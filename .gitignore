@@ -1,5 +1,18 @@
+.DS_Store
+
 # Godot 4+ specific ignores
 .godot/
 /android/
-addons/godot-git-plugin/
-.DS_Store
+addons/godot-git-plugin
+
+.import/
+export.cfg
+export_presets.cfg
+
+# Imported translations (automatically generated from CSV files)
+*.translation
+
+# Mono-specific ignores
+.mono/
+data_*/
+mono_crash.*.json
