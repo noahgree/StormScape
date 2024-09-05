@@ -18,3 +18,15 @@ config/icon="res://icon.svg"
 
 version_control/plugin_name="GitPlugin"
 version_control/autoload_on_startup=true
+
+[file_customization]
+
+folder_colors={
+"res://Assets/": "red",
+"res://Entities/": "green",
+"res://Stages/": "orange",
+"res://UI/": "blue",
+"res://Utilities/": "purple",
+"res://Utilities/Common/": "purple",
+"res://addons/": "gray"
+}
