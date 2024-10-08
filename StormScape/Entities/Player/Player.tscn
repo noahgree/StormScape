@@ -1,16 +1,50 @@
-[gd_scene load_steps=4 format=3 uid="uid://dba8mrurjlekp"]
+[gd_scene load_steps=11 format=3 uid="uid://dba8mrurjlekp"]
 
-[ext_resource type="Script" path="res://Entities/Player/player.gd" id="1_m33tt"]
+[ext_resource type="Script" path="res://Entities/Player/Player.gd" id="1_m33tt"]
 [ext_resource type="Texture2D" uid="uid://2xf1pqc78iin" path="res://icon.svg" id="2_7j3dw"]
+[ext_resource type="PackedScene" uid="uid://cdfdy8m6ki3oq" path="res://Entities/Components/health_component.tscn" id="3_ojev3"]
+[ext_resource type="Script" path="res://Entities/Components/StaminaComponent.gd" id="5_bsogp"]
+[ext_resource type="PackedScene" uid="uid://dypchto1ymi5j" path="res://Entities/Components/hurtbox_component.tscn" id="5_ff2qo"]
+[ext_resource type="Script" path="res://Entities/FSM/StateMachines/CharStateMachine.gd" id="6_otbuq"]
+[ext_resource type="Script" path="res://Entities/Player/States/Idle.gd" id="7_15a5x"]
+[ext_resource type="Script" path="res://Entities/Player/States/Move.gd" id="9_0dcld"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_j24f3"]
-size = Vector2(124, 124)
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_p1qul"]
+size = Vector2(133.201, 133.201)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_g3n2a"]
+size = Vector2(116.551, 116.551)
 
 [node name="Player" type="CharacterBody2D"]
+position = Vector2(8, 8)
+scale = Vector2(0.120119, 0.120119)
+motion_mode = 1
 script = ExtResource("1_m33tt")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture = ExtResource("2_7j3dw")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-shape = SubResource("RectangleShape2D_j24f3")
+[node name="Collision" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_p1qul")
+debug_color = Color(0, 0.6, 0.701961, 0.180392)
+
+[node name="HealthComponent" parent="." instance=ExtResource("3_ojev3")]
+
+[node name="HurtboxComponent" parent="." instance=ExtResource("5_ff2qo")]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HurtboxComponent"]
+shape = SubResource("RectangleShape2D_g3n2a")
+debug_color = Color(1, 0.294118, 0.588235, 0.156863)
+
+[node name="StaminaComponent" type="Node" parent="."]
+script = ExtResource("5_bsogp")
+
+[node name="CharStateMachine" type="Node" parent="." node_paths=PackedStringArray("initial_state")]
+script = ExtResource("6_otbuq")
+initial_state = NodePath("Idle")
+
+[node name="Idle" type="Node" parent="CharStateMachine"]
+script = ExtResource("7_15a5x")
+
+[node name="Move" type="Node" parent="CharStateMachine"]
+script = ExtResource("9_0dcld")
