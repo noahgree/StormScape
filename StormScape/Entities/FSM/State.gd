@@ -6,8 +6,13 @@ Generic state class intended to be subclasses by specific states.
 
 signal Transitioned
 
+@export var anim_tree: AnimationTree
+
 var parent: DynamicEntity
 var stamina_component: StaminaComponent
+
+@onready var state_machine = get_parent()
+
 
 func enter() -> void:
 	pass

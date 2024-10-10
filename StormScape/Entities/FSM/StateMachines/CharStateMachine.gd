@@ -9,6 +9,7 @@ No nodes except for this FSM node and its children should *EVER* know what state
 
 var current_state: State
 var states: Dictionary = {}
+var anim_pos: Vector2
 
 func init(parent: DynamicEntity) -> void:
 	for child in get_children():
@@ -51,4 +52,5 @@ func on_child_transition(requesting_state, new_state_name) -> void:
 	new_state.enter()
 	
 	current_state = new_state
-	print("DEBUG: Entered the state \"" + current_state.name.to_lower() + "\"")
+	if DebugFlags.PrintFlags.char_state_machine_swaps:
+		print("DEBUG: Entered the state \"" + current_state.name.to_lower() + "\"")
