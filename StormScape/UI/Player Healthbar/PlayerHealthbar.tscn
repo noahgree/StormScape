@@ -103,7 +103,6 @@ texture_progress = ExtResource("5_14ld6")
 
 [node name="StaminaBar" type="TextureProgressBar" parent="PanelContainer/MarginContainer"]
 unique_name_in_owner = true
-self_modulate = Color(1.9, 1.9, 1.9, 1)
 material = SubResource("ShaderMaterial_0q2s6")
 layout_mode = 2
 size_flags_vertical = 4

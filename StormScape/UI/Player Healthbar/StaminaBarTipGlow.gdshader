@@ -22,7 +22,7 @@ void fragment() {
     }
 
     // Ensure the color is bright enough for glow
-    base_color.rgb *= 2.0; // Increase intensity for glow effect
+    base_color.rgb *= 2.8; // Increase intensity for glow effect
 
     COLOR = base_color;
 }
