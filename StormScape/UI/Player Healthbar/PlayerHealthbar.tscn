@@ -1,0 +1,208 @@
+[gd_scene load_steps=21 format=3 uid="uid://cugxqj7rc0q35"]
+
+[ext_resource type="Script" path="res://UI/Player Healthbar/PlayerHealthbar.gd" id="1_bsbo1"]
+[ext_resource type="Texture2D" uid="uid://dwo0fuwylfxeq" path="res://UI/Player Healthbar/Assets/Stats Panel Bckgrd.png" id="2_883r4"]
+[ext_resource type="Texture2D" uid="uid://k0o25ihgea1n" path="res://UI/Player Healthbar/Assets/Hunger Progress Under.png" id="3_1c42m"]
+[ext_resource type="Texture2D" uid="uid://br8kgmxe41gh0" path="res://UI/Player Healthbar/Assets/Hunger Bar.png" id="3_2lhek"]
+[ext_resource type="Texture2D" uid="uid://cjjobaebw8uwu" path="res://UI/Player Healthbar/Assets/Hunger Under.png" id="4_5nri1"]
+[ext_resource type="Texture2D" uid="uid://bdgevpcheclv5" path="res://UI/Player Healthbar/Assets/Hunger Progress Bar.png" id="4_gyw0q"]
+[ext_resource type="Texture2D" uid="uid://c5mo0gxdddlte" path="res://UI/Player Healthbar/Assets/Hunger Change.png" id="5_14ld6"]
+[ext_resource type="Texture2D" uid="uid://xnppg0u7t7w4" path="res://UI/Player Healthbar/Assets/Stamina Recharge Under.png" id="5_cxgoi"]
+[ext_resource type="Texture2D" uid="uid://l7chqvbfg16y" path="res://UI/Player Healthbar/Assets/Stamina Bar.png" id="6_48fs3"]
+[ext_resource type="Texture2D" uid="uid://gfbxblly7q78" path="res://UI/Player Healthbar/Assets/Stamina Recharge Bar.png" id="6_r4a8w"]
+[ext_resource type="Texture2D" uid="uid://1m3lv40blexn" path="res://UI/Player Healthbar/Assets/Stamina Under.png" id="7_4rxgc"]
+[ext_resource type="Texture2D" uid="uid://dlx621mbgic4b" path="res://UI/Player Healthbar/Assets/Stamina Change.png" id="8_jxugl"]
+[ext_resource type="Texture2D" uid="uid://ba6aut5vjc3g" path="res://UI/Player Healthbar/Assets/Shield.png" id="9_fgebk"]
+[ext_resource type="Shader" path="res://UI/Player Healthbar/StaminaBarTipGlow.gdshader" id="10_cu3uy"]
+[ext_resource type="Texture2D" uid="uid://csmk61f3sxw44" path="res://UI/Player Healthbar/Assets/Shield Under.png" id="10_ywsvl"]
+[ext_resource type="Texture2D" uid="uid://dcsw75wiocvy0" path="res://UI/Player Healthbar/Assets/Shield Change.png" id="11_tmj4w"]
+[ext_resource type="Texture2D" uid="uid://b2v0527iatsjd" path="res://UI/Player Healthbar/Assets/Health.png" id="12_kcqr6"]
+[ext_resource type="Texture2D" uid="uid://dhvpkl1svbcys" path="res://UI/Player Healthbar/Assets/Health Under.png" id="13_clcwd"]
+[ext_resource type="Texture2D" uid="uid://lj78cee4aa38" path="res://UI/Player Healthbar/Assets/Health Change.png" id="14_xbi7i"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_0q2s6"]
+shader = ExtResource("10_cu3uy")
+shader_parameter/progress = 0.0
+shader_parameter/tip_size = 0.15
+shader_parameter/opacity = 0.385
+
+[node name="PlayerHealthbar" type="Control"]
+texture_filter = 2
+layout_mode = 3
+anchors_preset = 0
+offset_left = 4.0
+offset_top = 229.0
+offset_right = 4.0
+offset_bottom = 229.0
+script = ExtResource("1_bsbo1")
+
+[node name="PanelContainer" type="PanelContainer" parent="."]
+self_modulate = Color(1, 1, 1, 0)
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+scale = Vector2(0.08, 0.08)
+
+[node name="StatsBackground" type="TextureRect" parent="PanelContainer"]
+layout_mode = 2
+texture = ExtResource("2_883r4")
+
+[node name="MarginContainer" type="MarginContainer" parent="PanelContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 4
+theme_override_constants/margin_left = 59
+theme_override_constants/margin_top = 4
+
+[node name="HungerProgressBar" type="TextureProgressBar" parent="PanelContainer/MarginContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 4
+value = 50.0
+fill_mode = 4
+radial_initial_angle = 201.0
+radial_fill_degrees = 157.0
+texture_under = ExtResource("3_1c42m")
+texture_progress = ExtResource("4_gyw0q")
+
+[node name="StaminaRechargeBar" type="TextureProgressBar" parent="PanelContainer/MarginContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 4
+value = 50.0
+fill_mode = 5
+radial_initial_angle = 159.0
+radial_fill_degrees = 157.0
+texture_under = ExtResource("5_cxgoi")
+texture_progress = ExtResource("6_r4a8w")
+
+[node name="HungerBar" type="TextureProgressBar" parent="PanelContainer/MarginContainer"]
+unique_name_in_owner = true
+self_modulate = Color(1.39, 1.39, 1.39, 1)
+layout_mode = 2
+size_flags_vertical = 4
+value = 50.0
+fill_mode = 4
+radial_initial_angle = 201.0
+radial_fill_degrees = 157.0
+texture_progress = ExtResource("3_2lhek")
+
+[node name="HungerChange" type="TextureProgressBar" parent="PanelContainer/MarginContainer/HungerBar"]
+unique_name_in_owner = true
+show_behind_parent = true
+layout_mode = 2
+offset_right = 355.0
+offset_bottom = 356.0
+size_flags_vertical = 4
+value = 65.0
+fill_mode = 4
+radial_initial_angle = 201.0
+radial_fill_degrees = 157.0
+texture_under = ExtResource("4_5nri1")
+texture_progress = ExtResource("5_14ld6")
+
+[node name="StaminaBar" type="TextureProgressBar" parent="PanelContainer/MarginContainer"]
+unique_name_in_owner = true
+self_modulate = Color(1.9, 1.9, 1.9, 1)
+material = SubResource("ShaderMaterial_0q2s6")
+layout_mode = 2
+size_flags_vertical = 4
+value = 50.0
+fill_mode = 5
+radial_initial_angle = 159.0
+radial_fill_degrees = 157.0
+texture_progress = ExtResource("6_48fs3")
+
+[node name="StaminaChange" type="TextureProgressBar" parent="PanelContainer/MarginContainer/StaminaBar"]
+unique_name_in_owner = true
+show_behind_parent = true
+layout_mode = 2
+offset_right = 355.0
+offset_bottom = 356.0
+size_flags_vertical = 4
+value = 65.0
+fill_mode = 5
+radial_initial_angle = 159.0
+radial_fill_degrees = 157.0
+texture_under = ExtResource("7_4rxgc")
+texture_progress = ExtResource("8_jxugl")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer"]
+custom_minimum_size = Vector2(1495, 0)
+layout_mode = 2
+size_flags_horizontal = 10
+size_flags_vertical = 4
+theme_override_constants/separation = 38
+
+[node name="ShieldBar" type="TextureProgressBar" parent="PanelContainer/VBoxContainer"]
+unique_name_in_owner = true
+self_modulate = Color(1.7, 1.7, 1.7, 1)
+custom_minimum_size = Vector2(1439, 154)
+layout_mode = 2
+value = 50.0
+texture_progress = ExtResource("9_fgebk")
+texture_progress_offset = Vector2(16, 16)
+
+[node name="ShieldChange" type="TextureProgressBar" parent="PanelContainer/VBoxContainer/ShieldBar"]
+unique_name_in_owner = true
+show_behind_parent = true
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+value = 65.0
+texture_under = ExtResource("10_ywsvl")
+texture_progress = ExtResource("11_tmj4w")
+texture_progress_offset = Vector2(16, 16)
+
+[node name="HealthBar" type="TextureProgressBar" parent="PanelContainer/VBoxContainer"]
+unique_name_in_owner = true
+self_modulate = Color(1.55, 1.55, 1.55, 1)
+custom_minimum_size = Vector2(1441, 156)
+layout_mode = 2
+value = 8.0
+texture_progress = ExtResource("12_kcqr6")
+texture_progress_offset = Vector2(16, 17)
+
+[node name="HealthChange" type="TextureProgressBar" parent="PanelContainer/VBoxContainer/HealthBar"]
+unique_name_in_owner = true
+show_behind_parent = true
+layout_mode = 0
+offset_right = 1441.0
+offset_bottom = 156.0
+value = 1.0
+texture_under = ExtResource("13_clcwd")
+texture_progress = ExtResource("14_xbi7i")
+texture_progress_offset = Vector2(16, 17)
+
+[node name="HealthChangedTimer" type="Timer" parent="."]
+unique_name_in_owner = true
+wait_time = 0.5
+one_shot = true
+
+[node name="ShieldChangedTimer" type="Timer" parent="."]
+unique_name_in_owner = true
+wait_time = 0.5
+one_shot = true
+
+[node name="HungerChangedTimer" type="Timer" parent="."]
+unique_name_in_owner = true
+wait_time = 0.5
+one_shot = true
+
+[node name="StaminaChangedTimer" type="Timer" parent="."]
+unique_name_in_owner = true
+wait_time = 0.5
+one_shot = true
+
+[node name="StaminaRechargeTimer" type="Timer" parent="."]
+unique_name_in_owner = true
+wait_time = 0.3
+one_shot = true
+
+[connection signal="tree_entered" from="." to="." method="_on_tree_entered"]
+[connection signal="tree_exiting" from="." to="." method="_on_tree_exiting"]
+[connection signal="timeout" from="HealthChangedTimer" to="." method="_on_health_changed_timer_timeout"]
+[connection signal="timeout" from="ShieldChangedTimer" to="." method="_on_shield_changed_timer_timeout"]
+[connection signal="timeout" from="HungerChangedTimer" to="." method="_on_hunger_changed_timer_timeout"]
+[connection signal="timeout" from="StaminaChangedTimer" to="." method="_on_stamina_changed_timer_timeout"]
+[connection signal="timeout" from="StaminaRechargeTimer" to="." method="_on_stamina_recharge_timer_timeout"]

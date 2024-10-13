@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://bscnr6a23l10m"]
+[gd_scene load_steps=8 format=3 uid="uid://bscnr6a23l10m"]
 
 [ext_resource type="Texture2D" uid="uid://c50xdwgnkx441" path="res://Stages/Tilesets/TilesetFloor.png" id="2_dkief"]
 [ext_resource type="Texture2D" uid="uid://nvl4eoe0gf5y" path="res://Stages/Tilesets/TilesetField.png" id="3_h7gps"]
@@ -4079,6 +4079,14 @@ terrain_set_1/terrain_1/color = Color(0, 0.762018, 0.441434, 1)
 sources/1 = SubResource("TileSetAtlasSource_mc523")
 sources/2 = SubResource("TileSetAtlasSource_6prks")
 
+[sub_resource type="Environment" id="Environment_2wouv"]
+background_mode = 3
+background_canvas_max_layer = 1
+glow_enabled = true
+glow_normalized = true
+glow_intensity = 1.5
+glow_blend_mode = 1
+
 [node name="World" type="Node2D"]
 
 [node name="TileMapLayer" type="TileMapLayer" parent="."]
@@ -4086,3 +4094,6 @@ tile_set = SubResource("TileSet_wx2vu")
 
 [node name="Player" parent="." instance=ExtResource("4_57cqc")]
 position = Vector2(239, 128)
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_2wouv")

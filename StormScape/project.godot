@@ -30,6 +30,7 @@ config/icon="res://icon.svg"
 [autoload]
 
 DebugFlags="*res://Utilities/Common/DebugFlags.gd"
+SignalBus="*res://Utilities/Common/SignalBus.gd"
 
 [display]
 
@@ -39,7 +40,6 @@ window/size/always_on_top=true
 window/size/window_width_override=3840
 window/size/window_height_override=2160
 window/stretch/mode="canvas_items"
-window/stretch/scale_mode="integer"
 
 [editor]
 
@@ -61,6 +61,10 @@ folder_colors={
 "res://Utilities/Common/": "purple",
 "res://addons/": "gray"
 }
+
+[gui]
+
+theme/custom_font="res://Assets/fonts/Game Font Resources/ui_pixel_font.tres"
 
 [input]
 
@@ -107,3 +111,4 @@ inventory={
 [rendering]
 
 textures/canvas_textures/default_texture_filter=0
+viewport/hdr_2d=true

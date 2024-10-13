@@ -1,4 +1,4 @@
-[gd_scene load_steps=120 format=3 uid="uid://dba8mrurjlekp"]
+[gd_scene load_steps=124 format=3 uid="uid://dba8mrurjlekp"]
 
 [ext_resource type="Script" path="res://Entities/Player/Player.gd" id="1_m33tt"]
 [ext_resource type="Texture2D" uid="uid://77ell4xpptap" path="res://Entities/Player/Spritesheets/PlayerBase.png" id="2_jshja"]
@@ -8,6 +8,10 @@
 [ext_resource type="Script" path="res://Entities/FSM/StateMachines/CharStateMachine.gd" id="6_otbuq"]
 [ext_resource type="Script" path="res://Entities/Player/States/Idle.gd" id="7_15a5x"]
 [ext_resource type="Script" path="res://Entities/Player/States/Run.gd" id="9_0dcld"]
+[ext_resource type="PackedScene" uid="uid://cugxqj7rc0q35" path="res://UI/Player Healthbar/PlayerHealthbar.tscn" id="9_txdy5"]
+[ext_resource type="Script" path="res://Utilities/Debug/PlayerTestHurtBtn.gd" id="10_beouj"]
+[ext_resource type="FontFile" uid="uid://cjuheb3v0el30" path="res://Assets/fonts/Font Assets/Kenney Pixel.ttf" id="11_1rxkv"]
+[ext_resource type="Script" path="res://Utilities/Debug/PlayerTestHealBtn.gd" id="11_puk2x"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_o7k7i"]
 radius = 7.0
@@ -972,7 +976,7 @@ blend_point_5/pos = Vector2(0, -1)
 blend_mode = 1
 
 [sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_xmxd0"]
-graph_offset = Vector2(-266.564, 65.352)
+graph_offset = Vector2(-225, 118.5)
 nodes/TimeScale/node = SubResource("AnimationNodeTimeScale_dcuk4")
 nodes/TimeScale/position = Vector2(180, 210)
 nodes/blendspace2d/node = SubResource("AnimationNodeBlendSpace2D_s8iwx")
@@ -1067,6 +1071,11 @@ debug_color = Color(1, 0.294118, 0.588235, 0.156863)
 [node name="StaminaComponent" type="Node" parent="."]
 script = ExtResource("5_bsogp")
 
+[node name="StaminaWaitTimer" type="Timer" parent="StaminaComponent"]
+unique_name_in_owner = true
+wait_time = 5.0
+one_shot = true
+
 [node name="CharStateMachine" type="Node" parent="." node_paths=PackedStringArray("initial_state")]
 script = ExtResource("6_otbuq")
 initial_state = NodePath("Idle")
@@ -1091,3 +1100,36 @@ parameters/idle/TimeScale/scale = 1.0
 parameters/idle/blendspace2d/blend_position = Vector2(0, 0)
 parameters/run/TimeScale/scale = 1.5
 parameters/run/blendspace2d/blend_position = Vector2(0, 0)
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="PlayerHealthbar" parent="CanvasLayer" instance=ExtResource("9_txdy5")]
+
+[node name="TestHurtBtn" type="Button" parent="CanvasLayer" node_paths=PackedStringArray("health_component", "stamina_component")]
+offset_left = 162.0
+offset_top = 249.0
+offset_right = 194.0
+offset_bottom = 269.0
+scale = Vector2(0.7, 0.7)
+text = "HURT"
+script = ExtResource("10_beouj")
+health_component = NodePath("../../HealthComponent")
+stamina_component = NodePath("../../StaminaComponent")
+
+[node name="TestHealBtn" type="Button" parent="CanvasLayer" node_paths=PackedStringArray("health_component", "stamina_component")]
+texture_filter = 1
+offset_left = 162.0
+offset_top = 231.0
+offset_right = 193.0
+offset_bottom = 251.0
+scale = Vector2(0.7, 0.7)
+theme_override_fonts/font = ExtResource("11_1rxkv")
+theme_override_font_sizes/font_size = 16
+text = "HEAL"
+script = ExtResource("11_puk2x")
+health_component = NodePath("../../HealthComponent")
+stamina_component = NodePath("../../StaminaComponent")
+
+[connection signal="timeout" from="StaminaComponent/StaminaWaitTimer" to="StaminaComponent" method="_on_stamina_wait_timer_timeout"]
+[connection signal="pressed" from="CanvasLayer/TestHurtBtn" to="CanvasLayer/TestHurtBtn" method="_on_pressed"]
+[connection signal="pressed" from="CanvasLayer/TestHealBtn" to="CanvasLayer/TestHealBtn" method="_on_pressed"]
