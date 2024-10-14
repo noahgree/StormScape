@@ -1,5 +1,5 @@
 extends State
-
+## Handles when the character is moving, including both running and sprinting.
 
 @export var max_speed: float = 150
 @export var acceleration: float = 1250

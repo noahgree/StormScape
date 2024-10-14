@@ -1,3 +1,4 @@
+@icon("res://Utilities/Debug/EditorIcons/health_component.svg")
 extends Node
 class_name HealthComponent
 ## A component for handling health and shield for an entity.

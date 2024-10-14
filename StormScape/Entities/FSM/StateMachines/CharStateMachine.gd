@@ -1,3 +1,4 @@
+@icon("res://Utilities/Debug/EditorIcons/state_machine.svg")
 extends Node
 class_name CharStateMachine
 ## FSM class for moving entities that implements the managing logic of transitioning and maintaining states.

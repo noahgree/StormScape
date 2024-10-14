@@ -1,3 +1,4 @@
+@icon("res://Utilities/Debug/EditorIcons/stamina_component.svg")
 extends Node
 class_name StaminaComponent
 ## A component for handling stamina and hunger for an entity.
@@ -10,7 +11,7 @@ class_name StaminaComponent
 @export var max_stamina: float = 100.0 ## The max amount of stamina the entity can have.
 @export_custom(PROPERTY_HINT_NONE, "suffix:per second") var stamina_recharge_rate: float = 15.0 ## The amount of stamina that recharges per second during recharge.
 @export var max_hunger: int = 100 ## The max amount of hunger (or really satiation) the entity can have.
-@export_custom(PROPERTY_HINT_NONE, "suffix:hunger") var stamina_to_hunger_cost: int = 10 ## The amount of hunger to deduct per max_stamina amount of stamina.
+@export_custom(PROPERTY_HINT_NONE, "suffix:hunger") var stamina_to_hunger_cost: int = 5 ## The amount of hunger to deduct per max_stamina amount of stamina.
 
 @onready var stamina_wait_timer: Timer = %StaminaWaitTimer ## The wait between using stamina and when it starts recharging.
 

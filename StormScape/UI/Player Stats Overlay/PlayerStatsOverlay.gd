@@ -30,7 +30,7 @@ var previous_stamina: float ## The last stamina value to be receieved.
 var stamina_recharge_tween: Tween ## A tween for animating the stamina recharge delay indicator.
 
 
-## Called when the corresponding global signal fires. Manages 
+ 
 func on_health_changed(new_health: int) -> void:
 	health_bar.value = new_health
 	health_changed_timer.stop()

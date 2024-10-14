@@ -2,9 +2,9 @@
 
 [ext_resource type="Script" path="res://Entities/Player/Player.gd" id="1_m33tt"]
 [ext_resource type="Texture2D" uid="uid://77ell4xpptap" path="res://Entities/Player/Spritesheets/PlayerBase.png" id="2_jshja"]
-[ext_resource type="PackedScene" uid="uid://cdfdy8m6ki3oq" path="res://Entities/Components/health_component.tscn" id="3_ojev3"]
+[ext_resource type="PackedScene" uid="uid://cdfdy8m6ki3oq" path="res://Entities/Components/HealthComponent.tscn" id="3_ojev3"]
 [ext_resource type="Script" path="res://Entities/Components/StaminaComponent.gd" id="5_bsogp"]
-[ext_resource type="PackedScene" uid="uid://dypchto1ymi5j" path="res://Entities/Components/hurtbox_component.tscn" id="5_ff2qo"]
+[ext_resource type="PackedScene" uid="uid://dypchto1ymi5j" path="res://Entities/Components/HurtboxComponent.tscn" id="5_ff2qo"]
 [ext_resource type="Script" path="res://Entities/FSM/StateMachines/CharStateMachine.gd" id="6_otbuq"]
 [ext_resource type="Script" path="res://Entities/Player/States/Idle.gd" id="7_15a5x"]
 [ext_resource type="Script" path="res://Entities/Player/States/Run.gd" id="9_0dcld"]

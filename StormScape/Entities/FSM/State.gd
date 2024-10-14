@@ -1,9 +1,10 @@
+@icon("res://Utilities/Debug/EditorIcons/state.svg")
 extends Node
 class_name State
-"""
-Generic state class intended to be subclasses by specific states.
-"""
+## Generic state class intended to be subclassed by specific states like idle and move.
 
+
+@warning_ignore("unused_signal")
 signal Transitioned
 
 @export var anim_tree: AnimationTree

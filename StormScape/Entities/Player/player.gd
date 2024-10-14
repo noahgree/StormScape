@@ -1,5 +1,7 @@
 extends DynamicEntity
 class_name Player
+## The main class for the player character.
+
 
 @onready var state_machine: CharStateMachine = $CharStateMachine
 @onready var health_component: HealthComponent = $HealthComponent
