@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dlx621mbgic4b"
-path="res://.godot/imported/Stamina Change.png-7d16b7e6be06c22558d90562de6a8dd3.ctex"
+uid="uid://dhvpkl1svbcys"
+path="res://.godot/imported/Health Under.png-c218fd3322c4791fda9f9dcc5922fd08.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://UI/Player Healthbar/Assets/Stamina Change.png"
-dest_files=["res://.godot/imported/Stamina Change.png-7d16b7e6be06c22558d90562de6a8dd3.ctex"]
+source_file="res://UI/Player Stats Overlay/Assets/Health Under.png"
+dest_files=["res://.godot/imported/Health Under.png-c218fd3322c4791fda9f9dcc5922fd08.ctex"]
 
 [params]
 

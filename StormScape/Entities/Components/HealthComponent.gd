@@ -1,17 +1,20 @@
 extends Node
 class_name HealthComponent
+## A component for handling health and shield for an entity.
+## 
+## Has functions for handling taking damage and healing.
+## This class should always remain agnostic about the entity and the entity's UI it updates.
 
 
-@export var max_health: int = 100
-@export var max_shield: int = 100
-var health: int: set = _set_health
-var shield: int: set = _set_shield
-var ready_to_broadcast: bool # makes sure the call deffered's have been called already
+@export var stats_ui: Control ## The UI that will reflect this component's values.
+@export var max_health: int = 100 ## The maximum amount of health the entity can have.
+@export var max_shield: int = 100 ## The maximum amount of shield the entity can have.
+
+var health: int: set = _set_health ## The current health of the entity.
+var shield: int: set = _set_shield ## The current shield of the entity.
 
 
 func _ready() -> void: 
-	health = max_health
-	shield = max_shield
 	call_deferred("_emit_initial_values")
 
 
@@ -38,16 +41,25 @@ func heal(amount: int) -> void:
 
 
 func _emit_initial_values() -> void:
-	SignalBus.PlayerHealthChanged.emit(health)
-	SignalBus.PlayerShieldChanged.emit(shield)
-	ready_to_broadcast = true
+	health = max_health
+	shield = max_shield
+
+func set_max_health(new_max_health: int) -> void:
+	max_health = new_max_health
+	if stats_ui and stats_ui.has_method("on_max_health_changed"):
+		stats_ui.on_max_health_changed(max_health)
+
+func set_max_shield(new_max_shield: int) -> void:
+	max_shield = new_max_shield
+	if stats_ui and stats_ui.has_method("on_max_shield_changed"):
+		stats_ui.on_max_shield_changed(max_shield)
 
 func _set_health(new_value: int) -> void:
 	health = clampi(new_value, 0, max_health)
-	if ready_to_broadcast:
-		SignalBus.PlayerHealthChanged.emit(health)
+	if stats_ui and stats_ui.has_method("on_health_changed"):
+		stats_ui.on_health_changed(health)
 
 func _set_shield(new_value: int) -> void:
 	shield = clampi(new_value, 0, max_shield)
-	if ready_to_broadcast:
-		SignalBus.PlayerShieldChanged.emit(shield)
+	if stats_ui and stats_ui.has_method("on_shield_changed"):
+		stats_ui.on_shield_changed(shield)

@@ -31,6 +31,7 @@ config/icon="res://icon.svg"
 
 DebugFlags="*res://Utilities/Common/DebugFlags.gd"
 SignalBus="*res://Utilities/Common/SignalBus.gd"
+ItemDatabase="*res://Utilities/Common/ItemDatabase.tscn"
 
 [display]
 

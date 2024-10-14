@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dwo0fuwylfxeq"
-path="res://.godot/imported/Stats Panel Bckgrd.png-0cbc9737c40f68f0c45b53c023ac7017.ctex"
+uid="uid://xnppg0u7t7w4"
+path="res://.godot/imported/Stamina Recharge Under.png-197f94231cb01915f7ee82d9160f95a9.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://UI/Player Healthbar/Assets/Stats Panel Bckgrd.png"
-dest_files=["res://.godot/imported/Stats Panel Bckgrd.png-0cbc9737c40f68f0c45b53c023ac7017.ctex"]
+source_file="res://UI/Player Stats Overlay/Assets/Stamina Recharge Under.png"
+dest_files=["res://.godot/imported/Stamina Recharge Under.png-197f94231cb01915f7ee82d9160f95a9.ctex"]
 
 [params]
 

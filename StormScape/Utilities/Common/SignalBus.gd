@@ -1,8 +1,6 @@
 extends Node
-
-signal PlayerHealthChanged(new_health: int)
-signal PlayerShieldChanged(new_shield: int)
-signal PlayerHungerChanged(new_hunger: int)
-signal PlayerStaminaChanged(new_stamina: float)
-signal PlayerHungerTicksChanged(new_hunger_ticks: float)
-signal PlayerStaminaWaitTimerStateChange(wait_time: float, started: bool)
+## An autoload singleton for managing the bussing of signals.
+##
+## This node acts as a middleman to keep multiple signal users from having to connect all over the place.
+## For example, use this to create a "EnemyDied" signal and then wherever you need to 
+## depend on the value, you connect to this script and not all the enemies individually. 

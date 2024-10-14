@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://xnppg0u7t7w4"
-path="res://.godot/imported/Stamina Recharge Under.png-a09ad9ad1c779330ceb2936a9d1bb04e.ctex"
+uid="uid://cjjobaebw8uwu"
+path="res://.godot/imported/Hunger Under.png-e65f46bd1826682db628a0a73cc19989.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://UI/Player Healthbar/Assets/Stamina Recharge Under.png"
-dest_files=["res://.godot/imported/Stamina Recharge Under.png-a09ad9ad1c779330ceb2936a9d1bb04e.ctex"]
+source_file="res://UI/Player Stats Overlay/Assets/Hunger Under.png"
+dest_files=["res://.godot/imported/Hunger Under.png-e65f46bd1826682db628a0a73cc19989.ctex"]
 
 [params]
 

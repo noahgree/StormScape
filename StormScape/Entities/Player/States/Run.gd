@@ -6,7 +6,7 @@ extends State
 @export var friction: float = 1550
 
 @export var sprint_multiplier: float = 1.5
-@export var sprint_stamina_usage: float = 15.0 # per second
+@export_custom(PROPERTY_HINT_NONE, "suffix:per second") var sprint_stamina_usage: float = 15.0
 
 var movement_vector: Vector2 = Vector2.ZERO
 

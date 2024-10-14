@@ -1,8 +1,9 @@
 extends DynamicEntity
 class_name Player
 
-@onready var state_machine = $CharStateMachine
-@onready var stamina_component = $StaminaComponent
+@onready var state_machine: CharStateMachine = $CharStateMachine
+@onready var health_component: HealthComponent = $HealthComponent
+@onready var stamina_component: StaminaComponent = $StaminaComponent
 
 
 func _ready() -> void:

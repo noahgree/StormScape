@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://1m3lv40blexn"
-path="res://.godot/imported/Stamina Under.png-47b1a04791d1413b07060df4385b80d2.ctex"
+uid="uid://csmk61f3sxw44"
+path="res://.godot/imported/Shield Under.png-e91ef2bb80fcb6b6d1c982645e79dd53.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://UI/Player Healthbar/Assets/Stamina Under.png"
-dest_files=["res://.godot/imported/Stamina Under.png-47b1a04791d1413b07060df4385b80d2.ctex"]
+source_file="res://UI/Player Stats Overlay/Assets/Shield Under.png"
+dest_files=["res://.godot/imported/Shield Under.png-e91ef2bb80fcb6b6d1c982645e79dd53.ctex"]
 
 [params]
 

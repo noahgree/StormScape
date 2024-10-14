@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bdgevpcheclv5"
-path="res://.godot/imported/Hunger Progress Bar.png-4333871e0959a0309514b143fa3a09fb.ctex"
+uid="uid://dwo0fuwylfxeq"
+path="res://.godot/imported/Stats Panel Bckgrd.png-cfa67dee00f216cc553cfb9dfea45d77.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://UI/Player Healthbar/Assets/Hunger Progress Bar.png"
-dest_files=["res://.godot/imported/Hunger Progress Bar.png-4333871e0959a0309514b143fa3a09fb.ctex"]
+source_file="res://UI/Player Stats Overlay/Assets/Stats Panel Bckgrd.png"
+dest_files=["res://.godot/imported/Stats Panel Bckgrd.png-cfa67dee00f216cc553cfb9dfea45d77.ctex"]
 
 [params]
 

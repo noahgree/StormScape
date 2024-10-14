@@ -4096,4 +4096,5 @@ tile_set = SubResource("TileSet_wx2vu")
 position = Vector2(239, 128)
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+editor_description = "This handles glow and other global effects like saturation and contrast."
 environment = SubResource("Environment_2wouv")

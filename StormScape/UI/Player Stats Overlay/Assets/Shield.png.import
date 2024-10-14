@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://l7chqvbfg16y"
-path="res://.godot/imported/Stamina Bar.png-82a8cd9fdbcb9a7d3dac001c2b7b8185.ctex"
+uid="uid://ba6aut5vjc3g"
+path="res://.godot/imported/Shield.png-b1336f8b46f91995b93d7178c293667e.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://UI/Player Healthbar/Assets/Stamina Bar.png"
-dest_files=["res://.godot/imported/Stamina Bar.png-82a8cd9fdbcb9a7d3dac001c2b7b8185.ctex"]
+source_file="res://UI/Player Stats Overlay/Assets/Shield.png"
+dest_files=["res://.godot/imported/Shield.png-b1336f8b46f91995b93d7178c293667e.ctex"]
 
 [params]
 

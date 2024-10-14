@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c5mo0gxdddlte"
-path="res://.godot/imported/Hunger Change.png-38023dbccca57abbc9b6e68246df019a.ctex"
+uid="uid://dcsw75wiocvy0"
+path="res://.godot/imported/Shield Change.png-d93f72b23f21c714f98d96a355f39727.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://UI/Player Healthbar/Assets/Hunger Change.png"
-dest_files=["res://.godot/imported/Hunger Change.png-38023dbccca57abbc9b6e68246df019a.ctex"]
+source_file="res://UI/Player Stats Overlay/Assets/Shield Change.png"
+dest_files=["res://.godot/imported/Shield Change.png-d93f72b23f21c714f98d96a355f39727.ctex"]
 
 [params]
 

@@ -1,9 +1,10 @@
 extends Node
 class_name CharStateMachine
-"""
-FSM class for moving entities that implements the managing logic of transitioning and maintaining states.
-No nodes except for this FSM node and its children should *EVER* know what state is active. By allowing this, you allow a long rabbit hole of dependencies that make things less and less reusable."
-"""
+## FSM class for moving entities that implements the managing logic of transitioning and maintaining states.
+## 
+## No nodes except for this FSM node and its children should *EVER* know what state is active. 
+## By allowing this, you allow a long rabbit hole of dependencies that make things less and less reusable.
+
 
 @export var initial_state: State
 
@@ -50,7 +51,7 @@ func on_child_transition(requesting_state, new_state_name) -> void:
 		current_state.exit()
 	
 	new_state.enter()
-	
 	current_state = new_state
+	
 	if DebugFlags.PrintFlags.char_state_machine_swaps:
-		print("DEBUG: Entered the state \"" + current_state.name.to_lower() + "\"")
+		print("DEBUG: Character entered the state \"" + current_state.name.to_lower() + "\"")

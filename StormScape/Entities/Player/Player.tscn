@@ -8,7 +8,7 @@
 [ext_resource type="Script" path="res://Entities/FSM/StateMachines/CharStateMachine.gd" id="6_otbuq"]
 [ext_resource type="Script" path="res://Entities/Player/States/Idle.gd" id="7_15a5x"]
 [ext_resource type="Script" path="res://Entities/Player/States/Run.gd" id="9_0dcld"]
-[ext_resource type="PackedScene" uid="uid://cugxqj7rc0q35" path="res://UI/Player Healthbar/PlayerHealthbar.tscn" id="9_txdy5"]
+[ext_resource type="PackedScene" uid="uid://cugxqj7rc0q35" path="res://UI/Player Stats Overlay/PlayerStatsOverlay.tscn" id="9_txdy5"]
 [ext_resource type="Script" path="res://Utilities/Debug/PlayerTestHurtBtn.gd" id="10_beouj"]
 [ext_resource type="FontFile" uid="uid://cjuheb3v0el30" path="res://Assets/fonts/Font Assets/Kenney Pixel.ttf" id="11_1rxkv"]
 [ext_resource type="Script" path="res://Utilities/Debug/PlayerTestHealBtn.gd" id="11_puk2x"]
@@ -1057,7 +1057,8 @@ position = Vector2(0, -16)
 sprite_frames = SubResource("SpriteFrames_lbx7k")
 animation = &"idle"
 
-[node name="HealthComponent" parent="." instance=ExtResource("3_ojev3")]
+[node name="HealthComponent" parent="." node_paths=PackedStringArray("stats_ui") instance=ExtResource("3_ojev3")]
+stats_ui = NodePath("../PlayerUI/PlayerStatsOverlay")
 
 [node name="HurtboxComponent" parent="." instance=ExtResource("5_ff2qo")]
 monitoring = false
@@ -1068,8 +1069,9 @@ position = Vector2(0, -13)
 shape = SubResource("RectangleShape2D_7dc0v")
 debug_color = Color(1, 0.294118, 0.588235, 0.156863)
 
-[node name="StaminaComponent" type="Node" parent="."]
+[node name="StaminaComponent" type="Node" parent="." node_paths=PackedStringArray("stats_ui")]
 script = ExtResource("5_bsogp")
+stats_ui = NodePath("../PlayerUI/PlayerStatsOverlay")
 
 [node name="StaminaWaitTimer" type="Timer" parent="StaminaComponent"]
 unique_name_in_owner = true
@@ -1101,11 +1103,12 @@ parameters/idle/blendspace2d/blend_position = Vector2(0, 0)
 parameters/run/TimeScale/scale = 1.5
 parameters/run/blendspace2d/blend_position = Vector2(0, 0)
 
-[node name="CanvasLayer" type="CanvasLayer" parent="."]
+[node name="PlayerUI" type="CanvasLayer" parent="."]
 
-[node name="PlayerHealthbar" parent="CanvasLayer" instance=ExtResource("9_txdy5")]
+[node name="PlayerStatsOverlay" parent="PlayerUI" node_paths=PackedStringArray("player") instance=ExtResource("9_txdy5")]
+player = NodePath("../..")
 
-[node name="TestHurtBtn" type="Button" parent="CanvasLayer" node_paths=PackedStringArray("health_component", "stamina_component")]
+[node name="TestHurtBtn" type="Button" parent="PlayerUI" node_paths=PackedStringArray("health_component", "stamina_component")]
 offset_left = 162.0
 offset_top = 249.0
 offset_right = 194.0
@@ -1116,7 +1119,7 @@ script = ExtResource("10_beouj")
 health_component = NodePath("../../HealthComponent")
 stamina_component = NodePath("../../StaminaComponent")
 
-[node name="TestHealBtn" type="Button" parent="CanvasLayer" node_paths=PackedStringArray("health_component", "stamina_component")]
+[node name="TestHealBtn" type="Button" parent="PlayerUI" node_paths=PackedStringArray("health_component", "stamina_component")]
 texture_filter = 1
 offset_left = 162.0
 offset_top = 231.0
@@ -1131,5 +1134,5 @@ health_component = NodePath("../../HealthComponent")
 stamina_component = NodePath("../../StaminaComponent")
 
 [connection signal="timeout" from="StaminaComponent/StaminaWaitTimer" to="StaminaComponent" method="_on_stamina_wait_timer_timeout"]
-[connection signal="pressed" from="CanvasLayer/TestHurtBtn" to="CanvasLayer/TestHurtBtn" method="_on_pressed"]
-[connection signal="pressed" from="CanvasLayer/TestHealBtn" to="CanvasLayer/TestHealBtn" method="_on_pressed"]
+[connection signal="pressed" from="PlayerUI/TestHurtBtn" to="PlayerUI/TestHurtBtn" method="_on_pressed"]
+[connection signal="pressed" from="PlayerUI/TestHealBtn" to="PlayerUI/TestHealBtn" method="_on_pressed"]
