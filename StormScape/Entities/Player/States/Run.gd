@@ -4,9 +4,7 @@ extends State
 @export var max_speed: float = 150
 @export var acceleration: float = 1250
 @export var friction: float = 1550
-
 @export var sprint_multiplier: float = 1.5
-@export_custom(PROPERTY_HINT_NONE, "suffix:per second") var sprint_stamina_usage: float = 15.0
 
 var movement_vector: Vector2 = Vector2.ZERO
 
@@ -17,10 +15,11 @@ func exit() -> void:
 	pass
 
 func state_physics_process(delta: float) -> void:
-	do_player_movement(delta)
+	do_character_movement(delta)
+	check_for_dash_request()
 	animate()
 
-func do_player_movement(delta: float) -> void:
+func do_character_movement(delta: float) -> void:
 	movement_vector = calculate_move_vector()
 	var request_sprint = Input.is_action_pressed("sprint")
 	
@@ -37,7 +36,7 @@ func do_player_movement(delta: float) -> void:
 		else:
 			state_machine.anim_pos = movement_vector
 		
-		if request_sprint and stamina_component.use_stamina(sprint_stamina_usage * delta): # move with sprint
+		if request_sprint and stamina_component.use_stamina(state_machine.sprint_stamina_usage * delta): # sprint
 			anim_tree.set("parameters/run/TimeScale/scale", 1.5 * sprint_multiplier)
 			parent.velocity += (movement_vector * acceleration * sprint_multiplier * delta)
 			parent.velocity = parent.velocity.limit_length(max_speed * sprint_multiplier)
@@ -50,6 +49,11 @@ func do_player_movement(delta: float) -> void:
 
 func calculate_move_vector() -> Vector2:
 	return Input.get_vector("move_left", "move_right", "move_up", "move_down").normalized()
+
+func check_for_dash_request() -> void:
+	if Input.is_action_pressed("dash") and state_machine.dash_cooldown_timer.is_stopped():
+		if stamina_component.use_stamina(state_machine.dash_stamina_usage):
+			Transitioned.emit(self, "Dash")
 
 func animate() -> void:
 	anim_tree.set("parameters/run/blendspace2d/blend_position", state_machine.anim_pos)

@@ -1,4 +1,4 @@
-[gd_scene load_steps=124 format=3 uid="uid://dba8mrurjlekp"]
+[gd_scene load_steps=126 format=3 uid="uid://dba8mrurjlekp"]
 
 [ext_resource type="Script" path="res://Entities/Player/Player.gd" id="1_m33tt"]
 [ext_resource type="Texture2D" uid="uid://77ell4xpptap" path="res://Entities/Player/Spritesheets/PlayerBase.png" id="2_jshja"]
@@ -8,8 +8,10 @@
 [ext_resource type="Script" path="res://Entities/FSM/StateMachines/CharStateMachine.gd" id="6_otbuq"]
 [ext_resource type="Script" path="res://Entities/Player/States/Idle.gd" id="7_15a5x"]
 [ext_resource type="Script" path="res://Entities/Player/States/Run.gd" id="9_0dcld"]
+[ext_resource type="Script" path="res://Entities/Player/States/Dash/Dash.gd" id="9_a1qv1"]
 [ext_resource type="PackedScene" uid="uid://cugxqj7rc0q35" path="res://UI/Player Stats Overlay/PlayerStatsOverlay.tscn" id="9_txdy5"]
 [ext_resource type="Script" path="res://Utilities/Debug/PlayerTestHurtBtn.gd" id="10_beouj"]
+[ext_resource type="PackedScene" uid="uid://bv3ae77701mrg" path="res://Entities/Player/States/Dash/DashGhost.tscn" id="10_c2plq"]
 [ext_resource type="FontFile" uid="uid://cjuheb3v0el30" path="res://Assets/fonts/Font Assets/Kenney Pixel.ttf" id="11_1rxkv"]
 [ext_resource type="Script" path="res://Utilities/Debug/PlayerTestHealBtn.gd" id="11_puk2x"]
 
@@ -1090,6 +1092,19 @@ anim_tree = NodePath("../../AnimationTree")
 script = ExtResource("9_0dcld")
 anim_tree = NodePath("../../AnimationTree")
 
+[node name="Dash" type="Node" parent="CharStateMachine" node_paths=PackedStringArray("anim_tree")]
+script = ExtResource("9_a1qv1")
+ghost_scene = ExtResource("10_c2plq")
+anim_tree = NodePath("../../AnimationTree")
+
+[node name="DashTimer" type="Timer" parent="CharStateMachine/Dash"]
+unique_name_in_owner = true
+one_shot = true
+
+[node name="DashCooldownTimer" type="Timer" parent="CharStateMachine"]
+unique_name_in_owner = true
+one_shot = true
+
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
 "": SubResource("AnimationLibrary_xrucm")
@@ -1134,5 +1149,6 @@ health_component = NodePath("../../HealthComponent")
 stamina_component = NodePath("../../StaminaComponent")
 
 [connection signal="timeout" from="StaminaComponent/StaminaWaitTimer" to="StaminaComponent" method="_on_stamina_wait_timer_timeout"]
+[connection signal="timeout" from="CharStateMachine/Dash/DashTimer" to="CharStateMachine/Dash" method="_on_dash_timer_timeout"]
 [connection signal="pressed" from="PlayerUI/TestHurtBtn" to="PlayerUI/TestHurtBtn" method="_on_pressed"]
 [connection signal="pressed" from="PlayerUI/TestHealBtn" to="PlayerUI/TestHealBtn" method="_on_pressed"]

@@ -8,10 +8,14 @@ class_name CharStateMachine
 
 
 @export var initial_state: State
+@export_custom(PROPERTY_HINT_NONE, "suffix:per second") var sprint_stamina_usage: float = 15.0
+@export_custom(PROPERTY_HINT_NONE, "suffix:per dash") var dash_stamina_usage: float = 20.0
+
+@onready var dash_cooldown_timer: Timer = %DashCooldownTimer
 
 var current_state: State
 var states: Dictionary = {}
-var anim_pos: Vector2
+var anim_pos: Vector2 = Vector2.ZERO
 
 func init(parent: DynamicEntity) -> void:
 	for child in get_children():
@@ -55,4 +59,4 @@ func on_child_transition(requesting_state, new_state_name) -> void:
 	current_state = new_state
 	
 	if DebugFlags.PrintFlags.char_state_machine_swaps:
-		print("DEBUG: Character entered the state \"" + current_state.name.to_lower() + "\"")
+		print_rich("DEBUG: Character entered [color=pink]" + current_state.name.to_lower() + "[/color]")
