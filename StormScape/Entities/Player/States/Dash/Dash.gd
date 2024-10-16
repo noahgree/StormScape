@@ -11,10 +11,10 @@ extends State
 
 @onready var dash_timer: Timer = %DashTimer ## Timer to enforce how long the dash lasts for.
 
-var movement_vector: Vector2 = Vector2.ZERO ## The current movement vector.
+var movement_vector: Vector2 = Vector2.ZERO ## The current direction of movement.
 var ghosts_spawned: int = 0 ## The number of ghosts spawned so far in this dash.
-var time_since_ghost: float = 0.0
-var can_spawn_ghosts: bool = false
+var time_since_ghost: float = 0.0 ## The number of seconds since the last ghost spawn.
+var can_spawn_ghosts: bool = false ## Whether we have the proper node to enable ghost spawns during dash.
 
 
 func enter() -> void:
@@ -34,6 +34,7 @@ func exit() -> void:
 	dash_timer.stop()
 	parent.velocity = Vector2.ZERO
 
+## Ticks the time since last ghost spawn.
 func state_process(delta: float) -> void:
 	if can_spawn_ghosts:
 		time_since_ghost += delta
@@ -43,6 +44,7 @@ func state_physics_process(delta: float) -> void:
 	animate()
 	do_character_dash()
 
+## Overrides the parent velocity to be a simple dash in the direction currently faced.
 func do_character_dash() -> void:
 	parent.velocity = movement_vector * dash_speed
 	parent.move_and_slide()
@@ -53,11 +55,13 @@ func calculate_move_vector() -> Vector2:
 func animate() -> void:
 	anim_tree.set("parameters/run/blendspace2d/blend_position", state_machine.anim_pos)
 
+## Checks if we have spent enough time since the last ghost and if we haven't spawned enough yet, then spawns one.
 func update_ghost_spawns(delta: float) -> void:
 	if (ghosts_spawned < ghost_count) and (time_since_ghost >= (dash_duration / ghost_count)):
 		create_ghost()
 		time_since_ghost = 0.0
 
+## Grabs the current animation frame texture and creates a ghost from it, adding it at the proper offset as a child.
 func create_ghost() -> void:
 	var animated_sprite_node = parent.get_node("AnimatedSprite2D")
 	var current_anim: String = animated_sprite_node.animation
@@ -70,6 +74,7 @@ func create_ghost() -> void:
 	add_child(ghost_instance)
 	ghosts_spawned += 1
 
+## If there is a non-zero movement vector, go to the run state, otherwise go to the idle state.
 func travel_to_next_state() -> void:
 	if movement_vector != Vector2.ZERO:
 		Transitioned.emit(self, "Run")

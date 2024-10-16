@@ -1,10 +1,11 @@
 extends Sprite2D
 class_name DashGhost
+## A simple sprite2D node to handle fading and queue freeing a ghost instance during something like a dash state.
+
+var fade_out_time: float = 0.0 ## How long the sprite takes to fade out after being instanced.
 
 
-var fade_out_time: float = 0.0
-
-
+## Takes in relevant data to instance the node in the world as a ghost, including a custom fade out time.
 func init(pos: Vector2, size: Vector2, frame: Texture2D, fade_time: float) -> void:
 	position = pos
 	scale = size
@@ -16,6 +17,7 @@ func init(pos: Vector2, size: Vector2, frame: Texture2D, fade_time: float) -> vo
 func _ready() -> void:
 	do_ghosting()
 
+## Creates the tween for handling the fade out, waits for the fade to finish, then queue frees the node.
 func do_ghosting() -> void:
 	var fade_out_tween: Tween = create_tween()
 	fade_out_tween.tween_property(self, "self_modulate", Color(1, 1, 1, 0), fade_out_time)

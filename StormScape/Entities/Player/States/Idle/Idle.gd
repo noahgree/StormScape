@@ -12,6 +12,7 @@ func enter() -> void:
 func exit() -> void:
 	pass
 
+## If any input vector besides Vector2.ZERO is detected, we transition to the run state
 func state_physics_process(_delta: float) -> void:
 	movement_vector = calculate_move_vector()
 	

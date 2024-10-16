@@ -1,17 +1,20 @@
 extends Node2D
+## A global singleton that caches the location of all audio resources.
+##
+## Interface with this singleton to play any music or sound effect, optionally providing a location to make it 2d.
 
-@export_dir var music_resources_folder: String
-@export_dir var sfx_resources_folder: String
+@export_dir var music_resources_folder: String ## The folder holding all .tres music files.
+@export_dir var sfx_resources_folder: String ## The folder holding all .tres sfx files.
 
-enum SoundType {
+enum SoundType { ## A specifier for determining music vs sfx and also whether it should be directional or not.
 	MUSIC_GLOBAL,
 	MUSIC_2D,
 	SFX_GLOBAL,
 	SFX_2D
 }
 
-var sfx_cache: Dictionary = {}
-var music_cache: Dictionary = {}
+var sfx_cache: Dictionary = {} ## The dict of the file paths to all sfx resources, using the sfx name as the key.
+var music_cache: Dictionary = {} ## The dict of the file paths to all music resources, using the music name as the key.
 
 func _ready() -> void:
 	if OS.get_unique_id() == "W1RHWL2KQ6": # needed to make audio work on Noah's computer, only affects him
@@ -20,6 +23,8 @@ func _ready() -> void:
 	cache_sound_resources(music_resources_folder, music_cache)
 	cache_sound_resources(sfx_resources_folder, sfx_cache)
 
+## Stores a key-value pair in the appropriate cache dict using the name specified in the sound resource as the key.
+## Given a key, the cache created by this method will return a file path to the specified audio name. 
 func cache_sound_resources(folder_path: String, cache: Dictionary) -> void:
 	var folder = DirAccess.open(folder_path)
 	folder.list_dir_begin()
@@ -36,7 +41,7 @@ func cache_sound_resources(folder_path: String, cache: Dictionary) -> void:
 		file_name = folder.get_next()
 	folder.list_dir_end()
 
-
+## Pulls a sound from one of the audio caches and creates it directionally if 2d is specified. 
 func create_sound(sound_name: String, type: SoundType, location: Vector2 = Vector2.ZERO) -> void:
 	var sound_resource: SoundResource
 	var is_2d: bool = false
