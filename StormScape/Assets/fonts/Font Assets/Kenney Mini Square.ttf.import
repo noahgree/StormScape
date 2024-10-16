@@ -3,12 +3,12 @@
 importer="font_data_dynamic"
 type="FontFile"
 uid="uid://dhsxhpwy05q22"
-path="res://.godot/imported/Kenney Mini Square.ttf-e0293be443e2d1a3c0aaa709adde51ee.fontdata"
+path="res://.godot/imported/Kenney Mini Square.ttf-9b0a2f791a58ec36a3eb714e86ca6a7d.fontdata"
 
 [deps]
 
-source_file="res://Assets/fonts/Font Assets/Kenney Mini Square.ttf"
-dest_files=["res://.godot/imported/Kenney Mini Square.ttf-e0293be443e2d1a3c0aaa709adde51ee.fontdata"]
+source_file="res://Assets/Fonts/Font Assets/Kenney Mini Square.ttf"
+dest_files=["res://.godot/imported/Kenney Mini Square.ttf-9b0a2f791a58ec36a3eb714e86ca6a7d.fontdata"]
 
 [params]
 

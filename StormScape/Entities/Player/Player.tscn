@@ -1,4 +1,4 @@
-[gd_scene load_steps=126 format=3 uid="uid://dba8mrurjlekp"]
+[gd_scene load_steps=127 format=3 uid="uid://dba8mrurjlekp"]
 
 [ext_resource type="Script" path="res://Entities/Player/Player.gd" id="1_m33tt"]
 [ext_resource type="Texture2D" uid="uid://77ell4xpptap" path="res://Entities/Player/Spritesheets/PlayerBase.png" id="2_jshja"]
@@ -12,8 +12,9 @@
 [ext_resource type="PackedScene" uid="uid://cugxqj7rc0q35" path="res://UI/Player Stats Overlay/PlayerStatsOverlay.tscn" id="9_txdy5"]
 [ext_resource type="Script" path="res://Utilities/Debug/PlayerTestHurtBtn.gd" id="10_beouj"]
 [ext_resource type="PackedScene" uid="uid://bv3ae77701mrg" path="res://Entities/Player/States/Dash/DashGhost.tscn" id="10_c2plq"]
-[ext_resource type="FontFile" uid="uid://cjuheb3v0el30" path="res://Assets/fonts/Font Assets/Kenney Pixel.ttf" id="11_1rxkv"]
+[ext_resource type="FontFile" uid="uid://cjuheb3v0el30" path="res://Assets/Fonts/Font Assets/Kenney Pixel.ttf" id="11_1rxkv"]
 [ext_resource type="Script" path="res://Utilities/Debug/PlayerTestHealBtn.gd" id="11_puk2x"]
+[ext_resource type="Script" path="res://Utilities/Debug/TestMusicBtn.gd" id="15_qbajg"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_o7k7i"]
 radius = 7.0
@@ -1148,7 +1149,20 @@ script = ExtResource("11_puk2x")
 health_component = NodePath("../../HealthComponent")
 stamina_component = NodePath("../../StaminaComponent")
 
+[node name="TestMusicBtn" type="Button" parent="PlayerUI"]
+texture_filter = 1
+offset_left = 432.0
+offset_top = 253.0
+offset_right = 496.0
+offset_bottom = 273.0
+scale = Vector2(0.7, 0.7)
+theme_override_fonts/font = ExtResource("11_1rxkv")
+theme_override_font_sizes/font_size = 16
+text = "TEST MUSIC"
+script = ExtResource("15_qbajg")
+
 [connection signal="timeout" from="StaminaComponent/StaminaWaitTimer" to="StaminaComponent" method="_on_stamina_wait_timer_timeout"]
 [connection signal="timeout" from="CharStateMachine/Dash/DashTimer" to="CharStateMachine/Dash" method="_on_dash_timer_timeout"]
 [connection signal="pressed" from="PlayerUI/TestHurtBtn" to="PlayerUI/TestHurtBtn" method="_on_pressed"]
 [connection signal="pressed" from="PlayerUI/TestHealBtn" to="PlayerUI/TestHealBtn" method="_on_pressed"]
+[connection signal="pressed" from="PlayerUI/TestMusicBtn" to="PlayerUI/TestMusicBtn" method="_on_pressed"]

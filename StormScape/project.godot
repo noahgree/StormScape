@@ -22,16 +22,17 @@ resources_spreadsheet_view/context_menu_on_leftclick=false
 
 config/name="StormScape"
 config/version="0.1"
-run/main_scene="res://Stages/World/world.tscn"
+run/main_scene="res://Stages/World/Game.tscn"
 config/features=PackedStringArray("4.3", "Forward Plus")
 boot_splash/bg_color=Color(0.104389, 0.121748, 0.27417, 1)
 config/icon="res://icon.svg"
 
 [autoload]
 
-DebugFlags="*res://Utilities/Common/DebugFlags.gd"
-SignalBus="*res://Utilities/Common/SignalBus.gd"
-ItemDatabase="*res://Utilities/Common/ItemDatabase.tscn"
+DebugFlags="*res://Utilities/Autoloads/DebugFlags.gd"
+ItemDatabase="*res://Utilities/Autoloads/ItemDatabase.tscn"
+SignalBus="*res://Utilities/Autoloads/SignalBus.gd"
+AudioManager="*res://Utilities/Autoloads/AudioManager.tscn"
 
 [display]
 
@@ -65,7 +66,7 @@ folder_colors={
 
 [gui]
 
-theme/custom_font="res://Assets/fonts/Game Font Resources/ui_pixel_font.tres"
+theme/custom_font="res://Assets/Fonts/Game Font Resources/ui_pixel_font.tres"
 
 [input]
 
