@@ -25,19 +25,19 @@ func take_damage(amount: int) -> void:
 	if spillover_damage > 0:
 		health = clampi(health - spillover_damage, 0, max_health)
 	
-	check_for_death()
+	_check_for_death()
 
 ## Decrements only the health value by the passed in amount.
 func take_health_damage(amount: int) -> void:
 	health = max(0, health - amount)
-	check_for_death()
+	_check_for_death()
 
 ## Decrements only the shield value by the passed in amount.
 func take_shield_damage(amount: int) -> void:
 	shield = max(0, shield - amount)
 
 ## Handles what happens when health reaches 0 for the entity.
-func check_for_death() -> void:
+func _check_for_death() -> void:
 	if health <= 0:
 		if get_parent().has_method("die"):
 			get_parent().die()

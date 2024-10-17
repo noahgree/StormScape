@@ -15,10 +15,10 @@ func init(pos: Vector2, size: Vector2, frame: Texture2D, fade_time: float) -> vo
 	self_modulate = Color(1, 1, 1, 0.6)
 
 func _ready() -> void:
-	do_ghosting()
+	_do_ghosting()
 
 ## Creates the tween for handling the fade out, waits for the fade to finish, then queue frees the node.
-func do_ghosting() -> void:
+func _do_ghosting() -> void:
 	var fade_out_tween: Tween = create_tween()
 	fade_out_tween.tween_property(self, "self_modulate", Color(1, 1, 1, 0), fade_out_time)
 	

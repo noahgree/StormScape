@@ -15,14 +15,14 @@ func exit() -> void:
 	pass
 
 func state_physics_process(delta: float) -> void:
-	do_character_movement(delta)
-	check_for_dash_request()
-	animate()
+	_do_character_movement(delta)
+	_check_for_dash_request()
+	_animate()
 
 ## Besides appropriately applying velocity to the parent entity, this checks and potentially activates sprinting 
 ## as well as calculates what vector the animation state machine should receive to play the matching directional anim.
-func do_character_movement(delta: float) -> void:
-	movement_vector = calculate_move_vector()
+func _do_character_movement(delta: float) -> void:
+	movement_vector = _calculate_move_vector()
 	var request_sprint = Input.is_action_pressed("sprint")
 	
 	if movement_vector == Vector2.ZERO:
@@ -49,15 +49,15 @@ func do_character_movement(delta: float) -> void:
 	
 	parent.move_and_slide()
 
-func calculate_move_vector() -> Vector2:
+func _calculate_move_vector() -> Vector2:
 	return Input.get_vector("move_left", "move_right", "move_up", "move_down").normalized()
 
 ## If the dash button is pressed and we are not on dash cooldown, we check if we have enough stamina to dash.
 ## If the use_stamina request is successful, we enter the dash state having already decremented the stamina amount.
-func check_for_dash_request() -> void:
+func _check_for_dash_request() -> void:
 	if Input.is_action_pressed("dash") and state_machine.dash_cooldown_timer.is_stopped():
 		if stamina_component.use_stamina(state_machine.dash_stamina_usage):
 			Transitioned.emit(self, "Dash")
 
-func animate() -> void:
+func _animate() -> void:
 	state_machine.anim_tree.set("parameters/run/blendspace2d/blend_position", state_machine.anim_pos)

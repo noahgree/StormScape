@@ -23,11 +23,11 @@ func enter() -> void:
 	ghosts_spawned = 0
 	dash_timer.start(dash_duration)
 	state_machine.dash_cooldown_timer.start(dash_duration + dash_cooldown)
-	movement_vector = calculate_move_vector()
+	movement_vector = _calculate_move_vector()
 	state_machine.anim_pos = movement_vector
 	
 	if parent.has_node("AnimatedSprite2D"):
-		create_ghost()
+		_create_ghost()
 		can_spawn_ghosts = true
 
 func exit() -> void:
@@ -38,31 +38,31 @@ func exit() -> void:
 func state_process(delta: float) -> void:
 	if can_spawn_ghosts:
 		time_since_ghost += delta
-		update_ghost_spawns(delta)
+		_update_ghost_spawns(delta)
 
 func state_physics_process(delta: float) -> void:
-	animate()
-	do_character_dash()
+	_animate()
+	_do_character_dash()
 
 ## Overrides the parent velocity to be a simple dash in the direction currently faced.
-func do_character_dash() -> void:
+func _do_character_dash() -> void:
 	parent.velocity = movement_vector * dash_speed
 	parent.move_and_slide()
 
-func calculate_move_vector() -> Vector2:
+func _calculate_move_vector() -> Vector2:
 	return Input.get_vector("move_left", "move_right", "move_up", "move_down").normalized()
 
-func animate() -> void:
+func _animate() -> void:
 	state_machine.anim_tree.set("parameters/run/blendspace2d/blend_position", state_machine.anim_pos)
 
 ## Checks if we have spent enough time since the last ghost and if we haven't spawned enough yet, then spawns one.
-func update_ghost_spawns(delta: float) -> void:
+func _update_ghost_spawns(delta: float) -> void:
 	if (ghosts_spawned < ghost_count) and (time_since_ghost >= (dash_duration / ghost_count)):
-		create_ghost()
+		_create_ghost()
 		time_since_ghost = 0.0
 
 ## Grabs the current animation frame texture and creates a ghost from it, adding it at the proper offset as a child.
-func create_ghost() -> void:
+func _create_ghost() -> void:
 	var animated_sprite_node = parent.get_node("AnimatedSprite2D")
 	var current_anim: String = animated_sprite_node.animation
 	var current_frame: int = animated_sprite_node.frame
@@ -75,11 +75,11 @@ func create_ghost() -> void:
 	ghosts_spawned += 1
 
 ## If there is a non-zero movement vector, go to the run state, otherwise go to the idle state.
-func travel_to_next_state() -> void:
+func _travel_to_next_state() -> void:
 	if movement_vector != Vector2.ZERO:
 		Transitioned.emit(self, "Run")
 	else:
 		Transitioned.emit(self, "Idle")
 
 func _on_dash_timer_timeout() -> void:
-	travel_to_next_state()
+	_travel_to_next_state()

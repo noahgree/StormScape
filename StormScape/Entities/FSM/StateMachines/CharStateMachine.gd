@@ -29,7 +29,7 @@ func init(parent: DynamicEntity) -> void:
 	for child in get_children():
 		if child is State:
 			states[child.name.to_lower()] = child
-			child.Transitioned.connect(on_child_transition)
+			child.Transitioned.connect(_on_child_transition)
 			child.parent = parent
 			child.stamina_component = parent.get_node("StaminaComponent")
 
@@ -50,7 +50,7 @@ func state_machine_handle_input(event: InputEvent) -> void:
 	if current_state:
 		current_state.state_handle_input(event)
 
-func on_child_transition(requesting_state, new_state_name) -> void:
+func _on_child_transition(requesting_state, new_state_name) -> void:
 	if requesting_state != current_state:
 		return
 	
