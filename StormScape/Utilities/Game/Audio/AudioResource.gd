@@ -1,5 +1,5 @@
 extends Resource
-class_name SoundResource
+class_name AudioResource
 ## A resource for linking a sound file path with an associated volume, pitch settings, name, and max concurrent streams.
 
 @export var name: String ## The main name of the sound.
@@ -8,6 +8,12 @@ class_name SoundResource
 @export_range(-40, 20, 0.1, "suffix:db") var volume = 0 ## The default volume associated with this sound.
 @export_range(0.0, 4.0, 0.01) var pitch_scale = 1.0 ## The default pitch scale to give this sound.
 @export_range(0.0, 1.0, 0.01) var pitch_randomness = 0.0 ## The range that the randomness can apply to the pitch scale.
+@export var restart_if_at_limit: bool = false ## If a current stream of this sound should restart when we request to play this audio but no streams are available. 
+@export var should_loop: bool = false ## Whether the sound should loop until it is asked to stop.
+
+@export_group("Spatial")
+@export_custom(PROPERTY_HINT_NONE, "suffix:px") var max_distance: int = 2000
+@export_exp_easing("attenuation") var attentuation_falloff: float = 1.0
 
 var current_count = 0 ## How many instances of this sound are currently being played.
 

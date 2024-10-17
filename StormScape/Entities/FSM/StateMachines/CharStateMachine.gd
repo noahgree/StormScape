@@ -7,25 +7,31 @@ class_name CharStateMachine
 ## By allowing this, you allow a long rabbit hole of dependencies that make things less and less reusable.
 
 
-@export var initial_state: State
-@export_custom(PROPERTY_HINT_NONE, "suffix:per second") var sprint_stamina_usage: float = 15.0
-@export_custom(PROPERTY_HINT_NONE, "suffix:per dash") var dash_stamina_usage: float = 20.0
+@export var initial_state: State ## What state the state machine should start off in.
+@export var anim_tree: AnimationTree ## The animation tree node to support the children state animations.
+@export_custom(PROPERTY_HINT_NONE, "suffix:per second") var sprint_stamina_usage: float = 15.0 ## The amount of stamina used per second when the entity is sprinting.
+@export_custom(PROPERTY_HINT_NONE, "suffix:per dash") var dash_stamina_usage: float = 20.0 ## The amount of stamina used per dash activation.
 
-@onready var dash_cooldown_timer: Timer = %DashCooldownTimer
+@onready var dash_cooldown_timer: Timer = %DashCooldownTimer ## The minimum time between activating a dash.
 
-var current_state: State
-var states: Dictionary = {}
-var anim_pos: Vector2 = Vector2.ZERO
+var current_state: State ## The current state the state machine is in.
+var states: Dictionary = {} ## A dict of all current children states of the state machine node.
+var anim_pos: Vector2 = Vector2.ZERO ## The vector to provide the associated animation state machine with.
 
+## Called externally by the parent node of this FSM. This passes in the parent reference to each child state.
+## Parent entities must have an appropriately named and typed StaminaComponent or execution will fail.
 func init(parent: DynamicEntity) -> void:
+	var stamina_component
+	if parent.has_node("StaminaComponent"):
+		stamina_component = parent.get_node("StaminaComponent")
+	assert(stamina_component is StaminaComponent, "Parent entities of this FSM must have a StaminaComponent to support being a dynamic entity.")
+	
 	for child in get_children():
 		if child is State:
 			states[child.name.to_lower()] = child
 			child.Transitioned.connect(on_child_transition)
 			child.parent = parent
-			if parent.has_node("StaminaComponent"):
-				child.stamina_component = parent.get_node("StaminaComponent")
-
+			child.stamina_component = parent.get_node("StaminaComponent")
 
 func _ready() -> void:
 	if initial_state:

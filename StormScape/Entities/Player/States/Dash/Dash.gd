@@ -18,7 +18,7 @@ var can_spawn_ghosts: bool = false ## Whether we have the proper node to enable 
 
 
 func enter() -> void:
-	anim_tree["parameters/playback"].travel("run")
+	state_machine.anim_tree["parameters/playback"].travel("run")
 	
 	ghosts_spawned = 0
 	dash_timer.start(dash_duration)
@@ -53,7 +53,7 @@ func calculate_move_vector() -> Vector2:
 	return Input.get_vector("move_left", "move_right", "move_up", "move_down").normalized()
 
 func animate() -> void:
-	anim_tree.set("parameters/run/blendspace2d/blend_position", state_machine.anim_pos)
+	state_machine.anim_tree.set("parameters/run/blendspace2d/blend_position", state_machine.anim_pos)
 
 ## Checks if we have spent enough time since the last ghost and if we haven't spawned enough yet, then spawns one.
 func update_ghost_spawns(delta: float) -> void:

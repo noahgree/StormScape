@@ -2,12 +2,11 @@ extends DynamicEntity
 class_name Player
 ## The main class for the player character.
 
+@onready var state_machine: CharStateMachine = $CharStateMachine ## The FSM controlling the player.
+@onready var health_component: HealthComponent = $HealthComponent ## The component in charge of player health and shield.
+@onready var stamina_component: StaminaComponent = $StaminaComponent ## The component in charge of player stamina and hunger.
 
-@onready var state_machine: CharStateMachine = $CharStateMachine
-@onready var health_component: HealthComponent = $HealthComponent
-@onready var stamina_component: StaminaComponent = $StaminaComponent
-
-
+## Initializes the FSM that controls this player.
 func _ready() -> void:
 	state_machine.init(self)
 

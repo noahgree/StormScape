@@ -1067,10 +1067,9 @@ stats_ui = NodePath("../PlayerUI/PlayerStatsOverlay")
 monitoring = false
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="HurtboxComponent"]
-visible = false
 position = Vector2(0, -13)
 shape = SubResource("RectangleShape2D_7dc0v")
-debug_color = Color(1, 0.294118, 0.588235, 0.156863)
+debug_color = Color(1, 0.294, 0.588, 0.06)
 
 [node name="StaminaComponent" type="Node" parent="." node_paths=PackedStringArray("stats_ui")]
 script = ExtResource("5_bsogp")
@@ -1081,28 +1080,26 @@ unique_name_in_owner = true
 wait_time = 5.0
 one_shot = true
 
-[node name="CharStateMachine" type="Node" parent="." node_paths=PackedStringArray("initial_state")]
+[node name="CharStateMachine" type="Node" parent="." node_paths=PackedStringArray("initial_state", "anim_tree")]
 script = ExtResource("6_otbuq")
 initial_state = NodePath("Idle")
+anim_tree = NodePath("../AnimationTree")
 
-[node name="Idle" type="Node" parent="CharStateMachine" node_paths=PackedStringArray("anim_tree")]
+[node name="Idle" type="Node" parent="CharStateMachine"]
 script = ExtResource("7_15a5x")
-anim_tree = NodePath("../../AnimationTree")
 
-[node name="Run" type="Node" parent="CharStateMachine" node_paths=PackedStringArray("anim_tree")]
+[node name="Run" type="Node" parent="CharStateMachine"]
 script = ExtResource("9_0dcld")
-anim_tree = NodePath("../../AnimationTree")
 
-[node name="Dash" type="Node" parent="CharStateMachine" node_paths=PackedStringArray("anim_tree")]
+[node name="Dash" type="Node" parent="CharStateMachine"]
 script = ExtResource("9_a1qv1")
 ghost_scene = ExtResource("10_c2plq")
-anim_tree = NodePath("../../AnimationTree")
 
 [node name="DashTimer" type="Timer" parent="CharStateMachine/Dash"]
 unique_name_in_owner = true
 one_shot = true
 
-[node name="DashCooldownTimer" type="Timer" parent="CharStateMachine"]
+[node name="DashCooldownTimer" type="Timer" parent="CharStateMachine/Dash"]
 unique_name_in_owner = true
 one_shot = true
 

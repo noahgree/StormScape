@@ -9,7 +9,7 @@ extends State
 var movement_vector: Vector2 = Vector2.ZERO ## The current direction of movement.
 
 func enter() -> void:
-	anim_tree["parameters/playback"].travel("run")
+	state_machine.anim_tree["parameters/playback"].travel("run")
 
 func exit() -> void:
 	pass
@@ -39,11 +39,11 @@ func do_character_movement(delta: float) -> void:
 			state_machine.anim_pos = movement_vector
 		
 		if request_sprint and stamina_component.use_stamina(state_machine.sprint_stamina_usage * delta): # sprint
-			anim_tree.set("parameters/run/TimeScale/scale", 1.5 * sprint_multiplier)
+			state_machine.anim_tree.set("parameters/run/TimeScale/scale", 1.5 * sprint_multiplier)
 			parent.velocity += (movement_vector * acceleration * sprint_multiplier * delta)
 			parent.velocity = parent.velocity.limit_length(max_speed * sprint_multiplier)
 		else: # move without sprint
-			anim_tree.set("parameters/run/TimeScale/scale", 1.5)
+			state_machine.anim_tree.set("parameters/run/TimeScale/scale", 1.5)
 			parent.velocity += (movement_vector * acceleration * delta)
 			parent.velocity = parent.velocity.limit_length(max_speed)
 	
@@ -60,4 +60,4 @@ func check_for_dash_request() -> void:
 			Transitioned.emit(self, "Dash")
 
 func animate() -> void:
-	anim_tree.set("parameters/run/blendspace2d/blend_position", state_machine.anim_pos)
+	state_machine.anim_tree.set("parameters/run/blendspace2d/blend_position", state_machine.anim_pos)
