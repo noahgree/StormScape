@@ -16,6 +16,7 @@ class_name AudioResource
 @export_exp_easing("attenuation") var attentuation_falloff: float = 1.0
 
 var current_count = 0 ## How many instances of this sound are currently being played.
+var id: int = 0 ## Incremented when audio stream players using this sound are instantiated to keep names unique
 
 ## Changes the current number of instances value.
 func change_current_count(amount: int) -> void:
@@ -24,6 +25,9 @@ func change_current_count(amount: int) -> void:
 ## Checks if the current number of instances is less than the allowed concurrent_limit.
 func has_available_stream() -> bool:
 	return current_count < concurrent_limit
+
+func on_audio_created() -> void:
+	id += 1
 
 ## Called when the connected "finished" signal from the AudioStream created using this resource finishes playing.
 func on_audio_finished() -> void:

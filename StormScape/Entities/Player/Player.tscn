@@ -1055,6 +1055,9 @@ script = ExtResource("1_m33tt")
 shape = SubResource("CircleShape2D_o7k7i")
 debug_color = Color(0, 0.6, 0.701961, 0.180392)
 
+[node name="AudioListener2D" type="AudioListener2D" parent="."]
+current = true
+
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 position = Vector2(0, -16)
 sprite_frames = SubResource("SpriteFrames_lbx7k")
