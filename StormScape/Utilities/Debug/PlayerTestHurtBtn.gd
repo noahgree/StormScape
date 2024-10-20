@@ -1,8 +1,7 @@
 extends Button
 
 @export var health_component: HealthComponent
-@export var stamina_component: StaminaComponent
 
 
 func _on_pressed() -> void:
-	health_component.take_damage(12)
+	health_component.damage_shield_then_health(12)

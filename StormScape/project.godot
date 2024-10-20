@@ -37,6 +37,7 @@ DebugFlags="*res://Utilities/Autoloads/DebugFlags.gd"
 ItemDatabase="*res://Utilities/Autoloads/ItemDatabase.tscn"
 SignalBus="*res://Utilities/Autoloads/SignalBus.gd"
 AudioManager="*res://Utilities/Autoloads/AudioManager.tscn"
+EnumUtils="*res://Utilities/Autoloads/EnumUtils.gd"
 
 [display]
 
@@ -49,6 +50,8 @@ window/stretch/mode="canvas_items"
 
 [editor]
 
+naming/scene_name_casing=1
+naming/script_name_casing=1
 version_control/plugin_name="GitPlugin"
 version_control/autoload_on_startup=true
 
@@ -118,6 +121,7 @@ dash={
 2d_physics/layer_4="Enemy Attacks"
 2d_physics/layer_5="Objects"
 2d_physics/layer_6="Terrain"
+2d_physics/layer_7="World Areas"
 
 [rendering]
 

@@ -1,8 +1,14 @@
-[gd_scene load_steps=8 format=3 uid="uid://bscnr6a23l10m"]
+[gd_scene load_steps=18 format=3 uid="uid://bscnr6a23l10m"]
 
 [ext_resource type="Texture2D" uid="uid://c50xdwgnkx441" path="res://Stages/Tilesets/TilesetFloor.png" id="1_o34ct"]
 [ext_resource type="Texture2D" uid="uid://nvl4eoe0gf5y" path="res://Stages/Tilesets/TilesetField.png" id="2_okrb7"]
 [ext_resource type="PackedScene" uid="uid://dba8mrurjlekp" path="res://Entities/Player/Player.tscn" id="3_0mevo"]
+[ext_resource type="PackedScene" uid="uid://jgqrrdsi1kxn" path="res://Utilities/Debug/TestEffectSource.tscn" id="4_vckf6"]
+[ext_resource type="Script" path="res://Entities/EffectSources/StaticEffectSource.gd" id="5_ehppk"]
+[ext_resource type="Script" path="res://Entities/EffectSources/MovingEffectSource.gd" id="5_myh46"]
+[ext_resource type="Script" path="res://Entities/EntityTypes/RigidEntity.gd" id="6_ldfbn"]
+[ext_resource type="PackedScene" uid="uid://btba0jmsow1mx" path="res://Entities/Components/EffectReceiverComponent/EffectReceiverComponent.tscn" id="7_bfj3g"]
+[ext_resource type="PackedScene" uid="uid://dykiv0tlhwmox" path="res://Entities/Components/EffectReceiverComponent/EffectHandlers/KnockbackEffectHandler.tscn" id="8_41uae"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_mc523"]
 texture = ExtResource("1_o34ct")
@@ -4087,6 +4093,17 @@ glow_normalized = true
 glow_intensity = 1.5
 glow_blend_mode = 1
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_1u7wc"]
+size = Vector2(34, 32)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_5ulmn"]
+size = Vector2(6, 6)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_sbju2"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_wpovd"]
+size = Vector2(18, 18)
+
 [node name="Game" type="Node2D"]
 
 [node name="TileMapLayer" type="TileMapLayer" parent="."]
@@ -4100,3 +4117,78 @@ editor_description = "This handles glow and other global effects like saturation
 environment = SubResource("Environment_2wouv")
 
 [node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
+
+[node name="TestEffectSource" parent="." instance=ExtResource("4_vckf6")]
+position = Vector2(181, 105)
+collision_mask = 63
+script = ExtResource("5_ehppk")
+knockback_force = 700
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="TestEffectSource"]
+shape = SubResource("RectangleShape2D_1u7wc")
+
+[node name="TestEffectSource2" parent="." instance=ExtResource("4_vckf6")]
+position = Vector2(62, 96)
+collision_mask = 63
+script = ExtResource("5_myh46")
+piercing_count = 0
+source_team = 4
+dmg_affected_teams = 3
+base_damage = 30
+dmg_affected_stats = 2
+dmg_stun_time = 0.5
+base_healing = 20
+heal_affected_stats = 2
+heal_timeline = 1
+hot_number_of_ticks = 2
+hot_delay_time = 1.0
+knockback_force = 650
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="TestEffectSource2"]
+shape = SubResource("RectangleShape2D_5ulmn")
+
+[node name="TestStaticEntity" type="RigidBody2D" parent="."]
+position = Vector2(120, 106)
+collision_layer = 16
+collision_mask = 117
+mass = 2.5
+gravity_scale = 0.0
+lock_rotation = true
+linear_damp = 2.0
+script = ExtResource("6_ldfbn")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="TestStaticEntity"]
+shape = SubResource("RectangleShape2D_sbju2")
+
+[node name="EffectReceiverComponent" parent="TestStaticEntity" node_paths=PackedStringArray("affected_entity") instance=ExtResource("7_bfj3g")]
+collision_layer = 16
+affected_entity = NodePath("..")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="TestStaticEntity/EffectReceiverComponent"]
+shape = SubResource("RectangleShape2D_wpovd")
+debug_color = Color(0.941042, 1.32841e-05, 0.612344, 0.42)
+
+[node name="KnockbackEffectHandler" parent="TestStaticEntity/EffectReceiverComponent" instance=ExtResource("8_41uae")]
+
+[node name="TestStaticEntity2" type="RigidBody2D" parent="."]
+position = Vector2(152, 143)
+collision_layer = 16
+collision_mask = 117
+mass = 2.5
+gravity_scale = 0.0
+lock_rotation = true
+linear_damp = 2.0
+script = ExtResource("6_ldfbn")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="TestStaticEntity2"]
+shape = SubResource("RectangleShape2D_sbju2")
+
+[node name="EffectReceiverComponent" parent="TestStaticEntity2" node_paths=PackedStringArray("affected_entity") instance=ExtResource("7_bfj3g")]
+collision_layer = 16
+affected_entity = NodePath("..")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="TestStaticEntity2/EffectReceiverComponent"]
+shape = SubResource("RectangleShape2D_wpovd")
+debug_color = Color(0.941042, 1.32841e-05, 0.612344, 0.42)
+
+[node name="KnockbackEffectHandler" parent="TestStaticEntity2/EffectReceiverComponent" instance=ExtResource("8_41uae")]

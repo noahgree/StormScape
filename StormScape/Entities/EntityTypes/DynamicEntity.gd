@@ -4,3 +4,12 @@ class_name DynamicEntity
 ## 
 ## This should be used by things like players, enemies, moving environmental entities, etc. 
 ## This should not be used by things like weapons or trees.
+
+@onready var move_fsm: MoveStateMachine = %MoveStateMachine ## The FSM controlling the player.
+
+
+func request_stun(duration: float) -> void:
+	move_fsm.request_stun(duration)
+
+func request_knockback(knockback: Vector2) -> void:
+	move_fsm.request_knockback(knockback)

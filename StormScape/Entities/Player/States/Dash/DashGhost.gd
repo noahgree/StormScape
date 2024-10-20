@@ -6,11 +6,11 @@ var fade_out_time: float = 0.0 ## How long the sprite takes to fade out after be
 
 
 ## Takes in relevant data to instance the node in the world as a ghost, including a custom fade out time.
-func init(pos: Vector2, size: Vector2, frame: Texture2D, fade_time: float) -> void:
+func init(pos: Vector2, size: Vector2, sprite_frame: Texture2D, fade_time: float) -> void:
 	position = pos
 	scale = size
 	if frame:
-		texture = frame
+		texture = sprite_frame
 	fade_out_time = fade_time
 	self_modulate = Color(1, 1, 1, 0.6)
 

@@ -1,0 +1,14 @@
+extends RigidBody2D
+class_name RigidEntity
+## An entity that can move with physics and that also cannot have non-HP stats like stamina and hunger.
+##
+## This would be used for things like blocks that respond to explosions and that also need potential health.
+## This should not be used for static environmental entities like trees and also not for players or moving enemies.
+
+
+func _ready() -> void:
+	mass = 3
+	linear_damp = 2.5
+	var material = PhysicsMaterial.new()
+	material.friction = 1.0
+	self.physics_material_override = material

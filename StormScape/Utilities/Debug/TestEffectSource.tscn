@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://jgqrrdsi1kxn"]
+
+[ext_resource type="Script" path="res://Entities/EffectSources/EffectSource.gd" id="1_fhja0"]
+
+[node name="TestEffectSource" type="Area2D"]
+collision_layer = 0
+monitorable = false
+script = ExtResource("1_fhja0")

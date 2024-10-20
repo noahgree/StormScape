@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://dykiv0tlhwmox"]
+
+[ext_resource type="Script" path="res://Entities/Components/EffectReceiverComponent/EffectHandlers/KnockbackEffectHandler.gd" id="1_bm2cp"]
+
+[node name="KnockbackEffectHandler" type="Node"]
+script = ExtResource("1_bm2cp")
