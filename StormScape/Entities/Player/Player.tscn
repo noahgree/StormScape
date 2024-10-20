@@ -1,4 +1,4 @@
-[gd_scene load_steps=133 format=3 uid="uid://dba8mrurjlekp"]
+[gd_scene load_steps=132 format=3 uid="uid://dba8mrurjlekp"]
 
 [ext_resource type="Script" path="res://Entities/Player/Player.gd" id="1_m33tt"]
 [ext_resource type="Texture2D" uid="uid://77ell4xpptap" path="res://Entities/Player/Spritesheets/PlayerBase.png" id="2_jshja"]
@@ -7,7 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://4gl24qwdyti3" path="res://Entities/Components/EffectReceiverComponent/EffectHandlers/DmgEffectHandler.tscn" id="5_g3ixu"]
 [ext_resource type="PackedScene" uid="uid://cxpv7l7rcaq1o" path="res://Entities/Components/StaminaComponent/StaminaComponent.tscn" id="5_k4fu6"]
 [ext_resource type="PackedScene" uid="uid://ddj5ippwwkvop" path="res://Entities/Components/EffectReceiverComponent/EffectHandlers/HealEffectHandler.tscn" id="6_5e1ju"]
-[ext_resource type="Script" path="res://Entities/FSM/StateMachines/MoveStateMachine.gd" id="6_otbuq"]
+[ext_resource type="Script" path="res://Entities/EntityTypes/DynamicEntity/DynamicFSM/MoveStateMachine.gd" id="6_otbuq"]
 [ext_resource type="Script" path="res://Entities/Player/States/Idle/Idle.gd" id="7_15a5x"]
 [ext_resource type="PackedScene" uid="uid://dykiv0tlhwmox" path="res://Entities/Components/EffectReceiverComponent/EffectHandlers/KnockbackEffectHandler.tscn" id="7_k0pv8"]
 [ext_resource type="Script" path="res://Entities/Player/States/Run/Run.gd" id="9_0dcld"]
@@ -16,7 +16,6 @@
 [ext_resource type="PackedScene" uid="uid://cx4b21058vypq" path="res://Entities/Components/EffectReceiverComponent/EffectHandlers/StunEffectHandler.tscn" id="9_w4lel"]
 [ext_resource type="Script" path="res://Utilities/Debug/PlayerTestHurtBtn.gd" id="10_beouj"]
 [ext_resource type="PackedScene" uid="uid://bv3ae77701mrg" path="res://Entities/Player/States/Dash/DashGhost.tscn" id="10_c2plq"]
-[ext_resource type="Script" path="res://Entities/Components/EffectReceiverComponent/EffectHandlers/StunEffectHandler.gd" id="10_m0mwe"]
 [ext_resource type="FontFile" uid="uid://cjuheb3v0el30" path="res://Assets/Fonts/Font Assets/Kenney Pixel.ttf" id="11_1rxkv"]
 [ext_resource type="Script" path="res://Utilities/Debug/PlayerTestHealBtn.gd" id="11_puk2x"]
 [ext_resource type="Script" path="res://Entities/Player/States/Stunned/Stunned.gd" id="15_eiig3"]
@@ -1095,13 +1094,12 @@ debug_color = Color(1, 0.294, 0.588, 0.06)
 [node name="KnockbackEffectHandler" parent="EffectReceiverComponent" instance=ExtResource("7_k0pv8")]
 
 [node name="StunEffectHandler" parent="EffectReceiverComponent" instance=ExtResource("9_w4lel")]
-script = ExtResource("10_m0mwe")
 
-[node name="MoveStateMachine" type="Node" parent="." node_paths=PackedStringArray("initial_state", "anim_tree")]
+[node name="MoveStateMachine" type="Node" parent="." node_paths=PackedStringArray("anim_tree", "initial_state")]
 unique_name_in_owner = true
 script = ExtResource("6_otbuq")
-initial_state = NodePath("Idle")
 anim_tree = NodePath("../AnimationTree")
+initial_state = NodePath("Idle")
 
 [node name="Idle" type="Node" parent="MoveStateMachine"]
 script = ExtResource("7_15a5x")
@@ -1111,7 +1109,12 @@ script = ExtResource("9_0dcld")
 
 [node name="Dash" type="Node" parent="MoveStateMachine"]
 script = ExtResource("9_a1qv1")
+dash_speed = null
+dash_duration = null
+dash_cooldown = null
 ghost_scene = ExtResource("10_c2plq")
+ghost_count = null
+ghost_fade_time = null
 
 [node name="DashTimer" type="Timer" parent="MoveStateMachine/Dash"]
 unique_name_in_owner = true

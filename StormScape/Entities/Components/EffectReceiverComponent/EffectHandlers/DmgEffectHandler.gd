@@ -1,9 +1,15 @@
+@icon("res://Utilities/Debug/EditorIcons/dmg_effect_handler.svg")
 extends Node
 ## A handler for using the data provided in the effect source to apply damage in different ways.
 
-@onready var health_component: HealthComponent = get_parent().health_component
+@onready var health_component: HealthComponent = get_parent().health_component ## The health component to be affected by the damage.
 
 
+## Asserts that there is a valid health component on the affected entity before trying to handle damage.
+func _ready() -> void:
+	assert(get_parent().health_component, get_parent().get_parent().name + " has an effect receiver that is intended to handle damage, but no health component is connected.")
+
+## Calculates the final damage to apply after considering whether the crit hit and also how much the armor blocks.
 func _get_dmg_after_crit_then_armor(effect_source: EffectSource) -> int:
 	var should_crit: bool = randf() < effect_source.crit_chance
 	var dmg_after_crit: int = effect_source.base_damage
@@ -14,10 +20,12 @@ func _get_dmg_after_crit_then_armor(effect_source: EffectSource) -> int:
 	var new_damage: int = max(0, round(dmg_after_crit * (1 - armor_block_percent)))
 	return new_damage
 
+## Handles applying instant, one-shot damage to the affected entity.
 func handle_instant_dmg(effect_source: EffectSource) -> void:
 	var dmg_after_crit_then_armor: int = _get_dmg_after_crit_then_armor(effect_source)
 	_send_handled_dmg(effect_source.dmg_affected_stats, dmg_after_crit_then_armor)
 
+## Handles applying damage that is inflicted over time, whether with a delay, with burst intervals, or with both.
 func handle_over_time_dmg(effect_source: EffectSource) -> void:
 	var dmg_after_crit_then_armor: int = _get_dmg_after_crit_then_armor(effect_source)
 	
@@ -40,7 +48,8 @@ func handle_over_time_dmg(effect_source: EffectSource) -> void:
 	else:
 		dot_timer.start()
 
-
+## When the damage over time interval timer ends, check what sourced the timer and see if that source 
+## needs to apply any more damage ticks before ending.
 func _on_dot_timer_timeout(dot_timer: Timer) -> void:
 	var effect_source: EffectSource = dot_timer.get_meta("effect_source")
 	var ticks_completed: int = dot_timer.get_meta("ticks_completed")
@@ -58,6 +67,8 @@ func _on_dot_timer_timeout(dot_timer: Timer) -> void:
 		dot_timer.stop()
 		dot_timer.queue_free()
 
+## Sends the affected entity's health component the final damage values based on what stats the damage was 
+## allowed to affect.
 func _send_handled_dmg(dmg_affected_stats: EffectSource.DmgAffectedStats, handled_amount: int) -> void:
 	match dmg_affected_stats:
 		EffectSource.DmgAffectedStats.HEALTH_ONLY:

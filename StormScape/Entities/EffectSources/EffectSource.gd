@@ -51,6 +51,7 @@ func _ready() -> void:
 	collision_layer = 0
 	collision_mask = scanned_phys_layers
 
+## Meant to interact with an EffectReceiverComponent that can handle effects supplied by this instance.
 func _on_area_entered(area: Area2D) -> void:
 	if area is EffectReceiverComponent:
 		area.handle_effect(self)

@@ -1,4 +1,4 @@
-extends State
+extends DynamicState
 ## Handles when the character is moving, including both running and sprinting.
 
 @export var max_speed: float = 150 ## The maximum speed the entity can travel once fully accelerated. 
@@ -60,7 +60,7 @@ func _calculate_move_vector() -> Vector2:
 ## If the dash button is pressed and we are not on dash cooldown, we check if we have enough stamina to dash.
 ## If the use_stamina request is successful, we enter the dash state having already decremented the stamina amount.
 func _check_for_dash_request() -> void:
-	if Input.is_action_pressed("dash") and fsm.dash_cooldown_timer.is_stopped() and movement_vector != Vector2.ZERO:
+	if _is_dash_requested() and fsm.dash_cooldown_timer.is_stopped() and movement_vector != Vector2.ZERO:
 		if stamina_component.use_stamina(fsm.dash_stamina_usage):
 			Transitioned.emit(self, "Dash")
 

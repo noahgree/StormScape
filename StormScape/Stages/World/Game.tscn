@@ -1,14 +1,17 @@
-[gd_scene load_steps=18 format=3 uid="uid://bscnr6a23l10m"]
+[gd_scene load_steps=21 format=3 uid="uid://bscnr6a23l10m"]
 
 [ext_resource type="Texture2D" uid="uid://c50xdwgnkx441" path="res://Stages/Tilesets/TilesetFloor.png" id="1_o34ct"]
 [ext_resource type="Texture2D" uid="uid://nvl4eoe0gf5y" path="res://Stages/Tilesets/TilesetField.png" id="2_okrb7"]
 [ext_resource type="PackedScene" uid="uid://dba8mrurjlekp" path="res://Entities/Player/Player.tscn" id="3_0mevo"]
 [ext_resource type="PackedScene" uid="uid://jgqrrdsi1kxn" path="res://Utilities/Debug/TestEffectSource.tscn" id="4_vckf6"]
-[ext_resource type="Script" path="res://Entities/EffectSources/StaticEffectSource.gd" id="5_ehppk"]
-[ext_resource type="Script" path="res://Entities/EffectSources/MovingEffectSource.gd" id="5_myh46"]
-[ext_resource type="Script" path="res://Entities/EntityTypes/RigidEntity.gd" id="6_ldfbn"]
+[ext_resource type="Script" path="res://Entities/EffectSources/StaticEffectSources/StaticEffectSource.gd" id="5_ehppk"]
+[ext_resource type="Script" path="res://Entities/EffectSources/MovingEffectSources/MovingEffectSource.gd" id="5_myh46"]
+[ext_resource type="Script" path="res://Entities/EntityTypes/RigidEntity/RigidEntity.gd" id="6_ldfbn"]
 [ext_resource type="PackedScene" uid="uid://btba0jmsow1mx" path="res://Entities/Components/EffectReceiverComponent/EffectReceiverComponent.tscn" id="7_bfj3g"]
 [ext_resource type="PackedScene" uid="uid://dykiv0tlhwmox" path="res://Entities/Components/EffectReceiverComponent/EffectHandlers/KnockbackEffectHandler.tscn" id="8_41uae"]
+[ext_resource type="PackedScene" uid="uid://cdfdy8m6ki3oq" path="res://Entities/Components/HealthComponent/HealthComponent.tscn" id="10_7lajt"]
+[ext_resource type="PackedScene" uid="uid://4gl24qwdyti3" path="res://Entities/Components/EffectReceiverComponent/EffectHandlers/DmgEffectHandler.tscn" id="11_ahd86"]
+[ext_resource type="PackedScene" uid="uid://ddj5ippwwkvop" path="res://Entities/Components/EffectReceiverComponent/EffectHandlers/HealEffectHandler.tscn" id="12_6kqwm"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_mc523"]
 texture = ExtResource("1_o34ct")
@@ -4119,7 +4122,7 @@ environment = SubResource("Environment_2wouv")
 [node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
 
 [node name="TestEffectSource" parent="." instance=ExtResource("4_vckf6")]
-position = Vector2(181, 105)
+position = Vector2(327, 137)
 collision_mask = 63
 script = ExtResource("5_ehppk")
 knockback_force = 700
@@ -4128,13 +4131,11 @@ knockback_force = 700
 shape = SubResource("RectangleShape2D_1u7wc")
 
 [node name="TestEffectSource2" parent="." instance=ExtResource("4_vckf6")]
-position = Vector2(62, 96)
+position = Vector2(11, 98)
 collision_mask = 63
 script = ExtResource("5_myh46")
 piercing_count = 0
-source_team = 4
-dmg_affected_teams = 3
-base_damage = 30
+base_damage = 20
 dmg_affected_stats = 2
 dmg_stun_time = 0.5
 base_healing = 20
@@ -4147,8 +4148,26 @@ knockback_force = 650
 [node name="CollisionShape2D" type="CollisionShape2D" parent="TestEffectSource2"]
 shape = SubResource("RectangleShape2D_5ulmn")
 
+[node name="TestEffectSource3" parent="." instance=ExtResource("4_vckf6")]
+position = Vector2(11, 106)
+collision_mask = 63
+script = ExtResource("5_myh46")
+piercing_count = 0
+base_damage = 20
+dmg_affected_stats = 2
+dmg_stun_time = 0.5
+base_healing = 20
+heal_affected_stats = 2
+heal_timeline = 1
+hot_number_of_ticks = 2
+hot_delay_time = 1.0
+knockback_force = 650
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="TestEffectSource3"]
+shape = SubResource("RectangleShape2D_5ulmn")
+
 [node name="TestStaticEntity" type="RigidBody2D" parent="."]
-position = Vector2(120, 106)
+position = Vector2(76, 155)
 collision_layer = 16
 collision_mask = 117
 mass = 2.5
@@ -4171,7 +4190,7 @@ debug_color = Color(0.941042, 1.32841e-05, 0.612344, 0.42)
 [node name="KnockbackEffectHandler" parent="TestStaticEntity/EffectReceiverComponent" instance=ExtResource("8_41uae")]
 
 [node name="TestStaticEntity2" type="RigidBody2D" parent="."]
-position = Vector2(152, 143)
+position = Vector2(172, 75)
 collision_layer = 16
 collision_mask = 117
 mass = 2.5
@@ -4183,12 +4202,19 @@ script = ExtResource("6_ldfbn")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="TestStaticEntity2"]
 shape = SubResource("RectangleShape2D_sbju2")
 
-[node name="EffectReceiverComponent" parent="TestStaticEntity2" node_paths=PackedStringArray("affected_entity") instance=ExtResource("7_bfj3g")]
+[node name="HealthComponent" parent="TestStaticEntity2" instance=ExtResource("10_7lajt")]
+
+[node name="EffectReceiverComponent" parent="TestStaticEntity2" node_paths=PackedStringArray("health_component", "affected_entity") instance=ExtResource("7_bfj3g")]
 collision_layer = 16
+health_component = NodePath("../HealthComponent")
 affected_entity = NodePath("..")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="TestStaticEntity2/EffectReceiverComponent"]
 shape = SubResource("RectangleShape2D_wpovd")
 debug_color = Color(0.941042, 1.32841e-05, 0.612344, 0.42)
+
+[node name="DmgEffectHandler" parent="TestStaticEntity2/EffectReceiverComponent" instance=ExtResource("11_ahd86")]
+
+[node name="HealEffectHandler" parent="TestStaticEntity2/EffectReceiverComponent" instance=ExtResource("12_6kqwm")]
 
 [node name="KnockbackEffectHandler" parent="TestStaticEntity2/EffectReceiverComponent" instance=ExtResource("8_41uae")]
