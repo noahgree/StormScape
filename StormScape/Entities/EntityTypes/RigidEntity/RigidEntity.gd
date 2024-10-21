@@ -9,6 +9,6 @@ class_name RigidEntity
 func _ready() -> void:
 	mass = 3
 	linear_damp = 2.5
-	var material = PhysicsMaterial.new()
-	material.friction = 1.0
-	self.physics_material_override = material
+	var phys_material = PhysicsMaterial.new()
+	phys_material.friction = 1.0
+	self.physics_material_override = phys_material

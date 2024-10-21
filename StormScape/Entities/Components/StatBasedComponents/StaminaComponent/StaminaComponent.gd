@@ -1,17 +1,17 @@
 @icon("res://Utilities/Debug/EditorIcons/stamina_component.svg")
-extends Node
+extends StatBasedComponent
 class_name StaminaComponent
-## A component for handling stamina and hunger for an entity.
+## A component for handling stamina and hunger for a dynamic entity.
 ## 
 ## Has functions for handling using stamina and hunger.
-## This class should always remain agnostic about the entity and the entity's UI it updates.
+## This class should always remain agnostic about the entity, and the UI it updates is optional.
 
-
-@export var stats_ui: Control ## The UI that will reflect this component's values.
-@export var max_stamina: float = 100.0 ## The max amount of stamina the entity can have.
-@export_custom(PROPERTY_HINT_NONE, "suffix:per second") var stamina_recharge_rate: float = 15.0 ## The amount of stamina that recharges per second during recharge.
-@export var max_hunger_bars: int = 100 ## The max amount of hunger bars the entity can have.
-@export_custom(PROPERTY_HINT_NONE, "suffix:hunger") var stamina_to_hunger_cost: int = 5 ## The amount of hunger to deduct per max_stamina amount of stamina.
+@export var _max_stamina: float = 100.0 ## The max amount of stamina the entity can have.
+@export_custom(PROPERTY_HINT_NONE, "suffix:per second") var _stamina_recharge_rate: float = 15.0 ## The amount of stamina that recharges per second during recharge.
+@export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var _stamina_recharge_delay: float = 5.0 ## The delay after using stamina before it starts recharging.
+@export var _max_hunger_bars: int = 100 ## The max amount of hunger bars the entity can have.
+@export var _stamina_use_per_hunger_deduction: float = 100.0 ## The amount of stamina the entity has to use before it can deduct the _hunger_cost_per_stamina_bar from the hunger bar.
+@export_custom(PROPERTY_HINT_NONE, "suffix:hunger") var _hunger_cost_per_stamina_use: int = 5 ## The amount of hunger to deduct per _stamina_use_per_hunger_deduction amount of stamina.
 
 @onready var stamina_wait_timer: Timer = %StaminaWaitTimer ## The wait between using stamina and when it starts recharging.
 
@@ -23,7 +23,18 @@ var can_use_hunger_bars: bool = true ## Whether the entity can currently have hu
 var stamina_recharge_tween: Tween ## A tween for slowly incrementing the stamina value during recharge.
 
 
+## Asserts that the parent is a DynamicEntity and then sets up modifiable var dictionary for the stat mod handler.
 func _ready() -> void:
+	assert(get_parent() is DynamicEntity, get_parent().name + " has a StaminaComponent but is not a DynamicEntity.")
+	
+	var moddable_stats: Dictionary = {
+		"max_stamina" : _max_stamina, "max_hunger_bars" : _max_hunger_bars, 
+		"stamina_recharge_rate" : _stamina_recharge_rate, 
+		"stamina_use_per_hunger_deduction" : _stamina_use_per_hunger_deduction,
+		"hunger_cost_per_stamina_use" : _hunger_cost_per_stamina_use,
+		"stamina_recharge_delay" : _stamina_recharge_delay
+	}
+	add_moddable_stats(moddable_stats)
 	call_deferred("_emit_initial_values")
 
 ## Checks whether stamina use is allowed, deducts the amount if so, and returns whether or not the amount was used.
@@ -41,19 +52,19 @@ func use_stamina(amount: float) -> bool:
 			stamina_recharge_tween.kill()
 		stamina_wait_timer.stop()
 		set_stamina_wait_timer_state_change(false)
-		stamina_wait_timer.start()
+		stamina_wait_timer.start(get_stat("stamina_recharge_delay"))
 		set_stamina_wait_timer_state_change(true)
 		
 		stamina_to_hunger_count += amount
-		if stamina_to_hunger_count / max_stamina >= 0.99:
+		if stamina_to_hunger_count / get_stat("stamina_use_per_hunger_deduction") >= 0.99:
 			stamina_to_hunger_count = 0
-			hunger_bars = max(0, hunger_bars - stamina_to_hunger_cost)
+			hunger_bars = max(0, hunger_bars - get_stat("hunger_cost_per_stamina_use"))
 		
 		return true
 
 ## Increases the current stamina value by a passed in amount.
 func gain_stamina(amount: float) -> void:
-	stamina = min(stamina + amount, max_stamina)
+	stamina = min(stamina + amount, get_stat("max_stamina"))
 
 ## Checks whether hunger is allowed to be used and deducts the amount if so.
 func use_hunger_bars(amount: int) -> bool:
@@ -68,15 +79,15 @@ func use_hunger_bars(amount: int) -> bool:
 
 ## Setter for stamina. Clamps the new value to the allowed range and attempts to tell a linked ui about the update.
 func _set_stamina(new_value: float) -> void:
-	stamina = clampf(new_value, 0, max_stamina)
+	stamina = clampf(new_value, 0, get_stat("max_stamina"))
 	if stats_ui and stats_ui.has_method("on_stamina_changed"):
 		stats_ui.on_stamina_changed(stamina)
 
 ## Setter for hunger. Clamps the new value to the allowed range and attempts to tell a linked ui about the update.
 func _set_hunger_bars(new_value: int) -> void:
-	hunger_bars = clampi(new_value, 0, max_hunger_bars)
-	if stats_ui and stats_ui.has_method("on_hunger_changed"):
-		stats_ui.on_hunger_changed(hunger_bars)
+	@warning_ignore("narrowing_conversion") hunger_bars = clampi(new_value, 0, get_stat("max_hunger_bars"))
+	if stats_ui and stats_ui.has_method("on_hunger_bars_changed"):
+		stats_ui.on_hunger_bars_changed(hunger_bars)
 
 ## Setter for stamina_to_hunger_count. Clamps the new value to the allowed range and attempts to tell a linked ui about the update.
 func _set_stamina_to_hunger_count(new_value: float) -> void:
@@ -85,9 +96,9 @@ func _set_stamina_to_hunger_count(new_value: float) -> void:
 		stats_ui.on_hunger_ticks_changed(stamina_to_hunger_count)
 
 ## Used to attempt to tell a linked ui that the stamina recharge wait timer has either stopped or started.
-func set_stamina_wait_timer_state_change(started: bool) -> void:
+func set_stamina_wait_timer_state_change(should_start: bool) -> void:
 	if stats_ui and stats_ui.has_method("on_stamina_wait_timer_state_change"):
-		stats_ui.on_stamina_wait_timer_state_change(stamina_wait_timer.wait_time, started)
+		stats_ui.on_stamina_wait_timer_state_change(get_stat("stamina_recharge_delay"), should_start)
 
 func get_can_use_stamina() -> bool:
 	return can_use_stamina
@@ -104,18 +115,18 @@ func set_can_use_hunger(flag: bool) -> void:
 ## Called from a deferred method caller in order to let any associated ui ready up first. 
 ## Then it emits the initially loaded values.
 func _emit_initial_values() -> void:
-	stamina = max_stamina
-	hunger_bars = max_hunger_bars
+	stamina = get_stat("max_stamina")
+	@warning_ignore("narrowing_conversion") hunger_bars = get_stat("max_hunger_bars")
 	stamina_to_hunger_count = 0
 	set_stamina_wait_timer_state_change(false)
 
 ## When the stamina recharge wait timer ends, this handles creating a tweener that slowly increments the new stamina.
 func _on_stamina_wait_timer_timeout() -> void:
-	if stamina < max_stamina:
+	if stamina < get_stat("max_stamina"):
 		if stamina_recharge_tween:
 			if stamina_recharge_tween.is_running():
 				return
 			else:
 				stamina_recharge_tween.kill()
 		stamina_recharge_tween = create_tween()
-		stamina_recharge_tween.tween_method(_set_stamina, stamina, max_stamina, (max_stamina - stamina) / stamina_recharge_rate)
+		stamina_recharge_tween.tween_method(_set_stamina, stamina, get_stat("max_stamina"), (get_stat("max_stamina") - stamina) / get_stat("stamina_recharge_rate"))

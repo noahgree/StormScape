@@ -6,15 +6,17 @@ class_name MoveStateMachine
 ## No nodes except for this FSM node and its children should *EVER* know what state is active. 
 
 @export var anim_tree: AnimationTree ## The animation tree node to support the children state animations.
-@export_custom(PROPERTY_HINT_NONE, "suffix:per second") var sprint_stamina_usage: float = 15.0 ## The amount of stamina used per second when the entity is sprinting.
-@export_custom(PROPERTY_HINT_NONE, "suffix:per dash") var dash_stamina_usage: float = 20.0 ## The amount of stamina used per dash activation.
-@export var friction: float = 1550 ## The decrease in speed per second for the entity.
+@export_custom(PROPERTY_HINT_NONE, "suffix:per second") var _sprint_stamina_usage: float = 15.0 ## The amount of stamina used per second when the entity is sprinting.
+@export_custom(PROPERTY_HINT_NONE, "suffix:per dash") var _dash_stamina_usage: float = 20.0 ## The amount of stamina used per dash activation.
+@export var _friction: float = 1550 ## The decrease in speed per second for the entity.
 
-@onready var dash_cooldown_timer: Timer = %DashCooldownTimer ## The minimum time between activating a dash.
+@onready var dash_cooldown_timer: Timer = %DashCooldownTimer ## The timer controlling the minimum time between activating dashes.
 
 var anim_vector: Vector2 = Vector2.ZERO ## The vector to provide the associated animation state machine with.
 var stun_time: float ## Set by whatever requests this state machine to enter the stun state each time.
 var knockback_vector: Vector2 = Vector2.ZERO ## The current knockback to apply to any state that can move.
+var can_receive_effects: bool = true ## Whether the entity is in a state that can receive effects.
+const MAX_KNOCKBACK: int = 3000 ## The highest length the knockback vector can ever be to prevent dramatic movement.
 
 
 ## Asserts the necessary components exist to support a dynamic entity, then caches the child states and sets them up.
@@ -35,6 +37,12 @@ func _ready() -> void:
 	if initial_state:
 		initial_state.enter()
 		current_state = initial_state
+		
+	var moddable_stats: Dictionary = {
+		"sprint_stamina_usage" : _sprint_stamina_usage, "dash_stamina_usage" : _dash_stamina_usage,
+		"friction" : _friction
+	}
+	add_moddable_stats(moddable_stats)
 
 ## Checks if knockback needs to be lerped to 0 and passes the physics process to the active state.
 func state_machine_physics_process(delta: float) -> void:
@@ -54,4 +62,4 @@ func request_stun(duration: float) -> void:
 
 ## Requests to add a value to the current knockback vector, doing so if possible.
 func request_knockback(knockback: Vector2) -> void:
-	knockback_vector += knockback
+	knockback_vector = (knockback_vector + knockback).limit_length(MAX_KNOCKBACK)

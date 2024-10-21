@@ -1,6 +1,0 @@
-[gd_scene load_steps=2 format=3 uid="uid://4gl24qwdyti3"]
-
-[ext_resource type="Script" path="res://Entities/Components/EffectReceiverComponent/EffectHandlers/DmgEffectHandler.gd" id="1_quvcq"]
-
-[node name="DmgEffectHandler" type="Node"]
-script = ExtResource("1_quvcq")

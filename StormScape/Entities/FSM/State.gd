@@ -6,8 +6,6 @@ class_name State
 @warning_ignore("unused_signal")
 signal Transitioned ## Called by a subclassed state when it wants to transition to another state.
 
-@onready var fsm = get_parent() ## The FSM that controls this state.
-
 
 func enter() -> void:
 	pass

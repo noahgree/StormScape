@@ -1,9 +1,9 @@
 extends DynamicState
 ## Handles when the character is dashing.
 
-@export var dash_speed: float = 1200 ## How fast the dash moves the character.
-@export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var dash_duration: float = 0.1 ## The dash duration.
-@export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var dash_cooldown: float = 1.0 ## The dash cooldown.
+@export var _dash_speed: float = 1200 ## How fast the dash moves the character.
+@export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var _dash_duration: float = 0.1 ## The dash duration.
+@export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var _dash_cooldown: float = 1.0 ## The dash cooldown.
 @export var ghost_scene: PackedScene ## The scene that defines the ghosts' behavior.
 @export var ghost_count: int = 8 ## How many ghosts to make during the dash.
 @export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var ghost_fade_time: float = 0.1 ## How long ghosts take to fade.
@@ -17,13 +17,21 @@ var can_spawn_ghosts: bool = false ## Whether we have the proper node to enable 
 var parent_sprite_node: Node2D
 
 
+func _ready() -> void:
+	var moddable_stats: Dictionary = {
+		"dash_speed" : _dash_speed, "dash_duration" : _dash_duration, 
+		"dash_cooldown" : _dash_cooldown
+	}
+	fsm.add_moddable_stats(moddable_stats)
+
 func enter() -> void:
 	fsm.anim_tree["parameters/playback"].travel("run")
 	fsm.knockback_vector = Vector2.ZERO
+	fsm.can_receive_effects = false
 	
 	ghosts_spawned = 0
-	dash_timer.start(dash_duration)
-	fsm.dash_cooldown_timer.start(dash_duration + dash_cooldown)
+	dash_timer.start(fsm.get_stat("dash_duration"))
+	fsm.dash_cooldown_timer.start(fsm.get_stat("dash_duration") + fsm.get_stat("dash_cooldown"))
 	movement_vector = _calculate_move_vector()
 	fsm.anim_vector = movement_vector
 	
@@ -37,6 +45,7 @@ func enter() -> void:
 	can_spawn_ghosts = true
 
 func exit() -> void:
+	fsm.can_receive_effects = true
 	dash_timer.stop()
 	dynamic_entity.velocity = Vector2.ZERO
 	fsm.knockback_vector = Vector2.ZERO
@@ -45,15 +54,15 @@ func exit() -> void:
 func state_process(delta: float) -> void:
 	if can_spawn_ghosts:
 		time_since_ghost += delta
-		_update_ghost_spawns(delta)
+		_update_ghost_spawns()
 
-func state_physics_process(delta: float)  -> void:
+func state_physics_process(_delta: float)  -> void:
 	_animate()
 	_do_character_dash()
 
 ## Overrides the dynamic entity's velocity to be a simple dash in the direction currently faced.
 func _do_character_dash() -> void:
-	dynamic_entity.velocity = movement_vector * dash_speed
+	dynamic_entity.velocity = movement_vector * fsm.get_stat("dash_speed")
 	dynamic_entity.move_and_slide()
 
 func _calculate_move_vector() -> Vector2:
@@ -63,8 +72,8 @@ func _animate() -> void:
 	fsm.anim_tree.set("parameters/run/blendspace2d/blend_position", fsm.anim_vector)
 
 ## Checks if we have spent enough time since the last ghost and if we haven't spawned enough yet, then spawns one.
-func _update_ghost_spawns(delta: float) -> void:
-	if (ghosts_spawned < ghost_count) and (time_since_ghost >= (dash_duration / ghost_count)):
+func _update_ghost_spawns() -> void:
+	if (ghosts_spawned < ghost_count) and (time_since_ghost >= (fsm.get_stat("dash_duration") / ghost_count)):
 		_create_ghost()
 		time_since_ghost = 0.0
 
@@ -81,6 +90,7 @@ func _create_ghost() -> void:
 	
 	var ghost_instance = ghost_scene.instantiate()
 	var ghost_pos: Vector2 = Vector2(dynamic_entity.position.x + parent_sprite_node.position.x, dynamic_entity.position.y + parent_sprite_node.position.y)
+	
 	ghost_instance.init(ghost_pos, dynamic_entity.scale, sprite_texture, ghost_fade_time)
 	add_child(ghost_instance)
 	ghosts_spawned += 1

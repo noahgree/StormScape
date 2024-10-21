@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://cx4b21058vypq"]
+
+[ext_resource type="Script" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/StunEffectHandler.gd" id="1_0wr7v"]
+
+[node name="StunEffectHandler" type="Node"]
+script = ExtResource("1_0wr7v")

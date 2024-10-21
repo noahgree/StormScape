@@ -13,6 +13,7 @@ enum DmgTimeline { INSTANT, OVER_TIME }
 enum HealTimeline { INSTANT, OVER_TIME }
 enum DmgAffectedTeams { ENEMIES = 1 << 0, ALLIES = 1 << 1 }
 enum HealAffectedTeams { ENEMIES = 1 << 0, ALLIES = 1 << 1 }
+enum DamageType { NORMAL, POISON, FIRE, ICE, ELECTRIC }
 
 @export_group("Teams & Layers")
 @export var source_team: EnumUtils.Teams = EnumUtils.Teams.ENEMY ## Should eventually be set by what produces this effect. Used for determining which parts are applied.
@@ -26,6 +27,7 @@ enum HealAffectedTeams { ENEMIES = 1 << 0, ALLIES = 1 << 1 }
 @export_range(0.0, 1.0, 0.01, "suffix:%") var crit_chance: float = 0.0 ## The chance the application of damage will be a critial hit.
 @export var crit_multiplier: float = 1.5 ## How much stronger critical hits are than normal hits.
 @export_range(0.0, 1.0, 0.01, "suffix:%") var armor_penetration: float = 0.0 ## The percent of armor ignored.
+@export var damage_type: DamageType = DamageType.NORMAL ## The category of damage this effect applies.
 @export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var dmg_stun_time: float = 0 ## The amount of time the damage recipient should be stunned for. Note that this only stuns on the first damage tick regardless of DOT settings.
 @export_subgroup("Damage Timeline")
 @export var dmg_timeline: DmgTimeline ## Whether the damage is instant or over time using damage ticks at intervals.
@@ -45,13 +47,20 @@ enum HealAffectedTeams { ENEMIES = 1 << 0, ALLIES = 1 << 1 }
 @export_group("General")
 @export var knockback_force: int = 0 ## The magnitude of knockback applied to the entity receiving this damage.
 
+
+## Setup the area detection signal and turn off monitorable for performance. 
+## Also set collision mask to the matching flags.
 func _ready() -> void:
 	self.area_entered.connect(_on_area_entered)
 	monitorable = false
 	collision_layer = 0
 	collision_mask = scanned_phys_layers
 
-## Meant to interact with an EffectReceiverComponent that can handle effects supplied by this instance.
+## When detecting an area, start having it handled. This method can be overridden in subclasses.
 func _on_area_entered(area: Area2D) -> void:
-	if area is EffectReceiverComponent:
-		area.handle_effect(self)
+	_start_being_handled(area)
+
+## Meant to interact with an EffectReceiverComponent that can handle effects supplied by this instance.
+func _start_being_handled(handling_area: Area2D) -> void:
+	if handling_area is EffectReceiverComponent:
+		handling_area.handle_effect(self)

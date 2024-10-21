@@ -5,8 +5,9 @@ class_name EffectReceiverComponent
 ## they exist as children. This node must have an attached collision shape to define where effects are received.
 ##
 ## Add specific effect handlers as children of this node to be able to receive those effects on the entity.
-## For all intensive purposes, this is acting as a hurtbox component.
+## For all intensive purposes, this is acting as a hurtbox component via its receiver area.
 
+@export var effect_modifier_component: EffectModifierComponent ## The component attached to the affected entity that handles modifying incoming values based on stats of the entity.
 @export var health_component: HealthComponent ## The connected health component to receive damage and healing if the parent entity can handle it.
 @export var affected_entity: PhysicsBody2D  ## The connected entity to be affected by the effects be received.
 @export var team: EnumUtils.Teams = EnumUtils.Teams.PLAYER ## What team the effects being received should consider the affected entity as being on.
@@ -23,6 +24,9 @@ func _ready() -> void:
 ## Handles an incoming effect source, passing it to present receivers for further processing before changing 
 ## entity stats.
 func handle_effect(effect_source: EffectSource) -> void:
+	if (affected_entity is DynamicEntity) and not affected_entity.move_fsm.can_receive_effects:
+		return
+	
 	if has_node("KnockbackEffectHandler"):
 		if effect_source.knockback_force != 0:
 			_run_knockback_handler(effect_source)

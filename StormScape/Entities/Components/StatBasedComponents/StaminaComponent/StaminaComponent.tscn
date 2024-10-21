@@ -1,10 +1,9 @@
 [gd_scene load_steps=2 format=3 uid="uid://cxpv7l7rcaq1o"]
 
-[ext_resource type="Script" path="res://Entities/Components/StaminaComponent/StaminaComponent.gd" id="1_1us2t"]
+[ext_resource type="Script" path="res://Entities/Components/StatBasedComponents/StaminaComponent/StaminaComponent.gd" id="1_1us2t"]
 
-[node name="StaminaComponent" type="Node" node_paths=PackedStringArray("stats_ui")]
+[node name="StaminaComponent" type="Node"]
 script = ExtResource("1_1us2t")
-stats_ui = NodePath("")
 
 [node name="StaminaWaitTimer" type="Timer" parent="."]
 unique_name_in_owner = true

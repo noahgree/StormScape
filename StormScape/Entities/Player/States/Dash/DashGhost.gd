@@ -9,7 +9,7 @@ var fade_out_time: float = 0.0 ## How long the sprite takes to fade out after be
 func init(pos: Vector2, size: Vector2, sprite_frame: Texture2D, fade_time: float) -> void:
 	position = pos
 	scale = size
-	if frame:
+	if sprite_frame:
 		texture = sprite_frame
 	fade_out_time = fade_time
 	self_modulate = Color(1, 1, 1, 0.6)

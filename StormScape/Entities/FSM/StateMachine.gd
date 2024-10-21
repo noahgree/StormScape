@@ -1,4 +1,4 @@
-extends Node
+extends StatBasedComponent
 class_name StateMachine
 ## Base FSM class that implements the managing logic of transitioning and maintaining states.
 ## 

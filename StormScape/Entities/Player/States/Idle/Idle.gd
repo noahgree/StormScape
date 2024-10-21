@@ -12,7 +12,7 @@ func exit() -> void:
 	pass
 
 ## If any input vector besides Vector2.ZERO is detected, we transition to the run state
-func state_physics_process(delta: float) -> void:
+func state_physics_process(_delta: float) -> void:
 	movement_vector = _calculate_move_vector()
 	var knockback: Vector2 = fsm.knockback_vector
 	

@@ -1,25 +1,24 @@
-[gd_scene load_steps=132 format=3 uid="uid://dba8mrurjlekp"]
+[gd_scene load_steps=131 format=3 uid="uid://dba8mrurjlekp"]
 
 [ext_resource type="Script" path="res://Entities/Player/Player.gd" id="1_m33tt"]
 [ext_resource type="Texture2D" uid="uid://77ell4xpptap" path="res://Entities/Player/Spritesheets/PlayerBase.png" id="2_jshja"]
-[ext_resource type="PackedScene" uid="uid://cdfdy8m6ki3oq" path="res://Entities/Components/HealthComponent/HealthComponent.tscn" id="3_ojev3"]
-[ext_resource type="PackedScene" uid="uid://btba0jmsow1mx" path="res://Entities/Components/EffectReceiverComponent/EffectReceiverComponent.tscn" id="4_hhm8x"]
-[ext_resource type="PackedScene" uid="uid://4gl24qwdyti3" path="res://Entities/Components/EffectReceiverComponent/EffectHandlers/DmgEffectHandler.tscn" id="5_g3ixu"]
-[ext_resource type="PackedScene" uid="uid://cxpv7l7rcaq1o" path="res://Entities/Components/StaminaComponent/StaminaComponent.tscn" id="5_k4fu6"]
-[ext_resource type="PackedScene" uid="uid://ddj5ippwwkvop" path="res://Entities/Components/EffectReceiverComponent/EffectHandlers/HealEffectHandler.tscn" id="6_5e1ju"]
+[ext_resource type="PackedScene" uid="uid://cdfdy8m6ki3oq" path="res://Entities/Components/StatBasedComponents/HealthComponent/HealthComponent.tscn" id="3_ojev3"]
+[ext_resource type="PackedScene" uid="uid://btba0jmsow1mx" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectReceiverComponent.tscn" id="4_hhm8x"]
+[ext_resource type="PackedScene" uid="uid://4gl24qwdyti3" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/DmgEffectHandler.tscn" id="5_g3ixu"]
+[ext_resource type="PackedScene" uid="uid://cxpv7l7rcaq1o" path="res://Entities/Components/StatBasedComponents/StaminaComponent/StaminaComponent.tscn" id="5_k4fu6"]
+[ext_resource type="PackedScene" uid="uid://co3n6m7efg8pd" path="res://Entities/Components/EffectComponents/EffectModifierComponent/EffectModifierComponent.tscn" id="5_pahas"]
+[ext_resource type="PackedScene" uid="uid://ddj5ippwwkvop" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/HealEffectHandler.tscn" id="6_5e1ju"]
 [ext_resource type="Script" path="res://Entities/EntityTypes/DynamicEntity/DynamicFSM/MoveStateMachine.gd" id="6_otbuq"]
 [ext_resource type="Script" path="res://Entities/Player/States/Idle/Idle.gd" id="7_15a5x"]
-[ext_resource type="PackedScene" uid="uid://dykiv0tlhwmox" path="res://Entities/Components/EffectReceiverComponent/EffectHandlers/KnockbackEffectHandler.tscn" id="7_k0pv8"]
+[ext_resource type="PackedScene" uid="uid://dykiv0tlhwmox" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/KnockbackEffectHandler.tscn" id="7_k0pv8"]
 [ext_resource type="Script" path="res://Entities/Player/States/Run/Run.gd" id="9_0dcld"]
 [ext_resource type="Script" path="res://Entities/Player/States/Dash/Dash.gd" id="9_a1qv1"]
 [ext_resource type="PackedScene" uid="uid://cugxqj7rc0q35" path="res://UI/Player Stats Overlay/PlayerStatsOverlay.tscn" id="9_txdy5"]
-[ext_resource type="PackedScene" uid="uid://cx4b21058vypq" path="res://Entities/Components/EffectReceiverComponent/EffectHandlers/StunEffectHandler.tscn" id="9_w4lel"]
-[ext_resource type="Script" path="res://Utilities/Debug/PlayerTestHurtBtn.gd" id="10_beouj"]
+[ext_resource type="PackedScene" uid="uid://cx4b21058vypq" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/StunEffectHandler.tscn" id="9_w4lel"]
 [ext_resource type="PackedScene" uid="uid://bv3ae77701mrg" path="res://Entities/Player/States/Dash/DashGhost.tscn" id="10_c2plq"]
 [ext_resource type="FontFile" uid="uid://cjuheb3v0el30" path="res://Assets/Fonts/Font Assets/Kenney Pixel.ttf" id="11_1rxkv"]
-[ext_resource type="Script" path="res://Utilities/Debug/PlayerTestHealBtn.gd" id="11_puk2x"]
 [ext_resource type="Script" path="res://Entities/Player/States/Stunned/Stunned.gd" id="15_eiig3"]
-[ext_resource type="Script" path="res://Utilities/Debug/TestMusicBtn.gd" id="15_qbajg"]
+[ext_resource type="Script" path="res://Utilities/Debug/TestButtons.gd" id="17_vdk5v"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_o7k7i"]
 radius = 7.0
@@ -1078,7 +1077,12 @@ stats_ui = NodePath("../PlayerUI/PlayerStatsOverlay")
 unique_name_in_owner = true
 stats_ui = NodePath("../PlayerUI/PlayerStatsOverlay")
 
-[node name="EffectReceiverComponent" parent="." node_paths=PackedStringArray("health_component", "affected_entity") instance=ExtResource("4_hhm8x")]
+[node name="EffectModifierComponent" parent="." node_paths=PackedStringArray("stats_ui") instance=ExtResource("5_pahas")]
+unique_name_in_owner = true
+stats_ui = NodePath("../PlayerUI/PlayerStatsOverlay")
+
+[node name="EffectReceiverComponent" parent="." node_paths=PackedStringArray("effect_modifier_component", "health_component", "affected_entity") instance=ExtResource("4_hhm8x")]
+effect_modifier_component = NodePath("../EffectModifierComponent")
 health_component = NodePath("../HealthComponent")
 affected_entity = NodePath("..")
 
@@ -1109,12 +1113,7 @@ script = ExtResource("9_0dcld")
 
 [node name="Dash" type="Node" parent="MoveStateMachine"]
 script = ExtResource("9_a1qv1")
-dash_speed = null
-dash_duration = null
-dash_cooldown = null
 ghost_scene = ExtResource("10_c2plq")
-ghost_count = null
-ghost_fade_time = null
 
 [node name="DashTimer" type="Timer" parent="MoveStateMachine/Dash"]
 unique_name_in_owner = true
@@ -1149,18 +1148,26 @@ parameters/run/blendspace2d/blend_position = Vector2(0, 0)
 [node name="PlayerStatsOverlay" parent="PlayerUI" node_paths=PackedStringArray("player") instance=ExtResource("9_txdy5")]
 player = NodePath("../..")
 
-[node name="TestHurtBtn" type="Button" parent="PlayerUI" node_paths=PackedStringArray("health_component")]
+[node name="TestButtons" type="Control" parent="PlayerUI" node_paths=PackedStringArray("health_component")]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("17_vdk5v")
+health_component = NodePath("../../HealthComponent")
+
+[node name="TestHurtBtn" type="Button" parent="PlayerUI/TestButtons"]
+layout_mode = 0
 offset_left = 162.0
 offset_top = 249.0
 offset_right = 194.0
 offset_bottom = 269.0
 scale = Vector2(0.7, 0.7)
 text = "HURT"
-script = ExtResource("10_beouj")
-health_component = NodePath("../../HealthComponent")
 
-[node name="TestHealBtn" type="Button" parent="PlayerUI" node_paths=PackedStringArray("health_component")]
+[node name="TestHealBtn" type="Button" parent="PlayerUI/TestButtons"]
 texture_filter = 1
+layout_mode = 0
 offset_left = 162.0
 offset_top = 231.0
 offset_right = 193.0
@@ -1169,11 +1176,10 @@ scale = Vector2(0.7, 0.7)
 theme_override_fonts/font = ExtResource("11_1rxkv")
 theme_override_font_sizes/font_size = 16
 text = "HEAL"
-script = ExtResource("11_puk2x")
-health_component = NodePath("../../HealthComponent")
 
-[node name="TestMusicBtn" type="Button" parent="PlayerUI"]
+[node name="TestMusicBtn" type="Button" parent="PlayerUI/TestButtons"]
 texture_filter = 1
+layout_mode = 0
 offset_left = 432.0
 offset_top = 253.0
 offset_right = 496.0
@@ -1182,10 +1188,35 @@ scale = Vector2(0.7, 0.7)
 theme_override_fonts/font = ExtResource("11_1rxkv")
 theme_override_font_sizes/font_size = 16
 text = "TEST MUSIC"
-script = ExtResource("15_qbajg")
+
+[node name="TestModBtn1" type="Button" parent="PlayerUI/TestButtons"]
+texture_filter = 1
+layout_mode = 0
+offset_left = 452.0
+offset_top = 3.0
+offset_right = 488.0
+offset_bottom = 23.0
+scale = Vector2(0.7, 0.7)
+theme_override_fonts/font = ExtResource("11_1rxkv")
+theme_override_font_sizes/font_size = 16
+text = "MOD 1"
+
+[node name="TestModBtn2" type="Button" parent="PlayerUI/TestButtons"]
+texture_filter = 1
+layout_mode = 0
+offset_left = 452.0
+offset_top = 19.0
+offset_right = 488.0
+offset_bottom = 39.0
+scale = Vector2(0.7, 0.7)
+theme_override_fonts/font = ExtResource("11_1rxkv")
+theme_override_font_sizes/font_size = 16
+text = "MOD 2"
 
 [connection signal="timeout" from="MoveStateMachine/Dash/DashTimer" to="MoveStateMachine/Dash" method="_on_dash_timer_timeout"]
 [connection signal="timeout" from="MoveStateMachine/Stunned/StunnedTimer" to="MoveStateMachine/Stunned" method="_on_stunned_timer_timeout"]
-[connection signal="pressed" from="PlayerUI/TestHurtBtn" to="PlayerUI/TestHurtBtn" method="_on_pressed"]
-[connection signal="pressed" from="PlayerUI/TestHealBtn" to="PlayerUI/TestHealBtn" method="_on_pressed"]
-[connection signal="pressed" from="PlayerUI/TestMusicBtn" to="PlayerUI/TestMusicBtn" method="_on_pressed"]
+[connection signal="pressed" from="PlayerUI/TestButtons/TestHurtBtn" to="PlayerUI/TestButtons" method="_on_test_hurt_btn_pressed"]
+[connection signal="pressed" from="PlayerUI/TestButtons/TestHealBtn" to="PlayerUI/TestButtons" method="_on_test_heal_btn_pressed"]
+[connection signal="pressed" from="PlayerUI/TestButtons/TestMusicBtn" to="PlayerUI/TestButtons" method="_on_test_music_btn_pressed"]
+[connection signal="pressed" from="PlayerUI/TestButtons/TestModBtn1" to="PlayerUI/TestButtons" method="_on_test_mod_btn_1_pressed"]
+[connection signal="pressed" from="PlayerUI/TestButtons/TestModBtn2" to="PlayerUI/TestButtons" method="_on_test_mod_btn_2_pressed"]

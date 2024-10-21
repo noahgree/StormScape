@@ -27,8 +27,6 @@ func handle_instant_dmg(effect_source: EffectSource) -> void:
 
 ## Handles applying damage that is inflicted over time, whether with a delay, with burst intervals, or with both.
 func handle_over_time_dmg(effect_source: EffectSource) -> void:
-	var dmg_after_crit_then_armor: int = _get_dmg_after_crit_then_armor(effect_source)
-	
 	var dot_timer: Timer = Timer.new()
 	dot_timer.set_meta("effect_source", effect_source)
 	dot_timer.set_meta("ticks_completed", 0)
