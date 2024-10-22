@@ -5,6 +5,7 @@ class_name StatusEffectComponent
 ##
 ## This handles things like fire & poison damage not taking into account armor, etc.
 
+# Below are the components required to handle the base effects before applying stat mods.
 @export var health_component: HealthComponent
 @export var stamina_component: StaminaComponent
 @export var move_fsm: MoveStateMachine
@@ -17,12 +18,14 @@ class_name StatusEffectComponent
 @export var frostbite_handler: FrostbiteHandler
 
 var current_effects: Dictionary = {} ## Keys are general status effect titles like "Poison", and values are arrays of all integer levels of the status effect currently applied.
-var effect_timers: Dictionary = {}
+var effect_timers: Dictionary = {} ## Holds references to all timers currently tracking active status effects.
 
 
-## Handles an incoming status effect. It starts by sending relevant info to its handler if it exists, 
-## then it handles stat mods via a helper function.
+## Handles an incoming status effect. It starts by adding any stat mods provided by the status effect, and then
+## it passes the effect logic to the relevant handler if it exists.
 func handle_status_effect(status_effect: StatusEffect) -> void:
+	handle_status_effect_mods(status_effect)
+	
 	match status_effect.handler_type:
 		EnumUtils.EntityStatusEffectType.KNOCKBACK:
 			if knockback_handler: knockback_handler.handle_knockback(status_effect)
@@ -34,8 +37,6 @@ func handle_status_effect(status_effect: StatusEffect) -> void:
 			if regen_handler: regen_handler.handle_regen(status_effect)
 		EnumUtils.EntityStatusEffectType.FROSTBITE:
 			if frostbite_handler: frostbite_handler.handle_frostbite(status_effect)
-	
-	handle_status_effect_mods(status_effect)
 
 ## Checks if we already have a status effect of the same name and decides what to do depending on the level.
 func handle_status_effect_mods(status_effect: StatusEffect) -> void:
@@ -110,7 +111,8 @@ func _restart_effect_duration(effect_name: String) -> void:
 		timer.stop()
 		timer.start()
 
-## Removes the status effect from the current effects dict and removes all its mods.
+## Removes the status effect from the current effects dict and removes all its mods. Additionally removes its
+## associated timer from the timer dict.
 func remove_status_effect(status_effect: StatusEffect) -> void:
 	for mod_resource in status_effect.stat_mods:
 		var mod: EntityStatMod = (mod_resource as EntityStatMod)
@@ -137,10 +139,18 @@ func remove_status_effect(status_effect: StatusEffect) -> void:
 			EnumUtils.EntityStatModType.FROSTBITE:
 				if frostbite_handler: frostbite_handler.remove_mod(mod.stat_id, mod.mod_id)
 	
-	current_effects.erase(status_effect.effect_name)
+	if status_effect.effect_name in current_effects:
+		current_effects.erase(status_effect.effect_name)
 	
 	var timer: Timer = effect_timers.get(status_effect.effect_name, null)
 	if timer:
 		timer.stop()
 		timer.queue_free()
 		effect_timers.erase(status_effect.effect_name)
+
+## Loads the necessary movement and contact data from the effect source into the knockback handler.
+func prepare_knockback_vars(effect_source: EffectSource) -> void:
+	if knockback_handler:
+		knockback_handler.contact_position = effect_source.contact_position
+		knockback_handler.effect_movement_direction = effect_source.movement_direction
+		knockback_handler.is_source_moving_type = effect_source.is_source_moving_type

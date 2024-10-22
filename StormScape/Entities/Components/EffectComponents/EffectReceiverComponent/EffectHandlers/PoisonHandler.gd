@@ -8,6 +8,8 @@ class_name PoisonHandler
 
 @onready var effect_receiver: EffectReceiverComponent = get_parent() ## The receiver that passes the effect to this handler node.
 
+
+## Sets up moddable stats.
 func _ready() -> void:
 	var moddable_stats: Dictionary = {
 		"poison_weakness" : _poison_weakness, "poison_resistance" : _poison_resistance

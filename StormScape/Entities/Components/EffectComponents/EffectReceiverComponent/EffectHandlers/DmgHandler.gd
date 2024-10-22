@@ -8,7 +8,7 @@ class_name DmgHandler
 
 ## Asserts that there is a valid health component on the affected entity before trying to handle damage.
 func _ready() -> void:
-	assert(get_parent().health_component, get_parent().get_parent().name + " has an effect receiver that is intended to handle damage, but no health component is connected.")
+	assert(get_parent().health_component, get_parent().affected_entity.name + " has an effect receiver that is intended to handle damage, but no health component is connected.")
 
 ## Calculates the final damage to apply after considering whether the crit hit and also how much the armor blocks.
 func _get_dmg_after_crit_then_armor(effect_source: EffectSource) -> int:

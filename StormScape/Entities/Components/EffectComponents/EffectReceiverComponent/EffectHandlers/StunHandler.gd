@@ -6,8 +6,9 @@ class_name StunHandler
 @onready var affected_entity: PhysicsBody2D = get_parent().affected_entity ## The entity to be affected by the stun.
 
 
+## Asserts that the affected entity is a Dynamic Entity before trying to handle things.
 func _ready() -> void:
-	assert(get_parent().get_parent() is DynamicEntity, get_parent().get_parent().name + " has an effect receiver intended to handle stuns, but the affected entity is not a DynamicEntity.")
+	assert(get_parent().get_parent() is DynamicEntity, get_parent().affected_entity.name + " has an effect receiver intended to handle stuns, but the affected entity is not a DynamicEntity.")
 
 ## Handles performing a stun effect on the affected entity.
 func handle_stun(stun_effect: StunEffect) -> void:

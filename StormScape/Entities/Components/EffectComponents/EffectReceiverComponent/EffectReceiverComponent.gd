@@ -39,11 +39,11 @@ func handle_effect_source(effect_source: EffectSource) -> void:
 			elif not _check_same_team(effect_source) and _check_heal_enemies(effect_source):
 				$HealHandler.handle_instant_heal(effect_source.base_healing, effect_source.heal_affected_stats)
 	
+	if has_node("KnockbackHandler"):
+		status_effect_component.prepare_knockback_vars(effect_source)
+	
 	for status_effect in effect_source.status_effects:
 		if status_effect:
-			status_effect.is_source_moving_type = effect_source.is_source_moving_type
-			status_effect.movement_direction = effect_source.movement_direction
-			status_effect.contact_position = effect_source.contact_position
 			status_effect_component.handle_status_effect(status_effect)
 
 ## Checks if the affected entity is on the same team as the producer of the effect source.

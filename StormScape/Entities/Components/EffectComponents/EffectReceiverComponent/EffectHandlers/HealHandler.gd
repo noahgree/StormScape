@@ -8,7 +8,7 @@ class_name HealHandler
 
 ## Asserts that there is a valid health component on the affected entity before trying to handle healing.
 func _ready() -> void:
-	assert(get_parent().health_component, get_parent().get_parent().name + " has an effect receiver that is intended to handle healing, but no health component is connected.")
+	assert(get_parent().health_component, get_parent().affected_entity.name + " has an effect receiver that is intended to handle healing, but no health component is connected.")
 
 ## Handles applying instant, one-shot healing to the affected entity.
 func handle_instant_heal(base_healing: int, heal_affected_stats: EnumUtils.HealAffectedStats) -> void:

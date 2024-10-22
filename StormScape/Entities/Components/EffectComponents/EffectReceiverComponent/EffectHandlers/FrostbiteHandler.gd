@@ -2,12 +2,13 @@
 extends StatBasedComponent
 class_name FrostbiteHandler
 
-@export var _frostbite_weakness: float = 1.0 ## A multiplier for regen boosting on an entity.
-@export var _frostbite_resistance: float = 1.0 ## A multiplier for regen reduction on an entity.
+@export var _frostbite_weakness: float = 1.0 ## A multiplier for frostbite damage on an entity.
+@export var _frostbite_resistance: float = 1.0 ## A multiplier for frostbite reduction on an entity.
 
 @onready var effect_receiver: EffectReceiverComponent = get_parent() ## The receiver that passes the effect to this handler node.
 
 
+## Sets up moddable stats.
 func _ready() -> void:
 	var moddable_stats: Dictionary = {
 		"frostbite_weakness" : _frostbite_weakness, "frostbite_resistance" : _frostbite_resistance

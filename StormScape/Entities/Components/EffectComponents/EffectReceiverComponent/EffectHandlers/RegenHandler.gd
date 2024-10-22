@@ -9,6 +9,7 @@ class_name RegenHandler
 @onready var effect_receiver: EffectReceiverComponent = get_parent() ## The receiver that passes the effect to this handler node.
 
 
+## Sets up moddable stats.
 func _ready() -> void:
 	var moddable_stats: Dictionary = {
 		"regen_boost" : _regen_boost, "regen_penalty" : _regen_penalty

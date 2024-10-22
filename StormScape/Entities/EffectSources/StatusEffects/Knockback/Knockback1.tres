@@ -1,7 +1,19 @@
-[gd_resource type="Resource" script_class="KnockbackEffect" load_steps=3 format=3 uid="uid://b0it5xmpw16sd"]
+[gd_resource type="Resource" script_class="KnockbackEffect" load_steps=4 format=3 uid="uid://b0it5xmpw16sd"]
 
 [ext_resource type="Script" path="res://Entities/EffectSources/StatusEffects/Knockback/KnockbackEffect.gd" id="1_ofqhb"]
 [ext_resource type="Script" path="res://Entities/Components/EntityStatMod.gd" id="2_rysxw"]
+
+[sub_resource type="Resource" id="Resource_7ngg3"]
+script = ExtResource("2_rysxw")
+type = 5
+stat_id = "knockback_boost"
+mod_id = "knockback1"
+operation = "+%"
+value = 200.0
+priority = 1
+can_stack = false
+max_stack_count = 3
+override_all = false
 
 [resource]
 script = ExtResource("1_ofqhb")
@@ -11,4 +23,4 @@ handler_type = 1
 effect_name = "Knockback"
 effect_lvl = 1
 effect_mods_time = 5.0
-stat_mods = Array[ExtResource("2_rysxw")]([])
+stat_mods = Array[ExtResource("2_rysxw")]([SubResource("Resource_7ngg3")])

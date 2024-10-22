@@ -4137,7 +4137,7 @@ crit_multiplier = 1.5
 armor_penetration = 0.0
 base_healing = 0
 heal_affected_stats = 2
-status_effects = Array[ExtResource("12_awpt0")]([ExtResource("17_x5bx7")])
+status_effects = Array[ExtResource("12_awpt0")]([ExtResource("17_x5bx7"), ExtResource("16_db41q")])
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_8bjrm"]
 size = Vector2(6, 6)

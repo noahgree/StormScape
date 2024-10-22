@@ -19,7 +19,7 @@ func state_physics_process(_delta: float) -> void:
 	if movement_vector != Vector2.ZERO:
 		Transitioned.emit(self, "Run")
 	else:
-		if knockback > Vector2.ZERO:
+		if knockback.length() > 0:
 			dynamic_entity.velocity = knockback
 			Transitioned.emit(self, "Run")
 		else:
