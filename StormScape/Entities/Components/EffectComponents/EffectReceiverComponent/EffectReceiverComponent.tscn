@@ -3,4 +3,5 @@
 [ext_resource type="Script" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectReceiverComponent.gd" id="1_x67rl"]
 
 [node name="EffectReceiverComponent" type="Area2D"]
+monitoring = false
 script = ExtResource("1_x67rl")

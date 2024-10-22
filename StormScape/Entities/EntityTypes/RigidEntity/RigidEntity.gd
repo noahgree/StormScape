@@ -5,6 +5,8 @@ class_name RigidEntity
 ## This would be used for things like blocks that respond to explosions and that also need potential health.
 ## This should not be used for static environmental entities like trees and also not for players or moving enemies.
 
+@export var team: EnumUtils.Teams = EnumUtils.Teams.PLAYER ## What the effects received by this entity should consider as this entity's team.
+
 
 func _ready() -> void:
 	mass = 3

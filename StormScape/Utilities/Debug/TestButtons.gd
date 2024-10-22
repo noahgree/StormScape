@@ -17,9 +17,12 @@ func _on_test_music_btn_pressed() -> void:
 
 func _on_test_mod_btn_1_pressed() -> void:
 	var node = get_parent().get_parent().stamina_component
-	var mod = EntityStatMod.new("mod1", "*", 2, 1, true, 2)
-	node.add_mod("stamina_use_per_hunger_deduction", mod)
+	var mod = EntityStatMod.new("stamina_use_per_hunger_deduction", "mod1", "-%", 10, 1, true, 2, false)
+	var mod2 = EntityStatMod.new("stamina_use_per_hunger_deduction", "mod2", "=", 2, 2, true, 5, true)
+	var arr: Array[EntityStatMod] = [mod, mod2]
+	node.add_mods(arr)
 
 func _on_test_mod_btn_2_pressed() -> void:
 	var node = get_parent().get_parent().stamina_component
+	node.remove_mod("stamina_use_per_hunger_deduction", "mod2", 1)
 	node.remove_mod("stamina_use_per_hunger_deduction", "mod1", 1)

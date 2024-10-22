@@ -1,66 +1,33 @@
-extends Area2D
+extends Resource
 class_name EffectSource
-## A base class for all instances in the game that can apply effects like damage and health. 
+## A base class for all instances in the game that can apply effects like damage and knockback. 
 ##
-## Should be the superclass for things like projectiles, melee hits, traps, explosions, etc.
-## For all intensive purposes, this is acting as a hitbox component.
-## By default, there is are exported vars for things like damage, healing, knockback, team, etc... but these 
-## can and usually should be overridden by whatever produces this damage source (gun, bomb, etc.).
-
-enum DmgAffectedStats { HEALTH_ONLY, SHIELD_ONLY, SHIELD_THEN_HEALTH, SIMULTANEOUS }
-enum HealAffectedStats { HEALTH_ONLY, SHIELD_ONLY, HEALTH_THEN_SHIELD, SIMULTANEOUS }
-enum DmgTimeline { INSTANT, OVER_TIME }
-enum HealTimeline { INSTANT, OVER_TIME }
-enum DmgAffectedTeams { ENEMIES = 1 << 0, ALLIES = 1 << 1 }
-enum HealAffectedTeams { ENEMIES = 1 << 0, ALLIES = 1 << 1 }
-enum DamageType { NORMAL, POISON, FIRE, ICE, ELECTRIC }
+## Should be the superclass for all effect sources.
+## This contains all the data needed by an effect receiver, and nothing more. Textures, animations, hitboxes, etc.
+## should be handled by the producer of this effect source. This is purely data.
 
 @export_group("Teams & Layers")
 @export var source_team: EnumUtils.Teams = EnumUtils.Teams.ENEMY ## Should eventually be set by what produces this effect. Used for determining which parts are applied.
-@export_flags("Enemies", "Allies") var dmg_affected_teams: int = DmgAffectedTeams.ENEMIES ## Which entity teams in relation to who produced this source are affected by this damage.
-@export_flags("Enemies", "Allies") var heal_affected_teams: int = HealAffectedTeams.ALLIES ## Which entity teams in relation to who produced this source are affected by this healing.
+@export_flags("Enemies", "Allies") var bad_effect_affected_teams: int = EnumUtils.BadEffectAffectedTeams.ENEMIES ## Which entity teams in relation to who produced this source are affected by this damage.
+@export_flags("Enemies", "Allies") var good_effect_affected_teams: int = EnumUtils.GoodEffectAffectedTeams.ALLIES ## Which entity teams in relation to who produced this source are affected by this healing.
+@export_subgroup("Scanned Physics Layers")
 @export_flags("Player", "Player Attacks", "Enemies", "Enemy Attacks", "Objects", "Terrain", "World Areas", "Layer 8") var scanned_phys_layers: int = 0b00011111 ## The collision mask that this source scans in order to apply affects to.
 
-@export_group("Damage Method")
+@export_group("Base Damage")
 @export var base_damage: int ## The base numerical amount of damage associated with this effect source.
-@export var dmg_affected_stats: DmgAffectedStats ## Which entity stats are affected by this damage source.
+@export var dmg_affected_stats: EnumUtils.DmgAffectedStats = EnumUtils.DmgAffectedStats.SHIELD_THEN_HEALTH ## Which entity stats are affected by this damage source.
 @export_range(0.0, 1.0, 0.01, "suffix:%") var crit_chance: float = 0.0 ## The chance the application of damage will be a critial hit.
 @export var crit_multiplier: float = 1.5 ## How much stronger critical hits are than normal hits.
 @export_range(0.0, 1.0, 0.01, "suffix:%") var armor_penetration: float = 0.0 ## The percent of armor ignored.
-@export var damage_type: DamageType = DamageType.NORMAL ## The category of damage this effect applies.
-@export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var dmg_stun_time: float = 0 ## The amount of time the damage recipient should be stunned for. Note that this only stuns on the first damage tick regardless of DOT settings.
-@export_subgroup("Damage Timeline")
-@export var dmg_timeline: DmgTimeline ## Whether the damage is instant or over time using damage ticks at intervals.
-@export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var dot_total_length: float = 3.0 ## How long the damage over time effect will last.
-@export var dot_number_of_ticks: int = 3 ## How many times the damage amount will be applied after this effect source makes contact.
-@export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var dot_delay_time: float = 0.0 ## How long before the damage over time starts.
 
 @export_group("Healing Method")
 @export var base_healing: int ## The base numerical amount of health associated with this effect source.
-@export var heal_affected_stats: HealAffectedStats ## Which entity stats are affected by this healing source.
-@export_subgroup("Healing Timeline")
-@export var heal_timeline: HealTimeline ## Whether the healing is instant or over time using heal ticks at intervals.
-@export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var hot_total_length: float = 3.0 ## How long the healing over time effect will last.
-@export var hot_number_of_ticks: int = 3 ## How many times the healing amount will be applied after this effect source makes contact.
-@export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var hot_delay_time: float = 0.0 ## How long before the healing over time starts.
+@export var heal_affected_stats: EnumUtils.HealAffectedStats = EnumUtils.HealAffectedStats.HEALTH_THEN_SHIELD ## Which entity stats are affected by this healing source.
 
-@export_group("General")
-@export var knockback_force: int = 0 ## The magnitude of knockback applied to the entity receiving this damage.
+@export_group("Status Effects")
+@export var status_effects: Array[StatusEffect]
 
-
-## Setup the area detection signal and turn off monitorable for performance. 
-## Also set collision mask to the matching flags.
-func _ready() -> void:
-	self.area_entered.connect(_on_area_entered)
-	monitorable = false
-	collision_layer = 0
-	collision_mask = scanned_phys_layers
-
-## When detecting an area, start having it handled. This method can be overridden in subclasses.
-func _on_area_entered(area: Area2D) -> void:
-	_start_being_handled(area)
-
-## Meant to interact with an EffectReceiverComponent that can handle effects supplied by this instance.
-func _start_being_handled(handling_area: Area2D) -> void:
-	if handling_area is EffectReceiverComponent:
-		handling_area.handle_effect(self)
+var source_entity
+var contact_position: Vector2
+var movement_direction: Vector2
+var is_source_moving_type: bool

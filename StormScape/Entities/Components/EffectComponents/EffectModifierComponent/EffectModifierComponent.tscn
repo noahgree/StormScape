@@ -1,6 +1,0 @@
-[gd_scene load_steps=2 format=3 uid="uid://co3n6m7efg8pd"]
-
-[ext_resource type="Script" path="res://Entities/Components/EffectComponents/EffectModifierComponent/EffectModifierComponent.gd" id="1_sm2iu"]
-
-[node name="EffectModifierComponent" type="Node"]
-script = ExtResource("1_sm2iu")

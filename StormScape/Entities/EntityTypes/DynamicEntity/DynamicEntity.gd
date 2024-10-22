@@ -5,6 +5,8 @@ class_name DynamicEntity
 ## This should be used by things like players, enemies, moving environmental entities, etc. 
 ## This should not be used by things like weapons or trees.
 
+@export var team: EnumUtils.Teams = EnumUtils.Teams.PLAYER ## What the effects received by this entity should consider as this entity's team.
+
 @onready var move_fsm: MoveStateMachine = %MoveStateMachine ## The FSM controlling the player.
 @onready var health_component: HealthComponent = %HealthComponent ## The component in charge of player health and shield.
 @onready var stamina_component: StaminaComponent = %StaminaComponent ## The component in charge of player stamina and hunger.

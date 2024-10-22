@@ -7,10 +7,9 @@ class_name EffectReceiverComponent
 ## Add specific effect handlers as children of this node to be able to receive those effects on the entity.
 ## For all intensive purposes, this is acting as a hurtbox component via its receiver area.
 
-@export var effect_modifier_component: EffectModifierComponent ## The component attached to the affected entity that handles modifying incoming values based on stats of the entity.
+@export var status_effect_component: StatusEffectComponent ## The optional component attached to the affected entity that handles modifying incoming values based on stats of the entity.
 @export var health_component: HealthComponent ## The connected health component to receive damage and healing if the parent entity can handle it.
 @export var affected_entity: PhysicsBody2D  ## The connected entity to be affected by the effects be received.
-@export var team: EnumUtils.Teams = EnumUtils.Teams.PLAYER ## What team the effects being received should consider the affected entity as being on.
 
 
 ## Asserts that the affected entity has been set for easy debugging, then sets the monitoring to off for 
@@ -23,78 +22,47 @@ func _ready() -> void:
 
 ## Handles an incoming effect source, passing it to present receivers for further processing before changing 
 ## entity stats.
-func handle_effect(effect_source: EffectSource) -> void:
+func handle_effect_source(effect_source: EffectSource) -> void:
 	if (affected_entity is DynamicEntity) and not affected_entity.move_fsm.can_receive_effects:
 		return
 	
-	if has_node("KnockbackEffectHandler"):
-		if effect_source.knockback_force != 0:
-			_run_knockback_handler(effect_source)
+	if effect_source.base_damage > 0 and has_node("DmgHandler"):
+		if _check_same_team(effect_source) and _check_dmg_allies(effect_source):
+			$DmgHandler.handle_base_damage(effect_source)
+		elif not _check_same_team(effect_source) and _check_dmg_enemies(effect_source):
+			$DmgHandler.handle_base_damage(effect_source)
 	
-	if effect_source.source_team == EnumUtils.Teams.PASSIVE:
-		_run_stun_handler(effect_source)
-		return
-	
-	if has_node("DmgEffectHandler"):
-		if effect_source.base_damage > 0:
-			if _check_same_team(effect_source) and _check_dmg_allies(effect_source):
-				_run_dmg_handler(effect_source)
-			elif not _check_same_team(effect_source) and _check_dmg_enemies(effect_source):
-				_run_dmg_handler(effect_source)
-
-	if has_node("HealEffectHandler"):
+	if effect_source.base_healing > 0 and has_node("HealHandler"):
 		if effect_source.base_healing > 0:
 			if _check_same_team(effect_source) and _check_heal_allies(effect_source):
-				_run_heal_handler(effect_source)
+				$HealHandler.handle_instant_heal(effect_source.base_healing, effect_source.heal_affected_stats)
 			elif not _check_same_team(effect_source) and _check_heal_enemies(effect_source):
-				_run_heal_handler(effect_source)
-
-## Starts the damage handler based on the damage timeline in the effect source. Also calls the stun handler to start.
-func _run_dmg_handler(effect_source: EffectSource) -> void:
-	match effect_source.dmg_timeline:
-		EffectSource.DmgTimeline.INSTANT:
-			$DmgEffectHandler.handle_instant_dmg(effect_source)
-		EffectSource.DmgTimeline.OVER_TIME:
-			$DmgEffectHandler.handle_over_time_dmg(effect_source)
-	_run_stun_handler(effect_source)
-
-## Starts the healing handler based on the healing timeline in the effect source.
-func _run_heal_handler(effect_source: EffectSource) -> void:
-	match effect_source.heal_timeline:
-		EffectSource.HealTimeline.INSTANT:
-			$HealEffectHandler.handle_instant_heal(effect_source)
-		EffectSource.HealTimeline.OVER_TIME:
-			$HealEffectHandler.handle_over_time_heal(effect_source)
-
-## Starts the knockback handler based on what kind of entity the affected entity is.
-func _run_knockback_handler(effect_source: EffectSource) -> void:
-	if affected_entity is DynamicEntity:
-		$KnockbackEffectHandler.handle_dynamic_entity_knockback(effect_source)
-	elif affected_entity is RigidEntity:
-		$KnockbackEffectHandler.handle_rigid_entity_knockback(effect_source)
-
-## Starts the stun handler, first ensuring there is even any stun to handle.
-func _run_stun_handler(effect_source: EffectSource) -> void:
-	if has_node("StunEffectHandler"):
-		if effect_source.dmg_stun_time > 0:
-			$StunEffectHandler.handle_stun(effect_source)
+				$HealHandler.handle_instant_heal(effect_source.base_healing, effect_source.heal_affected_stats)
+	
+	for status_effect in effect_source.status_effects:
+		if status_effect:
+			status_effect.is_source_moving_type = effect_source.is_source_moving_type
+			status_effect.movement_direction = effect_source.movement_direction
+			status_effect.contact_position = effect_source.contact_position
+			status_effect_component.handle_status_effect(status_effect)
 
 ## Checks if the affected entity is on the same team as the producer of the effect source.
 func _check_same_team(effect_source: EffectSource) -> bool:
-	return team & effect_source.source_team != 0
+	print(affected_entity.team & effect_source.source_team != 0)
+	return affected_entity.team & effect_source.source_team != 0
 
-## Checks if the effect source should damage allies. 
+## Checks if the effect source should do bad effects to allies. 
 func _check_dmg_allies(effect_source: EffectSource) -> bool:
-	return effect_source.dmg_affected_teams & effect_source.DmgAffectedTeams.ALLIES != 0
+	return effect_source.bad_effect_affected_teams & EnumUtils.BadEffectAffectedTeams.ALLIES != 0
 
-## Checks if the effect source should damage enemies. 
+## Checks if the effect source should do bad effects to enemies. 
 func _check_dmg_enemies(effect_source: EffectSource) -> bool:
-	return effect_source.dmg_affected_teams & effect_source.DmgAffectedTeams.ENEMIES != 0
+	return effect_source.bad_effect_affected_teams & EnumUtils.BadEffectAffectedTeams.ENEMIES != 0
 
-## Checks if the effect source should heal allies.
+## Checks if the effect source should do good effects to allies.
 func _check_heal_allies(effect_source: EffectSource) -> bool:
-	return effect_source.heal_affected_teams & effect_source.HealAffectedTeams.ALLIES != 0
+	return effect_source.good_effect_affected_teams & EnumUtils.GoodEffectAffectedTeams.ALLIES != 0
 
-## Checks if the effect source should heal enemies.
+## Checks if the effect source should do good effects to enemies.
 func _check_heal_enemies(effect_source: EffectSource) -> bool:
-	return effect_source.heal_affected_teams & effect_source.HealAffectedTeams.ENEMIES != 0
+	return effect_source.good_effect_affected_teams & EnumUtils.GoodEffectAffectedTeams.ENEMIES != 0

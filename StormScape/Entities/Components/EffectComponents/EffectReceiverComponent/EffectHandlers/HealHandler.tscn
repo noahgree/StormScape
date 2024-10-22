@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://ddj5ippwwkvop"]
+
+[ext_resource type="Script" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/HealHandler.gd" id="1_1eglc"]
+
+[node name="HealHandler" type="Node"]
+script = ExtResource("1_1eglc")
