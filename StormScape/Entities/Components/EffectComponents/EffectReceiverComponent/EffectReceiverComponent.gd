@@ -17,6 +17,8 @@ class_name EffectReceiverComponent
 ## affected entity so that the effect sources only see it when they should.
 func _ready() -> void:
 	assert(affected_entity, get_parent().name + " has an effect receiver that is missing a reference to an entity.")
+	assert(status_effect_component, get_parent().name + " has an effect receiver that is missing a reference to a status effect component.")
+	
 	collision_layer = affected_entity.collision_layer
 	monitoring = false
 

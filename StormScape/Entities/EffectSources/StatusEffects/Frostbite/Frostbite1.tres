@@ -41,5 +41,5 @@ dot_resource = SubResource("Resource_ge1fd")
 handler_type = 5
 effect_name = "Frostbite"
 effect_lvl = 1
-effect_mods_time = 10.0
+mods_time_override = 5.0
 stat_mods = Array[ExtResource("2_27v06")]([SubResource("Resource_xefcn"), SubResource("Resource_4k2h3")])

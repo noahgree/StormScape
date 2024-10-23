@@ -6,10 +6,10 @@
 
 [sub_resource type="Resource" id="Resource_m7vw8"]
 script = ExtResource("1_vgior")
-healing_time = 5.0
-heal_ticks_array = Array[int]([5, 5, 5])
+healing_time = 8.0
+heal_ticks_array = Array[int]([2, 2, 2, 2])
 delay_time = 6.0
-heal_affected_stats = 3
+heal_affected_stats = 1
 
 [resource]
 script = ExtResource("1_ryq06")

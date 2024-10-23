@@ -25,4 +25,4 @@ func handle_regen(regen_effect: RegenEffect) -> void:
 	for i in range(local_hot_resource.heal_ticks_array.size()):
 		local_hot_resource.heal_ticks_array[i] = int(roundf(local_hot_resource.heal_ticks_array[i] * (1 + regen_boost - regen_penalty)))
 	
-	(effect_receiver.get_node("HealHandler") as HealHandler).handle_over_time_heal(local_hot_resource)
+	(effect_receiver.get_node("HealHandler") as HealHandler).handle_over_time_heal(local_hot_resource, "Regen")

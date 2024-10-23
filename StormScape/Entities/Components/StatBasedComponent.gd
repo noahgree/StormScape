@@ -31,7 +31,7 @@ func _recalculate_stat(stat_id: String, base_value: float) -> void:
 		result = mod.apply(base_value, result)
 	
 	cached_stats[stat_id] = max(0, result)
-	print(stat_id + ": " + str(cached_stats[stat_id]))
+	print_rich("[color=cyan]" + stat_id + ":[/color] [b]" + str(cached_stats[stat_id]) + "[/b]")
 	_update_ui_for_stat(stat_id, result)
 
 ## Updates an optionally connected UI when a watched stat changes.

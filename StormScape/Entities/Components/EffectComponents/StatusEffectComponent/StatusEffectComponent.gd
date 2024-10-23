@@ -5,6 +5,7 @@ class_name StatusEffectComponent
 ##
 ## This handles things like fire & poison damage not taking into account armor, etc.
 
+@export var can_be_modded: bool = true
 # Below are the components required to handle the base effects before applying stat mods.
 @export var health_component: HealthComponent
 @export var stamina_component: StaminaComponent
@@ -16,6 +17,7 @@ class_name StatusEffectComponent
 @export var poison_handler: PoisonHandler
 @export var regen_handler: RegenHandler
 @export var frostbite_handler: FrostbiteHandler
+@export var burning_handler: BurningHandler
 
 var current_effects: Dictionary = {} ## Keys are general status effect titles like "Poison", and values are arrays of all integer levels of the status effect currently applied.
 var effect_timers: Dictionary = {} ## Holds references to all timers currently tracking active status effects.
@@ -24,7 +26,8 @@ var effect_timers: Dictionary = {} ## Holds references to all timers currently t
 ## Handles an incoming status effect. It starts by adding any stat mods provided by the status effect, and then
 ## it passes the effect logic to the relevant handler if it exists.
 func handle_status_effect(status_effect: StatusEffect) -> void:
-	handle_status_effect_mods(status_effect)
+	if can_be_modded:
+		handle_status_effect_mods(status_effect)
 	
 	match status_effect.handler_type:
 		EnumUtils.EntityStatusEffectType.KNOCKBACK:
@@ -37,6 +40,8 @@ func handle_status_effect(status_effect: StatusEffect) -> void:
 			if regen_handler: regen_handler.handle_regen(status_effect)
 		EnumUtils.EntityStatusEffectType.FROSTBITE:
 			if frostbite_handler: frostbite_handler.handle_frostbite(status_effect)
+		EnumUtils.EntityStatusEffectType.BURNING:
+			if burning_handler: burning_handler.handle_burning(status_effect)
 
 ## Checks if we already have a status effect of the same name and decides what to do depending on the level.
 func handle_status_effect_mods(status_effect: StatusEffect) -> void:
@@ -48,7 +53,7 @@ func handle_status_effect_mods(status_effect: StatusEffect) -> void:
 			_extend_effect_duration(status_effect.effect_name, time_to_add)
 			return
 		elif existing_lvl < status_effect.effect_lvl: # new effect is higher lvl
-			remove_status_effect(current_effects[status_effect.effect_name])
+			_remove_status_effect(current_effects[status_effect.effect_name])
 			add_status_effect(status_effect)
 			return
 		else: # new effect is same lvl
@@ -62,9 +67,10 @@ func add_status_effect(status_effect: StatusEffect) -> void:
 	current_effects[status_effect.effect_name] = status_effect
 
 	var mod_timer: Timer = Timer.new()
-	mod_timer.wait_time = status_effect.effect_mods_time
+	mod_timer.wait_time = status_effect.mod_time
 	mod_timer.one_shot = true
-	mod_timer.timeout.connect(func(): remove_status_effect(status_effect))
+	mod_timer.timeout.connect(func(): _remove_status_effect(status_effect))
+	mod_timer.name = str(status_effect.effect_name) + str(status_effect.effect_lvl) + "_timer"
 	add_child(mod_timer)
 	mod_timer.start()
 	
@@ -94,11 +100,15 @@ func add_status_effect(status_effect: StatusEffect) -> void:
 				if regen_handler: regen_handler.add_mods([mod])
 			EnumUtils.EntityStatModType.FROSTBITE: 
 				if frostbite_handler: frostbite_handler.add_mods([mod])
+			EnumUtils.EntityStatModType.BURNING:
+				if burning_handler: burning_handler.add_mods([mod])
+		
+	print_rich("[color=green]added[/color] " + str(status_effect.effect_name) + ": " + str(current_effects.keys()))
 
 ## Extends the duration of the timer associated with some current effect.
 func _extend_effect_duration(effect_name: String, time_to_add: float) -> void:
 	var timer: Timer = effect_timers.get(effect_name, null)
-	if timer:
+	if timer != null:
 		var new_time: float = timer.get_time_left() + time_to_add
 		timer.stop()
 		timer.wait_time = new_time
@@ -107,13 +117,13 @@ func _extend_effect_duration(effect_name: String, time_to_add: float) -> void:
 ## Restarts the timer associated with some current effect.
 func _restart_effect_duration(effect_name: String) -> void:
 	var timer: Timer = effect_timers.get(effect_name, null)
-	if timer:
+	if timer != null:
 		timer.stop()
 		timer.start()
 
 ## Removes the status effect from the current effects dict and removes all its mods. Additionally removes its
 ## associated timer from the timer dict.
-func remove_status_effect(status_effect: StatusEffect) -> void:
+func _remove_status_effect(status_effect: StatusEffect) -> void:
 	for mod_resource in status_effect.stat_mods:
 		var mod: EntityStatMod = (mod_resource as EntityStatMod)
 		
@@ -138,15 +148,19 @@ func remove_status_effect(status_effect: StatusEffect) -> void:
 				if regen_handler: regen_handler.remove_mod(mod.stat_id, mod.mod_id)
 			EnumUtils.EntityStatModType.FROSTBITE:
 				if frostbite_handler: frostbite_handler.remove_mod(mod.stat_id, mod.mod_id)
+			EnumUtils.EntityStatModType.BURNING:
+				if burning_handler: burning_handler.remove_mod(mod.stat_id, mod.mod_id)
 	
 	if status_effect.effect_name in current_effects:
 		current_effects.erase(status_effect.effect_name)
 	
 	var timer: Timer = effect_timers.get(status_effect.effect_name, null)
-	if timer:
+	if timer != null:
 		timer.stop()
 		timer.queue_free()
 		effect_timers.erase(status_effect.effect_name)
+	
+	print_rich("[color=magenta]removed[/color] " + str(status_effect.effect_name) + ": " + str(current_effects.keys()))
 
 ## Loads the necessary movement and contact data from the effect source into the knockback handler.
 func prepare_knockback_vars(effect_source: EffectSource) -> void:
@@ -154,3 +168,15 @@ func prepare_knockback_vars(effect_source: EffectSource) -> void:
 		knockback_handler.contact_position = effect_source.contact_position
 		knockback_handler.effect_movement_direction = effect_source.movement_direction
 		knockback_handler.is_source_moving_type = effect_source.is_source_moving_type
+
+## Returns if any effect (no matter the level) of the passed in name is active.
+func check_if_effect(effect_name: String) -> bool:
+	return current_effects.has(effect_name)
+
+## Attempts to remove any effect of the matching name and then tries to cancel any active DOTs and HOTs for it.
+func request_effect_removal(effect_name: String) -> void:
+	var existing_effect: StatusEffect = current_effects.get(effect_name, null)
+	if existing_effect: _remove_status_effect(existing_effect)
+	
+	if dmg_handler: dmg_handler.cancel_over_time_dmg(effect_name)
+	if heal_handler: heal_handler.cancel_over_time_heal(effect_name)

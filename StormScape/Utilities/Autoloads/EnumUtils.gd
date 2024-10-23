@@ -12,5 +12,9 @@ enum HealAffectedStats { HEALTH_ONLY, SHIELD_ONLY, HEALTH_THEN_SHIELD, SIMULTANE
 enum BadEffectAffectedTeams { ENEMIES = 1 << 0, ALLIES = 1 << 1 }
 enum GoodEffectAffectedTeams { ENEMIES = 1 << 0, ALLIES = 1 << 1 }
 
-enum EntityStatusEffectType { NONE, KNOCKBACK, STUN, POISON, REGEN, FROSTBITE }
-enum EntityStatModType { VITALS, STAMINA, MOVEMENT, DAMAGE, HEALING, KNOCKBACK, STUN, POISON, REGEN, FROSTBITE }
+enum EntityStatusEffectType { ## The kind of status effect. Should be associated with a handler of the type.
+	NONE, KNOCKBACK, STUN, POISON, REGEN, FROSTBITE, BURNING 
+	}
+enum EntityStatModType { ## The associated type of StatBasedComponent that tracks the variable being modded.
+	VITALS, STAMINA, MOVEMENT, DAMAGE, HEALING, KNOCKBACK, STUN, POISON, REGEN, FROSTBITE, BURNING 
+	}

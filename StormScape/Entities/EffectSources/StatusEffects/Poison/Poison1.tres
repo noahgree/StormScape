@@ -53,5 +53,5 @@ dot_resource = SubResource("Resource_d0iyw")
 handler_type = 3
 effect_name = "Poison"
 effect_lvl = 1
-effect_mods_time = 5.0
+mods_time_override = 5.0
 stat_mods = Array[ExtResource("2_epos6")]([SubResource("Resource_ceyil"), SubResource("Resource_tgo5x"), SubResource("Resource_cytk6")])

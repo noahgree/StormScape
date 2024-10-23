@@ -32,7 +32,7 @@ func _do_character_movement(delta: float) -> void:
 	var request_sprint = Input.is_action_pressed("sprint")
 	var knockback: Vector2 = fsm.knockback_vector
 	
-	if knockback != Vector2.ZERO: # let knockback take control if there is any
+	if knockback.length() > 0: # let knockback take control if there is any
 		dynamic_entity.velocity = knockback
 	
 	if movement_vector == Vector2.ZERO:

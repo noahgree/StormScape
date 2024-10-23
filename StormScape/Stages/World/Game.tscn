@@ -1,4 +1,4 @@
-[gd_scene load_steps=28 format=3 uid="uid://bscnr6a23l10m"]
+[gd_scene load_steps=31 format=3 uid="uid://bscnr6a23l10m"]
 
 [ext_resource type="Texture2D" uid="uid://c50xdwgnkx441" path="res://Stages/Tilesets/TilesetFloor.png" id="1_o34ct"]
 [ext_resource type="Texture2D" uid="uid://nvl4eoe0gf5y" path="res://Stages/Tilesets/TilesetField.png" id="2_okrb7"]
@@ -7,7 +7,9 @@
 [ext_resource type="Script" path="res://Entities/EffectSources/StaticEffectSource.gd" id="6_p71do"]
 [ext_resource type="PackedScene" uid="uid://btba0jmsow1mx" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectReceiverComponent.tscn" id="7_bfj3g"]
 [ext_resource type="PackedScene" uid="uid://dykiv0tlhwmox" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/KnockbackHandler.tscn" id="8_41uae"]
+[ext_resource type="Resource" uid="uid://b8yo5kmjiwnca" path="res://Entities/EffectSources/StatusEffects/Regen/Regen1.tres" id="9_6ty5i"]
 [ext_resource type="PackedScene" uid="uid://cdfdy8m6ki3oq" path="res://Entities/Components/HealthComponent/HealthComponent.tscn" id="10_7lajt"]
+[ext_resource type="Script" path="res://Entities/Components/EntityStatMod.gd" id="10_ex6ei"]
 [ext_resource type="Script" path="res://Entities/Components/HitboxComponent/HitboxComponent.gd" id="10_nwmsb"]
 [ext_resource type="PackedScene" uid="uid://4gl24qwdyti3" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/DmgHandler.tscn" id="11_ahd86"]
 [ext_resource type="PackedScene" uid="uid://co3n6m7efg8pd" path="res://Entities/Components/EffectComponents/StatusEffectComponent/StatusEffectComponent.tscn" id="11_vsn5y"]
@@ -15,8 +17,7 @@
 [ext_resource type="Script" path="res://Entities/EffectSources/StatusEffects/StatusEffect.gd" id="12_awpt0"]
 [ext_resource type="Script" path="res://Utilities/Debug/TestBullet.gd" id="14_fb2si"]
 [ext_resource type="Script" path="res://Entities/EffectSources/MovingEffectSource.gd" id="15_0qs72"]
-[ext_resource type="Resource" uid="uid://b0it5xmpw16sd" path="res://Entities/EffectSources/StatusEffects/Knockback/Knockback1.tres" id="16_db41q"]
-[ext_resource type="Resource" uid="uid://b2ekcx7kndqjb" path="res://Entities/EffectSources/StatusEffects/Frostbite/Frostbite1.tres" id="17_x5bx7"]
+[ext_resource type="Resource" uid="uid://dvew5cy3k7s48" path="res://Entities/EffectSources/StatusEffects/Burning/Burning1.tres" id="18_fi4i2"]
 
 [sub_resource type="Environment" id="Environment_2wouv"]
 background_mode = 3
@@ -4101,6 +4102,26 @@ terrain_set_1/terrain_1/color = Color(0, 0.762018, 0.441434, 1)
 sources/1 = SubResource("TileSetAtlasSource_mc523")
 sources/2 = SubResource("TileSetAtlasSource_6prks")
 
+[sub_resource type="Resource" id="Resource_ycuje"]
+script = ExtResource("10_ex6ei")
+type = 10
+stat_id = "burning_weakness"
+mod_id = "burn_weak1"
+operation = "="
+value = 5.0
+priority = 1
+can_stack = false
+max_stack_count = 3
+override_all = true
+
+[sub_resource type="Resource" id="Resource_me7xs"]
+script = ExtResource("12_awpt0")
+handler_type = 0
+effect_name = "burn_weak"
+effect_lvl = 1
+mod_time = 5.0
+stat_mods = Array[ExtResource("10_ex6ei")]([SubResource("Resource_ycuje")])
+
 [sub_resource type="Resource" id="Resource_hd71j"]
 script = ExtResource("6_p71do")
 source_team = 2
@@ -4114,7 +4135,7 @@ crit_multiplier = 1.5
 armor_penetration = 0.0
 base_healing = 0
 heal_affected_stats = 2
-status_effects = Array[ExtResource("12_awpt0")]([ExtResource("16_db41q")])
+status_effects = Array[ExtResource("12_awpt0")]([ExtResource("9_6ty5i"), SubResource("Resource_me7xs")])
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_o8yml"]
 size = Vector2(14, 14)
@@ -4137,7 +4158,7 @@ crit_multiplier = 1.5
 armor_penetration = 0.0
 base_healing = 0
 heal_affected_stats = 2
-status_effects = Array[ExtResource("12_awpt0")]([ExtResource("17_x5bx7"), ExtResource("16_db41q")])
+status_effects = Array[ExtResource("12_awpt0")]([ExtResource("18_fi4i2")])
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_8bjrm"]
 size = Vector2(6, 6)
@@ -4182,6 +4203,10 @@ script = ExtResource("6_ldfbn")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Testing/TestStaticEntity"]
 shape = SubResource("RectangleShape2D_sbju2")
 
+[node name="StatusEffectComponent" parent="Testing/TestStaticEntity" node_paths=PackedStringArray("knockback_handler") instance=ExtResource("11_vsn5y")]
+can_be_modded = false
+knockback_handler = NodePath("../EffectReceiverComponent/KnockbackHandler")
+
 [node name="EffectReceiverComponent" parent="Testing/TestStaticEntity" node_paths=PackedStringArray("status_effect_component", "affected_entity") instance=ExtResource("7_bfj3g")]
 status_effect_component = NodePath("../StatusEffectComponent")
 affected_entity = NodePath("..")
@@ -4191,9 +4216,6 @@ shape = SubResource("RectangleShape2D_wpovd")
 debug_color = Color(0.941042, 1.32841e-05, 0.612344, 0.42)
 
 [node name="KnockbackHandler" parent="Testing/TestStaticEntity/EffectReceiverComponent" instance=ExtResource("8_41uae")]
-
-[node name="StatusEffectComponent" parent="Testing/TestStaticEntity" node_paths=PackedStringArray("knockback_handler") instance=ExtResource("11_vsn5y")]
-knockback_handler = NodePath("../EffectReceiverComponent/KnockbackHandler")
 
 [node name="TestStaticEntity2" type="RigidBody2D" parent="Testing"]
 position = Vector2(190, 36)
@@ -4210,7 +4232,8 @@ shape = SubResource("RectangleShape2D_sbju2")
 
 [node name="HealthComponent" parent="Testing/TestStaticEntity2" instance=ExtResource("10_7lajt")]
 
-[node name="EffectReceiverComponent" parent="Testing/TestStaticEntity2" node_paths=PackedStringArray("health_component", "affected_entity") instance=ExtResource("7_bfj3g")]
+[node name="EffectReceiverComponent" parent="Testing/TestStaticEntity2" node_paths=PackedStringArray("status_effect_component", "health_component", "affected_entity") instance=ExtResource("7_bfj3g")]
+status_effect_component = NodePath("../StatusEffectComponent")
 health_component = NodePath("../HealthComponent")
 affected_entity = NodePath("..")
 
@@ -4223,6 +4246,8 @@ debug_color = Color(0.941042, 1.32841e-05, 0.612344, 0.42)
 [node name="HealHandler" parent="Testing/TestStaticEntity2/EffectReceiverComponent" instance=ExtResource("12_6kqwm")]
 
 [node name="KnockbackHandler" parent="Testing/TestStaticEntity2/EffectReceiverComponent" instance=ExtResource("8_41uae")]
+
+[node name="StatusEffectComponent" parent="Testing/TestStaticEntity2" instance=ExtResource("11_vsn5y")]
 
 [node name="TestBullet" type="Node2D" parent="Testing"]
 script = ExtResource("14_fb2si")

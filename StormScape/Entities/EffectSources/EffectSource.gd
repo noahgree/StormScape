@@ -14,7 +14,7 @@ class_name EffectSource
 @export_flags("Player", "Player Attacks", "Enemies", "Enemy Attacks", "Objects", "Terrain", "World Areas", "Layer 8") var scanned_phys_layers: int = 0b00011111 ## The collision mask that this source scans in order to apply affects to.
 
 @export_group("Base Damage")
-@export var base_damage: int:  ## The base numerical amount of damage associated with this effect source.
+@export var base_damage: int: ## The base numerical amount of damage associated with this effect source.
 	set(new_value):
 		max(0, new_value)
 @export var dmg_affected_stats: EnumUtils.DmgAffectedStats = EnumUtils.DmgAffectedStats.SHIELD_THEN_HEALTH ## Which entity stats are affected by this damage source.

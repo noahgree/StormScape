@@ -9,5 +9,5 @@ dmg_stun_time = 0.5
 handler_type = 2
 effect_name = "Stun"
 effect_lvl = 1
-effect_mods_time = 5.0
+mods_time_override = 5.0
 stat_mods = Array[ExtResource("2_vysiy")]([])

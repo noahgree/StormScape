@@ -15,7 +15,7 @@ func exit() -> void:
 
 func state_physics_process(delta: float) -> void:
 	var knockback: Vector2 = fsm.knockback_vector
-	if knockback != Vector2.ZERO: # let knockback take control if there is any
+	if knockback.length() > 0: # let knockback take control if there is any
 		dynamic_entity.velocity = knockback
 	
 	if dynamic_entity.velocity.length() > (fsm.get_stat("friction") * delta): # no input, still slowing
