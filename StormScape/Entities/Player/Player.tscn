@@ -1,4 +1,4 @@
-[gd_scene load_steps=135 format=3 uid="uid://dba8mrurjlekp"]
+[gd_scene load_steps=134 format=3 uid="uid://dba8mrurjlekp"]
 
 [ext_resource type="Script" path="res://Entities/Player/Player.gd" id="1_m33tt"]
 [ext_resource type="Texture2D" uid="uid://77ell4xpptap" path="res://Entities/Player/Spritesheets/PlayerBase.png" id="2_jshja"]
@@ -6,7 +6,6 @@
 [ext_resource type="PackedScene" uid="uid://btba0jmsow1mx" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectReceiverComponent.tscn" id="4_hhm8x"]
 [ext_resource type="PackedScene" uid="uid://4gl24qwdyti3" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/DmgHandler.tscn" id="5_g3ixu"]
 [ext_resource type="PackedScene" uid="uid://cxpv7l7rcaq1o" path="res://Entities/Components/StaminaComponent/StaminaComponent.tscn" id="5_k4fu6"]
-[ext_resource type="PackedScene" uid="uid://co3n6m7efg8pd" path="res://Entities/Components/EffectComponents/StatusEffectComponent/StatusEffectComponent.tscn" id="5_pahas"]
 [ext_resource type="PackedScene" uid="uid://ddj5ippwwkvop" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/HealHandler.tscn" id="6_5e1ju"]
 [ext_resource type="Script" path="res://Entities/EntityTypes/DynamicEntity/DynamicFSM/MoveStateMachine.gd" id="6_otbuq"]
 [ext_resource type="Script" path="res://Entities/Player/States/Idle/Idle.gd" id="7_15a5x"]
@@ -1081,24 +1080,19 @@ stats_ui = NodePath("../PlayerUI/PlayerStatsOverlay")
 unique_name_in_owner = true
 stats_ui = NodePath("../PlayerUI/PlayerStatsOverlay")
 
-[node name="StatusEffectComponent" parent="." node_paths=PackedStringArray("health_component", "stamina_component", "move_fsm", "dmg_handler", "heal_handler", "knockback_handler", "stun_handler", "poison_handler", "regen_handler", "frostbite_handler", "burning_handler") instance=ExtResource("5_pahas")]
-unique_name_in_owner = true
+[node name="EffectReceiverComponent" parent="." node_paths=PackedStringArray("affected_entity", "health_component", "stamina_component", "move_fsm", "dmg_handler", "heal_handler", "knockback_handler", "stun_handler", "poison_handler", "regen_handler", "frostbite_handler", "burning_handler") instance=ExtResource("4_hhm8x")]
+affected_entity = NodePath("..")
 health_component = NodePath("../HealthComponent")
 stamina_component = NodePath("../StaminaComponent")
 move_fsm = NodePath("../MoveStateMachine")
-dmg_handler = NodePath("../EffectReceiverComponent/DmgHandler")
-heal_handler = NodePath("../EffectReceiverComponent/HealHandler")
-knockback_handler = NodePath("../EffectReceiverComponent/KnockbackHandler")
-stun_handler = NodePath("../EffectReceiverComponent/StunHandler")
-poison_handler = NodePath("../EffectReceiverComponent/PoisonHandler")
-regen_handler = NodePath("../EffectReceiverComponent/RegenHandler")
-frostbite_handler = NodePath("../EffectReceiverComponent/FrostbiteHandler")
-burning_handler = NodePath("../EffectReceiverComponent/BurningHandler")
-
-[node name="EffectReceiverComponent" parent="." node_paths=PackedStringArray("status_effect_component", "health_component", "affected_entity") instance=ExtResource("4_hhm8x")]
-status_effect_component = NodePath("../StatusEffectComponent")
-health_component = NodePath("../HealthComponent")
-affected_entity = NodePath("..")
+dmg_handler = NodePath("DmgHandler")
+heal_handler = NodePath("HealHandler")
+knockback_handler = NodePath("KnockbackHandler")
+stun_handler = NodePath("StunHandler")
+poison_handler = NodePath("PoisonHandler")
+regen_handler = NodePath("RegenHandler")
+frostbite_handler = NodePath("FrostbiteHandler")
+burning_handler = NodePath("BurningHandler")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="EffectReceiverComponent"]
 position = Vector2(0, -13)

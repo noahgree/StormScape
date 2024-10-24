@@ -1,4 +1,5 @@
 @icon("res://Utilities/Debug/EditorIcons/effect_receiver_component.svg")
+@tool
 extends Area2D
 class_name EffectReceiverComponent
 ## A general effect source receiver that passes the appropriate parts of the effect to handlers, but only if 
@@ -7,20 +8,40 @@ class_name EffectReceiverComponent
 ## Add specific effect handlers as children of this node to be able to receive those effects on the entity.
 ## For all intensive purposes, this is acting as a hurtbox component via its receiver area.
 
-@export var status_effect_component: StatusEffectComponent ## The optional component attached to the affected entity that handles modifying incoming values based on stats of the entity.
-@export var health_component: HealthComponent ## The connected health component to receive damage and healing if the parent entity can handle it.
+@export var can_receive_stat_mods: bool = true ## Whether the affected entity can have its stats modded via received effect sources.
 @export var affected_entity: PhysicsBody2D  ## The connected entity to be affected by the effects be received.
+@export var health_component: HealthComponent
+@export var stamina_component: StaminaComponent
+@export var move_fsm: MoveStateMachine
+@export var dmg_handler: DmgHandler
+@export var heal_handler: HealHandler
+@export var knockback_handler: KnockbackHandler
+@export var stun_handler: StunHandler
+@export var poison_handler: PoisonHandler
+@export var regen_handler: RegenHandler
+@export var frostbite_handler: FrostbiteHandler
+@export var burning_handler: BurningHandler
 
+@onready var status_effect_component: StatusEffectComponent = %StatusEffectComponent ## The optional component attached to the affected entity that handles modifying incoming values based on stats of the entity.
+
+var tool_script = preload("res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectReceiverTool.gd").new() ## This is a script that handles automatically setting the export node's when assigned as children to this receiver.
+
+## This works with the tool script defined above to assign export vars automatically in-editor once added to the tree.
+func _notification(what):
+	if Engine.is_editor_hint():
+		if what == NOTIFICATION_CHILD_ORDER_CHANGED:
+			tool_script.update_editor_children_exports(self, get_children())
+		elif what == NOTIFICATION_ENTER_TREE:
+			tool_script.update_editor_parent_export(self, get_parent())
 
 ## Asserts that the affected entity has been set for easy debugging, then sets the monitoring to off for 
 ## performance reasons in case it was changed in the editor. It also ensures the collision layer is the same as the 
 ## affected entity so that the effect sources only see it when they should.
 func _ready() -> void:
-	assert(affected_entity, get_parent().name + " has an effect receiver that is missing a reference to an entity.")
-	assert(status_effect_component, get_parent().name + " has an effect receiver that is missing a reference to a status effect component.")
-	
-	collision_layer = affected_entity.collision_layer
-	monitoring = false
+	assert(affected_entity or get_parent() is SubViewport, get_parent().name + " has an effect receiver that is missing a reference to an entity.")
+	if not Engine.is_editor_hint():
+		collision_layer = affected_entity.collision_layer
+		monitoring = false
 
 ## Handles an incoming effect source, passing it to present receivers for further processing before changing 
 ## entity stats.
@@ -30,9 +51,9 @@ func handle_effect_source(effect_source: EffectSource) -> void:
 	
 	if effect_source.base_damage > 0 and has_node("DmgHandler"):
 		if _check_same_team(effect_source) and _check_dmg_allies(effect_source):
-			$DmgHandler.handle_base_damage(effect_source)
+			$DmgHandler.handle_instant_damage(effect_source)
 		elif not _check_same_team(effect_source) and _check_dmg_enemies(effect_source):
-			$DmgHandler.handle_base_damage(effect_source)
+			$DmgHandler.handle_instant_damage(effect_source)
 	
 	if effect_source.base_healing > 0 and has_node("HealHandler"):
 		if effect_source.base_healing > 0:
@@ -50,7 +71,6 @@ func handle_effect_source(effect_source: EffectSource) -> void:
 
 ## Checks if the affected entity is on the same team as the producer of the effect source.
 func _check_same_team(effect_source: EffectSource) -> bool:
-	print(affected_entity.team & effect_source.source_team != 0)
 	return affected_entity.team & effect_source.source_team != 0
 
 ## Checks if the effect source should do bad effects to allies. 

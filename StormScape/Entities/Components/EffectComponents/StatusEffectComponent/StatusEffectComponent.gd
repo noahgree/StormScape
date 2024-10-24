@@ -5,43 +5,30 @@ class_name StatusEffectComponent
 ##
 ## This handles things like fire & poison damage not taking into account armor, etc.
 
-@export var can_be_modded: bool = true
-# Below are the components required to handle the base effects before applying stat mods.
-@export var health_component: HealthComponent
-@export var stamina_component: StaminaComponent
-@export var move_fsm: MoveStateMachine
-@export var dmg_handler: DmgHandler
-@export var heal_handler: HealHandler
-@export var knockback_handler: KnockbackHandler
-@export var stun_handler: StunHandler
-@export var poison_handler: PoisonHandler
-@export var regen_handler: RegenHandler
-@export var frostbite_handler: FrostbiteHandler
-@export var burning_handler: BurningHandler
-
 var current_effects: Dictionary = {} ## Keys are general status effect titles like "Poison", and values are arrays of all integer levels of the status effect currently applied.
 var effect_timers: Dictionary = {} ## Holds references to all timers currently tracking active status effects.
 
+@onready var receiver: EffectReceiverComponent = get_parent()
 
 ## Handles an incoming status effect. It starts by adding any stat mods provided by the status effect, and then
 ## it passes the effect logic to the relevant handler if it exists.
 func handle_status_effect(status_effect: StatusEffect) -> void:
-	if can_be_modded:
+	if get_parent().can_receive_stat_mods:
 		handle_status_effect_mods(status_effect)
 	
 	match status_effect.handler_type:
 		EnumUtils.EntityStatusEffectType.KNOCKBACK:
-			if knockback_handler: knockback_handler.handle_knockback(status_effect)
+			if receiver.knockback_handler: receiver.knockback_handler.handle_knockback(status_effect)
 		EnumUtils.EntityStatusEffectType.STUN:
-			if stun_handler: stun_handler.handle_stun(status_effect)
+			if receiver.stun_handler: receiver.stun_handler.handle_stun(status_effect)
 		EnumUtils.EntityStatusEffectType.POISON:
-			if poison_handler: poison_handler.handle_poison(status_effect)
+			if receiver.poison_handler: receiver.poison_handler.handle_poison(status_effect)
 		EnumUtils.EntityStatusEffectType.REGEN:
-			if regen_handler: regen_handler.handle_regen(status_effect)
+			if receiver.regen_handler: receiver.regen_handler.handle_regen(status_effect)
 		EnumUtils.EntityStatusEffectType.FROSTBITE:
-			if frostbite_handler: frostbite_handler.handle_frostbite(status_effect)
+			if receiver.frostbite_handler: receiver.frostbite_handler.handle_frostbite(status_effect)
 		EnumUtils.EntityStatusEffectType.BURNING:
-			if burning_handler: burning_handler.handle_burning(status_effect)
+			if receiver.burning_handler: receiver.burning_handler.handle_burning(status_effect)
 
 ## Checks if we already have a status effect of the same name and decides what to do depending on the level.
 func handle_status_effect_mods(status_effect: StatusEffect) -> void:
@@ -81,27 +68,27 @@ func add_status_effect(status_effect: StatusEffect) -> void:
 		
 		match mod.type:
 			EnumUtils.EntityStatModType.VITALS:
-				if health_component: health_component.add_mods([mod])
+				if receiver.health_component: receiver.health_component.add_mods([mod])
 			EnumUtils.EntityStatModType.STAMINA:
-				if stamina_component: stamina_component.add_mods([mod])
+				if receiver.stamina_component: receiver.stamina_component.add_mods([mod])
 			EnumUtils.EntityStatModType.MOVEMENT:
-				if move_fsm: move_fsm.add_mods([mod])
+				if receiver.move_fsm: receiver.move_fsm.add_mods([mod])
 			EnumUtils.EntityStatModType.DAMAGE:
-				if dmg_handler: dmg_handler.add_mods([mod])
+				if receiver.dmg_handler: receiver.dmg_handler.add_mods([mod])
 			EnumUtils.EntityStatModType.HEALING:
-				if heal_handler: heal_handler.add_mods([mod])
+				if receiver.heal_handler: receiver.heal_handler.add_mods([mod])
 			EnumUtils.EntityStatModType.KNOCKBACK:
-				if knockback_handler: knockback_handler.add_mods([mod])
+				if receiver.knockback_handler: receiver.knockback_handler.add_mods([mod])
 			EnumUtils.EntityStatModType.STUN:
-				if stun_handler: stun_handler.add_mods([mod])
+				if receiver.stun_handler: receiver.stun_handler.add_mods([mod])
 			EnumUtils.EntityStatModType.POISON:
-				if poison_handler: poison_handler.add_mods([mod])
+				if receiver.poison_handler: receiver.poison_handler.add_mods([mod])
 			EnumUtils.EntityStatModType.REGEN: 
-				if regen_handler: regen_handler.add_mods([mod])
+				if receiver.regen_handler: receiver.regen_handler.add_mods([mod])
 			EnumUtils.EntityStatModType.FROSTBITE: 
-				if frostbite_handler: frostbite_handler.add_mods([mod])
+				if receiver.frostbite_handler: receiver.frostbite_handler.add_mods([mod])
 			EnumUtils.EntityStatModType.BURNING:
-				if burning_handler: burning_handler.add_mods([mod])
+				if receiver.burning_handler: receiver.burning_handler.add_mods([mod])
 		
 	print_rich("[color=green]added[/color] " + str(status_effect.effect_name) + ": " + str(current_effects.keys()))
 
@@ -129,27 +116,27 @@ func _remove_status_effect(status_effect: StatusEffect) -> void:
 		
 		match mod.type:
 			EnumUtils.EntityStatModType.VITALS:
-				if health_component: health_component.remove_mod(mod.stat_id, mod.mod_id)
+				if receiver.health_component: receiver.health_component.remove_mod(mod.stat_id, mod.mod_id)
 			EnumUtils.EntityStatModType.STAMINA:
-				if stamina_component: stamina_component.remove_mod(mod.stat_id, mod.mod_id)
+				if receiver.stamina_component: receiver.stamina_component.remove_mod(mod.stat_id, mod.mod_id)
 			EnumUtils.EntityStatModType.MOVEMENT:
-				if move_fsm: move_fsm.remove_mod(mod.stat_id, mod.mod_id)
+				if receiver.move_fsm: receiver.move_fsm.remove_mod(mod.stat_id, mod.mod_id)
 			EnumUtils.EntityStatModType.DAMAGE:
-				if dmg_handler: dmg_handler.remove_mod(mod.stat_id, mod.mod_id)
+				if receiver.dmg_handler: receiver.dmg_handler.remove_mod(mod.stat_id, mod.mod_id)
 			EnumUtils.EntityStatModType.HEALING:
-				if heal_handler: heal_handler.remove_mod(mod.stat_id, mod.mod_id)
+				if receiver.heal_handler: receiver.heal_handler.remove_mod(mod.stat_id, mod.mod_id)
 			EnumUtils.EntityStatModType.KNOCKBACK:
-				if knockback_handler: knockback_handler.remove_mod(mod.stat_id, mod.mod_id)
+				if receiver.knockback_handler: receiver.knockback_handler.remove_mod(mod.stat_id, mod.mod_id)
 			EnumUtils.EntityStatModType.STUN:
-				if stun_handler: stun_handler.remove_mod(mod.stat_id, mod.mod_id)
+				if receiver.stun_handler: receiver.stun_handler.remove_mod(mod.stat_id, mod.mod_id)
 			EnumUtils.EntityStatModType.POISON:
-				if poison_handler: poison_handler.remove_mod(mod.stat_id, mod.mod_id)
+				if receiver.poison_handler: receiver.poison_handler.remove_mod(mod.stat_id, mod.mod_id)
 			EnumUtils.EntityStatModType.REGEN:
-				if regen_handler: regen_handler.remove_mod(mod.stat_id, mod.mod_id)
+				if receiver.regen_handler: receiver.regen_handler.remove_mod(mod.stat_id, mod.mod_id)
 			EnumUtils.EntityStatModType.FROSTBITE:
-				if frostbite_handler: frostbite_handler.remove_mod(mod.stat_id, mod.mod_id)
+				if receiver.frostbite_handler: receiver.frostbite_handler.remove_mod(mod.stat_id, mod.mod_id)
 			EnumUtils.EntityStatModType.BURNING:
-				if burning_handler: burning_handler.remove_mod(mod.stat_id, mod.mod_id)
+				if receiver.burning_handler: receiver.burning_handler.remove_mod(mod.stat_id, mod.mod_id)
 	
 	if status_effect.effect_name in current_effects:
 		current_effects.erase(status_effect.effect_name)
@@ -164,10 +151,10 @@ func _remove_status_effect(status_effect: StatusEffect) -> void:
 
 ## Loads the necessary movement and contact data from the effect source into the knockback handler.
 func prepare_knockback_vars(effect_source: EffectSource) -> void:
-	if knockback_handler:
-		knockback_handler.contact_position = effect_source.contact_position
-		knockback_handler.effect_movement_direction = effect_source.movement_direction
-		knockback_handler.is_source_moving_type = effect_source.is_source_moving_type
+	if receiver.knockback_handler:
+		receiver.knockback_handler.contact_position = effect_source.contact_position
+		receiver.knockback_handler.effect_movement_direction = effect_source.movement_direction
+		receiver.knockback_handler.is_source_moving_type = effect_source.is_source_moving_type
 
 ## Returns if any effect (no matter the level) of the passed in name is active.
 func check_if_effect(effect_name: String) -> bool:
@@ -178,5 +165,5 @@ func request_effect_removal(effect_name: String) -> void:
 	var existing_effect: StatusEffect = current_effects.get(effect_name, null)
 	if existing_effect: _remove_status_effect(existing_effect)
 	
-	if dmg_handler: dmg_handler.cancel_over_time_dmg(effect_name)
-	if heal_handler: heal_handler.cancel_over_time_heal(effect_name)
+	if receiver.dmg_handler: receiver.dmg_handler.cancel_over_time_dmg(effect_name)
+	if receiver.heal_handler: receiver.heal_handler.cancel_over_time_heal(effect_name)

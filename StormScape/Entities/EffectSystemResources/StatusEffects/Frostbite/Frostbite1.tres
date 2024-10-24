@@ -1,7 +1,7 @@
 [gd_resource type="Resource" script_class="FrostbiteEffect" load_steps=7 format=3 uid="uid://b2ekcx7kndqjb"]
 
-[ext_resource type="Script" path="res://Entities/EffectSources/StatusEffects/Frostbite/FrostbiteEffect.gd" id="1_apbmx"]
-[ext_resource type="Script" path="res://Entities/EffectSources/EffectOverTimeResources/DOTResource.gd" id="1_gn7v7"]
+[ext_resource type="Script" path="res://Entities/EffectSystemResources/StatusEffects/Frostbite/FrostbiteEffect.gd" id="1_apbmx"]
+[ext_resource type="Script" path="res://Entities/EffectSystemResources/EffectOverTimeResources/DOTResource.gd" id="1_gn7v7"]
 [ext_resource type="Script" path="res://Entities/Components/EntityStatMod.gd" id="2_27v06"]
 
 [sub_resource type="Resource" id="Resource_ge1fd"]

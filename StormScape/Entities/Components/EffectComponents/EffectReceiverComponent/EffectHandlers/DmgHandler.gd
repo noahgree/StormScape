@@ -24,14 +24,10 @@ func _get_dmg_after_crit_then_armor(effect_source: EffectSource) -> int:
 	var new_damage: int = max(0, round(dmg_after_crit * (1 - armor_block_percent)))
 	return new_damage
 
-## Handles the base damage coming from an effect source. Only called by effect receivers.
-func handle_base_damage(effect_source: EffectSource) -> void:
+## Handles instantaneous damage that will be affected by armor.
+func handle_instant_damage(effect_source: EffectSource) -> void:
 	var dmg_after_crit_then_armor: int = _get_dmg_after_crit_then_armor(effect_source)
 	_send_handled_dmg(effect_source.dmg_affected_stats, dmg_after_crit_then_armor)
-
-## Handles applying instant, one-shot damage to the affected entity.
-func handle_instant_dmg(base_damage: int, dmg_affected_stats: EnumUtils.DmgAffectedStats) -> void:
-	_send_handled_dmg(dmg_affected_stats, base_damage)
 
 ## Handles applying damage that is inflicted over time, whether with a delay, with burst intervals, or with both.
 func handle_over_time_dmg(dot_resource: DOTResource, source_type: String) -> void:

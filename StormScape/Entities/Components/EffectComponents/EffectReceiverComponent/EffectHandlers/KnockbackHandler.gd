@@ -3,10 +3,10 @@ extends StatBasedComponent
 class_name KnockbackHandler
 ## A handler for using the data provided in the effect source to apply knockback in different ways.
 
-@export_range(0.0, 0.5, 0.01) var entity_dir_influence: float = 0.25 ## How strong of an influence the entity's movement direction should have on the knockback vector.
-
 @export var _knockback_boost: float = 1.0 ## A multiplier for knockback on an entity.
 @export var _knockback_resistance: float = 1.0 ## A multiplier for redudcing knockback on an entity.
+@export_subgroup("Other")
+@export_range(0.0, 0.5, 0.01) var entity_dir_influence: float = 0.25 ## How strong of an influence the entity's movement direction should have on the knockback vector.
 
 @onready var affected_entity: PhysicsBody2D = get_parent().affected_entity ## The entity to be affected by the knockback.
 @onready var effect_receiver: EffectReceiverComponent = get_parent() ## The receiver that passes the knockback to this handler node.

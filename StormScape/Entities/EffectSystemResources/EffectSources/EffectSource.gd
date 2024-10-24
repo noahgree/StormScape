@@ -16,7 +16,7 @@ class_name EffectSource
 @export_group("Base Damage")
 @export var base_damage: int: ## The base numerical amount of damage associated with this effect source.
 	set(new_value):
-		max(0, new_value)
+		base_damage = max(0, new_value)
 @export var dmg_affected_stats: EnumUtils.DmgAffectedStats = EnumUtils.DmgAffectedStats.SHIELD_THEN_HEALTH ## Which entity stats are affected by this damage source.
 @export_range(0.0, 1.0, 0.01, "suffix:%") var crit_chance: float = 0.0 ## The chance the application of damage will be a critial hit.
 @export var crit_multiplier: float = 1.5 ## How much stronger critical hits are than normal hits.
@@ -25,7 +25,7 @@ class_name EffectSource
 @export_group("Healing Method")
 @export var base_healing: int: ## The base numerical amount of health associated with this effect source.
 	set(new_value):
-		max(0, new_value)
+		base_healing = max(0, new_value)
 @export var heal_affected_stats: EnumUtils.HealAffectedStats = EnumUtils.HealAffectedStats.HEALTH_THEN_SHIELD ## Which entity stats are affected by this healing source.
 
 @export_group("Status Effects")
