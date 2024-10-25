@@ -6,24 +6,26 @@ class_name DynamicEntity
 ## This should not be used by things like weapons or trees.
 
 @export var team: GlobalData.Teams = GlobalData.Teams.PLAYER ## What the effects received by this entity should consider as this entity's team.
-@export_group("Other")
-@export var rigid_entity_push_force: float = 10.0 ## How much impulse this dynamic entity should apply to any rigid body it interacts with in order to move it.
 
 @onready var move_fsm: MoveStateMachine = %MoveStateMachine ## The FSM controlling the player.
 @onready var health_component: HealthComponent = %HealthComponent ## The component in charge of player health and shield.
 @onready var stamina_component: StaminaComponent = %StaminaComponent ## The component in charge of player stamina and hunger.
+
+var time_snare_counter: float = 0
+var snare_factor: float = 0 ## Multiplier for delta time during time snares.
 
 
 func _process(delta: float) -> void:
 	move_fsm.state_machine_process(delta)
 
 func _physics_process(delta: float) -> void:
-	move_fsm.state_machine_physics_process(delta)
-	for i in get_slide_collision_count():
-		var c = get_slide_collision(i)
-		var collider = c.get_collider()
-		if collider is RigidEntity:
-			collider.apply_central_impulse(-c.get_normal() * rigid_entity_push_force)
+	if snare_factor > 0:
+		time_snare_counter += delta * snare_factor
+		while time_snare_counter > delta:
+			time_snare_counter -= delta
+			move_fsm.state_machine_physics_process(delta)
+	else:
+		move_fsm.state_machine_physics_process(delta)
 
 func _unhandled_input(event: InputEvent) -> void:
 	move_fsm.state_machine_handle_input(event)
@@ -33,3 +35,15 @@ func request_stun(duration: float) -> void:
 
 func request_knockback(knockback: Vector2) -> void:
 	move_fsm.request_knockback(knockback)
+
+func request_time_snare(factor: float, snare_time: float) -> void:
+	var timer = Timer.new()
+	timer.one_shot = true
+	timer.autostart = true
+	timer.wait_time = max(0.001, snare_time)
+	timer.timeout.connect(func(): snare_factor = 0)
+	timer.timeout.connect(timer.queue_free)
+	
+	snare_factor = factor
+	
+	add_child(timer)

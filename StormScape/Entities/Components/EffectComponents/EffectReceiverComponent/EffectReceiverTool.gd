@@ -19,6 +19,8 @@ func update_editor_children_exports(node: EffectReceiverComponent, children: Arr
 			node.frostbite_handler = child
 		if child is BurningHandler:
 			node.burning_handler = child
+		if child is TimeSnareHandler:
+			node.time_snare_handler = child
 
 func update_editor_parent_export(node: EffectReceiverComponent, parent: Node) -> void:
 	if parent is DynamicEntity or parent is RigidEntity or parent is StaticEntity:

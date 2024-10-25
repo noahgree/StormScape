@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="StunEffect" load_steps=3 format=3 uid="uid://3e6mdax7u2av"]
 
-[ext_resource type="Script" path="res://Entities/EffectSystemResources/StatusEffects/Stun/StunEffect.gd" id="1_sdbli"]
+[ext_resource type="Script" path="res://Entities/EffectSystemResources/StatusEffects/BadEffects/Stun/StunEffect.gd" id="1_sdbli"]
 [ext_resource type="Script" path="res://Entities/Components/StatBasedComponent/EntityStatMod.gd" id="2_vysiy"]
 
 [resource]

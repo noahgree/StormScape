@@ -1,0 +1,48 @@
+[gd_resource type="Resource" script_class="StatusEffect" load_steps=6 format=3 uid="uid://c0gxq4ufi3snt"]
+
+[ext_resource type="Script" path="res://Entities/EffectSystemResources/StatusEffects/StatusEffect.gd" id="1_638x2"]
+[ext_resource type="Script" path="res://Entities/Components/StatBasedComponent/EntityStatMod.gd" id="2_o6fme"]
+
+[sub_resource type="Resource" id="Resource_wakq2"]
+script = ExtResource("2_o6fme")
+type = 2
+stat_id = "max_speed"
+mod_id = "speed2"
+operation = "+%"
+value = 25.0
+priority = 1
+can_stack = false
+max_stack_count = 3
+override_all = false
+
+[sub_resource type="Resource" id="Resource_r3x4i"]
+script = ExtResource("2_o6fme")
+type = 2
+stat_id = "friction"
+mod_id = "speed2"
+operation = "+%"
+value = 25.0
+priority = 1
+can_stack = false
+max_stack_count = 3
+override_all = false
+
+[sub_resource type="Resource" id="Resource_ncnec"]
+script = ExtResource("2_o6fme")
+type = 2
+stat_id = "acceleration"
+mod_id = "speed2"
+operation = "+%"
+value = 25.0
+priority = 1
+can_stack = false
+max_stack_count = 3
+override_all = false
+
+[resource]
+script = ExtResource("1_638x2")
+handler_type = 0
+effect_name = "Speed"
+effect_lvl = 2
+mod_time = 5.0
+stat_mods = Array[ExtResource("2_o6fme")]([SubResource("Resource_wakq2"), SubResource("Resource_r3x4i"), SubResource("Resource_ncnec")])

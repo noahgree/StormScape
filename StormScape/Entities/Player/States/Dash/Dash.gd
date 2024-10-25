@@ -1,9 +1,10 @@
 extends DynamicState
 ## Handles when the character is dashing.
 
-@export var _dash_speed: float = 1200 ## How fast the dash moves the character.
-@export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var _dash_duration: float = 0.1 ## The dash duration.
+@export var _dash_speed: float = 1000 ## How fast the dash moves the character.
+@export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var _dash_duration: float = 0.08 ## The dash duration.
 @export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var _dash_cooldown: float = 1.0 ## The dash cooldown.
+@export var _dash_collision_impulse_factor: float = 1.0 ## A multiplier that controls how much impulse gets applied to rigid entites when colliding with them during a dash.
 @export var ghost_scene: PackedScene ## The scene that defines the ghosts' behavior.
 @export var ghost_count: int = 8 ## How many ghosts to make during the dash.
 @export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var ghost_fade_time: float = 0.1 ## How long ghosts take to fade.
@@ -20,7 +21,7 @@ var parent_sprite_node: Node2D
 func _ready() -> void:
 	var moddable_stats: Dictionary = {
 		"dash_speed" : _dash_speed, "dash_duration" : _dash_duration, 
-		"dash_cooldown" : _dash_cooldown
+		"dash_cooldown" : _dash_cooldown, "dash_collision_impulse_factor" : _dash_collision_impulse_factor
 	}
 	fsm.add_moddable_stats(moddable_stats)
 
@@ -64,9 +65,16 @@ func state_physics_process(_delta: float)  -> void:
 func _do_character_dash() -> void:
 	dynamic_entity.velocity = movement_vector * fsm.get_stat("dash_speed")
 	dynamic_entity.move_and_slide()
+	
+	# handle collisions with rigid entities 
+	for i in dynamic_entity.get_slide_collision_count():
+		var c = dynamic_entity.get_slide_collision(i)
+		var collider = c.get_collider()
+		if collider is RigidEntity:
+			collider.apply_central_impulse(-c.get_normal().normalized() * dynamic_entity.velocity.length() / (5 / (fsm.get_stat("dash_collision_impulse_factor"))))
 
 func _calculate_move_vector() -> Vector2:
-	return _get_input_vector()
+	return (_get_input_vector().rotated(fsm.get_stat("confusion_amount")))
 
 func _animate() -> void:
 	fsm.anim_tree.set("parameters/run/blendspace2d/blend_position", fsm.anim_vector)

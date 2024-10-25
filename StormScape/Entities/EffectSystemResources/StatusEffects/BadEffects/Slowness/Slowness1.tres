@@ -1,0 +1,48 @@
+[gd_resource type="Resource" script_class="StatusEffect" load_steps=6 format=3 uid="uid://c050ytbbmgfem"]
+
+[ext_resource type="Script" path="res://Entities/EffectSystemResources/StatusEffects/StatusEffect.gd" id="1_ffs2s"]
+[ext_resource type="Script" path="res://Entities/Components/StatBasedComponent/EntityStatMod.gd" id="2_fd4bu"]
+
+[sub_resource type="Resource" id="Resource_y0lhg"]
+script = ExtResource("2_fd4bu")
+type = 2
+stat_id = "max_speed"
+mod_id = "slowness1"
+operation = "-%"
+value = 60.0
+priority = 1
+can_stack = false
+max_stack_count = 3
+override_all = false
+
+[sub_resource type="Resource" id="Resource_idxik"]
+script = ExtResource("2_fd4bu")
+type = 2
+stat_id = "dash_speed"
+mod_id = "slowness1"
+operation = "-%"
+value = 80.0
+priority = 1
+can_stack = false
+max_stack_count = 3
+override_all = false
+
+[sub_resource type="Resource" id="Resource_kkwqv"]
+script = ExtResource("2_fd4bu")
+type = 2
+stat_id = "dash_duration"
+mod_id = "slowness1"
+operation = "+%"
+value = 125.0
+priority = 1
+can_stack = false
+max_stack_count = 3
+override_all = false
+
+[resource]
+script = ExtResource("1_ffs2s")
+handler_type = 0
+effect_name = "Slowness"
+effect_lvl = 0
+mod_time = 5.0
+stat_mods = Array[ExtResource("2_fd4bu")]([SubResource("Resource_y0lhg"), SubResource("Resource_idxik"), SubResource("Resource_kkwqv")])

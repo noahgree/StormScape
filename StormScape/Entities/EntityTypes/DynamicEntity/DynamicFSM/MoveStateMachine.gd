@@ -9,6 +9,7 @@ class_name MoveStateMachine
 @export_custom(PROPERTY_HINT_NONE, "suffix:per second") var _sprint_stamina_usage: float = 15.0 ## The amount of stamina used per second when the entity is sprinting.
 @export_custom(PROPERTY_HINT_NONE, "suffix:per dash") var _dash_stamina_usage: float = 20.0 ## The amount of stamina used per dash activation.
 @export var _friction: float = 1550 ## The decrease in speed per second for the entity.
+@export var _confusion_amount: float = 0 ## The amount of influence to apply to the velocity to simulate confusion.
 
 @onready var dash_cooldown_timer: Timer = %DashCooldownTimer ## The timer controlling the minimum time between activating dashes.
 
@@ -40,7 +41,7 @@ func _ready() -> void:
 		
 	var moddable_stats: Dictionary = {
 		"sprint_stamina_usage" : _sprint_stamina_usage, "dash_stamina_usage" : _dash_stamina_usage,
-		"friction" : _friction
+		"friction" : _friction, "confusion_amount" : _confusion_amount
 	}
 	add_moddable_stats(moddable_stats)
 
@@ -53,6 +54,7 @@ func state_machine_physics_process(delta: float) -> void:
 	
 	if current_state:
 		current_state.state_physics_process(delta)
+		anim_tree.advance(delta)
 
 ## Requests to transition to the stun state, doing so if possible.
 func request_stun(duration: float) -> void:

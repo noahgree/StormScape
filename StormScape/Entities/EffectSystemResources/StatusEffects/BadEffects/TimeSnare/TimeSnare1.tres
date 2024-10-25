@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="TimeSnareEffect" load_steps=3 format=3 uid="uid://jxv16pf038go"]
+
+[ext_resource type="Script" path="res://Entities/EffectSystemResources/StatusEffects/BadEffects/TimeSnare/TimeSnareEffect.gd" id="1_6of7d"]
+[ext_resource type="Script" path="res://Entities/Components/StatBasedComponent/EntityStatMod.gd" id="2_qu0hr"]
+
+[resource]
+script = ExtResource("1_6of7d")
+time_multiplier = 0.5
+snare_time = 3.0
+handler_type = 7
+effect_name = "TimeSnare"
+effect_lvl = 1
+mod_time = 5.0
+stat_mods = Array[ExtResource("2_qu0hr")]([])

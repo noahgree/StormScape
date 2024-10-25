@@ -13,11 +13,11 @@ enum BadEffectAffectedTeams { ENEMIES = 1 << 0, ALLIES = 1 << 1 }
 enum GoodEffectAffectedTeams { ENEMIES = 1 << 0, ALLIES = 1 << 1 }
 
 enum EntityStatusEffectType { ## The kind of status effect. Should be associated with a handler of the type.
-	NONE, KNOCKBACK, STUN, POISON, REGEN, FROSTBITE, BURNING 
+	NONE, KNOCKBACK, STUN, POISON, REGEN, FROSTBITE, BURNING, TIMESNARE 
 	}
 enum EntityStatModType { ## The associated type of StatBasedComponent that tracks the variable being modded.
-	VITALS, STAMINA, MOVEMENT, DAMAGE, HEALING, KNOCKBACK, STUN, POISON, REGEN, FROSTBITE, BURNING 
+	VITALS, STAMINA, MOVEMENT, DAMAGE, HEALING, KNOCKBACK, STUN, POISON, REGEN, FROSTBITE, BURNING, TIMESNARE 
 	}
 
-const BAD_STATUS_EFFECTS: Array[String] = ["Knockback", "Stun", "Poison", "Frostbite", "Burning"]
-const GOOD_STATUS_EFFECTS: Array[String] = ["Regen", "Untouchable"]
+const BAD_STATUS_EFFECTS: Array[String] = ["Knockback", "Stun", "Poison", "Frostbite", "Burning", "Confusion", "Slowness", "TimeSnare"]
+const GOOD_STATUS_EFFECTS: Array[String] = ["Regen", "Untouchable", "Speed"]

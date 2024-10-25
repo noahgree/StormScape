@@ -1,4 +1,4 @@
-[gd_scene load_steps=134 format=3 uid="uid://dba8mrurjlekp"]
+[gd_scene load_steps=136 format=3 uid="uid://dba8mrurjlekp"]
 
 [ext_resource type="Script" path="res://Entities/Player/Player.gd" id="1_m33tt"]
 [ext_resource type="Texture2D" uid="uid://77ell4xpptap" path="res://Entities/Player/Spritesheets/PlayerBase.png" id="2_jshja"]
@@ -19,7 +19,9 @@
 [ext_resource type="PackedScene" uid="uid://tc2awdm3onyi" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/PoisonHandler.tscn" id="11_rtl41"]
 [ext_resource type="PackedScene" uid="uid://e3qv2f7w61vy" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/RegenHandler.tscn" id="12_goxma"]
 [ext_resource type="PackedScene" uid="uid://bhg7jmodo3t5t" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/FrostbiteHandler.tscn" id="13_hqb6d"]
+[ext_resource type="PackedScene" uid="uid://d1ml6s716obw0" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/TimeSnareHandler.tscn" id="14_63vgk"]
 [ext_resource type="PackedScene" uid="uid://depnx3pnassrq" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/BurningHandler.tscn" id="14_q2ueb"]
+[ext_resource type="Script" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/TimeSnareHandler.gd" id="15_64y42"]
 [ext_resource type="Script" path="res://Entities/Player/States/Stunned/Stunned.gd" id="15_eiig3"]
 [ext_resource type="Script" path="res://Utilities/Debug/TestButtons.gd" id="17_vdk5v"]
 
@@ -1030,7 +1032,7 @@ blend_point_5/pos = Vector2(0, -1)
 blend_mode = 1
 
 [sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_w6nco"]
-graph_offset = Vector2(-19.2, 25.92)
+graph_offset = Vector2(-77.6359, 101.715)
 nodes/TimeScale/node = SubResource("AnimationNodeTimeScale_48h8v")
 nodes/TimeScale/position = Vector2(400, 190)
 nodes/blendspace2d/node = SubResource("AnimationNodeBlendSpace2D_ykscl")
@@ -1080,7 +1082,7 @@ stats_ui = NodePath("../PlayerUI/PlayerStatsOverlay")
 unique_name_in_owner = true
 stats_ui = NodePath("../PlayerUI/PlayerStatsOverlay")
 
-[node name="EffectReceiverComponent" parent="." node_paths=PackedStringArray("affected_entity", "health_component", "stamina_component", "dmg_handler", "heal_handler", "knockback_handler", "stun_handler", "poison_handler", "regen_handler", "frostbite_handler", "burning_handler") instance=ExtResource("4_hhm8x")]
+[node name="EffectReceiverComponent" parent="." node_paths=PackedStringArray("affected_entity", "health_component", "stamina_component", "dmg_handler", "heal_handler", "knockback_handler", "stun_handler", "poison_handler", "regen_handler", "frostbite_handler", "burning_handler", "time_snare_handler") instance=ExtResource("4_hhm8x")]
 affected_entity = NodePath("..")
 health_component = NodePath("../HealthComponent")
 stamina_component = NodePath("../StaminaComponent")
@@ -1092,6 +1094,7 @@ poison_handler = NodePath("PoisonHandler")
 regen_handler = NodePath("RegenHandler")
 frostbite_handler = NodePath("FrostbiteHandler")
 burning_handler = NodePath("BurningHandler")
+time_snare_handler = NodePath("TimeSnareHandler")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="EffectReceiverComponent"]
 position = Vector2(0, -13)
@@ -1099,9 +1102,6 @@ shape = SubResource("RectangleShape2D_7dc0v")
 debug_color = Color(1, 0.294, 0.588, 0.06)
 
 [node name="DmgHandler" parent="EffectReceiverComponent" instance=ExtResource("5_g3ixu")]
-_dmg_weakness = null
-_dmg_resistance = null
-stat_mods = null
 
 [node name="HealHandler" parent="EffectReceiverComponent" instance=ExtResource("6_5e1ju")]
 
@@ -1116,6 +1116,9 @@ stat_mods = null
 [node name="FrostbiteHandler" parent="EffectReceiverComponent" instance=ExtResource("13_hqb6d")]
 
 [node name="BurningHandler" parent="EffectReceiverComponent" instance=ExtResource("14_q2ueb")]
+
+[node name="TimeSnareHandler" parent="EffectReceiverComponent" instance=ExtResource("14_63vgk")]
+script = ExtResource("15_64y42")
 
 [node name="MoveStateMachine" type="Node" parent="." node_paths=PackedStringArray("anim_tree", "initial_state")]
 unique_name_in_owner = true
@@ -1154,6 +1157,7 @@ libraries = {
 }
 
 [node name="AnimationTree" type="AnimationTree" parent="."]
+callback_mode_process = 2
 tree_root = SubResource("AnimationNodeStateMachine_342k8")
 anim_player = NodePath("../AnimationPlayer")
 parameters/idle/TimeScale/scale = 1.0

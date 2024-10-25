@@ -118,6 +118,12 @@ func get_stat(stat_id: String) -> float:
 	assert(value != null, stat_id + " was null when trying to be accessed from a StatBasedComponent")
 	return value
 
+## Returns the original cached value of a stat before any modifications.
+func get_original_stat(stat_id: String) -> float:
+	var value = base_values.get(stat_id, null)
+	assert(value != null, stat_id + " was null when trying to be accessed from a StatBasedComponent")
+	return value
+
 ## Gets the EntityStatMod for the stat_id based on the mod_id. Pushes an error if it can't be found.
 func _get_mod(stat_id: String, mod_id: String) -> EntityStatMod:
 	if stat_id in stat_mods and mod_id in stat_mods[stat_id]:

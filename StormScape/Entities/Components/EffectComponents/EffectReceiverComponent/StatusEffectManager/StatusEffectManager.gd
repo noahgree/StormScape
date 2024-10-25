@@ -29,6 +29,8 @@ func handle_status_effect(status_effect: StatusEffect) -> void:
 			if receiver.frostbite_handler: receiver.frostbite_handler.handle_frostbite(status_effect)
 		GlobalData.EntityStatusEffectType.BURNING:
 			if receiver.burning_handler: receiver.burning_handler.handle_burning(status_effect)
+		GlobalData.EntityStatusEffectType.TIMESNARE:
+			if receiver.time_snare_handler: receiver.time_snare_handler.handle_time_snare(status_effect)
 
 ## Checks if we already have a status effect of the same name and decides what to do depending on the level.
 func handle_status_effect_mods(status_effect: StatusEffect) -> void:
@@ -36,7 +38,7 @@ func handle_status_effect_mods(status_effect: StatusEffect) -> void:
 		var existing_lvl = current_effects[status_effect.effect_name].effect_lvl
 		
 		if existing_lvl > status_effect.effect_lvl: # new effect is lower lvl
-			var time_to_add: float = status_effect.effect_mods_time * (status_effect.effect_lvl / existing_lvl)
+			var time_to_add: float = status_effect.mod_time * (float(status_effect.effect_lvl) / float(existing_lvl))
 			_extend_effect_duration(status_effect.effect_name, time_to_add)
 			return
 		elif existing_lvl < status_effect.effect_lvl: # new effect is higher lvl
@@ -89,6 +91,8 @@ func add_status_effect(status_effect: StatusEffect) -> void:
 				if receiver.frostbite_handler: receiver.frostbite_handler.add_mods([mod])
 			GlobalData.EntityStatModType.BURNING:
 				if receiver.burning_handler: receiver.burning_handler.add_mods([mod])
+			GlobalData.EntityStatusEffectType.TIMESNARE:
+				if receiver.time_snare_handler: receiver.time_snare_handler.add_mods([mod])
 		
 	print_rich("[color=green]added[/color] " + str(status_effect.effect_name) + ": " + str(current_effects.keys()))
 
@@ -96,10 +100,13 @@ func add_status_effect(status_effect: StatusEffect) -> void:
 func _extend_effect_duration(effect_name: String, time_to_add: float) -> void:
 	var timer: Timer = effect_timers.get(effect_name, null)
 	if timer != null:
+		print(timer.get_time_left())
+		print(time_to_add)
 		var new_time: float = timer.get_time_left() + time_to_add
 		timer.stop()
 		timer.wait_time = new_time
 		timer.start()
+		print(timer.get_time_left())
 
 ## Restarts the timer associated with some current effect.
 func _restart_effect_duration(effect_name: String) -> void:
@@ -137,6 +144,8 @@ func _remove_status_effect(status_effect: StatusEffect) -> void:
 				if receiver.frostbite_handler: receiver.frostbite_handler.remove_mod(mod.stat_id, mod.mod_id)
 			GlobalData.EntityStatModType.BURNING:
 				if receiver.burning_handler: receiver.burning_handler.remove_mod(mod.stat_id, mod.mod_id)
+			GlobalData.EntityStatModType.TIMESNARE:
+				if receiver.time_snare_handler: receiver.time_snare_handler.remove_mod(mod.stat_id, mod.mod_id)
 	
 	if status_effect.effect_name in current_effects:
 		current_effects.erase(status_effect.effect_name)

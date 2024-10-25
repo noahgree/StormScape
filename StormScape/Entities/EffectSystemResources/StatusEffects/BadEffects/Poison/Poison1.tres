@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="PoisonEffect" load_steps=8 format=3 uid="uid://dpr7bbypm0g2j"]
 
-[ext_resource type="Script" path="res://Entities/EffectSystemResources/StatusEffects/Poison/PoisonEffect.gd" id="1_1d4mc"]
+[ext_resource type="Script" path="res://Entities/EffectSystemResources/StatusEffects/BadEffects/Poison/PoisonEffect.gd" id="1_1d4mc"]
 [ext_resource type="Script" path="res://Entities/EffectSystemResources/EffectOverTimeResources/DOTResource.gd" id="1_nu123"]
 [ext_resource type="Script" path="res://Entities/Components/StatBasedComponent/EntityStatMod.gd" id="2_epos6"]
 

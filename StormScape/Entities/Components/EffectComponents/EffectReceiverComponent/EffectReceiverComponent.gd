@@ -23,6 +23,7 @@ class_name EffectReceiverComponent
 @export var regen_handler: RegenHandler
 @export var frostbite_handler: FrostbiteHandler
 @export var burning_handler: BurningHandler
+@export var time_snare_handler: TimeSnareHandler
 
 @onready var status_effect_manager: StatusEffectManager = %StatusEffectManager ## The optional component attached to the affected entity that handles modifying incoming values based on stats of the entity.
 
@@ -48,6 +49,8 @@ func _ready() -> void:
 ## Handles an incoming effect source, passing it to present receivers for further processing before changing 
 ## entity stats.
 func handle_effect_source(effect_source: EffectSource) -> void:
+	if effect_source.source_team == GlobalData.Teams.PASSIVE:
+		return
 	if (affected_entity is DynamicEntity) and not affected_entity.move_fsm.can_receive_effects:
 		return
 	
@@ -81,6 +84,7 @@ func _handle_status_effects(effect_source: EffectSource) -> void:
 				continue
 			if (not do_good_effects) and (status_effect.effect_name in GlobalData.GOOD_STATUS_EFFECTS):
 				continue
+			
 			status_effect_manager.handle_status_effect(status_effect)
 		
 	if "Untouchable" in status_effect_manager.current_effects:

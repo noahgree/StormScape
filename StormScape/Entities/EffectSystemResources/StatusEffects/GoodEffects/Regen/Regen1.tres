@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="RegenEffect" load_steps=5 format=3 uid="uid://b8yo5kmjiwnca"]
 
-[ext_resource type="Script" path="res://Entities/EffectSystemResources/StatusEffects/Regen/RegenEffect.gd" id="1_ryq06"]
+[ext_resource type="Script" path="res://Entities/EffectSystemResources/StatusEffects/GoodEffects/Regen/RegenEffect.gd" id="1_ryq06"]
 [ext_resource type="Script" path="res://Entities/EffectSystemResources/EffectOverTimeResources/HOTResource.gd" id="1_vgior"]
 [ext_resource type="Script" path="res://Entities/Components/StatBasedComponent/EntityStatMod.gd" id="2_0lf2m"]
 
