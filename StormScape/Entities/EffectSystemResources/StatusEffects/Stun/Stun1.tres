@@ -1,7 +1,7 @@
 [gd_resource type="Resource" script_class="StunEffect" load_steps=3 format=3 uid="uid://3e6mdax7u2av"]
 
 [ext_resource type="Script" path="res://Entities/EffectSystemResources/StatusEffects/Stun/StunEffect.gd" id="1_sdbli"]
-[ext_resource type="Script" path="res://Entities/Components/EntityStatMod.gd" id="2_vysiy"]
+[ext_resource type="Script" path="res://Entities/Components/StatBasedComponent/EntityStatMod.gd" id="2_vysiy"]
 
 [resource]
 script = ExtResource("1_sdbli")
@@ -9,5 +9,5 @@ dmg_stun_time = 0.5
 handler_type = 2
 effect_name = "Stun"
 effect_lvl = 1
-mods_time_override = 5.0
+mod_time = 1.0
 stat_mods = Array[ExtResource("2_vysiy")]([])

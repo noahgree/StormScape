@@ -52,13 +52,15 @@ func handle_rigid_entity_knockback(knockback_effect: KnockbackEffect) -> void:
 	else:
 		effect_dir = (effect_receiver.global_position - contact_position).normalized()
 	
-	_send_handled_knockback(effect_dir, knockback_effect.knockback_force)
+	_send_handled_knockback(effect_dir, knockback_effect.knockback_force * 2)
 
 ## Send the resulting handled knockback vector to the affected entity with logic based on what the entity type is.
 func _send_handled_knockback(knockback_dir: Vector2, force: int) -> void:
 	if knockback_dir == Vector2.ZERO:
 		return
-	var handled_knockback = knockback_dir * force * (1 + (get_stat("knockback_boost") - get_stat("knockback_resistance")))
+	var knockback_boost: float = get_stat("knockback_boost")
+	var knockback_resistance: float = get_stat("knockback_resistance")
+	var handled_knockback = knockback_dir * force * max(0, (1 + knockback_boost - knockback_resistance))
 	
 	if affected_entity is DynamicEntity:
 		if affected_entity.has_method("request_knockback"):

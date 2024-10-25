@@ -5,4 +5,4 @@ class_name StaticEntity
 ## This would be used for things like trees or blocks or buildings that need collision and also potential health.
 ## This should not be used for moving environmental entities like players and also not for inventory entities like weapons.
 
-@export var team: EnumUtils.Teams = EnumUtils.Teams.PLAYER ## What the effects received by this entity should consider as this entity's team.
+@export var team: GlobalData.Teams = GlobalData.Teams.PLAYER ## What the effects received by this entity should consider as this entity's team.

@@ -12,8 +12,9 @@ func _on_test_heal_btn_pressed() -> void:
 
 func _on_test_music_btn_pressed() -> void:
 	AudioManager.play_sound("SummerTide", AudioManager.SoundType.SFX_GLOBAL)
-	await get_tree().create_timer(2).timeout
-	AudioManager.fade_out_sounds("SummerTide", 1.0, 1)
+	#AudioManager.play_sound("PowerUp3", AudioManager.SoundType.SFX_GLOBAL)
+	#await get_tree().create_timer(10).timeout
+	#AudioManager.fade_out_sounds("SummerTide", 1.0, 1)
 
 func _on_test_mod_btn_1_pressed() -> void:
 	var node = get_parent().get_parent().stamina_component

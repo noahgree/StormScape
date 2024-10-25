@@ -37,7 +37,7 @@ DebugFlags="*res://Utilities/Autoloads/DebugFlags.gd"
 ItemDatabase="*res://Utilities/Autoloads/ItemDatabase.tscn"
 SignalBus="*res://Utilities/Autoloads/SignalBus.gd"
 AudioManager="*res://Utilities/Autoloads/AudioManager.tscn"
-EnumUtils="*res://Utilities/Autoloads/EnumUtils.gd"
+GlobalData="*res://Utilities/Autoloads/GlobalData.gd"
 
 [display]
 
@@ -119,9 +119,10 @@ dash={
 2d_physics/layer_2="Player Attacks"
 2d_physics/layer_3="Enemy"
 2d_physics/layer_4="Enemy Attacks"
-2d_physics/layer_5="Objects"
-2d_physics/layer_6="Terrain"
-2d_physics/layer_7="World Areas"
+2d_physics/layer_5="Static Objects"
+2d_physics/layer_6="Movable Objects"
+2d_physics/layer_7="Land Edge"
+2d_physics/layer_8="World"
 
 [rendering]
 

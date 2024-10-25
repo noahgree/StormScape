@@ -1,7 +1,10 @@
 @icon("res://Utilities/Debug/EditorIcons/dmg_handler.svg")
-extends Node
+extends StatBasedComponent
 class_name DmgHandler
 ## A handler for using the data provided in the effect source to apply damage in different ways.
+
+@export var _dmg_weakness: float = 1.0 ## Multiplier for increasing ALL incoming damage.
+@export var _dmg_resistance: float = 1.0 ## Multiplier for decreasing ALL incoming damage.
 
 @onready var health_component: HealthComponent = get_parent().health_component ## The health component to be affected by the damage.
 
@@ -12,6 +15,11 @@ var dot_delay_timers: Dictionary = {} ## Holds references to all timers current 
 ## Asserts that there is a valid health component on the affected entity before trying to handle damage.
 func _ready() -> void:
 	assert(get_parent().health_component, get_parent().affected_entity.name + " has an effect receiver that is intended to handle damage, but no health component is connected.")
+	
+	var moddable_stats: Dictionary = {
+		"dmg_weakness" : _dmg_weakness, "dmg_resistance" : _dmg_resistance
+	}
+	add_moddable_stats(moddable_stats)
 
 ## Calculates the final damage to apply after considering whether the crit hit and also how much the armor blocks.
 func _get_dmg_after_crit_then_armor(effect_source: EffectSource) -> int:
@@ -94,7 +102,7 @@ func _on_dot_timer_timeout(dot_timer: Timer, source_type: String) -> void:
 	var max_ticks: int = dot_resource.dmg_ticks_array.size()
 	if ticks_completed < max_ticks:
 		var damage: int = dot_resource.dmg_ticks_array[ticks_completed]
-		var dmg_affected_stats: EnumUtils.DmgAffectedStats = dot_resource.dmg_affected_stats
+		var dmg_affected_stats: GlobalData.DmgAffectedStats = dot_resource.dmg_affected_stats
 		_send_handled_dmg(dmg_affected_stats, damage)
 		dot_timer.set_meta("ticks_completed", ticks_completed + 1)
 		
@@ -105,15 +113,18 @@ func _on_dot_timer_timeout(dot_timer: Timer, source_type: String) -> void:
 
 ## Sends the affected entity's health component the final damage values based on what stats the damage was 
 ## allowed to affect.
-func _send_handled_dmg(dmg_affected_stats: EnumUtils.DmgAffectedStats, handled_amount: int) -> void:
-	var positive_dmg: int = max(0, handled_amount)
+func _send_handled_dmg(dmg_affected_stats: GlobalData.DmgAffectedStats, handled_amount: int) -> void:
+	var dmg_weakness: float = get_stat("dmg_weakness")
+	var dmg_resistance: float = get_stat("dmg_resistance")
+	var positive_dmg: int = max(0, handled_amount * (1 + dmg_weakness - dmg_resistance))
+	
 	match dmg_affected_stats:
-		EnumUtils.DmgAffectedStats.HEALTH_ONLY:
+		GlobalData.DmgAffectedStats.HEALTH_ONLY:
 			health_component.damage_health(positive_dmg)
-		EnumUtils.DmgAffectedStats.SHIELD_ONLY:
+		GlobalData.DmgAffectedStats.SHIELD_ONLY:
 			health_component.damage_shield(positive_dmg)
-		EnumUtils.DmgAffectedStats.SHIELD_THEN_HEALTH:
+		GlobalData.DmgAffectedStats.SHIELD_THEN_HEALTH:
 			health_component.damage_shield_then_health(positive_dmg)
-		EnumUtils.DmgAffectedStats.SIMULTANEOUS:
+		GlobalData.DmgAffectedStats.SIMULTANEOUS:
 			health_component.damage_shield(positive_dmg)
 			health_component.damage_health(positive_dmg)

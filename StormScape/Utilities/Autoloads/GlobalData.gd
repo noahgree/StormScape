@@ -18,3 +18,6 @@ enum EntityStatusEffectType { ## The kind of status effect. Should be associated
 enum EntityStatModType { ## The associated type of StatBasedComponent that tracks the variable being modded.
 	VITALS, STAMINA, MOVEMENT, DAMAGE, HEALING, KNOCKBACK, STUN, POISON, REGEN, FROSTBITE, BURNING 
 	}
+
+const BAD_STATUS_EFFECTS: Array[String] = ["Knockback", "Stun", "Poison", "Frostbite", "Burning"]
+const GOOD_STATUS_EFFECTS: Array[String] = ["Regen", "Untouchable"]

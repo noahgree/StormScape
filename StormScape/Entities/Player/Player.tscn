@@ -1055,7 +1055,7 @@ states/run/position = Vector2(367, 176.5)
 transitions = ["idle", "run", SubResource("AnimationNodeStateMachineTransition_70g00"), "run", "idle", SubResource("AnimationNodeStateMachineTransition_sdv4y"), "Start", "idle", SubResource("AnimationNodeStateMachineTransition_qm8ic")]
 
 [node name="Player" type="CharacterBody2D"]
-collision_mask = 117
+collision_mask = 213
 motion_mode = 1
 script = ExtResource("1_m33tt")
 
@@ -1080,11 +1080,10 @@ stats_ui = NodePath("../PlayerUI/PlayerStatsOverlay")
 unique_name_in_owner = true
 stats_ui = NodePath("../PlayerUI/PlayerStatsOverlay")
 
-[node name="EffectReceiverComponent" parent="." node_paths=PackedStringArray("affected_entity", "health_component", "stamina_component", "move_fsm", "dmg_handler", "heal_handler", "knockback_handler", "stun_handler", "poison_handler", "regen_handler", "frostbite_handler", "burning_handler") instance=ExtResource("4_hhm8x")]
+[node name="EffectReceiverComponent" parent="." node_paths=PackedStringArray("affected_entity", "health_component", "stamina_component", "dmg_handler", "heal_handler", "knockback_handler", "stun_handler", "poison_handler", "regen_handler", "frostbite_handler", "burning_handler") instance=ExtResource("4_hhm8x")]
 affected_entity = NodePath("..")
 health_component = NodePath("../HealthComponent")
 stamina_component = NodePath("../StaminaComponent")
-move_fsm = NodePath("../MoveStateMachine")
 dmg_handler = NodePath("DmgHandler")
 heal_handler = NodePath("HealHandler")
 knockback_handler = NodePath("KnockbackHandler")
@@ -1100,6 +1099,9 @@ shape = SubResource("RectangleShape2D_7dc0v")
 debug_color = Color(1, 0.294, 0.588, 0.06)
 
 [node name="DmgHandler" parent="EffectReceiverComponent" instance=ExtResource("5_g3ixu")]
+_dmg_weakness = null
+_dmg_resistance = null
+stat_mods = null
 
 [node name="HealHandler" parent="EffectReceiverComponent" instance=ExtResource("6_5e1ju")]
 

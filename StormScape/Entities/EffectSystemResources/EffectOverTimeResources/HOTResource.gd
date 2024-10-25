@@ -5,4 +5,4 @@ class_name HOTResource
 @export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var healing_time: float
 @export var heal_ticks_array: Array[int]
 @export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var delay_time: float
-@export var heal_affected_stats: EnumUtils.HealAffectedStats
+@export var heal_affected_stats: GlobalData.HealAffectedStats

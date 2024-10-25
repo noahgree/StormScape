@@ -6,7 +6,7 @@
 script = ExtResource("1_wpmb0")
 name = "PowerUp3"
 sound_file_path = "res://Assets/Audio/Sfx/powerUp3.mp3"
-concurrent_limit = 2
+concurrent_limit = 1
 volume = 0
 pitch_scale = 1.0
 pitch_randomness = 0.02

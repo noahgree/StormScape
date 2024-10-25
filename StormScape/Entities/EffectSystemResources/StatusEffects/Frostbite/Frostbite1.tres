@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://Entities/EffectSystemResources/StatusEffects/Frostbite/FrostbiteEffect.gd" id="1_apbmx"]
 [ext_resource type="Script" path="res://Entities/EffectSystemResources/EffectOverTimeResources/DOTResource.gd" id="1_gn7v7"]
-[ext_resource type="Script" path="res://Entities/Components/EntityStatMod.gd" id="2_27v06"]
+[ext_resource type="Script" path="res://Entities/Components/StatBasedComponent/EntityStatMod.gd" id="2_27v06"]
 
 [sub_resource type="Resource" id="Resource_ge1fd"]
 script = ExtResource("1_gn7v7")
@@ -41,5 +41,5 @@ dot_resource = SubResource("Resource_ge1fd")
 handler_type = 5
 effect_name = "Frostbite"
 effect_lvl = 1
-mods_time_override = 5.0
+mod_time = 5.0
 stat_mods = Array[ExtResource("2_27v06")]([SubResource("Resource_xefcn"), SubResource("Resource_4k2h3")])

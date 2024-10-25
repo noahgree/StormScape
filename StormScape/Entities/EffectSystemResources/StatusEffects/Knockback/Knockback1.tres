@@ -1,7 +1,7 @@
 [gd_resource type="Resource" script_class="KnockbackEffect" load_steps=3 format=3 uid="uid://b0it5xmpw16sd"]
 
 [ext_resource type="Script" path="res://Entities/EffectSystemResources/StatusEffects/Knockback/KnockbackEffect.gd" id="1_ofqhb"]
-[ext_resource type="Script" path="res://Entities/Components/EntityStatMod.gd" id="2_rysxw"]
+[ext_resource type="Script" path="res://Entities/Components/StatBasedComponent/EntityStatMod.gd" id="2_rysxw"]
 
 [resource]
 script = ExtResource("1_ofqhb")
@@ -10,5 +10,5 @@ knockback_direction = Vector2(0, 0)
 handler_type = 1
 effect_name = "Knockback"
 effect_lvl = 1
-effect_mods_time = 5.0
+mod_time = 1.0
 stat_mods = Array[ExtResource("2_rysxw")]([])

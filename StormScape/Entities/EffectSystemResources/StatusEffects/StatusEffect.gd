@@ -2,7 +2,7 @@ extends Resource
 class_name StatusEffect
 ## Base class for all status effects in the game.
 
-@export var handler_type: EnumUtils.EntityStatusEffectType = EnumUtils.EntityStatusEffectType.NONE ## What kind of handler node should process this effect.
+@export var handler_type: GlobalData.EntityStatusEffectType = GlobalData.EntityStatusEffectType.NONE ## What kind of handler node should process this effect.
 @export var effect_name: String ## What the effect title is without the level attached.
 @export_range(1, 100, 1) var effect_lvl: int ## The level of the effect, 1 is the lowest.
 @export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var mod_time: float = 5 ## The duration of the mods applied by this effect.
