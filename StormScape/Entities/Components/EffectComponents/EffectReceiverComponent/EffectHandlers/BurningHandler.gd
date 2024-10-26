@@ -11,6 +11,7 @@ class_name BurningHandler
 
 ## Sets up moddable stats.
 func _ready() -> void:
+	debug_print_changes = get_parent().print_child_mod_updates
 	var moddable_stats: Dictionary = {
 		"burning_weakness" : _burning_weakness, "burning_resistance" : _burning_resistance
 	}

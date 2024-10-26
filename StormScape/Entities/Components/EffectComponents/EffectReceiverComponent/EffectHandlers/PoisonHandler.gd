@@ -11,6 +11,7 @@ class_name PoisonHandler
 
 ## Sets up moddable stats.
 func _ready() -> void:
+	debug_print_changes = get_parent().print_child_mod_updates
 	var moddable_stats: Dictionary = {
 		"poison_weakness" : _poison_weakness, "poison_resistance" : _poison_resistance
 	}

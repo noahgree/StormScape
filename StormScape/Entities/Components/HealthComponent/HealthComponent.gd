@@ -8,12 +8,12 @@ class_name HealthComponent
 
 @export var _max_health: int = 100 ## The maximum amount of health the entity can have.
 @export var _max_shield: int = 100 ## The maximum amount of shield the entity can have.
-@export_range(0, 1, 0.01) var base_armor: float = 0.0
+@export_range(0, 100, 1) var base_armor: int = 0
 
 var health: int: set = _set_health ## The current health of the entity.
 var shield: int: set = _set_shield ## The current shield of the entity.
-var armor: float = 0.0: set = _set_armor ## The current armor of the entity. This is the fraction of dmg that is blocked.
-const MAX_ARMOR: float = 1.0 ## The maximum amount of armor the entity can have. 
+var armor: float = 0: set = _set_armor ## The current armor of the entity. This is the percent of dmg that is blocked.
+const MAX_ARMOR: int = 100 ## The maximum amount of armor the entity can have. 
 
 #region Setup
 func _ready() -> void: 
@@ -57,6 +57,12 @@ func _check_for_death() -> void:
 			get_parent().die()
 		else:
 			get_parent().queue_free()
+#endregion
+
+#region Changing Armor
+## Called externally to update the current armor value.
+func set_armor(new_armor: int) -> void:
+	armor = new_armor
 #endregion
 
 #region Utils: Applying Healing

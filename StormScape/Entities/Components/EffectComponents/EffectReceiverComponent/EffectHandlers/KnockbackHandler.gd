@@ -17,6 +17,7 @@ var is_source_moving_type: bool = false ## Set by the status effect component fo
 
 ## Sets up moddable stats.
 func _ready() -> void:
+	debug_print_changes = get_parent().print_child_mod_updates
 	var moddable_stats: Dictionary = {
 		"knockback_boost" : _knockback_boost, "knockback_resistance" : _knockback_resistance
 	}
@@ -24,6 +25,9 @@ func _ready() -> void:
 
 ## Handles applying knockback to a dynamic entity when they hit something that provides knockback.
 func handle_knockback(knockback_effect: KnockbackEffect) -> void:
+	if knockback_effect.custom_knockback_direction != Vector2.ZERO:
+		_send_handled_knockback(knockback_effect.custom_knockback_direction, knockback_effect.knockback_force)
+		return
 	if effect_receiver.affected_entity is DynamicEntity:
 		handle_dynamic_entity_knockback(knockback_effect)
 	elif effect_receiver.affected_entity is RigidEntity:

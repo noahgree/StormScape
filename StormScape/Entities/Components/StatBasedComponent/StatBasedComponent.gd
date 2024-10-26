@@ -6,6 +6,9 @@ class_name StatBasedComponent
 
 @export var stats_ui: Control ## The optional UI that will reflect this component's values.
 @export var stat_mods: Dictionary = {} ## The catalog of EntityStatMods per stat. Does not store current calculated values. [b]DO NOT EDIT[/b] this in the export panel. This is only 'exported' for easy debugging in remote branch.
+@export_group("Debug", "debug_")
+@export var debug_print_changes: bool = false ## Prints out stat mod recalculations in the editor if checked.
+
 var cached_stats: Dictionary = {} ## The up-to-date and calculated stats to be used by anything that depend on them.
 var base_values: Dictionary = {} ## The unchanging base values of each moddable stat, usually set by copying the exported values from the component into a dictionary that is passed into the setup function below. 
 
@@ -31,7 +34,8 @@ func _recalculate_stat(stat_id: String, base_value: float) -> void:
 		result = mod.apply(base_value, result)
 	
 	cached_stats[stat_id] = max(0, result)
-	print_rich("[color=cyan]" + stat_id + ":[/color] [b]" + str(cached_stats[stat_id]) + "[/b]")
+	if DebugFlags.PrintFlags.stat_mod_changes and debug_print_changes:
+		print_rich("[color=cyan]" + stat_id + ":[/color] [b]" + str(cached_stats[stat_id]) + "[/b]")
 	_update_ui_for_stat(stat_id, result)
 
 ## Updates an optionally connected UI when a watched stat changes.
@@ -101,7 +105,6 @@ func _recalculate_mod_value_with_new_stack_count(mod: EntityStatMod) -> void:
 		mod.value = pow(mod.before_stack_value, mod.stack_count)
 	else:
 		mod.value = mod.before_stack_value * mod.stack_count
-		print(mod.before_stack_value)
 
 ## Undoes any stacking applied to a mod, setting it back to as if there was only one instance active.
 func undo_mod_stacking(stat_id: String, mod_id: String) -> void:

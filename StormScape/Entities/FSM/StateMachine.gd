@@ -7,7 +7,11 @@ class_name StateMachine
 @export var initial_state: State ## What state the state machine should start off in.
 
 
-var current_state: State ## The current state the state machine is in.
+var current_state: State: ## The current state the state machine is in.
+	set(new_state):
+		current_state = new_state
+		if DebugFlags.PrintFlags.state_machine_swaps:
+			print_rich("DEBUG: " + get_parent().name + " entered [color=pink]" + current_state.name.to_lower() + "[/color]")
 var states: Dictionary = {} ## A dict of all current children states of the state machine node.
 
 ## Caches the child states and sets them up.
@@ -47,6 +51,3 @@ func _on_child_transition(requesting_state, new_state_name) -> void:
 			
 			new_state.enter()
 			current_state = new_state
-			
-			if DebugFlags.PrintFlags.state_machine_swaps:
-				print_rich("DEBUG: " + get_parent().name + " entered [color=pink]" + current_state.name.to_lower() + "[/color]")

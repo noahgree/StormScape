@@ -15,6 +15,7 @@ var dot_delay_timers: Dictionary = {} ## Holds references to all timers current 
 ## Asserts that there is a valid health component on the affected entity before trying to handle damage.
 func _ready() -> void:
 	assert(get_parent().health_component, get_parent().affected_entity.name + " has an effect receiver that is intended to handle damage, but no health component is connected.")
+	debug_print_changes = get_parent().print_child_mod_updates
 	
 	var moddable_stats: Dictionary = {
 		"dmg_weakness" : _dmg_weakness, "dmg_resistance" : _dmg_resistance
@@ -23,13 +24,13 @@ func _ready() -> void:
 
 ## Calculates the final damage to apply after considering whether the crit hit and also how much the armor blocks.
 func _get_dmg_after_crit_then_armor(effect_source: EffectSource) -> int:
-	var should_crit: bool = randf() < effect_source.crit_chance
+	var should_crit: bool = randf_range(0, 100) <= effect_source.crit_chance
 	var dmg_after_crit: int = effect_source.base_damage
 	if should_crit: 
 		dmg_after_crit = round(dmg_after_crit * effect_source.crit_multiplier)
 	
-	var armor_block_percent: float = max(0, health_component.armor - effect_source.armor_penetration)
-	var new_damage: int = max(0, round(dmg_after_crit * (1 - armor_block_percent)))
+	var armor_block_percent: int = max(0, health_component.armor - effect_source.armor_penetration)
+	var new_damage: int = max(0, round(dmg_after_crit * (1 - (float(armor_block_percent) / 100))))
 	return new_damage
 
 ## Handles instantaneous damage that will be affected by armor.

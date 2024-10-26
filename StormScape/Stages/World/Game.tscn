@@ -1,4 +1,4 @@
-[gd_scene load_steps=27 format=3 uid="uid://bscnr6a23l10m"]
+[gd_scene load_steps=28 format=3 uid="uid://bscnr6a23l10m"]
 
 [ext_resource type="Texture2D" uid="uid://c50xdwgnkx441" path="res://Stages/Tilesets/TilesetFloor.png" id="1_o34ct"]
 [ext_resource type="Texture2D" uid="uid://nvl4eoe0gf5y" path="res://Stages/Tilesets/TilesetField.png" id="2_okrb7"]
@@ -16,6 +16,7 @@
 [ext_resource type="Script" path="res://Utilities/Debug/TestBullet.gd" id="14_fb2si"]
 [ext_resource type="Resource" uid="uid://b0it5xmpw16sd" path="res://Entities/EffectSystemResources/StatusEffects/BadEffects/Knockback/Knockback1.tres" id="16_phc6m"]
 [ext_resource type="Script" path="res://Entities/EffectSystemResources/EffectSources/MovingEffectSource.gd" id="17_mwl25"]
+[ext_resource type="Resource" uid="uid://jxv16pf038go" path="res://Entities/EffectSystemResources/StatusEffects/BadEffects/TimeSnare/TimeSnare1.tres" id="18_27bbk"]
 
 [sub_resource type="Environment" id="Environment_2wouv"]
 background_mode = 3
@@ -4113,9 +4114,9 @@ good_effect_affected_teams = 3
 scanned_phys_layers = 191
 base_damage = 10
 dmg_affected_stats = 0
-crit_chance = 0.0
+crit_chance = 0
 crit_multiplier = 1.5
-armor_penetration = 0.0
+armor_penetration = 0
 base_healing = 0
 heal_affected_stats = 2
 status_effects = Array[ExtResource("12_awpt0")]([ExtResource("13_q3w5l")])
@@ -4131,12 +4132,12 @@ good_effect_affected_teams = 3
 scanned_phys_layers = 191
 base_damage = 10
 dmg_affected_stats = 2
-crit_chance = 0.0
+crit_chance = 0
 crit_multiplier = 1.5
-armor_penetration = 0.0
+armor_penetration = 0
 base_healing = 0
 heal_affected_stats = 2
-status_effects = Array[ExtResource("12_awpt0")]([ExtResource("16_phc6m")])
+status_effects = Array[ExtResource("12_awpt0")]([ExtResource("16_phc6m"), ExtResource("18_27bbk")])
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_8bjrm"]
 size = Vector2(6, 6)
@@ -4226,14 +4227,14 @@ source_entity = NodePath("../Enemy")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Testing/TestStaticEffectSource"]
 shape = SubResource("RectangleShape2D_o8yml")
 
-[node name="TestBullet" type="Node2D" parent="Testing"]
+[node name="TestMovingEffectSource" type="Node2D" parent="Testing"]
 script = ExtResource("14_fb2si")
 
-[node name="Hitbox" type="Area2D" parent="Testing/TestBullet" node_paths=PackedStringArray("source_entity")]
+[node name="Hitbox" type="Area2D" parent="Testing/TestMovingEffectSource" node_paths=PackedStringArray("source_entity")]
 position = Vector2(40, 98)
 script = ExtResource("10_nwmsb")
 effect_source = SubResource("Resource_rvpdg")
 source_entity = NodePath("../../Enemy")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Testing/TestBullet/Hitbox"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Testing/TestMovingEffectSource/Hitbox"]
 shape = SubResource("RectangleShape2D_8bjrm")

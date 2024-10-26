@@ -12,6 +12,7 @@ class_name StunHandler
 ## Asserts that the affected entity is a Dynamic Entity before trying to handle things.
 func _ready() -> void:
 	assert(get_parent().get_parent() is DynamicEntity, get_parent().affected_entity.name + " has an effect receiver intended to handle stuns, but the affected entity is not a DynamicEntity.")
+	debug_print_changes = get_parent().print_child_mod_updates
 	
 	var moddable_stats: Dictionary = {
 		"stun_weakness" : _stun_weakness, "stun_resistance" : _stun_resistance

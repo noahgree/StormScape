@@ -1,5 +1,5 @@
 @icon("res://Utilities/Debug/EditorIcons/heal_handler.svg")
-extends Node
+extends StatBasedComponent
 class_name HealHandler
 ## A handler for using the data provided in the effect source to apply healing in different ways.
 
@@ -12,6 +12,7 @@ var hot_delay_timers: Dictionary = {} ## Holds references to all timers current 
 ## Asserts that there is a valid health component on the affected entity before trying to handle healing.
 func _ready() -> void:
 	assert(get_parent().health_component, get_parent().affected_entity.name + " has an effect receiver that is intended to handle healing, but no health component is connected.")
+	debug_print_changes = get_parent().print_child_mod_updates
 
 ## Handles applying instant, one-shot healing to the affected entity.
 func handle_instant_heal(base_healing: int, heal_affected_stats: GlobalData.HealAffectedStats) -> void:

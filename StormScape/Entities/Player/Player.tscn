@@ -1,4 +1,4 @@
-[gd_scene load_steps=136 format=3 uid="uid://dba8mrurjlekp"]
+[gd_scene load_steps=144 format=3 uid="uid://dba8mrurjlekp"]
 
 [ext_resource type="Script" path="res://Entities/Player/Player.gd" id="1_m33tt"]
 [ext_resource type="Texture2D" uid="uid://77ell4xpptap" path="res://Entities/Player/Spritesheets/PlayerBase.png" id="2_jshja"]
@@ -23,7 +23,10 @@
 [ext_resource type="PackedScene" uid="uid://depnx3pnassrq" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/BurningHandler.tscn" id="14_q2ueb"]
 [ext_resource type="Script" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/TimeSnareHandler.gd" id="15_64y42"]
 [ext_resource type="Script" path="res://Entities/Player/States/Stunned/Stunned.gd" id="15_eiig3"]
+[ext_resource type="Script" path="res://Entities/Player/States/Spawn/Spawn.gd" id="17_fwsnm"]
 [ext_resource type="Script" path="res://Utilities/Debug/TestButtons.gd" id="17_vdk5v"]
+[ext_resource type="Script" path="res://Entities/Player/States/Die/Die.gd" id="18_jcofa"]
+[ext_resource type="Script" path="res://Entities/Player/States/Sneak/Sneak.gd" id="19_alhqe"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_o7k7i"]
 radius = 7.0
@@ -574,6 +577,60 @@ tracks/1/keys = {
 "update": 1,
 "values": [0]
 }
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("AnimatedSprite2D:scale")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_y7dy5"]
+resource_name = "die"
+length = 0.2
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AnimatedSprite2D:animation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [&"idle"]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("AnimatedSprite2D:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(1.00136e-05, 1.00136e-05)]
+}
+tracks/2/type = "method"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("MoveStateMachine/Die")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0.2),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"_on_die_anim_ended"
+}]
+}
 
 [sub_resource type="Animation" id="Animation_0xfck"]
 resource_name = "idle_down"
@@ -935,9 +992,65 @@ tracks/1/keys = {
 "values": [6, 7, 8, 9, 10, 11]
 }
 
+[sub_resource type="Animation" id="Animation_4hltv"]
+resource_name = "spawn"
+length = 0.4
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AnimatedSprite2D:animation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [&"idle"]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("AnimatedSprite2D:frame")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("AnimatedSprite2D:scale")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.4),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(0, 0), Vector2(1e-05, 1e-05), Vector2(1, 1)]
+}
+tracks/3/type = "method"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("MoveStateMachine/Spawn")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0.4),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"_on_spawn_anim_ended"
+}]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_xrucm"]
 _data = {
 "RESET": SubResource("Animation_sys1a"),
+"die": SubResource("Animation_y7dy5"),
 "idle_down": SubResource("Animation_0xfck"),
 "idle_left_down": SubResource("Animation_o53sl"),
 "idle_left_up": SubResource("Animation_4m1p0"),
@@ -949,8 +1062,12 @@ _data = {
 "run_left_up": SubResource("Animation_cje5g"),
 "run_right_down": SubResource("Animation_x20u6"),
 "run_right_up": SubResource("Animation_4qi3l"),
-"run_up": SubResource("Animation_8rao3")
+"run_up": SubResource("Animation_8rao3"),
+"spawn": SubResource("Animation_4hltv")
 }
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_gqh27"]
+animation = &"die"
 
 [sub_resource type="AnimationNodeTimeScale" id="AnimationNodeTimeScale_dcuk4"]
 
@@ -988,7 +1105,6 @@ blend_point_5/pos = Vector2(0, -1)
 blend_mode = 1
 
 [sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_xmxd0"]
-graph_offset = Vector2(-225, 118.5)
 nodes/TimeScale/node = SubResource("AnimationNodeTimeScale_dcuk4")
 nodes/TimeScale/position = Vector2(180, 210)
 nodes/blendspace2d/node = SubResource("AnimationNodeBlendSpace2D_s8iwx")
@@ -1040,21 +1156,33 @@ nodes/blendspace2d/position = Vector2(180, 140)
 nodes/output/position = Vector2(640, 210)
 node_connections = [&"TimeScale", 0, &"blendspace2d", &"output", 0, &"TimeScale"]
 
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_5b1k5"]
+animation = &"spawn"
+
 [sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_70g00"]
 
 [sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_sdv4y"]
 
-[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_qm8ic"]
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_8h6fx"]
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_x8kh3"]
+switch_mode = 2
 advance_mode = 2
 
 [sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_342k8"]
-states/End/position = Vector2(603, 113.5)
-states/Start/position = Vector2(188, 108.5)
+states/End/position = Vector2(754, 113.375)
+states/Start/position = Vector2(29.5, 114.5)
+states/die/node = SubResource("AnimationNodeAnimation_gqh27")
+states/die/position = Vector2(583, 113.156)
 states/idle/node = SubResource("AnimationNodeBlendTree_xmxd0")
 states/idle/position = Vector2(367.5, 50.5)
 states/run/node = SubResource("AnimationNodeBlendTree_w6nco")
 states/run/position = Vector2(367, 176.5)
-transitions = ["idle", "run", SubResource("AnimationNodeStateMachineTransition_70g00"), "run", "idle", SubResource("AnimationNodeStateMachineTransition_sdv4y"), "Start", "idle", SubResource("AnimationNodeStateMachineTransition_qm8ic")]
+states/spawn/node = SubResource("AnimationNodeAnimation_5b1k5")
+states/spawn/position = Vector2(184.5, 70.5)
+transitions = ["idle", "run", SubResource("AnimationNodeStateMachineTransition_70g00"), "run", "idle", SubResource("AnimationNodeStateMachineTransition_sdv4y"), "Start", "spawn", SubResource("AnimationNodeStateMachineTransition_8h6fx"), "spawn", "idle", SubResource("AnimationNodeStateMachineTransition_x8kh3")]
+graph_offset = Vector2(-48, 10)
 
 [node name="Player" type="CharacterBody2D"]
 collision_mask = 213
@@ -1077,10 +1205,12 @@ animation = &"idle"
 [node name="HealthComponent" parent="." node_paths=PackedStringArray("stats_ui") instance=ExtResource("3_ojev3")]
 unique_name_in_owner = true
 stats_ui = NodePath("../PlayerUI/PlayerStatsOverlay")
+debug_print_changes = true
 
 [node name="StaminaComponent" parent="." node_paths=PackedStringArray("stats_ui") instance=ExtResource("5_k4fu6")]
 unique_name_in_owner = true
 stats_ui = NodePath("../PlayerUI/PlayerStatsOverlay")
+debug_print_changes = true
 
 [node name="EffectReceiverComponent" parent="." node_paths=PackedStringArray("affected_entity", "health_component", "stamina_component", "dmg_handler", "heal_handler", "knockback_handler", "stun_handler", "poison_handler", "regen_handler", "frostbite_handler", "burning_handler", "time_snare_handler") instance=ExtResource("4_hhm8x")]
 affected_entity = NodePath("..")
@@ -1095,6 +1225,7 @@ regen_handler = NodePath("RegenHandler")
 frostbite_handler = NodePath("FrostbiteHandler")
 burning_handler = NodePath("BurningHandler")
 time_snare_handler = NodePath("TimeSnareHandler")
+print_child_mod_updates = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="EffectReceiverComponent"]
 position = Vector2(0, -13)
@@ -1124,13 +1255,23 @@ script = ExtResource("15_64y42")
 unique_name_in_owner = true
 script = ExtResource("6_otbuq")
 anim_tree = NodePath("../AnimationTree")
-initial_state = NodePath("Idle")
+initial_state = NodePath("Spawn")
+debug_print_changes = true
+
+[node name="Spawn" type="Node" parent="MoveStateMachine"]
+script = ExtResource("17_fwsnm")
+
+[node name="Die" type="Node" parent="MoveStateMachine"]
+script = ExtResource("18_jcofa")
 
 [node name="Idle" type="Node" parent="MoveStateMachine"]
 script = ExtResource("7_15a5x")
 
 [node name="Run" type="Node" parent="MoveStateMachine"]
 script = ExtResource("9_0dcld")
+
+[node name="Sneak" type="Node" parent="MoveStateMachine"]
+script = ExtResource("19_alhqe")
 
 [node name="Dash" type="Node" parent="MoveStateMachine"]
 script = ExtResource("9_a1qv1")
@@ -1185,6 +1326,7 @@ offset_top = 249.0
 offset_right = 194.0
 offset_bottom = 269.0
 scale = Vector2(0.7, 0.7)
+focus_mode = 0
 text = "HURT"
 
 [node name="TestHealBtn" type="Button" parent="PlayerUI/TestButtons"]
@@ -1195,6 +1337,7 @@ offset_top = 231.0
 offset_right = 193.0
 offset_bottom = 251.0
 scale = Vector2(0.7, 0.7)
+focus_mode = 0
 theme_override_fonts/font = ExtResource("11_1rxkv")
 theme_override_font_sizes/font_size = 16
 text = "HEAL"
@@ -1207,6 +1350,7 @@ offset_top = 253.0
 offset_right = 496.0
 offset_bottom = 273.0
 scale = Vector2(0.7, 0.7)
+focus_mode = 0
 theme_override_fonts/font = ExtResource("11_1rxkv")
 theme_override_font_sizes/font_size = 16
 text = "TEST MUSIC"
@@ -1219,6 +1363,7 @@ offset_top = 3.0
 offset_right = 488.0
 offset_bottom = 23.0
 scale = Vector2(0.7, 0.7)
+focus_mode = 0
 theme_override_fonts/font = ExtResource("11_1rxkv")
 theme_override_font_sizes/font_size = 16
 text = "MOD 1"
@@ -1231,6 +1376,7 @@ offset_top = 19.0
 offset_right = 488.0
 offset_bottom = 39.0
 scale = Vector2(0.7, 0.7)
+focus_mode = 0
 theme_override_fonts/font = ExtResource("11_1rxkv")
 theme_override_font_sizes/font_size = 16
 text = "MOD 2"

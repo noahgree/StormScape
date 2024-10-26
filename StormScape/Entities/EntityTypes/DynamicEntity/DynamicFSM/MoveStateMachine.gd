@@ -65,3 +65,11 @@ func request_stun(duration: float) -> void:
 ## Requests to add a value to the current knockback vector, doing so if possible.
 func request_knockback(knockback: Vector2) -> void:
 	knockback_vector = (knockback_vector + knockback).limit_length(MAX_KNOCKBACK)
+
+func spawn() -> void:
+	if current_state:
+		_on_child_transition(current_state, "Spawn")
+
+func die() -> void:
+	if current_state:
+		_on_child_transition(current_state, "Die")

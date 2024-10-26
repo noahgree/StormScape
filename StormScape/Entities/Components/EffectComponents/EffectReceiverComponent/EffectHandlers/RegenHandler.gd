@@ -11,6 +11,7 @@ class_name RegenHandler
 
 ## Sets up moddable stats.
 func _ready() -> void:
+	debug_print_changes = get_parent().print_child_mod_updates
 	var moddable_stats: Dictionary = {
 		"regen_boost" : _regen_boost, "regen_penalty" : _regen_penalty
 	}

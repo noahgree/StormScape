@@ -24,6 +24,8 @@ class_name EffectReceiverComponent
 @export var frostbite_handler: FrostbiteHandler
 @export var burning_handler: BurningHandler
 @export var time_snare_handler: TimeSnareHandler
+@export_group("Debug")
+@export var print_child_mod_updates: bool = false ## Whether all child handlers of this node should print when they have an owned stat get recalculated via a mod update.
 
 @onready var status_effect_manager: StatusEffectManager = %StatusEffectManager ## The optional component attached to the affected entity that handles modifying incoming values based on stats of the entity.
 
@@ -45,6 +47,11 @@ func _ready() -> void:
 	if not Engine.is_editor_hint():
 		collision_layer = affected_entity.collision_layer
 		monitoring = false
+	
+	if DebugFlags.PrintFlags.stat_mod_changes:
+		for child in get_children():
+			if child is StatBasedComponent:
+				child.debug_print_changes = print_child_mod_updates
 
 ## Handles an incoming effect source, passing it to present receivers for further processing before changing 
 ## entity stats.

@@ -91,9 +91,9 @@ func add_status_effect(status_effect: StatusEffect) -> void:
 				if receiver.frostbite_handler: receiver.frostbite_handler.add_mods([mod])
 			GlobalData.EntityStatModType.BURNING:
 				if receiver.burning_handler: receiver.burning_handler.add_mods([mod])
-			GlobalData.EntityStatusEffectType.TIMESNARE:
+			GlobalData.EntityStatModType.TIMESNARE:
 				if receiver.time_snare_handler: receiver.time_snare_handler.add_mods([mod])
-		
+	
 	print_rich("[color=green]added[/color] " + str(status_effect.effect_name) + ": " + str(current_effects.keys()))
 
 ## Extends the duration of the timer associated with some current effect.

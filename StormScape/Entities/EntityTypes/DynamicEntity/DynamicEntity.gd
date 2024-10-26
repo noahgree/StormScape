@@ -13,6 +13,7 @@ class_name DynamicEntity
 
 var time_snare_counter: float = 0
 var snare_factor: float = 0 ## Multiplier for delta time during time snares.
+var current_stealth: int = 0 ## The extra amount of closeness this entity can achieve to an enemy before being detected.
 
 
 func _process(delta: float) -> void:
@@ -47,3 +48,6 @@ func request_time_snare(factor: float, snare_time: float) -> void:
 	snare_factor = factor
 	
 	add_child(timer)
+
+func die() -> void:
+	move_fsm.die()

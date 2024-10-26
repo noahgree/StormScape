@@ -6,7 +6,7 @@ extends DynamicState
 @export var _sprint_multiplier: float = 1.5 ## How much faster the max_speed should be when sprinting.
 @export var _run_collision_impulse_factor: float = 1.0 ## A multiplier that controls how much impulse gets applied to rigid entites when colliding with them during the run state.
 
-const DEFAULT_ANIM_TIME_SCALE: float = 1.5
+const DEFAULT_RUN_ANIM_TIME_SCALE: float = 1.5 ## How fast the run anim should play before stat mods.
 var movement_vector: Vector2 = Vector2.ZERO ## The current direction of movement.
 
 func _ready() -> void:
@@ -23,13 +23,14 @@ func exit() -> void:
 	pass
 
 func state_physics_process(delta: float) -> void:
-	_do_character_movement(delta)
+	_do_character_run(delta)
 	_check_for_dash_request()
+	_check_for_sneak_request()
 	_animate()
 
 ## Besides appropriately applying velocity to the parent entity, this checks and potentially activates sprinting 
 ## as well as calculates what vector the animation state machine should receive to play the matching directional anim.
-func _do_character_movement(delta: float) -> void:
+func _do_character_run(delta: float) -> void:
 	movement_vector = _calculate_move_vector()
 	var request_sprint = Input.is_action_pressed("sprint")
 	var knockback: Vector2 = fsm.knockback_vector
@@ -52,11 +53,11 @@ func _do_character_movement(delta: float) -> void:
 			fsm.anim_vector = movement_vector
 		
 		if request_sprint and stamina_component.use_stamina(fsm.get_stat("sprint_stamina_usage") * delta): # sprint
-			fsm.anim_tree.set("parameters/run/TimeScale/scale", DEFAULT_ANIM_TIME_SCALE * fsm.get_stat("sprint_multiplier") * (fsm.get_stat("max_speed") / fsm.get_original_stat("max_speed")))
+			fsm.anim_tree.set("parameters/run/TimeScale/scale", DEFAULT_RUN_ANIM_TIME_SCALE * fsm.get_stat("sprint_multiplier") * (fsm.get_stat("max_speed") / fsm.get_original_stat("max_speed")))
 			dynamic_entity.velocity += (movement_vector * fsm.get_stat("acceleration") * fsm.get_stat("sprint_multiplier") * delta)
 			dynamic_entity.velocity = dynamic_entity.velocity.limit_length(fsm.get_stat("max_speed") * fsm.get_stat("sprint_multiplier"))
 		else: # move without sprint
-			fsm.anim_tree.set("parameters/run/TimeScale/scale", DEFAULT_ANIM_TIME_SCALE * (fsm.get_stat("max_speed") / fsm.get_original_stat("max_speed")))
+			fsm.anim_tree.set("parameters/run/TimeScale/scale", DEFAULT_RUN_ANIM_TIME_SCALE * (fsm.get_stat("max_speed") / fsm.get_original_stat("max_speed")))
 			dynamic_entity.velocity += (movement_vector * fsm.get_stat("acceleration") * delta)
 			dynamic_entity.velocity = dynamic_entity.velocity.limit_length(fsm.get_stat("max_speed"))
 	
@@ -81,6 +82,11 @@ func _check_for_dash_request() -> void:
 	if _is_dash_requested() and fsm.dash_cooldown_timer.is_stopped() and movement_vector != Vector2.ZERO:
 		if stamina_component.use_stamina(fsm.get_stat("dash_stamina_usage")):
 			Transitioned.emit(self, "Dash")
+
+## Checks if we meet the input (or otherwise) conditions to start sneaking. If so, transition to sneak.
+func _check_for_sneak_request() -> void:
+	if _is_sneak_requested() and fsm.knockback_vector == Vector2.ZERO:
+		Transitioned.emit(self, "Sneak")
 
 func _animate() -> void:
 	fsm.anim_tree.set("parameters/run/blendspace2d/blend_position", fsm.anim_vector)
