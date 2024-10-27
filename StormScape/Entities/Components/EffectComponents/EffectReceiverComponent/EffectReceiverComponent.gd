@@ -24,6 +24,7 @@ class_name EffectReceiverComponent
 @export var frostbite_handler: FrostbiteHandler
 @export var burning_handler: BurningHandler
 @export var time_snare_handler: TimeSnareHandler
+
 @export_group("Debug")
 @export var print_child_mod_updates: bool = false ## Whether all child handlers of this node should print when they have an owned stat get recalculated via a mod update.
 

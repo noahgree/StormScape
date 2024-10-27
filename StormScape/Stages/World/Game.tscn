@@ -4199,6 +4199,11 @@ script = ExtResource("6_ldfbn")
 shape = SubResource("RectangleShape2D_sbju2")
 
 [node name="HealthComponent" parent="Testing/TestRigidEntity2" instance=ExtResource("12_6s08t")]
+_max_health = null
+_max_shield = null
+base_armor = null
+stat_mods = null
+debug_print_changes = null
 
 [node name="EffectReceiverComponent" parent="Testing/TestRigidEntity2" node_paths=PackedStringArray("affected_entity", "health_component", "dmg_handler", "heal_handler", "knockback_handler") instance=ExtResource("7_bfj3g")]
 can_receive_stat_mods = false

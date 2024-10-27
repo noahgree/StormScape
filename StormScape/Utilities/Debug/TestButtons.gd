@@ -27,3 +27,9 @@ func _on_test_mod_btn_2_pressed() -> void:
 	var node = get_parent().get_parent().stamina_component
 	node.remove_mod("stamina_use_per_hunger_deduction", "mod2", 1)
 	node.remove_mod("stamina_use_per_hunger_deduction", "mod1", 1)
+
+func _on_test_save_btn_pressed() -> void:
+	SaverLoader.save_game()
+
+func _on_test_load_btn_pressed() -> void:
+	SaverLoader.load_game()

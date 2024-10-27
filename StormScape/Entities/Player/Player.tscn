@@ -1195,7 +1195,6 @@ shape = SubResource("CircleShape2D_o7k7i")
 debug_color = Color(0, 0.6, 0.701961, 0.180392)
 
 [node name="AudioListener2D" type="AudioListener2D" parent="."]
-current = true
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 position = Vector2(0, -16)
@@ -1204,7 +1203,11 @@ animation = &"idle"
 
 [node name="HealthComponent" parent="." node_paths=PackedStringArray("stats_ui") instance=ExtResource("3_ojev3")]
 unique_name_in_owner = true
+_max_health = null
+_max_shield = null
+base_armor = null
 stats_ui = NodePath("../PlayerUI/PlayerStatsOverlay")
+stat_mods = null
 debug_print_changes = true
 
 [node name="StaminaComponent" parent="." node_paths=PackedStringArray("stats_ui") instance=ExtResource("5_k4fu6")]
@@ -1355,6 +1358,32 @@ theme_override_fonts/font = ExtResource("11_1rxkv")
 theme_override_font_sizes/font_size = 16
 text = "TEST MUSIC"
 
+[node name="TestSaveBtn" type="Button" parent="PlayerUI/TestButtons"]
+texture_filter = 1
+layout_mode = 0
+offset_left = 451.0
+offset_top = 221.0
+offset_right = 487.0
+offset_bottom = 241.0
+scale = Vector2(0.7, 0.7)
+focus_mode = 0
+theme_override_fonts/font = ExtResource("11_1rxkv")
+theme_override_font_sizes/font_size = 16
+text = "SAVE"
+
+[node name="TestLoadBtn" type="Button" parent="PlayerUI/TestButtons"]
+texture_filter = 1
+layout_mode = 0
+offset_left = 451.0
+offset_top = 237.0
+offset_right = 487.0
+offset_bottom = 257.0
+scale = Vector2(0.7, 0.7)
+focus_mode = 0
+theme_override_fonts/font = ExtResource("11_1rxkv")
+theme_override_font_sizes/font_size = 16
+text = "LOAD"
+
 [node name="TestModBtn1" type="Button" parent="PlayerUI/TestButtons"]
 texture_filter = 1
 layout_mode = 0
@@ -1386,5 +1415,7 @@ text = "MOD 2"
 [connection signal="pressed" from="PlayerUI/TestButtons/TestHurtBtn" to="PlayerUI/TestButtons" method="_on_test_hurt_btn_pressed"]
 [connection signal="pressed" from="PlayerUI/TestButtons/TestHealBtn" to="PlayerUI/TestButtons" method="_on_test_heal_btn_pressed"]
 [connection signal="pressed" from="PlayerUI/TestButtons/TestMusicBtn" to="PlayerUI/TestButtons" method="_on_test_music_btn_pressed"]
+[connection signal="pressed" from="PlayerUI/TestButtons/TestSaveBtn" to="PlayerUI/TestButtons" method="_on_test_save_btn_pressed"]
+[connection signal="pressed" from="PlayerUI/TestButtons/TestLoadBtn" to="PlayerUI/TestButtons" method="_on_test_load_btn_pressed"]
 [connection signal="pressed" from="PlayerUI/TestButtons/TestModBtn1" to="PlayerUI/TestButtons" method="_on_test_mod_btn_1_pressed"]
 [connection signal="pressed" from="PlayerUI/TestButtons/TestModBtn2" to="PlayerUI/TestButtons" method="_on_test_mod_btn_2_pressed"]

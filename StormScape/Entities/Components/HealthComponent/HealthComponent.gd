@@ -15,6 +15,20 @@ var shield: int: set = _set_shield ## The current shield of the entity.
 var armor: float = 0: set = _set_armor ## The current armor of the entity. This is the percent of dmg that is blocked.
 const MAX_ARMOR: int = 100 ## The maximum amount of armor the entity can have. 
 
+#region Save & Load
+func _on_save_game(save_data: Array[SaveData]) -> void:
+	var data = HealthSaveData.new()
+	data.scene_path = scene_file_path
+	data.health = health
+	data.shield = shield
+	data.armor = armor
+	
+	save_data.append(data)
+
+func _on_load_game() -> void:
+	pass
+#endregion
+
 #region Setup
 func _ready() -> void: 
 	var moddable_stats: Dictionary = {

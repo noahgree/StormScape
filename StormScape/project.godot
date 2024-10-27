@@ -38,6 +38,7 @@ ItemDatabase="*res://Utilities/Autoloads/ItemDatabase.tscn"
 SignalBus="*res://Utilities/Autoloads/SignalBus.gd"
 AudioManager="*res://Utilities/Autoloads/AudioManager.tscn"
 GlobalData="*res://Utilities/Autoloads/GlobalData.gd"
+SaverLoader="*res://Utilities/Autoloads/SaverLoader.gd"
 
 [display]
 
@@ -70,6 +71,10 @@ folder_colors={
 "res://Utilities/Common/": "purple",
 "res://addons/": "gray"
 }
+
+[global_group]
+
+has_save_data="A collection of all nodes in the game that must be saved and subsequently loaded."
 
 [gui]
 
