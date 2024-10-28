@@ -31,7 +31,9 @@ func _on_save_game(save_data: Array[SaveData]) -> void:
 	data.anim_vector = $MoveStateMachine.anim_vector
 	data.knockback_vector = $MoveStateMachine.knockback_vector
 	
-	if snare_timer: data.snare_time_left = snare_timer.time_left
+	if snare_timer != null: 
+		data.snare_time_left = snare_timer.time_left
+		snare_timer.queue_free()
 	else: data.snare_time_left = 0
 	
 	save_data.append(data)
@@ -40,6 +42,7 @@ func _on_load_game_player(data: PlayerData) -> void:
 	global_position = data.position
 	stat_mods = data.stat_mods
 	velocity = data.velocity
+	snare_factor = 0
 	$AnimatedSprite2D.sprite_frames = load(data.sprite_frames)
 	$HealthComponent.health = data.health
 	$HealthComponent.shield = data.shield
@@ -59,5 +62,6 @@ func _on_load_game_player(data: PlayerData) -> void:
 	move_fsm.verify_anim_vector()
 	if velocity.length() > 0:
 		move_fsm._on_child_transition(move_fsm.current_state, "Run")
+	if snare_timer != null: snare_timer.queue_free()
 	if data.snare_time_left > 0: request_time_snare(data.snare_factor, data.snare_time_left)
 #endregion
