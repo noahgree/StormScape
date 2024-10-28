@@ -1,11 +1,11 @@
 extends Node
 class_name StatBasedComponent
-## A base class for components that handle moddable stats. 
+## A base class for components that handle moddable stats. Applicable for any entity type.
 ##
 ## Used for things like health components with moddable values like max health. 
 
+@export var entity: PhysicsBody2D ## The entity to store all stat mods in.
 @export var stats_ui: Control ## The optional UI that will reflect this component's values.
-@export var stat_mods: Dictionary = {} ## The catalog of EntityStatMods per stat. Does not store current calculated values. [b]DO NOT EDIT[/b] this in the export panel. This is only 'exported' for easy debugging in remote branch.
 @export_group("Debug", "debug_")
 @export var debug_print_changes: bool = false ## Prints out stat mod recalculations in the editor if checked.
 
@@ -13,17 +13,29 @@ var cached_stats: Dictionary = {} ## The up-to-date and calculated stats to be u
 var base_values: Dictionary = {} ## The unchanging base values of each moddable stat, usually set by copying the exported values from the component into a dictionary that is passed into the setup function below. 
 
 
+#region Save & Load
+func _on_save_game(_save_data: Array[SaveData]) -> void:
+	pass
+
+func _on_before_load_game() -> void:
+	pass
+
+func _on_load_game() -> void:
+	for stat_id in base_values:
+		_recalculate_stat(stat_id, base_values.get(stat_id))
+#endregion
+
 ## Sets up the base values dict and calculates initial values based on any already present mods. 
 func add_moddable_stats(base_valued_stats: Dictionary) -> void:
 	for stat_id in base_valued_stats.keys():
 		var base_value = base_valued_stats[stat_id]
-		stat_mods[stat_id] = {}
+		entity.stat_mods[stat_id] = {}
 		base_values[stat_id] = base_value
 		_recalculate_stat(stat_id, base_value)
 
 ## Recalculates a cached stat. Usually called once something has changed like from an update or removal.
 func _recalculate_stat(stat_id: String, base_value: float) -> void:
-	var mods: Array = stat_mods[stat_id].values()
+	var mods: Array = entity.stat_mods[stat_id].values()
 	mods.sort_custom(_compare_by_priority)
 	
 	var result: float = base_value
@@ -34,9 +46,10 @@ func _recalculate_stat(stat_id: String, base_value: float) -> void:
 		result = mod.apply(base_value, result)
 	
 	cached_stats[stat_id] = max(0, result)
+	_update_ui_for_stat(stat_id, result)
+	
 	if DebugFlags.PrintFlags.stat_mod_changes and debug_print_changes:
 		print_rich("[color=cyan]" + stat_id + ":[/color] [b]" + str(cached_stats[stat_id]) + "[/b]")
-	_update_ui_for_stat(stat_id, result)
 
 ## Updates an optionally connected UI when a watched stat changes.
 func _update_ui_for_stat(stat_id: String, new_value: float):
@@ -68,8 +81,8 @@ func update_mod_by_id(stat_id: String, mod_id: String, new_value: float) -> void
 ## Adds mods to a stat. Handles logic for stacking if the mod can stack.
 func add_mods(mod_array: Array[EntityStatMod]) -> void:
 	for mod in mod_array:
-		if mod.stat_id in stat_mods:
-			var existing_mod: EntityStatMod = stat_mods[mod.stat_id].get(mod.mod_id, null)
+		if mod.stat_id in entity.stat_mods:
+			var existing_mod: EntityStatMod = entity.stat_mods[mod.stat_id].get(mod.mod_id, null)
 			if existing_mod and existing_mod.can_stack:
 				if existing_mod.stack_count < existing_mod.max_stack_count:
 					existing_mod.stack_count += 1
@@ -78,7 +91,7 @@ func add_mods(mod_array: Array[EntityStatMod]) -> void:
 					continue
 			else:
 				mod.before_stack_value = mod.value
-				stat_mods[mod.stat_id][mod.mod_id] = mod
+				entity.stat_mods[mod.stat_id][mod.mod_id] = mod
 			
 			_recalculate_stat(mod.stat_id, base_values[mod.stat_id])
 		else:
@@ -89,17 +102,17 @@ func remove_mod(stat_id: String, mod_id: String, count: int = 0) -> void:
 	var existing_mod: EntityStatMod = _get_mod(stat_id, mod_id)
 	if existing_mod:
 		if count == 0:
-			stat_mods[stat_id].erase(mod_id)
+			entity.stat_mods[stat_id].erase(mod_id)
 		elif existing_mod.can_stack:
 			existing_mod.stack_count = max(0, existing_mod.stack_count - count)
 			_recalculate_mod_value_with_new_stack_count(existing_mod)
 			
 			if existing_mod.stack_count <= 0:
-				stat_mods[stat_id].erase(mod_id)
+				entity.stat_mods[stat_id].erase(mod_id)
 		
 		_recalculate_stat(stat_id, base_values[stat_id])
 
-
+## Recalculates the cached stat value based on the updated stack count of that mod on that stat.
 func _recalculate_mod_value_with_new_stack_count(mod: EntityStatMod) -> void:
 	if mod.operation == "*" or mod.operation == "/":
 		mod.value = pow(mod.before_stack_value, mod.stack_count)
@@ -129,12 +142,12 @@ func get_original_stat(stat_id: String) -> float:
 
 ## Gets the EntityStatMod for the stat_id based on the mod_id. Pushes an error if it can't be found.
 func _get_mod(stat_id: String, mod_id: String) -> EntityStatMod:
-	if stat_id in stat_mods and mod_id in stat_mods[stat_id]:
-		return stat_mods[stat_id].get(mod_id, null)
+	if stat_id in entity.stat_mods and mod_id in entity.stat_mods[stat_id]:
+		return entity.stat_mods[stat_id].get(mod_id, null)
 	else:
 		_push_mod_not_found_error(stat_id, mod_id)
 		return null
 
 ## Pushes an error to the console with the stat id and the mod id for the mod that could not be found.
 func _push_mod_not_found_error(stat_id: String, mod_id: String) -> void:
-	push_error("The mod for stat \"" + stat_id + "\"" + " with mod_id of: \"" + mod_id + "\" was not in the cache. Check the stat id and the mod id.")
+	push_error("The mod for stat \"" + stat_id + "\"" + " with mod_id of: \"" + mod_id + "\" was not in the cache for entity: " + str(entity) + ". Check the stat id and the mod id.")

@@ -133,6 +133,8 @@ func _emit_initial_values() -> void:
 	@warning_ignore("narrowing_conversion") hunger_bars = get_stat("max_hunger_bars")
 	stamina_to_hunger_count = 0
 	set_stamina_wait_timer_state_change(false)
+	stamina_wait_timer.start(get_stat("stamina_recharge_delay"))
+	set_stamina_wait_timer_state_change(true)
 
 ## When the stamina recharge wait timer ends, this handles creating a tweener that slowly increments the new stamina.
 func _on_stamina_wait_timer_timeout() -> void:

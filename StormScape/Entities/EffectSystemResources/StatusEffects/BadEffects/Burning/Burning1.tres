@@ -29,5 +29,5 @@ dot_resource = SubResource("Resource_1q46y")
 handler_type = 6
 effect_name = "Burning"
 effect_lvl = 1
-mod_time = 8.0
+mod_time = 5.0
 stat_mods = Array[ExtResource("2_l3ggl")]([SubResource("Resource_xigmb")])

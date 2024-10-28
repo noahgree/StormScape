@@ -2,5 +2,5 @@
 
 [ext_resource type="Script" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/HealHandler.gd" id="1_1eglc"]
 
-[node name="HealHandler" type="Node"]
+[node name="HealHandler" type="Node" groups=["has_save_logic"]]
 script = ExtResource("1_1eglc")

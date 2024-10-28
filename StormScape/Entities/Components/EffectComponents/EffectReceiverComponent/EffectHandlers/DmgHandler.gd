@@ -8,9 +8,37 @@ class_name DmgHandler
 
 @onready var health_component: HealthComponent = get_parent().health_component ## The health component to be affected by the damage.
 
-var dot_timers: Dictionary = {} ## Holds references to all timers currently tracking active DOT.
+var dot_timers: Dictionary = {} ## Holds references to all timers currently tracking active DOT. Keys are source type names and values are an array of all matching timers of that type.
 var dot_delay_timers: Dictionary = {} ## Holds references to all timers current tracking delays for active DOT.
+var saved_dots: Dictionary = {} ## Saves the running DOT instances and the progress so far when the game saves. Keys are source type names and values are an array of modified duplicated DOT resources.
 
+
+#region Save & Load
+func _on_save_game(_save_data: Array[SaveData]) -> void:
+	for source_type in dot_timers.keys():
+		saved_dots[source_type] = []
+		for timer in dot_timers[source_type]:
+			var clean_resource: DOTResource = timer.get_meta("dot_resource").duplicate()
+			var ticks_completed: int = timer.get_meta("ticks_completed")
+			var original_tick_count: int = clean_resource.dmg_ticks_array.size()
+			clean_resource.dmg_ticks_array = clean_resource.dmg_ticks_array.slice(ticks_completed, clean_resource.dmg_ticks_array.size())
+			clean_resource.delay_time = max(randf_range(3, 5), clean_resource.delay_time) # buffer so it doesn't insta dmg on load
+			clean_resource.damaging_time = clean_resource.damaging_time * (1 - (float(ticks_completed) / float(original_tick_count)))
+			saved_dots[source_type].append(clean_resource)
+
+func _on_before_load_game() -> void:
+	dot_timers = {}
+	dot_delay_timers = {}
+	for child in get_children():
+		child.queue_free()
+
+func _on_load_game() -> void:
+	for source_type in saved_dots.keys():
+		for dot_instance: DOTResource in saved_dots.get(source_type):
+			handle_over_time_dmg(dot_instance, source_type)
+		
+		saved_dots.erase(source_type)
+#endregion
 
 ## Asserts that there is a valid health component on the affected entity before trying to handle damage.
 func _ready() -> void:
@@ -42,18 +70,20 @@ func handle_instant_damage(effect_source: EffectSource) -> void:
 func handle_over_time_dmg(dot_resource: DOTResource, source_type: String) -> void:
 	var dot_timer: Timer = Timer.new()
 	dot_timer.set_meta("dot_resource", dot_resource)
-	dot_timer.set_meta("ticks_completed", 1)
-	dot_timer.wait_time = max(0.001, (dot_resource.damaging_time / (dot_resource.dmg_ticks_array.size() - 1)))
 	dot_timer.one_shot = false
 	dot_timer.timeout.connect(func(): _on_dot_timer_timeout(dot_timer, source_type))
 	dot_timer.name = source_type + "_timer" + str(randf())
 	add_child(dot_timer)
 	
-	if dot_resource.delay_time > 0:
+	if dot_resource.delay_time > 0: # we have a delay before the damage starts
 		var delay_timer: Timer = Timer.new()
 		delay_timer.one_shot = true
 		delay_timer.wait_time = dot_resource.delay_time
-		delay_timer.timeout.connect(func(): _send_handled_dmg(dot_resource.dmg_affected_stats, dot_resource.dmg_ticks_array[0]))
+		
+		dot_timer.set_meta("ticks_completed", 0)
+		dot_timer.wait_time = max(0.001, (dot_resource.damaging_time / (dot_resource.dmg_ticks_array.size() - 1)))
+		
+		delay_timer.timeout.connect(func(): _on_dot_timer_timeout(dot_timer, source_type))
 		delay_timer.timeout.connect(dot_timer.start)
 		delay_timer.timeout.connect(delay_timer.queue_free)
 		delay_timer.name = source_type + "_delayTimer" + str(randf())
@@ -61,7 +91,10 @@ func handle_over_time_dmg(dot_resource: DOTResource, source_type: String) -> voi
 		delay_timer.start()
 		_add_timer_to_cache(source_type, dot_timer, dot_timers)
 		_add_timer_to_cache(source_type, delay_timer, dot_delay_timers)
-	else:
+	else: # there is no delay needed
+		dot_timer.set_meta("ticks_completed", 1)
+		dot_timer.wait_time = max(0.001, (dot_resource.damaging_time / (dot_resource.dmg_ticks_array.size())))
+		
 		_send_handled_dmg(dot_resource.dmg_affected_stats, dot_resource.dmg_ticks_array[0])
 		_add_timer_to_cache(source_type, dot_timer, dot_timers)
 		dot_timer.start()

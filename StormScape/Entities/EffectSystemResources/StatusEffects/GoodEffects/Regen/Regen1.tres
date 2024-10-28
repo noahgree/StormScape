@@ -7,8 +7,8 @@
 [sub_resource type="Resource" id="Resource_m7vw8"]
 script = ExtResource("1_vgior")
 healing_time = 8.0
-heal_ticks_array = Array[int]([2, 2, 2, 2])
-delay_time = 6.0
+heal_ticks_array = Array[int]([10, 10, 10])
+delay_time = 3.0
 heal_affected_stats = 1
 
 [resource]
@@ -17,5 +17,5 @@ hot_resource = SubResource("Resource_m7vw8")
 handler_type = 4
 effect_name = "Regen"
 effect_lvl = 1
-mod_time = 8.0
+mod_time = 10.0
 stat_mods = Array[ExtResource("2_0lf2m")]([])

@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://Entities/Components/StaminaComponent/StaminaComponent.gd" id="1_1us2t"]
 
-[node name="StaminaComponent" type="Node"]
+[node name="StaminaComponent" type="Node" groups=["has_save_logic"]]
 script = ExtResource("1_1us2t")
 
 [node name="StaminaWaitTimer" type="Timer" parent="."]

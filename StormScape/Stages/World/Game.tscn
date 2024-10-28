@@ -1,22 +1,20 @@
-[gd_scene load_steps=28 format=3 uid="uid://bscnr6a23l10m"]
+[gd_scene load_steps=26 format=3 uid="uid://bscnr6a23l10m"]
 
-[ext_resource type="Texture2D" uid="uid://c50xdwgnkx441" path="res://Stages/Tilesets/TilesetFloor.png" id="1_o34ct"]
-[ext_resource type="Texture2D" uid="uid://nvl4eoe0gf5y" path="res://Stages/Tilesets/TilesetField.png" id="2_okrb7"]
-[ext_resource type="PackedScene" uid="uid://dba8mrurjlekp" path="res://Entities/Player/Player.tscn" id="3_0mevo"]
-[ext_resource type="Script" path="res://Entities/EntityTypes/RigidEntity/RigidEntity.gd" id="6_ldfbn"]
-[ext_resource type="Script" path="res://Entities/EffectSystemResources/EffectSources/StaticEffectSource.gd" id="6_n8a6r"]
-[ext_resource type="PackedScene" uid="uid://btba0jmsow1mx" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectReceiverComponent.tscn" id="7_bfj3g"]
-[ext_resource type="PackedScene" uid="uid://dykiv0tlhwmox" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/KnockbackHandler.tscn" id="8_41uae"]
-[ext_resource type="Script" path="res://Entities/Components/HitboxComponent/HitboxComponent.gd" id="10_nwmsb"]
-[ext_resource type="PackedScene" uid="uid://4gl24qwdyti3" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/DmgHandler.tscn" id="11_ahd86"]
-[ext_resource type="PackedScene" uid="uid://ddj5ippwwkvop" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/HealHandler.tscn" id="12_6kqwm"]
-[ext_resource type="PackedScene" uid="uid://cdfdy8m6ki3oq" path="res://Entities/Components/HealthComponent/HealthComponent.tscn" id="12_6s08t"]
-[ext_resource type="Script" path="res://Entities/EffectSystemResources/StatusEffects/StatusEffect.gd" id="12_awpt0"]
-[ext_resource type="Resource" uid="uid://w0ul0pi7nx0w" path="res://Entities/EffectSystemResources/StatusEffects/GoodEffects/KineticImpact/KineticImpact1.tres" id="13_q3w5l"]
-[ext_resource type="Script" path="res://Utilities/Debug/TestBullet.gd" id="14_fb2si"]
-[ext_resource type="Resource" uid="uid://b0it5xmpw16sd" path="res://Entities/EffectSystemResources/StatusEffects/BadEffects/Knockback/Knockback1.tres" id="16_phc6m"]
-[ext_resource type="Script" path="res://Entities/EffectSystemResources/EffectSources/MovingEffectSource.gd" id="17_mwl25"]
-[ext_resource type="Resource" uid="uid://jxv16pf038go" path="res://Entities/EffectSystemResources/StatusEffects/BadEffects/TimeSnare/TimeSnare1.tres" id="18_27bbk"]
+[ext_resource type="Script" path="res://Utilities/Game/WorldRoot/WorldRoot.gd" id="1_q0i4n"]
+[ext_resource type="Texture2D" uid="uid://c50xdwgnkx441" path="res://Stages/Tilesets/TilesetFloor.png" id="2_jx7f2"]
+[ext_resource type="Texture2D" uid="uid://nvl4eoe0gf5y" path="res://Stages/Tilesets/TilesetField.png" id="3_eucto"]
+[ext_resource type="PackedScene" uid="uid://dba8mrurjlekp" path="res://Entities/Player/Player.tscn" id="4_ptig0"]
+[ext_resource type="Script" path="res://Entities/EntityTypes/RigidEntity/RigidEntity.gd" id="5_vhyrg"]
+[ext_resource type="PackedScene" uid="uid://btba0jmsow1mx" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectReceiverComponent.tscn" id="6_haafe"]
+[ext_resource type="PackedScene" uid="uid://dykiv0tlhwmox" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/KnockbackHandler.tscn" id="7_vet3v"]
+[ext_resource type="Resource" uid="uid://b2ekcx7kndqjb" path="res://Entities/EffectSystemResources/StatusEffects/BadEffects/Frostbite/Frostbite1.tres" id="11_4lsv2"]
+[ext_resource type="Script" path="res://Entities/Components/HitboxComponent/HitboxComponent.gd" id="11_vr4ax"]
+[ext_resource type="Script" path="res://Entities/EffectSystemResources/EffectSources/StaticEffectSource.gd" id="12_gga1h"]
+[ext_resource type="Script" path="res://Entities/EffectSystemResources/StatusEffects/StatusEffect.gd" id="13_33bgr"]
+[ext_resource type="Script" path="res://Utilities/Debug/TestBullet.gd" id="15_v7yfh"]
+[ext_resource type="Script" path="res://Entities/EffectSystemResources/EffectSources/MovingEffectSource.gd" id="16_5aosc"]
+[ext_resource type="Resource" uid="uid://b0it5xmpw16sd" path="res://Entities/EffectSystemResources/StatusEffects/BadEffects/Knockback/Knockback1.tres" id="17_re3lx"]
+[ext_resource type="Resource" uid="uid://jxv16pf038go" path="res://Entities/EffectSystemResources/StatusEffects/BadEffects/TimeSnare/TimeSnare1.tres" id="18_wrpcx"]
 
 [sub_resource type="Environment" id="Environment_2wouv"]
 background_mode = 3
@@ -27,7 +25,7 @@ glow_intensity = 1.5
 glow_blend_mode = 1
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_mc523"]
-texture = ExtResource("1_o34ct")
+texture = ExtResource("2_jx7f2")
 0:0/0 = 0
 0:0/0/terrain_set = 0
 0:0/0/terrain = 4
@@ -4004,7 +4002,7 @@ texture = ExtResource("1_o34ct")
 14:13/6/transpose = true
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_6prks"]
-texture = ExtResource("2_okrb7")
+texture = ExtResource("3_eucto")
 0:0/0 = 0
 1:0/0 = 0
 2:0/0 = 0
@@ -4107,25 +4105,25 @@ sources/2 = SubResource("TileSetAtlasSource_6prks")
 size = Vector2(18, 18)
 
 [sub_resource type="Resource" id="Resource_hd71j"]
-script = ExtResource("6_n8a6r")
+script = ExtResource("12_gga1h")
 source_team = 2
 bad_effect_affected_teams = 3
 good_effect_affected_teams = 3
 scanned_phys_layers = 191
-base_damage = 10
+base_damage = 0
 dmg_affected_stats = 0
 crit_chance = 0
 crit_multiplier = 1.5
 armor_penetration = 0
 base_healing = 0
 heal_affected_stats = 2
-status_effects = Array[ExtResource("12_awpt0")]([ExtResource("13_q3w5l")])
+status_effects = Array[ExtResource("13_33bgr")]([ExtResource("11_4lsv2")])
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_o8yml"]
 size = Vector2(14, 14)
 
 [sub_resource type="Resource" id="Resource_rvpdg"]
-script = ExtResource("17_mwl25")
+script = ExtResource("16_5aosc")
 source_team = 2
 bad_effect_affected_teams = 3
 good_effect_affected_teams = 3
@@ -4137,31 +4135,35 @@ crit_multiplier = 1.5
 armor_penetration = 0
 base_healing = 0
 heal_affected_stats = 2
-status_effects = Array[ExtResource("12_awpt0")]([ExtResource("16_phc6m"), ExtResource("18_27bbk")])
+status_effects = Array[ExtResource("13_33bgr")]([ExtResource("17_re3lx"), ExtResource("18_wrpcx")])
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_8bjrm"]
 size = Vector2(6, 6)
 
 [node name="Game" type="Node2D"]
 
-[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+[node name="WorldRoot" type="Node2D" parent="." groups=["core"]]
+unique_name_in_owner = true
+script = ExtResource("1_q0i4n")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="WorldRoot" groups=["core"]]
 editor_description = "This handles glow and other global effects like saturation and contrast."
 environment = SubResource("Environment_2wouv")
 
-[node name="TileMapLayer" type="TileMapLayer" parent="."]
+[node name="TileMapLayer" type="TileMapLayer" parent="WorldRoot" groups=["core"]]
 tile_set = SubResource("TileSet_wx2vu")
 
-[node name="Player" parent="." instance=ExtResource("3_0mevo")]
+[node name="Player" parent="WorldRoot" instance=ExtResource("4_ptig0")]
 position = Vector2(258, 85)
 collision_mask = 245
 
-[node name="Testing" type="Node2D" parent="."]
+[node name="Testing" type="Node2D" parent="WorldRoot"]
 
-[node name="Enemy" type="RigidBody2D" parent="Testing"]
-script = ExtResource("6_ldfbn")
+[node name="Enemy" type="RigidBody2D" parent="WorldRoot/Testing"]
+script = ExtResource("5_vhyrg")
 team = 2
 
-[node name="TestRigidEntity" type="RigidBody2D" parent="Testing"]
+[node name="TestRigidEntity" type="RigidBody2D" parent="WorldRoot/Testing"]
 position = Vector2(126, 99)
 collision_layer = 32
 collision_mask = 245
@@ -4169,23 +4171,24 @@ mass = 3.0
 gravity_scale = 0.0
 lock_rotation = true
 linear_damp = 2.5
-script = ExtResource("6_ldfbn")
+script = ExtResource("5_vhyrg")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Testing/TestRigidEntity"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="WorldRoot/Testing/TestRigidEntity"]
 shape = SubResource("RectangleShape2D_sbju2")
 
-[node name="EffectReceiverComponent" parent="Testing/TestRigidEntity" node_paths=PackedStringArray("affected_entity", "knockback_handler") instance=ExtResource("7_bfj3g")]
+[node name="EffectReceiverComponent" parent="WorldRoot/Testing/TestRigidEntity" node_paths=PackedStringArray("affected_entity", "knockback_handler") instance=ExtResource("6_haafe")]
 can_receive_stat_mods = false
 affected_entity = NodePath("..")
 knockback_handler = NodePath("KnockbackHandler")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Testing/TestRigidEntity/EffectReceiverComponent"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="WorldRoot/Testing/TestRigidEntity/EffectReceiverComponent"]
 shape = SubResource("RectangleShape2D_wpovd")
 debug_color = Color(0.941042, 1.32841e-05, 0.612344, 0.42)
 
-[node name="KnockbackHandler" parent="Testing/TestRigidEntity/EffectReceiverComponent" instance=ExtResource("8_41uae")]
+[node name="KnockbackHandler" parent="WorldRoot/Testing/TestRigidEntity/EffectReceiverComponent" node_paths=PackedStringArray("entity") instance=ExtResource("7_vet3v")]
+entity = NodePath("../..")
 
-[node name="TestRigidEntity2" type="RigidBody2D" parent="Testing"]
+[node name="TestRigidEntity2" type="RigidBody2D" parent="WorldRoot/Testing"]
 position = Vector2(190, 36)
 collision_layer = 32
 collision_mask = 245
@@ -4193,53 +4196,36 @@ mass = 3.0
 gravity_scale = 0.0
 lock_rotation = true
 linear_damp = 2.5
-script = ExtResource("6_ldfbn")
+script = ExtResource("5_vhyrg")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Testing/TestRigidEntity2"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="WorldRoot/Testing/TestRigidEntity2"]
 shape = SubResource("RectangleShape2D_sbju2")
 
-[node name="HealthComponent" parent="Testing/TestRigidEntity2" instance=ExtResource("12_6s08t")]
-_max_health = null
-_max_shield = null
-base_armor = null
-stat_mods = null
-debug_print_changes = null
-
-[node name="EffectReceiverComponent" parent="Testing/TestRigidEntity2" node_paths=PackedStringArray("affected_entity", "health_component", "dmg_handler", "heal_handler", "knockback_handler") instance=ExtResource("7_bfj3g")]
+[node name="EffectReceiverComponent" parent="WorldRoot/Testing/TestRigidEntity2" node_paths=PackedStringArray("affected_entity") instance=ExtResource("6_haafe")]
 can_receive_stat_mods = false
 affected_entity = NodePath("..")
-health_component = NodePath("../HealthComponent")
-dmg_handler = NodePath("DmgHandler")
-heal_handler = NodePath("HealHandler")
-knockback_handler = NodePath("KnockbackHandler")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Testing/TestRigidEntity2/EffectReceiverComponent"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="WorldRoot/Testing/TestRigidEntity2/EffectReceiverComponent"]
 shape = SubResource("RectangleShape2D_wpovd")
 debug_color = Color(0.941042, 1.32841e-05, 0.612344, 0.42)
 
-[node name="DmgHandler" parent="Testing/TestRigidEntity2/EffectReceiverComponent" instance=ExtResource("11_ahd86")]
-
-[node name="HealHandler" parent="Testing/TestRigidEntity2/EffectReceiverComponent" instance=ExtResource("12_6kqwm")]
-
-[node name="KnockbackHandler" parent="Testing/TestRigidEntity2/EffectReceiverComponent" instance=ExtResource("8_41uae")]
-
-[node name="TestStaticEffectSource" type="Area2D" parent="Testing" node_paths=PackedStringArray("source_entity")]
+[node name="TestStaticEffectSource" type="Area2D" parent="WorldRoot/Testing" node_paths=PackedStringArray("source_entity")]
 position = Vector2(63, 127)
-script = ExtResource("10_nwmsb")
+script = ExtResource("11_vr4ax")
 effect_source = SubResource("Resource_hd71j")
 source_entity = NodePath("../Enemy")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Testing/TestStaticEffectSource"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="WorldRoot/Testing/TestStaticEffectSource"]
 shape = SubResource("RectangleShape2D_o8yml")
 
-[node name="TestMovingEffectSource" type="Node2D" parent="Testing"]
-script = ExtResource("14_fb2si")
+[node name="TestMovingEffectSource" type="Node2D" parent="WorldRoot/Testing"]
+script = ExtResource("15_v7yfh")
 
-[node name="Hitbox" type="Area2D" parent="Testing/TestMovingEffectSource" node_paths=PackedStringArray("source_entity")]
+[node name="Hitbox" type="Area2D" parent="WorldRoot/Testing/TestMovingEffectSource" node_paths=PackedStringArray("source_entity")]
 position = Vector2(40, 98)
-script = ExtResource("10_nwmsb")
+script = ExtResource("11_vr4ax")
 effect_source = SubResource("Resource_rvpdg")
 source_entity = NodePath("../../Enemy")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Testing/TestMovingEffectSource/Hitbox"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="WorldRoot/Testing/TestMovingEffectSource/Hitbox"]
 shape = SubResource("RectangleShape2D_8bjrm")

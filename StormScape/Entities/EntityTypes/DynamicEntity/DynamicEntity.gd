@@ -11,6 +11,7 @@ class_name DynamicEntity
 @onready var health_component: HealthComponent = %HealthComponent ## The component in charge of player health and shield.
 @onready var stamina_component: StaminaComponent = %StaminaComponent ## The component in charge of player stamina and hunger.
 
+var stat_mods: Dictionary = {}
 var time_snare_counter: float = 0
 var snare_factor: float = 0 ## Multiplier for delta time during time snares.
 var current_stealth: int = 0 ## The extra amount of closeness this entity can achieve to an enemy before being detected.

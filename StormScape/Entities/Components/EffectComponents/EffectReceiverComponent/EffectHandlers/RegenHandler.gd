@@ -19,11 +19,12 @@ func _ready() -> void:
 
 
 func handle_regen(regen_effect: RegenEffect) -> void:
-	var local_hot_resource: HOTResource = regen_effect.hot_resource.duplicate()
-	var regen_boost: float = get_stat("regen_boost")
-	var regen_penalty: float = get_stat("regen_penalty")
-	
-	for i in range(local_hot_resource.heal_ticks_array.size()):
-		local_hot_resource.heal_ticks_array[i] = int(roundf(local_hot_resource.heal_ticks_array[i] * (1 + regen_boost - regen_penalty)))
-	
-	(effect_receiver.get_node("HealHandler") as HealHandler).handle_over_time_heal(local_hot_resource, "Regen")
+	if regen_effect.hot_resource != null: # needed for when we nullify on game load
+		var local_hot_resource: HOTResource = regen_effect.hot_resource.duplicate()
+		var regen_boost: float = get_stat("regen_boost")
+		var regen_penalty: float = get_stat("regen_penalty")
+		
+		for i in range(local_hot_resource.heal_ticks_array.size()):
+			local_hot_resource.heal_ticks_array[i] = int(roundf(local_hot_resource.heal_ticks_array[i] * (1 + regen_boost - regen_penalty)))
+		
+		(effect_receiver.get_node("HealHandler") as HealHandler).handle_over_time_heal(local_hot_resource, "Regen")

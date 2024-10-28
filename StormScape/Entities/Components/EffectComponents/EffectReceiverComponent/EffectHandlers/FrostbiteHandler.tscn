@@ -2,5 +2,5 @@
 
 [ext_resource type="Script" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/FrostbiteHandler.gd" id="1_qyabv"]
 
-[node name="FrostbiteHandler" type="Node"]
+[node name="FrostbiteHandler" type="Node" groups=["has_save_logic"]]
 script = ExtResource("1_qyabv")

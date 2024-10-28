@@ -7,6 +7,7 @@ class_name RigidEntity
 
 @export var team: GlobalData.Teams = GlobalData.Teams.PLAYER ## What the effects received by this entity should consider as this entity's team.
 
+var stat_mods: Dictionary = {}
 
 func _ready() -> void:
 	mass = 3

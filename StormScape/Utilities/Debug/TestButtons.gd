@@ -33,3 +33,7 @@ func _on_test_save_btn_pressed() -> void:
 
 func _on_test_load_btn_pressed() -> void:
 	SaverLoader.load_game()
+
+
+func _on_test_mod_btn_3_pressed() -> void:
+	pass

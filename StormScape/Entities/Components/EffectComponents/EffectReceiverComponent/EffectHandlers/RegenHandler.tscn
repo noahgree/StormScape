@@ -2,5 +2,5 @@
 
 [ext_resource type="Script" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/RegenHandler.gd" id="1_dx5or"]
 
-[node name="RegenHandler" type="Node"]
+[node name="RegenHandler" type="Node" groups=["has_save_logic"]]
 script = ExtResource("1_dx5or")

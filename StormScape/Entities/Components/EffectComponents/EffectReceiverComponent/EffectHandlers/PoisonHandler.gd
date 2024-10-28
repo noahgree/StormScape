@@ -18,11 +18,12 @@ func _ready() -> void:
 	add_moddable_stats(moddable_stats)
 
 func handle_poison(poison_effect: PoisonEffect) -> void:
-	var local_dot_resource: DOTResource = poison_effect.dot_resource.duplicate()
-	var poison_weakness: float = get_stat("poison_weakness")
-	var poison_resistance: float = get_stat("poison_resistance")
-	
-	for i in range(local_dot_resource.dmg_ticks_array.size()):
-		local_dot_resource.dmg_ticks_array[i] = int(roundf(local_dot_resource.dmg_ticks_array[i] * (1 + poison_weakness - poison_resistance)))
-	
-	(effect_receiver.get_node("DmgHandler") as DmgHandler).handle_over_time_dmg(local_dot_resource, "Poison")
+	if poison_effect.dot_resource != null: # needed for when we nullify on game load
+		var local_dot_resource: DOTResource = poison_effect.dot_resource.duplicate()
+		var poison_weakness: float = get_stat("poison_weakness")
+		var poison_resistance: float = get_stat("poison_resistance")
+		
+		for i in range(local_dot_resource.dmg_ticks_array.size()):
+			local_dot_resource.dmg_ticks_array[i] = int(roundf(local_dot_resource.dmg_ticks_array[i] * (1 + poison_weakness - poison_resistance)))
+		
+		(effect_receiver.get_node("DmgHandler") as DmgHandler).handle_over_time_dmg(local_dot_resource, "Poison")

@@ -2,6 +2,5 @@
 
 [ext_resource type="Script" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/PoisonHandler.gd" id="1_oi8w0"]
 
-[node name="PoisonHandler" type="Node" node_paths=PackedStringArray("effect_modder")]
+[node name="PoisonHandler" type="Node" groups=["has_save_logic"]]
 script = ExtResource("1_oi8w0")
-effect_modder = NodePath("")

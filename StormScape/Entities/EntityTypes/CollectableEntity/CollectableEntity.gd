@@ -4,3 +4,5 @@ class_name CollectableEntity
 ##
 ## This would be used for things like consumables and weapons.
 ## This should not be used for moving environmental entities like players and also not for collidable objects like trees.
+
+var stat_mods: Dictionary = {}

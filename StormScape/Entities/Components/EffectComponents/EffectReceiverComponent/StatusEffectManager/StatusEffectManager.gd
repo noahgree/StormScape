@@ -5,10 +5,37 @@ class_name StatusEffectManager
 ##
 ## This handles things like fire & poison damage not taking into account armor, etc.
 
-var current_effects: Dictionary = {} ## Keys are general status effect titles like "Poison", and values are arrays of all integer levels of the status effect currently applied.
-var effect_timers: Dictionary = {} ## Holds references to all timers currently tracking active status effects.
+var current_effects: Dictionary = {} ## Keys are general status effect titles like "Poison", and values are the effect resources themselves.
+var effect_timers: Dictionary = {} ## Holds references to all timers currently tracking active status effects. 
+var saved_times_left: Dictionary = {} ## Holds time remaining for status effects that were applied during a game save.
 
-@onready var receiver: EffectReceiverComponent = get_parent()
+@onready var receiver: EffectReceiverComponent = get_parent() ## The effect receiver that owns this manager.
+
+
+#region Save & Load
+func _on_save_game(_save_data: Array[SaveData]) -> void:
+	for effect_name in effect_timers.keys():
+		saved_times_left[effect_name] = effect_timers.get(effect_name, 0.001).time_left
+
+func _on_before_load_game() -> void:
+	effect_timers = {}
+	for status_effect in current_effects.keys():
+		request_effect_removal(status_effect)
+	for child in get_children():
+		child.queue_free()
+
+func _on_load_game() -> void:
+	for status_effect: StatusEffect in current_effects.values():
+		var clean_status_effect: StatusEffect = status_effect.duplicate()
+		
+		clean_status_effect.mod_time = saved_times_left.get(status_effect.effect_name, 0.001)
+		if "dot_resource" in clean_status_effect:
+			clean_status_effect.dot_resource = null
+		if "hot_resource" in clean_status_effect:
+			clean_status_effect.hot_resource = null
+		
+		_add_status_effect(clean_status_effect)
+#endregion
 
 ## Handles an incoming status effect. It starts by adding any stat mods provided by the status effect, and then
 ## it passes the effect logic to the relevant handler if it exists.
@@ -43,16 +70,16 @@ func handle_status_effect_mods(status_effect: StatusEffect) -> void:
 			return
 		elif existing_lvl < status_effect.effect_lvl: # new effect is higher lvl
 			_remove_status_effect(current_effects[status_effect.effect_name])
-			add_status_effect(status_effect)
+			_add_status_effect(status_effect)
 			return
 		else: # new effect is same lvl
 			_restart_effect_duration(status_effect.effect_name)
 			return
 	else:
-		add_status_effect(status_effect)
+		_add_status_effect(status_effect)
 
 ## Adds a status effect to the current effects dict, starts its timer, stores its timer, and applies its mods.
-func add_status_effect(status_effect: StatusEffect) -> void:
+func _add_status_effect(status_effect: StatusEffect) -> void:
 	current_effects[status_effect.effect_name] = status_effect
 
 	var mod_timer: Timer = Timer.new()
@@ -94,19 +121,17 @@ func add_status_effect(status_effect: StatusEffect) -> void:
 			GlobalData.EntityStatModType.TIMESNARE:
 				if receiver.time_snare_handler: receiver.time_snare_handler.add_mods([mod])
 	
-	print_rich("[color=green]added[/color] " + str(status_effect.effect_name) + ": " + str(current_effects.keys()))
+	if DebugFlags.PrintFlags.current_effect_changes:
+		print_rich("[color=green]added[/color] " + str(status_effect.effect_name) + ": " + str(current_effects.keys()))
 
 ## Extends the duration of the timer associated with some current effect.
 func _extend_effect_duration(effect_name: String, time_to_add: float) -> void:
 	var timer: Timer = effect_timers.get(effect_name, null)
 	if timer != null:
-		print(timer.get_time_left())
-		print(time_to_add)
 		var new_time: float = timer.get_time_left() + time_to_add
 		timer.stop()
 		timer.wait_time = new_time
 		timer.start()
-		print(timer.get_time_left())
 
 ## Restarts the timer associated with some current effect.
 func _restart_effect_duration(effect_name: String) -> void:
@@ -150,13 +175,14 @@ func _remove_status_effect(status_effect: StatusEffect) -> void:
 	if status_effect.effect_name in current_effects:
 		current_effects.erase(status_effect.effect_name)
 	
-	var timer: Timer = effect_timers.get(status_effect.effect_name, null)
+	var timer: Timer = effect_timers.get(status_effect.effect_name[0], null)
 	if timer != null:
 		timer.stop()
 		timer.queue_free()
 		effect_timers.erase(status_effect.effect_name)
 	
-	print_rich("[color=magenta]removed[/color] " + str(status_effect.effect_name) + ": " + str(current_effects.keys()))
+	if DebugFlags.PrintFlags.current_effect_changes:
+		print_rich("[color=magenta]removed[/color] " + str(status_effect.effect_name) + ": " + str(current_effects.keys()))
 
 ## Loads the necessary movement and contact data from the effect source into the knockback handler.
 func prepare_knockback_vars(effect_source: EffectSource) -> void:

@@ -12,22 +12,9 @@ class_name HealthComponent
 
 var health: int: set = _set_health ## The current health of the entity.
 var shield: int: set = _set_shield ## The current shield of the entity.
-var armor: float = 0: set = _set_armor ## The current armor of the entity. This is the percent of dmg that is blocked.
+var armor: int = 0: set = _set_armor ## The current armor of the entity. This is the percent of dmg that is blocked.
 const MAX_ARMOR: int = 100 ## The maximum amount of armor the entity can have. 
 
-#region Save & Load
-func _on_save_game(save_data: Array[SaveData]) -> void:
-	var data = HealthSaveData.new()
-	data.scene_path = scene_file_path
-	data.health = health
-	data.shield = shield
-	data.armor = armor
-	
-	save_data.append(data)
-
-func _on_load_game() -> void:
-	pass
-#endregion
 
 #region Setup
 func _ready() -> void: 
@@ -111,8 +98,8 @@ func _set_shield(new_value: int) -> void:
 		stats_ui.on_shield_changed(shield)
 
 ## Setter for the current armor. Clamps the new value to the allowed range.
-func _set_armor(new_value: float) -> void:
-	armor = clampf(new_value, 0, MAX_ARMOR)
+func _set_armor(new_value: int) -> void:
+	armor = clampi(new_value, 0, MAX_ARMOR)
 
 ## When max health changes, we need to limit the current health value.
 func on_max_health_changed(new_max_health: int) -> void:

@@ -6,7 +6,6 @@ extends DynamicState
 
 func enter() -> void:
 	fsm.anim_tree["parameters/playback"].travel("idle") # FIXME: Shouldn't just be idle anim for stun.
-	stunned_timer.wait_time = fsm.stun_time
 	stunned_timer.start()
 	_animate()
 

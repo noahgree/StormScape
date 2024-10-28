@@ -8,7 +8,7 @@
 script = ExtResource("1_ab1dr")
 damaging_time = 10.0
 dmg_ticks_array = Array[int]([5, 5, 5])
-delay_time = 6.0
+delay_time = 3.0
 dmg_affected_stats = 0
 
 [sub_resource type="Resource" id="Resource_xefcn"]
@@ -41,5 +41,5 @@ dot_resource = SubResource("Resource_ge1fd")
 handler_type = 5
 effect_name = "Frostbite"
 effect_lvl = 2
-mod_time = 5.0
+mod_time = 10.0
 stat_mods = Array[ExtResource("3_63sjm")]([SubResource("Resource_xefcn"), SubResource("Resource_3of86")])

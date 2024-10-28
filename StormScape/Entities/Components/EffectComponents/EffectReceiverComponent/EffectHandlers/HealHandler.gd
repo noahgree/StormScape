@@ -7,7 +7,35 @@ class_name HealHandler
 
 var hot_timers: Dictionary = {} ## Holds references to all timers currently tracking active HOT.
 var hot_delay_timers: Dictionary = {} ## Holds references to all timers current tracking delays for active HOT.
+var saved_hots: Dictionary = {} ## Saves the running HOT instances and the progress so far when the game saves. Keys are source type names and values are an array of modified duplicated HOT resources.
 
+
+#region Save & Load
+func _on_save_game(_save_data: Array[SaveData]) -> void:
+	for source_type in hot_timers.keys():
+		saved_hots[source_type] = []
+		for timer in hot_timers[source_type]:
+			var clean_resource: HOTResource = timer.get_meta("hot_resource").duplicate()
+			var ticks_completed: int = timer.get_meta("ticks_completed")
+			var original_tick_count: int = clean_resource.heal_ticks_array.size()
+			clean_resource.heal_ticks_array = clean_resource.heal_ticks_array.slice(ticks_completed, clean_resource.heal_ticks_array.size())
+			clean_resource.delay_time = max(randf_range(3, 5), clean_resource.delay_time)
+			clean_resource.healing_time = clean_resource.healing_time * (1 - (float(ticks_completed) / float(original_tick_count)))
+			saved_hots[source_type].append(clean_resource)
+
+func _on_before_load_game() -> void:
+	hot_timers = {}
+	hot_delay_timers = {}
+	for child in get_children():
+		child.queue_free()
+
+func _on_load_game() -> void:
+	for source_type in saved_hots.keys():
+		for hot_instance: HOTResource in saved_hots.get(source_type):
+			handle_over_time_heal(hot_instance, source_type)
+		
+		saved_hots.erase(source_type)
+#endregion
 
 ## Asserts that there is a valid health component on the affected entity before trying to handle healing.
 func _ready() -> void:
@@ -22,18 +50,20 @@ func handle_instant_heal(base_healing: int, heal_affected_stats: GlobalData.Heal
 func handle_over_time_heal(hot_resource: HOTResource, source_type: String) -> void:
 	var hot_timer: Timer = Timer.new()
 	hot_timer.set_meta("hot_resource", hot_resource)
-	hot_timer.set_meta("ticks_completed", 1)
-	hot_timer.wait_time = max(0.001, (hot_resource.healing_time / (hot_resource.heal_ticks_array.size() - 1)))
 	hot_timer.one_shot = false
 	hot_timer.timeout.connect(func(): _on_hot_timer_timeout(hot_timer, source_type))
 	hot_timer.name = source_type + "_timer"
 	add_child(hot_timer)
 	
-	if hot_resource.delay_time > 0:
+	if hot_resource.delay_time > 0: # we have a delay before the healing starts
 		var delay_timer: Timer = Timer.new()
 		delay_timer.one_shot = true
 		delay_timer.wait_time = hot_resource.delay_time
-		delay_timer.timeout.connect(func(): _send_handled_healing(hot_resource.heal_affected_stats, hot_resource.heal_ticks_array[0]))
+		
+		hot_timer.set_meta("ticks_completed", 0)
+		hot_timer.wait_time = max(0.001, (hot_resource.healing_time / (hot_resource.heal_ticks_array.size() - 1)))
+		
+		delay_timer.timeout.connect(func(): _on_hot_timer_timeout(hot_timer, source_type))
 		delay_timer.timeout.connect(hot_timer.start)
 		delay_timer.timeout.connect(delay_timer.queue_free)
 		delay_timer.name = source_type + "_delayTimer"
@@ -41,7 +71,9 @@ func handle_over_time_heal(hot_resource: HOTResource, source_type: String) -> vo
 		delay_timer.start()
 		_add_timer_to_cache(source_type, hot_timer, hot_timers)
 		_add_timer_to_cache(source_type, delay_timer, hot_delay_timers)
-	else:
+	else: # there is no delay needed
+		hot_timer.set_meta("ticks_completed", 1)
+		hot_timer.wait_time = max(0.001, (hot_resource.healing_time / (hot_resource.heal_ticks_array.size())))
 		_send_handled_healing(hot_resource.heal_affected_stats, hot_resource.heal_ticks_array[0])
 		_add_timer_to_cache(source_type, hot_timer, hot_timers)
 		hot_timer.start()

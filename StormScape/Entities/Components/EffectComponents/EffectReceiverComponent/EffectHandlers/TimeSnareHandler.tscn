@@ -1,3 +1,3 @@
 [gd_scene format=3 uid="uid://d1ml6s716obw0"]
 
-[node name="TimeSnareHandler" type="Node"]
+[node name="TimeSnareHandler" type="Node" groups=["has_save_logic"]]

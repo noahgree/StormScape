@@ -74,7 +74,8 @@ folder_colors={
 
 [global_group]
 
-has_save_data="A collection of all nodes in the game that must be saved and subsequently loaded."
+core="Nodes that are core to every scene like the root and the lighting environment."
+has_save_logic="A collection of all nodes in the game that must be saved and subsequently loaded."
 
 [gui]
 

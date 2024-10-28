@@ -2,5 +2,5 @@
 
 [ext_resource type="Script" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/StunHandler.gd" id="1_0wr7v"]
 
-[node name="StunHandler" type="Node"]
+[node name="StunHandler" type="Node" groups=["has_save_logic"]]
 script = ExtResource("1_0wr7v")

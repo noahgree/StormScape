@@ -12,9 +12,9 @@ class_name MoveStateMachine
 @export var _confusion_amount: float = 0 ## The amount of influence to apply to the velocity to simulate confusion.
 
 @onready var dash_cooldown_timer: Timer = %DashCooldownTimer ## The timer controlling the minimum time between activating dashes.
+@onready var stunned_timer: Timer = %StunnedTimer
 
 var anim_vector: Vector2 = Vector2.ZERO ## The vector to provide the associated animation state machine with.
-var stun_time: float ## Set by whatever requests this state machine to enter the stun state each time.
 var knockback_vector: Vector2 = Vector2.ZERO ## The current knockback to apply to any state that can move.
 var can_receive_effects: bool = true ## Whether the entity is in a state that can receive effects.
 const MAX_KNOCKBACK: int = 3000 ## The highest length the knockback vector can ever be to prevent dramatic movement.
@@ -56,10 +56,15 @@ func state_machine_physics_process(delta: float) -> void:
 		current_state.state_physics_process(delta)
 		anim_tree.advance(delta)
 
+## Assists in turning the character to the right direction upon game loads.
+func verify_anim_vector() -> void:
+	if current_state and current_state.has_method("_animate"):
+		current_state._animate()
+
 ## Requests to transition to the stun state, doing so if possible.
 func request_stun(duration: float) -> void:
 	if current_state:
-		stun_time = duration
+		stunned_timer.wait_time = duration
 		_on_child_transition(current_state, "Stunned")
 
 ## Requests to add a value to the current knockback vector, doing so if possible.

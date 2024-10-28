@@ -7,5 +7,5 @@
 monitoring = false
 script = ExtResource("1_x67rl")
 
-[node name="StatusEffectManager" parent="." instance=ExtResource("2_6kig4")]
+[node name="StatusEffectManager" parent="." groups=["has_save_logic"] instance=ExtResource("2_6kig4")]
 unique_name_in_owner = true

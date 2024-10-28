@@ -83,7 +83,6 @@ func on_max_hunger_bars_changed(new_max_hunger_bars: int) -> void:
 	hunger_change.max_value = new_max_hunger_bars
 	@warning_ignore("narrowing_conversion") on_hunger_bars_changed(hunger_bar.value)
 
-
 ## When stamina changes, update the bar and tween the change bar after a delay. Also enable the tip shader.
 ## Only activate the delay timer that triggers the tween if we are decreasing the amount.
 func on_stamina_changed(new_stamina: float) -> void:

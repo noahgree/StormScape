@@ -2,5 +2,5 @@
 
 [ext_resource type="Script" path="res://Entities/Components/HealthComponent/HealthComponent.gd" id="1_2k16p"]
 
-[node name="HealthComponent" type="Node" groups=["has_save_data"]]
+[node name="HealthComponent" type="Node" groups=["has_save_logic"]]
 script = ExtResource("1_2k16p")

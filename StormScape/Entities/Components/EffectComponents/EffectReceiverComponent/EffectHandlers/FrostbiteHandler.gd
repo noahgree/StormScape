@@ -18,13 +18,15 @@ func _ready() -> void:
 
 
 func handle_frostbite(frostbite_effect: FrostbiteEffect) -> void:
-	var local_dot_resource: DOTResource = frostbite_effect.dot_resource.duplicate()
-	var frostbite_weakness: float = get_stat("frostbite_weakness")
-	var frostbite_resistance: float = get_stat("frostbite_resistance")
-	
-	effect_receiver.status_effect_manager.request_effect_removal("Burning")
-	
-	for i in range(local_dot_resource.dmg_ticks_array.size()):
-		local_dot_resource.dmg_ticks_array[i] = int(roundf(local_dot_resource.dmg_ticks_array[i] * (1 + frostbite_weakness - frostbite_resistance)))
-	
-	(effect_receiver.get_node("DmgHandler") as DmgHandler).handle_over_time_dmg(local_dot_resource, "Frostbite")
+	if frostbite_effect.dot_resource != null: # needed for when we nullify on game load
+		print("Frostbite Handler Manipulation")
+		var local_dot_resource: DOTResource = frostbite_effect.dot_resource.duplicate()
+		var frostbite_weakness: float = get_stat("frostbite_weakness")
+		var frostbite_resistance: float = get_stat("frostbite_resistance")
+		
+		effect_receiver.status_effect_manager.request_effect_removal("Burning")
+		
+		for i in range(local_dot_resource.dmg_ticks_array.size()):
+			local_dot_resource.dmg_ticks_array[i] = int(roundf(local_dot_resource.dmg_ticks_array[i] * (1 + frostbite_weakness - frostbite_resistance)))
+		
+		(effect_receiver.get_node("DmgHandler") as DmgHandler).handle_over_time_dmg(local_dot_resource, "Frostbite")

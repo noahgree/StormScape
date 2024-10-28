@@ -6,3 +6,5 @@ class_name StaticEntity
 ## This should not be used for moving environmental entities like players and also not for inventory entities like weapons.
 
 @export var team: GlobalData.Teams = GlobalData.Teams.PLAYER ## What the effects received by this entity should consider as this entity's team.
+
+var stat_mods: Dictionary = {}
