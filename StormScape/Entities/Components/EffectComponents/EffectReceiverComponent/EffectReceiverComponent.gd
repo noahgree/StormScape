@@ -49,7 +49,7 @@ func _ready() -> void:
 		collision_layer = affected_entity.collision_layer
 		monitoring = false
 	
-	if DebugFlags.PrintFlags.stat_mod_changes:
+	if DebugFlags.PrintFlags.stat_mod_changes_during_game:
 		for child in get_children():
 			if child is StatBasedComponent:
 				child.debug_print_changes = print_child_mod_updates

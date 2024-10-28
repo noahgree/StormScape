@@ -5,6 +5,8 @@ class_name PlayerData
 @export var position: Vector2
 @export var stat_mods: Dictionary
 @export var velocity: Vector2
+@export var snare_factor: float
+@export var snare_time_left: float
 # AnimatedSprite2D
 @export var sprite_frames: String
 # HealthComponent

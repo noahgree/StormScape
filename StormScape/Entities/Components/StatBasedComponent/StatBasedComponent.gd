@@ -21,17 +21,23 @@ func _on_before_load_game() -> void:
 	pass
 
 func _on_load_game() -> void:
+	var debug_print_temp_var: bool = debug_print_changes
+	debug_print_changes = DebugFlags.PrintFlags.stat_mod_changes_on_load
 	for stat_id in base_values:
 		_recalculate_stat(stat_id, base_values.get(stat_id))
+	debug_print_changes = debug_print_temp_var
 #endregion
 
 ## Sets up the base values dict and calculates initial values based on any already present mods. 
 func add_moddable_stats(base_valued_stats: Dictionary) -> void:
+	var debug_print_temp_var: bool = debug_print_changes
+	debug_print_changes = false
 	for stat_id in base_valued_stats.keys():
 		var base_value = base_valued_stats[stat_id]
 		entity.stat_mods[stat_id] = {}
 		base_values[stat_id] = base_value
 		_recalculate_stat(stat_id, base_value)
+	debug_print_changes = debug_print_temp_var
 
 ## Recalculates a cached stat. Usually called once something has changed like from an update or removal.
 func _recalculate_stat(stat_id: String, base_value: float) -> void:
@@ -48,8 +54,10 @@ func _recalculate_stat(stat_id: String, base_value: float) -> void:
 	cached_stats[stat_id] = max(0, result)
 	_update_ui_for_stat(stat_id, result)
 	
-	if DebugFlags.PrintFlags.stat_mod_changes and debug_print_changes:
-		print_rich("[color=cyan]" + stat_id + ":[/color] [b]" + str(cached_stats[stat_id]) + "[/b]")
+	if DebugFlags.PrintFlags.stat_mod_changes_during_game and debug_print_changes:
+		var change_text = str(float(cached_stats[stat_id]) / float(base_values[stat_id]))
+		var base_text = "[color=gray][i](base)[/i][/color]" if change_text == "1" else "[color=pink][i](" + change_text + "%)[/i][/color]"
+		print_rich("[color=cyan]" + stat_id + base_text + "[/color]: [b]" + str(cached_stats[stat_id]) + "[/b]")
 
 ## Updates an optionally connected UI when a watched stat changes.
 func _update_ui_for_stat(stat_id: String, new_value: float):
@@ -150,4 +158,4 @@ func _get_mod(stat_id: String, mod_id: String) -> EntityStatMod:
 
 ## Pushes an error to the console with the stat id and the mod id for the mod that could not be found.
 func _push_mod_not_found_error(stat_id: String, mod_id: String) -> void:
-	push_error("The mod for stat \"" + stat_id + "\"" + " with mod_id of: \"" + mod_id + "\" was not in the cache for entity: " + str(entity) + ". Check the stat id and the mod id.")
+	push_error("The mod for stat \"" + stat_id + "\"" + " with mod_id of: \"" + mod_id + "\" was not in the cache for the entity: \"" + str(entity.name) + "\".")

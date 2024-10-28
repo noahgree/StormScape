@@ -10,5 +10,5 @@ snare_time = 3.0
 handler_type = 7
 effect_name = "TimeSnare"
 effect_lvl = 1
-mod_time = 5.0
+mod_time = 3.0
 stat_mods = Array[ExtResource("2_qu0hr")]([])

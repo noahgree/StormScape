@@ -19,7 +19,6 @@ func _ready() -> void:
 
 func handle_frostbite(frostbite_effect: FrostbiteEffect) -> void:
 	if frostbite_effect.dot_resource != null: # needed for when we nullify on game load
-		print("Frostbite Handler Manipulation")
 		var local_dot_resource: DOTResource = frostbite_effect.dot_resource.duplicate()
 		var frostbite_weakness: float = get_stat("frostbite_weakness")
 		var frostbite_resistance: float = get_stat("frostbite_resistance")

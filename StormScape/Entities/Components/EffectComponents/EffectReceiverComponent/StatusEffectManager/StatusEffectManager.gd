@@ -35,6 +35,7 @@ func _on_load_game() -> void:
 			clean_status_effect.hot_resource = null
 		
 		_add_status_effect(clean_status_effect)
+	saved_times_left = {}
 #endregion
 
 ## Handles an incoming status effect. It starts by adding any stat mods provided by the status effect, and then
@@ -80,12 +81,19 @@ func handle_status_effect_mods(status_effect: StatusEffect) -> void:
 
 ## Adds a status effect to the current effects dict, starts its timer, stores its timer, and applies its mods.
 func _add_status_effect(status_effect: StatusEffect) -> void:
+	if DebugFlags.PrintFlags.current_effect_changes:
+		print_rich("-------[color=green]Adding[/color][b] " + str(status_effect.effect_name) + str(status_effect.effect_lvl) + "[/b]-------")
+	
 	current_effects[status_effect.effect_name] = status_effect
 
 	var mod_timer: Timer = Timer.new()
 	mod_timer.wait_time = max(0.001, status_effect.mod_time)
 	mod_timer.one_shot = true
-	mod_timer.timeout.connect(func(): _remove_status_effect(status_effect))
+	
+	var callable = Callable(self, "_remove_status_effect").bind(status_effect)
+	mod_timer.timeout.connect(callable)
+	mod_timer.set_meta("callable", callable)
+	
 	mod_timer.name = str(status_effect.effect_name) + str(status_effect.effect_lvl) + "_timer"
 	add_child(mod_timer)
 	mod_timer.start()
@@ -120,9 +128,6 @@ func _add_status_effect(status_effect: StatusEffect) -> void:
 				if receiver.burning_handler: receiver.burning_handler.add_mods([mod])
 			GlobalData.EntityStatModType.TIMESNARE:
 				if receiver.time_snare_handler: receiver.time_snare_handler.add_mods([mod])
-	
-	if DebugFlags.PrintFlags.current_effect_changes:
-		print_rich("[color=green]added[/color] " + str(status_effect.effect_name) + ": " + str(current_effects.keys()))
 
 ## Extends the duration of the timer associated with some current effect.
 func _extend_effect_duration(effect_name: String, time_to_add: float) -> void:
@@ -143,6 +148,9 @@ func _restart_effect_duration(effect_name: String) -> void:
 ## Removes the status effect from the current effects dict and removes all its mods. Additionally removes its
 ## associated timer from the timer dict.
 func _remove_status_effect(status_effect: StatusEffect) -> void:
+	if DebugFlags.PrintFlags.current_effect_changes:
+		print_rich("-------[color=red]Removing[/color][b] " + str(status_effect.effect_name) + str(status_effect.effect_lvl) + "[/b]-------")
+	
 	for mod_resource in status_effect.stat_mods:
 		var mod: EntityStatMod = (mod_resource as EntityStatMod)
 		
@@ -175,14 +183,15 @@ func _remove_status_effect(status_effect: StatusEffect) -> void:
 	if status_effect.effect_name in current_effects:
 		current_effects.erase(status_effect.effect_name)
 	
-	var timer: Timer = effect_timers.get(status_effect.effect_name[0], null)
+	var timer: Timer = effect_timers.get(status_effect.effect_name, null)
 	if timer != null:
+		if timer.has_meta("callable"): # so we can cancel any pending callables before freeing
+			var callable = timer.get_meta("callable")
+			timer.timeout.disconnect(callable)
+			timer.set_meta("callable", null)
 		timer.stop()
 		timer.queue_free()
 		effect_timers.erase(status_effect.effect_name)
-	
-	if DebugFlags.PrintFlags.current_effect_changes:
-		print_rich("[color=magenta]removed[/color] " + str(status_effect.effect_name) + ": " + str(current_effects.keys()))
 
 ## Loads the necessary movement and contact data from the effect source into the knockback handler.
 func prepare_knockback_vars(effect_source: EffectSource) -> void:

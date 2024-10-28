@@ -3,7 +3,8 @@ extends Node
 
 class PrintFlags:
 	static var state_machine_swaps: bool = false
-	static var stat_mod_changes: bool = true
+	static var stat_mod_changes_during_game: bool = true
+	static var stat_mod_changes_on_load: bool = false
 	static var current_effect_changes: bool = true
 
 class MainMenuFlags:
