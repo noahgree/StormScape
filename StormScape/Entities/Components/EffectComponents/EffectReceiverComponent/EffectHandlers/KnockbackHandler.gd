@@ -1,5 +1,5 @@
 @icon("res://Utilities/Debug/EditorIcons/knockback_handler.svg")
-extends StatBasedComponent
+extends Node
 class_name KnockbackHandler
 ## A handler for using the data provided in the effect source to apply knockback in different ways.
 
@@ -17,11 +17,10 @@ var is_source_moving_type: bool = false ## Set by the status effect component fo
 
 ## Sets up moddable stats.
 func _ready() -> void:
-	debug_print_changes = get_parent().print_child_mod_updates
 	var moddable_stats: Dictionary = {
 		"knockback_boost" : _knockback_boost, "knockback_resistance" : _knockback_resistance
 	}
-	add_moddable_stats(moddable_stats)
+	get_parent().affected_entity.stats.add_moddable_stats(moddable_stats)
 
 ## Handles applying knockback to a dynamic entity when they hit something that provides knockback.
 func handle_knockback(knockback_effect: KnockbackEffect) -> void:
@@ -61,8 +60,8 @@ func handle_rigid_entity_knockback(knockback_effect: KnockbackEffect) -> void:
 func _send_handled_knockback(knockback_dir: Vector2, force: int) -> void:
 	if knockback_dir == Vector2.ZERO:
 		return
-	var knockback_boost: float = get_stat("knockback_boost")
-	var knockback_resistance: float = get_stat("knockback_resistance")
+	var knockback_boost: float = effect_receiver.affected_entity.stats.get_stat("knockback_boost")
+	var knockback_resistance: float = effect_receiver.affected_entity.stats.get_stat("knockback_resistance")
 	var handled_knockback = knockback_dir * force * max(0, (1 + knockback_boost - knockback_resistance))
 	
 	if effect_receiver.affected_entity is DynamicEntity:

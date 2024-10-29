@@ -5,6 +5,7 @@ class_name MoveStateMachine
 ## 
 ## No nodes except for this FSM node and its children should *EVER* know what state is active. 
 
+@export var entity: DynamicEntity
 @export var anim_tree: AnimationTree ## The animation tree node to support the children state animations.
 @export_custom(PROPERTY_HINT_NONE, "suffix:per second") var _sprint_stamina_usage: float = 15.0 ## The amount of stamina used per second when the entity is sprinting.
 @export_custom(PROPERTY_HINT_NONE, "suffix:per dash") var _dash_stamina_usage: float = 20.0 ## The amount of stamina used per dash activation.
@@ -22,18 +23,17 @@ const MAX_KNOCKBACK: int = 3000 ## The highest length the knockback vector can e
 
 ## Asserts the necessary components exist to support a dynamic entity, then caches the child states and sets them up.
 func _ready() -> void:
-	var parent: DynamicEntity = get_parent()
 	assert(has_node("Idle"), "Dynamic entities must have an Idle state.")
 	assert(has_node("Stunned"), "Dynamic entities must have a Stunned state.")
 	
-	var stamina_component: StaminaComponent = parent.get_node("StaminaComponent")
+	var stamina_component: StaminaComponent = entity.get_node("StaminaComponent")
 	
 	for child in get_children():
 		if child is State:
 			states[child.name.to_lower()] = child
 			child.Transitioned.connect(_on_child_transition)
-			child.dynamic_entity = parent
-			child.stamina_component = parent.get_node("StaminaComponent")
+			child.dynamic_entity = entity
+			child.stamina_component = entity.get_node("StaminaComponent")
 	
 	if initial_state:
 		initial_state.enter()
@@ -43,7 +43,7 @@ func _ready() -> void:
 		"sprint_stamina_usage" : _sprint_stamina_usage, "dash_stamina_usage" : _dash_stamina_usage,
 		"friction" : _friction, "confusion_amount" : _confusion_amount
 	}
-	add_moddable_stats(moddable_stats)
+	entity.stats.add_moddable_stats(moddable_stats)
 
 ## Checks if knockback needs to be lerped to 0 and passes the physics process to the active state.
 func state_machine_physics_process(delta: float) -> void:

@@ -14,7 +14,7 @@ func _ready() -> void:
 		"max_speed" : _max_speed, "acceleration" : _acceleration, 
 		"sprint_multiplier" : _sprint_multiplier, "run_collision_impulse_factor" : _run_collision_impulse_factor
 	}
-	fsm.add_moddable_stats(moddable_stats)
+	get_parent().entity.stats.add_moddable_stats(moddable_stats)
 
 func enter() -> void:
 	fsm.anim_tree["parameters/playback"].travel("run")
@@ -39,27 +39,27 @@ func _do_character_run(delta: float) -> void:
 		dynamic_entity.velocity = knockback
 	
 	if movement_vector == Vector2.ZERO:
-		if dynamic_entity.velocity.length() > (fsm.get_stat("friction") * delta): # no input, still slowing
-			dynamic_entity.velocity -= dynamic_entity.velocity.normalized() * (fsm.get_stat("friction") * delta)
+		if dynamic_entity.velocity.length() > (dynamic_entity.stats.get_stat("friction") * delta): # no input, still slowing
+			dynamic_entity.velocity -= dynamic_entity.velocity.normalized() * (dynamic_entity.stats.get_stat("friction") * delta)
 		else: # no input, stopped
 			fsm.knockback_vector = Vector2.ZERO
 			dynamic_entity.velocity = Vector2.ZERO
 			Transitioned.emit(self, "Idle")
 	elif knockback == Vector2.ZERO:
 		# this if-else handles smoothing out the beginning of animation transitions
-		if dynamic_entity.velocity.length() > fsm.get_stat("max_speed") * 0.10:
+		if dynamic_entity.velocity.length() > dynamic_entity.stats.get_stat("max_speed") * 0.10:
 			fsm.anim_vector = dynamic_entity.velocity.normalized()
 		else:
 			fsm.anim_vector = movement_vector
 		
-		if request_sprint and stamina_component.use_stamina(fsm.get_stat("sprint_stamina_usage") * delta): # sprint
-			fsm.anim_tree.set("parameters/run/TimeScale/scale", DEFAULT_RUN_ANIM_TIME_SCALE * fsm.get_stat("sprint_multiplier") * (fsm.get_stat("max_speed") / fsm.get_original_stat("max_speed")))
-			dynamic_entity.velocity += (movement_vector * fsm.get_stat("acceleration") * fsm.get_stat("sprint_multiplier") * delta)
-			dynamic_entity.velocity = dynamic_entity.velocity.limit_length(fsm.get_stat("max_speed") * fsm.get_stat("sprint_multiplier"))
+		if request_sprint and stamina_component.use_stamina(dynamic_entity.stats.get_stat("sprint_stamina_usage") * delta): # sprint
+			fsm.anim_tree.set("parameters/run/TimeScale/scale", DEFAULT_RUN_ANIM_TIME_SCALE * dynamic_entity.stats.get_stat("sprint_multiplier") * (dynamic_entity.stats.get_stat("max_speed") / dynamic_entity.stats.get_original_stat("max_speed")))
+			dynamic_entity.velocity += (movement_vector * dynamic_entity.stats.get_stat("acceleration") * dynamic_entity.stats.get_stat("sprint_multiplier") * delta)
+			dynamic_entity.velocity = dynamic_entity.velocity.limit_length(dynamic_entity.stats.get_stat("max_speed") * dynamic_entity.stats.get_stat("sprint_multiplier"))
 		else: # move without sprint
-			fsm.anim_tree.set("parameters/run/TimeScale/scale", DEFAULT_RUN_ANIM_TIME_SCALE * (fsm.get_stat("max_speed") / fsm.get_original_stat("max_speed")))
-			dynamic_entity.velocity += (movement_vector * fsm.get_stat("acceleration") * delta)
-			dynamic_entity.velocity = dynamic_entity.velocity.limit_length(fsm.get_stat("max_speed"))
+			fsm.anim_tree.set("parameters/run/TimeScale/scale", DEFAULT_RUN_ANIM_TIME_SCALE * (dynamic_entity.stats.get_stat("max_speed") / dynamic_entity.stats.get_original_stat("max_speed")))
+			dynamic_entity.velocity += (movement_vector * dynamic_entity.stats.get_stat("acceleration") * delta)
+			dynamic_entity.velocity = dynamic_entity.velocity.limit_length(dynamic_entity.stats.get_stat("max_speed"))
 	
 	dynamic_entity.move_and_slide()
 	
@@ -68,19 +68,19 @@ func _do_character_run(delta: float) -> void:
 		var c = dynamic_entity.get_slide_collision(i)
 		var collider = c.get_collider()
 		if collider is RigidEntity:
-			collider.apply_central_impulse(-c.get_normal().normalized() * dynamic_entity.velocity.length() / (10 / (fsm.get_stat("run_collision_impulse_factor"))))
+			collider.apply_central_impulse(-c.get_normal().normalized() * dynamic_entity.velocity.length() / (10 / (dynamic_entity.stats.get_stat("run_collision_impulse_factor"))))
 
 func _calculate_move_vector() -> Vector2:
 	if _get_input_vector() == Vector2.ZERO:
 		return _get_input_vector()
 	else:
-		return (_get_input_vector().rotated(fsm.get_stat("confusion_amount")))
+		return (_get_input_vector().rotated(dynamic_entity.stats.get_stat("confusion_amount")))
 
 ## If the dash button is pressed and we are not on dash cooldown, we check if we have enough stamina to dash.
 ## If the use_stamina request is successful, we enter the dash state having already decremented the stamina amount.
 func _check_for_dash_request() -> void:
 	if _is_dash_requested() and fsm.dash_cooldown_timer.is_stopped() and movement_vector != Vector2.ZERO:
-		if stamina_component.use_stamina(fsm.get_stat("dash_stamina_usage")):
+		if stamina_component.use_stamina(dynamic_entity.stats.get_stat("dash_stamina_usage")):
 			Transitioned.emit(self, "Dash")
 
 ## Checks if we meet the input (or otherwise) conditions to start sneaking. If so, transition to sneak.

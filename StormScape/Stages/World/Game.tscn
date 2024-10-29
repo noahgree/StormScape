@@ -1,4 +1,4 @@
-[gd_scene load_steps=27 format=3 uid="uid://bscnr6a23l10m"]
+[gd_scene load_steps=32 format=3 uid="uid://bscnr6a23l10m"]
 
 [ext_resource type="Script" path="res://Utilities/Game/WorldRoot/WorldRoot.gd" id="1_q0i4n"]
 [ext_resource type="Texture2D" uid="uid://c50xdwgnkx441" path="res://Stages/Tilesets/TilesetFloor.png" id="2_jx7f2"]
@@ -6,16 +6,18 @@
 [ext_resource type="PackedScene" uid="uid://dba8mrurjlekp" path="res://Entities/Player/Player.tscn" id="4_ptig0"]
 [ext_resource type="Script" path="res://Entities/EntityTypes/RigidEntity/RigidEntity.gd" id="5_vhyrg"]
 [ext_resource type="PackedScene" uid="uid://btba0jmsow1mx" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectReceiverComponent.tscn" id="6_haafe"]
+[ext_resource type="Script" path="res://Entities/Components/StatModComponents/StatModsCacheResource.gd" id="6_jky7o"]
 [ext_resource type="PackedScene" uid="uid://dykiv0tlhwmox" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/KnockbackHandler.tscn" id="7_vet3v"]
-[ext_resource type="Resource" uid="uid://b2ekcx7kndqjb" path="res://Entities/EffectSystemResources/StatusEffects/BadEffects/Frostbite/Frostbite1.tres" id="11_4lsv2"]
+[ext_resource type="PackedScene" uid="uid://cdfdy8m6ki3oq" path="res://Entities/Components/HealthComponent/HealthComponent.tscn" id="7_yay1r"]
+[ext_resource type="PackedScene" uid="uid://co3n6m7efg8pd" path="res://Entities/Components/EffectComponents/StatusEffectManager/StatusEffectManager.tscn" id="8_anrko"]
 [ext_resource type="Script" path="res://Entities/Components/HitboxComponent/HitboxComponent.gd" id="11_vr4ax"]
 [ext_resource type="Script" path="res://Entities/EffectSystemResources/EffectSources/StaticEffectSource.gd" id="12_gga1h"]
 [ext_resource type="Script" path="res://Entities/EffectSystemResources/StatusEffects/StatusEffect.gd" id="13_33bgr"]
+[ext_resource type="Resource" uid="uid://brjtdk41hym1c" path="res://Entities/EffectSystemResources/StatusEffects/GoodEffects/Speed/Speed1.tres" id="14_mfw04"]
 [ext_resource type="Script" path="res://Utilities/Debug/TestBullet.gd" id="15_v7yfh"]
 [ext_resource type="Script" path="res://Entities/EffectSystemResources/EffectSources/MovingEffectSource.gd" id="16_5aosc"]
-[ext_resource type="Resource" uid="uid://8rdmrt73jg3k" path="res://Entities/EffectSystemResources/StatusEffects/BadEffects/Frostbite/Frostbite2.tres" id="16_xwame"]
 [ext_resource type="Resource" uid="uid://b0it5xmpw16sd" path="res://Entities/EffectSystemResources/StatusEffects/BadEffects/Knockback/Knockback1.tres" id="17_re3lx"]
-[ext_resource type="Resource" uid="uid://jxv16pf038go" path="res://Entities/EffectSystemResources/StatusEffects/BadEffects/TimeSnare/TimeSnare1.tres" id="18_wrpcx"]
+[ext_resource type="Script" path="res://Entities/Components/StatModComponents/EntityStatMod.gd" id="18_1o6jq"]
 
 [sub_resource type="Environment" id="Environment_2wouv"]
 background_mode = 3
@@ -4100,6 +4102,12 @@ terrain_set_1/terrain_1/color = Color(0, 0.762018, 0.441434, 1)
 sources/1 = SubResource("TileSetAtlasSource_mc523")
 sources/2 = SubResource("TileSetAtlasSource_6prks")
 
+[sub_resource type="Resource" id="Resource_0ub65"]
+script = ExtResource("6_jky7o")
+debug_print_changes = false
+cached_stats = {}
+base_values = {}
+
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_sbju2"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_wpovd"]
@@ -4118,10 +4126,30 @@ crit_multiplier = 1.5
 armor_penetration = 0
 base_healing = 0
 heal_affected_stats = 2
-status_effects = Array[ExtResource("13_33bgr")]([ExtResource("11_4lsv2")])
+status_effects = Array[ExtResource("13_33bgr")]([ExtResource("17_re3lx"), ExtResource("14_mfw04")])
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_o8yml"]
 size = Vector2(14, 14)
+
+[sub_resource type="Resource" id="Resource_ifhmm"]
+script = ExtResource("18_1o6jq")
+type = 0
+stat_id = "max_health"
+mod_id = "mh_low1"
+operation = "-%"
+value = 50.0
+priority = 1
+can_stack = false
+max_stack_count = 3
+override_all = false
+
+[sub_resource type="Resource" id="Resource_jbdh5"]
+script = ExtResource("13_33bgr")
+handler_type = 0
+effect_name = "mh_low"
+effect_lvl = 1
+mod_time = 5.0
+stat_mods = Array[ExtResource("18_1o6jq")]([SubResource("Resource_ifhmm")])
 
 [sub_resource type="Resource" id="Resource_rvpdg"]
 script = ExtResource("16_5aosc")
@@ -4136,7 +4164,7 @@ crit_multiplier = 1.5
 armor_penetration = 0
 base_healing = 0
 heal_affected_stats = 2
-status_effects = Array[ExtResource("13_33bgr")]([ExtResource("17_re3lx"), ExtResource("18_wrpcx"), ExtResource("16_xwame")])
+status_effects = Array[ExtResource("13_33bgr")]([SubResource("Resource_jbdh5")])
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_8bjrm"]
 size = Vector2(6, 6)
@@ -4164,7 +4192,7 @@ collision_mask = 245
 script = ExtResource("5_vhyrg")
 team = 2
 
-[node name="TestRigidEntity" type="RigidBody2D" parent="WorldRoot/Testing"]
+[node name="TestRigidEntity" type="RigidBody2D" parent="WorldRoot/Testing" node_paths=PackedStringArray("effects")]
 position = Vector2(126, 99)
 collision_layer = 32
 collision_mask = 245
@@ -4173,21 +4201,28 @@ gravity_scale = 0.0
 lock_rotation = true
 linear_damp = 2.5
 script = ExtResource("5_vhyrg")
+stats = SubResource("Resource_0ub65")
+effects = NodePath("StatusEffectManager")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="WorldRoot/Testing/TestRigidEntity"]
 shape = SubResource("RectangleShape2D_sbju2")
 
-[node name="EffectReceiverComponent" parent="WorldRoot/Testing/TestRigidEntity" node_paths=PackedStringArray("affected_entity", "knockback_handler") instance=ExtResource("6_haafe")]
+[node name="HealthComponent" parent="WorldRoot/Testing/TestRigidEntity" instance=ExtResource("7_yay1r")]
+
+[node name="EffectReceiverComponent" parent="WorldRoot/Testing/TestRigidEntity" node_paths=PackedStringArray("affected_entity", "health_component", "knockback_handler") instance=ExtResource("6_haafe")]
 can_receive_stat_mods = false
 affected_entity = NodePath("..")
+health_component = NodePath("../HealthComponent")
 knockback_handler = NodePath("KnockbackHandler")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="WorldRoot/Testing/TestRigidEntity/EffectReceiverComponent"]
 shape = SubResource("RectangleShape2D_wpovd")
 debug_color = Color(0.941042, 1.32841e-05, 0.612344, 0.42)
 
-[node name="KnockbackHandler" parent="WorldRoot/Testing/TestRigidEntity/EffectReceiverComponent" node_paths=PackedStringArray("entity") instance=ExtResource("7_vet3v")]
-entity = NodePath("../..")
+[node name="KnockbackHandler" parent="WorldRoot/Testing/TestRigidEntity/EffectReceiverComponent" instance=ExtResource("7_vet3v")]
+
+[node name="StatusEffectManager" parent="WorldRoot/Testing/TestRigidEntity" node_paths=PackedStringArray("effect_receiver") instance=ExtResource("8_anrko")]
+effect_receiver = NodePath("../EffectReceiverComponent")
 
 [node name="TestRigidEntity2" type="RigidBody2D" parent="WorldRoot/Testing"]
 position = Vector2(190, 36)
@@ -4203,6 +4238,7 @@ script = ExtResource("5_vhyrg")
 shape = SubResource("RectangleShape2D_sbju2")
 
 [node name="EffectReceiverComponent" parent="WorldRoot/Testing/TestRigidEntity2" node_paths=PackedStringArray("affected_entity") instance=ExtResource("6_haafe")]
+can_receive_status_effects = false
 can_receive_stat_mods = false
 affected_entity = NodePath("..")
 

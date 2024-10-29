@@ -79,6 +79,7 @@ func on_hunger_bars_changed(new_hunger_bars: int) -> void:
 ## Trigger hunger bars change so the on_hunger_bars_changed function will recalculate where the bars need to be 
 ## according to the new max_hunger_bars amount.
 func on_max_hunger_bars_changed(new_max_hunger_bars: int) -> void:
+	player.stamina_component.on_max_hunger_bars_changed(new_max_hunger_bars)
 	hunger_bar.max_value = new_max_hunger_bars
 	hunger_change.max_value = new_max_hunger_bars
 	@warning_ignore("narrowing_conversion") on_hunger_bars_changed(hunger_bar.value)
@@ -100,12 +101,13 @@ func on_stamina_changed(new_stamina: float) -> void:
 	var tween = create_tween()
 	tween.tween_property(stamina_bar, "material:shader_parameter/opacity", 0.385, 0.2)
 	stamina_bar.material.set_shader_parameter(
-		"progress", 1.0 - new_stamina / player.stamina_component.get_stat("max_stamina")
+		"progress", 1.0 - new_stamina / player.stats.get_stat("max_stamina")
 		)
 
 ## Trigger stamina change so the on_stamina_changed function will recalculate where the bars need to be 
 ## according to the new max_stamina amount.
 func on_max_stamina_changed(new_max_stamina: float) -> void:
+	player.stamina_component.on_max_stamina_changed(new_max_stamina)
 	stamina_bar.max_value = new_max_stamina
 	stamina_change.max_value = new_max_stamina
 	on_stamina_changed(stamina_bar.value)

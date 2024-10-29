@@ -1,11 +1,12 @@
 @icon("res://Utilities/Debug/EditorIcons/health_component.svg")
-extends StatBasedComponent
+extends Node
 class_name HealthComponent
 ## A component for handling health and shield for an entity.
 ## 
 ## Has functions for handling taking damage and healing.
 ## This class should always remain agnostic about the entity and the entity's UI it updates.
 
+@export var stats_ui: Control
 @export var _max_health: int = 100 ## The maximum amount of health the entity can have.
 @export var _max_shield: int = 100 ## The maximum amount of shield the entity can have.
 @export_range(0, 100, 1) var base_armor: int = 0
@@ -21,14 +22,14 @@ func _ready() -> void:
 	var moddable_stats: Dictionary = {
 		"max_health" : _max_health, "max_shield" : _max_shield
 	}
-	add_moddable_stats(moddable_stats)
+	get_parent().stats.add_moddable_stats(moddable_stats)
 	call_deferred("_emit_initial_values")
 
 ## Called from a deferred method caller in order to let any associated ui ready up first. 
 ## Then it emits the initially loaded values.
 func _emit_initial_values() -> void:
-	@warning_ignore("narrowing_conversion") health = get_stat("max_health")
-	@warning_ignore("narrowing_conversion") shield = get_stat("max_shield")
+	@warning_ignore("narrowing_conversion") health = get_parent().stats.get_stat("max_health")
+	@warning_ignore("narrowing_conversion") shield = get_parent().stats.get_stat("max_shield")
 	armor = base_armor
 #endregion
 
@@ -36,10 +37,10 @@ func _emit_initial_values() -> void:
 ## Takes damage to both health and shield, starting with available shield then applying any remaining amount to health.
 func damage_shield_then_health(amount: int) -> void:
 	var spillover_damage: int = max(0, amount - shield)
-	@warning_ignore("narrowing_conversion") shield = clampi(shield - amount, 0, get_stat("max_shield"))
+	@warning_ignore("narrowing_conversion") shield = clampi(shield - amount, 0, get_parent().stats.get_stat("max_shield"))
 	
 	if spillover_damage > 0:
-		@warning_ignore("narrowing_conversion") health = clampi(health - spillover_damage, 0, get_stat("max_health"))
+		@warning_ignore("narrowing_conversion") health = clampi(health - spillover_damage, 0, get_parent().stats.get_stat("max_health"))
 	_check_for_death()
 
 ## Decrements only the health value by the passed in amount.
@@ -69,31 +70,31 @@ func set_armor(new_armor: int) -> void:
 #region Utils: Applying Healing
 ## Heals to both health and shield, starting with health then applying any remaining amount to shield.
 func heal_health_then_shield(amount: int) -> void:
-	var spillover_health: int = max(0, (amount + health) - get_stat("max_health"))
-	@warning_ignore("narrowing_conversion") health = clampi(health + amount, 0, get_stat("max_health"))
+	var spillover_health: int = max(0, (amount + health) - get_parent().stats.get_stat("max_health"))
+	@warning_ignore("narrowing_conversion") health = clampi(health + amount, 0, get_parent().stats.get_stat("max_health"))
 	
 	if spillover_health > 0:
-		@warning_ignore("narrowing_conversion") shield = clampi(shield + spillover_health, 0, get_stat("max_shield"))
+		@warning_ignore("narrowing_conversion") shield = clampi(shield + spillover_health, 0, get_parent().stats.get_stat("max_shield"))
 
 ## Heals only health.
 func heal_health(amount: int) -> void:
-	health = min(health + amount, get_stat("max_health"))
+	health = min(health + amount, get_parent().stats.get_stat("max_health"))
 
 ## Heals only shield.
 func heal_shield(amount: int) -> void:
-	shield = min(shield + amount, get_stat("max_shield"))
+	shield = min(shield + amount, get_parent().stats.get_stat("max_shield"))
 #endregion
 
 #region Setters & On-Change Funcs
 ## Setter for the current health. Clamps the new value to the allowed range and updates any connected UI.
 func _set_health(new_value: int) -> void:
-	@warning_ignore("narrowing_conversion") health = clampi(new_value, 0, get_stat("max_health"))
+	@warning_ignore("narrowing_conversion") health = clampi(new_value, 0, get_parent().stats.get_stat("max_health"))
 	if stats_ui and stats_ui.has_method("on_health_changed"):
 		stats_ui.on_health_changed(health)
 
 ## Setter for the current shield. Clamps the new value to the allowed range and updates any connected UI.
 func _set_shield(new_value: int) -> void:
-	@warning_ignore("narrowing_conversion") shield = clampi(new_value, 0, get_stat("max_shield"))
+	@warning_ignore("narrowing_conversion") shield = clampi(new_value, 0, get_parent().stats.get_stat("max_shield"))
 	if stats_ui and stats_ui.has_method("on_shield_changed"):
 		stats_ui.on_shield_changed(shield)
 

@@ -25,10 +25,6 @@ class_name EffectReceiverComponent
 @export var burning_handler: BurningHandler
 @export var time_snare_handler: TimeSnareHandler
 
-@export_group("Debug")
-@export var print_child_mod_updates: bool = false ## Whether all child handlers of this node should print when they have an owned stat get recalculated via a mod update.
-
-@onready var status_effect_manager: StatusEffectManager = %StatusEffectManager ## The optional component attached to the affected entity that handles modifying incoming values based on stats of the entity.
 
 var tool_script = preload("res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectReceiverTool.gd").new() ## This is a script that handles automatically setting the export node's when assigned as children to this receiver.
 
@@ -45,14 +41,10 @@ func _notification(what):
 ## affected entity so that the effect sources only see it when they should.
 func _ready() -> void:
 	assert(affected_entity or get_parent() is SubViewport, get_parent().name + " has an effect receiver that is missing a reference to an entity.")
+	if can_receive_status_effects: assert(get_parent().has_node("StatusEffectManager"), get_parent().name + " has an effect receiver flagged as being able to handle status effects, yet has no StatusEffectManager.")
 	if not Engine.is_editor_hint():
 		collision_layer = affected_entity.collision_layer
 		monitoring = false
-	
-	if DebugFlags.PrintFlags.stat_mod_changes_during_game:
-		for child in get_children():
-			if child is StatBasedComponent:
-				child.debug_print_changes = print_child_mod_updates
 
 ## Handles an incoming effect source, passing it to present receivers for further processing before changing 
 ## entity stats.
@@ -77,26 +69,46 @@ func handle_effect_source(effect_source: EffectSource) -> void:
 	
 	if can_receive_status_effects:
 		if has_node("KnockbackHandler"):
-			status_effect_manager.prepare_knockback_vars(effect_source)
+			knockback_handler.contact_position = effect_source.contact_position
+			knockback_handler.effect_movement_direction = effect_source.movement_direction
+			knockback_handler.is_source_moving_type = effect_source.is_source_moving_type
 		
-		_handle_status_effects(effect_source)
+		_unpack_status_effects_from_source(effect_source)
 
 ## Handles the array of status effects coming in from the effect source by sending each status effect to the manager.
-func _handle_status_effects(effect_source: EffectSource) -> void:
+func _unpack_status_effects_from_source(effect_source: EffectSource) -> void:
 	var do_bad_effects: bool = not _check_same_team(effect_source) and _check_if_bad_effects_apply_to_enemies(effect_source)
 	var do_good_effects: bool = not _check_same_team(effect_source) and _check_if_good_effects_apply_to_enemies(effect_source)
 	
 	for status_effect in effect_source.status_effects:
 		if status_effect:
-			if (not do_bad_effects or "Untouchable" in status_effect_manager.current_effects) and (status_effect.effect_name in GlobalData.BAD_STATUS_EFFECTS):
+			if (not do_bad_effects or "Untouchable" in affected_entity.effects.current_effects) and (status_effect.effect_name in GlobalData.BAD_STATUS_EFFECTS):
 				continue
 			if (not do_good_effects) and (status_effect.effect_name in GlobalData.GOOD_STATUS_EFFECTS):
 				continue
 			
-			status_effect_manager.handle_status_effect(status_effect)
+			_pass_effect_to_handler(status_effect)
 		
-	if "Untouchable" in status_effect_manager.current_effects:
-		status_effect_manager.remove_all_bad_status_effects()
+	if "Untouchable" in affected_entity.effects.current_effects:
+		affected_entity.effects.remove_all_bad_status_effects()
+
+func _pass_effect_to_handler(status_effect: StatusEffect) -> void:
+	affected_entity.effects.handle_status_effect(status_effect)
+	match status_effect.handler_type:
+		GlobalData.EntityStatusEffectType.KNOCKBACK:
+			if knockback_handler: knockback_handler.handle_knockback(status_effect)
+		GlobalData.EntityStatusEffectType.STUN:
+			if stun_handler: stun_handler.handle_stun(status_effect)
+		GlobalData.EntityStatusEffectType.POISON:
+			if poison_handler: poison_handler.handle_poison(status_effect)
+		GlobalData.EntityStatusEffectType.REGEN:
+			if regen_handler: regen_handler.handle_regen(status_effect)
+		GlobalData.EntityStatusEffectType.FROSTBITE:
+			if frostbite_handler: frostbite_handler.handle_frostbite(status_effect)
+		GlobalData.EntityStatusEffectType.BURNING:
+			if burning_handler: burning_handler.handle_burning(status_effect)
+		GlobalData.EntityStatusEffectType.TIMESNARE:
+			if time_snare_handler: time_snare_handler.handle_time_snare(status_effect)
 
 ## Checks if the affected entity is on the same team as the producer of the effect source.
 func _check_same_team(effect_source: EffectSource) -> bool:

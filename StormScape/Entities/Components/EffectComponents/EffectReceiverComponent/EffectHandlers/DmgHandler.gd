@@ -1,5 +1,5 @@
 @icon("res://Utilities/Debug/EditorIcons/dmg_handler.svg")
-extends StatBasedComponent
+extends Node
 class_name DmgHandler
 ## A handler for using the data provided in the effect source to apply damage in different ways.
 
@@ -22,7 +22,7 @@ func _on_save_game(_save_data: Array[SaveData]) -> void:
 			var ticks_completed: int = timer.get_meta("ticks_completed")
 			var original_tick_count: int = clean_resource.dmg_ticks_array.size()
 			clean_resource.dmg_ticks_array = clean_resource.dmg_ticks_array.slice(ticks_completed, clean_resource.dmg_ticks_array.size())
-			clean_resource.delay_time = max(randf_range(3, 5), clean_resource.delay_time) # buffer so it doesn't insta dmg on load
+			clean_resource.delay_time = max(randf_range(1, 2.5), clean_resource.delay_time) # buffer so it doesn't insta dmg on load
 			clean_resource.damaging_time = clean_resource.damaging_time * (1 - (float(ticks_completed) / float(original_tick_count)))
 			saved_dots[source_type].append(clean_resource)
 
@@ -43,12 +43,11 @@ func _on_load_game() -> void:
 ## Asserts that there is a valid health component on the affected entity before trying to handle damage.
 func _ready() -> void:
 	assert(get_parent().health_component, get_parent().affected_entity.name + " has an effect receiver that is intended to handle damage, but no health component is connected.")
-	debug_print_changes = get_parent().print_child_mod_updates
 	
 	var moddable_stats: Dictionary = {
 		"dmg_weakness" : _dmg_weakness, "dmg_resistance" : _dmg_resistance
 	}
-	add_moddable_stats(moddable_stats)
+	get_parent().affected_entity.stats.add_moddable_stats(moddable_stats)
 
 ## Calculates the final damage to apply after considering whether the crit hit and also how much the armor blocks.
 func _get_dmg_after_crit_then_armor(effect_source: EffectSource) -> int:
@@ -148,8 +147,8 @@ func _on_dot_timer_timeout(dot_timer: Timer, source_type: String) -> void:
 ## Sends the affected entity's health component the final damage values based on what stats the damage was 
 ## allowed to affect.
 func _send_handled_dmg(dmg_affected_stats: GlobalData.DmgAffectedStats, handled_amount: int) -> void:
-	var dmg_weakness: float = get_stat("dmg_weakness")
-	var dmg_resistance: float = get_stat("dmg_resistance")
+	var dmg_weakness: float = get_parent().affected_entity.stats.get_stat("dmg_weakness")
+	var dmg_resistance: float = get_parent().affected_entity.stats.get_stat("dmg_resistance")
 	var positive_dmg: int = max(0, handled_amount * (1 + dmg_weakness - dmg_resistance))
 	
 	match dmg_affected_stats:

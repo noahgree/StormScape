@@ -6,6 +6,7 @@ class PrintFlags:
 	static var stat_mod_changes_during_game: bool = true
 	static var stat_mod_changes_on_load: bool = false
 	static var current_effect_changes: bool = true
+	static var saver_loader_status_changes: bool = true
 
 class MainMenuFlags:
 	static var skip_main_menu: bool = false

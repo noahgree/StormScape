@@ -6,17 +6,30 @@ class_name DynamicEntity
 ## This should not be used by things like weapons or trees.
 
 @export var team: GlobalData.Teams = GlobalData.Teams.PLAYER ## What the effects received by this entity should consider as this entity's team.
+@export_group("Status Effects & Stat Mods")
+@export var stats: StatModsCacheResource ## The resource that will cache and work with all stat mods for this entity.
+@export var effects: StatusEffectManager ## The node that will cache and manage all status effects for this entity.
 
-@onready var move_fsm: MoveStateMachine = %MoveStateMachine ## The FSM controlling the player.
-@onready var health_component: HealthComponent = %HealthComponent ## The component in charge of player health and shield.
-@onready var stamina_component: StaminaComponent = %StaminaComponent ## The component in charge of player stamina and hunger.
+@onready var move_fsm: MoveStateMachine = $MoveStateMachine ## The FSM controlling the player.
+@onready var health_component: HealthComponent = $HealthComponent ## The component in charge of player health and shield.
+@onready var stamina_component: StaminaComponent = $StaminaComponent ## The component in charge of player stamina and hunger.
 
-var stat_mods: Dictionary = {}
-var time_snare_counter: float = 0
+var time_snare_counter: float = 0 ## The ticker that slows down delta when under a time snare.
 var snare_factor: float = 0 ## Multiplier for delta time during time snares.
-var snare_timer: Timer
+var snare_timer: Timer ## A reference to a timer that might currently be tracking a time snare instance.
 var current_stealth: int = 0 ## The extra amount of closeness this entity can achieve to an enemy before being detected.
 
+
+## Recalculates the stats in the stat mods cache to be base values just before mods get reapplied on load.
+func _on_load_game() -> void:
+	if stats: stats.reinit_on_load()
+
+## Making sure we know we have save logic, even if not set in editor. Then assigning self to stats and effects managers 
+## so they are aware of who they are modifying.
+func _ready() -> void:
+	add_to_group("has_save_logic")
+	if stats: stats.entity = self
+	if effects: effects.entity = self
 
 func _process(delta: float) -> void:
 	move_fsm.state_machine_process(delta)

@@ -1,5 +1,5 @@
 @icon("res://Utilities/Debug/EditorIcons/regen_handler.svg")
-extends StatBasedComponent
+extends Node
 class_name RegenHandler
 ## A handler for using the data provided in the effect source to apply regeneration in different ways.
 
@@ -11,18 +11,17 @@ class_name RegenHandler
 
 ## Sets up moddable stats.
 func _ready() -> void:
-	debug_print_changes = get_parent().print_child_mod_updates
 	var moddable_stats: Dictionary = {
 		"regen_boost" : _regen_boost, "regen_penalty" : _regen_penalty
 	}
-	add_moddable_stats(moddable_stats)
+	effect_receiver.affected_entity.stats.add_moddable_stats(moddable_stats)
 
 
 func handle_regen(regen_effect: RegenEffect) -> void:
 	if regen_effect.hot_resource != null: # needed for when we nullify on game load
 		var local_hot_resource: HOTResource = regen_effect.hot_resource.duplicate()
-		var regen_boost: float = get_stat("regen_boost")
-		var regen_penalty: float = get_stat("regen_penalty")
+		var regen_boost: float = effect_receiver.affected_entity.stats.get_stat("regen_boost")
+		var regen_penalty: float = effect_receiver.affected_entity.stats.get_stat("regen_penalty")
 		
 		for i in range(local_hot_resource.heal_ticks_array.size()):
 			local_hot_resource.heal_ticks_array[i] = int(roundf(local_hot_resource.heal_ticks_array[i] * (1 + regen_boost - regen_penalty)))

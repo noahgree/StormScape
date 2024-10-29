@@ -6,10 +6,20 @@ class_name RigidEntity
 ## This should not be used for static environmental entities like trees and also not for players or moving enemies.
 
 @export var team: GlobalData.Teams = GlobalData.Teams.PLAYER ## What the effects received by this entity should consider as this entity's team.
+@export_group("Status Effects & Stat Mods")
+@export var stats: StatModsCacheResource ## The resource that will cache and work with all stat mods for this entity.
+@export var effects: StatusEffectManager ## The node that will cache and manage all status effects for this entity.
 
-var stat_mods: Dictionary = {}
 
+## Recalculates the stats in the stat mods cache to be base values just before mods get reapplied on load.
+func _on_load_game() -> void:
+	if stats: stats.reinit_on_load()
+
+## Making sure we know we have save logic, even if not set in editor. Then set up rigid body physics. 
+## Then assigning self to stats and effects managers so they are aware of who they are modifying.
 func _ready() -> void:
+	add_to_group("has_save_logic")
+	
 	mass = 3
 	linear_damp = 4.5
 	var phys_material = PhysicsMaterial.new()
@@ -18,3 +28,6 @@ func _ready() -> void:
 	self.physics_material_override = phys_material
 	collision_layer = 0b00100000
 	collision_mask = 0b11110101 
+	
+	if stats: stats.entity = self
+	if effects: effects.entity = self

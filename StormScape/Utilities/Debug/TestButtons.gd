@@ -17,16 +17,16 @@ func _on_test_music_btn_pressed() -> void:
 	#AudioManager.fade_out_sounds("SummerTide", 1.0, 1)
 
 func _on_test_mod_btn_1_pressed() -> void:
-	var node = get_parent().get_parent().stamina_component
+	var stats_ui: Control = get_parent().get_node("PlayerStatsOverlay")
 	var mod = EntityStatMod.new("stamina_use_per_hunger_deduction", "mod1", "-%", 10, 1, true, 2, false)
 	var mod2 = EntityStatMod.new("stamina_use_per_hunger_deduction", "mod2", "=", 2, 2, true, 5, true)
 	var arr: Array[EntityStatMod] = [mod, mod2]
-	node.add_mods(arr)
+	get_parent().get_parent().stats.add_mods(arr, stats_ui)
 
 func _on_test_mod_btn_2_pressed() -> void:
-	var node = get_parent().get_parent().stamina_component
-	node.remove_mod("stamina_use_per_hunger_deduction", "mod2", 1)
-	node.remove_mod("stamina_use_per_hunger_deduction", "mod1", 1)
+	var stats_ui: Control = get_parent().get_node("PlayerStatsOverlay")
+	get_parent().get_parent().stats.remove_mod("stamina_use_per_hunger_deduction", "mod2", stats_ui, 1)
+	get_parent().get_parent().stats.remove_mod("stamina_use_per_hunger_deduction", "mod1", stats_ui, 1)
 
 func _on_test_save_btn_pressed() -> void:
 	SaverLoader.save_game()

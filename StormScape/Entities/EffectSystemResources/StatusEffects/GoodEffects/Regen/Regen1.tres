@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://Entities/EffectSystemResources/StatusEffects/GoodEffects/Regen/RegenEffect.gd" id="1_ryq06"]
 [ext_resource type="Script" path="res://Entities/EffectSystemResources/EffectOverTimeResources/HOTResource.gd" id="1_vgior"]
-[ext_resource type="Script" path="res://Entities/Components/StatBasedComponent/EntityStatMod.gd" id="2_0lf2m"]
+[ext_resource type="Script" path="res://Entities/Components/StatModComponents/EntityStatMod.gd" id="2_0lf2m"]
 
 [sub_resource type="Resource" id="Resource_m7vw8"]
 script = ExtResource("1_vgior")

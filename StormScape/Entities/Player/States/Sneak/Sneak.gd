@@ -20,7 +20,7 @@ func _ready() -> void:
 		"max_stealth" : _max_stealth, "max_sneak_speed" : _max_sneak_speed,
 		"sneak_acceleration" : _sneak_acceleration
 	}
-	fsm.add_moddable_stats(moddable_stats)
+	get_parent().entity.stats.add_moddable_stats(moddable_stats)
 
 func state_physics_process(delta: float) -> void:
 	_do_character_sneak(delta)
@@ -37,21 +37,21 @@ func _do_character_sneak(delta: float) -> void:
 		Transitioned.emit(self, "Run")
 	
 	if movement_vector == Vector2.ZERO:
-		if dynamic_entity.velocity.length() > (fsm.get_stat("friction") * delta): # no input, still slowing
-			dynamic_entity.velocity -= dynamic_entity.velocity.normalized() * (fsm.get_stat("friction") * delta)
+		if dynamic_entity.velocity.length() > (dynamic_entity.stats.get_stat("friction") * delta): # no input, still slowing
+			dynamic_entity.velocity -= dynamic_entity.velocity.normalized() * (dynamic_entity.stats.get_stat("friction") * delta)
 		else: # no input, stopped
 			fsm.knockback_vector = Vector2.ZERO
 			dynamic_entity.velocity = Vector2.ZERO
 	elif knockback == Vector2.ZERO:
 		# this if-else handles smoothing out the beginning of animation transitions
-		if dynamic_entity.velocity.length() > fsm.get_stat("max_sneak_speed") * 0.10:
+		if dynamic_entity.velocity.length() > dynamic_entity.stats.get_stat("max_sneak_speed") * 0.10:
 			fsm.anim_vector = dynamic_entity.velocity.normalized()
 		else:
 			fsm.anim_vector = movement_vector
 		
-		fsm.anim_tree.set("parameters/run/TimeScale/scale", DEFAULT_SNEAK_ANIM_TIME_SCALE * (fsm.get_stat("max_sneak_speed") / fsm.get_original_stat("max_sneak_speed")))
-		dynamic_entity.velocity += (movement_vector * fsm.get_stat("sneak_acceleration") * delta)
-		dynamic_entity.velocity = dynamic_entity.velocity.limit_length(fsm.get_stat("max_sneak_speed"))
+		fsm.anim_tree.set("parameters/run/TimeScale/scale", DEFAULT_SNEAK_ANIM_TIME_SCALE * (dynamic_entity.stats.get_stat("max_sneak_speed") / dynamic_entity.stats.get_original_stat("max_sneak_speed")))
+		dynamic_entity.velocity += (movement_vector * dynamic_entity.stats.get_stat("sneak_acceleration") * delta)
+		dynamic_entity.velocity = dynamic_entity.velocity.limit_length(dynamic_entity.stats.get_stat("max_sneak_speed"))
 	
 	dynamic_entity.move_and_slide()
 
@@ -60,7 +60,7 @@ func _calculate_move_vector() -> Vector2:
 
 ## Updates the dynamic entity with the amount of stealth we currently have.
 func _send_parent_entity_stealth_value() -> void:
-	dynamic_entity.current_stealth = int(fsm.get_stat("max_stealth"))
+	dynamic_entity.current_stealth = int(dynamic_entity.stats.get_stat("max_stealth"))
 
 ## If the sneak button is still pressed, continue in this state. Otherwise, transition out based on movement vector.
 func _check_if_stopped_sneaking() -> void:

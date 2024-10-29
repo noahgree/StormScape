@@ -1,7 +1,7 @@
 [gd_resource type="Resource" script_class="StatusEffect" load_steps=6 format=3 uid="uid://c0gxq4ufi3snt"]
 
 [ext_resource type="Script" path="res://Entities/EffectSystemResources/StatusEffects/StatusEffect.gd" id="1_638x2"]
-[ext_resource type="Script" path="res://Entities/Components/StatBasedComponent/EntityStatMod.gd" id="2_o6fme"]
+[ext_resource type="Script" path="res://Entities/Components/StatModComponents/EntityStatMod.gd" id="2_o6fme"]
 
 [sub_resource type="Resource" id="Resource_wakq2"]
 script = ExtResource("2_o6fme")

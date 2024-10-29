@@ -1,11 +1,7 @@
-[gd_scene load_steps=3 format=3 uid="uid://btba0jmsow1mx"]
+[gd_scene load_steps=2 format=3 uid="uid://btba0jmsow1mx"]
 
 [ext_resource type="Script" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectReceiverComponent.gd" id="1_x67rl"]
-[ext_resource type="PackedScene" uid="uid://co3n6m7efg8pd" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/StatusEffectManager/StatusEffectManager.tscn" id="2_6kig4"]
 
 [node name="EffectReceiverComponent" type="Area2D"]
 monitoring = false
 script = ExtResource("1_x67rl")
-
-[node name="StatusEffectManager" parent="." groups=["has_save_logic"] instance=ExtResource("2_6kig4")]
-unique_name_in_owner = true

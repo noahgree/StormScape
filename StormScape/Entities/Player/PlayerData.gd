@@ -4,6 +4,8 @@ class_name PlayerData
 # Player
 @export var position: Vector2
 @export var stat_mods: Dictionary
+@export var current_effects: Dictionary
+@export var saved_times_left: Dictionary
 @export var velocity: Vector2
 @export var snare_factor: float
 @export var snare_time_left: float
@@ -19,9 +21,6 @@ class_name PlayerData
 @export var stamina_to_hunger_count: float
 @export var hunger_bars: int
 @export var can_use_hunger_bars: bool
-# EffectReceiverComponent/StatusEffectManager
-@export var current_effects: Dictionary
-@export var saved_times_left: Dictionary
 # DmgHandler
 @export var saved_dots: Dictionary
 # HealHandler

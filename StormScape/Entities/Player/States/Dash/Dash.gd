@@ -23,7 +23,7 @@ func _ready() -> void:
 		"dash_speed" : _dash_speed, "dash_duration" : _dash_duration, 
 		"dash_cooldown" : _dash_cooldown, "dash_collision_impulse_factor" : _dash_collision_impulse_factor
 	}
-	fsm.add_moddable_stats(moddable_stats)
+	get_parent().entity.stats.add_moddable_stats(moddable_stats)
 
 func enter() -> void:
 	fsm.anim_tree["parameters/playback"].travel("run")
@@ -31,8 +31,8 @@ func enter() -> void:
 	fsm.can_receive_effects = false
 	
 	ghosts_spawned = 0
-	dash_timer.start(fsm.get_stat("dash_duration"))
-	fsm.dash_cooldown_timer.start(fsm.get_stat("dash_duration") + fsm.get_stat("dash_cooldown"))
+	dash_timer.start(dynamic_entity.stats.get_stat("dash_duration"))
+	fsm.dash_cooldown_timer.start(dynamic_entity.stats.get_stat("dash_duration") + dynamic_entity.stats.get_stat("dash_cooldown"))
 	movement_vector = _calculate_move_vector()
 	fsm.anim_vector = movement_vector
 	
@@ -63,7 +63,7 @@ func state_physics_process(_delta: float)  -> void:
 
 ## Overrides the dynamic entity's velocity to be a simple dash in the direction currently faced.
 func _do_character_dash() -> void:
-	dynamic_entity.velocity = movement_vector * fsm.get_stat("dash_speed")
+	dynamic_entity.velocity = movement_vector * dynamic_entity.stats.get_stat("dash_speed")
 	dynamic_entity.move_and_slide()
 	
 	# handle collisions with rigid entities 
@@ -71,17 +71,17 @@ func _do_character_dash() -> void:
 		var c = dynamic_entity.get_slide_collision(i)
 		var collider = c.get_collider()
 		if collider is RigidEntity:
-			collider.apply_central_impulse(-c.get_normal().normalized() * dynamic_entity.velocity.length() / (5 / (fsm.get_stat("dash_collision_impulse_factor"))))
+			collider.apply_central_impulse(-c.get_normal().normalized() * dynamic_entity.velocity.length() / (5 / (dynamic_entity.stats.get_stat("dash_collision_impulse_factor"))))
 
 func _calculate_move_vector() -> Vector2:
-	return (_get_input_vector().rotated(fsm.get_stat("confusion_amount")))
+	return (_get_input_vector().rotated(dynamic_entity.stats.get_stat("confusion_amount")))
 
 func _animate() -> void:
 	fsm.anim_tree.set("parameters/run/blendspace2d/blend_position", fsm.anim_vector)
 
 ## Checks if we have spent enough time since the last ghost and if we haven't spawned enough yet, then spawns one.
 func _update_ghost_spawns() -> void:
-	if (ghosts_spawned < ghost_count) and (time_since_ghost >= (fsm.get_stat("dash_duration") / ghost_count)):
+	if (ghosts_spawned < ghost_count) and (time_since_ghost >= (dynamic_entity.stats.get_stat("dash_duration") / ghost_count)):
 		_create_ghost()
 		time_since_ghost = 0.0
 

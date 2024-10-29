@@ -9,7 +9,7 @@ func _ready() -> void:
 	player_node = await SignalBus.PlayerReady
 
 func save_game() -> void:
-	print_rich("[color=orange]SAVING[/color]")
+	if DebugFlags.PrintFlags.saver_loader_status_changes: print_rich("[color=orange]Saving...[/color]")
 	var saved_game: SavedGame = SavedGame.new()
 	
 	var save_data: Array[SaveData] = []
@@ -17,13 +17,14 @@ func save_game() -> void:
 	saved_game.save_data = save_data
 	
 	ResourceSaver.save(saved_game, "user://savegame1.tres")
+	if DebugFlags.PrintFlags.saver_loader_status_changes: print_rich("--------------------------------------[color=orange][b]SAVED![/b][/color]--------------------------------------")
 
 func load_game() -> void:
-	print_rich("[color=yellow]LOADING[/color]")
 	var saved_game: SavedGame = load("user://savegame1.tres") as SavedGame
-	
+	if DebugFlags.PrintFlags.saver_loader_status_changes: print_rich("[color=yellow]Performing 'Before Load' Functions...[/color]")
 	get_tree().call_group("has_save_logic", "_on_before_load_game")
-	
+	if DebugFlags.PrintFlags.saver_loader_status_changes: print_rich("-------------------------------------[color=yellow][b]LOADING![/b][/color]-------------------------------------")
+
 	for item in saved_game.save_data:
 		if item is PlayerData:
 			player_node._on_load_game_player(item)

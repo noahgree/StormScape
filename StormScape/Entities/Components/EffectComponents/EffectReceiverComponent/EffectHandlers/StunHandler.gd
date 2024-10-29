@@ -1,5 +1,5 @@
 @icon("res://Utilities/Debug/EditorIcons/stun_handler.svg")
-extends StatBasedComponent
+extends Node
 class_name StunHandler
 ## A handler for using the data provided in the effect source to apply stuns in different ways.
 
@@ -12,17 +12,16 @@ class_name StunHandler
 ## Asserts that the affected entity is a Dynamic Entity before trying to handle things.
 func _ready() -> void:
 	assert(get_parent().get_parent() is DynamicEntity, get_parent().affected_entity.name + " has an effect receiver intended to handle stuns, but the affected entity is not a DynamicEntity.")
-	debug_print_changes = get_parent().print_child_mod_updates
 	
 	var moddable_stats: Dictionary = {
 		"stun_weakness" : _stun_weakness, "stun_resistance" : _stun_resistance
 	}
-	add_moddable_stats(moddable_stats)
+	affected_entity.stats.add_moddable_stats(moddable_stats)
 
 ## Handles performing a stun effect on the affected entity.
 func handle_stun(stun_effect: StunEffect) -> void:
-	var stun_weakness: float = get_stat("stun_weakness")
-	var stun_resistance: float = get_stat("stun_resistance")
+	var stun_weakness: float = affected_entity.stats.get_stat("stun_weakness")
+	var stun_resistance: float = affected_entity.stats.get_stat("stun_resistance")
 	var handled_stun_time: float = stun_effect.dmg_stun_time * (1 + stun_weakness - stun_resistance)
 	
 	_send_handled_stun(handled_stun_time)

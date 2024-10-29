@@ -5,6 +5,7 @@ class_name Player
 @export var player_name: String = "Player1"
 
 func _ready() -> void:
+	super._ready()
 	SignalBus.emit_signal("PlayerReady", self)
 
 #region Save & Load
@@ -12,7 +13,9 @@ func _on_save_game(save_data: Array[SaveData]) -> void:
 	var data = PlayerData.new()
 	
 	data.position = global_position
-	data.stat_mods = stat_mods
+	data.stat_mods = stats.stat_mods
+	data.current_effects = effects.current_effects
+	data.saved_times_left = effects.saved_times_left
 	data.velocity = velocity
 	data.snare_factor = snare_factor
 	data.sprite_frames = $AnimatedSprite2D.sprite_frames.resource_path
@@ -24,8 +27,6 @@ func _on_save_game(save_data: Array[SaveData]) -> void:
 	data.stamina_to_hunger_count = $StaminaComponent.stamina_to_hunger_count
 	data.hunger_bars = $StaminaComponent.hunger_bars
 	data.can_use_hunger_bars = $StaminaComponent.can_use_hunger_bars
-	data.current_effects = $EffectReceiverComponent/StatusEffectManager.current_effects
-	data.saved_times_left = $EffectReceiverComponent/StatusEffectManager.saved_times_left
 	data.saved_dots = $EffectReceiverComponent/DmgHandler.saved_dots
 	data.saved_hots = $EffectReceiverComponent/HealHandler.saved_hots
 	data.anim_vector = $MoveStateMachine.anim_vector
@@ -33,14 +34,15 @@ func _on_save_game(save_data: Array[SaveData]) -> void:
 	
 	if snare_timer != null: 
 		data.snare_time_left = snare_timer.time_left
-		snare_timer.queue_free()
 	else: data.snare_time_left = 0
 	
 	save_data.append(data)
 
 func _on_load_game_player(data: PlayerData) -> void:
 	global_position = data.position
-	stat_mods = data.stat_mods
+	stats.stat_mods = data.stat_mods
+	effects.current_effects = data.current_effects
+	effects.saved_times_left = data.saved_times_left
 	velocity = data.velocity
 	snare_factor = 0
 	$AnimatedSprite2D.sprite_frames = load(data.sprite_frames)
@@ -52,8 +54,6 @@ func _on_load_game_player(data: PlayerData) -> void:
 	$StaminaComponent.stamina_to_hunger_count = data.stamina_to_hunger_count
 	$StaminaComponent.hunger_bars = data.hunger_bars
 	$StaminaComponent.can_use_hunger_bars = data.can_use_hunger_bars
-	$EffectReceiverComponent/StatusEffectManager.current_effects = data.current_effects
-	$EffectReceiverComponent/StatusEffectManager.saved_times_left = data.saved_times_left
 	$EffectReceiverComponent/DmgHandler.saved_dots = data.saved_dots
 	$EffectReceiverComponent/HealHandler.saved_hots = data.saved_hots
 	$MoveStateMachine.anim_vector = data.anim_vector

@@ -17,8 +17,8 @@ func state_physics_process(delta: float) -> void:
 	if knockback.length() > 0: # let knockback take control if there is any
 		dynamic_entity.velocity = knockback
 	
-	if dynamic_entity.velocity.length() > (fsm.get_stat("friction") * delta): # no input, still slowing
-		dynamic_entity.velocity -= dynamic_entity.velocity.normalized() * (fsm.get_stat("friction") * delta)
+	if dynamic_entity.velocity.length() > (dynamic_entity.stats.get_stat("friction") * delta): # no input, still slowing
+		dynamic_entity.velocity -= dynamic_entity.velocity.normalized() * (dynamic_entity.stats.get_stat("friction") * delta)
 	else:
 		dynamic_entity.velocity = Vector2.ZERO
 	dynamic_entity.move_and_slide()
