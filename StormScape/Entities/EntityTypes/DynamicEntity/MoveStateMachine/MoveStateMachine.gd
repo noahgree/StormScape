@@ -1,11 +1,8 @@
-@icon("res://Utilities/Debug/EditorIcons/state_machine.svg")
 extends StateMachine
 class_name MoveStateMachine
-## FSM class for dynamic entities that implements the managing logic of transitioning and maintaining states.
-## 
-## No nodes except for this FSM node and its children should *EVER* know what state is active. 
+## FSM class for dynamic entities that implements the managing logic of transitioning between movement states.
 
-@export var entity: DynamicEntity
+@export var entity: DynamicEntity ## The entity that this FSM moves.
 @export var anim_tree: AnimationTree ## The animation tree node to support the children state animations.
 @export_custom(PROPERTY_HINT_NONE, "suffix:per second") var _sprint_stamina_usage: float = 15.0 ## The amount of stamina used per second when the entity is sprinting.
 @export_custom(PROPERTY_HINT_NONE, "suffix:per dash") var _dash_stamina_usage: float = 20.0 ## The amount of stamina used per dash activation.
@@ -22,14 +19,13 @@ const MAX_KNOCKBACK: int = 3000 ## The highest length the knockback vector can e
 
 
 ## Asserts the necessary components exist to support a dynamic entity, then caches the child states and sets them up.
+## Overrides the parent state machine class _ready function.
 func _ready() -> void:
-	assert(has_node("Idle"), "Dynamic entities must have an Idle state.")
-	assert(has_node("Stunned"), "Dynamic entities must have a Stunned state.")
-	
-	var stamina_component: StaminaComponent = entity.get_node("StaminaComponent")
+	assert(has_node("Idle"), "Dynamic entities must have an Idle state in the move state machine.")
+	assert(has_node("Stunned"), "Dynamic entities must have a Stunned state in the move state machine.")
 	
 	for child in get_children():
-		if child is State:
+		if child is MoveState:
 			states[child.name.to_lower()] = child
 			child.Transitioned.connect(_on_child_transition)
 			child.dynamic_entity = entity
@@ -46,6 +42,7 @@ func _ready() -> void:
 	entity.stats.add_moddable_stats(moddable_stats)
 
 ## Checks if knockback needs to be lerped to 0 and passes the physics process to the active state.
+## Advances animation tree manually so that it respects time snares. Overrides parent state machine class.
 func state_machine_physics_process(delta: float) -> void:
 	if knockback_vector.length() > 100:
 		knockback_vector = lerp(knockback_vector, Vector2.ZERO, 0.1)

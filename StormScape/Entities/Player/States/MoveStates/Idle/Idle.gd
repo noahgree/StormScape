@@ -1,4 +1,4 @@
-extends DynamicState
+extends MoveState
 ## Handles when the character is not moving.
 
 var movement_vector: Vector2 = Vector2.ZERO

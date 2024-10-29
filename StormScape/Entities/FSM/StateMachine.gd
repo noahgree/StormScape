@@ -1,3 +1,4 @@
+@icon("res://Utilities/Debug/EditorIcons/state_machine.svg")
 extends Node
 class_name StateMachine
 ## Base FSM class that implements the managing logic of transitioning and maintaining states.

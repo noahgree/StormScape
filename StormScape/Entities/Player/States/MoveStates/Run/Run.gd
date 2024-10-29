@@ -1,4 +1,4 @@
-extends DynamicState
+extends MoveState
 ## Handles when the character is moving, including both running and sprinting.
 
 @export var _max_speed: float = 150 ## The maximum speed the entity can travel once fully accelerated. 

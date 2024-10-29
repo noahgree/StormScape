@@ -1,4 +1,4 @@
-@icon("res://Utilities/Debug/EditorIcons/effect_modifier_component.svg")
+@icon("res://Utilities/Debug/EditorIcons/status_effect_manager.svg")
 extends Node
 class_name StatusEffectManager
 ## The component that holds the stats and logic for how the entity should receive effects.
@@ -10,17 +10,18 @@ class_name StatusEffectManager
 @export_subgroup("Debug")
 @export var print_effect_updates: bool = false ## Whether to print when this entity has status effects added and removed.
 
-var entity: PhysicsBody2D ## The entity to receive the status effects.
 var current_effects: Dictionary = {} ## Keys are general status effect titles like "Poison", and values are the effect resources themselves.
 var effect_timers: Dictionary = {} ## Holds references to all timers currently tracking active status effects. 
 var saved_times_left: Dictionary = {} ## Holds time remaining for status effects that were applied during a game save.
 
 
 #region Save & Load
+## We save every effect timer that is in progress into the saved_times_left. 
 func _on_save_game(_save_data: Array[SaveData]) -> void:
 	for effect_name in effect_timers.keys():
 		saved_times_left[effect_name] = effect_timers.get(effect_name, 0.001).time_left
 
+## We must clear out any existing effect timers and remove all exiting status effects.
 func _on_before_load_game() -> void:
 	effect_timers = {}
 	for status_effect in current_effects.keys():
@@ -28,6 +29,8 @@ func _on_before_load_game() -> void:
 	for child in get_children():
 		child.queue_free()
 
+## For every effect that was saved into current_effects, we duplicate a clean instance, clear out dot/hot resources,
+## set the time remaining on the effect from when it got saved, and add the effect back.
 func _on_load_game() -> void:
 	for status_effect: StatusEffect in current_effects.values():
 		var clean_status_effect: StatusEffect = status_effect.duplicate()
@@ -38,12 +41,13 @@ func _on_load_game() -> void:
 		if "hot_resource" in clean_status_effect:
 			clean_status_effect.hot_resource = null
 		
-		if DebugFlags.PrintFlags.current_effect_changes and entity.print_effect_updates:
+		if DebugFlags.PrintFlags.current_effect_changes and print_effect_updates:
 			print_rich("-------[color=green]Restoring[/color][b] " + str(status_effect.effect_name) + str(status_effect.effect_lvl) + "[/b]-------")
 		_add_status_effect(clean_status_effect)
 	saved_times_left = {}
 #endregion
 
+## Assert that this node has a connected effect receiver from which it can receive status effects.
 func _ready() -> void:
 	assert(effect_receiver != null, get_parent().name + " has a StatusEffectManager without a connected EffectReceiverComponent.")
 
@@ -95,7 +99,7 @@ func _add_status_effect(status_effect: StatusEffect) -> void:
 	
 	for mod_resource in status_effect.stat_mods:
 		var mod: EntityStatMod = (mod_resource as EntityStatMod)
-		entity.stats.add_mods([mod] as Array[EntityStatMod], stats_ui)
+		get_parent().stats.add_mods([mod] as Array[EntityStatMod], stats_ui)
 
 ## Extends the duration of the timer associated with some current effect.
 func _extend_effect_duration(effect_name: String, time_to_add: float) -> void:
@@ -121,7 +125,7 @@ func _remove_status_effect(status_effect: StatusEffect) -> void:
 	
 	for mod_resource in status_effect.stat_mods:
 		var mod: EntityStatMod = (mod_resource as EntityStatMod)
-		entity.stats.remove_mod(mod.stat_id, mod.mod_id, stats_ui)
+		get_parent().stats.remove_mod(mod.stat_id, mod.mod_id, stats_ui)
 	
 	if status_effect.effect_name in current_effects:
 		current_effects.erase(status_effect.effect_name)

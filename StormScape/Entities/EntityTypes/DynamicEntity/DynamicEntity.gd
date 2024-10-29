@@ -10,7 +10,8 @@ class_name DynamicEntity
 @export var stats: StatModsCacheResource ## The resource that will cache and work with all stat mods for this entity.
 @export var effects: StatusEffectManager ## The node that will cache and manage all status effects for this entity.
 
-@onready var move_fsm: MoveStateMachine = $MoveStateMachine ## The FSM controlling the player.
+@onready var move_fsm: MoveStateMachine = $MoveStateMachine ## The FSM controlling the player's movement.
+@onready var action_fsm: ActionStateMachine = $ActionStateMachine ## The FSM controlling the player's actions.
 @onready var health_component: HealthComponent = $HealthComponent ## The component in charge of player health and shield.
 @onready var stamina_component: StaminaComponent = $StaminaComponent ## The component in charge of player stamina and hunger.
 
@@ -24,15 +25,13 @@ var current_stealth: int = 0 ## The extra amount of closeness this entity can ac
 func _on_load_game() -> void:
 	if stats: stats.reinit_on_load()
 
-## Making sure we know we have save logic, even if not set in editor. Then assigning self to stats and effects managers 
-## so they are aware of who they are modifying.
+## Making sure we know we have save logic, even if not set in editor.
 func _ready() -> void:
 	add_to_group("has_save_logic")
-	if stats: stats.entity = self
-	if effects: effects.entity = self
 
 func _process(delta: float) -> void:
 	move_fsm.state_machine_process(delta)
+	action_fsm.state_machine_process(delta)
 
 func _physics_process(delta: float) -> void:
 	if snare_factor > 0:
@@ -40,11 +39,14 @@ func _physics_process(delta: float) -> void:
 		while time_snare_counter > delta:
 			time_snare_counter -= delta
 			move_fsm.state_machine_physics_process(delta)
+			action_fsm.state_machine_physics_process(delta)
 	else:
 		move_fsm.state_machine_physics_process(delta)
+		action_fsm.state_machine_physics_process(delta)
 
 func _unhandled_input(event: InputEvent) -> void:
 	move_fsm.state_machine_handle_input(event)
+	action_fsm.state_machine_handle_input(event)
 
 func request_stun(duration: float) -> void:
 	move_fsm.request_stun(duration)

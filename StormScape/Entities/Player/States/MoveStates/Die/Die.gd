@@ -1,4 +1,4 @@
-extends DynamicState
+extends MoveState
 ## Handles when the character is actively dying.
 
 

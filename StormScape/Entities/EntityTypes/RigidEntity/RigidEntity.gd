@@ -16,7 +16,6 @@ func _on_load_game() -> void:
 	if stats: stats.reinit_on_load()
 
 ## Making sure we know we have save logic, even if not set in editor. Then set up rigid body physics. 
-## Then assigning self to stats and effects managers so they are aware of who they are modifying.
 func _ready() -> void:
 	add_to_group("has_save_logic")
 	
@@ -29,5 +28,3 @@ func _ready() -> void:
 	collision_layer = 0b00100000
 	collision_mask = 0b11110101 
 	
-	if stats: stats.entity = self
-	if effects: effects.entity = self

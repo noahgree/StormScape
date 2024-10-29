@@ -10,5 +10,5 @@ custom_knockback_direction = Vector2(0, 0)
 handler_type = 1
 effect_name = "Knockback"
 effect_lvl = 1
-mod_time = 1.0
+mod_time = 0.2
 stat_mods = Array[ExtResource("2_rysxw")]([])

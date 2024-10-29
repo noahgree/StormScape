@@ -2,33 +2,33 @@ extends Resource
 class_name StatModsCacheResource
 ## A resource that caches and works with stat mods applied to the entity on which it is defined.
 
-@export var debug_print_changes: bool = false ## Prints out stat mod recalculations in the editor if checked.
+@export_group("Debug", "debug_")
+@export var debug_print_mod_changes: bool = false ## Prints out stat mod recalculations in the editor if checked.
 
-var entity: PhysicsBody2D
 var stat_mods: Dictionary = {} ## The cache of mod resources currently applied to the entity's stats.
-@export var cached_stats: Dictionary = {} ## The up-to-date and calculated stats to be used by anything that depend on them.
-@export var base_values: Dictionary = {} ## The unchanging base values of each moddable stat, usually set by copying the exported values from the component into a dictionary that is passed into the setup function below. 
+var cached_stats: Dictionary = {} ## The up-to-date and calculated stats to be used by anything that depend on them.
+var base_values: Dictionary = {} ## The unchanging base values of each moddable stat, usually set by copying the exported values from the component into a dictionary that is passed into the setup function below. 
 
 
 ## Clears out the cached stats and recalculates everything based on base values.
 func reinit_on_load() -> void:
-	var temp_debug_print_changes: bool = debug_print_changes
-	debug_print_changes = false
+	var temp_debug_print_changes: bool = debug_print_mod_changes
+	debug_print_mod_changes = false
 	cached_stats = {}
 	for stat_id in base_values:
 		_recalculate_stat(stat_id, base_values.get(stat_id))
-	debug_print_changes = temp_debug_print_changes
+	debug_print_mod_changes = temp_debug_print_changes
 
 ## Sets up the base values dict and calculates initial values based on any already present mods. 
 func add_moddable_stats(base_valued_stats: Dictionary, stats_ui: Control = null) -> void:
-	var debug_print_temp_var: bool = debug_print_changes
-	debug_print_changes = false
+	var temp_debug_print_changes: bool = debug_print_mod_changes
+	debug_print_mod_changes = false
 	for stat_id in base_valued_stats.keys():
 		var base_value = base_valued_stats[stat_id]
 		stat_mods[stat_id] = {}
 		base_values[stat_id] = base_value
 		_recalculate_stat(stat_id, base_value, stats_ui)
-	debug_print_changes = debug_print_temp_var
+	debug_print_mod_changes = temp_debug_print_changes
 
 ## Recalculates a cached stat. Usually called once something has changed like from an update or removal.
 func _recalculate_stat(stat_id: String, base_value: float, stats_ui: Control = null) -> void:
@@ -45,7 +45,7 @@ func _recalculate_stat(stat_id: String, base_value: float, stats_ui: Control = n
 	cached_stats[stat_id] = max(0, result)
 	_update_ui_for_stat(stat_id, result, stats_ui)
 	
-	if DebugFlags.PrintFlags.stat_mod_changes_during_game and debug_print_changes:
+	if DebugFlags.PrintFlags.stat_mod_changes_during_game and debug_print_mod_changes:
 		var change_text = str(float(cached_stats[stat_id]) / float(base_values[stat_id]))
 		var base_text = "[color=gray][i](base)[/i][/color]" if cached_stats[stat_id] == base_values[stat_id] else "[color=pink][i](" + change_text + "%)[/i][/color]"
 		print_rich("[color=cyan]" + stat_id + base_text + "[/color]: [b]" + str(cached_stats[stat_id]) + "[/b]")
@@ -147,4 +147,4 @@ func _get_mod(stat_id: String, mod_id: String) -> EntityStatMod:
 
 ## Pushes an error to the console with the stat id and the mod id for the mod that could not be found.
 func _push_mod_not_found_error(stat_id: String, mod_id: String) -> void:
-	push_error("The mod for stat \"" + stat_id + "\"" + " with mod_id of: \"" + mod_id + "\" was not in the cache for the entity: \"" + entity.name + "\".")
+	push_error("The mod for stat \"" + stat_id + "\"" + " with mod_id of: \"" + mod_id + "\" was not in the cache: \"" + str(self) + "\".")

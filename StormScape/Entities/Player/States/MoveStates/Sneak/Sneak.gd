@@ -1,4 +1,4 @@
-extends DynamicState
+extends MoveState
 ## Handles when the character is sneaking, passing a stealth factor back up to the parent entity.
 
 @export var _max_stealth: int = 100 ## How much closer you can get to an unalereted enemy before alerting them.

@@ -1,9 +1,10 @@
-[gd_scene load_steps=32 format=3 uid="uid://bscnr6a23l10m"]
+[gd_scene load_steps=29 format=3 uid="uid://bscnr6a23l10m"]
 
 [ext_resource type="Script" path="res://Utilities/Game/WorldRoot/WorldRoot.gd" id="1_q0i4n"]
 [ext_resource type="Texture2D" uid="uid://c50xdwgnkx441" path="res://Stages/Tilesets/TilesetFloor.png" id="2_jx7f2"]
 [ext_resource type="Texture2D" uid="uid://nvl4eoe0gf5y" path="res://Stages/Tilesets/TilesetField.png" id="3_eucto"]
 [ext_resource type="PackedScene" uid="uid://dba8mrurjlekp" path="res://Entities/Player/Player.tscn" id="4_ptig0"]
+[ext_resource type="Script" path="res://Entities/Player/PlayerCamera.gd" id="4_tj8qg"]
 [ext_resource type="Script" path="res://Entities/EntityTypes/RigidEntity/RigidEntity.gd" id="5_vhyrg"]
 [ext_resource type="PackedScene" uid="uid://btba0jmsow1mx" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectReceiverComponent.tscn" id="6_haafe"]
 [ext_resource type="Script" path="res://Entities/Components/StatModComponents/StatModsCacheResource.gd" id="6_jky7o"]
@@ -13,11 +14,9 @@
 [ext_resource type="Script" path="res://Entities/Components/HitboxComponent/HitboxComponent.gd" id="11_vr4ax"]
 [ext_resource type="Script" path="res://Entities/EffectSystemResources/EffectSources/StaticEffectSource.gd" id="12_gga1h"]
 [ext_resource type="Script" path="res://Entities/EffectSystemResources/StatusEffects/StatusEffect.gd" id="13_33bgr"]
-[ext_resource type="Resource" uid="uid://brjtdk41hym1c" path="res://Entities/EffectSystemResources/StatusEffects/GoodEffects/Speed/Speed1.tres" id="14_mfw04"]
 [ext_resource type="Script" path="res://Utilities/Debug/TestBullet.gd" id="15_v7yfh"]
 [ext_resource type="Script" path="res://Entities/EffectSystemResources/EffectSources/MovingEffectSource.gd" id="16_5aosc"]
 [ext_resource type="Resource" uid="uid://b0it5xmpw16sd" path="res://Entities/EffectSystemResources/StatusEffects/BadEffects/Knockback/Knockback1.tres" id="17_re3lx"]
-[ext_resource type="Script" path="res://Entities/Components/StatModComponents/EntityStatMod.gd" id="18_1o6jq"]
 
 [sub_resource type="Environment" id="Environment_2wouv"]
 background_mode = 3
@@ -4104,9 +4103,7 @@ sources/2 = SubResource("TileSetAtlasSource_6prks")
 
 [sub_resource type="Resource" id="Resource_0ub65"]
 script = ExtResource("6_jky7o")
-debug_print_changes = false
-cached_stats = {}
-base_values = {}
+debug_print_mod_changes = false
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_sbju2"]
 
@@ -4126,30 +4123,10 @@ crit_multiplier = 1.5
 armor_penetration = 0
 base_healing = 0
 heal_affected_stats = 2
-status_effects = Array[ExtResource("13_33bgr")]([ExtResource("17_re3lx"), ExtResource("14_mfw04")])
+status_effects = Array[ExtResource("13_33bgr")]([ExtResource("17_re3lx")])
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_o8yml"]
 size = Vector2(14, 14)
-
-[sub_resource type="Resource" id="Resource_ifhmm"]
-script = ExtResource("18_1o6jq")
-type = 0
-stat_id = "max_health"
-mod_id = "mh_low1"
-operation = "-%"
-value = 50.0
-priority = 1
-can_stack = false
-max_stack_count = 3
-override_all = false
-
-[sub_resource type="Resource" id="Resource_jbdh5"]
-script = ExtResource("13_33bgr")
-handler_type = 0
-effect_name = "mh_low"
-effect_lvl = 1
-mod_time = 5.0
-stat_mods = Array[ExtResource("18_1o6jq")]([SubResource("Resource_ifhmm")])
 
 [sub_resource type="Resource" id="Resource_rvpdg"]
 script = ExtResource("16_5aosc")
@@ -4164,7 +4141,7 @@ crit_multiplier = 1.5
 armor_penetration = 0
 base_healing = 0
 heal_affected_stats = 2
-status_effects = Array[ExtResource("13_33bgr")]([SubResource("Resource_jbdh5")])
+status_effects = Array[ExtResource("13_33bgr")]([ExtResource("17_re3lx")])
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_8bjrm"]
 size = Vector2(6, 6)
@@ -4181,6 +4158,17 @@ environment = SubResource("Environment_2wouv")
 
 [node name="TileMapLayer" type="TileMapLayer" parent="WorldRoot" groups=["core"]]
 tile_set = SubResource("TileSet_wx2vu")
+
+[node name="PlayerCamera" type="Camera2D" parent="WorldRoot" node_paths=PackedStringArray("player") groups=["core"]]
+position_smoothing_speed = 18.0
+drag_left_margin = 0.4
+drag_top_margin = 0.4
+drag_right_margin = 0.4
+drag_bottom_margin = 0.4
+editor_draw_drag_margin = true
+script = ExtResource("4_tj8qg")
+player = NodePath("../Player")
+smoothing_enabled = true
 
 [node name="Player" parent="WorldRoot" instance=ExtResource("4_ptig0")]
 position = Vector2(258, 85)

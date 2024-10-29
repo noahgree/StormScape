@@ -1,4 +1,4 @@
-extends DynamicState
+extends MoveState
 ## Handles when the character is dashing.
 
 @export var _dash_speed: float = 1000 ## How fast the dash moves the character.

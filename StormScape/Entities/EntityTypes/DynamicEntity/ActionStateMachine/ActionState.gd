@@ -1,8 +1,8 @@
 extends State
-class_name DynamicState
+class_name ActionState
 ## State class intended to be subclassed by specific dynamic states like idle and move.
 
-@onready var fsm: MoveStateMachine = get_parent()
+@onready var fsm: ActionStateMachine = get_parent()
 
 var dynamic_entity: DynamicEntity ## The dynamic entity which contains the FSM that this state is a part of.
 var stamina_component: StaminaComponent ## The stamina component for the dynamic entity.

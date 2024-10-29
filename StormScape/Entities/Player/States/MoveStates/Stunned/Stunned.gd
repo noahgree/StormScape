@@ -1,4 +1,4 @@
-extends DynamicState
+extends MoveState
 ## Handles when the entity is stunned. This is a required state for all dynamic entities.
 
 @onready var stunned_timer: Timer = %StunnedTimer
