@@ -5,7 +5,6 @@
 
 [sub_resource type="Resource" id="Resource_4kxph"]
 script = ExtResource("2_2qesc")
-type = 2
 stat_id = "confusion_amount"
 mod_id = "Confusion"
 operation = "+"
@@ -20,5 +19,7 @@ script = ExtResource("1_h4nev")
 handler_type = 0
 effect_name = "Confusion"
 effect_lvl = 0
+is_bad_effect = true
+effects_to_stop = Array[String]([])
 mod_time = 5.0
 stat_mods = Array[ExtResource("2_2qesc")]([SubResource("Resource_4kxph")])

@@ -5,6 +5,8 @@ class_name StatusEffect
 @export var handler_type: GlobalData.EntityStatusEffectType = GlobalData.EntityStatusEffectType.NONE ## What kind of handler node should process this effect.
 @export var effect_name: String ## What the effect title is without the level attached.
 @export_range(1, 100, 1) var effect_lvl: int = 1 ## The level of the effect, 1 is the lowest.
+@export var is_bad_effect: bool = true ## Whether this should be considered a negative effect. If unchecked, this is considered a good effect. This is used when handling which teams should receive which types of effects related to who sent them.
+@export var effects_to_stop: Array[String] ## The names of other status effects that this status effect should stop and remove from the entity upon being applied.
 @export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var mod_time: float = 5 ## The duration of the mods applied by this effect.
 @export var stat_mods: Array[EntityStatMod] ## The mods applied by this effect. Do not have duplicates in this array.
 
