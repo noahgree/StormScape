@@ -4161,11 +4161,6 @@ tile_set = SubResource("TileSet_wx2vu")
 
 [node name="PlayerCamera" type="Camera2D" parent="WorldRoot" node_paths=PackedStringArray("player") groups=["core"]]
 position_smoothing_speed = 18.0
-drag_left_margin = 0.4
-drag_top_margin = 0.4
-drag_right_margin = 0.4
-drag_bottom_margin = 0.4
-editor_draw_drag_margin = true
 script = ExtResource("4_tj8qg")
 player = NodePath("../Player")
 smoothing_enabled = true

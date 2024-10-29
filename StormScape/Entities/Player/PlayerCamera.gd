@@ -17,7 +17,6 @@ func _physics_process(delta: float) -> void:
 			var vertical_limit = screen_size.y * drag_vertical
 			var horizontal_limit = screen_size.x * drag_horizontal
 			var player_screen_pos = to_local(player.global_position)
-
 			
 			# Check vertical threshold
 			if player_screen_pos.y < -vertical_limit:

@@ -2,7 +2,7 @@
 
 importer="font_data_dynamic"
 type="FontFile"
-uid="uid://pf7xf7eg6y8t"
+uid="uid://c7ikl4pyo6e4l"
 path="res://.godot/imported/Kenney Future.ttf-bec0a5d4922ec99798e914b98ebf17c7.fontdata"
 
 [deps]
@@ -13,7 +13,7 @@ dest_files=["res://.godot/imported/Kenney Future.ttf-bec0a5d4922ec99798e914b98eb
 [params]
 
 Rendering=null
-antialiasing=0
+antialiasing=1
 generate_mipmaps=false
 disable_embedded_bitmaps=true
 multichannel_signed_distance_field=false

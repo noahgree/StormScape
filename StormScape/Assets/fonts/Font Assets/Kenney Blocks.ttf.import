@@ -2,7 +2,7 @@
 
 importer="font_data_dynamic"
 type="FontFile"
-uid="uid://bcje03rxqc487"
+uid="uid://cxmqv86x64y7t"
 path="res://.godot/imported/Kenney Blocks.ttf-e667167695a79b8a89abcc5debc51be4.fontdata"
 
 [deps]
@@ -22,7 +22,7 @@ msdf_size=48
 allow_system_fallback=true
 force_autohinter=false
 hinting=1
-subpixel_positioning=0
+subpixel_positioning=1
 oversampling=0.0
 Fallbacks=null
 fallbacks=[]
