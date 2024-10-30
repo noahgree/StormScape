@@ -4,6 +4,7 @@ extends MoveState
 @export var _max_stealth: int = 100 ## How much closer you can get to an unalereted enemy before alerting them.
 @export var _max_sneak_speed: int = 50 ## How fast you can move while sneaking.
 @export var _sneak_acceleration: float = 500 ## The increase in speed per second for the entity while sneaking.
+@export var _sneak_collision_impulse_factor: float = 1.0 ## A multiplier that controls how much impulse gets applied to rigid entites when colliding with them during the run state.
 
 const DEFAULT_SNEAK_ANIM_TIME_SCALE: float = 0.65 ## How fast the sneak anim should play before stat mods.
 var movement_vector: Vector2 = Vector2.ZERO
@@ -18,7 +19,7 @@ func exit() -> void:
 func _ready() -> void:
 	var moddable_stats: Dictionary = {
 		"max_stealth" : _max_stealth, "max_sneak_speed" : _max_sneak_speed,
-		"sneak_acceleration" : _sneak_acceleration
+		"sneak_acceleration" : _sneak_acceleration, "sneak_collision_impulse_factor" : _sneak_collision_impulse_factor
 	}
 	get_parent().entity.stats.add_moddable_stats(moddable_stats)
 
@@ -54,6 +55,13 @@ func _do_character_sneak(delta: float) -> void:
 		dynamic_entity.velocity = dynamic_entity.velocity.limit_length(dynamic_entity.stats.get_stat("max_sneak_speed"))
 	
 	dynamic_entity.move_and_slide()
+	
+	# handle collisions with rigid entities 
+	for i in dynamic_entity.get_slide_collision_count():
+		var c = dynamic_entity.get_slide_collision(i)
+		var collider = c.get_collider()
+		if collider is RigidEntity:
+			collider.apply_central_impulse(-c.get_normal().normalized() * dynamic_entity.velocity.length() / (15 / (dynamic_entity.stats.get_stat("sneak_collision_impulse_factor"))))
 
 func _calculate_move_vector() -> Vector2:
 	return _get_input_vector()

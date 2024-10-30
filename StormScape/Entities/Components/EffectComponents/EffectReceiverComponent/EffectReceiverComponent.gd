@@ -82,10 +82,13 @@ func _unpack_status_effects_from_source(effect_source: EffectSource) -> void:
 	
 	for status_effect in effect_source.status_effects:
 		if status_effect:
-			if (not do_bad_effects or "Untouchable" in affected_entity.effects.current_effects) and (status_effect.effect_name in GlobalData.BAD_STATUS_EFFECTS):
+			if (not do_bad_effects or "Untouchable" in affected_entity.effects.current_effects) and (status_effect.is_bad_effect):
 				continue
-			if (not do_good_effects) and (status_effect.effect_name in GlobalData.GOOD_STATUS_EFFECTS):
+			if (not do_good_effects) and (not status_effect.is_bad_effect):
 				continue
+			
+			for effect_to_stop in status_effect.effects_to_stop:
+				affected_entity.effects.request_effect_removal(effect_to_stop)
 			
 			_pass_effect_to_handler(status_effect)
 		

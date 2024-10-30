@@ -1,4 +1,4 @@
-[gd_scene load_steps=29 format=3 uid="uid://bscnr6a23l10m"]
+[gd_scene load_steps=30 format=3 uid="uid://bscnr6a23l10m"]
 
 [ext_resource type="Script" path="res://Utilities/Game/WorldRoot/WorldRoot.gd" id="1_q0i4n"]
 [ext_resource type="Texture2D" uid="uid://c50xdwgnkx441" path="res://Stages/Tilesets/TilesetFloor.png" id="2_jx7f2"]
@@ -17,6 +17,7 @@
 [ext_resource type="Script" path="res://Utilities/Debug/TestBullet.gd" id="15_v7yfh"]
 [ext_resource type="Script" path="res://Entities/EffectSystemResources/EffectSources/MovingEffectSource.gd" id="16_5aosc"]
 [ext_resource type="Resource" uid="uid://b0it5xmpw16sd" path="res://Entities/EffectSystemResources/StatusEffects/BadEffects/Knockback/Knockback1.tres" id="17_re3lx"]
+[ext_resource type="Resource" uid="uid://3e6mdax7u2av" path="res://Entities/EffectSystemResources/StatusEffects/BadEffects/Stun/Stun1.tres" id="19_14mf1"]
 
 [sub_resource type="Environment" id="Environment_2wouv"]
 background_mode = 3
@@ -4123,7 +4124,7 @@ crit_multiplier = 1.5
 armor_penetration = 0
 base_healing = 0
 heal_affected_stats = 2
-status_effects = Array[ExtResource("13_33bgr")]([ExtResource("17_re3lx")])
+status_effects = Array[ExtResource("13_33bgr")]([ExtResource("19_14mf1"), ExtResource("17_re3lx")])
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_o8yml"]
 size = Vector2(14, 14)
@@ -4134,7 +4135,7 @@ source_team = 2
 bad_effect_affected_teams = 3
 good_effect_affected_teams = 3
 scanned_phys_layers = 191
-base_damage = 10
+base_damage = 0
 dmg_affected_stats = 2
 crit_chance = 0
 crit_multiplier = 1.5

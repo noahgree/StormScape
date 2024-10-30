@@ -9,7 +9,7 @@ extends MoveState
 @export var ghost_count: int = 8 ## How many ghosts to make during the dash.
 @export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var ghost_fade_time: float = 0.1 ## How long ghosts take to fade.
 
-@onready var dash_timer: Timer = %DashTimer ## Timer to enforce how long the dash lasts for.
+@onready var dash_timer: Timer = $DashTimer ## Timer to enforce how long the dash lasts for.
 
 var movement_vector: Vector2 = Vector2.ZERO ## The current direction of movement.
 var ghosts_spawned: int = 0 ## The number of ghosts spawned so far in this dash.

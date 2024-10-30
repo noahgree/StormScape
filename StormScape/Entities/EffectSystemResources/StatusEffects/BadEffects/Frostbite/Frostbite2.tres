@@ -13,7 +13,6 @@ dmg_affected_stats = 0
 
 [sub_resource type="Resource" id="Resource_xefcn"]
 script = ExtResource("3_63sjm")
-type = 2
 stat_id = "friction"
 mod_id = "frostbite2"
 operation = "-%"
@@ -25,7 +24,6 @@ override_all = false
 
 [sub_resource type="Resource" id="Resource_3of86"]
 script = ExtResource("3_63sjm")
-type = 2
 stat_id = "acceleration"
 mod_id = "frostbite2"
 operation = "-%"
@@ -41,5 +39,7 @@ dot_resource = SubResource("Resource_ge1fd")
 handler_type = 5
 effect_name = "Frostbite"
 effect_lvl = 2
+is_bad_effect = true
+effects_to_stop = Array[String](["Burning"])
 mod_time = 10.0
 stat_mods = Array[ExtResource("3_63sjm")]([SubResource("Resource_xefcn"), SubResource("Resource_3of86")])

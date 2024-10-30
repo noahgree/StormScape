@@ -1,4 +1,4 @@
-[gd_scene load_steps=76 format=3 uid="uid://dba8mrurjlekp"]
+[gd_scene load_steps=77 format=3 uid="uid://dba8mrurjlekp"]
 
 [ext_resource type="Script" path="res://Entities/Player/Player.gd" id="1_m33tt"]
 [ext_resource type="SpriteFrames" uid="uid://cxo625s2sh5hx" path="res://Entities/Player/Spritesheets/Base/Base.tres" id="2_t1by5"]
@@ -30,11 +30,12 @@
 [ext_resource type="Script" path="res://Entities/Player/States/MoveStates/Die/Die.gd" id="18_jcofa"]
 [ext_resource type="Script" path="res://Entities/Player/States/MoveStates/Sneak/Sneak.gd" id="19_alhqe"]
 [ext_resource type="PackedScene" uid="uid://blbjjhekjsi6y" path="res://Entities/EntityTypes/DynamicEntity/ActionStateMachine/ActionStateMachine.tscn" id="27_16wot"]
+[ext_resource type="PackedScene" uid="uid://c6wbsh31fq52k" path="res://Entities/Player/States/MoveStates/Stunned/StunIndicator.tscn" id="27_fyxoi"]
 [ext_resource type="Script" path="res://Entities/Player/States/ActionStates/ActionIdle.gd" id="28_mrxbf"]
 
 [sub_resource type="Resource" id="Resource_rwbul"]
 script = ExtResource("2_vyeuy")
-debug_print_mod_changes = false
+debug_print_mod_changes = true
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_o7k7i"]
 radius = 7.0
@@ -683,6 +684,7 @@ stats = SubResource("Resource_rwbul")
 effects = NodePath("StatusEffectManager")
 
 [node name="Collision" type="CollisionShape2D" parent="."]
+visible = false
 position = Vector2(0, -5)
 shape = SubResource("CircleShape2D_o7k7i")
 debug_color = Color(0, 0.6, 0.701961, 0.180392)
@@ -701,6 +703,7 @@ stats_ui = NodePath("../PlayerUI/PlayerStatsOverlay")
 stats_ui = NodePath("../PlayerUI/PlayerStatsOverlay")
 
 [node name="EffectReceiverComponent" parent="." node_paths=PackedStringArray("affected_entity", "health_component", "stamina_component", "dmg_handler", "heal_handler", "knockback_handler", "stun_handler", "poison_handler", "regen_handler", "frostbite_handler", "burning_handler", "time_snare_handler") instance=ExtResource("4_hhm8x")]
+visible = false
 affected_entity = NodePath("..")
 health_component = NodePath("../HealthComponent")
 stamina_component = NodePath("../StaminaComponent")
@@ -768,18 +771,16 @@ script = ExtResource("9_a1qv1")
 ghost_scene = ExtResource("10_c2plq")
 
 [node name="DashTimer" type="Timer" parent="MoveStateMachine/Dash"]
-unique_name_in_owner = true
 one_shot = true
 
 [node name="DashCooldownTimer" type="Timer" parent="MoveStateMachine/Dash"]
-unique_name_in_owner = true
 one_shot = true
 
 [node name="Stunned" type="Node" parent="MoveStateMachine"]
 script = ExtResource("15_eiig3")
+indicator_scene = ExtResource("27_fyxoi")
 
 [node name="StunnedTimer" type="Timer" parent="MoveStateMachine/Stunned"]
-unique_name_in_owner = true
 one_shot = true
 
 [node name="ActionStateMachine" parent="." node_paths=PackedStringArray("entity", "initial_state") instance=ExtResource("27_16wot")]

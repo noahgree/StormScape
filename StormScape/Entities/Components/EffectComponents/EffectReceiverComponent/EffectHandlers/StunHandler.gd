@@ -22,7 +22,7 @@ func _ready() -> void:
 func handle_stun(stun_effect: StunEffect) -> void:
 	var stun_weakness: float = affected_entity.stats.get_stat("stun_weakness")
 	var stun_resistance: float = affected_entity.stats.get_stat("stun_resistance")
-	var handled_stun_time: float = stun_effect.dmg_stun_time * (1 + stun_weakness - stun_resistance)
+	var handled_stun_time: float = stun_effect.stun_time * (1 + stun_weakness - stun_resistance)
 	
 	_send_handled_stun(handled_stun_time)
 

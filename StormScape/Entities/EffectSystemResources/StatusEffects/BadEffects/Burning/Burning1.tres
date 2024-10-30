@@ -9,7 +9,7 @@ script = ExtResource("1_olowo")
 damaging_time = 8.0
 dmg_ticks_array = Array[int]([3, 3, 3, 3])
 delay_time = 3.0
-dmg_affected_stats = 1
+dmg_affected_stats = 0
 
 [sub_resource type="Resource" id="Resource_xigmb"]
 script = ExtResource("2_l3ggl")
@@ -29,6 +29,6 @@ handler_type = 6
 effect_name = "Burning"
 effect_lvl = 1
 is_bad_effect = true
-effects_to_stop = Array[String]([])
+effects_to_stop = Array[String](["Frostbite"])
 mod_time = 5.0
 stat_mods = Array[ExtResource("2_l3ggl")]([SubResource("Resource_xigmb")])

@@ -5,9 +5,11 @@
 
 [resource]
 script = ExtResource("1_sdbli")
-dmg_stun_time = 0.5
+stun_time = 2.5
 handler_type = 2
 effect_name = "Stun"
 effect_lvl = 1
-mod_time = 1.0
+is_bad_effect = true
+effects_to_stop = Array[String]([])
+mod_time = 2.5
 stat_mods = Array[ExtResource("2_vysiy")]([])

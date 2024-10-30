@@ -9,8 +9,8 @@ class_name MoveStateMachine
 @export var _friction: float = 1550 ## The decrease in speed per second for the entity.
 @export var _confusion_amount: float = 0 ## The amount of influence to apply to the velocity to simulate confusion.
 
-@onready var dash_cooldown_timer: Timer = %DashCooldownTimer ## The timer controlling the minimum time between activating dashes.
-@onready var stunned_timer: Timer = %StunnedTimer
+@onready var dash_cooldown_timer: Timer = $Dash/DashCooldownTimer ## The timer controlling the minimum time between activating dashes.
+@onready var stunned_timer: Timer = $Stunned/StunnedTimer ## The timer controlling how long the stun effect has remaining.
 
 var anim_vector: Vector2 = Vector2.ZERO ## The vector to provide the associated animation state machine with.
 var knockback_vector: Vector2 = Vector2.ZERO ## The current knockback to apply to any state that can move.

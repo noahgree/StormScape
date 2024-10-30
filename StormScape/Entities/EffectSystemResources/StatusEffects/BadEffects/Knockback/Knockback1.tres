@@ -12,5 +12,5 @@ effect_name = "Knockback"
 effect_lvl = 1
 is_bad_effect = true
 effects_to_stop = Array[String]([])
-mod_time = 0.2
+mod_time = 0.5
 stat_mods = Array[ExtResource("2_rysxw")]([])

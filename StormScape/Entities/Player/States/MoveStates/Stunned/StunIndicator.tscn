@@ -1,0 +1,74 @@
+[gd_scene load_steps=11 format=3 uid="uid://c6wbsh31fq52k"]
+
+[ext_resource type="Texture2D" uid="uid://qqal2orje3v0" path="res://Entities/Player/States/MoveStates/Stunned/effect_stun.png" id="1_5ddm1"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bjkj1"]
+atlas = ExtResource("1_5ddm1")
+region = Rect2(0, 0, 32, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_pxn0x"]
+atlas = ExtResource("1_5ddm1")
+region = Rect2(32, 0, 32, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qgt0y"]
+atlas = ExtResource("1_5ddm1")
+region = Rect2(64, 0, 32, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6wyxa"]
+atlas = ExtResource("1_5ddm1")
+region = Rect2(96, 0, 32, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_r760r"]
+atlas = ExtResource("1_5ddm1")
+region = Rect2(128, 0, 32, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_mie45"]
+atlas = ExtResource("1_5ddm1")
+region = Rect2(160, 0, 32, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0krdc"]
+atlas = ExtResource("1_5ddm1")
+region = Rect2(192, 0, 32, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2sqrl"]
+atlas = ExtResource("1_5ddm1")
+region = Rect2(224, 0, 32, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_5ms8p"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_bjkj1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_pxn0x")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_qgt0y")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6wyxa")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_r760r")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_mie45")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0krdc")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2sqrl")
+}],
+"loop": true,
+"name": &"stun",
+"speed": 8.0
+}]
+
+[node name="StunIndicator" type="AnimatedSprite2D"]
+self_modulate = Color(1.5, 1.5, 1.5, 1)
+position = Vector2(0, -8)
+sprite_frames = SubResource("SpriteFrames_5ms8p")
+animation = &"stun"
+autoplay = "stun"

@@ -12,9 +12,6 @@ enum HealAffectedStats { HEALTH_ONLY, SHIELD_ONLY, HEALTH_THEN_SHIELD, SIMULTANE
 enum BadEffectAffectedTeams { ENEMIES = 1 << 0, ALLIES = 1 << 1 }
 enum GoodEffectAffectedTeams { ENEMIES = 1 << 0, ALLIES = 1 << 1 }
 
-enum EntityStatusEffectType { ## The types of handlers that process additional properties of a status effect.
+enum EntityStatusEffectType { ## The types of handlers that process additional logic of a status effect.
 	NONE, KNOCKBACK, STUN, POISON, REGEN, FROSTBITE, BURNING, TIMESNARE 
 	}
-
-const BAD_STATUS_EFFECTS: Array[String] = ["Knockback", "Stun", "Poison", "Frostbite", "Burning", "Confusion", "Slowness", "TimeSnare"]  # FIXME: DELETE THIS AND REDO VIA BOOL
-const GOOD_STATUS_EFFECTS: Array[String] = ["Regen", "Untouchable", "Speed"] # FIXME: DELETE THIS AND REDO VIA BOOL

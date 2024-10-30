@@ -1,6 +1,7 @@
 extends Node
 ## An autoload singleton file for flagging certain debug features like print statements and audio device switches.
 
+
 class PrintFlags:
 	static var state_machine_swaps: bool = false
 	static var stat_mod_changes_during_game: bool = true
