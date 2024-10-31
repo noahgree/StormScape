@@ -1,19 +1,19 @@
 extends Area2D
 class_name HitboxComponent
-## The area2d that defines where an effect source comes from. 
+## The area2d that defines where an effect source comes from.
 
 @export var effect_source: EffectSource ## The effect to be applied when this hitbox hits an effect receiver.
 @export var source_entity: PhysicsBody2D ## The entity that the effect was produced by.
 
 
-## Setup the area detection signal and turn off monitorable for performance. 
+## Setup the area detection signal and turn off monitorable for performance.
 ## Also set collision mask to the matching flags.
 func _ready() -> void:
 	self.area_entered.connect(_on_area_entered)
 	monitorable = false
 	collision_layer = 0
 	collision_mask = effect_source.scanned_phys_layers
-	
+
 	effect_source.source_entity = self
 	effect_source.source_team = source_entity.team
 

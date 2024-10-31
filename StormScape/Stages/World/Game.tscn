@@ -1,6 +1,7 @@
 [gd_scene load_steps=30 format=3 uid="uid://bscnr6a23l10m"]
 
 [ext_resource type="Script" path="res://Utilities/Game/WorldRoot/WorldRoot.gd" id="1_q0i4n"]
+[ext_resource type="Script" path="res://Stages/World/BackgroundMusicManager.gd" id="1_q5pr2"]
 [ext_resource type="Texture2D" uid="uid://c50xdwgnkx441" path="res://Stages/Tilesets/TilesetFloor.png" id="2_jx7f2"]
 [ext_resource type="Texture2D" uid="uid://nvl4eoe0gf5y" path="res://Stages/Tilesets/TilesetField.png" id="3_eucto"]
 [ext_resource type="PackedScene" uid="uid://dba8mrurjlekp" path="res://Entities/Player/Player.tscn" id="4_ptig0"]
@@ -17,7 +18,6 @@
 [ext_resource type="Script" path="res://Utilities/Debug/TestBullet.gd" id="15_v7yfh"]
 [ext_resource type="Script" path="res://Entities/EffectSystemResources/EffectSources/MovingEffectSource.gd" id="16_5aosc"]
 [ext_resource type="Resource" uid="uid://b0it5xmpw16sd" path="res://Entities/EffectSystemResources/StatusEffects/BadEffects/Knockback/Knockback1.tres" id="17_re3lx"]
-[ext_resource type="Resource" uid="uid://3e6mdax7u2av" path="res://Entities/EffectSystemResources/StatusEffects/BadEffects/Stun/Stun1.tres" id="19_14mf1"]
 
 [sub_resource type="Environment" id="Environment_2wouv"]
 background_mode = 3
@@ -4124,7 +4124,11 @@ crit_multiplier = 1.5
 armor_penetration = 0
 base_healing = 0
 heal_affected_stats = 2
-status_effects = Array[ExtResource("13_33bgr")]([ExtResource("19_14mf1"), ExtResource("17_re3lx")])
+cam_shake_strength = 1.5
+cam_shake_duration = 0.08
+cam_freeze_multiplier = 1.0
+cam_freeze_duration = 0.0
+status_effects = Array[ExtResource("13_33bgr")]([ExtResource("17_re3lx")])
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_o8yml"]
 size = Vector2(14, 14)
@@ -4142,12 +4146,19 @@ crit_multiplier = 1.5
 armor_penetration = 0
 base_healing = 0
 heal_affected_stats = 2
+cam_shake_strength = 0.0
+cam_shake_duration = 0.0
+cam_freeze_multiplier = 1.0
+cam_freeze_duration = 0.0
 status_effects = Array[ExtResource("13_33bgr")]([ExtResource("17_re3lx")])
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_8bjrm"]
 size = Vector2(6, 6)
 
 [node name="Game" type="Node2D"]
+
+[node name="BackgroundMusicManager" type="Node" parent="." groups=["core"]]
+script = ExtResource("1_q5pr2")
 
 [node name="WorldRoot" type="Node2D" parent="." groups=["core"]]
 unique_name_in_owner = true
@@ -4159,16 +4170,6 @@ environment = SubResource("Environment_2wouv")
 
 [node name="TileMapLayer" type="TileMapLayer" parent="WorldRoot" groups=["core"]]
 tile_set = SubResource("TileSet_wx2vu")
-
-[node name="PlayerCamera" type="Camera2D" parent="WorldRoot" node_paths=PackedStringArray("player") groups=["core"]]
-position_smoothing_speed = 18.0
-script = ExtResource("4_tj8qg")
-player = NodePath("../Player")
-smoothing_enabled = true
-
-[node name="Player" parent="WorldRoot" instance=ExtResource("4_ptig0")]
-position = Vector2(258, 85)
-collision_mask = 245
 
 [node name="Testing" type="Node2D" parent="WorldRoot"]
 
@@ -4250,3 +4251,14 @@ source_entity = NodePath("../../Enemy")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="WorldRoot/Testing/TestMovingEffectSource/Hitbox"]
 shape = SubResource("RectangleShape2D_8bjrm")
+
+[node name="Player" parent="WorldRoot" instance=ExtResource("4_ptig0")]
+position = Vector2(258, 85)
+collision_mask = 245
+
+[node name="PlayerCamera" type="Camera2D" parent="WorldRoot" node_paths=PackedStringArray("player") groups=["core"]]
+unique_name_in_owner = true
+position_smoothing_speed = 18.0
+script = ExtResource("4_tj8qg")
+player = NodePath("../Player")
+smoothing_enabled = true

@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="AudioResource" load_steps=2 format=3 uid="uid://cjv5d4cwpj1l8"]
+
+[ext_resource type="Script" path="res://Utilities/Game/Audio/AudioResource.gd" id="1_vcftv"]
+
+[resource]
+script = ExtResource("1_vcftv")
+name = "PlayerSprintWind"
+sound_file_paths = Array[String](["res://Assets/Audio/Sfx/SfxRawAudio/Characters/Player/Movement/Run/Sprint/player_sprint_wind.wav"])
+concurrent_limit = 1
+rythmic_delay = 0.0
+volume = -18
+pitch_scale = 1.0
+pitch_randomness = 0.0
+restart_if_at_limit = false
+should_loop = true
+max_distance = 2000
+attentuation_falloff = 1.0

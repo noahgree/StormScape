@@ -11,12 +11,12 @@ class_name StatusEffectManager
 @export var print_effect_updates: bool = false ## Whether to print when this entity has status effects added and removed.
 
 var current_effects: Dictionary = {} ## Keys are general status effect titles like "Poison", and values are the effect resources themselves.
-var effect_timers: Dictionary = {} ## Holds references to all timers currently tracking active status effects. 
+var effect_timers: Dictionary = {} ## Holds references to all timers currently tracking active status effects.
 var saved_times_left: Dictionary = {} ## Holds time remaining for status effects that were applied during a game save.
 
 
 #region Save & Load
-## We save every effect timer that is in progress into the saved_times_left. 
+## We save every effect timer that is in progress into the saved_times_left.
 func _on_save_game(_save_data: Array[SaveData]) -> void:
 	for effect_name in effect_timers.keys():
 		saved_times_left[effect_name] = effect_timers.get(effect_name, 0.001).time_left
@@ -34,13 +34,13 @@ func _on_before_load_game() -> void:
 func _on_load_game() -> void:
 	for status_effect: StatusEffect in current_effects.values():
 		var clean_status_effect: StatusEffect = status_effect.duplicate()
-		
+
 		clean_status_effect.mod_time = saved_times_left.get(status_effect.effect_name, 0.001)
 		if "dot_resource" in clean_status_effect:
 			clean_status_effect.dot_resource = null
 		if "hot_resource" in clean_status_effect:
 			clean_status_effect.hot_resource = null
-		
+
 		if DebugFlags.PrintFlags.current_effect_changes and print_effect_updates:
 			print_rich("-------[color=green]Restoring[/color][b] " + str(status_effect.effect_name) + str(status_effect.effect_lvl) + "[/b]-------")
 		_add_status_effect(clean_status_effect)
@@ -56,7 +56,7 @@ func _ready() -> void:
 func handle_status_effect(status_effect: StatusEffect) -> void:
 	if DebugFlags.PrintFlags.current_effect_changes and print_effect_updates:
 		print_rich("-------[color=green]Adding[/color][b] " + str(status_effect.effect_name) + str(status_effect.effect_lvl) + "[/b]-------")
-	
+
 	if effect_receiver.can_receive_stat_mods:
 		_handle_status_effect_mods(status_effect)
 
@@ -64,7 +64,7 @@ func handle_status_effect(status_effect: StatusEffect) -> void:
 func _handle_status_effect_mods(status_effect: StatusEffect) -> void:
 	if status_effect.effect_name in current_effects:
 		var existing_lvl = current_effects[status_effect.effect_name].effect_lvl
-		
+
 		if existing_lvl > status_effect.effect_lvl: # new effect is lower lvl
 			var time_to_add: float = status_effect.mod_time * (float(status_effect.effect_lvl) / float(existing_lvl))
 			_extend_effect_duration(status_effect.effect_name, time_to_add)
@@ -86,17 +86,17 @@ func _add_status_effect(status_effect: StatusEffect) -> void:
 	var mod_timer: Timer = Timer.new()
 	mod_timer.wait_time = max(0.001, status_effect.mod_time)
 	mod_timer.one_shot = true
-	
+
 	var callable = Callable(self, "_remove_status_effect").bind(status_effect)
 	mod_timer.timeout.connect(callable)
 	mod_timer.set_meta("callable", callable)
-	
+
 	mod_timer.name = str(status_effect.effect_name) + str(status_effect.effect_lvl) + "_timer"
 	add_child(mod_timer)
 	mod_timer.start()
-	
+
 	effect_timers[status_effect.effect_name] = mod_timer
-	
+
 	for mod_resource in status_effect.stat_mods:
 		var mod: EntityStatMod = (mod_resource as EntityStatMod)
 		get_parent().stats.add_mods([mod] as Array[EntityStatMod], stats_ui)
@@ -122,14 +122,14 @@ func _restart_effect_duration(effect_name: String) -> void:
 func _remove_status_effect(status_effect: StatusEffect) -> void:
 	if DebugFlags.PrintFlags.current_effect_changes and print_effect_updates:
 		print_rich("-------[color=red]Removed[/color][b] " + str(status_effect.effect_name) + str(status_effect.effect_lvl) + "[/b]-------")
-	
+
 	for mod_resource in status_effect.stat_mods:
 		var mod: EntityStatMod = (mod_resource as EntityStatMod)
 		get_parent().stats.remove_mod(mod.stat_id, mod.mod_id, stats_ui)
-	
+
 	if status_effect.effect_name in current_effects:
 		current_effects.erase(status_effect.effect_name)
-	
+
 	var timer: Timer = effect_timers.get(status_effect.effect_name, null)
 	if timer != null:
 		if timer.has_meta("callable"): # so we can cancel any pending callables before freeing
@@ -148,10 +148,10 @@ func check_if_effect(effect_name: String) -> bool:
 func request_effect_removal(effect_name: String) -> void:
 	var existing_effect: StatusEffect = current_effects.get(effect_name, null)
 	if existing_effect: _remove_status_effect(existing_effect)
-	
+
 	if effect_receiver.has_node("DmgHandler"):
 		effect_receiver.get_node("DmgHandler").cancel_over_time_dmg(effect_name)
-	if effect_receiver.has_node("HealHandler"): 
+	if effect_receiver.has_node("HealHandler"):
 		effect_receiver.get_node("HealHandler").cancel_over_time_heal(effect_name)
 
 ## Removes all bad status effects except for an optional exception effect that may be specified.

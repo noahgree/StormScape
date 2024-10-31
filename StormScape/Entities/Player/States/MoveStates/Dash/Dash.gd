@@ -16,11 +16,12 @@ var ghosts_spawned: int = 0 ## The number of ghosts spawned so far in this dash.
 var time_since_ghost: float = 0.0 ## The number of seconds since the last ghost spawn.
 var can_spawn_ghosts: bool = false ## Whether we have the proper node to enable ghost spawns during dash.
 var parent_sprite_node: Node2D
+var collision_shake_complete: bool = false ## Whether the character hit a collider and had shake applied (if player) during the current dash state
 
 
 func _ready() -> void:
 	var moddable_stats: Dictionary = {
-		"dash_speed" : _dash_speed, "dash_duration" : _dash_duration, 
+		"dash_speed" : _dash_speed, "dash_duration" : _dash_duration,
 		"dash_cooldown" : _dash_cooldown, "dash_collision_impulse_factor" : _dash_collision_impulse_factor
 	}
 	get_parent().entity.stats.add_moddable_stats(moddable_stats)
@@ -29,13 +30,15 @@ func enter() -> void:
 	fsm.anim_tree["parameters/playback"].travel("run")
 	fsm.knockback_vector = Vector2.ZERO
 	fsm.can_receive_effects = false
-	
+	collision_shake_complete = false
+	_play_dash_sound()
+
 	ghosts_spawned = 0
 	dash_timer.start(dynamic_entity.stats.get_stat("dash_duration"))
 	fsm.dash_cooldown_timer.start(dynamic_entity.stats.get_stat("dash_duration") + dynamic_entity.stats.get_stat("dash_cooldown"))
 	movement_vector = _calculate_move_vector()
 	fsm.anim_vector = movement_vector
-	
+
 	if dynamic_entity.has_node("AnimatedSprite2D"):
 		parent_sprite_node = dynamic_entity.get_node("AnimatedSprite2D")
 	elif dynamic_entity.has_node("Sprite2D"):
@@ -50,6 +53,7 @@ func exit() -> void:
 	dash_timer.stop()
 	dynamic_entity.velocity = Vector2.ZERO
 	fsm.knockback_vector = Vector2.ZERO
+	_stop_dash_sound()
 
 ## Ticks the time since last ghost spawn.
 func state_process(delta: float) -> void:
@@ -65,13 +69,17 @@ func state_physics_process(_delta: float)  -> void:
 func _do_character_dash() -> void:
 	dynamic_entity.velocity = movement_vector * dynamic_entity.stats.get_stat("dash_speed")
 	dynamic_entity.move_and_slide()
-	
-	# handle collisions with rigid entities 
+
+	# handle collisions with rigid entities
 	for i in dynamic_entity.get_slide_collision_count():
 		var c = dynamic_entity.get_slide_collision(i)
 		var collider = c.get_collider()
 		if collider is RigidEntity:
 			collider.apply_central_impulse(-c.get_normal().normalized() * dynamic_entity.velocity.length() / (5 / (dynamic_entity.stats.get_stat("dash_collision_impulse_factor"))))
+			if not collision_shake_complete:
+				GlobalData.player_camera.start_shake(2.2, 0.15)
+				AudioManager.play_sound("PlayerDashImpact", AudioManager.SoundType.SFX_2D, dynamic_entity.global_position)
+				collision_shake_complete = true
 
 func _calculate_move_vector() -> Vector2:
 	return (_get_input_vector().rotated(dynamic_entity.stats.get_stat("confusion_amount")))
@@ -95,13 +103,19 @@ func _create_ghost() -> void:
 		sprite_texture = animated_sprite_node.sprite_frames.get_frame_texture(current_anim, current_frame)
 	elif parent_sprite_node is Sprite2D:
 		sprite_texture = parent_sprite_node.texture
-	
+
 	var ghost_instance = ghost_scene.instantiate()
 	var ghost_pos: Vector2 = Vector2(dynamic_entity.position.x + parent_sprite_node.position.x, dynamic_entity.position.y + parent_sprite_node.position.y)
-	
+
 	ghost_instance.init(ghost_pos, dynamic_entity.scale, sprite_texture, ghost_fade_time)
 	add_child(ghost_instance)
 	ghosts_spawned += 1
+
+func _play_dash_sound() -> void:
+	AudioManager.play_sound("PlayerDash", AudioManager.SoundType.SFX_GLOBAL)
+
+func _stop_dash_sound() -> void:
+	AudioManager.fade_out_sounds("PlayerDash", 0.1, 1, true)
 
 ## If there is a non-zero movement vector, go to the run state, otherwise go to the idle state.
 func _travel_to_next_state() -> void:

@@ -2,7 +2,7 @@
 @tool
 extends Area2D
 class_name EffectReceiverComponent
-## A general effect source receiver that passes the appropriate parts of the effect to handlers, but only if 
+## A general effect source receiver that passes the appropriate parts of the effect to handlers, but only if
 ## they exist as children. This node must have an attached collision shape to define where effects are received.
 ##
 ## Add specific effect handlers as children of this node to be able to receive those effects on the entity.
@@ -36,8 +36,8 @@ func _notification(what):
 		elif what == NOTIFICATION_ENTER_TREE:
 			tool_script.update_editor_parent_export(self, get_parent())
 
-## Asserts that the affected entity has been set for easy debugging, then sets the monitoring to off for 
-## performance reasons in case it was changed in the editor. It also ensures the collision layer is the same as the 
+## Asserts that the affected entity has been set for easy debugging, then sets the monitoring to off for
+## performance reasons in case it was changed in the editor. It also ensures the collision layer is the same as the
 ## affected entity so that the effect sources only see it when they should.
 func _ready() -> void:
 	assert(affected_entity or get_parent() is SubViewport, get_parent().name + " has an effect receiver that is missing a reference to an entity.")
@@ -46,52 +46,63 @@ func _ready() -> void:
 		collision_layer = affected_entity.collision_layer
 		monitoring = false
 
-## Handles an incoming effect source, passing it to present receivers for further processing before changing 
+## Handles an incoming effect source, passing it to present receivers for further processing before changing
 ## entity stats.
 func handle_effect_source(effect_source: EffectSource) -> void:
 	if effect_source.source_team == GlobalData.Teams.PASSIVE:
 		return
 	if (affected_entity is DynamicEntity) and not affected_entity.move_fsm.can_receive_effects:
 		return
-	
+
+	if (affected_entity is Player):
+		if effect_source.cam_shake_duration > 0:
+			GlobalData.player_camera.start_shake(effect_source.cam_shake_strength, effect_source.cam_shake_duration)
+		if effect_source.cam_freeze_duration > 0:
+			GlobalData.player_camera.start_freeze(effect_source.cam_freeze_multiplier, effect_source.cam_freeze_duration)
+
 	if effect_source.base_damage > 0 and has_node("DmgHandler"):
 		if _check_same_team(effect_source) and _check_if_bad_effects_apply_to_allies(effect_source):
 			$DmgHandler.handle_instant_damage(effect_source)
 		elif not _check_same_team(effect_source) and _check_if_bad_effects_apply_to_enemies(effect_source):
 			$DmgHandler.handle_instant_damage(effect_source)
-	
+
 	if effect_source.base_healing > 0 and has_node("HealHandler"):
 		if effect_source.base_healing > 0:
 			if _check_same_team(effect_source) and _check_if_good_effects_apply_to_allies(effect_source):
 				$HealHandler.handle_instant_heal(effect_source.base_healing, effect_source.heal_affected_stats)
 			elif not _check_same_team(effect_source) and _check_if_good_effects_apply_to_enemies(effect_source):
 				$HealHandler.handle_instant_heal(effect_source.base_healing, effect_source.heal_affected_stats)
-	
+
 	if can_receive_status_effects:
 		if has_node("KnockbackHandler"):
 			knockback_handler.contact_position = effect_source.contact_position
 			knockback_handler.effect_movement_direction = effect_source.movement_direction
 			knockback_handler.is_source_moving_type = effect_source.is_source_moving_type
-		
+
 		_unpack_status_effects_from_source(effect_source)
 
 ## Handles the array of status effects coming in from the effect source by sending each status effect to the manager.
 func _unpack_status_effects_from_source(effect_source: EffectSource) -> void:
 	var do_bad_effects: bool = not _check_same_team(effect_source) and _check_if_bad_effects_apply_to_enemies(effect_source)
 	var do_good_effects: bool = not _check_same_team(effect_source) and _check_if_good_effects_apply_to_enemies(effect_source)
-	
+
 	for status_effect in effect_source.status_effects:
 		if status_effect:
 			if (not do_bad_effects or "Untouchable" in affected_entity.effects.current_effects) and (status_effect.is_bad_effect):
 				continue
 			if (not do_good_effects) and (not status_effect.is_bad_effect):
 				continue
-			
+
 			for effect_to_stop in status_effect.effects_to_stop:
 				affected_entity.effects.request_effect_removal(effect_to_stop)
-			
+
+			if (affected_entity is not Player) and status_effect.only_cue_on_player_hit:
+				pass
+			else:
+				AudioManager.play_sound(status_effect.audio_to_play, AudioManager.SoundType.SFX_2D, affected_entity.global_position)
+
 			_pass_effect_to_handler(status_effect)
-		
+
 	if "Untouchable" in affected_entity.effects.current_effects:
 		affected_entity.effects.remove_all_bad_status_effects()
 
@@ -117,11 +128,11 @@ func _pass_effect_to_handler(status_effect: StatusEffect) -> void:
 func _check_same_team(effect_source: EffectSource) -> bool:
 	return affected_entity.team & effect_source.source_team != 0
 
-## Checks if the effect source should do bad effects to allies. 
+## Checks if the effect source should do bad effects to allies.
 func _check_if_bad_effects_apply_to_allies(effect_source: EffectSource) -> bool:
 	return effect_source.bad_effect_affected_teams & GlobalData.BadEffectAffectedTeams.ALLIES != 0
 
-## Checks if the effect source should do bad effects to enemies. 
+## Checks if the effect source should do bad effects to enemies.
 func _check_if_bad_effects_apply_to_enemies(effect_source: EffectSource) -> bool:
 	return effect_source.bad_effect_affected_teams & GlobalData.BadEffectAffectedTeams.ENEMIES != 0
 

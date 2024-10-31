@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="AudioResource" load_steps=2 format=3 uid="uid://bu1dumes1uevh"]
+
+[ext_resource type="Script" path="res://Utilities/Game/Audio/AudioResource.gd" id="1_01431"]
+
+[resource]
+script = ExtResource("1_01431")
+name = "PlayerDashImpact"
+sound_file_paths = Array[String](["res://Assets/Audio/Sfx/SfxRawAudio/Characters/Player/Movement/Dash/player_dash_impact_1.wav", "res://Assets/Audio/Sfx/SfxRawAudio/Characters/Player/Movement/Dash/player_dash_impact_2.wav", "res://Assets/Audio/Sfx/SfxRawAudio/Characters/Player/Movement/Dash/player_dash_impact_3.wav"])
+concurrent_limit = 1
+rythmic_delay = 0.0
+volume = -8
+pitch_scale = 1.0
+pitch_randomness = 0.08
+restart_if_at_limit = false
+should_loop = false
+max_distance = 2000
+attentuation_falloff = 1.0

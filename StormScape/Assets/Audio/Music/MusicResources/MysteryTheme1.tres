@@ -5,12 +5,13 @@
 [resource]
 script = ExtResource("1_yubck")
 name = "MysteryTheme1"
-sound_file_path = "res://Assets/Audio/Music/MysteryTheme1.wav"
+sound_file_paths = Array[String](["res://Assets/Audio/Music/MusicRawAudio/Background/mystery_theme_1.wav"])
 concurrent_limit = 1
-volume = -8
+rythmic_delay = 0.0
+volume = -15
 pitch_scale = 1.0
 pitch_randomness = 0.0
 restart_if_at_limit = false
-should_loop = false
+should_loop = true
 max_distance = 2000
 attentuation_falloff = 1.0

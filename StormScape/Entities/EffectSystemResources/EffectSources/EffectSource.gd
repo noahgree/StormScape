@@ -28,6 +28,15 @@ class_name EffectSource
 		base_healing = max(0, new_value)
 @export var heal_affected_stats: GlobalData.HealAffectedStats = GlobalData.HealAffectedStats.HEALTH_THEN_SHIELD ## Which entity stats are affected by this healing source.
 
+@export_group("Player Camera")
+@export_subgroup("Shake", "cam_shake_")
+@export_range(0, 30, 0.01) var cam_shake_strength: float = 0 ## How strong the camera should shake if this source hits the player
+@export_range(0, 2, 0.01) var cam_shake_duration: float = 0 ## How long the shake should take to fade out.
+@export_subgroup("Freeze", "cam_freeze_")
+@export_range(0, 1, 0.01) var cam_freeze_multiplier: float = 1.0 ## The multiplier for the speed of the camera updates, with a value of 0 freezing it entirely.
+@export_range(0, 1, 0.01) var cam_freeze_duration: float = 0 ## How long the camera should freeze or slow for upon hitting the player.
+
+
 @export_group("Status Effects")
 @export var status_effects: Array[StatusEffect] ## The array of status effects that can be applied to the receiving entity.
 

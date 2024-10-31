@@ -23,18 +23,18 @@ const MAX_KNOCKBACK: int = 3000 ## The highest length the knockback vector can e
 func _ready() -> void:
 	assert(has_node("Idle"), "Dynamic entities must have an Idle state in the move state machine.")
 	assert(has_node("Stunned"), "Dynamic entities must have a Stunned state in the move state machine.")
-	
+
 	for child in get_children():
 		if child is MoveState:
 			states[child.name.to_lower()] = child
 			child.Transitioned.connect(_on_child_transition)
 			child.dynamic_entity = entity
 			child.stamina_component = entity.get_node("StaminaComponent")
-	
+
 	if initial_state:
 		initial_state.enter()
 		current_state = initial_state
-		
+
 	var moddable_stats: Dictionary = {
 		"sprint_stamina_usage" : _sprint_stamina_usage, "dash_stamina_usage" : _dash_stamina_usage,
 		"friction" : _friction, "confusion_amount" : _confusion_amount
@@ -45,10 +45,10 @@ func _ready() -> void:
 ## Advances animation tree manually so that it respects time snares. Overrides parent state machine class.
 func state_machine_physics_process(delta: float) -> void:
 	if knockback_vector.length() > 100:
-		knockback_vector = lerp(knockback_vector, Vector2.ZERO, 0.1)
+		knockback_vector = lerp(knockback_vector, Vector2.ZERO, 6 * delta)
 	else:
 		knockback_vector = Vector2.ZERO
-	
+
 	if current_state:
 		current_state.state_physics_process(delta)
 		anim_tree.advance(delta)

@@ -11,7 +11,7 @@ func _ready() -> void:
 #region Save & Load
 func _on_save_game(save_data: Array[SaveData]) -> void:
 	var data = PlayerData.new()
-	
+
 	data.position = global_position
 	data.stat_mods = stats.stat_mods
 	data.current_effects = effects.current_effects
@@ -31,11 +31,11 @@ func _on_save_game(save_data: Array[SaveData]) -> void:
 	data.saved_hots = $EffectReceiverComponent/HealHandler.saved_hots
 	data.anim_vector = $MoveStateMachine.anim_vector
 	data.knockback_vector = $MoveStateMachine.knockback_vector
-	
-	if snare_timer != null: 
+
+	if snare_timer != null:
 		data.snare_time_left = snare_timer.time_left
 	else: data.snare_time_left = 0
-	
+
 	save_data.append(data)
 
 func _on_load_game_player(data: PlayerData) -> void:
@@ -58,7 +58,7 @@ func _on_load_game_player(data: PlayerData) -> void:
 	$EffectReceiverComponent/HealHandler.saved_hots = data.saved_hots
 	$MoveStateMachine.anim_vector = data.anim_vector
 	$MoveStateMachine.knockback_vector = data.knockback_vector
-	
+
 	move_fsm.verify_anim_vector()
 	if velocity.length() > 0:
 		move_fsm._on_child_transition(move_fsm.current_state, "Run")
