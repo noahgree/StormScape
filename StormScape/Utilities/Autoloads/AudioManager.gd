@@ -275,7 +275,9 @@ func _start_audio_fade_out(audio_player, sound_name: String, fade_out_time: floa
 		tween.finished.connect(func(): _open_audio_resource_spot(audio_player, sound_name, true))
 
 ## Tell the audio resource that we can open up a spot by decrementing the current count of the sound playing.
+## Then it removes it from its  group.
 func _open_audio_resource_spot(audio_player, sound_name: String, return_player_to_pool: bool) -> void:
+	_remove_callable_from_signal(audio_player)
 	var audio_resource: AudioResource
 	if audio_player.bus == "Music":
 		audio_resource = music_cache.get(sound_name, null)
@@ -290,14 +292,15 @@ func _open_audio_resource_spot(audio_player, sound_name: String, return_player_t
 		_return_audio_player(audio_player, sound_name)
 
 ## Returns the audio stream player to its pool after removing it from its group.
-## Also removes its signal connections.
 func _return_audio_player(audio_player, sound_name: String) -> void:
+	audio_player.stop()
+	audio_player.remove_from_group(sound_name)
+	_return_player_to_pool(audio_player)
+
+## Removes the callable from the "finished" signal from the audio player.
+func _remove_callable_from_signal(audio_player) -> void:
 	if audio_player.has_meta("callable"): # so when we use it next time it doesn't have its old signal connections
 		var callable = audio_player.get_meta("callable")
 		audio_player.finished.disconnect(callable)
 		audio_player.set_meta("callable", null)
-
-	audio_player.stop()
-	audio_player.remove_from_group(sound_name)
-	_return_player_to_pool(audio_player)
 #endregion
