@@ -99,7 +99,8 @@ func _unpack_status_effects_from_source(effect_source: EffectSource) -> void:
 			if (affected_entity is not Player) and status_effect.only_cue_on_player_hit:
 				pass
 			else:
-				AudioManager.play_sound(status_effect.audio_to_play, AudioManager.SoundType.SFX_2D, affected_entity.global_position)
+				if status_effect.audio_to_play != "":
+					AudioManager.play_sound(status_effect.audio_to_play, AudioManager.SoundType.SFX_2D, affected_entity.global_position)
 
 			_pass_effect_to_handler(status_effect)
 

@@ -78,7 +78,10 @@ func _do_character_dash() -> void:
 			collider.apply_central_impulse(-c.get_normal().normalized() * dynamic_entity.velocity.length() / (5 / (dynamic_entity.stats.get_stat("dash_collision_impulse_factor"))))
 			if not collision_shake_complete:
 				GlobalData.player_camera.start_shake(2.2, 0.15)
-				AudioManager.play_sound("PlayerDashImpact", AudioManager.SoundType.SFX_2D, dynamic_entity.global_position)
+				if dynamic_entity.effects.check_if_has_effect("KineticImpact"):
+					AudioManager.play_sound("KineticImpactHit", AudioManager.SoundType.SFX_2D, dynamic_entity.global_position)
+				else:
+					AudioManager.play_sound("PlayerDashImpact", AudioManager.SoundType.SFX_2D, dynamic_entity.global_position)
 				collision_shake_complete = true
 
 func _calculate_move_vector() -> Vector2:
@@ -115,7 +118,7 @@ func _play_dash_sound() -> void:
 	AudioManager.play_sound("PlayerDash", AudioManager.SoundType.SFX_GLOBAL)
 
 func _stop_dash_sound() -> void:
-	AudioManager.fade_out_sounds("PlayerDash", 0.1, 1, true)
+	AudioManager.fade_out_sound_by_name("PlayerDash", 0.1, 1, true)
 
 ## If there is a non-zero movement vector, go to the run state, otherwise go to the idle state.
 func _travel_to_next_state() -> void:

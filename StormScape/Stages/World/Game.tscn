@@ -1,4 +1,4 @@
-[gd_scene load_steps=30 format=3 uid="uid://bscnr6a23l10m"]
+[gd_scene load_steps=31 format=3 uid="uid://bscnr6a23l10m"]
 
 [ext_resource type="Script" path="res://Utilities/Game/WorldRoot/WorldRoot.gd" id="1_q0i4n"]
 [ext_resource type="Script" path="res://Stages/World/BackgroundMusicManager.gd" id="1_q5pr2"]
@@ -15,6 +15,7 @@
 [ext_resource type="Script" path="res://Entities/Components/HitboxComponent/HitboxComponent.gd" id="11_vr4ax"]
 [ext_resource type="Script" path="res://Entities/EffectSystemResources/EffectSources/StaticEffectSource.gd" id="12_gga1h"]
 [ext_resource type="Script" path="res://Entities/EffectSystemResources/StatusEffects/StatusEffect.gd" id="13_33bgr"]
+[ext_resource type="Resource" uid="uid://w0ul0pi7nx0w" path="res://Entities/EffectSystemResources/StatusEffects/GoodEffects/KineticImpact/KineticImpact1.tres" id="15_py3s0"]
 [ext_resource type="Script" path="res://Utilities/Debug/TestBullet.gd" id="15_v7yfh"]
 [ext_resource type="Script" path="res://Entities/EffectSystemResources/EffectSources/MovingEffectSource.gd" id="16_5aosc"]
 [ext_resource type="Resource" uid="uid://b0it5xmpw16sd" path="res://Entities/EffectSystemResources/StatusEffects/BadEffects/Knockback/Knockback1.tres" id="17_re3lx"]
@@ -4128,7 +4129,7 @@ cam_shake_strength = 1.5
 cam_shake_duration = 0.08
 cam_freeze_multiplier = 1.0
 cam_freeze_duration = 0.0
-status_effects = Array[ExtResource("13_33bgr")]([ExtResource("17_re3lx")])
+status_effects = Array[ExtResource("13_33bgr")]([ExtResource("17_re3lx"), ExtResource("15_py3s0")])
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_o8yml"]
 size = Vector2(14, 14)
@@ -4146,8 +4147,8 @@ crit_multiplier = 1.5
 armor_penetration = 0
 base_healing = 0
 heal_affected_stats = 2
-cam_shake_strength = 0.0
-cam_shake_duration = 0.0
+cam_shake_strength = 1.25
+cam_shake_duration = 0.1
 cam_freeze_multiplier = 1.0
 cam_freeze_duration = 0.0
 status_effects = Array[ExtResource("13_33bgr")]([ExtResource("17_re3lx")])

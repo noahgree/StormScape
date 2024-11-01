@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="AudioResource" load_steps=2 format=3 uid="uid://8nu42ett0fqr"]
+
+[ext_resource type="Script" path="res://Utilities/Game/Audio/AudioResource.gd" id="1_lxbf2"]
+
+[resource]
+script = ExtResource("1_lxbf2")
+name = "PlayerShieldDamage"
+sound_file_paths = Array[String](["res://Assets/Audio/Sfx/SfxRawAudio/Characters/Player/Health/ShieldDamage/player_shield_damag.wav"])
+concurrent_limit = 2
+rhythmic_delay = 0.0
+volume = -3
+pitch_scale = 1.0
+pitch_randomness = 0.1
+restart_if_at_limit = true
+should_loop = false
+max_distance = 500
+attentuation_falloff = 1.0

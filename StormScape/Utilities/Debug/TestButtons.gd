@@ -11,10 +11,14 @@ func _on_test_heal_btn_pressed() -> void:
 	health_component.heal_health_then_shield(15)
 
 func _on_test_music_btn_pressed() -> void:
-	AudioManager.play_sound("MysteryTheme1", AudioManager.SoundType.MUSIC_GLOBAL)
-	#AudioManager.play_sound("PowerUp3", AudioManager.SoundType.SFX_GLOBAL)
-	#await get_tree().create_timer(10).timeout
-	#AudioManager.fade_out_sounds("SummerTide", 1.0, 1)
+	var audio_player = AudioManager.play_and_get_sound("MysteryTheme1", AudioManager.SoundType.MUSIC_2D, SaverLoader.player_node, 0)
+	if audio_player:
+		print(audio_player.global_position)
+		print(SaverLoader.player_node.global_position)
+		#AudioManager.play_sound("PowerUp3", AudioManager.SoundType.SFX_GLOBAL)
+		#await get_tree().create_timer(15).timeout
+		#AudioManager.fade_out_sounds("SummerTide", 1.0, 1)
+		#AudioManager.stop_audio_player(audio_player)
 
 func _on_test_mod_btn_1_pressed() -> void:
 	var stats_ui: Control = get_parent().get_node("PlayerStatsOverlay")

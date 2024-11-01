@@ -2,7 +2,7 @@
 extends Node
 class_name HealthComponent
 ## A component for handling health and shield for an entity.
-## 
+##
 ## Has functions for handling taking damage and healing.
 ## This class should always remain agnostic about the entity and the entity's UI it updates.
 
@@ -14,18 +14,18 @@ class_name HealthComponent
 var health: int: set = _set_health ## The current health of the entity.
 var shield: int: set = _set_shield ## The current shield of the entity.
 var armor: int = 0: set = _set_armor ## The current armor of the entity. This is the percent of dmg that is blocked.
-const MAX_ARMOR: int = 100 ## The maximum amount of armor the entity can have. 
+const MAX_ARMOR: int = 100 ## The maximum amount of armor the entity can have.
 
 
 #region Setup
-func _ready() -> void: 
+func _ready() -> void:
 	var moddable_stats: Dictionary = {
 		"max_health" : _max_health, "max_shield" : _max_shield
 	}
 	get_parent().stats.add_moddable_stats(moddable_stats)
 	call_deferred("_emit_initial_values")
 
-## Called from a deferred method caller in order to let any associated ui ready up first. 
+## Called from a deferred method caller in order to let any associated ui ready up first.
 ## Then it emits the initially loaded values.
 func _emit_initial_values() -> void:
 	@warning_ignore("narrowing_conversion") health = get_parent().stats.get_stat("max_health")
@@ -36,9 +36,10 @@ func _emit_initial_values() -> void:
 #region Utils: Taking Damage
 ## Takes damage to both health and shield, starting with available shield then applying any remaining amount to health.
 func damage_shield_then_health(amount: int) -> void:
+	if amount > 0 and shield > 0: _play_shield_damage_sound()
 	var spillover_damage: int = max(0, amount - shield)
 	@warning_ignore("narrowing_conversion") shield = clampi(shield - amount, 0, get_parent().stats.get_stat("max_shield"))
-	
+
 	if spillover_damage > 0:
 		@warning_ignore("narrowing_conversion") health = clampi(health - spillover_damage, 0, get_parent().stats.get_stat("max_health"))
 	_check_for_death()
@@ -51,6 +52,7 @@ func damage_health(amount: int) -> void:
 ## Decrements only the shield value by the passed in amount.
 func damage_shield(amount: int) -> void:
 	shield = max(0, shield - amount)
+	if amount > 0: _play_shield_damage_sound()
 
 ## Handles what happens when health reaches 0 for the entity.
 func _check_for_death() -> void:
@@ -72,7 +74,7 @@ func set_armor(new_armor: int) -> void:
 func heal_health_then_shield(amount: int) -> void:
 	var spillover_health: int = max(0, (amount + health) - get_parent().stats.get_stat("max_health"))
 	@warning_ignore("narrowing_conversion") health = clampi(health + amount, 0, get_parent().stats.get_stat("max_health"))
-	
+
 	if spillover_health > 0:
 		@warning_ignore("narrowing_conversion") shield = clampi(shield + spillover_health, 0, get_parent().stats.get_stat("max_shield"))
 
@@ -109,4 +111,7 @@ func on_max_health_changed(new_max_health: int) -> void:
 ## When max shield changes, we need to limit the current shield value.
 func on_max_shield_changed(new_max_shield: int) -> void:
 	shield = min(shield, new_max_shield)
+
+func _play_shield_damage_sound() -> void:
+	AudioManager.play_sound("PlayerShieldDamage", AudioManager.SoundType.SFX_2D, get_parent().global_position)
 #endregion

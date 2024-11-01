@@ -141,7 +141,7 @@ func _remove_status_effect(status_effect: StatusEffect) -> void:
 		effect_timers.erase(status_effect.effect_name)
 
 ## Returns if any effect (no matter the level) of the passed in name is active.
-func check_if_effect(effect_name: String) -> bool:
+func check_if_has_effect(effect_name: String) -> bool:
 	return current_effects.has(effect_name)
 
 ## Attempts to remove any effect of the matching name and then tries to cancel any active DOTs and HOTs for it.

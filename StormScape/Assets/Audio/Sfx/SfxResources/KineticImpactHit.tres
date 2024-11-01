@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="AudioResource" load_steps=2 format=3 uid="uid://di0gs4d7ihmp2"]
+
+[ext_resource type="Script" path="res://Utilities/Game/Audio/AudioResource.gd" id="1_plx4t"]
+
+[resource]
+script = ExtResource("1_plx4t")
+name = "KineticImpactHit"
+sound_file_paths = Array[String](["res://Assets/Audio/Sfx/SfxRawAudio/Characters/StatusEffects/KineticImpact/kinetic_impact_hit.wav"])
+concurrent_limit = 2
+rhythmic_delay = 0.0
+volume = -1
+pitch_scale = 1.0
+pitch_randomness = 0.08
+restart_if_at_limit = false
+should_loop = false
+max_distance = 500
+attentuation_falloff = 1.0

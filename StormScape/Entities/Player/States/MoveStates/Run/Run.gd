@@ -39,9 +39,10 @@ func _do_character_run(delta: float) -> void:
 	var actual_movement_speed = (dynamic_entity.global_position - previous_pos).length() / delta
 	previous_pos = dynamic_entity.global_position
 
-	if ceil(actual_movement_speed) <= floor(dynamic_entity.stats.get_stat("max_speed")):
+	if (ceil(actual_movement_speed) <= floor(dynamic_entity.stats.get_stat("max_speed"))) and is_sprint_audio_playing:
 		_stop_sprint_sound()
 		is_sprint_audio_playing = false
+		AudioManager.change_sfx_resource_rhythmic_delay("PlayerRunBase", 0.03)
 
 	var request_sprint = Input.is_action_pressed("sprint")
 	var knockback: Vector2 = fsm.knockback_vector
@@ -67,6 +68,7 @@ func _do_character_run(delta: float) -> void:
 			if actual_movement_speed > dynamic_entity.stats.get_stat("max_speed"):
 				_play_sprint_sound()
 				is_sprint_audio_playing = true
+			AudioManager.change_sfx_resource_rhythmic_delay("PlayerRunBase", 0)
 			fsm.anim_tree.set("parameters/run/TimeScale/scale", DEFAULT_RUN_ANIM_TIME_SCALE * dynamic_entity.stats.get_stat("sprint_multiplier") * (dynamic_entity.stats.get_stat("max_speed") / dynamic_entity.stats.get_original_stat("max_speed")))
 			dynamic_entity.velocity += (movement_vector * dynamic_entity.stats.get_stat("acceleration") * dynamic_entity.stats.get_stat("sprint_multiplier") * delta)
 			dynamic_entity.velocity = dynamic_entity.velocity.limit_length(dynamic_entity.stats.get_stat("max_speed") * dynamic_entity.stats.get_stat("sprint_multiplier"))
@@ -114,4 +116,4 @@ func _play_sprint_sound() -> void:
 
 func _stop_sprint_sound() -> void:
 	if is_sprint_audio_playing:
-		AudioManager.fade_out_sounds("PlayerSprintWind", 0.3, 1, true)
+		AudioManager.fade_out_sound_by_name("PlayerSprintWind", 0.3, 1, true)

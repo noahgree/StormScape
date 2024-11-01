@@ -2,7 +2,7 @@
 extends Node
 class_name StaminaComponent
 ## A component for handling stamina and hunger for a dynamic entity.
-## 
+##
 ## Has functions for handling using stamina and hunger.
 ## This class should always remain agnostic about the entity, and the UI it updates is optional.
 
@@ -27,10 +27,10 @@ var stamina_recharge_tween: Tween ## A tween for slowly incrementing the stamina
 ## Asserts that the parent is a DynamicEntity and then sets up modifiable var dictionary for the stat mod handler.
 func _ready() -> void:
 	assert(get_parent() is DynamicEntity, get_parent().name + " has a StaminaComponent but is not a DynamicEntity.")
-	
+
 	var moddable_stats: Dictionary = {
-		"max_stamina" : _max_stamina, "max_hunger_bars" : _max_hunger_bars, 
-		"stamina_recharge_rate" : _stamina_recharge_rate, 
+		"max_stamina" : _max_stamina, "max_hunger_bars" : _max_hunger_bars,
+		"stamina_recharge_rate" : _stamina_recharge_rate,
 		"stamina_use_per_hunger_deduction" : _stamina_use_per_hunger_deduction,
 		"hunger_cost_per_stamina_use" : _hunger_cost_per_stamina_use,
 		"stamina_recharge_delay" : _stamina_recharge_delay
@@ -39,12 +39,12 @@ func _ready() -> void:
 	call_deferred("_emit_initial_values")
 
 ## Checks whether stamina use is allowed, deducts the amount if so, and returns whether or not the amount was used.
-## This also tells the wait timer for stamina recharge to restart if stamina was used as well as 
-## increments the stamina_to_hunger_count appropriately. 
+## This also tells the wait timer for stamina recharge to restart if stamina was used as well as
+## increments the stamina_to_hunger_count appropriately.
 func use_stamina(amount: float) -> bool:
 	if !can_use_stamina:
 		return false
-	
+
 	if stamina < amount:
 		return false
 	else:
@@ -55,12 +55,12 @@ func use_stamina(amount: float) -> bool:
 		set_stamina_wait_timer_state_change(false)
 		stamina_wait_timer.start(get_parent().stats.get_stat("stamina_recharge_delay"))
 		set_stamina_wait_timer_state_change(true)
-		
+
 		stamina_to_hunger_count += amount
 		if stamina_to_hunger_count / get_parent().stats.get_stat("stamina_use_per_hunger_deduction") >= 0.99:
 			stamina_to_hunger_count = 0
 			hunger_bars = max(0, hunger_bars - get_parent().stats.get_stat("hunger_cost_per_stamina_use"))
-		
+
 		return true
 
 ## Increases the current stamina value by a passed in amount.
@@ -71,7 +71,7 @@ func gain_stamina(amount: float) -> void:
 func use_hunger_bars(amount: int) -> bool:
 	if !can_use_hunger_bars:
 		return false
-	
+
 	if hunger_bars < amount:
 		return false
 	else:
@@ -115,7 +115,7 @@ func on_max_stamina_changed(new_max_stamina: float) -> void:
 func on_max_hunger_bars_changed(new_max_hunger_bars: int) -> void:
 	hunger_bars = min(hunger_bars, new_max_hunger_bars)
 
-## Called from a deferred method caller in order to let any associated ui ready up first. 
+## Called from a deferred method caller in order to let any associated ui ready up first.
 ## Then it emits the initially loaded values.
 func _emit_initial_values() -> void:
 	stamina = get_parent().stats.get_stat("max_stamina")
