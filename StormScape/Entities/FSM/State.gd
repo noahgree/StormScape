@@ -4,7 +4,7 @@ class_name State
 ## Generic state class intended to be subclassed by state categories like DynamicState.
 
 @warning_ignore("unused_signal")
-signal Transitioned ## Called by a subclassed state when it wants to transition to another state.
+signal transitioned ## Called by a subclassed state when it wants to transition to another state.
 
 
 func enter() -> void:

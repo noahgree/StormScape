@@ -1,0 +1,11 @@
+[gd_resource type="FontVariation" load_steps=2 format=3 uid="uid://dgmjve36m0xbc"]
+
+[ext_resource type="FontFile" uid="uid://bpld83nxsonow" path="res://Assets/Theming/Fonts/FontAssets/Dynamic/Kanit/Kanit-Regular.ttf" id="1_pewp0"]
+
+[resource]
+base_font = ExtResource("1_pewp0")
+opentype_features = {
+1667329140: 0
+}
+spacing_top = -25
+spacing_bottom = -25

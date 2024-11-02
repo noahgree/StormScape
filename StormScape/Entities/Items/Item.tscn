@@ -1,0 +1,28 @@
+[gd_scene load_steps=5 format=3 uid="uid://u04d840fx7vw"]
+
+[ext_resource type="Script" path="res://Entities/Items/Item.gd" id="1_rwd02"]
+[ext_resource type="Resource" uid="uid://chfps77qv6w0e" path="res://Entities/Items/ItemResources/TestGun.tres" id="2_yldjb"]
+[ext_resource type="Texture2D" uid="uid://cyhjli7h8fn7r" path="res://Entities/Items/ItemScripts/Weapons/TestGun/gauntlet_default.png" id="3_borrj"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_no3c7"]
+radius = 11.0
+
+[node name="Item" type="Area2D" groups=["Items"]]
+collision_layer = 0
+collision_mask = 53
+monitorable = false
+script = ExtResource("1_rwd02")
+stats = ExtResource("2_yldjb")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+visible = false
+shape = SubResource("CircleShape2D_no3c7")
+debug_color = Color(5.29438e-07, 0.636012, 0.41019, 0.42)
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("3_borrj")
+
+[connection signal="area_entered" from="." to="." method="_on_area_entered"]
+[connection signal="area_exited" from="." to="." method="_on_area_exited"]
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
+[connection signal="body_exited" from="." to="." method="_on_body_exited"]

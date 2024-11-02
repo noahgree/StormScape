@@ -19,13 +19,13 @@ func state_physics_process(_delta: float) -> void:
 func _do_character_idle() -> void:
 	movement_vector = _calculate_move_vector()
 	var knockback: Vector2 = fsm.knockback_vector
-	
+
 	if movement_vector != Vector2.ZERO:
-		Transitioned.emit(self, "Run")
+		transitioned.emit(self, "Run")
 	else:
 		if knockback.length() > 0:
 			dynamic_entity.velocity = knockback
-			Transitioned.emit(self, "Run")
+			transitioned.emit(self, "Run")
 		else:
 			dynamic_entity.velocity = Vector2.ZERO
 
@@ -35,7 +35,7 @@ func _calculate_move_vector() -> Vector2:
 ## Checks if we meet the input (or otherwise) conditions to start sneaking. If so, transition to sneak.
 func _check_for_sneak_request() -> void:
 	if _is_sneak_requested() and fsm.knockback_vector == Vector2.ZERO:
-		Transitioned.emit(self, "Sneak")
+		transitioned.emit(self, "Sneak")
 
 func _animate() -> void:
 	fsm.anim_tree.set("parameters/idle/blendspace2d/blend_position", fsm.anim_vector)

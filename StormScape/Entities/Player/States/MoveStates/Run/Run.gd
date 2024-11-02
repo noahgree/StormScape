@@ -56,7 +56,7 @@ func _do_character_run(delta: float) -> void:
 		else: # no input, stopped
 			fsm.knockback_vector = Vector2.ZERO
 			dynamic_entity.velocity = Vector2.ZERO
-			Transitioned.emit(self, "Idle")
+			transitioned.emit(self, "Idle")
 	elif knockback == Vector2.ZERO:
 		# this if-else handles smoothing out the beginning of animation transitions
 		if dynamic_entity.velocity.length() > dynamic_entity.stats.get_stat("max_speed") * 0.10:
@@ -97,12 +97,12 @@ func _calculate_move_vector() -> Vector2:
 func _check_for_dash_request() -> void:
 	if _is_dash_requested() and fsm.dash_cooldown_timer.is_stopped() and movement_vector != Vector2.ZERO:
 		if stamina_component.use_stamina(dynamic_entity.stats.get_stat("dash_stamina_usage")):
-			Transitioned.emit(self, "Dash")
+			transitioned.emit(self, "Dash")
 
 ## Checks if we meet the input (or otherwise) conditions to start sneaking. If so, transition to sneak.
 func _check_for_sneak_request() -> void:
 	if _is_sneak_requested() and fsm.knockback_vector == Vector2.ZERO:
-		Transitioned.emit(self, "Sneak")
+		transitioned.emit(self, "Sneak")
 
 func _animate() -> void:
 	fsm.anim_tree.set("parameters/run/blendspace2d/blend_position", fsm.anim_vector)

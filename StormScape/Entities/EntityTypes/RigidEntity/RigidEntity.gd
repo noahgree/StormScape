@@ -10,15 +10,17 @@ class_name RigidEntity
 @export var stats: StatModsCacheResource ## The resource that will cache and work with all stat mods for this entity.
 @export var effects: StatusEffectManager ## The node that will cache and manage all status effects for this entity.
 
+@onready var inv: ItemReceiverComponent = get_node_or_null("ItemReceiverComponent")
+
 
 ## Recalculates the stats in the stat mods cache to be base values just before mods get reapplied on load.
 func _on_load_game() -> void:
 	if stats: stats.reinit_on_load()
 
-## Making sure we know we have save logic, even if not set in editor. Then set up rigid body physics. 
+## Making sure we know we have save logic, even if not set in editor. Then set up rigid body physics.
 func _ready() -> void:
 	add_to_group("has_save_logic")
-	
+
 	mass = 3
 	linear_damp = 4.5
 	var phys_material = PhysicsMaterial.new()
@@ -26,5 +28,4 @@ func _ready() -> void:
 	phys_material.rough = true
 	self.physics_material_override = phys_material
 	collision_layer = 0b00100000
-	collision_mask = 0b11110101 
-	
+	collision_mask = 0b11110101

@@ -21,8 +21,11 @@ var global_pool: Array[AudioStreamPlayer] ## The global audio players current wa
 
 #region Setup & Cache
 func _ready() -> void:
-	if OS.get_unique_id() == "W1RHWL2KQ6": # needed to make audio work on Noah's computer, only affects him
-		AudioServer.output_device = "MacBook Pro Speakers (75)" if DebugFlags.AudioFlags.set_debug_output_device else "Default"
+	if OS.get_unique_id() == "W1RHWL2KQ6": # needed to make audio work on Noah's computer, only affects him.
+		var devices = AudioServer.get_output_device_list()
+		var macbook_device_index = devices.find("Macbook")
+		var macbook_device = devices[macbook_device_index]
+		AudioServer.output_device = macbook_device if DebugFlags.AudioFlags.set_debug_output_device else "Default"
 
 	_cache_audio_resources(music_resources_folder, music_cache)
 	_cache_audio_resources(sfx_resources_folder, sfx_cache)
@@ -215,7 +218,7 @@ func _create_stream_resource_from_audio_resource(audio_resource: AudioResource) 
 
 ## Checks if a 2d sound is close enough to the player to start playing in an effort to save off screen resources.
 func _is_close_enough_to_play_2d(audio_resource: AudioResource, location: Vector2) -> bool:
-	var distance_to_player: float = SaverLoader.player_node.global_position.distance_to(location)
+	var distance_to_player: float = GlobalData.player_node.global_position.distance_to(location)
 	if distance_to_player > (audio_resource.max_distance + DISTANCE_FROM_PLAYER_BUFFER):
 		return false
 	else: return true

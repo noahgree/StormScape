@@ -4,4 +4,4 @@
 
 [node name="ItemDatabase" type="Node"]
 script = ExtResource("1_uvhc7")
-items_folder = "res://Entities/Items/Resources/"
+items_folder = "res://Entities/Items/ItemResources"

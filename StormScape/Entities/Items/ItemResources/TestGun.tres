@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="ItemResource" load_steps=3 format=3 uid="uid://chfps77qv6w0e"]
+
+[ext_resource type="Texture2D" uid="uid://cyhjli7h8fn7r" path="res://Entities/Items/ItemScripts/Weapons/TestGun/gauntlet_default.png" id="1_ma2d2"]
+[ext_resource type="Script" path="res://Entities/Items/ItemResource.gd" id="1_w3f40"]
+
+[resource]
+script = ExtResource("1_w3f40")
+name = "TestGun"
+icon = ExtResource("1_ma2d2")
+type = "Weapon"
+rarity = "Common"
+info = "A gun for testing."

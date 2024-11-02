@@ -1,8 +1,8 @@
 extends CharacterBody2D
 class_name DynamicEntity
 ## An entity that has vitals stats and can move.
-## 
-## This should be used by things like players, enemies, moving environmental entities, etc. 
+##
+## This should be used by things like players, enemies, moving environmental entities, etc.
 ## This should not be used by things like weapons or trees.
 
 @export var team: GlobalData.Teams = GlobalData.Teams.PLAYER ## What the effects received by this entity should consider as this entity's team.
@@ -14,6 +14,7 @@ class_name DynamicEntity
 @onready var action_fsm: ActionStateMachine = $ActionStateMachine ## The FSM controlling the player's actions.
 @onready var health_component: HealthComponent = $HealthComponent ## The component in charge of player health and shield.
 @onready var stamina_component: StaminaComponent = $StaminaComponent ## The component in charge of player stamina and hunger.
+@onready var inv: ItemReceiverComponent = get_node_or_null("ItemReceiverComponent")
 
 var time_snare_counter: float = 0 ## The ticker that slows down delta when under a time snare.
 var snare_factor: float = 0 ## Multiplier for delta time during time snares.
@@ -61,9 +62,9 @@ func request_time_snare(factor: float, snare_time: float) -> void:
 	snare_timer.wait_time = max(0.001, snare_time)
 	snare_timer.timeout.connect(func(): snare_factor = 0)
 	snare_timer.timeout.connect(snare_timer.queue_free)
-	
+
 	snare_factor = factor
-	
+
 	add_child(snare_timer)
 
 func die() -> void:

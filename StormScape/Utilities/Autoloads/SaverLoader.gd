@@ -1,12 +1,5 @@
 extends Node
 
-@onready var world_root: WorldRoot = get_parent().get_node("Game/WorldRoot")
-
-var player_node: Player = null
-
-
-func _ready() -> void:
-	player_node = await SignalBus.PlayerReady
 
 func save_game() -> void:
 	if DebugFlags.PrintFlags.saver_loader_status_changes: print_rich("[color=orange]Saving...[/color]")
@@ -27,7 +20,7 @@ func load_game() -> void:
 
 	for item in saved_game.save_data:
 		if item is PlayerData:
-			player_node._on_load_game_player(item)
+			GlobalData.player_node._on_load_game_player(item)
 			continue
 		var scene = load(item.scene_path) as PackedScene
 		var loaded_node = scene.instantiate()

@@ -27,7 +27,7 @@ func _ready() -> void:
 	for child in get_children():
 		if child is MoveState:
 			states[child.name.to_lower()] = child
-			child.Transitioned.connect(_on_child_transition)
+			child.transitioned.connect(_on_child_transition)
 			child.dynamic_entity = entity
 			child.stamina_component = entity.get_node("StaminaComponent")
 

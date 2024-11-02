@@ -32,11 +32,11 @@ func state_physics_process(delta: float) -> void:
 func _do_character_sneak(delta: float) -> void:
 	movement_vector = _calculate_move_vector()
 	var knockback: Vector2 = fsm.knockback_vector
-	
+
 	if knockback.length() > 0: # let knockback take control if there is any
 		dynamic_entity.velocity = knockback
-		Transitioned.emit(self, "Run")
-	
+		transitioned.emit(self, "Run")
+
 	if movement_vector == Vector2.ZERO:
 		if dynamic_entity.velocity.length() > (dynamic_entity.stats.get_stat("friction") * delta): # no input, still slowing
 			dynamic_entity.velocity -= dynamic_entity.velocity.normalized() * (dynamic_entity.stats.get_stat("friction") * delta)
@@ -49,14 +49,14 @@ func _do_character_sneak(delta: float) -> void:
 			fsm.anim_vector = dynamic_entity.velocity.normalized()
 		else:
 			fsm.anim_vector = movement_vector
-		
+
 		fsm.anim_tree.set("parameters/run/TimeScale/scale", DEFAULT_SNEAK_ANIM_TIME_SCALE * (dynamic_entity.stats.get_stat("max_sneak_speed") / dynamic_entity.stats.get_original_stat("max_sneak_speed")))
 		dynamic_entity.velocity += (movement_vector * dynamic_entity.stats.get_stat("sneak_acceleration") * delta)
 		dynamic_entity.velocity = dynamic_entity.velocity.limit_length(dynamic_entity.stats.get_stat("max_sneak_speed"))
-	
+
 	dynamic_entity.move_and_slide()
-	
-	# handle collisions with rigid entities 
+
+	# handle collisions with rigid entities
 	for i in dynamic_entity.get_slide_collision_count():
 		var c = dynamic_entity.get_slide_collision(i)
 		var collider = c.get_collider()
@@ -74,9 +74,9 @@ func _send_parent_entity_stealth_value() -> void:
 func _check_if_stopped_sneaking() -> void:
 	if not _is_sneak_requested():
 		if movement_vector == Vector2.ZERO:
-			Transitioned.emit(self, "Idle")
+			transitioned.emit(self, "Idle")
 		else:
-			Transitioned.emit(self, "Run")
+			transitioned.emit(self, "Run")
 
 func _animate() -> void: # FIXME: NEED SNEAK ANIMATION!
 	if movement_vector == Vector2.ZERO:

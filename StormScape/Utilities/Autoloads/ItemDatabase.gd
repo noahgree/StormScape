@@ -9,12 +9,12 @@ var cache : Dictionary = {}
 func _ready() -> void:
 	var folder = DirAccess.open(items_folder)
 	folder.list_dir_begin()
-	
+
 	var file_name = folder.get_next()
-	
+
 	while file_name != "":
 		cache[file_name] = load(items_folder + "/" + file_name)
 		file_name = folder.get_next()
 
-func get_item(ID) -> Item:
-	return cache[ID + ".tres"]
+func get_item(item_name) -> Item:
+	return cache[item_name + ".tres"]

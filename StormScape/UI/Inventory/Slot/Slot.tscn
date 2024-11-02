@@ -1,0 +1,73 @@
+[gd_scene load_steps=4 format=3 uid="uid://m4ur3n2hwsp8"]
+
+[ext_resource type="Texture2D" uid="uid://barnaq2utcos2" path="res://UI/Inventory/Slot/InventorySlot9Patch.png" id="1_sk7xc"]
+[ext_resource type="Script" path="res://UI/Inventory/Slot/Slot.gd" id="2_ywtjc"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_kd5f7"]
+line_spacing = 0.0
+font_size = 100
+outline_size = 16
+outline_color = Color(0, 0, 0, 1)
+shadow_size = 0
+shadow_color = Color(0, 0, 0, 0.733333)
+shadow_offset = Vector2(3, 1)
+
+[node name="Slot" type="NinePatchRect"]
+custom_minimum_size = Vector2(22, 22)
+size_flags_horizontal = 4
+texture = ExtResource("1_sk7xc")
+patch_margin_left = 2
+patch_margin_top = 2
+patch_margin_right = 2
+patch_margin_bottom = 2
+script = ExtResource("2_ywtjc")
+
+[node name="Button" type="Button" parent="."]
+custom_minimum_size = Vector2(16, 16)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+focus_mode = 0
+action_mode = 0
+keep_pressed_outside = true
+flat = true
+icon_alignment = 1
+expand_icon = true
+
+[node name="TextureMargins" type="MarginContainer" parent="Button"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 3
+theme_override_constants/margin_top = 3
+theme_override_constants/margin_right = 3
+theme_override_constants/margin_bottom = 3
+
+[node name="ItemTexture" type="TextureRect" parent="Button/TextureMargins"]
+custom_minimum_size = Vector2(16, 16)
+layout_mode = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="QuantityMargins" type="MarginContainer" parent="."]
+layout_mode = 1
+offset_left = 6.0
+offset_top = 12.0
+offset_right = 226.0
+offset_bottom = 137.0
+scale = Vector2(0.069, 0.069)
+mouse_filter = 2
+theme_override_constants/margin_right = 25
+
+[node name="Quantity" type="Label" parent="QuantityMargins"]
+layout_mode = 2
+label_settings = SubResource("LabelSettings_kd5f7")
+horizontal_alignment = 2
+vertical_alignment = 1

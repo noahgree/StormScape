@@ -123,9 +123,9 @@ func _stop_dash_sound() -> void:
 ## If there is a non-zero movement vector, go to the run state, otherwise go to the idle state.
 func _travel_to_next_state() -> void:
 	if movement_vector != Vector2.ZERO:
-		Transitioned.emit(self, "Run")
+		transitioned.emit(self, "Run")
 	else:
-		Transitioned.emit(self, "Idle")
+		transitioned.emit(self, "Idle")
 
 func _on_dash_timer_timeout() -> void:
 	_travel_to_next_state()

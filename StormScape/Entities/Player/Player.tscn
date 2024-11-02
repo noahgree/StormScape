@@ -1,4 +1,4 @@
-[gd_scene load_steps=77 format=3 uid="uid://dba8mrurjlekp"]
+[gd_scene load_steps=107 format=3 uid="uid://dba8mrurjlekp"]
 
 [ext_resource type="Script" path="res://Entities/Player/Player.gd" id="1_m33tt"]
 [ext_resource type="SpriteFrames" uid="uid://cxo625s2sh5hx" path="res://Entities/Player/Spritesheets/Base/Base.tres" id="2_t1by5"]
@@ -13,10 +13,9 @@
 [ext_resource type="PackedScene" uid="uid://dykiv0tlhwmox" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/KnockbackHandler.tscn" id="7_k0pv8"]
 [ext_resource type="Script" path="res://Entities/Player/States/MoveStates/Run/Run.gd" id="9_0dcld"]
 [ext_resource type="Script" path="res://Entities/Player/States/MoveStates/Dash/Dash.gd" id="9_a1qv1"]
-[ext_resource type="PackedScene" uid="uid://cugxqj7rc0q35" path="res://UI/Player Stats Overlay/PlayerStatsOverlay.tscn" id="9_txdy5"]
 [ext_resource type="PackedScene" uid="uid://cx4b21058vypq" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/StunHandler.tscn" id="9_w4lel"]
 [ext_resource type="PackedScene" uid="uid://bv3ae77701mrg" path="res://Entities/Player/States/MoveStates/Dash/DashGhost.tscn" id="10_c2plq"]
-[ext_resource type="FontFile" uid="uid://cj0mctn1mh06m" path="res://Assets/Fonts/Font Assets/Kenney Pixel.ttf" id="11_1rxkv"]
+[ext_resource type="FontFile" uid="uid://cj0mctn1mh06m" path="res://Assets/Theming/Fonts/FontAssets/Pixel/Kenney Pixel.ttf" id="11_1rxkv"]
 [ext_resource type="PackedScene" uid="uid://tc2awdm3onyi" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/PoisonHandler.tscn" id="11_rtl41"]
 [ext_resource type="PackedScene" uid="uid://e3qv2f7w61vy" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/RegenHandler.tscn" id="12_goxma"]
 [ext_resource type="PackedScene" uid="uid://bhg7jmodo3t5t" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/FrostbiteHandler.tscn" id="13_hqb6d"]
@@ -32,6 +31,34 @@
 [ext_resource type="PackedScene" uid="uid://blbjjhekjsi6y" path="res://Entities/EntityTypes/DynamicEntity/ActionStateMachine/ActionStateMachine.tscn" id="27_16wot"]
 [ext_resource type="PackedScene" uid="uid://c6wbsh31fq52k" path="res://Entities/Player/States/MoveStates/Stunned/StunIndicator.tscn" id="27_fyxoi"]
 [ext_resource type="Script" path="res://Entities/Player/States/ActionStates/ActionIdle.gd" id="28_mrxbf"]
+[ext_resource type="PackedScene" uid="uid://c4n604w30gx8m" path="res://Entities/Components/ItemComponents/ItemReceiverComponent.tscn" id="30_qgyag"]
+[ext_resource type="Script" path="res://UI/Inventory/PlayerInventory/PlayerInvCommunicator.gd" id="31_mjpan"]
+[ext_resource type="Script" path="res://UI/PlayerInvUI.gd" id="32_3a185"]
+[ext_resource type="Texture2D" uid="uid://biejldas3s8ak" path="res://UI/Inventory/Inventory9Patch.png" id="33_8yk75"]
+[ext_resource type="Script" path="res://UI/Inventory/PlayerInventory/ItemInteractionHud.gd" id="35_45ikj"]
+[ext_resource type="Script" path="res://UI/PlayerStatsOverlay/PlayerStatsOverlay.gd" id="35_yln51"]
+[ext_resource type="Texture2D" uid="uid://dwo0fuwylfxeq" path="res://UI/PlayerStatsOverlay/Assets/Stats Panel Bckgrd.png" id="36_vdy3t"]
+[ext_resource type="Texture2D" uid="uid://k0o25ihgea1n" path="res://UI/PlayerStatsOverlay/Assets/Hunger Progress Under.png" id="37_32xjt"]
+[ext_resource type="Texture2D" uid="uid://4uf2f502te50" path="res://Entities/Items/ItemScripts/Weapons/Projectiles/Bullet/pistol_bullet_default.png" id="37_x5jlh"]
+[ext_resource type="Texture2D" uid="uid://bdgevpcheclv5" path="res://UI/PlayerStatsOverlay/Assets/Hunger Progress Bar.png" id="38_ht2cb"]
+[ext_resource type="Shader" path="res://UI/Shaders/BlurBehind.gdshader" id="39_r4tgk"]
+[ext_resource type="Texture2D" uid="uid://xnppg0u7t7w4" path="res://UI/PlayerStatsOverlay/Assets/Stamina Recharge Under.png" id="39_ryeha"]
+[ext_resource type="Texture2D" uid="uid://gfbxblly7q78" path="res://UI/PlayerStatsOverlay/Assets/Stamina Recharge Bar.png" id="40_suqvl"]
+[ext_resource type="Script" path="res://UI/Inventory/InventoryPopulator.gd" id="41_nwjbq"]
+[ext_resource type="Texture2D" uid="uid://br8kgmxe41gh0" path="res://UI/PlayerStatsOverlay/Assets/Hunger Bar.png" id="41_wehgh"]
+[ext_resource type="Texture2D" uid="uid://cjjobaebw8uwu" path="res://UI/PlayerStatsOverlay/Assets/Hunger Under.png" id="42_im6xp"]
+[ext_resource type="PackedScene" uid="uid://m4ur3n2hwsp8" path="res://UI/Inventory/Slot/Slot.tscn" id="42_r422n"]
+[ext_resource type="Texture2D" uid="uid://c5mo0gxdddlte" path="res://UI/PlayerStatsOverlay/Assets/Hunger Change.png" id="43_k8324"]
+[ext_resource type="Shader" path="res://UI/PlayerStatsOverlay/StaminaBarTipGlow.gdshader" id="44_vk3bi"]
+[ext_resource type="Texture2D" uid="uid://l7chqvbfg16y" path="res://UI/PlayerStatsOverlay/Assets/Stamina Bar.png" id="45_3j47m"]
+[ext_resource type="Texture2D" uid="uid://1m3lv40blexn" path="res://UI/PlayerStatsOverlay/Assets/Stamina Under.png" id="46_l08yu"]
+[ext_resource type="Texture2D" uid="uid://dlx621mbgic4b" path="res://UI/PlayerStatsOverlay/Assets/Stamina Change.png" id="47_2ra1b"]
+[ext_resource type="Texture2D" uid="uid://ba6aut5vjc3g" path="res://UI/PlayerStatsOverlay/Assets/Shield.png" id="48_d5w3g"]
+[ext_resource type="Texture2D" uid="uid://csmk61f3sxw44" path="res://UI/PlayerStatsOverlay/Assets/Shield Under.png" id="49_ynd7x"]
+[ext_resource type="Texture2D" uid="uid://dcsw75wiocvy0" path="res://UI/PlayerStatsOverlay/Assets/Shield Change.png" id="50_86ubk"]
+[ext_resource type="Texture2D" uid="uid://b2v0527iatsjd" path="res://UI/PlayerStatsOverlay/Assets/Health.png" id="51_6cphe"]
+[ext_resource type="Texture2D" uid="uid://dhvpkl1svbcys" path="res://UI/PlayerStatsOverlay/Assets/Health Under.png" id="52_dhyl8"]
+[ext_resource type="Texture2D" uid="uid://lj78cee4aa38" path="res://UI/PlayerStatsOverlay/Assets/Health Change.png" id="53_qsiea"]
 
 [sub_resource type="Resource" id="Resource_rwbul"]
 script = ExtResource("2_vyeuy")
@@ -778,6 +805,22 @@ states/spawn/position = Vector2(184.5, 70.5)
 transitions = ["idle", "run", SubResource("AnimationNodeStateMachineTransition_70g00"), "run", "idle", SubResource("AnimationNodeStateMachineTransition_sdv4y"), "Start", "spawn", SubResource("AnimationNodeStateMachineTransition_8h6fx"), "spawn", "idle", SubResource("AnimationNodeStateMachineTransition_x8kh3")]
 graph_offset = Vector2(-48, 10)
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_0q2s6"]
+shader = ExtResource("44_vk3bi")
+shader_parameter/progress = 0.0
+shader_parameter/tip_size = 0.15
+shader_parameter/opacity = 0.385
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_2q23q"]
+shader = ExtResource("39_r4tgk")
+shader_parameter/lod = 3.771
+shader_parameter/darken_factor = 0.454
+
+[sub_resource type="LabelSettings" id="LabelSettings_nuang"]
+line_spacing = 0.0
+font_size = 100
+font_color = Color(0.4, 0.223529, 0.192157, 1)
+
 [node name="Player" type="CharacterBody2D" node_paths=PackedStringArray("effects") groups=["has_save_logic"]]
 collision_mask = 213
 motion_mode = 1
@@ -800,10 +843,10 @@ sprite_frames = ExtResource("2_t1by5")
 animation = &"idle"
 
 [node name="HealthComponent" parent="." node_paths=PackedStringArray("stats_ui") instance=ExtResource("3_ojev3")]
-stats_ui = NodePath("../PlayerUI/PlayerStatsOverlay")
+stats_ui = NodePath("../PlayerUILayer/PlayerStatsOverlay")
 
 [node name="StaminaComponent" parent="." node_paths=PackedStringArray("stats_ui") instance=ExtResource("5_k4fu6")]
-stats_ui = NodePath("../PlayerUI/PlayerStatsOverlay")
+stats_ui = NodePath("../PlayerUILayer/PlayerStatsOverlay")
 
 [node name="EffectReceiverComponent" parent="." node_paths=PackedStringArray("affected_entity", "health_component", "stamina_component", "dmg_handler", "heal_handler", "knockback_handler", "stun_handler", "poison_handler", "regen_handler", "frostbite_handler", "burning_handler", "time_snare_handler") instance=ExtResource("4_hhm8x")]
 visible = false
@@ -846,7 +889,7 @@ script = ExtResource("15_64y42")
 
 [node name="StatusEffectManager" parent="." node_paths=PackedStringArray("effect_receiver", "stats_ui") instance=ExtResource("6_n0x5k")]
 effect_receiver = NodePath("../EffectReceiverComponent")
-stats_ui = NodePath("../PlayerUI/PlayerStatsOverlay")
+stats_ui = NodePath("../PlayerUILayer/PlayerStatsOverlay")
 print_effect_updates = true
 
 [node name="MoveStateMachine" parent="." node_paths=PackedStringArray("entity", "anim_tree", "initial_state") instance=ExtResource("16_xoncr")]
@@ -907,12 +950,17 @@ parameters/idle/blendspace2d/blend_position = Vector2(0, 0)
 parameters/run/TimeScale/scale = 1.5
 parameters/run/blendspace2d/blend_position = Vector2(0, 0)
 
-[node name="PlayerUI" type="CanvasLayer" parent="."]
+[node name="ItemReceiverComponent" parent="." node_paths=PackedStringArray("ui") instance=ExtResource("30_qgyag")]
+ui = NodePath("../PlayerUILayer/PlayerInvUI/TextureMargins/InventoryTexture/GridMargins/SlotGrid")
 
-[node name="PlayerStatsOverlay" parent="PlayerUI" node_paths=PackedStringArray("player") instance=ExtResource("9_txdy5")]
-player = NodePath("../..")
+[node name="PlayerInvCommunicator" type="Node" parent="ItemReceiverComponent" node_paths=PackedStringArray("item_interact_hud")]
+script = ExtResource("31_mjpan")
+item_interact_hud = NodePath("../../PlayerUILayer/ItemInteractionHUD")
 
-[node name="TestButtons" type="Control" parent="PlayerUI" node_paths=PackedStringArray("health_component")]
+[node name="PlayerUILayer" type="CanvasLayer" parent="."]
+
+[node name="TestButtons" type="Control" parent="PlayerUILayer" node_paths=PackedStringArray("health_component")]
+visible = false
 layout_mode = 3
 anchors_preset = 0
 offset_right = 40.0
@@ -920,7 +968,7 @@ offset_bottom = 40.0
 script = ExtResource("17_vdk5v")
 health_component = NodePath("../../HealthComponent")
 
-[node name="TestHurtBtn" type="Button" parent="PlayerUI/TestButtons"]
+[node name="TestHurtBtn" type="Button" parent="PlayerUILayer/TestButtons"]
 layout_mode = 0
 offset_left = 162.0
 offset_top = 249.0
@@ -930,7 +978,7 @@ scale = Vector2(0.7, 0.7)
 focus_mode = 0
 text = "HURT"
 
-[node name="TestHealBtn" type="Button" parent="PlayerUI/TestButtons"]
+[node name="TestHealBtn" type="Button" parent="PlayerUILayer/TestButtons"]
 texture_filter = 1
 layout_mode = 0
 offset_left = 162.0
@@ -943,7 +991,7 @@ theme_override_fonts/font = ExtResource("11_1rxkv")
 theme_override_font_sizes/font_size = 16
 text = "HEAL"
 
-[node name="TestMusicBtn" type="Button" parent="PlayerUI/TestButtons"]
+[node name="TestMusicBtn" type="Button" parent="PlayerUILayer/TestButtons"]
 texture_filter = 1
 layout_mode = 0
 offset_left = 432.0
@@ -956,7 +1004,7 @@ theme_override_fonts/font = ExtResource("11_1rxkv")
 theme_override_font_sizes/font_size = 16
 text = "TEST MUSIC"
 
-[node name="TestSaveBtn" type="Button" parent="PlayerUI/TestButtons"]
+[node name="TestSaveBtn" type="Button" parent="PlayerUILayer/TestButtons"]
 texture_filter = 1
 layout_mode = 0
 offset_left = 451.0
@@ -969,7 +1017,7 @@ theme_override_fonts/font = ExtResource("11_1rxkv")
 theme_override_font_sizes/font_size = 16
 text = "SAVE"
 
-[node name="TestLoadBtn" type="Button" parent="PlayerUI/TestButtons"]
+[node name="TestLoadBtn" type="Button" parent="PlayerUILayer/TestButtons"]
 texture_filter = 1
 layout_mode = 0
 offset_left = 451.0
@@ -982,7 +1030,7 @@ theme_override_fonts/font = ExtResource("11_1rxkv")
 theme_override_font_sizes/font_size = 16
 text = "LOAD"
 
-[node name="TestModBtn1" type="Button" parent="PlayerUI/TestButtons"]
+[node name="TestModBtn1" type="Button" parent="PlayerUILayer/TestButtons"]
 texture_filter = 1
 layout_mode = 0
 offset_left = 452.0
@@ -995,7 +1043,7 @@ theme_override_fonts/font = ExtResource("11_1rxkv")
 theme_override_font_sizes/font_size = 16
 text = "MOD 1"
 
-[node name="TestModBtn2" type="Button" parent="PlayerUI/TestButtons"]
+[node name="TestModBtn2" type="Button" parent="PlayerUILayer/TestButtons"]
 texture_filter = 1
 layout_mode = 0
 offset_left = 452.0
@@ -1008,7 +1056,7 @@ theme_override_fonts/font = ExtResource("11_1rxkv")
 theme_override_font_sizes/font_size = 16
 text = "MOD 2"
 
-[node name="TestShakeBtn" type="Button" parent="PlayerUI/TestButtons"]
+[node name="TestShakeBtn" type="Button" parent="PlayerUILayer/TestButtons"]
 texture_filter = 1
 layout_mode = 0
 offset_left = 451.0
@@ -1021,13 +1069,435 @@ theme_override_fonts/font = ExtResource("11_1rxkv")
 theme_override_font_sizes/font_size = 16
 text = "Shake"
 
+[node name="PlayerStatsOverlay" type="Control" parent="PlayerUILayer" node_paths=PackedStringArray("player")]
+texture_filter = 2
+layout_mode = 3
+anchors_preset = 0
+offset_left = 4.0
+offset_top = 229.0
+offset_right = 4.0
+offset_bottom = 229.0
+script = ExtResource("35_yln51")
+player = NodePath("../..")
+
+[node name="PanelContainer" type="PanelContainer" parent="PlayerUILayer/PlayerStatsOverlay"]
+self_modulate = Color(1, 1, 1, 0)
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+scale = Vector2(0.08, 0.08)
+
+[node name="StatsBackground" type="TextureRect" parent="PlayerUILayer/PlayerStatsOverlay/PanelContainer"]
+layout_mode = 2
+texture = ExtResource("36_vdy3t")
+
+[node name="MarginContainer" type="MarginContainer" parent="PlayerUILayer/PlayerStatsOverlay/PanelContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 4
+theme_override_constants/margin_left = 59
+theme_override_constants/margin_top = 4
+
+[node name="HungerProgressBar" type="TextureProgressBar" parent="PlayerUILayer/PlayerStatsOverlay/PanelContainer/MarginContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 4
+value = 35.0
+fill_mode = 4
+radial_initial_angle = 201.0
+radial_fill_degrees = 157.0
+texture_under = ExtResource("37_32xjt")
+texture_progress = ExtResource("38_ht2cb")
+
+[node name="StaminaRechargeBar" type="TextureProgressBar" parent="PlayerUILayer/PlayerStatsOverlay/PanelContainer/MarginContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 4
+value = 35.0
+fill_mode = 5
+radial_initial_angle = 159.0
+radial_fill_degrees = 157.0
+texture_under = ExtResource("39_ryeha")
+texture_progress = ExtResource("40_suqvl")
+
+[node name="HungerBar" type="TextureProgressBar" parent="PlayerUILayer/PlayerStatsOverlay/PanelContainer/MarginContainer"]
+unique_name_in_owner = true
+self_modulate = Color(1.39, 1.39, 1.39, 1)
+layout_mode = 2
+size_flags_vertical = 4
+value = 50.0
+fill_mode = 4
+radial_initial_angle = 201.0
+radial_fill_degrees = 157.0
+texture_progress = ExtResource("41_wehgh")
+
+[node name="HungerChange" type="TextureProgressBar" parent="PlayerUILayer/PlayerStatsOverlay/PanelContainer/MarginContainer/HungerBar"]
+unique_name_in_owner = true
+show_behind_parent = true
+layout_mode = 2
+offset_right = 355.0
+offset_bottom = 356.0
+size_flags_vertical = 4
+value = 65.0
+fill_mode = 4
+radial_initial_angle = 201.0
+radial_fill_degrees = 157.0
+texture_under = ExtResource("42_im6xp")
+texture_progress = ExtResource("43_k8324")
+
+[node name="StaminaBar" type="TextureProgressBar" parent="PlayerUILayer/PlayerStatsOverlay/PanelContainer/MarginContainer"]
+unique_name_in_owner = true
+material = SubResource("ShaderMaterial_0q2s6")
+layout_mode = 2
+size_flags_vertical = 4
+value = 50.0
+fill_mode = 5
+radial_initial_angle = 159.0
+radial_fill_degrees = 157.0
+texture_progress = ExtResource("45_3j47m")
+
+[node name="StaminaChange" type="TextureProgressBar" parent="PlayerUILayer/PlayerStatsOverlay/PanelContainer/MarginContainer/StaminaBar"]
+unique_name_in_owner = true
+show_behind_parent = true
+layout_mode = 2
+offset_right = 355.0
+offset_bottom = 356.0
+size_flags_vertical = 4
+value = 65.0
+fill_mode = 5
+radial_initial_angle = 159.0
+radial_fill_degrees = 157.0
+texture_under = ExtResource("46_l08yu")
+texture_progress = ExtResource("47_2ra1b")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PlayerUILayer/PlayerStatsOverlay/PanelContainer"]
+custom_minimum_size = Vector2(1495, 0)
+layout_mode = 2
+size_flags_horizontal = 10
+size_flags_vertical = 4
+theme_override_constants/separation = 38
+
+[node name="ShieldBar" type="TextureProgressBar" parent="PlayerUILayer/PlayerStatsOverlay/PanelContainer/VBoxContainer"]
+unique_name_in_owner = true
+self_modulate = Color(1.7, 1.7, 1.7, 1)
+custom_minimum_size = Vector2(1439, 154)
+layout_mode = 2
+value = 75.0
+texture_progress = ExtResource("48_d5w3g")
+texture_progress_offset = Vector2(16, 16)
+
+[node name="ShieldChange" type="TextureProgressBar" parent="PlayerUILayer/PlayerStatsOverlay/PanelContainer/VBoxContainer/ShieldBar"]
+unique_name_in_owner = true
+show_behind_parent = true
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+value = 80.0
+texture_under = ExtResource("49_ynd7x")
+texture_progress = ExtResource("50_86ubk")
+texture_progress_offset = Vector2(16, 16)
+
+[node name="HealthBar" type="TextureProgressBar" parent="PlayerUILayer/PlayerStatsOverlay/PanelContainer/VBoxContainer"]
+unique_name_in_owner = true
+self_modulate = Color(1.55, 1.55, 1.55, 1)
+custom_minimum_size = Vector2(1441, 156)
+layout_mode = 2
+value = 100.0
+texture_progress = ExtResource("51_6cphe")
+texture_progress_offset = Vector2(16, 17)
+
+[node name="HealthChange" type="TextureProgressBar" parent="PlayerUILayer/PlayerStatsOverlay/PanelContainer/VBoxContainer/HealthBar"]
+unique_name_in_owner = true
+show_behind_parent = true
+layout_mode = 0
+offset_right = 1441.0
+offset_bottom = 156.0
+value = 100.0
+texture_under = ExtResource("52_dhyl8")
+texture_progress = ExtResource("53_qsiea")
+texture_progress_offset = Vector2(16, 17)
+
+[node name="HealthChangedTimer" type="Timer" parent="PlayerUILayer/PlayerStatsOverlay"]
+unique_name_in_owner = true
+wait_time = 0.5
+one_shot = true
+
+[node name="ShieldChangedTimer" type="Timer" parent="PlayerUILayer/PlayerStatsOverlay"]
+unique_name_in_owner = true
+wait_time = 0.5
+one_shot = true
+
+[node name="HungerChangedTimer" type="Timer" parent="PlayerUILayer/PlayerStatsOverlay"]
+unique_name_in_owner = true
+wait_time = 0.5
+one_shot = true
+
+[node name="StaminaChangedTimer" type="Timer" parent="PlayerUILayer/PlayerStatsOverlay"]
+unique_name_in_owner = true
+wait_time = 0.5
+one_shot = true
+
+[node name="StaminaRechargeTimer" type="Timer" parent="PlayerUILayer/PlayerStatsOverlay"]
+unique_name_in_owner = true
+wait_time = 0.3
+one_shot = true
+
+[node name="ItemInteractionHUD" type="NinePatchRect" parent="PlayerUILayer"]
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -91.0
+offset_top = -30.0
+offset_right = -4.0
+offset_bottom = -4.0
+grow_horizontal = 0
+grow_vertical = 0
+texture = ExtResource("33_8yk75")
+patch_margin_left = 4
+patch_margin_top = 4
+patch_margin_right = 4
+patch_margin_bottom = 4
+script = ExtResource("35_45ikj")
+
+[node name="InteractText" type="Label" parent="PlayerUILayer/ItemInteractionHUD"]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 6.0
+offset_top = -7.0
+offset_right = 540.0
+offset_bottom = 143.0
+grow_vertical = 2
+scale = Vector2(0.1, 0.1)
+text = "'E' to Pickup"
+
+[node name="ItemTexture" type="TextureRect" parent="PlayerUILayer/ItemInteractionHUD"]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -23.0
+offset_top = -8.0
+offset_right = 9.0
+offset_bottom = 24.0
+grow_horizontal = 0
+grow_vertical = 2
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("37_x5jlh")
+
+[node name="PlayerInvUI" type="ColorRect" parent="PlayerUILayer"]
+process_mode = 3
+material = SubResource("ShaderMaterial_2q23q")
+use_parent_material = true
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.109341, 0.109341, 0.109341, 0.976471)
+script = ExtResource("32_3a185")
+
+[node name="TextureMargins" type="MarginContainer" parent="PlayerUILayer/PlayerInvUI"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 125
+theme_override_constants/margin_top = 55
+theme_override_constants/margin_right = 125
+theme_override_constants/margin_bottom = 55
+
+[node name="InventoryTexture" type="NinePatchRect" parent="PlayerUILayer/PlayerInvUI/TextureMargins"]
+layout_mode = 2
+texture = ExtResource("33_8yk75")
+patch_margin_left = 4
+patch_margin_top = 4
+patch_margin_right = 4
+patch_margin_bottom = 4
+
+[node name="InventoryTitle" type="Label" parent="PlayerUILayer/PlayerInvUI/TextureMargins/InventoryTexture"]
+texture_filter = 2
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -85.0
+offset_top = 8.0
+offset_right = 439.0
+offset_bottom = 158.0
+grow_horizontal = 2
+scale = Vector2(0.2, 0.2)
+pivot_offset = Vector2(41, 0)
+text = "INVENTORY"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ItemDetails" type="Label" parent="PlayerUILayer/PlayerInvUI/TextureMargins/InventoryTexture"]
+texture_filter = 2
+layout_mode = 1
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = 6.0
+offset_top = 58.0
+offset_right = 2996.0
+offset_bottom = 273.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.068, 0.068)
+text = "Details about the selected item. This text supports up to two lines, then it adds an ellipsis at the end."
+label_settings = SubResource("LabelSettings_nuang")
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+text_overrun_behavior = 3
+
+[node name="GridMargins" type="MarginContainer" parent="PlayerUILayer/PlayerInvUI/TextureMargins/InventoryTexture"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -109.0
+offset_top = -74.0
+offset_right = 109.0
+offset_bottom = 74.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 6
+theme_override_constants/margin_top = 26
+theme_override_constants/margin_right = 6
+theme_override_constants/margin_bottom = 6
+
+[node name="SlotGrid" type="GridContainer" parent="PlayerUILayer/PlayerInvUI/TextureMargins/InventoryTexture/GridMargins"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_constants/h_separation = 1
+theme_override_constants/v_separation = 1
+columns = 8
+script = ExtResource("41_nwjbq")
+slot_scene = ExtResource("42_r422n")
+
+[node name="Slot1" parent="PlayerUILayer/PlayerInvUI/TextureMargins/InventoryTexture/GridMargins/SlotGrid" instance=ExtResource("42_r422n")]
+layout_mode = 2
+
+[node name="Slot2" parent="PlayerUILayer/PlayerInvUI/TextureMargins/InventoryTexture/GridMargins/SlotGrid" instance=ExtResource("42_r422n")]
+layout_mode = 2
+
+[node name="Slot3" parent="PlayerUILayer/PlayerInvUI/TextureMargins/InventoryTexture/GridMargins/SlotGrid" instance=ExtResource("42_r422n")]
+layout_mode = 2
+
+[node name="Slot4" parent="PlayerUILayer/PlayerInvUI/TextureMargins/InventoryTexture/GridMargins/SlotGrid" instance=ExtResource("42_r422n")]
+layout_mode = 2
+
+[node name="Slot5" parent="PlayerUILayer/PlayerInvUI/TextureMargins/InventoryTexture/GridMargins/SlotGrid" instance=ExtResource("42_r422n")]
+layout_mode = 2
+
+[node name="Slot6" parent="PlayerUILayer/PlayerInvUI/TextureMargins/InventoryTexture/GridMargins/SlotGrid" instance=ExtResource("42_r422n")]
+layout_mode = 2
+
+[node name="Slot7" parent="PlayerUILayer/PlayerInvUI/TextureMargins/InventoryTexture/GridMargins/SlotGrid" instance=ExtResource("42_r422n")]
+layout_mode = 2
+
+[node name="Slot8" parent="PlayerUILayer/PlayerInvUI/TextureMargins/InventoryTexture/GridMargins/SlotGrid" instance=ExtResource("42_r422n")]
+layout_mode = 2
+
+[node name="Slot9" parent="PlayerUILayer/PlayerInvUI/TextureMargins/InventoryTexture/GridMargins/SlotGrid" instance=ExtResource("42_r422n")]
+layout_mode = 2
+
+[node name="Slot10" parent="PlayerUILayer/PlayerInvUI/TextureMargins/InventoryTexture/GridMargins/SlotGrid" instance=ExtResource("42_r422n")]
+layout_mode = 2
+
+[node name="Slot11" parent="PlayerUILayer/PlayerInvUI/TextureMargins/InventoryTexture/GridMargins/SlotGrid" instance=ExtResource("42_r422n")]
+layout_mode = 2
+
+[node name="Slot12" parent="PlayerUILayer/PlayerInvUI/TextureMargins/InventoryTexture/GridMargins/SlotGrid" instance=ExtResource("42_r422n")]
+layout_mode = 2
+
+[node name="Slot13" parent="PlayerUILayer/PlayerInvUI/TextureMargins/InventoryTexture/GridMargins/SlotGrid" instance=ExtResource("42_r422n")]
+layout_mode = 2
+
+[node name="Slot14" parent="PlayerUILayer/PlayerInvUI/TextureMargins/InventoryTexture/GridMargins/SlotGrid" instance=ExtResource("42_r422n")]
+layout_mode = 2
+
+[node name="Slot15" parent="PlayerUILayer/PlayerInvUI/TextureMargins/InventoryTexture/GridMargins/SlotGrid" instance=ExtResource("42_r422n")]
+layout_mode = 2
+
+[node name="Slot16" parent="PlayerUILayer/PlayerInvUI/TextureMargins/InventoryTexture/GridMargins/SlotGrid" instance=ExtResource("42_r422n")]
+layout_mode = 2
+
+[node name="Slot17" parent="PlayerUILayer/PlayerInvUI/TextureMargins/InventoryTexture/GridMargins/SlotGrid" instance=ExtResource("42_r422n")]
+layout_mode = 2
+
+[node name="Slot18" parent="PlayerUILayer/PlayerInvUI/TextureMargins/InventoryTexture/GridMargins/SlotGrid" instance=ExtResource("42_r422n")]
+layout_mode = 2
+
+[node name="Slot19" parent="PlayerUILayer/PlayerInvUI/TextureMargins/InventoryTexture/GridMargins/SlotGrid" instance=ExtResource("42_r422n")]
+layout_mode = 2
+
+[node name="Slot20" parent="PlayerUILayer/PlayerInvUI/TextureMargins/InventoryTexture/GridMargins/SlotGrid" instance=ExtResource("42_r422n")]
+layout_mode = 2
+
+[node name="Slot21" parent="PlayerUILayer/PlayerInvUI/TextureMargins/InventoryTexture/GridMargins/SlotGrid" instance=ExtResource("42_r422n")]
+layout_mode = 2
+
+[node name="Slot22" parent="PlayerUILayer/PlayerInvUI/TextureMargins/InventoryTexture/GridMargins/SlotGrid" instance=ExtResource("42_r422n")]
+layout_mode = 2
+
+[node name="Slot23" parent="PlayerUILayer/PlayerInvUI/TextureMargins/InventoryTexture/GridMargins/SlotGrid" instance=ExtResource("42_r422n")]
+layout_mode = 2
+
+[node name="Slot24" parent="PlayerUILayer/PlayerInvUI/TextureMargins/InventoryTexture/GridMargins/SlotGrid" instance=ExtResource("42_r422n")]
+layout_mode = 2
+
+[node name="Slot25" parent="PlayerUILayer/PlayerInvUI/TextureMargins/InventoryTexture/GridMargins/SlotGrid" instance=ExtResource("42_r422n")]
+layout_mode = 2
+
+[node name="Slot26" parent="PlayerUILayer/PlayerInvUI/TextureMargins/InventoryTexture/GridMargins/SlotGrid" instance=ExtResource("42_r422n")]
+layout_mode = 2
+
+[node name="Slot27" parent="PlayerUILayer/PlayerInvUI/TextureMargins/InventoryTexture/GridMargins/SlotGrid" instance=ExtResource("42_r422n")]
+layout_mode = 2
+
+[node name="Slot28" parent="PlayerUILayer/PlayerInvUI/TextureMargins/InventoryTexture/GridMargins/SlotGrid" instance=ExtResource("42_r422n")]
+layout_mode = 2
+
+[node name="Slot29" parent="PlayerUILayer/PlayerInvUI/TextureMargins/InventoryTexture/GridMargins/SlotGrid" instance=ExtResource("42_r422n")]
+layout_mode = 2
+
+[node name="Slot30" parent="PlayerUILayer/PlayerInvUI/TextureMargins/InventoryTexture/GridMargins/SlotGrid" instance=ExtResource("42_r422n")]
+layout_mode = 2
+
+[node name="Slot31" parent="PlayerUILayer/PlayerInvUI/TextureMargins/InventoryTexture/GridMargins/SlotGrid" instance=ExtResource("42_r422n")]
+layout_mode = 2
+
+[node name="Slot32" parent="PlayerUILayer/PlayerInvUI/TextureMargins/InventoryTexture/GridMargins/SlotGrid" instance=ExtResource("42_r422n")]
+layout_mode = 2
+
 [connection signal="timeout" from="MoveStateMachine/Dash/DashTimer" to="MoveStateMachine/Dash" method="_on_dash_timer_timeout"]
 [connection signal="timeout" from="MoveStateMachine/Stunned/StunnedTimer" to="MoveStateMachine/Stunned" method="_on_stunned_timer_timeout"]
-[connection signal="pressed" from="PlayerUI/TestButtons/TestHurtBtn" to="PlayerUI/TestButtons" method="_on_test_hurt_btn_pressed"]
-[connection signal="pressed" from="PlayerUI/TestButtons/TestHealBtn" to="PlayerUI/TestButtons" method="_on_test_heal_btn_pressed"]
-[connection signal="pressed" from="PlayerUI/TestButtons/TestMusicBtn" to="PlayerUI/TestButtons" method="_on_test_music_btn_pressed"]
-[connection signal="pressed" from="PlayerUI/TestButtons/TestSaveBtn" to="PlayerUI/TestButtons" method="_on_test_save_btn_pressed"]
-[connection signal="pressed" from="PlayerUI/TestButtons/TestLoadBtn" to="PlayerUI/TestButtons" method="_on_test_load_btn_pressed"]
-[connection signal="pressed" from="PlayerUI/TestButtons/TestModBtn1" to="PlayerUI/TestButtons" method="_on_test_mod_btn_1_pressed"]
-[connection signal="pressed" from="PlayerUI/TestButtons/TestModBtn2" to="PlayerUI/TestButtons" method="_on_test_mod_btn_2_pressed"]
-[connection signal="pressed" from="PlayerUI/TestButtons/TestShakeBtn" to="PlayerUI/TestButtons" method="_on_test_mod_btn_3_pressed"]
+[connection signal="pressed" from="PlayerUILayer/TestButtons/TestHurtBtn" to="PlayerUILayer/TestButtons" method="_on_test_hurt_btn_pressed"]
+[connection signal="pressed" from="PlayerUILayer/TestButtons/TestHealBtn" to="PlayerUILayer/TestButtons" method="_on_test_heal_btn_pressed"]
+[connection signal="pressed" from="PlayerUILayer/TestButtons/TestMusicBtn" to="PlayerUILayer/TestButtons" method="_on_test_music_btn_pressed"]
+[connection signal="pressed" from="PlayerUILayer/TestButtons/TestSaveBtn" to="PlayerUILayer/TestButtons" method="_on_test_save_btn_pressed"]
+[connection signal="pressed" from="PlayerUILayer/TestButtons/TestLoadBtn" to="PlayerUILayer/TestButtons" method="_on_test_load_btn_pressed"]
+[connection signal="pressed" from="PlayerUILayer/TestButtons/TestModBtn1" to="PlayerUILayer/TestButtons" method="_on_test_mod_btn_1_pressed"]
+[connection signal="pressed" from="PlayerUILayer/TestButtons/TestModBtn2" to="PlayerUILayer/TestButtons" method="_on_test_mod_btn_2_pressed"]
+[connection signal="pressed" from="PlayerUILayer/TestButtons/TestShakeBtn" to="PlayerUILayer/TestButtons" method="_on_test_mod_btn_3_pressed"]
+[connection signal="tree_entered" from="PlayerUILayer/PlayerStatsOverlay" to="PlayerUILayer/PlayerStatsOverlay" method="_on_tree_entered"]
+[connection signal="tree_exiting" from="PlayerUILayer/PlayerStatsOverlay" to="PlayerUILayer/PlayerStatsOverlay" method="_on_tree_exiting"]
+[connection signal="timeout" from="PlayerUILayer/PlayerStatsOverlay/HealthChangedTimer" to="PlayerUILayer/PlayerStatsOverlay" method="_on_health_changed_timer_timeout"]
+[connection signal="timeout" from="PlayerUILayer/PlayerStatsOverlay/ShieldChangedTimer" to="PlayerUILayer/PlayerStatsOverlay" method="_on_shield_changed_timer_timeout"]
+[connection signal="timeout" from="PlayerUILayer/PlayerStatsOverlay/HungerChangedTimer" to="PlayerUILayer/PlayerStatsOverlay" method="_on_hunger_changed_timer_timeout"]
+[connection signal="timeout" from="PlayerUILayer/PlayerStatsOverlay/StaminaChangedTimer" to="PlayerUILayer/PlayerStatsOverlay" method="_on_stamina_changed_timer_timeout"]
+[connection signal="timeout" from="PlayerUILayer/PlayerStatsOverlay/StaminaRechargeTimer" to="PlayerUILayer/PlayerStatsOverlay" method="_on_stamina_recharge_timer_timeout"]

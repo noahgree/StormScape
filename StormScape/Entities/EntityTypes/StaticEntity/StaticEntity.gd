@@ -7,4 +7,6 @@ class_name StaticEntity
 
 @export var team: GlobalData.Teams = GlobalData.Teams.PLAYER ## What the effects received by this entity should consider as this entity's team.
 
+@onready var inv: ItemReceiverComponent = get_node_or_null("ItemReceiverComponent")
+
 var stat_mods: Dictionary = {}

@@ -1,4 +1,4 @@
-[gd_scene load_steps=31 format=3 uid="uid://bscnr6a23l10m"]
+[gd_scene load_steps=34 format=3 uid="uid://bscnr6a23l10m"]
 
 [ext_resource type="Script" path="res://Utilities/Game/WorldRoot/WorldRoot.gd" id="1_q0i4n"]
 [ext_resource type="Script" path="res://Stages/World/BackgroundMusicManager.gd" id="1_q5pr2"]
@@ -19,6 +19,9 @@
 [ext_resource type="Script" path="res://Utilities/Debug/TestBullet.gd" id="15_v7yfh"]
 [ext_resource type="Script" path="res://Entities/EffectSystemResources/EffectSources/MovingEffectSource.gd" id="16_5aosc"]
 [ext_resource type="Resource" uid="uid://b0it5xmpw16sd" path="res://Entities/EffectSystemResources/StatusEffects/BadEffects/Knockback/Knockback1.tres" id="17_re3lx"]
+[ext_resource type="PackedScene" uid="uid://u04d840fx7vw" path="res://Entities/Items/Item.tscn" id="18_8630i"]
+[ext_resource type="Resource" uid="uid://bbya4jg50etnu" path="res://Entities/Items/ItemResources/TestBullet.tres" id="18_epvul"]
+[ext_resource type="Resource" uid="uid://c7xxa5yy1lsyb" path="res://Entities/Items/ItemResources/TestCannonball.tres" id="19_rcdoo"]
 
 [sub_resource type="Environment" id="Environment_2wouv"]
 background_mode = 3
@@ -4158,9 +4161,6 @@ size = Vector2(6, 6)
 
 [node name="Game" type="Node2D"]
 
-[node name="BackgroundMusicManager" type="Node" parent="." groups=["core"]]
-script = ExtResource("1_q5pr2")
-
 [node name="WorldRoot" type="Node2D" parent="." groups=["core"]]
 unique_name_in_owner = true
 script = ExtResource("1_q0i4n")
@@ -4253,6 +4253,30 @@ source_entity = NodePath("../../Enemy")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="WorldRoot/Testing/TestMovingEffectSource/Hitbox"]
 shape = SubResource("RectangleShape2D_8bjrm")
 
+[node name="Item" parent="WorldRoot/Testing" instance=ExtResource("18_8630i")]
+position = Vector2(322, 167)
+
+[node name="Item2" parent="WorldRoot/Testing" instance=ExtResource("18_8630i")]
+position = Vector2(296, 168)
+stats = ExtResource("18_epvul")
+
+[node name="Item3" parent="WorldRoot/Testing" instance=ExtResource("18_8630i")]
+position = Vector2(309, 189)
+stats = ExtResource("19_rcdoo")
+
+[node name="Item4" parent="WorldRoot/Testing" instance=ExtResource("18_8630i")]
+position = Vector2(328, 201)
+stats = ExtResource("19_rcdoo")
+
+[node name="Item5" parent="WorldRoot/Testing" instance=ExtResource("18_8630i")]
+position = Vector2(308, 213)
+stats = ExtResource("19_rcdoo")
+quantity = 5
+
+[node name="Item6" parent="WorldRoot/Testing" instance=ExtResource("18_8630i")]
+position = Vector2(287, 200)
+stats = ExtResource("18_epvul")
+
 [node name="Player" parent="WorldRoot" instance=ExtResource("4_ptig0")]
 position = Vector2(258, 85)
 collision_mask = 245
@@ -4263,3 +4287,6 @@ position_smoothing_speed = 18.0
 script = ExtResource("4_tj8qg")
 player = NodePath("../Player")
 smoothing_enabled = true
+
+[node name="BackgroundMusicManager" type="Node" parent="." groups=["core"]]
+script = ExtResource("1_q5pr2")

@@ -13,7 +13,7 @@ func enter() -> void:
 	fsm.anim_tree["parameters/playback"].travel("idle")
 	stunned_timer.start()
 	_animate()
-	
+
 	if dynamic_entity.has_node("AnimatedSprite2D"):
 		parent_sprite_node = dynamic_entity.get_node("AnimatedSprite2D")
 	elif dynamic_entity.has_node("Sprite2D"):
@@ -33,7 +33,7 @@ func _do_character_stun(delta: float) -> void:
 	var knockback: Vector2 = fsm.knockback_vector
 	if knockback.length() > 0: # let knockback take control if there is any
 		dynamic_entity.velocity = knockback
-	
+
 	if dynamic_entity.velocity.length() > (dynamic_entity.stats.get_stat("friction") * delta): # still slowing
 		dynamic_entity.velocity -= dynamic_entity.velocity.normalized() * (dynamic_entity.stats.get_stat("friction") * delta)
 	else:
@@ -60,4 +60,4 @@ func _update_stun_indicator_pos() -> void:
 
 ## When the stun time has ended, transition out of this state and back to Idle.
 func _on_stunned_timer_timeout() -> void:
-	Transitioned.emit(self, "Idle")
+	transitioned.emit(self, "Idle")

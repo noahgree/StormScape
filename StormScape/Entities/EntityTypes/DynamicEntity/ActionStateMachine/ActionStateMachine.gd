@@ -9,14 +9,14 @@ class_name ActionStateMachine
 ## Overrides parent state machine class.
 func _ready() -> void:
 	assert(has_node("ActionIdle"), "Dynamic entities must have an Idle state in the action state machine.")
-	
+
 	for child in get_children():
 		if child is ActionState:
 			states[child.name.to_lower()] = child
-			child.Transitioned.connect(_on_child_transition)
+			child.transitioned.connect(_on_child_transition)
 			child.dynamic_entity = entity
 			child.stamina_component = entity.get_node("StaminaComponent")
-	
+
 	if initial_state:
 		initial_state.enter()
 		current_state = initial_state

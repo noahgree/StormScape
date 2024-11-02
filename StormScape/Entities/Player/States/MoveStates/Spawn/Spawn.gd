@@ -13,4 +13,4 @@ func _on_spawn_anim_ended() -> void:
 	call_deferred("_transition_out_of_spawn")
 
 func _transition_out_of_spawn() -> void:
-	Transitioned.emit(self, "Idle")
+	transitioned.emit(self, "Idle")

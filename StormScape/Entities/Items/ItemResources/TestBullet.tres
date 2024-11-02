@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="ItemResource" load_steps=3 format=3 uid="uid://bbya4jg50etnu"]
+
+[ext_resource type="Script" path="res://Entities/Items/ItemResource.gd" id="1_18bkw"]
+[ext_resource type="Texture2D" uid="uid://4uf2f502te50" path="res://Entities/Items/ItemScripts/Weapons/Projectiles/Bullet/pistol_bullet_default.png" id="1_oa1h3"]
+
+[resource]
+script = ExtResource("1_18bkw")
+name = "TestBullet"
+icon = ExtResource("1_oa1h3")
+type = "Consumable"
+rarity = "Uncommon"
+info = "A test bullet."

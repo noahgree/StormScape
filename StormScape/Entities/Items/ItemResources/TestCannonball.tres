@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="ItemResource" load_steps=3 format=3 uid="uid://c7xxa5yy1lsyb"]
+
+[ext_resource type="Texture2D" uid="uid://qwyrtuh8et4r" path="res://Entities/Items/ItemScripts/Weapons/Projectiles/Bullet/cannonball_default.png" id="1_oqp80"]
+[ext_resource type="Script" path="res://Entities/Items/ItemResource.gd" id="2_uyhuf"]
+
+[resource]
+script = ExtResource("2_uyhuf")
+name = "TestCannonball"
+icon = ExtResource("1_oqp80")
+type = 0
+rarity = 0
+stack_size = 2
+info = "A test cannonball."

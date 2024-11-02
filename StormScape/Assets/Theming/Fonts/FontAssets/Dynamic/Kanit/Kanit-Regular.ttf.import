@@ -1,0 +1,39 @@
+[remap]
+
+importer="font_data_dynamic"
+type="FontFile"
+uid="uid://bpld83nxsonow"
+path="res://.godot/imported/Kanit-Regular.ttf-3a1ee9ba443d0b20aa76954978c9aeee.fontdata"
+
+[deps]
+
+source_file="res://Assets/Theming/Fonts/FontAssets/Dynamic/Kanit/Kanit-Regular.ttf"
+dest_files=["res://.godot/imported/Kanit-Regular.ttf-3a1ee9ba443d0b20aa76954978c9aeee.fontdata"]
+
+[params]
+
+Rendering=null
+antialiasing=1
+generate_mipmaps=false
+disable_embedded_bitmaps=true
+multichannel_signed_distance_field=false
+msdf_pixel_range=8
+msdf_size=48
+allow_system_fallback=true
+force_autohinter=false
+hinting=1
+subpixel_positioning=1
+oversampling=0.0
+Fallbacks=null
+fallbacks=[]
+Compress=null
+compress=true
+preload=[{
+"chars": [],
+"glyphs": [],
+"name": "Default",
+"size": Vector2i(100, 0)
+}]
+language_support={}
+script_support={}
+opentype_features={}

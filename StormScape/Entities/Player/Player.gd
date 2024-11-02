@@ -4,9 +4,10 @@ class_name Player
 
 @export var player_name: String = "Player1"
 
+
 func _ready() -> void:
 	super._ready()
-	SignalBus.emit_signal("PlayerReady", self)
+	SignalBus.player_ready.emit(self)
 
 #region Save & Load
 func _on_save_game(save_data: Array[SaveData]) -> void:
