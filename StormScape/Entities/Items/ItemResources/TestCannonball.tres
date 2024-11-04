@@ -5,9 +5,10 @@
 
 [resource]
 script = ExtResource("2_uyhuf")
-name = "TestCannonball"
+id = "TestCannonball"
+name = "Test Cannonball"
 icon = ExtResource("1_oqp80")
 type = 0
 rarity = 0
-stack_size = 2
+stack_size = 3
 info = "A test cannonball."

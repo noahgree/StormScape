@@ -1,4 +1,4 @@
-[gd_scene load_steps=107 format=3 uid="uid://dba8mrurjlekp"]
+[gd_scene load_steps=110 format=3 uid="uid://dba8mrurjlekp"]
 
 [ext_resource type="Script" path="res://Entities/Player/Player.gd" id="1_m33tt"]
 [ext_resource type="SpriteFrames" uid="uid://cxo625s2sh5hx" path="res://Entities/Player/Spritesheets/Base/Base.tres" id="2_t1by5"]
@@ -59,6 +59,7 @@
 [ext_resource type="Texture2D" uid="uid://b2v0527iatsjd" path="res://UI/PlayerStatsOverlay/Assets/Health.png" id="51_6cphe"]
 [ext_resource type="Texture2D" uid="uid://dhvpkl1svbcys" path="res://UI/PlayerStatsOverlay/Assets/Health Under.png" id="52_dhyl8"]
 [ext_resource type="Texture2D" uid="uid://lj78cee4aa38" path="res://UI/PlayerStatsOverlay/Assets/Health Change.png" id="53_qsiea"]
+[ext_resource type="FontVariation" uid="uid://blgkcg6c83yln" path="res://Assets/Theming/Fonts/GameFontResources/ui_pixel_font.tres" id="58_eexr8"]
 
 [sub_resource type="Resource" id="Resource_rwbul"]
 script = ExtResource("2_vyeuy")
@@ -811,14 +812,25 @@ shader_parameter/progress = 0.0
 shader_parameter/tip_size = 0.15
 shader_parameter/opacity = 0.385
 
+[sub_resource type="LabelSettings" id="LabelSettings_p2yk1"]
+line_spacing = 0.0
+font = ExtResource("58_eexr8")
+font_color = Color(0.4, 0.223529, 0.192157, 1)
+
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_2q23q"]
 shader = ExtResource("39_r4tgk")
 shader_parameter/lod = 3.771
 shader_parameter/darken_factor = 0.454
 
+[sub_resource type="LabelSettings" id="LabelSettings_xlxjq"]
+line_spacing = 0.0
+font = ExtResource("58_eexr8")
+font_size = 32
+font_color = Color(0.4, 0.223529, 0.192157, 1)
+
 [sub_resource type="LabelSettings" id="LabelSettings_nuang"]
 line_spacing = 0.0
-font_size = 100
+font = ExtResource("58_eexr8")
 font_color = Color(0.4, 0.223529, 0.192157, 1)
 
 [node name="Player" type="CharacterBody2D" node_paths=PackedStringArray("effects") groups=["has_save_logic"]]
@@ -950,8 +962,9 @@ parameters/idle/blendspace2d/blend_position = Vector2(0, 0)
 parameters/run/TimeScale/scale = 1.5
 parameters/run/blendspace2d/blend_position = Vector2(0, 0)
 
-[node name="ItemReceiverComponent" parent="." node_paths=PackedStringArray("ui") instance=ExtResource("30_qgyag")]
-ui = NodePath("../PlayerUILayer/PlayerInvUI/TextureMargins/InventoryTexture/GridMargins/SlotGrid")
+[node name="ItemReceiverComponent" parent="." node_paths=PackedStringArray("inv_populator", "ui") instance=ExtResource("30_qgyag")]
+inv_populator = NodePath("../PlayerUILayer/PlayerInvUI/TextureMargins/InventoryTexture/GridMargins/SlotGrid")
+ui = NodePath("../PlayerUILayer/PlayerInvUI")
 
 [node name="PlayerInvCommunicator" type="Node" parent="ItemReceiverComponent" node_paths=PackedStringArray("item_interact_hud")]
 script = ExtResource("31_mjpan")
@@ -965,6 +978,7 @@ layout_mode = 3
 anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
+mouse_filter = 1
 script = ExtResource("17_vdk5v")
 health_component = NodePath("../../HealthComponent")
 
@@ -1077,6 +1091,7 @@ offset_left = 4.0
 offset_top = 229.0
 offset_right = 4.0
 offset_bottom = 229.0
+mouse_filter = 2
 script = ExtResource("35_yln51")
 player = NodePath("../..")
 
@@ -1263,16 +1278,19 @@ script = ExtResource("35_45ikj")
 
 [node name="InteractText" type="Label" parent="PlayerUILayer/ItemInteractionHUD"]
 layout_mode = 1
-anchors_preset = 4
+anchors_preset = 14
 anchor_top = 0.5
+anchor_right = 1.0
 anchor_bottom = 0.5
-offset_left = 6.0
-offset_top = -7.0
-offset_right = 540.0
-offset_bottom = 143.0
+offset_left = 7.0
+offset_top = -6.0
+offset_right = -23.0
+offset_bottom = 6.0
+grow_horizontal = 2
 grow_vertical = 2
-scale = Vector2(0.1, 0.1)
+scale = Vector2(0.9, 0.9)
 text = "'E' to Pickup"
+label_settings = SubResource("LabelSettings_p2yk1")
 
 [node name="ItemTexture" type="TextureRect" parent="PlayerUILayer/ItemInteractionHUD"]
 layout_mode = 1
@@ -1316,6 +1334,7 @@ theme_override_constants/margin_bottom = 55
 
 [node name="InventoryTexture" type="NinePatchRect" parent="PlayerUILayer/PlayerInvUI/TextureMargins"]
 layout_mode = 2
+mouse_filter = 0
 texture = ExtResource("33_8yk75")
 patch_margin_left = 4
 patch_margin_top = 4
@@ -1323,42 +1342,39 @@ patch_margin_right = 4
 patch_margin_bottom = 4
 
 [node name="InventoryTitle" type="Label" parent="PlayerUILayer/PlayerInvUI/TextureMargins/InventoryTexture"]
-texture_filter = 2
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
-offset_left = -85.0
-offset_top = 8.0
-offset_right = 439.0
-offset_bottom = 158.0
+offset_left = -52.0
+offset_top = 10.0
+offset_right = 52.0
+offset_bottom = 34.0
 grow_horizontal = 2
-scale = Vector2(0.2, 0.2)
-pivot_offset = Vector2(41, 0)
 text = "INVENTORY"
+label_settings = SubResource("LabelSettings_xlxjq")
 horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="ItemDetails" type="Label" parent="PlayerUILayer/PlayerInvUI/TextureMargins/InventoryTexture"]
-texture_filter = 2
 layout_mode = 1
-anchors_preset = 14
-anchor_top = 0.5
+anchors_preset = 12
+anchor_top = 1.0
 anchor_right = 1.0
-anchor_bottom = 0.5
-offset_left = 6.0
-offset_top = 58.0
-offset_right = 2996.0
-offset_bottom = 273.0
+anchor_bottom = 1.0
+offset_left = 7.0
+offset_top = -22.0
+offset_right = 139.0
+offset_bottom = 7.0
 grow_horizontal = 2
-grow_vertical = 2
-scale = Vector2(0.068, 0.068)
+grow_vertical = 0
+scale = Vector2(0.6, 0.6)
 text = "Details about the selected item. This text supports up to two lines, then it adds an ellipsis at the end."
 label_settings = SubResource("LabelSettings_nuang")
 horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 3
-text_overrun_behavior = 3
+text_overrun_behavior = 4
 
 [node name="GridMargins" type="MarginContainer" parent="PlayerUILayer/PlayerInvUI/TextureMargins/InventoryTexture"]
 layout_mode = 1
@@ -1377,8 +1393,10 @@ theme_override_constants/margin_left = 6
 theme_override_constants/margin_top = 26
 theme_override_constants/margin_right = 6
 theme_override_constants/margin_bottom = 6
+metadata/_edit_lock_ = true
 
-[node name="SlotGrid" type="GridContainer" parent="PlayerUILayer/PlayerInvUI/TextureMargins/InventoryTexture/GridMargins"]
+[node name="SlotGrid" type="GridContainer" parent="PlayerUILayer/PlayerInvUI/TextureMargins/InventoryTexture/GridMargins" node_paths=PackedStringArray("item_details_label")]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
@@ -1387,6 +1405,7 @@ theme_override_constants/v_separation = 1
 columns = 8
 script = ExtResource("41_nwjbq")
 slot_scene = ExtResource("42_r422n")
+item_details_label = NodePath("../../ItemDetails")
 
 [node name="Slot1" parent="PlayerUILayer/PlayerInvUI/TextureMargins/InventoryTexture/GridMargins/SlotGrid" instance=ExtResource("42_r422n")]
 layout_mode = 2

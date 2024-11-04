@@ -1,12 +1,14 @@
-[gd_resource type="Resource" script_class="Item" load_steps=3 format=3 uid="uid://c1yh67b4i2xtt"]
+[gd_resource type="Resource" script_class="ItemResource" load_steps=3 format=3 uid="uid://c1yh67b4i2xtt"]
 
 [ext_resource type="Texture2D" uid="uid://2xf1pqc78iin" path="res://Assets/Icon/icon.svg" id="1_2yyi8"]
 [ext_resource type="Script" path="res://Entities/Items/ItemResource.gd" id="1_bk6ou"]
 
 [resource]
 script = ExtResource("1_bk6ou")
+id = "Apple"
 name = "Apple"
 icon = ExtResource("1_2yyi8")
-type = "Consumable"
-rarity = "Common"
+type = 0
+rarity = 0
+stack_size = 1
 info = "A healthy snack."

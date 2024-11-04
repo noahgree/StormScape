@@ -1,29 +1,23 @@
-[gd_scene load_steps=6 format=3 uid="uid://m4ur3n2hwsp8"]
+[gd_scene load_steps=4 format=3 uid="uid://bacsel0a5l2iu"]
 
-[ext_resource type="Texture2D" uid="uid://barnaq2utcos2" path="res://UI/Inventory/Slot/InventorySlot9Patch.png" id="1_sk7xc"]
-[ext_resource type="Script" path="res://UI/Inventory/Slot/Slot.gd" id="2_ywtjc"]
-[ext_resource type="PackedScene" uid="uid://bacsel0a5l2iu" path="res://UI/Inventory/Slot/SlotDragPreview.tscn" id="3_2ljmb"]
-[ext_resource type="FontVariation" uid="uid://blgkcg6c83yln" path="res://Assets/Theming/Fonts/GameFontResources/ui_pixel_font.tres" id="3_dimqv"]
+[ext_resource type="FontVariation" uid="uid://blgkcg6c83yln" path="res://Assets/Theming/Fonts/GameFontResources/ui_pixel_font.tres" id="1_35dku"]
+[ext_resource type="Texture2D" uid="uid://4uf2f502te50" path="res://Entities/Items/ItemScripts/Weapons/Projectiles/Bullet/pistol_bullet_default.png" id="1_uxir4"]
 
-[sub_resource type="LabelSettings" id="LabelSettings_kd5f7"]
+[sub_resource type="LabelSettings" id="LabelSettings_c1tbv"]
 line_spacing = 0.0
-font = ExtResource("3_dimqv")
+font = ExtResource("1_35dku")
 outline_size = 2
 outline_color = Color(0, 0, 0, 1)
 shadow_size = 0
 shadow_offset = Vector2(0, 0)
 
-[node name="Slot" type="NinePatchRect"]
+[node name="SlotDragPreview" type="Control"]
 custom_minimum_size = Vector2(22, 22)
+layout_mode = 3
+anchors_preset = 0
+offset_right = 22.0
+offset_bottom = 22.0
 size_flags_horizontal = 4
-mouse_filter = 1
-texture = ExtResource("1_sk7xc")
-patch_margin_left = 2
-patch_margin_top = 2
-patch_margin_right = 2
-patch_margin_bottom = 2
-script = ExtResource("2_ywtjc")
-drag_preview = ExtResource("3_2ljmb")
 
 [node name="TextureMargins" type="MarginContainer" parent="."]
 layout_mode = 1
@@ -41,6 +35,7 @@ theme_override_constants/margin_bottom = 3
 [node name="ItemTexture" type="TextureRect" parent="TextureMargins"]
 custom_minimum_size = Vector2(16, 16)
 layout_mode = 2
+texture = ExtResource("1_uxir4")
 expand_mode = 1
 stretch_mode = 5
 
@@ -62,6 +57,7 @@ theme_override_constants/margin_bottom = 2
 layout_mode = 2
 size_flags_horizontal = 8
 size_flags_vertical = 8
-label_settings = SubResource("LabelSettings_kd5f7")
+text = "64"
+label_settings = SubResource("LabelSettings_c1tbv")
 horizontal_alignment = 2
 vertical_alignment = 1

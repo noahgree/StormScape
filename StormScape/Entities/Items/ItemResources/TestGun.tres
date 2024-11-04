@@ -5,8 +5,10 @@
 
 [resource]
 script = ExtResource("1_w3f40")
-name = "TestGun"
+id = "TestGun"
+name = "Test Gun"
 icon = ExtResource("1_ma2d2")
-type = "Weapon"
-rarity = "Common"
+type = 0
+rarity = 0
+stack_size = 1
 info = "A gun for testing."

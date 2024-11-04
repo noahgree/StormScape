@@ -5,46 +5,58 @@ class_name Inventory
 signal slot_updated(index: int, item: InventoryItem)
 
 @export var inv_size: int = 32
-@export var ui: InventoryPopulator
+@export var inv_populator: InventoryPopulator
+@export var ui: InventoryUI
 
 var inv: Array[InventoryItem] = []
 
 
 func _ready() -> void:
 	inv.resize(inv_size)
+	inv_populator.connect_inventory(self)
 	ui.connect_inventory(self)
 
-func add_item(item: Item) -> bool:
+func add_item_from_world(item: Item) -> bool:
 	var inv_item: InventoryItem = InventoryItem.new(item.stats, item.quantity)
 	for i in range(inv_size):
 		if inv[i] != null and inv[i].stats.is_same_as(inv_item.stats):
 			if (inv_item.quantity + inv[i].quantity) <= inv_item.stats.stack_size:
-				inv[i].quantity += inv_item.quantity
-				item.queue_free()
-				slot_updated.emit(i, inv[i])
+				_combine_item_count_in_occupied_slot(i, item, inv_item)
 				return true
 			else:
-				var amount_that_fits: int = max(0, inv_item.stats.stack_size - inv[i].quantity)
-				inv[i].quantity = inv_item.stats.stack_size
-				inv_item.quantity -= amount_that_fits
-				item.quantity -= amount_that_fits
-				slot_updated.emit(i, inv[i])
-				continue
+				_add_what_fits_to_occupied_slot_and_continue(i, item, inv_item)
 		if inv[i] == null:
 			if inv_item.quantity <= inv_item.stats.stack_size:
-				inv[i] = inv_item
-				item.queue_free()
-				slot_updated.emit(i, inv[i])
+				_put_entire_quantity_in_empty_slot(i, item, inv_item)
 				return true
 			else:
-				var leftover: int = max(0, inv_item.quantity - inv_item.stats.stack_size)
-				inv_item.quantity = inv_item.stats.stack_size
-				inv[i] = inv_item
-				item.quantity = leftover
+				_put_what_fits_in_empty_slot_and_continue(i, item, inv_item)
 				inv_item = InventoryItem.new(item.stats, item.quantity)
-				slot_updated.emit(i, inv[i])
-
 	return false
+
+func _combine_item_count_in_occupied_slot(index, item, inv_item) -> void:
+	inv[index].quantity += inv_item.quantity
+	item.queue_free()
+	slot_updated.emit(index, inv[index])
+
+func _add_what_fits_to_occupied_slot_and_continue(index, item, inv_item) -> void:
+	var amount_that_fits: int = max(0, inv_item.stats.stack_size - inv[index].quantity)
+	inv[index].quantity = inv_item.stats.stack_size
+	inv_item.quantity -= amount_that_fits
+	item.quantity -= amount_that_fits
+	slot_updated.emit(index, inv[index])
+
+func _put_entire_quantity_in_empty_slot(index, item, inv_item) -> void:
+	inv[index] = inv_item
+	item.queue_free()
+	slot_updated.emit(index, inv[index])
+
+func _put_what_fits_in_empty_slot_and_continue(index, item, inv_item) -> void:
+	var leftover: int = max(0, inv_item.quantity - inv_item.stats.stack_size)
+	inv_item.quantity = inv_item.stats.stack_size
+	inv[index] = inv_item
+	item.quantity = leftover
+	slot_updated.emit(index, inv[index])
 
 func remove_item() -> void:
 	pass

@@ -2,7 +2,7 @@ extends Inventory
 class_name ItemReceiverComponent
 ## When attached to an entity, this gives it the ability to pick up items when overlapping with its main collision box.
 
-@onready var player_communicator: Node = get_node_or_null("PlayerCommunicator")
+@onready var player_communicator: Node = get_node_or_null("PlayerInvCommunicator")
 
 var items_in_range: Array[Item] = []
 
@@ -29,4 +29,4 @@ func _unhandled_key_input(_event: InputEvent) -> void:
 
 func _pickup_item() -> void:
 	if not items_in_range.is_empty():
-		add_item(items_in_range.pop_back())
+		add_item_from_world(items_in_range.pop_back())

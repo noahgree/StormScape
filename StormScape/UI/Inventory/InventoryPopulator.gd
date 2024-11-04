@@ -2,6 +2,7 @@ extends GridContainer
 class_name InventoryPopulator
 
 @export var slot_scene: PackedScene
+@export var item_details_label: Label
 
 var synced_inv: Inventory
 var slots: Array[Slot] = []
@@ -20,6 +21,9 @@ func _change_slot_count(count: int) -> void:
 	for i in range(count):
 		var slot: Slot = slot_scene.instantiate()
 		add_child(slot)
+		slot.name = "Slot_" + str(i)
+		slot.is_hovered_over.connect(_on_slot_hovered)
+		slot.is_not_hovered_over.connect(_on_slot_not_hovered)
 		slots.append(slot)
 
 func connect_inventory(inv: Inventory) -> void:
@@ -31,8 +35,10 @@ func connect_inventory(inv: Inventory) -> void:
 	call_deferred("_set_synced_ui")
 
 func _set_synced_ui() -> void:
-	for slot in slots:
-		slot.item = null
+	for i in range(slots.size()):
+		slots[i].item = null
+		slots[i].index = i
+		slots[i].synced_inv = synced_inv
 	if slots.size() != synced_inv.inv.size():
 		_change_slot_count(synced_inv.inv.size())
 
@@ -41,7 +47,13 @@ func _set_synced_ui() -> void:
 
 func _on_slot_updated(index: int, item: InventoryItem) -> void:
 	slots[index].item = item
-	print_slots()
+
+func _on_slot_hovered(index) -> void:
+	if item_details_label and slots[index].item != null:
+		item_details_label.text = slots[index].item.stats.info
+
+func _on_slot_not_hovered() -> void:
+	if item_details_label: item_details_label.text = ""
 
 func print_slots(include_null_spots: bool = false) -> void:
 	var to_print: String = "[b]-----------------------------------------------------------------------------------------------------------------------------------[/b]\n"

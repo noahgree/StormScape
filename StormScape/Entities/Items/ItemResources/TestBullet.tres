@@ -5,8 +5,10 @@
 
 [resource]
 script = ExtResource("1_18bkw")
-name = "TestBullet"
+id = "TestBullet"
+name = "Test Bullet"
 icon = ExtResource("1_oa1h3")
-type = "Consumable"
-rarity = "Uncommon"
+type = 0
+rarity = 0
+stack_size = 1
 info = "A test bullet."
