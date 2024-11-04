@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3 uid="uid://u04d840fx7vw"]
+[gd_scene load_steps=5 format=3 uid="uid://ccfnvvfj0yyrq"]
 
 [ext_resource type="Script" path="res://Entities/Items/Item.gd" id="1_rwd02"]
 [ext_resource type="Resource" uid="uid://chfps77qv6w0e" path="res://Entities/Items/ItemResources/TestGun.tres" id="2_yldjb"]

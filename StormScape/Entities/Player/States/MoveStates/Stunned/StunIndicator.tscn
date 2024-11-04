@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://c6wbsh31fq52k"]
+[gd_scene load_steps=11 format=3 uid="uid://biduyqlpqhmrp"]
 
 [ext_resource type="Texture2D" uid="uid://qqal2orje3v0" path="res://Entities/Player/States/MoveStates/Stunned/effect_stun.png" id="1_5ddm1"]
 

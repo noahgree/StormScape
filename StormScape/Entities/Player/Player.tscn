@@ -29,7 +29,7 @@
 [ext_resource type="Script" path="res://Entities/Player/States/MoveStates/Die/Die.gd" id="18_jcofa"]
 [ext_resource type="Script" path="res://Entities/Player/States/MoveStates/Sneak/Sneak.gd" id="19_alhqe"]
 [ext_resource type="PackedScene" uid="uid://blbjjhekjsi6y" path="res://Entities/EntityTypes/DynamicEntity/ActionStateMachine/ActionStateMachine.tscn" id="27_16wot"]
-[ext_resource type="PackedScene" uid="uid://c6wbsh31fq52k" path="res://Entities/Player/States/MoveStates/Stunned/StunIndicator.tscn" id="27_fyxoi"]
+[ext_resource type="PackedScene" uid="uid://biduyqlpqhmrp" path="res://Entities/Player/States/MoveStates/Stunned/StunIndicator.tscn" id="27_fyxoi"]
 [ext_resource type="Script" path="res://Entities/Player/States/ActionStates/ActionIdle.gd" id="28_mrxbf"]
 [ext_resource type="PackedScene" uid="uid://c4n604w30gx8m" path="res://Entities/Components/ItemComponents/ItemReceiverComponent.tscn" id="30_qgyag"]
 [ext_resource type="Script" path="res://UI/Inventory/PlayerInventory/PlayerInvCommunicator.gd" id="31_mjpan"]
@@ -1310,6 +1310,7 @@ texture = ExtResource("37_x5jlh")
 
 [node name="PlayerInvUI" type="ColorRect" parent="PlayerUILayer"]
 process_mode = 3
+visible = false
 material = SubResource("ShaderMaterial_2q23q")
 use_parent_material = true
 anchors_preset = 15

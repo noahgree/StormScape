@@ -141,8 +141,6 @@ func _move_only_one_to_empty_slot(data: Variant) -> void:
 
 	_check_if_inv_slot_is_now_empty_after_dragging_only_one(data)
 
-	synced_inv.print_inv(true)
-
 func _add_one_item_into_slot_with_space(data: Variant, total_quantity: int) -> void:
 	item.quantity = total_quantity
 	_set_item(item)
