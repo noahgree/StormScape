@@ -26,7 +26,10 @@ func _set_item(new_item) -> void:
 	if item:
 		item_texture.texture = item.stats.icon
 		if item.quantity > 0:
-			quantity.text = str(item.quantity)
+			if item.quantity > 1:
+				quantity.text = str(item.quantity)
+			else:
+				quantity.text = ""
 		else:
 			item = null
 			item_texture.texture = null
@@ -43,10 +46,17 @@ func _ready() -> void:
 func _to_string() -> String:
 	return str(item)
 
+func _reset_hover_while_dragging_mods() -> void:
+	modulate = Color(1, 1, 1, 1)
+	if item == null:
+		item_texture.texture = null
+	item_texture.modulate.a = 1.0
+
 func _get_drag_data(at_position: Vector2) -> Variant:
 	dragging_only_one = false
 
 	if item != null and not is_hotbar_ui_preview_slot:
+		modulate = Color(0.5, 0.5, 0.5, 1)
 		set_drag_preview(_make_drag_preview(at_position))
 		return self
 	else:
@@ -79,6 +89,7 @@ func _gui_input(event: InputEvent) -> void:
 		if event.button_index == MOUSE_BUTTON_RIGHT:
 			if item != null:
 				dragging_only_one = true
+				modulate = Color(0.5, 0.5, 0.5, 1)
 				force_drag(self, _make_drag_preview(get_local_mouse_position()))
 
 func _can_drop_data(_at_position: Vector2, data: Variant) -> bool:
@@ -86,9 +97,12 @@ func _can_drop_data(_at_position: Vector2, data: Variant) -> bool:
 		return false
 	if item == null:
 		return true
-	if item.quantity >= item.stats.stack_size:
-		return false
-	return item.stats.is_same_as(data.item.stats)
+	if item.stats.is_same_as(data.item.stats):
+		return true
+	else:
+		if data.dragging_only_one:
+			return false
+	return true
 
 func _drop_data(_at_position: Vector2, data: Variant) -> void:
 	if not (data and synced_inv):
@@ -111,8 +125,11 @@ func _drop_data(_at_position: Vector2, data: Variant) -> void:
 					_combine_all_items_into_slot_with_space(data, total_quantity)
 				else:
 					_combine_what_fits_and_leave_remainder(data)
+		elif not data.dragging_only_one:
+			_swap_item_stacks(data)
 
 	is_hovered_over.emit(index)
+	_on_mouse_exited()
 
 func _move_items_to_other_empty_slot(data: Variant) -> void:
 	item = InventoryItem.new(data.item.stats, data.item.quantity)
@@ -165,6 +182,40 @@ func _check_if_inv_slot_is_now_empty_after_dragging_only_one(data: Variant) -> v
 
 	_emit_changes_for_potential_listening_hotbar(data)
 
+func _swap_item_stacks(data: Variant) -> void:
+	var temp_item = item
+	item = InventoryItem.new(data.item.stats, data.item.quantity)
+	synced_inv.inv[index] = item
+
+	synced_inv.inv[data.index] = temp_item
+	data.item = temp_item
+
+	_emit_changes_for_potential_listening_hotbar(data)
+
 func _emit_changes_for_potential_listening_hotbar(data: Variant) -> void:
 	if data.index >= synced_inv_main_size: synced_inv.slot_updated.emit(data.index, data.item)
 	if index >= synced_inv_main_size: synced_inv.slot_updated.emit(index, item)
+
+func _on_mouse_entered() -> void:
+	if get_viewport().gui_is_dragging():
+		var drag_data = get_viewport().gui_get_drag_data()
+		if _can_drop_data(get_local_mouse_position(), drag_data):
+			modulate = Color(1.2, 1.2, 1.2, 1.0)
+			if item == null:
+				item_texture.texture = drag_data.item_texture.texture
+				item_texture.modulate.a = 0.5
+
+func _on_mouse_exited() -> void:
+	var drag_data
+	if get_viewport().gui_is_dragging():
+		drag_data = get_viewport().gui_get_drag_data()
+		if drag_data.index == index:
+			return
+	modulate = Color(1, 1, 1, 1)
+	if item == null and drag_data:
+		item_texture.texture = null
+		item_texture.modulate.a = 1.0
+
+func _notification(what):
+	if what == NOTIFICATION_DRAG_END:
+		_reset_hover_while_dragging_mods()

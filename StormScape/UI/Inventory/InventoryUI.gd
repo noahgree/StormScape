@@ -42,6 +42,8 @@ func _drop_data(_at_position: Vector2, data: Variant) -> void:
 	var inv_to_reflect_main_size: int = inventory_to_reflect.inv_size - inventory_to_reflect.hotbar_size
 	if data.index >= inv_to_reflect_main_size: inventory_to_reflect.slot_updated.emit(data.index, data.item)
 
+	data._on_mouse_exited()
+
 func _on_blank_space_input_event(_event: InputEvent) -> void:
 	if Input.is_action_just_pressed("primary"):
 		visible = false
