@@ -1,8 +1,10 @@
-extends GridContainer
+extends Control
 class_name InventoryPopulator
 
-@export var slot_scene: PackedScene
+@export var slot_scene: PackedScene = load("res://UI/Inventory/Slot/Slot.tscn")
 @export var item_details_label: Label
+@export var main_slot_grid: GridContainer
+@export var hotbar_grid: HBoxContainer
 
 var synced_inv: Inventory
 var slots: Array[Slot] = []
@@ -10,20 +12,40 @@ const DEFAULT_SLOT_COUNT: int = 32
 
 
 func _ready() -> void:
-	for child in get_children():
+	for child in main_slot_grid.get_children():
 		child.queue_free()
-	_change_slot_count(DEFAULT_SLOT_COUNT)
+	if hotbar_grid:
+		for child in hotbar_grid.get_children():
+			child.queue_free()
+	_change_slot_count_for_new_inv()
 
-func _change_slot_count(count: int) -> void:
+func _change_slot_count_for_new_inv(inv: Inventory = null) -> void:
 	for slot in slots:
 		slot.queue_free()
 	slots = []
-	for i in range(count):
+
+	var main_count: int = DEFAULT_SLOT_COUNT
+	var hotbar_count: int = 0
+	if inv and inv.is_player_inv:
+		main_count = inv.inv_size - inv.hotbar_size
+		hotbar_count = inv.hotbar_size
+	for i in range(main_count):
 		var slot: Slot = slot_scene.instantiate()
-		add_child(slot)
+		main_slot_grid.add_child(slot)
 		slot.name = "Slot_" + str(i)
 		slot.is_hovered_over.connect(_on_slot_hovered)
 		slot.is_not_hovered_over.connect(_on_slot_not_hovered)
+		slot.index = i
+		if inv: slot.synced_inv = inv
+		slots.append(slot)
+	for i in range(hotbar_count):
+		var slot: Slot = slot_scene.instantiate()
+		hotbar_grid.add_child(slot)
+		slot.name = "HotSlot_" + str(i)
+		slot.is_hovered_over.connect(_on_slot_hovered)
+		slot.is_not_hovered_over.connect(_on_slot_not_hovered)
+		slot.index = main_count + i
+		if inv: slot.synced_inv = inv
 		slots.append(slot)
 
 func connect_inventory(inv: Inventory) -> void:
@@ -35,12 +57,7 @@ func connect_inventory(inv: Inventory) -> void:
 	call_deferred("_set_synced_ui")
 
 func _set_synced_ui() -> void:
-	for i in range(slots.size()):
-		slots[i].item = null
-		slots[i].index = i
-		slots[i].synced_inv = synced_inv
-	if slots.size() != synced_inv.inv.size():
-		_change_slot_count(synced_inv.inv.size())
+	_change_slot_count_for_new_inv(synced_inv)
 
 	for i in range(slots.size()):
 		slots[i].item = synced_inv.inv[i]

@@ -1,6 +1,9 @@
+@icon("res://Utilities/Debug/EditorIcons/item_receiver_component.svg")
 extends Inventory
 class_name ItemReceiverComponent
-## When attached to an entity, this gives it the ability to pick up items when overlapping with its main collision box.
+## When attached to an entity, this gives it the ability to pick up items when overlapping with this collision box.
+##
+## For all intensive purposes (and as you can see based on the inheritance), this is an inventory.
 
 @onready var player_communicator: Node = get_node_or_null("PlayerInvCommunicator")
 

@@ -12,14 +12,24 @@ class_name Item
 
 func _ready() -> void:
 	_set_item(stats)
+	thumbnail.material.set_shader_parameter("random_start_offset", randf() * 2.0)
 
 func _on_area_entered(area: Area2D) -> void:
-	if area is ItemReceiverComponent:
+	if area is ItemReceiverComponent and area.get_parent() is Player:
 		(area as ItemReceiverComponent).add_to_in_range_queue(self)
 
+		for item in (area as ItemReceiverComponent).items_in_range:
+			item.thumbnail.material.set_shader_parameter("width", 0)
+		(area as ItemReceiverComponent).items_in_range[area.items_in_range.size() - 1].thumbnail.material.set_shader_parameter("width", 0.75)
+
 func _on_area_exited(area: Area2D) -> void:
-	if area is ItemReceiverComponent:
+	if area is ItemReceiverComponent and area.get_parent() is Player:
 		(area as ItemReceiverComponent).remove_from_in_range_queue(self)
+
+		thumbnail.material.set_shader_parameter("width", 0)
+		if not (area as ItemReceiverComponent).items_in_range.is_empty():
+			(area as ItemReceiverComponent).items_in_range[area.items_in_range.size() - 1].thumbnail.material.set_shader_parameter("width", 0.75)
+
 
 func _set_item(item_stats: ItemResource) -> void:
 	stats = item_stats

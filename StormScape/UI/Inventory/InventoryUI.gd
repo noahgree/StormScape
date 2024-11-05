@@ -3,8 +3,6 @@ class_name InventoryUI
 
 @export var item_scene: PackedScene = load("res://Entities/Items/Item.tscn")
 
-@onready var slot_grid: InventoryPopulator = %SlotGrid
-
 var inventory_to_reflect: Inventory
 
 
@@ -40,6 +38,9 @@ func _drop_data(_at_position: Vector2, data: Variant) -> void:
 
 		ground_item.global_position = GlobalData.player_node.global_position + Vector2(randi_range(-17, 12) + 6, randi_range(-17, 12) + 6)
 		GlobalData.world_root.get_node("Testing").add_child(ground_item)
+
+	var inv_to_reflect_main_size: int = inventory_to_reflect.inv_size - inventory_to_reflect.hotbar_size
+	if data.index >= inv_to_reflect_main_size: inventory_to_reflect.slot_updated.emit(data.index, data.item)
 
 func _on_blank_space_input_event(_event: InputEvent) -> void:
 	if Input.is_action_just_pressed("primary"):

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dcbwxgak6a0r8"
-path="res://.godot/imported/entity_shadow.png-498a9343c1c6eab23bc696c49f9b27f7.ctex"
+uid="uid://cr1hp8piptacc"
+path="res://.godot/imported/item_glow_light_texture.png-c9f844243d085129de70a67c8d32f652.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Entities/entity_shadow.png"
-dest_files=["res://.godot/imported/entity_shadow.png-498a9343c1c6eab23bc696c49f9b27f7.ctex"]
+source_file="res://Entities/Items/item_glow_light_texture.png"
+dest_files=["res://.godot/imported/item_glow_light_texture.png-c9f844243d085129de70a67c8d32f652.ctex"]
 
 [params]
 

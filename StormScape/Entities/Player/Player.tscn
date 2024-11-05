@@ -1,9 +1,9 @@
-[gd_scene load_steps=116 format=3 uid="uid://dba8mrurjlekp"]
+[gd_scene load_steps=118 format=3 uid="uid://dba8mrurjlekp"]
 
 [ext_resource type="Script" path="res://Entities/Player/Player.gd" id="1_m33tt"]
 [ext_resource type="SpriteFrames" uid="uid://cxo625s2sh5hx" path="res://Entities/Player/Spritesheets/Base/Base.tres" id="2_t1by5"]
 [ext_resource type="Script" path="res://Entities/Components/StatModComponents/StatModsCacheResource.gd" id="2_vyeuy"]
-[ext_resource type="Texture2D" uid="uid://csihsfur3oxag" path="res://Entities/entity_shadow.png" id="3_e6fnh"]
+[ext_resource type="Texture2D" uid="uid://dcbwxgak6a0r8" path="res://Entities/entity_shadow.png" id="3_e6fnh"]
 [ext_resource type="PackedScene" uid="uid://cdfdy8m6ki3oq" path="res://Entities/Components/HealthComponent/HealthComponent.tscn" id="3_ojev3"]
 [ext_resource type="PackedScene" uid="uid://btba0jmsow1mx" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectReceiverComponent.tscn" id="4_hhm8x"]
 [ext_resource type="PackedScene" uid="uid://4gl24qwdyti3" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/DmgHandler.tscn" id="5_g3ixu"]
@@ -34,8 +34,9 @@
 [ext_resource type="Script" path="res://Entities/Player/States/ActionStates/ActionIdle.gd" id="28_mrxbf"]
 [ext_resource type="PackedScene" uid="uid://c4n604w30gx8m" path="res://Entities/Components/ItemComponents/ItemReceiverComponent.tscn" id="30_qgyag"]
 [ext_resource type="Script" path="res://UI/Inventory/PlayerInventory/PlayerInvCommunicator.gd" id="31_mjpan"]
-[ext_resource type="Script" path="res://UI/PlayerInvUI.gd" id="32_3a185"]
+[ext_resource type="Script" path="res://UI/Inventory/PlayerInventory/PlayerInvUI.gd" id="32_3a185"]
 [ext_resource type="Texture2D" uid="uid://biejldas3s8ak" path="res://UI/Inventory/inv_9_patch.png" id="33_8yk75"]
+[ext_resource type="Script" path="res://UI/PlayerUILayer.gd" id="33_wetrf"]
 [ext_resource type="Script" path="res://UI/Inventory/PlayerInventory/ItemInteractionHud.gd" id="35_45ikj"]
 [ext_resource type="Script" path="res://UI/PlayerStatsOverlay/PlayerStatsOverlay.gd" id="35_yln51"]
 [ext_resource type="Texture2D" uid="uid://dwo0fuwylfxeq" path="res://UI/PlayerStatsOverlay/Assets/Stats Panel Bckgrd.png" id="36_vdy3t"]
@@ -61,6 +62,7 @@
 [ext_resource type="Texture2D" uid="uid://dhvpkl1svbcys" path="res://UI/PlayerStatsOverlay/Assets/Health Under.png" id="52_dhyl8"]
 [ext_resource type="Texture2D" uid="uid://lj78cee4aa38" path="res://UI/PlayerStatsOverlay/Assets/Health Change.png" id="53_qsiea"]
 [ext_resource type="FontVariation" uid="uid://blgkcg6c83yln" path="res://Assets/Theming/Fonts/GameFontResources/ui_pixel_font.tres" id="58_eexr8"]
+[ext_resource type="Script" path="res://UI/Inventory/PlayerInventory/HotbarUI.gd" id="58_i567i"]
 [ext_resource type="Texture2D" uid="uid://f3dtce257pvb" path="res://UI/Inventory/button_9_patch_dark.png" id="59_ph20g"]
 
 [sub_resource type="Resource" id="Resource_rwbul"]
@@ -864,7 +866,7 @@ debug_color = Color(0, 0.6, 0.701961, 0.180392)
 current = true
 
 [node name="Shadow" type="Sprite2D" parent="."]
-self_modulate = Color(1, 1, 1, 0.215686)
+self_modulate = Color(0, 0, 0, 0.254902)
 texture = ExtResource("3_e6fnh")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
@@ -981,7 +983,10 @@ parameters/run/TimeScale/scale = 1.5
 parameters/run/blendspace2d/blend_position = Vector2(0, 0)
 
 [node name="ItemReceiverComponent" parent="." node_paths=PackedStringArray("inv_populator", "ui") instance=ExtResource("30_qgyag")]
-inv_populator = NodePath("../PlayerUILayer/PlayerInvUI/TextureMargins/InventoryTexture/GridMargins/SlotGrid")
+is_player_inv = true
+inv_size = 40
+hotbar_size = 8
+inv_populator = NodePath("../PlayerUILayer/PlayerInvUI/MainTextureMargins/InvPopulator")
 ui = NodePath("../PlayerUILayer/PlayerInvUI")
 
 [node name="PlayerInvCommunicator" type="Node" parent="ItemReceiverComponent" node_paths=PackedStringArray("item_interact_hud")]
@@ -995,6 +1000,7 @@ shape = SubResource("CircleShape2D_3wm74")
 debug_color = Color(0.454902, 0.596078, 0, 0.227451)
 
 [node name="PlayerUILayer" type="CanvasLayer" parent="."]
+script = ExtResource("33_wetrf")
 
 [node name="TestButtons" type="Control" parent="PlayerUILayer" node_paths=PackedStringArray("health_component")]
 visible = false
@@ -1112,9 +1118,10 @@ texture_filter = 2
 layout_mode = 3
 anchors_preset = 0
 offset_left = 4.0
-offset_top = 229.0
+offset_top = 240.0
 offset_right = 4.0
-offset_bottom = 229.0
+offset_bottom = 240.0
+scale = Vector2(0.7, 0.7)
 mouse_filter = 2
 script = ExtResource("35_yln51")
 player = NodePath("../..")
@@ -1287,13 +1294,14 @@ anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -91.0
-offset_top = -30.0
-offset_right = -4.0
-offset_bottom = -4.0
+offset_left = -66.0
+offset_top = -23.0
+offset_right = 21.0
+offset_bottom = 3.0
 grow_horizontal = 0
 grow_vertical = 0
-texture = ExtResource("59_ph20g")
+scale = Vector2(0.7, 0.7)
+texture = ExtResource("33_8yk75")
 patch_margin_left = 4
 patch_margin_top = 4
 patch_margin_right = 4
@@ -1332,7 +1340,94 @@ grow_vertical = 2
 scale = Vector2(0.5, 0.5)
 texture = ExtResource("37_x5jlh")
 
-[node name="PlayerInvUI" type="ColorRect" parent="PlayerUILayer"]
+[node name="HotbarUI" type="NinePatchRect" parent="PlayerUILayer" node_paths=PackedStringArray("player_inv")]
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -69.0
+offset_top = -27.0
+offset_right = 127.0
+offset_bottom = 5.0
+grow_horizontal = 2
+grow_vertical = 0
+scale = Vector2(0.7, 0.7)
+texture = ExtResource("33_8yk75")
+patch_margin_left = 4
+patch_margin_top = 4
+patch_margin_right = 4
+patch_margin_bottom = 4
+script = ExtResource("58_i567i")
+player_inv = NodePath("../../ItemReceiverComponent")
+
+[node name="HotbarUISlotMargins" type="MarginContainer" parent="PlayerUILayer/HotbarUI"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -110.0
+offset_top = -16.0
+offset_right = 110.0
+offset_bottom = 16.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 6
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 6
+metadata/_edit_lock_ = true
+
+[node name="HotbarUISlotGrid" type="HBoxContainer" parent="PlayerUILayer/HotbarUI/HotbarUISlotMargins"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 1
+alignment = 1
+metadata/_edit_lock_ = true
+
+[node name="Slot1" parent="PlayerUILayer/HotbarUI/HotbarUISlotMargins/HotbarUISlotGrid" instance=ExtResource("42_r422n")]
+layout_mode = 2
+size_flags_vertical = 4
+metadata/_edit_lock_ = true
+
+[node name="Slot2" parent="PlayerUILayer/HotbarUI/HotbarUISlotMargins/HotbarUISlotGrid" instance=ExtResource("42_r422n")]
+layout_mode = 2
+size_flags_vertical = 4
+metadata/_edit_lock_ = true
+
+[node name="Slot3" parent="PlayerUILayer/HotbarUI/HotbarUISlotMargins/HotbarUISlotGrid" instance=ExtResource("42_r422n")]
+layout_mode = 2
+size_flags_vertical = 4
+metadata/_edit_lock_ = true
+
+[node name="Slot4" parent="PlayerUILayer/HotbarUI/HotbarUISlotMargins/HotbarUISlotGrid" instance=ExtResource("42_r422n")]
+layout_mode = 2
+size_flags_vertical = 4
+metadata/_edit_lock_ = true
+
+[node name="Slot5" parent="PlayerUILayer/HotbarUI/HotbarUISlotMargins/HotbarUISlotGrid" instance=ExtResource("42_r422n")]
+layout_mode = 2
+size_flags_vertical = 4
+metadata/_edit_lock_ = true
+
+[node name="Slot6" parent="PlayerUILayer/HotbarUI/HotbarUISlotMargins/HotbarUISlotGrid" instance=ExtResource("42_r422n")]
+layout_mode = 2
+size_flags_vertical = 4
+metadata/_edit_lock_ = true
+
+[node name="Slot7" parent="PlayerUILayer/HotbarUI/HotbarUISlotMargins/HotbarUISlotGrid" instance=ExtResource("42_r422n")]
+layout_mode = 2
+size_flags_vertical = 4
+metadata/_edit_lock_ = true
+
+[node name="Slot8" parent="PlayerUILayer/HotbarUI/HotbarUISlotMargins/HotbarUISlotGrid" instance=ExtResource("42_r422n")]
+layout_mode = 2
+size_flags_vertical = 4
+metadata/_edit_lock_ = true
+
+[node name="PlayerInvUI" type="ColorRect" parent="PlayerUILayer" node_paths=PackedStringArray("hotbar_ui")]
 process_mode = 3
 visible = false
 material = SubResource("ShaderMaterial_2q23q")
@@ -1344,8 +1439,9 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.109341, 0.109341, 0.109341, 0.976471)
 script = ExtResource("32_3a185")
+hotbar_ui = NodePath("../HotbarUI")
 
-[node name="TextureMargins" type="MarginContainer" parent="PlayerUILayer/PlayerInvUI"]
+[node name="MainTextureMargins" type="MarginContainer" parent="PlayerUILayer/PlayerInvUI"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -1353,35 +1449,46 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/margin_left = 125
-theme_override_constants/margin_top = 55
+theme_override_constants/margin_top = 50
 theme_override_constants/margin_right = 125
-theme_override_constants/margin_bottom = 55
+theme_override_constants/margin_bottom = 20
 
-[node name="InventoryTexture" type="NinePatchRect" parent="PlayerUILayer/PlayerInvUI/TextureMargins"]
+[node name="InvPopulator" type="VBoxContainer" parent="PlayerUILayer/PlayerInvUI/MainTextureMargins" node_paths=PackedStringArray("item_details_label", "main_slot_grid", "hotbar_grid")]
+unique_name_in_owner = true
 layout_mode = 2
 mouse_filter = 0
+theme_override_constants/separation = 8
+alignment = 1
+script = ExtResource("41_nwjbq")
+item_details_label = NodePath("InventoryTexture/ItemDetails")
+main_slot_grid = NodePath("InventoryTexture/GridMargins/SlotGrid")
+hotbar_grid = NodePath("HotbarTextureMargins/HotbarTexture/HotbarSlotMargins/HotbarSlotGrid")
+
+[node name="InventoryTexture" type="NinePatchRect" parent="PlayerUILayer/PlayerInvUI/MainTextureMargins/InvPopulator"]
+layout_mode = 2
+size_flags_vertical = 3
 texture = ExtResource("33_8yk75")
 patch_margin_left = 4
 patch_margin_top = 4
 patch_margin_right = 4
 patch_margin_bottom = 4
 
-[node name="InventoryTitle" type="Label" parent="PlayerUILayer/PlayerInvUI/TextureMargins/InventoryTexture"]
+[node name="InventoryTitle" type="Label" parent="PlayerUILayer/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture"]
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
 offset_left = -52.0
-offset_top = 7.0
+offset_top = 5.0
 offset_right = 52.0
-offset_bottom = 31.0
+offset_bottom = 29.0
 grow_horizontal = 2
 text = "INVENTORY"
 label_settings = SubResource("LabelSettings_xlxjq")
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="ItemDetails" type="Label" parent="PlayerUILayer/PlayerInvUI/TextureMargins/InventoryTexture"]
+[node name="ItemDetails" type="Label" parent="PlayerUILayer/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture"]
 layout_mode = 1
 anchors_preset = 12
 anchor_top = 1.0
@@ -1400,18 +1507,18 @@ vertical_alignment = 1
 autowrap_mode = 3
 text_overrun_behavior = 4
 
-[node name="SortByName" type="NinePatchRect" parent="PlayerUILayer/PlayerInvUI/TextureMargins/InventoryTexture"]
+[node name="SortByName" type="NinePatchRect" parent="PlayerUILayer/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture"]
 layout_mode = 1
-anchors_preset = 6
-anchor_left = 1.0
+anchors_preset = 8
+anchor_left = 0.5
 anchor_top = 0.5
-anchor_right = 1.0
+anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -69.0
-offset_top = -46.0
-offset_right = -24.0
-offset_bottom = -38.0
-grow_horizontal = 0
+offset_left = 34.0
+offset_top = -44.0
+offset_right = 79.0
+offset_bottom = -36.0
+grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("59_ph20g")
 patch_margin_left = 4
@@ -1419,14 +1526,15 @@ patch_margin_top = 4
 patch_margin_right = 4
 patch_margin_bottom = 4
 
-[node name="SortByNameBtn" type="Button" parent="PlayerUILayer/PlayerInvUI/TextureMargins/InventoryTexture/SortByName"]
+[node name="SortByNameBtn" type="Button" parent="PlayerUILayer/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/SortByName"]
 layout_mode = 0
 offset_right = 45.0
 offset_bottom = 8.0
 focus_mode = 0
 flat = true
+metadata/_edit_lock_ = true
 
-[node name="Label" type="Label" parent="PlayerUILayer/PlayerInvUI/TextureMargins/InventoryTexture/SortByName"]
+[node name="Label" type="Label" parent="PlayerUILayer/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/SortByName"]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -1446,18 +1554,18 @@ horizontal_alignment = 1
 vertical_alignment = 1
 metadata/_edit_lock_ = true
 
-[node name="SortByCount" type="NinePatchRect" parent="PlayerUILayer/PlayerInvUI/TextureMargins/InventoryTexture"]
+[node name="SortByCount" type="NinePatchRect" parent="PlayerUILayer/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture"]
 layout_mode = 1
-anchors_preset = 6
-anchor_left = 1.0
+anchors_preset = 8
+anchor_left = 0.5
 anchor_top = 0.5
-anchor_right = 1.0
+anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -138.0
-offset_top = -46.0
-offset_right = -93.0
-offset_bottom = -38.0
-grow_horizontal = 0
+offset_left = -23.0
+offset_top = -44.0
+offset_right = 22.0
+offset_bottom = -36.0
+grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("59_ph20g")
 patch_margin_left = 4
@@ -1465,14 +1573,15 @@ patch_margin_top = 4
 patch_margin_right = 4
 patch_margin_bottom = 4
 
-[node name="SortByCountBtn" type="Button" parent="PlayerUILayer/PlayerInvUI/TextureMargins/InventoryTexture/SortByCount"]
+[node name="SortByCountBtn" type="Button" parent="PlayerUILayer/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/SortByCount"]
 layout_mode = 0
 offset_right = 45.0
 offset_bottom = 8.0
 focus_mode = 0
 flat = true
+metadata/_edit_lock_ = true
 
-[node name="Label" type="Label" parent="PlayerUILayer/PlayerInvUI/TextureMargins/InventoryTexture/SortByCount"]
+[node name="Label" type="Label" parent="PlayerUILayer/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/SortByCount"]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -1492,18 +1601,18 @@ horizontal_alignment = 1
 vertical_alignment = 1
 metadata/_edit_lock_ = true
 
-[node name="SortByRarity" type="NinePatchRect" parent="PlayerUILayer/PlayerInvUI/TextureMargins/InventoryTexture"]
+[node name="SortByRarity" type="NinePatchRect" parent="PlayerUILayer/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture"]
 layout_mode = 1
-anchors_preset = 6
-anchor_left = 1.0
+anchors_preset = 8
+anchor_left = 0.5
 anchor_top = 0.5
-anchor_right = 1.0
+anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -207.0
-offset_top = -46.0
-offset_right = -162.0
-offset_bottom = -38.0
-grow_horizontal = 0
+offset_left = -80.0
+offset_top = -44.0
+offset_right = -35.0
+offset_bottom = -36.0
+grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("59_ph20g")
 patch_margin_left = 4
@@ -1511,14 +1620,15 @@ patch_margin_top = 4
 patch_margin_right = 4
 patch_margin_bottom = 4
 
-[node name="SortByRarityBtn" type="Button" parent="PlayerUILayer/PlayerInvUI/TextureMargins/InventoryTexture/SortByRarity"]
+[node name="SortByRarityBtn" type="Button" parent="PlayerUILayer/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/SortByRarity"]
 layout_mode = 0
 offset_right = 45.0
 offset_bottom = 8.0
 focus_mode = 0
 flat = true
+metadata/_edit_lock_ = true
 
-[node name="Label" type="Label" parent="PlayerUILayer/PlayerInvUI/TextureMargins/InventoryTexture/SortByRarity"]
+[node name="Label" type="Label" parent="PlayerUILayer/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/SortByRarity"]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -1538,7 +1648,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 metadata/_edit_lock_ = true
 
-[node name="GridMargins" type="MarginContainer" parent="PlayerUILayer/PlayerInvUI/TextureMargins/InventoryTexture"]
+[node name="GridMargins" type="MarginContainer" parent="PlayerUILayer/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture"]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -1552,119 +1662,185 @@ offset_bottom = 74.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-theme_override_constants/margin_left = 6
-theme_override_constants/margin_top = 26
-theme_override_constants/margin_right = 6
-theme_override_constants/margin_bottom = 6
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 30
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 4
 metadata/_edit_lock_ = true
 
-[node name="SlotGrid" type="GridContainer" parent="PlayerUILayer/PlayerInvUI/TextureMargins/InventoryTexture/GridMargins" node_paths=PackedStringArray("item_details_label")]
-unique_name_in_owner = true
+[node name="SlotGrid" type="GridContainer" parent="PlayerUILayer/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/GridMargins"]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 theme_override_constants/h_separation = 1
 theme_override_constants/v_separation = 1
 columns = 8
-script = ExtResource("41_nwjbq")
-slot_scene = ExtResource("42_r422n")
-item_details_label = NodePath("../../ItemDetails")
 
-[node name="Slot1" parent="PlayerUILayer/PlayerInvUI/TextureMargins/InventoryTexture/GridMargins/SlotGrid" instance=ExtResource("42_r422n")]
+[node name="Slot1" parent="PlayerUILayer/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/GridMargins/SlotGrid" instance=ExtResource("42_r422n")]
 layout_mode = 2
 
-[node name="Slot2" parent="PlayerUILayer/PlayerInvUI/TextureMargins/InventoryTexture/GridMargins/SlotGrid" instance=ExtResource("42_r422n")]
+[node name="Slot2" parent="PlayerUILayer/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/GridMargins/SlotGrid" instance=ExtResource("42_r422n")]
 layout_mode = 2
 
-[node name="Slot3" parent="PlayerUILayer/PlayerInvUI/TextureMargins/InventoryTexture/GridMargins/SlotGrid" instance=ExtResource("42_r422n")]
+[node name="Slot3" parent="PlayerUILayer/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/GridMargins/SlotGrid" instance=ExtResource("42_r422n")]
 layout_mode = 2
 
-[node name="Slot4" parent="PlayerUILayer/PlayerInvUI/TextureMargins/InventoryTexture/GridMargins/SlotGrid" instance=ExtResource("42_r422n")]
+[node name="Slot4" parent="PlayerUILayer/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/GridMargins/SlotGrid" instance=ExtResource("42_r422n")]
 layout_mode = 2
 
-[node name="Slot5" parent="PlayerUILayer/PlayerInvUI/TextureMargins/InventoryTexture/GridMargins/SlotGrid" instance=ExtResource("42_r422n")]
+[node name="Slot5" parent="PlayerUILayer/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/GridMargins/SlotGrid" instance=ExtResource("42_r422n")]
 layout_mode = 2
 
-[node name="Slot6" parent="PlayerUILayer/PlayerInvUI/TextureMargins/InventoryTexture/GridMargins/SlotGrid" instance=ExtResource("42_r422n")]
+[node name="Slot6" parent="PlayerUILayer/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/GridMargins/SlotGrid" instance=ExtResource("42_r422n")]
 layout_mode = 2
 
-[node name="Slot7" parent="PlayerUILayer/PlayerInvUI/TextureMargins/InventoryTexture/GridMargins/SlotGrid" instance=ExtResource("42_r422n")]
+[node name="Slot7" parent="PlayerUILayer/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/GridMargins/SlotGrid" instance=ExtResource("42_r422n")]
 layout_mode = 2
 
-[node name="Slot8" parent="PlayerUILayer/PlayerInvUI/TextureMargins/InventoryTexture/GridMargins/SlotGrid" instance=ExtResource("42_r422n")]
+[node name="Slot8" parent="PlayerUILayer/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/GridMargins/SlotGrid" instance=ExtResource("42_r422n")]
 layout_mode = 2
 
-[node name="Slot9" parent="PlayerUILayer/PlayerInvUI/TextureMargins/InventoryTexture/GridMargins/SlotGrid" instance=ExtResource("42_r422n")]
+[node name="Slot9" parent="PlayerUILayer/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/GridMargins/SlotGrid" instance=ExtResource("42_r422n")]
 layout_mode = 2
 
-[node name="Slot10" parent="PlayerUILayer/PlayerInvUI/TextureMargins/InventoryTexture/GridMargins/SlotGrid" instance=ExtResource("42_r422n")]
+[node name="Slot10" parent="PlayerUILayer/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/GridMargins/SlotGrid" instance=ExtResource("42_r422n")]
 layout_mode = 2
 
-[node name="Slot11" parent="PlayerUILayer/PlayerInvUI/TextureMargins/InventoryTexture/GridMargins/SlotGrid" instance=ExtResource("42_r422n")]
+[node name="Slot11" parent="PlayerUILayer/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/GridMargins/SlotGrid" instance=ExtResource("42_r422n")]
 layout_mode = 2
 
-[node name="Slot12" parent="PlayerUILayer/PlayerInvUI/TextureMargins/InventoryTexture/GridMargins/SlotGrid" instance=ExtResource("42_r422n")]
+[node name="Slot12" parent="PlayerUILayer/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/GridMargins/SlotGrid" instance=ExtResource("42_r422n")]
 layout_mode = 2
 
-[node name="Slot13" parent="PlayerUILayer/PlayerInvUI/TextureMargins/InventoryTexture/GridMargins/SlotGrid" instance=ExtResource("42_r422n")]
+[node name="Slot13" parent="PlayerUILayer/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/GridMargins/SlotGrid" instance=ExtResource("42_r422n")]
 layout_mode = 2
 
-[node name="Slot14" parent="PlayerUILayer/PlayerInvUI/TextureMargins/InventoryTexture/GridMargins/SlotGrid" instance=ExtResource("42_r422n")]
+[node name="Slot14" parent="PlayerUILayer/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/GridMargins/SlotGrid" instance=ExtResource("42_r422n")]
 layout_mode = 2
 
-[node name="Slot15" parent="PlayerUILayer/PlayerInvUI/TextureMargins/InventoryTexture/GridMargins/SlotGrid" instance=ExtResource("42_r422n")]
+[node name="Slot15" parent="PlayerUILayer/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/GridMargins/SlotGrid" instance=ExtResource("42_r422n")]
 layout_mode = 2
 
-[node name="Slot16" parent="PlayerUILayer/PlayerInvUI/TextureMargins/InventoryTexture/GridMargins/SlotGrid" instance=ExtResource("42_r422n")]
+[node name="Slot16" parent="PlayerUILayer/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/GridMargins/SlotGrid" instance=ExtResource("42_r422n")]
 layout_mode = 2
 
-[node name="Slot17" parent="PlayerUILayer/PlayerInvUI/TextureMargins/InventoryTexture/GridMargins/SlotGrid" instance=ExtResource("42_r422n")]
+[node name="Slot17" parent="PlayerUILayer/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/GridMargins/SlotGrid" instance=ExtResource("42_r422n")]
 layout_mode = 2
 
-[node name="Slot18" parent="PlayerUILayer/PlayerInvUI/TextureMargins/InventoryTexture/GridMargins/SlotGrid" instance=ExtResource("42_r422n")]
+[node name="Slot18" parent="PlayerUILayer/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/GridMargins/SlotGrid" instance=ExtResource("42_r422n")]
 layout_mode = 2
 
-[node name="Slot19" parent="PlayerUILayer/PlayerInvUI/TextureMargins/InventoryTexture/GridMargins/SlotGrid" instance=ExtResource("42_r422n")]
+[node name="Slot19" parent="PlayerUILayer/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/GridMargins/SlotGrid" instance=ExtResource("42_r422n")]
 layout_mode = 2
 
-[node name="Slot20" parent="PlayerUILayer/PlayerInvUI/TextureMargins/InventoryTexture/GridMargins/SlotGrid" instance=ExtResource("42_r422n")]
+[node name="Slot20" parent="PlayerUILayer/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/GridMargins/SlotGrid" instance=ExtResource("42_r422n")]
 layout_mode = 2
 
-[node name="Slot21" parent="PlayerUILayer/PlayerInvUI/TextureMargins/InventoryTexture/GridMargins/SlotGrid" instance=ExtResource("42_r422n")]
+[node name="Slot21" parent="PlayerUILayer/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/GridMargins/SlotGrid" instance=ExtResource("42_r422n")]
 layout_mode = 2
 
-[node name="Slot22" parent="PlayerUILayer/PlayerInvUI/TextureMargins/InventoryTexture/GridMargins/SlotGrid" instance=ExtResource("42_r422n")]
+[node name="Slot22" parent="PlayerUILayer/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/GridMargins/SlotGrid" instance=ExtResource("42_r422n")]
 layout_mode = 2
 
-[node name="Slot23" parent="PlayerUILayer/PlayerInvUI/TextureMargins/InventoryTexture/GridMargins/SlotGrid" instance=ExtResource("42_r422n")]
+[node name="Slot23" parent="PlayerUILayer/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/GridMargins/SlotGrid" instance=ExtResource("42_r422n")]
 layout_mode = 2
 
-[node name="Slot24" parent="PlayerUILayer/PlayerInvUI/TextureMargins/InventoryTexture/GridMargins/SlotGrid" instance=ExtResource("42_r422n")]
+[node name="Slot24" parent="PlayerUILayer/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/GridMargins/SlotGrid" instance=ExtResource("42_r422n")]
 layout_mode = 2
 
-[node name="Slot25" parent="PlayerUILayer/PlayerInvUI/TextureMargins/InventoryTexture/GridMargins/SlotGrid" instance=ExtResource("42_r422n")]
+[node name="Slot25" parent="PlayerUILayer/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/GridMargins/SlotGrid" instance=ExtResource("42_r422n")]
 layout_mode = 2
 
-[node name="Slot26" parent="PlayerUILayer/PlayerInvUI/TextureMargins/InventoryTexture/GridMargins/SlotGrid" instance=ExtResource("42_r422n")]
+[node name="Slot26" parent="PlayerUILayer/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/GridMargins/SlotGrid" instance=ExtResource("42_r422n")]
 layout_mode = 2
 
-[node name="Slot27" parent="PlayerUILayer/PlayerInvUI/TextureMargins/InventoryTexture/GridMargins/SlotGrid" instance=ExtResource("42_r422n")]
+[node name="Slot27" parent="PlayerUILayer/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/GridMargins/SlotGrid" instance=ExtResource("42_r422n")]
 layout_mode = 2
 
-[node name="Slot28" parent="PlayerUILayer/PlayerInvUI/TextureMargins/InventoryTexture/GridMargins/SlotGrid" instance=ExtResource("42_r422n")]
+[node name="Slot28" parent="PlayerUILayer/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/GridMargins/SlotGrid" instance=ExtResource("42_r422n")]
 layout_mode = 2
 
-[node name="Slot29" parent="PlayerUILayer/PlayerInvUI/TextureMargins/InventoryTexture/GridMargins/SlotGrid" instance=ExtResource("42_r422n")]
+[node name="Slot29" parent="PlayerUILayer/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/GridMargins/SlotGrid" instance=ExtResource("42_r422n")]
 layout_mode = 2
 
-[node name="Slot30" parent="PlayerUILayer/PlayerInvUI/TextureMargins/InventoryTexture/GridMargins/SlotGrid" instance=ExtResource("42_r422n")]
+[node name="Slot30" parent="PlayerUILayer/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/GridMargins/SlotGrid" instance=ExtResource("42_r422n")]
 layout_mode = 2
 
-[node name="Slot31" parent="PlayerUILayer/PlayerInvUI/TextureMargins/InventoryTexture/GridMargins/SlotGrid" instance=ExtResource("42_r422n")]
+[node name="Slot31" parent="PlayerUILayer/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/GridMargins/SlotGrid" instance=ExtResource("42_r422n")]
 layout_mode = 2
 
-[node name="Slot32" parent="PlayerUILayer/PlayerInvUI/TextureMargins/InventoryTexture/GridMargins/SlotGrid" instance=ExtResource("42_r422n")]
+[node name="Slot32" parent="PlayerUILayer/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/GridMargins/SlotGrid" instance=ExtResource("42_r422n")]
 layout_mode = 2
+
+[node name="HotbarTextureMargins" type="MarginContainer" parent="PlayerUILayer/PlayerInvUI/MainTextureMargins/InvPopulator"]
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 0.2
+theme_override_constants/margin_left = 17
+theme_override_constants/margin_right = 17
+
+[node name="HotbarTexture" type="NinePatchRect" parent="PlayerUILayer/PlayerInvUI/MainTextureMargins/InvPopulator/HotbarTextureMargins"]
+layout_mode = 2
+texture = ExtResource("33_8yk75")
+patch_margin_left = 4
+patch_margin_top = 4
+patch_margin_right = 4
+patch_margin_bottom = 4
+
+[node name="HotbarSlotMargins" type="MarginContainer" parent="PlayerUILayer/PlayerInvUI/MainTextureMargins/InvPopulator/HotbarTextureMargins/HotbarTexture"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -110.0
+offset_top = -16.0
+offset_right = 110.0
+offset_bottom = 16.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 6
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 6
+
+[node name="HotbarSlotGrid" type="HBoxContainer" parent="PlayerUILayer/PlayerInvUI/MainTextureMargins/InvPopulator/HotbarTextureMargins/HotbarTexture/HotbarSlotMargins"]
+layout_mode = 2
+theme_override_constants/separation = 1
+alignment = 1
+
+[node name="Slot1" parent="PlayerUILayer/PlayerInvUI/MainTextureMargins/InvPopulator/HotbarTextureMargins/HotbarTexture/HotbarSlotMargins/HotbarSlotGrid" instance=ExtResource("42_r422n")]
+layout_mode = 2
+size_flags_vertical = 4
+
+[node name="Slot2" parent="PlayerUILayer/PlayerInvUI/MainTextureMargins/InvPopulator/HotbarTextureMargins/HotbarTexture/HotbarSlotMargins/HotbarSlotGrid" instance=ExtResource("42_r422n")]
+layout_mode = 2
+size_flags_vertical = 4
+
+[node name="Slot3" parent="PlayerUILayer/PlayerInvUI/MainTextureMargins/InvPopulator/HotbarTextureMargins/HotbarTexture/HotbarSlotMargins/HotbarSlotGrid" instance=ExtResource("42_r422n")]
+layout_mode = 2
+size_flags_vertical = 4
+
+[node name="Slot4" parent="PlayerUILayer/PlayerInvUI/MainTextureMargins/InvPopulator/HotbarTextureMargins/HotbarTexture/HotbarSlotMargins/HotbarSlotGrid" instance=ExtResource("42_r422n")]
+layout_mode = 2
+size_flags_vertical = 4
+
+[node name="Slot5" parent="PlayerUILayer/PlayerInvUI/MainTextureMargins/InvPopulator/HotbarTextureMargins/HotbarTexture/HotbarSlotMargins/HotbarSlotGrid" instance=ExtResource("42_r422n")]
+layout_mode = 2
+size_flags_vertical = 4
+
+[node name="Slot6" parent="PlayerUILayer/PlayerInvUI/MainTextureMargins/InvPopulator/HotbarTextureMargins/HotbarTexture/HotbarSlotMargins/HotbarSlotGrid" instance=ExtResource("42_r422n")]
+layout_mode = 2
+size_flags_vertical = 4
+
+[node name="Slot7" parent="PlayerUILayer/PlayerInvUI/MainTextureMargins/InvPopulator/HotbarTextureMargins/HotbarTexture/HotbarSlotMargins/HotbarSlotGrid" instance=ExtResource("42_r422n")]
+layout_mode = 2
+size_flags_vertical = 4
+
+[node name="Slot8" parent="PlayerUILayer/PlayerInvUI/MainTextureMargins/InvPopulator/HotbarTextureMargins/HotbarTexture/HotbarSlotMargins/HotbarSlotGrid" instance=ExtResource("42_r422n")]
+layout_mode = 2
+size_flags_vertical = 4
 
 [connection signal="timeout" from="MoveStateMachine/Dash/DashTimer" to="MoveStateMachine/Dash" method="_on_dash_timer_timeout"]
 [connection signal="timeout" from="MoveStateMachine/Stunned/StunnedTimer" to="MoveStateMachine/Stunned" method="_on_stunned_timer_timeout"]
@@ -1683,6 +1859,6 @@ layout_mode = 2
 [connection signal="timeout" from="PlayerUILayer/PlayerStatsOverlay/HungerChangedTimer" to="PlayerUILayer/PlayerStatsOverlay" method="_on_hunger_changed_timer_timeout"]
 [connection signal="timeout" from="PlayerUILayer/PlayerStatsOverlay/StaminaChangedTimer" to="PlayerUILayer/PlayerStatsOverlay" method="_on_stamina_changed_timer_timeout"]
 [connection signal="timeout" from="PlayerUILayer/PlayerStatsOverlay/StaminaRechargeTimer" to="PlayerUILayer/PlayerStatsOverlay" method="_on_stamina_recharge_timer_timeout"]
-[connection signal="pressed" from="PlayerUILayer/PlayerInvUI/TextureMargins/InventoryTexture/SortByName/SortByNameBtn" to="PlayerUILayer/PlayerInvUI" method="_on_sort_by_name_btn_pressed"]
-[connection signal="pressed" from="PlayerUILayer/PlayerInvUI/TextureMargins/InventoryTexture/SortByCount/SortByCountBtn" to="PlayerUILayer/PlayerInvUI" method="_on_sort_by_count_btn_pressed"]
-[connection signal="pressed" from="PlayerUILayer/PlayerInvUI/TextureMargins/InventoryTexture/SortByRarity/SortByRarityBtn" to="PlayerUILayer/PlayerInvUI" method="_on_sort_by_rarity_btn_pressed"]
+[connection signal="pressed" from="PlayerUILayer/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/SortByName/SortByNameBtn" to="PlayerUILayer/PlayerInvUI" method="_on_sort_by_name_btn_pressed"]
+[connection signal="pressed" from="PlayerUILayer/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/SortByCount/SortByCountBtn" to="PlayerUILayer/PlayerInvUI" method="_on_sort_by_count_btn_pressed"]
+[connection signal="pressed" from="PlayerUILayer/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/SortByRarity/SortByRarityBtn" to="PlayerUILayer/PlayerInvUI" method="_on_sort_by_rarity_btn_pressed"]

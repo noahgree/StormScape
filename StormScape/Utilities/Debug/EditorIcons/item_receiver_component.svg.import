@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dcbwxgak6a0r8"
-path="res://.godot/imported/entity_shadow.png-498a9343c1c6eab23bc696c49f9b27f7.ctex"
+uid="uid://dwevj68jfosdl"
+path="res://.godot/imported/item_receiver_component.svg-cf108449a50adaa16f487609331ef727.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Entities/entity_shadow.png"
-dest_files=["res://.godot/imported/entity_shadow.png-498a9343c1c6eab23bc696c49f9b27f7.ctex"]
+source_file="res://Utilities/Debug/EditorIcons/item_receiver_component.svg"
+dest_files=["res://.godot/imported/item_receiver_component.svg-cf108449a50adaa16f487609331ef727.ctex"]
 
 [params]
 
@@ -32,3 +32,6 @@ process/hdr_as_srgb=false
 process/hdr_clamp_exposure=false
 process/size_limit=0
 detect_3d/compress_to=1
+svg/scale=1.0
+editor/scale_with_editor_scale=false
+editor/convert_colors_with_editor_theme=false

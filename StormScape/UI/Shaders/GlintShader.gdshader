@@ -1,58 +1,111 @@
 shader_type canvas_item;
 
-uniform sampler2D vertical_gradient; // used to set alpha values. So you can use this to make the effect dis-/re-appear at points
-uniform sampler2D color_gradient; // sets the effect color, supports 2d gradients
-uniform float size_effect: hint_range(-5.0, 5.0, 0.05) = 0.1; // size of the effect
-uniform float speed = 1; // effect speed; Will reverse effect if set to negative
-uniform float highlight_strength: hint_range(-4.0, 4.0, 0.05) = 0.5; // how strong the color overides the base color
-uniform bool color_mode_toggle = false; // changes how the color gradient is applied. Default is on the entire texture, if set to true it is only applied to the effect
-uniform float pause_duration = 0.5; // duration of the pause between highlight cycles
-uniform float angle = 0.0; // Angle in degrees for the effect direction
+// Uniforms from both shaders
+uniform vec4 outline_color : source_color = vec4(1.0);
+uniform float width : hint_range(0, 10) = 1.0;
+uniform int pattern : hint_range(0, 2) = 0;
+uniform bool inside = false;
+uniform bool add_margins = true;
+
+uniform sampler2D vertical_gradient;
+uniform sampler2D color_gradient;
+uniform float size_effect: hint_range(-5.0, 5.0, 0.05) = 0.1;
+uniform float speed = 1;
+uniform float highlight_strength: hint_range(-4.0, 4.0, 0.05) = 0.5;
+uniform bool color_mode_toggle = false;
+uniform float pause_duration = 0.5;
+uniform float angle = 0.0;
+
+uniform vec4 tint_color: source_color = vec4(1.0, 1.0, 1.0, 0.0);
+uniform float glow_intensity : hint_range(0.0, 2.0) = 1.0;
+
+uniform float random_start_offset = 0.0;
+
+void vertex() {
+    if (add_margins) {
+        VERTEX += (UV * 2.0 - 1.0) * width;
+    }
+}
+
+// Existing function from the first shader
+bool hasContraryNeighbour(vec2 uv, vec2 texture_pixel_size, sampler2D texture) {
+	for (float i = -ceil(width); i <= ceil(width); i++) {
+		float x = abs(i) > width ? width * sign(i) : i;
+		float offset;
+
+		if (pattern == 0) {
+			offset = width - abs(x);
+		} else if (pattern == 1) {
+			offset = floor(sqrt(pow(width + 0.5, 2) - x * x));
+		} else if (pattern == 2) {
+			offset = width;
+		}
+
+		for (float j = -ceil(offset); j <= ceil(offset); j++) {
+			float y = abs(j) > offset ? offset * sign(j) : j;
+			vec2 xy = uv + texture_pixel_size * vec2(x, y);
+
+			if ((xy != clamp(xy, vec2(0.0), vec2(1.0)) || texture(texture, xy).a <= 0.0) == inside) {
+				return true;
+			}
+		}
+	}
+
+	return false;
+}
 
 void fragment() {
-	// set up base parameters
-	vec4 old_color = COLOR;
-	
-	float time = TIME * abs(speed); // Absolute time to handle both positive and negative speeds
-	float effect_cycle_duration = 1.0 + pause_duration; // total time for one cycle and pause
-	float mod_time = mod(time, effect_cycle_duration); // current time within the cycle
+    vec2 uv = UV;
+    vec4 base_color = texture(TEXTURE, uv);
 
-	// Handle the pause
-	float progress = mod_time / (1.0); // Normalize mod_time to the active highlight duration only (excluding pause)
+    // Logic for margins
+    if (add_margins) {
+        vec2 texture_pixel_size = vec2(1.0) / (vec2(1.0) / TEXTURE_PIXEL_SIZE + vec2(width * 2.0));
+        uv = (uv - texture_pixel_size * width) * TEXTURE_PIXEL_SIZE / texture_pixel_size;
+        if (uv != clamp(uv, vec2(0.0), vec2(1.0))) {
+            base_color.a = 0.0;
+        } else {
+            base_color = texture(TEXTURE, uv);
+        }
+    }
 
-	// Ensure the effect is clamped during the pause period
-	if (mod_time > 1.0) {
-		progress = 1.0; // Hold the highlight at the final position during the pause
-	}
+    // Apply the tint and glow to the base color
+    vec3 tinted_base_color = mix(base_color.rgb, tint_color.rgb, tint_color.a);
+    base_color.rgb = tinted_base_color * glow_intensity;
 
-	// Reverse the direction if speed is negative
-	if (speed < 0.0) {
-		progress = 1.0 - progress; // Reverse progress when speed is negative
-	}
-	
-	float rad_angle = radians(angle);
-	vec2 direction = vec2(cos(rad_angle), sin(rad_angle));
-	float position_value = dot(UV, direction);
-    position_value = position_value / sqrt(2.0);
+    // Determine if the outline should be applied
+    if ((base_color.a > 0.0) == inside && hasContraryNeighbour(uv, TEXTURE_PIXEL_SIZE, TEXTURE)) {
+        COLOR.rgb = mix(base_color.rgb, outline_color.rgb, outline_color.a);
+        COLOR.a = 1.0; // Ensure alpha is correctly set for the outline
+    } else {
+        COLOR = base_color;
+    }
 
-	// Set the current time and bounds for the highlight effect
-	float current_time = mix(0.0 - size_effect, 1.0 + size_effect, progress);
-	float effect_lower_bound = current_time - size_effect;
-	float effect_upper_bound = current_time + size_effect;
+    // Logic from the second shader
+    float time = TIME * abs(speed);
+    float effect_cycle_duration = 1.0 + pause_duration + random_start_offset;
+    float mod_time = mod(time, effect_cycle_duration);
+    float progress = mod_time / (1.0);
+    if (mod_time > 1.0) {
+        progress = 1.0;
+    }
+    if (speed < 0.0) {
+        progress = 1.0 - progress;
+    }
 
-	// Smooth out the lower/upper bounds with the UV values to calculate how far from the middle point (the effect) the pixel is
-	float effect_distance = smoothstep(effect_lower_bound, current_time, position_value) - smoothstep(current_time, effect_upper_bound, position_value);
+    float rad_angle = radians(angle);
+    vec2 direction = vec2(cos(rad_angle), sin(rad_angle));
+    float position_value = dot(UV, direction) / sqrt(2.0);
+    float current_time = mix(0.0 - size_effect, 1.0 + size_effect, progress);
+    float effect_lower_bound = current_time - size_effect;
+    float effect_upper_bound = current_time + size_effect;
+    float effect_distance = smoothstep(effect_lower_bound, current_time, position_value) - smoothstep(current_time, effect_upper_bound, position_value);
+    float inner_effect_position = smoothstep(effect_lower_bound, effect_upper_bound, position_value);
+    vec2 color_position = (color_mode_toggle) ? vec2(UV.x, inner_effect_position) : vec2(progress);
+    vec4 new_color = vec4(texture(color_gradient, color_position));
+    new_color = mix(base_color, new_color, vec4(texture(vertical_gradient, vec2(progress))));
+    vec4 effect_color = mix(base_color, new_color, effect_distance * highlight_strength);
+    COLOR.rgb = mix(COLOR.rgb, effect_color.rgb, effect_distance * highlight_strength);
 
-	// Get the position of the pixel within the effect for the inner_gradient color mode
-	float inner_effect_position = smoothstep(effect_lower_bound, effect_upper_bound, position_value);
-	vec2 color_position = (color_mode_toggle) ? vec2(UV.x, inner_effect_position) : vec2(progress);
-
-	// Get the new color from the gradient
-	vec4 new_color = vec4(texture(color_gradient, color_position));
-
-	// Calculate the vertical gradient and alpha_values
-	new_color = mix(old_color, new_color, vec4(texture(vertical_gradient, vec2(progress))));
-
-	// Apply the color to the texture
-	COLOR.rgb = mix(old_color.rgb, new_color.rgb, vec3(effect_distance * highlight_strength));
+	COLOR.rgb *= glow_intensity;
 }

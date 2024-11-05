@@ -11,11 +11,14 @@ signal is_not_hovered_over()
 @onready var quantity: Label = $QuantityMargins/Quantity
 
 var index: int
-var synced_inv: Inventory
+var synced_inv: Inventory:
+	set(new_synced_inv):
+		synced_inv = new_synced_inv
+		synced_inv_main_size = synced_inv.inv_size - synced_inv.hotbar_size
 var dragging_only_one: bool = false
-
-
 var item: InventoryItem: set = _set_item
+var synced_inv_main_size: int
+var is_hotbar_ui_preview_slot: bool = false
 
 
 func _set_item(new_item) -> void:
@@ -33,7 +36,6 @@ func _set_item(new_item) -> void:
 		item_texture.texture = null
 		quantity.text = ""
 
-
 func _ready() -> void:
 	mouse_entered.connect(func(): is_hovered_over.emit(index))
 	mouse_exited.connect(func(): is_not_hovered_over.emit())
@@ -44,7 +46,7 @@ func _to_string() -> String:
 func _get_drag_data(at_position: Vector2) -> Variant:
 	dragging_only_one = false
 
-	if item != null:
+	if item != null and not is_hotbar_ui_preview_slot:
 		set_drag_preview(_make_drag_preview(at_position))
 		return self
 	else:
@@ -80,7 +82,7 @@ func _gui_input(event: InputEvent) -> void:
 				force_drag(self, _make_drag_preview(get_local_mouse_position()))
 
 func _can_drop_data(_at_position: Vector2, data: Variant) -> bool:
-	if data.item == null or not synced_inv or data.index == index:
+	if data.item == null or not synced_inv or data.index == index or is_hotbar_ui_preview_slot:
 		return false
 	if item == null:
 		return true
@@ -119,12 +121,16 @@ func _move_items_to_other_empty_slot(data: Variant) -> void:
 	synced_inv.inv[data.index] = null
 	data.item = null
 
+	_emit_changes_for_potential_listening_hotbar(data)
+
 func _combine_all_items_into_slot_with_space(data: Variant, total_quantity: int) -> void:
 	item.quantity = total_quantity
 	_set_item(item)
 
 	synced_inv.inv[data.index] = null
 	data.item = null
+
+	_emit_changes_for_potential_listening_hotbar(data)
 
 func _combine_what_fits_and_leave_remainder(data: Variant) -> void:
 	var amount_that_fits: int = item.stats.stack_size - item.quantity
@@ -134,6 +140,8 @@ func _combine_what_fits_and_leave_remainder(data: Variant) -> void:
 	data.item.quantity -= amount_that_fits
 	synced_inv.inv[data.index] = InventoryItem.new(data.item.stats, data.item.quantity)
 	data.item = synced_inv.inv[data.index]
+
+	_emit_changes_for_potential_listening_hotbar(data)
 
 func _move_only_one_to_empty_slot(data: Variant) -> void:
 	item = InventoryItem.new(data.item.stats, 1)
@@ -154,3 +162,9 @@ func _check_if_inv_slot_is_now_empty_after_dragging_only_one(data: Variant) -> v
 		synced_inv.inv[data.index].quantity -= 1
 
 	data.item = synced_inv.inv[data.index]
+
+	_emit_changes_for_potential_listening_hotbar(data)
+
+func _emit_changes_for_potential_listening_hotbar(data: Variant) -> void:
+	if data.index >= synced_inv_main_size: synced_inv.slot_updated.emit(data.index, data.item)
+	if index >= synced_inv_main_size: synced_inv.slot_updated.emit(index, item)
