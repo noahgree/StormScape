@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://barnaq2utcos2"
-path="res://.godot/imported/InventorySlot9Patch.png-4dc96d1337cd548c1c14a3d738d97ef3.ctex"
+uid="uid://bfhfklmv02pmx"
+path="res://.godot/imported/pickaxe.png-b15dc082a6bef7215d814be4e3338473.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://UI/Inventory/Slot/InventorySlot9Patch.png"
-dest_files=["res://.godot/imported/InventorySlot9Patch.png-4dc96d1337cd548c1c14a3d738d97ef3.ctex"]
+source_file="res://Entities/Items/ItemScripts/Weapons/Pickaxe/pickaxe.png"
+dest_files=["res://.godot/imported/pickaxe.png-b15dc082a6bef7215d814be4e3338473.ctex"]
 
 [params]
 

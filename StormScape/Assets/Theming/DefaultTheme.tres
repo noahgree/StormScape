@@ -1,7 +1,7 @@
 [gd_resource type="Theme" load_steps=4 format=3 uid="uid://dc4prjnav82u"]
 
 [ext_resource type="FontVariation" uid="uid://blgkcg6c83yln" path="res://Assets/Theming/Fonts/GameFontResources/ui_pixel_font.tres" id="1_27yu0"]
-[ext_resource type="Texture2D" uid="uid://biejldas3s8ak" path="res://UI/Inventory/Inventory9Patch.png" id="2_gvibo"]
+[ext_resource type="Texture2D" uid="uid://biejldas3s8ak" path="res://UI/Inventory/inv_9_patch.png" id="2_gvibo"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_x36p3"]
 texture = ExtResource("2_gvibo")
@@ -13,11 +13,11 @@ texture_margin_bottom = 6.0
 [resource]
 Label/colors/font_color = Color(0.4, 0.223529, 0.192157, 1)
 Label/colors/font_shadow_color = Color(0, 0, 0, 0.454902)
+Label/constants/line_spacing = 0
 Label/constants/outline_size = 0
 Label/constants/shadow_offset_x = 0
 Label/constants/shadow_offset_y = 0
 Label/constants/shadow_outline_size = 0
-Label/font_sizes/font_size = 100
 TooltipLabel/colors/font_color = Color(0.875, 0.875, 0.875, 1)
 TooltipLabel/font_sizes/font_size = 16
 TooltipLabel/fonts/font = ExtResource("1_27yu0")

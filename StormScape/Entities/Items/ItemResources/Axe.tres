@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="ItemResource" load_steps=4 format=3 uid="uid://bbya4jg50etnu"]
+
+[ext_resource type="Script" path="res://Entities/Items/ItemResource.gd" id="1_jhrhy"]
+[ext_resource type="Texture2D" uid="uid://dpodisv43y3j1" path="res://Entities/Items/ItemScripts/Weapons/Axe/axe.png" id="1_y2n6j"]
+[ext_resource type="Texture2D" uid="uid://281vvvg82e8t" path="res://Entities/Items/ItemScripts/Weapons/Axe/axe_medium.png" id="3_advpm"]
+
+[resource]
+script = ExtResource("1_jhrhy")
+id = "Axe"
+name = "Axe"
+icon = ExtResource("1_y2n6j")
+thumbnail = ExtResource("3_advpm")
+type = 1
+rarity = 2
+stack_size = 1
+info = "A mighty axe."

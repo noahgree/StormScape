@@ -4,6 +4,7 @@ class_name ItemResource
 @export var id: String
 @export var name: String
 @export var icon: Texture2D
+@export var thumbnail: Texture2D
 
 @export var type: GlobalData.ItemType = GlobalData.ItemType.CONSUMABLE
 @export var rarity: GlobalData.ItemRarity = GlobalData.ItemRarity.COMMON

@@ -1,8 +1,9 @@
-[gd_scene load_steps=110 format=3 uid="uid://dba8mrurjlekp"]
+[gd_scene load_steps=116 format=3 uid="uid://dba8mrurjlekp"]
 
 [ext_resource type="Script" path="res://Entities/Player/Player.gd" id="1_m33tt"]
 [ext_resource type="SpriteFrames" uid="uid://cxo625s2sh5hx" path="res://Entities/Player/Spritesheets/Base/Base.tres" id="2_t1by5"]
 [ext_resource type="Script" path="res://Entities/Components/StatModComponents/StatModsCacheResource.gd" id="2_vyeuy"]
+[ext_resource type="Texture2D" uid="uid://csihsfur3oxag" path="res://Entities/entity_shadow.png" id="3_e6fnh"]
 [ext_resource type="PackedScene" uid="uid://cdfdy8m6ki3oq" path="res://Entities/Components/HealthComponent/HealthComponent.tscn" id="3_ojev3"]
 [ext_resource type="PackedScene" uid="uid://btba0jmsow1mx" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectReceiverComponent.tscn" id="4_hhm8x"]
 [ext_resource type="PackedScene" uid="uid://4gl24qwdyti3" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/DmgHandler.tscn" id="5_g3ixu"]
@@ -34,7 +35,7 @@
 [ext_resource type="PackedScene" uid="uid://c4n604w30gx8m" path="res://Entities/Components/ItemComponents/ItemReceiverComponent.tscn" id="30_qgyag"]
 [ext_resource type="Script" path="res://UI/Inventory/PlayerInventory/PlayerInvCommunicator.gd" id="31_mjpan"]
 [ext_resource type="Script" path="res://UI/PlayerInvUI.gd" id="32_3a185"]
-[ext_resource type="Texture2D" uid="uid://biejldas3s8ak" path="res://UI/Inventory/Inventory9Patch.png" id="33_8yk75"]
+[ext_resource type="Texture2D" uid="uid://biejldas3s8ak" path="res://UI/Inventory/inv_9_patch.png" id="33_8yk75"]
 [ext_resource type="Script" path="res://UI/Inventory/PlayerInventory/ItemInteractionHud.gd" id="35_45ikj"]
 [ext_resource type="Script" path="res://UI/PlayerStatsOverlay/PlayerStatsOverlay.gd" id="35_yln51"]
 [ext_resource type="Texture2D" uid="uid://dwo0fuwylfxeq" path="res://UI/PlayerStatsOverlay/Assets/Stats Panel Bckgrd.png" id="36_vdy3t"]
@@ -60,6 +61,7 @@
 [ext_resource type="Texture2D" uid="uid://dhvpkl1svbcys" path="res://UI/PlayerStatsOverlay/Assets/Health Under.png" id="52_dhyl8"]
 [ext_resource type="Texture2D" uid="uid://lj78cee4aa38" path="res://UI/PlayerStatsOverlay/Assets/Health Change.png" id="53_qsiea"]
 [ext_resource type="FontVariation" uid="uid://blgkcg6c83yln" path="res://Assets/Theming/Fonts/GameFontResources/ui_pixel_font.tres" id="58_eexr8"]
+[ext_resource type="Texture2D" uid="uid://f3dtce257pvb" path="res://UI/Inventory/button_9_patch_dark.png" id="59_ph20g"]
 
 [sub_resource type="Resource" id="Resource_rwbul"]
 script = ExtResource("2_vyeuy")
@@ -806,6 +808,9 @@ states/spawn/position = Vector2(184.5, 70.5)
 transitions = ["idle", "run", SubResource("AnimationNodeStateMachineTransition_70g00"), "run", "idle", SubResource("AnimationNodeStateMachineTransition_sdv4y"), "Start", "spawn", SubResource("AnimationNodeStateMachineTransition_8h6fx"), "spawn", "idle", SubResource("AnimationNodeStateMachineTransition_x8kh3")]
 graph_offset = Vector2(-48, 10)
 
+[sub_resource type="CircleShape2D" id="CircleShape2D_3wm74"]
+radius = 19.0263
+
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_0q2s6"]
 shader = ExtResource("44_vk3bi")
 shader_parameter/progress = 0.0
@@ -833,6 +838,15 @@ line_spacing = 0.0
 font = ExtResource("58_eexr8")
 font_color = Color(0.4, 0.223529, 0.192157, 1)
 
+[sub_resource type="LabelSettings" id="LabelSettings_83b3b"]
+font_color = Color(0.933333, 0.764706, 0.603922, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_h2uvl"]
+font_color = Color(0.933333, 0.764706, 0.603922, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_veflf"]
+font_color = Color(0.933333, 0.764706, 0.603922, 1)
+
 [node name="Player" type="CharacterBody2D" node_paths=PackedStringArray("effects") groups=["has_save_logic"]]
 collision_mask = 213
 motion_mode = 1
@@ -848,6 +862,10 @@ debug_color = Color(0, 0.6, 0.701961, 0.180392)
 
 [node name="AudioListener2D" type="AudioListener2D" parent="."]
 current = true
+
+[node name="Shadow" type="Sprite2D" parent="."]
+self_modulate = Color(1, 1, 1, 0.215686)
+texture = ExtResource("3_e6fnh")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 position = Vector2(0, -16)
@@ -969,6 +987,12 @@ ui = NodePath("../PlayerUILayer/PlayerInvUI")
 [node name="PlayerInvCommunicator" type="Node" parent="ItemReceiverComponent" node_paths=PackedStringArray("item_interact_hud")]
 script = ExtResource("31_mjpan")
 item_interact_hud = NodePath("../../PlayerUILayer/ItemInteractionHUD")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ItemReceiverComponent"]
+visible = false
+position = Vector2(0, -5)
+shape = SubResource("CircleShape2D_3wm74")
+debug_color = Color(0.454902, 0.596078, 0, 0.227451)
 
 [node name="PlayerUILayer" type="CanvasLayer" parent="."]
 
@@ -1269,7 +1293,7 @@ offset_right = -4.0
 offset_bottom = -4.0
 grow_horizontal = 0
 grow_vertical = 0
-texture = ExtResource("33_8yk75")
+texture = ExtResource("59_ph20g")
 patch_margin_left = 4
 patch_margin_top = 4
 patch_margin_right = 4
@@ -1348,9 +1372,9 @@ anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
 offset_left = -52.0
-offset_top = 10.0
+offset_top = 7.0
 offset_right = 52.0
-offset_bottom = 34.0
+offset_bottom = 31.0
 grow_horizontal = 2
 text = "INVENTORY"
 label_settings = SubResource("LabelSettings_xlxjq")
@@ -1370,12 +1394,149 @@ offset_bottom = 7.0
 grow_horizontal = 2
 grow_vertical = 0
 scale = Vector2(0.6, 0.6)
-text = "Details about the selected item. This text supports up to two lines, then it adds an ellipsis at the end."
 label_settings = SubResource("LabelSettings_nuang")
 horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 3
 text_overrun_behavior = 4
+
+[node name="SortByName" type="NinePatchRect" parent="PlayerUILayer/PlayerInvUI/TextureMargins/InventoryTexture"]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -69.0
+offset_top = -46.0
+offset_right = -24.0
+offset_bottom = -38.0
+grow_horizontal = 0
+grow_vertical = 2
+texture = ExtResource("59_ph20g")
+patch_margin_left = 4
+patch_margin_top = 4
+patch_margin_right = 4
+patch_margin_bottom = 4
+
+[node name="SortByNameBtn" type="Button" parent="PlayerUILayer/PlayerInvUI/TextureMargins/InventoryTexture/SortByName"]
+layout_mode = 0
+offset_right = 45.0
+offset_bottom = 8.0
+focus_mode = 0
+flat = true
+
+[node name="Label" type="Label" parent="PlayerUILayer/PlayerInvUI/TextureMargins/InventoryTexture/SortByName"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -17.5
+offset_top = -3.0
+offset_right = 52.5
+offset_bottom = 9.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.5, 0.5)
+text = "SORT BY NAME"
+label_settings = SubResource("LabelSettings_83b3b")
+horizontal_alignment = 1
+vertical_alignment = 1
+metadata/_edit_lock_ = true
+
+[node name="SortByCount" type="NinePatchRect" parent="PlayerUILayer/PlayerInvUI/TextureMargins/InventoryTexture"]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -138.0
+offset_top = -46.0
+offset_right = -93.0
+offset_bottom = -38.0
+grow_horizontal = 0
+grow_vertical = 2
+texture = ExtResource("59_ph20g")
+patch_margin_left = 4
+patch_margin_top = 4
+patch_margin_right = 4
+patch_margin_bottom = 4
+
+[node name="SortByCountBtn" type="Button" parent="PlayerUILayer/PlayerInvUI/TextureMargins/InventoryTexture/SortByCount"]
+layout_mode = 0
+offset_right = 45.0
+offset_bottom = 8.0
+focus_mode = 0
+flat = true
+
+[node name="Label" type="Label" parent="PlayerUILayer/PlayerInvUI/TextureMargins/InventoryTexture/SortByCount"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -17.5
+offset_top = -3.0
+offset_right = 52.5
+offset_bottom = 9.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.5, 0.5)
+text = "SORT BY COUNT"
+label_settings = SubResource("LabelSettings_h2uvl")
+horizontal_alignment = 1
+vertical_alignment = 1
+metadata/_edit_lock_ = true
+
+[node name="SortByRarity" type="NinePatchRect" parent="PlayerUILayer/PlayerInvUI/TextureMargins/InventoryTexture"]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -207.0
+offset_top = -46.0
+offset_right = -162.0
+offset_bottom = -38.0
+grow_horizontal = 0
+grow_vertical = 2
+texture = ExtResource("59_ph20g")
+patch_margin_left = 4
+patch_margin_top = 4
+patch_margin_right = 4
+patch_margin_bottom = 4
+
+[node name="SortByRarityBtn" type="Button" parent="PlayerUILayer/PlayerInvUI/TextureMargins/InventoryTexture/SortByRarity"]
+layout_mode = 0
+offset_right = 45.0
+offset_bottom = 8.0
+focus_mode = 0
+flat = true
+
+[node name="Label" type="Label" parent="PlayerUILayer/PlayerInvUI/TextureMargins/InventoryTexture/SortByRarity"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -18.5
+offset_top = -3.0
+offset_right = 55.5
+offset_bottom = 9.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.5, 0.5)
+text = "SORT BY RARITY"
+label_settings = SubResource("LabelSettings_veflf")
+horizontal_alignment = 1
+vertical_alignment = 1
+metadata/_edit_lock_ = true
 
 [node name="GridMargins" type="MarginContainer" parent="PlayerUILayer/PlayerInvUI/TextureMargins/InventoryTexture"]
 layout_mode = 1
@@ -1390,6 +1551,7 @@ offset_right = 109.0
 offset_bottom = 74.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 theme_override_constants/margin_left = 6
 theme_override_constants/margin_top = 26
 theme_override_constants/margin_right = 6
@@ -1521,3 +1683,6 @@ layout_mode = 2
 [connection signal="timeout" from="PlayerUILayer/PlayerStatsOverlay/HungerChangedTimer" to="PlayerUILayer/PlayerStatsOverlay" method="_on_hunger_changed_timer_timeout"]
 [connection signal="timeout" from="PlayerUILayer/PlayerStatsOverlay/StaminaChangedTimer" to="PlayerUILayer/PlayerStatsOverlay" method="_on_stamina_changed_timer_timeout"]
 [connection signal="timeout" from="PlayerUILayer/PlayerStatsOverlay/StaminaRechargeTimer" to="PlayerUILayer/PlayerStatsOverlay" method="_on_stamina_recharge_timer_timeout"]
+[connection signal="pressed" from="PlayerUILayer/PlayerInvUI/TextureMargins/InventoryTexture/SortByName/SortByNameBtn" to="PlayerUILayer/PlayerInvUI" method="_on_sort_by_name_btn_pressed"]
+[connection signal="pressed" from="PlayerUILayer/PlayerInvUI/TextureMargins/InventoryTexture/SortByCount/SortByCountBtn" to="PlayerUILayer/PlayerInvUI" method="_on_sort_by_count_btn_pressed"]
+[connection signal="pressed" from="PlayerUILayer/PlayerInvUI/TextureMargins/InventoryTexture/SortByRarity/SortByRarityBtn" to="PlayerUILayer/PlayerInvUI" method="_on_sort_by_rarity_btn_pressed"]

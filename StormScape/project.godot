@@ -81,7 +81,7 @@ Items=""
 [gui]
 
 theme/custom="res://Assets/Theming/DefaultTheme.tres"
-theme/custom_font="res://Assets/Theming/Fonts/GameFontResources/ui_dynamic_font.tres"
+theme/custom_font="res://Assets/Theming/Fonts/GameFontResources/ui_pixel_font.tres"
 
 [input]
 

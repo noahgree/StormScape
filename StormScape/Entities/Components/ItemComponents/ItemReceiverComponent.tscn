@@ -2,5 +2,5 @@
 
 [ext_resource type="Script" path="res://Entities/Components/ItemComponents/ItemReceiverComponent.gd" id="1_whjxx"]
 
-[node name="ItemReceiverComponent" type="Node"]
+[node name="ItemReceiverComponent" type="Area2D"]
 script = ExtResource("1_whjxx")

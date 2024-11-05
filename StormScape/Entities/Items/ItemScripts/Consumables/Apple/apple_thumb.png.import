@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://biejldas3s8ak"
-path="res://.godot/imported/Inventory9Patch.png-99dc8c473cf33eaa5606cc7560298518.ctex"
+uid="uid://vogh2mn7c26h"
+path="res://.godot/imported/apple_thumb.png-32b610b5c1435bed47bfc8388b091f7f.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://UI/Inventory/Inventory9Patch.png"
-dest_files=["res://.godot/imported/Inventory9Patch.png-99dc8c473cf33eaa5606cc7560298518.ctex"]
+source_file="res://Entities/Items/ItemScripts/Consumables/Apple/apple_thumb.png"
+dest_files=["res://.godot/imported/apple_thumb.png-32b610b5c1435bed47bfc8388b091f7f.ctex"]
 
 [params]
 

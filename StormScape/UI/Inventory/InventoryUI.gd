@@ -33,16 +33,13 @@ func _drop_data(_at_position: Vector2, data: Variant) -> void:
 				inventory_to_reflect.inv[data.index].quantity -= 1
 
 			data.item = inventory_to_reflect.inv[data.index]
-			inventory_to_reflect.print_inv(true)
 		else:
 			ground_item.quantity = data.item.quantity
 			data.item = null
 			inventory_to_reflect.inv[data.index] = null
 
-		ground_item.global_position = GlobalData.player_node.global_position + Vector2(randi_range(-20, 20), randi_range(-20, 20))
+		ground_item.global_position = GlobalData.player_node.global_position + Vector2(randi_range(-17, 12) + 6, randi_range(-17, 12) + 6)
 		GlobalData.world_root.get_node("Testing").add_child(ground_item)
-
-
 
 func _on_blank_space_input_event(_event: InputEvent) -> void:
 	if Input.is_action_just_pressed("primary"):

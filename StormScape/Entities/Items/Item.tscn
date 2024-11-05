@@ -1,11 +1,94 @@
-[gd_scene load_steps=5 format=3 uid="uid://ccfnvvfj0yyrq"]
+[gd_scene load_steps=13 format=3 uid="uid://ccfnvvfj0yyrq"]
 
+[ext_resource type="Shader" path="res://UI/Shaders/GlintShader.gdshader" id="1_att70"]
 [ext_resource type="Script" path="res://Entities/Items/Item.gd" id="1_rwd02"]
-[ext_resource type="Resource" uid="uid://chfps77qv6w0e" path="res://Entities/Items/ItemResources/TestGun.tres" id="2_yldjb"]
-[ext_resource type="Texture2D" uid="uid://cyhjli7h8fn7r" path="res://Entities/Items/ItemScripts/Weapons/TestGun/gauntlet_default.png" id="3_borrj"]
+[ext_resource type="Resource" uid="uid://chfps77qv6w0e" path="res://Entities/Items/ItemResources/Pickaxe.tres" id="2_yldjb"]
+[ext_resource type="Texture2D" uid="uid://bfhfklmv02pmx" path="res://Entities/Items/ItemScripts/Weapons/Pickaxe/pickaxe.png" id="3_n4x5f"]
+[ext_resource type="Texture2D" uid="uid://csihsfur3oxag" path="res://Entities/entity_shadow.png" id="4_n8nbw"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_no3c7"]
 radius = 11.0
+
+[sub_resource type="Gradient" id="Gradient_ujuwf"]
+interpolation_mode = 2
+offsets = PackedFloat32Array(0.168203, 0.476959, 0.721198)
+colors = PackedColorArray(0, 0, 0, 1, 0.760297, 0.760297, 0.760297, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_pytf7"]
+gradient = SubResource("Gradient_ujuwf")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_qrrcp"]
+shader = ExtResource("1_att70")
+shader_parameter/size_effect = 0.25
+shader_parameter/speed = 1.0
+shader_parameter/highlight_strength = 0.1
+shader_parameter/color_mode_toggle = false
+shader_parameter/pause_duration = 1.35
+shader_parameter/angle = 35.0
+shader_parameter/vertical_gradient = SubResource("GradientTexture1D_pytf7")
+
+[sub_resource type="Animation" id="Animation_4d1l1"]
+resource_name = "hover"
+length = 3.0
+loop_mode = 1
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:offset")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1.6, 3),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(0, 0), Vector2(0, -3), Vector2(0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("ShadowScaler:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 1.6, 3),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(0.85, 0.85), Vector2(1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_5tv4j"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:offset")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("ShadowScaler:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_wgl0c"]
+_data = {
+"RESET": SubResource("Animation_5tv4j"),
+"hover": SubResource("Animation_4d1l1")
+}
 
 [node name="Item" type="Area2D" groups=["Items"]]
 collision_layer = 0
@@ -20,7 +103,20 @@ shape = SubResource("CircleShape2D_no3c7")
 debug_color = Color(5.29438e-07, 0.636012, 0.41019, 0.42)
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
-texture = ExtResource("3_borrj")
+material = SubResource("ShaderMaterial_qrrcp")
+texture = ExtResource("3_n4x5f")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_wgl0c")
+}
+autoplay = "hover"
+
+[node name="ShadowScaler" type="Node2D" parent="."]
+
+[node name="Shadow" type="Sprite2D" parent="ShadowScaler"]
+self_modulate = Color(1, 1, 1, 0.215686)
+texture = ExtResource("4_n8nbw")
 
 [connection signal="area_entered" from="." to="." method="_on_area_entered"]
 [connection signal="area_exited" from="." to="." method="_on_area_exited"]

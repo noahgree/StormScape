@@ -8,6 +8,7 @@ script = ExtResource("2_uyhuf")
 id = "TestCannonball"
 name = "Test Cannonball"
 icon = ExtResource("1_oqp80")
+thumbnail = ExtResource("1_oqp80")
 type = 0
 rarity = 0
 stack_size = 3

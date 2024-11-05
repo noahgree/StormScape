@@ -2,7 +2,7 @@
 class_name TileMapDual
 extends TileMapLayer
 
-## Uses code from TimeMapDual found here: 
+## Uses code from TimeMapDual found here:
 ## https://github.com/GlitchedinOrbit/dual-grid-tilemap-system-godot-gdscript
 
 var display_tilemap: TileMapLayer = null
@@ -16,7 +16,7 @@ var full_tile: Vector2i = Vector2i(2,1)
 var empty_tile: Vector2i = Vector2i(0,3)
 ## Prevents checking the cells more than once when the entire tileset
 ## is being updated, which is indicated by _checked_cells[0]=true.
-## _checked_cells[0]=false will overpass this check. 
+## _checked_cells[0]=false will overpass this check.
 var _checked_cells: Array = [false]
 var is_isometric: bool = false
 var _atlas_id: int
@@ -101,12 +101,10 @@ func _ready() -> void:
 		set_process(false)
 		self.changed.connect(_update_tileset, 1)
 
-
 func _process(_delta): # Only used inside the editor
 	if not self.tile_set:
 		return
 	call_deferred('_update_tileset')
-
 
 ## Set the dual grid as a child of TileMapDual.
 func _set_display_tilemap() -> void:
@@ -135,7 +133,6 @@ func _set_display_tilemap() -> void:
 		display_tilemap.position.y = - self.tile_set.tile_size.y * 0.5
 	display_tilemap.clear()
 
-
 ## Update the entire tileset, processing all the cells in the map.
 func update_full_tileset() -> void:
 	if display_tilemap == null:
@@ -150,7 +147,6 @@ func update_full_tileset() -> void:
 	# _checked_cells is only used when updating
 	# the whole tilemap to avoid repeating checks.
 	# This is skipped when updating tiles individually.
-
 
 ## Update only the very specific tiles that have changed.
 ## Much more efficient than update_full_tileset.
@@ -174,7 +170,6 @@ func _update_tileset() -> void:
 	for _cell in _changed_cells:
 		update_tile(_cell)
 
-
 ## Return the values that are not shared between the arrays
 func exclude_arrays(a: Array, b: Array) -> Array:
 	var result = a.duplicate()
@@ -185,7 +180,6 @@ func exclude_arrays(a: Array, b: Array) -> Array:
 			result.append(item)
 	return result
 
-
 ## Merge two arrays without duplicates
 func intersect_arrays(a: Array, b: Array) -> Array:
 	var result: Array = a.duplicate()
@@ -194,15 +188,14 @@ func intersect_arrays(a: Array, b: Array) -> Array:
 			result.append(item)
 	return result
 
-
 ## Takes a cell, and updates the overlapping tiles from the dual grid accordingly.
 func update_tile(world_cell: Vector2i, recurse: bool = true) -> void:
 	_atlas_id = self.get_cell_source_id(world_cell)
-	
+
 	# to not fall in a recursive loop because of a large space of emptiness in the map
 	if (!recurse and _atlas_id == -1):
 		return
-	
+
 	var __NEIGHBORS = _NEIGHBORS_ISOMETRIC if is_isometric else _NEIGHBORS
 	var _top_left = world_cell
 	var _low_left = display_tilemap.get_neighbor_cell(world_cell, __NEIGHBORS[_direction.BOTTOM])
@@ -212,7 +205,7 @@ func update_tile(world_cell: Vector2i, recurse: bool = true) -> void:
 	_update_displayed_tile(_low_left)
 	_update_displayed_tile(_top_right)
 	_update_displayed_tile(_low_right)
-	
+
 	# if atlas id is -1 the tile is empty, so to have a good rendering we need to update surroundings
 	if (_atlas_id == -1):
 		update_tile(self.get_neighbor_cell(world_cell, __NEIGHBORS[_direction.LEFT]), false)
@@ -224,20 +217,19 @@ func update_tile(world_cell: Vector2i, recurse: bool = true) -> void:
 		update_tile(self.get_neighbor_cell(world_cell, __NEIGHBORS[_direction.BOTTOM]), false)
 		update_tile(self.get_neighbor_cell(world_cell, __NEIGHBORS[_direction.BOTTOM_LEFT]), false)
 
-
 func _update_displayed_tile(_display_cell: Vector2i) -> void:
 	# Avoid updating cells more than necessary
 	if _checked_cells[0] == true:
 		if _display_cell in _checked_cells:
 			return
 		_checked_cells.append(_display_cell)
-	
+
 	var __NEIGHBORS = _NEIGHBORS_ISOMETRIC if is_isometric else _NEIGHBORS
 	var _top_left = display_tilemap.get_neighbor_cell(_display_cell, __NEIGHBORS[_direction.TOP_LEFT])
 	var _low_left = display_tilemap.get_neighbor_cell(_display_cell, __NEIGHBORS[_direction.LEFT])
 	var _top_right = display_tilemap.get_neighbor_cell(_display_cell, __NEIGHBORS[_direction.TOP])
 	var _low_right = _display_cell
-	
+
 	# We perform a bitwise summation over the sketched neighbours
 	var _tile_key: int = 0
 	if _is_world_tile_sketched(_top_left) == 1:
@@ -248,10 +240,9 @@ func _update_displayed_tile(_display_cell: Vector2i) -> void:
 		_tile_key += _location.TOP_RIGHT
 	if _is_world_tile_sketched(_low_right) == 1:
 		_tile_key += _location.LOW_RIGHT
-	
+
 	var _coords_atlas: Vector2i = _NEIGHBORS_TO_ATLAS[_tile_key]
 	display_tilemap.set_cell(_display_cell, _atlas_id, _coords_atlas)
-
 
 ## Return -1 if the cell is empty, 0 if sketched with the empty tile,
 ## and 1 if it is sketched with the fully-filled tile.
@@ -263,21 +254,19 @@ func _is_world_tile_sketched(_world_cell: Vector2i):
 		return 0
 	return -1
 
-
 ## Public method to add a tile in a given World cell
 func fill_tile(cell: Vector2i, atlas_id: int = 0) -> void:
 	# Prevents a crash if this is called on the first frame
 	if display_tilemap == null:
 		update_full_tileset()
-	
+
 	set_cell(cell, atlas_id, full_tile)
 	update_tile(cell)
-
 
 ## Public method to erase a tile in a given World cell
 func erase_tile(cell: Vector2i, atlas_id: int = 0) -> void:
 	if display_tilemap == null:
 		update_full_tileset()
-	
+
 	set_cell(cell, atlas_id, empty_tile)
 	update_tile(cell)
