@@ -80,10 +80,28 @@ func remove_item() -> void:
 	pass
 
 func _update_all_connected_slots() -> void:
-	for i in range(inv.size()):
+	for i in range(inv_size):
 		slot_updated.emit(i, inv[i])
 
 #region Sorting
+func activate_auto_stack() -> void:
+	for i in range(inv_size - hotbar_size):
+		if inv[i] == null:
+			continue
+		for j in range(i + 1, inv_size - hotbar_size):
+			if inv[j] == null:
+				continue
+			if inv[i].stats.is_same_as(inv[j].stats):
+				var total_quantity = inv[i].quantity + inv[j].quantity
+				if total_quantity <= inv[i].stats.stack_size:
+					inv[i].quantity = total_quantity
+					inv[j] = null
+				else:
+					inv[i].quantity = inv[i].stats.stack_size
+					inv[j].quantity = total_quantity - inv[i].stats.stack_size
+
+	_update_all_connected_slots()
+
 func activate_sort_by_rarity() -> void:
 	var arr = inv.slice(0, inv_size - hotbar_size)
 	arr.sort_custom(_rarity_sort_logic)

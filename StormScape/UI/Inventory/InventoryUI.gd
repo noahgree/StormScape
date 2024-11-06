@@ -31,6 +31,13 @@ func _drop_data(_at_position: Vector2, data: Variant) -> void:
 				inventory_to_reflect.inv[data.index].quantity -= 1
 
 			data.item = inventory_to_reflect.inv[data.index]
+		elif data.dragging_half_stack:
+			var half_quantity: int = int(floor(data.item.quantity / 2.0))
+			var remainder: int = data.item.quantity - half_quantity
+			ground_item.quantity = half_quantity
+
+			inventory_to_reflect.inv[data.index].quantity = remainder
+			data.item = inventory_to_reflect.inv[data.index]
 		else:
 			ground_item.quantity = data.item.quantity
 			data.item = null

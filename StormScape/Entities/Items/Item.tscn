@@ -40,7 +40,7 @@ shader_parameter/pause_duration = 1.0
 shader_parameter/angle = 35.0
 shader_parameter/tint_color = Color(1, 1, 1, 0)
 shader_parameter/glow_intensity = 1.0
-shader_parameter/random_start_offset = 0.0
+shader_parameter/random_start_offset = 0.292029
 shader_parameter/vertical_gradient = SubResource("GradientTexture1D_pytf7")
 shader_parameter/color_gradient = SubResource("GradientTexture1D_u0r6t")
 

@@ -11,5 +11,5 @@ icon = ExtResource("1_oqp80")
 thumbnail = ExtResource("1_oqp80")
 type = 0
 rarity = 0
-stack_size = 3
+stack_size = 9
 info = "A test cannonball."

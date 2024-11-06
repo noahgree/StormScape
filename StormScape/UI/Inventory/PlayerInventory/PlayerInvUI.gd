@@ -35,3 +35,6 @@ func _on_sort_by_rarity_btn_pressed() -> void:
 
 func _on_sort_by_count_btn_pressed() -> void:
 	GlobalData.player_node.get_node("ItemReceiverComponent").activate_sort_by_count()
+
+func _on_auto_stack_btn_pressed() -> void:
+	GlobalData.player_node.get_node("ItemReceiverComponent").activate_auto_stack()

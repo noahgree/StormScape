@@ -4340,7 +4340,7 @@ stats = ExtResource("19_rcdoo")
 [node name="Item5" parent="WorldRoot/Testing" instance=ExtResource("18_8630i")]
 position = Vector2(308, 213)
 stats = ExtResource("19_rcdoo")
-quantity = 5
+quantity = 24
 
 [node name="Item6" parent="WorldRoot/Testing" instance=ExtResource("18_8630i")]
 position = Vector2(276, 209)

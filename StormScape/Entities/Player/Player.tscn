@@ -1429,7 +1429,6 @@ metadata/_edit_lock_ = true
 
 [node name="PlayerInvUI" type="ColorRect" parent="PlayerUILayer" node_paths=PackedStringArray("hotbar_ui")]
 process_mode = 3
-visible = false
 material = SubResource("ShaderMaterial_2q23q")
 use_parent_material = true
 anchors_preset = 15
@@ -1514,9 +1513,9 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = 34.0
+offset_left = 46.0
 offset_top = -44.0
-offset_right = 79.0
+offset_right = 91.0
 offset_bottom = -36.0
 grow_horizontal = 2
 grow_vertical = 2
@@ -1561,9 +1560,8 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -23.0
 offset_top = -44.0
-offset_right = 22.0
+offset_right = 45.0
 offset_bottom = -36.0
 grow_horizontal = 2
 grow_vertical = 2
@@ -1608,9 +1606,9 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -80.0
+offset_left = -46.0
 offset_top = -44.0
-offset_right = -35.0
+offset_right = -1.0
 offset_bottom = -36.0
 grow_horizontal = 2
 grow_vertical = 2
@@ -1643,6 +1641,53 @@ grow_horizontal = 2
 grow_vertical = 2
 scale = Vector2(0.5, 0.5)
 text = "SORT BY RARITY"
+label_settings = SubResource("LabelSettings_veflf")
+horizontal_alignment = 1
+vertical_alignment = 1
+metadata/_edit_lock_ = true
+
+[node name="AutoStack" type="NinePatchRect" parent="PlayerUILayer/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -92.0
+offset_top = -44.0
+offset_right = -47.0
+offset_bottom = -36.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("59_ph20g")
+patch_margin_left = 4
+patch_margin_top = 4
+patch_margin_right = 4
+patch_margin_bottom = 4
+
+[node name="AutoStackBtn" type="Button" parent="PlayerUILayer/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/AutoStack"]
+layout_mode = 0
+offset_right = 45.0
+offset_bottom = 8.0
+focus_mode = 0
+flat = true
+metadata/_edit_lock_ = true
+
+[node name="Label" type="Label" parent="PlayerUILayer/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/AutoStack"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -18.5
+offset_top = -3.0
+offset_right = 55.5
+offset_bottom = 9.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.5, 0.5)
+text = "STACK ITEMS"
 label_settings = SubResource("LabelSettings_veflf")
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -1862,3 +1907,4 @@ size_flags_vertical = 4
 [connection signal="pressed" from="PlayerUILayer/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/SortByName/SortByNameBtn" to="PlayerUILayer/PlayerInvUI" method="_on_sort_by_name_btn_pressed"]
 [connection signal="pressed" from="PlayerUILayer/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/SortByCount/SortByCountBtn" to="PlayerUILayer/PlayerInvUI" method="_on_sort_by_count_btn_pressed"]
 [connection signal="pressed" from="PlayerUILayer/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/SortByRarity/SortByRarityBtn" to="PlayerUILayer/PlayerInvUI" method="_on_sort_by_rarity_btn_pressed"]
+[connection signal="pressed" from="PlayerUILayer/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/AutoStack/AutoStackBtn" to="PlayerUILayer/PlayerInvUI" method="_on_auto_stack_btn_pressed"]
