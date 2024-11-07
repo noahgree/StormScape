@@ -28,3 +28,5 @@ class_name PlayerData
 # MoveStateMachine
 @export var anim_vector: Vector2
 @export var knockback_vector: Vector2
+# ItemReceiverComponent
+@export var inv: Array[InventoryItem]

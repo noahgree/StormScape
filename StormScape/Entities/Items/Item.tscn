@@ -107,7 +107,7 @@ _data = {
 "hover": SubResource("Animation_4d1l1")
 }
 
-[node name="Item" type="Area2D" groups=["Items"]]
+[node name="Item" type="Area2D" groups=["Items", "has_save_logic"]]
 collision_layer = 0
 collision_mask = 53
 monitorable = false

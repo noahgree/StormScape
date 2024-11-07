@@ -4,6 +4,7 @@ class_name Inventory
 
 signal slot_updated(index: int, item: InventoryItem)
 
+@export var starting_inv: Array[InventoryItem]
 @export var is_player_inv: bool = false ## Whether this is the player's inventory or not. Needed for hotbar logic.
 @export var inv_size: int = 32 ## The total number of slots in the inventory, including the hotbar slots.
 @export var hotbar_size: int = 0 ## The number of slots out of the inv_size that are in the hotbar. Only affects the player inv.
@@ -11,69 +12,97 @@ signal slot_updated(index: int, item: InventoryItem)
 @export var ui: InventoryUI
 
 var inv: Array[InventoryItem] = []
+var inv_to_load_from_save: Array[InventoryItem] = []
 
 
 func _ready() -> void:
 	if not is_player_inv:
 		hotbar_size = 0
 	inv.resize(inv_size)
+	fill_inventory_with_checks(starting_inv)
 	inv_populator.connect_inventory(self)
 	ui.connect_inventory(self)
+
+func fill_inventory_without_checks(inv_to_fill_from: Array[InventoryItem]) -> void:
+	inv.fill(null)
+	for i in range(min(inv_size, inv_to_fill_from.size())):
+		if inv_to_fill_from[i] == null:
+			inv[i] = null
+		else:
+			inv[i] = inv_to_fill_from[i]
+	_update_all_connected_slots()
+
+func fill_inventory_with_checks(inv_to_fill_from: Array[InventoryItem]) -> void:
+	inv.fill(null)
+	for i in range(min(inv_size, inv_to_fill_from.size())):
+		if inv_to_fill_from[i] != null:
+			add_item_from_inv_item_resource(inv_to_fill_from[i])
+	_update_all_connected_slots()
 
 func add_item_from_world(item: Item) -> bool:
 	var inv_item: InventoryItem = InventoryItem.new(item.stats, item.quantity)
 	for i in range(hotbar_size):
-		var result: String = _do_add_item_checks(i + (inv_size - hotbar_size), item, inv_item)
+		var result: String = _do_add_ground_item_checks(i + (inv_size - hotbar_size), inv_item, item)
 		if result == "done":
 			return true
 		elif result == "new inv item created":
 			inv_item = InventoryItem.new(item.stats, item.quantity)
 	for i in range(inv_size - hotbar_size):
-		var result: String = _do_add_item_checks(i, item, inv_item)
+		var result: String = _do_add_ground_item_checks(i, inv_item, item)
 		if result == "done":
 			return true
 		elif result == "new inv item created":
 			inv_item = InventoryItem.new(item.stats, item.quantity)
 	return false
 
-func _do_add_item_checks(index: int, item: Item, inv_item: InventoryItem) -> String:
+func add_item_from_inv_item_resource(original_item: InventoryItem) -> bool:
+	var inv_item: InventoryItem = InventoryItem.new(original_item.stats, original_item.quantity)
+	for i in range(inv_size):
+		var result: String = _do_add_ground_item_checks(i, inv_item, original_item)
+		if result == "done":
+			return true
+		elif result == "new inv item created":
+			inv_item = InventoryItem.new(original_item.stats, original_item.quantity)
+	return false
+
+func _do_add_ground_item_checks(index: int, inv_item: InventoryItem, item: Variant) -> String:
 	if inv[index] != null and inv[index].stats.is_same_as(inv_item.stats):
 		if (inv_item.quantity + inv[index].quantity) <= inv_item.stats.stack_size:
-			_combine_item_count_in_occupied_slot(index, item, inv_item)
+			_combine_item_count_in_occupied_slot(index, inv_item, item)
 			return "done"
 		else:
-			_add_what_fits_to_occupied_slot_and_continue(index, item, inv_item)
+			_add_what_fits_to_occupied_slot_and_continue(index, inv_item, item)
 	if inv[index] == null:
 		if inv_item.quantity <= inv_item.stats.stack_size:
-			_put_entire_quantity_in_empty_slot(index, item, inv_item)
+			_put_entire_quantity_in_empty_slot(index, inv_item, item)
 			return "done"
 		else:
-			_put_what_fits_in_empty_slot_and_continue(index, item, inv_item)
+			_put_what_fits_in_empty_slot_and_continue(index, inv_item, item)
 			return "new inv item created"
 	return ""
 
-func _combine_item_count_in_occupied_slot(index: int, item: Item, inv_item: InventoryItem) -> void:
+func _combine_item_count_in_occupied_slot(index: int, inv_item: InventoryItem, original_item: Variant) -> void:
 	inv[index].quantity += inv_item.quantity
-	item.queue_free()
+	if original_item is Item: original_item.queue_free()
 	slot_updated.emit(index, inv[index])
 
-func _add_what_fits_to_occupied_slot_and_continue(index: int, item: Item, inv_item: InventoryItem) -> void:
+func _add_what_fits_to_occupied_slot_and_continue(index: int, inv_item: InventoryItem, original_item: Variant) -> void:
 	var amount_that_fits: int = max(0, inv_item.stats.stack_size - inv[index].quantity)
 	inv[index].quantity = inv_item.stats.stack_size
 	inv_item.quantity -= amount_that_fits
-	item.quantity -= amount_that_fits
+	original_item.quantity -= amount_that_fits
 	slot_updated.emit(index, inv[index])
 
-func _put_entire_quantity_in_empty_slot(index: int, item: Item, inv_item: InventoryItem) -> void:
+func _put_entire_quantity_in_empty_slot(index: int, inv_item: InventoryItem, original_item: Variant) -> void:
 	inv[index] = inv_item
-	item.queue_free()
+	if original_item is Item: original_item.queue_free()
 	slot_updated.emit(index, inv[index])
 
-func _put_what_fits_in_empty_slot_and_continue(index: int, item: Item, inv_item: InventoryItem) -> void:
+func _put_what_fits_in_empty_slot_and_continue(index: int, inv_item: InventoryItem, original_item: Variant) -> void:
 	var leftover: int = max(0, inv_item.quantity - inv_item.stats.stack_size)
 	inv_item.quantity = inv_item.stats.stack_size
 	inv[index] = inv_item
-	item.quantity = leftover
+	original_item.quantity = leftover
 	slot_updated.emit(index, inv[index])
 
 func remove_item() -> void:

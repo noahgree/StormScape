@@ -36,14 +36,14 @@ func _on_load_game() -> void:
 	for source_type in saved_dots.keys():
 		for dot_instance: DOTResource in saved_dots.get(source_type):
 			handle_over_time_dmg(dot_instance, source_type)
-		
+
 		saved_dots.erase(source_type)
 #endregion
 
 ## Asserts that there is a valid health component on the affected entity before trying to handle damage.
 func _ready() -> void:
 	assert(get_parent().health_component, get_parent().affected_entity.name + " has an effect receiver that is intended to handle damage, but no health component is connected.")
-	
+
 	var moddable_stats: Dictionary = {
 		"dmg_weakness" : _dmg_weakness, "dmg_resistance" : _dmg_resistance
 	}
@@ -53,9 +53,9 @@ func _ready() -> void:
 func _get_dmg_after_crit_then_armor(effect_source: EffectSource) -> int:
 	var should_crit: bool = randf_range(0, 100) <= effect_source.crit_chance
 	var dmg_after_crit: int = effect_source.base_damage
-	if should_crit: 
+	if should_crit:
 		dmg_after_crit = round(dmg_after_crit * effect_source.crit_multiplier)
-	
+
 	var armor_block_percent: int = max(0, health_component.armor - effect_source.armor_penetration)
 	var new_damage: int = max(0, round(dmg_after_crit * (1 - (float(armor_block_percent) / 100))))
 	return new_damage
@@ -73,15 +73,15 @@ func handle_over_time_dmg(dot_resource: DOTResource, source_type: String) -> voi
 	dot_timer.timeout.connect(func(): _on_dot_timer_timeout(dot_timer, source_type))
 	dot_timer.name = source_type + "_timer" + str(randf())
 	add_child(dot_timer)
-	
+
 	if dot_resource.delay_time > 0: # we have a delay before the damage starts
 		var delay_timer: Timer = Timer.new()
 		delay_timer.one_shot = true
 		delay_timer.wait_time = dot_resource.delay_time
-		
+
 		dot_timer.set_meta("ticks_completed", 0)
 		dot_timer.wait_time = max(0.001, (dot_resource.damaging_time / (dot_resource.dmg_ticks_array.size() - 1)))
-		
+
 		delay_timer.timeout.connect(func(): _on_dot_timer_timeout(dot_timer, source_type))
 		delay_timer.timeout.connect(dot_timer.start)
 		delay_timer.timeout.connect(delay_timer.queue_free)
@@ -93,7 +93,7 @@ func handle_over_time_dmg(dot_resource: DOTResource, source_type: String) -> voi
 	else: # there is no delay needed
 		dot_timer.set_meta("ticks_completed", 1)
 		dot_timer.wait_time = max(0.001, (dot_resource.damaging_time / (dot_resource.dmg_ticks_array.size())))
-		
+
 		_send_handled_dmg(dot_resource.dmg_affected_stats, dot_resource.dmg_ticks_array[0])
 		_add_timer_to_cache(source_type, dot_timer, dot_timers)
 		dot_timer.start()
@@ -118,7 +118,7 @@ func _delete_timers_from_caches(source_type: String) -> void:
 				timer.stop()
 				timer.queue_free()
 		dot_timers.erase(source_type)
-	
+
 	var delay_timers = dot_delay_timers.get(source_type, null)
 	if delay_timers:
 		for delay_timer in delay_timers:
@@ -127,7 +127,7 @@ func _delete_timers_from_caches(source_type: String) -> void:
 				delay_timer.queue_free()
 		dot_delay_timers.erase(source_type)
 
-## When the damage over time interval timer ends, check what sourced the timer and see if that source 
+## When the damage over time interval timer ends, check what sourced the timer and see if that source
 ## needs to apply any more damage ticks before ending.
 func _on_dot_timer_timeout(dot_timer: Timer, source_type: String) -> void:
 	var dot_resource: DOTResource = dot_timer.get_meta("dot_resource")
@@ -138,19 +138,19 @@ func _on_dot_timer_timeout(dot_timer: Timer, source_type: String) -> void:
 		var dmg_affected_stats: GlobalData.DmgAffectedStats = dot_resource.dmg_affected_stats
 		_send_handled_dmg(dmg_affected_stats, damage)
 		dot_timer.set_meta("ticks_completed", ticks_completed + 1)
-		
+
 		if max_ticks == 1:
 			_delete_timers_from_caches(source_type)
 	else:
 		_delete_timers_from_caches(source_type)
 
-## Sends the affected entity's health component the final damage values based on what stats the damage was 
+## Sends the affected entity's health component the final damage values based on what stats the damage was
 ## allowed to affect.
 func _send_handled_dmg(dmg_affected_stats: GlobalData.DmgAffectedStats, handled_amount: int) -> void:
 	var dmg_weakness: float = get_parent().affected_entity.stats.get_stat("dmg_weakness")
 	var dmg_resistance: float = get_parent().affected_entity.stats.get_stat("dmg_resistance")
 	var positive_dmg: int = max(0, handled_amount * (1 + dmg_weakness - dmg_resistance))
-	
+
 	match dmg_affected_stats:
 		GlobalData.DmgAffectedStats.HEALTH_ONLY:
 			health_component.damage_health(positive_dmg)

@@ -10,6 +10,19 @@ class_name ItemReceiverComponent
 var items_in_range: Array[Item] = []
 
 
+#region Save & Load
+func _on_save_game(_save_data: Array[SaveData]) -> void:
+	pass
+
+func _on_before_load_game() -> void:
+	inv_to_load_from_save = []
+	items_in_range = []
+
+func _on_load_game() -> void:
+	print(inv_to_load_from_save)
+	fill_inventory_without_checks(inv_to_load_from_save)
+#endregion
+
 func add_to_in_range_queue(item: Item) -> void:
 	items_in_range.append(item)
 	_update_player_communicator()

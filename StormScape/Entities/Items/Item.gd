@@ -7,8 +7,32 @@ class_name Item
 @export var quantity: int = 1 ## The quantity associated with the physical item.
 
 @onready var thumbnail: Sprite2D = $Sprite2D ## The sprite that shows the item's texture.
-@onready var shadow: Sprite2D = $ShadowScaler/Shadow
+@onready var shadow: Sprite2D = $ShadowScaler/Shadow ## The fake shadow sprite to simulate physicality in the world.
 
+
+#region Save & Load
+func _on_save_game(save_data: Array[SaveData]) -> void:
+	var data: ItemData = ItemData.new()
+	data.scene_path = scene_file_path
+	data.position = global_position
+	data.stats = stats
+	data.quantity = quantity
+
+	save_data.append(data)
+
+func _on_before_load_game() -> void:
+	queue_free()
+
+func _is_instance_on_load_game(item_data: ItemData) -> void:
+	global_position = item_data.position
+	stats = item_data.stats
+	quantity = item_data.quantity
+
+	GlobalData.world_root.add_child(self)
+
+func _on_load_game() -> void:
+	pass
+#endregion
 
 func _ready() -> void:
 	_set_item(stats)
