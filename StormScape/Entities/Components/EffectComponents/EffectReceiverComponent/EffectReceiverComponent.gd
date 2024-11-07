@@ -25,16 +25,16 @@ class_name EffectReceiverComponent
 @export var burning_handler: BurningHandler
 @export var time_snare_handler: TimeSnareHandler
 
+@onready var tool_script: Node = $EffectReceiverToolScript
 
-var tool_script = preload("res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectReceiverTool.gd").new() ## This is a script that handles automatically setting the export node's when assigned as children to this receiver.
 
 ## This works with the tool script defined above to assign export vars automatically in-editor once added to the tree.
 func _notification(what):
 	if Engine.is_editor_hint():
 		if what == NOTIFICATION_CHILD_ORDER_CHANGED:
-			tool_script.update_editor_children_exports(self, get_children())
+			if tool_script: tool_script.update_editor_children_exports(self, get_children())
 		elif what == NOTIFICATION_ENTER_TREE:
-			tool_script.update_editor_parent_export(self, get_parent())
+			if tool_script: tool_script.update_editor_parent_export(self, get_parent())
 
 ## Asserts that the affected entity has been set for easy debugging, then sets the monitoring to off for
 ## performance reasons in case it was changed in the editor. It also ensures the collision layer is the same as the

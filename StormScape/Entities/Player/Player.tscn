@@ -1,4 +1,4 @@
-[gd_scene load_steps=118 format=3 uid="uid://dba8mrurjlekp"]
+[gd_scene load_steps=117 format=3 uid="uid://dba8mrurjlekp"]
 
 [ext_resource type="Script" path="res://Entities/Player/Player.gd" id="1_m33tt"]
 [ext_resource type="SpriteFrames" uid="uid://cxo625s2sh5hx" path="res://Entities/Player/Spritesheets/Base/Base.tres" id="2_t1by5"]
@@ -41,7 +41,6 @@
 [ext_resource type="Script" path="res://UI/PlayerStatsOverlay/PlayerStatsOverlay.gd" id="35_yln51"]
 [ext_resource type="Texture2D" uid="uid://dwo0fuwylfxeq" path="res://UI/PlayerStatsOverlay/Assets/Stats Panel Bckgrd.png" id="36_vdy3t"]
 [ext_resource type="Texture2D" uid="uid://k0o25ihgea1n" path="res://UI/PlayerStatsOverlay/Assets/Hunger Progress Under.png" id="37_32xjt"]
-[ext_resource type="Texture2D" uid="uid://4uf2f502te50" path="res://Entities/Items/ItemScripts/Weapons/Projectiles/Bullet/pistol_bullet_default.png" id="37_x5jlh"]
 [ext_resource type="Texture2D" uid="uid://bdgevpcheclv5" path="res://UI/PlayerStatsOverlay/Assets/Hunger Progress Bar.png" id="38_ht2cb"]
 [ext_resource type="Shader" path="res://UI/Shaders/BlurBehind.gdshader" id="39_r4tgk"]
 [ext_resource type="Texture2D" uid="uid://xnppg0u7t7w4" path="res://UI/PlayerStatsOverlay/Assets/Stamina Recharge Under.png" id="39_ryeha"]
@@ -1338,7 +1337,6 @@ offset_bottom = 24.0
 grow_horizontal = 0
 grow_vertical = 2
 scale = Vector2(0.5, 0.5)
-texture = ExtResource("37_x5jlh")
 
 [node name="HotbarUI" type="NinePatchRect" parent="PlayerUILayer" node_paths=PackedStringArray("player_inv")]
 anchors_preset = 7

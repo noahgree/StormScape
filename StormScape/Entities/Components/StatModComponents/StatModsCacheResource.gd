@@ -7,7 +7,7 @@ class_name StatModsCacheResource
 
 var stat_mods: Dictionary = {} ## The cache of mod resources currently applied to the entity's stats.
 var cached_stats: Dictionary = {} ## The up-to-date and calculated stats to be used by anything that depend on them.
-var base_values: Dictionary = {} ## The unchanging base values of each moddable stat, usually set by copying the exported values from the component into a dictionary that is passed into the setup function below. 
+var base_values: Dictionary = {} ## The unchanging base values of each moddable stat, usually set by copying the exported values from the component into a dictionary that is passed into the setup function below.
 
 
 ## Clears out the cached stats and recalculates everything based on base values.
@@ -19,7 +19,7 @@ func reinit_on_load() -> void:
 		_recalculate_stat(stat_id, base_values.get(stat_id))
 	debug_print_mod_changes = temp_debug_print_changes
 
-## Sets up the base values dict and calculates initial values based on any already present mods. 
+## Sets up the base values dict and calculates initial values based on any already present mods.
 func add_moddable_stats(base_valued_stats: Dictionary, stats_ui: Control = null) -> void:
 	var temp_debug_print_changes: bool = debug_print_mod_changes
 	debug_print_mod_changes = false
@@ -34,17 +34,17 @@ func add_moddable_stats(base_valued_stats: Dictionary, stats_ui: Control = null)
 func _recalculate_stat(stat_id: String, base_value: float, stats_ui: Control = null) -> void:
 	var mods: Array = stat_mods[stat_id].values()
 	mods.sort_custom(_compare_by_priority)
-	
+
 	var result: float = base_value
 	for mod in mods:
 		if mod.override_all:
 			result = mod.apply(base_value, base_value)
 			break
 		result = mod.apply(base_value, result)
-	
+
 	cached_stats[stat_id] = max(0, result)
 	_update_ui_for_stat(stat_id, result, stats_ui)
-	
+
 	if DebugFlags.PrintFlags.stat_mod_changes_during_game and debug_print_mod_changes:
 		var change_text = str(float(cached_stats[stat_id]) / float(base_values[stat_id]))
 		var base_text = "[color=gray][i](base)[/i][/color]" if cached_stats[stat_id] == base_values[stat_id] else "[color=pink][i](" + change_text + "%)[/i][/color]"
@@ -62,7 +62,7 @@ func _update_ui_for_stat(stat_id: String, new_value: float, stats_ui) -> void:
 func _compare_by_priority(a: EntityStatMod, b: EntityStatMod) -> int:
 	return a.priority - b.priority
 
-## Updates a mod's value by a given mod_id that must exist on a given stat_id. 
+## Updates a mod's value by a given mod_id that must exist on a given stat_id.
 ## This will automatically update any stacking as well.
 func update_mod_by_id(stat_id: String, mod_id: String, new_value: float) -> void:
 	var existing_mod: EntityStatMod = _get_mod(stat_id, mod_id)
@@ -72,7 +72,7 @@ func update_mod_by_id(stat_id: String, mod_id: String, new_value: float) -> void
 			_recalculate_mod_value_with_new_stack_count(existing_mod)
 		else:
 			existing_mod.value = existing_mod.before_stack_value
-		
+
 		_recalculate_stat(stat_id, base_values[stat_id])
 
 ## Adds mods to a stat. Handles logic for stacking if the mod can stack.
@@ -89,7 +89,7 @@ func add_mods(mod_array: Array[EntityStatMod], stats_ui: Control = null) -> void
 			else:
 				mod.before_stack_value = mod.value
 				stat_mods[mod.stat_id][mod.mod_id] = mod
-			
+
 			_recalculate_stat(mod.stat_id, base_values[mod.stat_id], stats_ui)
 		else:
 			_push_mod_not_found_error(mod.stat_id, mod.mod_id)
@@ -103,10 +103,10 @@ func remove_mod(stat_id: String, mod_id: String, stats_ui: Control = null, count
 		elif existing_mod.can_stack:
 			existing_mod.stack_count = max(0, existing_mod.stack_count - count)
 			_recalculate_mod_value_with_new_stack_count(existing_mod)
-			
+
 			if existing_mod.stack_count <= 0:
 				stat_mods[stat_id].erase(mod_id)
-		
+
 		_recalculate_stat(stat_id, base_values[stat_id], stats_ui)
 
 ## Recalculates the cached stat value based on the updated stack count of that mod on that stat.
@@ -122,7 +122,7 @@ func undo_mod_stacking(stat_id: String, mod_id: String, stats_ui: Control = null
 	if existing_mod:
 		existing_mod.stack_count = 1
 		existing_mod.value = existing_mod.before_stack_value
-		
+
 		_recalculate_stat(stat_id, base_values[stat_id], stats_ui)
 
 ## Gets the current cached value of a stat.

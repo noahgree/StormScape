@@ -12,7 +12,8 @@ class_name Item
 
 func _ready() -> void:
 	_set_item(stats)
-	thumbnail.material.set_shader_parameter("random_start_offset", randf() * 2.0)
+	if not Engine.is_editor_hint():
+		thumbnail.material.set_shader_parameter("random_start_offset", randf() * 2.0)
 
 func _on_area_entered(area: Area2D) -> void:
 	if area is ItemReceiverComponent and area.get_parent() is Player:

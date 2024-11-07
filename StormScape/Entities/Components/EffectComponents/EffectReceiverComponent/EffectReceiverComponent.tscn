@@ -1,7 +1,11 @@
-[gd_scene load_steps=2 format=3 uid="uid://btba0jmsow1mx"]
+[gd_scene load_steps=3 format=3 uid="uid://btba0jmsow1mx"]
 
 [ext_resource type="Script" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectReceiverComponent.gd" id="1_x67rl"]
+[ext_resource type="Script" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectReceiverTool.gd" id="2_nlfld"]
 
 [node name="EffectReceiverComponent" type="Area2D"]
 monitoring = false
 script = ExtResource("1_x67rl")
+
+[node name="EffectReceiverToolScript" type="Node" parent="."]
+script = ExtResource("2_nlfld")
