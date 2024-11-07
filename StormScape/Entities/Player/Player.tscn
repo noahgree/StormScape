@@ -1,4 +1,4 @@
-[gd_scene load_steps=125 format=3 uid="uid://dba8mrurjlekp"]
+[gd_scene load_steps=126 format=3 uid="uid://dba8mrurjlekp"]
 
 [ext_resource type="Script" path="res://Entities/Player/Player.gd" id="1_m33tt"]
 [ext_resource type="SpriteFrames" uid="uid://cxo625s2sh5hx" path="res://Entities/Player/Spritesheets/Base/Base.tres" id="2_t1by5"]
@@ -32,6 +32,7 @@
 [ext_resource type="PackedScene" uid="uid://biduyqlpqhmrp" path="res://Entities/Player/States/MoveStates/Stunned/StunIndicator.tscn" id="27_fyxoi"]
 [ext_resource type="Script" path="res://Entities/Player/States/ActionStates/ActionIdle.gd" id="28_mrxbf"]
 [ext_resource type="PackedScene" uid="uid://c4n604w30gx8m" path="res://Entities/Components/ItemComponents/ItemReceiverComponent.tscn" id="30_qgyag"]
+[ext_resource type="PackedScene" uid="uid://ccfnvvfj0yyrq" path="res://Entities/Items/Item.tscn" id="31_8v2rb"]
 [ext_resource type="Script" path="res://UI/Inventory/PlayerInventory/PlayerInvCommunicator.gd" id="31_mjpan"]
 [ext_resource type="Script" path="res://UI/Inventory/PlayerInventory/PlayerInvUI.gd" id="32_3a185"]
 [ext_resource type="Script" path="res://Entities/Items/InventoryItem.gd" id="32_ixmb3"]
@@ -816,22 +817,22 @@ graph_offset = Vector2(-48, 10)
 [sub_resource type="Resource" id="Resource_pihal"]
 script = ExtResource("32_ixmb3")
 stats = ExtResource("33_jgsm1")
-quantity = 7
+quantity = 2
 
 [sub_resource type="Resource" id="Resource_ww7hy"]
 script = ExtResource("32_ixmb3")
 stats = ExtResource("34_1e85o")
-quantity = 3
+quantity = 1
 
 [sub_resource type="Resource" id="Resource_l1sgy"]
 script = ExtResource("32_ixmb3")
 stats = ExtResource("35_7kvtx")
-quantity = 7
+quantity = 8
 
 [sub_resource type="Resource" id="Resource_apvdf"]
 script = ExtResource("32_ixmb3")
 stats = ExtResource("36_86qoy")
-quantity = 2
+quantity = 1
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_3wm74"]
 radius = 12.0
@@ -1005,7 +1006,8 @@ parameters/run/TimeScale/scale = 1.5
 parameters/run/blendspace2d/blend_position = Vector2(0, 0)
 
 [node name="ItemReceiverComponent" parent="." node_paths=PackedStringArray("inv_populator", "ui") instance=ExtResource("30_qgyag")]
-starting_inv = Array[ExtResource("32_ixmb3")]([SubResource("Resource_pihal"), SubResource("Resource_ww7hy"), SubResource("Resource_l1sgy"), SubResource("Resource_apvdf")])
+item_scene = ExtResource("31_8v2rb")
+starting_inv = Array[ExtResource("32_ixmb3")]([SubResource("Resource_pihal"), null, SubResource("Resource_ww7hy"), null, SubResource("Resource_l1sgy"), SubResource("Resource_apvdf"), null])
 is_player_inv = true
 inv_size = 40
 hotbar_size = 8
@@ -1460,6 +1462,7 @@ grow_vertical = 2
 color = Color(0.109341, 0.109341, 0.109341, 0.976471)
 script = ExtResource("32_3a185")
 hotbar_ui = NodePath("../HotbarUI")
+item_scene = ExtResource("31_8v2rb")
 
 [node name="MainTextureMargins" type="MarginContainer" parent="PlayerUILayer/PlayerInvUI"]
 layout_mode = 1

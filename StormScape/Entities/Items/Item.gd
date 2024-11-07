@@ -9,6 +9,7 @@ class_name Item
 @onready var thumbnail: Sprite2D = $Sprite2D ## The sprite that shows the item's texture.
 @onready var shadow: Sprite2D = $ShadowScaler/Shadow ## The fake shadow sprite to simulate physicality in the world.
 
+var can_be_auto_picked_up: bool = false
 
 #region Save & Load
 func _on_save_game(save_data: Array[SaveData]) -> void:
@@ -38,10 +39,13 @@ func _ready() -> void:
 	_set_item(stats)
 	if not Engine.is_editor_hint():
 		thumbnail.material.set_shader_parameter("random_start_offset", randf() * 2.0)
+	if not can_be_auto_picked_up:
+		await get_tree().create_timer(1.0, false, false, false).timeout
+		can_be_auto_picked_up = true
 
 func _on_area_entered(area: Area2D) -> void:
 	if area is ItemReceiverComponent and area.get_parent() is Player:
-		if stats.auto_pickup:
+		if stats.auto_pickup and can_be_auto_picked_up:
 			(area as ItemReceiverComponent).pickup_item(self)
 		else:
 			(area as ItemReceiverComponent).add_to_in_range_queue(self)
@@ -65,7 +69,8 @@ func _set_item(item_stats: ItemResource) -> void:
 	if stats and thumbnail:
 		$CollisionShape2D.shape.radius = stats.pickup_radius
 		thumbnail.texture = stats.thumbnail
+		thumbnail.position.y = -thumbnail.texture.get_height() / 2.0
 		if shadow:
 			shadow.scale.x = thumbnail.texture.get_width() / 16.0
 			shadow.scale.y = thumbnail.texture.get_height() / 32.0
-			shadow.position.y = ceil(thumbnail.texture.get_height() / 2.0) + ceil(shadow.texture.get_height() / 2.0) - 2
+			shadow.position.y = ceil(thumbnail.texture.get_height() / 2.0) + ceil(shadow.texture.get_height() / 2.0) - 2 + thumbnail.position.y

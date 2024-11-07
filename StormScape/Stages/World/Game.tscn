@@ -1,4 +1,4 @@
-[gd_scene load_steps=42 format=4 uid="uid://bscnr6a23l10m"]
+[gd_scene load_steps=38 format=4 uid="uid://bscnr6a23l10m"]
 
 [ext_resource type="Script" path="res://Utilities/Game/WorldRoot/WorldRoot.gd" id="1_q0i4n"]
 [ext_resource type="Script" path="res://Stages/World/BackgroundMusicManager.gd" id="1_q5pr2"]
@@ -19,11 +19,7 @@
 [ext_resource type="Script" path="res://Utilities/Debug/TestBullet.gd" id="15_v7yfh"]
 [ext_resource type="Script" path="res://Entities/EffectSystemResources/EffectSources/MovingEffectSource.gd" id="16_5aosc"]
 [ext_resource type="Resource" uid="uid://b0it5xmpw16sd" path="res://Entities/EffectSystemResources/StatusEffects/BadEffects/Knockback/Knockback1.tres" id="17_re3lx"]
-[ext_resource type="PackedScene" uid="uid://ccfnvvfj0yyrq" path="res://Entities/Items/Item.tscn" id="18_8630i"]
-[ext_resource type="Resource" uid="uid://bbya4jg50etnu" path="res://Entities/Items/ItemResources/Axe.tres" id="18_epvul"]
-[ext_resource type="Resource" uid="uid://c7xxa5yy1lsyb" path="res://Entities/Items/ItemResources/TestCannonball.tres" id="19_rcdoo"]
 [ext_resource type="Texture2D" uid="uid://6saycs5sisdk" path="res://Stages/Tilesets/TILESET_GRASSDIRT.png" id="22_tnvqm"]
-[ext_resource type="Resource" uid="uid://c1yh67b4i2xtt" path="res://Entities/Items/ItemResources/Apple.tres" id="22_v1fan"]
 [ext_resource type="Script" path="res://Stages/Tilesets/Scripts/TileMapDual.gd" id="23_cnh84"]
 
 [sub_resource type="Environment" id="Environment_2wouv"]
@@ -4225,6 +4221,7 @@ size = Vector2(6, 6)
 
 [node name="WorldRoot" type="Node2D" parent="." groups=["core"]]
 unique_name_in_owner = true
+y_sort_enabled = true
 script = ExtResource("1_q0i4n")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="WorldRoot" groups=["core"]]
@@ -4243,6 +4240,7 @@ visible = false
 tile_set = SubResource("TileSet_wx2vu")
 
 [node name="Testing" type="Node2D" parent="WorldRoot"]
+y_sort_enabled = true
 
 [node name="Enemy" type="RigidBody2D" parent="WorldRoot/Testing"]
 script = ExtResource("5_vhyrg")
@@ -4323,39 +4321,8 @@ source_entity = NodePath("../../Enemy")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="WorldRoot/Testing/TestMovingEffectSource/Hitbox"]
 shape = SubResource("RectangleShape2D_8bjrm")
 
-[node name="Item" parent="WorldRoot/Testing" instance=ExtResource("18_8630i")]
-position = Vector2(322, 167)
-
-[node name="Item2" parent="WorldRoot/Testing" instance=ExtResource("18_8630i")]
-position = Vector2(292, 157)
-stats = ExtResource("18_epvul")
-
-[node name="Item3" parent="WorldRoot/Testing" instance=ExtResource("18_8630i")]
-position = Vector2(309, 189)
-stats = ExtResource("19_rcdoo")
-
-[node name="Item4" parent="WorldRoot/Testing" instance=ExtResource("18_8630i")]
-position = Vector2(328, 201)
-stats = ExtResource("19_rcdoo")
-
-[node name="Item5" parent="WorldRoot/Testing" instance=ExtResource("18_8630i")]
-position = Vector2(308, 213)
-stats = ExtResource("19_rcdoo")
-quantity = 24
-
-[node name="Item6" parent="WorldRoot/Testing" instance=ExtResource("18_8630i")]
-position = Vector2(276, 209)
-stats = ExtResource("18_epvul")
-
-[node name="Item7" parent="WorldRoot/Testing" instance=ExtResource("18_8630i")]
-position = Vector2(266, 171)
-stats = ExtResource("22_v1fan")
-
-[node name="Item8" parent="WorldRoot/Testing" instance=ExtResource("18_8630i")]
-position = Vector2(251, 206)
-stats = ExtResource("22_v1fan")
-
 [node name="Player" parent="WorldRoot" instance=ExtResource("4_ptig0")]
+z_index = 0
 position = Vector2(258, 85)
 collision_mask = 245
 
