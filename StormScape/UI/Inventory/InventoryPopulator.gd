@@ -5,6 +5,7 @@ class_name InventoryPopulator
 @export var item_details_label: Label
 @export var main_slot_grid: GridContainer
 @export var hotbar_grid: HBoxContainer
+@export var trash_slot: Slot
 
 var synced_inv: Inventory
 var slots: Array[Slot] = []
@@ -17,6 +18,11 @@ func _ready() -> void:
 	if hotbar_grid:
 		for child in hotbar_grid.get_children():
 			child.queue_free()
+	if trash_slot:
+		trash_slot.is_trash_slot = true
+		trash_slot.name = "Trash_Slot"
+		trash_slot.is_hovered_over.connect(_on_slot_hovered)
+		trash_slot.is_not_hovered_over.connect(_on_slot_not_hovered)
 	_change_slot_count_for_new_inv()
 
 func _change_slot_count_for_new_inv(inv: Inventory = null) -> void:
@@ -29,6 +35,8 @@ func _change_slot_count_for_new_inv(inv: Inventory = null) -> void:
 	if inv and inv.is_player_inv:
 		main_count = inv.inv_size - inv.hotbar_size
 		hotbar_count = inv.hotbar_size
+		trash_slot.index = inv.inv_size
+		trash_slot.synced_inv = inv
 	for i in range(main_count):
 		var slot: Slot = slot_scene.instantiate()
 		main_slot_grid.add_child(slot)
@@ -47,6 +55,8 @@ func _change_slot_count_for_new_inv(inv: Inventory = null) -> void:
 		slot.index = main_count + i
 		if inv: slot.synced_inv = inv
 		slots.append(slot)
+	if inv and inv.is_player_inv:
+		slots.append(trash_slot)
 
 func connect_inventory(inv: Inventory) -> void:
 	if synced_inv:

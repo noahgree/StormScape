@@ -19,14 +19,14 @@ var inv_to_load_from_save: Array[InventoryItem] = []
 func _ready() -> void:
 	if not is_player_inv:
 		hotbar_size = 0
-	inv.resize(inv_size)
+	inv.resize(inv_size if not is_player_inv else inv_size + 1) # For trash slot.
 	fill_inventory(starting_inv)
 	inv_populator.connect_inventory(self)
 	ui.connect_inventory(self)
 
 func fill_inventory(inv_to_fill_from: Array[InventoryItem]) -> void:
 	inv.fill(null)
-	for i in range(min(inv_size, inv_to_fill_from.size())):
+	for i in range(min(inv_size if not is_player_inv else inv_size + 1, inv_to_fill_from.size())):
 		if inv_to_fill_from[i] == null:
 			inv[i] = null
 		else:
@@ -44,7 +44,7 @@ func fill_inventory(inv_to_fill_from: Array[InventoryItem]) -> void:
 
 func fill_inventory_with_checks(inv_to_fill_from: Array[InventoryItem]) -> void:
 	inv.fill(null)
-	for i in range(min(inv_size, inv_to_fill_from.size())):
+	for i in range(min(inv_size if not is_player_inv else inv_size + 1, inv_to_fill_from.size())):
 		if inv_to_fill_from[i] != null:
 			add_item_from_inv_item_resource(inv_to_fill_from[i])
 	_update_all_connected_slots()
@@ -121,6 +121,8 @@ func remove_item() -> void:
 func _update_all_connected_slots() -> void:
 	for i in range(inv_size):
 		slot_updated.emit(i, inv[i])
+	if is_player_inv:
+		slot_updated.emit(inv_size, inv[inv_size])
 
 #region Sorting
 func activate_auto_stack() -> void:

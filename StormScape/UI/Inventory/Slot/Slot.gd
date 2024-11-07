@@ -16,6 +16,7 @@ var dragging_only_one: bool = false
 var dragging_half_stack: bool = false
 var item: InventoryItem: set = _set_item
 var is_hotbar_ui_preview_slot: bool = false
+var is_trash_slot: bool = false ## The slot, that if present, is used to discard items. It will have the highest index.
 
 
 func _set_item(new_item) -> void:
@@ -101,7 +102,7 @@ func _gui_input(event: InputEvent) -> void:
 func _can_drop_data(_at_position: Vector2, data: Variant) -> bool:
 	if data.item == null or not synced_inv or data.index == index or is_hotbar_ui_preview_slot:
 		return false
-	if item == null:
+	if item == null or is_trash_slot:
 		return true
 	if item.stats.is_same_as(data.item.stats):
 		if item.quantity >= item.stats.stack_size:
@@ -179,9 +180,17 @@ func _combine_what_fits_and_leave_remainder(data: Variant) -> void:
 	item.quantity = item.stats.stack_size
 	_set_item(item)
 
-	data.item.quantity -= amount_that_fits
-	synced_inv.inv[data.index] = InventoryItem.new(data.item.stats, data.item.quantity)
-	data.item = synced_inv.inv[data.index]
+	if is_trash_slot:
+		if not data.dragging_half_stack:
+			synced_inv.inv[data.index] = null
+			data.item = null
+		else:
+			data.item.quantity -= int(floor(data.item.quantity / 2.0))
+			synced_inv.inv[data.index] = InventoryItem.new(data.item.stats, data.item.quantity)
+	else:
+		data.item.quantity -= amount_that_fits
+		synced_inv.inv[data.index] = InventoryItem.new(data.item.stats, data.item.quantity)
+		data.item = synced_inv.inv[data.index]
 
 	_emit_changes_for_potential_listening_hotbar(data)
 
@@ -190,8 +199,12 @@ func _swap_item_stacks(data: Variant) -> void:
 	item = InventoryItem.new(data.item.stats, data.item.quantity)
 	synced_inv.inv[index] = item
 
-	synced_inv.inv[data.index] = temp_item
-	data.item = temp_item
+	if is_trash_slot:
+		synced_inv.inv[data.index] = null
+		data.item = null
+	else:
+		synced_inv.inv[data.index] = temp_item
+		data.item = temp_item
 
 	_emit_changes_for_potential_listening_hotbar(data)
 #endregion

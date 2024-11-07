@@ -122,7 +122,7 @@ debug_color = Color(5.29438e-07, 0.636012, 0.41019, 0.42)
 [node name="Sprite2D" type="Sprite2D" parent="."]
 self_modulate = Color(2, 0, 2, 1)
 material = SubResource("ShaderMaterial_qrrcp")
-position = Vector2(0, -8)
+position = Vector2(0, -16)
 texture = ExtResource("3_n4x5f")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
@@ -135,7 +135,7 @@ autoplay = "hover"
 
 [node name="Shadow" type="Sprite2D" parent="ShadowScaler"]
 self_modulate = Color(0, 0, 0, 0.188)
-position = Vector2(0, 8)
+position = Vector2(0, 2)
 scale = Vector2(2, 1)
 texture = ExtResource("4_n8nbw")
 

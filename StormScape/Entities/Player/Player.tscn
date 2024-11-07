@@ -1,4 +1,4 @@
-[gd_scene load_steps=126 format=3 uid="uid://dba8mrurjlekp"]
+[gd_scene load_steps=128 format=3 uid="uid://dba8mrurjlekp"]
 
 [ext_resource type="Script" path="res://Entities/Player/Player.gd" id="1_m33tt"]
 [ext_resource type="SpriteFrames" uid="uid://cxo625s2sh5hx" path="res://Entities/Player/Spritesheets/Base/Base.tres" id="2_t1by5"]
@@ -68,6 +68,7 @@
 [ext_resource type="FontVariation" uid="uid://blgkcg6c83yln" path="res://Assets/Theming/Fonts/GameFontResources/ui_pixel_font.tres" id="58_eexr8"]
 [ext_resource type="Script" path="res://UI/Inventory/PlayerInventory/HotbarUI.gd" id="58_i567i"]
 [ext_resource type="Texture2D" uid="uid://f3dtce257pvb" path="res://UI/Inventory/button_9_patch_dark.png" id="59_ph20g"]
+[ext_resource type="Texture2D" uid="uid://dtft3mljs2y5s" path="res://UI/Inventory/trash_slot_icon.png" id="69_4ao77"]
 
 [sub_resource type="Resource" id="Resource_rwbul"]
 script = ExtResource("2_vyeuy")
@@ -834,6 +835,11 @@ script = ExtResource("32_ixmb3")
 stats = ExtResource("36_86qoy")
 quantity = 1
 
+[sub_resource type="Resource" id="Resource_xqlif"]
+script = ExtResource("32_ixmb3")
+stats = ExtResource("35_7kvtx")
+quantity = 9
+
 [sub_resource type="CircleShape2D" id="CircleShape2D_3wm74"]
 radius = 12.0
 
@@ -1007,7 +1013,7 @@ parameters/run/blendspace2d/blend_position = Vector2(0, 0)
 
 [node name="ItemReceiverComponent" parent="." node_paths=PackedStringArray("inv_populator", "ui") instance=ExtResource("30_qgyag")]
 item_scene = ExtResource("31_8v2rb")
-starting_inv = Array[ExtResource("32_ixmb3")]([SubResource("Resource_pihal"), null, SubResource("Resource_ww7hy"), null, SubResource("Resource_l1sgy"), SubResource("Resource_apvdf"), null])
+starting_inv = Array[ExtResource("32_ixmb3")]([SubResource("Resource_pihal"), null, SubResource("Resource_ww7hy"), null, SubResource("Resource_l1sgy"), SubResource("Resource_apvdf"), null, SubResource("Resource_xqlif")])
 is_player_inv = true
 inv_size = 40
 hotbar_size = 8
@@ -1451,7 +1457,6 @@ metadata/_edit_lock_ = true
 
 [node name="PlayerInvUI" type="ColorRect" parent="PlayerUILayer" node_paths=PackedStringArray("hotbar_ui")]
 process_mode = 3
-visible = false
 material = SubResource("ShaderMaterial_2q23q")
 use_parent_material = true
 anchors_preset = 15
@@ -1465,27 +1470,29 @@ hotbar_ui = NodePath("../HotbarUI")
 item_scene = ExtResource("31_8v2rb")
 
 [node name="MainTextureMargins" type="MarginContainer" parent="PlayerUILayer/PlayerInvUI"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
+layout_mode = 2
+offset_right = 480.0
+offset_bottom = 270.0
 grow_horizontal = 2
 grow_vertical = 2
+size_flags_horizontal = 3
 theme_override_constants/margin_left = 125
 theme_override_constants/margin_top = 50
 theme_override_constants/margin_right = 125
 theme_override_constants/margin_bottom = 20
 
-[node name="InvPopulator" type="VBoxContainer" parent="PlayerUILayer/PlayerInvUI/MainTextureMargins" node_paths=PackedStringArray("item_details_label", "main_slot_grid", "hotbar_grid")]
+[node name="InvPopulator" type="VBoxContainer" parent="PlayerUILayer/PlayerInvUI/MainTextureMargins" node_paths=PackedStringArray("item_details_label", "main_slot_grid", "hotbar_grid", "trash_slot")]
 unique_name_in_owner = true
 layout_mode = 2
 mouse_filter = 0
 theme_override_constants/separation = 8
 alignment = 1
 script = ExtResource("41_nwjbq")
+slot_scene = ExtResource("42_r422n")
 item_details_label = NodePath("InventoryTexture/ItemDetails")
 main_slot_grid = NodePath("InventoryTexture/GridMargins/SlotGrid")
 hotbar_grid = NodePath("HotbarTextureMargins/HotbarTexture/HotbarSlotMargins/HotbarSlotGrid")
+trash_slot = NodePath("../../TrashSlotPanel/TrashSlot")
 
 [node name="InventoryTexture" type="NinePatchRect" parent="PlayerUILayer/PlayerInvUI/MainTextureMargins/InvPopulator"]
 layout_mode = 2
@@ -1718,6 +1725,7 @@ vertical_alignment = 1
 metadata/_edit_lock_ = true
 
 [node name="GridMargins" type="MarginContainer" parent="PlayerUILayer/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture"]
+editor_description = "THIS GRIDMARGIN MOUSE FILTER MUST STAY AS IGNORE TO MAKE SORT BUTTONS WORK!"
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -1843,6 +1851,7 @@ layout_mode = 2
 
 [node name="HotbarTextureMargins" type="MarginContainer" parent="PlayerUILayer/PlayerInvUI/MainTextureMargins/InvPopulator"]
 layout_mode = 2
+size_flags_horizontal = 3
 size_flags_vertical = 3
 size_flags_stretch_ratio = 0.2
 theme_override_constants/margin_left = 17
@@ -1911,6 +1920,45 @@ size_flags_vertical = 4
 layout_mode = 2
 size_flags_vertical = 4
 
+[node name="TrashSlotPanel" type="NinePatchRect" parent="PlayerUILayer/PlayerInvUI"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+offset_left = 341.0
+offset_top = 218.0
+offset_right = 373.0
+offset_bottom = 250.0
+size_flags_horizontal = 8
+size_flags_vertical = 8
+mouse_filter = 0
+texture = ExtResource("33_8yk75")
+patch_margin_left = 4
+patch_margin_top = 4
+patch_margin_right = 4
+patch_margin_bottom = 4
+metadata/_edit_group_ = true
+
+[node name="TrashSlot" parent="PlayerUILayer/PlayerInvUI/TrashSlotPanel" instance=ExtResource("42_r422n")]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -11.0
+offset_top = -11.0
+offset_right = 11.0
+offset_bottom = 11.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_vertical = 4
+
+[node name="TrashTexture" type="TextureRect" parent="PlayerUILayer/PlayerInvUI/TrashSlotPanel/TrashSlot/TextureMargins" index="0"]
+unique_name_in_owner = true
+self_modulate = Color(0, 0, 0, 0.4)
+layout_mode = 2
+texture = ExtResource("69_4ao77")
+stretch_mode = 3
+
 [connection signal="timeout" from="MoveStateMachine/Dash/DashTimer" to="MoveStateMachine/Dash" method="_on_dash_timer_timeout"]
 [connection signal="timeout" from="MoveStateMachine/Stunned/StunnedTimer" to="MoveStateMachine/Stunned" method="_on_stunned_timer_timeout"]
 [connection signal="pressed" from="PlayerUILayer/TestButtons/TestHurtBtn" to="PlayerUILayer/TestButtons" method="_on_test_hurt_btn_pressed"]
@@ -1932,3 +1980,5 @@ size_flags_vertical = 4
 [connection signal="pressed" from="PlayerUILayer/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/SortByCount/SortByCountBtn" to="PlayerUILayer/PlayerInvUI" method="_on_sort_by_count_btn_pressed"]
 [connection signal="pressed" from="PlayerUILayer/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/SortByRarity/SortByRarityBtn" to="PlayerUILayer/PlayerInvUI" method="_on_sort_by_rarity_btn_pressed"]
 [connection signal="pressed" from="PlayerUILayer/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/AutoStack/AutoStackBtn" to="PlayerUILayer/PlayerInvUI" method="_on_auto_stack_btn_pressed"]
+
+[editable path="PlayerUILayer/PlayerInvUI/TrashSlotPanel/TrashSlot"]

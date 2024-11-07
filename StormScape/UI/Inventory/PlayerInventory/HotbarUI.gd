@@ -19,4 +19,5 @@ func _ready() -> void:
 func _on_slot_updated(index: int, item: InventoryItem) -> void:
 	var hotbar_slot_count: int = player_inv.inv_size - player_inv.hotbar_size
 	if index >= hotbar_slot_count:
-		hotbar_slots[index - hotbar_slot_count].item = item
+		if index < player_inv.inv_size:
+			hotbar_slots[index - hotbar_slot_count].item = item
