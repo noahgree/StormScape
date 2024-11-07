@@ -44,7 +44,9 @@ func _get_drag_data(at_position: Vector2) -> Variant:
 	dragging_half_stack = false
 	dragging_only_one = false
 	if item != null and not is_hotbar_ui_preview_slot:
-		modulate = Color(0.5, 0.5, 0.5, 1)
+		modulate = Color(0.65, 0.65, 0.65, 1)
+		quantity.text = ""
+		item_texture.modulate.a = 0.65
 		set_drag_preview(_make_drag_preview(at_position))
 		return self
 	else:
@@ -81,9 +83,15 @@ func _gui_input(event: InputEvent) -> void:
 			if item != null:
 				if Input.is_action_pressed("sprint") and item.quantity > 1:
 					dragging_half_stack = true
+					quantity.text = str(item.quantity - int(floor(item.quantity / 2.0)))
 				else:
 					dragging_only_one = true
-				modulate = Color(0.5, 0.5, 0.5, 1)
+					if item.quantity - 1 > 0:
+						quantity.text = str(item.quantity - 1)
+					else:
+						quantity.text = ""
+						item_texture.modulate.a = 0.65
+				modulate = Color(0.65, 0.65, 0.65, 1)
 				force_drag(self, _make_drag_preview(get_local_mouse_position()))
 		elif event.button_index == MOUSE_BUTTON_LEFT and event.double_click:
 			if item != null:
@@ -259,6 +267,8 @@ func _reset_post_drag_mods() -> void:
 	modulate = Color(1, 1, 1, 1)
 	if item == null:
 		item_texture.texture = null
+	elif item.quantity > 1:
+		quantity.text = str(item.quantity)
 	item_texture.modulate.a = 1.0
 
 func _to_string() -> String:

@@ -1,3 +1,6 @@
-[gd_scene format=3 uid="uid://d1ml6s716obw0"]
+[gd_scene load_steps=2 format=3 uid="uid://d1ml6s716obw0"]
 
-[node name="TimeSnareHandler" type="Node" groups=["has_save_logic"]]
+[ext_resource type="Script" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/TimeSnareHandler.gd" id="1_sut6e"]
+
+[node name="TimeSnareHandler" type="Node"]
+script = ExtResource("1_sut6e")

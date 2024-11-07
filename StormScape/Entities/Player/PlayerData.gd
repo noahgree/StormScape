@@ -30,3 +30,4 @@ class_name PlayerData
 @export var knockback_vector: Vector2
 # ItemReceiverComponent
 @export var inv: Array[InventoryItem]
+@export var pickup_range: int

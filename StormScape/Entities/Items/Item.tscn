@@ -7,7 +7,7 @@
 [ext_resource type="Texture2D" uid="uid://dcbwxgak6a0r8" path="res://Entities/entity_shadow.png" id="4_n8nbw"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_no3c7"]
-radius = 11.0
+resource_local_to_scene = true
 
 [sub_resource type="Gradient" id="Gradient_8c7dk"]
 offsets = PackedFloat32Array(0.543779)
@@ -115,7 +115,7 @@ script = ExtResource("1_rwd02")
 stats = ExtResource("2_yldjb")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-visible = false
+position = Vector2(0, 3)
 shape = SubResource("CircleShape2D_no3c7")
 debug_color = Color(5.29438e-07, 0.636012, 0.41019, 0.42)
 

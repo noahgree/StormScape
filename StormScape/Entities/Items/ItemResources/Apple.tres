@@ -13,4 +13,6 @@ thumbnail = ExtResource("1_1h1du")
 type = 0
 rarity = 0
 stack_size = 2
+auto_pickup = true
+pickup_radius = 4
 info = "A healthy snack."

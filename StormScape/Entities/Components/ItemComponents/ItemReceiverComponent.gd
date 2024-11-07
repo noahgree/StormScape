@@ -5,6 +5,11 @@ class_name ItemReceiverComponent
 ##
 ## For all intensive purposes (and as you can see based on the inheritance), this is an inventory.
 
+@export var pickup_range: int = 12: ## How big the collision shape is in px that is detected by items to enable pickup.
+	set(new_range):
+		pickup_range = new_range
+		$CollisionShape2D.shape.radius = pickup_range
+
 @onready var player_communicator: Node = get_node_or_null("PlayerInvCommunicator")
 
 var items_in_range: Array[Item] = []
@@ -19,8 +24,7 @@ func _on_before_load_game() -> void:
 	items_in_range = []
 
 func _on_load_game() -> void:
-	print(inv_to_load_from_save)
-	fill_inventory_without_checks(inv_to_load_from_save)
+	fill_inventory(inv_to_load_from_save)
 #endregion
 
 func add_to_in_range_queue(item: Item) -> void:
@@ -41,8 +45,11 @@ func _update_player_communicator() -> void:
 
 func _unhandled_key_input(_event: InputEvent) -> void:
 	if Input.is_action_just_pressed("interact"):
-		_pickup_item()
+		_pickup_item_from_queue()
 
-func _pickup_item() -> void:
+func _pickup_item_from_queue() -> void:
 	if not items_in_range.is_empty():
 		add_item_from_world(items_in_range.pop_back())
+
+func pickup_item(item: Item) -> void:
+	add_item_from_world(item)

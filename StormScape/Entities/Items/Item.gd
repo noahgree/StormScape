@@ -41,11 +41,15 @@ func _ready() -> void:
 
 func _on_area_entered(area: Area2D) -> void:
 	if area is ItemReceiverComponent and area.get_parent() is Player:
-		(area as ItemReceiverComponent).add_to_in_range_queue(self)
+		if stats.auto_pickup:
+			(area as ItemReceiverComponent).pickup_item(self)
+		else:
+			(area as ItemReceiverComponent).add_to_in_range_queue(self)
 
-		for item in (area as ItemReceiverComponent).items_in_range:
-			item.thumbnail.material.set_shader_parameter("width", 0)
-		(area as ItemReceiverComponent).items_in_range[area.items_in_range.size() - 1].thumbnail.material.set_shader_parameter("width", 0.75)
+		if not area.items_in_range.is_empty():
+			for item in (area as ItemReceiverComponent).items_in_range:
+				item.thumbnail.material.set_shader_parameter("width", 0)
+			(area as ItemReceiverComponent).items_in_range[area.items_in_range.size() - 1].thumbnail.material.set_shader_parameter("width", 0.75)
 
 func _on_area_exited(area: Area2D) -> void:
 	if area is ItemReceiverComponent and area.get_parent() is Player:
@@ -59,6 +63,7 @@ func _on_area_exited(area: Area2D) -> void:
 func _set_item(item_stats: ItemResource) -> void:
 	stats = item_stats
 	if stats and thumbnail:
+		$CollisionShape2D.shape.radius = stats.pickup_radius
 		thumbnail.texture = stats.thumbnail
 		if shadow:
 			shadow.scale.x = thumbnail.texture.get_width() / 16.0

@@ -11,7 +11,7 @@ class_name TimeSnareHandler
 ## Sets up moddable stats.
 func _ready() -> void:
 	assert(get_parent().get_parent() is DynamicEntity, get_parent().affected_entity.name + " has an effect receiver intended to handle time snares, but the affected entity is not a DynamicEntity.")
-	
+
 	var moddable_stats: Dictionary = {
 		"time_snare_immunity" : _time_snare_immunity
 	}
@@ -21,6 +21,6 @@ func handle_time_snare(time_snare_effect: TimeSnareEffect) -> void:
 	if effect_receiver.affected_entity.stats.get_stat("time_snare_immunity") > 0:
 		effect_receiver.status_effect_manager.request_effect_removal("TimeSnare")
 		return
-	
+
 	if effect_receiver.affected_entity is DynamicEntity:
 		effect_receiver.affected_entity.request_time_snare(time_snare_effect.time_multiplier, time_snare_effect.snare_time)

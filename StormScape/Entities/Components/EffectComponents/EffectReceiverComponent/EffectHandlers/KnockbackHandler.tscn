@@ -2,5 +2,5 @@
 
 [ext_resource type="Script" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/KnockbackHandler.gd" id="1_bm2cp"]
 
-[node name="KnockbackHandler" type="Node" groups=["has_save_logic"]]
+[node name="KnockbackHandler" type="Node"]
 script = ExtResource("1_bm2cp")

@@ -21,8 +21,8 @@ func handle_frostbite(frostbite_effect: FrostbiteEffect) -> void:
 		var local_dot_resource: DOTResource = frostbite_effect.dot_resource.duplicate()
 		var frostbite_weakness: float = effect_receiver.affected_entity.stats.get_stat("frostbite_weakness")
 		var frostbite_resistance: float = effect_receiver.affected_entity.stats.get_stat("frostbite_resistance")
-		
+
 		for i in range(local_dot_resource.dmg_ticks_array.size()):
 			local_dot_resource.dmg_ticks_array[i] = int(roundf(local_dot_resource.dmg_ticks_array[i] * (1 + frostbite_weakness - frostbite_resistance)))
-		
+
 		(effect_receiver.get_node("DmgHandler") as DmgHandler).handle_over_time_dmg(local_dot_resource, "Frostbite")

@@ -43,7 +43,7 @@ func handle_dynamic_entity_knockback(knockback_effect: KnockbackEffect) -> void:
 			effect_dir = effect_dir.lerp(entity_move_dir, entity_dir_influence).normalized()
 	else:
 		effect_dir = -entity_move_dir
-	
+
 	_send_handled_knockback(effect_dir, knockback_effect.knockback_force)
 
 ## Handles applying knockback to a rigid entity when it hits something that provides knockback.
@@ -53,7 +53,7 @@ func handle_rigid_entity_knockback(knockback_effect: KnockbackEffect) -> void:
 		effect_dir = effect_movement_direction
 	else:
 		effect_dir = (effect_receiver.global_position - contact_position).normalized()
-	
+
 	_send_handled_knockback(effect_dir, knockback_effect.knockback_force * 2)
 
 ## Send the resulting handled knockback vector to the affected entity with logic based on what the entity type is.
@@ -63,7 +63,7 @@ func _send_handled_knockback(knockback_dir: Vector2, force: int) -> void:
 	var knockback_boost: float = effect_receiver.affected_entity.stats.get_stat("knockback_boost")
 	var knockback_resistance: float = effect_receiver.affected_entity.stats.get_stat("knockback_resistance")
 	var handled_knockback = knockback_dir * force * max(0, (1 + knockback_boost - knockback_resistance))
-	
+
 	if effect_receiver.affected_entity is DynamicEntity:
 		if effect_receiver.affected_entity.has_method("request_knockback"):
 			effect_receiver.affected_entity.request_knockback(handled_knockback)

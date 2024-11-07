@@ -19,7 +19,7 @@ func _can_drop_data(_at_position: Vector2, data: Variant) -> bool:
 	else: return false
 
 func _drop_data(_at_position: Vector2, data: Variant) -> void:
-	var ground_item_res: ItemResource = data.item.stats.duplicate()
+	var ground_item_res: ItemResource = data.item.stats
 	if ground_item_res and data:
 		var ground_item: Item = item_scene.instantiate()
 		ground_item.stats = ground_item_res

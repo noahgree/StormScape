@@ -4,6 +4,7 @@ class_name Inventory
 
 signal slot_updated(index: int, item: InventoryItem)
 
+@export var item_scene: PackedScene = load("res://Entities/Items/Item.tscn")
 @export var starting_inv: Array[InventoryItem]
 @export var is_player_inv: bool = false ## Whether this is the player's inventory or not. Needed for hotbar logic.
 @export var inv_size: int = 32 ## The total number of slots in the inventory, including the hotbar slots.
@@ -19,17 +20,26 @@ func _ready() -> void:
 	if not is_player_inv:
 		hotbar_size = 0
 	inv.resize(inv_size)
-	fill_inventory_with_checks(starting_inv)
+	fill_inventory(starting_inv)
 	inv_populator.connect_inventory(self)
 	ui.connect_inventory(self)
 
-func fill_inventory_without_checks(inv_to_fill_from: Array[InventoryItem]) -> void:
+func fill_inventory(inv_to_fill_from: Array[InventoryItem]) -> void:
 	inv.fill(null)
 	for i in range(min(inv_size, inv_to_fill_from.size())):
 		if inv_to_fill_from[i] == null:
 			inv[i] = null
 		else:
-			inv[i] = inv_to_fill_from[i]
+			var inv_item: InventoryItem = inv_to_fill_from[i]
+			if inv_item.quantity > inv_item.stats.stack_size:
+				var ground_item: Item = item_scene.instantiate()
+				ground_item.stats = inv_item.stats
+				ground_item.quantity = inv_item.quantity - inv_item.stats.stack_size
+				ground_item.global_position = global_position + Vector2(randi_range(-15, 15), randi_range(-15, 15))
+				GlobalData.world_root.add_child.call_deferred(ground_item)
+
+				inv_item.quantity = inv_item.stats.stack_size
+			inv[i] = inv_item
 	_update_all_connected_slots()
 
 func fill_inventory_with_checks(inv_to_fill_from: Array[InventoryItem]) -> void:

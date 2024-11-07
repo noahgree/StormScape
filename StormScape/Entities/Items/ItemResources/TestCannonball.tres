@@ -12,4 +12,6 @@ thumbnail = ExtResource("1_oqp80")
 type = 0
 rarity = 0
 stack_size = 9
+auto_pickup = true
+pickup_radius = 4
 info = "A test cannonball."

@@ -12,7 +12,7 @@ class_name StunHandler
 ## Asserts that the affected entity is a Dynamic Entity before trying to handle things.
 func _ready() -> void:
 	assert(get_parent().get_parent() is DynamicEntity, get_parent().affected_entity.name + " has an effect receiver intended to handle stuns, but the affected entity is not a DynamicEntity.")
-	
+
 	var moddable_stats: Dictionary = {
 		"stun_weakness" : _stun_weakness, "stun_resistance" : _stun_resistance
 	}
@@ -23,7 +23,7 @@ func handle_stun(stun_effect: StunEffect) -> void:
 	var stun_weakness: float = affected_entity.stats.get_stat("stun_weakness")
 	var stun_resistance: float = affected_entity.stats.get_stat("stun_resistance")
 	var handled_stun_time: float = stun_effect.stun_time * (1 + stun_weakness - stun_resistance)
-	
+
 	_send_handled_stun(handled_stun_time)
 
 ## Sends the resulting stun time to the affected entity as long as it is the right type.

@@ -13,4 +13,6 @@ thumbnail = ExtResource("3_advpm")
 type = 1
 rarity = 2
 stack_size = 1
+auto_pickup = false
+pickup_radius = 4
 info = "A mighty axe."

@@ -5,12 +5,11 @@ class_name ItemResource
 @export var name: String
 @export var icon: Texture2D
 @export var thumbnail: Texture2D
-
 @export var type: GlobalData.ItemType = GlobalData.ItemType.CONSUMABLE
 @export var rarity: GlobalData.ItemRarity = GlobalData.ItemRarity.COMMON
-
 @export var stack_size: int = 1
-
+@export var auto_pickup: bool = false
+@export_custom(PROPERTY_HINT_NONE, "suffix:px") var pickup_radius: int = 4
 @export_multiline var info: String
 
 
