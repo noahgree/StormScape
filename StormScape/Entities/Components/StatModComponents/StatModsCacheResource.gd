@@ -51,7 +51,7 @@ func _recalculate_stat(stat_id: String, base_value: float, stats_ui: Control = n
 		print_rich("[color=cyan]" + stat_id + base_text + "[/color]: [b]" + str(cached_stats[stat_id]) + "[/b]")
 
 ## Updates an optionally connected UI when a watched stat changes.
-func _update_ui_for_stat(stat_id: String, new_value: float, stats_ui) -> void:
+func _update_ui_for_stat(stat_id: String, new_value: float, stats_ui: Node) -> void:
 	var method_name = "on_" + stat_id + "_changed"
 	if stats_ui:
 		if stats_ui.has_method(method_name):
@@ -128,13 +128,13 @@ func undo_mod_stacking(stat_id: String, mod_id: String, stats_ui: Control = null
 ## Gets the current cached value of a stat.
 func get_stat(stat_id: String) -> float:
 	var value = cached_stats.get(stat_id, null)
-	assert(value != null, stat_id + " was null when trying to be accessed from a StatBasedComponent")
+	assert(value != null, stat_id + " was null when trying to be retrieved from a stat mods cache.")
 	return value
 
 ## Returns the original cached value of a stat before any modifications.
 func get_original_stat(stat_id: String) -> float:
 	var value = base_values.get(stat_id, null)
-	assert(value != null, stat_id + " was null when trying to be accessed from a StatBasedComponent")
+	assert(value != null, stat_id + " was null when trying to be retrieved from a stat mods cache.")
 	return value
 
 ## Gets the EntityStatMod for the stat_id based on the mod_id. Pushes an error if it can't be found.

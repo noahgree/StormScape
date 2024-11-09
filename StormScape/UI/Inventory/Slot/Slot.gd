@@ -1,24 +1,25 @@
 @tool
 extends NinePatchRect
 class_name Slot
+## The item and quantity representation inside all inventories. Handles drag and drop logic as well as stacking.
 
-signal is_hovered_over(index: int)
-signal is_not_hovered_over()
+signal is_hovered_over(index: int) ## Emitted when a slot is currently being hovered over.
+signal is_not_hovered_over() ## Emitted when a slot is no longer being hovered over.
 
-@export var drag_preview: PackedScene
+@export var drag_preview: PackedScene = load("res://UI/Inventory/Slot/SlotDragPreview.tscn") ## The control preview for a dragged slot.
 
-@onready var item_texture: TextureRect = $TextureMargins/ItemTexture
-@onready var quantity: Label = $QuantityMargins/Quantity
+@onready var item_texture: TextureRect = $TextureMargins/ItemTexture ## The item texture node for this slot.
+@onready var quantity: Label = $QuantityMargins/Quantity ## The quantity label for this slot.
 
-var index: int
-var synced_inv: Inventory
-var dragging_only_one: bool = false
-var dragging_half_stack: bool = false
-var item: InventoryItem: set = _set_item
-var is_hotbar_ui_preview_slot: bool = false
+var index: int ## The index that this slot represents inside the inventory.
+var synced_inv: Inventory ## The synced inventory that this slot is a part of.
+var dragging_only_one: bool = false ## Whether this slot is carrying only a quantity of 1 when in drag data.
+var dragging_half_stack: bool = false ## Whether this slot is carrying only half of its quantity when in drag data.
+var item: InventoryItem: set = _set_item ## The current inventory item represented in this slot.
+var is_hotbar_ui_preview_slot: bool = false ## Whether this slot is an inventory hotbar preview slot for the player's screen.
 var is_trash_slot: bool = false ## The slot, that if present, is used to discard items. It will have the highest index.
 
-
+## Setter function for the item represented by this slot. Updates texture and quantity label.
 func _set_item(new_item) -> void:
 	item = new_item
 	if item:
@@ -37,10 +38,12 @@ func _set_item(new_item) -> void:
 		item_texture.texture = null
 		quantity.text = ""
 
+## Connects relevant mouse entered and exited functions.
 func _ready() -> void:
 	mouse_entered.connect(func(): is_hovered_over.emit(index))
 	mouse_exited.connect(func(): is_not_hovered_over.emit())
 
+## Gets a reference to the data from the slot where the drag originated.
 func _get_drag_data(at_position: Vector2) -> Variant:
 	dragging_half_stack = false
 	dragging_only_one = false
@@ -53,6 +56,7 @@ func _get_drag_data(at_position: Vector2) -> Variant:
 	else:
 		return null
 
+## Creates a drag preview to display at the mouse when a drag is in progress.
 func _make_drag_preview(at_position: Vector2) -> Control:
 	var c: Control = Control.new()
 	if item and item.stats.icon and item.quantity > 0:
@@ -70,6 +74,7 @@ func _make_drag_preview(at_position: Vector2) -> Control:
 	return c
 
 #region RightClick Drags
+## When a right click drag is released, interpret it as a left click drag. Allows right drags to work with Godot's drag system.
 func _input(event: InputEvent) -> void:
 	if event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_RIGHT and not event.pressed:
@@ -78,6 +83,7 @@ func _input(event: InputEvent) -> void:
 				event.button_index = MOUSE_BUTTON_LEFT
 				Input.parse_input_event(event)
 
+## When we start a right click drag, interpret it as starting a left click drag. Runs single quantity and half quantity logic.
 func _gui_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_RIGHT:
@@ -99,6 +105,7 @@ func _gui_input(event: InputEvent) -> void:
 				_fill_slot_to_stack_size()
 #endregion
 
+## Determines if the slot we are hovering over during a drag can accept drag data on mouse release.
 func _can_drop_data(_at_position: Vector2, data: Variant) -> bool:
 	if data.item == null or not synced_inv or data.index == index or is_hotbar_ui_preview_slot:
 		return false
@@ -114,6 +121,7 @@ func _can_drop_data(_at_position: Vector2, data: Variant) -> bool:
 			return false
 	return true
 
+## Drops item slot drag data into the hovered slot, updating the current and source slot based on quantities and drag method.
 func _drop_data(_at_position: Vector2, data: Variant) -> void:
 	if not (data and synced_inv):
 		return
@@ -157,6 +165,7 @@ func _drop_data(_at_position: Vector2, data: Variant) -> void:
 	_on_mouse_exited()
 
 #region Dropping Full Stacks
+## Moves all items from drag into a different empty slot.
 func _move_items_to_other_empty_slot(data: Variant) -> void:
 	item = InventoryItem.new(data.item.stats, data.item.quantity)
 	synced_inv.inv[index] = item
@@ -166,6 +175,7 @@ func _move_items_to_other_empty_slot(data: Variant) -> void:
 
 	_emit_changes_for_potential_listening_hotbar(data)
 
+## Combines the drag data items into a slot with items of the same kind. This means that when combined they still fit stack size.
 func _combine_all_items_into_slot_with_space(data: Variant, total_quantity: int) -> void:
 	item.quantity = total_quantity
 	_set_item(item)
@@ -175,6 +185,7 @@ func _combine_all_items_into_slot_with_space(data: Variant, total_quantity: int)
 
 	_emit_changes_for_potential_listening_hotbar(data)
 
+## Combines items of same kind from drag data into an already occupied slot. Passes what doesn't fit to the next iteration.
 func _combine_what_fits_and_leave_remainder(data: Variant) -> void:
 	var amount_that_fits: int = item.stats.stack_size - item.quantity
 	item.quantity = item.stats.stack_size
@@ -194,6 +205,7 @@ func _combine_what_fits_and_leave_remainder(data: Variant) -> void:
 
 	_emit_changes_for_potential_listening_hotbar(data)
 
+## Swaps slot data's.
 func _swap_item_stacks(data: Variant) -> void:
 	var temp_item = item
 	item = InventoryItem.new(data.item.stats, data.item.quantity)
@@ -210,16 +222,19 @@ func _swap_item_stacks(data: Variant) -> void:
 #endregion
 
 #region Dropping Only One
+## Moves a quantity of 1 from an item slot to an empty slot.
 func _move_one_item_to_empty_slot(data: Variant) -> void:
 	item = InventoryItem.new(data.item.stats, 1)
 	synced_inv.inv[index] = item
 	_check_if_inv_slot_is_now_empty_after_dragging_only_one(data)
 
+## Moves a quantity of 1 from the drag data into a slot of the same kind with space.
 func _add_one_item_into_slot_with_space(data: Variant, total_quantity: int) -> void:
 	item.quantity = total_quantity
 	_set_item(item)
 	_check_if_inv_slot_is_now_empty_after_dragging_only_one(data)
 
+## After moving a quantity of 1 in any way, checks that the source did not only have 1 to begin with and would then need to be ## cleared out.
 func _check_if_inv_slot_is_now_empty_after_dragging_only_one(data: Variant) -> void:
 	if synced_inv.inv[data.index].quantity - 1 <= 0:
 		synced_inv.inv[data.index] = null
@@ -232,6 +247,7 @@ func _check_if_inv_slot_is_now_empty_after_dragging_only_one(data: Variant) -> v
 #endregion
 
 #region Dropping Half Stacks
+## Moves all of the half quantity represented by the drag data into a slot with space, empty or not.
 func _move_all_of_the_half_stack_into_a_slot(data: Variant, source_remainder: int, total_quantity: int) -> void:
 	item = InventoryItem.new(data.item.stats, total_quantity)
 	synced_inv.inv[index] = item
@@ -241,15 +257,19 @@ func _move_all_of_the_half_stack_into_a_slot(data: Variant, source_remainder: in
 
 	_emit_changes_for_potential_listening_hotbar(data)
 
+## Moves what fits from the half quantity represented by the drag data into a slot that can take some of it.
+## Leaves what doesn't fit.
 func _move_part_of_half_stack_into_slot_and_leave_remainder(data: Variant) -> void:
 	_combine_what_fits_and_leave_remainder(data)
 #endregion
 
 #region Utils
+## Emits signals for all slots of high enough index when changed to let any connected hotbar know to change it's data and UI.
 func _emit_changes_for_potential_listening_hotbar(data: Variant) -> void:
 	if data.index >= synced_inv.inv_size - synced_inv.hotbar_size: synced_inv.slot_updated.emit(data.index, data.item)
 	if index >= synced_inv.inv_size - synced_inv.hotbar_size: synced_inv.slot_updated.emit(index, item)
 
+## When mouse enters, if we can drop, display an effect on this slot.
 func _on_mouse_entered() -> void:
 	if get_viewport().gui_is_dragging():
 		var drag_data = get_viewport().gui_get_drag_data()
@@ -259,6 +279,7 @@ func _on_mouse_entered() -> void:
 				item_texture.texture = drag_data.item_texture.texture
 				item_texture.modulate.a = 0.5
 
+## When mouse exits, if we are dragging, remove effects on this slot.
 func _on_mouse_exited() -> void:
 	var drag_data
 	if get_viewport().gui_is_dragging():
@@ -270,10 +291,12 @@ func _on_mouse_exited() -> void:
 		item_texture.texture = null
 		item_texture.modulate.a = 1.0
 
+## When the system is notifed of a drag being over, call the method that resets slot highlight and drag preview effects.
 func _notification(what):
 	if what == NOTIFICATION_DRAG_END:
 		_reset_post_drag_mods()
 
+## Resets slot highlights and drag preview effects.
 func _reset_post_drag_mods() -> void:
 	dragging_only_one = false
 	dragging_half_stack = false
@@ -284,9 +307,12 @@ func _reset_post_drag_mods() -> void:
 		quantity.text = str(item.quantity)
 	item_texture.modulate.a = 1.0
 
+## Custom string representation of the item in this slot.
 func _to_string() -> String:
 	return str(item)
 
+## When an item is double clicked in the inventory, attempt to garner a full stack by iterating over all other slots.
+## Pulls from slots not at stack size first, then goes back and gets from stack size if needed.
 func _fill_slot_to_stack_size() -> void:
 	var needed_quantity = item.stats.stack_size - item.quantity
 	if needed_quantity <= 0:

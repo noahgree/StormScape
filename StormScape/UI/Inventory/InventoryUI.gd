@@ -1,23 +1,26 @@
 extends ColorRect
 class_name InventoryUI
 
-@export var item_scene: PackedScene = load("res://Entities/Items/Item.tscn")
+@export var item_scene: PackedScene = load("res://Entities/Items/Item.tscn") ## The item scene to be instantiated when items are dropped onto the ground.
 
-var inventory_to_reflect: Inventory
+var inventory_to_reflect: Inventory ## The inventory to reflect in this UI.
 
 
 func _ready() -> void:
 	visible = false
 	gui_input.connect(_on_blank_space_input_event)
 
+## Called externally to connect an inventory to this UI.
 func connect_inventory(inv: Inventory) -> void:
 	inventory_to_reflect = inv
 
+## Determines if this control node can have item slot data dropped into it.
 func _can_drop_data(_at_position: Vector2, data: Variant) -> bool:
 	if data and ("item" in data) and (data.item != null):
 		return true
 	else: return false
 
+## Runs the logic for what to do when we can drop an item slot's data at the current moment. Creates physical items on the ground.
 func _drop_data(_at_position: Vector2, data: Variant) -> void:
 	var ground_item_res: ItemResource = data.item.stats
 	if ground_item_res and data:
@@ -51,6 +54,7 @@ func _drop_data(_at_position: Vector2, data: Variant) -> void:
 
 	data._on_mouse_exited()
 
+## When the empty space of the inventory screen is clicked, we close the inventory altogether.
 func _on_blank_space_input_event(_event: InputEvent) -> void:
 	if Input.is_action_just_pressed("primary"):
 		visible = false

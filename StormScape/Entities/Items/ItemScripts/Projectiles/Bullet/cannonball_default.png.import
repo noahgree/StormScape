@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cyhjli7h8fn7r"
-path="res://.godot/imported/gauntlet_default.png-773f6e080091aa6e58c94b28bc08d55f.ctex"
+uid="uid://qwyrtuh8et4r"
+path="res://.godot/imported/cannonball_default.png-a494ed635731888bb2f85cc96205ca6e.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Entities/Items/ItemScripts/Weapons/TestGun/gauntlet_default.png"
-dest_files=["res://.godot/imported/gauntlet_default.png-773f6e080091aa6e58c94b28bc08d55f.ctex"]
+source_file="res://Entities/Items/ItemScripts/Projectiles/Bullet/cannonball_default.png"
+dest_files=["res://.godot/imported/cannonball_default.png-a494ed635731888bb2f85cc96205ca6e.ctex"]
 
 [params]
 
