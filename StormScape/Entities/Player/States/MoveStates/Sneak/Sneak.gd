@@ -44,12 +44,6 @@ func _do_character_sneak(delta: float) -> void:
 			fsm.knockback_vector = Vector2.ZERO
 			dynamic_entity.velocity = Vector2.ZERO
 	elif knockback == Vector2.ZERO:
-		# this if-else handles smoothing out the beginning of animation transitions
-		if dynamic_entity.velocity.length() > dynamic_entity.stats.get_stat("max_sneak_speed") * 0.10:
-			fsm.anim_vector = dynamic_entity.velocity.normalized()
-		else:
-			fsm.anim_vector = movement_vector
-
 		fsm.anim_tree.set("parameters/run/TimeScale/scale", DEFAULT_SNEAK_ANIM_TIME_SCALE * (dynamic_entity.stats.get_stat("max_sneak_speed") / dynamic_entity.stats.get_original_stat("max_sneak_speed")))
 		dynamic_entity.velocity += (movement_vector * dynamic_entity.stats.get_stat("sneak_acceleration") * delta)
 		dynamic_entity.velocity = dynamic_entity.velocity.limit_length(dynamic_entity.stats.get_stat("max_sneak_speed"))

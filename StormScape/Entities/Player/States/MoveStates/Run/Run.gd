@@ -58,12 +58,6 @@ func _do_character_run(delta: float) -> void:
 			dynamic_entity.velocity = Vector2.ZERO
 			transitioned.emit(self, "Idle")
 	elif knockback == Vector2.ZERO:
-		# this if-else handles smoothing out the beginning of animation transitions
-		if dynamic_entity.velocity.length() > dynamic_entity.stats.get_stat("max_speed") * 0.10:
-			fsm.anim_vector = dynamic_entity.velocity.normalized()
-		else:
-			fsm.anim_vector = movement_vector
-
 		if request_sprint and stamina_component.use_stamina(dynamic_entity.stats.get_stat("sprint_stamina_usage") * delta): # sprint
 			if actual_movement_speed > dynamic_entity.stats.get_stat("max_speed"):
 				_play_sprint_sound()

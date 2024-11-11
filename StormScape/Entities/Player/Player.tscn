@@ -1,4 +1,4 @@
-[gd_scene load_steps=128 format=3 uid="uid://dba8mrurjlekp"]
+[gd_scene load_steps=132 format=3 uid="uid://dba8mrurjlekp"]
 
 [ext_resource type="Script" path="res://Entities/Player/Player.gd" id="1_m33tt"]
 [ext_resource type="SpriteFrames" uid="uid://cxo625s2sh5hx" path="res://Entities/Player/Spritesheets/Base/Base.tres" id="2_t1by5"]
@@ -36,7 +36,7 @@
 [ext_resource type="Script" path="res://UI/Inventory/PlayerInventory/PlayerInvCommunicator.gd" id="31_mjpan"]
 [ext_resource type="Script" path="res://UI/Inventory/PlayerInventory/PlayerInvUI.gd" id="32_3a185"]
 [ext_resource type="Script" path="res://Entities/Items/InventoryItem.gd" id="32_ixmb3"]
-[ext_resource type="Texture2D" uid="uid://biejldas3s8ak" path="res://UI/Inventory/inv_9_patch.png" id="33_8yk75"]
+[ext_resource type="Texture2D" uid="uid://biejldas3s8ak" path="res://UI/Inventory/InventoryCore/inv_9_patch.png" id="33_8yk75"]
 [ext_resource type="Resource" uid="uid://c1yh67b4i2xtt" path="res://Entities/Items/ItemResources/Apple.tres" id="33_jgsm1"]
 [ext_resource type="Script" path="res://UI/PlayerUILayer.gd" id="33_wetrf"]
 [ext_resource type="Resource" uid="uid://chfps77qv6w0e" path="res://Entities/Items/ItemResources/Pickaxe.tres" id="34_1e85o"]
@@ -46,14 +46,17 @@
 [ext_resource type="Resource" uid="uid://bbya4jg50etnu" path="res://Entities/Items/ItemResources/Axe.tres" id="36_86qoy"]
 [ext_resource type="Texture2D" uid="uid://dwo0fuwylfxeq" path="res://UI/PlayerStatsOverlay/Assets/Stats Panel Bckgrd.png" id="36_vdy3t"]
 [ext_resource type="Texture2D" uid="uid://k0o25ihgea1n" path="res://UI/PlayerStatsOverlay/Assets/Hunger Progress Under.png" id="37_32xjt"]
+[ext_resource type="Resource" uid="uid://ciel2rrqq4dvv" path="res://Entities/Items/Weapons/LaserGun/LaserGun.tres" id="37_a2tah"]
 [ext_resource type="Texture2D" uid="uid://bdgevpcheclv5" path="res://UI/PlayerStatsOverlay/Assets/Hunger Progress Bar.png" id="38_ht2cb"]
+[ext_resource type="Script" path="res://Entities/Components/ItemComponents/HandsComponent.gd" id="38_klsxl"]
 [ext_resource type="Shader" path="res://UI/Shaders/BlurBehind.gdshader" id="39_r4tgk"]
 [ext_resource type="Texture2D" uid="uid://xnppg0u7t7w4" path="res://UI/PlayerStatsOverlay/Assets/Stamina Recharge Under.png" id="39_ryeha"]
+[ext_resource type="Texture2D" uid="uid://cs3clmnktksd6" path="res://Entities/Player/player_hand.png" id="40_2q1kf"]
 [ext_resource type="Texture2D" uid="uid://gfbxblly7q78" path="res://UI/PlayerStatsOverlay/Assets/Stamina Recharge Bar.png" id="40_suqvl"]
-[ext_resource type="Script" path="res://UI/Inventory/InventoryPopulator.gd" id="41_nwjbq"]
+[ext_resource type="Script" path="res://UI/Inventory/InventoryCore/InventoryPopulator.gd" id="41_nwjbq"]
 [ext_resource type="Texture2D" uid="uid://br8kgmxe41gh0" path="res://UI/PlayerStatsOverlay/Assets/Hunger Bar.png" id="41_wehgh"]
 [ext_resource type="Texture2D" uid="uid://cjjobaebw8uwu" path="res://UI/PlayerStatsOverlay/Assets/Hunger Under.png" id="42_im6xp"]
-[ext_resource type="PackedScene" uid="uid://m4ur3n2hwsp8" path="res://UI/Inventory/Slot/Slot.tscn" id="42_r422n"]
+[ext_resource type="PackedScene" uid="uid://m4ur3n2hwsp8" path="res://UI/Inventory/InventoryCore/Slot/Slot.tscn" id="42_r422n"]
 [ext_resource type="Texture2D" uid="uid://c5mo0gxdddlte" path="res://UI/PlayerStatsOverlay/Assets/Hunger Change.png" id="43_k8324"]
 [ext_resource type="Shader" path="res://UI/PlayerStatsOverlay/StaminaBarTipGlow.gdshader" id="44_vk3bi"]
 [ext_resource type="Texture2D" uid="uid://l7chqvbfg16y" path="res://UI/PlayerStatsOverlay/Assets/Stamina Bar.png" id="45_3j47m"]
@@ -67,8 +70,8 @@
 [ext_resource type="Texture2D" uid="uid://lj78cee4aa38" path="res://UI/PlayerStatsOverlay/Assets/Health Change.png" id="53_qsiea"]
 [ext_resource type="FontVariation" uid="uid://blgkcg6c83yln" path="res://Assets/Theming/Fonts/GameFontResources/ui_pixel_font.tres" id="58_eexr8"]
 [ext_resource type="Script" path="res://UI/Inventory/PlayerInventory/HotbarUI.gd" id="58_i567i"]
-[ext_resource type="Texture2D" uid="uid://f3dtce257pvb" path="res://UI/Inventory/button_9_patch_dark.png" id="59_ph20g"]
-[ext_resource type="Texture2D" uid="uid://dtft3mljs2y5s" path="res://UI/Inventory/trash_slot_icon.png" id="69_4ao77"]
+[ext_resource type="Texture2D" uid="uid://f3dtce257pvb" path="res://UI/Inventory/InventoryCore/button_9_patch_dark.png" id="59_ph20g"]
+[ext_resource type="Texture2D" uid="uid://dtft3mljs2y5s" path="res://UI/Inventory/InventoryCore/Slot/trash_slot_icon.png" id="69_4ao77"]
 
 [sub_resource type="Resource" id="Resource_rwbul"]
 script = ExtResource("2_vyeuy")
@@ -840,6 +843,11 @@ script = ExtResource("32_ixmb3")
 stats = ExtResource("35_7kvtx")
 quantity = 9
 
+[sub_resource type="Resource" id="Resource_3kywt"]
+script = ExtResource("32_ixmb3")
+stats = ExtResource("37_a2tah")
+quantity = 1
+
 [sub_resource type="CircleShape2D" id="CircleShape2D_3wm74"]
 radius = 12.0
 
@@ -1013,7 +1021,7 @@ parameters/run/blendspace2d/blend_position = Vector2(0, 0)
 
 [node name="ItemReceiverComponent" parent="." node_paths=PackedStringArray("inv_populator", "ui") instance=ExtResource("30_qgyag")]
 item_scene = ExtResource("31_8v2rb")
-starting_inv = Array[ExtResource("32_ixmb3")]([SubResource("Resource_pihal"), null, SubResource("Resource_ww7hy"), null, SubResource("Resource_l1sgy"), SubResource("Resource_apvdf"), null, SubResource("Resource_xqlif")])
+starting_inv = Array[ExtResource("32_ixmb3")]([SubResource("Resource_pihal"), null, SubResource("Resource_ww7hy"), null, SubResource("Resource_l1sgy"), SubResource("Resource_apvdf"), null, SubResource("Resource_xqlif"), SubResource("Resource_3kywt")])
 is_player_inv = true
 inv_size = 40
 hotbar_size = 8
@@ -1028,6 +1036,19 @@ item_interact_hud = NodePath("../../PlayerUILayer/ItemInteractionHUD")
 position = Vector2(0, -5)
 shape = SubResource("CircleShape2D_3wm74")
 debug_color = Color(0.800804, 0.389919, 9.62615e-07, 0.227451)
+
+[node name="HandsComponent" type="Node2D" parent="."]
+position = Vector2(0, -9)
+script = ExtResource("38_klsxl")
+
+[node name="HandSprite" type="Sprite2D" parent="HandsComponent"]
+self_modulate = Color(0.933333, 0.764706, 0.603922, 1)
+z_index = 1
+position = Vector2(4, 1)
+texture = ExtResource("40_2q1kf")
+
+[node name="MainHand" type="Node2D" parent="HandsComponent"]
+position = Vector2(9, 0)
 
 [node name="PlayerUILayer" type="CanvasLayer" parent="."]
 script = ExtResource("33_wetrf")
@@ -1457,6 +1478,7 @@ metadata/_edit_lock_ = true
 
 [node name="PlayerInvUI" type="ColorRect" parent="PlayerUILayer" node_paths=PackedStringArray("hotbar_ui")]
 process_mode = 3
+visible = false
 material = SubResource("ShaderMaterial_2q23q")
 use_parent_material = true
 anchors_preset = 15

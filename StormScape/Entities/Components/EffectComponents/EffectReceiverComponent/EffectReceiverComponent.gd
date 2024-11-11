@@ -49,7 +49,7 @@ func _ready() -> void:
 ## Handles an incoming effect source, passing it to present receivers for further processing before changing
 ## entity stats.
 func handle_effect_source(effect_source: EffectSource) -> void:
-	if effect_source.source_team == GlobalData.Teams.PASSIVE:
+	if effect_source.source_entity.team == GlobalData.Teams.PASSIVE:
 		return
 	if (affected_entity is DynamicEntity) and not affected_entity.move_fsm.can_receive_effects:
 		return
@@ -77,7 +77,7 @@ func handle_effect_source(effect_source: EffectSource) -> void:
 		if has_node("KnockbackHandler"):
 			knockback_handler.contact_position = effect_source.contact_position
 			knockback_handler.effect_movement_direction = effect_source.movement_direction
-			knockback_handler.is_source_moving_type = effect_source.is_source_moving_type
+			knockback_handler.is_source_moving_type = effect_source.is_projectile
 
 		_unpack_status_effects_from_source(effect_source)
 

@@ -1,0 +1,102 @@
+[gd_resource type="Resource" script_class="ProjWeaponResource" load_steps=14 format=3 uid="uid://ciel2rrqq4dvv"]
+
+[ext_resource type="Script" path="res://Entities/EffectSystemResources/EffectSources/EffectSource.gd" id="1_2i3xb"]
+[ext_resource type="Script" path="res://Entities/Items/Weapons/ProjWeaponResource.gd" id="1_7bjnk"]
+[ext_resource type="PackedScene" uid="uid://ckf7i8bnass5n" path="res://Entities/Items/Projectiles/Laser/Laser.tscn" id="1_sf3xp"]
+[ext_resource type="Script" path="res://Entities/EffectSystemResources/StatusEffects/StatusEffect.gd" id="2_mu3cd"]
+[ext_resource type="Texture2D" uid="uid://cgeqpk6i7o7im" path="res://Entities/Items/Weapons/LaserGun/laser_gun_default.png" id="3_h5lfv"]
+[ext_resource type="Script" path="res://Entities/Items/Projectiles/ProjectileResource.gd" id="5_54flx"]
+[ext_resource type="Script" path="res://Entities/Components/StatModComponents/StatModsCacheResource.gd" id="5_lsump"]
+[ext_resource type="PackedScene" uid="uid://baxpb3crwepc0" path="res://Entities/Items/Weapons/LaserGun/LaserGun.tscn" id="6_gbfef"]
+
+[sub_resource type="Curve" id="Curve_kfl3v"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Resource" id="Resource_wic0i"]
+script = ExtResource("1_2i3xb")
+is_projectile = true
+source_team = 2
+bad_effect_affected_teams = 1
+good_effect_affected_teams = 2
+scanned_phys_layers = 191
+base_damage = 0
+dmg_affected_stats = 2
+crit_chance = 0
+crit_multiplier = 1.5
+armor_penetration = 0
+base_healing = 0
+heal_affected_stats = 2
+cam_shake_strength = 0.0
+cam_shake_duration = 0.0
+cam_freeze_multiplier = 1.0
+cam_freeze_duration = 0.0
+status_effects = Array[ExtResource("2_mu3cd")]([])
+
+[sub_resource type="Resource" id="Resource_2dbrb"]
+script = ExtResource("5_54flx")
+speed = 500
+lifetime = 100.0
+max_distance = 500
+max_pierce = 0
+max_ricochet = 0
+spin_speed = 0.0
+homing = false
+arc_height = 0.0
+arc_time = 0.15
+arc_collision_delay = 0.3
+split_count = 0
+split_delay = 0.0
+whiz_sound = ""
+glow_strength = 0.0
+glow_color = Color(1, 1, 1, 1)
+impact_sound = ""
+splash_radius = 0
+splash_falloff_exponent = 1.0
+splash_effect_delay = 0.0
+splash_sound = ""
+
+[sub_resource type="Curve" id="Curve_p4aqc"]
+_data = [Vector2(0.00729927, 0.00647151), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Resource" id="Resource_wcvpy"]
+script = ExtResource("5_lsump")
+debug_print_mod_changes = false
+
+[resource]
+script = ExtResource("1_7bjnk")
+proj_weapon_type = 0
+projectile = ExtResource("1_sf3xp")
+projectile_data = SubResource("Resource_2dbrb")
+ammo_type = 0
+mag_size = 30
+reload_time = 1.0
+reload_type = "Magazine"
+firing_mode = "Semi Auto"
+uses_bloom = false
+bloom_curve = SubResource("Curve_kfl3v")
+recoil_curve = SubResource("Curve_p4aqc")
+auto_fire_delay = 0.15
+num_of_bursts = 0
+projectiles_per_burst = 3
+burst_bullet_delay = 0.1
+auto_burst_delay = 0.3
+angluar_spread = 0
+barrage_count = 3
+firing_sound = ""
+reload_sound = ""
+weapon_scene = ExtResource("6_gbfef")
+stats = SubResource("Resource_wcvpy")
+effect_source = SubResource("Resource_wic0i")
+id = "laser_gun"
+name = "Laser Gun"
+icon = ExtResource("3_h5lfv")
+thumbnail = ExtResource("3_h5lfv")
+item_type = 1
+rarity = 2
+weight = 0
+stack_size = 1
+auto_pickup = false
+pickup_radius = 4
+info = ""

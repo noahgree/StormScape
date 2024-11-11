@@ -3,7 +3,7 @@
 [ext_resource type="Shader" path="res://UI/Shaders/GlintShader.gdshader" id="1_att70"]
 [ext_resource type="Script" path="res://Entities/Items/Item.gd" id="1_rwd02"]
 [ext_resource type="Resource" uid="uid://chfps77qv6w0e" path="res://Entities/Items/ItemResources/Pickaxe.tres" id="2_yldjb"]
-[ext_resource type="Texture2D" uid="uid://bfhfklmv02pmx" path="res://Entities/Items/ItemScripts/Weapons/Pickaxe/pickaxe.png" id="3_n4x5f"]
+[ext_resource type="Texture2D" uid="uid://bfhfklmv02pmx" path="res://Entities/Items/Weapons/Pickaxe/pickaxe.png" id="3_n4x5f"]
 [ext_resource type="Texture2D" uid="uid://dcbwxgak6a0r8" path="res://Entities/entity_shadow.png" id="4_n8nbw"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_no3c7"]
@@ -110,7 +110,7 @@ _data = {
 
 [node name="Item" type="Area2D" groups=["Items", "has_save_logic"]]
 collision_layer = 0
-collision_mask = 53
+collision_mask = 256
 monitorable = false
 script = ExtResource("1_rwd02")
 stats = ExtResource("2_yldjb")

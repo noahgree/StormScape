@@ -1,0 +1,68 @@
+[gd_scene load_steps=6 format=3 uid="uid://m4ur3n2hwsp8"]
+
+[ext_resource type="Texture2D" uid="uid://barnaq2utcos2" path="res://UI/Inventory/InventoryCore/Slot/inv_slot_9_patch.png" id="1_sk7xc"]
+[ext_resource type="Script" path="res://UI/Inventory/InventoryCore/Slot/Slot.gd" id="2_ywtjc"]
+[ext_resource type="PackedScene" uid="uid://bacsel0a5l2iu" path="res://UI/Inventory/InventoryCore/Slot/SlotDragPreview.tscn" id="3_2ljmb"]
+[ext_resource type="FontVariation" uid="uid://blgkcg6c83yln" path="res://Assets/Theming/Fonts/GameFontResources/ui_pixel_font.tres" id="3_dimqv"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_kd5f7"]
+line_spacing = 0.0
+font = ExtResource("3_dimqv")
+outline_size = 2
+outline_color = Color(0, 0, 0, 1)
+shadow_size = 0
+shadow_offset = Vector2(0, 0)
+
+[node name="Slot" type="NinePatchRect"]
+custom_minimum_size = Vector2(22, 22)
+size_flags_horizontal = 4
+mouse_filter = 1
+texture = ExtResource("1_sk7xc")
+patch_margin_left = 2
+patch_margin_top = 2
+patch_margin_right = 2
+patch_margin_bottom = 2
+script = ExtResource("2_ywtjc")
+drag_preview = ExtResource("3_2ljmb")
+
+[node name="TextureMargins" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 3
+theme_override_constants/margin_top = 3
+theme_override_constants/margin_right = 3
+theme_override_constants/margin_bottom = 3
+
+[node name="ItemTexture" type="TextureRect" parent="TextureMargins"]
+custom_minimum_size = Vector2(16, 16)
+layout_mode = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="QuantityMargins" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = 7.0
+offset_bottom = 7.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.75, 0.75)
+theme_override_constants/margin_right = 3
+theme_override_constants/margin_bottom = 2
+
+[node name="Quantity" type="Label" parent="QuantityMargins"]
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 8
+label_settings = SubResource("LabelSettings_kd5f7")
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="." to="." method="_on_mouse_exited"]

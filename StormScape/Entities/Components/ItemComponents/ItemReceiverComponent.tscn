@@ -3,4 +3,7 @@
 [ext_resource type="Script" path="res://Entities/Components/ItemComponents/ItemReceiverComponent.gd" id="1_whjxx"]
 
 [node name="ItemReceiverComponent" type="Area2D" groups=["has_save_logic"]]
+collision_layer = 256
+collision_mask = 0
+monitoring = false
 script = ExtResource("1_whjxx")

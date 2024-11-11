@@ -1,0 +1,102 @@
+[gd_scene load_steps=9 format=3 uid="uid://baxpb3crwepc0"]
+
+[ext_resource type="Script" path="res://Entities/Items/Weapons/ProjectileWeapon.gd" id="1_v8yes"]
+[ext_resource type="Texture2D" uid="uid://cgeqpk6i7o7im" path="res://Entities/Items/Weapons/LaserGun/laser_gun_default.png" id="2_h3oo0"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gdc4m"]
+atlas = ExtResource("2_h3oo0")
+region = Rect2(0, 2, 24, 22)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2w2sp"]
+atlas = ExtResource("2_h3oo0")
+region = Rect2(24, 2, 24, 22)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_g1kh6"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_gdc4m")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2w2sp")
+}],
+"loop": true,
+"name": &"fire",
+"speed": 5.0
+}]
+
+[sub_resource type="Animation" id="Animation_tjfuh"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AnimatedSprite2D:animation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [&"fire"]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("AnimatedSprite2D:frame")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+
+[sub_resource type="Animation" id="Animation_ea614"]
+resource_name = "fire"
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AnimatedSprite2D:animation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [&"fire"]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("AnimatedSprite2D:frame")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [0, 1]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_7q2gn"]
+_data = {
+"RESET": SubResource("Animation_tjfuh"),
+"fire": SubResource("Animation_ea614")
+}
+
+[node name="LaserGun" type="Node2D"]
+script = ExtResource("1_v8yes")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_g1kh6")
+animation = &"fire"
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_7q2gn")
+}
+
+[node name="ProjectileOrigin" type="Marker2D" parent="."]
+position = Vector2(10, -4)

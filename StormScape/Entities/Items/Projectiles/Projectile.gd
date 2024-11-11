@@ -1,0 +1,33 @@
+extends HitboxComponent
+class_name Projectile
+## The viusal representation of the projectile. Defines all needed methods for how to travel and seek, with the flags for what
+## to do being set by whatever spawns the projectile.
+
+@onready var previous_position: Vector2 = global_position
+@onready var sprite: Sprite2D = $Sprite2D
+
+var stats: ProjectileResource
+
+static func spawn(proj_scene: PackedScene, proj_stats: ProjectileResource, pos: Vector2,
+				rot: float, source: PhysicsBody2D) -> Projectile:
+	var proj: Projectile = proj_scene.instantiate()
+	proj.global_position = pos
+	proj.rotation = rot
+	proj.source_entity = source
+	proj.stats = proj_stats
+	return proj
+
+func _ready() -> void:
+	super._ready()
+	z_index = -1
+
+	var start_offset: int = int(floor(sprite.region_rect.size.x / 2.0))
+	var offset_vector: Vector2 = Vector2(start_offset, 0).rotated(global_rotation)
+	global_position += offset_vector
+
+func _physics_process(delta: float) -> void:
+	position += transform.x * stats.speed * delta
+	movement_direction = (global_position - previous_position).normalized()
+
+func _process_hit(_area: Area2D) -> void:
+	queue_free()

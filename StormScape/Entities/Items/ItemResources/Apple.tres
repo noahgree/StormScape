@@ -1,7 +1,7 @@
 [gd_resource type="Resource" script_class="ItemResource" load_steps=4 format=3 uid="uid://c1yh67b4i2xtt"]
 
-[ext_resource type="Texture2D" uid="uid://vogh2mn7c26h" path="res://Entities/Items/ItemScripts/Consumables/Apple/apple_thumb.png" id="1_1h1du"]
-[ext_resource type="Texture2D" uid="uid://uv2k6jkr0t8h" path="res://Entities/Items/ItemScripts/Consumables/Apple/apple.png" id="1_30bht"]
+[ext_resource type="Texture2D" uid="uid://vogh2mn7c26h" path="res://Entities/Items/Consumables/Apple/apple_thumb.png" id="1_1h1du"]
+[ext_resource type="Texture2D" uid="uid://uv2k6jkr0t8h" path="res://Entities/Items/Consumables/Apple/apple.png" id="1_30bht"]
 [ext_resource type="Script" path="res://Entities/Items/ItemResource.gd" id="1_bk6ou"]
 
 [resource]

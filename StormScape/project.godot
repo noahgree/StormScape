@@ -156,6 +156,7 @@ primary={
 2d_physics/layer_6="Movable Objects"
 2d_physics/layer_7="Land Edge"
 2d_physics/layer_8="World"
+2d_physics/layer_9="Item Pickups"
 
 [rendering]
 

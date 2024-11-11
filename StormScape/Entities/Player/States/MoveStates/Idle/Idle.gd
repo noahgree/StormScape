@@ -6,13 +6,13 @@ var movement_vector: Vector2 = Vector2.ZERO
 
 func enter() -> void:
 	fsm.anim_tree["parameters/playback"].travel("idle")
-	_animate()
 
 func exit() -> void:
 	pass
 
 ## If any input vector besides Vector2.ZERO is detected, we transition to the run state
 func state_physics_process(_delta: float) -> void:
+	_animate()
 	_do_character_idle()
 	_check_for_sneak_request()
 

@@ -1,22 +1,25 @@
 extends Camera2D
 class_name PlayerCamera
+## The main player camera that implements screen shake and engine freeze/slow.
 
-@export var player: Player
-@export var smoothing_enabled: bool = false
-@export_range(1, 100, 1) var smoothing_factor: int = 7
-@export var drag_vertical: float = 0.1
-@export var drag_horizontal: float = 0.2
+@export var player: Player ## A reference to the player.
+@export var smoothing_enabled: bool = false ## Whether to use smoothing logic when this camera moves.
+@export_range(1, 100, 1) var smoothing_factor: int = 7 ## The amount of smoothing to use.
+@export var drag_vertical: float = 0.1 ## The vertical ratio of screen to allow shown ahead of the player before moving the camera.
+@export var drag_horizontal: float = 0.2 ## The horizontal ratio of screen to allow shown ahead of the player before moving the camera.
 
-var shake_strength: float = 0
-var shake_time: float = 0
-var shake_tween: Tween = null
-const MAX_SHAKE_STRENGTH: float = 30.0
-const MAX_SHAKE_TIME: float = 2.0
+var shake_strength: float = 0 ## The current shake strength of the camera. Automatically decremented over time once set.
+var shake_time: float = 0 ## How long the shake strength should take to return to 0. Can be updated on the fly.
+var shake_tween: Tween = null ## Tween for automatically decreasing the camera shake strength.
+const MAX_SHAKE_STRENGTH: float = 30.0 ## The max amount of cumulative shake strength this camera can have at any given time.
+const MAX_SHAKE_TIME: float = 2.0 ## The max amount of cumulative shake time this camera can have at any given point.
 
 
+## Sets the initial position to be right above the player.
 func _ready() -> void:
 	global_position = player.global_position
 
+## Runs positioning logic for every physics frame. Also checks if shake is needed and automatically decrements it.
 func _physics_process(delta: float) -> void:
 	if shake_strength > 0:
 		offset = Vector2(randf_range(-shake_strength, shake_strength), randf_range(-shake_strength, shake_strength))

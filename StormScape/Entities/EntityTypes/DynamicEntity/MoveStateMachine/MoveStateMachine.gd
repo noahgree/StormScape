@@ -44,6 +44,8 @@ func _ready() -> void:
 ## Checks if knockback needs to be lerped to 0 and passes the physics process to the active state.
 ## Advances animation tree manually so that it respects time snares. Overrides parent state machine class.
 func state_machine_physics_process(delta: float) -> void:
+	anim_vector = _get_mouse_direction(entity.global_position)
+
 	if knockback_vector.length() > 100:
 		knockback_vector = lerp(knockback_vector, Vector2.ZERO, 6 * delta)
 	else:
@@ -52,6 +54,9 @@ func state_machine_physics_process(delta: float) -> void:
 	if current_state:
 		current_state.state_physics_process(delta)
 		anim_tree.advance(delta)
+
+func _get_mouse_direction(relative_position: Vector2) -> Vector2:
+	return (entity.get_global_mouse_position() - relative_position).normalized()
 
 ## Assists in turning the character to the right direction upon game loads.
 func verify_anim_vector() -> void:

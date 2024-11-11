@@ -11,6 +11,18 @@ class_name Item
 
 var can_be_auto_picked_up: bool = false
 
+
+func _set_item(item_stats: ItemResource) -> void:
+	stats = item_stats
+	if stats and thumbnail:
+		$CollisionShape2D.shape.radius = stats.pickup_radius
+		thumbnail.texture = stats.thumbnail
+		thumbnail.position.y = -thumbnail.texture.get_height() / 2.0
+		if shadow:
+			shadow.scale.x = thumbnail.texture.get_width() / 16.0
+			shadow.scale.y = thumbnail.texture.get_height() / 32.0
+			shadow.position.y = ceil(thumbnail.texture.get_height() / 2.0) + ceil(shadow.texture.get_height() / 2.0) - 2 + thumbnail.position.y
+
 #region Save & Load
 func _on_save_game(save_data: Array[SaveData]) -> void:
 	var data: ItemData = ItemData.new()
@@ -62,15 +74,3 @@ func _on_area_exited(area: Area2D) -> void:
 		thumbnail.material.set_shader_parameter("width", 0)
 		if not (area as ItemReceiverComponent).items_in_range.is_empty():
 			(area as ItemReceiverComponent).items_in_range[area.items_in_range.size() - 1].thumbnail.material.set_shader_parameter("width", 0.75)
-
-
-func _set_item(item_stats: ItemResource) -> void:
-	stats = item_stats
-	if stats and thumbnail:
-		$CollisionShape2D.shape.radius = stats.pickup_radius
-		thumbnail.texture = stats.thumbnail
-		thumbnail.position.y = -thumbnail.texture.get_height() / 2.0
-		if shadow:
-			shadow.scale.x = thumbnail.texture.get_width() / 16.0
-			shadow.scale.y = thumbnail.texture.get_height() / 32.0
-			shadow.position.y = ceil(thumbnail.texture.get_height() / 2.0) + ceil(shadow.texture.get_height() / 2.0) - 2 + thumbnail.position.y

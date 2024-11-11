@@ -7,7 +7,7 @@ class_name RigidEntity
 
 @export var team: GlobalData.Teams = GlobalData.Teams.PLAYER ## What the effects received by this entity should consider as this entity's team.
 @export_group("Status Effects & Stat Mods")
-@export var stats: StatModsCacheResource ## The resource that will cache and work with all stat mods for this entity.
+@export var stats: StatModsCacheResource = StatModsCacheResource.new() ## The resource that will cache and work with all stat mods for this entity.
 @export var effects: StatusEffectManager ## The node that will cache and manage all status effects for this entity.
 
 @onready var inv: ItemReceiverComponent = get_node_or_null("ItemReceiverComponent")
