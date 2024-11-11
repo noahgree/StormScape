@@ -1,7 +1,7 @@
 [gd_resource type="Resource" script_class="ItemResource" load_steps=4 format=3 uid="uid://c1yh67b4i2xtt"]
 
-[ext_resource type="Texture2D" uid="uid://vogh2mn7c26h" path="res://Entities/Items/Consumables/Apple/apple_thumb.png" id="1_1h1du"]
-[ext_resource type="Texture2D" uid="uid://uv2k6jkr0t8h" path="res://Entities/Items/Consumables/Apple/apple.png" id="1_30bht"]
+[ext_resource type="Texture2D" uid="uid://7v6u4kbfcjon" path="res://Entities/Items/Consumables/Apple/apple_thumb.png" id="1_1h1du"]
+[ext_resource type="Texture2D" uid="uid://b4acjy3ujbtoy" path="res://Entities/Items/Consumables/Apple/apple.png" id="1_30bht"]
 [ext_resource type="Script" path="res://Entities/Items/ItemResource.gd" id="1_bk6ou"]
 
 [resource]
@@ -10,8 +10,9 @@ id = "Apple"
 name = "Apple"
 icon = ExtResource("1_30bht")
 thumbnail = ExtResource("1_1h1du")
-type = 0
+item_type = 0
 rarity = 0
+weight = 0
 stack_size = 2
 auto_pickup = true
 pickup_radius = 4

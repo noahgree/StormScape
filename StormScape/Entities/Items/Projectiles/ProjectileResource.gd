@@ -3,6 +3,7 @@ class_name ProjectileResource
 
 @export_group("General")
 @export var speed: int = 500
+@export var speed_falloff: Curve = Curve.new()
 @export var lifetime: float = 100.0
 @export var max_distance: int = 500
 @export var max_pierce: int = 0
@@ -18,13 +19,6 @@ class_name ProjectileResource
 @export_group("Splitting Logic")
 @export var split_count: int = 0
 @export var split_delay: float = 0.0
-
-@export_group("FX")
-@export var whiz_sound: String = ""
-@export_range(0, 100, 0.1, "suffix:%") var glow_strength: float = 0
-@export var glow_color: Color = Color(1, 1, 1)
-@export var impact_vfx: PackedScene = null
-@export var impact_sound: String = ""
 
 @export_group("Area of Effect")
 @export var splash_radius: int = 0

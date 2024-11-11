@@ -1,7 +1,8 @@
-[gd_scene load_steps=9 format=3 uid="uid://baxpb3crwepc0"]
+[gd_scene load_steps=10 format=3 uid="uid://baxpb3crwepc0"]
 
 [ext_resource type="Script" path="res://Entities/Items/Weapons/ProjectileWeapon.gd" id="1_v8yes"]
 [ext_resource type="Texture2D" uid="uid://cgeqpk6i7o7im" path="res://Entities/Items/Weapons/LaserGun/laser_gun_default.png" id="2_h3oo0"]
+[ext_resource type="Texture2D" uid="uid://cs3clmnktksd6" path="res://Entities/Player/player_hand.png" id="3_5j6aw"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_gdc4m"]
 atlas = ExtResource("2_h3oo0")
@@ -100,3 +101,11 @@ libraries = {
 
 [node name="ProjectileOrigin" type="Marker2D" parent="."]
 position = Vector2(10, -4)
+
+[node name="MainHandPos" type="Marker2D" parent="."]
+position = Vector2(-5, 1)
+
+[node name="MainHandSprite" type="Sprite2D" parent="."]
+z_index = 1
+position = Vector2(-5, 1)
+texture = ExtResource("3_5j6aw")

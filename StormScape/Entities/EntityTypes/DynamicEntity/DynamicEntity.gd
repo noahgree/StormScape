@@ -10,11 +10,12 @@ class_name DynamicEntity
 @export var stats: StatModsCacheResource = StatModsCacheResource.new() ## The resource that will cache and work with all stat mods for this entity.
 @export var effects: StatusEffectManager ## The node that will cache and manage all status effects for this entity.
 
-@onready var move_fsm: MoveStateMachine = $MoveStateMachine ## The FSM controlling the player's movement.
-@onready var action_fsm: ActionStateMachine = $ActionStateMachine ## The FSM controlling the player's actions.
-@onready var health_component: HealthComponent = $HealthComponent ## The component in charge of player health and shield.
-@onready var stamina_component: StaminaComponent = $StaminaComponent ## The component in charge of player stamina and hunger.
-@onready var inv: ItemReceiverComponent = get_node_or_null("ItemReceiverComponent")
+@onready var move_fsm: MoveStateMachine = $MoveStateMachine ## The FSM controlling the entity's movement.
+@onready var action_fsm: ActionStateMachine = $ActionStateMachine ## The FSM controlling the entity's actions.
+@onready var health_component: HealthComponent = $HealthComponent ## The component in charge of entity health and shield.
+@onready var stamina_component: StaminaComponent = $StaminaComponent ## The component in charge of entity stamina and hunger.
+@onready var inv: ItemReceiverComponent = get_node_or_null("ItemReceiverComponent") ## The inventory component for the entity.
+@onready var hands: EquippedItemComponent = get_node_or_null("EquippedItemComponent") ## The hands item component for the entity.
 
 var time_snare_counter: float = 0 ## The ticker that slows down delta when under a time snare.
 var snare_factor: float = 0 ## Multiplier for delta time during time snares.

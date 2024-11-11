@@ -1,12 +1,15 @@
 extends Node2D
-class_name HandComponents
+class_name EquippedItemComponent
 
-@onready var main_hand: Node2D = $MainHand
-@onready var hand_sprite: Sprite2D = $HandSprite
+@onready var main_hand: Node2D = $HandsAnchor/MainHand
+@onready var off_hand_sprite: Sprite2D = $OffHandSprite
 
 
-func _unhandled_input(_event: InputEvent) -> void:
-	if Input.is_action_just_pressed("primary"):
+func _ready() -> void:
+	pass
+
+func _unhandled_input(event: InputEvent) -> void:
+	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
 		if main_hand.get_child_count() > 0 and main_hand.get_child(0).has_method("fire"):
 			main_hand.get_child(0).fire(get_parent())
 

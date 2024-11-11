@@ -169,7 +169,7 @@ func _drop_data(_at_position: Vector2, data: Variant) -> void:
 		if item.stats is WeaponResource:
 			var wpn_scene: Weapon = item.stats.weapon_scene.instantiate()
 			wpn_scene.stats = item.stats
-			GlobalData.player_node.get_node("HandsComponent/MainHand").add_child(wpn_scene)
+			GlobalData.player_node.get_node("EquippedItemComponent").main_hand.add_child(wpn_scene)
 
 #region Dropping Full Stacks
 ## Moves all items from drag into a different empty slot.

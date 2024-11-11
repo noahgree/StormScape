@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dnf30kfbtgcar"
-path="res://.godot/imported/pickaxe_thumb.png-803d05b19c3a47f61e1ddffe1e471b06.ctex"
+uid="uid://co2s33qcdlpj1"
+path="res://.godot/imported/player_base.png-29974effbefae1297f814da58aaf71f8.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Entities/Items/Weapons/Pickaxe/pickaxe_thumb.png"
-dest_files=["res://.godot/imported/pickaxe_thumb.png-803d05b19c3a47f61e1ddffe1e471b06.ctex"]
+source_file="res://Entities/Player/Spritesheets/Base/player_base.png"
+dest_files=["res://.godot/imported/player_base.png-29974effbefae1297f814da58aaf71f8.ctex"]
 
 [params]
 

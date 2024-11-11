@@ -3,6 +3,12 @@ class_name Projectile
 ## The viusal representation of the projectile. Defines all needed methods for how to travel and seek, with the flags for what
 ## to do being set by whatever spawns the projectile.
 
+@export var whiz_sound: String = ""
+@export_range(0, 100, 0.1, "suffix:%") var glow_strength: float = 0
+@export var glow_color: Color = Color(1, 1, 1)
+@export var impact_vfx: PackedScene = null
+@export var impact_sound: String = ""
+
 @onready var previous_position: Vector2 = global_position
 @onready var sprite: Sprite2D = $Sprite2D
 

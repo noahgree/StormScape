@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="ItemResource" load_steps=3 format=3 uid="uid://chfps77qv6w0e"]
 
-[ext_resource type="Texture2D" uid="uid://bfhfklmv02pmx" path="res://Entities/Items/Weapons/Pickaxe/pickaxe.png" id="1_atmb4"]
+[ext_resource type="Texture2D" uid="uid://b6q76o13tanxi" path="res://Entities/Items/Weapons/Pickaxe/pickaxe.png" id="1_atmb4"]
 [ext_resource type="Script" path="res://Entities/Items/ItemResource.gd" id="2_1dymc"]
 
 [resource]
@@ -9,7 +9,10 @@ id = "Pickaxe"
 name = "Pickaxe"
 icon = ExtResource("1_atmb4")
 thumbnail = ExtResource("1_atmb4")
-type = 1
+item_type = 0
 rarity = 3
+weight = 0
 stack_size = 1
+auto_pickup = false
+pickup_radius = 4
 info = "A handy pickaxe."

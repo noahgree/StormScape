@@ -2,9 +2,11 @@ extends Weapon
 class_name ProjectileWeapon
 
 @export var stats: ProjWeaponResource = null: set = _set_wpn ## The resource driving the stats and type of weapon.
+@export_enum("Single", "TwoHanded") var grip_method: String = "Single"
 
 @onready var anim_player: AnimationPlayer = $AnimationPlayer
 @onready var proj_origin: Marker2D = $ProjectileOrigin
+@onready var main_hand_pos: Marker2D = get_node_or_null("MainHandPos")
 
 
 func _set_wpn(wpn_stats: ProjWeaponResource) -> void:

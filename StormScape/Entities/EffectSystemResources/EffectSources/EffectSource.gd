@@ -44,9 +44,3 @@ class_name EffectSource
 var source_entity: PhysicsBody2D ## The entity this effect source came from.
 var contact_position: Vector2 ## The position of what the effect source is attached to when it makes contact with a receiver.
 var movement_direction: Vector2 ## The direction vector of this effect source at contact used for knockback.
-
-
-## Sets this resource to always be unique to each instance of the scene it is in. If attached to a gun, stats like
-## "base_damage" will become unique to each instance of the gun rather than anywhere that gun scene is instantiated.
-func _ready() -> void:
-	resource_local_to_scene = true
