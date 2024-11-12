@@ -5,7 +5,6 @@
 [ext_resource type="Resource" uid="uid://chfps77qv6w0e" path="res://Entities/Items/ItemResources/Pickaxe.tres" id="2_yldjb"]
 [ext_resource type="Texture2D" uid="uid://b6q76o13tanxi" path="res://Entities/Items/Weapons/Pickaxe/pickaxe.png" id="4_1yl86"]
 [ext_resource type="Texture2D" uid="uid://dcbwxgak6a0r8" path="res://Entities/entity_shadow.png" id="4_n8nbw"]
-[ext_resource type="Texture2D" uid="uid://b6q76o13tanxi" path="res://Entities/Items/Weapons/Pickaxe/pickaxe.png" id="4_smp3j"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_no3c7"]
 resource_local_to_scene = true
@@ -20,8 +19,8 @@ gradient = SubResource("Gradient_8c7dk")
 
 [sub_resource type="Gradient" id="Gradient_ujuwf"]
 interpolation_mode = 2
-offsets = PackedFloat32Array(0.142857, 0.476959, 0.785714)
-colors = PackedColorArray(0, 0, 0, 1, 0.760297, 0.760297, 0.760297, 1, 0, 0, 0, 1)
+offsets = PackedFloat32Array(0, 0.486957, 1)
+colors = PackedColorArray(0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 1)
 
 [sub_resource type="GradientTexture1D" id="GradientTexture1D_pytf7"]
 gradient = SubResource("Gradient_ujuwf")
@@ -34,15 +33,15 @@ shader_parameter/width = 0.0
 shader_parameter/pattern = 2
 shader_parameter/inside = false
 shader_parameter/add_margins = true
-shader_parameter/size_effect = 0.3
+shader_parameter/size_effect = 0.4
 shader_parameter/speed = 0.9
-shader_parameter/highlight_strength = 0.3
+shader_parameter/highlight_strength = 0.7
 shader_parameter/color_mode_toggle = true
 shader_parameter/pause_duration = 1.0
 shader_parameter/angle = 35.0
 shader_parameter/tint_color = Color(1, 1, 1, 0)
 shader_parameter/glow_intensity = 1.0
-shader_parameter/random_start_offset = 0.292029
+shader_parameter/random_start_offset = 0.0
 shader_parameter/vertical_gradient = SubResource("GradientTexture1D_pytf7")
 shader_parameter/color_gradient = SubResource("GradientTexture1D_u0r6t")
 
@@ -121,7 +120,6 @@ shape = SubResource("CircleShape2D_no3c7")
 debug_color = Color(5.29438e-07, 0.636012, 0.41019, 0.42)
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
-self_modulate = Color(2, 0, 2, 1)
 material = SubResource("ShaderMaterial_qrrcp")
 position = Vector2(0, -8)
 texture = ExtResource("4_1yl86")

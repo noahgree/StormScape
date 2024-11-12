@@ -4,7 +4,7 @@
 [ext_resource type="Script" path="res://Entities/Items/Weapons/ProjWeaponResource.gd" id="1_7bjnk"]
 [ext_resource type="PackedScene" uid="uid://ckf7i8bnass5n" path="res://Entities/Items/Projectiles/Laser/Laser.tscn" id="1_sf3xp"]
 [ext_resource type="Script" path="res://Entities/EffectSystemResources/StatusEffects/StatusEffect.gd" id="2_mu3cd"]
-[ext_resource type="Texture2D" uid="uid://cgeqpk6i7o7im" path="res://Entities/Items/Weapons/LaserGun/laser_gun_default.png" id="3_h5lfv"]
+[ext_resource type="Texture2D" uid="uid://bjm0js8cfg2rm" path="res://Entities/Items/Weapons/LaserGun/laser_gun.png" id="3_qr2dh"]
 [ext_resource type="Script" path="res://Entities/Items/Projectiles/ProjectileResource.gd" id="5_54flx"]
 [ext_resource type="Script" path="res://Entities/Components/StatModComponents/StatModsCacheResource.gd" id="5_lsump"]
 [ext_resource type="PackedScene" uid="uid://baxpb3crwepc0" path="res://Entities/Items/Weapons/LaserGun/LaserGun.tscn" id="6_gbfef"]
@@ -47,6 +47,8 @@ arc_time = 0.15
 arc_collision_delay = 0.3
 split_count = 0
 split_delay = 0.0
+split_cam_shake_str = 0.0
+split_cam_shake_dur = 0.0
 splash_radius = 0
 splash_falloff_exponent = 1.0
 splash_effect_delay = 0.0
@@ -76,19 +78,24 @@ recoil_curve = SubResource("Curve_p4aqc")
 auto_fire_delay = 0.15
 num_of_bursts = 0
 projectiles_per_burst = 3
+use_ammo_per_proj = true
 burst_bullet_delay = 0.1
 auto_burst_delay = 0.3
 angluar_spread = 0
 barrage_count = 3
+cam_shake_strength = 0.0
+cam_shake_duration = 0.0
+cam_freeze_strength = 0.0
+cam_freeze_duration = 0.0
 firing_sound = ""
 reload_sound = ""
-weapon_scene = ExtResource("6_gbfef")
 stats = SubResource("Resource_wcvpy")
 effect_source = SubResource("Resource_wic0i")
 id = "laser_gun"
 name = "Laser Gun"
-icon = ExtResource("3_h5lfv")
-thumbnail = ExtResource("3_h5lfv")
+item_scene = ExtResource("6_gbfef")
+icon = ExtResource("3_qr2dh")
+thumbnail = ExtResource("3_qr2dh")
 item_type = 1
 rarity = 2
 weight = 0

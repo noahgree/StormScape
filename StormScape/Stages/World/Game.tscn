@@ -4351,6 +4351,8 @@ texture = ExtResource("12_ajeh1")
 z_index = 0
 position = Vector2(258, 85)
 collision_mask = 245
+player_name = "Player1"
+team = 1
 
 [node name="PlayerCamera" type="Camera2D" parent="WorldRoot" node_paths=PackedStringArray("player") groups=["core"]]
 unique_name_in_owner = true

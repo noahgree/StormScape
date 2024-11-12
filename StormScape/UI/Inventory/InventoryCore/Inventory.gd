@@ -128,8 +128,13 @@ func _put_what_fits_in_empty_slot_and_continue(index: int, inv_item: InvItemReso
 	original_item.quantity = leftover
 	slot_updated.emit(index, inv[index])
 
-func remove_item() -> void:
-	pass
+func remove_item(index: int, amount: int) -> void:
+	var updated_item: InvItemResource = InvItemResource.new(inv[index].stats, inv[index].quantity)
+	updated_item.quantity = max(0, updated_item.quantity - amount)
+	inv[index] = updated_item
+	if updated_item.quantity <= 0:
+		inv[index] = null
+	slot_updated.emit(index, inv[index])
 
 ## This updates all connected slots in order to reflect the UI properly.
 func _update_all_connected_slots() -> void:

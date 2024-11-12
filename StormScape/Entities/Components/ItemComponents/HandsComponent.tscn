@@ -1,0 +1,23 @@
+[gd_scene load_steps=3 format=3 uid="uid://b7gdy01q8wsjx"]
+
+[ext_resource type="Script" path="res://Entities/Components/ItemComponents/HandsComponent.gd" id="1_y5huf"]
+[ext_resource type="Texture2D" uid="uid://cs3clmnktksd6" path="res://Entities/Player/player_hand.png" id="2_lwexw"]
+
+[node name="HandsComponent" type="Node2D"]
+position = Vector2(0, -9)
+script = ExtResource("1_y5huf")
+
+[node name="OffHandSprite" type="Sprite2D" parent="."]
+z_index = 1
+position = Vector2(-7, 1)
+texture = ExtResource("2_lwexw")
+
+[node name="HandsAnchor" type="Node2D" parent="."]
+
+[node name="MainHandSprite" type="Sprite2D" parent="HandsAnchor"]
+z_index = 1
+position = Vector2(9, 1)
+texture = ExtResource("2_lwexw")
+
+[node name="MainHand" type="Node2D" parent="HandsAnchor"]
+position = Vector2(9, 1)

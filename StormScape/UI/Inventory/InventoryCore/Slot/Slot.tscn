@@ -1,9 +1,10 @@
-[gd_scene load_steps=6 format=3 uid="uid://m4ur3n2hwsp8"]
+[gd_scene load_steps=7 format=3 uid="uid://m4ur3n2hwsp8"]
 
 [ext_resource type="Texture2D" uid="uid://barnaq2utcos2" path="res://UI/Inventory/InventoryCore/Slot/inv_slot_9_patch.png" id="1_sk7xc"]
 [ext_resource type="Script" path="res://UI/Inventory/InventoryCore/Slot/Slot.gd" id="2_ywtjc"]
 [ext_resource type="PackedScene" uid="uid://bacsel0a5l2iu" path="res://UI/Inventory/InventoryCore/Slot/SlotDragPreview.tscn" id="3_2ljmb"]
 [ext_resource type="FontVariation" uid="uid://blgkcg6c83yln" path="res://Assets/Theming/Fonts/GameFontResources/ui_pixel_font.tres" id="3_dimqv"]
+[ext_resource type="Texture2D" uid="uid://cau2iedv1rubj" path="res://UI/Inventory/InventoryCore/Slot/inv_slot_active_9_patch.png" id="4_fx27x"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_kd5f7"]
 line_spacing = 0.0
@@ -24,6 +25,8 @@ patch_margin_right = 2
 patch_margin_bottom = 2
 script = ExtResource("2_ywtjc")
 drag_preview = ExtResource("3_2ljmb")
+default_slot_texture = ExtResource("1_sk7xc")
+active_slot_texture = ExtResource("4_fx27x")
 
 [node name="TextureMargins" type="MarginContainer" parent="."]
 layout_mode = 1

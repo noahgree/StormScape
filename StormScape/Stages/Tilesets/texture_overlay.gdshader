@@ -1,6 +1,6 @@
 shader_type canvas_item;
 
-uniform sampler2D overlay_tex: repeat_enable, filter_nearest;
+uniform sampler2D overlay_tex: source_color, repeat_enable, filter_nearest;
 uniform float scale = 0.0078125; // calculated by 1/texture size e.g. 1/144
 varying vec2 world_position;
 
@@ -10,12 +10,15 @@ void vertex(){
 }
 
 void fragment() {
-	// only apply overlay_tex on the fully red parts of the original tiles
-	float mix_amount = floor(COLOR.r);
+    // Calculate mix amount, ensuring it's within the range
+    float mix_amount = COLOR.r > 0.99 ? 1.0 : 0.0;
 
-	// sample the overlay_tex using worldPos
-	vec4 overlay_color = texture(overlay_tex, world_position * scale);
+    // Sample the overlay texture
+    vec4 overlay_color = texture(overlay_tex, world_position * scale);
 
-	// combine original color and overlay color together
-	COLOR = mix(COLOR, overlay_color, mix_amount);
+    // Mix the original color with the overlay color
+    vec4 final_color = mix(COLOR, overlay_color, mix_amount);
+
+    // Clamp the final color to ensure it doesn't exceed the expected range
+    COLOR = clamp(final_color, 0.0, 1.0);
 }

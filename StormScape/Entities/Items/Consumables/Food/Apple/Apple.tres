@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="ConsumableResource" load_steps=5 format=3 uid="uid://cx1ydw2jde1y8"]
+
+[ext_resource type="Script" path="res://Entities/Items/Consumables/ConsumableResource.gd" id="1_jepoi"]
+[ext_resource type="Texture2D" uid="uid://b4acjy3ujbtoy" path="res://Entities/Items/Consumables/Food/Apple/apple.png" id="1_vw2hi"]
+[ext_resource type="PackedScene" uid="uid://bdaogdtcus1ac" path="res://Entities/Items/Consumables/Food.tscn" id="2_oh2im"]
+[ext_resource type="Texture2D" uid="uid://7v6u4kbfcjon" path="res://Entities/Items/Consumables/Food/Apple/apple_thumb.png" id="4_upr2p"]
+
+[resource]
+script = ExtResource("1_jepoi")
+id = "apple"
+name = "Apple"
+item_scene = ExtResource("2_oh2im")
+icon = ExtResource("1_vw2hi")
+thumbnail = ExtResource("4_upr2p")
+item_type = 0
+rarity = 0
+weight = 0
+stack_size = 5
+auto_pickup = true
+pickup_radius = 4
+info = "A simple snack."

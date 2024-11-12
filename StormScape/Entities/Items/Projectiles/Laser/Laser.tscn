@@ -38,6 +38,7 @@ shape = SubResource("RectangleShape2D_apooh")
 debug_color = Color(0.626, 0.349, 1, 0.196)
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
+self_modulate = Color(1.8, 1.8, 1.8, 1)
 texture = ExtResource("2_xaeia")
 region_enabled = true
 region_rect = Rect2(2, 5, 12, 5)

@@ -4,6 +4,7 @@ class_name ItemResource
 @export_group("Item Details")
 @export var id: String ## The unique identifier for the item.
 @export var name: String ## The item's string name.
+@export var item_scene: PackedScene = null ## The equippable representation of this item.
 @export var icon: Texture2D ## The inventory representation of the item.
 @export var thumbnail: Texture2D ## The physical representation of the item.
 @export var item_type: GlobalData.ItemType = GlobalData.ItemType.CONSUMABLE ## The type that this item is.

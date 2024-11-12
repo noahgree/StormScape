@@ -57,6 +57,7 @@ bool hasContraryNeighbour(vec2 uv, vec2 texture_pixel_size, sampler2D texture) {
 void fragment() {
     vec2 uv = UV;
     vec4 base_color = texture(TEXTURE, uv);
+    vec4 final_color = base_color;
 
     // Logic for margins
     if (add_margins) {
@@ -74,38 +75,43 @@ void fragment() {
     base_color.rgb = tinted_base_color * glow_intensity;
 
     // Determine if the outline should be applied
-    if ((base_color.a > 0.0) == inside && hasContraryNeighbour(uv, TEXTURE_PIXEL_SIZE, TEXTURE)) {
-        COLOR.rgb = mix(base_color.rgb, outline_color.rgb, outline_color.a);
-        COLOR.a = 1.0; // Ensure alpha is correctly set for the outline
+    bool is_outline = (base_color.a > 0.0) == inside && hasContraryNeighbour(uv, TEXTURE_PIXEL_SIZE, TEXTURE);
+    if (is_outline) {
+        final_color.rgb = mix(base_color.rgb, outline_color.rgb, outline_color.a);
+        final_color.a = 1.0; // Ensure alpha is correctly set for the outline
     } else {
-        COLOR = base_color;
+        final_color = base_color;
     }
 
-    // Logic from the second shader
-    float time = TIME * abs(speed);
-    float effect_cycle_duration = 1.0 + pause_duration + random_start_offset;
-    float mod_time = mod(time, effect_cycle_duration);
-    float progress = mod_time / (1.0);
-    if (mod_time > 1.0) {
-        progress = 1.0;
-    }
-    if (speed < 0.0) {
-        progress = 1.0 - progress;
+    // Logic for the glint effect, applied only to non-outline parts
+    if (!is_outline) {
+        float time = TIME * abs(speed);
+        float effect_cycle_duration = 1.0 + pause_duration + random_start_offset;
+        float mod_time = mod(time, effect_cycle_duration);
+        float progress = mod_time / (1.0);
+        if (mod_time > 1.0) {
+            progress = 1.0;
+        }
+        if (speed < 0.0) {
+            progress = 1.0 - progress;
+        }
+
+        float rad_angle = radians(angle);
+        vec2 direction = vec2(cos(rad_angle), sin(rad_angle));
+        float position_value = dot(UV, direction) / sqrt(2.0);
+        float current_time = mix(0.0 - size_effect, 1.0 + size_effect, progress);
+        float effect_lower_bound = current_time - size_effect;
+        float effect_upper_bound = current_time + size_effect;
+        float effect_distance = smoothstep(effect_lower_bound, current_time, position_value) - smoothstep(current_time, effect_upper_bound, position_value);
+        float inner_effect_position = smoothstep(effect_lower_bound, effect_upper_bound, position_value);
+        vec2 color_position = (color_mode_toggle) ? vec2(UV.x, inner_effect_position) : vec2(progress);
+        vec4 new_color = vec4(texture(color_gradient, color_position));
+        new_color = mix(base_color, new_color, vec4(texture(vertical_gradient, vec2(progress))));
+        vec4 effect_color = mix(base_color, new_color, effect_distance * highlight_strength);
+
+        final_color.rgb = mix(final_color.rgb, effect_color.rgb, effect_distance * highlight_strength);
     }
 
-    float rad_angle = radians(angle);
-    vec2 direction = vec2(cos(rad_angle), sin(rad_angle));
-    float position_value = dot(UV, direction) / sqrt(2.0);
-    float current_time = mix(0.0 - size_effect, 1.0 + size_effect, progress);
-    float effect_lower_bound = current_time - size_effect;
-    float effect_upper_bound = current_time + size_effect;
-    float effect_distance = smoothstep(effect_lower_bound, current_time, position_value) - smoothstep(current_time, effect_upper_bound, position_value);
-    float inner_effect_position = smoothstep(effect_lower_bound, effect_upper_bound, position_value);
-    vec2 color_position = (color_mode_toggle) ? vec2(UV.x, inner_effect_position) : vec2(progress);
-    vec4 new_color = vec4(texture(color_gradient, color_position));
-    new_color = mix(base_color, new_color, vec4(texture(vertical_gradient, vec2(progress))));
-    vec4 effect_color = mix(base_color, new_color, effect_distance * highlight_strength);
-    COLOR.rgb = mix(COLOR.rgb, effect_color.rgb, effect_distance * highlight_strength);
-
-	COLOR.rgb *= glow_intensity;
+    final_color.rgb *= glow_intensity;
+	COLOR = final_color;
 }

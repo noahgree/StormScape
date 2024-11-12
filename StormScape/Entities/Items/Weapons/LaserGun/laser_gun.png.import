@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://7v6u4kbfcjon"
-path="res://.godot/imported/apple_thumb.png-4bfa081a6fabaf457c40c0bb554697b6.ctex"
+uid="uid://bjm0js8cfg2rm"
+path="res://.godot/imported/laser_gun.png-920666abb42faa28cc0dbdb72864572b.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Entities/Items/Consumables/Apple/apple_thumb.png"
-dest_files=["res://.godot/imported/apple_thumb.png-4bfa081a6fabaf457c40c0bb554697b6.ctex"]
+source_file="res://Entities/Items/Weapons/LaserGun/laser_gun.png"
+dest_files=["res://.godot/imported/laser_gun.png-920666abb42faa28cc0dbdb72864572b.ctex"]
 
 [params]
 

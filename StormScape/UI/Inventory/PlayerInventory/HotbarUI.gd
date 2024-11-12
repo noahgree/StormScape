@@ -33,7 +33,7 @@ func _on_slot_updated(index: int, item: InvItemResource) -> void:
 			_update_active_item()
 
 func _update_active_item() -> void:
-	GlobalData.player_node.hands.on_equipped_item_change(active_slot.item)
+	GlobalData.player_node.hands.on_equipped_item_change(active_slot)
 
 func _input(event: InputEvent) -> void:
 	if DebugFlags.HotbarFlags.use_scroll_debounce and not scroll_debounce_timer.is_stopped(): return

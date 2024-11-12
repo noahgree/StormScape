@@ -12,7 +12,7 @@ class_name StaminaComponent
 @export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var _stamina_recharge_delay: float = 5.0 ## The delay after using stamina before it starts recharging.
 @export var _max_hunger_bars: int = 100 ## The max amount of hunger bars the entity can have.
 @export var _stamina_use_per_hunger_deduction: float = 100.0 ## The amount of stamina the entity has to use before it can deduct the _hunger_cost_per_stamina_bar from the hunger bar.
-@export_custom(PROPERTY_HINT_NONE, "suffix:hunger") var _hunger_cost_per_stamina_use: int = 5 ## The amount of hunger to deduct per _stamina_use_per_hunger_deduction amount of stamina.
+@export_custom(PROPERTY_HINT_NONE, "suffix:hunger") var _hunger_cost_per_stamina_bar: int = 5 ## The amount of hunger to deduct per _stamina_use_per_hunger_deduction amount of stamina.
 
 @onready var stamina_wait_timer: Timer = %StaminaWaitTimer ## The wait between using stamina and when it starts recharging.
 
@@ -32,7 +32,7 @@ func _ready() -> void:
 		"max_stamina" : _max_stamina, "max_hunger_bars" : _max_hunger_bars,
 		"stamina_recharge_rate" : _stamina_recharge_rate,
 		"stamina_use_per_hunger_deduction" : _stamina_use_per_hunger_deduction,
-		"hunger_cost_per_stamina_use" : _hunger_cost_per_stamina_use,
+		"hunger_cost_per_stamina_bar" : _hunger_cost_per_stamina_bar,
 		"stamina_recharge_delay" : _stamina_recharge_delay
 	}
 	get_parent().stats.add_moddable_stats(moddable_stats)
@@ -59,7 +59,7 @@ func use_stamina(amount: float) -> bool:
 		stamina_to_hunger_count += amount
 		if stamina_to_hunger_count / get_parent().stats.get_stat("stamina_use_per_hunger_deduction") >= 0.99:
 			stamina_to_hunger_count = 0
-			hunger_bars = max(0, hunger_bars - get_parent().stats.get_stat("hunger_cost_per_stamina_use"))
+			hunger_bars = max(0, hunger_bars - get_parent().stats.get_stat("hunger_cost_per_stamina_bar"))
 
 		return true
 
@@ -77,6 +77,10 @@ func use_hunger_bars(amount: int) -> bool:
 	else:
 		hunger_bars -= amount
 		return true
+
+## Increases current number of hunger bars based on a passed in amount.
+func gain_hunger_bars(amount: int) -> void:
+	hunger_bars = min(get_parent().stats.get_stat("max_hunger_bars"), hunger_bars + amount)
 
 ## Setter for stamina. Clamps the new value to the allowed range and attempts to tell a linked ui about the update.
 func _set_stamina(new_value: float) -> void:

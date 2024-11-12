@@ -12,3 +12,6 @@ func activate(source_entity: PhysicsBody2D = null) -> void:
 func fire(source_entity: PhysicsBody2D) -> void:
 	var proj: Projectile = Projectile.spawn(stats.projectile, stats.projectile_data, proj_origin.global_position, global_rotation, source_entity)
 	GlobalData.world_root.add_child(proj)
+
+	anim_player.speed_scale = 1.0 / stats.auto_fire_delay
+	anim_player.play("fire")

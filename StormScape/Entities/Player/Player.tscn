@@ -1,4 +1,4 @@
-[gd_scene load_steps=205 format=3 uid="uid://dba8mrurjlekp"]
+[gd_scene load_steps=204 format=3 uid="uid://dba8mrurjlekp"]
 
 [ext_resource type="Script" path="res://Entities/Player/Player.gd" id="1_m33tt"]
 [ext_resource type="Script" path="res://Entities/Components/StatModComponents/StatModsCacheResource.gd" id="2_vyeuy"]
@@ -36,8 +36,8 @@
 [ext_resource type="Script" path="res://UI/Inventory/PlayerInventory/PlayerInvCommunicator.gd" id="31_mjpan"]
 [ext_resource type="Script" path="res://UI/Inventory/PlayerInventory/PlayerInvUI.gd" id="32_3a185"]
 [ext_resource type="Script" path="res://Entities/Items/InvItemResource.gd" id="32_ixmb3"]
+[ext_resource type="Resource" uid="uid://cx1ydw2jde1y8" path="res://Entities/Items/Consumables/Food/Apple/Apple.tres" id="33_0qw5e"]
 [ext_resource type="Texture2D" uid="uid://biejldas3s8ak" path="res://UI/Inventory/InventoryCore/inv_9_patch.png" id="33_8yk75"]
-[ext_resource type="Resource" uid="uid://c1yh67b4i2xtt" path="res://Entities/Items/ItemResources/Apple.tres" id="33_jgsm1"]
 [ext_resource type="Script" path="res://UI/PlayerUILayer.gd" id="33_wetrf"]
 [ext_resource type="Resource" uid="uid://chfps77qv6w0e" path="res://Entities/Items/ItemResources/Pickaxe.tres" id="34_1e85o"]
 [ext_resource type="Resource" uid="uid://c7xxa5yy1lsyb" path="res://Entities/Items/ItemResources/TestCannonball.tres" id="35_7kvtx"]
@@ -48,10 +48,9 @@
 [ext_resource type="Texture2D" uid="uid://k0o25ihgea1n" path="res://UI/PlayerStatsOverlay/Assets/Hunger Progress Under.png" id="37_32xjt"]
 [ext_resource type="Resource" uid="uid://ciel2rrqq4dvv" path="res://Entities/Items/Weapons/LaserGun/LaserGun.tres" id="37_a2tah"]
 [ext_resource type="Texture2D" uid="uid://bdgevpcheclv5" path="res://UI/PlayerStatsOverlay/Assets/Hunger Progress Bar.png" id="38_ht2cb"]
-[ext_resource type="Script" path="res://Entities/Components/ItemComponents/HandsComponent.gd" id="38_klsxl"]
+[ext_resource type="PackedScene" uid="uid://b7gdy01q8wsjx" path="res://Entities/Components/ItemComponents/HandsComponent.tscn" id="39_ngono"]
 [ext_resource type="Shader" path="res://UI/Shaders/BlurBehind.gdshader" id="39_r4tgk"]
 [ext_resource type="Texture2D" uid="uid://xnppg0u7t7w4" path="res://UI/PlayerStatsOverlay/Assets/Stamina Recharge Under.png" id="39_ryeha"]
-[ext_resource type="Texture2D" uid="uid://cs3clmnktksd6" path="res://Entities/Player/player_hand.png" id="40_2q1kf"]
 [ext_resource type="Texture2D" uid="uid://gfbxblly7q78" path="res://UI/PlayerStatsOverlay/Assets/Stamina Recharge Bar.png" id="40_suqvl"]
 [ext_resource type="Script" path="res://UI/Inventory/InventoryCore/InventoryPopulator.gd" id="41_nwjbq"]
 [ext_resource type="Texture2D" uid="uid://br8kgmxe41gh0" path="res://UI/PlayerStatsOverlay/Assets/Hunger Bar.png" id="41_wehgh"]
@@ -1505,7 +1504,7 @@ graph_offset = Vector2(-48, 10)
 
 [sub_resource type="Resource" id="Resource_pihal"]
 script = ExtResource("32_ixmb3")
-stats = ExtResource("33_jgsm1")
+stats = ExtResource("33_0qw5e")
 quantity = 2
 
 [sub_resource type="Resource" id="Resource_ww7hy"]
@@ -1577,8 +1576,6 @@ z_index = 1
 collision_mask = 213
 motion_mode = 1
 script = ExtResource("1_m33tt")
-player_name = null
-team = null
 stats = SubResource("Resource_rwbul")
 effects = NodePath("StatusEffectManager")
 
@@ -1724,19 +1721,8 @@ position = Vector2(0, -5)
 shape = SubResource("CircleShape2D_3wm74")
 debug_color = Color(0.800804, 0.389919, 9.62615e-07, 0.227451)
 
-[node name="HandsComponent" type="Node2D" parent="."]
-position = Vector2(0, -9)
-script = ExtResource("38_klsxl")
-
-[node name="OffHandSprite" type="Sprite2D" parent="HandsComponent"]
-z_index = 1
-position = Vector2(-7, 1)
-texture = ExtResource("40_2q1kf")
-
-[node name="HandsAnchor" type="Node2D" parent="HandsComponent"]
-
-[node name="MainHand" type="Node2D" parent="HandsComponent/HandsAnchor"]
-position = Vector2(11, 0)
+[node name="HandsComponent" parent="." instance=ExtResource("39_ngono")]
+default_main_hand_pos = Vector2(7, 1)
 
 [node name="PlayerUILayer" type="CanvasLayer" parent="."]
 script = ExtResource("33_wetrf")
