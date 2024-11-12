@@ -118,6 +118,9 @@ func _set_display_tilemap() -> void:
 	if not get_node_or_null('WorldTileMap'):
 		display_tilemap = TileMapLayer.new()
 		display_tilemap.name = "WorldTileMap"
+		display_tilemap.material = CanvasItemMaterial.new()
+		display_tilemap.material.light_mode = CanvasItemMaterial.LightMode.LIGHT_MODE_LIGHT_ONLY
+		display_tilemap.material = self.material
 		add_child(display_tilemap)
 	# Both tilemaps must be the same
 	if display_tilemap.tile_set != self.tile_set:
