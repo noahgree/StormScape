@@ -3,6 +3,7 @@
 [ext_resource type="Shader" path="res://UI/Shaders/GlintShader.gdshader" id="1_att70"]
 [ext_resource type="Script" path="res://Entities/Items/Item.gd" id="1_rwd02"]
 [ext_resource type="Resource" uid="uid://chfps77qv6w0e" path="res://Entities/Items/ItemResources/Pickaxe.tres" id="2_yldjb"]
+[ext_resource type="Texture2D" uid="uid://b6q76o13tanxi" path="res://Entities/Items/Weapons/Pickaxe/pickaxe.png" id="4_1yl86"]
 [ext_resource type="Texture2D" uid="uid://dcbwxgak6a0r8" path="res://Entities/entity_shadow.png" id="4_n8nbw"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_no3c7"]
@@ -43,9 +44,6 @@ shader_parameter/glow_intensity = 1.0
 shader_parameter/random_start_offset = 0.292029
 shader_parameter/vertical_gradient = SubResource("GradientTexture1D_pytf7")
 shader_parameter/color_gradient = SubResource("GradientTexture1D_u0r6t")
-
-[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_vskda"]
-load_path = "res://.godot/imported/pickaxe.png-d7be2e235389cd181dd8b53578ccf1eb.ctex"
 
 [sub_resource type="Animation" id="Animation_5tv4j"]
 length = 0.001
@@ -124,8 +122,8 @@ debug_color = Color(5.29438e-07, 0.636012, 0.41019, 0.42)
 [node name="Sprite2D" type="Sprite2D" parent="."]
 self_modulate = Color(2, 0, 2, 1)
 material = SubResource("ShaderMaterial_qrrcp")
-position = Vector2(0, -16)
-texture = SubResource("CompressedTexture2D_vskda")
+position = Vector2(0, -8)
+texture = ExtResource("4_1yl86")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
@@ -138,7 +136,7 @@ autoplay = "hover"
 [node name="Shadow" type="Sprite2D" parent="ShadowScaler"]
 self_modulate = Color(0, 0, 0, 0.188)
 position = Vector2(0, 2)
-scale = Vector2(2, 1)
+scale = Vector2(1, 0.5)
 texture = ExtResource("4_n8nbw")
 
 [connection signal="area_entered" from="." to="." method="_on_area_entered"]

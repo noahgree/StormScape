@@ -7,6 +7,7 @@ class_name HotbarUI
 @onready var hotbar: HBoxContainer = %HotbarUISlotGrid ## The container that holds the hotbar slots.
 
 var hotbar_slots: Array[Slot] = [] ## Local representation of the hoytbar slots, updated when changed externally.
+var active_slot: Slot
 
 
 ## Connects the hotbar slots to the signal needed to keep them up to date.
@@ -18,9 +19,16 @@ func _ready() -> void:
 		hotbar.get_child(i).index = player_inv.inv_size - player_inv.hotbar_size + i
 		hotbar_slots.append(hotbar.get_child(i))
 
+	if not hotbar_slots.is_empty():
+		active_slot = hotbar_slots[0]
+
 ## When receiving the signal that a slot has changed, update the visuals.
-func _on_slot_updated(index: int, item: InventoryItem) -> void:
+func _on_slot_updated(index: int, item: InvItemResource) -> void:
 	var hotbar_slot_count: int = player_inv.inv_size - player_inv.hotbar_size
-	if index >= hotbar_slot_count:
-		if index < player_inv.inv_size:
-			hotbar_slots[index - hotbar_slot_count].item = item
+	if (index >= hotbar_slot_count) and (index < player_inv.inv_size):
+		hotbar_slots[index - hotbar_slot_count].item = item
+		if index == active_slot.index:
+			_update_active_item()
+
+func _update_active_item() -> void:
+	GlobalData.player_node.hands.on_equipped_item_change(active_slot.item)

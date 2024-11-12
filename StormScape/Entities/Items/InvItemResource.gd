@@ -1,11 +1,11 @@
 extends Resource
-class_name InventoryItem
+class_name InvItemResource
 
 @export var stats: ItemResource ## The resource driving the stats and type of item this is.
 @export var quantity: int = 1 ## The quantity associated with the inventory item.
 
 
-## Used when calling InventoryItem.new() to be able to pass in stats and a quantity.
+## Used when calling InvItemResource.new() to be able to pass in stats and a quantity.
 func _init(item_stats: ItemResource = null, item_quantity: int = 1) -> void:
 	self.stats = item_stats
 	self.quantity = item_quantity

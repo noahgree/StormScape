@@ -78,7 +78,7 @@ func _set_synced_ui() -> void:
 		slots[i].item = synced_inv.inv[i]
 
 ## When a slot gets updated in the inventory, this is received via signal in order to update a slot visual here.
-func _on_slot_updated(index: int, item: InventoryItem) -> void:
+func _on_slot_updated(index: int, item: InvItemResource) -> void:
 	slots[index].item = item
 
 ## When a slot is hovered, update the item details label if that slot's item is not null.

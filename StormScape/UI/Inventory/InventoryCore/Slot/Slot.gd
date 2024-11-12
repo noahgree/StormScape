@@ -15,7 +15,7 @@ var index: int ## The index that this slot represents inside the inventory.
 var synced_inv: Inventory ## The synced inventory that this slot is a part of.
 var dragging_only_one: bool = false ## Whether this slot is carrying only a quantity of 1 when in drag data.
 var dragging_half_stack: bool = false ## Whether this slot is carrying only half of its quantity when in drag data.
-var item: InventoryItem: set = _set_item ## The current inventory item represented in this slot.
+var item: InvItemResource: set = _set_item ## The current inventory item represented in this slot.
 var is_hotbar_ui_preview_slot: bool = false ## Whether this slot is an inventory hotbar preview slot for the player's screen.
 var is_trash_slot: bool = false ## The slot, that if present, is used to discard items. It will have the highest index.
 
@@ -165,16 +165,10 @@ func _drop_data(_at_position: Vector2, data: Variant) -> void:
 	is_hovered_over.emit(index)
 	_on_mouse_exited()
 
-	if index == synced_inv.inv_size - synced_inv.hotbar_size: ## FIXME: Temp equipping logic.
-		if item.stats is WeaponResource:
-			var wpn_scene: Weapon = item.stats.weapon_scene.instantiate()
-			wpn_scene.stats = item.stats
-			GlobalData.player_node.get_node("EquippedItemComponent").main_hand.add_child(wpn_scene)
-
 #region Dropping Full Stacks
 ## Moves all items from drag into a different empty slot.
 func _move_items_to_other_empty_slot(data: Variant) -> void:
-	item = InventoryItem.new(data.item.stats, data.item.quantity)
+	item = InvItemResource.new(data.item.stats, data.item.quantity)
 	synced_inv.inv[index] = item
 
 	synced_inv.inv[data.index] = null
@@ -204,10 +198,10 @@ func _combine_what_fits_and_leave_remainder(data: Variant) -> void:
 			data.item = null
 		else:
 			data.item.quantity -= int(floor(data.item.quantity / 2.0))
-			synced_inv.inv[data.index] = InventoryItem.new(data.item.stats, data.item.quantity)
+			synced_inv.inv[data.index] = InvItemResource.new(data.item.stats, data.item.quantity)
 	else:
 		data.item.quantity -= amount_that_fits
-		synced_inv.inv[data.index] = InventoryItem.new(data.item.stats, data.item.quantity)
+		synced_inv.inv[data.index] = InvItemResource.new(data.item.stats, data.item.quantity)
 		data.item = synced_inv.inv[data.index]
 
 	_emit_changes_for_potential_listening_hotbar(data)
@@ -215,7 +209,7 @@ func _combine_what_fits_and_leave_remainder(data: Variant) -> void:
 ## Swaps slot data's.
 func _swap_item_stacks(data: Variant) -> void:
 	var temp_item = item
-	item = InventoryItem.new(data.item.stats, data.item.quantity)
+	item = InvItemResource.new(data.item.stats, data.item.quantity)
 	synced_inv.inv[index] = item
 
 	if is_trash_slot:
@@ -231,7 +225,7 @@ func _swap_item_stacks(data: Variant) -> void:
 #region Dropping Only One
 ## Moves a quantity of 1 from an item slot to an empty slot.
 func _move_one_item_to_empty_slot(data: Variant) -> void:
-	item = InventoryItem.new(data.item.stats, 1)
+	item = InvItemResource.new(data.item.stats, 1)
 	synced_inv.inv[index] = item
 	_check_if_inv_slot_is_now_empty_after_dragging_only_one(data)
 
@@ -256,10 +250,10 @@ func _check_if_inv_slot_is_now_empty_after_dragging_only_one(data: Variant) -> v
 #region Dropping Half Stacks
 ## Moves all of the half quantity represented by the drag data into a slot with space, empty or not.
 func _move_all_of_the_half_stack_into_a_slot(data: Variant, source_remainder: int, total_quantity: int) -> void:
-	item = InventoryItem.new(data.item.stats, total_quantity)
+	item = InvItemResource.new(data.item.stats, total_quantity)
 	synced_inv.inv[index] = item
 
-	synced_inv.inv[data.index] = InventoryItem.new(data.item.stats, source_remainder)
+	synced_inv.inv[data.index] = InvItemResource.new(data.item.stats, source_remainder)
 	data.item = synced_inv.inv[data.index]
 
 	_emit_changes_for_potential_listening_hotbar(data)

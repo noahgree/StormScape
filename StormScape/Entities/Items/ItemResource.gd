@@ -14,6 +14,7 @@ class_name ItemResource
 @export_custom(PROPERTY_HINT_NONE, "suffix:px") var pickup_radius: int = 4 ## The radius at which the item can be detected for pickup.
 @export_multiline var info: String ## The multiline information about this item.
 
+
 ## The custom string representation of this item resource.
 func _to_string() -> String:
 	return str(GlobalData.ItemType.keys()[item_type]) + ": " + str(GlobalData.ItemRarity.keys()[rarity]) + "_" + name

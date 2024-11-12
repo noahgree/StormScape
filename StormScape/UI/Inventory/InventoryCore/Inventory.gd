@@ -2,18 +2,18 @@ extends Area2D
 class_name Inventory
 ## The main superclass for any inventory controller.
 
-signal slot_updated(index: int, item: InventoryItem)
+signal slot_updated(index: int, item: InvItemResource)
 
 @export var item_scene: PackedScene = load("res://Entities/Items/Item.tscn") ## The item scene to be used when items are instantiated on the ground.
-@export var starting_inv: Array[InventoryItem] ## The inventory that should be loaded when this scene is instantiated.
+@export var starting_inv: Array[InvItemResource] ## The inventory that should be loaded when this scene is instantiated.
 @export var is_player_inv: bool = false ## Whether this is the player's inventory or not. Needed for hotbar and trash slot logic.
 @export var inv_size: int = 32 ## The total number of slots in the inventory, including the hotbar slots.
 @export var hotbar_size: int = 0 ## The number of slots out of the inv_size that are in the hotbar. Only affects the player inv.
 @export var inv_populator: InventoryPopulator ## The control node that is responsible for populating its connected slots.
 @export var ui: InventoryUI ## The parent control node that contains all inventory UI nodes as children.
 
-var inv: Array[InventoryItem] = [] ## The current inventory. Main source of truth.
-var inv_to_load_from_save: Array[InventoryItem] = [] ## Gets loaded when a game is loaded so that it can be iterated into the main inv array.
+var inv: Array[InvItemResource] = [] ## The current inventory. Main source of truth.
+var inv_to_load_from_save: Array[InvItemResource] = [] ## Gets loaded when a game is loaded so that it can be iterated into the main inv array.
 
 
 ## Sets up the connected UI and populator after resizing the inv array appropriately.
@@ -26,13 +26,13 @@ func _ready() -> void:
 	ui.connect_inventory(self)
 
 ## Fills the main inventory from an array of inventory items. If an item exceeds stack size, the quantity that does not fit into ## one slot is instantiated on the ground as a physical item. This method respects null spots in the list.
-func fill_inventory(inv_to_fill_from: Array[InventoryItem]) -> void:
+func fill_inventory(inv_to_fill_from: Array[InvItemResource]) -> void:
 	inv.fill(null)
 	for i in range(min(inv_size if not is_player_inv else inv_size + 1, inv_to_fill_from.size())):
 		if inv_to_fill_from[i] == null:
 			inv[i] = null
 		else:
-			var inv_item: InventoryItem = inv_to_fill_from[i]
+			var inv_item: InvItemResource = inv_to_fill_from[i]
 			if inv_item.quantity > inv_item.stats.stack_size:
 				var ground_item: Item = item_scene.instantiate()
 				ground_item.stats = inv_item.stats
@@ -46,7 +46,7 @@ func fill_inventory(inv_to_fill_from: Array[InventoryItem]) -> void:
 
 ## Fills the main inventory from an array of inventory items. Calls another method to check stack size conditions, filling
 ## iteratively. It does not drop excess items on the ground, and anything that does not fit will be ignored.
-func fill_inventory_with_checks(inv_to_fill_from: Array[InventoryItem]) -> void:
+func fill_inventory_with_checks(inv_to_fill_from: Array[InvItemResource]) -> void:
 	inv.fill(null)
 	for i in range(min(inv_size if not is_player_inv else inv_size + 1, inv_to_fill_from.size())):
 		if inv_to_fill_from[i] != null:
@@ -56,35 +56,35 @@ func fill_inventory_with_checks(inv_to_fill_from: Array[InventoryItem]) -> void:
 ## Handles the logic needed for adding an item to the inventory when picked up from the ground. Respects stack size.
 ## Any extra quantity that does not fit will be left on the ground as a physical item.
 func add_item_from_world(item: Item) -> bool:
-	var inv_item: InventoryItem = InventoryItem.new(item.stats, item.quantity)
+	var inv_item: InvItemResource = InvItemResource.new(item.stats, item.quantity)
 	for i in range(hotbar_size):
 		var result: String = _do_add_item_checks(i + (inv_size - hotbar_size), inv_item, item)
 		if result == "done":
 			return true
 		elif result == "new inv item created":
-			inv_item = InventoryItem.new(item.stats, item.quantity)
+			inv_item = InvItemResource.new(item.stats, item.quantity)
 	for i in range(inv_size - hotbar_size):
 		var result: String = _do_add_item_checks(i, inv_item, item)
 		if result == "done":
 			return true
 		elif result == "new inv item created":
-			inv_item = InventoryItem.new(item.stats, item.quantity)
+			inv_item = InvItemResource.new(item.stats, item.quantity)
 	return false
 
 ## Handles the logic needed for adding an item to the inventory from a given inventory item resource. Respects stack size.
 ## Any extra quantity that does not fit will be ignored and deleted.
-func add_item_from_inv_item_resource(original_item: InventoryItem) -> bool:
-	var inv_item: InventoryItem = InventoryItem.new(original_item.stats, original_item.quantity)
+func add_item_from_inv_item_resource(original_item: InvItemResource) -> bool:
+	var inv_item: InvItemResource = InvItemResource.new(original_item.stats, original_item.quantity)
 	for i in range(inv_size):
 		var result: String = _do_add_item_checks(i, inv_item, original_item)
 		if result == "done":
 			return true
 		elif result == "new inv item created":
-			inv_item = InventoryItem.new(original_item.stats, original_item.quantity)
+			inv_item = InvItemResource.new(original_item.stats, original_item.quantity)
 	return false
 
 ## Wrapper function to let child functions check whether to add quantity to an item slot. Returns a string based on what it did.
-func _do_add_item_checks(index: int, inv_item: InventoryItem, item: Variant) -> String:
+func _do_add_item_checks(index: int, inv_item: InvItemResource, item: Variant) -> String:
 	if inv[index] != null and inv[index].stats.is_same_as(inv_item.stats):
 		if (inv_item.quantity + inv[index].quantity) <= inv_item.stats.stack_size:
 			_combine_item_count_in_occupied_slot(index, inv_item, item)
@@ -101,13 +101,13 @@ func _do_add_item_checks(index: int, inv_item: InventoryItem, item: Variant) -> 
 	return ""
 
 ## Combines the item into a slot that has space for that kind of item.
-func _combine_item_count_in_occupied_slot(index: int, inv_item: InventoryItem, original_item: Variant) -> void:
+func _combine_item_count_in_occupied_slot(index: int, inv_item: InvItemResource, original_item: Variant) -> void:
 	inv[index].quantity += inv_item.quantity
 	if original_item is Item: original_item.queue_free()
 	slot_updated.emit(index, inv[index])
 
 ## Adds what fits to an occupied slot of the same kind of item and passes the remainder to the next iteration.
-func _add_what_fits_to_occupied_slot_and_continue(index: int, inv_item: InventoryItem, original_item: Variant) -> void:
+func _add_what_fits_to_occupied_slot_and_continue(index: int, inv_item: InvItemResource, original_item: Variant) -> void:
 	var amount_that_fits: int = max(0, inv_item.stats.stack_size - inv[index].quantity)
 	inv[index].quantity = inv_item.stats.stack_size
 	inv_item.quantity -= amount_that_fits
@@ -115,13 +115,13 @@ func _add_what_fits_to_occupied_slot_and_continue(index: int, inv_item: Inventor
 	slot_updated.emit(index, inv[index])
 
 ## Puts the entire quantity of the given item into an empty slot. This means it was less than or equal to stack size.
-func _put_entire_quantity_in_empty_slot(index: int, inv_item: InventoryItem, original_item: Variant) -> void:
+func _put_entire_quantity_in_empty_slot(index: int, inv_item: InvItemResource, original_item: Variant) -> void:
 	inv[index] = inv_item
 	if original_item is Item: original_item.queue_free()
 	slot_updated.emit(index, inv[index])
 
 ## This puts what fits of an item type into an empty slot and passes the remainder to the next iteration.
-func _put_what_fits_in_empty_slot_and_continue(index: int, inv_item: InventoryItem, original_item: Variant) -> void:
+func _put_what_fits_in_empty_slot_and_continue(index: int, inv_item: InvItemResource, original_item: Variant) -> void:
 	var leftover: int = max(0, inv_item.quantity - inv_item.stats.stack_size)
 	inv_item.quantity = inv_item.stats.stack_size
 	inv[index] = inv_item
@@ -183,7 +183,7 @@ func activate_sort_by_name() -> void:
 	_update_all_connected_slots()
 
 ## Implements the comparison logic for sorting by rarity.
-func _rarity_sort_logic(a: InventoryItem, b: InventoryItem) -> bool:
+func _rarity_sort_logic(a: InvItemResource, b: InvItemResource) -> bool:
 	if a == null and b == null: return false
 	if a == null: return false
 	if b == null: return true
@@ -194,7 +194,7 @@ func _rarity_sort_logic(a: InventoryItem, b: InventoryItem) -> bool:
 		return a.stats.name < b.stats.name
 
 ## Implements the comparison logic for sorting by count.
-func _count_sort_logic(a: InventoryItem, b: InventoryItem) -> bool:
+func _count_sort_logic(a: InvItemResource, b: InvItemResource) -> bool:
 	if a == null and b == null: return false
 	if a == null: return false
 	if b == null: return true
@@ -205,7 +205,7 @@ func _count_sort_logic(a: InventoryItem, b: InventoryItem) -> bool:
 		return a.stats.name < b.stats.name
 
 ## Implements the comparison logic for sorting by name.
-func _name_sort_logic(a: InventoryItem, b: InventoryItem) -> bool:
+func _name_sort_logic(a: InvItemResource, b: InvItemResource) -> bool:
 	if a == null and b == null: return false
 	if a == null: return false
 	if b == null: return true
