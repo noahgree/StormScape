@@ -5,6 +5,7 @@
 [ext_resource type="Resource" uid="uid://chfps77qv6w0e" path="res://Entities/Items/ItemResources/Pickaxe.tres" id="2_yldjb"]
 [ext_resource type="Texture2D" uid="uid://b6q76o13tanxi" path="res://Entities/Items/Weapons/Pickaxe/pickaxe.png" id="4_1yl86"]
 [ext_resource type="Texture2D" uid="uid://dcbwxgak6a0r8" path="res://Entities/entity_shadow.png" id="4_n8nbw"]
+[ext_resource type="Texture2D" uid="uid://b6q76o13tanxi" path="res://Entities/Items/Weapons/Pickaxe/pickaxe.png" id="4_smp3j"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_no3c7"]
 resource_local_to_scene = true
