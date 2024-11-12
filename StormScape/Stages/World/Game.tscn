@@ -5,9 +5,9 @@
 [ext_resource type="Shader" path="res://Stages/Tilesets/texture_overlay.gdshader" id="2_dbic0"]
 [ext_resource type="Texture2D" uid="uid://c50xdwgnkx441" path="res://Stages/Tilesets/Old/TilesetFloor.png" id="2_jx7f2"]
 [ext_resource type="Texture2D" uid="uid://nvl4eoe0gf5y" path="res://Stages/Tilesets/Old/TilesetField.png" id="3_eucto"]
-[ext_resource type="Texture2D" uid="uid://bsmcmitw3c2iy" path="res://Stages/Tilesets/GrassTexture3.png" id="3_x7fsi"]
 [ext_resource type="PackedScene" uid="uid://dba8mrurjlekp" path="res://Entities/Player/Player.tscn" id="4_ptig0"]
 [ext_resource type="Script" path="res://Entities/Player/PlayerCamera.gd" id="4_tj8qg"]
+[ext_resource type="Texture2D" uid="uid://dhgjawgf5u572" path="res://Stages/Tilesets/grass_flowers_texture_repeating.png" id="5_5par6"]
 [ext_resource type="Script" path="res://Entities/EntityTypes/RigidEntity/RigidEntity.gd" id="5_vhyrg"]
 [ext_resource type="PackedScene" uid="uid://btba0jmsow1mx" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectReceiverComponent.tscn" id="6_haafe"]
 [ext_resource type="Script" path="res://Entities/Components/StatModComponents/StatModsCacheResource.gd" id="6_jky7o"]
@@ -4109,8 +4109,8 @@ sources/2 = SubResource("TileSetAtlasSource_6prks")
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_mrxx3"]
 shader = ExtResource("2_dbic0")
-shader_parameter/scale = 0.00694444
-shader_parameter/overlay_tex = ExtResource("3_x7fsi")
+shader_parameter/scale = 0.0078125
+shader_parameter/overlay_tex = ExtResource("5_5par6")
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_4rxbk"]
 texture = ExtResource("22_tnvqm")
