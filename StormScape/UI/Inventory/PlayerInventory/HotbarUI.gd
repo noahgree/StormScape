@@ -5,6 +5,7 @@ class_name HotbarUI
 @export var player_inv: Inventory ## The connected player inventory to reflect as a UI.
 
 @onready var hotbar: HBoxContainer = %HotbarUISlotGrid ## The container that holds the hotbar slots.
+@onready var scroll_debounce_timer: Timer = $ScrollDebounceTimer
 
 var hotbar_slots: Array[Slot] = [] ## Local representation of the hoytbar slots, updated when changed externally.
 var active_slot: Slot
@@ -21,6 +22,7 @@ func _ready() -> void:
 
 	if not hotbar_slots.is_empty():
 		active_slot = hotbar_slots[0]
+		active_slot.texture = active_slot.active_slot_texture
 
 ## When receiving the signal that a slot has changed, update the visuals.
 func _on_slot_updated(index: int, item: InvItemResource) -> void:
@@ -32,3 +34,22 @@ func _on_slot_updated(index: int, item: InvItemResource) -> void:
 
 func _update_active_item() -> void:
 	GlobalData.player_node.hands.on_equipped_item_change(active_slot.item)
+
+func _input(event: InputEvent) -> void:
+	if DebugFlags.HotbarFlags.use_scroll_debounce and not scroll_debounce_timer.is_stopped(): return
+	if event is InputEventMouseButton:
+		if Input.is_action_just_released("scroll_up"):
+			_change_active_slot(-1)
+			scroll_debounce_timer.start()
+		elif Input.is_action_just_released("scroll_down"):
+			_change_active_slot(1)
+			scroll_debounce_timer.start()
+
+func _change_active_slot(direction: int) -> void:
+	active_slot.texture = active_slot.default_slot_texture
+	var new_index = (active_slot.index + direction) % hotbar_slots.size()
+	if new_index < 0:
+		new_index = hotbar_slots.size() - 1
+	active_slot = hotbar_slots[new_index]
+	active_slot.texture = active_slot.active_slot_texture
+	_update_active_item()

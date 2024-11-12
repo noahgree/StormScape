@@ -12,3 +12,6 @@ func _set_stats(new_stats: ItemResource) -> void:
 
 func _ready() -> void:
 	_set_stats(stats)
+
+func activate(_source_entity: PhysicsBody2D = null) -> void:
+	pass

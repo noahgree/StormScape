@@ -14,3 +14,6 @@ class MainMenuFlags:
 
 class AudioFlags:
 	static var set_debug_output_device: bool = true
+
+class HotbarFlags:
+	static var use_scroll_debounce: bool = true
