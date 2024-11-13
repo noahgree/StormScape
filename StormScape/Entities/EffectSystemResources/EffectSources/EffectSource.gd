@@ -9,7 +9,6 @@ class_name EffectSource
 @export_group("General")
 @export var is_projectile: bool = true ## Whether or not this effect source is attached to something that moves in order to deal damage.
 @export_subgroup("Team Logic")
-@export var source_team: GlobalData.Teams = GlobalData.Teams.ENEMY ## Should eventually be set by what produces this effect. Used for determining which parts are applied.
 @export_flags("Enemies", "Allies") var bad_effect_affected_teams: int = GlobalData.BadEffectAffectedTeams.ENEMIES ## Which entity teams in relation to who produced this source are affected by this damage.
 @export_flags("Enemies", "Allies") var good_effect_affected_teams: int = GlobalData.GoodEffectAffectedTeams.ALLIES ## Which entity teams in relation to who produced this source are affected by this healing.
 @export_subgroup("Scanned Physics Layers")
@@ -37,6 +36,10 @@ class_name EffectSource
 @export_subgroup("Freeze", "cam_freeze_")
 @export_range(0, 1, 0.01) var cam_freeze_multiplier: float = 1.0 ## The multiplier for the speed of the camera updates, with a value of 0 freezing it entirely.
 @export_range(0, 1, 0.01) var cam_freeze_duration: float = 0 ## How long the camera should freeze or slow for upon hitting the player.
+
+@export_group("General Impact FX")
+@export var impact_vfx: PackedScene = null ## The vfx to spawn when impacting something.
+@export var impact_sound: String = "" ## The sound to play when impacting something.
 
 @export_group("Status Effects")
 @export var status_effects: Array[StatusEffect] ## The array of status effects that can be applied to the receiving entity.

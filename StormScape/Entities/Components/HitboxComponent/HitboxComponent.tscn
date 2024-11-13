@@ -1,29 +1,7 @@
-[gd_scene load_steps=5 format=3 uid="uid://b7ckcb2xdimpo"]
+[gd_scene load_steps=2 format=3 uid="uid://b7ckcb2xdimpo"]
 
 [ext_resource type="Script" path="res://Entities/Components/HitboxComponent/HitboxComponent.gd" id="1_ldrqf"]
-[ext_resource type="Script" path="res://Entities/EffectSystemResources/EffectSources/EffectSource.gd" id="2_vc24v"]
-[ext_resource type="Script" path="res://Entities/EffectSystemResources/StatusEffects/StatusEffect.gd" id="3_608ks"]
-
-[sub_resource type="Resource" id="Resource_n8ugl"]
-script = ExtResource("2_vc24v")
-is_moving = true
-source_team = 2
-bad_effect_affected_teams = 1
-good_effect_affected_teams = 2
-scanned_phys_layers = 191
-base_damage = 0
-dmg_affected_stats = 2
-crit_chance = 0
-crit_multiplier = 1.5
-armor_penetration = 0
-base_healing = 0
-heal_affected_stats = 2
-cam_shake_strength = 0.0
-cam_shake_duration = 0.0
-cam_freeze_multiplier = 1.0
-cam_freeze_duration = 0.0
-status_effects = Array[ExtResource("3_608ks")]([])
 
 [node name="HitboxComponent" type="Area2D"]
+monitorable = false
 script = ExtResource("1_ldrqf")
-effect_source = SubResource("Resource_n8ugl")

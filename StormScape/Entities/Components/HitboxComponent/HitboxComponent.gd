@@ -12,10 +12,12 @@ var movement_direction: Vector2 = Vector2.ZERO
 ## Also set collision mask to the matching flags.
 func _ready() -> void:
 	self.area_entered.connect(_on_area_entered)
-	monitorable = false
+	self.body_entered.connect(_on_tilemap_collision)
+	monitorable = true
 	collision_layer = 0
-	effect_source.source_entity = source_entity
-	collision_mask = effect_source.scanned_phys_layers
+	if effect_source and source_entity:
+		effect_source.source_entity = source_entity
+		collision_mask = effect_source.scanned_phys_layers
 
 ## When detecting an area, start having it handled. This method can be overridden in subclasses.
 func _on_area_entered(area: Area2D) -> void:
@@ -27,6 +29,11 @@ func _on_area_entered(area: Area2D) -> void:
 			_start_being_handled(area as EffectReceiverComponent)
 
 		_process_hit(area)
+
+## If we hit the tilemap body, queue free.
+func _on_tilemap_collision(body: Node2D) -> void:
+	if body is TileMapLayer:
+		queue_free()
 
 ## Meant to interact with an EffectReceiverComponent that can handle effects supplied by this instance.
 func _start_being_handled(handling_area: EffectReceiverComponent) -> void:

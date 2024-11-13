@@ -1,0 +1,58 @@
+[gd_scene load_steps=5 format=3 uid="uid://bdaogdtcus1ac"]
+
+[ext_resource type="Script" path="res://Entities/Items/Consumables/Consumable.gd" id="1_uttff"]
+
+[sub_resource type="Animation" id="Animation_uwhct"]
+resource_name = "consume"
+step = 0.1
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_3f4dj"]
+_data = {
+"consume": SubResource("Animation_uwhct")
+}
+
+[sub_resource type="Curve" id="Curve_v3l01"]
+min_value = -1.0
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, -1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[node name="Consumable" type="Node2D"]
+script = ExtResource("1_uttff")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+
+[node name="HandLocation" type="Marker2D" parent="."]
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_3f4dj")
+}
+
+[node name="FoodParticles" type="CPUParticles2D" parent="."]
+emitting = false
+amount = 10
+lifetime = 0.65
+one_shot = true
+preprocess = 0.15
+local_coords = true
+emission_shape = 1
+emission_sphere_radius = 5.0
+direction = Vector2(0, -1)
+spread = 25.0
+gravity = Vector2(0, 60)
+initial_velocity_min = 8.0
+initial_velocity_max = 18.0
+angular_velocity_min = 5.0
+angular_velocity_max = 50.0
+linear_accel_max = 10.0
+scale_amount_max = 2.0
+color = Color(0.182401, 0.0929262, 0.0741723, 1)
+hue_variation_min = -0.05
+hue_variation_max = 0.05
+hue_variation_curve = SubResource("Curve_v3l01")
+
+[node name="ConsumptionTimer" type="Timer" parent="."]
+one_shot = true
+
+[node name="ConsumptionDelayTimer" type="Timer" parent="."]
+one_shot = true

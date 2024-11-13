@@ -1,15 +1,45 @@
-[gd_resource type="Resource" script_class="ConsumableResource" load_steps=5 format=3 uid="uid://cx1ydw2jde1y8"]
+[gd_resource type="Resource" script_class="ConsumableResource" load_steps=8 format=3 uid="uid://cx1ydw2jde1y8"]
 
+[ext_resource type="Script" path="res://Entities/EffectSystemResources/EffectSources/EffectSource.gd" id="1_bn713"]
 [ext_resource type="Script" path="res://Entities/Items/Consumables/ConsumableResource.gd" id="1_jepoi"]
 [ext_resource type="Texture2D" uid="uid://b4acjy3ujbtoy" path="res://Entities/Items/Consumables/Food/Apple/apple.png" id="1_vw2hi"]
-[ext_resource type="PackedScene" uid="uid://bdaogdtcus1ac" path="res://Entities/Items/Consumables/Food.tscn" id="2_oh2im"]
+[ext_resource type="PackedScene" uid="uid://bdaogdtcus1ac" path="res://Entities/Items/Consumables/Food/Consumable.tscn" id="2_1oeu8"]
+[ext_resource type="Script" path="res://Entities/EffectSystemResources/StatusEffects/StatusEffect.gd" id="2_kdgs1"]
 [ext_resource type="Texture2D" uid="uid://7v6u4kbfcjon" path="res://Entities/Items/Consumables/Food/Apple/apple_thumb.png" id="4_upr2p"]
+
+[sub_resource type="Resource" id="Resource_hsou2"]
+script = ExtResource("1_bn713")
+is_projectile = false
+bad_effect_affected_teams = 1
+good_effect_affected_teams = 2
+scanned_phys_layers = 191
+base_damage = 0
+dmg_affected_stats = 2
+crit_chance = 0
+crit_multiplier = 1.5
+armor_penetration = 0
+base_healing = 0
+heal_affected_stats = 2
+cam_shake_strength = 0.0
+cam_shake_duration = 0.0
+cam_freeze_multiplier = 1.0
+cam_freeze_duration = 0.0
+impact_sound = ""
+status_effects = Array[ExtResource("2_kdgs1")]([])
 
 [resource]
 script = ExtResource("1_jepoi")
+effect_source = SubResource("Resource_hsou2")
+hunger_bar_gain = 1
+hunger_bar_deduction = 0
+consumption_time = 1.0
+post_consumption_delay = 0.35
+particles_color = Color(0.52847, 0, 0.0533954, 1)
+consumption_sound = ""
+post_consumption_sound = ""
 id = "apple"
 name = "Apple"
-item_scene = ExtResource("2_oh2im")
+item_scene = ExtResource("2_1oeu8")
 icon = ExtResource("1_vw2hi")
 thumbnail = ExtResource("4_upr2p")
 item_type = 0

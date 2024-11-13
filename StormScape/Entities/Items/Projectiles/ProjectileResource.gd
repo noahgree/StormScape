@@ -19,6 +19,7 @@ class_name ProjectileResource
 @export_group("Splitting Logic")
 @export var split_count: int = 0
 @export var split_delay: float = 0.0
+@export_subgroup("FX")
 @export var split_cam_shake_str: float = 0.0
 @export var split_cam_shake_dur: float = 0.0
 
@@ -26,5 +27,6 @@ class_name ProjectileResource
 @export var splash_radius: int = 0
 @export var splash_falloff_exponent: float = 1.0
 @export var splash_effect_delay: float = 0.0
+@export_subgroup("FX")
 @export var splash_vfx: PackedScene = null
 @export var splash_sound: String = ""

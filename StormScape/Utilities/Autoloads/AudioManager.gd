@@ -1,4 +1,3 @@
-@icon("res://Utilities/Debug/EditorIcons/audio_manager.svg")
 extends Node2D
 ## A global singleton that caches the location of all audio resources.
 ##

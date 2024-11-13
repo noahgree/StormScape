@@ -54,6 +54,14 @@ func handle_effect_source(effect_source: EffectSource) -> void:
 	if (affected_entity is DynamicEntity) and not affected_entity.move_fsm.can_receive_effects:
 		return
 
+
+	if effect_source.impact_vfx != null:
+		var vfx: Node2D = effect_source.impact_vfx.instantiate()
+		vfx.global_position = affected_entity.global_position
+		add_child(vfx)
+	if effect_source.impact_sound != "":
+		AudioManager.play_sound(effect_source.impact_sound, AudioManager.SoundType.SFX_2D, affected_entity.global_position)
+
 	if (affected_entity is Player):
 		if effect_source.cam_shake_duration > 0:
 			GlobalData.player_camera.start_shake(effect_source.cam_shake_strength, effect_source.cam_shake_duration)
@@ -83,22 +91,24 @@ func handle_effect_source(effect_source: EffectSource) -> void:
 
 ## Handles the array of status effects coming in from the effect source by sending each status effect to the manager.
 func _unpack_status_effects_from_source(effect_source: EffectSource) -> void:
-	var do_bad_effects: bool = not _check_same_team(effect_source) and _check_if_bad_effects_apply_to_enemies(effect_source)
-	var do_good_effects: bool = not _check_same_team(effect_source) and _check_if_good_effects_apply_to_enemies(effect_source)
+	var is_same_team = _check_same_team(effect_source)
+	var bad_effects_to_enemies = not is_same_team and _check_if_bad_effects_apply_to_enemies(effect_source)
+	var good_effects_to_enemies = not is_same_team and _check_if_good_effects_apply_to_enemies(effect_source)
+	var bad_effects_to_allies = is_same_team and _check_if_bad_effects_apply_to_allies(effect_source)
+	var good_effects_to_allies = is_same_team and _check_if_good_effects_apply_to_allies(effect_source)
 
 	for status_effect in effect_source.status_effects:
 		if status_effect:
-			if (not do_bad_effects or "Untouchable" in affected_entity.effects.current_effects) and (status_effect.is_bad_effect):
-				continue
-			if (not do_good_effects) and (not status_effect.is_bad_effect):
+			var is_bad_effect = status_effect.is_bad_effect
+			var applies_to_target = (is_bad_effect and (bad_effects_to_enemies or bad_effects_to_allies)) or (not is_bad_effect and (good_effects_to_enemies or good_effects_to_allies))
+
+			if not applies_to_target or ("Untouchable" in affected_entity.effects.current_effects and is_bad_effect):
 				continue
 
 			for effect_to_stop in status_effect.effects_to_stop:
 				affected_entity.effects.request_effect_removal(effect_to_stop)
 
-			if (affected_entity is not Player) and status_effect.only_cue_on_player_hit:
-				pass
-			else:
+			if not ((affected_entity is not Player) and status_effect.only_cue_on_player_hit):
 				if status_effect.audio_to_play != "":
 					AudioManager.play_sound(status_effect.audio_to_play, AudioManager.SoundType.SFX_2D, affected_entity.global_position)
 
@@ -127,7 +137,7 @@ func _pass_effect_to_handler(status_effect: StatusEffect) -> void:
 
 ## Checks if the affected entity is on the same team as the producer of the effect source.
 func _check_same_team(effect_source: EffectSource) -> bool:
-	return affected_entity.team & effect_source.source_team != 0
+	return affected_entity.team & effect_source.source_entity.team != 0
 
 ## Checks if the effect source should do bad effects to allies.
 func _check_if_bad_effects_apply_to_allies(effect_source: EffectSource) -> bool:

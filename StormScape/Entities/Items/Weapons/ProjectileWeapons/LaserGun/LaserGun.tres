@@ -1,0 +1,107 @@
+[gd_resource type="Resource" script_class="ProjWeaponResource" load_steps=16 format=3 uid="uid://ciel2rrqq4dvv"]
+
+[ext_resource type="Script" path="res://Entities/EffectSystemResources/EffectSources/EffectSource.gd" id="1_2i3xb"]
+[ext_resource type="Script" path="res://Entities/Items/Weapons/ProjectileWeapons/ProjWeaponResource.gd" id="1_7bjnk"]
+[ext_resource type="PackedScene" uid="uid://ckf7i8bnass5n" path="res://Entities/Items/Projectiles/Laser/Laser.tscn" id="1_sf3xp"]
+[ext_resource type="Script" path="res://Entities/EffectSystemResources/StatusEffects/StatusEffect.gd" id="2_mu3cd"]
+[ext_resource type="Resource" uid="uid://b0it5xmpw16sd" path="res://Entities/EffectSystemResources/StatusEffects/BadEffects/Knockback/Knockback1.tres" id="3_fcr8t"]
+[ext_resource type="Texture2D" uid="uid://bjm0js8cfg2rm" path="res://Entities/Items/Weapons/ProjectileWeapons/LaserGun/laser_gun.png" id="3_qr2dh"]
+[ext_resource type="Resource" uid="uid://dvew5cy3k7s48" path="res://Entities/EffectSystemResources/StatusEffects/BadEffects/Burning/Burning1.tres" id="4_x3u7g"]
+[ext_resource type="Script" path="res://Entities/Items/Projectiles/ProjectileResource.gd" id="5_54flx"]
+[ext_resource type="Script" path="res://Entities/Components/StatModComponents/StatModsCacheResource.gd" id="5_lsump"]
+[ext_resource type="PackedScene" uid="uid://baxpb3crwepc0" path="res://Entities/Items/Weapons/ProjectileWeapons/LaserGun/LaserGun.tscn" id="6_gbfef"]
+
+[sub_resource type="Curve" id="Curve_kfl3v"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Resource" id="Resource_wic0i"]
+script = ExtResource("1_2i3xb")
+is_projectile = true
+bad_effect_affected_teams = 1
+good_effect_affected_teams = 2
+scanned_phys_layers = 191
+base_damage = 0
+dmg_affected_stats = 2
+crit_chance = 0
+crit_multiplier = 1.5
+armor_penetration = 0
+base_healing = 0
+heal_affected_stats = 2
+cam_shake_strength = 0.0
+cam_shake_duration = 0.0
+cam_freeze_multiplier = 1.0
+cam_freeze_duration = 0.0
+impact_sound = ""
+status_effects = Array[ExtResource("2_mu3cd")]([ExtResource("3_fcr8t"), ExtResource("4_x3u7g")])
+
+[sub_resource type="Resource" id="Resource_2dbrb"]
+script = ExtResource("5_54flx")
+speed = 500
+lifetime = 100.0
+max_distance = 500
+max_pierce = 0
+max_ricochet = 0
+spin_speed = 0.0
+homing = false
+arc_height = 0.0
+arc_time = 0.15
+arc_collision_delay = 0.3
+split_count = 0
+split_delay = 0.0
+split_cam_shake_str = 0.0
+split_cam_shake_dur = 0.0
+splash_radius = 0
+splash_falloff_exponent = 1.0
+splash_effect_delay = 0.0
+splash_sound = ""
+
+[sub_resource type="Curve" id="Curve_p4aqc"]
+_data = [Vector2(0.00729927, 0.00647151), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Resource" id="Resource_wcvpy"]
+script = ExtResource("5_lsump")
+debug_print_mod_changes = false
+
+[resource]
+script = ExtResource("1_7bjnk")
+proj_weapon_type = 0
+projectile = ExtResource("1_sf3xp")
+projectile_data = SubResource("Resource_2dbrb")
+ammo_type = 0
+mag_size = 30
+reload_time = 1.0
+reload_type = "Magazine"
+firing_mode = "Semi Auto"
+uses_bloom = false
+bloom_curve = SubResource("Curve_kfl3v")
+recoil_curve = SubResource("Curve_p4aqc")
+auto_fire_delay = 0.15
+num_of_bursts = 0
+projectiles_per_burst = 3
+use_ammo_per_proj = true
+burst_bullet_delay = 0.1
+auto_burst_delay = 0.3
+angluar_spread = 0
+barrage_count = 3
+firing_cam_shake_str = 0.18
+firing_cam_shake_dur = 0.1
+firing_cam_freeze_str = 0.0
+firing_cam_freeze_dur = 0.0
+firing_sound = "PlayerDash"
+reload_sound = ""
+stats = SubResource("Resource_wcvpy")
+effect_source = SubResource("Resource_wic0i")
+id = "laser_gun"
+name = "Laser Gun"
+item_scene = ExtResource("6_gbfef")
+icon = ExtResource("3_qr2dh")
+thumbnail = ExtResource("3_qr2dh")
+item_type = 1
+rarity = 2
+weight = 0
+stack_size = 1
+auto_pickup = false
+pickup_radius = 4
+info = ""

@@ -7,3 +7,6 @@ func enter() -> void:
 
 func exit() -> void:
 	pass
+
+func state_physics_process(_delta: float) -> void:
+	dynamic_entity.move_fsm.update_anim_vector()

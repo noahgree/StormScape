@@ -1,9 +1,12 @@
+@icon("res://Utilities/Debug/EditorIcons/hands_component.svg")
 extends Node2D
 class_name HandsComponent
 ## This component allows the entity to hold an item and interact with it.
 
-@export var default_main_hand_pos: Vector2 = Vector2(7, 0)
-@export var main_hand_with_weapon_pos: Vector2 = Vector2(11, 0)
+@export var default_main_hand_pos: Vector2 = Vector2(6, 1)
+@export var main_hand_with_proj_weapon_pos: Vector2 = Vector2(11, 0)
+@export var main_hand_with_melee_weapon_pos: Vector2 = Vector2(8, 0)
+@export var mouth_pos: Vector2 = Vector2(0, -8) ## Used for emitting food particles.
 
 @onready var hands_anchor: Node2D = $HandsAnchor
 @onready var main_hand: Node2D = $HandsAnchor/MainHand
@@ -20,20 +23,19 @@ func _ready() -> void:
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
 		if equipped_item != null:
-			equipped_item.activate(get_parent())
+			equipped_item.activate()
 
 func on_equipped_item_change(inv_item_slot: Slot) -> void:
-	if equipped_item != null: equipped_item.queue_free()
+	if equipped_item != null:
+		equipped_item.exit()
+		equipped_item.queue_free()
 	if inv_item_slot.item == null:
 		set_physics_process(false)
 		main_hand_sprite.visible = false
 		off_hand_sprite.visible = false
 		return
 
-	_create_new_item(inv_item_slot)
-	equipped_item.stats = inv_item_slot.item.stats
-	equipped_item.source_slot = inv_item_slot
-	set_physics_process(true)
+	equipped_item = EquippableItem.create_from_slot(inv_item_slot)
 
 	hands_anchor.scale = Vector2(1, 1)
 	hands_anchor.global_rotation = 0
@@ -41,8 +43,11 @@ func on_equipped_item_change(inv_item_slot: Slot) -> void:
 
 	match equipped_item.stats.item_type:
 		GlobalData.ItemType.WEAPON:
-			main_hand.position = main_hand_with_weapon_pos
 			main_hand_sprite.visible = false
+			if equipped_item is ProjectileWeapon:
+				main_hand.position = main_hand_with_proj_weapon_pos
+			elif equipped_item is MeleeWeapon:
+				main_hand.position = main_hand_with_melee_weapon_pos
 		GlobalData.ItemType.CONSUMABLE:
 			main_hand.position.y = default_main_hand_pos.y - int(floor(equipped_item.stats.thumbnail.get_height() / 3.0))
 			main_hand.position.x = default_main_hand_pos.x + int(floor(equipped_item.stats.thumbnail.get_width() / 2.0))
@@ -50,9 +55,8 @@ func on_equipped_item_change(inv_item_slot: Slot) -> void:
 			main_hand_sprite.visible = true
 
 	main_hand.add_child(equipped_item)
-
-func _create_new_item(inv_item_slot: Slot) -> void:
-	equipped_item = inv_item_slot.item.stats.item_scene.instantiate()
+	equipped_item.enter()
+	set_physics_process(true)
 
 func _physics_process(_delta: float) -> void:
 	if equipped_item == null:
@@ -63,11 +67,14 @@ func _physics_process(_delta: float) -> void:
 
 	match equipped_item.stats.item_type:
 		GlobalData.ItemType.WEAPON:
-			_manage_weapon_hands(anim_vector)
+			if equipped_item is ProjectileWeapon:
+				_manage_proj_weapon_hands(anim_vector)
+			elif equipped_item is MeleeWeapon:
+				_manage_melee_weapon_hands(anim_vector)
 		GlobalData.ItemType.CONSUMABLE:
 			_manage_consumable_hands(anim_vector)
 
-func _manage_weapon_hands(anim_vector: Vector2) -> void:
+func _manage_proj_weapon_hands(anim_vector: Vector2) -> void:
 	hands_anchor.global_rotation = (get_global_mouse_position() - hands_anchor.global_position).angle()
 
 	if anim_vector.y < 0:
@@ -81,6 +88,20 @@ func _manage_weapon_hands(anim_vector: Vector2) -> void:
 	else:
 		hands_anchor.scale.y = 1
 		_change_off_hand_sprite_visibility(true)
+
+func _manage_melee_weapon_hands(anim_vector: Vector2) -> void:
+	if not equipped_item.anim_player.is_playing():
+		hands_anchor.global_rotation = get_parent().move_fsm.curr_mouse_direction.angle()
+
+		if anim_vector.y < 0:
+			z_index = -2
+		else:
+			z_index = 0
+
+		if anim_vector.x < 0:
+			_change_off_hand_sprite_visibility(false)
+		else:
+			_change_off_hand_sprite_visibility(true)
 
 func _manage_consumable_hands(anim_vector: Vector2) -> void:
 	if anim_vector.y < 0:

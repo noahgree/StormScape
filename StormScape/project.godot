@@ -34,7 +34,6 @@ buses/default_bus_layout="res://Utilities/Game/Audio/default_bus_layout.tres"
 [autoload]
 
 DebugFlags="*res://Utilities/Autoloads/DebugFlags.gd"
-ItemDatabase="*res://Utilities/Autoloads/ItemDatabase.tscn"
 SignalBus="*res://Utilities/Autoloads/SignalBus.gd"
 AudioManager="*res://Utilities/Autoloads/AudioManager.tscn"
 GlobalData="*res://Utilities/Autoloads/GlobalData.gd"

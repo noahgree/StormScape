@@ -30,5 +30,7 @@ effect_name = "Burning"
 effect_lvl = 1
 is_bad_effect = true
 effects_to_stop = Array[String](["Frostbite"])
+audio_to_play = ""
+only_cue_on_player_hit = false
 mod_time = 5.0
 stat_mods = Array[ExtResource("2_l3ggl")]([SubResource("Resource_xigmb")])

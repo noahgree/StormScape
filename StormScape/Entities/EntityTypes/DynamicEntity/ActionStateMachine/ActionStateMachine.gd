@@ -9,6 +9,7 @@ class_name ActionStateMachine
 ## Overrides parent state machine class.
 func _ready() -> void:
 	assert(has_node("ActionIdle"), "Dynamic entities must have an Idle state in the action state machine.")
+	assert(get_parent().hands, get_parent().name + " has an action FSM but does not have a hands component.")
 
 	for child in get_children():
 		if child is ActionState:

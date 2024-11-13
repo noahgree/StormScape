@@ -13,9 +13,12 @@ class_name MoveStateMachine
 @onready var stunned_timer: Timer = $Stunned/StunnedTimer ## The timer controlling how long the stun effect has remaining.
 
 var anim_vector: Vector2 = Vector2.ZERO ## The vector to provide the associated animation state machine with.
+var curr_mouse_direction: Vector2 = Vector2.ZERO
 var knockback_vector: Vector2 = Vector2.ZERO ## The current knockback to apply to any state that can move.
 var can_receive_effects: bool = true ## Whether the entity is in a state that can receive effects.
+var should_rotate: bool = true ## Reflects whether or not we are performing an action that prevents us from changing the current anim vector used by child states to rotate the entity animation.
 const MAX_KNOCKBACK: int = 3000 ## The highest length the knockback vector can ever be to prevent dramatic movement.
+const MOUSE_SMOOTHING_FACTOR: float = 0.09 ## The lerping rate for getting the current mouse direction.
 
 
 ## Asserts the necessary components exist to support a dynamic entity, then caches the child states and sets them up.
@@ -44,7 +47,8 @@ func _ready() -> void:
 ## Checks if knockback needs to be lerped to 0 and passes the physics process to the active state.
 ## Advances animation tree manually so that it respects time snares. Overrides parent state machine class.
 func state_machine_physics_process(delta: float) -> void:
-	anim_vector = _get_mouse_direction(entity.global_position)
+	if should_rotate:
+		update_anim_vector()
 
 	if knockback_vector.length() > 100:
 		knockback_vector = lerp(knockback_vector, Vector2.ZERO, 6 * delta)
@@ -56,7 +60,12 @@ func state_machine_physics_process(delta: float) -> void:
 		anim_tree.advance(delta)
 
 func _get_mouse_direction(relative_position: Vector2) -> Vector2:
-	return (entity.get_global_mouse_position() - relative_position).normalized()
+	var target_direction = (entity.get_global_mouse_position() - relative_position).normalized()
+	curr_mouse_direction = curr_mouse_direction.lerp(target_direction, MOUSE_SMOOTHING_FACTOR)
+	return curr_mouse_direction
+
+func update_anim_vector() -> void:
+	anim_vector = _get_mouse_direction(entity.global_position)
 
 ## Assists in turning the character to the right direction upon game loads.
 func verify_anim_vector() -> void:

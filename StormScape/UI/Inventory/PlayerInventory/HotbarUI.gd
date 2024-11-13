@@ -28,9 +28,14 @@ func _ready() -> void:
 func _on_slot_updated(index: int, item: InvItemResource) -> void:
 	var hotbar_slot_count: int = player_inv.inv_size - player_inv.hotbar_size
 	if (index >= hotbar_slot_count) and (index < player_inv.inv_size):
-		hotbar_slots[index - hotbar_slot_count].item = item
 		if index == active_slot.index:
-			_update_active_item()
+			if (active_slot.item == null or item == null) or (not active_slot.item.stats.is_same_as(item.stats)):
+				hotbar_slots[index - hotbar_slot_count].item = item
+				_update_active_item()
+			else:
+				hotbar_slots[index - hotbar_slot_count].item = item
+		else:
+			hotbar_slots[index - hotbar_slot_count].item = item
 
 func _update_active_item() -> void:
 	GlobalData.player_node.hands.on_equipped_item_change(active_slot)
@@ -39,10 +44,10 @@ func _input(event: InputEvent) -> void:
 	if DebugFlags.HotbarFlags.use_scroll_debounce and not scroll_debounce_timer.is_stopped(): return
 	if event is InputEventMouseButton:
 		if Input.is_action_just_released("scroll_up"):
-			_change_active_slot(-1)
+			_change_active_slot(1)
 			scroll_debounce_timer.start()
 		elif Input.is_action_just_released("scroll_down"):
-			_change_active_slot(1)
+			_change_active_slot(-1)
 			scroll_debounce_timer.start()
 
 func _change_active_slot(direction: int) -> void:

@@ -14,13 +14,13 @@ class_name Projectile
 
 var stats: ProjectileResource
 
-static func spawn(proj_scene: PackedScene, proj_stats: ProjectileResource, pos: Vector2,
-				rot: float, source: PhysicsBody2D) -> Projectile:
-	var proj: Projectile = proj_scene.instantiate()
+static func spawn(weapon_stats: ProjWeaponResource, pos: Vector2, rot: float) -> Projectile:
+	var proj: Projectile = weapon_stats.projectile.instantiate()
 	proj.global_position = pos
 	proj.rotation = rot
-	proj.source_entity = source
-	proj.stats = proj_stats
+	proj.stats = weapon_stats.projectile_data
+	proj.effect_source = weapon_stats.effect_source
+	proj.collision_mask = weapon_stats.effect_source.scanned_phys_layers
 	return proj
 
 func _ready() -> void:
