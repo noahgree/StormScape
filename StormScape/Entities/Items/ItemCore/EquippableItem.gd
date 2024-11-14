@@ -4,7 +4,6 @@ class_name EquippableItem
 ## some place other than the inventory, the item resource must have an associated equippable item scene.
 
 @export var stats: ItemResource = null: set = _set_stats ## The resource driving the stats and type of item. Do not set in editor, as this is automatically set on item creation via a static method.
-@export var is_gripped_by_one_hand: bool = true ## Whether or not this item should only have one hand shown gripping it.
 
 var source_slot: Slot ## The slot this equippable item is in whilst equipped.
 var source_entity: PhysicsBody2D ## The entity that is holding the equippable item.
@@ -27,6 +26,14 @@ func _ready() -> void:
 
 ## Intended to be overridden by child classes in order to specify what to do when this item is used.
 func activate() -> void:
+	pass
+
+## Intended to be overridden by child classes in order to specify what to do when this item is used after a hold click.
+func hold_activate(_hold_time: float) -> void:
+	pass
+
+## Intended to be overridden by child classes in order to specify what to do when this item is used after a released hold click.
+func release_hold_activate(_hold_time: float) -> void:
 	pass
 
 func enter() -> void:

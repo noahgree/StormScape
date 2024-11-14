@@ -20,4 +20,5 @@ enum AmmoType { ## The kinds of ammo to consume on attack.
 @export_subgroup("Usage FX")
 @export var usage_vfx_scene: PackedScene = null ## The scene that spawns and controls usage vfx.
 @export var usage_sound: String = "" ## The sound to play when using the item.
-@export var cooldown_sound: String = "" ## The sound to play when on cooldown.
+
+var cooldown_left: float = 0.0

@@ -4,9 +4,13 @@ class_name ItemResource
 @export_group("Item Details")
 @export var id: String ## The unique identifier for the item.
 @export var name: String ## The item's string name.
-@export var item_scene: PackedScene = null ## The equippable representation of this item.
 @export var icon: Texture2D ## The inventory representation of the item.
 @export var thumbnail: Texture2D ## The physical representation of the item.
+@export_subgroup("Equippability Details")
+@export var item_scene: PackedScene = null ## The equippable representation of this item.
+@export var is_gripped_by_one_hand: bool = true ## Whether or not this item should only have one hand shown gripping it.
+@export var rotation_smoothing: float = 0.1 ## How fast the rotation lerping should be while holding this item.
+@export_subgroup("")
 @export var item_type: GlobalData.ItemType = GlobalData.ItemType.CONSUMABLE ## The type that this item is.
 @export var rarity: GlobalData.ItemRarity = GlobalData.ItemRarity.COMMON ## The rarity of this item.
 @export var weight: int = 0 ## If greater than 0, holding this item in the main hand will affect stats like speed.

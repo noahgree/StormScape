@@ -1,6 +1,0 @@
-[gd_scene load_steps=2 format=3 uid="uid://blbjjhekjsi6y"]
-
-[ext_resource type="Script" path="res://Entities/EntityTypes/DynamicEntity/ActionStateMachine/ActionStateMachine.gd" id="1_gnic3"]
-
-[node name="ActionStateMachine" type="Node"]
-script = ExtResource("1_gnic3")

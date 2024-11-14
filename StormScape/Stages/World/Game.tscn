@@ -8,7 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://dba8mrurjlekp" path="res://Entities/Player/PlayerCore/Player.tscn" id="4_ptig0"]
 [ext_resource type="Script" path="res://Entities/Player/PlayerCore/PlayerCamera.gd" id="4_tj8qg"]
 [ext_resource type="Texture2D" uid="uid://dhgjawgf5u572" path="res://Stages/Tilemaps/GrassDirt/grass_flowers_texture_repeating.png" id="5_5par6"]
-[ext_resource type="Script" path="res://Entities/EntityTypes/RigidEntity/RigidEntity.gd" id="5_vhyrg"]
+[ext_resource type="Script" path="res://Entities/EntityCore/EntityTypes/RigidEntity/RigidEntity.gd" id="5_vhyrg"]
 [ext_resource type="PackedScene" uid="uid://btba0jmsow1mx" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectReceiverComponent.tscn" id="6_haafe"]
 [ext_resource type="Script" path="res://Entities/Components/StatModComponents/StatModsCacheResource.gd" id="6_jky7o"]
 [ext_resource type="PackedScene" uid="uid://dykiv0tlhwmox" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/KnockbackHandler.tscn" id="7_vet3v"]

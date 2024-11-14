@@ -5,7 +5,7 @@ extends MoveState
 @export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var _dash_duration: float = 0.08 ## The dash duration.
 @export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var _dash_cooldown: float = 1.0 ## The dash cooldown.
 @export var _dash_collision_impulse_factor: float = 1.0 ## A multiplier that controls how much impulse gets applied to rigid entites when colliding with them during a dash.
-@export var ghost_scene: PackedScene ## The scene that defines the ghosts' behavior.
+@export var ghost_scene: PackedScene = load("res://Entities/EntityCore/SpriteGhost.tscn") ## The scene that defines the ghosts' behavior.
 @export var ghost_count: int = 8 ## How many ghosts to make during the dash.
 @export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var ghost_fade_time: float = 0.1 ## How long ghosts take to fade.
 
@@ -107,10 +107,10 @@ func _create_ghost() -> void:
 	elif parent_sprite_node is Sprite2D:
 		sprite_texture = parent_sprite_node.texture
 
-	var ghost_instance = ghost_scene.instantiate()
 	var ghost_pos: Vector2 = Vector2(dynamic_entity.position.x + parent_sprite_node.position.x, dynamic_entity.position.y + parent_sprite_node.position.y)
+	var ghost_transform: Transform2D = Transform2D(dynamic_entity.rotation, ghost_pos)
 
-	ghost_instance.init(ghost_pos, dynamic_entity.scale, sprite_texture, ghost_fade_time)
+	var ghost_instance: SpriteGhost = SpriteGhost.create(ghost_scene, ghost_transform, dynamic_entity.scale, sprite_texture, ghost_fade_time)
 	add_child(ghost_instance)
 	ghosts_spawned += 1
 

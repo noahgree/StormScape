@@ -78,22 +78,21 @@ func _get_audio_resource_by_type(sound_name: String, type: SoundType) -> AudioRe
 #region Pooling
 ## Gets a 2d audio player from the pool or creates one if they are all busy.
 func _get_or_create_2d_player() -> AudioStreamPlayer2D:
-	if spatial_pool.size() > 0: return spatial_pool.pop_back()
+	if spatial_pool.size() > 0: return spatial_pool.pop_front()
 	else: return AudioStreamPlayer2D.new()
 
 ## Gets a global audio player from the pool or creates one if they are all busy.
 func _get_or_create_global_player() -> AudioStreamPlayer:
-	if global_pool.size() > 0: return global_pool.pop_back()
+	if global_pool.size() > 0: return global_pool.pop_front()
 	else: return AudioStreamPlayer.new()
 
 ## Puts an audio player back in the pool and removes it from the tree.
 func _return_player_to_pool(audio_player) -> void:
-	if audio_player.is_inside_tree():
-		audio_player.get_parent().remove_child(audio_player)
+	audio_player.get_parent().remove_child(audio_player)
 
 	if audio_player is AudioStreamPlayer2D:
 		spatial_pool.append(audio_player)
-	else:
+	elif audio_player is AudioStreamPlayer:
 		global_pool.append(audio_player)
 
 ## Trims the amount of audio players kept waiting around in the pool when there get to be too many not being used.

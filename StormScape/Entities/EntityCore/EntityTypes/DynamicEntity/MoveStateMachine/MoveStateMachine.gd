@@ -17,8 +17,9 @@ var curr_mouse_direction: Vector2 = Vector2.ZERO
 var knockback_vector: Vector2 = Vector2.ZERO ## The current knockback to apply to any state that can move.
 var can_receive_effects: bool = true ## Whether the entity is in a state that can receive effects.
 var should_rotate: bool = true ## Reflects whether or not we are performing an action that prevents us from changing the current anim vector used by child states to rotate the entity animation.
+var rotation_smoothing_factor: float = 0.1 ## The current lerping rate for getting the current mouse direction.
 const MAX_KNOCKBACK: int = 3000 ## The highest length the knockback vector can ever be to prevent dramatic movement.
-const MOUSE_SMOOTHING_FACTOR: float = 0.09 ## The lerping rate for getting the current mouse direction.
+const DEFAULT_ROTATION_SMOOTHING_FACTOR: float = 0.1 ## The default lerping rate for getting the current mouse direction.
 
 
 ## Asserts the necessary components exist to support a dynamic entity, then caches the child states and sets them up.
@@ -26,6 +27,8 @@ const MOUSE_SMOOTHING_FACTOR: float = 0.09 ## The lerping rate for getting the c
 func _ready() -> void:
 	assert(has_node("Idle"), "Dynamic entities must have an Idle state in the move state machine.")
 	assert(has_node("Stunned"), "Dynamic entities must have a Stunned state in the move state machine.")
+
+	rotation_smoothing_factor = DEFAULT_ROTATION_SMOOTHING_FACTOR
 
 	for child in get_children():
 		if child is MoveState:
@@ -59,13 +62,33 @@ func state_machine_physics_process(delta: float) -> void:
 		current_state.state_physics_process(delta)
 		anim_tree.advance(delta)
 
-func _get_mouse_direction(relative_position: Vector2) -> Vector2:
-	var target_direction = (entity.get_global_mouse_position() - relative_position).normalized()
-	curr_mouse_direction = curr_mouse_direction.lerp(target_direction, MOUSE_SMOOTHING_FACTOR)
-	return curr_mouse_direction
-
+## Updates the current animation vector by lerping the current mouse direction.
 func update_anim_vector() -> void:
-	anim_vector = _get_mouse_direction(entity.global_position)
+	var entity_loc_with_sprite_offset: Vector2 = entity.get_node("AnimatedSprite2D").position / 2.0 + entity.global_position
+	curr_mouse_direction = get_lerped_mouse_direction_to_pos(curr_mouse_direction, entity_loc_with_sprite_offset)
+	anim_vector = curr_mouse_direction
+
+## Takes in a current direction of rotation and a target position to face, lerping it every frame.
+func get_lerped_mouse_direction_to_pos(current_direction: Vector2, target_position: Vector2) -> Vector2:
+	var target_direction = (entity.get_global_mouse_position() - target_position).normalized()
+
+	# Convert directions to angles
+	var current_angle = current_direction.angle()
+	var target_angle = target_direction.angle()
+
+	# Use the built-in function to get the shortest angle difference
+	var angle_diff = angle_difference(current_angle, target_angle)
+
+	# Interpolate the angle
+	var new_angle = current_angle + angle_diff * rotation_smoothing_factor
+
+	# Convert the new angle back to a direction vector
+	return Vector2.RIGHT.rotated(new_angle)
+
+
+func get_mouse_direction_to_pos() -> Vector2:
+	var entity_loc_with_sprite_offset: Vector2 = entity.get_node("AnimatedSprite2D").position / 2.0 + entity.global_position
+	return (entity.get_global_mouse_position() - entity_loc_with_sprite_offset).normalized()
 
 ## Assists in turning the character to the right direction upon game loads.
 func verify_anim_vector() -> void:
@@ -82,10 +105,12 @@ func request_stun(duration: float) -> void:
 func request_knockback(knockback: Vector2) -> void:
 	knockback_vector = (knockback_vector + knockback).limit_length(MAX_KNOCKBACK)
 
+## Called when the entity spawns.
 func spawn() -> void:
 	if current_state:
 		_on_child_transition(current_state, "Spawn")
 
+## Called when the entity dies.
 func die() -> void:
 	if current_state:
 		_on_child_transition(current_state, "Die")

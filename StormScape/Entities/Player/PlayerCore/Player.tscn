@@ -1,8 +1,8 @@
-[gd_scene load_steps=196 format=3 uid="uid://dba8mrurjlekp"]
+[gd_scene load_steps=198 format=3 uid="uid://dba8mrurjlekp"]
 
 [ext_resource type="Script" path="res://Entities/Player/PlayerCore/Player.gd" id="1_m33tt"]
 [ext_resource type="Script" path="res://Entities/Components/StatModComponents/StatModsCacheResource.gd" id="2_vyeuy"]
-[ext_resource type="Texture2D" uid="uid://dcbwxgak6a0r8" path="res://Entities/entity_shadow.png" id="3_e6fnh"]
+[ext_resource type="Texture2D" uid="uid://dcbwxgak6a0r8" path="res://Entities/EntityCore/entity_shadow.png" id="3_e6fnh"]
 [ext_resource type="PackedScene" uid="uid://cdfdy8m6ki3oq" path="res://Entities/Components/HealthComponent/HealthComponent.tscn" id="3_ojev3"]
 [ext_resource type="PackedScene" uid="uid://btba0jmsow1mx" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectReceiverComponent.tscn" id="4_hhm8x"]
 [ext_resource type="Texture2D" uid="uid://co2s33qcdlpj1" path="res://Entities/Player/Spritesheets/Base/player_base.png" id="4_sdxpd"]
@@ -15,7 +15,7 @@
 [ext_resource type="Script" path="res://Entities/Player/States/MoveStates/Run/Run.gd" id="9_0dcld"]
 [ext_resource type="Script" path="res://Entities/Player/States/MoveStates/Dash/Dash.gd" id="9_a1qv1"]
 [ext_resource type="PackedScene" uid="uid://cx4b21058vypq" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/StunHandler.tscn" id="9_w4lel"]
-[ext_resource type="PackedScene" uid="uid://bv3ae77701mrg" path="res://Entities/Player/States/MoveStates/Dash/DashGhost.tscn" id="10_c2plq"]
+[ext_resource type="PackedScene" uid="uid://bv3ae77701mrg" path="res://Entities/EntityCore/SpriteGhost.tscn" id="10_c2plq"]
 [ext_resource type="FontFile" uid="uid://cj0mctn1mh06m" path="res://Assets/Theming/Fonts/FontAssets/Pixel/Kenney Pixel.ttf" id="11_1rxkv"]
 [ext_resource type="PackedScene" uid="uid://tc2awdm3onyi" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/PoisonHandler.tscn" id="11_rtl41"]
 [ext_resource type="PackedScene" uid="uid://e3qv2f7w61vy" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/RegenHandler.tscn" id="12_goxma"]
@@ -23,7 +23,7 @@
 [ext_resource type="PackedScene" uid="uid://d1ml6s716obw0" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/TimeSnareHandler.tscn" id="14_63vgk"]
 [ext_resource type="PackedScene" uid="uid://depnx3pnassrq" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/BurningHandler.tscn" id="14_q2ueb"]
 [ext_resource type="Script" path="res://Entities/Player/States/MoveStates/Stunned/Stunned.gd" id="15_eiig3"]
-[ext_resource type="PackedScene" uid="uid://cueo26qpyouhj" path="res://Entities/EntityTypes/DynamicEntity/MoveStateMachine/MoveStateMachine.tscn" id="16_xoncr"]
+[ext_resource type="PackedScene" uid="uid://cueo26qpyouhj" path="res://Entities/EntityCore/EntityTypes/DynamicEntity/MoveStateMachine/MoveStateMachine.tscn" id="16_xoncr"]
 [ext_resource type="Script" path="res://Entities/Player/States/MoveStates/Spawn/Spawn.gd" id="17_fwsnm"]
 [ext_resource type="Script" path="res://Utilities/Debug/TestButtons.gd" id="17_vdk5v"]
 [ext_resource type="Script" path="res://Entities/Player/States/MoveStates/Die/Die.gd" id="18_jcofa"]
@@ -36,6 +36,7 @@
 [ext_resource type="Script" path="res://Entities/Items/ItemCore/InvItemResource.gd" id="32_ixmb3"]
 [ext_resource type="Resource" uid="uid://cx1ydw2jde1y8" path="res://Entities/Items/Consumables/Food/Apple/Apple.tres" id="33_0qw5e"]
 [ext_resource type="Texture2D" uid="uid://biejldas3s8ak" path="res://UI/Inventory/InventoryCore/inv_9_patch.png" id="33_8yk75"]
+[ext_resource type="Resource" uid="uid://bh18kqp2up3oe" path="res://Entities/Items/Weapons/MeleeWeapons/Pickaxe/Pickaxe.tres" id="34_i8j5r"]
 [ext_resource type="Script" path="res://UI/Inventory/PlayerInventory/ItemInteractionHud.gd" id="35_45ikj"]
 [ext_resource type="Resource" uid="uid://bper7kxtsf7f1" path="res://Entities/Items/Weapons/MeleeWeapons/Axe/Axe.tres" id="35_g2eu7"]
 [ext_resource type="Script" path="res://UI/PlayerStatsOverlay/PlayerStatsOverlay.gd" id="35_yln51"]
@@ -1512,6 +1513,11 @@ script = ExtResource("32_ixmb3")
 stats = ExtResource("35_g2eu7")
 quantity = 1
 
+[sub_resource type="Resource" id="Resource_h68kk"]
+script = ExtResource("32_ixmb3")
+stats = ExtResource("34_i8j5r")
+quantity = 1
+
 [sub_resource type="CircleShape2D" id="CircleShape2D_3wm74"]
 radius = 12.0
 
@@ -1677,7 +1683,7 @@ parameters/run/blendspace2d/blend_position = Vector2(0, 0)
 
 [node name="ItemReceiverComponent" parent="." node_paths=PackedStringArray("inv_populator", "ui") instance=ExtResource("30_qgyag")]
 item_scene = ExtResource("31_8v2rb")
-starting_inv = Array[ExtResource("32_ixmb3")]([SubResource("Resource_pihal"), null, SubResource("Resource_3kywt"), null, null, SubResource("Resource_kx1me")])
+starting_inv = Array[ExtResource("32_ixmb3")]([SubResource("Resource_pihal"), null, SubResource("Resource_3kywt"), null, null, SubResource("Resource_kx1me"), SubResource("Resource_h68kk")])
 is_player_inv = true
 inv_size = 40
 hotbar_size = 8

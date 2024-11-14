@@ -1,0 +1,59 @@
+[gd_resource type="Resource" script_class="MeleeWeaponResource" load_steps=9 format=3 uid="uid://bh18kqp2up3oe"]
+
+[ext_resource type="Script" path="res://Entities/EffectSystemResources/EffectSources/EffectSource.gd" id="1_urffy"]
+[ext_resource type="Script" path="res://Entities/EffectSystemResources/StatusEffects/StatusEffect.gd" id="2_ypwee"]
+[ext_resource type="Texture2D" uid="uid://b6q76o13tanxi" path="res://Entities/Items/Weapons/MeleeWeapons/Pickaxe/pickaxe.png" id="3_mtxs0"]
+[ext_resource type="PackedScene" uid="uid://b0wwbgbbfkso4" path="res://Entities/Items/Weapons/MeleeWeapons/Pickaxe/Pickaxe.tscn" id="4_6vlkm"]
+[ext_resource type="Script" path="res://Entities/Items/Weapons/MeleeWeapons/MeleeWeaponResource.gd" id="5_uecum"]
+[ext_resource type="Script" path="res://Entities/Components/StatModComponents/StatModsCacheResource.gd" id="6_1evhg"]
+
+[sub_resource type="Resource" id="Resource_63o7k"]
+script = ExtResource("1_urffy")
+is_projectile = false
+bad_effect_affected_teams = 1
+good_effect_affected_teams = 2
+scanned_phys_layers = 191
+base_damage = 100
+dmg_affected_stats = 2
+crit_chance = 5
+crit_multiplier = 1.5
+armor_penetration = 0
+base_healing = 0
+heal_affected_stats = 2
+cam_shake_strength = 0.0
+cam_shake_duration = 0.0
+cam_freeze_multiplier = 1.0
+cam_freeze_duration = 0.0
+impact_sound = ""
+status_effects = Array[ExtResource("2_ypwee")]([])
+
+[sub_resource type="Resource" id="Resource_15gyn"]
+script = ExtResource("6_1evhg")
+debug_print_mod_changes = false
+
+[resource]
+script = ExtResource("5_uecum")
+melee_weapon_type = 0
+ammo_type = 0
+ammo_cost = 3.0
+cooldown = 0.25
+use_speed = 0.2
+swing_angle = 75
+usage_sound = ""
+cooldown_sound = ""
+stats = SubResource("Resource_15gyn")
+effect_source = SubResource("Resource_63o7k")
+id = "pickaxe"
+name = "Pickaxe"
+icon = ExtResource("3_mtxs0")
+thumbnail = ExtResource("3_mtxs0")
+item_scene = ExtResource("4_6vlkm")
+is_gripped_by_one_hand = false
+rotation_smoothing = 0.1
+item_type = 1
+rarity = 0
+weight = 0
+stack_size = 1
+auto_pickup = false
+pickup_radius = 6
+info = "A handy pick."
