@@ -40,7 +40,6 @@ cooldown = 0.5
 use_speed = 0.25
 swing_angle = 150
 usage_sound = ""
-cooldown_sound = ""
 stats = SubResource("Resource_15gyn")
 effect_source = SubResource("Resource_63o7k")
 id = "axe"

@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="ProjWeaponResource" load_steps=16 format=3 uid="uid://ciel2rrqq4dvv"]
+[gd_resource type="Resource" script_class="ProjWeaponResource" load_steps=20 format=3 uid="uid://ciel2rrqq4dvv"]
 
 [ext_resource type="Script" path="res://Entities/EffectSystemResources/EffectSources/EffectSource.gd" id="1_2i3xb"]
 [ext_resource type="Script" path="res://Entities/Items/Weapons/ProjectileWeapons/ProjWeaponResource.gd" id="1_7bjnk"]
@@ -12,15 +12,23 @@
 [ext_resource type="PackedScene" uid="uid://baxpb3crwepc0" path="res://Entities/Items/Weapons/ProjectileWeapons/LaserGun/LaserGun.tscn" id="6_gbfef"]
 
 [sub_resource type="Curve" id="Curve_kfl3v"]
-_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.757194, 0.277558), 0.0, 0.0, 0, 0, Vector2(1, 1), 2.89929, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="Curve" id="Curve_7cqvo"]
+_data = [Vector2(0, 0.0692444), 0.0, -0.246832, 0, 0, Vector2(1, 0.95222), 0.658218, 0.0, 0, 0]
 point_count = 2
+
+[sub_resource type="Curve" id="Curve_mls34"]
+_data = [Vector2(0, 0.0138195), 0.0, 0.0609458, 0, 0, Vector2(0.809353, 0.228211), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.152751, 0.0, 0, 0]
+point_count = 3
 
 [sub_resource type="Resource" id="Resource_wic0i"]
 script = ExtResource("1_2i3xb")
 is_projectile = true
 bad_effect_affected_teams = 1
 good_effect_affected_teams = 2
-scanned_phys_layers = 191
+scanned_phys_layers = 190
 base_damage = 0
 dmg_affected_stats = 2
 crit_chance = 0
@@ -56,13 +64,21 @@ splash_falloff_exponent = 1.0
 splash_effect_delay = 0.0
 splash_sound = ""
 
-[sub_resource type="Curve" id="Curve_p4aqc"]
-_data = [Vector2(0.00729927, 0.00647151), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
-point_count = 2
-
 [sub_resource type="Resource" id="Resource_wcvpy"]
 script = ExtResource("5_lsump")
 debug_print_mod_changes = false
+
+[sub_resource type="Curve" id="Curve_43cgp"]
+_data = [Vector2(0, 0.350592), 0.0, 0.0, 0, 0, Vector2(1, 0.133465), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Curve" id="Curve_c3po6"]
+_data = [Vector2(0, 0.506529), 0.0, 0.0, 0, 0, Vector2(1, 0.0999089), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Curve" id="Curve_5x8xt"]
+_data = [Vector2(0, 0.0545096), 0.0, 0.233214, 0, 0, Vector2(1, 0.129517), 0.0, 0.0, 0, 0]
+point_count = 2
 
 [resource]
 script = ExtResource("1_7bjnk")
@@ -73,23 +89,30 @@ ammo_type = 0
 mag_size = 30
 reload_time = 1.0
 reload_type = "Magazine"
-firing_mode = "Semi Auto"
-uses_bloom = false
+pullout_delay = 2.0
+firing_mode = "Auto"
+initial_shot_delay = 0.0
+auto_fire_delay = 0.2
+max_bloom = 10.0
 bloom_curve = SubResource("Curve_kfl3v")
-recoil_curve = SubResource("Curve_p4aqc")
-auto_fire_delay = 0.075
+bloom_increase_rate = SubResource("Curve_mls34")
+bloom_decrease_rate = SubResource("Curve_7cqvo")
+fully_cool_delay_time = 0.0
+warmth_delay_curve = SubResource("Curve_c3po6")
+warmth_increase_rate = SubResource("Curve_5x8xt")
+warmth_decrease_rate = SubResource("Curve_43cgp")
 min_charge_time = 1.0
-charge_fire_cooldown = 0.0
-has_charge_fire_anim = false
+charge_fire_cooldown = 0.5
 ammo_use_per_charge = 3
+charge_bloom_mult = 5.0
+has_charge_fire_anim = false
 charging_entity_speed_mult = 1.0
-num_of_bursts = 0
-projectiles_per_burst = 3
+projectiles_per_fire = 1
 use_ammo_per_proj = true
-burst_bullet_delay = 0.1
-auto_burst_delay = 0.3
-angluar_spread = 0
-barrage_count = 3
+burst_bullet_delay = 0.07
+add_bloom_per_burst_shot = true
+barrage_count = 1
+angluar_spread = 10
 firing_cam_shake_str = 0.0
 firing_cam_shake_dur = 0.0
 firing_cam_freeze_str = 0.0

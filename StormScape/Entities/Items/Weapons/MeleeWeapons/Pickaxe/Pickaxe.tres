@@ -40,7 +40,6 @@ cooldown = 0.25
 use_speed = 0.2
 swing_angle = 75
 usage_sound = ""
-cooldown_sound = ""
 stats = SubResource("Resource_15gyn")
 effect_source = SubResource("Resource_63o7k")
 id = "pickaxe"
