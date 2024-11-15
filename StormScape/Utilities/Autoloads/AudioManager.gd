@@ -198,6 +198,8 @@ func _start_audio_player_in_tree(audio_player, volume: float, fade_in_time: floa
 		_start_audio_player_fade_in(audio_player, volume, fade_in_time)
 	else:
 		audio_player.play()
+		if DebugFlags.PrintFlags.sounds_starting:
+			print_rich("\"[b]" + audio_player.get_meta("sound_name") + "[/b]\" sound is starting")
 
 ## Restarts the first sound in the group belonging to the passed in sound name, fading if necessary.
 func _restart_sound_by_name_due_to_limit(sound_name: String, volume: float, fade_in_time: float) -> void:
@@ -208,6 +210,8 @@ func _restart_sound_by_name_due_to_limit(sound_name: String, volume: float, fade
 			_start_audio_player_fade_in(playing_sounds[0], volume, fade_in_time)
 		else:
 			playing_sounds[0].play()
+			if DebugFlags.PrintFlags.sounds_starting:
+				print_rich("\"[b]" + sound_name + "[/b]\" sound is starting")
 
 ## Picks a random sound from the array in the sound name's resource and creates an audio stream resource from it.
 func _create_stream_resource_from_audio_resource(audio_resource: AudioResource) -> AudioStream:

@@ -1,4 +1,4 @@
-[gd_scene load_steps=198 format=3 uid="uid://dba8mrurjlekp"]
+[gd_scene load_steps=201 format=3 uid="uid://dba8mrurjlekp"]
 
 [ext_resource type="Script" path="res://Entities/Player/PlayerCore/Player.gd" id="1_m33tt"]
 [ext_resource type="Script" path="res://Entities/Components/StatModComponents/StatModsCacheResource.gd" id="2_vyeuy"]
@@ -34,11 +34,12 @@
 [ext_resource type="Script" path="res://UI/Inventory/PlayerInventory/PlayerInvCommunicator.gd" id="31_mjpan"]
 [ext_resource type="Script" path="res://UI/Inventory/PlayerInventory/PlayerInvUI.gd" id="32_3a185"]
 [ext_resource type="Script" path="res://Entities/Items/ItemCore/InvItemResource.gd" id="32_ixmb3"]
-[ext_resource type="Resource" uid="uid://cx1ydw2jde1y8" path="res://Entities/Items/Consumables/Food/Apple/Apple.tres" id="33_0qw5e"]
+[ext_resource type="Resource" uid="uid://cx1ydw2jde1y8" path="res://Entities/Items/Consumables/Apple/Apple.tres" id="33_0qw5e"]
 [ext_resource type="Texture2D" uid="uid://biejldas3s8ak" path="res://UI/Inventory/InventoryCore/inv_9_patch.png" id="33_8yk75"]
 [ext_resource type="Resource" uid="uid://bh18kqp2up3oe" path="res://Entities/Items/Weapons/MeleeWeapons/Pickaxe/Pickaxe.tres" id="34_i8j5r"]
 [ext_resource type="Script" path="res://UI/Inventory/PlayerInventory/ItemInteractionHud.gd" id="35_45ikj"]
 [ext_resource type="Resource" uid="uid://bper7kxtsf7f1" path="res://Entities/Items/Weapons/MeleeWeapons/Axe/Axe.tres" id="35_g2eu7"]
+[ext_resource type="Resource" uid="uid://m8eslst1uuxh" path="res://Entities/Items/Ammo/LightAmmo.tres" id="35_qbswt"]
 [ext_resource type="Script" path="res://UI/PlayerStatsOverlay/PlayerStatsOverlay.gd" id="35_yln51"]
 [ext_resource type="Texture2D" uid="uid://dwo0fuwylfxeq" path="res://UI/PlayerStatsOverlay/Assets/Stats Panel Bckgrd.png" id="36_vdy3t"]
 [ext_resource type="Texture2D" uid="uid://k0o25ihgea1n" path="res://UI/PlayerStatsOverlay/Assets/Hunger Progress Under.png" id="37_32xjt"]
@@ -1518,6 +1519,16 @@ script = ExtResource("32_ixmb3")
 stats = ExtResource("34_i8j5r")
 quantity = 1
 
+[sub_resource type="Resource" id="Resource_jrr0m"]
+script = ExtResource("32_ixmb3")
+stats = ExtResource("35_qbswt")
+quantity = 64
+
+[sub_resource type="Resource" id="Resource_2ijsm"]
+script = ExtResource("32_ixmb3")
+stats = ExtResource("35_qbswt")
+quantity = 64
+
 [sub_resource type="CircleShape2D" id="CircleShape2D_3wm74"]
 radius = 12.0
 
@@ -1683,7 +1694,7 @@ parameters/run/blendspace2d/blend_position = Vector2(0, 0)
 
 [node name="ItemReceiverComponent" parent="." node_paths=PackedStringArray("inv_populator", "ui") instance=ExtResource("30_qgyag")]
 item_scene = ExtResource("31_8v2rb")
-starting_inv = Array[ExtResource("32_ixmb3")]([SubResource("Resource_pihal"), null, SubResource("Resource_3kywt"), null, null, SubResource("Resource_kx1me"), SubResource("Resource_h68kk")])
+starting_inv = Array[ExtResource("32_ixmb3")]([SubResource("Resource_pihal"), null, SubResource("Resource_3kywt"), null, null, SubResource("Resource_kx1me"), SubResource("Resource_h68kk"), SubResource("Resource_jrr0m"), SubResource("Resource_2ijsm")])
 is_player_inv = true
 inv_size = 40
 hotbar_size = 8

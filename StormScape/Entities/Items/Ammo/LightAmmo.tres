@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="ProjAmmoResource" load_steps=3 format=3 uid="uid://m8eslst1uuxh"]
+
+[ext_resource type="Texture2D" uid="uid://dd7trlkk62n13" path="res://Entities/Items/Ammo/pistol_bullet_default.png" id="1_bbn41"]
+[ext_resource type="Script" path="res://Entities/Items/Ammo/ProjAmmoResource.gd" id="1_r1ps3"]
+
+[resource]
+script = ExtResource("1_r1ps3")
+ammo_type = 1
+id = "light_ammo"
+name = "Light Ammo"
+icon = ExtResource("1_bbn41")
+thumbnail = ExtResource("1_bbn41")
+is_gripped_by_one_hand = true
+rotation_smoothing = 0.1
+item_type = 2
+rarity = 0
+weight = 0
+stack_size = 64
+auto_pickup = true
+pickup_radius = 4
+info = "Ammo used in light weapons like pistols."

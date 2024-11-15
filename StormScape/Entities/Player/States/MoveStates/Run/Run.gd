@@ -57,7 +57,7 @@ func _do_character_run(delta: float) -> void:
 			fsm.knockback_vector = Vector2.ZERO
 			dynamic_entity.velocity = Vector2.ZERO
 			transitioned.emit(self, "Idle")
-	elif knockback == Vector2.ZERO:
+	elif knockback.length() == 0:
 		if request_sprint and stamina_component.use_stamina(dynamic_entity.stats.get_stat("sprint_stamina_usage") * delta): # sprint
 			if actual_movement_speed > dynamic_entity.stats.get_stat("max_speed"):
 				_play_sprint_sound()

@@ -15,8 +15,7 @@ func _ready() -> void:
 	self.body_entered.connect(_on_tilemap_collision)
 	monitorable = true
 	collision_layer = 0
-	if effect_source and source_entity:
-		effect_source.source_entity = source_entity
+	if effect_source:
 		collision_mask = effect_source.scanned_phys_layers
 
 ## When detecting an area, start having it handled. This method can be overridden in subclasses.
@@ -33,12 +32,12 @@ func _on_area_entered(area: Area2D) -> void:
 ## If we hit the tilemap body, queue free.
 func _on_tilemap_collision(body: Node2D) -> void:
 	if body is TileMapLayer:
-		queue_free()
+		_process_hit(body)
 
 ## Meant to interact with an EffectReceiverComponent that can handle effects supplied by this instance.
 func _start_being_handled(handling_area: EffectReceiverComponent) -> void:
 	effect_source.contact_position = get_parent().global_position
-	handling_area.handle_effect_source(effect_source)
+	handling_area.handle_effect_source(effect_source, source_entity)
 
 ## Meant to be overridden by subclasses to determine what to do after hitting an object.
 func _process_hit(_area: Area2D) -> void:

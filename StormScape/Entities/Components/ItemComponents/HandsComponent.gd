@@ -25,21 +25,24 @@ func _ready() -> void:
 	off_hand_sprite.visible = false
 
 func _unhandled_input(event: InputEvent) -> void:
-	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
-		if equipped_item != null and not scale_is_lerping:
-			if event.is_pressed():
-				equipped_item.activate()
+	if equipped_item != null:
+		if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
+			if not scale_is_lerping:
+				if event.is_pressed():
+					equipped_item.activate()
 			is_mouse_button_held = event.pressed
+		elif Input.is_action_pressed("reload") and equipped_item is ProjectileWeapon:
+			equipped_item.reload()
 
 func _process(delta: float) -> void:
-	if equipped_item != null and not scale_is_lerping:
+	if equipped_item != null:
 		if is_mouse_button_held:
 			been_holding_time += delta
-			equipped_item.hold_activate(been_holding_time)
+			if not scale_is_lerping:
+				equipped_item.hold_activate(been_holding_time)
 			return
 		else:
-			if been_holding_time > delta:
-				equipped_item.release_hold_activate(been_holding_time)
+			equipped_item.release_hold_activate(been_holding_time)
 
 	been_holding_time = 0
 
@@ -48,7 +51,7 @@ func on_equipped_item_change(inv_item_slot: Slot) -> void:
 		equipped_item.exit()
 		equipped_item.queue_free()
 
-	if inv_item_slot.item == null:
+	if inv_item_slot.item == null or inv_item_slot.item.stats.item_scene == null:
 		set_physics_process(false)
 		main_hand_sprite.visible = false
 		off_hand_sprite.visible = false
@@ -158,6 +161,9 @@ func _handle_y_scale_lerping(anim_vector: Vector2) -> void:
 		current_x_direction = -1
 
 	hands_anchor.scale.y = lerp(hands_anchor.scale.y, -1.0 if current_x_direction == -1 else 1.0, 0.22)
+
+func snap_y_scale() -> void:
+	hands_anchor.scale.y = -1.0 if current_x_direction == -1 else 1.0
 
 func _get_anim_vector() -> Vector2:
 	return get_parent().move_fsm.anim_vector

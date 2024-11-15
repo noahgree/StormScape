@@ -27,6 +27,11 @@ func handle_knockback(knockback_effect: KnockbackEffect) -> void:
 	if knockback_effect.custom_knockback_direction != Vector2.ZERO:
 		_send_handled_knockback(knockback_effect.custom_knockback_direction, knockback_effect.knockback_force)
 		return
+
+	if knockback_effect is SelfKnockbackEffect:
+		handle_self_knockback(knockback_effect)
+		return
+
 	if effect_receiver.affected_entity is DynamicEntity:
 		handle_dynamic_entity_knockback(knockback_effect)
 	elif effect_receiver.affected_entity is RigidEntity:
@@ -55,6 +60,20 @@ func handle_rigid_entity_knockback(knockback_effect: KnockbackEffect) -> void:
 		effect_dir = (effect_receiver.global_position - contact_position).normalized()
 
 	_send_handled_knockback(effect_dir, knockback_effect.knockback_force * 2)
+
+func handle_self_knockback(knockback_effect: SelfKnockbackEffect) -> void:
+	if effect_receiver.affected_entity is not DynamicEntity:
+		push_error("SelfKnockbackEffect was attempted to be used on a non-DynamicEntity.")
+		return
+
+	var effect_dir: Vector2
+	if knockback_effect.direction_method == "Direction Faced":
+		effect_dir = -effect_receiver.affected_entity.move_fsm.anim_vector.normalized()
+	else:
+		var hands_rotation: float = effect_receiver.affected_entity.hands.hands_anchor.global_rotation
+		effect_dir = -Vector2(cos(hands_rotation), sin(hands_rotation)).normalized()
+
+	_send_handled_knockback(effect_dir, knockback_effect.knockback_force)
 
 ## Send the resulting handled knockback vector to the affected entity with logic based on what the entity type is.
 func _send_handled_knockback(knockback_dir: Vector2, force: int) -> void:

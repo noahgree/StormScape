@@ -44,6 +44,5 @@ class_name EffectSource
 @export_group("Status Effects")
 @export var status_effects: Array[StatusEffect] ## The array of status effects that can be applied to the receiving entity.
 
-var source_entity: PhysicsBody2D ## The entity this effect source came from.
 var contact_position: Vector2 ## The position of what the effect source is attached to when it makes contact with a receiver.
 var movement_direction: Vector2 ## The direction vector of this effect source at contact used for knockback.

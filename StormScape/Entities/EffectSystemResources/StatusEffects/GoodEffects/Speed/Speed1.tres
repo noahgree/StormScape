@@ -43,5 +43,7 @@ effect_name = "Speed"
 effect_lvl = 1
 is_bad_effect = false
 effects_to_stop = Array[String]([])
+audio_to_play = ""
+only_cue_on_player_hit = false
 mod_time = 5.0
 stat_mods = Array[ExtResource("2_l733c")]([SubResource("Resource_wakq2"), SubResource("Resource_r3x4i"), SubResource("Resource_ncnec")])

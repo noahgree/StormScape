@@ -14,10 +14,11 @@ heal_affected_stats = 1
 [resource]
 script = ExtResource("1_ryq06")
 hot_resource = SubResource("Resource_m7vw8")
-handler_type = 4
 effect_name = "Regen"
 effect_lvl = 1
 is_bad_effect = false
 effects_to_stop = Array[String]([])
+audio_to_play = ""
+only_cue_on_player_hit = false
 mod_time = 10.0
 stat_mods = Array[ExtResource("2_0lf2m")]([])

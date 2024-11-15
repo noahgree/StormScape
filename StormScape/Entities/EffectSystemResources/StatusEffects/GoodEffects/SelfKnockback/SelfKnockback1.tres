@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="SelfKnockbackEffect" load_steps=3 format=3 uid="uid://budyhbdyh7yme"]
+
+[ext_resource type="Script" path="res://Entities/EffectSystemResources/StatusEffects/GoodEffects/SelfKnockback/SelfKnockbackEffect.gd" id="1_77pio"]
+[ext_resource type="Script" path="res://Entities/Components/StatModComponents/EntityStatMod.gd" id="2_w3ylo"]
+
+[resource]
+script = ExtResource("1_77pio")
+direction_method = "Direction Faced"
+knockback_force = 350
+custom_knockback_direction = Vector2(0, 0)
+effect_name = "SelfKnockback"
+effect_lvl = 1
+is_bad_effect = false
+effects_to_stop = Array[String]([])
+audio_to_play = ""
+only_cue_on_player_hit = false
+mod_time = 0.5
+stat_mods = Array[ExtResource("2_w3ylo")]([])

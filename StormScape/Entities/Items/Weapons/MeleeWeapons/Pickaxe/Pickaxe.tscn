@@ -1,10 +1,12 @@
-[gd_scene load_steps=12 format=3 uid="uid://b0wwbgbbfkso4"]
+[gd_scene load_steps=11 format=3 uid="uid://b0wwbgbbfkso4"]
 
 [ext_resource type="Script" path="res://Entities/Items/Weapons/MeleeWeapons/MeleeWeapon.gd" id="1_rnhoy"]
 [ext_resource type="PackedScene" uid="uid://bv3ae77701mrg" path="res://Entities/EntityCore/SpriteGhost.tscn" id="2_5i8p7"]
 [ext_resource type="Texture2D" uid="uid://b6q76o13tanxi" path="res://Entities/Items/Weapons/MeleeWeapons/Pickaxe/pickaxe.png" id="3_j3tj5"]
 [ext_resource type="PackedScene" uid="uid://b7ckcb2xdimpo" path="res://Entities/Components/HitboxComponent/HitboxComponent.tscn" id="4_047ac"]
 [ext_resource type="Texture2D" uid="uid://cs3clmnktksd6" path="res://Entities/Player/PlayerCore/player_hand.png" id="5_llog1"]
+[ext_resource type="Script" path="res://Entities/Items/ItemCore/EquippableItem.gd" id="6_q6xvu"]
+[ext_resource type="AnimationLibrary" uid="uid://dk7m82xohebji" path="res://Entities/Items/Weapons/MeleeWeapons/MeleeWeaponAnimLibrary.res" id="7_huo2n"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_iu4vy"]
 atlas = ExtResource("3_j3tj5")
@@ -23,107 +25,6 @@ animations = [{
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_sjv0y"]
 size = Vector2(18.3848, 9)
-
-[sub_resource type="Animation" id="Animation_uki13"]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("AnimatedSprite2D:rotation")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [0.0]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("AnimatedSprite2D/HitboxComponent/CollisionShape2D:disabled")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [true]
-}
-
-[sub_resource type="Animation" id="Animation_41srr"]
-resource_name = "use"
-step = 0.05
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("AnimatedSprite2D:rotation")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.5, 1),
-"transitions": PackedFloat32Array(1, 1, 1),
-"update": 0,
-"values": [0.0, 0.785398, 0.0]
-}
-tracks/1/type = "method"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath(".")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(1),
-"transitions": PackedFloat32Array(1),
-"values": [{
-"args": [],
-"method": &"_on_animation_ended"
-}]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("AnimatedSprite2D/HitboxComponent/CollisionShape2D:disabled")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0, 0.5),
-"transitions": PackedFloat32Array(1, 1),
-"update": 1,
-"values": [false, true]
-}
-tracks/3/type = "method"
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/path = NodePath(".")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/keys = {
-"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
-"values": [{
-"args": [],
-"method": &"_spawn_ghost"
-}, {
-"args": [],
-"method": &"_spawn_ghost"
-}, {
-"args": [],
-"method": &"_spawn_ghost"
-}, {
-"args": [],
-"method": &"_spawn_ghost"
-}, {
-"args": [],
-"method": &"_spawn_ghost"
-}]
-}
-
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_fwr4v"]
-_data = {
-"RESET": SubResource("Animation_uki13"),
-"use": SubResource("Animation_41srr")
-}
 
 [node name="Pickaxe" type="Node2D"]
 script = ExtResource("1_rnhoy")
@@ -144,14 +45,14 @@ metadata/_edit_group_ = true
 [node name="CollisionShape2D" type="CollisionShape2D" parent="AnimatedSprite2D/HitboxComponent"]
 rotation = 0.785398
 shape = SubResource("RectangleShape2D_sjv0y")
-disabled = true
 
 [node name="MainHandSprite" type="Sprite2D" parent="AnimatedSprite2D"]
 z_index = 1
 position = Vector2(8.01041, 4.01041)
 texture = ExtResource("5_llog1")
+script = ExtResource("6_q6xvu")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
-"": SubResource("AnimationLibrary_fwr4v")
+"MeleeWeaponAnimLibrary": ExtResource("7_huo2n")
 }

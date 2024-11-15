@@ -23,14 +23,13 @@ enum HealAffectedStats { HEALTH_ONLY, SHIELD_ONLY, HEALTH_THEN_SHIELD, SIMULTANE
 enum BadEffectAffectedTeams { ENEMIES = 1 << 0, ALLIES = 1 << 1 }
 enum GoodEffectAffectedTeams { ENEMIES = 1 << 0, ALLIES = 1 << 1 }
 
-enum EntityStatusEffectType { ## The types of handlers that process additional logic of a status effect.
-	NONE, KNOCKBACK, STUN, POISON, REGEN, FROSTBITE, BURNING, TIMESNARE
-	}
-
 # Items
 enum ItemType {
 	CONSUMABLE, WEAPON, AMMO, CLOTHING, SPECIAL
 }
 enum ItemRarity {
 	COMMON, UNCOMMON, RARE, EPIC, LEGENDARY, SINGULAR
+}
+enum ProjAmmoType {
+	NONE, LIGHT, MEDIUM, HEAVY, SHELL, ROCKET, MAGIC, ION_CHARGE, STAMINA
 }

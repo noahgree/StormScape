@@ -10,6 +10,9 @@ class_name MeleeWeapon
 
 var s_stats: MeleeWeaponResource ## Self stats, only exists to give us type hints for this specific kind of item resource.
 var cooldown_timer: Timer = Timer.new()
+var is_swinging: bool = false
+var is_holding: bool = false
+const HOLDING_THRESHOLD: float = 0.1
 
 
 func _set_stats(new_stats: ItemResource) -> void:
@@ -21,8 +24,10 @@ func _set_stats(new_stats: ItemResource) -> void:
 
 func _ready() -> void:
 	super._ready()
+
 	add_child(cooldown_timer)
 	cooldown_timer.one_shot = true
+	hitbox_component.source_entity = source_entity
 
 func enter() -> void:
 	if s_stats.cooldown_left > 0:
@@ -37,28 +42,74 @@ func exit() -> void:
 
 ## Overrides the parent method to specify what to do on use while equipped.
 func activate() -> void:
-	pass
-
-func hold_activate(_hold_time: float) -> void:
-	_swing()
-
-func release_hold_activate(_hold_time: float) -> void:
-	pass
-
-func _swing() -> void:
-	if not cooldown_timer.is_stopped():
+	if is_swinging:
 		return
 
-	s_stats.effect_source.source_entity = source_entity
+	is_holding = false
+	await get_tree().create_timer(HOLDING_THRESHOLD, false, false, false).timeout
+	if not is_holding or not s_stats.can_do_charge_use:
+		if pullout_delay_timer.is_stopped() and cooldown_timer.is_stopped():
+			if not source_entity.hands.scale_is_lerping:
+				_swing()
 
-	source_entity.move_fsm.should_rotate = false
+func hold_activate(hold_time: float) -> void:
+	if not pullout_delay_timer.is_stopped() or not cooldown_timer.is_stopped() or is_swinging:
+		source_entity.hands.been_holding_time = 0
+		return
 
-	var anim: Animation = anim_player.get_animation("use")
-	var main_sprite_track: int = anim.find_track("AnimatedSprite2D:rotation", Animation.TYPE_VALUE)
-	anim.track_set_key_value(main_sprite_track, 1, deg_to_rad(s_stats.swing_angle))
+	if hold_time >= HOLDING_THRESHOLD:
+		is_holding = true
+		if s_stats.auto_do_charge_use and s_stats.can_do_charge_use:
+			_charge_swing(hold_time)
 
-	anim_player.speed_scale = 1.0 / s_stats.use_speed
-	anim_player.play("use")
+func release_hold_activate(hold_time: float) -> void:
+	if not pullout_delay_timer.is_stopped() or not cooldown_timer.is_stopped() or is_swinging:
+		source_entity.hands.been_holding_time = 0
+		return
+
+	if hold_time >= HOLDING_THRESHOLD and not s_stats.auto_do_charge_use and s_stats.can_do_charge_use:
+		_charge_swing(hold_time)
+
+func _swing() -> void:
+	if source_entity.stamina_component.use_stamina(s_stats.stamina_cost):
+		is_swinging = true
+		source_entity.move_fsm.should_rotate = false
+
+		_apply_start_use_effect(false)
+
+		var lib: AnimationLibrary = anim_player.get_animation_library("MeleeWeaponAnimLibrary")
+		var anim: Animation = lib.get_animation("use")
+		var main_sprite_track: int = anim.find_track("AnimatedSprite2D:rotation", Animation.TYPE_VALUE)
+		anim.track_set_key_value(main_sprite_track, 1, deg_to_rad(s_stats.swing_angle))
+
+		anim_player.speed_scale = 1.0 / s_stats.use_speed
+		anim_player.play("MeleeWeaponAnimLibrary/use")
+		if s_stats.usage_sound != "":
+			AudioManager.play_sound(s_stats.usage_sound, AudioManager.SoundType.SFX_2D, source_entity.global_position)
+
+func _charge_swing(hold_time: float) -> void:
+	if not (hold_time >= s_stats.min_charge_time):
+		return
+
+	if s_stats.charge_effect_source == null:
+		s_stats.charge_effect_source = s_stats.effect_source
+
+	if source_entity.stamina_component.use_stamina(s_stats.charge_stamina_cost):
+		is_swinging = true
+		source_entity.move_fsm.should_rotate = false
+		source_entity.hands.snap_y_scale()
+
+		_apply_start_use_effect(true)
+
+		var lib: AnimationLibrary = anim_player.get_animation_library("MeleeWeaponAnimLibrary")
+		var anim: Animation = lib.get_animation("charge_use")
+		var main_sprite_track: int = anim.find_track("AnimatedSprite2D:rotation", Animation.TYPE_VALUE)
+		anim.track_set_key_value(main_sprite_track, 1, deg_to_rad(s_stats.charge_swing_angle))
+
+		anim_player.speed_scale = 1.0 / s_stats.charge_use_speed
+		anim_player.play("MeleeWeaponAnimLibrary/charge_use")
+		if s_stats.charge_use_sound != "":
+			AudioManager.play_sound(s_stats.charge_use_sound, AudioManager.SoundType.SFX_2D, source_entity.global_position)
 
 func _spawn_ghost() -> void:
 	var current_anim: String = sprite.animation
@@ -74,6 +125,20 @@ func _spawn_ghost() -> void:
 	ghost_instance.make_white()
 	add_child(ghost_instance)
 
-func _on_animation_ended() -> void:
+## Applies a status effect to the source entity at the start of use.
+func _apply_start_use_effect(was_charge_fire: bool = false) -> void:
+	var effect: StatusEffect = s_stats.use_start_effect if not was_charge_fire else s_stats.chg_use_start_effect
+	if effect != null:
+		source_entity.effect_receiver.handle_status_effect(effect)
+
+## Applies a status effect to the source entity after use.
+func _apply_post_use_effect(was_charge_fire: bool = false) -> void:
+	var effect: StatusEffect = s_stats.post_use_effect if not was_charge_fire else s_stats.post_chg_use_effect
+	if effect != null:
+		source_entity.effect_receiver.handle_status_effect(effect)
+
+func _on_use_animation_ended(was_charge_use: bool = false) -> void:
+	is_swinging = false
 	source_entity.move_fsm.should_rotate = true
-	cooldown_timer.start(s_stats.cooldown)
+	cooldown_timer.start(s_stats.cooldown if not was_charge_use else s_stats.charge_use_cooldown)
+	_apply_post_use_effect(was_charge_use)

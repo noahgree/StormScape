@@ -32,8 +32,7 @@ func consume() -> void:
 
 		stamina_component.gain_hunger_bars(s_stats.hunger_bar_gain)
 		stamina_component.use_hunger_bars(s_stats.hunger_bar_deduction)
-		s_stats.effect_source.source_entity = source_entity
-		source_entity.get_node("EffectReceiverComponent").handle_effect_source(s_stats.effect_source)
+		source_entity.effect_receiver.handle_effect_source(s_stats.effect_source, source_entity)
 
 		source_slot.synced_inv.remove_item(source_slot.index, 1)
 

@@ -5,7 +5,6 @@
 
 [sub_resource type="Resource" id="Resource_y0lhg"]
 script = ExtResource("2_fd4bu")
-type = 2
 stat_id = "max_speed"
 mod_id = "slowness1"
 operation = "-%"
@@ -17,7 +16,6 @@ override_all = false
 
 [sub_resource type="Resource" id="Resource_idxik"]
 script = ExtResource("2_fd4bu")
-type = 2
 stat_id = "dash_speed"
 mod_id = "slowness1"
 operation = "-%"
@@ -29,7 +27,6 @@ override_all = false
 
 [sub_resource type="Resource" id="Resource_kkwqv"]
 script = ExtResource("2_fd4bu")
-type = 2
 stat_id = "dash_duration"
 mod_id = "slowness1"
 operation = "+%"
@@ -44,5 +41,9 @@ script = ExtResource("1_ffs2s")
 handler_type = 0
 effect_name = "Slowness"
 effect_lvl = 0
+is_bad_effect = true
+effects_to_stop = Array[String]([])
+audio_to_play = ""
+only_cue_on_player_hit = false
 mod_time = 5.0
 stat_mods = Array[ExtResource("2_fd4bu")]([SubResource("Resource_y0lhg"), SubResource("Resource_idxik"), SubResource("Resource_kkwqv")])

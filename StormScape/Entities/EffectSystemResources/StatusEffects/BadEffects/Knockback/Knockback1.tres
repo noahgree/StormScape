@@ -5,9 +5,8 @@
 
 [resource]
 script = ExtResource("1_ofqhb")
-knockback_force = 400
+knockback_force = 350
 custom_knockback_direction = Vector2(0, 0)
-handler_type = 1
 effect_name = "Knockback"
 effect_lvl = 1
 is_bad_effect = true

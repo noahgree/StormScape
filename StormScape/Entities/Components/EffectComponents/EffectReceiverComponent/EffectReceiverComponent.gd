@@ -48,12 +48,11 @@ func _ready() -> void:
 
 ## Handles an incoming effect source, passing it to present receivers for further processing before changing
 ## entity stats.
-func handle_effect_source(effect_source: EffectSource) -> void:
-	if effect_source.source_entity.team == GlobalData.Teams.PASSIVE:
+func handle_effect_source(effect_source: EffectSource, source_entity: PhysicsBody2D) -> void:
+	if source_entity.team == GlobalData.Teams.PASSIVE:
 		return
 	if (affected_entity is DynamicEntity) and not affected_entity.move_fsm.can_receive_effects:
 		return
-
 
 	if effect_source.impact_vfx != null:
 		var vfx: Node2D = effect_source.impact_vfx.instantiate()
@@ -69,16 +68,16 @@ func handle_effect_source(effect_source: EffectSource) -> void:
 			GlobalData.player_camera.start_freeze(effect_source.cam_freeze_multiplier, effect_source.cam_freeze_duration)
 
 	if effect_source.base_damage > 0 and has_node("DmgHandler"):
-		if _check_same_team(effect_source) and _check_if_bad_effects_apply_to_allies(effect_source):
+		if _check_same_team(source_entity) and _check_if_bad_effects_apply_to_allies(effect_source):
 			$DmgHandler.handle_instant_damage(effect_source)
-		elif not _check_same_team(effect_source) and _check_if_bad_effects_apply_to_enemies(effect_source):
+		elif not _check_same_team(source_entity) and _check_if_bad_effects_apply_to_enemies(effect_source):
 			$DmgHandler.handle_instant_damage(effect_source)
 
 	if effect_source.base_healing > 0 and has_node("HealHandler"):
 		if effect_source.base_healing > 0:
-			if _check_same_team(effect_source) and _check_if_good_effects_apply_to_allies(effect_source):
+			if _check_same_team(source_entity) and _check_if_good_effects_apply_to_allies(effect_source):
 				$HealHandler.handle_instant_heal(effect_source.base_healing, effect_source.heal_affected_stats)
-			elif not _check_same_team(effect_source) and _check_if_good_effects_apply_to_enemies(effect_source):
+			elif not _check_same_team(source_entity) and _check_if_good_effects_apply_to_enemies(effect_source):
 				$HealHandler.handle_instant_heal(effect_source.base_healing, effect_source.heal_affected_stats)
 
 	if can_receive_status_effects:
@@ -87,11 +86,11 @@ func handle_effect_source(effect_source: EffectSource) -> void:
 			knockback_handler.effect_movement_direction = effect_source.movement_direction
 			knockback_handler.is_source_moving_type = effect_source.is_projectile
 
-		_unpack_status_effects_from_source(effect_source)
+		_check_status_effect_team_logic(effect_source, source_entity)
 
-## Handles the array of status effects coming in from the effect source by sending each status effect to the manager.
-func _unpack_status_effects_from_source(effect_source: EffectSource) -> void:
-	var is_same_team = _check_same_team(effect_source)
+## Checks if each status effect in the array applies to this entity via team logic, then passes it to be unpacked.
+func _check_status_effect_team_logic(effect_source: EffectSource, source_entity: PhysicsBody2D) -> void:
+	var is_same_team = _check_same_team(source_entity)
 	var bad_effects_to_enemies = not is_same_team and _check_if_bad_effects_apply_to_enemies(effect_source)
 	var good_effects_to_enemies = not is_same_team and _check_if_good_effects_apply_to_enemies(effect_source)
 	var bad_effects_to_allies = is_same_team and _check_if_bad_effects_apply_to_allies(effect_source)
@@ -99,45 +98,43 @@ func _unpack_status_effects_from_source(effect_source: EffectSource) -> void:
 
 	for status_effect in effect_source.status_effects:
 		if status_effect:
-			var is_bad_effect = status_effect.is_bad_effect
-			var applies_to_target = (is_bad_effect and (bad_effects_to_enemies or bad_effects_to_allies)) or (not is_bad_effect and (good_effects_to_enemies or good_effects_to_allies))
+			var applies_to_target = (status_effect.is_bad_effect and (bad_effects_to_enemies or bad_effects_to_allies)) or (not status_effect.is_bad_effect and (good_effects_to_enemies or good_effects_to_allies))
 
-			if not applies_to_target or ("Untouchable" in affected_entity.effects.current_effects and is_bad_effect):
-				continue
+			if applies_to_target:
+				handle_status_effect(status_effect)
 
-			for effect_to_stop in status_effect.effects_to_stop:
-				affected_entity.effects.request_effect_removal(effect_to_stop)
+## Checks for untouchability and handles the stat mods in the status effect.
+## Then it passes the effect to have its main logic handled if it needs a handler.
+func handle_status_effect(status_effect: StatusEffect) -> void:
+	if ("Untouchable" in affected_entity.effects.current_effects) and (status_effect.is_bad_effect):
+		return
 
-			if not ((affected_entity is not Player) and status_effect.only_cue_on_player_hit):
-				if status_effect.audio_to_play != "":
-					AudioManager.play_sound(status_effect.audio_to_play, AudioManager.SoundType.SFX_2D, affected_entity.global_position)
+	for effect_to_stop in status_effect.effects_to_stop:
+		affected_entity.effects.request_effect_removal(effect_to_stop)
 
-			_pass_effect_to_handler(status_effect)
+	if not ((affected_entity is not Player) and status_effect.only_cue_on_player_hit):
+		if status_effect.audio_to_play != "":
+			AudioManager.play_sound(status_effect.audio_to_play, AudioManager.SoundType.SFX_2D, affected_entity.global_position)
+
+	affected_entity.effects.handle_status_effect(status_effect)
+	_pass_effect_to_handler(status_effect)
 
 	if "Untouchable" in affected_entity.effects.current_effects:
 		affected_entity.effects.remove_all_bad_status_effects()
 
+## Passes the status effect to a handler if one is needed for additional logic handling.
 func _pass_effect_to_handler(status_effect: StatusEffect) -> void:
-	affected_entity.effects.handle_status_effect(status_effect)
-	match status_effect.handler_type:
-		GlobalData.EntityStatusEffectType.KNOCKBACK:
-			if knockback_handler: knockback_handler.handle_knockback(status_effect)
-		GlobalData.EntityStatusEffectType.STUN:
-			if stun_handler: stun_handler.handle_stun(status_effect)
-		GlobalData.EntityStatusEffectType.POISON:
-			if poison_handler: poison_handler.handle_poison(status_effect)
-		GlobalData.EntityStatusEffectType.REGEN:
-			if regen_handler: regen_handler.handle_regen(status_effect)
-		GlobalData.EntityStatusEffectType.FROSTBITE:
-			if frostbite_handler: frostbite_handler.handle_frostbite(status_effect)
-		GlobalData.EntityStatusEffectType.BURNING:
-			if burning_handler: burning_handler.handle_burning(status_effect)
-		GlobalData.EntityStatusEffectType.TIMESNARE:
-			if time_snare_handler: time_snare_handler.handle_time_snare(status_effect)
+	if knockback_handler and status_effect is KnockbackEffect: knockback_handler.handle_knockback(status_effect)
+	if stun_handler and status_effect is StunEffect: stun_handler.handle_stun(status_effect)
+	if poison_handler and status_effect is PoisonEffect: poison_handler.handle_poison(status_effect)
+	if regen_handler and status_effect is RegenEffect: regen_handler.handle_regen(status_effect)
+	if frostbite_handler and status_effect is FrostbiteEffect: frostbite_handler.handle_frostbite(status_effect)
+	if burning_handler and status_effect is BurningEffect: burning_handler.handle_burning(status_effect)
+	if time_snare_handler and status_effect is TimeSnareEffect: time_snare_handler.handle_time_snare(status_effect)
 
 ## Checks if the affected entity is on the same team as the producer of the effect source.
-func _check_same_team(effect_source: EffectSource) -> bool:
-	return affected_entity.team & effect_source.source_entity.team != 0
+func _check_same_team(source_entity: PhysicsBody2D) -> bool:
+	return affected_entity.team & source_entity.team != 0
 
 ## Checks if the effect source should do bad effects to allies.
 func _check_if_bad_effects_apply_to_allies(effect_source: EffectSource) -> bool:

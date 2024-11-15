@@ -9,6 +9,7 @@ class_name RigidEntity
 @export_group("Status Effects & Stat Mods")
 @export var stats: StatModsCacheResource = StatModsCacheResource.new() ## The resource that will cache and work with all stat mods for this entity.
 
+@onready var effect_receiver: EffectReceiverComponent = get_node_or_null("EffectReceiverComponent") ## The component that handles incoming effect sources.
 @onready var effects: StatusEffectManager = get_node_or_null("StatusEffectManager") ## The node that will cache and manage all status effects for this entity.
 @onready var inv: ItemReceiverComponent = get_node_or_null("ItemReceiverComponent")
 
