@@ -10,6 +10,7 @@ class_name MeleeWeapon
 
 var s_stats: MeleeWeaponResource ## Self stats, only exists to give us type hints for this specific kind of item resource.
 var cooldown_timer: Timer = Timer.new()
+var charge_cooldown_timer: Timer = Timer.new()
 var is_swinging: bool = false
 var is_holding: bool = false
 const HOLDING_THRESHOLD: float = 0.1
@@ -17,7 +18,9 @@ const HOLDING_THRESHOLD: float = 0.1
 
 func _set_stats(new_stats: ItemResource) -> void:
 	stats = new_stats
-	s_stats = stats
+	s_stats = stats.duplicate()
+	source_slot.item.stats = s_stats
+
 	if hitbox_component:
 		hitbox_component.effect_source = s_stats.effect_source
 		hitbox_component.collision_mask = hitbox_component.effect_source.scanned_phys_layers
@@ -26,19 +29,25 @@ func _ready() -> void:
 	super._ready()
 
 	add_child(cooldown_timer)
+	add_child(charge_cooldown_timer)
 	cooldown_timer.one_shot = true
+	charge_cooldown_timer.one_shot = true
+
 	hitbox_component.source_entity = source_entity
 
 func enter() -> void:
 	if s_stats.cooldown_left > 0:
 		cooldown_timer.start(s_stats.cooldown_left)
+	if s_stats.charge_cooldown_left > 0:
+		charge_cooldown_timer.start(s_stats.charge_use_cooldown)
 
 func exit() -> void:
 	source_entity.move_fsm.should_rotate = true
-	if not cooldown_timer.is_stopped():
-		s_stats.cooldown_left = cooldown_timer.time_left
-	else:
-		s_stats.cooldown_left = 0
+
+	s_stats.cooldown_left = cooldown_timer.time_left
+	s_stats.charge_cooldown_left = charge_cooldown_timer.time_left
+
+	s_stats.time_last_equipped = Time.get_ticks_msec() / 1000.0
 
 ## Overrides the parent method to specify what to do on use while equipped.
 func activate() -> void:
@@ -53,7 +62,7 @@ func activate() -> void:
 				_swing()
 
 func hold_activate(hold_time: float) -> void:
-	if not pullout_delay_timer.is_stopped() or not cooldown_timer.is_stopped() or is_swinging:
+	if not pullout_delay_timer.is_stopped() or not cooldown_timer.is_stopped() or not charge_cooldown_timer.is_stopped() or is_swinging:
 		source_entity.hands.been_holding_time = 0
 		return
 
@@ -63,7 +72,7 @@ func hold_activate(hold_time: float) -> void:
 			_charge_swing(hold_time)
 
 func release_hold_activate(hold_time: float) -> void:
-	if not pullout_delay_timer.is_stopped() or not cooldown_timer.is_stopped() or is_swinging:
+	if not pullout_delay_timer.is_stopped() or not cooldown_timer.is_stopped() or not charge_cooldown_timer.is_stopped() or is_swinging:
 		source_entity.hands.been_holding_time = 0
 		return
 
@@ -72,6 +81,7 @@ func release_hold_activate(hold_time: float) -> void:
 
 func _swing() -> void:
 	if source_entity.stamina_component.use_stamina(s_stats.stamina_cost):
+		cooldown_timer.start(s_stats.cooldown + s_stats.use_speed)
 		is_swinging = true
 		source_entity.move_fsm.should_rotate = false
 
@@ -95,6 +105,7 @@ func _charge_swing(hold_time: float) -> void:
 		s_stats.charge_effect_source = s_stats.effect_source
 
 	if source_entity.stamina_component.use_stamina(s_stats.charge_stamina_cost):
+		cooldown_timer.start(s_stats.charge_use_cooldown + s_stats.charge_use_speed)
 		is_swinging = true
 		source_entity.move_fsm.should_rotate = false
 		source_entity.hands.snap_y_scale()
@@ -140,5 +151,5 @@ func _apply_post_use_effect(was_charge_fire: bool = false) -> void:
 func _on_use_animation_ended(was_charge_use: bool = false) -> void:
 	is_swinging = false
 	source_entity.move_fsm.should_rotate = true
-	cooldown_timer.start(s_stats.cooldown if not was_charge_use else s_stats.charge_use_cooldown)
+
 	_apply_post_use_effect(was_charge_use)

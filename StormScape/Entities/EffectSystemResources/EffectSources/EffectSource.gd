@@ -9,6 +9,7 @@ class_name EffectSource
 @export_group("General")
 @export var is_projectile: bool = true ## Whether or not this effect source is attached to something that moves in order to deal damage.
 @export_subgroup("Team Logic")
+@export var can_hit_self: bool = true ## Whether or not this effect source can be applied to what created it.
 @export_flags("Enemies", "Allies") var bad_effect_affected_teams: int = GlobalData.BadEffectAffectedTeams.ENEMIES ## Which entity teams in relation to who produced this source are affected by this damage.
 @export_flags("Enemies", "Allies") var good_effect_affected_teams: int = GlobalData.GoodEffectAffectedTeams.ALLIES ## Which entity teams in relation to who produced this source are affected by this healing.
 @export_subgroup("Scanned Physics Layers")
@@ -44,5 +45,7 @@ class_name EffectSource
 @export_group("Status Effects")
 @export var status_effects: Array[StatusEffect] ## The array of status effects that can be applied to the receiving entity.
 
-var contact_position: Vector2 ## The position of what the effect source is attached to when it makes contact with a receiver.
-var movement_direction: Vector2 ## The direction vector of this effect source at contact used for knockback.
+
+# Unique Properties #
+@export_custom(PROPERTY_HINT_NONE, "", PROPERTY_USAGE_NO_EDITOR) var contact_position: Vector2 ## The position of what the effect source is attached to when it makes contact with a receiver.
+@export_custom(PROPERTY_HINT_NONE, "", PROPERTY_USAGE_NO_EDITOR) var movement_direction: Vector2 ## The direction vector of this effect source at contact used for knockback.

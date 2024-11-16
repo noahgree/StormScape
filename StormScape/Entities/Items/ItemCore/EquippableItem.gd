@@ -12,8 +12,8 @@ var source_entity: PhysicsBody2D ## The entity that is holding the equippable it
 ## Creates an equippable item to be used via the slot it is currently in.
 static func create_from_slot(item_source_slot: Slot) -> EquippableItem:
 	var item: EquippableItem = item_source_slot.item.stats.item_scene.instantiate()
-	item.stats = item_source_slot.item.stats
 	item.source_slot = item_source_slot
+	item.stats = item_source_slot.item.stats
 	item.source_entity = item_source_slot.synced_inv.get_parent()
 	return item
 

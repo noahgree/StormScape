@@ -69,11 +69,13 @@ enum ProjWeaponType { ## The kinds of projectile weapons.
 @export var reload_sound: String = "" ## The sound to play when reloading.
 @export var empty_mag_sound: String = "" ## The sound to play when trying to fire with no ammo left.
 
-var auto_fire_delay_left: float = 0
-var charge_fire_cooldown_left: float = 0
-var current_warmth_level: float = 0
-var current_bloom_level: float = 0
-var ammo_in_mag: int = -1:
+
+# Unique Properties #
+@export_custom(PROPERTY_HINT_NONE, "", PROPERTY_USAGE_NO_EDITOR) var auto_fire_delay_left: float = 0
+@export_custom(PROPERTY_HINT_NONE, "", PROPERTY_USAGE_NO_EDITOR) var charge_fire_cooldown_left: float = 0
+@export_custom(PROPERTY_HINT_NONE, "", PROPERTY_USAGE_NO_EDITOR) var current_warmth_level: float = 0
+@export_custom(PROPERTY_HINT_NONE, "", PROPERTY_USAGE_NO_EDITOR) var current_bloom_level: float = 0
+@export_custom(PROPERTY_HINT_NONE, "", PROPERTY_USAGE_NO_EDITOR) var ammo_in_mag: int = -1:
 	set(new_ammo_amount):
 		ammo_in_mag = new_ammo_amount
 		if DebugFlags.PrintFlags.ammo_updates:

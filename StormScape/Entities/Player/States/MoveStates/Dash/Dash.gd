@@ -37,7 +37,7 @@ func enter() -> void:
 	dash_timer.start(dynamic_entity.stats.get_stat("dash_duration"))
 	fsm.dash_cooldown_timer.start(dynamic_entity.stats.get_stat("dash_duration") + dynamic_entity.stats.get_stat("dash_cooldown"))
 	movement_vector = _calculate_move_vector()
-	fsm.anim_vector = movement_vector
+	fsm.anim_vector = get_parent().curr_mouse_direction
 
 	if dynamic_entity.has_node("AnimatedSprite2D"):
 		parent_sprite_node = dynamic_entity.get_node("AnimatedSprite2D")

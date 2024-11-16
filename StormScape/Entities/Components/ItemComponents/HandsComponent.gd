@@ -71,9 +71,11 @@ func on_equipped_item_change(inv_item_slot: Slot) -> void:
 			main_hand_sprite.visible = false
 			if equipped_item is ProjectileWeapon:
 				main_hand.position = main_hand_with_proj_weapon_pos
+				snap_y_scale()
 				_manage_proj_weapon_hands(_get_anim_vector())
 			elif equipped_item is MeleeWeapon:
 				main_hand.position = main_hand_with_melee_weapon_pos
+				snap_y_scale()
 				_manage_melee_weapon_hands(_get_anim_vector())
 		GlobalData.ItemType.CONSUMABLE:
 			main_hand.position.y = default_main_hand_pos.y - int(floor(equipped_item.stats.thumbnail.get_height() / 2.0))

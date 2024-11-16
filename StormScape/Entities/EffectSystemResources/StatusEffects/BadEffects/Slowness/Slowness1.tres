@@ -38,7 +38,6 @@ override_all = false
 
 [resource]
 script = ExtResource("1_ffs2s")
-handler_type = 0
 effect_name = "Slowness"
 effect_lvl = 0
 is_bad_effect = true

@@ -36,10 +36,11 @@ override_all = false
 [resource]
 script = ExtResource("2_murqd")
 dot_resource = SubResource("Resource_ge1fd")
-handler_type = 5
 effect_name = "Frostbite"
 effect_lvl = 2
 is_bad_effect = true
 effects_to_stop = Array[String](["Burning"])
+audio_to_play = ""
+only_cue_on_player_hit = false
 mod_time = 10.0
 stat_mods = Array[ExtResource("3_63sjm")]([SubResource("Resource_xefcn"), SubResource("Resource_3of86")])

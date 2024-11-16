@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="ProjWeaponResource" load_steps=20 format=3 uid="uid://ciel2rrqq4dvv"]
+[gd_resource type="Resource" script_class="ProjWeaponResource" load_steps=22 format=3 uid="uid://ciel2rrqq4dvv"]
 
 [ext_resource type="Script" path="res://Entities/EffectSystemResources/EffectSources/EffectSource.gd" id="1_2i3xb"]
 [ext_resource type="Script" path="res://Entities/Items/Weapons/ProjectileWeapons/ProjWeaponResource.gd" id="1_7bjnk"]
@@ -25,6 +25,7 @@ point_count = 3
 [sub_resource type="Resource" id="Resource_wic0i"]
 script = ExtResource("1_2i3xb")
 is_projectile = true
+can_hit_self = true
 bad_effect_affected_teams = 1
 good_effect_affected_teams = 2
 scanned_phys_layers = 191
@@ -41,16 +42,45 @@ cam_freeze_multiplier = 1.0
 cam_freeze_duration = 0.0
 impact_sound = ""
 status_effects = Array[ExtResource("2_mu3cd")]([])
+contact_position = Vector2(0, 0)
+movement_direction = Vector2(0, 0)
 
 [sub_resource type="Curve" id="Curve_xm4dv"]
-_data = [Vector2(0, 0.514076), 0.0, -0.0675633, 0, 0, Vector2(1, 1), 0.485924, 0.0, 1, 0]
+_data = [Vector2(0, 0.22229), 0.0, -0.0675633, 0, 0, Vector2(1, 1), 0.77771, 0.0, 1, 0]
+point_count = 2
+
+[sub_resource type="Resource" id="Resource_pil5o"]
+script = ExtResource("1_2i3xb")
+is_projectile = false
+can_hit_self = true
+bad_effect_affected_teams = 1
+good_effect_affected_teams = 2
+scanned_phys_layers = 191
+base_damage = 25
+dmg_affected_stats = 2
+crit_chance = 0
+crit_multiplier = 1.5
+armor_penetration = 0
+base_healing = 0
+heal_affected_stats = 2
+cam_shake_strength = 0.0
+cam_shake_duration = 0.0
+cam_freeze_multiplier = 1.0
+cam_freeze_duration = 0.0
+impact_sound = ""
+status_effects = Array[ExtResource("2_mu3cd")]([])
+contact_position = Vector2(0, 0)
+movement_direction = Vector2(0, 0)
+
+[sub_resource type="Curve" id="Curve_wr325"]
+_data = [Vector2(0, 1), 0.0, -1.0, 0, 1, Vector2(1, 0), -1.0, 0.0, 1, 0]
 point_count = 2
 
 [sub_resource type="Resource" id="Resource_2dbrb"]
 script = ExtResource("5_54flx")
 speed = 200
 speed_curve = SubResource("Curve_xm4dv")
-lifetime = 2.0
+lifetime = 3.0
 max_distance = 500
 max_pierce = 0
 max_ricochet = 0
@@ -58,20 +88,29 @@ ricochet_bounce = true
 homing = false
 spin_speed = 0.0
 spin_both_ways = true
-spin_direction = "Left"
+spin_direction = "Right"
 move_in_rotated_dir = true
-arc_height = 0.0
-arc_time = 0.15
-arc_collision_delay = 0.3
-number_of_splits = 1
-split_into_count = 5
-split_angle = 100.0
-split_delay = 0.1
-split_cam_shake_str = 0.0
-split_cam_shake_dur = 0.0
+launch_angle = 40.0
+arc_travel_distance = 125
+arc_speed = 500.0
+max_collision_height = 25
+grounding_free_delay = 0.5
+number_of_splits = 0
+split_into_counts = Array[int]([2, 2, 5])
+angular_spreads = Array[float]([15.0, 25.0, 360.0])
+split_delays = Array[float]([0.1, 0.3, 0.35])
+splitting_sounds = Array[String](["", "PlayerDash", "KineticImpactHit"])
+split_cam_shakes_str = Array[float]([0.65, 1.2, 1.48])
+split_cam_shakes_dur = Array[float]([0.2, 0.0, 0.0])
 splash_radius = 0
-splash_falloff_exponent = 1.0
+do_aoe_on_arc_land = false
+splash_falloff_curve = SubResource("Curve_wr325")
+bad_effects_falloff = true
+good_effects_falloff = false
 splash_effect_delay = 0.0
+splash_effect_dur = 0.05
+splash_before_freeing = false
+splash_effect_source = SubResource("Resource_pil5o")
 splash_sound = ""
 
 [sub_resource type="Resource" id="Resource_wcvpy"]
@@ -99,12 +138,12 @@ firing_mode = "Auto"
 initial_shot_delay = 0.0
 auto_fire_delay = 0.12
 ammo_type = 1
-mag_size = 14
+mag_size = 60
 reload_type = "Magazine"
 mag_reload_time = 1.0
 single_proj_reload_time = 0.5
 stamina_use_per_proj = 0.5
-max_bloom = 10.0
+max_bloom = 20.0
 bloom_curve = SubResource("Curve_kfl3v")
 bloom_increase_rate = SubResource("Curve_mls34")
 bloom_decrease_rate = SubResource("Curve_7cqvo")
@@ -133,9 +172,15 @@ firing_sound = ""
 charge_firing_sound = ""
 reload_sound = ""
 empty_mag_sound = ""
+auto_fire_delay_left = 0.0
+charge_fire_cooldown_left = 0.0
+current_warmth_level = 0.0
+current_bloom_level = 0.0
+ammo_in_mag = -1
 stats = SubResource("Resource_wcvpy")
 effect_source = SubResource("Resource_wic0i")
 pullout_delay = 0.0
+time_last_equipped = 0.0
 id = "laser_gun"
 name = "Laser Gun"
 icon = ExtResource("3_qr2dh")

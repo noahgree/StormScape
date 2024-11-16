@@ -20,14 +20,13 @@ func _ready() -> void:
 
 ## When detecting an area, start having it handled. This method can be overridden in subclasses.
 func _on_area_entered(area: Area2D) -> void:
-	if area.get_parent() != source_entity:
-		if area is EffectReceiverComponent:
-			if effect_source.is_projectile:
-				effect_source.movement_direction = movement_direction
+	if (area.get_parent() == source_entity) and not effect_source.can_hit_self:
+		return
 
-			_start_being_handled(area as EffectReceiverComponent)
+	if area is EffectReceiverComponent:
+		_start_being_handled(area as EffectReceiverComponent)
 
-		_process_hit(area)
+	_process_hit(area)
 
 ## If we hit the tilemap body, queue free.
 func _on_tilemap_collision(body: Node2D) -> void:
@@ -36,6 +35,10 @@ func _on_tilemap_collision(body: Node2D) -> void:
 
 ## Meant to interact with an EffectReceiverComponent that can handle effects supplied by this instance.
 func _start_being_handled(handling_area: EffectReceiverComponent) -> void:
+	effect_source = effect_source.duplicate()
+
+	if effect_source.is_projectile:
+		effect_source.movement_direction = movement_direction
 	effect_source.contact_position = get_parent().global_position
 	handling_area.handle_effect_source(effect_source, source_entity)
 

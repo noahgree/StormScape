@@ -45,6 +45,7 @@ metadata/_edit_group_ = true
 [node name="CollisionShape2D" type="CollisionShape2D" parent="AnimatedSprite2D/HitboxComponent"]
 rotation = 0.785398
 shape = SubResource("RectangleShape2D_sjv0y")
+disabled = true
 
 [node name="MainHandSprite" type="Sprite2D" parent="AnimatedSprite2D"]
 z_index = 1

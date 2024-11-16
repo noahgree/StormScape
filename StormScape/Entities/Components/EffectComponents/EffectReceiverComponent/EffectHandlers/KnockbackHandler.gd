@@ -40,6 +40,7 @@ func handle_knockback(knockback_effect: KnockbackEffect) -> void:
 func handle_dynamic_entity_knockback(knockback_effect: KnockbackEffect) -> void:
 	var entity_move_dir = effect_receiver.affected_entity.velocity.normalized()
 	var effect_dir: Vector2
+
 	if is_source_moving_type:
 		if entity_move_dir == Vector2.ZERO:
 			effect_dir = effect_movement_direction
@@ -47,13 +48,18 @@ func handle_dynamic_entity_knockback(knockback_effect: KnockbackEffect) -> void:
 			effect_dir = effect_movement_direction
 			effect_dir = effect_dir.lerp(entity_move_dir, entity_dir_influence).normalized()
 	else:
-		effect_dir = -entity_move_dir
+		if entity_move_dir == Vector2.ZERO:
+			effect_dir = (effect_receiver.global_position - contact_position).normalized()
+		else:
+			effect_dir = (effect_receiver.global_position - contact_position).normalized()
+			effect_dir = effect_dir.lerp(entity_move_dir, entity_dir_influence).normalized()
 
 	_send_handled_knockback(effect_dir, knockback_effect.knockback_force)
 
 ## Handles applying knockback to a rigid entity when it hits something that provides knockback.
 func handle_rigid_entity_knockback(knockback_effect: KnockbackEffect) -> void:
 	var effect_dir: Vector2
+
 	if is_source_moving_type:
 		effect_dir = effect_movement_direction
 	else:
@@ -67,6 +73,7 @@ func handle_self_knockback(knockback_effect: SelfKnockbackEffect) -> void:
 		return
 
 	var effect_dir: Vector2
+
 	if knockback_effect.direction_method == "Direction Faced":
 		effect_dir = -effect_receiver.affected_entity.move_fsm.anim_vector.normalized()
 	else:

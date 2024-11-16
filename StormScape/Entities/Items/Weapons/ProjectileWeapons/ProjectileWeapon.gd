@@ -26,7 +26,8 @@ var is_charging: bool = false
 #region EquippableItem Core
 func _set_stats(new_stats: ItemResource) -> void:
 	stats = new_stats
-	s_stats = stats
+	s_stats = stats.duplicate()
+	source_slot.item.stats = s_stats
 
 func _ready() -> void:
 	if not Engine.is_editor_hint():
@@ -45,6 +46,8 @@ func _ready() -> void:
 		single_reload_timer.timeout.connect(_on_single_reload_timer_timeout)
 
 func enter() -> void:
+	_handle_reequipping_stats()
+
 	if (s_stats.ammo_in_mag == -1) and (s_stats.ammo_type != GlobalData.ProjAmmoType.STAMINA):
 		s_stats.ammo_in_mag = s_stats.mag_size
 	else:
@@ -64,6 +67,13 @@ func exit() -> void:
 		s_stats.auto_fire_delay_left = firing_delay_timer.time_left
 	else:
 		s_stats.auto_fire_delay_left = 0
+
+	s_stats.time_last_equipped = Time.get_ticks_msec() / 1000.0
+
+func _handle_reequipping_stats() -> void:
+	var time_since_last_equipped: float = (Time.get_ticks_msec() / 1000.0) - s_stats.time_last_equipped
+	var forgiveness_factor: float = min(1.0, time_since_last_equipped / 5.0)
+	s_stats.current_bloom_level = s_stats.current_bloom_level * (1 - forgiveness_factor)
 
 ## Every frame we decrease the warmth and the bloom levels based on their decrease curves.
 func _process(delta: float) -> void:

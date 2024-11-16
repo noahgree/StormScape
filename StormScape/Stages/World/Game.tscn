@@ -4181,6 +4181,7 @@ size = Vector2(18, 18)
 [sub_resource type="Resource" id="Resource_sx5ie"]
 script = ExtResource("14_pdlrm")
 is_projectile = true
+can_hit_self = true
 bad_effect_affected_teams = 1
 good_effect_affected_teams = 2
 scanned_phys_layers = 191
@@ -4197,6 +4198,8 @@ cam_freeze_multiplier = 1.0
 cam_freeze_duration = 0.0
 impact_sound = ""
 status_effects = Array[ExtResource("13_33bgr")]([])
+contact_position = Vector2(0, 0)
+movement_direction = Vector2(0, 0)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_o8yml"]
 size = Vector2(14, 14)
@@ -4204,6 +4207,7 @@ size = Vector2(14, 14)
 [sub_resource type="Resource" id="Resource_laavl"]
 script = ExtResource("14_pdlrm")
 is_projectile = true
+can_hit_self = true
 bad_effect_affected_teams = 1
 good_effect_affected_teams = 2
 scanned_phys_layers = 191
@@ -4220,6 +4224,8 @@ cam_freeze_multiplier = 1.0
 cam_freeze_duration = 0.0
 impact_sound = ""
 status_effects = Array[ExtResource("13_33bgr")]([])
+contact_position = Vector2(0, 0)
+movement_direction = Vector2(0, 0)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_wvmy1"]
 size = Vector2(6, 6)

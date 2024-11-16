@@ -10,6 +10,7 @@
 [sub_resource type="Resource" id="Resource_hsou2"]
 script = ExtResource("1_bn713")
 is_projectile = false
+can_hit_self = true
 bad_effect_affected_teams = 1
 good_effect_affected_teams = 2
 scanned_phys_layers = 191
@@ -26,6 +27,8 @@ cam_freeze_multiplier = 1.0
 cam_freeze_duration = 0.0
 impact_sound = ""
 status_effects = Array[ExtResource("2_kdgs1")]([])
+contact_position = Vector2(0, 0)
+movement_direction = Vector2(0, 0)
 
 [resource]
 script = ExtResource("1_jepoi")
