@@ -19,3 +19,11 @@ class AudioFlags:
 
 class HotbarFlags:
 	static var use_scroll_debounce: bool = true
+
+class Projectiles:
+	static var show_collision_points: bool = false
+	static var show_homing_rays: bool = false
+	static var show_movement_dir: bool = false
+
+class OnScreenDebug:
+	static var frame_rate: bool = true

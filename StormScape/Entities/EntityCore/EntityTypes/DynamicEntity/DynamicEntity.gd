@@ -30,6 +30,10 @@ func _on_load_game() -> void:
 ## Making sure we know we have save logic, even if not set in editor.
 func _ready() -> void:
 	add_to_group("has_save_logic")
+	if team == GlobalData.Teams.PLAYER:
+		add_to_group("player_entities")
+	elif team == GlobalData.Teams.ENEMY:
+		add_to_group("enemy_entities")
 
 func _process(delta: float) -> void:
 	move_fsm.state_machine_process(delta)

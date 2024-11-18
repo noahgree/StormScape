@@ -27,6 +27,7 @@ func _set_stats(new_stats: ItemResource) -> void:
 
 func _ready() -> void:
 	super._ready()
+	call_deferred("_disable_collider")
 
 	add_child(cooldown_timer)
 	add_child(charge_cooldown_timer)
@@ -34,6 +35,9 @@ func _ready() -> void:
 	charge_cooldown_timer.one_shot = true
 
 	hitbox_component.source_entity = source_entity
+
+func _disable_collider() -> void:
+	hitbox_component.collider.disabled = true
 
 func enter() -> void:
 	if s_stats.cooldown_left > 0:

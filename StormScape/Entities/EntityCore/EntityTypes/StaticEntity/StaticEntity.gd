@@ -10,3 +10,10 @@ class_name StaticEntity
 @onready var inv: ItemReceiverComponent = get_node_or_null("ItemReceiverComponent")
 
 var stat_mods: Dictionary = {}
+
+
+func _ready() -> void:
+	if team == GlobalData.Teams.PLAYER:
+		add_to_group("player_entities")
+	elif team == GlobalData.Teams.ENEMY:
+		add_to_group("enemy_entities")

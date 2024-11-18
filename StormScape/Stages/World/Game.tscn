@@ -1,4 +1,4 @@
-[gd_scene load_steps=41 format=4 uid="uid://bscnr6a23l10m"]
+[gd_scene load_steps=38 format=4 uid="uid://bscnr6a23l10m"]
 
 [ext_resource type="Script" path="res://Utilities/Game/WorldRoot/WorldRoot.gd" id="1_q0i4n"]
 [ext_resource type="Script" path="res://Stages/World/BackgroundMusicManager.gd" id="1_q5pr2"]
@@ -20,8 +20,6 @@
 [ext_resource type="PackedScene" uid="uid://4gl24qwdyti3" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/DmgHandler.tscn" id="13_bs3qc"]
 [ext_resource type="PackedScene" uid="uid://depnx3pnassrq" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/BurningHandler.tscn" id="14_fmrr1"]
 [ext_resource type="Script" path="res://Entities/EffectSystemResources/EffectSources/EffectSource.gd" id="14_pdlrm"]
-[ext_resource type="Script" path="res://Utilities/Debug/TestBullet.gd" id="15_v7yfh"]
-[ext_resource type="PackedScene" uid="uid://b7ckcb2xdimpo" path="res://Entities/Components/HitboxComponent/HitboxComponent.tscn" id="19_bijto"]
 [ext_resource type="Script" path="res://Stages/Tilemaps/TileMapDual.gd" id="22_47ykm"]
 [ext_resource type="Texture2D" uid="uid://6saycs5sisdk" path="res://Stages/Tilemaps/GrassDirt/TILESET_GRASSDIRT.png" id="22_tnvqm"]
 
@@ -4204,31 +4202,9 @@ movement_direction = Vector2(0, 0)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_o8yml"]
 size = Vector2(14, 14)
 
-[sub_resource type="Resource" id="Resource_laavl"]
-script = ExtResource("14_pdlrm")
-is_projectile = true
-can_hit_self = true
-bad_effect_affected_teams = 1
-good_effect_affected_teams = 2
-scanned_phys_layers = 191
-base_damage = 0
-dmg_affected_stats = 2
-crit_chance = 0
-crit_multiplier = 1.5
-armor_penetration = 0
-base_healing = 0
-heal_affected_stats = 2
-cam_shake_strength = 0.0
-cam_shake_duration = 0.0
-cam_freeze_multiplier = 1.0
-cam_freeze_duration = 0.0
-impact_sound = ""
-status_effects = Array[ExtResource("13_33bgr")]([])
-contact_position = Vector2(0, 0)
-movement_direction = Vector2(0, 0)
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_wvmy1"]
-size = Vector2(6, 6)
+[sub_resource type="LabelSettings" id="LabelSettings_lfc2v"]
+outline_size = 3
+outline_color = Color(0, 0, 0, 1)
 
 [node name="Game" type="Node2D"]
 
@@ -4271,8 +4247,14 @@ script = ExtResource("5_vhyrg")
 team = 2
 stats = SubResource("Resource_0ub65")
 
+[node name="Sprite2D" type="Sprite2D" parent="WorldRoot/Testing/TestRigidEntity"]
+modulate = Color(0, 0.27443, 0.568498, 1)
+scale = Vector2(0.15625, 0.15625)
+texture = ExtResource("12_ajeh1")
+
 [node name="CollisionShape2D" type="CollisionShape2D" parent="WorldRoot/Testing/TestRigidEntity"]
 shape = SubResource("RectangleShape2D_sbju2")
+debug_color = Color(1.44392e-06, 0.568839, 0.851513, 0.42)
 
 [node name="HealthComponent" parent="WorldRoot/Testing/TestRigidEntity" instance=ExtResource("7_yay1r")]
 
@@ -4297,11 +4279,6 @@ debug_color = Color(0.941042, 1.32841e-05, 0.612344, 0.42)
 [node name="StatusEffectManager" parent="WorldRoot/Testing/TestRigidEntity" node_paths=PackedStringArray("effect_receiver") instance=ExtResource("8_anrko")]
 effect_receiver = NodePath("../EffectReceiverComponent")
 
-[node name="Sprite2D" type="Sprite2D" parent="WorldRoot/Testing/TestRigidEntity"]
-modulate = Color(0, 0.27443, 0.568498, 1)
-scale = Vector2(0.15625, 0.15625)
-texture = ExtResource("12_ajeh1")
-
 [node name="TestRigidEntity2" type="RigidBody2D" parent="WorldRoot/Testing"]
 position = Vector2(190, 36)
 collision_layer = 32
@@ -4313,12 +4290,22 @@ linear_damp = 2.5
 script = ExtResource("5_vhyrg")
 team = 2
 
+[node name="Sprite2D" type="Sprite2D" parent="WorldRoot/Testing/TestRigidEntity2"]
+modulate = Color(0, 0.27443, 0.568498, 1)
+scale = Vector2(0.15625, 0.15625)
+texture = ExtResource("12_ajeh1")
+
 [node name="CollisionShape2D" type="CollisionShape2D" parent="WorldRoot/Testing/TestRigidEntity2"]
 shape = SubResource("RectangleShape2D_4wvqs")
+debug_color = Color(0.385145, 0.578011, 1, 0.385)
 
-[node name="EffectReceiverComponent" parent="WorldRoot/Testing/TestRigidEntity2" node_paths=PackedStringArray("affected_entity", "knockback_handler") instance=ExtResource("6_haafe")]
+[node name="HealthComponent" parent="WorldRoot/Testing/TestRigidEntity2" instance=ExtResource("7_yay1r")]
+
+[node name="EffectReceiverComponent" parent="WorldRoot/Testing/TestRigidEntity2" node_paths=PackedStringArray("affected_entity", "health_component", "dmg_handler", "knockback_handler") instance=ExtResource("6_haafe")]
 can_receive_stat_mods = false
 affected_entity = NodePath("..")
+health_component = NodePath("../HealthComponent")
+dmg_handler = NodePath("DmgHandler")
 knockback_handler = NodePath("KnockbackHandler")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="WorldRoot/Testing/TestRigidEntity2/EffectReceiverComponent"]
@@ -4327,12 +4314,49 @@ debug_color = Color(0.941042, 1.32841e-05, 0.612344, 0.42)
 
 [node name="KnockbackHandler" parent="WorldRoot/Testing/TestRigidEntity2/EffectReceiverComponent" instance=ExtResource("7_vet3v")]
 
-[node name="Sprite2D" type="Sprite2D" parent="WorldRoot/Testing/TestRigidEntity2"]
+[node name="DmgHandler" parent="WorldRoot/Testing/TestRigidEntity2/EffectReceiverComponent" instance=ExtResource("13_bs3qc")]
+
+[node name="StatusEffectManager" parent="WorldRoot/Testing/TestRigidEntity2" node_paths=PackedStringArray("effect_receiver") instance=ExtResource("8_anrko")]
+effect_receiver = NodePath("../EffectReceiverComponent")
+
+[node name="TestRigidEntity3" type="RigidBody2D" parent="WorldRoot/Testing"]
+position = Vector2(241, 147)
+collision_layer = 32
+collision_mask = 245
+mass = 3.0
+gravity_scale = 0.0
+lock_rotation = true
+linear_damp = 2.5
+script = ExtResource("5_vhyrg")
+team = 2
+
+[node name="Sprite2D" type="Sprite2D" parent="WorldRoot/Testing/TestRigidEntity3"]
 modulate = Color(0, 0.27443, 0.568498, 1)
 scale = Vector2(0.15625, 0.15625)
 texture = ExtResource("12_ajeh1")
 
-[node name="StatusEffectManager" parent="WorldRoot/Testing/TestRigidEntity2" node_paths=PackedStringArray("effect_receiver") instance=ExtResource("8_anrko")]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="WorldRoot/Testing/TestRigidEntity3"]
+shape = SubResource("RectangleShape2D_4wvqs")
+debug_color = Color(0.385145, 0.578011, 1, 0.385)
+
+[node name="HealthComponent" parent="WorldRoot/Testing/TestRigidEntity3" instance=ExtResource("7_yay1r")]
+
+[node name="EffectReceiverComponent" parent="WorldRoot/Testing/TestRigidEntity3" node_paths=PackedStringArray("affected_entity", "health_component", "dmg_handler", "knockback_handler") instance=ExtResource("6_haafe")]
+can_receive_stat_mods = false
+affected_entity = NodePath("..")
+health_component = NodePath("../HealthComponent")
+dmg_handler = NodePath("DmgHandler")
+knockback_handler = NodePath("KnockbackHandler")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="WorldRoot/Testing/TestRigidEntity3/EffectReceiverComponent"]
+shape = SubResource("RectangleShape2D_tov2u")
+debug_color = Color(0.941042, 1.32841e-05, 0.612344, 0.42)
+
+[node name="KnockbackHandler" parent="WorldRoot/Testing/TestRigidEntity3/EffectReceiverComponent" instance=ExtResource("7_vet3v")]
+
+[node name="DmgHandler" parent="WorldRoot/Testing/TestRigidEntity3/EffectReceiverComponent" instance=ExtResource("13_bs3qc")]
+
+[node name="StatusEffectManager" parent="WorldRoot/Testing/TestRigidEntity3" node_paths=PackedStringArray("effect_receiver") instance=ExtResource("8_anrko")]
 effect_receiver = NodePath("../EffectReceiverComponent")
 
 [node name="TestStaticEffectSource" type="Area2D" parent="WorldRoot/Testing" node_paths=PackedStringArray("source_entity")]
@@ -4343,28 +4367,12 @@ source_entity = NodePath("../Enemy")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="WorldRoot/Testing/TestStaticEffectSource"]
 shape = SubResource("RectangleShape2D_o8yml")
+disabled = true
 
 [node name="Sprite2D" type="Sprite2D" parent="WorldRoot/Testing/TestStaticEffectSource"]
 modulate = Color(0.535417, 0, 0.108896, 1)
 position = Vector2(-3.8147e-06, 0)
 scale = Vector2(0.109375, 0.109375)
-texture = ExtResource("12_ajeh1")
-
-[node name="TestMovingEffectSource" type="Node2D" parent="WorldRoot/Testing"]
-script = ExtResource("15_v7yfh")
-
-[node name="HitboxComponent" parent="WorldRoot/Testing/TestMovingEffectSource" node_paths=PackedStringArray("source_entity") instance=ExtResource("19_bijto")]
-effect_source = SubResource("Resource_laavl")
-source_entity = NodePath("../../Enemy")
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="WorldRoot/Testing/TestMovingEffectSource/HitboxComponent"]
-position = Vector2(40, 98)
-shape = SubResource("RectangleShape2D_wvmy1")
-
-[node name="Sprite2D" type="Sprite2D" parent="WorldRoot/Testing/TestMovingEffectSource"]
-modulate = Color(0.488801, 0, 0.115136, 1)
-position = Vector2(40, 98)
-scale = Vector2(0.046875, 0.046875)
 texture = ExtResource("12_ajeh1")
 
 [node name="Player" parent="WorldRoot" instance=ExtResource("4_ptig0")]
@@ -4375,9 +4383,22 @@ collision_mask = 245
 [node name="PlayerCamera" type="Camera2D" parent="WorldRoot" node_paths=PackedStringArray("player") groups=["core"]]
 unique_name_in_owner = true
 position_smoothing_speed = 18.0
+editor_draw_screen = false
 script = ExtResource("4_tj8qg")
 player = NodePath("../Player")
 smoothing_enabled = true
+
+[node name="DebugCanvasLayer" type="CanvasLayer" parent="WorldRoot"]
+
+[node name="FPS" type="Label" parent="WorldRoot/DebugCanvasLayer" groups=["core"]]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -20.0
+offset_right = 20.0
+offset_bottom = 12.0
+grow_horizontal = 2
+label_settings = SubResource("LabelSettings_lfc2v")
 
 [node name="BackgroundMusicManager" type="Node" parent="." groups=["core"]]
 script = ExtResource("1_q5pr2")

@@ -70,6 +70,7 @@ func exit() -> void:
 
 	s_stats.time_last_equipped = Time.get_ticks_msec() / 1000.0
 
+## Checks how long since we last had this equipped and changes bloom accordingly.
 func _handle_reequipping_stats() -> void:
 	var time_since_last_equipped: float = (Time.get_ticks_msec() / 1000.0) - s_stats.time_last_equipped
 	var forgiveness_factor: float = min(1.0, time_since_last_equipped / 5.0)
@@ -227,6 +228,7 @@ func _apply_barrage_logic(was_charge_fire: bool = false) -> void:
 		var proj: Projectile = Projectile.spawn(proj_scene, proj_stats, effect_src, source_entity, proj_origin_node.global_position, global_rotation)
 		var rotation_adjustment: float = start_rotation + (i * spread_segment_width)
 		proj.rotation = rotation_adjustment if s_stats.barrage_count > 1 else proj.rotation
+		proj.projectile_height = -(source_entity.hands.position.x + proj_origin.y) / 2
 
 		_spawn_projectile(proj, was_charge_fire)
 

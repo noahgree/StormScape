@@ -4,14 +4,16 @@
 [ext_resource type="Texture2D" uid="uid://dbkn88m72bsus" path="res://Entities/Items/Projectiles/Laser/laser_default.png" id="2_xaeia"]
 [ext_resource type="Texture2D" uid="uid://dcbwxgak6a0r8" path="res://Entities/EntityCore/entity_shadow.png" id="4_jjt2l"]
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_g5klj"]
-radius = 4.0
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_hgbw0"]
+radius = 3.0
+height = 13.0
 
 [node name="Laser" type="Area2D"]
 script = ExtResource("1_nvvwy")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-shape = SubResource("CircleShape2D_g5klj")
+rotation = 1.5708
+shape = SubResource("CapsuleShape2D_hgbw0")
 debug_color = Color(0.626, 0.349, 1, 0.196)
 
 [node name="Sprite2D" type="Sprite2D" parent="."]

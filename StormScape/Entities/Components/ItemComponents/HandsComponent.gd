@@ -3,7 +3,7 @@ extends Node2D
 class_name HandsComponent
 ## This component allows the entity to hold an item and interact with it.
 
-@export var default_main_hand_pos: Vector2 = Vector2(6, 1)
+@export var main_hand_with_consumable_pos: Vector2 = Vector2(6, 1)
 @export var main_hand_with_proj_weapon_pos: Vector2 = Vector2(11, 0)
 @export var main_hand_with_melee_weapon_pos: Vector2 = Vector2(8, 0)
 @export var mouth_pos: Vector2 = Vector2(0, -8) ## Used for emitting food particles.
@@ -78,9 +78,9 @@ func on_equipped_item_change(inv_item_slot: Slot) -> void:
 				snap_y_scale()
 				_manage_melee_weapon_hands(_get_anim_vector())
 		GlobalData.ItemType.CONSUMABLE:
-			main_hand.position.y = default_main_hand_pos.y - int(floor(equipped_item.stats.thumbnail.get_height() / 2.0))
-			main_hand.position.x = default_main_hand_pos.x
-			main_hand_sprite.position = default_main_hand_pos
+			main_hand.position.y = main_hand_with_consumable_pos.y - int(floor(equipped_item.stats.thumbnail.get_height() / 2.0))
+			main_hand.position.x = main_hand_with_consumable_pos.x
+			main_hand_sprite.position = main_hand_with_consumable_pos
 			main_hand_sprite.visible = true
 			_manage_consumable_hands(_get_anim_vector())
 

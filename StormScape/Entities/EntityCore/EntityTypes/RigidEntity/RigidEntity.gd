@@ -21,6 +21,10 @@ func _on_load_game() -> void:
 ## Making sure we know we have save logic, even if not set in editor. Then set up rigid body physics.
 func _ready() -> void:
 	add_to_group("has_save_logic")
+	if team == GlobalData.Teams.PLAYER:
+		add_to_group("player_entities")
+	elif team == GlobalData.Teams.ENEMY:
+		add_to_group("enemy_entities")
 
 	mass = 3
 	linear_damp = 4.5
@@ -28,5 +32,6 @@ func _ready() -> void:
 	phys_material.friction = 1.0
 	phys_material.rough = true
 	self.physics_material_override = phys_material
+
 	collision_layer = 0b00100000
 	collision_mask = 0b11110101

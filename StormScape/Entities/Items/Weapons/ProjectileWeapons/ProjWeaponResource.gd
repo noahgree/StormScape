@@ -15,6 +15,11 @@ enum ProjWeaponType { ## The kinds of projectile weapons.
 @export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var initial_shot_delay: float = 0 ## How long after we initiate a firing should we wait before the shot releases.
 @export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var auto_fire_delay: float = 0.065 ## Time between fully auto projectile emmision. Also the minimum time that must elapse between clicks if set to semi-auto.
 
+@export_subgroup("Hitscan Options")
+@export var uses_hitscan: bool = false
+@export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var hitscan_duration: float = 0
+@export_custom(PROPERTY_HINT_NONE, "suffix:pixels") var hitscan_width: float = 0.5
+
 @export_subgroup("Ammo & Reloading")
 @export var ammo_type: GlobalData.ProjAmmoType = GlobalData.ProjAmmoType.LIGHT ## The kind of ammo to consume on use.
 @export var mag_size: int = 30  ## Number of normal attack executions that can happen before a reload is needed.
@@ -48,7 +53,7 @@ enum ProjWeaponType { ## The kinds of projectile weapons.
 @export var post_chg_shot_effect: StatusEffect = null ## The status effect to apply to the source entity after a charge shot.
 
 @export_subgroup("Burst Logic")
-@export var projectiles_per_fire: int = 1 ## How many projectiles are emitted per burst execution.
+@export_range(1, 100, 1) var projectiles_per_fire: int = 1 ## How many projectiles are emitted per burst execution.
 @export var use_ammo_per_burst_proj: bool = true ## Whether to consume ammo per projectile emmitted or consume 1 per full burst.
 @export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var burst_bullet_delay: float = 0.1 ## Time between burst shots after execute.
 @export var add_bloom_per_burst_shot: bool = true ## Whether or not each bullet from a burst fire increases bloom individually.
@@ -71,11 +76,11 @@ enum ProjWeaponType { ## The kinds of projectile weapons.
 
 
 # Unique Properties #
-@export_custom(PROPERTY_HINT_NONE, "", PROPERTY_USAGE_NO_EDITOR) var auto_fire_delay_left: float = 0
-@export_custom(PROPERTY_HINT_NONE, "", PROPERTY_USAGE_NO_EDITOR) var charge_fire_cooldown_left: float = 0
-@export_custom(PROPERTY_HINT_NONE, "", PROPERTY_USAGE_NO_EDITOR) var current_warmth_level: float = 0
-@export_custom(PROPERTY_HINT_NONE, "", PROPERTY_USAGE_NO_EDITOR) var current_bloom_level: float = 0
-@export_custom(PROPERTY_HINT_NONE, "", PROPERTY_USAGE_NO_EDITOR) var ammo_in_mag: int = -1:
+@export_custom(PROPERTY_HINT_NONE, "", PROPERTY_USAGE_NO_EDITOR) var auto_fire_delay_left: float = 0 ## How much time we have left to wait before being able to fire again.
+@export_custom(PROPERTY_HINT_NONE, "", PROPERTY_USAGE_NO_EDITOR) var charge_fire_cooldown_left: float = 0 ## How much time we have left before being able to do a charge shot again.
+@export_custom(PROPERTY_HINT_NONE, "", PROPERTY_USAGE_NO_EDITOR) var current_warmth_level: float = 0 ## The current warm-up level for this weapon.
+@export_custom(PROPERTY_HINT_NONE, "", PROPERTY_USAGE_NO_EDITOR) var current_bloom_level: float = 0 ## The current bloom level for this weapon.
+@export_custom(PROPERTY_HINT_NONE, "", PROPERTY_USAGE_NO_EDITOR) var ammo_in_mag: int = -1: ## The current ammo in the mag.
 	set(new_ammo_amount):
 		ammo_in_mag = new_ammo_amount
 		if DebugFlags.PrintFlags.ammo_updates:

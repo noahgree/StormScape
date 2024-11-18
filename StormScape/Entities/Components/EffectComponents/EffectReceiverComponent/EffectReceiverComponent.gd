@@ -44,6 +44,7 @@ func _ready() -> void:
 	if can_receive_status_effects: assert(get_parent().has_node("StatusEffectManager"), get_parent().name + " has an effect receiver flagged as being able to handle status effects, yet has no StatusEffectManager.")
 	if not Engine.is_editor_hint():
 		collision_layer = affected_entity.collision_layer
+		collision_mask = 0
 		monitoring = false
 
 ## Handles an incoming effect source, passing it to present receivers for further processing before changing
