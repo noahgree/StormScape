@@ -3,7 +3,7 @@ extends Weapon
 class_name ProjectileWeapon
 ## Base class for all weapons that spawn any sort of projectile.
 
-@export var proj_origin: Vector2 = Vector2.ZERO:
+@export var proj_origin: Vector2 = Vector2.ZERO: ## Where the projectile spawns from in local space of the weapon scene.
 	set(new_origin):
 		proj_origin = new_origin
 		if proj_origin_node:
@@ -13,14 +13,15 @@ class_name ProjectileWeapon
 @onready var proj_origin_node: Marker2D = $ProjectileOrigin ## The point at which projectiles should spawn from.
 
 var s_stats: ProjWeaponResource ## Self stats, only exists to give us type hints for this specific kind of item resource.
-var firing_delay_timer: Timer = Timer.new()
-var charge_fire_cooldown_timer: Timer = Timer.new()
-var initial_shot_delay_timer: Timer = Timer.new()
-var mag_reload_timer: Timer = Timer.new()
-var single_reload_timer: Timer = Timer.new()
-var hold_just_released: bool = false
-var is_reloading_single_and_has_since_released: bool = true
-var is_charging: bool = false
+var firing_delay_timer: Timer = Timer.new() ## The timer tracking time between regular firing shots.
+var charge_fire_cooldown_timer: Timer = Timer.new() ## The timer tracking how long after charge shots we are on charge cooldown.
+var initial_shot_delay_timer: Timer = Timer.new() ## The timer tracking how long after we press fire before the proj spawns.
+var mag_reload_timer: Timer = Timer.new() ## The timer tracking the delay between full mag reload start and end.
+var single_reload_timer: Timer = Timer.new() ## The timer tracking the delay between single bullet reloads.
+var hold_just_released: bool = false ## Whether the mouse hold was just released.
+var is_reloading_single_and_has_since_released: bool = true ## Whether we've begun reloading one bullet at a time and have relased the mouse since starting.
+var is_charging: bool = false ## Whether the weapon is currently charging up for a charge shot.
+var hitscan_delay: float = 0
 
 
 #region EquippableItem Core
@@ -58,6 +59,7 @@ func enter() -> void:
 
 func exit() -> void:
 	source_entity.move_fsm.should_rotate = true
+	source_entity.hands.equipped_item_should_follow_mouse = true
 	s_stats.current_warmth_level = 0
 
 	if s_stats.charging_stat_effect != null:
@@ -163,6 +165,7 @@ func _fire() -> void:
 			hold_just_released = false
 			return
 
+	_set_up_hitscan(false)
 	_handle_warmth_increase()
 	_apply_burst_logic(false)
 	_apply_post_firing_effect(false)
@@ -183,6 +186,12 @@ func _charge_fire(hold_time: float) -> void:
 	if (hold_time >= s_stats.min_charge_time) and (hold_time > 0) and charge_fire_cooldown_timer.is_stopped():
 		_apply_burst_logic(true)
 		_apply_post_firing_effect(true)
+
+func _set_up_hitscan(_was_charge_fire: bool = false) -> void:
+	if not s_stats.use_hitscan:
+		hitscan_delay = 0
+	else:
+		hitscan_delay = s_stats.hitscan_duration
 #endregion
 
 #region Projectile Spawning
@@ -191,9 +200,9 @@ func _apply_burst_logic(was_charge_fire: bool = false) -> void:
 	if s_stats.projectiles_per_fire > 1 and not s_stats.add_bloom_per_burst_shot: _handle_bloom_increase(was_charge_fire)
 	var shots: int = s_stats.projectiles_per_fire
 
-	var delay: float = _get_warmth_firing_delay() if _get_warmth_firing_delay() > 0 else s_stats.auto_fire_delay
+	var delay: float = _get_warmth_firing_delay() if _get_warmth_firing_delay() > 0 else s_stats.auto_fire_delay + hitscan_delay
 	var delay_adjusted_for_burst: float = delay + (s_stats.burst_bullet_delay * (shots - 1))
-	firing_delay_timer.start(delay_adjusted_for_burst)
+	firing_delay_timer.start(max(0.03, delay_adjusted_for_burst))
 
 	if not was_charge_fire:
 		if s_stats.use_ammo_per_burst_proj:
@@ -210,7 +219,7 @@ func _apply_burst_logic(was_charge_fire: bool = false) -> void:
 
 		_apply_barrage_logic(was_charge_fire)
 
-		if i != shots - 1:
+		if i != (shots - 1):
 			await get_tree().create_timer(s_stats.burst_bullet_delay, false, true, false).timeout
 
 ## Applies barrage logic to potentially spawn multiple projectiles at a specific angle apart.
@@ -225,21 +234,38 @@ func _apply_barrage_logic(was_charge_fire: bool = false) -> void:
 	var start_rotation = global_rotation - (anuglar_spread_radians / 2.0)
 
 	for i in range(s_stats.barrage_count):
-		var proj: Projectile = Projectile.spawn(proj_scene, proj_stats, effect_src, source_entity, proj_origin_node.global_position, global_rotation)
 		var rotation_adjustment: float = start_rotation + (i * spread_segment_width)
-		proj.rotation = rotation_adjustment if s_stats.barrage_count > 1 else proj.rotation
-		proj.projectile_height = -(source_entity.hands.position.x + proj_origin.y) / 2
 
-		_spawn_projectile(proj, was_charge_fire)
+		if not s_stats.use_hitscan:
+			var proj: Projectile = Projectile.create(proj_scene, proj_stats, effect_src, source_entity, proj_origin_node.global_position, global_rotation)
+			proj.rotation = rotation_adjustment if s_stats.barrage_count > 1 else proj.rotation
+			proj.starting_proj_height = -(source_entity.hands.position.y + proj_origin.y) / 2
+			_spawn_projectile(proj, was_charge_fire)
+		else:
+			var hitscan: Hitscan = Hitscan.create(s_stats.hitscan, effect_src, self, source_entity, proj_origin_node.global_position, global_rotation)
+			hitscan.rotation = rotation_adjustment if s_stats.barrage_count > 1 else hitscan.rotation
+			_spawn_hitscan(hitscan, was_charge_fire)
 
 ## Spawns the projectile that has been passed to it. Reloads if we don't have enough for the next activation.
-func _spawn_projectile(proj, was_charge_fire: bool = false) -> void:
+func _spawn_projectile(proj: Projectile, was_charge_fire: bool = false) -> void:
 	proj.rotation += deg_to_rad(_get_bloom())
 	GlobalData.world_root.add_child(proj)
 
 	_do_firing_fx(was_charge_fire)
 	_start_firing_anim(was_charge_fire)
 
+	await firing_delay_timer.timeout
+	_get_has_needed_ammo_and_reload_if_not(was_charge_fire)
+
+## Spawns the hitscan that has been passed to it. Reloads if we don't have enough for the next activation.
+func _spawn_hitscan(hitscan: Hitscan, was_charge_fire: bool = false) -> void:
+	hitscan.rotation += deg_to_rad(_get_bloom())
+	GlobalData.world_root.add_child(hitscan)
+
+	_do_firing_fx(was_charge_fire)
+	_start_firing_anim(was_charge_fire)
+
+	await firing_delay_timer.timeout
 	_get_has_needed_ammo_and_reload_if_not(was_charge_fire)
 
 ## Takes away either the passed in amount from the appropriate ammo reserve.
@@ -260,7 +286,7 @@ func _handle_warmth_increase() -> void:
 func _get_warmth_firing_delay() -> float:
 	if s_stats.fully_cool_delay_time > 0 and s_stats.firing_mode == "Auto":
 		var delay: float = s_stats.warmth_delay_curve.sample_baked(s_stats.current_warmth_level)
-		return max(0.02, delay * s_stats.fully_cool_delay_time)
+		return max(0.02, delay * s_stats.fully_cool_delay_time) + hitscan_delay
 	else:
 		return 0
 
@@ -285,10 +311,10 @@ func _get_bloom() -> float:
 func _do_firing_fx(with_charge_mult: bool = false) -> void:
 	var multiplier: float = s_stats.charge_cam_fx_mult if with_charge_mult else 1.0
 	if s_stats.firing_cam_shake_dur > 0:
-		var dur: float = min(s_stats.firing_cam_shake_dur, s_stats.auto_fire_delay - 0.01)
+		var dur: float = min(s_stats.firing_cam_shake_dur, max(0, s_stats.auto_fire_delay + hitscan_delay - 0.01))
 		GlobalData.player_camera.start_shake(s_stats.firing_cam_shake_str * multiplier, dur * multiplier)
 	if s_stats.firing_cam_freeze_dur > 0:
-		var dur: float = min(s_stats.firing_cam_freeze_dur, s_stats.auto_fire_delay - 0.01)
+		var dur: float = min(s_stats.firing_cam_freeze_dur, max(0, s_stats.auto_fire_delay + hitscan_delay - 0.01))
 		GlobalData.player_camera.start_freeze(s_stats.firing_cam_freeze_mult * multiplier, dur * multiplier)
 	var sound: String = s_stats.firing_sound if not with_charge_mult else s_stats.charge_firing_sound
 	if sound != "": AudioManager.play_sound(sound, AudioManager.SoundType.SFX_2D, global_position)
@@ -300,7 +326,7 @@ func _start_firing_anim(was_charge_fire: bool = false) -> void:
 			anim_player.speed_scale = 1.0
 			anim_player.play("delay_fire")
 		else:
-			anim_player.speed_scale = 1.0 / s_stats.auto_fire_delay
+			anim_player.speed_scale = 1.0 / (s_stats.auto_fire_delay + hitscan_delay)
 			anim_player.play("fire")
 	else:
 		if s_stats.has_charge_fire_anim:

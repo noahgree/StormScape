@@ -1,0 +1,69 @@
+[gd_scene load_steps=6 format=3 uid="uid://c3e5wour08d6u"]
+
+[ext_resource type="Script" path="res://Entities/Items/Hitscans/Hitscan.gd" id="1_i0es2"]
+[ext_resource type="Texture2D" uid="uid://ide5dl6vilq8" path="res://Entities/Items/Hitscans/glow_circle.png" id="3_aayxu"]
+
+[sub_resource type="Curve" id="Curve_rgawo"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Curve" id="Curve_xxm3k"]
+_data = [Vector2(0, 0.685395), 0.0, 0.0, 0, 0, Vector2(0.498322, 0.505095), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="Gradient" id="Gradient_hxle3"]
+offsets = PackedFloat32Array(0, 0.767658, 1)
+colors = PackedColorArray(0.999998, 0.522116, 0.490212, 1, 0.999995, 0.510296, 0.478821, 1, 1, 0.277, 0.303, 0)
+
+[node name="LaserBeam" type="Line2D"]
+points = PackedVector2Array(0, 0, 10, 0)
+width = 1.5
+width_curve = SubResource("Curve_rgawo")
+default_color = Color(2.86, 0.852, 0.78, 1)
+end_cap_mode = 2
+script = ExtResource("1_i0es2")
+
+[node name="LineParticles" type="CPUParticles2D" parent="."]
+emitting = false
+lifetime = 0.3
+preprocess = 0.05
+texture = ExtResource("3_aayxu")
+spread = 20.0
+gravity = Vector2(0, 0)
+initial_velocity_min = 120.0
+initial_velocity_max = 120.0
+scale_amount_min = 0.01
+scale_amount_max = 0.02
+scale_amount_curve = SubResource("Curve_xxm3k")
+color_ramp = SubResource("Gradient_hxle3")
+
+[node name="ImpactParticles" type="CPUParticles2D" parent="."]
+emitting = false
+lifetime = 0.3
+preprocess = 0.05
+texture = ExtResource("3_aayxu")
+spread = 20.0
+gravity = Vector2(0, 0)
+initial_velocity_min = 250.0
+initial_velocity_max = 250.0
+scale_amount_min = 0.01
+scale_amount_max = 0.02
+scale_amount_curve = SubResource("Curve_xxm3k")
+color_ramp = SubResource("Gradient_hxle3")
+
+[node name="BeamParticles" type="CPUParticles2D" parent="."]
+lifetime = 0.3
+preprocess = 0.05
+texture = ExtResource("3_aayxu")
+emission_shape = 3
+emission_rect_extents = Vector2(1, 1)
+spread = 20.0
+gravity = Vector2(0, 0)
+initial_velocity_min = 250.0
+initial_velocity_max = 250.0
+linear_accel_min = 100.0
+linear_accel_max = 100.0
+scale_amount_min = 0.01
+scale_amount_max = 0.02
+scale_amount_curve = SubResource("Curve_xxm3k")
+color_ramp = SubResource("Gradient_hxle3")

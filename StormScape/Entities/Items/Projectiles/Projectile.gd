@@ -16,7 +16,7 @@ class_name Projectile
 #region Local Vars
 const fov_raycast_count: int = 36
 var stats: ProjectileResource ## The logic for how to operate this projectile.
-var projectile_height: int
+var starting_proj_height: int
 var lifetime_timer: Timer = Timer.new() ## The timer tracking how long the projectile has left to exist.
 var splash_effect_delay_timer: Timer = Timer.new() ## The timer tracking how long after starting an AOE do we wait before enabling damage again.
 var homing_timer: Timer = Timer.new() ## Timer to control homing duration.
@@ -45,6 +45,7 @@ var starting_arc_speed: float = 0 ## The initial speed of an arc, used in kinema
 var resettable_starting_dir: Vector2 ## The initial direction of an arc, used in kinematic equations.
 var resettable_starting_pos: Vector2 ## The starting position of the arc, can be updated after a ricochet to start a new arc.
 var bounces_so_far: int = 0 ## The number of times so far that we have bounced off the ground after an initial arc.
+var just_bounced: bool = false ## Whether we just bounced in the previous frame.
 var is_homing_active: bool = false ## Indicates if homing is currently active.
 var homing_target: Node = null ## The current homing target.
 var debug_homing_rays: Array[Dictionary] = [] ## An array of debug info about the FOV homing method raycasts.
@@ -53,7 +54,7 @@ var debug_recent_hit_location: Vector2 ## The location of the most recent point 
 
 
 ## Creates a projectile and assigns its needed variables in a specific order. Then it returns it.
-static func spawn(proj_scene: PackedScene, proj_stats: ProjectileResource, effect_src: EffectSource,
+static func create(proj_scene: PackedScene, proj_stats: ProjectileResource, effect_src: EffectSource,
 				src_entity: PhysicsBody2D, pos: Vector2, rot: float) -> Projectile:
 	var proj: Projectile = proj_scene.instantiate()
 	proj.split_proj_scene = proj_scene
@@ -64,6 +65,32 @@ static func spawn(proj_scene: PackedScene, proj_stats: ProjectileResource, effec
 	proj.collision_mask = effect_src.scanned_phys_layers
 	proj.source_entity = src_entity
 	return proj
+
+## Used for debugging the homing system & other collisions. Draws vectors to where we have scanned during the "FOV" method.
+func _draw() -> void:
+	if DebugFlags.Projectiles.show_movement_dir:
+		var local_movement_direction = movement_direction.rotated(-rotation) * 100
+		draw_line(Vector2.ZERO, local_movement_direction, Color(1, 1, 1, 0.5), 0.6)
+
+	if debug_recent_hit_location != Vector2.ZERO and DebugFlags.Projectiles.show_collision_points:
+		z_index = 100
+		draw_circle(to_local(debug_recent_hit_location), 1.5, Color(1, 1, 0, 0.35))
+
+	if not DebugFlags.Projectiles.show_homing_rays:
+		return
+
+	for ray in debug_homing_rays:
+		var from_pos: Vector2 = to_local(ray["from"])
+		var to_pos: Vector2 = to_local(ray["hit_position"])
+		var color: Color = Color(0, 1, 0, 0.4) if ray["hit"] else Color(1, 0, 0, 0.25)
+
+		draw_line(from_pos, to_pos, color, 1)
+
+		if ray["hit"]:
+			draw_circle(to_pos, 2, color)
+
+	if homing_target != null:
+		draw_circle(to_local(homing_target.global_position), 5, Color(1, 0, 1, 0.3))
 
 ## Setting up z_index, hiding shadow until rotation is assigned, and initializing timers. Then this sets up spin and arcing
 ## logic should we need it.
@@ -91,6 +118,9 @@ func _ready() -> void:
 
 	_set_up_potential_homing_delay()
 
+	if stats.override_gun_height and splits_so_far == 0:
+			starting_proj_height = stats.height_override
+
 	_set_up_starting_transform_and_spin_logic()
 	if stats.launch_angle > 0 and stats.homing_method == "None":
 		is_arcing = true
@@ -109,6 +139,7 @@ func _enable_collider() -> void:
 func _disable_collider() -> void:
 	collider.disabled = true
 
+#region General
 ## Assigns a random spin direction if we need one, otherwise picks from the pre-chosen direction.
 ## Then it determines where to start shooting from based on how big its sprite texture is.
 func _set_up_starting_transform_and_spin_logic() -> void:
@@ -183,26 +214,27 @@ func _do_projectile_movement(delta: float) -> void:
 ## Updates the shadow in a realistic manner.
 func _update_shadow(new_position: Vector2, movement_dir: Vector2) -> void:
 	var fake_shadow_dir: Vector2
-	Engine.time_scale = 0.1
-	if is_arcing:
-		fake_shadow_dir = resettable_starting_dir.normalized()
-		shadow.rotation = atan2(fake_shadow_dir.y, fake_shadow_dir.x)
-		shadow.rotation += non_sped_up_time_counter * deg_to_rad(stats.spin_speed * spin_dir)
-
-		var displacement_vector: Vector2 = new_position - resettable_starting_pos
-		var projection_length: float = displacement_vector.dot(fake_shadow_dir)
-		shadow.global_position = resettable_starting_pos + (fake_shadow_dir * projection_length)
-		shadow.global_position.y += stats.projectile_height if bounces_so_far == 0 else 0
-	else:
+	if stats.shadow_matches_spin:
 		fake_shadow_dir = movement_dir.normalized()
 		shadow.rotation = atan2(fake_shadow_dir.y, fake_shadow_dir.x)
 		shadow.rotation += non_sped_up_time_counter * deg_to_rad(stats.spin_speed * spin_dir)
+	else:
+		fake_shadow_dir = resettable_starting_dir.normalized()
+		shadow.rotation = atan2(resettable_starting_dir.y, resettable_starting_dir.x)
 
+	if is_arcing:
+		var displacement_vector: Vector2 = new_position - resettable_starting_pos
+		var projection_length: float = displacement_vector.dot(resettable_starting_dir)
+		shadow.global_position = resettable_starting_pos + (resettable_starting_dir * projection_length)
+		shadow.global_position.y += starting_proj_height if bounces_so_far == 0 else 0
+	else:
 		shadow.global_position = new_position
-		shadow.global_position.y += stats.projectile_height
+		shadow.global_position.y += starting_proj_height
 
 	shadow.visible = true
+#endregion
 
+#region Homing
 ## Sets up the homing delay if one exists, otherwise begins homing immediately if we have a valid homing method selected.
 func _set_up_potential_homing_delay() -> void:
 	if stats.homing_method != "None":
@@ -288,32 +320,6 @@ func _find_target_in_fov() -> void:
 		homing_target = null
 		is_homing_active = stats.can_change_target
 
-## Used for debugging the homing system. Draws vectors to where we have scanned during the "FOV" method.
-func _draw() -> void:
-	if DebugFlags.Projectiles.show_movement_dir:
-		var local_movement_direction = movement_direction.rotated(-rotation) * 100
-		draw_line(Vector2.ZERO, local_movement_direction, Color(1, 1, 1, 0.5), 0.6)
-
-	if debug_recent_hit_location != Vector2.ZERO and DebugFlags.Projectiles.show_collision_points:
-		z_index = 100
-		draw_circle(to_local(debug_recent_hit_location), 1.5, Color(1, 1, 0, 0.35))
-
-	if not DebugFlags.Projectiles.show_homing_rays:
-		return
-
-	for ray in debug_homing_rays:
-		var from_pos: Vector2 = to_local(ray["from"])
-		var to_pos: Vector2 = to_local(ray["hit_position"])
-		var color: Color = Color(0, 1, 0, 0.4) if ray["hit"] else Color(1, 0, 0, 0.25)
-
-		draw_line(from_pos, to_pos, color, 1)
-
-		if ray["hit"]:
-			draw_circle(to_pos, 2, color)
-
-	if homing_target != null:
-		draw_circle(to_local(homing_target.global_position), 5, Color(1, 0, 1, 0.3))
-
 ## Checks if the homing target is something we are even allowed to target.
 func _is_valid_homing_target(obj: Node) -> bool:
 	if obj is DynamicEntity or obj is RigidEntity or obj is StaticEntity:
@@ -382,19 +388,21 @@ func _apply_homing_movement(delta: float) -> void:
 	if stats.homing_method == "Boomerang":
 		if global_position.distance_squared_to(source_entity.global_position) < pow(stats.boomerang_home_radius, 2):
 			queue_free()
+#endregion
 
+#region Arcing
 ## Sets up starting arcing variables like initial speed based on kinematics.
 func _reset_arc_logic() -> void:
 	var falloff_mult: float = max(0.01, stats.bounce_falloff_curve.sample_baked(1 - (lifetime_timer.time_left / stats.lifetime)))
 	var dist: float = stats.arc_travel_distance * falloff_mult
 	updated_arc_angle = stats.launch_angle * falloff_mult
 
-	starting_arc_speed = find_initial_speed(dist, updated_arc_angle, stats.projectile_height if bounces_so_far == 0 else 0)
+	starting_arc_speed = find_initial_arc_speed(dist, updated_arc_angle, starting_proj_height if bounces_so_far == 0 else 0)
 	resettable_starting_pos = global_position
 	arc_time_counter = 0
 
 ## Calculates the distance we will travel in our arcing motion based on speed, angle, and height.
-func calculate_distance(speed, angle, height):
+func calculate_arc_distance(speed, angle, height):
 	var g = 9.8
 	var rad_angle = deg_to_rad(angle)
 	var sin_angle = sin(rad_angle)
@@ -410,14 +418,14 @@ func calculate_distance(speed, angle, height):
 	return v_cos * time
 
 ## Calculates the initial speed of the arcing motion based on the target distance and angle and starting height.
-func find_initial_speed(target_distance, angle, height):
+func find_initial_arc_speed(target_distance, angle, height):
 	var low = 0.0
 	var high = 100.0
 	var epsilon = 1.0  # Precision
 
 	while high - low > epsilon:
 		var mid = (low + high) / 2
-		var distance = calculate_distance(mid, angle, height)
+		var distance = calculate_arc_distance(mid, angle, height)
 
 		if distance < target_distance:
 			low = mid
@@ -432,14 +440,16 @@ func _do_arc_movement(delta: float) -> void:
 
 	fake_z_axis = starting_arc_speed * sin(deg_to_rad(updated_arc_angle)) * arc_time_counter - 0.5 * 9.8 * pow(arc_time_counter, 2)
 
-	var ground_level: float = -(stats.projectile_height) if bounces_so_far == 0 else 0
+	var ground_level: float = -(starting_proj_height) if bounces_so_far == 0 else 0
 	if fake_z_axis > ground_level:
 		z_index = 3
 		var fake_x_axis: float = starting_arc_speed * cos(deg_to_rad(stats.launch_angle)) * arc_time_counter
 		var new_position: Vector2 = resettable_starting_pos + (resettable_starting_dir * fake_x_axis)
 		new_position.y -= fake_z_axis
 		var fake_move_dir: Vector2 = (new_position - global_position).normalized()
+
 		rotation = atan2(fake_move_dir.y, fake_move_dir.x)
+		rotation += non_sped_up_time_counter * deg_to_rad(stats.spin_speed * spin_dir)
 
 		global_position = new_position
 
@@ -447,10 +457,14 @@ func _do_arc_movement(delta: float) -> void:
 		cumulative_distance += dist_so_far - fake_previous_pos
 		fake_previous_pos = dist_so_far
 
-		_update_shadow(new_position, resettable_starting_dir)
+		_update_shadow(new_position, fake_move_dir)
 		show()
 	elif stats.bounce_count > 0 and (bounces_so_far < stats.bounce_count):
 		bounces_so_far += 1
+		if stats.ping_pong_bounce:
+			resettable_starting_dir *= -1
+			spin_dir *= -1
+		non_sped_up_time_counter = 0
 		_reset_arc_logic()
 	else:
 		z_index = -1
@@ -461,13 +475,13 @@ func _do_arc_movement(delta: float) -> void:
 				await get_tree().create_timer(stats.grounding_free_delay, false, true, false).timeout
 			queue_free()
 
-	rotation += non_sped_up_time_counter * deg_to_rad(stats.spin_speed * spin_dir)
-
 	if fake_z_axis > stats.max_collision_height:
 		call_deferred("_disable_collider")
 	else:
 		call_deferred("_enable_collider")
+#endregion
 
+#region Splitting, Ricocheting, Piercing
 ## Splits the projectile into multiple instances across a specified angle.
 func _split_self() -> void:
 	if not (splits_so_far < stats.number_of_splits) or (stats.split_into_counts[splits_so_far] < 2):
@@ -482,9 +496,8 @@ func _split_self() -> void:
 
 	for i in range(stats.split_into_counts[splits_so_far - 1]):
 		var angle: float = start_angle + (i * step_angle)
-		var new_proj: Projectile = Projectile.spawn(split_proj_scene, stats, effect_source, source_entity, position, angle)
+		var new_proj: Projectile = Projectile.create(split_proj_scene, stats, effect_source, source_entity, position, angle)
 		new_proj.splits_so_far = splits_so_far
-		new_proj.projectile_height = projectile_height
 		new_proj.spin_dir = spin_dir
 
 		get_parent().add_child(new_proj)
@@ -523,7 +536,9 @@ func _handle_ricochet(object: Variant) -> void:
 ## Updates the number of things we have pierced through.
 func _handle_pierce() -> void:
 		pierce_count += 1
+#endregion
 
+#region AOE
 ## Begins a splash damage sequence by checking if we have a circle collision shape to work with.
 ## If so, it plays any needed animations and creates the defined waits for splash duration and delay.
 func _handle_aoe() -> void:
@@ -554,6 +569,7 @@ func _assign_new_collider_shape(new_shape: Shape2D) -> void:
 	new_shape.radius = stats.splash_radius
 	collider.shape = new_shape
 	_enable_collider()
+#endregion
 
 ## When the lifetime ends, either start an AOE or queue free.
 func _on_lifetime_timer_timeout() -> void:

@@ -18,6 +18,7 @@ var current_x_direction: int = 1
 var scale_is_lerping: bool = false
 var is_mouse_button_held = false
 var been_holding_time: float = 0
+var equipped_item_should_follow_mouse: bool = true
 
 
 func _ready() -> void:
@@ -43,7 +44,6 @@ func _process(delta: float) -> void:
 			return
 		else:
 			equipped_item.release_hold_activate(been_holding_time)
-
 	been_holding_time = 0
 
 func on_equipped_item_change(inv_item_slot: Slot) -> void:
@@ -112,7 +112,8 @@ func _manage_proj_weapon_hands(anim_vector: Vector2) -> void:
 		_change_off_hand_sprite_visibility(true)
 
 	var sprite_pos_with_offsets: Vector2 = hands_anchor.global_position + Vector2(0, equipped_item.proj_origin.y)
-	hands_anchor.global_rotation = get_parent().move_fsm.get_lerped_mouse_direction_to_pos(Vector2.RIGHT.rotated(hands_anchor.global_rotation), sprite_pos_with_offsets).angle()
+	if equipped_item_should_follow_mouse:
+		hands_anchor.global_rotation = get_parent().move_fsm.get_lerped_mouse_direction_to_pos(Vector2.RIGHT.rotated(hands_anchor.global_rotation), sprite_pos_with_offsets).angle()
 
 func _manage_melee_weapon_hands(anim_vector: Vector2) -> void:
 	if not equipped_item.is_node_ready():
@@ -129,7 +130,8 @@ func _do_melee_weapon_hand_placement(anim_vector: Vector2) -> void:
 	else:
 		scale_is_lerping = false
 
-	hands_anchor.global_rotation = get_parent().move_fsm.curr_mouse_direction.angle() - (hands_anchor.scale.y * deg_to_rad(equipped_item.stats.swing_angle / 2.0)) + (hands_anchor.scale.y * deg_to_rad(equipped_item.sprite_visual_rotation))
+	if equipped_item_should_follow_mouse:
+		hands_anchor.global_rotation = get_parent().move_fsm.curr_mouse_direction.angle() - (hands_anchor.scale.y * deg_to_rad(equipped_item.stats.swing_angle / 2.0)) + (hands_anchor.scale.y * deg_to_rad(equipped_item.sprite_visual_rotation))
 
 func _manage_consumable_hands(anim_vector: Vector2) -> void:
 	_change_z_index(anim_vector)

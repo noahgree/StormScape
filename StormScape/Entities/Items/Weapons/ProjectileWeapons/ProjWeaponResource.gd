@@ -6,41 +6,62 @@ enum ProjWeaponType { ## The kinds of projectile weapons.
 	PISTOL, SHOTGUN, SMG, SNIPER, RIFLE, EXPLOSIVE, PRIMITIVE, MAGICAL, SPECIAL
 }
 
-@export_group("Projectile Weapon Details")
+@export_group("General")
 @export var proj_weapon_type: ProjWeaponType = ProjWeaponType.PISTOL ## The kind of projectile weapon this is.
 @export var projectile: PackedScene ## The projectile scene to spawn on firing.
 @export var projectile_data: ProjectileResource = ProjectileResource.new() ## The logic passed to the projectile for how to behave.
-@export var post_firing_effect: StatusEffect = null ## The status effect to apply to the source entity after firing.
 @export_enum("Semi Auto", "Auto", "Charge") var firing_mode: String = "Semi Auto" ## Whether the weapon should fire projectiles once per click or allow holding down for auto firing logic.
 @export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var initial_shot_delay: float = 0 ## How long after we initiate a firing should we wait before the shot releases.
-@export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var auto_fire_delay: float = 0.065 ## Time between fully auto projectile emmision. Also the minimum time that must elapse between clicks if set to semi-auto.
+@export_range(0.03, 10, 0.01, "hide_slider", "or_greater", "suffix:seconds") var auto_fire_delay: float = 0.1 ## Time between fully auto projectile emmision. Also the minimum time that must elapse between clicks if set to semi-auto.
+@export_subgroup("Entity Effects")
+@export var post_firing_effect: StatusEffect = null ## The status effect to apply to the source entity after firing.
+@export_subgroup("General Firing FX")
+@export_range(0, 30, 0.01) var firing_cam_shake_str: float = 0.0 ## How strong the camera should shake when firing.
+@export_range(0, 2, 0.01) var firing_cam_shake_dur: float = 0.0 ## How long the camera shake when firing should take to decay.
+@export_range(0, 1, 0.01) var firing_cam_freeze_mult: float = 1.0 ## How strong the camera should freeze when firing.
+@export_range(0, 1, 0.01) var firing_cam_freeze_dur: float = 0.0 ## How long the camera freeze when firing should take to decay.
+@export var firing_vfx_scene: PackedScene = null ## The scene that spawns and controls vfx when firing.
+@export var firing_sound: String = "" ## The sound to play when firing.
 
-@export_subgroup("Hitscan Options")
-@export var uses_hitscan: bool = false
-@export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var hitscan_duration: float = 0
-@export_custom(PROPERTY_HINT_NONE, "suffix:pixels") var hitscan_width: float = 0.5
+@export_group("Hitscan Options")
+@export var use_hitscan: bool = false ## Whether to use hitscan firing and spawn the hitscan scene instead of the main projectile.
+@export var hitscan: PackedScene ## The hitscan scene to spawn when using hitscan firing.
+@export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var hitscan_duration: float = 0 ## The time the hitscan ray is scanning.
+@export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var hitscan_effect_interval: float = -1 ## How long after we last did damage should we do it again. '-1' means only once.
+@export_custom(PROPERTY_HINT_NONE, "suffix:pixels") var hitscan_max_width: float = 0.5 ## The max width the hitscan ray will be when affected by the width curve.
+@export var hitscan_width_curve: Curve = Curve.new() ## The change in width of the hitscan ray over its distance.
+@export var hitscan_pierce_count: int = 0 ## How many objects the hitscan can pierce through.
+@export_custom(PROPERTY_HINT_NONE, "suffix:pixels") var hitscan_max_distance: int = 200 ## The max distance the hitscan ray can travel.
+@export_subgroup("Hitscan Falloff")
+@export var hitscan_falloff_curve: Curve = Curve.new() ## The falloff for the effects applied to the receiver of the hitscan.
+@export var bad_effects_falloff: bool = true ## Whether the bad effects of the effect source falloff.
+@export var good_effects_falloff: bool = false ## Whether the good effects of the effect source falloff.
 
-@export_subgroup("Ammo & Reloading")
+
+@export_group("Ammo & Reloading")
 @export var ammo_type: GlobalData.ProjAmmoType = GlobalData.ProjAmmoType.LIGHT ## The kind of ammo to consume on use.
 @export var mag_size: int = 30  ## Number of normal attack executions that can happen before a reload is needed.
 @export_enum("Magazine", "Single") var reload_type: String = "Magazine" ## Whether to reload over time or all at once at the end.
 @export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var mag_reload_time: float = 1.0 ## How long it takes to reload an entire mag.
 @export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var single_proj_reload_time: float = 0.25 ## How long it takes to reload a single projectile if the reload type is set to "single".
 @export var stamina_use_per_proj: float = 0.5 ## How much stamina is needed per projectile when stamina is the ammo type.
+@export_subgroup("Reloading FX")
+@export var reload_sound: String = "" ## The sound to play when reloading.
+@export var empty_mag_sound: String = "" ## The sound to play when trying to fire with no ammo left.
 
-@export_subgroup("Blooming Logic")
+@export_group("Blooming Logic")
 @export_custom(PROPERTY_HINT_NONE, "suffix:degrees") var max_bloom: float = 0 ## The max amount of bloom the weapon can have.
 @export var bloom_curve: Curve = Curve.new() ## How to apply blooming logic over time.
 @export var bloom_increase_rate: Curve = Curve.new() ## How much bloom to add per shot based on current bloom.
 @export var bloom_decrease_rate: Curve = Curve.new() ## How much bloom to take away per second based on current bloom.
 
-@export_subgroup("Auto Fire Warmup Logic")
+@export_group("Auto Fire Warmup Logic")
 @export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var fully_cool_delay_time: float = 0 ## At the lowest warmth level, how long must we wait before a shot fires.
 @export var warmth_delay_curve: Curve = Curve.new() ## A curve for how long the time between shots should be based on how much we have been firing recently.
 @export var warmth_increase_rate: Curve = Curve.new() ## A curve for determining how much warmth to add depending on current warmth.
 @export var warmth_decrease_rate: Curve = Curve.new() ## A curve for determining how much warmth to remove depending on current warmth.
 
-@export_subgroup("Hold Charging Logic")
+@export_group("Hold Charging Logic")
 @export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var min_charge_time: float = 1 ## How long must the activation be held down before releasing the charge shot.
 @export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var charge_fire_cooldown: float = 0.5 ## How long after a charge shot must we wait before being able to fire again.
 @export var ammo_use_per_charge: int = 3 ## How much ammo to consume on charge shots. Overrides all burst and barrage consumption to consume this amount no matter what.
@@ -49,30 +70,22 @@ enum ProjWeaponType { ## The kinds of projectile weapons.
 @export var charge_projectile_data: ProjectileResource = null ## Overrides the normal projectile data for charge shots.
 @export var charge_effect_source: EffectSource = null ## Overrides the normal effect source for charge shots.
 @export var has_charge_fire_anim: bool = false ## If false, we can duplicate the regular fire anim and keep the speed scale.
+@export_subgroup("Entity Effects")
 @export var charging_stat_effect: StatusEffect = null ## A status effect to apply to the entity while charging. Typically to slow them.
 @export var post_chg_shot_effect: StatusEffect = null ## The status effect to apply to the source entity after a charge shot.
+@export_subgroup("Charge Firing FX")
+@export var charge_cam_fx_mult: float = 1.0 ## How much to multiply the cam fx by when doing a charge shot.
+@export var charge_firing_sound: String = "" ## The sound to play when charge firing.
 
-@export_subgroup("Burst Logic")
+@export_group("Burst Logic")
 @export_range(1, 100, 1) var projectiles_per_fire: int = 1 ## How many projectiles are emitted per burst execution.
 @export var use_ammo_per_burst_proj: bool = true ## Whether to consume ammo per projectile emmitted or consume 1 per full burst.
 @export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var burst_bullet_delay: float = 0.1 ## Time between burst shots after execute.
 @export var add_bloom_per_burst_shot: bool = true ## Whether or not each bullet from a burst fire increases bloom individually.
 
-@export_subgroup("Barrage Logic")
+@export_group("Barrage Logic")
 @export var barrage_count: int = 1 ## Number of projectiles fired at 'angular-spread' degrees apart for each execute. Only applies when angular spread is greater than 0.
 @export_range(0, 360, 0.1, "suffix:degrees") var angluar_spread = 10 ## Angular spread of barrage projectiles in degrees.
-
-@export_subgroup("FX")
-@export_range(0, 30, 0.01) var firing_cam_shake_str: float = 0.0 ## How strong the camera should shake when firing.
-@export_range(0, 2, 0.01) var firing_cam_shake_dur: float = 0.0 ## How long the camera shake when firing should take to decay.
-@export_range(0, 1, 0.01) var firing_cam_freeze_mult: float = 1.0 ## How strong the camera should freeze when firing.
-@export_range(0, 1, 0.01) var firing_cam_freeze_dur: float = 0.0 ## How long the camera freeze when firing should take to decay.
-@export var charge_cam_fx_mult: float = 1.0 ## How much to multiply the cam fx by when doing a charge shot.
-@export var firing_vfx_scene: PackedScene = null ## The scene that spawns and controls vfx when firing.
-@export var firing_sound: String = "" ## The sound to play when firing.
-@export var charge_firing_sound: String = "" ## The sound to play when charge firing.
-@export var reload_sound: String = "" ## The sound to play when reloading.
-@export var empty_mag_sound: String = "" ## The sound to play when trying to fire with no ammo left.
 
 
 # Unique Properties #

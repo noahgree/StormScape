@@ -8,7 +8,9 @@ class_name ProjectileResource
 @export var initial_boost_mult: float = 2.0 ## The speed multiplier for the initial boost, if any.
 @export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var lifetime: float = 3 ## The max time this projectile can be in the air.
 @export_custom(PROPERTY_HINT_NONE, "suffix:pixels") var max_distance: int = 500 ## The max distance this projectile can travel from its starting position.
-@export_custom(PROPERTY_HINT_NONE, "suffix:pixels") var projectile_height: int = 6 ## How high off the ground to simulate this projectile being. Basically just moves the shadow's y offset.
+@export_subgroup("Height")
+@export var override_gun_height: bool = false ## Whether to use this custom height or keep the height the gun passes in.
+@export_custom(PROPERTY_HINT_NONE, "suffix:pixels") var height_override: int = 6 ## How high off the ground to simulate this projectile being. Basically just moves the shadow's y offset.
 
 @export_subgroup("Falloff")
 @export var speed_curve: Curve = Curve.new() ## How the speed changes based on time alive.
@@ -37,9 +39,10 @@ class_name ProjectileResource
 
 @export_group("Spin Logic")
 @export_range(0, 10000, 1, "suffix:º/sec") var spin_speed: float = 0.0 ## How fast this projectile should spin while in the air.
-@export var spin_both_ways: bool = true ## Whether each projectile should choose a direction at random or depend on the spin_direction.
+@export var spin_both_ways: bool = false ## Whether each projectile should choose a direction at random or depend on the spin_direction.
 @export_enum("Forward", "Backward") var spin_direction: String = "Forward" ## If spin_both_ways is false, all projectiles will spin this direction.
 @export var move_in_rotated_dir: bool = false ## When true, projectiles will travel in the direction of their current rotation, determined by spinning it. If false, they will keep their original trajectory despite the spins. Note that this does nothing if we are arcing.
+@export var shadow_matches_spin: bool = false ## Whether the shadow should rotate with the spin or not. This is always overridden to be false when arcing.
 
 @export_group("Arc Trajectory")
 @export_range(0, 89, 1, "suffix:degrees") var launch_angle: float = 0 ## The initial angle to launch the projectile at. Note that homing projectiles cannot do arcing. Setting this to anything above 0 will enable the arcing logic.
@@ -50,6 +53,7 @@ class_name ProjectileResource
 @export_subgroup("Bouncing")
 @export var bounce_count: int = 0 ## How many more times to bounce off the ground after landing from the first arc.
 @export var bounce_falloff_curve: Curve = Curve.new() ## How the bounces simulate losing energy and travel less distance each time as a function of time alive.
+@export var ping_pong_bounce: bool = false ## Whether to bounce back and forth instead of in the original direction.
 
 @export_group("Splitting Logic")
 @export_range(0, 20, 1) var number_of_splits: int = 0 ## How many times the recursive splits should happen.
@@ -72,5 +76,5 @@ class_name ProjectileResource
 @export var splash_before_freeing: bool = false ## Whether to trigger the splash once we reach end of lifetime if we haven't hit anything yet.
 @export var splash_effect_source: EffectSource = null ## The effect source to apply when something is hit by splash damage. If null, this will just use the default effect source for this projectile.
 @export_subgroup("AOE FX")
-@export var splash_vfx: PackedScene = null
-@export var splash_sound: String = ""
+@export var splash_vfx: PackedScene = null ## The scene to instance when activating the aoe.
+@export var splash_sound: String = "" ## The sound to play when activating the aoe.

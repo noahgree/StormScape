@@ -5,9 +5,9 @@ class_name HitboxComponent
 @export var effect_source: EffectSource ## The effect to be applied when this hitbox hits an effect receiver.
 @export var source_entity: PhysicsBody2D ## The entity that the effect was produced by.
 
-@onready var collider: CollisionShape2D = $CollisionShape2D
+@onready var collider: CollisionShape2D = $CollisionShape2D ## The collision shape for this hitbox.
 
-var movement_direction: Vector2 = Vector2.ZERO
+var movement_direction: Vector2 = Vector2.ZERO ## The current movement direction for this hitbox.
 
 
 ## Setup the area detection signal and turn off monitorable for performance.

@@ -14,7 +14,3 @@ class_name StatusEffect
 @export_group("Stat Mods")
 @export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var mod_time: float = 5 ## The duration of the mods applied by this effect.
 @export var stat_mods: Array[EntityStatMod] ## The mods applied by this effect. Do not have duplicates in this array.
-
-var movement_direction: Vector2
-var contact_position: Vector2
-var is_source_moving_type: bool = false

@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="ProjWeaponResource" load_steps=23 format=3 uid="uid://ciel2rrqq4dvv"]
+[gd_resource type="Resource" script_class="ProjWeaponResource" load_steps=26 format=3 uid="uid://ciel2rrqq4dvv"]
 
 [ext_resource type="Script" path="res://Entities/EffectSystemResources/EffectSources/EffectSource.gd" id="1_2i3xb"]
 [ext_resource type="Script" path="res://Entities/Items/Weapons/ProjectileWeapons/ProjWeaponResource.gd" id="1_7bjnk"]
@@ -6,6 +6,7 @@
 [ext_resource type="Resource" uid="uid://c050ytbbmgfem" path="res://Entities/EffectSystemResources/StatusEffects/BadEffects/Slowness/Slowness1.tres" id="1_woy6l"]
 [ext_resource type="Script" path="res://Entities/EffectSystemResources/StatusEffects/StatusEffect.gd" id="2_mu3cd"]
 [ext_resource type="Texture2D" uid="uid://bjm0js8cfg2rm" path="res://Entities/Items/Weapons/ProjectileWeapons/LaserGun/laser_gun.png" id="3_qr2dh"]
+[ext_resource type="PackedScene" uid="uid://c3e5wour08d6u" path="res://Entities/Items/Hitscans/LaserBeam.tscn" id="4_co00d"]
 [ext_resource type="Script" path="res://Entities/Items/Projectiles/ProjectileResource.gd" id="5_54flx"]
 [ext_resource type="Script" path="res://Entities/Components/StatModComponents/StatModsCacheResource.gd" id="5_lsump"]
 [ext_resource type="PackedScene" uid="uid://baxpb3crwepc0" path="res://Entities/Items/Weapons/ProjectileWeapons/LaserGun/LaserGun.tscn" id="6_gbfef"]
@@ -28,7 +29,7 @@ is_projectile = true
 can_hit_self = false
 bad_effect_affected_teams = 1
 good_effect_affected_teams = 2
-scanned_phys_layers = 191
+scanned_phys_layers = 255
 base_damage = 10
 dmg_affected_stats = 2
 crit_chance = 0
@@ -44,6 +45,14 @@ impact_sound = ""
 status_effects = Array[ExtResource("2_mu3cd")]([])
 contact_position = Vector2(0, 0)
 movement_direction = Vector2(0, 0)
+
+[sub_resource type="Curve" id="Curve_2dwfc"]
+_data = [Vector2(0, 1), 0.0, -1.0, 0, 1, Vector2(1, 0), -1.0, 0.0, 1, 0]
+point_count = 2
+
+[sub_resource type="Curve" id="Curve_nam6b"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
 
 [sub_resource type="Curve" id="Curve_yottk"]
 _data = [Vector2(0, 1), 0.0, -1.0, 0, 1, Vector2(1, 0), -1.0, 0.0, 1, 0]
@@ -68,7 +77,8 @@ initial_boost_time = 0.0
 initial_boost_mult = 2.0
 lifetime = 5.0
 max_distance = 500
-projectile_height = 6
+override_gun_height = true
+height_override = 6
 speed_curve = SubResource("Curve_cqwfv")
 effect_falloff_curve = SubResource("Curve_cw11c")
 point_of_max_falloff = 500.0
@@ -86,21 +96,23 @@ homing_duration = -1.0
 homing_start_delay = 0.0
 can_change_target = false
 boomerang_home_radius = 5.0
-spin_speed = 1000.0
+spin_speed = 0.0
 spin_both_ways = false
 spin_direction = "Forward"
 move_in_rotated_dir = false
-launch_angle = 40.0
-arc_travel_distance = 80
+shadow_matches_spin = false
+launch_angle = 60.0
+arc_travel_distance = 100
 arc_speed = 500.0
 max_collision_height = 20
 grounding_free_delay = 0.0
-bounce_count = 3
+bounce_count = 4
 bounce_falloff_curve = SubResource("Curve_m6rur")
+ping_pong_bounce = false
 number_of_splits = 0
-split_into_counts = Array[int]([5, 3, 2])
-angular_spreads = Array[float]([360.0, 45.0, 45.0])
-split_delays = Array[float]([0.1, 0.3, 0.35])
+split_into_counts = Array[int]([2, 3, 2])
+angular_spreads = Array[float]([75.0, 45.0, 45.0])
+split_delays = Array[float]([0.15, 0.3, 0.35])
 splitting_sounds = Array[String](["", "PlayerDash", "KineticImpactHit"])
 split_cam_shakes_str = Array[float]([0.65, 1.2, 1.48])
 split_cam_shakes_dur = Array[float]([0.2, 0.0, 0.0])
@@ -138,15 +150,30 @@ projectile_data = SubResource("Resource_2dbrb")
 firing_mode = "Auto"
 initial_shot_delay = 0.0
 auto_fire_delay = 0.1
-uses_hitscan = false
-hitscan_duration = 0.0
-hitscan_width = 0.5
+firing_cam_shake_str = 0.0
+firing_cam_shake_dur = 0.0
+firing_cam_freeze_mult = 1.0
+firing_cam_freeze_dur = 0.0
+firing_sound = ""
+use_hitscan = true
+hitscan = ExtResource("4_co00d")
+hitscan_duration = 1.0
+hitscan_effect_interval = 0.1
+hitscan_max_width = 0.5
+hitscan_width_curve = SubResource("Curve_nam6b")
+hitscan_pierce_count = 2
+hitscan_max_distance = 200
+hitscan_falloff_curve = SubResource("Curve_2dwfc")
+bad_effects_falloff = true
+good_effects_falloff = false
 ammo_type = 1
 mag_size = 60
 reload_type = "Magazine"
 mag_reload_time = 1.0
 single_proj_reload_time = 0.5
 stamina_use_per_proj = 0.5
+reload_sound = ""
+empty_mag_sound = ""
 max_bloom = 10.0
 bloom_curve = SubResource("Curve_kfl3v")
 bloom_increase_rate = SubResource("Curve_mls34")
@@ -161,21 +188,14 @@ ammo_use_per_charge = 3
 charge_bloom_mult = 5.0
 has_charge_fire_anim = false
 charging_stat_effect = ExtResource("1_woy6l")
+charge_cam_fx_mult = 1.0
+charge_firing_sound = ""
 projectiles_per_fire = 1
 use_ammo_per_burst_proj = true
 burst_bullet_delay = 0.07
 add_bloom_per_burst_shot = true
 barrage_count = 1
 angluar_spread = 10
-firing_cam_shake_str = 0.0
-firing_cam_shake_dur = 0.0
-firing_cam_freeze_mult = 1.0
-firing_cam_freeze_dur = 0.0
-charge_cam_fx_mult = 1.0
-firing_sound = ""
-charge_firing_sound = ""
-reload_sound = ""
-empty_mag_sound = ""
 auto_fire_delay_left = 0.0
 charge_fire_cooldown_left = 0.0
 current_warmth_level = 0.0
@@ -191,7 +211,7 @@ icon = ExtResource("3_qr2dh")
 thumbnail = ExtResource("3_qr2dh")
 item_scene = ExtResource("6_gbfef")
 is_gripped_by_one_hand = true
-rotation_smoothing = 1.0
+rotation_smoothing = 0.1
 item_type = 1
 rarity = 2
 weight = 0

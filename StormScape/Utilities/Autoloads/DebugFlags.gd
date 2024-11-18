@@ -24,6 +24,7 @@ class Projectiles:
 	static var show_collision_points: bool = false
 	static var show_homing_rays: bool = false
 	static var show_movement_dir: bool = false
+	static var show_hitscan_rays: bool = false
 
 class OnScreenDebug:
 	static var frame_rate: bool = true

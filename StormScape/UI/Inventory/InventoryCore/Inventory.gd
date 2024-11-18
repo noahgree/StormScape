@@ -21,9 +21,9 @@ func _ready() -> void:
 	if not is_player_inv:
 		hotbar_size = 0
 	inv.resize(inv_size if not is_player_inv else inv_size + 1) # For trash slot.
-	fill_inventory(starting_inv)
 	inv_populator.connect_inventory(self)
 	ui.connect_inventory(self)
+	call_deferred("fill_inventory", starting_inv)
 
 ## Fills the main inventory from an array of inventory items. If an item exceeds stack size, the quantity that does not fit into ## one slot is instantiated on the ground as a physical item. This method respects null spots in the list.
 func fill_inventory(inv_to_fill_from: Array[InvItemResource]) -> void:

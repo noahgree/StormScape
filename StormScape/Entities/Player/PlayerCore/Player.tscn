@@ -1,4 +1,4 @@
-[gd_scene load_steps=201 format=3 uid="uid://dba8mrurjlekp"]
+[gd_scene load_steps=202 format=3 uid="uid://dba8mrurjlekp"]
 
 [ext_resource type="Script" path="res://Entities/Player/PlayerCore/Player.gd" id="1_m33tt"]
 [ext_resource type="Script" path="res://Entities/Components/StatModComponents/StatModsCacheResource.gd" id="2_vyeuy"]
@@ -1529,6 +1529,11 @@ script = ExtResource("32_ixmb3")
 stats = ExtResource("35_qbswt")
 quantity = 64
 
+[sub_resource type="Resource" id="Resource_0ta0y"]
+script = ExtResource("32_ixmb3")
+stats = ExtResource("37_a2tah")
+quantity = 1
+
 [sub_resource type="CircleShape2D" id="CircleShape2D_3wm74"]
 radius = 12.0
 
@@ -1694,7 +1699,7 @@ parameters/run/blendspace2d/blend_position = Vector2(0, 0)
 
 [node name="ItemReceiverComponent" parent="." node_paths=PackedStringArray("inv_populator", "ui") instance=ExtResource("30_qgyag")]
 item_scene = ExtResource("31_8v2rb")
-starting_inv = Array[ExtResource("32_ixmb3")]([SubResource("Resource_pihal"), null, SubResource("Resource_3kywt"), null, null, SubResource("Resource_kx1me"), SubResource("Resource_h68kk"), SubResource("Resource_jrr0m"), SubResource("Resource_2ijsm")])
+starting_inv = Array[ExtResource("32_ixmb3")]([SubResource("Resource_pihal"), null, SubResource("Resource_3kywt"), null, null, SubResource("Resource_kx1me"), SubResource("Resource_h68kk"), SubResource("Resource_jrr0m"), SubResource("Resource_2ijsm"), null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, SubResource("Resource_0ta0y")])
 is_player_inv = true
 inv_size = 40
 hotbar_size = 8
