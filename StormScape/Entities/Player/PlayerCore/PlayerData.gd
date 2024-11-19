@@ -31,3 +31,5 @@ class_name PlayerData
 # ItemReceiverComponent
 @export var inv: Array[InvItemResource]
 @export var pickup_range: int
+# HandsComponent
+@export var active_slot_index: int

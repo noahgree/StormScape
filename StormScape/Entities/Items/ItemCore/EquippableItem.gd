@@ -23,6 +23,7 @@ func _set_stats(new_stats: ItemResource) -> void:
 
 func _ready() -> void:
 	_set_stats(stats)
+	add_to_group("has_save_logic")
 
 ## Intended to be overridden by child classes in order to specify what to do when this item is used.
 func activate() -> void:

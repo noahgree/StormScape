@@ -12,7 +12,8 @@ var s_stats: ConsumableResource ## Self stats, only exists to give us type hints
 
 func _set_stats(new_stats: ItemResource) -> void:
 	stats = new_stats
-	s_stats = stats
+	s_stats = stats.duplicate()
+	source_slot.synced_inv.update_an_item_stats(source_slot.index, s_stats)
 	if sprite:
 		sprite.texture = s_stats.thumbnail
 

@@ -27,15 +27,16 @@ class_name ProjectileResource
 @export var ricochet_angle_bounce: bool = true ## Whether the ricochets should bounce at an angle or just reverse the direction they were travelling in. Note that when colliding with TileMaps, it always just reverses direction.
 
 @export_group("Homing Logic")
-@export_enum("None", "FOV", "Closest", "Boomerang") var homing_method: String = "None" ## Whether this projectile should home-in on its target.
+@export_enum("None", "FOV", "Closest", "Mouse Position", "Boomerang") var homing_method: String = "None" ## Whether this projectile should home-in on its target.
 @export var homing_speed_mult: float = 1.0 ## Multiplies the speed by a factor unique to the homing movement.
-@export_custom(PROPERTY_HINT_NONE, "suffix:º/sec") var max_turn_rate: float = 90 ## The max turn rate in degrees per second.
+@export_custom(PROPERTY_HINT_NONE, "suffix:º/sec") var max_turn_rate: float = 100 ## The max turn rate in degrees per second.
 @export_range(0, 360, 1, "suffix:degrees") var homing_fov_angle: float = 180 ## The FOV for aquiring targets.
 @export var homing_max_range: int = 850 ## The max range for aquiring targets when using the "closest" method.
 @export var homing_duration: float = -1 ## The duration for which homing is active. -1 means 'always'.
 @export var homing_start_delay: float = 0 ## The delay before homing begins.
 @export var can_change_target: bool = false ## Whether we can update what to home in on during flight.
 @export var boomerang_home_radius: float = 5 ## How far from the source entity the boomerang needs to be to queue free.
+@export var mouse_target_radius: float = 50 ## How close from the mouse on spawn objects need to be to be considered a target.
 
 @export_group("Spin Logic")
 @export_range(0, 10000, 1, "suffix:º/sec") var spin_speed: float = 0.0 ## How fast this projectile should spin while in the air.

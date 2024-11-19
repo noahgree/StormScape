@@ -136,6 +136,10 @@ func remove_item(index: int, amount: int) -> void:
 		inv[index] = null
 	slot_updated.emit(index, inv[index])
 
+func update_an_item_stats(index: int, new_stats: ItemResource) -> void:
+	inv[index].stats = new_stats
+	slot_updated.emit(index, inv[index])
+
 ## This updates all connected slots in order to reflect the UI properly.
 func _update_all_connected_slots() -> void:
 	for i in range(inv_size):

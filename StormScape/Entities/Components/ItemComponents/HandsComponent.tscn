@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://Entities/Components/ItemComponents/HandsComponent.gd" id="1_y5huf"]
 [ext_resource type="Texture2D" uid="uid://cs3clmnktksd6" path="res://Entities/Player/PlayerCore/player_hand.png" id="2_lwexw"]
 
-[node name="HandsComponent" type="Node2D"]
+[node name="HandsComponent" type="Node2D" groups=["has_save_logic"]]
 position = Vector2(0, -9)
 script = ExtResource("1_y5huf")
 

@@ -4,6 +4,8 @@ extends Node
 
 var player_node: Player = null
 var player_camera: PlayerCamera = null
+var focused_ui_is_open: bool = false
+
 
 
 func _ready() -> void:

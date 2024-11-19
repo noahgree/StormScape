@@ -18,17 +18,26 @@ var charge_fire_cooldown_timer: Timer = Timer.new() ## The timer tracking how lo
 var initial_shot_delay_timer: Timer = Timer.new() ## The timer tracking how long after we press fire before the proj spawns.
 var mag_reload_timer: Timer = Timer.new() ## The timer tracking the delay between full mag reload start and end.
 var single_reload_timer: Timer = Timer.new() ## The timer tracking the delay between single bullet reloads.
+var hitscan_hands_freeze_timer: Timer = Timer.new() ## The timer that tracks the brief moment after a semi-auto hitscan shot that we shouldn't be rotating.
 var hold_just_released: bool = false ## Whether the mouse hold was just released.
+var is_reloading: bool = false ## Whether some reload method is currently in progress.
 var is_reloading_single_and_has_since_released: bool = true ## Whether we've begun reloading one bullet at a time and have relased the mouse since starting.
 var is_charging: bool = false ## Whether the weapon is currently charging up for a charge shot.
 var hitscan_delay: float = 0
+var is_holding_hitscan: bool = false:
+	set(new_value):
+		is_holding_hitscan = new_value
+		if new_value == false: _clean_up_hitscans()
+var current_hitscans: Array[Hitscan] = []
+var mouse_scan_area_targets: Array[Node] = []
+var mouse_area: Area2D
 
 
-#region EquippableItem Core
+#region Core
 func _set_stats(new_stats: ItemResource) -> void:
 	stats = new_stats
 	s_stats = stats.duplicate()
-	source_slot.item.stats = s_stats
+	source_slot.synced_inv.update_an_item_stats(source_slot.index, s_stats)
 
 func _ready() -> void:
 	if not Engine.is_editor_hint():
@@ -39,12 +48,16 @@ func _ready() -> void:
 		add_child(initial_shot_delay_timer)
 		add_child(mag_reload_timer)
 		add_child(single_reload_timer)
+		add_child(hitscan_hands_freeze_timer)
 		firing_delay_timer.one_shot = true
+		firing_delay_timer.timeout.connect(_on_firing_delay_timeout)
 		charge_fire_cooldown_timer.one_shot = true
 		initial_shot_delay_timer.one_shot = true
 		mag_reload_timer.one_shot = true
 		single_reload_timer.one_shot = true
+		hitscan_hands_freeze_timer.one_shot = true
 		single_reload_timer.timeout.connect(_on_single_reload_timer_timeout)
+		hitscan_hands_freeze_timer.timeout.connect(_on_hitscan_hands_freeze_timer_timeout)
 
 func enter() -> void:
 	_handle_reequipping_stats()
@@ -57,16 +70,20 @@ func enter() -> void:
 	if s_stats.auto_fire_delay_left > 0:
 		firing_delay_timer.start(s_stats.auto_fire_delay_left)
 
+	_check_if_needs_mouse_area_scanner()
+
 func exit() -> void:
 	source_entity.move_fsm.should_rotate = true
 	source_entity.hands.equipped_item_should_follow_mouse = true
 	s_stats.current_warmth_level = 0
+	_clean_up_hitscans()
+	if mouse_area: mouse_area.queue_free()
 
 	if s_stats.charging_stat_effect != null:
 		source_entity.effects.request_effect_removal(s_stats.charging_stat_effect.effect_name)
 
 	if not firing_delay_timer.is_stopped():
-		s_stats.auto_fire_delay_left = firing_delay_timer.time_left
+		s_stats.auto_fire_delay_left = min(s_stats.auto_fire_delay, firing_delay_timer.time_left)
 	else:
 		s_stats.auto_fire_delay_left = 0
 
@@ -78,6 +95,30 @@ func _handle_reequipping_stats() -> void:
 	var forgiveness_factor: float = min(1.0, time_since_last_equipped / 5.0)
 	s_stats.current_bloom_level = s_stats.current_bloom_level * (1 - forgiveness_factor)
 
+func _check_if_needs_mouse_area_scanner() -> void:
+	if not s_stats.use_hitscan and s_stats.projectile_logic.homing_method == "Mouse Position":
+		mouse_area = Area2D.new()
+		var collision_shape = CollisionShape2D.new()
+		var circle_shape = CircleShape2D.new()
+
+		mouse_area.collision_layer = 0
+		mouse_area.collision_mask = s_stats.effect_source.scanned_phys_layers
+		mouse_area.area_entered.connect(func(area): mouse_scan_area_targets.append(area))
+		mouse_area.body_entered.connect(func(body): mouse_scan_area_targets.append(body))
+
+		circle_shape.radius = s_stats.projectile_logic.mouse_target_radius
+		collision_shape.shape = circle_shape
+		collision_shape.disabled = true
+		mouse_area.add_child(collision_shape)
+		mouse_area.global_position = get_global_mouse_position()
+		GlobalData.world_root.add_child(mouse_area)
+
+func _enable_mouse_area() -> void:
+	if mouse_area: mouse_area.get_child(0).disabled = false
+
+func _disable_mouse_area() -> void:
+	if mouse_area: mouse_area.get_child(0).disabled = true
+
 ## Every frame we decrease the warmth and the bloom levels based on their decrease curves.
 func _process(delta: float) -> void:
 	if firing_delay_timer.is_stopped() and not Engine.is_editor_hint():
@@ -88,6 +129,17 @@ func _process(delta: float) -> void:
 		if s_stats.current_warmth_level > 0:
 			var warmth_decrease_amount: float = max(0.01 * delta, s_stats.warmth_decrease_rate.sample_baked(s_stats.current_warmth_level) * delta)
 			s_stats.current_warmth_level = max(0, s_stats.current_warmth_level - warmth_decrease_amount)
+
+func _physics_process(_delta: float) -> void:
+	if mouse_area != null:
+		mouse_area.global_position = get_global_mouse_position()
+
+func _on_firing_delay_timeout() -> void:
+	if is_holding_hitscan:
+		_fire()
+		firing_delay_timer.start(s_stats.auto_fire_delay + hitscan_delay)
+	else:
+		_clean_up_hitscans()
 #endregion
 
 #region Called From HandsComponent
@@ -118,6 +170,9 @@ func hold_activate(_hold_time: float) -> void:
 
 ## Called from the hands component when we release the mouse. Includes how long we had it held down.
 func release_hold_activate(hold_time: float) -> void:
+	if s_stats.firing_mode == "Auto" and s_stats.allow_hitscan_holding and is_holding_hitscan:
+		is_holding_hitscan = false
+
 	if not pullout_delay_timer.is_stopped() or not mag_reload_timer.is_stopped():
 		source_entity.hands.been_holding_time = 0
 		return
@@ -136,7 +191,8 @@ func release_hold_activate(hold_time: float) -> void:
 func reload() -> void:
 	if s_stats.ammo_type != GlobalData.ProjAmmoType.STAMINA:
 		if pullout_delay_timer.is_stopped() and mag_reload_timer.is_stopped() and single_reload_timer.is_stopped():
-			_attempt_reload()
+			if not is_reloading:
+				_attempt_reload()
 #endregion
 
 #region Firing Activations
@@ -145,11 +201,14 @@ func _fire() -> void:
 	if not firing_delay_timer.is_stopped():
 		return
 	if not is_reloading_single_and_has_since_released:
+		is_holding_hitscan = false
 		return
 	if not _get_has_needed_ammo_and_reload_if_not(false):
+		is_holding_hitscan = false
 		return
 
 	single_reload_timer.stop()
+	is_reloading = false
 
 	if s_stats.initial_shot_delay > 0:
 		if initial_shot_delay_timer.is_stopped():
@@ -167,8 +226,15 @@ func _fire() -> void:
 
 	_set_up_hitscan(false)
 	_handle_warmth_increase()
-	_apply_burst_logic(false)
+	if not is_holding_hitscan:
+		_apply_burst_logic(false)
+	else:
+		_apply_ammo_consumption(s_stats.projectiles_per_fire, false)
 	_apply_post_firing_effect(false)
+
+	if s_stats.use_hitscan and s_stats.allow_hitscan_holding and s_stats.firing_mode == "Auto" and not is_holding_hitscan:
+		is_holding_hitscan = true
+		GlobalData.player_camera.update_persistent_shake_strength(s_stats.firing_cam_shake_str)
 
 ## Check if we can do a charge firing, and if we can, start it.
 func _charge_fire(hold_time: float) -> void:
@@ -178,20 +244,33 @@ func _charge_fire(hold_time: float) -> void:
 
 	if s_stats.charge_effect_source == null:
 		s_stats.charge_effect_source = s_stats.effect_source
-	if s_stats.charge_projectile_data == null:
-		s_stats.charge_projectile_data = s_stats.projectile_data
+	if s_stats.charge_projectile_logic == null:
+		s_stats.charge_projectile_logic = s_stats.projectile_logic
 	if s_stats.charge_projectile == null:
 		s_stats.charge_projectile = s_stats.projectile
 
 	if (hold_time >= s_stats.min_charge_time) and (hold_time > 0) and charge_fire_cooldown_timer.is_stopped():
+		_set_up_hitscan(true)
 		_apply_burst_logic(true)
 		_apply_post_firing_effect(true)
 
-func _set_up_hitscan(_was_charge_fire: bool = false) -> void:
+func _set_up_hitscan(was_charge_fire: bool = false) -> void:
 	if not s_stats.use_hitscan:
 		hitscan_delay = 0
 	else:
-		hitscan_delay = s_stats.hitscan_duration
+		hitscan_delay = s_stats.hitscan_logic.hitscan_duration if not was_charge_fire else s_stats.charged_hitscan_logic.hitscan_duration
+
+func _clean_up_hitscans() -> void:
+	if not current_hitscans.is_empty():
+		GlobalData.player_camera.update_persistent_shake_strength(-s_stats.firing_cam_shake_str)
+
+	for hitscan in current_hitscans:
+		if is_instance_valid(hitscan):
+			hitscan.queue_free()
+	current_hitscans.clear()
+
+func _on_hitscan_hands_freeze_timer_timeout() -> void:
+	source_entity.hands.equipped_item_should_follow_mouse = true
 #endregion
 
 #region Projectile Spawning
@@ -200,50 +279,79 @@ func _apply_burst_logic(was_charge_fire: bool = false) -> void:
 	if s_stats.projectiles_per_fire > 1 and not s_stats.add_bloom_per_burst_shot: _handle_bloom_increase(was_charge_fire)
 	var shots: int = s_stats.projectiles_per_fire
 
-	var delay: float = _get_warmth_firing_delay() if _get_warmth_firing_delay() > 0 else s_stats.auto_fire_delay + hitscan_delay
-	var delay_adjusted_for_burst: float = delay + (s_stats.burst_bullet_delay * (shots - 1))
-	firing_delay_timer.start(max(0.03, delay_adjusted_for_burst))
+	var delay: float
+	if _get_warmth_firing_delay() > 0:
+		delay = _get_warmth_firing_delay()
+	else:
+		if s_stats.firing_mode == "Auto" or s_stats.firing_mode == "Charge":
+			delay = s_stats.auto_fire_delay + hitscan_delay
+		elif s_stats.firing_mode == "Semi Auto":
+			delay = hitscan_delay
 
+	if not s_stats.use_hitscan:
+		delay += (s_stats.burst_bullet_delay * (shots - 1))
+
+	firing_delay_timer.start(max(0.035, delay))
+
+	_apply_ammo_consumption(shots, was_charge_fire)
+
+func _apply_ammo_consumption(shot_count: int, was_charge_fire: bool = false) -> void:
 	if not was_charge_fire:
 		if s_stats.use_ammo_per_burst_proj:
-			for i in range(shots):
+			for i in range(shot_count):
 				_consume_ammo(1)
 		else:
 			_consume_ammo(1)
 	else:
 		_consume_ammo(s_stats.ammo_use_per_charge)
 
-	for i in range(shots):
+	_handle_per_shot_delay_and_bloom(shot_count, was_charge_fire, (not is_holding_hitscan))
+
+func _handle_per_shot_delay_and_bloom(shot_count: int, was_charge_fire: bool = false, proceed_to_spawn: bool = true) -> void:
+	for i in range(shot_count):
 		if s_stats.add_bloom_per_burst_shot or (s_stats.projectiles_per_fire == 1):
 			_handle_bloom_increase(false)
 
-		_apply_barrage_logic(was_charge_fire)
+		if proceed_to_spawn:
+			_apply_barrage_logic(was_charge_fire)
 
-		if i != (shots - 1):
-			await get_tree().create_timer(s_stats.burst_bullet_delay, false, true, false).timeout
+			if i != (shot_count - 1):
+				await get_tree().create_timer(s_stats.burst_bullet_delay, false, true, false).timeout
 
 ## Applies barrage logic to potentially spawn multiple projectiles at a specific angle apart.
 func _apply_barrage_logic(was_charge_fire: bool = false) -> void:
 	var effect_src: EffectSource = s_stats.effect_source if not was_charge_fire else s_stats.charge_effect_source
-	var proj_scene: PackedScene = s_stats.projectile if not was_charge_fire else s_stats.charge_projectile
-	var proj_stats: ProjectileResource = s_stats.projectile_data if not was_charge_fire else s_stats.charge_projectile_data
 
-	var anuglar_spread_radians: float = deg_to_rad(s_stats.angluar_spread)
+	var angular_spread_radians: float = deg_to_rad(s_stats.angluar_spread)
 	var close_to_360_adjustment: int = 0 if s_stats.angluar_spread > 310 else 1
-	var spread_segment_width = anuglar_spread_radians / (s_stats.barrage_count - close_to_360_adjustment)
-	var start_rotation = global_rotation - (anuglar_spread_radians / 2.0)
+	var spread_segment_width = angular_spread_radians / (s_stats.barrage_count - close_to_360_adjustment)
+	var start_rotation = global_rotation - (angular_spread_radians / 2.0)
 
 	for i in range(s_stats.barrage_count):
-		var rotation_adjustment: float = start_rotation + (i * spread_segment_width)
-
 		if not s_stats.use_hitscan:
+			var proj_scene: PackedScene = s_stats.projectile if not was_charge_fire else s_stats.charge_projectile
+			var proj_stats: ProjectileResource = s_stats.projectile_logic if not was_charge_fire else s_stats.charge_projectile_logic
+			var rotation_adjustment: float = start_rotation + (i * spread_segment_width)
 			var proj: Projectile = Projectile.create(proj_scene, proj_stats, effect_src, source_entity, proj_origin_node.global_position, global_rotation)
 			proj.rotation = rotation_adjustment if s_stats.barrage_count > 1 else proj.rotation
 			proj.starting_proj_height = -(source_entity.hands.position.y + proj_origin.y) / 2
+
+			if s_stats.projectile_logic.homing_method == "Mouse Position":
+				mouse_scan_area_targets.clear()
+				_enable_mouse_area()
+				var tree: SceneTree = get_tree()
+				for j in range(2): await tree.physics_frame
+				proj.mouse_scan_targets = mouse_scan_area_targets
+				call_deferred("_disable_mouse_area")
+
 			_spawn_projectile(proj, was_charge_fire)
 		else:
-			var hitscan: Hitscan = Hitscan.create(s_stats.hitscan, effect_src, self, source_entity, proj_origin_node.global_position, global_rotation)
-			hitscan.rotation = rotation_adjustment if s_stats.barrage_count > 1 else hitscan.rotation
+			var hitscan_scene: PackedScene = s_stats.hitscan_logic.hitscan
+			if was_charge_fire and s_stats.charged_hitscan_logic != null and s_stats.charged_hitscan_logic.hitscan != null:
+				hitscan_scene = s_stats.charged_hitscan_logic.hitscan
+			var rotation_adjustment: float = -angular_spread_radians / 2 + (i * spread_segment_width)
+			var hitscan: Hitscan = Hitscan.create(hitscan_scene, effect_src, self, source_entity, proj_origin_node.global_position, rotation_adjustment if s_stats.barrage_count > 1 else 0.0, was_charge_fire)
+
 			_spawn_hitscan(hitscan, was_charge_fire)
 
 ## Spawns the projectile that has been passed to it. Reloads if we don't have enough for the next activation.
@@ -259,11 +367,16 @@ func _spawn_projectile(proj: Projectile, was_charge_fire: bool = false) -> void:
 
 ## Spawns the hitscan that has been passed to it. Reloads if we don't have enough for the next activation.
 func _spawn_hitscan(hitscan: Hitscan, was_charge_fire: bool = false) -> void:
-	hitscan.rotation += deg_to_rad(_get_bloom())
+	hitscan.rotation_offset += deg_to_rad(_get_bloom())
 	GlobalData.world_root.add_child(hitscan)
+	current_hitscans.append(hitscan)
 
 	_do_firing_fx(was_charge_fire)
 	_start_firing_anim(was_charge_fire)
+
+	if s_stats.firing_mode == "Semi Auto" or (s_stats.firing_mode == "Auto" and s_stats.hitscan_logic.hitscan_duration < 0.65):
+		source_entity.hands.equipped_item_should_follow_mouse = false
+		hitscan_hands_freeze_timer.start(0.065)
 
 	await firing_delay_timer.timeout
 	_get_has_needed_ammo_and_reload_if_not(was_charge_fire)
@@ -374,27 +487,37 @@ func _get_has_needed_ammo_and_reload_if_not(was_charge_fire: bool = false) -> bo
 		if s_stats.ammo_in_mag >= ammo_needed:
 			result = true
 		if result == false:
-			_attempt_reload()
-			if s_stats.empty_mag_sound != "":
-				AudioManager.play_sound(s_stats.empty_mag_sound, AudioManager.SoundType.SFX_GLOBAL)
+			if not is_reloading:
+				_attempt_reload()
+				if s_stats.empty_mag_sound != "":
+					AudioManager.play_sound(s_stats.empty_mag_sound, AudioManager.SoundType.SFX_GLOBAL)
 
 	return result
 
 ## Based on the reload method, starts the timer(s) needed to track how long the reload will take.
 func _attempt_reload() -> void:
+	is_reloading = true
+
 	var ammo_needed: int = s_stats.mag_size - s_stats.ammo_in_mag
 	if ammo_needed > 0:
 		source_entity.hands.been_holding_time = 0
 
 	if s_stats.reload_type == "Single":
 		is_reloading_single_and_has_since_released = false
-		s_stats.ammo_in_mag += _get_more_reload_ammo(1)
+		var ammo_available: int = _get_more_reload_ammo(1)
+		if ammo_available > 0:
+			if s_stats.proj_reload_sound != "": AudioManager.play_sound(s_stats.proj_reload_sound, AudioManager.SoundType.SFX_GLOBAL)
+		s_stats.ammo_in_mag += ammo_available
 		single_reload_timer.set_meta("reloads_left", ammo_needed - 1)
 		single_reload_timer.start(s_stats.single_proj_reload_time)
 	else:
 		mag_reload_timer.start(s_stats.mag_reload_time)
 		await mag_reload_timer.timeout
+		var ammo_available: int = _get_more_reload_ammo(ammo_needed)
+		if ammo_available > 0:
+			if s_stats.mag_reload_sound != "": AudioManager.play_sound(s_stats.mag_reload_sound, AudioManager.SoundType.SFX_GLOBAL)
 		s_stats.ammo_in_mag += _get_more_reload_ammo(ammo_needed)
+		is_reloading = false
 
 ## Searches through the source entity's inventory for more ammo to fill the magazine.
 func _get_more_reload_ammo(max_amount_needed: int) -> int:
@@ -421,7 +544,10 @@ func _on_single_reload_timer_timeout() -> void:
 	if reloads_left > 0:
 		var ammo_available: int = _get_more_reload_ammo(1)
 		if ammo_available == 1:
+			if s_stats.proj_reload_sound != "": AudioManager.play_sound(s_stats.proj_reload_sound, AudioManager.SoundType.SFX_GLOBAL)
 			s_stats.ammo_in_mag += ammo_available
 			single_reload_timer.set_meta("reloads_left", reloads_left - 1)
 			single_reload_timer.start(s_stats.single_proj_reload_time)
+	else:
+		is_reloading = false
 #endregion

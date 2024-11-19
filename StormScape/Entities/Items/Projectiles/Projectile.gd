@@ -14,7 +14,7 @@ class_name Projectile
 @onready var anim_player: AnimationPlayer = get_node_or_null("AnimationPlayer") ## The anim player for this projectile.
 
 #region Local Vars
-const fov_raycast_count: int = 36
+const FOV_RAYCAST_COUNT: int = 36
 var stats: ProjectileResource ## The logic for how to operate this projectile.
 var starting_proj_height: int
 var lifetime_timer: Timer = Timer.new() ## The timer tracking how long the projectile has left to exist.
@@ -45,13 +45,18 @@ var starting_arc_speed: float = 0 ## The initial speed of an arc, used in kinema
 var resettable_starting_dir: Vector2 ## The initial direction of an arc, used in kinematic equations.
 var resettable_starting_pos: Vector2 ## The starting position of the arc, can be updated after a ricochet to start a new arc.
 var bounces_so_far: int = 0 ## The number of times so far that we have bounced off the ground after an initial arc.
-var just_bounced: bool = false ## Whether we just bounced in the previous frame.
 var is_homing_active: bool = false ## Indicates if homing is currently active.
 var homing_target: Node = null ## The current homing target.
+var mouse_scan_targets: Array[Node] ## The current list of targets in range of the mouse click for the mouse position homing.
 var debug_homing_rays: Array[Dictionary] = [] ## An array of debug info about the FOV homing method raycasts.
 var debug_recent_hit_location: Vector2 ## The location of the most recent point we hit something.
 #endregion
 
+
+#region On Load
+func _on_before_load_game() -> void:
+	queue_free()
+#endregion
 
 ## Creates a projectile and assigns its needed variables in a specific order. Then it returns it.
 static func create(proj_scene: PackedScene, proj_stats: ProjectileResource, effect_src: EffectSource,
@@ -60,7 +65,11 @@ static func create(proj_scene: PackedScene, proj_stats: ProjectileResource, effe
 	proj.split_proj_scene = proj_scene
 	proj.global_position = pos
 	proj.rotation = rot
+
 	proj.stats = proj_stats
+	if proj.stats.speed_curve.point_count == 0:
+		push_error("\"" + src_entity.name + "\" has a weapon attempting to fire projectiles, but the projectile resource within the weapon has a blank speed curve.")
+
 	proj.effect_source = effect_src
 	proj.collision_mask = effect_src.scanned_phys_layers
 	proj.source_entity = src_entity
@@ -76,6 +85,10 @@ func _draw() -> void:
 		z_index = 100
 		draw_circle(to_local(debug_recent_hit_location), 1.5, Color(1, 1, 0, 0.35))
 
+	if DebugFlags.Projectiles.show_homing_targets and homing_target != null:
+		z_index = 100
+		draw_circle(to_local(homing_target.global_position), 5, Color(1, 0, 1, 0.3))
+
 	if not DebugFlags.Projectiles.show_homing_rays:
 		return
 
@@ -89,13 +102,11 @@ func _draw() -> void:
 		if ray["hit"]:
 			draw_circle(to_pos, 2, color)
 
-	if homing_target != null:
-		draw_circle(to_local(homing_target.global_position), 5, Color(1, 0, 1, 0.3))
-
 ## Setting up z_index, hiding shadow until rotation is assigned, and initializing timers. Then this sets up spin and arcing
 ## logic should we need it.
 func _ready() -> void:
 	super._ready()
+	add_to_group("has_save_logic")
 	z_index = 0
 	shadow.visible = false
 	previous_position = global_position
@@ -187,7 +198,7 @@ func _physics_process(delta: float) -> void:
 
 	movement_direction = (global_position - previous_position).normalized()
 
-	if DebugFlags.Projectiles.show_homing_rays or DebugFlags.Projectiles.show_collision_points:
+	if DebugFlags.Projectiles.show_homing_rays or DebugFlags.Projectiles.show_collision_points or DebugFlags.Projectiles.show_homing_targets or DebugFlags.Projectiles.show_movement_dir:
 		queue_redraw()
 
 ## This moves the projectile based on the current method, accounting for current rotation if we need to.
@@ -196,9 +207,9 @@ func _do_projectile_movement(delta: float) -> void:
 	current_sampled_speed = stats.speed_curve.sample_baked(1 - (lifetime_timer.time_left / stats.lifetime)) * stats.speed * current_initial_boost
 
 	if is_homing_active:
-			_apply_homing_movement(delta)
-			if homing_target == null or not homing_target.is_inside_tree():
-				is_homing_active = false
+		_apply_homing_movement(delta)
+		if homing_target == null or not homing_target.is_inside_tree():
+			is_homing_active = false
 	else:
 		rotation += deg_to_rad(stats.spin_speed * spin_dir) * delta
 
@@ -256,6 +267,12 @@ func _find_homing_target_based_on_method() -> void:
 		_find_target_in_fov()
 	elif stats.homing_method == "Closest":
 		_find_closest_target()
+	elif stats.homing_method == "Mouse Position":
+		if splits_so_far == 0:
+			_choose_from_mouse_area_targets()
+		elif is_instance_valid(homing_target):
+			homing_target = null
+			is_homing_active = false
 	elif stats.homing_method == "Boomerang":
 		homing_target = source_entity
 	else:
@@ -273,9 +290,9 @@ func _find_target_in_fov() -> void:
 	if DebugFlags.Projectiles.show_homing_rays:
 		debug_homing_rays.clear()
 
-	var step: float = fov_radians / fov_raycast_count
+	var step: float = fov_radians / FOV_RAYCAST_COUNT
 
-	for i in range(fov_raycast_count + 1):
+	for i in range(FOV_RAYCAST_COUNT + 1):
 		var angle_offset: float = -half_fov + step * i
 		var cast_direction: Vector2 = direction.rotated(angle_offset)
 		var from_pos: Vector2 = global_position
@@ -308,14 +325,14 @@ func _find_target_in_fov() -> void:
 			var obj: Node = result.collider
 			if obj and _is_valid_homing_target(obj):
 				candidates.append(obj)
-			if DebugFlags.Projectiles.show_homing_rays:
-				debug_ray_info["hit"] = true
-				debug_ray_info["hit_position"] = result.position
+				if DebugFlags.Projectiles.show_homing_rays:
+					debug_ray_info["hit"] = true
+					debug_ray_info["hit_position"] = result.position
 		if DebugFlags.Projectiles.show_homing_rays:
 			debug_homing_rays.append(debug_ray_info)
 
 	if candidates.size() > 0:
-		homing_target = _select_closest_homing_target(candidates)
+		homing_target = _select_closest_homing_target(candidates, global_position)
 	else:
 		homing_target = null
 		is_homing_active = stats.can_change_target
@@ -328,11 +345,11 @@ func _is_valid_homing_target(obj: Node) -> bool:
 	return false
 
 ## Give the possible targets, this selects the closest one using a faster 'distance squared' method.
-func _select_closest_homing_target(targets: Array[Node]) -> Node:
+func _select_closest_homing_target(targets: Array[Node], to_position: Vector2) -> Node:
 	var closest_target: Node = null
 	var closest_distance_squared: float = INF
 	for target in targets:
-		var distance_squared: float = global_position.distance_squared_to(target.global_position)
+		var distance_squared: float = to_position.distance_squared_to(target.global_position)
 		if distance_squared < closest_distance_squared:
 			closest_distance_squared = distance_squared
 			closest_target = target
@@ -351,7 +368,19 @@ func _find_closest_target() -> void:
 				candidates.append(entity)
 
 	if candidates.size() > 0:
-		homing_target = _select_closest_homing_target(candidates)
+		homing_target = _select_closest_homing_target(candidates, global_position)
+	else:
+		homing_target = null
+		is_homing_active = false
+
+func _choose_from_mouse_area_targets() -> void:
+	var candidates: Array[Node] = []
+	for obj in mouse_scan_targets:
+		if obj and _is_valid_homing_target(obj):
+			candidates.append(obj)
+
+	if candidates.size() > 0:
+		homing_target = _select_closest_homing_target(candidates, get_global_mouse_position())
 	else:
 		homing_target = null
 		is_homing_active = false
@@ -499,6 +528,7 @@ func _split_self() -> void:
 		var new_proj: Projectile = Projectile.create(split_proj_scene, stats, effect_source, source_entity, position, angle)
 		new_proj.splits_so_far = splits_so_far
 		new_proj.spin_dir = spin_dir
+		if stats.homing_method == "Mouse Position": new_proj.homing_target = homing_target
 
 		get_parent().add_child(new_proj)
 
@@ -529,7 +559,7 @@ func _handle_ricochet(object: Variant) -> void:
 
 	ricochet_count += 1
 
-	if stats.can_change_target:
+	if stats.can_change_target and stats.homing_method != "Mouse Position":
 		homing_target = null
 		_find_homing_target_based_on_method()
 

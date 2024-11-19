@@ -34,6 +34,7 @@ func _on_save_game(save_data: Array[SaveData]) -> void:
 	data.knockback_vector = $MoveStateMachine.knockback_vector
 	data.inv = $ItemReceiverComponent.inv
 	data.pickup_range = $ItemReceiverComponent.pickup_range
+	data.active_slot_index = $PlayerUILayer/HotbarUI.active_slot.index
 
 	if snare_timer != null:
 		data.snare_time_left = snare_timer.time_left
@@ -63,6 +64,7 @@ func _on_load_game_player(data: PlayerData) -> void:
 	$MoveStateMachine.knockback_vector = data.knockback_vector
 	$ItemReceiverComponent.inv_to_load_from_save = data.inv
 	$ItemReceiverComponent.pickup_range = data.pickup_range
+	$PlayerUILayer/HotbarUI._change_active_slot_to_index_relative_to_full_inventory_size(data.active_slot_index)
 
 	move_fsm.verify_anim_vector()
 	if velocity.length() > 0:

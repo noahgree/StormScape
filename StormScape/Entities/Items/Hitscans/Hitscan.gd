@@ -4,27 +4,39 @@ class_name Hitscan
 @export var effect_source: EffectSource ## The effect to be applied when this ray hits an effect receiver.
 @export var source_entity: PhysicsBody2D ## The entity that the effect was produced by.
 
-@onready var line_particles: CPUParticles2D = $LineParticles
+@onready var start_particles: CPUParticles2D = $StartParticles
 @onready var impact_particles: CPUParticles2D = $ImpactParticles
 @onready var beam_particles: CPUParticles2D = $BeamParticles
 
-var stats: ProjWeaponResource
+var stats: HitscanResource
 var source_item: ProjectileWeapon
+var rotation_offset: float
 var lifetime_timer: Timer = Timer.new()
 var effect_tick_timer: Timer = Timer.new()
 var debug_rays: Array[Dictionary] = []
 var end_point: Vector2
+var is_hitting_something: bool = false:
+	set(new_value):
+		is_hitting_something = new_value
+		impact_particles.emitting = new_value
+var impacted_nodes: Dictionary = {}
+var holding_allowed: bool = false
 
 
 ## Creates a hitscan scene, assigns its passed in parameters, then returns it.
 static func create(hitscan_scene: PackedScene, effect_src: EffectSource, source_wpn: ProjectileWeapon,
-					src_entity: PhysicsBody2D, pos: Vector2, rot: float) -> Hitscan:
+					src_entity: PhysicsBody2D, pos: Vector2, rot_offset: float, was_charged: bool = false) -> Hitscan:
 	var hitscan: Hitscan = hitscan_scene.instantiate()
 	hitscan.global_position = pos
-	hitscan.rotation = rot
+	hitscan.rotation_offset = rot_offset
 	hitscan.effect_source = effect_src
 	hitscan.source_entity = src_entity
-	hitscan.stats = source_wpn.s_stats
+	hitscan.stats = source_wpn.s_stats.hitscan_logic
+
+	if was_charged and source_wpn.s_stats.charged_hitscan_logic != null:
+			hitscan.stats = source_wpn.s_stats.charged_hitscan_logic
+	if source_wpn.s_stats.allow_hitscan_holding: hitscan.holding_allowed = true
+
 	hitscan.source_item = source_wpn
 	return hitscan
 
@@ -50,20 +62,46 @@ func _ready() -> void:
 	lifetime_timer.one_shot = true
 	effect_tick_timer.one_shot = true
 	lifetime_timer.timeout.connect(queue_free)
-	lifetime_timer.start(max(0.05, stats.hitscan_duration))
-	line_particles.emitting = true
+	if not holding_allowed:
+		lifetime_timer.start(max(0.05, stats.hitscan_duration))
+	start_particles.emitting = true
+
+	_set_up_visual_fx()
+
+func _set_up_visual_fx() -> void:
+	if not stats.override_vfx_defaults:
+		return
+	width = stats.hitscan_max_width
+	width_curve = stats.hitscan_width_curve
+	start_particles.color_ramp.set_color(0, stats.start_particle_color)
+	start_particles.color_ramp.set_color(1, stats.start_particle_color)
+	start_particles.color = stats.start_particle_color * (stats.glow_amount + 1.0)
+	start_particles.amount = int(start_particles.amount * stats.start_particle_mult)
+	impact_particles.color_ramp.set_color(0, stats.impact_particle_color)
+	impact_particles.color_ramp.set_color(1, stats.impact_particle_color)
+	impact_particles.color = stats.impact_particle_color * (stats.glow_amount + 1.0)
+	impact_particles.amount = int(impact_particles.amount * stats.impact_particle_mult)
+	beam_particles.color_ramp.set_color(0, stats.beam_particle_color)
+	beam_particles.color_ramp.set_color(1, stats.beam_particle_color)
+	beam_particles.color = stats.beam_particle_color * (stats.glow_amount + 1.0)
+	beam_particles.amount = int(beam_particles.amount * stats.beam_particle_mult)
+	default_color = stats.beam_color * (stats.glow_amount + 1.5)
 
 func _physics_process(_delta: float) -> void:
 	var equipped_item: EquippableItem = null
 	if is_instance_valid(source_entity.hands.equipped_item): equipped_item = source_entity.hands.equipped_item
 
 	if equipped_item != null and equipped_item == source_item:
-		_find_target_receivers()
 		global_position = equipped_item.proj_origin_node.global_position.rotated(equipped_item.rotation)
-		global_rotation = equipped_item.global_rotation
+		global_rotation = equipped_item.global_rotation + rotation_offset
 
 		beam_particles.position = points[1] * 0.5
 		beam_particles.emission_rect_extents.x = points[1].length() * 0.5
+		beam_particles.emitting = true
+
+		_find_target_receivers()
+
+		points[1] = end_point
 	else:
 		queue_free()
 
@@ -89,6 +127,7 @@ func _find_target_receivers() -> void:
 			exclusion_list.append(child.get_rid())
 
 	var remaining_pierces = stats.hitscan_pierce_count
+	var pierce_list: Dictionary ={}
 
 	while remaining_pierces >= 0:
 		var query = PhysicsRayQueryParameters2D.new()
@@ -106,11 +145,14 @@ func _find_target_receivers() -> void:
 		if result:
 			var obj: Node = result.collider
 			var collision_point: Vector2 = result.position
-			points[1] = to_local(collision_point)
+
+			pierce_list[obj] = result
+
+			is_hitting_something = true
+			end_point = to_local(collision_point)
 
 			impact_particles.position = to_local(collision_point)
-			impact_particles.rotation = -(collision_point - global_position).angle()
-			impact_particles.emitting = true
+			impact_particles.global_rotation = result.normal.angle()
 
 			if obj and _is_valid_receiver(obj):
 				candidates.append(obj)
@@ -131,10 +173,10 @@ func _find_target_receivers() -> void:
 				remaining_pierces = -1
 				debug_ray_info["to"] = collision_point
 		else:
-			points[1] = to_local(to_pos)
-			impact_particles.emitting = false
+			is_hitting_something = false
 			remaining_pierces = -1
 		debug_rays.append(debug_ray_info)
+		end_point = to_local(to_pos)
 
 	if effect_tick_timer.is_stopped():
 		for i in range(candidates.size()):
@@ -143,7 +185,6 @@ func _find_target_receivers() -> void:
 			var effect_receiver: EffectReceiverComponent = receiver.get_node_or_null("EffectReceiverComponent")
 			if effect_receiver != null:
 				_start_being_handled(effect_receiver, contact_positions[receiver_index])
-				end_point = contact_positions[receiver_index]
 
 				candidates.remove_at(receiver_index)
 				contact_positions.remove_at(receiver_index)
@@ -153,6 +194,8 @@ func _find_target_receivers() -> void:
 					effect_tick_timer.start(1000.0)
 				else:
 					effect_tick_timer.start(stats.hitscan_effect_interval)
+
+	_update_impact_particles(pierce_list)
 
 ## Checks if a receiver of the ray is something we are even allowed to target.
 func _is_valid_receiver(obj: Node) -> bool:
@@ -171,6 +214,24 @@ func _select_closest_receiver(targets: Array[Node]) -> int:
 			closest_distance_squared = distance_squared
 			closest_target = i
 	return closest_target
+
+func _update_impact_particles(pierce_list: Dictionary) -> void:
+	for node in pierce_list.keys():
+		if node in impacted_nodes:
+			impacted_nodes[node].position = to_local(pierce_list[node].position)
+			impacted_nodes[node].global_rotation = pierce_list[node].normal.angle()
+		else:
+			var particles: CPUParticles2D = impact_particles.duplicate()
+			particles.position = to_local(pierce_list[node].position)
+			particles.global_rotation = pierce_list[node].normal.angle()
+			impacted_nodes[node] = particles
+			add_child(particles)
+			particles.emitting = true
+
+	for node in impacted_nodes:
+		if not node in pierce_list.keys():
+			impacted_nodes[node].queue_free()
+			impacted_nodes.erase(node)
 
 ## Overrides parent method. When we overlap with an entity who can accept effect sources, pass the effect source to that
 ## entity's handler. Note that the effect source is duplicated on hit so that we can include unique info like move dir.

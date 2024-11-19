@@ -9,6 +9,7 @@ class_name PlayerCamera
 @export var drag_horizontal: float = 0.2 ## The horizontal ratio of screen to allow shown ahead of the player before moving the camera.
 
 var shake_strength: float = 0 ## The current shake strength of the camera. Automatically decremented over time once set.
+var persistent_shake_strength: float = 0 ## The amount of persistent strength that must be manually removed and does not lerp down.
 var shake_time: float = 0 ## How long the shake strength should take to return to 0. Can be updated on the fly.
 var shake_tween: Tween = null ## Tween for automatically decreasing the camera shake strength.
 const MAX_SHAKE_STRENGTH: float = 30.0 ## The max amount of cumulative shake strength this camera can have at any given time.
@@ -21,8 +22,9 @@ func _ready() -> void:
 
 ## Runs positioning logic for every physics frame. Also checks if shake is needed and automatically decrements it.
 func _physics_process(delta: float) -> void:
-	if shake_strength > 0:
-		offset = Vector2(randf_range(-shake_strength, shake_strength), randf_range(-shake_strength, shake_strength))
+	if shake_strength + persistent_shake_strength > 0:
+		var strength: float = shake_strength + persistent_shake_strength
+		offset = Vector2(randf_range(-strength, strength), randf_range(-strength, strength))
 	if shake_time > 0:
 		shake_time -= delta
 
@@ -61,6 +63,13 @@ func start_shake(strength: float, shake_duration: float) -> void:
 			shake_tween.kill()
 		shake_tween = create_tween()
 		shake_tween.tween_property(self, "shake_strength", 0.0, shake_time)
+
+## Updates the persistent shake strength that does not decrease over time.
+func update_persistent_shake_strength(strength: float) -> void:
+	persistent_shake_strength = max(0, persistent_shake_strength + strength)
+
+func reset_persistent_shake_strength() -> void:
+	persistent_shake_strength = 0
 
 ## Starts a freeze/slow effect for the whole engine.
 func start_freeze(time_multiplier: float, freeze_duration: float) -> void:

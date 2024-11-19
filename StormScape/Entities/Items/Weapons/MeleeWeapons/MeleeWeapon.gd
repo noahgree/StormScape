@@ -19,7 +19,7 @@ const HOLDING_THRESHOLD: float = 0.1
 func _set_stats(new_stats: ItemResource) -> void:
 	stats = new_stats
 	s_stats = stats.duplicate()
-	source_slot.item.stats = s_stats
+	source_slot.synced_inv.update_an_item_stats(source_slot.index, s_stats)
 
 	if hitbox_component:
 		hitbox_component.effect_source = s_stats.effect_source

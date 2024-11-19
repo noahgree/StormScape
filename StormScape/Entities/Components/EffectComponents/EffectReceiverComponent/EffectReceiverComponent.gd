@@ -69,7 +69,6 @@ func handle_effect_source(effect_source: EffectSource, source_entity: PhysicsBod
 			GlobalData.player_camera.start_freeze(effect_source.cam_freeze_multiplier, effect_source.cam_freeze_duration)
 
 	if effect_source.base_damage > 0 and has_node("DmgHandler"):
-		print(effect_source.base_damage)
 		if _check_same_team(source_entity) and _check_if_bad_effects_apply_to_allies(effect_source):
 			$DmgHandler.handle_instant_damage(effect_source)
 		elif not _check_same_team(source_entity) and _check_if_bad_effects_apply_to_enemies(effect_source):

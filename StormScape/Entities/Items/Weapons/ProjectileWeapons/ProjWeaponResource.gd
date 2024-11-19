@@ -9,7 +9,7 @@ enum ProjWeaponType { ## The kinds of projectile weapons.
 @export_group("General")
 @export var proj_weapon_type: ProjWeaponType = ProjWeaponType.PISTOL ## The kind of projectile weapon this is.
 @export var projectile: PackedScene ## The projectile scene to spawn on firing.
-@export var projectile_data: ProjectileResource = ProjectileResource.new() ## The logic passed to the projectile for how to behave.
+@export var projectile_logic: ProjectileResource = ProjectileResource.new() ## The logic passed to the projectile for how to behave.
 @export_enum("Semi Auto", "Auto", "Charge") var firing_mode: String = "Semi Auto" ## Whether the weapon should fire projectiles once per click or allow holding down for auto firing logic.
 @export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var initial_shot_delay: float = 0 ## How long after we initiate a firing should we wait before the shot releases.
 @export_range(0.03, 10, 0.01, "hide_slider", "or_greater", "suffix:seconds") var auto_fire_delay: float = 0.1 ## Time between fully auto projectile emmision. Also the minimum time that must elapse between clicks if set to semi-auto.
@@ -25,18 +25,9 @@ enum ProjWeaponType { ## The kinds of projectile weapons.
 
 @export_group("Hitscan Options")
 @export var use_hitscan: bool = false ## Whether to use hitscan firing and spawn the hitscan scene instead of the main projectile.
-@export var hitscan: PackedScene ## The hitscan scene to spawn when using hitscan firing.
-@export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var hitscan_duration: float = 0 ## The time the hitscan ray is scanning.
-@export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var hitscan_effect_interval: float = -1 ## How long after we last did damage should we do it again. '-1' means only once.
-@export_custom(PROPERTY_HINT_NONE, "suffix:pixels") var hitscan_max_width: float = 0.5 ## The max width the hitscan ray will be when affected by the width curve.
-@export var hitscan_width_curve: Curve = Curve.new() ## The change in width of the hitscan ray over its distance.
-@export var hitscan_pierce_count: int = 0 ## How many objects the hitscan can pierce through.
-@export_custom(PROPERTY_HINT_NONE, "suffix:pixels") var hitscan_max_distance: int = 200 ## The max distance the hitscan ray can travel.
-@export_subgroup("Hitscan Falloff")
-@export var hitscan_falloff_curve: Curve = Curve.new() ## The falloff for the effects applied to the receiver of the hitscan.
-@export var bad_effects_falloff: bool = true ## Whether the bad effects of the effect source falloff.
-@export var good_effects_falloff: bool = false ## Whether the good effects of the effect source falloff.
-
+@export var allow_hitscan_holding: bool = true ## Whether to keep the hitscan on and continue to consume ammo while the trigger is held.
+@export var hitscan_logic: HitscanResource ## The resource containing information on how to fire and operate the hitscan.
+@export var charged_hitscan_logic: HitscanResource ## The resource containing information on how to fire and operate the hitscan when charged.
 
 @export_group("Ammo & Reloading")
 @export var ammo_type: GlobalData.ProjAmmoType = GlobalData.ProjAmmoType.LIGHT ## The kind of ammo to consume on use.
@@ -46,7 +37,8 @@ enum ProjWeaponType { ## The kinds of projectile weapons.
 @export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var single_proj_reload_time: float = 0.25 ## How long it takes to reload a single projectile if the reload type is set to "single".
 @export var stamina_use_per_proj: float = 0.5 ## How much stamina is needed per projectile when stamina is the ammo type.
 @export_subgroup("Reloading FX")
-@export var reload_sound: String = "" ## The sound to play when reloading.
+@export var mag_reload_sound: String = "" ## The sound to play when reloading a whole mag.
+@export var proj_reload_sound: String = "" ## The sound to play when reloading a single projectile.
 @export var empty_mag_sound: String = "" ## The sound to play when trying to fire with no ammo left.
 
 @export_group("Blooming Logic")
@@ -67,7 +59,7 @@ enum ProjWeaponType { ## The kinds of projectile weapons.
 @export var ammo_use_per_charge: int = 3 ## How much ammo to consume on charge shots. Overrides all burst and barrage consumption to consume this amount no matter what.
 @export var charge_bloom_mult: float = 5.0 ## How much more should one charge shot count towards current bloom.
 @export var charge_projectile: PackedScene = null ## Overrides the normal projectile scene for charge shots.
-@export var charge_projectile_data: ProjectileResource = null ## Overrides the normal projectile data for charge shots.
+@export var charge_projectile_logic: ProjectileResource = null ## Overrides the normal projectile data for charge shots.
 @export var charge_effect_source: EffectSource = null ## Overrides the normal effect source for charge shots.
 @export var has_charge_fire_anim: bool = false ## If false, we can duplicate the regular fire anim and keep the speed scale.
 @export_subgroup("Entity Effects")
@@ -85,7 +77,7 @@ enum ProjWeaponType { ## The kinds of projectile weapons.
 
 @export_group("Barrage Logic")
 @export var barrage_count: int = 1 ## Number of projectiles fired at 'angular-spread' degrees apart for each execute. Only applies when angular spread is greater than 0.
-@export_range(0, 360, 0.1, "suffix:degrees") var angluar_spread = 10 ## Angular spread of barrage projectiles in degrees.
+@export_range(0, 360, 0.1, "suffix:degrees") var angluar_spread = 25 ## Angular spread of barrage projectiles in degrees.
 
 
 # Unique Properties #
