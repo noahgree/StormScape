@@ -78,7 +78,8 @@ func on_equipped_item_change(inv_item_slot: Slot) -> void:
 		return
 
 	equipped_item = EquippableItem.create_from_slot(inv_item_slot)
-	hands_anchor.scale = Vector2(1, 1)
+	_update_anchor_scale("x", 1)
+	_update_anchor_scale("y", 1)
 	get_parent().move_fsm.rotation_lerping_factor = equipped_item.stats.rotation_lerping
 	scale_is_lerping = false
 	been_holding_time = 0
@@ -112,19 +113,16 @@ func on_equipped_item_change(inv_item_slot: Slot) -> void:
 ## Based on the current anim vector, we artificially move the rotation of the hands over before the items to simulate
 ## a pullout animation.
 func _prep_for_pullout_anim() -> void:
-	var adjustment: float = 0
-	if equipped_item is MeleeWeapon: adjustment = equipped_item.stats.swing_angle
-
 	if _get_anim_vector().x > 0:
 		if _get_anim_vector().y > 0:
-			hands_anchor.global_rotation += (PI - 0.5 + adjustment)
+			hands_anchor.global_rotation = PI/4
 		else:
-			hands_anchor.global_rotation += (PI + 0.5 - adjustment)
+			hands_anchor.global_rotation = -PI/4
 	else:
 		if _get_anim_vector().y > 0:
-			hands_anchor.global_rotation -= (PI - 0.5 + adjustment)
+			hands_anchor.global_rotation = PI/2
 		else:
-			hands_anchor.global_rotation -= (PI + 0.5 - adjustment)
+			hands_anchor.global_rotation = -PI/2
 
 func _physics_process(_delta: float) -> void:
 	if equipped_item == null:
@@ -221,6 +219,10 @@ func _handle_y_scale_lerping(anim_vector: Vector2) -> void:
 	_update_anchor_scale("y", lerp(hands_anchor.scale.y, -1.0 if current_x_direction == -1 else 1.0, 0.22))
 
 func snap_y_scale() -> void:
+	if _get_anim_vector().x > 0.12:
+		current_x_direction = 1
+	elif _get_anim_vector().x < -0.12:
+		current_x_direction = -1
 	_update_anchor_scale("y", -1.0 if current_x_direction == -1 else 1.0)
 
 func _update_anchor_scale(coord: String, new_value: float) -> void:

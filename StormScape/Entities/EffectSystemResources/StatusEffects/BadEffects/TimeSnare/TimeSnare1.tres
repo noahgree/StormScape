@@ -7,12 +7,11 @@
 script = ExtResource("1_6of7d")
 time_multiplier = 0.5
 snare_time = 3.0
-handler_type = 7
-effect_name = "TimeSnare"
+effect_name = "Time Snare"
 effect_lvl = 1
 is_bad_effect = true
 effects_to_stop = Array[String]([])
+mod_time = 5.0
+stat_mods = Array[ExtResource("2_qu0hr")]([])
 audio_to_play = ""
 only_cue_on_player_hit = false
-mod_time = 3.0
-stat_mods = Array[ExtResource("2_qu0hr")]([])

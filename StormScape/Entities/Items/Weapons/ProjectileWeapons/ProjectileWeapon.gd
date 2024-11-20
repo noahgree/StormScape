@@ -258,7 +258,10 @@ func _set_up_hitscan(was_charge_fire: bool = false) -> void:
 	if not s_stats.use_hitscan:
 		hitscan_delay = 0
 	else:
-		hitscan_delay = s_stats.hitscan_logic.hitscan_duration if not was_charge_fire else s_stats.charged_hitscan_logic.hitscan_duration
+		if not s_stats.allow_hitscan_holding:
+			hitscan_delay = s_stats.hitscan_logic.hitscan_duration if not was_charge_fire else s_stats.charged_hitscan_logic.hitscan_duration
+		else:
+			hitscan_delay = 0
 
 func _clean_up_hitscans() -> void:
 	if not current_hitscans.is_empty():

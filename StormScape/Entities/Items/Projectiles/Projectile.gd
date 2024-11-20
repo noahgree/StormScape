@@ -4,7 +4,8 @@ class_name Projectile
 ## to do being set by whatever spawns the projectile.
 
 @export var whiz_sound: String = "" ## The sound to play when whizzing by the player.
-@export_range(0, 100, 0.1, "suffix:%") var glow_strength: float = 0 ## How strong the glow should be.
+@export_custom(PROPERTY_HINT_NONE, "suffix:pixels") var whiz_sound_distance: int = 25 ## The max distance from the player that the whiz sound will still play.
+@export_range(0, 500, 0.1, "suffix:%") var glow_strength: float = 0 ## How strong the glow should be.
 @export var glow_color: Color = Color(1, 1, 1) ## The color of the glow.
 @export var impact_vfx: PackedScene = null ## The VFX to spawn at the site of impact. Could be a decal or something.
 @export var impact_sound: String = "" ## The sound to play at the site of impact.
@@ -23,6 +24,7 @@ var homing_timer: Timer = Timer.new() ## Timer to control homing duration.
 var homing_delay_timer: Timer = Timer.new() ## Timer for homing start delay.
 var initial_boost_timer: Timer = Timer.new() ## The timer that tracks how long we have left in an initial boost.
 var current_sampled_speed: float = 0 ## The current speed pulled from the speed curve.
+var true_current_speed: float = 0 ## The real current speed calculated from change in position over time.
 var current_initial_boost: float = 1.0 ## If we need to boost at the start, this tracks the current boost.
 var cumulative_distance: float = 0 ## The cumulative distance we have travelled since spawning.
 var previous_position: Vector2 ## A temp variable for holding previous position. Used in movement direction calculation.
@@ -48,6 +50,7 @@ var bounces_so_far: int = 0 ## The number of times so far that we have bounced o
 var is_homing_active: bool = false ## Indicates if homing is currently active.
 var homing_target: Node = null ## The current homing target.
 var mouse_scan_targets: Array[Node] ## The current list of targets in range of the mouse click for the mouse position homing.
+var played_whiz_sound: bool = false ## Whether this has already played the whiz sound once or not.
 var debug_homing_rays: Array[Dictionary] = [] ## An array of debug info about the FOV homing method raycasts.
 var debug_recent_hit_location: Vector2 ## The location of the most recent point we hit something.
 #endregion
@@ -58,6 +61,7 @@ func _on_before_load_game() -> void:
 	queue_free()
 #endregion
 
+#region Core
 ## Creates a projectile and assigns its needed variables in a specific order. Then it returns it.
 static func create(proj_scene: PackedScene, proj_stats: ProjectileResource, effect_src: EffectSource,
 				src_entity: PhysicsBody2D, pos: Vector2, rot: float) -> Projectile:
@@ -110,6 +114,7 @@ func _ready() -> void:
 	z_index = 0
 	shadow.visible = false
 	previous_position = global_position
+	sprite.self_modulate = glow_color * (1.0 + (glow_strength / 100.0))
 
 	add_child(lifetime_timer)
 	add_child(splash_effect_delay_timer)
@@ -149,6 +154,7 @@ func _enable_collider() -> void:
 ## Disables the main projectile collider.
 func _disable_collider() -> void:
 	collider.disabled = true
+#endregion
 
 #region General
 ## Assigns a random spin direction if we need one, otherwise picks from the pre-chosen direction.
@@ -197,6 +203,7 @@ func _physics_process(delta: float) -> void:
 		_split_self()
 
 	movement_direction = (global_position - previous_position).normalized()
+	_check_for_whiz_sound()
 
 	if DebugFlags.Projectiles.show_homing_rays or DebugFlags.Projectiles.show_collision_points or DebugFlags.Projectiles.show_homing_targets or DebugFlags.Projectiles.show_movement_dir:
 		queue_redraw()
@@ -218,7 +225,9 @@ func _do_projectile_movement(delta: float) -> void:
 		else:
 			position += Vector2(cos(starting_rotation), sin(starting_rotation)).normalized() * current_sampled_speed * delta
 
-	cumulative_distance += previous_position.distance_to(global_position)
+	var distance_change: float = previous_position.distance_to(global_position)
+	cumulative_distance += distance_change
+	true_current_speed = distance_change / delta
 
 	_update_shadow(global_position, movement_direction)
 
@@ -601,6 +610,7 @@ func _assign_new_collider_shape(new_shape: Shape2D) -> void:
 	_enable_collider()
 #endregion
 
+#region Lifetime & Handling
 ## When the lifetime ends, either start an AOE or queue free.
 func _on_lifetime_timer_timeout() -> void:
 	if stats.splash_radius > 0 and stats.splash_before_freeing:
@@ -686,3 +696,14 @@ func _get_effect_source_adjusted_for_falloff(effect_src: EffectSource, handling_
 				falloff_effect_src.status_effects[i] = new_stat_effect
 
 	return falloff_effect_src
+#endregion
+
+func _check_for_whiz_sound() -> void:
+	if true_current_speed > 150:
+		if not played_whiz_sound and GlobalData.player_node != null:
+			var player: Player = GlobalData.player_node
+			if (player.global_position - global_position).dot(movement_direction) > 20:
+				if global_position.distance_squared_to(player.global_position) < pow(whiz_sound_distance, 2):
+					if whiz_sound != "":
+						AudioManager.play_sound(whiz_sound, AudioManager.SoundType.SFX_2D, global_position)
+						played_whiz_sound = true

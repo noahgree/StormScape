@@ -7,6 +7,8 @@ func update_editor_children_exports(node: EffectReceiverComponent, children: Arr
 			node.dmg_handler = child
 		if child is HealHandler:
 			node.heal_handler = child
+		if child is StormSyndromeHandler:
+			node.storm_syndrome_handler = child
 		if child is KnockbackHandler:
 			node.knockback_handler = child
 		if child is StunHandler:
@@ -27,3 +29,5 @@ func update_editor_parent_export(node: EffectReceiverComponent, parent: Node) ->
 		node.affected_entity = parent
 	if parent.has_node("HealthComponent"):
 		node.health_component = parent.get_node("HealthComponent")
+	if parent.has_node("StaminaComponent"):
+		node.stamina_component = parent.get_node("StaminaComponent")

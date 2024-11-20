@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="ProjWeaponResource" load_steps=28 format=3 uid="uid://ciel2rrqq4dvv"]
+[gd_resource type="Resource" script_class="ProjWeaponResource" load_steps=27 format=3 uid="uid://ciel2rrqq4dvv"]
 
 [ext_resource type="Script" path="res://Entities/EffectSystemResources/EffectSources/EffectSource.gd" id="1_2i3xb"]
 [ext_resource type="Script" path="res://Entities/Items/Weapons/ProjectileWeapons/ProjWeaponResource.gd" id="1_7bjnk"]
@@ -10,7 +10,6 @@
 [ext_resource type="Script" path="res://Entities/Components/StatModComponents/StatModsCacheResource.gd" id="5_lsump"]
 [ext_resource type="Script" path="res://Entities/Items/Hitscans/HitscanResource.gd" id="5_qsiix"]
 [ext_resource type="PackedScene" uid="uid://baxpb3crwepc0" path="res://Entities/Items/Weapons/ProjectileWeapons/LaserGun/LaserGun.tscn" id="6_gbfef"]
-[ext_resource type="Resource" uid="uid://b0it5xmpw16sd" path="res://Entities/EffectSystemResources/StatusEffects/BadEffects/Knockback/Knockback1.tres" id="6_ws8vr"]
 [ext_resource type="Script" path="res://Entities/Items/Projectiles/ProjectileResource.gd" id="9_bgryc"]
 
 [sub_resource type="Curve" id="Curve_kfl3v"]
@@ -69,7 +68,7 @@ cam_shake_duration = 0.0
 cam_freeze_multiplier = 1.0
 cam_freeze_duration = 0.0
 impact_sound = ""
-status_effects = Array[ExtResource("2_mu3cd")]([ExtResource("6_ws8vr")])
+status_effects = Array[ExtResource("2_mu3cd")]([])
 contact_position = Vector2(0, 0)
 movement_direction = Vector2(0, 0)
 
@@ -125,7 +124,7 @@ max_ricochet = 0
 ricochet_angle_bounce = true
 homing_method = "None"
 homing_speed_mult = 1.0
-max_turn_rate = 225.0
+max_turn_rate = 200.0
 homing_fov_angle = 180.0
 homing_max_range = 850
 homing_duration = -1.0
@@ -136,7 +135,7 @@ mouse_target_radius = 50.0
 spin_speed = 0.0
 spin_both_ways = false
 spin_direction = "Forward"
-move_in_rotated_dir = false
+move_in_rotated_dir = true
 shadow_matches_spin = false
 launch_angle = 0.0
 arc_travel_distance = 125
@@ -190,7 +189,7 @@ firing_cam_shake_dur = 0.3
 firing_cam_freeze_mult = 1.0
 firing_cam_freeze_dur = 0.0
 firing_sound = ""
-use_hitscan = false
+use_hitscan = true
 allow_hitscan_holding = true
 hitscan_logic = SubResource("Resource_2dr82")
 charged_hitscan_logic = SubResource("Resource_sb45i")
@@ -203,7 +202,7 @@ stamina_use_per_proj = 0.5
 mag_reload_sound = ""
 proj_reload_sound = ""
 empty_mag_sound = ""
-max_bloom = 100.0
+max_bloom = 15.0
 bloom_curve = SubResource("Curve_kfl3v")
 bloom_increase_rate = SubResource("Curve_mls34")
 bloom_decrease_rate = SubResource("Curve_7cqvo")

@@ -17,6 +17,7 @@ class_name EffectReceiverComponent
 @export_subgroup("Handlers")
 @export var dmg_handler: DmgHandler
 @export var heal_handler: HealHandler
+@export var storm_syndrome_handler: StormSyndromeHandler
 @export var knockback_handler: KnockbackHandler
 @export var stun_handler: StunHandler
 @export var poison_handler: PoisonHandler
@@ -125,6 +126,7 @@ func handle_status_effect(status_effect: StatusEffect) -> void:
 
 ## Passes the status effect to a handler if one is needed for additional logic handling.
 func _pass_effect_to_handler(status_effect: StatusEffect) -> void:
+	if storm_syndrome_handler and status_effect is StormSyndromeEffect: storm_syndrome_handler.handle_storm_syndrome(status_effect)
 	if knockback_handler and status_effect is KnockbackEffect: knockback_handler.handle_knockback(status_effect)
 	if stun_handler and status_effect is StunEffect: stun_handler.handle_stun(status_effect)
 	if poison_handler and status_effect is PoisonEffect: poison_handler.handle_poison(status_effect)

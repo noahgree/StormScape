@@ -2,8 +2,7 @@ extends Resource
 class_name ProjectileResource
 
 @export_group("General")
-@export var speed: int = 500 ## The highest speed the projectile can travel in.
-
+@export var speed: int = 350 ## The highest speed the projectile can travel in.
 @export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var initial_boost_time: float = 0 ## The duration of any initial boost we want to start with on.
 @export var initial_boost_mult: float = 2.0 ## The speed multiplier for the initial boost, if any.
 @export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var lifetime: float = 3 ## The max time this projectile can be in the air.

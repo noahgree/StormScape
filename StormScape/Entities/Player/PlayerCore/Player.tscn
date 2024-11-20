@@ -1,4 +1,4 @@
-[gd_scene load_steps=202 format=3 uid="uid://dba8mrurjlekp"]
+[gd_scene load_steps=203 format=3 uid="uid://dba8mrurjlekp"]
 
 [ext_resource type="Script" path="res://Entities/Player/PlayerCore/Player.gd" id="1_m33tt"]
 [ext_resource type="Script" path="res://Entities/Components/StatModComponents/StatModsCacheResource.gd" id="2_vyeuy"]
@@ -24,6 +24,7 @@
 [ext_resource type="PackedScene" uid="uid://depnx3pnassrq" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/BurningHandler.tscn" id="14_q2ueb"]
 [ext_resource type="Script" path="res://Entities/Player/States/MoveStates/Stunned/Stunned.gd" id="15_eiig3"]
 [ext_resource type="PackedScene" uid="uid://cueo26qpyouhj" path="res://Entities/EntityCore/EntityTypes/DynamicEntity/MoveStateMachine/MoveStateMachine.tscn" id="16_xoncr"]
+[ext_resource type="PackedScene" uid="uid://csrq1m4rp52vf" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/StormSyndromeHandler.tscn" id="17_2cms1"]
 [ext_resource type="Script" path="res://Entities/Player/States/MoveStates/Spawn/Spawn.gd" id="17_fwsnm"]
 [ext_resource type="Script" path="res://Utilities/Debug/TestButtons.gd" id="17_vdk5v"]
 [ext_resource type="Script" path="res://Entities/Player/States/MoveStates/Die/Die.gd" id="18_jcofa"]
@@ -1604,12 +1605,13 @@ stats_ui = NodePath("../PlayerUILayer/PlayerStatsOverlay")
 [node name="StaminaComponent" parent="." node_paths=PackedStringArray("stats_ui") instance=ExtResource("5_k4fu6")]
 stats_ui = NodePath("../PlayerUILayer/PlayerStatsOverlay")
 
-[node name="EffectReceiverComponent" parent="." node_paths=PackedStringArray("affected_entity", "health_component", "stamina_component", "dmg_handler", "heal_handler", "knockback_handler", "stun_handler", "poison_handler", "regen_handler", "frostbite_handler", "burning_handler", "time_snare_handler") instance=ExtResource("4_hhm8x")]
+[node name="EffectReceiverComponent" parent="." node_paths=PackedStringArray("affected_entity", "health_component", "stamina_component", "dmg_handler", "heal_handler", "storm_syndrome_handler", "knockback_handler", "stun_handler", "poison_handler", "regen_handler", "frostbite_handler", "burning_handler", "time_snare_handler") instance=ExtResource("4_hhm8x")]
 affected_entity = NodePath("..")
 health_component = NodePath("../HealthComponent")
 stamina_component = NodePath("../StaminaComponent")
 dmg_handler = NodePath("DmgHandler")
 heal_handler = NodePath("HealHandler")
+storm_syndrome_handler = NodePath("StormSyndromeHandler")
 knockback_handler = NodePath("KnockbackHandler")
 stun_handler = NodePath("StunHandler")
 poison_handler = NodePath("PoisonHandler")
@@ -1626,6 +1628,8 @@ debug_color = Color(1, 0.294, 0.588, 0.06)
 [node name="DmgHandler" parent="EffectReceiverComponent" instance=ExtResource("5_g3ixu")]
 
 [node name="HealHandler" parent="EffectReceiverComponent" instance=ExtResource("6_5e1ju")]
+
+[node name="StormSyndromeHandler" parent="EffectReceiverComponent" instance=ExtResource("17_2cms1")]
 
 [node name="KnockbackHandler" parent="EffectReceiverComponent" instance=ExtResource("7_k0pv8")]
 

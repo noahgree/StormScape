@@ -80,7 +80,11 @@ func handle_over_time_dmg(dot_resource: DOTResource, source_type: String) -> voi
 		delay_timer.wait_time = dot_resource.delay_time
 
 		dot_timer.set_meta("ticks_completed", 0)
-		dot_timer.wait_time = max(0.001, (dot_resource.damaging_time / (dot_resource.dmg_ticks_array.size() - 1)))
+
+		if not dot_resource.run_until_removed:
+			dot_timer.wait_time = max(0.01, (dot_resource.damaging_time / (dot_resource.dmg_ticks_array.size() - 1)))
+		else:
+			dot_timer.wait_time = max(0.01, dot_resource.time_between_ticks)
 
 		delay_timer.timeout.connect(func(): _on_dot_timer_timeout(dot_timer, source_type))
 		delay_timer.timeout.connect(dot_timer.start)
@@ -92,7 +96,11 @@ func handle_over_time_dmg(dot_resource: DOTResource, source_type: String) -> voi
 		_add_timer_to_cache(source_type, delay_timer, dot_delay_timers)
 	else: # there is no delay needed
 		dot_timer.set_meta("ticks_completed", 1)
-		dot_timer.wait_time = max(0.001, (dot_resource.damaging_time / (dot_resource.dmg_ticks_array.size())))
+
+		if not dot_resource.run_until_removed:
+			dot_timer.wait_time = max(0.001, (dot_resource.damaging_time / (dot_resource.dmg_ticks_array.size())))
+		else:
+			dot_timer.wait_time = max(0.01, dot_resource.time_between_ticks)
 
 		_send_handled_dmg(dot_resource.dmg_affected_stats, dot_resource.dmg_ticks_array[0])
 		_add_timer_to_cache(source_type, dot_timer, dot_timers)
@@ -132,17 +140,23 @@ func _delete_timers_from_caches(source_type: String) -> void:
 func _on_dot_timer_timeout(dot_timer: Timer, source_type: String) -> void:
 	var dot_resource: DOTResource = dot_timer.get_meta("dot_resource")
 	var ticks_completed: int = dot_timer.get_meta("ticks_completed")
-	var max_ticks: int = dot_resource.dmg_ticks_array.size()
-	if ticks_completed < max_ticks:
-		var damage: int = dot_resource.dmg_ticks_array[ticks_completed]
-		var dmg_affected_stats: GlobalData.DmgAffectedStats = dot_resource.dmg_affected_stats
+	var dmg_affected_stats: GlobalData.DmgAffectedStats = dot_resource.dmg_affected_stats
+
+	if dot_resource.run_until_removed:
+		var damage: int = dot_resource.dmg_ticks_array[0]
 		_send_handled_dmg(dmg_affected_stats, damage)
 		dot_timer.set_meta("ticks_completed", ticks_completed + 1)
-
-		if max_ticks == 1:
-			_delete_timers_from_caches(source_type)
 	else:
-		_delete_timers_from_caches(source_type)
+		var damage: int = dot_resource.dmg_ticks_array[ticks_completed]
+		var max_ticks: int = dot_resource.dmg_ticks_array.size()
+		if ticks_completed < max_ticks:
+			_send_handled_dmg(dmg_affected_stats, damage)
+			dot_timer.set_meta("ticks_completed", ticks_completed + 1)
+
+			if max_ticks == 1:
+				_delete_timers_from_caches(source_type)
+		else:
+			_delete_timers_from_caches(source_type)
 
 ## Sends the affected entity's health component the final damage values based on what stats the damage was
 ## allowed to affect.
