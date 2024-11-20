@@ -1,4 +1,4 @@
-[gd_scene load_steps=50 format=4 uid="uid://bscnr6a23l10m"]
+[gd_scene load_steps=53 format=4 uid="uid://bscnr6a23l10m"]
 
 [ext_resource type="Script" path="res://Utilities/Game/WorldRoot/WorldRoot.gd" id="1_q0i4n"]
 [ext_resource type="Script" path="res://Stages/World/BackgroundMusicManager.gd" id="1_q5pr2"]
@@ -21,11 +21,12 @@
 [ext_resource type="PackedScene" uid="uid://depnx3pnassrq" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/BurningHandler.tscn" id="14_fmrr1"]
 [ext_resource type="Script" path="res://Entities/EffectSystemResources/EffectSources/EffectSource.gd" id="14_pdlrm"]
 [ext_resource type="Resource" uid="uid://c050ytbbmgfem" path="res://Entities/EffectSystemResources/StatusEffects/BadEffects/Slowness/Slowness1.tres" id="20_x2bj4"]
-[ext_resource type="Script" path="res://Stages/World/Storm.gd" id="22_0op7h"]
+[ext_resource type="Script" path="res://Stages/World/Storm/Storm.gd" id="22_0op7h"]
 [ext_resource type="Script" path="res://Stages/Tilemaps/TileMapDual.gd" id="22_47ykm"]
 [ext_resource type="Texture2D" uid="uid://6saycs5sisdk" path="res://Stages/Tilemaps/GrassDirt/TILESET_GRASSDIRT.png" id="22_tnvqm"]
-[ext_resource type="Shader" path="res://Stages/World/StormShader.gdshader" id="23_05otm"]
+[ext_resource type="Shader" path="res://Stages/World/Storm/StormShader.gdshader" id="23_05otm"]
 [ext_resource type="Resource" uid="uid://cucuggowaf55y" path="res://Entities/EffectSystemResources/StatusEffects/BadEffects/StormSyndrome/StormSyndrome1.tres" id="23_5x8gm"]
+[ext_resource type="Script" path="res://Stages/World/Storm/StormTransform.gd" id="25_dqjbe"]
 
 [sub_resource type="Environment" id="Environment_2wouv"]
 background_mode = 3
@@ -4210,6 +4211,23 @@ size = Vector2(14, 14)
 outline_size = 3
 outline_color = Color(0, 0, 0, 1)
 
+[sub_resource type="Resource" id="Resource_8wnlk"]
+script = ExtResource("25_dqjbe")
+new_location = Vector2(320, 170)
+new_radius = 25.0
+delay = 1.0
+time_to_move = 3.0
+time_to_resize = 5.0
+status_effect = ExtResource("23_5x8gm")
+
+[sub_resource type="Resource" id="Resource_ng2ac"]
+script = ExtResource("25_dqjbe")
+new_location = Vector2(120, 100)
+new_radius = 50.0
+delay = 2.0
+time_to_move = 8.0
+time_to_resize = 4.0
+
 [sub_resource type="CircleShape2D" id="CircleShape2D_7o6b3"]
 radius = 113.31
 
@@ -4239,18 +4257,19 @@ noise = SubResource("FastNoiseLite_goubn")
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_b4rbd"]
 shader = ExtResource("23_05otm")
-shader_parameter/circle_center_pixels = null
-shader_parameter/radius_pixels = null
-shader_parameter/viewport_size = Vector2(2694, 934)
-shader_parameter/ring_thickness = 2.0
-shader_parameter/glow_intensity = 4.0
+shader_parameter/circle_center_pixels = Vector2(0, 0)
+shader_parameter/radius_pixels = 0.0
+shader_parameter/viewport_size = Vector2(2694, 1920)
+shader_parameter/noise_world_position = null
+shader_parameter/ring_thickness = 1.6
+shader_parameter/glow_intensity = 3.3
 shader_parameter/noise_scale = 0.003
 shader_parameter/noise_speed = 0.04
 shader_parameter/glow_color = Vector4(0.5, 0.2, 0.5, 1)
-shader_parameter/noise_color_influence = Vector3(1, 0.5, 0.8)
+shader_parameter/noise_color_influence = Vector3(1, 1, 1)
 shader_parameter/pulse_speed = 4.0
-shader_parameter/pulse_intensity = 0.15
-shader_parameter/color_cycle_speed = 0.5
+shader_parameter/pulse_intensity = 0.18
+shader_parameter/color_cycle_speed = 0.65
 shader_parameter/color_cycle_amplitude = Vector3(0.2, 0.2, 0.2)
 shader_parameter/color_cycle_phase = Vector3(0, 2, 4)
 shader_parameter/gradient_texture = SubResource("GradientTexture1D_mr0tx")
@@ -4496,8 +4515,9 @@ script = ExtResource("1_q5pr2")
 [node name="Storm" type="Node2D" parent="."]
 z_index = -2
 z_as_relative = false
-position = Vector2(260, 123)
+position = Vector2(189, 143)
 script = ExtResource("22_0op7h")
+transform_queue = Array[ExtResource("25_dqjbe")]([SubResource("Resource_8wnlk"), SubResource("Resource_ng2ac")])
 current_effect = ExtResource("23_5x8gm")
 metadata/_edit_group_ = true
 
@@ -4509,15 +4529,15 @@ monitorable = false
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Storm/SafeZone"]
 shape = SubResource("CircleShape2D_7o6b3")
 
-[node name="CanvasLayer" type="CanvasLayer" parent="Storm"]
+[node name="StormCanvas" type="CanvasLayer" parent="Storm"]
 
-[node name="StormCircle" type="ColorRect" parent="Storm/CanvasLayer"]
+[node name="StormCircle" type="ColorRect" parent="Storm/StormCanvas"]
 material = SubResource("ShaderMaterial_b4rbd")
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_right = 2214.0
-offset_bottom = 664.0
+offset_bottom = 1650.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2

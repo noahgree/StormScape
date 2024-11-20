@@ -3,6 +3,8 @@ shader_type canvas_item;
 uniform vec2 circle_center_pixels;
 uniform float radius_pixels;
 uniform vec2 viewport_size;
+uniform vec2 noise_world_position;
+
 uniform float ring_thickness = 5.0;
 uniform float glow_intensity = 1.0;
 uniform float noise_scale = 0.1;
@@ -23,14 +25,15 @@ void fragment() {
     float dist = distance(screen_pos_pixels, circle_center_pixels);
 
     vec2 relative_pos = (screen_pos_pixels - circle_center_pixels) * noise_scale;
+    vec2 relative_noise_pos = (screen_pos_pixels - noise_world_position) * noise_scale;
     float time = TIME * noise_speed;
 
     // Sample first noise texture
-    vec2 noise_uv = mod(relative_pos + vec2(time, time), 1.0);
+    vec2 noise_uv = mod(relative_noise_pos + vec2(time, time), 1.0);
     float n1 = texture(noise_texture, noise_uv).r;
 
     // Sample second noise texture with a different offset
-    vec2 noise_uv2 = mod(relative_pos + vec2(-time, time), 1.0);
+    vec2 noise_uv2 = mod(relative_noise_pos + vec2(-time, time), 1.0);
     float n2 = texture(noise_texture2, noise_uv2).r;
 
     // Blend the two noise layers
