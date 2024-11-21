@@ -25,6 +25,7 @@ func _physics_process(delta: float) -> void:
 	if shake_strength + persistent_shake_strength > 0:
 		var strength: float = shake_strength + persistent_shake_strength
 		offset = Vector2(randf_range(-strength, strength), randf_range(-strength, strength))
+
 	if shake_time > 0:
 		shake_time -= delta
 

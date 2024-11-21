@@ -16,10 +16,12 @@ override_all = false
 
 [resource]
 script = ExtResource("1_h4nev")
-handler_type = 0
 effect_name = "Confusion"
 effect_lvl = 0
 is_bad_effect = true
 effects_to_stop = Array[String]([])
-mod_time = 5.0
+mod_time = 3.0
+apply_until_removed = true
 stat_mods = Array[ExtResource("2_2qesc")]([SubResource("Resource_4kxph")])
+audio_to_play = ""
+only_cue_on_player_hit = false

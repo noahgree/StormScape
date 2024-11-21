@@ -1,0 +1,30 @@
+[gd_resource type="Resource" script_class="StormVisuals" load_steps=2 format=3 uid="uid://cx6t5cil24ca3"]
+
+[ext_resource type="Script" path="res://Stages/World/Storm/StormVisuals/StormVisuals.gd" id="1_a2p73"]
+
+[resource]
+script = ExtResource("1_a2p73")
+viusal_change_time = 1.0
+see_thru_amount = 50.0
+storm_gradient_colors = Array[Color]([Color(0.772, 0.384, 0.773, 0.574), Color(0.606, 0.322, 1, 0.542), Color(0.558, 0.396, 1, 0.772), Color(0.345, 0.001, 0.829, 0.877)])
+final_color_distance = 600.0
+reflection_intensity = 0.15
+reflection_thickness = 30.0
+reflection_color = Color(0.287, 0.287, 0.287, 0.293)
+turbulence = 1.5
+ripple_intensity = 0.5
+ripple_frequency = 0.6
+ripple_speed = 0.5
+rain_amount = 50
+rain_slant = 0.15
+rain_speed = 25.0
+rain_color = Color(0.857, 0.903, 1, 0.417)
+rain_size = Vector2(0.008, 0.19)
+wind_brightness = 1.25
+ground_wind_speed = 0.2
+top_wind_speed = 2.75
+wind_reversal_factor = 0.0
+wind_spiral_factor = 0.0
+ring_glow_color = Color(0.6, 0.6, 0.6, 1)
+ring_glow_intensity = 3.0
+ring_pulse_speed = 4.0
