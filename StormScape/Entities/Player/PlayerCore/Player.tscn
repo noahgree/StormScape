@@ -1,4 +1,4 @@
-[gd_scene load_steps=205 format=3 uid="uid://dba8mrurjlekp"]
+[gd_scene load_steps=211 format=3 uid="uid://dba8mrurjlekp"]
 
 [ext_resource type="Script" path="res://Entities/Player/PlayerCore/Player.gd" id="1_m33tt"]
 [ext_resource type="Script" path="res://Entities/Components/StatModComponents/StatModsCacheResource.gd" id="2_vyeuy"]
@@ -31,7 +31,7 @@
 [ext_resource type="Script" path="res://Entities/Player/States/MoveStates/Die/Die.gd" id="18_jcofa"]
 [ext_resource type="Script" path="res://Entities/Player/States/MoveStates/Sneak/Sneak.gd" id="19_alhqe"]
 [ext_resource type="PackedScene" uid="uid://biduyqlpqhmrp" path="res://Entities/Player/States/MoveStates/Stunned/StunIndicator.tscn" id="27_fyxoi"]
-[ext_resource type="PackedScene" uid="uid://c4n604w30gx8m" path="res://Entities/Components/ItemComponents/ItemReceiverComponent.tscn" id="30_qgyag"]
+[ext_resource type="PackedScene" uid="uid://c4n604w30gx8m" path="res://Entities/Components/ItemComponents/ItemReceiverComponent/ItemReceiverComponent.tscn" id="30_qgyag"]
 [ext_resource type="PackedScene" uid="uid://ccfnvvfj0yyrq" path="res://Entities/Items/ItemCore/Item.tscn" id="31_8v2rb"]
 [ext_resource type="Script" path="res://UI/Inventory/PlayerInventory/PlayerInvCommunicator.gd" id="31_mjpan"]
 [ext_resource type="Script" path="res://UI/Inventory/PlayerInventory/PlayerInvUI.gd" id="32_3a185"]
@@ -46,8 +46,10 @@
 [ext_resource type="Texture2D" uid="uid://dwo0fuwylfxeq" path="res://UI/PlayerStatsOverlay/Assets/Stats Panel Bckgrd.png" id="36_vdy3t"]
 [ext_resource type="Texture2D" uid="uid://k0o25ihgea1n" path="res://UI/PlayerStatsOverlay/Assets/Hunger Progress Under.png" id="37_32xjt"]
 [ext_resource type="Resource" uid="uid://ciel2rrqq4dvv" path="res://Entities/Items/Weapons/ProjectileWeapons/LaserGun/LaserGun.tres" id="37_a2tah"]
+[ext_resource type="Texture2D" uid="uid://dd7trlkk62n13" path="res://Entities/Items/Ammo/pistol_bullet_default.png" id="38_60ydo"]
 [ext_resource type="Texture2D" uid="uid://bdgevpcheclv5" path="res://UI/PlayerStatsOverlay/Assets/Hunger Progress Bar.png" id="38_ht2cb"]
-[ext_resource type="PackedScene" uid="uid://b7gdy01q8wsjx" path="res://Entities/Components/ItemComponents/HandsComponent.tscn" id="39_ngono"]
+[ext_resource type="Script" path="res://Entities/Items/Ammo/ProjAmmoResource.gd" id="39_7aiab"]
+[ext_resource type="PackedScene" uid="uid://b7gdy01q8wsjx" path="res://Entities/Components/ItemComponents/HandsComponent/HandsComponent.tscn" id="39_ngono"]
 [ext_resource type="Shader" path="res://UI/Shaders/BlurBehind.gdshader" id="39_r4tgk"]
 [ext_resource type="Texture2D" uid="uid://xnppg0u7t7w4" path="res://UI/PlayerStatsOverlay/Assets/Stamina Recharge Under.png" id="39_ryeha"]
 [ext_resource type="Texture2D" uid="uid://gfbxblly7q78" path="res://UI/PlayerStatsOverlay/Assets/Stamina Recharge Bar.png" id="40_suqvl"]
@@ -69,6 +71,7 @@
 [ext_resource type="FontVariation" uid="uid://blgkcg6c83yln" path="res://Assets/Theming/Fonts/GameFontResources/ui_pixel_font.tres" id="58_eexr8"]
 [ext_resource type="Script" path="res://UI/Inventory/PlayerInventory/HotbarUI.gd" id="58_i567i"]
 [ext_resource type="Texture2D" uid="uid://f3dtce257pvb" path="res://UI/Inventory/InventoryCore/button_9_patch_dark.png" id="59_ph20g"]
+[ext_resource type="Texture2D" uid="uid://ec7bui23pv1m" path="res://Entities/Items/Weapons/MeleeWeapons/Axe/axe.png" id="66_s2r6k"]
 [ext_resource type="Texture2D" uid="uid://dtft3mljs2y5s" path="res://UI/Inventory/InventoryCore/Slot/trash_slot_icon.png" id="69_4ao77"]
 
 [sub_resource type="Resource" id="Resource_rwbul"]
@@ -1540,6 +1543,28 @@ script = ExtResource("32_ixmb3")
 stats = ExtResource("35_qbswt")
 quantity = 64
 
+[sub_resource type="Resource" id="Resource_aqdjw"]
+script = ExtResource("39_7aiab")
+ammo_type = 1
+id = "light_ammo"
+name = "Light Ammo"
+icon = ExtResource("38_60ydo")
+thumbnail = ExtResource("38_60ydo")
+is_gripped_by_one_hand = true
+rotation_lerping = 0.1
+item_type = 2
+rarity = 5
+weight = 0
+stack_size = 64
+auto_pickup = true
+pickup_radius = 4
+info = "Ammo used in light weapons like pistols."
+
+[sub_resource type="Resource" id="Resource_t7kvu"]
+script = ExtResource("32_ixmb3")
+stats = SubResource("Resource_aqdjw")
+quantity = 1
+
 [sub_resource type="Resource" id="Resource_0ta0y"]
 script = ExtResource("32_ixmb3")
 stats = ExtResource("37_a2tah")
@@ -1558,6 +1583,12 @@ shader_parameter/opacity = 0.385
 line_spacing = 0.0
 font = ExtResource("58_eexr8")
 font_color = Color(0.4, 0.223529, 0.192157, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_5ehfk"]
+line_spacing = 0.0
+outline_size = 2
+outline_color = Color(0, 0, 0, 1)
+shadow_size = 0
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_2q23q"]
 shader = ExtResource("39_r4tgk")
@@ -1715,7 +1746,7 @@ parameters/run/blendspace2d/blend_position = Vector2(0, 0)
 
 [node name="ItemReceiverComponent" parent="." node_paths=PackedStringArray("inv_populator", "ui") instance=ExtResource("30_qgyag")]
 item_scene = ExtResource("31_8v2rb")
-starting_inv = Array[ExtResource("32_ixmb3")]([SubResource("Resource_pihal"), null, SubResource("Resource_3kywt"), null, null, SubResource("Resource_kx1me"), SubResource("Resource_h68kk"), SubResource("Resource_jrr0m"), SubResource("Resource_2ijsm"), null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, SubResource("Resource_0ta0y")])
+starting_inv = Array[ExtResource("32_ixmb3")]([SubResource("Resource_pihal"), null, SubResource("Resource_3kywt"), null, null, SubResource("Resource_kx1me"), SubResource("Resource_h68kk"), SubResource("Resource_jrr0m"), SubResource("Resource_2ijsm"), null, null, null, null, null, SubResource("Resource_t7kvu"), null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, SubResource("Resource_0ta0y")])
 is_player_inv = true
 inv_size = 40
 hotbar_size = 8
@@ -2083,6 +2114,25 @@ offset_bottom = 24.0
 grow_horizontal = 0
 grow_vertical = 2
 scale = Vector2(0.5, 0.5)
+texture = ExtResource("66_s2r6k")
+
+[node name="Quantity" type="Label" parent="PlayerUILayer/ItemInteractionHUD"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -12.7143
+offset_top = -13.1428
+offset_right = -2.71427
+offset_bottom = -1.14285
+grow_horizontal = 0
+grow_vertical = 0
+scale = Vector2(0.75, 0.75)
+label_settings = SubResource("LabelSettings_5ehfk")
+horizontal_alignment = 2
+vertical_alignment = 1
 
 [node name="HotbarUI" type="NinePatchRect" parent="PlayerUILayer" node_paths=PackedStringArray("player_inv")]
 anchors_preset = 7

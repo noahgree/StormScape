@@ -23,11 +23,10 @@ func _can_drop_data(_at_position: Vector2, data: Variant) -> bool:
 ## Runs the logic for what to do when we can drop an item slot's data at the current moment. Creates physical items on the ground.
 func _drop_data(_at_position: Vector2, data: Variant) -> void:
 	var ground_item_res: ItemResource = data.item.stats
+	var ground_item_quantity: int = 1
 	if ground_item_res and data:
-		var ground_item: Item = item_scene.instantiate()
-		ground_item.stats = ground_item_res
 		if data.dragging_only_one:
-			ground_item.quantity = 1
+			ground_item_quantity = 1
 			if inventory_to_reflect.inv[data.index].quantity - 1 <= 0:
 				inventory_to_reflect.inv[data.index] = null
 			else:
@@ -37,17 +36,16 @@ func _drop_data(_at_position: Vector2, data: Variant) -> void:
 		elif data.dragging_half_stack:
 			var half_quantity: int = int(floor(data.item.quantity / 2.0))
 			var remainder: int = data.item.quantity - half_quantity
-			ground_item.quantity = half_quantity
+			ground_item_quantity = half_quantity
 
 			inventory_to_reflect.inv[data.index].quantity = remainder
 			data.item = inventory_to_reflect.inv[data.index]
 		else:
-			ground_item.quantity = data.item.quantity
+			ground_item_quantity = data.item.quantity
 			data.item = null
 			inventory_to_reflect.inv[data.index] = null
 
-		ground_item.global_position = GlobalData.player_node.global_position + Vector2(randi_range(-17, 12) + 6, randi_range(-17, 12) + 6)
-		GlobalData.world_root.get_node("Testing").add_child(ground_item)
+		Item.spawn_on_ground(ground_item_res, ground_item_quantity, GlobalData.player_node.global_position, 15)
 
 	var inv_to_reflect_main_size: int = inventory_to_reflect.inv_size - inventory_to_reflect.hotbar_size
 	if data.index >= inv_to_reflect_main_size: inventory_to_reflect.slot_updated.emit(data.index, data.item)

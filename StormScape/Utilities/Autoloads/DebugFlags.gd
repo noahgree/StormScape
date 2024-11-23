@@ -11,6 +11,7 @@ class PrintFlags:
 	static var ammo_updates: bool = false
 	static var sounds_starting: bool = false
 	static var storm_phases: bool = true
+	static var loot_table_updates: bool = false
 
 class MainMenuFlags:
 	static var skip_main_menu: bool = false

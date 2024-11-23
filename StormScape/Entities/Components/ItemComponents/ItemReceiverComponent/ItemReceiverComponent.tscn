@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://c4n604w30gx8m"]
 
-[ext_resource type="Script" path="res://Entities/Components/ItemComponents/ItemReceiverComponent.gd" id="1_whjxx"]
+[ext_resource type="Script" path="res://Entities/Components/ItemComponents/ItemReceiverComponent/ItemReceiverComponent.gd" id="1_whjxx"]
 
 [node name="ItemReceiverComponent" type="Area2D" groups=["has_save_logic"]]
 collision_layer = 256

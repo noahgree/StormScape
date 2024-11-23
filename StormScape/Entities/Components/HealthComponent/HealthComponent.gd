@@ -57,6 +57,9 @@ func damage_shield(amount: int) -> void:
 ## Handles what happens when health reaches 0 for the entity.
 func _check_for_death() -> void:
 	if health <= 0:
+		var loot_table: LootTableComponent = get_parent().get_node_or_null("LootTableComponent")
+		if loot_table != null: loot_table.handle_death()
+
 		if get_parent().has_method("die"):
 			get_parent().die()
 		else:

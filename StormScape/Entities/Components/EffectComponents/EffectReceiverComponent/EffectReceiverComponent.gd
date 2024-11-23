@@ -14,6 +14,7 @@ class_name EffectReceiverComponent
 @export var affected_entity: PhysicsBody2D  ## The connected entity to be affected by the effects be received.
 @export var health_component: HealthComponent
 @export var stamina_component: StaminaComponent
+@export var loot_table_component: LootTableComponent
 @export_subgroup("Handlers")
 @export var dmg_handler: DmgHandler
 @export var heal_handler: HealHandler
@@ -27,6 +28,8 @@ class_name EffectReceiverComponent
 @export var time_snare_handler: TimeSnareHandler
 
 @onready var tool_script: Node = $EffectReceiverToolScript
+
+var most_recent_handling: Dictionary = { "effect_source" : null, "source_entity" : null }
 
 
 ## This works with the tool script defined above to assign export vars automatically in-editor once added to the tree.
@@ -51,9 +54,10 @@ func _ready() -> void:
 ## Handles an incoming effect source, passing it to present receivers for further processing before changing
 ## entity stats.
 func handle_effect_source(effect_source: EffectSource, source_entity: PhysicsBody2D) -> void:
-	if source_entity.team == GlobalData.Teams.PASSIVE:
-		return
-	if (affected_entity is DynamicEntity) and not affected_entity.move_fsm.can_receive_effects:
+	most_recent_handling = { "effect_source" : effect_source, "source_entity" : source_entity }
+
+	if source_entity.team == GlobalData.Teams.PASSIVE or ((affected_entity is DynamicEntity) and not affected_entity.move_fsm.can_receive_effects):
+		if loot_table_component: loot_table_component.handle_effect_source(effect_source, source_entity)
 		return
 
 	if effect_source.impact_vfx != null:
@@ -72,8 +76,10 @@ func handle_effect_source(effect_source: EffectSource, source_entity: PhysicsBod
 	if effect_source.base_damage > 0 and has_node("DmgHandler"):
 		if _check_same_team(source_entity) and _check_if_bad_effects_apply_to_allies(effect_source):
 			$DmgHandler.handle_instant_damage(effect_source)
+			if loot_table_component: loot_table_component.handle_effect_source(effect_source, source_entity)
 		elif not _check_same_team(source_entity) and _check_if_bad_effects_apply_to_enemies(effect_source):
 			$DmgHandler.handle_instant_damage(effect_source)
+			if loot_table_component: loot_table_component.handle_effect_source(effect_source, source_entity)
 
 	if effect_source.base_healing > 0 and has_node("HealHandler"):
 		if effect_source.base_healing > 0:

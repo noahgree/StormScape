@@ -36,3 +36,46 @@ enum ItemRarity {
 enum ProjAmmoType {
 	NONE, LIGHT, MEDIUM, HEAVY, SHELL, ROCKET, MAGIC, ION_CHARGE, STAMINA
 }
+
+const rarity_colors: Dictionary = {
+	"ground_glow" : {
+		ItemRarity.COMMON : Color(0.617, 0.625, 0.633),
+		ItemRarity.UNCOMMON : Color(0, 0.743, 0.433),
+		ItemRarity.RARE : Color(0, 0.611, 0.98),
+		ItemRarity.EPIC : Color(0.613, 0.475, 1),
+		ItemRarity.LEGENDARY : Color(0.926, 0.605, 0),
+		ItemRarity.SINGULAR : Color(0.946, 0, 0.381)
+	},
+	"outline_color": {
+		ItemRarity.COMMON : Color(0.617, 0.625, 0.633),
+		ItemRarity.UNCOMMON : Color(0, 0.743, 0.433),
+		ItemRarity.RARE : Color(0, 0.611, 0.98),
+		ItemRarity.EPIC : Color(0.613, 0.475, 1),
+		ItemRarity.LEGENDARY : Color(0.926, 0.605, 0),
+		ItemRarity.SINGULAR : Color(0.946, 0, 0.381)
+	},
+	"tint_color" : {
+		ItemRarity.COMMON : Color(0.617, 0.625, 0.633, 0.08),
+		ItemRarity.UNCOMMON : Color(0, 0.743, 0.433, 0.13),
+		ItemRarity.RARE : Color(0, 0.611, 0.98, 0.15),
+		ItemRarity.EPIC : Color(0.613, 0.475, 1, 0.15),
+		ItemRarity.LEGENDARY : Color(0.926, 0.605, 0, 0.15),
+		ItemRarity.SINGULAR : Color(0.946, 0, 0.381, 0.19)
+	},
+	"glint_color" : {
+		ItemRarity.COMMON : Color(0.617, 0.625, 0.633),
+		ItemRarity.UNCOMMON : Color(0, 0.743, 0.433),
+		ItemRarity.RARE : Color(0, 0.611, 0.98),
+		ItemRarity.EPIC : Color(0.613, 0.475, 1),
+		ItemRarity.LEGENDARY : Color(0.926, 0.605, 0),
+		ItemRarity.SINGULAR : Color(0.946, 0, 0.381)
+	},
+	"slot_glow" : {
+		ItemRarity.COMMON : Color(1.2, 1.2, 1.2),
+		ItemRarity.UNCOMMON : Color(0, 0.9659, 0.5629),
+		ItemRarity.RARE : Color(0, 0.95, 1.55),
+		ItemRarity.EPIC : Color(0.9195, 0.7125, 1.5),
+		ItemRarity.LEGENDARY : Color(1.389, 0.9075, 0),
+		ItemRarity.SINGULAR : Color(1.419, 0, 0.5715)
+	}
+}

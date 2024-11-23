@@ -103,7 +103,7 @@ func _do_add_item_checks(index: int, inv_item: InvItemResource, item: Variant) -
 ## Combines the item into a slot that has space for that kind of item.
 func _combine_item_count_in_occupied_slot(index: int, inv_item: InvItemResource, original_item: Variant) -> void:
 	inv[index].quantity += inv_item.quantity
-	if original_item is Item: original_item.queue_free()
+	if original_item is Item: original_item.remove_from_world()
 	slot_updated.emit(index, inv[index])
 
 ## Adds what fits to an occupied slot of the same kind of item and passes the remainder to the next iteration.
@@ -117,7 +117,7 @@ func _add_what_fits_to_occupied_slot_and_continue(index: int, inv_item: InvItemR
 ## Puts the entire quantity of the given item into an empty slot. This means it was less than or equal to stack size.
 func _put_entire_quantity_in_empty_slot(index: int, inv_item: InvItemResource, original_item: Variant) -> void:
 	inv[index] = inv_item
-	if original_item is Item: original_item.queue_free()
+	if original_item is Item: original_item.remove_from_world()
 	slot_updated.emit(index, inv[index])
 
 ## This puts what fits of an item type into an empty slot and passes the remainder to the next iteration.

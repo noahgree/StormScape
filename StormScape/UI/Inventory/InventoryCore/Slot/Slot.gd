@@ -12,6 +12,7 @@ signal is_not_hovered_over() ## Emitted when a slot is no longer being hovered o
 
 @onready var item_texture: TextureRect = $TextureMargins/ItemTexture ## The item texture node for this slot.
 @onready var quantity: Label = $QuantityMargins/Quantity ## The quantity label for this slot.
+@onready var rarity_glow: TextureRect = $RarityGlow
 
 var index: int ## The index that this slot represents inside the inventory.
 var synced_inv: Inventory ## The synced inventory that this slot is a part of.
@@ -26,8 +27,11 @@ var is_trash_slot: bool = false ## The slot, that if present, is used to discard
 func _set_item(new_item) -> void:
 	item = new_item
 	if item:
-		item_texture.texture = item.stats.icon
 		if item.quantity > 0:
+			item_texture.texture = item.stats.icon
+			rarity_glow.show()
+			rarity_glow.self_modulate = GlobalData.rarity_colors.slot_glow.get(item.stats.rarity)
+
 			if item.quantity > 1:
 				quantity.text = str(item.quantity)
 			else:
@@ -36,15 +40,18 @@ func _set_item(new_item) -> void:
 			item = null
 			item_texture.texture = null
 			quantity.text = ""
+			rarity_glow.hide()
 			return
 	else:
 		item_texture.texture = null
 		quantity.text = ""
+		rarity_glow.hide()
 
 ## Connects relevant mouse entered and exited functions.
 func _ready() -> void:
 	mouse_entered.connect(func(): is_hovered_over.emit(index))
 	mouse_exited.connect(func(): is_not_hovered_over.emit())
+	rarity_glow.hide()
 
 ## Gets a reference to the data from the slot where the drag originated.
 func _get_drag_data(at_position: Vector2) -> Variant:

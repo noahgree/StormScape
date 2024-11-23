@@ -32,9 +32,9 @@ var current_storm_transform_time_timer: Timer = Timer.new() ## The timer control
 var see_through_factor: float = 1.0 ## The percentage of transparency the see-thru effect gives the player.
 var see_through_distance: float = 20.0 ## The radius of the see-thru circle for the player.
 var see_through_target_distance: float ## The radius of the see-thru circle for the player.
-var pulse_up: bool = true
-var see_through_pulse_mult: float = 6.0
-var see_through_distance_mult: float = 1.0
+var pulse_up: bool = true ## Tracking the changing pulse direction of the player's see thru effect.
+var see_through_pulse_mult: float = 1.0 ## The current multiplier for the pulsing amount on the player's see thru effect.
+var see_through_distance_mult: float = 1.0 ## The current distance multiplier for the player's see thru effect.
 var using_default_visuals: bool = false ## Whether we are currently using default visuals for the storm FX.
 var current_effect: StatusEffect ##  The up-to-date effect to apply to entities leaving the safe area while the zone is active.
 var zone_count: int = 0 ## The number of zones we have popped off the transform queue.
@@ -50,6 +50,9 @@ func _ready() -> void:
 	current_storm_transform_time_timer.one_shot = true
 	storm_change_delay_timer.timeout.connect(_on_storm_change_delay_timer_timeout)
 	current_storm_transform_time_timer.timeout.connect(_on_current_storm_transform_time_timer_timeout)
+
+	storm_circle.visible = true
+	visible = true
 
 	current_radius = collision_shape.shape.radius
 	current_effect = default_storm_effect
@@ -70,7 +73,6 @@ func enable_storm() -> void:
 	else:
 		changing_enabled_status = true
 
-	set_physics_process(true)
 	storm_circle.visible = true
 	visible = true
 
@@ -124,7 +126,6 @@ func disable_storm() -> void:
 	tween.finished.connect(func():
 		storm_circle.visible = false
 		visible = false
-		set_physics_process(false)
 		changing_enabled_status = false
 		)
 
@@ -152,7 +153,7 @@ func disable_storm() -> void:
 ## was on for the previous final zone.
 func _revert_to_default_zone() -> void:
 	if DebugFlags.PrintFlags.storm_phases:
-		print_rich("*******[color=purple] [b]Starting[/b] Storm Phase [/color][b]0[/b]" + " [color=gray][i](default)[/i][/color] *******")
+		print_rich("[color=pink]*******[/color][color=purple] [b]Starting[/b] Storm Phase [/color][b]0[/b]" + " [color=gray][i](default)[/i][/color] [color=pink]*******[/color]")
 
 	_apply_visual_overrides(default_storm_visuals)
 	_swap_effect_applied_to_entities_out_of_safe_area(default_storm_effect)
@@ -164,7 +165,7 @@ func force_start_next_phase() -> void:
 		return
 
 	if DebugFlags.PrintFlags.storm_phases:
-		print_rich("*******[color=gray] [i]Force Ending[/i] Storm Phase[/color] *******")
+		print_rich("[color=pink]*******[/color][color=gray] [i]Force Ending[/i] Storm Phase[/color] [color=pink]*******[/color]")
 	if zone_count == 0:
 		_process_next_transform_in_queue()
 	else:
@@ -180,7 +181,7 @@ func _physics_process(_delta: float) -> void:
 	_set_shader_transform_params()
 #endregion
 
-#region Shader Positioning
+#region Shader Positioning & Player See Thru
 ## Updates the shader's transform params with the current values.
 func _set_shader_transform_params() -> void:
 	var collision_radius = current_radius
@@ -295,7 +296,7 @@ func _check_for_transform_delay(new_transform: StormTransform) -> void:
 			effect = new_transform.status_effect.effect_name + str(new_transform.status_effect.effect_lvl)
 		elif new_transform.effect_setting == "Revert to Default":
 			effect = "Reverted to Default: " + default_storm_effect.effect_name + str(default_storm_effect.effect_lvl)
-		print_rich("*******[color=purple] [b]Starting[/b] Storm Phase [/color][b]" + str(zone_count) + "[/b][i] [delay = " + str(new_transform.delay) + "] [duration = " + str(dur) + "] " + "[effect = " + effect + "] [/i] *******")
+		print_rich("[color=pink]*******[/color][color=purple] [b]Starting[/b] Storm Phase [/color][b]" + str(zone_count) + "[/b][i] [delay = " + str(new_transform.delay) + "] [duration = " + str(dur) + "] " + "[effect = " + effect + "] [/i] [color=pink]*******[/color]")
 
 	# Starting delay timer if we have any delay. Otherwise start applying the new zone transform.
 	if new_transform.delay > 0:
@@ -349,7 +350,7 @@ func _tween_to_new_zone_position_and_radius(new_transform: StormTransform) -> vo
 ## When the current transform ends and that transform had auto advance turned on, tell the popping method to check for next phase.
 func _on_current_storm_transform_time_timer_timeout() -> void:
 	if DebugFlags.PrintFlags.storm_phases:
-		print_rich("*******[color=gray] [i]End of[/i] Storm Phase [/color][b]" + str(zone_count) + "[/b] *******")
+		print_rich("[color=pink]*******[/color][color=gray] [i]End of[/i] Storm Phase [/color][b]" + str(zone_count) + "[/b] [color=pink]*******[/color]")
 	var auto_advance: bool = current_storm_transform_time_timer.get_meta("auto_advance")
 	if auto_advance:
 		_pop_current_transform_and_check_for_next_phase()
@@ -525,11 +526,12 @@ func _on_safe_zone_body_entered(body: Node2D) -> void:
 
 ## When a dynamic entity exits the inner safe circle, we apply the current storm effect.
 func _on_safe_zone_body_exited(body: Node2D) -> void:
-	if body is DynamicEntity and is_enabled:
-		_add_effect_to_entity(body, current_effect)
+	if body is DynamicEntity:
+		if is_enabled:
+			_add_effect_to_entity(body, current_effect)
 		body.add_to_group("entities_out_of_safe_area")
 
-	if body is Player:
+	if body is Player and is_enabled:
 		body.sprite.material.set_shader_parameter("glow_color", Color(0.726, 0.504, 1))
 		body.sprite.material.set_shader_parameter("glow_size", 5.0)
 

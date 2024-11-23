@@ -3,13 +3,20 @@ extends Area2D
 class_name Item
 ## Base class for all items in the game. Defines logic for interacting with entities that can pick it up.
 
+static var item_scene: PackedScene = load("res://Entities/Items/ItemCore/Item.tscn") ## The item scene to be instantiated when items are dropped onto the ground.
+
 @export var stats: ItemResource = null: set = _set_item ## The item resource driving the stats and type of item.
 @export var quantity: int = 1 ## The quantity associated with the physical item.
 
+@onready var collision_shape: CollisionShape2D = $CollisionShape2D
 @onready var thumbnail: Sprite2D = $Sprite2D ## The sprite that shows the item's texture.
-@onready var shadow: Sprite2D = $ShadowScaler/Shadow ## The fake shadow sprite to simulate physicality in the world.
+@onready var ground_glow: Sprite2D = $GroundGlowScaler/GroundGlow ## The fake light that immitates a glowing effect on the ground.
+@onready var particles: CPUParticles2D = $Particles
+@onready var anim_player: AnimationPlayer = $AnimationPlayer
 
 var can_be_auto_picked_up: bool = false
+var search_for_neighbors_timer: Timer = Timer.new()
+var lifetime_timer: Timer = Timer.new()
 
 
 func _set_item(item_stats: ItemResource) -> void:
@@ -18,10 +25,26 @@ func _set_item(item_stats: ItemResource) -> void:
 		$CollisionShape2D.shape.radius = stats.pickup_radius
 		thumbnail.texture = stats.thumbnail
 		thumbnail.position.y = -thumbnail.texture.get_height() / 2.0
-		if shadow:
-			shadow.scale.x = thumbnail.texture.get_width() / 16.0
-			shadow.scale.y = thumbnail.texture.get_height() / 32.0
-			shadow.position.y = ceil(thumbnail.texture.get_height() / 2.0) + ceil(shadow.texture.get_height() / 2.0) - 2 + thumbnail.position.y
+		if ground_glow:
+			ground_glow.scale.x = 0.05 * (thumbnail.texture.get_width() / 16.0)
+			ground_glow.scale.y = 0.05 * (thumbnail.texture.get_height() / 32.0)
+			ground_glow.position.y = ceil(thumbnail.texture.get_height() / 2.0) + ceil(7.0 / 2.0) - 2 + thumbnail.position.y
+
+## Spawns an item with the passed in details on the ground.
+static func spawn_on_ground(item_stats: ItemResource, quant: int, location: Vector2, location_range: float) -> void:
+	var quantity_count: int = quant
+	while quantity_count > 0:
+		var item_to_spawn: Item = item_scene.instantiate()
+		item_to_spawn.stats = item_stats.duplicate()
+
+		var quant_to_use: int = min(quantity_count, item_stats.stack_size)
+		item_to_spawn.quantity = quant_to_use
+		quantity_count -= quant_to_use
+
+		@warning_ignore("narrowing_conversion") item_to_spawn.global_position = location + Vector2(randi_range((-location_range - 6) / 2.0, (location_range - 6) / 2.0) + 6, randi_range(0, (location_range - 6)) + 6)
+
+		var spawn_callable: Callable = GlobalData.world_root.get_node("WorldItems").add_child.bind(item_to_spawn)
+		spawn_callable.call_deferred()
 
 #region Save & Load
 func _on_save_game(save_data: Array[SaveData]) -> void:
@@ -49,11 +72,53 @@ func _on_load_game() -> void:
 
 func _ready() -> void:
 	_set_item(stats)
+
 	if not Engine.is_editor_hint():
+		add_to_group("items_on_ground")
+		particles.emitting = false
+		_set_rarity_colors()
 		thumbnail.material.set_shader_parameter("random_start_offset", randf() * 2.0)
+
+		add_child(search_for_neighbors_timer)
+		add_child(lifetime_timer)
+		search_for_neighbors_timer.timeout.connect(_search_for_neighbors)
+		lifetime_timer.timeout.connect(remove_from_world)
+		search_for_neighbors_timer.one_shot = true
+		lifetime_timer.one_shot = true
+		lifetime_timer.start(300)
+		_search_for_neighbors()
+
 	if not can_be_auto_picked_up:
 		await get_tree().create_timer(1.0, false, false, false).timeout
 		can_be_auto_picked_up = true
+
+func _set_rarity_colors() -> void:
+	thumbnail.material.set_shader_parameter("width", 0.5)
+	ground_glow.self_modulate = GlobalData.rarity_colors.ground_glow.get(stats.rarity)
+	thumbnail.material.set_shader_parameter("outline_color", GlobalData.rarity_colors.outline_color.get(stats.rarity))
+	thumbnail.material.set_shader_parameter("tint_color", GlobalData.rarity_colors.tint_color.get(stats.rarity))
+	var gradient_texture: GradientTexture1D = GradientTexture1D.new()
+	gradient_texture.gradient = Gradient.new()
+	gradient_texture.gradient.add_point(0, GlobalData.rarity_colors.glint_color.get(stats.rarity))
+	thumbnail.material.set_shader_parameter("color_gradient", gradient_texture)
+	if stats.rarity == GlobalData.ItemRarity.EPIC or stats.rarity == GlobalData.ItemRarity.LEGENDARY or stats.rarity == GlobalData.ItemRarity.SINGULAR:
+		particles.color = GlobalData.rarity_colors.ground_glow.get(stats.rarity)
+		particles.emitting = true
+
+func _on_spawn_anim_completed() -> void:
+	anim_player.play("hover")
+
+func remove_from_world() -> void:
+	anim_player.play("remove")
+
+func _on_remove_anim_completed() -> void:
+	queue_free()
+
+func _search_for_neighbors() -> void:
+	## FIXME!!!
+
+	search_for_neighbors_timer.start(randf_range(0.5, 1.25) * 5)
+	pass
 
 func _on_area_entered(area: Area2D) -> void:
 	if area is ItemReceiverComponent and area.get_parent() is Player:
@@ -64,13 +129,18 @@ func _on_area_entered(area: Area2D) -> void:
 
 		if not area.items_in_range.is_empty():
 			for item in (area as ItemReceiverComponent).items_in_range:
-				item.thumbnail.material.set_shader_parameter("width", 0)
-			(area as ItemReceiverComponent).items_in_range[area.items_in_range.size() - 1].thumbnail.material.set_shader_parameter("width", 0.75)
+				item.thumbnail.material.set_shader_parameter("outline_color", GlobalData.rarity_colors.outline_color.get(item.stats.rarity))
+				item.thumbnail.material.set_shader_parameter("width", 0.5)
+
+			(area as ItemReceiverComponent).items_in_range[area.items_in_range.size() - 1].thumbnail.material.set_shader_parameter("outline_color", Color.WHITE)
+			(area as ItemReceiverComponent).items_in_range[area.items_in_range.size() - 1].thumbnail.material.set_shader_parameter("width", 0.82)
 
 func _on_area_exited(area: Area2D) -> void:
 	if area is ItemReceiverComponent and area.get_parent() is Player:
 		(area as ItemReceiverComponent).remove_from_in_range_queue(self)
 
-		thumbnail.material.set_shader_parameter("width", 0)
+		thumbnail.material.set_shader_parameter("outline_color", GlobalData.rarity_colors.outline_color.get(stats.rarity))
+		thumbnail.material.set_shader_parameter("width", 0.5)
 		if not (area as ItemReceiverComponent).items_in_range.is_empty():
-			(area as ItemReceiverComponent).items_in_range[area.items_in_range.size() - 1].thumbnail.material.set_shader_parameter("width", 0.75)
+			(area as ItemReceiverComponent).items_in_range[area.items_in_range.size() - 1].thumbnail.material.set_shader_parameter("outline_color", Color.WHITE)
+			(area as ItemReceiverComponent).items_in_range[area.items_in_range.size() - 1].thumbnail.material.set_shader_parameter("width", 0.82)

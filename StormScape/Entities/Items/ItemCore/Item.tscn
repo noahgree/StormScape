@@ -1,17 +1,24 @@
-[gd_scene load_steps=14 format=3 uid="uid://ccfnvvfj0yyrq"]
+[gd_scene load_steps=19 format=3 uid="uid://ccfnvvfj0yyrq"]
 
 [ext_resource type="Shader" path="res://UI/Shaders/GlintShader.gdshader" id="1_att70"]
 [ext_resource type="Script" path="res://Entities/Items/ItemCore/Item.gd" id="1_rwd02"]
 [ext_resource type="Texture2D" uid="uid://b6q76o13tanxi" path="res://Entities/Items/Weapons/MeleeWeapons/Pickaxe/pickaxe.png" id="4_1yl86"]
-[ext_resource type="Texture2D" uid="uid://dcbwxgak6a0r8" path="res://Entities/EntityCore/entity_shadow.png" id="4_n8nbw"]
+[ext_resource type="Texture2D" uid="uid://dbm40lvpgbd8t" path="res://Entities/Items/item_rarity_light.png" id="5_2unly"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_no3c7"]
 resource_local_to_scene = true
 radius = 4.0
 
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_njrp7"]
+blend_mode = 1
+
+[sub_resource type="Curve" id="Curve_lulwp"]
+_data = [Vector2(0, 0.51358), 0.0, 0.0, 0, 0, Vector2(1, 0.216845), 0.0, 0.0, 0, 0]
+point_count = 2
+
 [sub_resource type="Gradient" id="Gradient_8c7dk"]
-offsets = PackedFloat32Array(0.543779)
-colors = PackedColorArray(1, 1, 1, 1)
+offsets = PackedFloat32Array(0.321277)
+colors = PackedColorArray(0.931609, 0, 0.320733, 1)
 
 [sub_resource type="GradientTexture1D" id="GradientTexture1D_u0r6t"]
 gradient = SubResource("Gradient_8c7dk")
@@ -27,8 +34,8 @@ gradient = SubResource("Gradient_ujuwf")
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_qrrcp"]
 resource_local_to_scene = true
 shader = ExtResource("1_att70")
-shader_parameter/outline_color = Color(1, 1, 1, 1)
-shader_parameter/width = 0.0
+shader_parameter/outline_color = Color(1, 0.383605, 0.492229, 1)
+shader_parameter/width = 0.5
 shader_parameter/pattern = 2
 shader_parameter/inside = false
 shader_parameter/add_margins = true
@@ -38,8 +45,8 @@ shader_parameter/highlight_strength = 0.7
 shader_parameter/color_mode_toggle = true
 shader_parameter/pause_duration = 1.0
 shader_parameter/angle = 35.0
-shader_parameter/tint_color = Color(1, 1, 1, 0)
-shader_parameter/glow_intensity = 1.0
+shader_parameter/tint_color = Color(1, 0.20122, 0.303155, 0.186)
+shader_parameter/glow_intensity = 1.191
 shader_parameter/random_start_offset = 0.0
 shader_parameter/vertical_gradient = SubResource("GradientTexture1D_pytf7")
 shader_parameter/color_gradient = SubResource("GradientTexture1D_u0r6t")
@@ -61,7 +68,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("ShadowScaler:scale")
+tracks/1/path = NodePath(".:scale")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -91,21 +98,88 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("ShadowScaler:scale")
+tracks/1/path = NodePath("GroundGlowScaler:scale")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
 "times": PackedFloat32Array(0, 1.6, 3),
 "transitions": PackedFloat32Array(1, 1, 1),
 "update": 0,
-"values": [Vector2(1, 1), Vector2(0.85, 0.85), Vector2(1, 1)]
+"values": [Vector2(1, 1), Vector2(0.75, 0.75), Vector2(1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_i3ewg"]
+resource_name = "spawn"
+length = 0.08
+step = 0.01
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.08),
+"transitions": PackedFloat32Array(1, 0.378929),
+"update": 0,
+"values": [Vector2(0, 0), Vector2(1, 1)]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.08),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"_on_spawn_anim_completed"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_w43ql"]
+resource_name = "remove"
+length = 0.05
+step = 0.01
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.05),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(0, 0)]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.05),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"_on_remove_anim_completed"
+}]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_wgl0c"]
 _data = {
 "RESET": SubResource("Animation_5tv4j"),
-"hover": SubResource("Animation_4d1l1")
+"hover": SubResource("Animation_4d1l1"),
+"remove": SubResource("Animation_w43ql"),
+"spawn": SubResource("Animation_i3ewg")
 }
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_mrolm"]
+blend_mode = 1
 
 [node name="Item" type="Area2D" groups=["Items", "has_save_logic"]]
 collision_layer = 0
@@ -117,6 +191,29 @@ script = ExtResource("1_rwd02")
 shape = SubResource("CircleShape2D_no3c7")
 debug_color = Color(5.29438e-07, 0.636012, 0.41019, 0.42)
 
+[node name="Particles" type="CPUParticles2D" parent="."]
+material = SubResource("CanvasItemMaterial_njrp7")
+position = Vector2(0, -9)
+emitting = false
+amount = 6
+lifetime = 0.85
+texture = ExtResource("5_2unly")
+emission_shape = 1
+emission_sphere_radius = 8.0
+direction = Vector2(0, -1)
+spread = 30.0
+gravity = Vector2(0, 0)
+initial_velocity_min = 10.0
+initial_velocity_max = 15.0
+orbit_velocity_min = -0.08
+orbit_velocity_max = 0.08
+damping_max = 10.0
+scale_amount_min = 0.01
+scale_amount_max = 0.01
+scale_amount_curve = SubResource("Curve_lulwp")
+hue_variation_min = -0.5
+hue_variation_max = 0.5
+
 [node name="Sprite2D" type="Sprite2D" parent="."]
 material = SubResource("ShaderMaterial_qrrcp")
 position = Vector2(0, -8)
@@ -126,17 +223,14 @@ texture = ExtResource("4_1yl86")
 libraries = {
 "": SubResource("AnimationLibrary_wgl0c")
 }
-autoplay = "hover"
+autoplay = "spawn"
 
-[node name="ShadowScaler" type="Node2D" parent="."]
+[node name="GroundGlowScaler" type="Node2D" parent="."]
 
-[node name="Shadow" type="Sprite2D" parent="ShadowScaler"]
-self_modulate = Color(0, 0, 0, 0.188)
-position = Vector2(0, 2)
-scale = Vector2(1, 0.5)
-texture = ExtResource("4_n8nbw")
+[node name="GroundGlow" type="Sprite2D" parent="GroundGlowScaler"]
+material = SubResource("CanvasItemMaterial_mrolm")
+scale = Vector2(0.05, 0.035)
+texture = ExtResource("5_2unly")
 
 [connection signal="area_entered" from="." to="." method="_on_area_entered"]
 [connection signal="area_exited" from="." to="." method="_on_area_exited"]
-[connection signal="body_entered" from="." to="." method="_on_body_entered"]
-[connection signal="body_exited" from="." to="." method="_on_body_exited"]

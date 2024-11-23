@@ -1,4 +1,4 @@
-[gd_scene load_steps=59 format=4 uid="uid://bscnr6a23l10m"]
+[gd_scene load_steps=76 format=4 uid="uid://bscnr6a23l10m"]
 
 [ext_resource type="Script" path="res://Utilities/Game/WorldRoot/WorldRoot.gd" id="1_q0i4n"]
 [ext_resource type="Script" path="res://Stages/World/BackgroundMusicManager.gd" id="1_q5pr2"]
@@ -14,18 +14,27 @@
 [ext_resource type="PackedScene" uid="uid://dykiv0tlhwmox" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/KnockbackHandler.tscn" id="7_vet3v"]
 [ext_resource type="PackedScene" uid="uid://cdfdy8m6ki3oq" path="res://Entities/Components/HealthComponent/HealthComponent.tscn" id="7_yay1r"]
 [ext_resource type="PackedScene" uid="uid://co3n6m7efg8pd" path="res://Entities/Components/EffectComponents/StatusEffectManager/StatusEffectManager.tscn" id="8_anrko"]
+[ext_resource type="Script" path="res://Stages/World/WorldItems.gd" id="8_g8y4o"]
 [ext_resource type="Script" path="res://Entities/Components/HitboxComponent/HitboxComponent.gd" id="11_vr4ax"]
 [ext_resource type="Texture2D" uid="uid://2xf1pqc78iin" path="res://Assets/Icon/icon.svg" id="12_ajeh1"]
 [ext_resource type="Script" path="res://Entities/EffectSystemResources/StatusEffects/StatusEffect.gd" id="13_33bgr"]
 [ext_resource type="PackedScene" uid="uid://4gl24qwdyti3" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/DmgHandler.tscn" id="13_bs3qc"]
 [ext_resource type="PackedScene" uid="uid://depnx3pnassrq" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/BurningHandler.tscn" id="14_fmrr1"]
 [ext_resource type="Script" path="res://Entities/EffectSystemResources/EffectSources/EffectSource.gd" id="14_pdlrm"]
+[ext_resource type="PackedScene" uid="uid://c4kt3bx0ot3c7" path="res://Entities/Components/ItemComponents/LootTableComponent/LootTableComponent.tscn" id="17_rkuee"]
+[ext_resource type="Script" path="res://Entities/Components/ItemComponents/LootTableComponent/LootTableEntry.gd" id="18_cjmh4"]
+[ext_resource type="Resource" uid="uid://m8eslst1uuxh" path="res://Entities/Items/Ammo/LightAmmo.tres" id="19_2t00v"]
 [ext_resource type="Resource" uid="uid://jxv16pf038go" path="res://Entities/EffectSystemResources/StatusEffects/BadEffects/TimeSnare/TimeSnare1.tres" id="20_2dw8v"]
+[ext_resource type="Resource" uid="uid://cx1ydw2jde1y8" path="res://Entities/Items/Consumables/Apple/Apple.tres" id="20_xawyc"]
+[ext_resource type="Resource" uid="uid://bper7kxtsf7f1" path="res://Entities/Items/Weapons/MeleeWeapons/Axe/Axe.tres" id="21_gqs2b"]
 [ext_resource type="Script" path="res://Stages/World/Storm/Storm.gd" id="22_0op7h"]
 [ext_resource type="Script" path="res://Stages/Tilemaps/TileMapDual.gd" id="22_47ykm"]
+[ext_resource type="Resource" uid="uid://ciel2rrqq4dvv" path="res://Entities/Items/Weapons/ProjectileWeapons/LaserGun/LaserGun.tres" id="22_g8ua3"]
 [ext_resource type="Texture2D" uid="uid://6saycs5sisdk" path="res://Stages/Tilemaps/GrassDirt/TILESET_GRASSDIRT.png" id="22_tnvqm"]
 [ext_resource type="Shader" path="res://Stages/World/Storm/StormShader.gdshader" id="23_05otm"]
 [ext_resource type="Resource" uid="uid://cucuggowaf55y" path="res://Entities/EffectSystemResources/StatusEffects/BadEffects/StormSyndrome/StormSyndrome1.tres" id="23_5x8gm"]
+[ext_resource type="Resource" uid="uid://bh18kqp2up3oe" path="res://Entities/Items/Weapons/MeleeWeapons/Pickaxe/Pickaxe.tres" id="23_34j4d"]
+[ext_resource type="Script" path="res://Entities/Components/ItemComponents/LootTableComponent/LootTable.gd" id="23_lh0pd"]
 [ext_resource type="Script" path="res://Stages/World/Storm/StormTransform.gd" id="25_dqjbe"]
 [ext_resource type="Script" path="res://Entities/Components/StatModComponents/EntityStatMod.gd" id="26_fvygk"]
 [ext_resource type="Resource" uid="uid://cx6t5cil24ca3" path="res://Stages/World/Storm/StormVisuals/DefaultStormVisuals.tres" id="27_5uvpk"]
@@ -4164,7 +4173,7 @@ texture = ExtResource("22_tnvqm")
 3:3/0/physics_layer_0/polygon_2/points = PackedVector2Array(-8, 3.34375, -8, 8, -3.09375, 3.26562)
 
 [sub_resource type="TileSet" id="TileSet_hhfml"]
-physics_layer_0/collision_layer = 64
+physics_layer_0/collision_layer = 0
 physics_layer_0/collision_mask = 0
 physics_layer_1/collision_layer = 128
 physics_layer_1/collision_mask = 0
@@ -4179,10 +4188,68 @@ debug_print_mod_changes = false
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_wpovd"]
 size = Vector2(18, 18)
 
+[sub_resource type="Resource" id="Resource_l1o4x"]
+script = ExtResource("18_cjmh4")
+item = ExtResource("22_g8ua3")
+quantity = 1
+weighting = 1.0
+last_used = 0
+spawn_count = 0
+
+[sub_resource type="Resource" id="Resource_x8lvr"]
+script = ExtResource("18_cjmh4")
+item = ExtResource("21_gqs2b")
+quantity = 1
+weighting = 1.0
+last_used = 0
+spawn_count = 0
+
+[sub_resource type="Resource" id="Resource_tcueq"]
+script = ExtResource("23_lh0pd")
+hit_loot_table = Array[ExtResource("18_cjmh4")]([SubResource("Resource_x8lvr")])
+die_loot_table = Array[ExtResource("18_cjmh4")]([SubResource("Resource_l1o4x")])
+
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_4wvqs"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_tov2u"]
 size = Vector2(18, 18)
+
+[sub_resource type="Resource" id="Resource_cjrwo"]
+script = ExtResource("18_cjmh4")
+item = ExtResource("21_gqs2b")
+quantity = 1
+weighting = 10.0
+last_used = 0
+spawn_count = 0
+
+[sub_resource type="Resource" id="Resource_i50n4"]
+script = ExtResource("18_cjmh4")
+item = ExtResource("23_34j4d")
+quantity = 1
+weighting = 1.0
+last_used = 0
+spawn_count = 0
+
+[sub_resource type="Resource" id="Resource_q71vo"]
+script = ExtResource("18_cjmh4")
+item = ExtResource("20_xawyc")
+quantity = 1
+weighting = 5.0
+last_used = 0
+spawn_count = 0
+
+[sub_resource type="Resource" id="Resource_644bw"]
+script = ExtResource("18_cjmh4")
+item = ExtResource("19_2t00v")
+quantity = 2
+weighting = 1.0
+last_used = 0
+spawn_count = 0
+
+[sub_resource type="Resource" id="Resource_tkhv7"]
+script = ExtResource("23_lh0pd")
+hit_loot_table = Array[ExtResource("18_cjmh4")]([SubResource("Resource_q71vo"), SubResource("Resource_644bw")])
+die_loot_table = Array[ExtResource("18_cjmh4")]([SubResource("Resource_cjrwo"), SubResource("Resource_i50n4")])
 
 [sub_resource type="Resource" id="Resource_sx5ie"]
 script = ExtResource("14_pdlrm")
@@ -4448,6 +4515,10 @@ tile_map_data = PackedByteArray("AAD5////AAACAAEAAAD5/wAAAAACAAEAAAD5/wEAAAACAAE
 tile_set = SubResource("TileSet_hhfml")
 script = ExtResource("22_47ykm")
 
+[node name="WorldItems" type="Node2D" parent="WorldRoot" groups=["core"]]
+y_sort_enabled = true
+script = ExtResource("8_g8y4o")
+
 [node name="Testing" type="Node2D" parent="WorldRoot"]
 y_sort_enabled = true
 
@@ -4478,10 +4549,11 @@ debug_color = Color(1.44392e-06, 0.568839, 0.851513, 0.42)
 
 [node name="HealthComponent" parent="WorldRoot/Testing/TestRigidEntity" instance=ExtResource("7_yay1r")]
 
-[node name="EffectReceiverComponent" parent="WorldRoot/Testing/TestRigidEntity" node_paths=PackedStringArray("affected_entity", "health_component", "dmg_handler", "knockback_handler", "burning_handler") instance=ExtResource("6_haafe")]
+[node name="EffectReceiverComponent" parent="WorldRoot/Testing/TestRigidEntity" node_paths=PackedStringArray("affected_entity", "health_component", "loot_table_component", "dmg_handler", "knockback_handler", "burning_handler") instance=ExtResource("6_haafe")]
 can_receive_stat_mods = false
 affected_entity = NodePath("..")
 health_component = NodePath("../HealthComponent")
+loot_table_component = NodePath("../LootTableComponent")
 dmg_handler = NodePath("DmgHandler")
 knockback_handler = NodePath("KnockbackHandler")
 burning_handler = NodePath("BurningHandler")
@@ -4498,6 +4570,9 @@ debug_color = Color(0.941042, 1.32841e-05, 0.612344, 0.42)
 
 [node name="StatusEffectManager" parent="WorldRoot/Testing/TestRigidEntity" node_paths=PackedStringArray("effect_receiver") instance=ExtResource("8_anrko")]
 effect_receiver = NodePath("../EffectReceiverComponent")
+
+[node name="LootTableComponent" parent="WorldRoot/Testing/TestRigidEntity" instance=ExtResource("17_rkuee")]
+loot_table = SubResource("Resource_tcueq")
 
 [node name="TestRigidEntity2" type="RigidBody2D" parent="WorldRoot/Testing"]
 position = Vector2(190, 36)
@@ -4521,10 +4596,11 @@ debug_color = Color(0.385145, 0.578011, 1, 0.385)
 
 [node name="HealthComponent" parent="WorldRoot/Testing/TestRigidEntity2" instance=ExtResource("7_yay1r")]
 
-[node name="EffectReceiverComponent" parent="WorldRoot/Testing/TestRigidEntity2" node_paths=PackedStringArray("affected_entity", "health_component", "dmg_handler", "knockback_handler") instance=ExtResource("6_haafe")]
+[node name="EffectReceiverComponent" parent="WorldRoot/Testing/TestRigidEntity2" node_paths=PackedStringArray("affected_entity", "health_component", "loot_table_component", "dmg_handler", "knockback_handler") instance=ExtResource("6_haafe")]
 can_receive_stat_mods = false
 affected_entity = NodePath("..")
 health_component = NodePath("../HealthComponent")
+loot_table_component = NodePath("../LootTableComponent")
 dmg_handler = NodePath("DmgHandler")
 knockback_handler = NodePath("KnockbackHandler")
 
@@ -4538,6 +4614,10 @@ debug_color = Color(0.941042, 1.32841e-05, 0.612344, 0.42)
 
 [node name="StatusEffectManager" parent="WorldRoot/Testing/TestRigidEntity2" node_paths=PackedStringArray("effect_receiver") instance=ExtResource("8_anrko")]
 effect_receiver = NodePath("../EffectReceiverComponent")
+
+[node name="LootTableComponent" parent="WorldRoot/Testing/TestRigidEntity2" instance=ExtResource("17_rkuee")]
+loot_table = SubResource("Resource_tkhv7")
+hit_spawn_chance = 4.0
 
 [node name="TestRigidEntity3" type="RigidBody2D" parent="WorldRoot/Testing"]
 position = Vector2(41, 26)
@@ -4660,6 +4740,7 @@ grow_horizontal = 2
 label_settings = SubResource("LabelSettings_lfc2v")
 
 [node name="Storm" type="Node2D" parent="WorldRoot"]
+visible = false
 z_index = -2
 z_as_relative = false
 position = Vector2(189, 143)
@@ -4681,6 +4762,7 @@ shape = SubResource("CircleShape2D_7o6b3")
 [node name="StormCanvas" type="CanvasLayer" parent="WorldRoot/Storm"]
 
 [node name="StormCircle" type="ColorRect" parent="WorldRoot/Storm/StormCanvas"]
+visible = false
 material = SubResource("ShaderMaterial_b4rbd")
 anchors_preset = 15
 anchor_right = 1.0
