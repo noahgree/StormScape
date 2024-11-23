@@ -1,6 +1,7 @@
 extends Node
 
 @onready var world_root: WorldRoot = get_parent().get_node("Game/WorldRoot")
+@onready var storm: Storm = get_parent().get_node("Game/WorldRoot/Storm")
 
 var player_node: Player = null
 var player_camera: PlayerCamera = null

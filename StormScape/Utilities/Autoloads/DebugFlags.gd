@@ -10,6 +10,7 @@ class PrintFlags:
 	static var saver_loader_status_changes: bool = true
 	static var ammo_updates: bool = false
 	static var sounds_starting: bool = false
+	static var storm_phases: bool = true
 
 class MainMenuFlags:
 	static var skip_main_menu: bool = false

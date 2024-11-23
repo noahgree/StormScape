@@ -55,7 +55,10 @@ func _ready() -> void:
 ## it passes the effect logic to the relevant handler if it exists.
 func handle_status_effect(status_effect: StatusEffect) -> void:
 	if DebugFlags.PrintFlags.current_effect_changes and print_effect_updates:
-		print_rich("-------[color=green]Adding[/color][b] " + str(status_effect.effect_name) + str(status_effect.effect_lvl) + "[/b]-------")
+		if status_effect is StormSyndromeEffect:
+			print_rich("-------[color=green]Adding[/color][b] [color=pink]" + str(status_effect.effect_name) + str(status_effect.effect_lvl) + "[/color][/b]-------")
+		else:
+			print_rich("-------[color=green]Adding[/color][b] " + str(status_effect.effect_name) + str(status_effect.effect_lvl) + "[/b]-------")
 
 	if effect_receiver.can_receive_stat_mods:
 		_handle_status_effect_mods(status_effect)
@@ -124,7 +127,10 @@ func _restart_effect_duration(effect_name: String) -> void:
 ## associated timer from the timer dict.
 func _remove_status_effect(status_effect: StatusEffect) -> void:
 	if DebugFlags.PrintFlags.current_effect_changes and print_effect_updates:
-		print_rich("-------[color=red]Removed[/color][b] " + str(status_effect.effect_name) + str(status_effect.effect_lvl) + "[/b]-------")
+		if status_effect is StormSyndromeEffect:
+			print_rich("-------[color=red]Removed[/color][b] [color=pink]" + str(status_effect.effect_name) + str(status_effect.effect_lvl) + "[/color][/b]-------")
+		else:
+			print_rich("-------[color=red]Removed[/color][b] " + str(status_effect.effect_name) + str(status_effect.effect_lvl) + "[/b]-------")
 
 	for mod_resource in status_effect.stat_mods:
 		var mod: EntityStatMod = (mod_resource as EntityStatMod)

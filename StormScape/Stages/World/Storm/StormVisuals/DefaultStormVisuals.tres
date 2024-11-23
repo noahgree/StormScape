@@ -5,9 +5,11 @@
 [resource]
 script = ExtResource("1_a2p73")
 viusal_change_time = 1.0
-see_thru_amount = 50.0
+see_thru_amount = 25.0
+see_through_pulse_mult = 1.0
+see_thru_dist_mult = 1.0
 storm_gradient_colors = Array[Color]([Color(0.772, 0.384, 0.773, 0.574), Color(0.606, 0.322, 1, 0.542), Color(0.558, 0.396, 1, 0.772), Color(0.345, 0.001, 0.829, 0.877)])
-final_color_distance = 600.0
+final_color_distance = 500.0
 reflection_intensity = 0.15
 reflection_thickness = 30.0
 reflection_color = Color(0.287, 0.287, 0.287, 0.293)
@@ -15,7 +17,7 @@ turbulence = 1.5
 ripple_intensity = 0.5
 ripple_frequency = 0.6
 ripple_speed = 0.5
-rain_amount = 50
+rain_amount = 0
 rain_slant = 0.15
 rain_speed = 25.0
 rain_color = Color(0.857, 0.903, 1, 0.417)

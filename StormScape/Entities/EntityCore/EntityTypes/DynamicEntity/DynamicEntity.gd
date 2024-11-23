@@ -6,6 +6,7 @@ class_name DynamicEntity
 ## This should not be used by things like weapons or trees.
 
 @export var team: GlobalData.Teams = GlobalData.Teams.PLAYER ## What the effects received by this entity should consider as this entity's team.
+@export var sprite: Node2D
 @export_group("Status Effects & Stat Mods")
 @export var stats: StatModsCacheResource = StatModsCacheResource.new() ## The resource that will cache and work with all stat mods for this entity.
 
@@ -35,6 +36,11 @@ func _ready() -> void:
 	elif team == GlobalData.Teams.ENEMY:
 		add_to_group("enemy_entities")
 
+	if sprite.material != null and sprite.material.shader != null:
+		#if sprite is AnimatedSprite2D:
+			#(sprite as AnimatedSprite2D).frame_changed.connect(_update_shader_with_new_sprite_frame_size)
+		_update_shader_with_new_sprite_frame_size()
+
 func _process(delta: float) -> void:
 	move_fsm.state_machine_process(delta)
 
@@ -46,6 +52,8 @@ func _physics_process(delta: float) -> void:
 			move_fsm.state_machine_physics_process(delta)
 	else:
 		move_fsm.state_machine_physics_process(delta)
+
+	_update_shader_with_new_sprite_frame_size()
 
 func _unhandled_input(event: InputEvent) -> void:
 	move_fsm.state_machine_handle_input(event)
@@ -70,3 +78,55 @@ func request_time_snare(factor: float, snare_time: float) -> void:
 
 func die() -> void:
 	move_fsm.die()
+
+func _update_shader_with_new_sprite_frame_size() -> void:
+	if sprite is AnimatedSprite2D:
+		sprite.material.set_shader_parameter("enable_fading", true)
+
+		var current_animation = sprite.animation
+		var current_frame = sprite.frame
+		var texture = sprite.sprite_frames.get_frame_texture(current_animation, current_frame)
+
+		var frame_uv_min = Vector2(0.0, 0.0)
+		var frame_uv_max = Vector2(1.0, 1.0)
+
+		var region
+
+		# Ensure the texture is valid
+		if texture == null:
+			print("No texture found for the current frame.")
+			sprite.material.set_shader_parameter("enable_fading", false)
+			return
+
+		# Calculate UV coordinates based on texture type
+		if texture is AtlasTexture:
+			var atlas_texture = texture as AtlasTexture
+			var atlas_source = atlas_texture.atlas
+			region = atlas_texture.region
+			var atlas_size = atlas_source.get_size()
+
+			# Calculate UV coordinates
+			frame_uv_min = Vector2(region.position.x / atlas_size.x, region.position.y / atlas_size.y)
+			frame_uv_max = Vector2(
+				(region.position.x + region.size.x) / atlas_size.x,
+				(region.position.y + region.size.y) / atlas_size.y
+			)
+		elif texture is Texture2D:
+			# For regular textures, the UVs are (0,0) to (1,1)
+			frame_uv_min = Vector2(0.0, 0.0)
+			frame_uv_max = Vector2(1.0, 1.0)
+		else:
+			print("Unsupported texture type.")
+			sprite.material.set_shader_parameter("enable_fading", false)
+			return
+
+		# Pass frame_uv_min and frame_uv_max to the shader
+		sprite.material.set_shader_parameter("frame_uv_min", frame_uv_min)
+		sprite.material.set_shader_parameter("frame_uv_max", frame_uv_max)
+
+		# Calculate the UV pixel size
+		var frame_size = region.size if texture is AtlasTexture else texture.get_size()
+		var uv_pixel_size = Vector2(1.0 / frame_size.x, 1.0 / frame_size.y)
+		sprite.material.set_shader_parameter("uv_pixel_size", uv_pixel_size)
+	else:
+		sprite.material.set_shader_parameter("enable_fading", false)

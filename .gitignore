@@ -3,7 +3,7 @@
 # Godot 4+ specific ignores
 StormScape/.godot/
 StormScape/android/
-StormScape/addons/godot-git-plugin
+StormScape/addons/
 
 StormScape/.import/
 StormScape/export.cfg

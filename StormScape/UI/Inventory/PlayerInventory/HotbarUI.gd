@@ -40,15 +40,15 @@ func _on_slot_updated(index: int, item: InvItemResource) -> void:
 func _update_active_item() -> void:
 	GlobalData.player_node.hands.on_equipped_item_change(active_slot)
 
-func _input(event: InputEvent) -> void:
+func _input(_event: InputEvent) -> void:
 	if DebugFlags.HotbarFlags.use_scroll_debounce and not scroll_debounce_timer.is_stopped(): return
-	if event is InputEventMouseButton:
-		if Input.is_action_just_released("scroll_up"):
-			_change_active_slot_by_count(1)
-			scroll_debounce_timer.start()
-		elif Input.is_action_just_released("scroll_down"):
-			_change_active_slot_by_count(-1)
-			scroll_debounce_timer.start()
+
+	if Input.is_action_just_released("scroll_up"):
+		_change_active_slot_by_count(1)
+		scroll_debounce_timer.start()
+	elif Input.is_action_just_released("scroll_down"):
+		_change_active_slot_by_count(-1)
+		scroll_debounce_timer.start()
 
 func _change_active_slot_by_count(index_count: int) -> void:
 	active_slot.texture = active_slot.default_slot_texture

@@ -6,18 +6,20 @@ uniform float radius_pixels;
 uniform vec2 viewport_size;
 uniform vec2 noise_world_position;
 
+uniform float override_all_alpha = 1.0;
+
 uniform vec2 see_through_center_pixels;
 uniform float see_through_radius;
 uniform float see_through_opacity = 0.5;
 
-uniform float ring_thickness = 1.6;
-uniform float glow_intensity = 3.0;
+uniform float ring_thickness = 2.3;
+uniform float glow_intensity = 4.0;
 uniform float noise_scale = 0.003;
 uniform float noise_speed = 0.04;
 uniform float bottom_noise_speed = 0.2;
 uniform float top_noise_speed = 2.75;
 uniform float noise_brightness = 1.25;
-uniform vec4 glow_color : source_color = vec4(0.6, 0.6, 0.6, 1.0);
+uniform vec4 glow_color : source_color = vec4(0.722, 0.681, 1, 0.743);
 uniform sampler2D noise_texture;
 uniform sampler2D noise_texture2;
 uniform float pulse_speed = 4.0;
@@ -134,9 +136,10 @@ void fragment() {
     }
 
     float pulse = 1.0 + pulse_intensity * cos(TIME * pulse_speed);
-    float ring_dist = abs(dist - radius_pixels);
-    float glow = smoothstep(ring_thickness, 0.0, ring_dist) * glow_intensity * pulse * step(radius_pixels, dist);
-    vec4 ring_color = glow_color * glow * step(radius_pixels, dist) * step(dist, radius_pixels + ring_thickness);
+
+	float ring_dist = abs(dist - radius_pixels);
+	float glow = smoothstep(ring_thickness, -ring_thickness, ring_dist) * glow_intensity * pulse;
+	vec4 ring_color = glow_color * glow;
 
     vec4 noise_color = vec4(blended_rippled_noise, blended_rippled_noise, blended_rippled_noise, 1.0) * 0.1 * noise_brightness;
 
@@ -195,18 +198,11 @@ void fragment() {
 
 	vec4 rain_effect = vec4(rain_color.rgb, rain_output);
 
-	// Combine with other effects as before
-	if (dist < radius_pixels) {
-	    COLOR = vec4(0.0, 0.0, 0.0, 0.0);
-	} else {
-	    COLOR = outer_color + ring_color + reflection_color_effect;
-	    COLOR.rgb = mix(COLOR.rgb, rain_effect.rgb, rain_effect.a);
-	}
-
     if (dist < radius_pixels) {
-        COLOR = vec4(0.0, 0.0, 0.0, 0.0);
+        COLOR = vec4(0.0, 0.0, 0.0, 0.0) + ring_color;
     } else {
         COLOR = outer_color + ring_color + reflection_color_effect;
         COLOR.rgb = mix(COLOR.rgb, rain_effect.rgb, rain_effect.a);
+		COLOR.a *= override_all_alpha;
     }
 }

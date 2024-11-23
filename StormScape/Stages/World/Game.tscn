@@ -1,4 +1,4 @@
-[gd_scene load_steps=54 format=4 uid="uid://bscnr6a23l10m"]
+[gd_scene load_steps=59 format=4 uid="uid://bscnr6a23l10m"]
 
 [ext_resource type="Script" path="res://Utilities/Game/WorldRoot/WorldRoot.gd" id="1_q0i4n"]
 [ext_resource type="Script" path="res://Stages/World/BackgroundMusicManager.gd" id="1_q5pr2"]
@@ -20,13 +20,14 @@
 [ext_resource type="PackedScene" uid="uid://4gl24qwdyti3" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/DmgHandler.tscn" id="13_bs3qc"]
 [ext_resource type="PackedScene" uid="uid://depnx3pnassrq" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/BurningHandler.tscn" id="14_fmrr1"]
 [ext_resource type="Script" path="res://Entities/EffectSystemResources/EffectSources/EffectSource.gd" id="14_pdlrm"]
-[ext_resource type="Resource" uid="uid://c050ytbbmgfem" path="res://Entities/EffectSystemResources/StatusEffects/BadEffects/Slowness/Slowness1.tres" id="20_x2bj4"]
+[ext_resource type="Resource" uid="uid://jxv16pf038go" path="res://Entities/EffectSystemResources/StatusEffects/BadEffects/TimeSnare/TimeSnare1.tres" id="20_2dw8v"]
 [ext_resource type="Script" path="res://Stages/World/Storm/Storm.gd" id="22_0op7h"]
 [ext_resource type="Script" path="res://Stages/Tilemaps/TileMapDual.gd" id="22_47ykm"]
 [ext_resource type="Texture2D" uid="uid://6saycs5sisdk" path="res://Stages/Tilemaps/GrassDirt/TILESET_GRASSDIRT.png" id="22_tnvqm"]
 [ext_resource type="Shader" path="res://Stages/World/Storm/StormShader.gdshader" id="23_05otm"]
 [ext_resource type="Resource" uid="uid://cucuggowaf55y" path="res://Entities/EffectSystemResources/StatusEffects/BadEffects/StormSyndrome/StormSyndrome1.tres" id="23_5x8gm"]
 [ext_resource type="Script" path="res://Stages/World/Storm/StormTransform.gd" id="25_dqjbe"]
+[ext_resource type="Script" path="res://Entities/Components/StatModComponents/EntityStatMod.gd" id="26_fvygk"]
 [ext_resource type="Resource" uid="uid://cx6t5cil24ca3" path="res://Stages/World/Storm/StormVisuals/DefaultStormVisuals.tres" id="27_5uvpk"]
 [ext_resource type="Script" path="res://Stages/World/Storm/StormVisuals/StormVisuals.gd" id="27_8kcf2"]
 
@@ -4202,7 +4203,7 @@ cam_shake_duration = 0.0
 cam_freeze_multiplier = 1.0
 cam_freeze_duration = 0.0
 impact_sound = ""
-status_effects = Array[ExtResource("13_33bgr")]([ExtResource("20_x2bj4")])
+status_effects = Array[ExtResource("13_33bgr")]([ExtResource("20_2dw8v")])
 contact_position = Vector2(0, 0)
 movement_direction = Vector2(0, 0)
 
@@ -4215,53 +4216,145 @@ outline_color = Color(0, 0, 0, 1)
 
 [sub_resource type="Resource" id="Resource_h8tfd"]
 script = ExtResource("27_8kcf2")
-viusal_change_time = 3.5
-see_thru_amount = 40.0
-storm_gradient_colors = Array[Color]([Color(0.659, 0.274, 0.662, 0.715), Color(0.507, 0.003, 0.922, 0.663), Color(0.46, 0.003, 0.982, 0.82), Color(0.340732, 0.00156213, 0.820577, 0.859)])
+viusal_change_time = 4.0
+see_thru_amount = 100.0
+see_through_pulse_mult = 1.0
+see_thru_dist_mult = 1.0
+storm_gradient_colors = Array[Color]([Color(0.323, 0.001, 0.495, 0.783), Color(0.415022, 0.424206, 0, 0.663), Color(0.46, 0.003, 0.982, 0.82), Color(0.340732, 0.00156213, 0.820577, 0.859)])
 final_color_distance = 600.0
-reflection_intensity = 0.3
+reflection_intensity = 1.5
+reflection_thickness = 30.0
+reflection_color = Color(0.287, 0.287, 0.287, 0.293)
+turbulence = 10.0
+ripple_intensity = 0.5
+ripple_frequency = 0.6
+ripple_speed = 1.0
+rain_amount = 35
+rain_slant = -0.75
+rain_speed = 20.0
+rain_color = Color(0.857, 0.903, 1, 0.417)
+rain_size = Vector2(0.01, 0.2)
+wind_brightness = 3.5
+ground_wind_speed = 0.45
+top_wind_speed = 4.5
+wind_reversal_factor = 0.0
+wind_spiral_factor = 1.0
+ring_glow_color = Color(0.722, 0.681, 1, 0.743)
+ring_glow_intensity = 2.3
+ring_pulse_speed = 4.0
+
+[sub_resource type="Resource" id="Resource_0ujfv"]
+script = ExtResource("25_dqjbe")
+new_location = Vector2(0, 0)
+offset_location = true
+new_radius = 50.0
+offset_radius = false
+delay = 1.0
+time_to_move = 10.0
+time_to_resize = 10.0
+auto_advance = true
+effect_setting = "Keep Previous"
+visuals_setting = "Override"
+storm_visuals = SubResource("Resource_h8tfd")
+
+[sub_resource type="Resource" id="Resource_wrdhq"]
+script = ExtResource("13_33bgr")
+effect_name = "TestEffect"
+effect_lvl = 3
+is_bad_effect = true
+effects_to_stop = Array[String]([])
+mod_time = 5.0
+apply_until_removed = true
+stat_mods = Array[ExtResource("26_fvygk")]([])
+audio_to_play = ""
+only_cue_on_player_hit = false
+
+[sub_resource type="Resource" id="Resource_l1t3e"]
+script = ExtResource("27_8kcf2")
+viusal_change_time = 1.0
+see_thru_amount = 100.0
+see_through_pulse_mult = 1.0
+see_thru_dist_mult = 1.0
+storm_gradient_colors = Array[Color]([Color(0, 0.67779, 0.150121, 0.574), Color(0.606, 0.322, 1, 0.542), Color(0.558, 0.396, 1, 0.772), Color(0.345, 0.001, 0.829, 0.877)])
+final_color_distance = 600.0
+reflection_intensity = 0.15
 reflection_thickness = 30.0
 reflection_color = Color(0.287, 0.287, 0.287, 0.293)
 turbulence = 1.5
 ripple_intensity = 0.5
 ripple_frequency = 0.6
-ripple_speed = 1.0
-rain_amount = 25
-rain_slant = -0.75
-rain_speed = 20.0
+ripple_speed = 0.5
+rain_amount = 0
+rain_slant = 0.15
+rain_speed = 25.0
 rain_color = Color(0.857, 0.903, 1, 0.417)
-rain_size = Vector2(0.01, 0.2)
-wind_brightness = 2.2
-ground_wind_speed = 0.45
-top_wind_speed = 3.5
+rain_size = Vector2(0.008, 0.19)
+wind_brightness = 1.25
+ground_wind_speed = 0.2
+top_wind_speed = 2.75
 wind_reversal_factor = 0.0
 wind_spiral_factor = 0.0
-ring_glow_color = Color(0.6, 0.6, 0.6, 1)
-ring_glow_intensity = 3.0
+ring_glow_color = Color(0.722, 0.681, 1, 0.743)
+ring_glow_intensity = 2.3
 ring_pulse_speed = 4.0
-
-[sub_resource type="Resource" id="Resource_0ujfv"]
-script = ExtResource("25_dqjbe")
-new_location = Vector2(300, 170)
-offset_location = false
-new_radius = 50.0
-offset_radius = false
-delay = 5.0
-time_to_move = 10.0
-time_to_resize = 10.0
-override_visuals = true
-storm_visuals = SubResource("Resource_h8tfd")
 
 [sub_resource type="Resource" id="Resource_32mph"]
 script = ExtResource("25_dqjbe")
-new_location = Vector2(100, 50)
-offset_location = false
+new_location = Vector2(0, 0)
+offset_location = true
 new_radius = 50.0
 offset_radius = false
-delay = 30.0
+delay = 0.0
+time_to_move = 5.0
+time_to_resize = 5.0
+auto_advance = true
+effect_setting = "Override"
+status_effect = SubResource("Resource_wrdhq")
+visuals_setting = "Override"
+storm_visuals = SubResource("Resource_l1t3e")
+
+[sub_resource type="Resource" id="Resource_j2wa6"]
+script = ExtResource("27_8kcf2")
+viusal_change_time = 3.0
+see_thru_amount = 100.0
+see_through_pulse_mult = 1.0
+see_thru_dist_mult = 1.0
+storm_gradient_colors = Array[Color]([Color(1.29953e-06, 0.514757, 0.375111, 0.804), Color(0.963253, 0, 0.244638, 0.542), Color(0, 0.605301, 0.664768, 0.772), Color(0.345, 0.001, 0.829, 0.877)])
+final_color_distance = 600.0
+reflection_intensity = 0.15
+reflection_thickness = 30.0
+reflection_color = Color(0.287, 0.287, 0.287, 0.293)
+turbulence = 1.5
+ripple_intensity = 0.5
+ripple_frequency = 0.6
+ripple_speed = 0.5
+rain_amount = 0
+rain_slant = 0.15
+rain_speed = 25.0
+rain_color = Color(0.857, 0.903, 1, 0.417)
+rain_size = Vector2(0.008, 0.19)
+wind_brightness = 1.0
+ground_wind_speed = 5.0
+top_wind_speed = 2.75
+wind_reversal_factor = 1.0
+wind_spiral_factor = 5.0
+ring_glow_color = Color(0.722, 0.681, 1, 0.743)
+ring_glow_intensity = 2.3
+ring_pulse_speed = 4.0
+
+[sub_resource type="Resource" id="Resource_nc4mn"]
+script = ExtResource("25_dqjbe")
+new_location = Vector2(0, 0)
+offset_location = true
+new_radius = 50.0
+offset_radius = false
+delay = 0.0
 time_to_move = 10.0
 time_to_resize = 10.0
-override_visuals = false
+auto_advance = true
+effect_setting = "Keep Previous"
+visuals_setting = "Revert to Default"
+storm_visuals = SubResource("Resource_j2wa6")
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_7o6b3"]
 radius = 113.31
@@ -4289,17 +4382,18 @@ shader_parameter/circle_center_pixels = Vector2(1300, 800)
 shader_parameter/radius_pixels = 280.0
 shader_parameter/viewport_size = Vector2(2694, 1920)
 shader_parameter/noise_world_position = null
+shader_parameter/override_all_alpha = 1.0
 shader_parameter/see_through_center_pixels = null
 shader_parameter/see_through_radius = null
 shader_parameter/see_through_opacity = 0.5
-shader_parameter/ring_thickness = 1.6
-shader_parameter/glow_intensity = 3.0
+shader_parameter/ring_thickness = 2.3
+shader_parameter/glow_intensity = 4.0
 shader_parameter/noise_scale = 0.003
 shader_parameter/noise_speed = 0.04
 shader_parameter/bottom_noise_speed = 0.2
 shader_parameter/top_noise_speed = 2.75
 shader_parameter/noise_brightness = 1.25
-shader_parameter/glow_color = Color(0.6, 0.6, 0.6, 1)
+shader_parameter/glow_color = Color(0.722, 0.681, 1, 0.743)
 shader_parameter/pulse_speed = 4.0
 shader_parameter/pulse_intensity = 0.18
 shader_parameter/color_cycle_speed = 0.65
@@ -4565,30 +4659,28 @@ offset_bottom = 12.0
 grow_horizontal = 2
 label_settings = SubResource("LabelSettings_lfc2v")
 
-[node name="BackgroundMusicManager" type="Node" parent="." groups=["core"]]
-script = ExtResource("1_q5pr2")
-
-[node name="Storm" type="Node2D" parent="."]
+[node name="Storm" type="Node2D" parent="WorldRoot"]
 z_index = -2
 z_as_relative = false
 position = Vector2(189, 143)
 script = ExtResource("22_0op7h")
-transform_queue = Array[ExtResource("25_dqjbe")]([SubResource("Resource_0ujfv"), SubResource("Resource_32mph")])
+auto_start = false
+transform_queue = Array[ExtResource("25_dqjbe")]([SubResource("Resource_0ujfv"), SubResource("Resource_32mph"), SubResource("Resource_nc4mn")])
 default_storm_effect = ExtResource("23_5x8gm")
 default_storm_visuals = ExtResource("27_5uvpk")
 metadata/_edit_group_ = true
 
-[node name="SafeZone" type="Area2D" parent="Storm"]
+[node name="SafeZone" type="Area2D" parent="WorldRoot/Storm"]
 collision_layer = 0
 collision_mask = 5
 monitorable = false
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Storm/SafeZone"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="WorldRoot/Storm/SafeZone"]
 shape = SubResource("CircleShape2D_7o6b3")
 
-[node name="StormCanvas" type="CanvasLayer" parent="Storm"]
+[node name="StormCanvas" type="CanvasLayer" parent="WorldRoot/Storm"]
 
-[node name="StormCircle" type="ColorRect" parent="Storm/StormCanvas"]
+[node name="StormCircle" type="ColorRect" parent="WorldRoot/Storm/StormCanvas"]
 material = SubResource("ShaderMaterial_b4rbd")
 anchors_preset = 15
 anchor_right = 1.0
@@ -4597,5 +4689,8 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
-[connection signal="body_entered" from="Storm/SafeZone" to="Storm" method="_on_safe_zone_body_entered"]
-[connection signal="body_exited" from="Storm/SafeZone" to="Storm" method="_on_safe_zone_body_exited"]
+[node name="BackgroundMusicManager" type="Node" parent="." groups=["core"]]
+script = ExtResource("1_q5pr2")
+
+[connection signal="body_entered" from="WorldRoot/Storm/SafeZone" to="WorldRoot/Storm" method="_on_safe_zone_body_entered"]
+[connection signal="body_exited" from="WorldRoot/Storm/SafeZone" to="WorldRoot/Storm" method="_on_safe_zone_body_exited"]

@@ -30,11 +30,17 @@ func _on_test_mod_btn_2_pressed() -> void:
 	get_parent().get_parent().stats.remove_mod("stamina_use_per_hunger_deduction", "mod2", stats_ui, 1)
 	get_parent().get_parent().stats.remove_mod("stamina_use_per_hunger_deduction", "mod1", stats_ui, 1)
 
+func _on_test_mod_btn_3_pressed() -> void:
+	if GlobalData.storm.is_enabled:
+		GlobalData.storm.disable_storm()
+	else:
+		GlobalData.storm.enable_storm()
+
 func _on_test_save_btn_pressed() -> void:
 	SaverLoader.save_game()
 
 func _on_test_load_btn_pressed() -> void:
 	SaverLoader.load_game()
 
-func _on_test_mod_btn_3_pressed() -> void:
-	GlobalData.player_camera.start_shake(1.75, 0.2)
+func _on_test_storm_btn_2_pressed() -> void:
+	GlobalData.storm.force_start_next_phase()

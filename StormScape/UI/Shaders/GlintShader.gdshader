@@ -2,19 +2,19 @@ shader_type canvas_item;
 
 // Uniforms from both shaders
 uniform vec4 outline_color : source_color = vec4(1.0);
-uniform float width : hint_range(0, 10) = 1.0;
-uniform int pattern : hint_range(0, 2) = 0;
+uniform float width : hint_range(0, 10) = 0.0;
+uniform int pattern : hint_range(0, 2) = 2;
 uniform bool inside = false;
 uniform bool add_margins = true;
 
 uniform sampler2D vertical_gradient;
 uniform sampler2D color_gradient;
-uniform float size_effect: hint_range(-5.0, 5.0, 0.05) = 0.1;
-uniform float speed = 1;
-uniform float highlight_strength: hint_range(-4.0, 4.0, 0.05) = 0.5;
-uniform bool color_mode_toggle = false;
-uniform float pause_duration = 0.5;
-uniform float angle = 0.0;
+uniform float size_effect: hint_range(-5.0, 5.0, 0.05) = 0.4;
+uniform float speed = 0.9;
+uniform float highlight_strength: hint_range(-4.0, 4.0, 0.05) = 0.7;
+uniform bool color_mode_toggle = true;
+uniform float pause_duration = 1.0;
+uniform float angle = 35.0;
 
 uniform vec4 tint_color: source_color = vec4(1.0, 1.0, 1.0, 0.0);
 uniform float glow_intensity : hint_range(0.0, 2.0) = 1.0;

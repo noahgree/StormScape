@@ -1,4 +1,4 @@
-[gd_scene load_steps=203 format=3 uid="uid://dba8mrurjlekp"]
+[gd_scene load_steps=205 format=3 uid="uid://dba8mrurjlekp"]
 
 [ext_resource type="Script" path="res://Entities/Player/PlayerCore/Player.gd" id="1_m33tt"]
 [ext_resource type="Script" path="res://Entities/Components/StatModComponents/StatModsCacheResource.gd" id="2_vyeuy"]
@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://cdfdy8m6ki3oq" path="res://Entities/Components/HealthComponent/HealthComponent.tscn" id="3_ojev3"]
 [ext_resource type="PackedScene" uid="uid://btba0jmsow1mx" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectReceiverComponent.tscn" id="4_hhm8x"]
 [ext_resource type="Texture2D" uid="uid://co2s33qcdlpj1" path="res://Entities/Player/Spritesheets/Base/player_base.png" id="4_sdxpd"]
+[ext_resource type="Shader" path="res://Entities/EntityCore/EntityEffectShader.gdshader" id="4_ubhyl"]
 [ext_resource type="PackedScene" uid="uid://4gl24qwdyti3" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/DmgHandler.tscn" id="5_g3ixu"]
 [ext_resource type="PackedScene" uid="uid://cxpv7l7rcaq1o" path="res://Entities/Components/StaminaComponent/StaminaComponent.tscn" id="5_k4fu6"]
 [ext_resource type="PackedScene" uid="uid://ddj5ippwwkvop" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/HealHandler.tscn" id="6_5e1ju"]
@@ -76,6 +77,15 @@ debug_print_mod_changes = true
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_o7k7i"]
 radius = 7.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_jwk3c"]
+shader = ExtResource("4_ubhyl")
+shader_parameter/glow_color = Color(0.726352, 0.503602, 1, 1)
+shader_parameter/glow_size = 4.5
+shader_parameter/glow_strength = 9.0
+shader_parameter/enable_fade = false
+shader_parameter/frame_uv_min = null
+shader_parameter/frame_uv_max = null
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ju2md"]
 atlas = ExtResource("4_sdxpd")
@@ -1574,11 +1584,12 @@ font_color = Color(0.933333, 0.764706, 0.603922, 1)
 [sub_resource type="LabelSettings" id="LabelSettings_veflf"]
 font_color = Color(0.933333, 0.764706, 0.603922, 1)
 
-[node name="Player" type="CharacterBody2D" groups=["has_save_logic"]]
+[node name="Player" type="CharacterBody2D" node_paths=PackedStringArray("sprite") groups=["has_save_logic"]]
 z_index = 1
 collision_mask = 213
 motion_mode = 1
 script = ExtResource("1_m33tt")
+sprite = NodePath("AnimatedSprite2D")
 stats = SubResource("Resource_rwbul")
 
 [node name="Collision" type="CollisionShape2D" parent="."]
@@ -1595,6 +1606,7 @@ self_modulate = Color(0, 0, 0, 0.254902)
 texture = ExtResource("3_e6fnh")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+material = SubResource("ShaderMaterial_jwk3c")
 position = Vector2(0, -16)
 sprite_frames = SubResource("SpriteFrames_ubyvw")
 animation = &"idle"
@@ -1820,18 +1832,31 @@ theme_override_fonts/font = ExtResource("11_1rxkv")
 theme_override_font_sizes/font_size = 16
 text = "MOD 2"
 
-[node name="TestShakeBtn" type="Button" parent="PlayerUILayer/TestButtons"]
+[node name="TestStormBtn" type="Button" parent="PlayerUILayer/TestButtons"]
 texture_filter = 1
 layout_mode = 0
-offset_left = 451.0
-offset_top = 112.0
-offset_right = 489.0
-offset_bottom = 132.0
+offset_left = 449.0
+offset_top = 111.0
+offset_right = 488.0
+offset_bottom = 131.0
 scale = Vector2(0.7, 0.7)
 focus_mode = 0
 theme_override_fonts/font = ExtResource("11_1rxkv")
 theme_override_font_sizes/font_size = 16
-text = "Shake"
+text = "STORM"
+
+[node name="TestStormBtn2" type="Button" parent="PlayerUILayer/TestButtons"]
+texture_filter = 1
+layout_mode = 0
+offset_left = 432.0
+offset_top = 127.0
+offset_right = 496.0
+offset_bottom = 147.0
+scale = Vector2(0.7, 0.7)
+focus_mode = 0
+theme_override_fonts/font = ExtResource("11_1rxkv")
+theme_override_font_sizes/font_size = 16
+text = "NEXT PHASE"
 
 [node name="PlayerStatsOverlay" type="Control" parent="PlayerUILayer" node_paths=PackedStringArray("player")]
 texture_filter = 2
@@ -2647,6 +2672,7 @@ offset_bottom = 11.0
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_vertical = 4
+region_rect = Rect2(0, 0, 15, 15)
 
 [node name="TrashTexture" type="TextureRect" parent="PlayerUILayer/PlayerInvUI/TrashSlotPanel/TrashSlot/TextureMargins" index="0"]
 unique_name_in_owner = true
@@ -2664,7 +2690,8 @@ stretch_mode = 3
 [connection signal="pressed" from="PlayerUILayer/TestButtons/TestLoadBtn" to="PlayerUILayer/TestButtons" method="_on_test_load_btn_pressed"]
 [connection signal="pressed" from="PlayerUILayer/TestButtons/TestModBtn1" to="PlayerUILayer/TestButtons" method="_on_test_mod_btn_1_pressed"]
 [connection signal="pressed" from="PlayerUILayer/TestButtons/TestModBtn2" to="PlayerUILayer/TestButtons" method="_on_test_mod_btn_2_pressed"]
-[connection signal="pressed" from="PlayerUILayer/TestButtons/TestShakeBtn" to="PlayerUILayer/TestButtons" method="_on_test_mod_btn_3_pressed"]
+[connection signal="pressed" from="PlayerUILayer/TestButtons/TestStormBtn" to="PlayerUILayer/TestButtons" method="_on_test_mod_btn_3_pressed"]
+[connection signal="pressed" from="PlayerUILayer/TestButtons/TestStormBtn2" to="PlayerUILayer/TestButtons" method="_on_test_storm_btn_2_pressed"]
 [connection signal="tree_entered" from="PlayerUILayer/PlayerStatsOverlay" to="PlayerUILayer/PlayerStatsOverlay" method="_on_tree_entered"]
 [connection signal="tree_exiting" from="PlayerUILayer/PlayerStatsOverlay" to="PlayerUILayer/PlayerStatsOverlay" method="_on_tree_exiting"]
 [connection signal="timeout" from="PlayerUILayer/PlayerStatsOverlay/HealthChangedTimer" to="PlayerUILayer/PlayerStatsOverlay" method="_on_health_changed_timer_timeout"]
