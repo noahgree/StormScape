@@ -1,5 +1,5 @@
 extends Node2D
-class_name WorldItems
+class_name WorldItemsManager
 
 var grid_size: float = 32.0
 var grid: Dictionary = {}

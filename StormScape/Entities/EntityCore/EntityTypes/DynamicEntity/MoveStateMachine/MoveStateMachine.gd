@@ -64,7 +64,7 @@ func state_machine_physics_process(delta: float) -> void:
 
 ## Updates the current animation vector by lerping the current mouse direction.
 func update_anim_vector() -> void:
-	var entity_loc_with_sprite_offset: Vector2 = entity.get_node("AnimatedSprite2D").position / 2.0 + entity.global_position
+	var entity_loc_with_sprite_offset: Vector2 = entity.sprite.position / 2.0 + entity.global_position
 	curr_mouse_direction = get_lerped_mouse_direction_to_pos(curr_mouse_direction, entity_loc_with_sprite_offset)
 	anim_vector = curr_mouse_direction
 
@@ -82,7 +82,7 @@ func get_lerped_mouse_direction_to_pos(current_direction: Vector2, target_positi
 	return Vector2.RIGHT.rotated(new_angle)
 
 func get_mouse_direction_to_pos() -> Vector2:
-	var entity_loc_with_sprite_offset: Vector2 = entity.get_node("AnimatedSprite2D").position / 2.0 + entity.global_position
+	var entity_loc_with_sprite_offset: Vector2 = entity.sprite.position / 2.0 + entity.global_position
 	return (entity.get_global_mouse_position() - entity_loc_with_sprite_offset).normalized()
 
 ## Assists in turning the character to the right direction upon game loads.

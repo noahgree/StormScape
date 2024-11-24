@@ -1,4 +1,4 @@
-[gd_scene load_steps=76 format=4 uid="uid://bscnr6a23l10m"]
+[gd_scene load_steps=100 format=4 uid="uid://bscnr6a23l10m"]
 
 [ext_resource type="Script" path="res://Utilities/Game/WorldRoot/WorldRoot.gd" id="1_q0i4n"]
 [ext_resource type="Script" path="res://Stages/World/BackgroundMusicManager.gd" id="1_q5pr2"]
@@ -14,7 +14,9 @@
 [ext_resource type="PackedScene" uid="uid://dykiv0tlhwmox" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/KnockbackHandler.tscn" id="7_vet3v"]
 [ext_resource type="PackedScene" uid="uid://cdfdy8m6ki3oq" path="res://Entities/Components/HealthComponent/HealthComponent.tscn" id="7_yay1r"]
 [ext_resource type="PackedScene" uid="uid://co3n6m7efg8pd" path="res://Entities/Components/EffectComponents/StatusEffectManager/StatusEffectManager.tscn" id="8_anrko"]
-[ext_resource type="Script" path="res://Stages/World/WorldItems.gd" id="8_g8y4o"]
+[ext_resource type="Script" path="res://Stages/World/WorldItemsManager.gd" id="8_g8y4o"]
+[ext_resource type="Shader" path="res://Entities/EntityCore/EntityEffectShader.gdshader" id="11_4guke"]
+[ext_resource type="PackedScene" uid="uid://dmv4k4j4lg3pw" path="res://Entities/EntityCore/EntityStaticSprite.tscn" id="11_g56kn"]
 [ext_resource type="Script" path="res://Entities/Components/HitboxComponent/HitboxComponent.gd" id="11_vr4ax"]
 [ext_resource type="Texture2D" uid="uid://2xf1pqc78iin" path="res://Assets/Icon/icon.svg" id="12_ajeh1"]
 [ext_resource type="Script" path="res://Entities/EffectSystemResources/StatusEffects/StatusEffect.gd" id="13_33bgr"]
@@ -35,10 +37,14 @@
 [ext_resource type="Resource" uid="uid://cucuggowaf55y" path="res://Entities/EffectSystemResources/StatusEffects/BadEffects/StormSyndrome/StormSyndrome1.tres" id="23_5x8gm"]
 [ext_resource type="Resource" uid="uid://bh18kqp2up3oe" path="res://Entities/Items/Weapons/MeleeWeapons/Pickaxe/Pickaxe.tres" id="23_34j4d"]
 [ext_resource type="Script" path="res://Entities/Components/ItemComponents/LootTableComponent/LootTable.gd" id="23_lh0pd"]
+[ext_resource type="Resource" uid="uid://budyhbdyh7yme" path="res://Entities/EffectSystemResources/StatusEffects/GoodEffects/SelfKnockback/SelfKnockback1.tres" id="23_o7ib1"]
 [ext_resource type="Script" path="res://Stages/World/Storm/StormTransform.gd" id="25_dqjbe"]
 [ext_resource type="Script" path="res://Entities/Components/StatModComponents/EntityStatMod.gd" id="26_fvygk"]
+[ext_resource type="Texture2D" uid="uid://ec7bui23pv1m" path="res://Entities/Items/Weapons/MeleeWeapons/Axe/axe.png" id="26_pxj2w"]
 [ext_resource type="Resource" uid="uid://cx6t5cil24ca3" path="res://Stages/World/Storm/StormVisuals/DefaultStormVisuals.tres" id="27_5uvpk"]
 [ext_resource type="Script" path="res://Stages/World/Storm/StormVisuals/StormVisuals.gd" id="27_8kcf2"]
+[ext_resource type="PackedScene" uid="uid://bgj0b83wrmlon" path="res://Entities/Items/Weapons/MeleeWeapons/Axe/Axe.tscn" id="27_vg0ul"]
+[ext_resource type="Script" path="res://Entities/Items/Weapons/MeleeWeapons/MeleeWeaponResource.gd" id="28_flry6"]
 
 [sub_resource type="Environment" id="Environment_2wouv"]
 background_mode = 3
@@ -4179,9 +4185,31 @@ physics_layer_1/collision_layer = 128
 physics_layer_1/collision_mask = 0
 sources/0 = SubResource("TileSetAtlasSource_4rxbk")
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_i2v62"]
+resource_local_to_scene = true
+shader = ExtResource("11_4guke")
+shader_parameter/glow_color = Color(1, 1, 1, 1)
+shader_parameter/glow_size = 4.5
+shader_parameter/glow_strength = 9.0
+shader_parameter/enable_fade = false
+shader_parameter/tint_color = Color(1, 1, 1, 0)
+shader_parameter/frame_uv_min = null
+shader_parameter/frame_uv_max = null
+
 [sub_resource type="Resource" id="Resource_0ub65"]
 script = ExtResource("6_jky7o")
 debug_print_mod_changes = false
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_vww1a"]
+resource_local_to_scene = true
+shader = ExtResource("11_4guke")
+shader_parameter/glow_color = Color(1, 1, 1, 1)
+shader_parameter/glow_size = 4.5
+shader_parameter/glow_strength = 9.0
+shader_parameter/enable_fade = false
+shader_parameter/tint_color = Color(1, 1, 1, 0)
+shader_parameter/frame_uv_min = null
+shader_parameter/frame_uv_max = null
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_sbju2"]
 
@@ -4196,9 +4224,311 @@ weighting = 1.0
 last_used = 0
 spawn_count = 0
 
+[sub_resource type="Resource" id="Resource_63o7k"]
+script = ExtResource("14_pdlrm")
+is_projectile = false
+can_hit_self = false
+bad_effect_affected_teams = 1
+good_effect_affected_teams = 2
+scanned_phys_layers = 191
+base_damage = 200
+dmg_affected_stats = 2
+crit_chance = 5
+crit_multiplier = 1.5
+armor_penetration = 0
+base_healing = 0
+heal_affected_stats = 2
+cam_shake_strength = 0.0
+cam_shake_duration = 0.0
+cam_freeze_multiplier = 1.0
+cam_freeze_duration = 0.0
+impact_sound = ""
+hit_flash_color = Color(1, 1, 1, 0.45)
+status_effects = Array[ExtResource("13_33bgr")]([])
+contact_position = Vector2(0, 0)
+movement_direction = Vector2(0, 0)
+
+[sub_resource type="Resource" id="Resource_15gyn"]
+script = ExtResource("6_jky7o")
+debug_print_mod_changes = false
+
+[sub_resource type="Resource" id="Resource_0l7w0"]
+script = ExtResource("28_flry6")
+melee_weapon_type = 0
+stamina_cost = 3.0
+cooldown = 0.5
+use_speed = 0.25
+swing_angle = 125
+can_do_charge_use = true
+min_charge_time = 2.0
+auto_do_charge_use = false
+charge_use_cooldown = 1.5
+charge_use_speed = 0.75
+charge_swing_angle = 3000
+charge_stamina_cost = 25
+charging_entity_speed_mult = 1.0
+chg_use_start_effect = ExtResource("23_o7ib1")
+usage_sound = "PlayerDash"
+charge_use_sound = ""
+cooldown_left = 0.0
+charge_cooldown_left = 0.0
+stats = SubResource("Resource_15gyn")
+effect_source = SubResource("Resource_63o7k")
+pullout_delay = 0.0
+time_last_equipped = 0.0
+id = "axe"
+name = "Axe"
+icon = ExtResource("26_pxj2w")
+thumbnail = ExtResource("26_pxj2w")
+item_scene = ExtResource("27_vg0ul")
+is_gripped_by_one_hand = true
+rotation_lerping = 0.1
+item_type = 1
+rarity = 0
+weight = 0
+stack_size = 1
+auto_pickup = false
+pickup_radius = 6
+info = "A mighty axe."
+
 [sub_resource type="Resource" id="Resource_x8lvr"]
 script = ExtResource("18_cjmh4")
-item = ExtResource("21_gqs2b")
+item = SubResource("Resource_0l7w0")
+quantity = 1
+weighting = 1.0
+last_used = 0
+spawn_count = 0
+
+[sub_resource type="Resource" id="Resource_u3syr"]
+script = ExtResource("28_flry6")
+melee_weapon_type = 0
+stamina_cost = 3.0
+cooldown = 0.5
+use_speed = 0.25
+swing_angle = 125
+can_do_charge_use = true
+min_charge_time = 2.0
+auto_do_charge_use = false
+charge_use_cooldown = 1.5
+charge_use_speed = 0.75
+charge_swing_angle = 3000
+charge_stamina_cost = 25
+charging_entity_speed_mult = 1.0
+chg_use_start_effect = ExtResource("23_o7ib1")
+usage_sound = "PlayerDash"
+charge_use_sound = ""
+cooldown_left = 0.0
+charge_cooldown_left = 0.0
+stats = SubResource("Resource_15gyn")
+effect_source = SubResource("Resource_63o7k")
+pullout_delay = 0.0
+time_last_equipped = 0.0
+id = "axe"
+name = "Axe"
+icon = ExtResource("26_pxj2w")
+thumbnail = ExtResource("26_pxj2w")
+item_scene = ExtResource("27_vg0ul")
+is_gripped_by_one_hand = true
+rotation_lerping = 0.1
+item_type = 1
+rarity = 1
+weight = 0
+stack_size = 1
+auto_pickup = false
+pickup_radius = 6
+info = "A mighty axe."
+
+[sub_resource type="Resource" id="Resource_wjm1u"]
+script = ExtResource("18_cjmh4")
+item = SubResource("Resource_u3syr")
+quantity = 1
+weighting = 1.0
+last_used = 0
+spawn_count = 0
+
+[sub_resource type="Resource" id="Resource_aav7i"]
+script = ExtResource("28_flry6")
+melee_weapon_type = 0
+stamina_cost = 3.0
+cooldown = 0.5
+use_speed = 0.25
+swing_angle = 125
+can_do_charge_use = true
+min_charge_time = 2.0
+auto_do_charge_use = false
+charge_use_cooldown = 1.5
+charge_use_speed = 0.75
+charge_swing_angle = 3000
+charge_stamina_cost = 25
+charging_entity_speed_mult = 1.0
+chg_use_start_effect = ExtResource("23_o7ib1")
+usage_sound = "PlayerDash"
+charge_use_sound = ""
+cooldown_left = 0.0
+charge_cooldown_left = 0.0
+stats = SubResource("Resource_15gyn")
+effect_source = SubResource("Resource_63o7k")
+pullout_delay = 0.0
+time_last_equipped = 0.0
+id = "axe"
+name = "Axe"
+icon = ExtResource("26_pxj2w")
+thumbnail = ExtResource("26_pxj2w")
+item_scene = ExtResource("27_vg0ul")
+is_gripped_by_one_hand = true
+rotation_lerping = 0.1
+item_type = 1
+rarity = 2
+weight = 0
+stack_size = 1
+auto_pickup = false
+pickup_radius = 6
+info = "A mighty axe."
+
+[sub_resource type="Resource" id="Resource_ggoq4"]
+script = ExtResource("18_cjmh4")
+item = SubResource("Resource_aav7i")
+quantity = 1
+weighting = 1.0
+last_used = 0
+spawn_count = 0
+
+[sub_resource type="Resource" id="Resource_oipk6"]
+script = ExtResource("28_flry6")
+melee_weapon_type = 0
+stamina_cost = 3.0
+cooldown = 0.5
+use_speed = 0.25
+swing_angle = 125
+can_do_charge_use = true
+min_charge_time = 2.0
+auto_do_charge_use = false
+charge_use_cooldown = 1.5
+charge_use_speed = 0.75
+charge_swing_angle = 3000
+charge_stamina_cost = 25
+charging_entity_speed_mult = 1.0
+chg_use_start_effect = ExtResource("23_o7ib1")
+usage_sound = "PlayerDash"
+charge_use_sound = ""
+cooldown_left = 0.0
+charge_cooldown_left = 0.0
+stats = SubResource("Resource_15gyn")
+effect_source = SubResource("Resource_63o7k")
+pullout_delay = 0.0
+time_last_equipped = 0.0
+id = "axe"
+name = "Axe"
+icon = ExtResource("26_pxj2w")
+thumbnail = ExtResource("26_pxj2w")
+item_scene = ExtResource("27_vg0ul")
+is_gripped_by_one_hand = true
+rotation_lerping = 0.1
+item_type = 1
+rarity = 3
+weight = 0
+stack_size = 1
+auto_pickup = false
+pickup_radius = 6
+info = "A mighty axe."
+
+[sub_resource type="Resource" id="Resource_2hlfx"]
+script = ExtResource("18_cjmh4")
+item = SubResource("Resource_oipk6")
+quantity = 1
+weighting = 1.0
+last_used = 0
+spawn_count = 0
+
+[sub_resource type="Resource" id="Resource_sbnfn"]
+script = ExtResource("28_flry6")
+melee_weapon_type = 0
+stamina_cost = 3.0
+cooldown = 0.5
+use_speed = 0.25
+swing_angle = 125
+can_do_charge_use = true
+min_charge_time = 2.0
+auto_do_charge_use = false
+charge_use_cooldown = 1.5
+charge_use_speed = 0.75
+charge_swing_angle = 3000
+charge_stamina_cost = 25
+charging_entity_speed_mult = 1.0
+chg_use_start_effect = ExtResource("23_o7ib1")
+usage_sound = "PlayerDash"
+charge_use_sound = ""
+cooldown_left = 0.0
+charge_cooldown_left = 0.0
+stats = SubResource("Resource_15gyn")
+effect_source = SubResource("Resource_63o7k")
+pullout_delay = 0.0
+time_last_equipped = 0.0
+id = "axe"
+name = "Axe"
+icon = ExtResource("26_pxj2w")
+thumbnail = ExtResource("26_pxj2w")
+item_scene = ExtResource("27_vg0ul")
+is_gripped_by_one_hand = true
+rotation_lerping = 0.1
+item_type = 1
+rarity = 4
+weight = 0
+stack_size = 1
+auto_pickup = false
+pickup_radius = 6
+info = "A mighty axe."
+
+[sub_resource type="Resource" id="Resource_0obqf"]
+script = ExtResource("18_cjmh4")
+item = SubResource("Resource_sbnfn")
+quantity = 1
+weighting = 1.0
+last_used = 0
+spawn_count = 0
+
+[sub_resource type="Resource" id="Resource_bgfye"]
+script = ExtResource("28_flry6")
+melee_weapon_type = 0
+stamina_cost = 3.0
+cooldown = 0.5
+use_speed = 0.25
+swing_angle = 125
+can_do_charge_use = true
+min_charge_time = 2.0
+auto_do_charge_use = false
+charge_use_cooldown = 1.5
+charge_use_speed = 0.75
+charge_swing_angle = 3000
+charge_stamina_cost = 25
+charging_entity_speed_mult = 1.0
+chg_use_start_effect = ExtResource("23_o7ib1")
+usage_sound = "PlayerDash"
+charge_use_sound = ""
+cooldown_left = 0.0
+charge_cooldown_left = 0.0
+stats = SubResource("Resource_15gyn")
+effect_source = SubResource("Resource_63o7k")
+pullout_delay = 0.0
+time_last_equipped = 0.0
+id = "axe"
+name = "Axe"
+icon = ExtResource("26_pxj2w")
+thumbnail = ExtResource("26_pxj2w")
+item_scene = ExtResource("27_vg0ul")
+is_gripped_by_one_hand = true
+rotation_lerping = 0.1
+item_type = 1
+rarity = 5
+weight = 0
+stack_size = 1
+auto_pickup = false
+pickup_radius = 6
+info = "A mighty axe."
+
+[sub_resource type="Resource" id="Resource_py51w"]
+script = ExtResource("18_cjmh4")
+item = SubResource("Resource_bgfye")
 quantity = 1
 weighting = 1.0
 last_used = 0
@@ -4206,8 +4536,19 @@ spawn_count = 0
 
 [sub_resource type="Resource" id="Resource_tcueq"]
 script = ExtResource("23_lh0pd")
-hit_loot_table = Array[ExtResource("18_cjmh4")]([SubResource("Resource_x8lvr")])
+hit_loot_table = Array[ExtResource("18_cjmh4")]([SubResource("Resource_x8lvr"), SubResource("Resource_wjm1u"), SubResource("Resource_ggoq4"), SubResource("Resource_2hlfx"), SubResource("Resource_0obqf"), SubResource("Resource_py51w")])
 die_loot_table = Array[ExtResource("18_cjmh4")]([SubResource("Resource_l1o4x")])
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_rvn77"]
+resource_local_to_scene = true
+shader = ExtResource("11_4guke")
+shader_parameter/glow_color = Color(1, 1, 1, 1)
+shader_parameter/glow_size = 4.5
+shader_parameter/glow_strength = 9.0
+shader_parameter/enable_fade = false
+shader_parameter/tint_color = Color(1, 1, 1, 0)
+shader_parameter/frame_uv_min = null
+shader_parameter/frame_uv_max = null
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_4wvqs"]
 
@@ -4251,6 +4592,28 @@ script = ExtResource("23_lh0pd")
 hit_loot_table = Array[ExtResource("18_cjmh4")]([SubResource("Resource_q71vo"), SubResource("Resource_644bw")])
 die_loot_table = Array[ExtResource("18_cjmh4")]([SubResource("Resource_cjrwo"), SubResource("Resource_i50n4")])
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_rbjst"]
+resource_local_to_scene = true
+shader = ExtResource("11_4guke")
+shader_parameter/glow_color = Color(1, 1, 1, 1)
+shader_parameter/glow_size = 4.5
+shader_parameter/glow_strength = 9.0
+shader_parameter/enable_fade = false
+shader_parameter/tint_color = Color(1, 1, 1, 0)
+shader_parameter/frame_uv_min = null
+shader_parameter/frame_uv_max = null
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_n5ju2"]
+resource_local_to_scene = true
+shader = ExtResource("11_4guke")
+shader_parameter/glow_color = Color(1, 1, 1, 1)
+shader_parameter/glow_size = 4.5
+shader_parameter/glow_strength = 9.0
+shader_parameter/enable_fade = false
+shader_parameter/tint_color = Color(1, 1, 1, 0)
+shader_parameter/frame_uv_min = null
+shader_parameter/frame_uv_max = null
+
 [sub_resource type="Resource" id="Resource_sx5ie"]
 script = ExtResource("14_pdlrm")
 is_projectile = false
@@ -4270,6 +4633,7 @@ cam_shake_duration = 0.0
 cam_freeze_multiplier = 1.0
 cam_freeze_duration = 0.0
 impact_sound = ""
+hit_flash_color = Color(1, 1, 1, 0.45)
 status_effects = Array[ExtResource("13_33bgr")]([ExtResource("20_2dw8v")])
 contact_position = Vector2(0, 0)
 movement_direction = Vector2(0, 0)
@@ -4284,12 +4648,12 @@ outline_color = Color(0, 0, 0, 1)
 [sub_resource type="Resource" id="Resource_h8tfd"]
 script = ExtResource("27_8kcf2")
 viusal_change_time = 4.0
-see_thru_amount = 100.0
+see_thru_amount = 50.0
 see_through_pulse_mult = 1.0
 see_thru_dist_mult = 1.0
-storm_gradient_colors = Array[Color]([Color(0.323, 0.001, 0.495, 0.783), Color(0.415022, 0.424206, 0, 0.663), Color(0.46, 0.003, 0.982, 0.82), Color(0.340732, 0.00156213, 0.820577, 0.859)])
+storm_gradient_colors = Array[Color]([Color(1.44392e-07, 0.663415, 0.433462, 0.574), Color(0.668381, 0.483265, 0, 0.542), Color(0.558, 0.396, 1, 0.772), Color(0.345, 0.001, 0.829, 0.877)])
 final_color_distance = 600.0
-reflection_intensity = 1.5
+reflection_intensity = 0.4
 reflection_thickness = 30.0
 reflection_color = Color(0.287, 0.287, 0.287, 0.293)
 turbulence = 10.0
@@ -4312,7 +4676,7 @@ ring_pulse_speed = 4.0
 
 [sub_resource type="Resource" id="Resource_0ujfv"]
 script = ExtResource("25_dqjbe")
-new_location = Vector2(0, 0)
+new_location = Vector2(50, -50)
 offset_location = true
 new_radius = 50.0
 offset_radius = false
@@ -4338,12 +4702,12 @@ only_cue_on_player_hit = false
 
 [sub_resource type="Resource" id="Resource_l1t3e"]
 script = ExtResource("27_8kcf2")
-viusal_change_time = 1.0
-see_thru_amount = 100.0
+viusal_change_time = 3.0
+see_thru_amount = 65.0
 see_through_pulse_mult = 1.0
 see_thru_dist_mult = 1.0
-storm_gradient_colors = Array[Color]([Color(0, 0.67779, 0.150121, 0.574), Color(0.606, 0.322, 1, 0.542), Color(0.558, 0.396, 1, 0.772), Color(0.345, 0.001, 0.829, 0.877)])
-final_color_distance = 600.0
+storm_gradient_colors = Array[Color]([Color(0.992306, 3.27289e-06, 0.58646, 0.574), Color(0.949186, 0.142911, 0, 0.542), Color(0.749196, 0.459432, 1.92523e-07, 0.772), Color(0.406298, 0.311656, 0, 0.877)])
+final_color_distance = 400.0
 reflection_intensity = 0.15
 reflection_thickness = 30.0
 reflection_color = Color(0.287, 0.287, 0.287, 0.293)
@@ -4351,7 +4715,7 @@ turbulence = 1.5
 ripple_intensity = 0.5
 ripple_frequency = 0.6
 ripple_speed = 0.5
-rain_amount = 0
+rain_amount = 25
 rain_slant = 0.15
 rain_speed = 25.0
 rain_color = Color(0.857, 0.903, 1, 0.417)
@@ -4362,7 +4726,7 @@ top_wind_speed = 2.75
 wind_reversal_factor = 0.0
 wind_spiral_factor = 0.0
 ring_glow_color = Color(0.722, 0.681, 1, 0.743)
-ring_glow_intensity = 2.3
+ring_glow_intensity = 3.5
 ring_pulse_speed = 4.0
 
 [sub_resource type="Resource" id="Resource_32mph"]
@@ -4420,7 +4784,7 @@ time_to_move = 10.0
 time_to_resize = 10.0
 auto_advance = true
 effect_setting = "Keep Previous"
-visuals_setting = "Revert to Default"
+visuals_setting = "Override"
 storm_visuals = SubResource("Resource_j2wa6")
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_7o6b3"]
@@ -4515,7 +4879,7 @@ tile_map_data = PackedByteArray("AAD5////AAACAAEAAAD5/wAAAAACAAEAAAD5/wEAAAACAAE
 tile_set = SubResource("TileSet_hhfml")
 script = ExtResource("22_47ykm")
 
-[node name="WorldItems" type="Node2D" parent="WorldRoot" groups=["core"]]
+[node name="WorldItemsManager" type="Node2D" parent="WorldRoot" groups=["core"]]
 y_sort_enabled = true
 script = ExtResource("8_g8y4o")
 
@@ -4525,6 +4889,11 @@ y_sort_enabled = true
 [node name="Enemy" type="RigidBody2D" parent="WorldRoot/Testing"]
 script = ExtResource("5_vhyrg")
 team = 2
+
+[node name="EntitySprite" parent="WorldRoot/Testing/Enemy" instance=ExtResource("11_g56kn")]
+modulate = Color(0, 0.366846, 0.687652, 1)
+material = SubResource("ShaderMaterial_i2v62")
+scale = Vector2(0.156, 0.156)
 
 [node name="TestRigidEntity" type="RigidBody2D" parent="WorldRoot/Testing"]
 position = Vector2(128, 72)
@@ -4538,9 +4907,10 @@ script = ExtResource("5_vhyrg")
 team = 2
 stats = SubResource("Resource_0ub65")
 
-[node name="Sprite2D" type="Sprite2D" parent="WorldRoot/Testing/TestRigidEntity"]
-modulate = Color(0, 0.27443, 0.568498, 1)
-scale = Vector2(0.15625, 0.15625)
+[node name="EntitySprite" parent="WorldRoot/Testing/TestRigidEntity" instance=ExtResource("11_g56kn")]
+modulate = Color(0, 0.366846, 0.687652, 1)
+material = SubResource("ShaderMaterial_vww1a")
+scale = Vector2(0.156, 0.156)
 texture = ExtResource("12_ajeh1")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="WorldRoot/Testing/TestRigidEntity"]
@@ -4585,9 +4955,10 @@ linear_damp = 2.5
 script = ExtResource("5_vhyrg")
 team = 2
 
-[node name="Sprite2D" type="Sprite2D" parent="WorldRoot/Testing/TestRigidEntity2"]
-modulate = Color(0, 0.27443, 0.568498, 1)
-scale = Vector2(0.15625, 0.15625)
+[node name="EntitySprite" parent="WorldRoot/Testing/TestRigidEntity2" instance=ExtResource("11_g56kn")]
+modulate = Color(0, 0.366846, 0.687652, 1)
+material = SubResource("ShaderMaterial_rvn77")
+scale = Vector2(0.156, 0.156)
 texture = ExtResource("12_ajeh1")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="WorldRoot/Testing/TestRigidEntity2"]
@@ -4630,9 +5001,10 @@ linear_damp = 2.5
 script = ExtResource("5_vhyrg")
 team = 2
 
-[node name="Sprite2D" type="Sprite2D" parent="WorldRoot/Testing/TestRigidEntity3"]
-modulate = Color(0, 0.27443, 0.568498, 1)
-scale = Vector2(0.15625, 0.15625)
+[node name="EntitySprite" parent="WorldRoot/Testing/TestRigidEntity3" instance=ExtResource("11_g56kn")]
+modulate = Color(0, 0.366846, 0.687652, 1)
+material = SubResource("ShaderMaterial_rbjst")
+scale = Vector2(0.156, 0.156)
 texture = ExtResource("12_ajeh1")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="WorldRoot/Testing/TestRigidEntity3"]
@@ -4670,9 +5042,10 @@ linear_damp = 2.5
 script = ExtResource("5_vhyrg")
 team = 2
 
-[node name="Sprite2D" type="Sprite2D" parent="WorldRoot/Testing/TestRigidEntity4"]
-modulate = Color(0, 0.27443, 0.568498, 1)
-scale = Vector2(0.15625, 0.15625)
+[node name="EntitySprite" parent="WorldRoot/Testing/TestRigidEntity4" instance=ExtResource("11_g56kn")]
+modulate = Color(0, 0.366846, 0.687652, 1)
+material = SubResource("ShaderMaterial_n5ju2")
+scale = Vector2(0.156, 0.156)
 texture = ExtResource("12_ajeh1")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="WorldRoot/Testing/TestRigidEntity4"]

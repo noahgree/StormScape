@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="ProjWeaponResource" load_steps=27 format=3 uid="uid://ciel2rrqq4dvv"]
+[gd_resource type="Resource" script_class="ProjWeaponResource" load_steps=28 format=3 uid="uid://ciel2rrqq4dvv"]
 
 [ext_resource type="Script" path="res://Entities/EffectSystemResources/EffectSources/EffectSource.gd" id="1_2i3xb"]
 [ext_resource type="Script" path="res://Entities/Items/Weapons/ProjectileWeapons/ProjWeaponResource.gd" id="1_7bjnk"]
@@ -56,7 +56,7 @@ can_hit_self = false
 bad_effect_affected_teams = 1
 good_effect_affected_teams = 2
 scanned_phys_layers = 255
-base_damage = 5
+base_damage = 10
 dmg_affected_stats = 2
 crit_chance = 0
 crit_multiplier = 1.5
@@ -68,6 +68,7 @@ cam_shake_duration = 0.0
 cam_freeze_multiplier = 1.0
 cam_freeze_duration = 0.0
 impact_sound = ""
+hit_flash_color = Color(1, 1, 1, 0.45)
 status_effects = Array[ExtResource("2_mu3cd")]([])
 contact_position = Vector2(0, 0)
 movement_direction = Vector2(0, 0)
@@ -102,6 +103,10 @@ impact_particle_mult = 1.0
 beam_particle_color = Color(0.646492, 0.854506, 1, 1)
 beam_particle_mult = 1.0
 
+[sub_resource type="Curve" id="Curve_uaxhg"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
 [sub_resource type="Curve" id="Curve_2iwdc"]
 _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.506669), 0.0, 0.0, 0, 0]
 point_count = 2
@@ -116,6 +121,7 @@ max_distance = 500
 override_gun_height = false
 height_override = 6
 speed_curve = SubResource("Curve_2iwdc")
+effect_falloff_curve = SubResource("Curve_uaxhg")
 point_of_max_falloff = 500.0
 bad_effects_falloff = true
 good_effects_falloff = false

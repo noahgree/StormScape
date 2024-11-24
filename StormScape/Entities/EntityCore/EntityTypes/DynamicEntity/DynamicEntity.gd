@@ -6,10 +6,10 @@ class_name DynamicEntity
 ## This should not be used by things like weapons or trees.
 
 @export var team: GlobalData.Teams = GlobalData.Teams.PLAYER ## What the effects received by this entity should consider as this entity's team.
-@export var sprite: Node2D
 @export_group("Status Effects & Stat Mods")
 @export var stats: StatModsCacheResource = StatModsCacheResource.new() ## The resource that will cache and work with all stat mods for this entity.
 
+@onready var sprite: Node2D = $EntitySprite ## The visual representation of the entity. Needs to have the EntityEffectShader applied.
 @onready var effect_receiver: EffectReceiverComponent = get_node_or_null("EffectReceiverComponent") ## The component that handles incoming effect sources.
 @onready var effects: StatusEffectManager = get_node_or_null("StatusEffectManager") ## The node that will cache and manage all status effects for this entity.
 @onready var move_fsm: MoveStateMachine = $MoveStateMachine ## The FSM controlling the entity's movement.
@@ -37,8 +37,6 @@ func _ready() -> void:
 		add_to_group("enemy_entities")
 
 	if sprite.material != null and sprite.material.shader != null:
-		#if sprite is AnimatedSprite2D:
-			#(sprite as AnimatedSprite2D).frame_changed.connect(_update_shader_with_new_sprite_frame_size)
 		_update_shader_with_new_sprite_frame_size()
 
 func _process(delta: float) -> void:
@@ -79,6 +77,8 @@ func request_time_snare(factor: float, snare_time: float) -> void:
 func die() -> void:
 	move_fsm.die()
 
+## Updates the shader every frame with information on the position of a sprite frame within its sprite sheet. Needed
+## to make the glow not produce artifacts along the edges of the sprite when using an animated sprite node.
 func _update_shader_with_new_sprite_frame_size() -> void:
 	if sprite is AnimatedSprite2D:
 		sprite.material.set_shader_parameter("enable_fading", true)

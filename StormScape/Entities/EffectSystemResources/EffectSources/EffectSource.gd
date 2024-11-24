@@ -41,6 +41,7 @@ class_name EffectSource
 @export_group("General Impact FX")
 @export var impact_vfx: PackedScene = null ## The vfx to spawn when impacting something.
 @export var impact_sound: String = "" ## The sound to play when impacting something.
+@export var hit_flash_color: Color = Color(1, 1, 1, 0.45) ## The color to flash the hit entity to on being hit.
 
 @export_group("Status Effects")
 @export var status_effects: Array[StatusEffect] ## The array of status effects that can be applied to the receiving entity.

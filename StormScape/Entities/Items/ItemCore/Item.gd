@@ -12,6 +12,7 @@ static var item_scene: PackedScene = load("res://Entities/Items/ItemCore/Item.ts
 @onready var thumbnail: Sprite2D = $Sprite2D ## The sprite that shows the item's texture.
 @onready var ground_glow: Sprite2D = $GroundGlowScaler/GroundGlow ## The fake light that immitates a glowing effect on the ground.
 @onready var particles: CPUParticles2D = $Particles
+@onready var line_particles: CPUParticles2D = $LineParticles
 @onready var anim_player: AnimationPlayer = $AnimationPlayer
 
 var can_be_auto_picked_up: bool = false
@@ -43,7 +44,7 @@ static func spawn_on_ground(item_stats: ItemResource, quant: int, location: Vect
 
 		@warning_ignore("narrowing_conversion") item_to_spawn.global_position = location + Vector2(randi_range((-location_range - 6) / 2.0, (location_range - 6) / 2.0) + 6, randi_range(0, (location_range - 6)) + 6)
 
-		var spawn_callable: Callable = GlobalData.world_root.get_node("WorldItems").add_child.bind(item_to_spawn)
+		var spawn_callable: Callable = GlobalData.world_root.get_node("WorldItemsManager").add_child.bind(item_to_spawn)
 		spawn_callable.call_deferred()
 
 #region Save & Load
@@ -104,9 +105,14 @@ func _set_rarity_colors() -> void:
 	if stats.rarity == GlobalData.ItemRarity.EPIC or stats.rarity == GlobalData.ItemRarity.LEGENDARY or stats.rarity == GlobalData.ItemRarity.SINGULAR:
 		particles.color = GlobalData.rarity_colors.ground_glow.get(stats.rarity)
 		particles.emitting = true
+	if stats.rarity == GlobalData.ItemRarity.SINGULAR:
+		particles.amount *= 3
 
 func _on_spawn_anim_completed() -> void:
 	anim_player.play("hover")
+	if stats.rarity == GlobalData.ItemRarity.LEGENDARY or stats.rarity == GlobalData.ItemRarity.SINGULAR:
+		line_particles.color = GlobalData.rarity_colors.tint_color.get(stats.rarity)
+		line_particles.emitting = true
 
 func remove_from_world() -> void:
 	anim_player.play("remove")

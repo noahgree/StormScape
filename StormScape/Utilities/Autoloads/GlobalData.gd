@@ -47,19 +47,19 @@ const rarity_colors: Dictionary = {
 		ItemRarity.SINGULAR : Color(0.946, 0, 0.381)
 	},
 	"outline_color": {
-		ItemRarity.COMMON : Color(0.617, 0.625, 0.633),
-		ItemRarity.UNCOMMON : Color(0, 0.743, 0.433),
-		ItemRarity.RARE : Color(0, 0.611, 0.98),
-		ItemRarity.EPIC : Color(0.613, 0.475, 1),
-		ItemRarity.LEGENDARY : Color(0.926, 0.605, 0),
-		ItemRarity.SINGULAR : Color(0.946, 0, 0.381)
+		ItemRarity.COMMON : Color(0.617, 0.625, 0.633, 0.55),
+		ItemRarity.UNCOMMON : Color(0, 0.743, 0.433, 0.55),
+		ItemRarity.RARE : Color(0, 0.611, 0.98, 0.55),
+		ItemRarity.EPIC : Color(0.613, 0.475, 1, 0.8),
+		ItemRarity.LEGENDARY : Color(0.926, 0.605, 0, 0.9),
+		ItemRarity.SINGULAR : Color(2.0, 0.768, 0.984, 1.0)
 	},
 	"tint_color" : {
-		ItemRarity.COMMON : Color(0.617, 0.625, 0.633, 0.08),
-		ItemRarity.UNCOMMON : Color(0, 0.743, 0.433, 0.13),
-		ItemRarity.RARE : Color(0, 0.611, 0.98, 0.15),
-		ItemRarity.EPIC : Color(0.613, 0.475, 1, 0.15),
-		ItemRarity.LEGENDARY : Color(0.926, 0.605, 0, 0.15),
+		ItemRarity.COMMON : Color(0.617, 0.625, 0.633, 0.05),
+		ItemRarity.UNCOMMON : Color(0, 0.743, 0.433, 0.1),
+		ItemRarity.RARE : Color(0, 0.611, 0.98, 0.1),
+		ItemRarity.EPIC : Color(0.613, 0.475, 1, 0.14),
+		ItemRarity.LEGENDARY : Color(0.926, 0.605, 0, 0.14),
 		ItemRarity.SINGULAR : Color(0.946, 0, 0.381, 0.19)
 	},
 	"glint_color" : {

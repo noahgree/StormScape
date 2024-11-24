@@ -14,6 +14,7 @@ texture = ExtResource("2_lwexw")
 [node name="HandsAnchor" type="Node2D" parent="."]
 
 [node name="MainHandSprite" type="Sprite2D" parent="HandsAnchor"]
+z_index = 1
 position = Vector2(9, 1)
 texture = ExtResource("2_lwexw")
 

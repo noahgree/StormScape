@@ -29,8 +29,20 @@ func _set_item(new_item) -> void:
 	if item:
 		if item.quantity > 0:
 			item_texture.texture = item.stats.icon
-			rarity_glow.show()
-			rarity_glow.self_modulate = GlobalData.rarity_colors.slot_glow.get(item.stats.rarity)
+			item_texture.material.set_shader_parameter("outline_color", GlobalData.rarity_colors.outline_color.get(item.stats.rarity))
+			item_texture.material.set_shader_parameter("tint_color", GlobalData.rarity_colors.tint_color.get(item.stats.rarity))
+
+			if item.stats.rarity == GlobalData.ItemRarity.EPIC or item.stats.rarity == GlobalData.ItemRarity.LEGENDARY or item.stats.rarity == GlobalData.ItemRarity.SINGULAR:
+				rarity_glow.self_modulate = GlobalData.rarity_colors.slot_glow.get(item.stats.rarity)
+				rarity_glow.show()
+				var gradient_texture: GradientTexture1D = GradientTexture1D.new()
+				gradient_texture.gradient = Gradient.new()
+				gradient_texture.gradient.add_point(0, GlobalData.rarity_colors.glint_color.get(item.stats.rarity))
+				item_texture.material.set_shader_parameter("color_gradient", gradient_texture)
+				item_texture.material.set_shader_parameter("highlight_strength", 0.4)
+			else:
+				rarity_glow.hide()
+				item_texture.material.set_shader_parameter("highlight_strength", 0.0)
 
 			if item.quantity > 1:
 				quantity.text = str(item.quantity)
@@ -52,6 +64,8 @@ func _ready() -> void:
 	mouse_entered.connect(func(): is_hovered_over.emit(index))
 	mouse_exited.connect(func(): is_not_hovered_over.emit())
 	rarity_glow.hide()
+	item_texture.material.set_shader_parameter("width", 0.5)
+	item_texture.material.set_shader_parameter("highlight_strength", 0.0)
 
 ## Gets a reference to the data from the slot where the drag originated.
 func _get_drag_data(at_position: Vector2) -> Variant:
@@ -72,6 +86,10 @@ func _make_drag_preview(at_position: Vector2) -> Control:
 	if item and item.stats.icon and item.quantity > 0:
 		var preview_scene: Control = drag_preview.instantiate()
 		preview_scene.get_node("TextureMargins/ItemTexture").texture = item.stats.icon
+		preview_scene.get_node("TextureMargins/ItemTexture").material.set_shader_parameter("width", 0.5)
+		preview_scene.get_node("TextureMargins/ItemTexture").material.set_shader_parameter("highlight_strength", 0.0)
+		preview_scene.get_node("TextureMargins/ItemTexture").material.set_shader_parameter("outline_color", GlobalData.rarity_colors.outline_color.get(item.stats.rarity))
+		preview_scene.get_node("TextureMargins/ItemTexture").material.set_shader_parameter("tint_color", GlobalData.rarity_colors.tint_color.get(item.stats.rarity))
 		if dragging_only_one:
 			preview_scene.get_node("QuantityMargins/Quantity").text = str(1)
 		elif dragging_half_stack:
@@ -288,6 +306,8 @@ func _on_mouse_entered() -> void:
 			if item == null:
 				item_texture.texture = drag_data.item_texture.texture
 				item_texture.modulate.a = 0.5
+				item_texture.material.set_shader_parameter("outline_color", GlobalData.rarity_colors.outline_color.get(drag_data.item.stats.rarity))
+				item_texture.material.set_shader_parameter("tint_color", GlobalData.rarity_colors.tint_color.get(drag_data.item.stats.rarity))
 
 ## When mouse exits, if we are dragging, remove effects on this slot.
 func _on_mouse_exited() -> void:
@@ -315,6 +335,8 @@ func _reset_post_drag_mods() -> void:
 		item_texture.texture = null
 	elif item.quantity > 1:
 		quantity.text = str(item.quantity)
+		item_texture.material.set_shader_parameter("outline_color", GlobalData.rarity_colors.outline_color.get(item.stats.rarity))
+		item_texture.material.set_shader_parameter("tint_color", GlobalData.rarity_colors.tint_color.get(item.stats.rarity))
 	item_texture.modulate.a = 1.0
 
 ## Custom string representation of the item in this slot.

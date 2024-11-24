@@ -30,6 +30,7 @@ class_name EffectReceiverComponent
 @onready var tool_script: Node = $EffectReceiverToolScript
 
 var most_recent_handling: Dictionary = { "effect_source" : null, "source_entity" : null }
+var hit_flash_timer: Timer = Timer.new()
 
 
 ## This works with the tool script defined above to assign export vars automatically in-editor once added to the tree.
@@ -50,6 +51,10 @@ func _ready() -> void:
 		collision_layer = affected_entity.collision_layer
 		collision_mask = 0
 		monitoring = false
+		add_child(hit_flash_timer)
+		hit_flash_timer.one_shot = true
+		hit_flash_timer.wait_time = 0.05
+		hit_flash_timer.timeout.connect(_update_hit_flash)
 
 ## Handles an incoming effect source, passing it to present receivers for further processing before changing
 ## entity stats.
@@ -66,6 +71,8 @@ func handle_effect_source(effect_source: EffectSource, source_entity: PhysicsBod
 		add_child(vfx)
 	if effect_source.impact_sound != "":
 		AudioManager.play_sound(effect_source.impact_sound, AudioManager.SoundType.SFX_2D, affected_entity.global_position)
+
+	_update_hit_flash(effect_source, true)
 
 	if (affected_entity is Player):
 		if effect_source.cam_shake_duration > 0:
@@ -160,3 +167,11 @@ func _check_if_good_effects_apply_to_allies(effect_source: EffectSource) -> bool
 ## Checks if the effect source should do good effects to enemies.
 func _check_if_good_effects_apply_to_enemies(effect_source: EffectSource) -> bool:
 	return effect_source.good_effect_affected_teams & GlobalData.GoodEffectAffectedTeams.ENEMIES != 0
+
+func _update_hit_flash(effect_source: EffectSource = null, start: bool = false) -> void:
+	if start:
+		hit_flash_timer.stop()
+		affected_entity.sprite.material.set_shader_parameter("tint_color", effect_source.hit_flash_color)
+		hit_flash_timer.start()
+	else:
+		affected_entity.sprite.material.set_shader_parameter("tint_color", Color(1.0, 1.0, 1.0, 0.0))

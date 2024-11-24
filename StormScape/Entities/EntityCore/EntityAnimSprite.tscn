@@ -1,0 +1,17 @@
+[gd_scene load_steps=3 format=3 uid="uid://dh4ydl7l86ywq"]
+
+[ext_resource type="Shader" path="res://Entities/EntityCore/EntityEffectShader.gdshader" id="1_w5sdq"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_yb3gb"]
+resource_local_to_scene = true
+shader = ExtResource("1_w5sdq")
+shader_parameter/glow_color = Color(1, 1, 1, 1)
+shader_parameter/glow_size = 4.5
+shader_parameter/glow_strength = 9.0
+shader_parameter/enable_fade = false
+shader_parameter/tint_color = Color(1, 1, 1, 0)
+shader_parameter/frame_uv_min = null
+shader_parameter/frame_uv_max = null
+
+[node name="EntitySprite" type="AnimatedSprite2D"]
+material = SubResource("ShaderMaterial_yb3gb")

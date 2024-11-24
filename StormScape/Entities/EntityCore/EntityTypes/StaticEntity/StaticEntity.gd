@@ -7,6 +7,7 @@ class_name StaticEntity
 
 @export var team: GlobalData.Teams = GlobalData.Teams.PLAYER ## What the effects received by this entity should consider as this entity's team.
 
+@onready var sprite: Node2D = $EntitySprite ## The visual representation of the entity. Needs to have the EntityEffectShader applied.
 @onready var inv: ItemReceiverComponent = get_node_or_null("ItemReceiverComponent")
 
 var stat_mods: Dictionary = {}

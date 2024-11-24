@@ -62,12 +62,17 @@ func _do_character_run(delta: float) -> void:
 			if actual_movement_speed > dynamic_entity.stats.get_stat("max_speed"):
 				_play_sprint_sound()
 				is_sprint_audio_playing = true
+
 			AudioManager.change_sfx_resource_rhythmic_delay("PlayerRunBase", 0)
+
 			fsm.anim_tree.set("parameters/run/TimeScale/scale", DEFAULT_RUN_ANIM_TIME_SCALE * dynamic_entity.stats.get_stat("sprint_multiplier") * (dynamic_entity.stats.get_stat("max_speed") / dynamic_entity.stats.get_original_stat("max_speed")))
+
 			dynamic_entity.velocity += (movement_vector * dynamic_entity.stats.get_stat("acceleration") * dynamic_entity.stats.get_stat("sprint_multiplier") * delta)
+
 			dynamic_entity.velocity = dynamic_entity.velocity.limit_length(dynamic_entity.stats.get_stat("max_speed") * dynamic_entity.stats.get_stat("sprint_multiplier"))
 		else: # move without sprint
 			fsm.anim_tree.set("parameters/run/TimeScale/scale", DEFAULT_RUN_ANIM_TIME_SCALE * (dynamic_entity.stats.get_stat("max_speed") / dynamic_entity.stats.get_original_stat("max_speed")))
+
 			dynamic_entity.velocity += (movement_vector * dynamic_entity.stats.get_stat("acceleration") * delta)
 			dynamic_entity.velocity = dynamic_entity.velocity.limit_length(dynamic_entity.stats.get_stat("max_speed"))
 
