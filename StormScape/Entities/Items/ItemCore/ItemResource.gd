@@ -15,13 +15,14 @@ class_name ItemResource
 @export_multiline var info: String ## The multiline information about this item.
 @export_group("Equippability Details")
 @export var item_scene: PackedScene = null ## The equippable representation of this item.
-@export var is_gripped_by_one_hand: bool = true ## Whether or not this item should only have one hand shown gripping it.
 @export_range(0, 1, 0.01) var rotation_lerping: float = 0.1 ## How fast the rotation lerping should be while holding this item.
 @export var holding_offset: Vector2 = Vector2.ZERO ## The offset for placing the thumbnail of the sprite in the entity's hand.
 @export_custom(PROPERTY_HINT_NONE, "suffix:degrees") var holding_degrees: float = 0 ## The rotation offset for holding the thumnbail sprite in the entity's hand.
-@export_subgroup("Drawing The Off Hand")
+@export_subgroup("Manual Hands Positioning")
+@export var is_gripped_by_one_hand: bool = true ## Whether or not this item should only have one hand shown gripping it.
 @export var draw_off_hand: bool = false ## When true, the hands component will draw the off hand for it as well (hiding the idly animated off hand). This only applies when is_gripped_by_one_hand is false. Must have a Marker2D titled "OffHandLocation" in the item scene.
 @export var draw_off_hand_offset: Vector2 = Vector2.ZERO ## The offset for placing the off hand sprite when holding this item, assuming that draw_off_hand is true and is_gripped_by_one_hand is false.
+@export var main_hand_offset: Vector2 = Vector2.ZERO ## The offset for placing the main hand sprite when holding this item.
 
 
 ## The custom string representation of this item resource.

@@ -9,13 +9,13 @@ script = ExtResource("1_y5huf")
 
 [node name="HandsAnchor" type="Node2D" parent="."]
 
+[node name="MainHand" type="Node2D" parent="HandsAnchor"]
+position = Vector2(9, 1)
+
 [node name="MainHandSprite" type="Sprite2D" parent="HandsAnchor"]
 z_index = 1
 position = Vector2(9, 1)
 texture = ExtResource("2_lwexw")
-
-[node name="MainHand" type="Node2D" parent="HandsAnchor"]
-position = Vector2(9, 1)
 
 [node name="DrawnOffHand" type="Sprite2D" parent="HandsAnchor"]
 visible = false

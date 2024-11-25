@@ -107,7 +107,7 @@ func on_equipped_item_change(inv_item_slot: Slot) -> void:
 		main_hand.position.y = main_hand_with_held_item_pos.y + equipped_item.stats.holding_offset.y
 		main_hand.position.x = main_hand_with_held_item_pos.x + equipped_item.stats.holding_offset.x
 		main_hand.rotation += deg_to_rad(equipped_item.stats.holding_degrees)
-		main_hand_sprite.position = main_hand_with_held_item_pos
+		main_hand_sprite.position = main_hand_with_held_item_pos + equipped_item.stats.main_hand_offset
 		main_hand_sprite.visible = true
 		_manage_normal_hands(_get_anim_vector())
 
@@ -216,8 +216,12 @@ func _check_for_drawing_off_hand() -> void:
 func _change_z_index(anim_vector: Vector2) -> void:
 	if anim_vector.y < 0:
 		z_index = -2
+		drawn_off_hand.z_index = -1
+		main_hand_sprite.z_index = -1
 	else:
 		z_index = 0
+		drawn_off_hand.z_index = 0
+		main_hand_sprite.z_index = 0
 
 func _handle_y_scale_lerping(anim_vector: Vector2) -> void:
 	if anim_vector.x > 0.12:

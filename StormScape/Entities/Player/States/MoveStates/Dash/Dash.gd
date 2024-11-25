@@ -14,8 +14,6 @@ extends MoveState
 var movement_vector: Vector2 = Vector2.ZERO ## The current direction of movement.
 var ghosts_spawned: int = 0 ## The number of ghosts spawned so far in this dash.
 var time_since_ghost: float = 0.0 ## The number of seconds since the last ghost spawn.
-var can_spawn_ghosts: bool = false ## Whether we have the proper node to enable ghost spawns during dash.
-var parent_sprite_node: Node2D
 var collision_shake_complete: bool = false ## Whether the character hit a collider and had shake applied (if player) during the current dash state
 
 
@@ -39,14 +37,7 @@ func enter() -> void:
 	movement_vector = _calculate_move_vector()
 	fsm.anim_vector = get_parent().curr_mouse_direction
 
-	if dynamic_entity.has_node("AnimatedSprite2D"):
-		parent_sprite_node = dynamic_entity.get_node("AnimatedSprite2D")
-	elif dynamic_entity.has_node("Sprite2D"):
-		parent_sprite_node = dynamic_entity.get_node("Sprite2D")
-	else:
-		return
 	_create_ghost()
-	can_spawn_ghosts = true
 
 func exit() -> void:
 	fsm.can_receive_effects = true
@@ -57,9 +48,8 @@ func exit() -> void:
 
 ## Ticks the time since last ghost spawn.
 func state_process(delta: float) -> void:
-	if can_spawn_ghosts:
-		time_since_ghost += delta
-		_update_ghost_spawns()
+	time_since_ghost += delta
+	_update_ghost_spawns()
 
 func state_physics_process(_delta: float)  -> void:
 	_animate()
@@ -99,15 +89,15 @@ func _update_ghost_spawns() -> void:
 ## Grabs the current animation frame texture and creates a ghost from it, adding it at the proper offset as a child.
 func _create_ghost() -> void:
 	var sprite_texture: Texture2D
-	if parent_sprite_node is AnimatedSprite2D:
-		var animated_sprite_node = dynamic_entity.get_node("AnimatedSprite2D")
+	if dynamic_entity.sprite is AnimatedSprite2D:
+		var animated_sprite_node = dynamic_entity.sprite
 		var current_anim: String = animated_sprite_node.animation
 		var current_frame: int = animated_sprite_node.frame
 		sprite_texture = animated_sprite_node.sprite_frames.get_frame_texture(current_anim, current_frame)
-	elif parent_sprite_node is Sprite2D:
-		sprite_texture = parent_sprite_node.texture
+	elif dynamic_entity.sprite is Sprite2D:
+		sprite_texture = dynamic_entity.sprite.texture
 
-	var ghost_pos: Vector2 = Vector2(dynamic_entity.position.x + parent_sprite_node.position.x, dynamic_entity.position.y + parent_sprite_node.position.y)
+	var ghost_pos: Vector2 = Vector2(dynamic_entity.position.x + dynamic_entity.sprite.position.x, dynamic_entity.position.y + dynamic_entity.sprite.position.y)
 	var ghost_transform: Transform2D = Transform2D(dynamic_entity.rotation, ghost_pos)
 
 	var ghost_instance: SpriteGhost = SpriteGhost.create(ghost_scene, ghost_transform, dynamic_entity.scale, sprite_texture, ghost_fade_time)

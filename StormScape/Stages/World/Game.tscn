@@ -4288,12 +4288,13 @@ auto_pickup = false
 pickup_radius = 6
 info = "A mighty axe."
 item_scene = ExtResource("27_vg0ul")
-is_gripped_by_one_hand = true
 rotation_lerping = 0.1
 holding_offset = Vector2(0, 0)
 holding_degrees = 0.0
+is_gripped_by_one_hand = true
 draw_off_hand = false
 draw_off_hand_offset = Vector2(0, 0)
+main_hand_offset = Vector2(0, 0)
 
 [sub_resource type="Resource" id="Resource_x8lvr"]
 script = ExtResource("18_cjmh4")
@@ -4339,12 +4340,13 @@ auto_pickup = false
 pickup_radius = 6
 info = "A mighty axe."
 item_scene = ExtResource("27_vg0ul")
-is_gripped_by_one_hand = true
 rotation_lerping = 0.1
 holding_offset = Vector2(0, 0)
 holding_degrees = 0.0
+is_gripped_by_one_hand = true
 draw_off_hand = false
 draw_off_hand_offset = Vector2(0, 0)
+main_hand_offset = Vector2(0, 0)
 
 [sub_resource type="Resource" id="Resource_wjm1u"]
 script = ExtResource("18_cjmh4")
@@ -4390,12 +4392,13 @@ auto_pickup = false
 pickup_radius = 6
 info = "A mighty axe."
 item_scene = ExtResource("27_vg0ul")
-is_gripped_by_one_hand = true
 rotation_lerping = 0.1
 holding_offset = Vector2(0, 0)
 holding_degrees = 0.0
+is_gripped_by_one_hand = true
 draw_off_hand = false
 draw_off_hand_offset = Vector2(0, 0)
+main_hand_offset = Vector2(0, 0)
 
 [sub_resource type="Resource" id="Resource_ggoq4"]
 script = ExtResource("18_cjmh4")
@@ -4441,12 +4444,13 @@ auto_pickup = false
 pickup_radius = 6
 info = "A mighty axe."
 item_scene = ExtResource("27_vg0ul")
-is_gripped_by_one_hand = true
 rotation_lerping = 0.1
 holding_offset = Vector2(0, 0)
 holding_degrees = 0.0
+is_gripped_by_one_hand = true
 draw_off_hand = false
 draw_off_hand_offset = Vector2(0, 0)
+main_hand_offset = Vector2(0, 0)
 
 [sub_resource type="Resource" id="Resource_2hlfx"]
 script = ExtResource("18_cjmh4")
@@ -4492,12 +4496,13 @@ auto_pickup = false
 pickup_radius = 6
 info = "A mighty axe."
 item_scene = ExtResource("27_vg0ul")
-is_gripped_by_one_hand = true
 rotation_lerping = 0.1
 holding_offset = Vector2(0, 0)
 holding_degrees = 0.0
+is_gripped_by_one_hand = true
 draw_off_hand = false
 draw_off_hand_offset = Vector2(0, 0)
+main_hand_offset = Vector2(0, 0)
 
 [sub_resource type="Resource" id="Resource_0obqf"]
 script = ExtResource("18_cjmh4")
@@ -4543,12 +4548,13 @@ auto_pickup = false
 pickup_radius = 6
 info = "A mighty axe."
 item_scene = ExtResource("27_vg0ul")
-is_gripped_by_one_hand = true
 rotation_lerping = 0.1
 holding_offset = Vector2(0, 0)
 holding_degrees = 0.0
+is_gripped_by_one_hand = true
 draw_off_hand = false
 draw_off_hand_offset = Vector2(0, 0)
+main_hand_offset = Vector2(0, 0)
 
 [sub_resource type="Resource" id="Resource_py51w"]
 script = ExtResource("18_cjmh4")
