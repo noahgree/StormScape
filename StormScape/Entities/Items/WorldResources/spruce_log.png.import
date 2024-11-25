@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dbm40lvpgbd8t"
-path="res://.godot/imported/item_rarity_light.png-819fdfd002cd6b33a81a7d6ae201760b.ctex"
+uid="uid://1q78rueqnvgr"
+path="res://.godot/imported/spruce_log.png-fb3beb94e7deca4438f0b5a085cd207b.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Entities/Items/item_rarity_light.png"
-dest_files=["res://.godot/imported/item_rarity_light.png-819fdfd002cd6b33a81a7d6ae201760b.ctex"]
+source_file="res://Entities/Items/WorldResources/spruce_log.png"
+dest_files=["res://.godot/imported/spruce_log.png-fb3beb94e7deca4438f0b5a085cd207b.ctex"]
 
 [params]
 

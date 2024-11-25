@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://ir688ph61wxa"
-path="res://.godot/imported/LineParticle.png-fb300ecda7e90f780f64bf51aba8c162.ctex"
+uid="uid://bptqv05di5d2o"
+path="res://.godot/imported/oak_log.png-ca18dc2722045445298c5062954ca80e.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Entities/Items/LineParticle.png"
-dest_files=["res://.godot/imported/LineParticle.png-fb300ecda7e90f780f64bf51aba8c162.ctex"]
+source_file="res://Entities/Items/WorldResources/oak_log.png"
+dest_files=["res://.godot/imported/oak_log.png-ca18dc2722045445298c5062954ca80e.ctex"]
 
 [params]
 

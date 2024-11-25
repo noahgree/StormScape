@@ -1,4 +1,4 @@
-[gd_scene load_steps=144 format=3 uid="uid://dba8mrurjlekp"]
+[gd_scene load_steps=148 format=3 uid="uid://dba8mrurjlekp"]
 
 [ext_resource type="Script" path="res://Entities/Player/PlayerCore/Player.gd" id="1_m33tt"]
 [ext_resource type="Script" path="res://Entities/Components/StatModComponents/StatModsCacheResource.gd" id="2_vyeuy"]
@@ -55,7 +55,9 @@
 [ext_resource type="Texture2D" uid="uid://xnppg0u7t7w4" path="res://UI/PlayerStatsOverlay/Assets/Stamina Recharge Under.png" id="39_ryeha"]
 [ext_resource type="Texture2D" uid="uid://gfbxblly7q78" path="res://UI/PlayerStatsOverlay/Assets/Stamina Recharge Bar.png" id="40_suqvl"]
 [ext_resource type="Script" path="res://UI/Inventory/InventoryCore/InventoryPopulator.gd" id="41_nwjbq"]
+[ext_resource type="Resource" uid="uid://b6tg3hfcver2x" path="res://Entities/Items/WorldResources/OakLog.tres" id="41_sesym"]
 [ext_resource type="Texture2D" uid="uid://br8kgmxe41gh0" path="res://UI/PlayerStatsOverlay/Assets/Hunger Bar.png" id="41_wehgh"]
+[ext_resource type="Resource" uid="uid://cwiqqp4tbd4em" path="res://Entities/Items/WorldResources/SpruceLog.tres" id="42_d3gh5"]
 [ext_resource type="Texture2D" uid="uid://cjjobaebw8uwu" path="res://UI/PlayerStatsOverlay/Assets/Hunger Under.png" id="42_im6xp"]
 [ext_resource type="PackedScene" uid="uid://m4ur3n2hwsp8" path="res://UI/Inventory/InventoryCore/Slot/Slot.tscn" id="42_r422n"]
 [ext_resource type="Texture2D" uid="uid://c5mo0gxdddlte" path="res://UI/PlayerStatsOverlay/Assets/Hunger Change.png" id="43_k8324"]
@@ -72,7 +74,7 @@
 [ext_resource type="FontVariation" uid="uid://blgkcg6c83yln" path="res://Assets/Theming/Fonts/GameFontResources/ui_pixel_font.tres" id="58_eexr8"]
 [ext_resource type="Script" path="res://UI/Inventory/PlayerInventory/HotbarUI.gd" id="58_i567i"]
 [ext_resource type="Texture2D" uid="uid://f3dtce257pvb" path="res://UI/Inventory/InventoryCore/button_9_patch_dark.png" id="59_ph20g"]
-[ext_resource type="Texture2D" uid="uid://dbm40lvpgbd8t" path="res://Entities/Items/item_rarity_light.png" id="66_461tf"]
+[ext_resource type="Texture2D" uid="uid://dbm40lvpgbd8t" path="res://Entities/Items/ItemCore/Particles/item_rarity_light.png" id="66_461tf"]
 [ext_resource type="Texture2D" uid="uid://ec7bui23pv1m" path="res://Entities/Items/Weapons/MeleeWeapons/Axe/axe.png" id="66_s2r6k"]
 [ext_resource type="Shader" path="res://UI/Shaders/GlintShader.gdshader" id="67_w57pe"]
 [ext_resource type="Texture2D" uid="uid://dtft3mljs2y5s" path="res://UI/Inventory/InventoryCore/Slot/trash_slot_icon.png" id="69_4ao77"]
@@ -1038,8 +1040,6 @@ id = "light_ammo"
 name = "Light Ammo"
 icon = ExtResource("38_60ydo")
 thumbnail = ExtResource("38_60ydo")
-is_gripped_by_one_hand = true
-rotation_lerping = 0.1
 item_type = 2
 rarity = 5
 weight = 0
@@ -1047,11 +1047,27 @@ stack_size = 64
 auto_pickup = true
 pickup_radius = 4
 info = "Ammo used in light weapons like pistols."
+is_gripped_by_one_hand = true
+rotation_lerping = 0.1
+holding_offset = Vector2(0, 0)
+holding_degrees = 0.0
+draw_off_hand = false
+draw_off_hand_offset = Vector2(0, 0)
 
 [sub_resource type="Resource" id="Resource_t7kvu"]
 script = ExtResource("32_ixmb3")
 stats = SubResource("Resource_aqdjw")
 quantity = 1
+
+[sub_resource type="Resource" id="Resource_apvym"]
+script = ExtResource("32_ixmb3")
+stats = ExtResource("41_sesym")
+quantity = 8
+
+[sub_resource type="Resource" id="Resource_ur5wt"]
+script = ExtResource("32_ixmb3")
+stats = ExtResource("42_d3gh5")
+quantity = 16
 
 [sub_resource type="Resource" id="Resource_0ta0y"]
 script = ExtResource("32_ixmb3")
@@ -1271,7 +1287,7 @@ parameters/run/blendspace2d/blend_position = Vector2(0, 0)
 
 [node name="ItemReceiverComponent" parent="." node_paths=PackedStringArray("inv_populator", "ui") instance=ExtResource("30_qgyag")]
 item_scene = ExtResource("31_8v2rb")
-starting_inv = Array[ExtResource("32_ixmb3")]([SubResource("Resource_pihal"), null, SubResource("Resource_3kywt"), null, null, SubResource("Resource_kx1me"), SubResource("Resource_h68kk"), SubResource("Resource_jrr0m"), SubResource("Resource_2ijsm"), null, null, null, null, null, SubResource("Resource_t7kvu"), null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, SubResource("Resource_0ta0y")])
+starting_inv = Array[ExtResource("32_ixmb3")]([SubResource("Resource_pihal"), null, SubResource("Resource_3kywt"), null, null, SubResource("Resource_kx1me"), SubResource("Resource_h68kk"), SubResource("Resource_jrr0m"), SubResource("Resource_2ijsm"), null, null, null, null, null, SubResource("Resource_t7kvu"), null, null, SubResource("Resource_apvym"), SubResource("Resource_ur5wt"), null, null, null, null, null, null, null, null, null, null, null, null, null, SubResource("Resource_0ta0y")])
 is_player_inv = true
 inv_size = 40
 hotbar_size = 8

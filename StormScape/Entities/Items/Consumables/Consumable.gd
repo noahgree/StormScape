@@ -1,7 +1,6 @@
 extends EquippableItem
 class_name Consumable
 
-@onready var hand_location: Marker2D = $HandLocation
 @onready var sprite: Sprite2D = $Sprite2D
 @onready var consumption_timer: Timer = $ConsumptionTimer
 @onready var consumption_delay_timer: Timer = $ConsumptionDelayTimer

@@ -5,7 +5,7 @@
 [ext_resource type="FontVariation" uid="uid://blgkcg6c83yln" path="res://Assets/Theming/Fonts/GameFontResources/ui_pixel_font.tres" id="3_dimqv"]
 [ext_resource type="Texture2D" uid="uid://de31272sm433q" path="res://UI/Inventory/InventoryCore/button_9_patch.png" id="4_dri8h"]
 [ext_resource type="Texture2D" uid="uid://f3dtce257pvb" path="res://UI/Inventory/InventoryCore/button_9_patch_dark.png" id="4_epker"]
-[ext_resource type="Texture2D" uid="uid://dbm40lvpgbd8t" path="res://Entities/Items/item_rarity_light.png" id="5_dhreg"]
+[ext_resource type="Texture2D" uid="uid://dbm40lvpgbd8t" path="res://Entities/Items/ItemCore/Particles/item_rarity_light.png" id="5_dhreg"]
 [ext_resource type="Shader" path="res://UI/Shaders/GlintShader.gdshader" id="6_l1uky"]
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_raets"]
@@ -21,7 +21,7 @@ shader_parameter/inside = false
 shader_parameter/add_margins = true
 shader_parameter/size_effect = 0.4
 shader_parameter/speed = 0.9
-shader_parameter/highlight_strength = 5.96048e-08
+shader_parameter/highlight_strength = 0.0
 shader_parameter/color_mode_toggle = true
 shader_parameter/pause_duration = 1.0
 shader_parameter/angle = 35.0

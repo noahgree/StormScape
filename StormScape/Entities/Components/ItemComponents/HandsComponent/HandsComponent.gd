@@ -3,7 +3,7 @@ extends Node2D
 class_name HandsComponent
 ## This component allows the entity to hold an item and interact with it.
 
-@export var main_hand_with_consumable_pos: Vector2 = Vector2(6, 1)
+@export var main_hand_with_held_item_pos: Vector2 = Vector2(6, 1)
 @export var main_hand_with_proj_weapon_pos: Vector2 = Vector2(11, 0)
 @export var main_hand_with_melee_weapon_pos: Vector2 = Vector2(8, 0)
 @export var mouth_pos: Vector2 = Vector2(0, -8) ## Used for emitting food particles.
@@ -12,6 +12,7 @@ class_name HandsComponent
 @onready var main_hand: Node2D = $HandsAnchor/MainHand
 @onready var main_hand_sprite: Sprite2D = $HandsAnchor/MainHandSprite
 @onready var off_hand_sprite: Sprite2D = $OffHandSprite
+@onready var drawn_off_hand: Sprite2D = $HandsAnchor/DrawnOffHand
 
 var equipped_item: EquippableItem = null
 var current_x_direction: int = 1
@@ -63,6 +64,7 @@ func unequip_current_item() -> void:
 	if equipped_item != null:
 		is_mouse_button_held = false
 		been_holding_time = 0
+		drawn_off_hand.visible = false
 		equipped_item.exit()
 		equipped_item.queue_free()
 
@@ -80,31 +82,34 @@ func on_equipped_item_change(inv_item_slot: Slot) -> void:
 	equipped_item = EquippableItem.create_from_slot(inv_item_slot)
 	_update_anchor_scale("x", 1)
 	_update_anchor_scale("y", 1)
+	main_hand.rotation = 0
 	get_parent().move_fsm.rotation_lerping_factor = equipped_item.stats.rotation_lerping
 	scale_is_lerping = false
 	been_holding_time = 0
-	_change_off_hand_sprite_visibility(true)
 
-	match equipped_item.stats.item_type:
-		GlobalData.ItemType.WEAPON:
-			main_hand_sprite.visible = false
-			if equipped_item is ProjectileWeapon:
-				main_hand.position = main_hand_with_proj_weapon_pos
-				snap_y_scale()
-				_prep_for_pullout_anim()
-				_manage_proj_weapon_hands(_get_anim_vector())
-			elif equipped_item is MeleeWeapon:
-				main_hand.position = main_hand_with_melee_weapon_pos
-				snap_y_scale()
-				_prep_for_pullout_anim()
-				_manage_melee_weapon_hands(_get_anim_vector())
-		GlobalData.ItemType.CONSUMABLE:
-			hands_anchor.global_rotation = 0
-			main_hand.position.y = main_hand_with_consumable_pos.y - int(floor(equipped_item.stats.thumbnail.get_height() / 2.0))
-			main_hand.position.x = main_hand_with_consumable_pos.x
-			main_hand_sprite.position = main_hand_with_consumable_pos
-			main_hand_sprite.visible = true
-			_manage_consumable_hands(_get_anim_vector())
+	_change_off_hand_sprite_visibility(true)
+	_check_for_drawing_off_hand()
+
+	if equipped_item.stats.item_type == GlobalData.ItemType.WEAPON:
+		main_hand_sprite.visible = false
+		if equipped_item is ProjectileWeapon:
+			main_hand.position = main_hand_with_proj_weapon_pos
+			snap_y_scale()
+			_prep_for_pullout_anim()
+			_manage_proj_weapon_hands(_get_anim_vector())
+		elif equipped_item is MeleeWeapon:
+			main_hand.position = main_hand_with_melee_weapon_pos
+			snap_y_scale()
+			_prep_for_pullout_anim()
+			_manage_melee_weapon_hands(_get_anim_vector())
+	elif equipped_item.stats.item_type == GlobalData.ItemType.CONSUMABLE or equipped_item.stats.item_type == GlobalData.ItemType.WORLD_RESOURCE:
+		hands_anchor.global_rotation = 0
+		main_hand.position.y = main_hand_with_held_item_pos.y + equipped_item.stats.holding_offset.y
+		main_hand.position.x = main_hand_with_held_item_pos.x + equipped_item.stats.holding_offset.x
+		main_hand.rotation += deg_to_rad(equipped_item.stats.holding_degrees)
+		main_hand_sprite.position = main_hand_with_held_item_pos
+		main_hand_sprite.visible = true
+		_manage_normal_hands(_get_anim_vector())
 
 	main_hand.add_child(equipped_item)
 	equipped_item.enter()
@@ -129,14 +134,13 @@ func _physics_process(_delta: float) -> void:
 		set_physics_process(false)
 		return
 
-	match equipped_item.stats.item_type:
-		GlobalData.ItemType.WEAPON:
-			if equipped_item is ProjectileWeapon:
-				_manage_proj_weapon_hands(_get_anim_vector())
-			elif equipped_item is MeleeWeapon:
-				_manage_melee_weapon_hands(_get_anim_vector())
-		GlobalData.ItemType.CONSUMABLE:
-			_manage_consumable_hands(_get_anim_vector())
+	if equipped_item.stats.item_type == GlobalData.ItemType.WEAPON:
+		if equipped_item is ProjectileWeapon:
+			_manage_proj_weapon_hands(_get_anim_vector())
+		elif equipped_item is MeleeWeapon:
+			_manage_melee_weapon_hands(_get_anim_vector())
+	elif equipped_item.stats.item_type == GlobalData.ItemType.CONSUMABLE or equipped_item.stats.item_type == GlobalData.ItemType.WORLD_RESOURCE:
+		_manage_normal_hands(_get_anim_vector())
 
 func _manage_proj_weapon_hands(anim_vector: Vector2) -> void:
 	_change_z_index(anim_vector)
@@ -185,7 +189,7 @@ func _do_melee_weapon_hand_placement(anim_vector: Vector2) -> void:
 
 		hands_anchor.global_rotation = lerped_direction_angle
 
-func _manage_consumable_hands(anim_vector: Vector2) -> void:
+func _manage_normal_hands(anim_vector: Vector2) -> void:
 	_change_z_index(anim_vector)
 
 	if anim_vector.y < 0:
@@ -203,6 +207,11 @@ func _change_off_hand_sprite_visibility(show_off_hand: bool) -> void:
 			off_hand_sprite.visible = false
 	else:
 		off_hand_sprite.visible = false
+
+func _check_for_drawing_off_hand() -> void:
+	if equipped_item.stats.draw_off_hand and not equipped_item.stats.is_gripped_by_one_hand:
+		drawn_off_hand.position = off_hand_sprite.position + equipped_item.stats.draw_off_hand_offset
+		drawn_off_hand.visible = true
 
 func _change_z_index(anim_vector: Vector2) -> void:
 	if anim_vector.y < 0:
