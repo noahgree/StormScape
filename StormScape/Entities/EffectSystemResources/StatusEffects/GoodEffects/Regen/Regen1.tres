@@ -10,6 +10,8 @@ healing_time = 8.0
 heal_ticks_array = Array[int]([10, 10, 10])
 delay_time = 3.0
 heal_affected_stats = 1
+run_until_removed = false
+time_between_ticks = 1.0
 
 [resource]
 script = ExtResource("1_ryq06")
@@ -18,7 +20,10 @@ effect_name = "Regen"
 effect_lvl = 1
 is_bad_effect = false
 effects_to_stop = Array[String]([])
+mod_time = 10.0
+apply_until_removed = false
+stat_mods = Array[ExtResource("2_0lf2m")]([])
 audio_to_play = ""
 only_cue_on_player_hit = false
-mod_time = 10.0
-stat_mods = Array[ExtResource("2_0lf2m")]([])
+spawn_particles = true
+particles_req_handler = true

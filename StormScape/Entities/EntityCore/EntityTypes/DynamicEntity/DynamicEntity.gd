@@ -69,6 +69,7 @@ func request_time_snare(factor: float, snare_time: float) -> void:
 	snare_timer.wait_time = max(0.001, snare_time)
 	snare_timer.timeout.connect(func(): snare_factor = 0)
 	snare_timer.timeout.connect(snare_timer.queue_free)
+	snare_timer.timeout.connect(func(): effects._stop_effect_fx("Time Snare"))
 
 	snare_factor = factor
 

@@ -1,5 +1,5 @@
 @icon("res://Utilities/Debug/EditorIcons/status_effect_manager.svg")
-extends Node
+extends Node2D
 class_name StatusEffectManager
 ## The component that holds the stats and logic for how the entity should receive effects.
 ##
@@ -103,9 +103,29 @@ func _add_status_effect(status_effect: StatusEffect) -> void:
 
 	effect_timers[status_effect.effect_name] = mod_timer
 
+	if status_effect.spawn_particles: _start_effect_fx(status_effect.effect_name, status_effect.particles_req_handler)
+
 	for mod_resource in status_effect.stat_mods:
 		var mod: EntityStatMod = (mod_resource as EntityStatMod)
 		get_parent().stats.add_mods([mod] as Array[EntityStatMod], stats_ui)
+
+## Starts the status effects' associated visual FX like particles. Checks if the receiver has the matching handler node first.
+func _start_effect_fx(effect_name: String, requires_handler: bool) -> void:
+	var particle_node: CPUParticles2D = get_node_or_null((effect_name + "Particles").replace(" ", ""))
+	var allowed_to_receive: bool = effect_receiver.has_node((effect_name + "Handler").replace(" ", "")) or not requires_handler
+
+	if particle_node != null and allowed_to_receive:
+		var sprite_tex: Texture2D
+		var sprite: Node2D = get_parent().sprite
+		var scalar: Vector2 = sprite.scale
+		if sprite is AnimatedSprite2D:
+			var current_anim: String = sprite.animation
+			var current_frame: int = sprite.frame
+			sprite_tex = sprite.sprite_frames.get_frame_texture(current_anim, current_frame)
+		else:
+			sprite_tex = sprite.texture
+		particle_node.emission_rect_extents = Vector2((sprite_tex.get_width() / 4.0) * scalar.x, (sprite_tex.get_height() / 2.0) * scalar.y)
+		particle_node.emitting = true
 
 ## Extends the duration of the timer associated with some current effect.
 func _extend_effect_duration(effect_name: String, time_to_add: float) -> void:
@@ -149,6 +169,13 @@ func _remove_status_effect(status_effect: StatusEffect) -> void:
 		timer.queue_free()
 		effect_timers.erase(status_effect.effect_name)
 
+	_stop_effect_fx(status_effect.effect_name)
+
+## Stops the status effects' associated visual FX like particles.
+func _stop_effect_fx(effect_name: String) -> void:
+	var particle_node: CPUParticles2D = get_node_or_null((effect_name + "Particles").replace(" ", ""))
+	if particle_node != null: particle_node.emitting = false
+
 ## Returns if any effect (no matter the level) of the passed in name is active.
 func check_if_has_effect(effect_name: String) -> bool:
 	return current_effects.has(effect_name)
@@ -168,7 +195,7 @@ func remove_all_bad_status_effects(effect_to_keep: String = "") -> void:
 	for status_effect in current_effects.keys():
 		if effect_to_keep != "" and effect_to_keep == status_effect:
 			continue
-		elif status_effect in GlobalData.BAD_STATUS_EFFECTS:
+		elif current_effects[status_effect].is_bad_effect:
 			request_effect_removal(status_effect)
 
 ## Removes all good status effects except for an optional exception effect that may be specified.

@@ -19,7 +19,7 @@ func _on_save_game(save_data: Array[SaveData]) -> void:
 	data.saved_times_left = effects.saved_times_left
 	data.velocity = velocity
 	data.snare_factor = snare_factor
-	data.sprite_frames = $AnimatedSprite2D.sprite_frames.resource_path
+	data.sprite_frames = sprite.sprite_frames.resource_path
 	data.health = $HealthComponent.health
 	data.shield = $HealthComponent.shield
 	data.armor = $HealthComponent.armor
@@ -49,7 +49,7 @@ func _on_load_game_player(data: PlayerData) -> void:
 	effects.saved_times_left = data.saved_times_left
 	velocity = data.velocity
 	snare_factor = 0
-	$AnimatedSprite2D.sprite_frames = load(data.sprite_frames)
+	sprite.sprite_frames = load(data.sprite_frames)
 	$HealthComponent.health = data.health
 	$HealthComponent.shield = data.shield
 	$HealthComponent.armor = data.armor

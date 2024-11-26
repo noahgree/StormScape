@@ -93,7 +93,7 @@ shader_parameter/glow_color = Color(1, 1, 1, 1)
 shader_parameter/glow_size = 4.5
 shader_parameter/glow_strength = 9.0
 shader_parameter/enable_fade = false
-shader_parameter/tint_color = Color(1, 1, 1, 0)
+shader_parameter/tint_color = Color(0.683077, 0.683077, 0.683077, 0)
 shader_parameter/frame_uv_min = null
 shader_parameter/frame_uv_max = null
 
@@ -1191,6 +1191,7 @@ stats_ui = NodePath("../PlayerUILayer/PlayerStatsOverlay")
 stats_ui = NodePath("../PlayerUILayer/PlayerStatsOverlay")
 
 [node name="EffectReceiverComponent" parent="." node_paths=PackedStringArray("affected_entity", "health_component", "stamina_component", "dmg_handler", "heal_handler", "storm_syndrome_handler", "knockback_handler", "stun_handler", "poison_handler", "regen_handler", "frostbite_handler", "burning_handler", "time_snare_handler") instance=ExtResource("4_hhm8x")]
+visible = false
 affected_entity = NodePath("..")
 health_component = NodePath("../HealthComponent")
 stamina_component = NodePath("../StaminaComponent")
@@ -1287,6 +1288,7 @@ parameters/run/TimeScale/scale = 1.5
 parameters/run/blendspace2d/blend_position = Vector2(0, 0)
 
 [node name="ItemReceiverComponent" parent="." node_paths=PackedStringArray("inv_populator", "ui") instance=ExtResource("30_qgyag")]
+visible = false
 item_scene = ExtResource("31_8v2rb")
 starting_inv = Array[ExtResource("32_ixmb3")]([SubResource("Resource_pihal"), null, SubResource("Resource_3kywt"), null, null, SubResource("Resource_kx1me"), SubResource("Resource_h68kk"), SubResource("Resource_jrr0m"), SubResource("Resource_2ijsm"), null, null, null, null, null, SubResource("Resource_t7kvu"), null, null, SubResource("Resource_apvym"), SubResource("Resource_ur5wt"), null, null, null, null, null, null, null, null, null, null, null, null, null, SubResource("Resource_0ta0y")])
 is_player_inv = true

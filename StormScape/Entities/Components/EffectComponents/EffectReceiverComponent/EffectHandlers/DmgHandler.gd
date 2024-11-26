@@ -147,9 +147,9 @@ func _on_dot_timer_timeout(dot_timer: Timer, source_type: String) -> void:
 		_send_handled_dmg(dmg_affected_stats, damage)
 		dot_timer.set_meta("ticks_completed", ticks_completed + 1)
 	else:
-		var damage: int = dot_resource.dmg_ticks_array[ticks_completed]
 		var max_ticks: int = dot_resource.dmg_ticks_array.size()
 		if ticks_completed < max_ticks:
+			var damage: int = dot_resource.dmg_ticks_array[ticks_completed]
 			_send_handled_dmg(dmg_affected_stats, damage)
 			dot_timer.set_meta("ticks_completed", ticks_completed + 1)
 

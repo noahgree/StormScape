@@ -127,9 +127,9 @@ func _on_hot_timer_timeout(hot_timer: Timer, source_type: String) -> void:
 		_send_handled_healing(heal_affected_stats, healing)
 		hot_timer.set_meta("ticks_completed", ticks_completed + 1)
 	else:
-		var healing: int = hot_resource.heal_ticks_array[ticks_completed]
 		var max_ticks: int = hot_resource.heal_ticks_array.size()
 		if ticks_completed < max_ticks:
+			var healing: int = hot_resource.heal_ticks_array[ticks_completed]
 			_send_handled_healing(heal_affected_stats, healing)
 			hot_timer.set_meta("ticks_completed", ticks_completed + 1)
 

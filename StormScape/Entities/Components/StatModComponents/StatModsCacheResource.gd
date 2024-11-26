@@ -147,4 +147,5 @@ func _get_mod(stat_id: String, mod_id: String) -> EntityStatMod:
 
 ## Pushes an error to the console with the stat id and the mod id for the mod that could not be found.
 func _push_mod_not_found_error(stat_id: String, mod_id: String) -> void:
-	push_error("The mod for stat \"" + stat_id + "\"" + " with mod_id of: \"" + mod_id + "\" was not in the cache: \"" + str(self) + "\".")
+	if DebugFlags.PushErrors.mod_not_in_cache:
+		push_error("The mod for stat \"" + stat_id + "\"" + " with mod_id of: \"" + mod_id + "\" was not in the cache: \"" + str(self) + "\".")

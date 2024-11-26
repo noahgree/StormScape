@@ -38,10 +38,14 @@ override_all = true
 
 [resource]
 script = ExtResource("1_t8e5x")
-handler_type = 0
 effect_name = "Untouchable"
 effect_lvl = 0
 is_bad_effect = false
 effects_to_stop = Array[String]([])
 mod_time = 5.0
+apply_until_removed = false
 stat_mods = Array[ExtResource("2_ghdc2")]([SubResource("Resource_mfupn"), SubResource("Resource_dfagp"), SubResource("Resource_gpyv2")])
+audio_to_play = ""
+only_cue_on_player_hit = false
+spawn_particles = true
+particles_req_handler = false

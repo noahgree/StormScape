@@ -25,3 +25,5 @@ apply_until_removed = false
 stat_mods = Array[ExtResource("2_fd4bu")]([SubResource("Resource_moco0")])
 audio_to_play = ""
 only_cue_on_player_hit = false
+spawn_particles = true
+particles_req_handler = false

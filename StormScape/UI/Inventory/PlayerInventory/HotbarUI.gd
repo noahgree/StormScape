@@ -43,10 +43,10 @@ func _update_active_item() -> void:
 func _input(_event: InputEvent) -> void:
 	if DebugFlags.HotbarFlags.use_scroll_debounce and not scroll_debounce_timer.is_stopped(): return
 
-	if Input.is_action_just_released("scroll_up"):
+	if Input.is_action_just_released("scroll_up", false):
 		_change_active_slot_by_count(1)
 		scroll_debounce_timer.start()
-	elif Input.is_action_just_released("scroll_down"):
+	elif Input.is_action_just_released("scroll_down", false):
 		_change_active_slot_by_count(-1)
 		scroll_debounce_timer.start()
 

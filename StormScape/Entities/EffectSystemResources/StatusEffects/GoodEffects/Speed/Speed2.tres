@@ -47,3 +47,5 @@ apply_until_removed = false
 stat_mods = Array[ExtResource("2_o6fme")]([SubResource("Resource_wakq2"), SubResource("Resource_r3x4i"), SubResource("Resource_ncnec")])
 audio_to_play = ""
 only_cue_on_player_hit = false
+spawn_particles = true
+particles_req_handler = false

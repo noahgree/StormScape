@@ -10,10 +10,11 @@ damaging_time = 8.0
 dmg_ticks_array = Array[int]([10, 10, 10])
 delay_time = 0.0
 dmg_affected_stats = 0
+run_until_removed = false
+time_between_ticks = 1.0
 
 [sub_resource type="Resource" id="Resource_ceyil"]
 script = ExtResource("2_epos6")
-type = 1
 stat_id = "stamina_recharge_rate"
 mod_id = "poison1"
 operation = "-%"
@@ -25,7 +26,6 @@ override_all = false
 
 [sub_resource type="Resource" id="Resource_tgo5x"]
 script = ExtResource("2_epos6")
-type = 1
 stat_id = "stamina_use_per_hunger_deduction"
 mod_id = "poison1"
 operation = "-%"
@@ -37,7 +37,6 @@ override_all = false
 
 [sub_resource type="Resource" id="Resource_cytk6"]
 script = ExtResource("2_epos6")
-type = 1
 stat_id = "max_stamina"
 mod_id = "poison1"
 operation = "-%"
@@ -50,8 +49,14 @@ override_all = false
 [resource]
 script = ExtResource("1_1d4mc")
 dot_resource = SubResource("Resource_d0iyw")
-handler_type = 3
 effect_name = "Poison"
 effect_lvl = 1
+is_bad_effect = true
+effects_to_stop = Array[String]([])
 mod_time = 5.0
+apply_until_removed = false
 stat_mods = Array[ExtResource("2_epos6")]([SubResource("Resource_ceyil"), SubResource("Resource_tgo5x"), SubResource("Resource_cytk6")])
+audio_to_play = ""
+only_cue_on_player_hit = false
+spawn_particles = true
+particles_req_handler = true

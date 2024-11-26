@@ -12,6 +12,8 @@ class_name StatusEffect
 @export var apply_until_removed: bool = false ## If true, these stat mods will ignore their mod time and stay applied until removed.
 @export var stat_mods: Array[EntityStatMod] ## The mods applied by this effect. Do not have duplicates in this array.
 
-@export_group("Audio")
+@export_group("FX")
 @export var audio_to_play: String = "" ## The audio resource to play as a sound effect when hitting an entity.
 @export var only_cue_on_player_hit: bool = false ## Whether to only play the associated audio when the status effect is received by the player.
+@export var spawn_particles: bool = true ## Whether to spawn particles based on the name of this status effect. If the name does not match any valid particle spawners, nothing will happen.
+@export var particles_req_handler: bool = true ## Whether the spawning of the particles should be conditional on a handler of the same name being in the entity.

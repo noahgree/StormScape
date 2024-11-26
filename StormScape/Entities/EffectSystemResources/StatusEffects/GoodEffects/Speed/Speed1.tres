@@ -38,12 +38,14 @@ override_all = false
 
 [resource]
 script = ExtResource("1_oflmh")
-handler_type = 0
 effect_name = "Speed"
 effect_lvl = 1
 is_bad_effect = false
 effects_to_stop = Array[String]([])
+mod_time = 5.0
+apply_until_removed = false
+stat_mods = Array[ExtResource("2_l733c")]([SubResource("Resource_wakq2"), SubResource("Resource_r3x4i"), SubResource("Resource_ncnec")])
 audio_to_play = ""
 only_cue_on_player_hit = false
-mod_time = 5.0
-stat_mods = Array[ExtResource("2_l733c")]([SubResource("Resource_wakq2"), SubResource("Resource_r3x4i"), SubResource("Resource_ncnec")])
+spawn_particles = true
+particles_req_handler = false
