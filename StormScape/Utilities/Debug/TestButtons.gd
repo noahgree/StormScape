@@ -44,3 +44,6 @@ func _on_test_load_btn_pressed() -> void:
 
 func _on_test_storm_btn_2_pressed() -> void:
 	GlobalData.storm.force_start_next_phase()
+
+func _on_test_combine_items_pressed() -> void:
+	GlobalData.world_root.get_node("WorldItemsManager")._on_combination_attempt_timer_timeout()

@@ -1,0 +1,61 @@
+[gd_scene load_steps=8 format=3 uid="uid://b8f5sbvlr6fb3"]
+
+[ext_resource type="Texture2D" uid="uid://dsgx4sr31dhrs" path="res://Entities/EntityCore/EntityTypes/DynamicEntity/mud_texture.png" id="2_84nfn"]
+[ext_resource type="Script" path="res://Entities/EntityCore/EntityTypes/DynamicEntity/FootStreak.gd" id="2_rdmki"]
+
+[sub_resource type="Curve" id="Curve_ogbsm"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.848544), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Gradient" id="Gradient_au2uq"]
+resource_local_to_scene = true
+offsets = PackedFloat32Array(0, 0.65019, 1)
+colors = PackedColorArray(1, 1, 1, 0.869, 1, 1, 1, 0.741, 1, 1, 1, 0)
+
+[sub_resource type="Curve" id="Curve_vpxp6"]
+min_value = -360.0
+max_value = 360.0
+_data = [Vector2(0, -360), 0.0, 0.0, 0, 0, Vector2(1, 360), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Gradient" id="Gradient_t6iyi"]
+offsets = PackedFloat32Array(0, 0.553232, 1)
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="Curve" id="Curve_bstyt"]
+min_value = -1.0
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, -1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[node name="FootStreak" type="Line2D"]
+width = 4.0
+width_curve = SubResource("Curve_ogbsm")
+gradient = SubResource("Gradient_au2uq")
+texture = ExtResource("2_84nfn")
+texture_mode = 1
+joint_mode = 2
+begin_cap_mode = 2
+end_cap_mode = 2
+antialiased = true
+script = ExtResource("2_rdmki")
+
+[node name="CPUParticles2D" type="CPUParticles2D" parent="."]
+emitting = false
+amount = 15
+lifetime = 0.2
+one_shot = true
+preprocess = 0.05
+explosiveness = 0.25
+lifetime_randomness = 0.05
+direction = Vector2(0, 0)
+gravity = Vector2(0, 3)
+initial_velocity_min = 20.0
+initial_velocity_max = 30.0
+angle_min = -360.0
+angle_max = 360.0
+angle_curve = SubResource("Curve_vpxp6")
+color = Color(0.153469, 0.0640647, 0.037367, 1)
+color_ramp = SubResource("Gradient_t6iyi")
+hue_variation_min = -0.05
+hue_variation_max = 0.05
+hue_variation_curve = SubResource("Curve_bstyt")

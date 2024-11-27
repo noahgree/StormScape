@@ -4,6 +4,7 @@ class_name HitboxComponent
 
 @export var effect_source: EffectSource ## The effect to be applied when this hitbox hits an effect receiver.
 @export var source_entity: PhysicsBody2D ## The entity that the effect was produced by.
+@export var use_self_position: bool = false ## When using the hitbox as a standalone area2d, make this property true so that it uses its own position to handle effects like knockback.
 
 @onready var collider: CollisionShape2D = $CollisionShape2D ## The collision shape for this hitbox.
 
@@ -41,7 +42,10 @@ func _start_being_handled(handling_area: EffectReceiverComponent) -> void:
 
 	if effect_source.is_projectile:
 		effect_source.movement_direction = movement_direction
-	effect_source.contact_position = get_parent().global_position
+	if not use_self_position:
+		effect_source.contact_position = get_parent().global_position
+	else:
+		effect_source.contact_position = global_position
 	handling_area.handle_effect_source(effect_source, source_entity)
 
 ## Meant to be overridden by subclasses to determine what to do after hitting an object.

@@ -8,16 +8,16 @@ static var item_scene: PackedScene = load("res://Entities/Items/ItemCore/Item.ts
 @export var stats: ItemResource = null: set = _set_item ## The item resource driving the stats and type of item.
 @export var quantity: int = 1 ## The quantity associated with the physical item.
 
-@onready var collision_shape: CollisionShape2D = $CollisionShape2D
+@onready var collision_shape: CollisionShape2D = $CollisionShape2D ## The active collision shape for the item to be interacted with.
 @onready var thumbnail: Sprite2D = $Sprite2D ## The sprite that shows the item's texture.
 @onready var ground_glow: Sprite2D = $GroundGlowScaler/GroundGlow ## The fake light that immitates a glowing effect on the ground.
-@onready var particles: CPUParticles2D = $Particles
-@onready var line_particles: CPUParticles2D = $LineParticles
-@onready var anim_player: AnimationPlayer = $AnimationPlayer
+@onready var particles: CPUParticles2D = $Particles ## The orb particles that spawn on higher rarity items.
+@onready var line_particles: CPUParticles2D = $LineParticles ## The line particles that spawn on the highest rarity items.
+@onready var anim_player: AnimationPlayer = $AnimationPlayer ## The animation player controlling the hover, spawn, and remove anims.
 
-var can_be_auto_picked_up: bool = false
-var search_for_neighbors_timer: Timer = Timer.new()
-var lifetime_timer: Timer = Timer.new()
+var can_be_auto_picked_up: bool = false ## Whether the item can currently be auto picked up by walking over it.
+var can_be_picked_up_at_all: bool = true ## When true, the item is in a state where it cannot be picked up by any means.
+var lifetime_timer: Timer = Timer.new() ## The timer tracking how long the item has left to exist on the ground.
 
 
 func _set_item(item_stats: ItemResource) -> void:
@@ -44,7 +44,7 @@ static func spawn_on_ground(item_stats: ItemResource, quant: int, location: Vect
 
 		@warning_ignore("narrowing_conversion") item_to_spawn.global_position = location + Vector2(randi_range((-location_range - 6) / 2.0, (location_range - 6) / 2.0) + 6, randi_range(0, (location_range - 6)) + 6)
 
-		var spawn_callable: Callable = GlobalData.world_root.get_node("WorldItemsManager").add_child.bind(item_to_spawn)
+		var spawn_callable: Callable = GlobalData.world_root.get_node("WorldItemsManager").add_item.bind(item_to_spawn)
 		spawn_callable.call_deferred()
 
 #region Save & Load
@@ -80,19 +80,16 @@ func _ready() -> void:
 		_set_rarity_colors()
 		thumbnail.material.set_shader_parameter("random_start_offset", randf() * 2.0)
 
-		add_child(search_for_neighbors_timer)
 		add_child(lifetime_timer)
-		search_for_neighbors_timer.timeout.connect(_search_for_neighbors)
 		lifetime_timer.timeout.connect(remove_from_world)
-		search_for_neighbors_timer.one_shot = true
 		lifetime_timer.one_shot = true
 		lifetime_timer.start(300)
-		_search_for_neighbors()
 
 	if not can_be_auto_picked_up:
 		await get_tree().create_timer(1.0, false, false, false).timeout
 		can_be_auto_picked_up = true
 
+## Sets the rarity FX using the colors associated with that rarity, given by the dictionary in the GlobalData.
 func _set_rarity_colors() -> void:
 	thumbnail.material.set_shader_parameter("width", 0.5)
 	ground_glow.self_modulate = GlobalData.rarity_colors.ground_glow.get(stats.rarity)
@@ -108,25 +105,23 @@ func _set_rarity_colors() -> void:
 	if stats.rarity == GlobalData.ItemRarity.SINGULAR:
 		particles.amount *= 3
 
+## When the spawn animation finishes, start hovering and emitting particles if needed.
 func _on_spawn_anim_completed() -> void:
 	anim_player.play("hover")
 	if stats.rarity == GlobalData.ItemRarity.LEGENDARY or stats.rarity == GlobalData.ItemRarity.SINGULAR:
 		line_particles.color = GlobalData.rarity_colors.tint_color.get(stats.rarity)
 		line_particles.emitting = true
 
+## Removes the item from the world
 func remove_from_world() -> void:
 	anim_player.play("remove")
 
 func _on_remove_anim_completed() -> void:
 	queue_free()
 
-func _search_for_neighbors() -> void:
-	## FIXME!!!
-
-	search_for_neighbors_timer.start(randf_range(0.5, 1.25) * 5)
-	pass
-
 func _on_area_entered(area: Area2D) -> void:
+	if not can_be_picked_up_at_all: return
+
 	if area is ItemReceiverComponent and area.get_parent() is Player:
 		if stats.auto_pickup and can_be_auto_picked_up:
 			(area as ItemReceiverComponent).pickup_item(self)

@@ -8,6 +8,7 @@ resource_local_to_scene = true
 shader = ExtResource("1_74nwb")
 shader_parameter/whitener_enabled = false
 shader_parameter/alpha_multiplier = 0.15
+shader_parameter/tint_color = Color(1, 1, 1, 1)
 
 [node name="DashGhost" type="Sprite2D"]
 show_behind_parent = true

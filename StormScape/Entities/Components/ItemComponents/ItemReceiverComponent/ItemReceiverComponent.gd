@@ -49,7 +49,8 @@ func _unhandled_key_input(_event: InputEvent) -> void:
 
 func _pickup_item_from_queue() -> void:
 	if not items_in_range.is_empty():
-		add_item_from_world(items_in_range.pop_back())
+		if items_in_range[items_in_range.size() - 1].can_be_picked_up_at_all:
+			add_item_from_world(items_in_range.pop_back())
 
 func pickup_item(item: Item) -> void:
 	add_item_from_world(item)

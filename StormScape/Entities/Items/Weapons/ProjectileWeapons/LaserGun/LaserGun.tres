@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="ProjWeaponResource" load_steps=29 format=3 uid="uid://ciel2rrqq4dvv"]
+[gd_resource type="Resource" script_class="ProjWeaponResource" load_steps=30 format=3 uid="uid://ciel2rrqq4dvv"]
 
 [ext_resource type="Script" path="res://Entities/EffectSystemResources/EffectSources/EffectSource.gd" id="1_2i3xb"]
 [ext_resource type="Script" path="res://Entities/Items/Weapons/ProjectileWeapons/ProjWeaponResource.gd" id="1_7bjnk"]
@@ -12,6 +12,7 @@
 [ext_resource type="PackedScene" uid="uid://baxpb3crwepc0" path="res://Entities/Items/Weapons/ProjectileWeapons/LaserGun/LaserGun.tscn" id="6_gbfef"]
 [ext_resource type="Resource" uid="uid://dvew5cy3k7s48" path="res://Entities/EffectSystemResources/StatusEffects/BadEffects/Burning/Burning1.tres" id="6_oaxe5"]
 [ext_resource type="Script" path="res://Entities/Items/Projectiles/ProjectileResource.gd" id="9_bgryc"]
+[ext_resource type="Resource" uid="uid://budyhbdyh7yme" path="res://Entities/EffectSystemResources/StatusEffects/GoodEffects/SelfKnockback/SelfKnockback1.tres" id="9_vu8tx"]
 
 [sub_resource type="Curve" id="Curve_kfl3v"]
 _data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.757194, 0.277558), 0.0, 0.0, 0, 0, Vector2(1, 1), 2.89929, 0.0, 0, 0]
@@ -54,12 +55,12 @@ beam_particle_mult = 1.0
 script = ExtResource("1_2i3xb")
 is_projectile = true
 can_hit_self = false
-bad_effect_affected_teams = 1
-good_effect_affected_teams = 2
+bad_effect_affected_teams = 3
+good_effect_affected_teams = 3
 scanned_phys_layers = 255
-base_damage = 10
+base_damage = 2
 dmg_affected_stats = 2
-crit_chance = 0
+crit_chance = 50
 crit_multiplier = 1.5
 armor_penetration = 0
 base_healing = 0
@@ -191,12 +192,13 @@ projectile_logic = SubResource("Resource_tss3t")
 firing_mode = "Auto"
 initial_shot_delay = 0.0
 auto_fire_delay = 0.15
+post_firing_effect = ExtResource("9_vu8tx")
 firing_cam_shake_str = 0.68
 firing_cam_shake_dur = 0.3
 firing_cam_freeze_mult = 1.0
 firing_cam_freeze_dur = 0.0
 firing_sound = ""
-use_hitscan = false
+use_hitscan = true
 allow_hitscan_holding = true
 hitscan_logic = SubResource("Resource_2dr82")
 charged_hitscan_logic = SubResource("Resource_sb45i")

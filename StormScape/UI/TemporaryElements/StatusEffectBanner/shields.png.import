@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://ubajhsoa1d30"
-path="res://.godot/imported/question.png-3fffb67f2ab5d46fd18df05560788204.ctex"
+uid="uid://cjtlx8r1y2cn2"
+path="res://.godot/imported/shields.png-eda9d007583dd2a3545f0587fc80f9b1.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://UI/StatusEffectBanner/question.png"
-dest_files=["res://.godot/imported/question.png-3fffb67f2ab5d46fd18df05560788204.ctex"]
+source_file="res://UI/TemporaryElements/StatusEffectBanner/shields.png"
+dest_files=["res://.godot/imported/shields.png-eda9d007583dd2a3545f0587fc80f9b1.ctex"]
 
 [params]
 

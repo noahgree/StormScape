@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://p8l30rk26hyl"
-path="res://.godot/imported/slow_arrows.png-366c52fdb0b3eba9a37d7c0217760675.ctex"
+uid="uid://crawnbhc5weqf"
+path="res://.godot/imported/entity_footstep.png-e8dc7975b8db1a574755b5e38e97cb8e.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://UI/StatusEffectBanner/slow_arrows.png"
-dest_files=["res://.godot/imported/slow_arrows.png-366c52fdb0b3eba9a37d7c0217760675.ctex"]
+source_file="res://Entities/EntityCore/EntityTypes/DynamicEntity/entity_footstep.png"
+dest_files=["res://.godot/imported/entity_footstep.png-e8dc7975b8db1a574755b5e38e97cb8e.ctex"]
 
 [params]
 

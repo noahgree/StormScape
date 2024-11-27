@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c6ebk8sa1vvtq"
-path="res://.godot/imported/flames.png-d2c014a29ac47658f6bad7407409bc5c.ctex"
+uid="uid://dsgx4sr31dhrs"
+path="res://.godot/imported/mud_texture.png-c88e1ce4825ea0b113a31f7de30c114f.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://UI/StatusEffectBanner/flames.png"
-dest_files=["res://.godot/imported/flames.png-d2c014a29ac47658f6bad7407409bc5c.ctex"]
+source_file="res://Entities/EntityCore/EntityTypes/DynamicEntity/mud_texture.png"
+dest_files=["res://.godot/imported/mud_texture.png-c88e1ce4825ea0b113a31f7de30c114f.ctex"]
 
 [params]
 

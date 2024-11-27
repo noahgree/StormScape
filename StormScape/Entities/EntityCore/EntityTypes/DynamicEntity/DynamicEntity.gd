@@ -84,9 +84,7 @@ func _update_shader_with_new_sprite_frame_size() -> void:
 	if sprite is AnimatedSprite2D:
 		sprite.material.set_shader_parameter("enable_fading", true)
 
-		var current_animation = sprite.animation
-		var current_frame = sprite.frame
-		var texture = sprite.sprite_frames.get_frame_texture(current_animation, current_frame)
+		var texture = SpriteHelpers.SpriteDetails.get_frame_texture(sprite)
 
 		var frame_uv_min = Vector2(0.0, 0.0)
 		var frame_uv_max = Vector2(1.0, 1.0)
@@ -95,7 +93,6 @@ func _update_shader_with_new_sprite_frame_size() -> void:
 
 		# Ensure the texture is valid
 		if texture == null:
-			print("No texture found for the current frame.")
 			sprite.material.set_shader_parameter("enable_fading", false)
 			return
 
@@ -117,7 +114,7 @@ func _update_shader_with_new_sprite_frame_size() -> void:
 			frame_uv_min = Vector2(0.0, 0.0)
 			frame_uv_max = Vector2(1.0, 1.0)
 		else:
-			print("Unsupported texture type.")
+			push_error("Unsupported texture type for adjusting glow shader on an entity.")
 			sprite.material.set_shader_parameter("enable_fading", false)
 			return
 

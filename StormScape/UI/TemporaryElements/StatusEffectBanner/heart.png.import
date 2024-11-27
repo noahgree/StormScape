@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://b2jcsvncxjns3"
-path="res://.godot/imported/lightning.png-541cb2aebb66e8c93139f66357ea5cd0.ctex"
+uid="uid://n85wp2rkfw7t"
+path="res://.godot/imported/heart.png-2e3ff7b0a7a600e2327db0495b2523a5.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://UI/StatusEffectBanner/lightning.png"
-dest_files=["res://.godot/imported/lightning.png-541cb2aebb66e8c93139f66357ea5cd0.ctex"]
+source_file="res://UI/TemporaryElements/StatusEffectBanner/heart.png"
+dest_files=["res://.godot/imported/heart.png-2e3ff7b0a7a600e2327db0495b2523a5.ctex"]
 
 [params]
 

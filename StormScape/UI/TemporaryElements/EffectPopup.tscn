@@ -1,0 +1,41 @@
+[gd_scene load_steps=4 format=3 uid="uid://28ry06t64e8p"]
+
+[ext_resource type="Script" path="res://UI/TemporaryElements/EffectPopup.gd" id="1_obmtp"]
+[ext_resource type="Texture2D" uid="uid://dbm40lvpgbd8t" path="res://Entities/Items/ItemCore/Particles/item_rarity_light.png" id="2_8adlu"]
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_7bmg7"]
+blend_mode = 1
+
+[node name="EffectPopup" type="Marker2D"]
+modulate = Color(1, 1, 1, 0.95)
+z_index = 10
+scale = Vector2(0.85, 0.85)
+skew = -0.436332
+script = ExtResource("1_obmtp")
+
+[node name="Glow" type="TextureRect" parent="."]
+modulate = Color(1.1, 0.2, 0.25, 1)
+material = SubResource("CanvasItemMaterial_7bmg7")
+offset_left = -10.5882
+offset_top = -8.23529
+offset_right = 501.412
+offset_bottom = 503.765
+scale = Vector2(0.04, 0.035)
+texture = ExtResource("2_8adlu")
+
+[node name="NumberLabel" type="Label" parent="."]
+offset_left = -6.0
+offset_top = -6.0
+offset_right = 6.0
+offset_bottom = 6.0
+size_flags_horizontal = 4
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/line_spacing = 0
+theme_override_constants/shadow_offset_x = 0
+theme_override_constants/shadow_offset_y = 0
+theme_override_constants/outline_size = 0
+theme_override_constants/shadow_outline_size = 3
+text = "0"
+horizontal_alignment = 1

@@ -2,7 +2,6 @@ extends Weapon
 class_name MeleeWeapon
 
 @export var sprite_visual_rotation: float = 45 ## How rotated the drawn sprite is by default when imported. Straight up would be 0º, angling top-right would be 45º, etc.
-@export var ghost_scene: PackedScene = load("res://Entities/EntityCore/SpriteGhost.tscn")
 @export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var ghost_fade_time: float = 0.25 ## How long ghosts take to fade.
 
 @onready var anim_player: AnimationPlayer = $AnimationPlayer ## The animation controller for this melee weapon.
@@ -135,7 +134,7 @@ func _spawn_ghost() -> void:
 	var rotated_offset = sprite.offset.rotated(sprite.rotation)
 	adjusted_transform.origin += rotated_offset
 
-	var ghost_instance: SpriteGhost = SpriteGhost.create(ghost_scene, adjusted_transform, sprite.scale, sprite_texture, ghost_fade_time)
+	var ghost_instance: SpriteGhost = SpriteGhost.create(adjusted_transform, sprite.scale, sprite_texture, ghost_fade_time)
 	ghost_instance.flip_h = sprite.flip_h
 	ghost_instance.make_white()
 	add_child(ghost_instance)

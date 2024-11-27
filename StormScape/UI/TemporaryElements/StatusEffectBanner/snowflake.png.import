@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dp618rrm5wywy"
-path="res://.godot/imported/clocks.png-bfe0d7884fd49172ce3658163cff1934.ctex"
+uid="uid://cidg3ea0fltr"
+path="res://.godot/imported/snowflake.png-a99ad1bf880c1c059b545a018b0b3ed1.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://UI/StatusEffectBanner/clocks.png"
-dest_files=["res://.godot/imported/clocks.png-bfe0d7884fd49172ce3658163cff1934.ctex"]
+source_file="res://UI/TemporaryElements/StatusEffectBanner/snowflake.png"
+dest_files=["res://.godot/imported/snowflake.png-a99ad1bf880c1c059b545a018b0b3ed1.ctex"]
 
 [params]
 

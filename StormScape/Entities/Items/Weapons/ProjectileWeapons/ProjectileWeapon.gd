@@ -519,7 +519,7 @@ func _attempt_reload() -> void:
 		var ammo_available: int = _get_more_reload_ammo(ammo_needed)
 		if ammo_available > 0:
 			if s_stats.mag_reload_sound != "": AudioManager.play_sound(s_stats.mag_reload_sound, AudioManager.SoundType.SFX_GLOBAL)
-		s_stats.ammo_in_mag += _get_more_reload_ammo(ammo_needed)
+		s_stats.ammo_in_mag += ammo_available
 		is_reloading = false
 
 ## Searches through the source entity's inventory for more ammo to fill the magazine.

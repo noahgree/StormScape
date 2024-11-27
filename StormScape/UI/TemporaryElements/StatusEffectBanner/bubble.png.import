@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://n85wp2rkfw7t"
-path="res://.godot/imported/heart.png-bab7b288759e6cee43448e2ec4fa0ba1.ctex"
+uid="uid://ben7f106xwdu2"
+path="res://.godot/imported/bubble.png-25637e8637de7c68ec283d3de2045fdc.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://UI/StatusEffectBanner/heart.png"
-dest_files=["res://.godot/imported/heart.png-bab7b288759e6cee43448e2ec4fa0ba1.ctex"]
+source_file="res://UI/TemporaryElements/StatusEffectBanner/bubble.png"
+dest_files=["res://.godot/imported/bubble.png-25637e8637de7c68ec283d3de2045fdc.ctex"]
 
 [params]
 

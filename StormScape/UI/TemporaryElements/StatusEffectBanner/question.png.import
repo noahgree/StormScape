@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cidg3ea0fltr"
-path="res://.godot/imported/snowflake.png-819e138debb524dc556f1aa46f3d2516.ctex"
+uid="uid://ubajhsoa1d30"
+path="res://.godot/imported/question.png-af4494fc22f6a1a517a027840bf91fe5.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://UI/StatusEffectBanner/snowflake.png"
-dest_files=["res://.godot/imported/snowflake.png-819e138debb524dc556f1aa46f3d2516.ctex"]
+source_file="res://UI/TemporaryElements/StatusEffectBanner/question.png"
+dest_files=["res://.godot/imported/question.png-af4494fc22f6a1a517a027840bf91fe5.ctex"]
 
 [params]
 

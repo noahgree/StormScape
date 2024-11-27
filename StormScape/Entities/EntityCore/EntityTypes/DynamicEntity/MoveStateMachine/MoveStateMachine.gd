@@ -4,6 +4,8 @@ class_name MoveStateMachine
 
 @export var entity: DynamicEntity ## The entity that this FSM moves.
 @export var anim_tree: AnimationTree ## The animation tree node to support the children state animations.
+@export var footstep_texture: Texture2D ## The footstep texture used to leave a trail behind.
+@export var footstreak_offsets: Array[Vector2] = [Vector2(-4, 0), Vector2(4, 0)] ## The offsets to draw the footstreaks at when hit by knockback.
 @export_custom(PROPERTY_HINT_NONE, "suffix:per second") var _sprint_stamina_usage: float = 15.0 ## The amount of stamina used per second when the entity is sprinting.
 @export_custom(PROPERTY_HINT_NONE, "suffix:per dash") var _dash_stamina_usage: float = 20.0 ## The amount of stamina used per dash activation.
 @export var _friction: float = 1550 ## The decrease in speed per second for the entity.
@@ -15,6 +17,7 @@ class_name MoveStateMachine
 var anim_vector: Vector2 = Vector2.ZERO ## The vector to provide the associated animation state machine with.
 var curr_mouse_direction: Vector2 = Vector2.ZERO
 var knockback_vector: Vector2 = Vector2.ZERO ## The current knockback to apply to any state that can move.
+var knockback_streak_nodes: Array[FootStreak] = [] ## The current foot streak in the ground from knockback.
 var can_receive_effects: bool = true ## Whether the entity is in a state that can receive effects.
 var should_rotate: bool = true ## Reflects whether or not we are performing an action that prevents us from changing the current anim vector used by child states to rotate the entity animation.
 var rotation_lerping_factor: float = 0.1 ## The current lerping rate for getting the current mouse direction.
@@ -54,6 +57,7 @@ func state_machine_physics_process(delta: float) -> void:
 		update_anim_vector()
 
 	if knockback_vector.length() > 100:
+		update_knockback_streak()
 		knockback_vector = lerp(knockback_vector, Vector2.ZERO, 6 * delta)
 	else:
 		knockback_vector = Vector2.ZERO
@@ -90,6 +94,14 @@ func verify_anim_vector() -> void:
 	if current_state and current_state.has_method("_animate"):
 		current_state._animate()
 
+func create_footprint(offsets: Array) -> void:
+	for offset in offsets:
+		var trans: Transform2D = Transform2D(atan2(anim_vector.y, anim_vector.x), get_parent().global_position + offset)
+		var footprint: SpriteGhost = SpriteGhost.create(trans, Vector2(0.8, 0.8), footstep_texture, 0.8)
+		footprint.z_index = get_parent().sprite.z_index - 1
+		footprint.material.set_shader_parameter("tint_color", Color(0.0, 0.0, 0.0, 0.8))
+		GlobalData.world_root.add_child(footprint)
+
 ## Requests to transition to the stun state, doing so if possible.
 func request_stun(duration: float) -> void:
 	if current_state:
@@ -99,6 +111,20 @@ func request_stun(duration: float) -> void:
 ## Requests to add a value to the current knockback vector, doing so if possible.
 func request_knockback(knockback: Vector2) -> void:
 	knockback_vector = (knockback_vector + knockback).limit_length(MAX_KNOCKBACK)
+	if knockback_streak_nodes.is_empty() or (not is_instance_valid(knockback_streak_nodes[0])) or (knockback_streak_nodes[0] == null) or (knockback_streak_nodes[0].is_fading):
+		knockback_streak_nodes.clear()
+		for offset in footstreak_offsets:
+			var streak: FootStreak = FootStreak.create()
+			knockback_streak_nodes.append(streak)
+			GlobalData.world_root.add_child(streak)
+
+func update_knockback_streak() -> void:
+
+	for i in range(footstreak_offsets.size()):
+		if knockback_streak_nodes.size() >= (i + 1) and is_instance_valid(knockback_streak_nodes[i]) and knockback_streak_nodes[i] != null:
+			knockback_streak_nodes[i].update_trail_position(entity.global_position + footstreak_offsets[i], atan2(anim_vector.y, anim_vector.x))
+		else:
+			knockback_streak_nodes.clear()
 
 ## Called when the entity spawns.
 func spawn() -> void:

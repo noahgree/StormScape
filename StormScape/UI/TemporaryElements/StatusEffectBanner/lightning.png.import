@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cjtlx8r1y2cn2"
-path="res://.godot/imported/shields.png-0e13f9d98e16f37d291d446c16f9f045.ctex"
+uid="uid://b2jcsvncxjns3"
+path="res://.godot/imported/lightning.png-b7cedfa0f506f1318a1b92aeac47d16c.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://UI/StatusEffectBanner/shields.png"
-dest_files=["res://.godot/imported/shields.png-0e13f9d98e16f37d291d446c16f9f045.ctex"]
+source_file="res://UI/TemporaryElements/StatusEffectBanner/lightning.png"
+dest_files=["res://.godot/imported/lightning.png-b7cedfa0f506f1318a1b92aeac47d16c.ctex"]
 
 [params]
 

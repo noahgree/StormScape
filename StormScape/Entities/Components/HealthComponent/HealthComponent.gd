@@ -35,8 +35,13 @@ func _emit_initial_values() -> void:
 
 #region Utils: Taking Damage
 ## Takes damage to both health and shield, starting with available shield then applying any remaining amount to health.
-func damage_shield_then_health(amount: int) -> void:
-	if amount > 0 and shield > 0: _play_shield_damage_sound()
+func damage_shield_then_health(amount: int, was_crit: bool = false) -> void:
+	if amount > 0:
+		if shield > 0:
+			EffectPopup.create_popup(EffectPopup.PopupTypes.CRIT_DMG if was_crit else EffectPopup.PopupTypes.SHIELD_DMG, amount, get_parent())
+			_play_shield_damage_sound()
+		else:
+			EffectPopup.create_popup(EffectPopup.PopupTypes.CRIT_DMG if was_crit else EffectPopup.PopupTypes.HEALTH_DMG, amount, get_parent())
 	var spillover_damage: int = max(0, amount - shield)
 	@warning_ignore("narrowing_conversion") shield = clampi(shield - amount, 0, get_parent().stats.get_stat("max_shield"))
 
@@ -45,13 +50,15 @@ func damage_shield_then_health(amount: int) -> void:
 	_check_for_death()
 
 ## Decrements only the health value by the passed in amount.
-func damage_health(amount: int) -> void:
+func damage_health(amount: int, was_crit: bool = false) -> void:
 	health = max(0, health - amount)
+	EffectPopup.create_popup(EffectPopup.PopupTypes.CRIT_DMG if was_crit else EffectPopup.PopupTypes.HEALTH_DMG, amount, get_parent())
 	_check_for_death()
 
 ## Decrements only the shield value by the passed in amount.
-func damage_shield(amount: int) -> void:
+func damage_shield(amount: int, was_crit: bool = false) -> void:
 	shield = max(0, shield - amount)
+	EffectPopup.create_popup(EffectPopup.PopupTypes.CRIT_DMG if was_crit else EffectPopup.PopupTypes.SHIELD_DMG, amount, get_parent())
 	if amount > 0: _play_shield_damage_sound()
 
 ## Handles what happens when health reaches 0 for the entity.
@@ -75,6 +82,11 @@ func set_armor(new_armor: int) -> void:
 #region Utils: Applying Healing
 ## Heals to both health and shield, starting with health then applying any remaining amount to shield.
 func heal_health_then_shield(amount: int) -> void:
+	if health < get_parent().stats.get_stat("max_health"):
+		EffectPopup.create_popup(EffectPopup.PopupTypes.HEALTH_HEAL, amount, get_parent())
+	else:
+		EffectPopup.create_popup(EffectPopup.PopupTypes.SHIELD_HEAL, amount, get_parent())
+
 	var spillover_health: int = max(0, (amount + health) - get_parent().stats.get_stat("max_health"))
 	@warning_ignore("narrowing_conversion") health = clampi(health + amount, 0, get_parent().stats.get_stat("max_health"))
 
@@ -84,10 +96,12 @@ func heal_health_then_shield(amount: int) -> void:
 ## Heals only health.
 func heal_health(amount: int) -> void:
 	health = min(health + amount, get_parent().stats.get_stat("max_health"))
+	EffectPopup.create_popup(EffectPopup.PopupTypes.HEALTH_HEAL, amount, get_parent())
 
 ## Heals only shield.
 func heal_shield(amount: int) -> void:
 	shield = min(shield + amount, get_parent().stats.get_stat("max_shield"))
+	EffectPopup.create_popup(EffectPopup.PopupTypes.SHIELD_HEAL, amount, get_parent())
 #endregion
 
 #region Setters & On-Change Funcs

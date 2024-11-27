@@ -6,21 +6,13 @@ extends MoveState
 @onready var stunned_timer: Timer = $StunnedTimer ## The timer that tracks how much longer the stun has remaining.
 
 var stun_indicator: AnimatedSprite2D
-var parent_sprite_node: Node2D
 
 
 func enter() -> void:
 	fsm.anim_tree["parameters/playback"].travel("idle")
 	stunned_timer.start()
 	_animate()
-
-	if dynamic_entity.has_node("AnimatedSprite2D"):
-		parent_sprite_node = dynamic_entity.get_node("AnimatedSprite2D")
-	elif dynamic_entity.has_node("Sprite2D"):
-		parent_sprite_node = dynamic_entity.get_node("Sprite2D")
-	else:
-		return
-	if parent_sprite_node != null: _create_stun_indicator()
+	_create_stun_indicator()
 
 func exit() -> void:
 	if stun_indicator: stun_indicator.queue_free()
@@ -43,20 +35,16 @@ func _do_character_stun(delta: float) -> void:
 func _animate() -> void:
 	fsm.anim_tree.set("parameters/idle/blendspace2d/blend_position", fsm.anim_vector)
 
+## Creates the stun indicator scene above the entity and adds it as a child.
 func _create_stun_indicator() -> void:
 	stun_indicator = indicator_scene.instantiate()
 	add_child(stun_indicator)
 
+## Update where the stun indicator should be based on the entity size and position.
 func _update_stun_indicator_pos() -> void:
-	var sprite_texture: Texture2D
-	if parent_sprite_node is AnimatedSprite2D:
-		var animated_sprite_node = dynamic_entity.get_node("AnimatedSprite2D")
-		var current_anim: String = animated_sprite_node.animation
-		var current_frame: int = animated_sprite_node.frame
-		sprite_texture = animated_sprite_node.sprite_frames.get_frame_texture(current_anim, current_frame)
-	elif parent_sprite_node is Sprite2D:
-		sprite_texture = parent_sprite_node.texture
-	stun_indicator.global_position = Vector2(dynamic_entity.position.x + parent_sprite_node.position.x, dynamic_entity.position.y + parent_sprite_node.position.y - (sprite_texture.get_size().y / 2))
+	var sprite_texture: Texture2D = SpriteHelpers.SpriteDetails.get_frame_texture(dynamic_entity.sprite)
+	var sprite_offset: Vector2 = dynamic_entity.sprite.position - Vector2(0, sprite_texture.get_size().y / 2)
+	stun_indicator.global_position = dynamic_entity.position + sprite_offset
 
 ## When the stun time has ended, transition out of this state and back to Idle.
 func _on_stunned_timer_timeout() -> void:

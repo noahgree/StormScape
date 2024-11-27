@@ -50,10 +50,9 @@ func _ready() -> void:
 	get_parent().affected_entity.stats.add_moddable_stats(moddable_stats)
 
 ## Calculates the final damage to apply after considering whether the crit hit and also how much the armor blocks.
-func _get_dmg_after_crit_then_armor(effect_source: EffectSource) -> int:
-	var should_crit: bool = randf_range(0, 100) <= effect_source.crit_chance
+func _get_dmg_after_crit_then_armor(effect_source: EffectSource, is_crit: bool) -> int:
 	var dmg_after_crit: int = effect_source.base_damage
-	if should_crit:
+	if is_crit:
 		dmg_after_crit = round(dmg_after_crit * effect_source.crit_multiplier)
 
 	var armor_block_percent: int = max(0, health_component.armor - effect_source.armor_penetration)
@@ -62,8 +61,9 @@ func _get_dmg_after_crit_then_armor(effect_source: EffectSource) -> int:
 
 ## Handles instantaneous damage that will be affected by armor.
 func handle_instant_damage(effect_source: EffectSource) -> void:
-	var dmg_after_crit_then_armor: int = _get_dmg_after_crit_then_armor(effect_source)
-	_send_handled_dmg(effect_source.dmg_affected_stats, dmg_after_crit_then_armor)
+	var is_crit: bool = randf_range(0, 100) <= effect_source.crit_chance
+	var dmg_after_crit_then_armor: int = _get_dmg_after_crit_then_armor(effect_source, is_crit)
+	_send_handled_dmg(effect_source.dmg_affected_stats, dmg_after_crit_then_armor, is_crit)
 
 ## Handles applying damage that is inflicted over time, whether with a delay, with burst intervals, or with both.
 func handle_over_time_dmg(dot_resource: DOTResource, source_type: String) -> void:
@@ -102,7 +102,7 @@ func handle_over_time_dmg(dot_resource: DOTResource, source_type: String) -> voi
 		else:
 			dot_timer.wait_time = max(0.01, dot_resource.time_between_ticks)
 
-		_send_handled_dmg(dot_resource.dmg_affected_stats, dot_resource.dmg_ticks_array[0])
+		_send_handled_dmg(dot_resource.dmg_affected_stats, dot_resource.dmg_ticks_array[0], false)
 		_add_timer_to_cache(source_type, dot_timer, dot_timers)
 		dot_timer.start()
 
@@ -144,13 +144,13 @@ func _on_dot_timer_timeout(dot_timer: Timer, source_type: String) -> void:
 
 	if dot_resource.run_until_removed:
 		var damage: int = dot_resource.dmg_ticks_array[0]
-		_send_handled_dmg(dmg_affected_stats, damage)
+		_send_handled_dmg(dmg_affected_stats, damage, false)
 		dot_timer.set_meta("ticks_completed", ticks_completed + 1)
 	else:
 		var max_ticks: int = dot_resource.dmg_ticks_array.size()
 		if ticks_completed < max_ticks:
 			var damage: int = dot_resource.dmg_ticks_array[ticks_completed]
-			_send_handled_dmg(dmg_affected_stats, damage)
+			_send_handled_dmg(dmg_affected_stats, damage, false)
 			dot_timer.set_meta("ticks_completed", ticks_completed + 1)
 
 			if max_ticks == 1:
@@ -160,18 +160,18 @@ func _on_dot_timer_timeout(dot_timer: Timer, source_type: String) -> void:
 
 ## Sends the affected entity's health component the final damage values based on what stats the damage was
 ## allowed to affect.
-func _send_handled_dmg(dmg_affected_stats: GlobalData.DmgAffectedStats, handled_amount: int) -> void:
+func _send_handled_dmg(dmg_affected_stats: GlobalData.DmgAffectedStats, handled_amount: int, was_crit: bool) -> void:
 	var dmg_weakness: float = get_parent().affected_entity.stats.get_stat("dmg_weakness")
 	var dmg_resistance: float = get_parent().affected_entity.stats.get_stat("dmg_resistance")
 	var positive_dmg: int = max(0, handled_amount * (1 + dmg_weakness - dmg_resistance))
 
 	match dmg_affected_stats:
 		GlobalData.DmgAffectedStats.HEALTH_ONLY:
-			health_component.damage_health(positive_dmg)
+			health_component.damage_health(positive_dmg, was_crit)
 		GlobalData.DmgAffectedStats.SHIELD_ONLY:
-			health_component.damage_shield(positive_dmg)
+			health_component.damage_shield(positive_dmg, was_crit)
 		GlobalData.DmgAffectedStats.SHIELD_THEN_HEALTH:
-			health_component.damage_shield_then_health(positive_dmg)
+			health_component.damage_shield_then_health(positive_dmg, was_crit)
 		GlobalData.DmgAffectedStats.SIMULTANEOUS:
-			health_component.damage_shield(positive_dmg)
-			health_component.damage_health(positive_dmg)
+			health_component.damage_shield(positive_dmg, was_crit)
+			health_component.damage_health(positive_dmg, was_crit)

@@ -25,3 +25,5 @@ apply_until_removed = true
 stat_mods = Array[ExtResource("2_tlg1s")]([])
 audio_to_play = ""
 only_cue_on_player_hit = true
+spawn_particles = true
+particles_req_handler = true

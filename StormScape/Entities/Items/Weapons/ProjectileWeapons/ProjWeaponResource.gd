@@ -88,5 +88,5 @@ enum ProjWeaponType { ## The kinds of projectile weapons.
 @export_custom(PROPERTY_HINT_NONE, "", PROPERTY_USAGE_NO_EDITOR) var ammo_in_mag: int = -1: ## The current ammo in the mag.
 	set(new_ammo_amount):
 		ammo_in_mag = new_ammo_amount
-		if DebugFlags.PrintFlags.ammo_updates:
+		if DebugFlags.PrintFlags.ammo_updates and self.name != "":
 			print_rich("(" + str(self) + ") [b]AMMO[/b]: [color=cyan]" + str(ammo_in_mag) + "[/color]")

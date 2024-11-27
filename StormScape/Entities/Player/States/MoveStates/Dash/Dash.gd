@@ -5,7 +5,6 @@ extends MoveState
 @export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var _dash_duration: float = 0.08 ## The dash duration.
 @export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var _dash_cooldown: float = 1.0 ## The dash cooldown.
 @export var _dash_collision_impulse_factor: float = 1.0 ## A multiplier that controls how much impulse gets applied to rigid entites when colliding with them during a dash.
-@export var ghost_scene: PackedScene = load("res://Entities/EntityCore/SpriteGhost.tscn") ## The scene that defines the ghosts' behavior.
 @export var ghost_count: int = 8 ## How many ghosts to make during the dash.
 @export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var ghost_fade_time: float = 0.1 ## How long ghosts take to fade.
 
@@ -88,19 +87,12 @@ func _update_ghost_spawns() -> void:
 
 ## Grabs the current animation frame texture and creates a ghost from it, adding it at the proper offset as a child.
 func _create_ghost() -> void:
-	var sprite_texture: Texture2D
-	if dynamic_entity.sprite is AnimatedSprite2D:
-		var animated_sprite_node = dynamic_entity.sprite
-		var current_anim: String = animated_sprite_node.animation
-		var current_frame: int = animated_sprite_node.frame
-		sprite_texture = animated_sprite_node.sprite_frames.get_frame_texture(current_anim, current_frame)
-	elif dynamic_entity.sprite is Sprite2D:
-		sprite_texture = dynamic_entity.sprite.texture
+	var sprite_texture: Texture2D = SpriteHelpers.SpriteDetails.get_frame_texture(dynamic_entity.sprite)
 
 	var ghost_pos: Vector2 = Vector2(dynamic_entity.position.x + dynamic_entity.sprite.position.x, dynamic_entity.position.y + dynamic_entity.sprite.position.y)
 	var ghost_transform: Transform2D = Transform2D(dynamic_entity.rotation, ghost_pos)
 
-	var ghost_instance: SpriteGhost = SpriteGhost.create(ghost_scene, ghost_transform, dynamic_entity.scale, sprite_texture, ghost_fade_time)
+	var ghost_instance: SpriteGhost = SpriteGhost.create(ghost_transform, dynamic_entity.scale, sprite_texture, ghost_fade_time)
 	add_child(ghost_instance)
 	ghosts_spawned += 1
 

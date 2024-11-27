@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cfdtcke5ye6kv"
-path="res://.godot/imported/speed_arrows.png-be9076f171c4009a6dc364ba2fe89114.ctex"
+uid="uid://c6ebk8sa1vvtq"
+path="res://.godot/imported/flames.png-e4840b99c3f5e1f6cf27597361bc00e9.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://UI/StatusEffectBanner/speed_arrows.png"
-dest_files=["res://.godot/imported/speed_arrows.png-be9076f171c4009a6dc364ba2fe89114.ctex"]
+source_file="res://UI/TemporaryElements/StatusEffectBanner/flames.png"
+dest_files=["res://.godot/imported/flames.png-e4840b99c3f5e1f6cf27597361bc00e9.ctex"]
 
 [params]
 

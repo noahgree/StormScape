@@ -2,13 +2,15 @@ extends Sprite2D
 class_name SpriteGhost
 ## A simple sprite2D node to handle fading and queue freeing a ghost instance during something like a dash state.
 
+static var ghost_scene: PackedScene = load("res://Entities/EntityCore/SpriteGhost.tscn")
+
 var fade_out_time: float ## How long the sprite takes to fade out after being instanced.
 var is_whitened: bool = false
 const NON_WHITENED_ALPHA: float = 0.6
 
 
 ## Takes in relevant data to instance the node in the world as a ghost, including a custom fade out time.
-static func create(ghost_scene: PackedScene, trans: Transform2D, size: Vector2,
+static func create(trans: Transform2D, size: Vector2,
 					sprite_frame: Texture2D, fade_time: float) -> SpriteGhost:
 	var ghost_instance: SpriteGhost = ghost_scene.instantiate()
 	ghost_instance.transform = trans

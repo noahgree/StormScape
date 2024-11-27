@@ -1,4 +1,4 @@
-[gd_scene load_steps=101 format=4 uid="uid://bscnr6a23l10m"]
+[gd_scene load_steps=102 format=4 uid="uid://bscnr6a23l10m"]
 
 [ext_resource type="Script" path="res://Utilities/Game/WorldRoot/WorldRoot.gd" id="1_q0i4n"]
 [ext_resource type="Script" path="res://Stages/World/BackgroundMusicManager.gd" id="1_q5pr2"]
@@ -26,6 +26,7 @@
 [ext_resource type="PackedScene" uid="uid://c4kt3bx0ot3c7" path="res://Entities/Components/ItemComponents/LootTableComponent/LootTableComponent.tscn" id="17_rkuee"]
 [ext_resource type="Script" path="res://Entities/Components/ItemComponents/LootTableComponent/LootTableEntry.gd" id="18_cjmh4"]
 [ext_resource type="Resource" uid="uid://m8eslst1uuxh" path="res://Entities/Items/Ammo/LightAmmo.tres" id="19_2t00v"]
+[ext_resource type="PackedScene" uid="uid://ddj5ippwwkvop" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/HealHandler.tscn" id="19_wn2ac"]
 [ext_resource type="Resource" uid="uid://cx1ydw2jde1y8" path="res://Entities/Items/Consumables/Apple/Apple.tres" id="20_xawyc"]
 [ext_resource type="Resource" uid="uid://bper7kxtsf7f1" path="res://Entities/Items/Weapons/MeleeWeapons/Axe/Axe.tres" id="21_gqs2b"]
 [ext_resource type="Script" path="res://Stages/World/Storm/Storm.gd" id="22_0op7h"]
@@ -44,8 +45,8 @@
 [ext_resource type="Script" path="res://Stages/World/Storm/StormVisuals/StormVisuals.gd" id="27_8kcf2"]
 [ext_resource type="PackedScene" uid="uid://bgj0b83wrmlon" path="res://Entities/Items/Weapons/MeleeWeapons/Axe/Axe.tscn" id="27_vg0ul"]
 [ext_resource type="Script" path="res://Entities/Items/Weapons/MeleeWeapons/MeleeWeaponResource.gd" id="28_flry6"]
-[ext_resource type="Resource" uid="uid://b8yo5kmjiwnca" path="res://Entities/EffectSystemResources/StatusEffects/GoodEffects/Regen/Regen1.tres" id="35_s4kqk"]
-[ext_resource type="Resource" uid="uid://dvew5cy3k7s48" path="res://Entities/EffectSystemResources/StatusEffects/BadEffects/Burning/Burning1.tres" id="36_p3q46"]
+[ext_resource type="Resource" uid="uid://b0it5xmpw16sd" path="res://Entities/EffectSystemResources/StatusEffects/BadEffects/Knockback/Knockback1.tres" id="36_levdl"]
+[ext_resource type="Resource" uid="uid://3e6mdax7u2av" path="res://Entities/EffectSystemResources/StatusEffects/BadEffects/Stun/Stun1.tres" id="37_4u1fx"]
 
 [sub_resource type="Environment" id="Environment_2wouv"]
 background_mode = 3
@@ -4665,7 +4666,7 @@ cam_freeze_multiplier = 1.0
 cam_freeze_duration = 0.0
 impact_sound = ""
 hit_flash_color = Color(1, 1, 1, 0.45)
-status_effects = Array[ExtResource("13_33bgr")]([ExtResource("36_p3q46"), ExtResource("35_s4kqk")])
+status_effects = Array[ExtResource("13_33bgr")]([ExtResource("36_levdl"), ExtResource("37_4u1fx")])
 contact_position = Vector2(0, 0)
 movement_direction = Vector2(0, 0)
 
@@ -4954,12 +4955,13 @@ debug_color = Color(1.44392e-06, 0.568839, 0.851513, 0.42)
 
 [node name="HealthComponent" parent="WorldRoot/Testing/TestRigidEntity" instance=ExtResource("7_yay1r")]
 
-[node name="EffectReceiverComponent" parent="WorldRoot/Testing/TestRigidEntity" node_paths=PackedStringArray("affected_entity", "health_component", "loot_table_component", "dmg_handler", "knockback_handler", "burning_handler") instance=ExtResource("6_haafe")]
+[node name="EffectReceiverComponent" parent="WorldRoot/Testing/TestRigidEntity" node_paths=PackedStringArray("affected_entity", "health_component", "loot_table_component", "dmg_handler", "heal_handler", "knockback_handler", "burning_handler") instance=ExtResource("6_haafe")]
 position = Vector2(0, -10)
 affected_entity = NodePath("..")
 health_component = NodePath("../HealthComponent")
 loot_table_component = NodePath("../LootTableComponent")
 dmg_handler = NodePath("DmgHandler")
+heal_handler = NodePath("HealHandler")
 knockback_handler = NodePath("KnockbackHandler")
 burning_handler = NodePath("BurningHandler")
 
@@ -4970,8 +4972,12 @@ debug_color = Color(0.941042, 1.32841e-05, 0.612344, 0.42)
 [node name="KnockbackHandler" parent="WorldRoot/Testing/TestRigidEntity/EffectReceiverComponent" instance=ExtResource("7_vet3v")]
 
 [node name="DmgHandler" parent="WorldRoot/Testing/TestRigidEntity/EffectReceiverComponent" instance=ExtResource("13_bs3qc")]
+_dmg_weakness = null
+_dmg_resistance = null
 
 [node name="BurningHandler" parent="WorldRoot/Testing/TestRigidEntity/EffectReceiverComponent" instance=ExtResource("14_fmrr1")]
+
+[node name="HealHandler" parent="WorldRoot/Testing/TestRigidEntity/EffectReceiverComponent" instance=ExtResource("19_wn2ac")]
 
 [node name="StatusEffectManager" parent="WorldRoot/Testing/TestRigidEntity" node_paths=PackedStringArray("effect_receiver") instance=ExtResource("8_anrko")]
 effect_receiver = NodePath("../EffectReceiverComponent")
@@ -5004,13 +5010,14 @@ debug_color = Color(0.385145, 0.578011, 1, 0.385)
 
 [node name="HealthComponent" parent="WorldRoot/Testing/TestRigidEntity2" instance=ExtResource("7_yay1r")]
 
-[node name="EffectReceiverComponent" parent="WorldRoot/Testing/TestRigidEntity2" node_paths=PackedStringArray("affected_entity", "health_component", "loot_table_component", "dmg_handler", "knockback_handler") instance=ExtResource("6_haafe")]
+[node name="EffectReceiverComponent" parent="WorldRoot/Testing/TestRigidEntity2" node_paths=PackedStringArray("affected_entity", "health_component", "loot_table_component", "dmg_handler", "heal_handler", "knockback_handler") instance=ExtResource("6_haafe")]
 position = Vector2(-0.0160065, -10.016)
 can_receive_stat_mods = false
 affected_entity = NodePath("..")
 health_component = NodePath("../HealthComponent")
 loot_table_component = NodePath("../LootTableComponent")
 dmg_handler = NodePath("DmgHandler")
+heal_handler = NodePath("HealHandler")
 knockback_handler = NodePath("KnockbackHandler")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="WorldRoot/Testing/TestRigidEntity2/EffectReceiverComponent"]
@@ -5020,6 +5027,10 @@ debug_color = Color(0.941042, 1.32841e-05, 0.612344, 0.42)
 [node name="KnockbackHandler" parent="WorldRoot/Testing/TestRigidEntity2/EffectReceiverComponent" instance=ExtResource("7_vet3v")]
 
 [node name="DmgHandler" parent="WorldRoot/Testing/TestRigidEntity2/EffectReceiverComponent" instance=ExtResource("13_bs3qc")]
+_dmg_weakness = null
+_dmg_resistance = null
+
+[node name="HealHandler" parent="WorldRoot/Testing/TestRigidEntity2/EffectReceiverComponent" instance=ExtResource("19_wn2ac")]
 
 [node name="StatusEffectManager" parent="WorldRoot/Testing/TestRigidEntity2" node_paths=PackedStringArray("effect_receiver") instance=ExtResource("8_anrko")]
 effect_receiver = NodePath("../EffectReceiverComponent")
@@ -5053,12 +5064,13 @@ debug_color = Color(0.385145, 0.578011, 1, 0.385)
 
 [node name="HealthComponent" parent="WorldRoot/Testing/TestRigidEntity3" instance=ExtResource("7_yay1r")]
 
-[node name="EffectReceiverComponent" parent="WorldRoot/Testing/TestRigidEntity3" node_paths=PackedStringArray("affected_entity", "health_component", "dmg_handler", "knockback_handler") instance=ExtResource("6_haafe")]
+[node name="EffectReceiverComponent" parent="WorldRoot/Testing/TestRigidEntity3" node_paths=PackedStringArray("affected_entity", "health_component", "dmg_handler", "heal_handler", "knockback_handler") instance=ExtResource("6_haafe")]
 position = Vector2(-0.0159988, -10.016)
 can_receive_stat_mods = false
 affected_entity = NodePath("..")
 health_component = NodePath("../HealthComponent")
 dmg_handler = NodePath("DmgHandler")
+heal_handler = NodePath("HealHandler")
 knockback_handler = NodePath("KnockbackHandler")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="WorldRoot/Testing/TestRigidEntity3/EffectReceiverComponent"]
@@ -5068,6 +5080,10 @@ debug_color = Color(0.941042, 1.32841e-05, 0.612344, 0.42)
 [node name="KnockbackHandler" parent="WorldRoot/Testing/TestRigidEntity3/EffectReceiverComponent" instance=ExtResource("7_vet3v")]
 
 [node name="DmgHandler" parent="WorldRoot/Testing/TestRigidEntity3/EffectReceiverComponent" instance=ExtResource("13_bs3qc")]
+_dmg_weakness = null
+_dmg_resistance = null
+
+[node name="HealHandler" parent="WorldRoot/Testing/TestRigidEntity3/EffectReceiverComponent" instance=ExtResource("19_wn2ac")]
 
 [node name="StatusEffectManager" parent="WorldRoot/Testing/TestRigidEntity3" node_paths=PackedStringArray("effect_receiver") instance=ExtResource("8_anrko")]
 effect_receiver = NodePath("../EffectReceiverComponent")
@@ -5097,12 +5113,13 @@ debug_color = Color(0.385145, 0.578011, 1, 0.385)
 
 [node name="HealthComponent" parent="WorldRoot/Testing/TestRigidEntity4" instance=ExtResource("7_yay1r")]
 
-[node name="EffectReceiverComponent" parent="WorldRoot/Testing/TestRigidEntity4" node_paths=PackedStringArray("affected_entity", "health_component", "dmg_handler", "knockback_handler") instance=ExtResource("6_haafe")]
+[node name="EffectReceiverComponent" parent="WorldRoot/Testing/TestRigidEntity4" node_paths=PackedStringArray("affected_entity", "health_component", "dmg_handler", "heal_handler", "knockback_handler") instance=ExtResource("6_haafe")]
 position = Vector2(-0.0159988, -10.016)
 can_receive_stat_mods = false
 affected_entity = NodePath("..")
 health_component = NodePath("../HealthComponent")
 dmg_handler = NodePath("DmgHandler")
+heal_handler = NodePath("HealHandler")
 knockback_handler = NodePath("KnockbackHandler")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="WorldRoot/Testing/TestRigidEntity4/EffectReceiverComponent"]
@@ -5112,6 +5129,10 @@ debug_color = Color(0.941042, 1.32841e-05, 0.612344, 0.42)
 [node name="KnockbackHandler" parent="WorldRoot/Testing/TestRigidEntity4/EffectReceiverComponent" instance=ExtResource("7_vet3v")]
 
 [node name="DmgHandler" parent="WorldRoot/Testing/TestRigidEntity4/EffectReceiverComponent" instance=ExtResource("13_bs3qc")]
+_dmg_weakness = null
+_dmg_resistance = null
+
+[node name="HealHandler" parent="WorldRoot/Testing/TestRigidEntity4/EffectReceiverComponent" instance=ExtResource("19_wn2ac")]
 
 [node name="StatusEffectManager" parent="WorldRoot/Testing/TestRigidEntity4" node_paths=PackedStringArray("effect_receiver") instance=ExtResource("8_anrko")]
 effect_receiver = NodePath("../EffectReceiverComponent")
@@ -5121,15 +5142,17 @@ position = Vector2(149, 194)
 script = ExtResource("11_vr4ax")
 effect_source = SubResource("Resource_sx5ie")
 source_entity = NodePath("../Enemy")
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="WorldRoot/Testing/TestStaticEffectSource"]
-shape = SubResource("RectangleShape2D_o8yml")
+use_self_position = true
 
 [node name="Sprite2D" type="Sprite2D" parent="WorldRoot/Testing/TestStaticEffectSource"]
 modulate = Color(0.535417, 0, 0.108896, 1)
 position = Vector2(-3.8147e-06, 0)
 scale = Vector2(0.109375, 0.109375)
 texture = ExtResource("12_ajeh1")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="WorldRoot/Testing/TestStaticEffectSource"]
+shape = SubResource("RectangleShape2D_o8yml")
+debug_color = Color(0.994, 0, 0.227, 0.225)
 
 [node name="Player" parent="WorldRoot" instance=ExtResource("4_ptig0")]
 z_index = 0
