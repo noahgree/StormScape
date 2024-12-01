@@ -294,8 +294,10 @@ func _move_part_of_half_stack_into_slot_and_leave_remainder(data: Variant) -> vo
 #region Utils
 ## Emits signals for all slots of high enough index when changed to let any connected hotbar know to change it's data and UI.
 func _emit_changes_for_potential_listening_hotbar(data: Variant) -> void:
-	if data.index >= synced_inv.inv_size - synced_inv.hotbar_size: synced_inv.slot_updated.emit(data.index, data.item)
-	if index >= synced_inv.inv_size - synced_inv.hotbar_size: synced_inv.slot_updated.emit(index, item)
+	if data.index >= (synced_inv.inv_size - synced_inv.hotbar_size):
+		synced_inv.slot_updated.emit(data.index, data.item)
+	if index >= (synced_inv.inv_size - synced_inv.hotbar_size):
+		synced_inv.slot_updated.emit(index, item)
 
 ## When mouse enters, if we can drop, display an effect on this slot.
 func _on_mouse_entered() -> void:

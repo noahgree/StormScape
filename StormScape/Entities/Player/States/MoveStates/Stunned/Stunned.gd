@@ -5,7 +5,7 @@ extends MoveState
 
 @onready var stunned_timer: Timer = $StunnedTimer ## The timer that tracks how much longer the stun has remaining.
 
-var stun_indicator: AnimatedSprite2D
+var stun_indicator: AnimatedSprite2D ## The animated sprite showing the stun indicator over the entity.
 
 
 func enter() -> void:
@@ -13,6 +13,9 @@ func enter() -> void:
 	stunned_timer.start()
 	_animate()
 	_create_stun_indicator()
+
+	if dynamic_entity.hands != null:
+		dynamic_entity.hands.been_holding_time = 0
 
 func exit() -> void:
 	if stun_indicator: stun_indicator.queue_free()
@@ -23,7 +26,7 @@ func state_physics_process(delta: float) -> void:
 
 func _do_character_stun(delta: float) -> void:
 	var knockback: Vector2 = fsm.knockback_vector
-	if knockback.length() > 0: # let knockback take control if there is any
+	if knockback.length() > 0:
 		dynamic_entity.velocity = knockback
 
 	if dynamic_entity.velocity.length() > (dynamic_entity.stats.get_stat("friction") * delta): # still slowing

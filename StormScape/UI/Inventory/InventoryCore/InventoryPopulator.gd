@@ -35,11 +35,13 @@ func _change_slot_count_for_new_inv(inv: Inventory = null) -> void:
 
 	var main_count: int = DEFAULT_SLOT_COUNT
 	var hotbar_count: int = 0
+
 	if inv and inv.is_player_inv:
 		main_count = inv.inv_size - inv.hotbar_size
 		hotbar_count = inv.hotbar_size
 		trash_slot.index = inv.inv_size
 		trash_slot.synced_inv = inv
+
 	for i in range(main_count):
 		var slot: Slot = slot_scene.instantiate()
 		main_slot_grid.add_child(slot)
@@ -49,6 +51,7 @@ func _change_slot_count_for_new_inv(inv: Inventory = null) -> void:
 		slot.index = i
 		if inv: slot.synced_inv = inv
 		slots.append(slot)
+
 	for i in range(hotbar_count):
 		var slot: Slot = slot_scene.instantiate()
 		hotbar_grid.add_child(slot)
@@ -58,6 +61,7 @@ func _change_slot_count_for_new_inv(inv: Inventory = null) -> void:
 		slot.index = main_count + i
 		if inv: slot.synced_inv = inv
 		slots.append(slot)
+
 	if inv and inv.is_player_inv:
 		slots.append(trash_slot)
 

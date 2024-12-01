@@ -25,9 +25,6 @@ var equipped_item_should_follow_mouse: bool = true
 #region Save & Load
 func _on_before_load_game() -> void:
 	unequip_current_item()
-
-func _on_load_game() -> void:
-	pass
 #endregion
 
 func _ready() -> void:
@@ -67,6 +64,7 @@ func unequip_current_item() -> void:
 		drawn_off_hand.visible = false
 		equipped_item.exit()
 		equipped_item.queue_free()
+		equipped_item = null
 
 ## Handles positioning of the hands for the newly equipped item and then lets physics process take over.
 func on_equipped_item_change(inv_item_slot: Slot) -> void:
@@ -80,6 +78,7 @@ func on_equipped_item_change(inv_item_slot: Slot) -> void:
 		return
 
 	equipped_item = EquippableItem.create_from_slot(inv_item_slot)
+
 	_update_anchor_scale("x", 1)
 	_update_anchor_scale("y", 1)
 	main_hand.rotation = 0

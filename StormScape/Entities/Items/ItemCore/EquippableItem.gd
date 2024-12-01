@@ -19,7 +19,9 @@ static func create_from_slot(item_source_slot: Slot) -> EquippableItem:
 
 ## Sets the item stats when changed. Can be overridden by child classes to do specific things on change.
 func _set_stats(new_stats: ItemResource) -> void:
-	stats = new_stats
+	stats = new_stats.duplicate()
+	source_slot.synced_inv.inv[source_slot.index].stats = stats
+	source_slot.item.stats = stats
 
 func _ready() -> void:
 	_set_stats(stats)
@@ -37,8 +39,10 @@ func hold_activate(_hold_time: float) -> void:
 func release_hold_activate(_hold_time: float) -> void:
 	pass
 
+## Intended to be overridden by child classes in order to specify what to do when this item is equipped.
 func enter() -> void:
 	pass
 
+## Intended to be overridden by child classes in order to specify what to do when this item is unequipped.
 func exit() -> void:
 	pass

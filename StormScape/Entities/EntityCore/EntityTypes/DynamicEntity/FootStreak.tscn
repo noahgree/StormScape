@@ -10,7 +10,7 @@ point_count = 2
 [sub_resource type="Gradient" id="Gradient_au2uq"]
 resource_local_to_scene = true
 offsets = PackedFloat32Array(0, 0.65019, 1)
-colors = PackedColorArray(1, 1, 1, 0.869, 1, 1, 1, 0.741, 1, 1, 1, 0)
+colors = PackedColorArray(1, 1, 1, 0.752, 1, 1, 1, 0.657, 1, 1, 1, 0)
 
 [sub_resource type="Curve" id="Curve_vpxp6"]
 min_value = -360.0

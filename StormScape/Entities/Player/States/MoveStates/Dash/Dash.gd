@@ -10,7 +10,7 @@ extends MoveState
 
 @onready var dash_timer: Timer = $DashTimer ## Timer to enforce how long the dash lasts for.
 
-var movement_vector: Vector2 = Vector2.ZERO ## The current direction of movement.
+var movement_vector: Vector2 = Vector2.ZERO ## The current movement vector for the entity.
 var ghosts_spawned: int = 0 ## The number of ghosts spawned so far in this dash.
 var time_since_ghost: float = 0.0 ## The number of seconds since the last ghost spawn.
 var collision_shake_complete: bool = false ## Whether the character hit a collider and had shake applied (if player) during the current dash state

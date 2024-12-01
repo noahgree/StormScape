@@ -22,7 +22,7 @@ func _on_save_game(_save_data: Array[SaveData]) -> void:
 			var ticks_completed: int = timer.get_meta("ticks_completed")
 			var original_tick_count: int = clean_resource.dmg_ticks_array.size()
 			clean_resource.dmg_ticks_array = clean_resource.dmg_ticks_array.slice(ticks_completed, clean_resource.dmg_ticks_array.size())
-			clean_resource.delay_time = max(randf_range(1, 2.5), clean_resource.delay_time) # buffer so it doesn't insta dmg on load
+			clean_resource.delay_time = max(randf_range(1, 2.5), clean_resource.delay_time) # Buffer so it doesn't insta dmg on load
 			clean_resource.damaging_time = clean_resource.damaging_time * (1 - (float(ticks_completed) / float(original_tick_count)))
 			saved_dots[source_type].append(clean_resource)
 
@@ -74,7 +74,7 @@ func handle_over_time_dmg(dot_resource: DOTResource, source_type: String) -> voi
 	dot_timer.name = source_type + "_timer" + str(randf())
 	add_child(dot_timer)
 
-	if dot_resource.delay_time > 0: # we have a delay before the damage starts
+	if dot_resource.delay_time > 0: # We have a delay before the damage starts
 		var delay_timer: Timer = Timer.new()
 		delay_timer.one_shot = true
 		delay_timer.wait_time = dot_resource.delay_time
@@ -94,7 +94,7 @@ func handle_over_time_dmg(dot_resource: DOTResource, source_type: String) -> voi
 		delay_timer.start()
 		_add_timer_to_cache(source_type, dot_timer, dot_timers)
 		_add_timer_to_cache(source_type, delay_timer, dot_delay_timers)
-	else: # there is no delay needed
+	else: # There is no delay needed
 		dot_timer.set_meta("ticks_completed", 1)
 
 		if not dot_resource.run_until_removed:

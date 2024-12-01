@@ -27,7 +27,8 @@ func _on_before_load_game() -> void:
 	for status_effect in current_effects.keys():
 		request_effect_removal(status_effect)
 	for child in get_children():
-		child.queue_free()
+		if child is Timer:
+			child.queue_free()
 
 ## For every effect that was saved into current_effects, we duplicate a clean instance, clear out dot/hot resources,
 ## set the time remaining on the effect from when it got saved, and add the effect back.
@@ -106,8 +107,8 @@ func _add_status_effect(status_effect: StatusEffect) -> void:
 	if status_effect.spawn_particles: _start_effect_fx(status_effect.effect_name, status_effect.particles_req_handler)
 
 	for mod_resource in status_effect.stat_mods:
-		var mod: EntityStatMod = (mod_resource as EntityStatMod)
-		get_parent().stats.add_mods([mod] as Array[EntityStatMod], stats_ui)
+		var mod: StatMod = (mod_resource as StatMod)
+		get_parent().stats.add_mods([mod] as Array[StatMod], stats_ui)
 
 ## Starts the status effects' associated visual FX like particles. Checks if the receiver has the matching handler node first.
 func _start_effect_fx(effect_name: String, requires_handler: bool) -> void:
@@ -153,7 +154,7 @@ func _remove_status_effect(status_effect: StatusEffect) -> void:
 			print_rich("-------[color=red]Removed[/color][b] " + str(status_effect.effect_name) + str(status_effect.effect_lvl) + "[/b]-------")
 
 	for mod_resource in status_effect.stat_mods:
-		var mod: EntityStatMod = (mod_resource as EntityStatMod)
+		var mod: StatMod = (mod_resource as StatMod)
 		get_parent().stats.remove_mod(mod.stat_id, mod.mod_id, stats_ui)
 
 	if status_effect.effect_name in current_effects:

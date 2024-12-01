@@ -1,4 +1,4 @@
-[gd_scene load_steps=102 format=4 uid="uid://bscnr6a23l10m"]
+[gd_scene load_steps=87 format=4 uid="uid://bscnr6a23l10m"]
 
 [ext_resource type="Script" path="res://Utilities/Game/WorldRoot/WorldRoot.gd" id="1_q0i4n"]
 [ext_resource type="Script" path="res://Stages/World/BackgroundMusicManager.gd" id="1_q5pr2"]
@@ -10,7 +10,6 @@
 [ext_resource type="Texture2D" uid="uid://dhgjawgf5u572" path="res://Stages/Tilemaps/GrassDirt/grass_flowers_texture_repeating.png" id="5_5par6"]
 [ext_resource type="Script" path="res://Entities/EntityCore/EntityTypes/RigidEntity/RigidEntity.gd" id="5_vhyrg"]
 [ext_resource type="PackedScene" uid="uid://btba0jmsow1mx" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectReceiverComponent.tscn" id="6_haafe"]
-[ext_resource type="Script" path="res://Entities/Components/StatModComponents/StatModsCacheResource.gd" id="6_jky7o"]
 [ext_resource type="PackedScene" uid="uid://dykiv0tlhwmox" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/KnockbackHandler.tscn" id="7_vet3v"]
 [ext_resource type="PackedScene" uid="uid://cdfdy8m6ki3oq" path="res://Entities/Components/HealthComponent/HealthComponent.tscn" id="7_yay1r"]
 [ext_resource type="PackedScene" uid="uid://co3n6m7efg8pd" path="res://Entities/Components/EffectComponents/StatusEffectManager/StatusEffectManager.tscn" id="8_anrko"]
@@ -19,34 +18,33 @@
 [ext_resource type="PackedScene" uid="uid://dmv4k4j4lg3pw" path="res://Entities/EntityCore/EntityStaticSprite.tscn" id="11_g56kn"]
 [ext_resource type="Script" path="res://Entities/Components/HitboxComponent/HitboxComponent.gd" id="11_vr4ax"]
 [ext_resource type="Texture2D" uid="uid://2xf1pqc78iin" path="res://Assets/Icon/icon.svg" id="12_ajeh1"]
-[ext_resource type="Script" path="res://Entities/EffectSystemResources/StatusEffects/StatusEffect.gd" id="13_33bgr"]
+[ext_resource type="Script" path="res://Entities/Stats/StatMod/StatModsCacheResource.gd" id="12_ftlgo"]
+[ext_resource type="Script" path="res://Entities/Stats/EffectSystemResources/StatusEffects/StatusEffect.gd" id="13_33bgr"]
 [ext_resource type="PackedScene" uid="uid://4gl24qwdyti3" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/DmgHandler.tscn" id="13_bs3qc"]
 [ext_resource type="PackedScene" uid="uid://depnx3pnassrq" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/BurningHandler.tscn" id="14_fmrr1"]
-[ext_resource type="Script" path="res://Entities/EffectSystemResources/EffectSources/EffectSource.gd" id="14_pdlrm"]
+[ext_resource type="Script" path="res://Entities/Stats/EffectSystemResources/EffectSources/EffectSource.gd" id="14_pdlrm"]
 [ext_resource type="PackedScene" uid="uid://c4kt3bx0ot3c7" path="res://Entities/Components/ItemComponents/LootTableComponent/LootTableComponent.tscn" id="17_rkuee"]
 [ext_resource type="Script" path="res://Entities/Components/ItemComponents/LootTableComponent/LootTableEntry.gd" id="18_cjmh4"]
 [ext_resource type="Resource" uid="uid://m8eslst1uuxh" path="res://Entities/Items/Ammo/LightAmmo.tres" id="19_2t00v"]
 [ext_resource type="PackedScene" uid="uid://ddj5ippwwkvop" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/HealHandler.tscn" id="19_wn2ac"]
+[ext_resource type="PackedScene" uid="uid://tc2awdm3onyi" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/PoisonHandler.tscn" id="20_jkj1r"]
 [ext_resource type="Resource" uid="uid://cx1ydw2jde1y8" path="res://Entities/Items/Consumables/Apple/Apple.tres" id="20_xawyc"]
 [ext_resource type="Resource" uid="uid://bper7kxtsf7f1" path="res://Entities/Items/Weapons/MeleeWeapons/Axe/Axe.tres" id="21_gqs2b"]
 [ext_resource type="Script" path="res://Stages/World/Storm/Storm.gd" id="22_0op7h"]
 [ext_resource type="Script" path="res://Stages/Tilemaps/TileMapDual.gd" id="22_47ykm"]
 [ext_resource type="Resource" uid="uid://ciel2rrqq4dvv" path="res://Entities/Items/Weapons/ProjectileWeapons/LaserGun/LaserGun.tres" id="22_g8ua3"]
 [ext_resource type="Texture2D" uid="uid://6saycs5sisdk" path="res://Stages/Tilemaps/GrassDirt/TILESET_GRASSDIRT.png" id="22_tnvqm"]
+[ext_resource type="PackedScene" uid="uid://bhg7jmodo3t5t" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/FrostbiteHandler.tscn" id="22_tpwhr"]
 [ext_resource type="Shader" path="res://Stages/World/Storm/StormShader.gdshader" id="23_05otm"]
-[ext_resource type="Resource" uid="uid://cucuggowaf55y" path="res://Entities/EffectSystemResources/StatusEffects/BadEffects/StormSyndrome/StormSyndrome1.tres" id="23_5x8gm"]
+[ext_resource type="Resource" uid="uid://cucuggowaf55y" path="res://Entities/Stats/EffectSystemResources/StatusEffects/BadEffects/StormSyndrome/StormSyndrome1.tres" id="23_5x8gm"]
 [ext_resource type="Resource" uid="uid://bh18kqp2up3oe" path="res://Entities/Items/Weapons/MeleeWeapons/Pickaxe/Pickaxe.tres" id="23_34j4d"]
 [ext_resource type="Script" path="res://Entities/Components/ItemComponents/LootTableComponent/LootTable.gd" id="23_lh0pd"]
-[ext_resource type="Resource" uid="uid://budyhbdyh7yme" path="res://Entities/EffectSystemResources/StatusEffects/GoodEffects/SelfKnockback/SelfKnockback1.tres" id="23_o7ib1"]
 [ext_resource type="Script" path="res://Stages/World/Storm/StormTransform.gd" id="25_dqjbe"]
-[ext_resource type="Script" path="res://Entities/Components/StatModComponents/EntityStatMod.gd" id="26_fvygk"]
-[ext_resource type="Texture2D" uid="uid://ec7bui23pv1m" path="res://Entities/Items/Weapons/MeleeWeapons/Axe/axe.png" id="26_pxj2w"]
 [ext_resource type="Resource" uid="uid://cx6t5cil24ca3" path="res://Stages/World/Storm/StormVisuals/DefaultStormVisuals.tres" id="27_5uvpk"]
 [ext_resource type="Script" path="res://Stages/World/Storm/StormVisuals/StormVisuals.gd" id="27_8kcf2"]
-[ext_resource type="PackedScene" uid="uid://bgj0b83wrmlon" path="res://Entities/Items/Weapons/MeleeWeapons/Axe/Axe.tscn" id="27_vg0ul"]
-[ext_resource type="Script" path="res://Entities/Items/Weapons/MeleeWeapons/MeleeWeaponResource.gd" id="28_flry6"]
-[ext_resource type="Resource" uid="uid://b0it5xmpw16sd" path="res://Entities/EffectSystemResources/StatusEffects/BadEffects/Knockback/Knockback1.tres" id="36_levdl"]
-[ext_resource type="Resource" uid="uid://3e6mdax7u2av" path="res://Entities/EffectSystemResources/StatusEffects/BadEffects/Stun/Stun1.tres" id="37_4u1fx"]
+[ext_resource type="Resource" uid="uid://b0it5xmpw16sd" path="res://Entities/Stats/EffectSystemResources/StatusEffects/BadEffects/Knockback/Knockback1.tres" id="36_levdl"]
+[ext_resource type="Resource" uid="uid://3e6mdax7u2av" path="res://Entities/Stats/EffectSystemResources/StatusEffects/BadEffects/Stun/Stun1.tres" id="37_4u1fx"]
+[ext_resource type="Script" path="res://Entities/Stats/StatMod/StatMod.gd" id="43_0c5fh"]
 
 [sub_resource type="Environment" id="Environment_2wouv"]
 background_mode = 3
@@ -4187,6 +4185,10 @@ physics_layer_1/collision_layer = 128
 physics_layer_1/collision_mask = 0
 sources/0 = SubResource("TileSetAtlasSource_4rxbk")
 
+[sub_resource type="Resource" id="Resource_volbh"]
+script = ExtResource("12_ftlgo")
+debug_print_mod_changes = false
+
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_i2v62"]
 resource_local_to_scene = true
 shader = ExtResource("11_4guke")
@@ -4199,7 +4201,7 @@ shader_parameter/frame_uv_min = null
 shader_parameter/frame_uv_max = null
 
 [sub_resource type="Resource" id="Resource_0ub65"]
-script = ExtResource("6_jky7o")
+script = ExtResource("12_ftlgo")
 debug_print_mod_changes = false
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_vww1a"]
@@ -4226,349 +4228,9 @@ weighting = 1.0
 last_used = 0
 spawn_count = 0
 
-[sub_resource type="Resource" id="Resource_63o7k"]
-script = ExtResource("14_pdlrm")
-is_projectile = false
-can_hit_self = false
-bad_effect_affected_teams = 1
-good_effect_affected_teams = 2
-scanned_phys_layers = 191
-base_damage = 200
-dmg_affected_stats = 2
-crit_chance = 5
-crit_multiplier = 1.5
-armor_penetration = 0
-base_healing = 0
-heal_affected_stats = 2
-cam_shake_strength = 0.0
-cam_shake_duration = 0.0
-cam_freeze_multiplier = 1.0
-cam_freeze_duration = 0.0
-impact_sound = ""
-hit_flash_color = Color(1, 1, 1, 0.45)
-status_effects = Array[ExtResource("13_33bgr")]([])
-contact_position = Vector2(0, 0)
-movement_direction = Vector2(0, 0)
-
-[sub_resource type="Resource" id="Resource_15gyn"]
-script = ExtResource("6_jky7o")
-debug_print_mod_changes = false
-
-[sub_resource type="Resource" id="Resource_0l7w0"]
-script = ExtResource("28_flry6")
-melee_weapon_type = 0
-stamina_cost = 3.0
-cooldown = 0.5
-use_speed = 0.25
-swing_angle = 125
-can_do_charge_use = true
-min_charge_time = 2.0
-auto_do_charge_use = false
-charge_use_cooldown = 1.5
-charge_use_speed = 0.75
-charge_swing_angle = 3000
-charge_stamina_cost = 25
-charging_entity_speed_mult = 1.0
-chg_use_start_effect = ExtResource("23_o7ib1")
-usage_sound = "PlayerDash"
-charge_use_sound = ""
-cooldown_left = 0.0
-charge_cooldown_left = 0.0
-stats = SubResource("Resource_15gyn")
-effect_source = SubResource("Resource_63o7k")
-pullout_delay = 0.0
-time_last_equipped = 0.0
-id = "axe"
-name = "Axe"
-icon = ExtResource("26_pxj2w")
-thumbnail = ExtResource("26_pxj2w")
-item_type = 1
-rarity = 0
-weight = 0
-stack_size = 1
-auto_pickup = false
-pickup_radius = 6
-info = "A mighty axe."
-item_scene = ExtResource("27_vg0ul")
-rotation_lerping = 0.1
-holding_offset = Vector2(0, 0)
-holding_degrees = 0.0
-is_gripped_by_one_hand = true
-draw_off_hand = false
-draw_off_hand_offset = Vector2(0, 0)
-main_hand_offset = Vector2(0, 0)
-
-[sub_resource type="Resource" id="Resource_x8lvr"]
-script = ExtResource("18_cjmh4")
-item = SubResource("Resource_0l7w0")
-quantity = 1
-weighting = 1.0
-last_used = 0
-spawn_count = 0
-
-[sub_resource type="Resource" id="Resource_u3syr"]
-script = ExtResource("28_flry6")
-melee_weapon_type = 0
-stamina_cost = 3.0
-cooldown = 0.5
-use_speed = 0.25
-swing_angle = 125
-can_do_charge_use = true
-min_charge_time = 2.0
-auto_do_charge_use = false
-charge_use_cooldown = 1.5
-charge_use_speed = 0.75
-charge_swing_angle = 3000
-charge_stamina_cost = 25
-charging_entity_speed_mult = 1.0
-chg_use_start_effect = ExtResource("23_o7ib1")
-usage_sound = "PlayerDash"
-charge_use_sound = ""
-cooldown_left = 0.0
-charge_cooldown_left = 0.0
-stats = SubResource("Resource_15gyn")
-effect_source = SubResource("Resource_63o7k")
-pullout_delay = 0.0
-time_last_equipped = 0.0
-id = "axe"
-name = "Axe"
-icon = ExtResource("26_pxj2w")
-thumbnail = ExtResource("26_pxj2w")
-item_type = 1
-rarity = 1
-weight = 0
-stack_size = 1
-auto_pickup = false
-pickup_radius = 6
-info = "A mighty axe."
-item_scene = ExtResource("27_vg0ul")
-rotation_lerping = 0.1
-holding_offset = Vector2(0, 0)
-holding_degrees = 0.0
-is_gripped_by_one_hand = true
-draw_off_hand = false
-draw_off_hand_offset = Vector2(0, 0)
-main_hand_offset = Vector2(0, 0)
-
-[sub_resource type="Resource" id="Resource_wjm1u"]
-script = ExtResource("18_cjmh4")
-item = SubResource("Resource_u3syr")
-quantity = 1
-weighting = 1.0
-last_used = 0
-spawn_count = 0
-
-[sub_resource type="Resource" id="Resource_aav7i"]
-script = ExtResource("28_flry6")
-melee_weapon_type = 0
-stamina_cost = 3.0
-cooldown = 0.5
-use_speed = 0.25
-swing_angle = 125
-can_do_charge_use = true
-min_charge_time = 2.0
-auto_do_charge_use = false
-charge_use_cooldown = 1.5
-charge_use_speed = 0.75
-charge_swing_angle = 3000
-charge_stamina_cost = 25
-charging_entity_speed_mult = 1.0
-chg_use_start_effect = ExtResource("23_o7ib1")
-usage_sound = "PlayerDash"
-charge_use_sound = ""
-cooldown_left = 0.0
-charge_cooldown_left = 0.0
-stats = SubResource("Resource_15gyn")
-effect_source = SubResource("Resource_63o7k")
-pullout_delay = 0.0
-time_last_equipped = 0.0
-id = "axe"
-name = "Axe"
-icon = ExtResource("26_pxj2w")
-thumbnail = ExtResource("26_pxj2w")
-item_type = 1
-rarity = 2
-weight = 0
-stack_size = 1
-auto_pickup = false
-pickup_radius = 6
-info = "A mighty axe."
-item_scene = ExtResource("27_vg0ul")
-rotation_lerping = 0.1
-holding_offset = Vector2(0, 0)
-holding_degrees = 0.0
-is_gripped_by_one_hand = true
-draw_off_hand = false
-draw_off_hand_offset = Vector2(0, 0)
-main_hand_offset = Vector2(0, 0)
-
-[sub_resource type="Resource" id="Resource_ggoq4"]
-script = ExtResource("18_cjmh4")
-item = SubResource("Resource_aav7i")
-quantity = 1
-weighting = 1.0
-last_used = 0
-spawn_count = 0
-
-[sub_resource type="Resource" id="Resource_oipk6"]
-script = ExtResource("28_flry6")
-melee_weapon_type = 0
-stamina_cost = 3.0
-cooldown = 0.5
-use_speed = 0.25
-swing_angle = 125
-can_do_charge_use = true
-min_charge_time = 2.0
-auto_do_charge_use = false
-charge_use_cooldown = 1.5
-charge_use_speed = 0.75
-charge_swing_angle = 3000
-charge_stamina_cost = 25
-charging_entity_speed_mult = 1.0
-chg_use_start_effect = ExtResource("23_o7ib1")
-usage_sound = "PlayerDash"
-charge_use_sound = ""
-cooldown_left = 0.0
-charge_cooldown_left = 0.0
-stats = SubResource("Resource_15gyn")
-effect_source = SubResource("Resource_63o7k")
-pullout_delay = 0.0
-time_last_equipped = 0.0
-id = "axe"
-name = "Axe"
-icon = ExtResource("26_pxj2w")
-thumbnail = ExtResource("26_pxj2w")
-item_type = 1
-rarity = 3
-weight = 0
-stack_size = 1
-auto_pickup = false
-pickup_radius = 6
-info = "A mighty axe."
-item_scene = ExtResource("27_vg0ul")
-rotation_lerping = 0.1
-holding_offset = Vector2(0, 0)
-holding_degrees = 0.0
-is_gripped_by_one_hand = true
-draw_off_hand = false
-draw_off_hand_offset = Vector2(0, 0)
-main_hand_offset = Vector2(0, 0)
-
-[sub_resource type="Resource" id="Resource_2hlfx"]
-script = ExtResource("18_cjmh4")
-item = SubResource("Resource_oipk6")
-quantity = 1
-weighting = 1.0
-last_used = 0
-spawn_count = 0
-
-[sub_resource type="Resource" id="Resource_sbnfn"]
-script = ExtResource("28_flry6")
-melee_weapon_type = 0
-stamina_cost = 3.0
-cooldown = 0.5
-use_speed = 0.25
-swing_angle = 125
-can_do_charge_use = true
-min_charge_time = 2.0
-auto_do_charge_use = false
-charge_use_cooldown = 1.5
-charge_use_speed = 0.75
-charge_swing_angle = 3000
-charge_stamina_cost = 25
-charging_entity_speed_mult = 1.0
-chg_use_start_effect = ExtResource("23_o7ib1")
-usage_sound = "PlayerDash"
-charge_use_sound = ""
-cooldown_left = 0.0
-charge_cooldown_left = 0.0
-stats = SubResource("Resource_15gyn")
-effect_source = SubResource("Resource_63o7k")
-pullout_delay = 0.0
-time_last_equipped = 0.0
-id = "axe"
-name = "Axe"
-icon = ExtResource("26_pxj2w")
-thumbnail = ExtResource("26_pxj2w")
-item_type = 1
-rarity = 4
-weight = 0
-stack_size = 1
-auto_pickup = false
-pickup_radius = 6
-info = "A mighty axe."
-item_scene = ExtResource("27_vg0ul")
-rotation_lerping = 0.1
-holding_offset = Vector2(0, 0)
-holding_degrees = 0.0
-is_gripped_by_one_hand = true
-draw_off_hand = false
-draw_off_hand_offset = Vector2(0, 0)
-main_hand_offset = Vector2(0, 0)
-
-[sub_resource type="Resource" id="Resource_0obqf"]
-script = ExtResource("18_cjmh4")
-item = SubResource("Resource_sbnfn")
-quantity = 1
-weighting = 1.0
-last_used = 0
-spawn_count = 0
-
-[sub_resource type="Resource" id="Resource_bgfye"]
-script = ExtResource("28_flry6")
-melee_weapon_type = 0
-stamina_cost = 3.0
-cooldown = 0.5
-use_speed = 0.25
-swing_angle = 125
-can_do_charge_use = true
-min_charge_time = 2.0
-auto_do_charge_use = false
-charge_use_cooldown = 1.5
-charge_use_speed = 0.75
-charge_swing_angle = 3000
-charge_stamina_cost = 25
-charging_entity_speed_mult = 1.0
-chg_use_start_effect = ExtResource("23_o7ib1")
-usage_sound = "PlayerDash"
-charge_use_sound = ""
-cooldown_left = 0.0
-charge_cooldown_left = 0.0
-stats = SubResource("Resource_15gyn")
-effect_source = SubResource("Resource_63o7k")
-pullout_delay = 0.0
-time_last_equipped = 0.0
-id = "axe"
-name = "Axe"
-icon = ExtResource("26_pxj2w")
-thumbnail = ExtResource("26_pxj2w")
-item_type = 1
-rarity = 5
-weight = 0
-stack_size = 1
-auto_pickup = false
-pickup_radius = 6
-info = "A mighty axe."
-item_scene = ExtResource("27_vg0ul")
-rotation_lerping = 0.1
-holding_offset = Vector2(0, 0)
-holding_degrees = 0.0
-is_gripped_by_one_hand = true
-draw_off_hand = false
-draw_off_hand_offset = Vector2(0, 0)
-main_hand_offset = Vector2(0, 0)
-
-[sub_resource type="Resource" id="Resource_py51w"]
-script = ExtResource("18_cjmh4")
-item = SubResource("Resource_bgfye")
-quantity = 1
-weighting = 1.0
-last_used = 0
-spawn_count = 0
-
 [sub_resource type="Resource" id="Resource_tcueq"]
 script = ExtResource("23_lh0pd")
-hit_loot_table = Array[ExtResource("18_cjmh4")]([SubResource("Resource_x8lvr"), SubResource("Resource_wjm1u"), SubResource("Resource_ggoq4"), SubResource("Resource_2hlfx"), SubResource("Resource_0obqf"), SubResource("Resource_py51w")])
+hit_loot_table = Array[ExtResource("18_cjmh4")]([])
 die_loot_table = Array[ExtResource("18_cjmh4")]([SubResource("Resource_l1o4x")])
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_rvn77"]
@@ -4649,10 +4311,10 @@ shader_parameter/frame_uv_max = null
 [sub_resource type="Resource" id="Resource_sx5ie"]
 script = ExtResource("14_pdlrm")
 is_projectile = false
+scanned_phys_layers = 191
 can_hit_self = true
 bad_effect_affected_teams = 3
 good_effect_affected_teams = 3
-scanned_phys_layers = 191
 base_damage = 0
 dmg_affected_stats = 2
 crit_chance = 0
@@ -4728,7 +4390,7 @@ is_bad_effect = true
 effects_to_stop = Array[String]([])
 mod_time = 5.0
 apply_until_removed = true
-stat_mods = Array[ExtResource("26_fvygk")]([])
+stat_mods = Array[ExtResource("43_0c5fh")]([])
 audio_to_play = ""
 only_cue_on_player_hit = false
 spawn_particles = true
@@ -4923,6 +4585,7 @@ y_sort_enabled = true
 [node name="Enemy" type="RigidBody2D" parent="WorldRoot/Testing"]
 script = ExtResource("5_vhyrg")
 team = 2
+stats = SubResource("Resource_volbh")
 
 [node name="EntitySprite" parent="WorldRoot/Testing/Enemy" instance=ExtResource("11_g56kn")]
 modulate = Color(0, 0.366846, 0.687652, 1)
@@ -4955,7 +4618,7 @@ debug_color = Color(1.44392e-06, 0.568839, 0.851513, 0.42)
 
 [node name="HealthComponent" parent="WorldRoot/Testing/TestRigidEntity" instance=ExtResource("7_yay1r")]
 
-[node name="EffectReceiverComponent" parent="WorldRoot/Testing/TestRigidEntity" node_paths=PackedStringArray("affected_entity", "health_component", "loot_table_component", "dmg_handler", "heal_handler", "knockback_handler", "burning_handler") instance=ExtResource("6_haafe")]
+[node name="EffectReceiverComponent" parent="WorldRoot/Testing/TestRigidEntity" node_paths=PackedStringArray("affected_entity", "health_component", "loot_table_component", "dmg_handler", "heal_handler", "knockback_handler", "poison_handler", "frostbite_handler", "burning_handler") instance=ExtResource("6_haafe")]
 position = Vector2(0, -10)
 affected_entity = NodePath("..")
 health_component = NodePath("../HealthComponent")
@@ -4963,6 +4626,8 @@ loot_table_component = NodePath("../LootTableComponent")
 dmg_handler = NodePath("DmgHandler")
 heal_handler = NodePath("HealHandler")
 knockback_handler = NodePath("KnockbackHandler")
+poison_handler = NodePath("PoisonHandler")
+frostbite_handler = NodePath("FrostbiteHandler")
 burning_handler = NodePath("BurningHandler")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="WorldRoot/Testing/TestRigidEntity/EffectReceiverComponent"]
@@ -4972,12 +4637,14 @@ debug_color = Color(0.941042, 1.32841e-05, 0.612344, 0.42)
 [node name="KnockbackHandler" parent="WorldRoot/Testing/TestRigidEntity/EffectReceiverComponent" instance=ExtResource("7_vet3v")]
 
 [node name="DmgHandler" parent="WorldRoot/Testing/TestRigidEntity/EffectReceiverComponent" instance=ExtResource("13_bs3qc")]
-_dmg_weakness = null
-_dmg_resistance = null
 
 [node name="BurningHandler" parent="WorldRoot/Testing/TestRigidEntity/EffectReceiverComponent" instance=ExtResource("14_fmrr1")]
 
 [node name="HealHandler" parent="WorldRoot/Testing/TestRigidEntity/EffectReceiverComponent" instance=ExtResource("19_wn2ac")]
+
+[node name="PoisonHandler" parent="WorldRoot/Testing/TestRigidEntity/EffectReceiverComponent" instance=ExtResource("20_jkj1r")]
+
+[node name="FrostbiteHandler" parent="WorldRoot/Testing/TestRigidEntity/EffectReceiverComponent" instance=ExtResource("22_tpwhr")]
 
 [node name="StatusEffectManager" parent="WorldRoot/Testing/TestRigidEntity" node_paths=PackedStringArray("effect_receiver") instance=ExtResource("8_anrko")]
 effect_receiver = NodePath("../EffectReceiverComponent")
@@ -5027,8 +4694,6 @@ debug_color = Color(0.941042, 1.32841e-05, 0.612344, 0.42)
 [node name="KnockbackHandler" parent="WorldRoot/Testing/TestRigidEntity2/EffectReceiverComponent" instance=ExtResource("7_vet3v")]
 
 [node name="DmgHandler" parent="WorldRoot/Testing/TestRigidEntity2/EffectReceiverComponent" instance=ExtResource("13_bs3qc")]
-_dmg_weakness = null
-_dmg_resistance = null
 
 [node name="HealHandler" parent="WorldRoot/Testing/TestRigidEntity2/EffectReceiverComponent" instance=ExtResource("19_wn2ac")]
 
@@ -5080,8 +4745,6 @@ debug_color = Color(0.941042, 1.32841e-05, 0.612344, 0.42)
 [node name="KnockbackHandler" parent="WorldRoot/Testing/TestRigidEntity3/EffectReceiverComponent" instance=ExtResource("7_vet3v")]
 
 [node name="DmgHandler" parent="WorldRoot/Testing/TestRigidEntity3/EffectReceiverComponent" instance=ExtResource("13_bs3qc")]
-_dmg_weakness = null
-_dmg_resistance = null
 
 [node name="HealHandler" parent="WorldRoot/Testing/TestRigidEntity3/EffectReceiverComponent" instance=ExtResource("19_wn2ac")]
 
@@ -5129,8 +4792,6 @@ debug_color = Color(0.941042, 1.32841e-05, 0.612344, 0.42)
 [node name="KnockbackHandler" parent="WorldRoot/Testing/TestRigidEntity4/EffectReceiverComponent" instance=ExtResource("7_vet3v")]
 
 [node name="DmgHandler" parent="WorldRoot/Testing/TestRigidEntity4/EffectReceiverComponent" instance=ExtResource("13_bs3qc")]
-_dmg_weakness = null
-_dmg_resistance = null
 
 [node name="HealHandler" parent="WorldRoot/Testing/TestRigidEntity4/EffectReceiverComponent" instance=ExtResource("19_wn2ac")]
 

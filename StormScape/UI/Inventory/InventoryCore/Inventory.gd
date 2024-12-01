@@ -20,7 +20,7 @@ var inv_to_load_from_save: Array[InvItemResource] = [] ## Gets loaded when a gam
 func _ready() -> void:
 	if not is_player_inv:
 		hotbar_size = 0
-	inv.resize(inv_size if not is_player_inv else inv_size + 1) # For trash slot.
+	inv.resize(inv_size if not is_player_inv else inv_size + 1) # For trash slot
 	inv_populator.connect_inventory(self)
 	ui.connect_inventory(self)
 	call_deferred("fill_inventory", starting_inv)
@@ -28,29 +28,30 @@ func _ready() -> void:
 ## Fills the main inventory from an array of inventory items. If an item exceeds stack size, the quantity that does not fit into ## one slot is instantiated on the ground as a physical item. This method respects null spots in the list.
 func fill_inventory(inv_to_fill_from: Array[InvItemResource]) -> void:
 	inv.fill(null)
+
 	for i in range(min(inv_size if not is_player_inv else inv_size + 1, inv_to_fill_from.size())):
 		if inv_to_fill_from[i] == null:
 			inv[i] = null
 		else:
-			var inv_item: InvItemResource = inv_to_fill_from[i]
-			if inv_item.quantity > inv_item.stats.stack_size:
-				var ground_item: Item = item_scene.instantiate()
-				ground_item.stats = inv_item.stats
-				ground_item.quantity = inv_item.quantity - inv_item.stats.stack_size
-				ground_item.global_position = global_position + Vector2(randi_range(-15, 15), randi_range(-15, 15))
-				GlobalData.world_root.add_child.call_deferred(ground_item)
+			var inv_item: InvItemResource = inv_to_fill_from[i].duplicate()
 
+			if inv_item.quantity > inv_item.stats.stack_size:
+				Item.spawn_on_ground(inv_item.stats, inv_item.quantity - inv_item.stats.stack_size, global_position, 14.0)
 				inv_item.quantity = inv_item.stats.stack_size
+
 			inv[i] = inv_item
+
 	_update_all_connected_slots()
 
 ## Fills the main inventory from an array of inventory items. Calls another method to check stack size conditions, filling
 ## iteratively. It does not drop excess items on the ground, and anything that does not fit will be ignored.
 func fill_inventory_with_checks(inv_to_fill_from: Array[InvItemResource]) -> void:
 	inv.fill(null)
+
 	for i in range(min(inv_size if not is_player_inv else inv_size + 1, inv_to_fill_from.size())):
 		if inv_to_fill_from[i] != null:
 			add_item_from_inv_item_resource(inv_to_fill_from[i])
+
 	_update_all_connected_slots()
 
 ## Handles the logic needed for adding an item to the inventory when picked up from the ground. Respects stack size.
@@ -136,16 +137,12 @@ func remove_item(index: int, amount: int) -> void:
 		inv[index] = null
 	slot_updated.emit(index, inv[index])
 
-func update_an_item_stats(index: int, new_stats: ItemResource) -> void:
-	inv[index].stats = new_stats
-	slot_updated.emit(index, inv[index])
-
 ## This updates all connected slots in order to reflect the UI properly.
 func _update_all_connected_slots() -> void:
 	for i in range(inv_size):
 		slot_updated.emit(i, inv[i])
 	if is_player_inv:
-		slot_updated.emit(inv_size, inv[inv_size])
+		slot_updated.emit(inv_size, inv[inv_size]) # For trash slot
 
 #region Sorting
 ## This auto stacks and compacts items into their stack sizes.

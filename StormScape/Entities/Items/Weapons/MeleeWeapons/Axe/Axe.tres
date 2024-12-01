@@ -1,20 +1,44 @@
-[gd_resource type="Resource" script_class="MeleeWeaponResource" load_steps=10 format=3 uid="uid://bper7kxtsf7f1"]
+[gd_resource type="Resource" script_class="MeleeWeaponResource" load_steps=11 format=3 uid="uid://bper7kxtsf7f1"]
 
 [ext_resource type="Script" path="res://Entities/Items/Weapons/MeleeWeapons/MeleeWeaponResource.gd" id="1_0xu6s"]
 [ext_resource type="Texture2D" uid="uid://ec7bui23pv1m" path="res://Entities/Items/Weapons/MeleeWeapons/Axe/axe.png" id="1_c61qv"]
-[ext_resource type="Script" path="res://Entities/EffectSystemResources/EffectSources/EffectSource.gd" id="1_x4rfe"]
+[ext_resource type="Script" path="res://Entities/Stats/EffectSystemResources/EffectSources/EffectSource.gd" id="1_x4rfe"]
 [ext_resource type="PackedScene" uid="uid://bgj0b83wrmlon" path="res://Entities/Items/Weapons/MeleeWeapons/Axe/Axe.tscn" id="2_50myi"]
-[ext_resource type="Script" path="res://Entities/EffectSystemResources/StatusEffects/StatusEffect.gd" id="2_kry0o"]
-[ext_resource type="Script" path="res://Entities/Components/StatModComponents/StatModsCacheResource.gd" id="6_iunw2"]
-[ext_resource type="Resource" uid="uid://budyhbdyh7yme" path="res://Entities/EffectSystemResources/StatusEffects/GoodEffects/SelfKnockback/SelfKnockback1.tres" id="7_wy3of"]
+[ext_resource type="Script" path="res://Entities/Stats/EffectSystemResources/StatusEffects/StatusEffect.gd" id="2_kry0o"]
+[ext_resource type="Script" path="res://Entities/Stats/StatMod/StatModsCacheResource.gd" id="6_iunw2"]
+[ext_resource type="Resource" uid="uid://budyhbdyh7yme" path="res://Entities/Stats/EffectSystemResources/StatusEffects/GoodEffects/SelfKnockback/SelfKnockback1.tres" id="7_wy3of"]
+
+[sub_resource type="Resource" id="Resource_v12cw"]
+script = ExtResource("1_x4rfe")
+is_projectile = true
+scanned_phys_layers = 191
+can_hit_self = true
+bad_effect_affected_teams = 1
+good_effect_affected_teams = 2
+base_damage = 0
+dmg_affected_stats = 2
+crit_chance = 0
+crit_multiplier = 1.5
+armor_penetration = 0
+base_healing = 0
+heal_affected_stats = 2
+cam_shake_strength = 0.0
+cam_shake_duration = 0.0
+cam_freeze_multiplier = 1.0
+cam_freeze_duration = 0.0
+impact_sound = ""
+hit_flash_color = Color(1, 1, 1, 0.45)
+status_effects = Array[ExtResource("2_kry0o")]([])
+contact_position = Vector2(0, 0)
+movement_direction = Vector2(0, 0)
 
 [sub_resource type="Resource" id="Resource_63o7k"]
 script = ExtResource("1_x4rfe")
 is_projectile = false
+scanned_phys_layers = 191
 can_hit_self = false
 bad_effect_affected_teams = 1
 good_effect_affected_teams = 2
-scanned_phys_layers = 191
 base_damage = 200
 dmg_affected_stats = 2
 crit_chance = 5
@@ -32,9 +56,9 @@ status_effects = Array[ExtResource("2_kry0o")]([])
 contact_position = Vector2(0, 0)
 movement_direction = Vector2(0, 0)
 
-[sub_resource type="Resource" id="Resource_15gyn"]
+[sub_resource type="Resource" id="Resource_ieaky"]
 script = ExtResource("6_iunw2")
-debug_print_mod_changes = false
+debug_print_mod_changes = true
 
 [resource]
 script = ExtResource("1_0xu6s")
@@ -49,17 +73,22 @@ auto_do_charge_use = false
 charge_use_cooldown = 1.5
 charge_use_speed = 0.75
 charge_swing_angle = 3000
+charge_effect_source = SubResource("Resource_v12cw")
 charge_stamina_cost = 25
-charging_entity_speed_mult = 1.0
 chg_use_start_effect = ExtResource("7_wy3of")
 usage_sound = "PlayerDash"
 charge_use_sound = ""
 cooldown_left = 0.0
 charge_cooldown_left = 0.0
-stats = SubResource("Resource_15gyn")
+s_mods = SubResource("Resource_ieaky")
 effect_source = SubResource("Resource_63o7k")
 pullout_delay = 0.0
+blocked_mods = Array[String]([])
 time_last_equipped = 0.0
+cache_is_setup = false
+current_mods = {}
+original_status_effects = Array[ExtResource("2_kry0o")]([])
+original_charge_status_effects = Array[ExtResource("2_kry0o")]([])
 id = "axe"
 name = "Axe"
 icon = ExtResource("1_c61qv")

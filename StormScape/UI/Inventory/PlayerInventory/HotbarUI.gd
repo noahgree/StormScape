@@ -8,12 +8,15 @@ class_name HotbarUI
 @onready var scroll_debounce_timer: Timer = $ScrollDebounceTimer
 
 var hotbar_slots: Array[Slot] = [] ## Local representation of the hotbar slots, updated when changed externally.
-var active_slot: Slot
+var active_slot: Slot ## The slot that is currently selected in the hotbar and potentially contains an equipped item.
 
 
 ## Connects the hotbar slots to the signal needed to keep them up to date.
 func _ready() -> void:
 	player_inv.slot_updated.connect(_on_slot_updated)
+	_setup_slots()
+
+func _setup_slots() -> void:
 	for i in range(hotbar.get_child_count()):
 		hotbar.get_child(i).is_hotbar_ui_preview_slot = true
 		hotbar.get_child(i).synced_inv = player_inv
@@ -26,19 +29,15 @@ func _ready() -> void:
 
 ## When receiving the signal that a slot has changed, update the visuals.
 func _on_slot_updated(index: int, item: InvItemResource) -> void:
-	var hotbar_slot_count: int = player_inv.inv_size - player_inv.hotbar_size
-	if (index >= hotbar_slot_count) and (index < player_inv.inv_size):
-		if index == active_slot.index:
-			if (active_slot.item == null or item == null) or (not active_slot.item.stats.is_same_as(item.stats)):
-				hotbar_slots[index - hotbar_slot_count].item = item
-				_update_active_item()
-			else:
-				hotbar_slots[index - hotbar_slot_count].item = item
-		else:
-			hotbar_slots[index - hotbar_slot_count].item = item
+	var hotbar_starting_index: int = player_inv.inv_size - player_inv.hotbar_size
+	var hotbar_index: int = index - hotbar_starting_index
 
-func _update_active_item() -> void:
-	GlobalData.player_node.hands.on_equipped_item_change(active_slot)
+	if (index >= hotbar_starting_index) and (index < player_inv.inv_size):
+		if index == active_slot.index:
+			hotbar_slots[hotbar_index].item = item
+			GlobalData.player_node.hands.on_equipped_item_change(active_slot)
+		else:
+			hotbar_slots[hotbar_index].item = item
 
 func _input(_event: InputEvent) -> void:
 	if DebugFlags.HotbarFlags.use_scroll_debounce and not scroll_debounce_timer.is_stopped(): return
@@ -57,10 +56,10 @@ func _change_active_slot_by_count(index_count: int) -> void:
 		new_index += hotbar_slots.size()
 	active_slot = hotbar_slots[new_index]
 	active_slot.texture = active_slot.active_slot_texture
-	_update_active_item()
+	GlobalData.player_node.hands.on_equipped_item_change(active_slot)
 
 func _change_active_slot_to_index_relative_to_full_inventory_size(new_index: int) -> void:
 	active_slot.texture = active_slot.default_slot_texture
 	active_slot = hotbar_slots[new_index - (player_inv.inv_size - player_inv.hotbar_size)]
 	active_slot.texture = active_slot.active_slot_texture
-	_update_active_item()
+	GlobalData.player_node.hands.on_equipped_item_change(active_slot)

@@ -27,7 +27,7 @@ enum ProjWeaponType { ## The kinds of projectile weapons.
 @export var use_hitscan: bool = false ## Whether to use hitscan firing and spawn the hitscan scene instead of the main projectile.
 @export var allow_hitscan_holding: bool = true ## Whether to keep the hitscan on and continue to consume ammo while the trigger is held.
 @export var hitscan_logic: HitscanResource ## The resource containing information on how to fire and operate the hitscan.
-@export var charged_hitscan_logic: HitscanResource ## The resource containing information on how to fire and operate the hitscan when charged.
+@export var charge_hitscan_logic: HitscanResource ## The resource containing information on how to fire and operate the hitscan when charged.
 
 @export_group("Ammo & Reloading")
 @export var ammo_type: GlobalData.ProjAmmoType = GlobalData.ProjAmmoType.LIGHT ## The kind of ammo to consume on use.
@@ -56,12 +56,12 @@ enum ProjWeaponType { ## The kinds of projectile weapons.
 @export_group("Hold Charging Logic")
 @export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var min_charge_time: float = 1 ## How long must the activation be held down before releasing the charge shot.
 @export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var charge_fire_cooldown: float = 0.5 ## How long after a charge shot must we wait before being able to fire again.
+@export var has_charge_fire_anim: bool = false ## If false, we can duplicate the regular fire anim and keep the speed scale.
 @export var ammo_use_per_charge: int = 3 ## How much ammo to consume on charge shots. Overrides all burst and barrage consumption to consume this amount no matter what.
 @export var charge_bloom_mult: float = 5.0 ## How much more should one charge shot count towards current bloom.
 @export var charge_projectile: PackedScene = null ## Overrides the normal projectile scene for charge shots.
 @export var charge_projectile_logic: ProjectileResource = null ## Overrides the normal projectile data for charge shots.
 @export var charge_effect_source: EffectSource = null ## Overrides the normal effect source for charge shots.
-@export var has_charge_fire_anim: bool = false ## If false, we can duplicate the regular fire anim and keep the speed scale.
 @export_subgroup("Entity Effects")
 @export var charging_stat_effect: StatusEffect = null ## A status effect to apply to the entity while charging. Typically to slow them.
 @export var post_chg_shot_effect: StatusEffect = null ## The status effect to apply to the source entity after a charge shot.
@@ -77,15 +77,15 @@ enum ProjWeaponType { ## The kinds of projectile weapons.
 
 @export_group("Barrage Logic")
 @export var barrage_count: int = 1 ## Number of projectiles fired at 'angular-spread' degrees apart for each execute. Only applies when angular spread is greater than 0.
-@export_range(0, 360, 0.1, "suffix:degrees") var angluar_spread = 25 ## Angular spread of barrage projectiles in degrees.
+@export_range(0, 360, 0.1, "suffix:degrees") var angular_spread = 25 ## Angular spread of barrage projectiles in degrees.
 
 
 # Unique Properties #
-@export_custom(PROPERTY_HINT_NONE, "", PROPERTY_USAGE_NO_EDITOR) var auto_fire_delay_left: float = 0 ## How much time we have left to wait before being able to fire again.
-@export_custom(PROPERTY_HINT_NONE, "", PROPERTY_USAGE_NO_EDITOR) var charge_fire_cooldown_left: float = 0 ## How much time we have left before being able to do a charge shot again.
-@export_custom(PROPERTY_HINT_NONE, "", PROPERTY_USAGE_NO_EDITOR) var current_warmth_level: float = 0 ## The current warm-up level for this weapon.
-@export_custom(PROPERTY_HINT_NONE, "", PROPERTY_USAGE_NO_EDITOR) var current_bloom_level: float = 0 ## The current bloom level for this weapon.
-@export_custom(PROPERTY_HINT_NONE, "", PROPERTY_USAGE_NO_EDITOR) var ammo_in_mag: int = -1: ## The current ammo in the mag.
+@export_storage var auto_fire_delay_left: float = 0 ## How much time we have left to wait before being able to fire again.
+@export_storage var charge_fire_cooldown_left: float = 0 ## How much time we have left before being able to do a charge shot again.
+@export_storage var current_warmth_level: float = 0 ## The current warm-up level for this weapon.
+@export_storage var current_bloom_level: float = 0 ## The current bloom level for this weapon.
+@export_storage var ammo_in_mag: int = -1: ## The current ammo in the mag.
 	set(new_ammo_amount):
 		ammo_in_mag = new_ammo_amount
 		if DebugFlags.PrintFlags.ammo_updates and self.name != "":

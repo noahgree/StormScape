@@ -40,6 +40,6 @@ func _on_lifetime_timer_timeout() -> void:
 	tween.tween_method(func(new_value):
 		modulate.a = new_value
 		gradient.set_offset(2, new_value),
-		1.0, 0.0, 1.5)
-	tween.parallel().tween_method(func(new_value): gradient.set_offset(1, new_value), gradient.get_offset(1), 0.0, 1.5)
+		1.0, 0.0, 5.0)
+	tween.parallel().tween_method(func(new_value): gradient.set_offset(1, new_value), gradient.get_offset(1), 0.0, 5.0)
 	tween.chain().tween_callback(queue_free)

@@ -168,6 +168,7 @@ func _check_if_good_effects_apply_to_allies(effect_source: EffectSource) -> bool
 func _check_if_good_effects_apply_to_enemies(effect_source: EffectSource) -> bool:
 	return effect_source.good_effect_affected_teams & GlobalData.GoodEffectAffectedTeams.ENEMIES != 0
 
+## Updates whether the hit flash is showing or not. Sets its color to the one specified in the effect source.
 func _update_hit_flash(effect_source: EffectSource = null, start: bool = false) -> void:
 	if start:
 		hit_flash_timer.stop()

@@ -1,7 +1,7 @@
 extends MoveState
 ## Handles when the character is not moving.
 
-var movement_vector: Vector2 = Vector2.ZERO
+var movement_vector: Vector2 = Vector2.ZERO ## The current movement vector for the entity.
 
 
 func enter() -> void:

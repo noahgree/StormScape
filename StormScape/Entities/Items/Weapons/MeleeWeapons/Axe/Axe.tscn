@@ -3,8 +3,8 @@
 [ext_resource type="Script" path="res://Entities/Items/Weapons/MeleeWeapons/MeleeWeapon.gd" id="1_wke8h"]
 [ext_resource type="Texture2D" uid="uid://ec7bui23pv1m" path="res://Entities/Items/Weapons/MeleeWeapons/Axe/axe.png" id="2_04adv"]
 [ext_resource type="PackedScene" uid="uid://b7ckcb2xdimpo" path="res://Entities/Components/HitboxComponent/HitboxComponent.tscn" id="2_24s3u"]
-[ext_resource type="PackedScene" uid="uid://bv3ae77701mrg" path="res://Entities/EntityCore/SpriteGhost.tscn" id="2_fbulu"]
 [ext_resource type="Texture2D" uid="uid://cs3clmnktksd6" path="res://Entities/Player/PlayerCore/player_hand.png" id="3_sm82p"]
+[ext_resource type="PackedScene" uid="uid://batrfwan8r8ov" path="res://Entities/Items/Weapons/WeaponMods/WeaponModManager.tscn" id="6_180jj"]
 [ext_resource type="AnimationLibrary" uid="uid://dk7m82xohebji" path="res://Entities/Items/Weapons/MeleeWeapons/MeleeWeaponAnimLibrary.res" id="6_noelc"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_sb7d6"]
@@ -27,7 +27,6 @@ size = Vector2(10, 10)
 
 [node name="Axe" type="Node2D"]
 script = ExtResource("1_wke8h")
-ghost_scene = ExtResource("2_fbulu")
 ghost_fade_time = 0.2
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
@@ -54,3 +53,6 @@ offset = Vector2(4, -3)
 libraries = {
 "MeleeWeaponAnimLibrary": ExtResource("6_noelc")
 }
+
+[node name="WeaponModManager" parent="." instance=ExtResource("6_180jj")]
+print_effect_updates = true

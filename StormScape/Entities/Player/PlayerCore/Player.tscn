@@ -1,7 +1,7 @@
-[gd_scene load_steps=147 format=3 uid="uid://dba8mrurjlekp"]
+[gd_scene load_steps=150 format=3 uid="uid://dba8mrurjlekp"]
 
 [ext_resource type="Script" path="res://Entities/Player/PlayerCore/Player.gd" id="1_m33tt"]
-[ext_resource type="Script" path="res://Entities/Components/StatModComponents/StatModsCacheResource.gd" id="2_vyeuy"]
+[ext_resource type="Script" path="res://Entities/Stats/StatMod/StatModsCacheResource.gd" id="2_vetip"]
 [ext_resource type="Texture2D" uid="uid://dcbwxgak6a0r8" path="res://Entities/EntityCore/entity_shadow.png" id="3_e6fnh"]
 [ext_resource type="PackedScene" uid="uid://cdfdy8m6ki3oq" path="res://Entities/Components/HealthComponent/HealthComponent.tscn" id="3_ojev3"]
 [ext_resource type="PackedScene" uid="uid://dh4ydl7l86ywq" path="res://Entities/EntityCore/EntityAnimSprite.tscn" id="4_fmbcv"]
@@ -63,8 +63,11 @@
 [ext_resource type="Texture2D" uid="uid://c5mo0gxdddlte" path="res://UI/PlayerStatsOverlay/Assets/Hunger Change.png" id="43_k8324"]
 [ext_resource type="Shader" path="res://UI/PlayerStatsOverlay/StaminaBarTipGlow.gdshader" id="44_vk3bi"]
 [ext_resource type="Texture2D" uid="uid://l7chqvbfg16y" path="res://UI/PlayerStatsOverlay/Assets/Stamina Bar.png" id="45_3j47m"]
+[ext_resource type="Resource" uid="uid://ba8pkny735n2r" path="res://Entities/Items/Weapons/WeaponMods/ExtendedMag/ExtendedMag1.tres" id="46_2raqh"]
 [ext_resource type="Texture2D" uid="uid://1m3lv40blexn" path="res://UI/PlayerStatsOverlay/Assets/Stamina Under.png" id="46_l08yu"]
+[ext_resource type="Script" path="res://Entities/Items/Weapons/WeaponMods/WeaponMod.gd" id="46_xslb2"]
 [ext_resource type="Texture2D" uid="uid://dlx621mbgic4b" path="res://UI/PlayerStatsOverlay/Assets/Stamina Change.png" id="47_2ra1b"]
+[ext_resource type="Resource" uid="uid://caxftf2aer6g4" path="res://Entities/Items/Weapons/WeaponMods/BurningBullets/BurningBullets1.tres" id="47_l43tu"]
 [ext_resource type="Texture2D" uid="uid://ba6aut5vjc3g" path="res://UI/PlayerStatsOverlay/Assets/Shield.png" id="48_d5w3g"]
 [ext_resource type="Texture2D" uid="uid://csmk61f3sxw44" path="res://UI/PlayerStatsOverlay/Assets/Shield Under.png" id="49_ynd7x"]
 [ext_resource type="Texture2D" uid="uid://dcsw75wiocvy0" path="res://UI/PlayerStatsOverlay/Assets/Shield Change.png" id="50_86ubk"]
@@ -80,7 +83,7 @@
 [ext_resource type="Texture2D" uid="uid://dtft3mljs2y5s" path="res://UI/Inventory/InventoryCore/Slot/trash_slot_icon.png" id="69_4ao77"]
 
 [sub_resource type="Resource" id="Resource_rwbul"]
-script = ExtResource("2_vyeuy")
+script = ExtResource("2_vetip")
 debug_print_mod_changes = true
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_o7k7i"]
@@ -98,7 +101,7 @@ shader_parameter/frame_uv_min = null
 shader_parameter/frame_uv_max = null
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_7dc0v"]
-size = Vector2(14, 24)
+size = Vector2(12, 15)
 
 [sub_resource type="Animation" id="Animation_sys1a"]
 length = 0.001
@@ -1115,11 +1118,6 @@ script = ExtResource("32_ixmb3")
 stats = ExtResource("35_g2eu7")
 quantity = 1
 
-[sub_resource type="Resource" id="Resource_h68kk"]
-script = ExtResource("32_ixmb3")
-stats = ExtResource("34_i8j5r")
-quantity = 1
-
 [sub_resource type="Resource" id="Resource_jrr0m"]
 script = ExtResource("32_ixmb3")
 stats = ExtResource("35_qbswt")
@@ -1129,6 +1127,11 @@ quantity = 64
 script = ExtResource("32_ixmb3")
 stats = ExtResource("35_qbswt")
 quantity = 64
+
+[sub_resource type="Resource" id="Resource_xlc3k"]
+script = ExtResource("32_ixmb3")
+stats = ExtResource("34_i8j5r")
+quantity = 1
 
 [sub_resource type="Resource" id="Resource_aqdjw"]
 script = ExtResource("39_7aiab")
@@ -1302,13 +1305,11 @@ burning_handler = NodePath("BurningHandler")
 time_snare_handler = NodePath("TimeSnareHandler")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="EffectReceiverComponent"]
-position = Vector2(0, -13)
+position = Vector2(0, -7.5)
 shape = SubResource("RectangleShape2D_7dc0v")
 debug_color = Color(1, 0.294, 0.588, 0.06)
 
 [node name="DmgHandler" parent="EffectReceiverComponent" instance=ExtResource("5_g3ixu")]
-_dmg_weakness = null
-_dmg_resistance = null
 
 [node name="HealHandler" parent="EffectReceiverComponent" instance=ExtResource("6_5e1ju")]
 
@@ -1356,12 +1357,6 @@ script = ExtResource("19_alhqe")
 
 [node name="Dash" type="Node" parent="MoveStateMachine"]
 script = ExtResource("9_a1qv1")
-_dash_speed = null
-_dash_duration = null
-_dash_cooldown = null
-_dash_collision_impulse_factor = null
-ghost_count = null
-ghost_fade_time = null
 
 [node name="DashTimer" type="Timer" parent="MoveStateMachine/Dash"]
 one_shot = true
@@ -1391,9 +1386,8 @@ parameters/run/TimeScale/scale = 1.5
 parameters/run/blendspace2d/blend_position = Vector2(0, 0)
 
 [node name="ItemReceiverComponent" parent="." node_paths=PackedStringArray("inv_populator", "ui") instance=ExtResource("30_qgyag")]
-pickup_range = null
 item_scene = ExtResource("31_8v2rb")
-starting_inv = Array[ExtResource("32_ixmb3")]([SubResource("Resource_pihal"), null, null, null, SubResource("Resource_kx1me"), SubResource("Resource_h68kk"), SubResource("Resource_jrr0m"), SubResource("Resource_2ijsm"), null, null, null, null, null, SubResource("Resource_t7kvu"), null, null, SubResource("Resource_apvym"), SubResource("Resource_ur5wt"), null, null, null, null, null, null, null, null, null, null, null, null, null, null, SubResource("Resource_0ta0y")])
+starting_inv = Array[ExtResource("32_ixmb3")]([SubResource("Resource_pihal"), null, null, null, SubResource("Resource_kx1me"), SubResource("Resource_jrr0m"), SubResource("Resource_2ijsm"), null, SubResource("Resource_xlc3k"), null, null, null, SubResource("Resource_t7kvu"), null, null, SubResource("Resource_apvym"), SubResource("Resource_ur5wt"), null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, SubResource("Resource_0ta0y")])
 is_player_inv = true
 inv_size = 40
 hotbar_size = 8
@@ -1421,6 +1415,7 @@ offset_bottom = 40.0
 mouse_filter = 1
 script = ExtResource("17_vdk5v")
 health_component = NodePath("../../HealthComponent")
+mods = Array[ExtResource("46_xslb2")]([ExtResource("47_l43tu"), ExtResource("46_2raqh")])
 
 [node name="TestHurtBtn" type="Button" parent="PlayerUILayer/TestButtons"]
 layout_mode = 0
@@ -1814,7 +1809,7 @@ label_settings = SubResource("LabelSettings_5ehfk")
 horizontal_alignment = 2
 vertical_alignment = 1
 
-[node name="HotbarUI" type="NinePatchRect" parent="PlayerUILayer" node_paths=PackedStringArray("player_inv")]
+[node name="HotbarUI" type="NinePatchRect" parent="PlayerUILayer" node_paths=PackedStringArray("player_inv") groups=["has_save_logic"]]
 anchors_preset = 7
 anchor_left = 0.5
 anchor_top = 1.0

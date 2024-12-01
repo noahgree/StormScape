@@ -1,26 +1,29 @@
 extends Line2D
 class_name Hitscan
+## The base class for all hitscan objects. These emit as beams or rays from the source weapon instead of traveling along a path.
 
 @export var effect_source: EffectSource ## The effect to be applied when this ray hits an effect receiver.
 @export var source_entity: PhysicsBody2D ## The entity that the effect was produced by.
 
-@onready var start_particles: CPUParticles2D = $StartParticles
-@onready var impact_particles: CPUParticles2D = $ImpactParticles
-@onready var beam_particles: CPUParticles2D = $BeamParticles
+@onready var start_particles: CPUParticles2D = $StartParticles ## The particles emitting at the source point (at the weapon).
+@onready var impact_particles: CPUParticles2D = $ImpactParticles ## The particles emitting at each impact site.
+@onready var beam_particles: CPUParticles2D = $BeamParticles ## The particles emitting along the beam or ray of the hitscan.
 
-var stats: HitscanResource
-var source_item: ProjectileWeapon
-var rotation_offset: float
-var lifetime_timer: Timer = Timer.new()
-var effect_tick_timer: Timer = Timer.new()
-var debug_rays: Array[Dictionary] = []
-var end_point: Vector2
-var is_hitting_something: bool = false:
+var stats: HitscanResource ## The stats driving this hitscan.
+var s_mods: StatModsCacheResource ## The stat mods resource used to retrieve modified, updated stats for calculations and logic.
+var source_item: ProjectileWeapon ## The weapon that produced this hitscan.
+var rotation_offset: float ## The offset to rotate the hitscan by, determined by the source weapon.
+var lifetime_timer: Timer = Timer.new() ## The timer tracking lifetime left before freeing.
+var effect_tick_timer: Timer = Timer.new() ## The timer delaying the intervals of applying the effect source.
+var debug_rays: Array[Dictionary] = [] ## The debug arrays collected during each hit.
+var end_point: Vector2 ## The end point of the hitscan ray and visuals. Updated by the ray scan.
+var is_hitting_something: bool = false: ## Whether at any point along the hitscan we are hitting something.
 	set(new_value):
 		is_hitting_something = new_value
 		impact_particles.emitting = new_value
-var impacted_nodes: Dictionary = {}
-var holding_allowed: bool = false
+var impacted_nodes: Dictionary = {} ## The nodes being hit at current moment.
+var holding_allowed: bool = false ## Whether we are allowed to do holding and keep the hitscan active while the fire button is held.
+var is_charge_fire: bool = false ## Whether this hitscan was the result of a charged firing from the source weapon.
 
 
 ## Creates a hitscan scene, assigns its passed in parameters, then returns it.
@@ -31,11 +34,14 @@ static func create(hitscan_scene: PackedScene, effect_src: EffectSource, source_
 	hitscan.rotation_offset = rot_offset
 	hitscan.effect_source = effect_src
 	hitscan.source_entity = src_entity
-	hitscan.stats = source_wpn.s_stats.hitscan_logic
+	hitscan.stats = source_wpn.stats.hitscan_logic
+	hitscan.s_mods = source_wpn.stats.s_mods
 
-	if was_charged and source_wpn.s_stats.charged_hitscan_logic != null:
-			hitscan.stats = source_wpn.s_stats.charged_hitscan_logic
-	if source_wpn.s_stats.allow_hitscan_holding: hitscan.holding_allowed = true
+	hitscan.is_charge_fire = was_charged
+
+	if was_charged and source_wpn.stats.charge_hitscan_logic != null:
+			hitscan.stats = source_wpn.stats.charge_hitscan_logic
+	if source_wpn.stats.allow_hitscan_holding: hitscan.holding_allowed = true
 
 	hitscan.source_item = source_wpn
 	return hitscan
@@ -62,8 +68,9 @@ func _ready() -> void:
 	lifetime_timer.one_shot = true
 	effect_tick_timer.one_shot = true
 	lifetime_timer.timeout.connect(queue_free)
-	if not holding_allowed:
-		lifetime_timer.start(max(0.05, stats.hitscan_duration))
+	if not holding_allowed or is_charge_fire:
+		var dur_stat: float = s_mods.get_stat("hitscan_duration") if not is_charge_fire else s_mods.get_stat("charge_hitscan_duration")
+		lifetime_timer.start(max(0.05, dur_stat))
 	start_particles.emitting = true
 
 	_set_up_visual_fx()
@@ -126,7 +133,7 @@ func _find_target_receivers() -> void:
 		if child is Area2D:
 			exclusion_list.append(child.get_rid())
 
-	var remaining_pierces = stats.hitscan_pierce_count
+	var remaining_pierces = s_mods.get_stat("hitscan_pierce_count") if not is_charge_fire else s_mods.get_stat("charge_hitscan_pierce_count")
 	var pierce_list: Dictionary ={}
 
 	while remaining_pierces >= 0:
@@ -176,7 +183,8 @@ func _find_target_receivers() -> void:
 			is_hitting_something = false
 			remaining_pierces = -1
 		debug_rays.append(debug_ray_info)
-		end_point = to_local(to_pos)
+		if remaining_pierces > 0 or not result:
+			end_point = to_local(to_pos)
 
 	if effect_tick_timer.is_stopped():
 		for i in range(candidates.size()):
@@ -190,10 +198,13 @@ func _find_target_receivers() -> void:
 				contact_positions.remove_at(receiver_index)
 
 				effect_tick_timer.stop()
-				if stats.hitscan_effect_interval == -1:
+
+				var original_interval: float = s_mods.get_original_stat("hitscan_effect_interval") if not is_charge_fire else s_mods.get_original_stat("charge_hitscan_effect_interval")
+				if original_interval == -1:
 					effect_tick_timer.start(1000.0)
 				else:
-					effect_tick_timer.start(stats.hitscan_effect_interval)
+					var effect_time: float = s_mods.get_stat("hitscan_effect_interval") if not is_charge_fire else s_mods.get_stat("charge_hitscan_effect_interval")
+					effect_tick_timer.start(effect_time)
 
 	_update_impact_particles(pierce_list)
 
@@ -251,8 +262,10 @@ func _get_effect_source_adjusted_for_falloff(effect_src: EffectSource, contact_p
 
 	apply_to_bad = stats.bad_effects_falloff
 	apply_to_good = stats.good_effects_falloff
-	var point_to_sample: float = float(global_position.distance_to(contact_point) / stats.hitscan_max_distance)
-	falloff_mult = max(0.05, stats.hitscan_falloff_curve.sample_baked(point_to_sample))
+	var max_distance_stat: float = s_mods.get_stat("hitscan_max_distance") if not is_charge_fire else s_mods.get_stat("charge_hitscan_max_distance")
+	var point_to_sample: float = float(global_position.distance_to(contact_point) / max_distance_stat)
+	var sampled_point: float = stats.hitscan_falloff_curve.sample_baked(point_to_sample)
+	falloff_mult = max(0.05, sampled_point)
 
 	falloff_effect_src.cam_shake_strength *= falloff_mult
 	falloff_effect_src.cam_freeze_multiplier *= falloff_mult

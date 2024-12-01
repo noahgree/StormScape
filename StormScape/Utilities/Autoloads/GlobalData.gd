@@ -1,11 +1,12 @@
 extends Node
+## A global singleton containing all data needed globally.
 
-@onready var world_root: WorldRoot = get_parent().get_node("Game/WorldRoot")
-@onready var storm: Storm = get_parent().get_node("Game/WorldRoot/Storm")
+@onready var world_root: WorldRoot = get_parent().get_node("Game/WorldRoot") ## A reference to the root of the game world.
+@onready var storm: Storm = get_parent().get_node("Game/WorldRoot/Storm") ## A reference to the main storm node.
 
-var player_node: Player = null
-var player_camera: PlayerCamera = null
-var focused_ui_is_open: bool = false
+var player_node: Player = null ## The reference to the player's node.
+var player_camera: PlayerCamera = null ## The reference to the player's main camera.
+var focused_ui_is_open: bool = false ## When true, the main UI that pauses the game is open.
 
 
 func _ready() -> void:
@@ -14,8 +15,8 @@ func _ready() -> void:
 
 # EffectReceiver & StatModManager
 enum Teams {
-	PLAYER = 1 << 0,
-	ENEMY = 1 << 1,
+	PLAYER = 1 << 0, ## The player team (against the enemies).
+	ENEMY = 1 << 1, ## The enemy team (against the player).
 	PASSIVE = 1 << 2 ## Does not heal or damage anything. Just exists.
 }
 enum DmgAffectedStats { HEALTH_ONLY, SHIELD_ONLY, SHIELD_THEN_HEALTH, SIMULTANEOUS }

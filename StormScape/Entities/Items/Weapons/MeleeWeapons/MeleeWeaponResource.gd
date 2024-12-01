@@ -24,7 +24,6 @@ enum MeleeWeaponType { ## The kinds of melee weapons.
 @export var charge_swing_angle: int = 720 ## How wide of an angle to swing when triggered with charge.
 @export var charge_effect_source: EffectSource = null ## Overrides the normal effect source for charge uses.
 @export var charge_stamina_cost: int = 25 ## How much stamina to consume on charge usages. Overrides standard stamina use.
-@export var charging_entity_speed_mult: float = 1.0 ## A multiplier for entity speed for when this is actively charging.
 @export var chg_use_start_effect: StatusEffect ## The status effect to apply to the source entity at the start of a charge use.
 @export var post_chg_use_effect: StatusEffect ## The status effect to apply to the source entity after charge use.
 
@@ -34,5 +33,5 @@ enum MeleeWeaponType { ## The kinds of melee weapons.
 @export var charge_use_sound: String = "" ## The sound to play when a charge use happens.
 
 # Unique Properties #
-@export_custom(PROPERTY_HINT_NONE, "", PROPERTY_USAGE_NO_EDITOR) var cooldown_left: float = 0.0
-@export_custom(PROPERTY_HINT_NONE, "", PROPERTY_USAGE_NO_EDITOR) var charge_cooldown_left: float = 0.0
+@export_storage var cooldown_left: float = 0.0 ## The cooldown time for regular use that was left when we unequipped the weapon.
+@export_storage var charge_cooldown_left: float = 0.0 ## The cooldown time for charged use that was left when we unequipped the weapon.

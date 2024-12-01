@@ -7,7 +7,7 @@ extends MoveState
 @export var _sneak_collision_impulse_factor: float = 1.0 ## A multiplier that controls how much impulse gets applied to rigid entites when colliding with them during the run state.
 
 const DEFAULT_SNEAK_ANIM_TIME_SCALE: float = 0.65 ## How fast the sneak anim should play before stat mods.
-var movement_vector: Vector2 = Vector2.ZERO
+var movement_vector: Vector2 = Vector2.ZERO ## The current movement vector for the entity.
 
 
 func enter() -> void:
