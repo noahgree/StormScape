@@ -29,7 +29,7 @@ func _ready() -> void:
 func fill_inventory(inv_to_fill_from: Array[InvItemResource]) -> void:
 	inv.fill(null)
 
-	for i in range(min(inv_size if not is_player_inv else inv_size + 1, inv_to_fill_from.size())):
+	for i: int in range(min(inv_size if not is_player_inv else inv_size + 1, inv_to_fill_from.size())):
 		if inv_to_fill_from[i] == null:
 			inv[i] = null
 		else:
@@ -48,7 +48,7 @@ func fill_inventory(inv_to_fill_from: Array[InvItemResource]) -> void:
 func fill_inventory_with_checks(inv_to_fill_from: Array[InvItemResource]) -> void:
 	inv.fill(null)
 
-	for i in range(min(inv_size if not is_player_inv else inv_size + 1, inv_to_fill_from.size())):
+	for i: int in range(min(inv_size if not is_player_inv else inv_size + 1, inv_to_fill_from.size())):
 		if inv_to_fill_from[i] != null:
 			add_item_from_inv_item_resource(inv_to_fill_from[i])
 
@@ -58,13 +58,13 @@ func fill_inventory_with_checks(inv_to_fill_from: Array[InvItemResource]) -> voi
 ## Any extra quantity that does not fit will be left on the ground as a physical item.
 func add_item_from_world(item: Item) -> bool:
 	var inv_item: InvItemResource = InvItemResource.new(item.stats, item.quantity)
-	for i in range(hotbar_size):
+	for i: int in range(hotbar_size):
 		var result: String = _do_add_item_checks(i + (inv_size - hotbar_size), inv_item, item)
 		if result == "done":
 			return true
 		elif result == "new inv item created":
 			inv_item = InvItemResource.new(item.stats, item.quantity)
-	for i in range(inv_size - hotbar_size):
+	for i: int in range(inv_size - hotbar_size):
 		var result: String = _do_add_item_checks(i, inv_item, item)
 		if result == "done":
 			return true
@@ -76,7 +76,7 @@ func add_item_from_world(item: Item) -> bool:
 ## Any extra quantity that does not fit will be ignored and deleted.
 func add_item_from_inv_item_resource(original_item: InvItemResource) -> bool:
 	var inv_item: InvItemResource = InvItemResource.new(original_item.stats, original_item.quantity)
-	for i in range(inv_size):
+	for i: int in range(inv_size):
 		var result: String = _do_add_item_checks(i, inv_item, original_item)
 		if result == "done":
 			return true
@@ -139,7 +139,7 @@ func remove_item(index: int, amount: int) -> void:
 
 ## This updates all connected slots in order to reflect the UI properly.
 func _update_all_connected_slots() -> void:
-	for i in range(inv_size):
+	for i: int in range(inv_size):
 		slot_updated.emit(i, inv[i])
 	if is_player_inv:
 		slot_updated.emit(inv_size, inv[inv_size]) # For trash slot
@@ -147,14 +147,14 @@ func _update_all_connected_slots() -> void:
 #region Sorting
 ## This auto stacks and compacts items into their stack sizes.
 func activate_auto_stack() -> void:
-	for i in range(inv_size - hotbar_size):
+	for i: int in range(inv_size - hotbar_size):
 		if inv[i] == null:
 			continue
-		for j in range(i + 1, inv_size - hotbar_size):
+		for j: int in range(i + 1, inv_size - hotbar_size):
 			if inv[j] == null:
 				continue
 			if inv[i].stats.is_same_as(inv[j].stats):
-				var total_quantity = inv[i].quantity + inv[j].quantity
+				var total_quantity: int = inv[i].quantity + inv[j].quantity
 				if total_quantity <= inv[i].stats.stack_size:
 					inv[i].quantity = total_quantity
 					inv[j] = null
@@ -166,25 +166,25 @@ func activate_auto_stack() -> void:
 
 ## Called in order to start sorting by rarity of items in the inventory. Does not sort hotbar if present.
 func activate_sort_by_rarity() -> void:
-	var arr = inv.slice(0, inv_size - hotbar_size)
+	var arr: Array[InvItemResource] = inv.slice(0, inv_size - hotbar_size)
 	arr.sort_custom(_rarity_sort_logic)
-	for i in range(inv_size - hotbar_size):
+	for i: int in range(inv_size - hotbar_size):
 		inv[i] = arr[i]
 	_update_all_connected_slots()
 
 ## Called in order to start sorting by count of items in the inventory. Does not sort hotbar if present.
 func activate_sort_by_count() -> void:
-	var arr = inv.slice(0, inv_size - hotbar_size)
+	var arr: Array[InvItemResource] = inv.slice(0, inv_size - hotbar_size)
 	arr.sort_custom(_count_sort_logic)
-	for i in range(inv_size - hotbar_size):
+	for i: int in range(inv_size - hotbar_size):
 		inv[i] = arr[i]
 	_update_all_connected_slots()
 
 ## Called in order to start sorting by name of items in the inventory. Does not sort hotbar if present.
 func activate_sort_by_name() -> void:
-	var arr = inv.slice(0, inv_size - hotbar_size)
+	var arr: Array[InvItemResource] = inv.slice(0, inv_size - hotbar_size)
 	arr.sort_custom(_name_sort_logic)
-	for i in range(inv_size - hotbar_size):
+	for i: int in range(inv_size - hotbar_size):
 		inv[i] = arr[i]
 	_update_all_connected_slots()
 
@@ -225,7 +225,7 @@ func _name_sort_logic(a: InvItemResource, b: InvItemResource) -> bool:
 ## Custom method for printing the rich details of all inventory array spots.
 func print_inv(include_null_spots: bool = false) -> void:
 	var to_print: String = "[b]-----------------------------------------------------------------------------------------------------------------------------------[/b]\n"
-	for i in range(inv_size):
+	for i: int in range(inv_size):
 		if inv[i] == null and not include_null_spots:
 			continue
 		to_print = to_print + str(inv[i])

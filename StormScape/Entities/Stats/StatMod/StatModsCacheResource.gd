@@ -15,7 +15,7 @@ func reinit_on_load() -> void:
 	var temp_debug_print_changes: bool = debug_print_mod_changes
 	debug_print_mod_changes = false
 	cached_stats = {}
-	for stat_id in base_values:
+	for stat_id: String in base_values:
 		_recalculate_stat(stat_id, base_values.get(stat_id))
 	debug_print_mod_changes = temp_debug_print_changes
 
@@ -23,8 +23,8 @@ func reinit_on_load() -> void:
 func add_moddable_stats(base_valued_stats: Dictionary, stats_ui: Control = null) -> void:
 	var temp_debug_print_changes: bool = debug_print_mod_changes
 	debug_print_mod_changes = false
-	for stat_id in base_valued_stats.keys():
-		var base_value = base_valued_stats[stat_id]
+	for stat_id: String in base_valued_stats.keys():
+		var base_value: float = base_valued_stats[stat_id]
 		stat_mods[stat_id] = {}
 		base_values[stat_id] = base_value
 		_recalculate_stat(stat_id, base_value, stats_ui)
@@ -36,7 +36,7 @@ func _recalculate_stat(stat_id: String, base_value: float, stats_ui: Control = n
 	mods.sort_custom(_compare_by_priority)
 
 	var result: float = base_value
-	for mod in mods:
+	for mod: StatMod in mods:
 		if mod.override_all:
 			result = mod.apply(base_value, base_value)
 			break
@@ -46,13 +46,13 @@ func _recalculate_stat(stat_id: String, base_value: float, stats_ui: Control = n
 	_update_ui_for_stat(stat_id, result, stats_ui)
 
 	if DebugFlags.PrintFlags.stat_mod_changes_during_game and debug_print_mod_changes:
-		var change_text = str(float(cached_stats[stat_id]) / float(base_values[stat_id]))
-		var base_text = "[color=gray][i](base)[/i][/color]" if cached_stats[stat_id] == base_values[stat_id] else "[color=pink][i](" + change_text + "%)[/i][/color]"
+		var change_text: String = str(float(cached_stats[stat_id]) / float(base_values[stat_id]))
+		var base_text: String = "[color=gray][i](base)[/i][/color]" if cached_stats[stat_id] == base_values[stat_id] else "[color=pink][i](" + change_text + "%)[/i][/color]"
 		print_rich("[color=cyan]" + stat_id + base_text + "[/color]: [b]" + str(cached_stats[stat_id]) + "[/b]")
 
 ## Updates an optionally connected UI when a watched stat changes.
 func _update_ui_for_stat(stat_id: String, new_value: float, stats_ui: Node) -> void:
-	var method_name = "on_" + stat_id + "_changed"
+	var method_name: String = "on_" + stat_id + "_changed"
 	if stats_ui:
 		if stats_ui.has_method(method_name):
 			stats_ui.call_deferred("call", method_name, new_value)
@@ -77,7 +77,7 @@ func update_mod_by_id(stat_id: String, mod_id: String, new_value: float) -> void
 
 ## Adds mods to a stat. Handles logic for stacking if the mod can stack.
 func add_mods(mod_array: Array[StatMod], stats_ui: Control = null) -> void:
-	for mod in mod_array:
+	for mod: StatMod in mod_array:
 		if mod.stat_id in stat_mods:
 			var existing_mod: StatMod = stat_mods[mod.stat_id].get(mod.mod_id, null)
 			if existing_mod and existing_mod.stack_count > 1:
@@ -127,13 +127,13 @@ func undo_mod_stacking(stat_id: String, mod_id: String, stats_ui: Control = null
 
 ## Gets the current cached value of a stat.
 func get_stat(stat_id: String) -> float:
-	var value = cached_stats.get(stat_id, null)
+	var value: float = cached_stats.get(stat_id, null)
 	assert(value != null, stat_id + " was null when trying to be retrieved from a stat mods cache.")
 	return value
 
 ## Returns the original cached value of a stat before any modifications.
 func get_original_stat(stat_id: String) -> float:
-	var value = base_values.get(stat_id, null)
+	var value: float = base_values.get(stat_id, null)
 	assert(value != null, stat_id + " was null when trying to be retrieved from a stat mods cache.")
 	return value
 

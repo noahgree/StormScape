@@ -24,7 +24,7 @@ var is_trash_slot: bool = false ## The slot, that if present, is used to discard
 
 
 ## Setter function for the item represented by this slot. Updates texture and quantity label.
-func _set_item(new_item) -> void:
+func _set_item(new_item: InvItemResource) -> void:
 	item = new_item
 	if item:
 		if item.quantity > 0:
@@ -61,8 +61,8 @@ func _set_item(new_item) -> void:
 
 ## Connects relevant mouse entered and exited functions.
 func _ready() -> void:
-	mouse_entered.connect(func(): is_hovered_over.emit(index))
-	mouse_exited.connect(func(): is_not_hovered_over.emit())
+	mouse_entered.connect(func() -> void: is_hovered_over.emit(index))
+	mouse_exited.connect(func() -> void: is_not_hovered_over.emit())
 	rarity_glow.hide()
 	item_texture.material.set_shader_parameter("width", 0.5)
 	item_texture.material.set_shader_parameter("highlight_strength", 0.0)
@@ -235,7 +235,7 @@ func _combine_what_fits_and_leave_remainder(data: Variant) -> void:
 
 ## Swaps slot data's.
 func _swap_item_stacks(data: Variant) -> void:
-	var temp_item = item
+	var temp_item: InvItemResource = item
 	item = InvItemResource.new(data.item.stats, data.item.quantity)
 	synced_inv.inv[index] = item
 
@@ -302,7 +302,7 @@ func _emit_changes_for_potential_listening_hotbar(data: Variant) -> void:
 ## When mouse enters, if we can drop, display an effect on this slot.
 func _on_mouse_entered() -> void:
 	if get_viewport().gui_is_dragging():
-		var drag_data = get_viewport().gui_get_drag_data()
+		var drag_data: Variant = get_viewport().gui_get_drag_data()
 		if _can_drop_data(get_local_mouse_position(), drag_data):
 			modulate = Color(1.2, 1.2, 1.2, 1.0)
 			if item == null:
@@ -313,7 +313,7 @@ func _on_mouse_entered() -> void:
 
 ## When mouse exits, if we are dragging, remove effects on this slot.
 func _on_mouse_exited() -> void:
-	var drag_data
+	var drag_data: Variant
 	if get_viewport().gui_is_dragging():
 		drag_data = get_viewport().gui_get_drag_data()
 		if drag_data.index == index:
@@ -324,7 +324,7 @@ func _on_mouse_exited() -> void:
 		item_texture.modulate.a = 1.0
 
 ## When the system is notifed of a drag being over, call the method that resets slot highlight and drag preview effects.
-func _notification(what):
+func _notification(what: int) -> void:
 	if what == NOTIFICATION_DRAG_END:
 		_reset_post_drag_mods()
 
@@ -348,18 +348,18 @@ func _to_string() -> String:
 ## When an item is double clicked in the inventory, attempt to garner a full stack by iterating over all other slots.
 ## Pulls from slots not at stack size first, then goes back and gets from stack size if needed.
 func _fill_slot_to_stack_size() -> void:
-	var needed_quantity = item.stats.stack_size - item.quantity
+	var needed_quantity: int = item.stats.stack_size - item.quantity
 	if needed_quantity <= 0:
 		return
 
 	# First pass: Pull from non-full slots
-	for i in range(synced_inv.inv.size()):
+	for i: int in range(synced_inv.inv.size()):
 		if i == index:
 			continue
 
-		var other_item = synced_inv.inv[i]
+		var other_item: InvItemResource = synced_inv.inv[i]
 		if other_item != null and other_item.stats.is_same_as(item.stats) and other_item.quantity < other_item.stats.stack_size:
-			var transfer_quantity = min(needed_quantity, other_item.quantity)
+			var transfer_quantity: int = min(needed_quantity, other_item.quantity)
 			item.quantity += transfer_quantity
 			other_item.quantity -= transfer_quantity
 			needed_quantity -= transfer_quantity
@@ -374,13 +374,13 @@ func _fill_slot_to_stack_size() -> void:
 
 	# Second pass: Pull from full slots if needed
 	if needed_quantity > 0:
-		for i in range(synced_inv.inv.size()):
+		for i: int in range(synced_inv.inv.size()):
 			if i == index:
 				continue
 
-			var other_item = synced_inv.inv[i]
+			var other_item: InvItemResource = synced_inv.inv[i]
 			if other_item != null and other_item.stats.is_same_as(item.stats):
-				var transfer_quantity = min(needed_quantity, other_item.quantity)
+				var transfer_quantity: int = min(needed_quantity, other_item.quantity)
 				item.quantity += transfer_quantity
 				other_item.quantity -= transfer_quantity
 				needed_quantity -= transfer_quantity

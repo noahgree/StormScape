@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="ProjWeaponResource" load_steps=35 format=3 uid="uid://ciel2rrqq4dvv"]
+[gd_resource type="Resource" script_class="ProjWeaponResource" load_steps=42 format=3 uid="uid://ciel2rrqq4dvv"]
 
 [ext_resource type="Script" path="res://Entities/Items/Weapons/ProjectileWeapons/ProjWeaponResource.gd" id="1_7bjnk"]
 [ext_resource type="Script" path="res://Entities/Stats/EffectSystemResources/EffectSources/EffectSource.gd" id="1_67okc"]
@@ -11,8 +11,12 @@
 [ext_resource type="PackedScene" uid="uid://baxpb3crwepc0" path="res://Entities/Items/Weapons/ProjectileWeapons/LaserGun/LaserGun.tscn" id="6_gbfef"]
 [ext_resource type="Resource" uid="uid://c6aw6ev8jctgk" path="res://Entities/Stats/EffectSystemResources/StatusEffects/BadEffects/LifeSteal/LifeSteal2.tres" id="8_qhu50"]
 [ext_resource type="Resource" uid="uid://c0gxq4ufi3snt" path="res://Entities/Stats/EffectSystemResources/StatusEffects/GoodEffects/Speed/Speed2.tres" id="9_566jc"]
+[ext_resource type="Resource" uid="uid://b0it5xmpw16sd" path="res://Entities/Stats/EffectSystemResources/StatusEffects/BadEffects/Knockback/Knockback1.tres" id="9_ao8k3"]
 [ext_resource type="Script" path="res://Entities/Items/Projectiles/ProjectileResource.gd" id="9_bgryc"]
 [ext_resource type="Script" path="res://Entities/Stats/StatMod/StatModsCacheResource.gd" id="12_lft8x"]
+[ext_resource type="Script" path="res://UI/Inventory/PlayerInventory/Crafting/CraftingIngredient.gd" id="13_8mov7"]
+[ext_resource type="Resource" uid="uid://m8eslst1uuxh" path="res://Entities/Items/Ammo/LightAmmo.tres" id="14_8sjcv"]
+[ext_resource type="Resource" uid="uid://cx1ydw2jde1y8" path="res://Entities/Items/Consumables/Apple/Apple.tres" id="15_0vrv2"]
 
 [sub_resource type="Curve" id="Curve_kfl3v"]
 _data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.757194, 0.277558), 0.0, 0.0, 0, 0, Vector2(1, 1), 2.89929, 0.0, 0, 0]
@@ -150,7 +154,7 @@ scanned_phys_layers = 191
 can_hit_self = false
 bad_effect_affected_teams = 3
 good_effect_affected_teams = 3
-base_damage = 10
+base_damage = 3
 dmg_affected_stats = 2
 crit_chance = 5
 crit_multiplier = 1.5
@@ -163,7 +167,7 @@ cam_freeze_multiplier = 1.0
 cam_freeze_duration = 0.0
 impact_sound = ""
 hit_flash_color = Color(1, 1, 1, 0.45)
-status_effects = Array[ExtResource("2_ectm3")]([ExtResource("8_qhu50")])
+status_effects = Array[ExtResource("2_ectm3")]([ExtResource("8_qhu50"), ExtResource("9_ao8k3")])
 contact_position = Vector2(0, 0)
 movement_direction = Vector2(0, 0)
 
@@ -196,6 +200,10 @@ impact_particle_color = Color(0.631846, 0.865228, 1, 1)
 impact_particle_mult = 1.0
 beam_particle_color = Color(0.646492, 0.854506, 1, 1)
 beam_particle_mult = 1.0
+
+[sub_resource type="Curve" id="Curve_a16jh"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.49935), 0.0, 0.0, 0, 0]
+point_count = 2
 
 [sub_resource type="Curve" id="Curve_uaxhg"]
 _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
@@ -235,14 +243,15 @@ mouse_target_radius = 50.0
 spin_speed = 0.0
 spin_both_ways = false
 spin_direction = "Forward"
-move_in_rotated_dir = true
+move_in_rotated_dir = false
 shadow_matches_spin = false
 launch_angle = 0.0
 arc_travel_distance = 125
-arc_speed = 350.0
+arc_speed = 550.0
 max_collision_height = 20
 grounding_free_delay = 0.0
-bounce_count = 0
+bounce_count = 2
+bounce_falloff_curve = SubResource("Curve_a16jh")
 ping_pong_bounce = false
 number_of_splits = 0
 split_into_counts = Array[int]([2])
@@ -259,6 +268,20 @@ splash_effect_delay = 0.0
 splash_effect_dur = 0.05
 splash_before_freeing = false
 splash_sound = ""
+
+[sub_resource type="Resource" id="Resource_ct7xl"]
+script = ExtResource("13_8mov7")
+type = "Item"
+item = ExtResource("14_8sjcv")
+quantity = 3
+tags = Array[String]([])
+
+[sub_resource type="Resource" id="Resource_0uuw3"]
+script = ExtResource("13_8mov7")
+type = "Item"
+item = ExtResource("15_0vrv2")
+quantity = 2
+tags = Array[String]([])
 
 [sub_resource type="Resource" id="Resource_wi7kk"]
 script = ExtResource("12_lft8x")
@@ -344,6 +367,7 @@ original_status_effects = Array[ExtResource("2_ectm3")]([])
 original_charge_status_effects = Array[ExtResource("2_ectm3")]([])
 id = "laser_gun"
 name = "Laser Gun"
+tags = Array[String]([])
 icon = ExtResource("3_qr2dh")
 thumbnail = ExtResource("3_qr2dh")
 item_type = 1
@@ -353,6 +377,8 @@ stack_size = 1
 auto_pickup = false
 pickup_radius = 4
 info = "A simple laser gun."
+recipe = Array[ExtResource("13_8mov7")]([SubResource("Resource_ct7xl"), SubResource("Resource_0uuw3")])
+output_quantity = 1
 item_scene = ExtResource("6_gbfef")
 rotation_lerping = 0.15
 holding_offset = Vector2(0, 0)

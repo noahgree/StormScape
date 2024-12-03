@@ -17,7 +17,6 @@ func handle_life_steal(dmg_amount: int, percent_to_steal: float) -> void:
 		var src_health_component: HealthComponent = source_entity.get_node("HealthComponent")
 		var self_health_component: HealthComponent = effect_receiver.get_parent().get_node("HealthComponent")
 		var self_hp: int = self_health_component.health + self_health_component.shield
-		var steal_amount: int = int(floor(min(self_hp, dmg_amount) * percent_to_steal))
+		var steal_amount: int = int(floor(min(self_hp, dmg_amount) * (percent_to_steal / 100.0)))
 
-		if steal_amount > 0:
-			src_health_component.heal_health_then_shield(steal_amount)
+		src_health_component.heal_health_then_shield(max(1, steal_amount))

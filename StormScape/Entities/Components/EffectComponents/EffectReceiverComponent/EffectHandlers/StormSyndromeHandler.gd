@@ -25,7 +25,7 @@ func handle_storm_syndrome(storm_syndrome_effect: StormSyndromeEffect) -> void:
 		var storm_weakness: float = effect_receiver.affected_entity.stats.get_stat("storm_weakness")
 		var storm_resistance: float = effect_receiver.affected_entity.stats.get_stat("storm_resistance")
 
-		for i in range(local_dot_resource.dmg_ticks_array.size()):
+		for i: int in range(local_dot_resource.dmg_ticks_array.size()):
 			local_dot_resource.dmg_ticks_array[i] = int(roundf(local_dot_resource.dmg_ticks_array[i] * (1 + storm_weakness - storm_resistance)))
 
 		(effect_receiver.get_node("DmgHandler") as DmgHandler).handle_over_time_dmg(local_dot_resource, "Storm Syndrome")

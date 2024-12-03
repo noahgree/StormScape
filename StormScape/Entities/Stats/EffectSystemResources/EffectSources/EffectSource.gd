@@ -54,7 +54,7 @@ class_name EffectSource
 ## Looks to see if there is a status effect with the matching name in this effect source's array of status effects. Return its index
 ## if found, else return -1. Does not handle duplicates.
 func check_for_effect_and_get_index(name: String) -> int:
-	for i in range(status_effects.size()):
+	for i: int in range(status_effects.size()):
 		if status_effects[i].effect_name == name:
 			return i
 	return -1

@@ -24,7 +24,7 @@ func handle_burning(burning_effect: BurningEffect) -> void:
 		var burning_weakness: float = effect_receiver.affected_entity.stats.get_stat("burning_weakness")
 		var burning_resistance: float = effect_receiver.affected_entity.stats.get_stat("burning_resistance")
 
-		for i in range(local_dot_resource.dmg_ticks_array.size()):
+		for i: int in range(local_dot_resource.dmg_ticks_array.size()):
 			local_dot_resource.dmg_ticks_array[i] = int(roundf(local_dot_resource.dmg_ticks_array[i] * (1 + burning_weakness - burning_resistance)))
 
 		(effect_receiver.get_node("DmgHandler") as DmgHandler).handle_over_time_dmg(local_dot_resource, "Burning")

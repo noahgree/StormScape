@@ -28,10 +28,10 @@ var is_dying: bool = false
 
 func _ready() -> void:
 	loot_table = loot_table.duplicate()
-	for i in range(loot_table.hit_loot_table.size()):
+	for i: int in range(loot_table.hit_loot_table.size()):
 		hit_loot_table_total_weight += loot_table.hit_loot_table[i].weighting
 		loot_table.hit_loot_table[i].item = loot_table.hit_loot_table[i].item.duplicate()
-	for i in range(loot_table.die_loot_table.size()):
+	for i: int in range(loot_table.die_loot_table.size()):
 		die_loot_table_total_weight += loot_table.die_loot_table[i].weighting
 		loot_table.die_loot_table[i].item = loot_table.die_loot_table[i].item.duplicate()
 
@@ -80,10 +80,10 @@ func _get_random_loot_entry(was_hit: bool) -> LootTableEntry:
 	var selected_entry: LootTableEntry = null
 
 	var effective_weights: Array[float] = []
-	for entry in table_selection:
-		var rarity_factor = rarity_scaling_factors.get(entry.item.rarity, 1.0)
-		var time_factor = 1.0 + (entry.last_used * rarity_factor)
-		var effective_weight = entry.weighting * time_factor
+	for entry: LootTableEntry in table_selection:
+		var rarity_factor: float = rarity_scaling_factors.get(entry.item.rarity, 1.0)
+		var time_factor: float = 1.0 + (entry.last_used * rarity_factor)
+		var effective_weight: float = entry.weighting * time_factor
 		effective_weights.append(effective_weight)
 		total_weight += effective_weight
 
@@ -91,7 +91,7 @@ func _get_random_loot_entry(was_hit: bool) -> LootTableEntry:
 	var cumulative_weight: float = 0.0
 
 	var removal_index: int = -1
-	for i in range(table_selection.size()):
+	for i: int in range(table_selection.size()):
 		cumulative_weight += effective_weights[i]
 		if random_value < cumulative_weight and selected_entry == null:
 			table_selection[i].last_used = 0
@@ -116,5 +116,5 @@ func _get_random_loot_entry(was_hit: bool) -> LootTableEntry:
 func _print_table(use_hit: bool) -> void:
 	var table: Array[LootTableEntry] = loot_table.hit_loot_table if use_hit else loot_table.die_loot_table
 	print("-----------------------------------------------------------------------------------")
-	for i in range(table.size()):
+	for i: int in range(table.size()):
 		print_rich("+++++++++++++++ " + str(table[i].item) + " | Last Used: " + str(table[i].last_used) + " | Weighting: " + str(table[i].weighting) + " | Spawn Count: [b]" + str(table[i].spawn_count) + "[/b] +++++++++++++++")

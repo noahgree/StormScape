@@ -17,7 +17,7 @@ var before_stack_value: float = 0 ## The original value before stacking got appl
 
 
 func _init(sid: String = "UntitledStat", mid: String = "UntitledMod", op: String = "%", val: float = 1.0,
-			prio: int = 1, max_stack: int = 1, override: bool = false):
+			prio: int = 1, max_stack: int = 1, override: bool = false) -> void:
 	stat_id = sid
 	mod_id = mid
 	operation = op

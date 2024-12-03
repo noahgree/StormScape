@@ -14,8 +14,8 @@ var saved_hots: Dictionary = {} ## Saves the running HOT instances and the progr
 func _on_before_save_game() -> void:
 	saved_hots.clear()
 
-	for source_type in hot_timers.keys():
-		for timer in hot_timers[source_type]:
+	for source_type: String in hot_timers.keys():
+		for timer: Timer in hot_timers[source_type]:
 			var clean_resource: HOTResource = timer.get_meta("hot_resource").duplicate()
 			var ticks_completed: int = timer.get_meta("ticks_completed")
 			var original_tick_count: int = clean_resource.heal_ticks_array.size()
@@ -30,11 +30,11 @@ func _on_before_save_game() -> void:
 func _on_before_load_game() -> void:
 	hot_timers = {}
 	hot_delay_timers = {}
-	for child in get_children():
+	for child: Timer in get_children():
 		child.queue_free()
 
 func _on_game_finished_loading() -> void:
-	for source_type in saved_hots.keys():
+	for source_type: String in saved_hots.keys():
 		for hot_instance: HOTResource in saved_hots.get(source_type):
 			handle_over_time_heal(hot_instance, source_type)
 #endregion
@@ -52,7 +52,7 @@ func handle_over_time_heal(hot_resource: HOTResource, source_type: String) -> vo
 	var hot_timer: Timer = Timer.new()
 	hot_timer.set_meta("hot_resource", hot_resource)
 	hot_timer.one_shot = false
-	hot_timer.timeout.connect(func(): _on_hot_timer_timeout(hot_timer, source_type))
+	hot_timer.timeout.connect(func() -> void: _on_hot_timer_timeout(hot_timer, source_type))
 	hot_timer.name = source_type + "_timer"
 	add_child(hot_timer)
 
@@ -68,7 +68,7 @@ func handle_over_time_heal(hot_resource: HOTResource, source_type: String) -> vo
 		else:
 			hot_timer.wait_time = max(0.01, hot_resource.time_between_ticks)
 
-		delay_timer.timeout.connect(func(): _on_hot_timer_timeout(hot_timer, source_type))
+		delay_timer.timeout.connect(func() -> void: _on_hot_timer_timeout(hot_timer, source_type))
 		delay_timer.timeout.connect(hot_timer.start)
 		delay_timer.timeout.connect(delay_timer.queue_free)
 		delay_timer.name = source_type + "_delayTimer"
@@ -101,17 +101,17 @@ func _add_timer_to_cache(source_type: String, timer: Timer, cache: Dictionary) -
 
 ## Deletes all timers for a source type from the timer cache dict.
 func _delete_timers_from_caches(source_type: String) -> void:
-	var timers = hot_timers.get(source_type, null)
+	var timers: Array = hot_timers.get(source_type, [null])
 	if timers:
-		for timer in timers:
+		for timer: Timer in timers:
 			if timer != null:
 				timer.stop()
 				timer.queue_free()
 		hot_timers.erase(source_type)
 
-	var delay_timers = hot_delay_timers.get(source_type, null)
+	var delay_timers: Array = hot_delay_timers.get(source_type, [null])
 	if delay_timers:
-		for delay_timer in delay_timers:
+		for delay_timer: Timer in delay_timers:
 			if delay_timer != null:
 				delay_timer.stop()
 				delay_timer.queue_free()

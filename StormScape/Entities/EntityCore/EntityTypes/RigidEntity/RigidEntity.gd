@@ -94,7 +94,7 @@ func _ready() -> void:
 
 	mass = 3
 	linear_damp = 4.5
-	var phys_material = PhysicsMaterial.new()
+	var phys_material: PhysicsMaterial = PhysicsMaterial.new()
 	phys_material.friction = 1.0
 	phys_material.rough = true
 	self.physics_material_override = phys_material

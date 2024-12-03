@@ -5,7 +5,7 @@
 
 [resource]
 script = ExtResource("1_fkgp2")
-dmg_steal_mult = 0.35
+dmg_steal = 35.0
 effect_name = "Life Steal"
 effect_lvl = 2
 is_bad_effect = true

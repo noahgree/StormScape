@@ -129,7 +129,7 @@ func _on_area_entered(area: Area2D) -> void:
 			(area as ItemReceiverComponent).add_to_in_range_queue(self)
 
 		if not area.items_in_range.is_empty():
-			for item in (area as ItemReceiverComponent).items_in_range:
+			for item: Item in (area as ItemReceiverComponent).items_in_range:
 				item.thumbnail.material.set_shader_parameter("outline_color", GlobalData.rarity_colors.outline_color.get(item.stats.rarity))
 				item.thumbnail.material.set_shader_parameter("width", 0.5)
 

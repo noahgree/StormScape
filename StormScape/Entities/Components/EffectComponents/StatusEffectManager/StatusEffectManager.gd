@@ -18,15 +18,15 @@ var saved_times_left: Dictionary = {} ## Holds time remaining for status effects
 #region Save & Load
 ## We save every effect timer that is in progress into the saved_times_left.
 func _on_save_game(_save_data: Array[SaveData]) -> void:
-	for effect_name in effect_timers.keys():
+	for effect_name: String in effect_timers.keys():
 		saved_times_left[effect_name] = effect_timers.get(effect_name, 0.001).time_left
 
 ## We must clear out any existing effect timers and remove all exiting status effects.
 func _on_before_load_game() -> void:
 	effect_timers = {}
-	for status_effect in current_effects.keys():
+	for status_effect: String in current_effects.keys():
 		request_effect_removal(status_effect)
-	for child in get_children():
+	for child: Variant in get_children():
 		if child is Timer:
 			child.queue_free()
 
@@ -71,7 +71,7 @@ func handle_status_effect(status_effect: StatusEffect) -> void:
 ## Checks if we already have a status effect of the same name and decides what to do depending on the level.
 func _handle_status_effect_mods(status_effect: StatusEffect) -> void:
 	if status_effect.effect_name in current_effects:
-		var existing_lvl = current_effects[status_effect.effect_name].effect_lvl
+		var existing_lvl: int = current_effects[status_effect.effect_name].effect_lvl
 
 		if existing_lvl > status_effect.effect_lvl: # new effect is lower lvl
 			var time_to_add: float = status_effect.mod_time * (float(status_effect.effect_lvl) / float(existing_lvl))
@@ -96,11 +96,11 @@ func _add_status_effect(status_effect: StatusEffect) -> void:
 	mod_timer.one_shot = true
 
 	if not status_effect.apply_until_removed:
-		var removing_callable = Callable(self, "_remove_status_effect").bind(status_effect)
+		var removing_callable: Callable = Callable(self, "_remove_status_effect").bind(status_effect)
 		mod_timer.timeout.connect(removing_callable)
 		mod_timer.set_meta("callable", removing_callable)
 	else:
-		mod_timer.timeout.connect(func(): mod_timer.start(status_effect.mod_time))
+		mod_timer.timeout.connect(func() -> void: mod_timer.start(status_effect.mod_time))
 
 	mod_timer.name = str(status_effect.effect_name) + str(status_effect.effect_lvl) + "_timer"
 	add_child(mod_timer)
@@ -110,9 +110,8 @@ func _add_status_effect(status_effect: StatusEffect) -> void:
 
 	if status_effect.spawn_particles: _start_effect_fx(status_effect.effect_name, status_effect.particles_req_handler)
 
-	for mod_resource in status_effect.stat_mods:
-		var mod: StatMod = (mod_resource as StatMod)
-		get_parent().stats.add_mods([mod] as Array[StatMod], stats_ui)
+	for mod_resource: StatMod in status_effect.stat_mods:
+		get_parent().stats.add_mods([mod_resource] as Array[StatMod], stats_ui)
 
 ## Starts the status effects' associated visual FX like particles. Checks if the receiver has the matching handler node first.
 func _start_effect_fx(effect_name: String, requires_handler: bool) -> void:
@@ -157,9 +156,8 @@ func _remove_status_effect(status_effect: StatusEffect) -> void:
 		else:
 			print_rich("-------[color=red]Removed[/color][b] " + str(status_effect.effect_name) + str(status_effect.effect_lvl) + "[/b]-------")
 
-	for mod_resource in status_effect.stat_mods:
-		var mod: StatMod = (mod_resource as StatMod)
-		get_parent().stats.remove_mod(mod.stat_id, mod.mod_id, stats_ui)
+	for mod_resource: StatMod in status_effect.stat_mods:
+		get_parent().stats.remove_mod(mod_resource.stat_id, mod_resource.mod_id, stats_ui)
 
 	if status_effect.effect_name in current_effects:
 		current_effects.erase(status_effect.effect_name)
@@ -167,7 +165,7 @@ func _remove_status_effect(status_effect: StatusEffect) -> void:
 	var timer: Timer = effect_timers.get(status_effect.effect_name, null)
 	if timer != null:
 		if timer.has_meta("callable"): # so we can cancel any pending callables before freeing
-			var callable = timer.get_meta("callable")
+			var callable: Callable = timer.get_meta("callable")
 			timer.timeout.disconnect(callable)
 			timer.set_meta("callable", null)
 		timer.stop()

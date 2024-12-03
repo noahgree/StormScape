@@ -15,10 +15,10 @@ const DEFAULT_SLOT_COUNT: int = 32 ## The default amount of slots an inventory s
 
 ## Clears all children slots and sets up trash slot if needed. Changes slot count to default amount.
 func _ready() -> void:
-	for child in main_slot_grid.get_children():
+	for child: Slot in main_slot_grid.get_children():
 		child.queue_free()
 	if hotbar_grid:
-		for child in hotbar_grid.get_children():
+		for child: Slot in hotbar_grid.get_children():
 			child.queue_free()
 	if trash_slot:
 		trash_slot.is_trash_slot = true
@@ -29,7 +29,7 @@ func _ready() -> void:
 
 ## Recreates the slot children and updates the slots array based on a passed in inventory. Sets needed slot variables.
 func _change_slot_count_for_new_inv(inv: Inventory = null) -> void:
-	for slot in slots:
+	for slot: Slot in slots:
 		slot.queue_free()
 	slots = []
 
@@ -42,7 +42,7 @@ func _change_slot_count_for_new_inv(inv: Inventory = null) -> void:
 		trash_slot.index = inv.inv_size
 		trash_slot.synced_inv = inv
 
-	for i in range(main_count):
+	for i: int in range(main_count):
 		var slot: Slot = slot_scene.instantiate()
 		main_slot_grid.add_child(slot)
 		slot.name = "Slot_" + str(i)
@@ -52,7 +52,7 @@ func _change_slot_count_for_new_inv(inv: Inventory = null) -> void:
 		if inv: slot.synced_inv = inv
 		slots.append(slot)
 
-	for i in range(hotbar_count):
+	for i: int in range(hotbar_count):
 		var slot: Slot = slot_scene.instantiate()
 		hotbar_grid.add_child(slot)
 		slot.name = "HotSlot_" + str(i)
@@ -78,7 +78,7 @@ func connect_inventory(inv: Inventory) -> void:
 func _set_synced_ui() -> void:
 	_change_slot_count_for_new_inv(synced_inv)
 
-	for i in range(slots.size()):
+	for i: int in range(slots.size()):
 		slots[i].item = synced_inv.inv[i]
 
 ## When a slot gets updated in the inventory, this is received via signal in order to update a slot visual here.
@@ -86,7 +86,7 @@ func _on_slot_updated(index: int, item: InvItemResource) -> void:
 	slots[index].item = item
 
 ## When a slot is hovered, update the item details label if that slot's item is not null.
-func _on_slot_hovered(index) -> void:
+func _on_slot_hovered(index: int) -> void:
 	if item_details_label and slots[index].item != null:
 		item_details_label.text = slots[index].item.stats.info
 
@@ -97,7 +97,7 @@ func _on_slot_not_hovered() -> void:
 ## Custom printing method to show the items inside the slots populated by this node.
 func print_slots(include_null_spots: bool = false) -> void:
 	var to_print: String = "[b]-----------------------------------------------------------------------------------------------------------------------------------[/b]\n"
-	for i in range(slots.size()):
+	for i: int in range(slots.size()):
 		if slots[i].item == null and not include_null_spots:
 			continue
 		to_print = to_print + str(slots[i])

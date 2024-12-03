@@ -4,6 +4,7 @@ class_name ItemResource
 @export_group("Item Details")
 @export var id: String ## The unique identifier for the item.
 @export var name: String ## The item's string name.
+@export var tags: Array[String] = [] ## The set of tags that are checked against when this item is potentially used for crafting.
 @export var icon: Texture2D ## The inventory representation of the item.
 @export var thumbnail: Texture2D ## The physical representation of the item.
 @export var item_type: GlobalData.ItemType = GlobalData.ItemType.CONSUMABLE ## The type that this item is.
@@ -13,6 +14,11 @@ class_name ItemResource
 @export var auto_pickup: bool = false ## Whether this item should automatically be picked up when run over.
 @export_custom(PROPERTY_HINT_NONE, "suffix:px") var pickup_radius: int = 4 ## The radius at which the item can be detected for pickup.
 @export_multiline var info: String ## The multiline information about this item.
+
+@export_group("Crafting")
+@export var recipe: Array[CraftingIngredient] = [] ## The items & quantities required to craft an instance of this item.
+@export var output_quantity: int = 1 ## The number of resulting instances of this item that spawn when crafted.
+
 @export_group("Equippability Details")
 @export var item_scene: PackedScene = null ## The equippable representation of this item.
 @export_range(0, 1, 0.01) var rotation_lerping: float = 0.1 ## How fast the rotation lerping should be while holding this item.

@@ -17,8 +17,8 @@ var saved_dots: Dictionary = {} ## Saves the running DOT instances and the progr
 func _on_before_save_game() -> void:
 	saved_dots.clear()
 
-	for source_type in dot_timers.keys():
-		for timer in dot_timers[source_type]:
+	for source_type: String in dot_timers.keys():
+		for timer: Timer in dot_timers[source_type]:
 			var clean_resource: DOTResource = timer.get_meta("dot_resource").duplicate()
 			var ticks_completed: int = timer.get_meta("ticks_completed")
 			var original_tick_count: int = clean_resource.dmg_ticks_array.size()
@@ -33,11 +33,11 @@ func _on_before_save_game() -> void:
 func _on_before_load_game() -> void:
 	dot_timers = {}
 	dot_delay_timers = {}
-	for child in get_children():
+	for child: Timer in get_children():
 		child.queue_free()
 
 func _on_game_finished_loading() -> void:
-	for source_type in saved_dots.keys():
+	for source_type: String in saved_dots.keys():
 		for dot_instance: DOTResource in saved_dots.get(source_type):
 			handle_over_time_dmg(dot_instance, source_type)
 #endregion
@@ -72,7 +72,7 @@ func handle_over_time_dmg(dot_resource: DOTResource, source_type: String) -> voi
 	var dot_timer: Timer = Timer.new()
 	dot_timer.set_meta("dot_resource", dot_resource)
 	dot_timer.one_shot = false
-	dot_timer.timeout.connect(func(): _on_dot_timer_timeout(dot_timer, source_type))
+	dot_timer.timeout.connect(func() -> void: _on_dot_timer_timeout(dot_timer, source_type))
 	dot_timer.name = source_type + "_timer" + str(randf())
 	add_child(dot_timer)
 
@@ -88,7 +88,7 @@ func handle_over_time_dmg(dot_resource: DOTResource, source_type: String) -> voi
 		else:
 			dot_timer.wait_time = max(0.01, dot_resource.time_between_ticks)
 
-		delay_timer.timeout.connect(func(): _on_dot_timer_timeout(dot_timer, source_type))
+		delay_timer.timeout.connect(func() -> void: _on_dot_timer_timeout(dot_timer, source_type))
 		delay_timer.timeout.connect(dot_timer.start)
 		delay_timer.timeout.connect(delay_timer.queue_free)
 		delay_timer.name = source_type + "_delayTimer" + str(randf())
@@ -121,17 +121,17 @@ func _add_timer_to_cache(source_type: String, timer: Timer, cache: Dictionary) -
 
 ## Deletes all timers for a source type from the timer cache dict.
 func _delete_timers_from_caches(source_type: String) -> void:
-	var timers = dot_timers.get(source_type, null)
+	var timers: Array = dot_timers.get(source_type, [null])
 	if timers:
-		for timer in timers:
+		for timer: Timer in timers:
 			if timer != null:
 				timer.stop()
 				timer.queue_free()
 		dot_timers.erase(source_type)
 
-	var delay_timers = dot_delay_timers.get(source_type, null)
+	var delay_timers: Array = dot_delay_timers.get(source_type, [null])
 	if delay_timers:
-		for delay_timer in delay_timers:
+		for delay_timer: Timer in delay_timers:
 			if delay_timer != null:
 				delay_timer.stop()
 				delay_timer.queue_free()

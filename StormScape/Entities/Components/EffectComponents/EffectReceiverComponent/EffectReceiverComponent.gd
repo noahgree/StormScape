@@ -35,7 +35,7 @@ var hit_flash_timer: Timer = Timer.new()
 
 
 ## This works with the tool script defined above to assign export vars automatically in-editor once added to the tree.
-func _notification(what):
+func _notification(what: int) -> void:
 	if Engine.is_editor_hint():
 		if what == NOTIFICATION_CHILD_ORDER_CHANGED:
 			if tool_script: tool_script.update_editor_children_exports(self, get_children())
@@ -108,15 +108,15 @@ func handle_effect_source(effect_source: EffectSource, source_entity: PhysicsBod
 
 ## Checks if each status effect in the array applies to this entity via team logic, then passes it to be unpacked.
 func _check_status_effect_team_logic(effect_source: EffectSource, source_entity: PhysicsBody2D) -> void:
-	var is_same_team = _check_same_team(source_entity)
-	var bad_effects_to_enemies = not is_same_team and _check_if_bad_effects_apply_to_enemies(effect_source)
-	var good_effects_to_enemies = not is_same_team and _check_if_good_effects_apply_to_enemies(effect_source)
-	var bad_effects_to_allies = is_same_team and _check_if_bad_effects_apply_to_allies(effect_source)
-	var good_effects_to_allies = is_same_team and _check_if_good_effects_apply_to_allies(effect_source)
+	var is_same_team: bool = _check_same_team(source_entity)
+	var bad_effects_to_enemies: bool = not is_same_team and _check_if_bad_effects_apply_to_enemies(effect_source)
+	var good_effects_to_enemies: bool = not is_same_team and _check_if_good_effects_apply_to_enemies(effect_source)
+	var bad_effects_to_allies: bool = is_same_team and _check_if_bad_effects_apply_to_allies(effect_source)
+	var good_effects_to_allies: bool = is_same_team and _check_if_good_effects_apply_to_allies(effect_source)
 
-	for status_effect in effect_source.status_effects:
+	for status_effect: StatusEffect in effect_source.status_effects:
 		if status_effect:
-			var applies_to_target = (status_effect.is_bad_effect and (bad_effects_to_enemies or bad_effects_to_allies)) or (not status_effect.is_bad_effect and (good_effects_to_enemies or good_effects_to_allies))
+			var applies_to_target: bool = (status_effect.is_bad_effect and (bad_effects_to_enemies or bad_effects_to_allies)) or (not status_effect.is_bad_effect and (good_effects_to_enemies or good_effects_to_allies))
 
 			if applies_to_target:
 				handle_status_effect(status_effect)
@@ -127,12 +127,8 @@ func handle_status_effect(status_effect: StatusEffect) -> void:
 	if ("Untouchable" in affected_entity.effects.current_effects) and (status_effect.is_bad_effect):
 		return
 
-	for effect_to_stop in status_effect.effects_to_stop:
+	for effect_to_stop: String in status_effect.effects_to_stop:
 		affected_entity.effects.request_effect_removal(effect_to_stop)
-
-	if not ((affected_entity is not Player) and status_effect.only_cue_on_player_hit):
-		if status_effect.audio_to_play != "":
-			AudioManager.play_sound(status_effect.audio_to_play, AudioManager.SoundType.SFX_2D, affected_entity.global_position)
 
 	affected_entity.effects.handle_status_effect(status_effect)
 	_pass_effect_to_handler(status_effect)
@@ -142,14 +138,34 @@ func handle_status_effect(status_effect: StatusEffect) -> void:
 
 ## Passes the status effect to a handler if one is needed for additional logic handling.
 func _pass_effect_to_handler(status_effect: StatusEffect) -> void:
-	if storm_syndrome_handler and status_effect is StormSyndromeEffect: storm_syndrome_handler.handle_storm_syndrome(status_effect)
-	if knockback_handler and status_effect is KnockbackEffect: knockback_handler.handle_knockback(status_effect)
-	if stun_handler and status_effect is StunEffect: stun_handler.handle_stun(status_effect)
-	if poison_handler and status_effect is PoisonEffect: poison_handler.handle_poison(status_effect)
-	if regen_handler and status_effect is RegenEffect: regen_handler.handle_regen(status_effect)
-	if frostbite_handler and status_effect is FrostbiteEffect: frostbite_handler.handle_frostbite(status_effect)
-	if burning_handler and status_effect is BurningEffect: burning_handler.handle_burning(status_effect)
-	if time_snare_handler and status_effect is TimeSnareEffect: time_snare_handler.handle_time_snare(status_effect)
+	if status_effect is StormSyndromeEffect:
+		if storm_syndrome_handler: storm_syndrome_handler.handle_storm_syndrome(status_effect)
+		else: return
+	if status_effect is KnockbackEffect:
+		if knockback_handler: knockback_handler.handle_knockback(status_effect)
+		else: return
+	if status_effect is StunEffect:
+		if stun_handler: stun_handler.handle_stun(status_effect)
+		else: return
+	if status_effect is PoisonEffect:
+		if poison_handler: poison_handler.handle_poison(status_effect)
+		else: return
+	if status_effect is RegenEffect:
+		if regen_handler: regen_handler.handle_regen(status_effect)
+		else: return
+	if status_effect is FrostbiteEffect:
+		if frostbite_handler: frostbite_handler.handle_frostbite(status_effect)
+		else: return
+	if status_effect is BurningEffect:
+		if burning_handler: burning_handler.handle_burning(status_effect)
+		else: return
+	if status_effect is TimeSnareEffect:
+		if time_snare_handler: time_snare_handler.handle_time_snare(status_effect)
+		else: return
+
+	if not ((affected_entity is not Player) and status_effect.only_cue_on_player_hit):
+		if status_effect.audio_to_play != "":
+			AudioManager.play_sound(status_effect.audio_to_play, AudioManager.SoundType.SFX_2D, affected_entity.global_position)
 
 ## Checks if the affected entity is on the same team as the producer of the effect source.
 func _check_same_team(source_entity: PhysicsBody2D) -> bool:
@@ -183,9 +199,9 @@ func _update_hit_flash(effect_source: EffectSource = null, start: bool = false) 
 ## Checks if there is a life steal effect in the status effects and returns the percent to steal if so.
 func _get_life_steal(effect_source: EffectSource, source_entity: PhysicsBody2D) -> float:
 	if can_receive_status_effects and life_steal_handler != null:
-		for status_effect in effect_source.status_effects:
+		for status_effect: StatusEffect in effect_source.status_effects:
 			if status_effect is LifeStealEffect:
 				life_steal_handler.source_entity = source_entity
-				return status_effect.dmg_steal_mult
+				return status_effect.dmg_steal
 
 	return 0.0

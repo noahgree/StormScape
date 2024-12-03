@@ -32,10 +32,10 @@ func _physics_process(delta: float) -> void:
 	if player != null:
 		if smoothing_enabled:
 			var camera_pos: Vector2 = global_position
-			var screen_size = get_viewport_rect().size
-			var vertical_limit = screen_size.y * drag_vertical
-			var horizontal_limit = screen_size.x * drag_horizontal
-			var player_screen_pos = to_local(player.global_position)
+			var screen_size: Vector2 = get_viewport_rect().size
+			var vertical_limit: float = screen_size.y * drag_vertical
+			var horizontal_limit: float = screen_size.x * drag_horizontal
+			var player_screen_pos: Vector2 = to_local(player.global_position)
 
 			# Check vertical threshold
 			if player_screen_pos.y < -vertical_limit:

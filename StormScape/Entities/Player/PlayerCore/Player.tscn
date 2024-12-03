@@ -1,4 +1,4 @@
-[gd_scene load_steps=151 format=3 uid="uid://dba8mrurjlekp"]
+[gd_scene load_steps=152 format=3 uid="uid://dba8mrurjlekp"]
 
 [ext_resource type="Script" path="res://Entities/Player/PlayerCore/Player.gd" id="1_m33tt"]
 [ext_resource type="Script" path="res://Entities/Stats/StatMod/StatModsCacheResource.gd" id="2_vetip"]
@@ -54,6 +54,7 @@
 [ext_resource type="PackedScene" uid="uid://b7gdy01q8wsjx" path="res://Entities/Components/ItemComponents/HandsComponent/HandsComponent.tscn" id="39_ngono"]
 [ext_resource type="Shader" path="res://UI/Shaders/BlurBehind.gdshader" id="39_r4tgk"]
 [ext_resource type="Texture2D" uid="uid://xnppg0u7t7w4" path="res://UI/PlayerStatsOverlay/Assets/Stamina Recharge Under.png" id="39_ryeha"]
+[ext_resource type="Script" path="res://UI/Inventory/PlayerInventory/Crafting/CraftingIngredient.gd" id="40_3yx82"]
 [ext_resource type="Texture2D" uid="uid://gfbxblly7q78" path="res://UI/PlayerStatsOverlay/Assets/Stamina Recharge Bar.png" id="40_suqvl"]
 [ext_resource type="Script" path="res://UI/Inventory/InventoryCore/InventoryPopulator.gd" id="41_nwjbq"]
 [ext_resource type="Resource" uid="uid://b6tg3hfcver2x" path="res://Entities/Items/WorldResources/OakLog.tres" id="41_sesym"]
@@ -1140,6 +1141,7 @@ script = ExtResource("39_7aiab")
 ammo_type = 1
 id = "light_ammo"
 name = "Light Ammo"
+tags = Array[String]([])
 icon = ExtResource("38_60ydo")
 thumbnail = ExtResource("38_60ydo")
 item_type = 2
@@ -1149,6 +1151,8 @@ stack_size = 64
 auto_pickup = true
 pickup_radius = 4
 info = "Ammo used in light weapons like pistols."
+recipe = Array[ExtResource("40_3yx82")]([])
+output_quantity = 1
 rotation_lerping = 0.1
 holding_offset = Vector2(0, 0)
 holding_degrees = 0.0

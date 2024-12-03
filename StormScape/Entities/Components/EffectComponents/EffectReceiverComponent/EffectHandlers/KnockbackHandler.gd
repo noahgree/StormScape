@@ -38,7 +38,7 @@ func handle_knockback(knockback_effect: KnockbackEffect) -> void:
 		handle_rigid_entity_knockback(knockback_effect)
 
 func handle_dynamic_entity_knockback(knockback_effect: KnockbackEffect) -> void:
-	var entity_move_dir = effect_receiver.affected_entity.velocity.normalized()
+	var entity_move_dir: Vector2 = effect_receiver.affected_entity.velocity.normalized()
 	var effect_dir: Vector2
 
 	if is_source_moving_type:
@@ -88,7 +88,7 @@ func _send_handled_knockback(knockback_dir: Vector2, force: int) -> void:
 		return
 	var knockback_boost: float = effect_receiver.affected_entity.stats.get_stat("knockback_boost")
 	var knockback_resistance: float = effect_receiver.affected_entity.stats.get_stat("knockback_resistance")
-	var handled_knockback = knockback_dir * force * max(0, (1 + knockback_boost - knockback_resistance))
+	var handled_knockback: Vector2 = knockback_dir * force * max(0, (1 + knockback_boost - knockback_resistance))
 
 	if effect_receiver.affected_entity is DynamicEntity:
 		if effect_receiver.affected_entity.has_method("request_knockback"):
