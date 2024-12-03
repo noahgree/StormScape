@@ -1,4 +1,4 @@
-[gd_scene load_steps=150 format=3 uid="uid://dba8mrurjlekp"]
+[gd_scene load_steps=151 format=3 uid="uid://dba8mrurjlekp"]
 
 [ext_resource type="Script" path="res://Entities/Player/PlayerCore/Player.gd" id="1_m33tt"]
 [ext_resource type="Script" path="res://Entities/Stats/StatMod/StatModsCacheResource.gd" id="2_vetip"]
@@ -30,6 +30,7 @@
 [ext_resource type="Script" path="res://Utilities/Debug/TestButtons.gd" id="17_vdk5v"]
 [ext_resource type="Script" path="res://Entities/Player/States/MoveStates/Die/Die.gd" id="18_jcofa"]
 [ext_resource type="Script" path="res://Entities/Player/States/MoveStates/Sneak/Sneak.gd" id="19_alhqe"]
+[ext_resource type="PackedScene" uid="uid://b4bmp3jehto3g" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/LifeStealHandler.tscn" id="20_f770q"]
 [ext_resource type="Texture2D" uid="uid://crawnbhc5weqf" path="res://Entities/EntityCore/EntityTypes/DynamicEntity/entity_footstep.png" id="22_7y82q"]
 [ext_resource type="PackedScene" uid="uid://biduyqlpqhmrp" path="res://Entities/Player/States/MoveStates/Stunned/StunIndicator.tscn" id="27_fyxoi"]
 [ext_resource type="PackedScene" uid="uid://c4n604w30gx8m" path="res://Entities/Components/ItemComponents/ItemReceiverComponent/ItemReceiverComponent.tscn" id="30_qgyag"]
@@ -1330,6 +1331,8 @@ debug_color = Color(1, 0.294, 0.588, 0.06)
 [node name="BurningHandler" parent="EffectReceiverComponent" instance=ExtResource("14_q2ueb")]
 
 [node name="TimeSnareHandler" parent="EffectReceiverComponent" instance=ExtResource("14_63vgk")]
+
+[node name="LifeStealHandler" parent="EffectReceiverComponent" instance=ExtResource("20_f770q")]
 
 [node name="StatusEffectManager" parent="." node_paths=PackedStringArray("effect_receiver", "stats_ui") instance=ExtResource("6_n0x5k")]
 effect_receiver = NodePath("../EffectReceiverComponent")

@@ -11,6 +11,8 @@ class_name BurningHandler
 
 ## Sets up moddable stats.
 func _ready() -> void:
+	assert(get_parent().has_node("DmgHandler"), get_parent().get_parent().name + " has a BurningHandler but no DmgHandler.")
+
 	var moddable_stats: Dictionary = {
 		"burning_weakness" : _burning_weakness, "burning_resistance" : _burning_resistance
 	}

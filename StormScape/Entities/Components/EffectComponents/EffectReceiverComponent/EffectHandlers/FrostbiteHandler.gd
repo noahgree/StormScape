@@ -10,6 +10,8 @@ class_name FrostbiteHandler
 
 ## Sets up moddable stats.
 func _ready() -> void:
+	assert(get_parent().has_node("DmgHandler"), get_parent().get_parent().name + " has a FrostbiteHandler but no DmgHandler.")
+
 	var moddable_stats: Dictionary = {
 		"frostbite_weakness" : _frostbite_weakness, "frostbite_resistance" : _frostbite_resistance
 	}

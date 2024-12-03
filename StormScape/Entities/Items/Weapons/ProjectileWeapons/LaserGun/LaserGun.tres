@@ -9,7 +9,7 @@
 [ext_resource type="Resource" uid="uid://c050ytbbmgfem" path="res://Entities/Stats/EffectSystemResources/StatusEffects/BadEffects/Slowness/Slowness1.tres" id="5_52wyp"]
 [ext_resource type="Script" path="res://Entities/Items/Hitscans/HitscanResource.gd" id="5_qsiix"]
 [ext_resource type="PackedScene" uid="uid://baxpb3crwepc0" path="res://Entities/Items/Weapons/ProjectileWeapons/LaserGun/LaserGun.tscn" id="6_gbfef"]
-[ext_resource type="Resource" uid="uid://dvew5cy3k7s48" path="res://Entities/Stats/EffectSystemResources/StatusEffects/BadEffects/Burning/Burning1.tres" id="8_34pbj"]
+[ext_resource type="Resource" uid="uid://c6aw6ev8jctgk" path="res://Entities/Stats/EffectSystemResources/StatusEffects/BadEffects/LifeSteal/LifeSteal2.tres" id="8_qhu50"]
 [ext_resource type="Resource" uid="uid://c0gxq4ufi3snt" path="res://Entities/Stats/EffectSystemResources/StatusEffects/GoodEffects/Speed/Speed2.tres" id="9_566jc"]
 [ext_resource type="Script" path="res://Entities/Items/Projectiles/ProjectileResource.gd" id="9_bgryc"]
 [ext_resource type="Script" path="res://Entities/Stats/StatMod/StatModsCacheResource.gd" id="12_lft8x"]
@@ -150,7 +150,7 @@ scanned_phys_layers = 191
 can_hit_self = false
 bad_effect_affected_teams = 3
 good_effect_affected_teams = 3
-base_damage = 2
+base_damage = 10
 dmg_affected_stats = 2
 crit_chance = 5
 crit_multiplier = 1.5
@@ -163,7 +163,7 @@ cam_freeze_multiplier = 1.0
 cam_freeze_duration = 0.0
 impact_sound = ""
 hit_flash_color = Color(1, 1, 1, 0.45)
-status_effects = Array[ExtResource("2_ectm3")]([ExtResource("8_34pbj")])
+status_effects = Array[ExtResource("2_ectm3")]([ExtResource("8_qhu50")])
 contact_position = Vector2(0, 0)
 movement_direction = Vector2(0, 0)
 

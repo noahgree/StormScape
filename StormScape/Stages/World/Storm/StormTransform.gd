@@ -13,7 +13,7 @@ class_name StormTransform
 
 @export_subgroup("Status Effect")
 @export_enum("Override", "Revert to Default", "Keep Previous") var effect_setting: String = "Keep Previous" ## Determines how to change the status effect for this incoming phase.
-@export var status_effect: StatusEffect = null ## The new status effect to apply. Leave null to keep the old one.
+@export var status_effect: StatusEffect = null ## The new status effect to apply. Leave null to keep the old one. [b]MUST NOT REQUIRE AN EFFECT SOURCE[/b] because no source entity or movement direction information will be passed (Knockback, LifeSteal).
 
 @export_subgroup("Visuals")
 @export_enum("Override", "Revert to Default", "Keep Previous") var visuals_setting: String = "Keep Previous" ## Determines how to apply visuals for this incoming phase.

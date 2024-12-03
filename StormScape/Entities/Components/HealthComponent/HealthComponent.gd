@@ -43,11 +43,12 @@ func damage_shield_then_health(amount: int, was_crit: bool = false) -> void:
 			_play_shield_damage_sound()
 		else:
 			EffectPopup.create_popup(EffectPopup.PopupTypes.CRIT_DMG if was_crit else EffectPopup.PopupTypes.HEALTH_DMG, amount, get_parent())
+
 	var spillover_damage: int = max(0, amount - shield)
-	@warning_ignore("narrowing_conversion") shield = clampi(shield - amount, 0, get_parent().stats.get_stat("max_shield"))
+	@warning_ignore("narrowing_conversion") shield = max(0, shield - amount)
 
 	if spillover_damage > 0:
-		@warning_ignore("narrowing_conversion") health = clampi(health - spillover_damage, 0, get_parent().stats.get_stat("max_health"))
+		@warning_ignore("narrowing_conversion") health = max(0, health - spillover_damage)
 	_check_for_death()
 
 ## Decrements only the health value by the passed in amount.

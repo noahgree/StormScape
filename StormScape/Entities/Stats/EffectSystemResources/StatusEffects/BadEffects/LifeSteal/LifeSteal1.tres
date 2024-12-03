@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="LifeStealEffect" load_steps=3 format=3 uid="uid://opqylasujopp"]
+
+[ext_resource type="Script" path="res://Entities/Stats/EffectSystemResources/StatusEffects/BadEffects/LifeSteal/LifeStealEffect.gd" id="1_b8skv"]
+[ext_resource type="Script" path="res://Entities/Stats/StatMod/StatMod.gd" id="2_pd8bh"]
+
+[resource]
+script = ExtResource("1_b8skv")
+dmg_steal_mult = 0.25
+effect_name = "Life Steal"
+effect_lvl = 1
+is_bad_effect = true
+effects_to_stop = Array[String]([])
+mod_time = 0.5
+apply_until_removed = false
+stat_mods = Array[ExtResource("2_pd8bh")]([])
+audio_to_play = ""
+only_cue_on_player_hit = false
+spawn_particles = true
+particles_req_handler = true

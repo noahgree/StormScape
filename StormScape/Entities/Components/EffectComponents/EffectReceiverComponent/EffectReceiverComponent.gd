@@ -26,6 +26,7 @@ class_name EffectReceiverComponent
 @export var frostbite_handler: FrostbiteHandler
 @export var burning_handler: BurningHandler
 @export var time_snare_handler: TimeSnareHandler
+@export var life_steal_handler: LifeStealHandler
 
 @onready var tool_script: Node = $EffectReceiverToolScript
 
@@ -84,10 +85,10 @@ func handle_effect_source(effect_source: EffectSource, source_entity: PhysicsBod
 
 	if effect_source.base_damage > 0 and has_node("DmgHandler"):
 		if _check_same_team(source_entity) and _check_if_bad_effects_apply_to_allies(effect_source):
-			$DmgHandler.handle_instant_damage(effect_source)
+			$DmgHandler.handle_instant_damage(effect_source, _get_life_steal(effect_source, source_entity))
 			if loot_table_component: loot_table_component.handle_effect_source(effect_source, source_entity)
 		elif not _check_same_team(source_entity) and _check_if_bad_effects_apply_to_enemies(effect_source):
-			$DmgHandler.handle_instant_damage(effect_source)
+			$DmgHandler.handle_instant_damage(effect_source, _get_life_steal(effect_source, source_entity))
 			if loot_table_component: loot_table_component.handle_effect_source(effect_source, source_entity)
 
 	if effect_source.base_healing > 0 and has_node("HealHandler"):
@@ -98,7 +99,7 @@ func handle_effect_source(effect_source: EffectSource, source_entity: PhysicsBod
 				$HealHandler.handle_instant_heal(effect_source.base_healing, effect_source.heal_affected_stats)
 
 	if can_receive_status_effects:
-		if has_node("KnockbackHandler"):
+		if knockback_handler:
 			knockback_handler.contact_position = effect_source.contact_position
 			knockback_handler.effect_movement_direction = effect_source.movement_direction
 			knockback_handler.is_source_moving_type = effect_source.is_projectile
@@ -178,3 +179,13 @@ func _update_hit_flash(effect_source: EffectSource = null, start: bool = false) 
 		hit_flash_timer.start()
 	else:
 		affected_entity.sprite.material.set_shader_parameter("tint_color", Color(1.0, 1.0, 1.0, 0.0))
+
+## Checks if there is a life steal effect in the status effects and returns the percent to steal if so.
+func _get_life_steal(effect_source: EffectSource, source_entity: PhysicsBody2D) -> float:
+	if can_receive_status_effects and life_steal_handler != null:
+		for status_effect in effect_source.status_effects:
+			if status_effect is LifeStealEffect:
+				life_steal_handler.source_entity = source_entity
+				return status_effect.dmg_steal_mult
+
+	return 0.0

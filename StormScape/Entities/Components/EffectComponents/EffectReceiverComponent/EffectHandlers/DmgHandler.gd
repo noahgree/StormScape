@@ -62,10 +62,10 @@ func _get_dmg_after_crit_then_armor(effect_source: EffectSource, is_crit: bool) 
 	return new_damage
 
 ## Handles instantaneous damage that will be affected by armor.
-func handle_instant_damage(effect_source: EffectSource) -> void:
+func handle_instant_damage(effect_source: EffectSource, life_steal_percent: float = 0.0) -> void:
 	var is_crit: bool = randf_range(0, 100) <= effect_source.crit_chance
 	var dmg_after_crit_then_armor: int = _get_dmg_after_crit_then_armor(effect_source, is_crit)
-	_send_handled_dmg(effect_source.dmg_affected_stats, dmg_after_crit_then_armor, is_crit)
+	_send_handled_dmg(effect_source.dmg_affected_stats, dmg_after_crit_then_armor, is_crit, life_steal_percent)
 
 ## Handles applying damage that is inflicted over time, whether with a delay, with burst intervals, or with both.
 func handle_over_time_dmg(dot_resource: DOTResource, source_type: String) -> void:
@@ -162,10 +162,13 @@ func _on_dot_timer_timeout(dot_timer: Timer, source_type: String) -> void:
 
 ## Sends the affected entity's health component the final damage values based on what stats the damage was
 ## allowed to affect.
-func _send_handled_dmg(dmg_affected_stats: GlobalData.DmgAffectedStats, handled_amount: int, was_crit: bool) -> void:
+func _send_handled_dmg(dmg_affected_stats: GlobalData.DmgAffectedStats, handled_amount: int,
+						was_crit: bool, life_steal_percent: float = 0.0) -> void:
 	var dmg_weakness: float = get_parent().affected_entity.stats.get_stat("dmg_weakness")
 	var dmg_resistance: float = get_parent().affected_entity.stats.get_stat("dmg_resistance")
 	var positive_dmg: int = max(0, handled_amount * (1 + dmg_weakness - dmg_resistance))
+
+	_pass_damage_to_potential_life_steal_handler(positive_dmg, life_steal_percent)
 
 	match dmg_affected_stats:
 		GlobalData.DmgAffectedStats.HEALTH_ONLY:
@@ -177,3 +180,9 @@ func _send_handled_dmg(dmg_affected_stats: GlobalData.DmgAffectedStats, handled_
 		GlobalData.DmgAffectedStats.SIMULTANEOUS:
 			health_component.damage_shield(positive_dmg, was_crit)
 			health_component.damage_health(positive_dmg, was_crit)
+
+
+func _pass_damage_to_potential_life_steal_handler(amount: int, percent_to_steal: float) -> void:
+	if percent_to_steal > 0:
+		var handler: LifeStealHandler = get_parent().life_steal_handler
+		handler.handle_life_steal(amount, percent_to_steal)

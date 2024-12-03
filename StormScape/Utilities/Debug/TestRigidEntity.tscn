@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=3 uid="uid://xsq1q0fffsin"]
+[gd_scene load_steps=24 format=3 uid="uid://xsq1q0fffsin"]
 
 [ext_resource type="Script" path="res://Entities/EntityCore/EntityTypes/RigidEntity/RigidEntity.gd" id="1_6tnit"]
 [ext_resource type="PackedScene" uid="uid://dmv4k4j4lg3pw" path="res://Entities/EntityCore/EntityStaticSprite.tscn" id="3_rn076"]
@@ -12,6 +12,7 @@
 [ext_resource type="PackedScene" uid="uid://ddj5ippwwkvop" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/HealHandler.tscn" id="11_e8ceb"]
 [ext_resource type="PackedScene" uid="uid://tc2awdm3onyi" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/PoisonHandler.tscn" id="12_ptlrc"]
 [ext_resource type="PackedScene" uid="uid://bhg7jmodo3t5t" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/FrostbiteHandler.tscn" id="13_0vlu7"]
+[ext_resource type="PackedScene" uid="uid://b4bmp3jehto3g" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/LifeStealHandler.tscn" id="13_mscgs"]
 [ext_resource type="PackedScene" uid="uid://co3n6m7efg8pd" path="res://Entities/Components/EffectComponents/StatusEffectManager/StatusEffectManager.tscn" id="14_20kf8"]
 [ext_resource type="PackedScene" uid="uid://c4kt3bx0ot3c7" path="res://Entities/Components/ItemComponents/LootTableComponent/LootTableComponent.tscn" id="15_1vdsh"]
 [ext_resource type="Script" path="res://Entities/Components/ItemComponents/LootTableComponent/LootTableEntry.gd" id="16_fkdnf"]
@@ -71,7 +72,7 @@ debug_color = Color(1.44392e-06, 0.568839, 0.851513, 0.42)
 
 [node name="HealthComponent" parent="." instance=ExtResource("6_1wa26")]
 
-[node name="EffectReceiverComponent" parent="." node_paths=PackedStringArray("affected_entity", "health_component", "loot_table_component", "dmg_handler", "heal_handler", "knockback_handler", "poison_handler", "frostbite_handler", "burning_handler") instance=ExtResource("7_ftqus")]
+[node name="EffectReceiverComponent" parent="." node_paths=PackedStringArray("affected_entity", "health_component", "loot_table_component", "dmg_handler", "heal_handler", "knockback_handler", "poison_handler", "frostbite_handler", "burning_handler", "life_steal_handler") instance=ExtResource("7_ftqus")]
 position = Vector2(0, -10)
 affected_entity = NodePath("..")
 health_component = NodePath("../HealthComponent")
@@ -82,6 +83,7 @@ knockback_handler = NodePath("KnockbackHandler")
 poison_handler = NodePath("PoisonHandler")
 frostbite_handler = NodePath("FrostbiteHandler")
 burning_handler = NodePath("BurningHandler")
+life_steal_handler = NodePath("LifeStealHandler")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="EffectReceiverComponent"]
 shape = SubResource("RectangleShape2D_wpovd")
@@ -98,6 +100,8 @@ debug_color = Color(0.941042, 1.32841e-05, 0.612344, 0.42)
 [node name="PoisonHandler" parent="EffectReceiverComponent" instance=ExtResource("12_ptlrc")]
 
 [node name="FrostbiteHandler" parent="EffectReceiverComponent" instance=ExtResource("13_0vlu7")]
+
+[node name="LifeStealHandler" parent="EffectReceiverComponent" instance=ExtResource("13_mscgs")]
 
 [node name="StatusEffectManager" parent="." node_paths=PackedStringArray("effect_receiver") instance=ExtResource("14_20kf8")]
 effect_receiver = NodePath("../EffectReceiverComponent")

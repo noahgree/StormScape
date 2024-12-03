@@ -11,13 +11,15 @@ class_name PoisonHandler
 
 ## Sets up moddable stats.
 func _ready() -> void:
+	assert(get_parent().has_node("DmgHandler"), get_parent().get_parent().name + " has a PoisonHandler but no DmgHandler.")
+
 	var moddable_stats: Dictionary = {
 		"poison_weakness" : _poison_weakness, "poison_resistance" : _poison_resistance
 	}
 	effect_receiver.affected_entity.stats.add_moddable_stats(moddable_stats)
 
 func handle_poison(poison_effect: PoisonEffect) -> void:
-	if poison_effect.dot_resource != null: # needed for when we nullify on game load
+	if poison_effect.dot_resource != null: # Needed for when we nullify on game load
 		var local_dot_resource: DOTResource = poison_effect.dot_resource.duplicate()
 		var poison_weakness: float = effect_receiver.affected_entity.stats.get_stat("poison_weakness")
 		var poison_resistance: float = effect_receiver.affected_entity.stats.get_stat("poison_resistance")
