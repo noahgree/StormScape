@@ -86,8 +86,9 @@
 script = ExtResource("2_vetip")
 debug_print_mod_changes = true
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_o7k7i"]
-radius = 7.0
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_3f130"]
+radius = 5.0
+height = 14.0
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_0tj2u"]
 resource_local_to_scene = true
@@ -101,7 +102,7 @@ shader_parameter/frame_uv_min = null
 shader_parameter/frame_uv_max = null
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_7dc0v"]
-size = Vector2(12, 15)
+size = Vector2(14, 15)
 
 [sub_resource type="Animation" id="Animation_sys1a"]
 length = 0.001
@@ -1267,8 +1268,9 @@ stats = SubResource("Resource_rwbul")
 
 [node name="Collision" type="CollisionShape2D" parent="."]
 position = Vector2(0, -5)
-shape = SubResource("CircleShape2D_o7k7i")
-debug_color = Color(0, 0.6, 0.701961, 0.180392)
+rotation = 1.5708
+shape = SubResource("CapsuleShape2D_3f130")
+debug_color = Color(0.635375, 0.527557, 0, 0.180392)
 
 [node name="AudioListener2D" type="AudioListener2D" parent="."]
 current = true

@@ -33,3 +33,5 @@ func update_editor_parent_export(node: EffectReceiverComponent, parent: Node) ->
 		node.stamina_component = parent.get_node("StaminaComponent")
 	if parent.has_node("LootTableComponent"):
 		node.loot_table_component = parent.get_node("LootTableComponent")
+	if parent.has_node("StatusEffectManager"):
+		parent.get_node("StatusEffectManager").effect_receiver = get_parent()

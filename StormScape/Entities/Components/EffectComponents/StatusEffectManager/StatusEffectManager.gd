@@ -35,12 +35,16 @@ func _on_before_load_game() -> void:
 func _on_load_game() -> void:
 	for status_effect: StatusEffect in current_effects.values():
 		var clean_status_effect: StatusEffect = status_effect.duplicate()
+		var effect_delay: float = 0
 
-		clean_status_effect.mod_time = saved_times_left.get(status_effect.effect_name, 0.001)
 		if "dot_resource" in clean_status_effect:
 			clean_status_effect.dot_resource = null
+			effect_delay = status_effect.dot_resource.delay_time
 		if "hot_resource" in clean_status_effect:
 			clean_status_effect.hot_resource = null
+			effect_delay = status_effect.hot_resource.delay_time
+
+		clean_status_effect.mod_time = saved_times_left.get(status_effect.effect_name, 0.001) + effect_delay
 
 		if DebugFlags.PrintFlags.current_effect_changes and print_effect_updates:
 			print_rich("-------[color=green]Restoring[/color][b] " + str(status_effect.effect_name) + str(status_effect.effect_lvl) + "[/b]-------")

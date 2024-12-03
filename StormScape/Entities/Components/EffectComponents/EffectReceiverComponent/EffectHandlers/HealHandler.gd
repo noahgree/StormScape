@@ -11,17 +11,21 @@ var saved_hots: Dictionary = {} ## Saves the running HOT instances and the progr
 
 
 #region Save & Load
-func _on_save_game(_save_data: Array[SaveData]) -> void:
+func _on_before_save_game() -> void:
+	saved_hots.clear()
+
 	for source_type in hot_timers.keys():
-		saved_hots[source_type] = []
 		for timer in hot_timers[source_type]:
 			var clean_resource: HOTResource = timer.get_meta("hot_resource").duplicate()
 			var ticks_completed: int = timer.get_meta("ticks_completed")
 			var original_tick_count: int = clean_resource.heal_ticks_array.size()
 			clean_resource.heal_ticks_array = clean_resource.heal_ticks_array.slice(ticks_completed, clean_resource.heal_ticks_array.size())
-			clean_resource.delay_time = max(randf_range(1, 2.5), clean_resource.delay_time)
+			clean_resource.delay_time = max(randf(), clean_resource.delay_time + randf())
 			clean_resource.healing_time = clean_resource.healing_time * (1 - (float(ticks_completed) / float(original_tick_count)))
-			saved_hots[source_type].append(clean_resource)
+			if source_type in saved_hots:
+				saved_hots[source_type].append(clean_resource)
+			else:
+				saved_hots[source_type] = [clean_resource]
 
 func _on_before_load_game() -> void:
 	hot_timers = {}
@@ -29,12 +33,10 @@ func _on_before_load_game() -> void:
 	for child in get_children():
 		child.queue_free()
 
-func _on_load_game() -> void:
+func _on_game_finished_loading() -> void:
 	for source_type in saved_hots.keys():
 		for hot_instance: HOTResource in saved_hots.get(source_type):
 			handle_over_time_heal(hot_instance, source_type)
-
-		saved_hots.erase(source_type)
 #endregion
 
 ## Asserts that there is a valid health component on the affected entity before trying to handle healing.

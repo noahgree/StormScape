@@ -1,0 +1,93 @@
+[gd_scene load_steps=17 format=3 uid="uid://bond8rty1ljh"]
+
+[ext_resource type="Script" path="res://Entities/EntityCore/EntityTypes/StaticEntity/StaticEntity.gd" id="1_uvrwn"]
+[ext_resource type="Script" path="res://Entities/Components/HitboxComponent/HitboxComponent.gd" id="2_2xq31"]
+[ext_resource type="PackedScene" uid="uid://dmv4k4j4lg3pw" path="res://Entities/EntityCore/EntityStaticSprite.tscn" id="2_417jd"]
+[ext_resource type="Script" path="res://Entities/Stats/EffectSystemResources/EffectSources/EffectSource.gd" id="3_rckyr"]
+[ext_resource type="Shader" path="res://Entities/EntityCore/EntityEffectShader.gdshader" id="3_xscca"]
+[ext_resource type="Script" path="res://Entities/Stats/EffectSystemResources/StatusEffects/StatusEffect.gd" id="4_wslqq"]
+[ext_resource type="Resource" uid="uid://b0it5xmpw16sd" path="res://Entities/Stats/EffectSystemResources/StatusEffects/BadEffects/Knockback/Knockback1.tres" id="5_fxb1e"]
+[ext_resource type="Resource" uid="uid://dvew5cy3k7s48" path="res://Entities/Stats/EffectSystemResources/StatusEffects/BadEffects/Burning/Burning1.tres" id="6_8j6dp"]
+[ext_resource type="Texture2D" uid="uid://2xf1pqc78iin" path="res://Assets/Icon/icon.svg" id="7_7nbuj"]
+[ext_resource type="PackedScene" uid="uid://btba0jmsow1mx" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectReceiverComponent.tscn" id="10_o35vp"]
+[ext_resource type="PackedScene" uid="uid://co3n6m7efg8pd" path="res://Entities/Components/EffectComponents/StatusEffectManager/StatusEffectManager.tscn" id="11_swclu"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_s5j4o"]
+resource_local_to_scene = true
+shader = ExtResource("3_xscca")
+shader_parameter/glow_color = Color(1, 1, 1, 1)
+shader_parameter/glow_size = 4.5
+shader_parameter/glow_strength = 9.0
+shader_parameter/enable_fade = false
+shader_parameter/tint_color = Color(0.60858, 0, 0.0212126, 0.901)
+shader_parameter/frame_uv_min = null
+shader_parameter/frame_uv_max = null
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ur1i4"]
+size = Vector2(12, 12)
+
+[sub_resource type="Resource" id="Resource_sx5ie"]
+script = ExtResource("3_rckyr")
+is_projectile = false
+scanned_phys_layers = 191
+can_hit_self = false
+bad_effect_affected_teams = 3
+good_effect_affected_teams = 3
+base_damage = 0
+dmg_affected_stats = 2
+crit_chance = 0
+crit_multiplier = 1.5
+armor_penetration = 0
+base_healing = 0
+heal_affected_stats = 2
+cam_shake_strength = 0.0
+cam_shake_duration = 0.0
+cam_freeze_multiplier = 1.0
+cam_freeze_duration = 0.0
+impact_sound = ""
+hit_flash_color = Color(1, 1, 1, 0.45)
+status_effects = Array[ExtResource("4_wslqq")]([ExtResource("5_fxb1e"), ExtResource("6_8j6dp")])
+contact_position = Vector2(0, 0)
+movement_direction = Vector2(0, 0)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_o8yml"]
+size = Vector2(14, 14)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_opl06"]
+size = Vector2(14, 14)
+
+[node name="TestStaticEntity" type="StaticBody2D"]
+collision_mask = 245
+script = ExtResource("1_uvrwn")
+team = 2
+
+[node name="EntitySprite" parent="." instance=ExtResource("2_417jd")]
+material = SubResource("ShaderMaterial_s5j4o")
+position = Vector2(0, -7)
+scale = Vector2(0.11, 0.11)
+texture = ExtResource("7_7nbuj")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -7)
+shape = SubResource("RectangleShape2D_ur1i4")
+
+[node name="TestStaticEffectSource" type="Area2D" parent="." node_paths=PackedStringArray("source_entity")]
+position = Vector2(0, -7)
+script = ExtResource("2_2xq31")
+effect_source = SubResource("Resource_sx5ie")
+source_entity = NodePath("..")
+use_self_position = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="TestStaticEffectSource"]
+shape = SubResource("RectangleShape2D_o8yml")
+debug_color = Color(0.994, 0, 0.227, 0.225)
+
+[node name="EffectReceiverComponent2" parent="." node_paths=PackedStringArray("affected_entity") instance=ExtResource("10_o35vp")]
+affected_entity = NodePath("..")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="EffectReceiverComponent2"]
+position = Vector2(0, -7)
+shape = SubResource("RectangleShape2D_opl06")
+
+[node name="StatusEffectManager" parent="." node_paths=PackedStringArray("effect_receiver") instance=ExtResource("11_swclu")]
+effect_receiver = NodePath("../EffectReceiverComponent2")

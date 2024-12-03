@@ -1,35 +1,51 @@
 extends SaveData
-class_name PlayerData
+class_name DynamicEntityData
 
-# Player
+# DynamicEntity Core
 @export var position: Vector2
+@export var sprite_frames_path: String
+@export var sprite_texture_path: String
+
+# Stats
 @export var stat_mods: Dictionary
+
+# Effects
 @export var current_effects: Dictionary
 @export var saved_times_left: Dictionary
+
+# Movement
 @export var velocity: Vector2
 @export var snare_factor: float
 @export var snare_time_left: float
-# AnimatedSprite2D
-@export var sprite_frames: String
+@export var anim_vector: Vector2
+@export var knockback_vector: Vector2
+
 # HealthComponent
 @export var health: int
 @export var shield: int
 @export var armor: int
+
 # StaminaComponent
 @export var stamina: float
 @export var can_use_stamina: bool
 @export var stamina_to_hunger_count: float
 @export var hunger_bars: int
 @export var can_use_hunger_bars: bool
+
 # DmgHandler
 @export var saved_dots: Dictionary
+
 # HealHandler
 @export var saved_hots: Dictionary
-# MoveStateMachine
-@export var anim_vector: Vector2
-@export var knockback_vector: Vector2
+
 # ItemReceiverComponent
 @export var inv: Array[InvItemResource]
 @export var pickup_range: int
-# HandsComponent
+
+#region Player Only Data
+# Player Core
+@export var is_player: bool = false
+
+# HotbarUI
 @export var active_slot_index: int
+#endregion

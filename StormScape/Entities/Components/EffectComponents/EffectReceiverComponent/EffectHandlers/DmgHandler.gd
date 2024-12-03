@@ -14,17 +14,21 @@ var saved_dots: Dictionary = {} ## Saves the running DOT instances and the progr
 
 
 #region Save & Load
-func _on_save_game(_save_data: Array[SaveData]) -> void:
+func _on_before_save_game() -> void:
+	saved_dots.clear()
+
 	for source_type in dot_timers.keys():
-		saved_dots[source_type] = []
 		for timer in dot_timers[source_type]:
 			var clean_resource: DOTResource = timer.get_meta("dot_resource").duplicate()
 			var ticks_completed: int = timer.get_meta("ticks_completed")
 			var original_tick_count: int = clean_resource.dmg_ticks_array.size()
 			clean_resource.dmg_ticks_array = clean_resource.dmg_ticks_array.slice(ticks_completed, clean_resource.dmg_ticks_array.size())
-			clean_resource.delay_time = max(randf_range(1, 2.5), clean_resource.delay_time) # Buffer so it doesn't insta dmg on load
+			clean_resource.delay_time = max(randf(), clean_resource.delay_time + randf()) # So it doesn't insta dmg on load
 			clean_resource.damaging_time = clean_resource.damaging_time * (1 - (float(ticks_completed) / float(original_tick_count)))
-			saved_dots[source_type].append(clean_resource)
+			if source_type in saved_dots:
+				saved_dots[source_type].append(clean_resource)
+			else:
+				saved_dots[source_type] = [clean_resource]
 
 func _on_before_load_game() -> void:
 	dot_timers = {}
@@ -32,12 +36,10 @@ func _on_before_load_game() -> void:
 	for child in get_children():
 		child.queue_free()
 
-func _on_load_game() -> void:
+func _on_game_finished_loading() -> void:
 	for source_type in saved_dots.keys():
 		for dot_instance: DOTResource in saved_dots.get(source_type):
 			handle_over_time_dmg(dot_instance, source_type)
-
-		saved_dots.erase(source_type)
 #endregion
 
 ## Asserts that there is a valid health component on the affected entity before trying to handle damage.

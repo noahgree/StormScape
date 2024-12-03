@@ -47,10 +47,12 @@ func _notification(what):
 func _ready() -> void:
 	assert(affected_entity or get_parent() is SubViewport, get_parent().name + " has an effect receiver that is missing a reference to an entity.")
 	if can_receive_status_effects: assert(get_parent().has_node("StatusEffectManager"), get_parent().name + " has an effect receiver flagged as being able to handle status effects, yet has no StatusEffectManager.")
+
 	if not Engine.is_editor_hint():
 		collision_layer = affected_entity.collision_layer
 		collision_mask = 0
 		monitoring = false
+
 		add_child(hit_flash_timer)
 		hit_flash_timer.one_shot = true
 		hit_flash_timer.wait_time = 0.05

@@ -6,7 +6,6 @@ class_name DynamicEntity
 ## This should not be used by things like weapons or trees.
 
 @export var team: GlobalData.Teams = GlobalData.Teams.PLAYER ## What the effects received by this entity should consider as this entity's team.
-@export_group("Status Effects & Stat Mods")
 @export var stats: StatModsCacheResource = StatModsCacheResource.new() ## The resource that will cache and work with all stat mods for this entity.
 
 @onready var sprite: Node2D = $EntitySprite ## The visual representation of the entity. Needs to have the EntityEffectShader applied.
@@ -14,7 +13,7 @@ class_name DynamicEntity
 @onready var effects: StatusEffectManager = get_node_or_null("StatusEffectManager") ## The node that will cache and manage all status effects for this entity.
 @onready var move_fsm: MoveStateMachine = $MoveStateMachine ## The FSM controlling the entity's movement.
 @onready var health_component: HealthComponent = $HealthComponent ## The component in charge of entity health and shield.
-@onready var stamina_component: StaminaComponent = $StaminaComponent ## The component in charge of entity stamina and hunger.
+@onready var stamina_component: StaminaComponent = get_node_or_null("StaminaComponent") ## The component in charge of entity stamina and hunger.
 @onready var inv: ItemReceiverComponent = get_node_or_null("ItemReceiverComponent") ## The inventory component for the entity.
 @onready var hands: HandsComponent = get_node_or_null("HandsComponent") ## The hands item component for the entity.
 
@@ -24,12 +23,117 @@ var snare_timer: Timer ## A reference to a timer that might currently be trackin
 var current_stealth: int = 0 ## The extra amount of closeness this entity can achieve to an enemy before being detected.
 
 
-## Recalculates the stats in the stat mods cache to be base values just before mods get reapplied on load.
-func _on_load_game() -> void:
-	if stats: stats.reinit_on_load()
+#region Save & Load
+func _on_save_game(save_data: Array[SaveData]) -> void:
+	var data: DynamicEntityData = DynamicEntityData.new()
+
+	data.scene_path = scene_file_path
+
+	data.position = global_position
+	data.velocity = velocity
+
+	data.stat_mods = stats.stat_mods
+
+	if effects != null:
+		data.current_effects = effects.current_effects
+		data.saved_times_left = effects.saved_times_left
+
+	if sprite is AnimatedSprite2D:
+		data.sprite_frames_path = sprite.sprite_frames.resource_path
+	else:
+		data.sprite_texture_path = sprite.texture.resource_path
+
+	data.health = health_component.health
+	data.shield = health_component.shield
+	data.armor = health_component.armor
+
+	data.anim_vector = move_fsm.anim_vector
+	data.knockback_vector = move_fsm.knockback_vector
+
+	if stamina_component != null:
+		data.stamina = stamina_component.stamina
+		data.can_use_stamina = stamina_component.can_use_stamina
+		data.stamina_to_hunger_count = stamina_component.stamina_to_hunger_count
+		data.hunger_bars = stamina_component.hunger_bars
+		data.can_use_hunger_bars = stamina_component.can_use_hunger_bars
+
+	if effect_receiver.has_node("DmgHander"):
+		data.saved_dots = effect_receiver.get_node("DmgHandler").saved_dots
+	if effect_receiver.has_node("HealHandler"):
+		data.saved_hots = effect_receiver.get_node("HealHandler").saved_hots
+
+	if inv != null:
+		data.inv = inv.inv
+		data.pickup_range = inv.pickup_range
+
+	data.snare_factor = snare_factor
+	if snare_timer != null: data.snare_time_left = snare_timer.time_left
+	else: data.snare_time_left = 0
+
+	if self.name == "Player":
+		data.is_player = true
+		data.active_slot_index = $PlayerUILayer/HotbarUI.active_slot.index
+
+	save_data.append(data)
+
+func _is_instance_on_load_game(data: DynamicEntityData) -> void:
+	global_position = data.position
+	velocity = data.velocity
+
+	if not data.is_player:
+		GlobalData.world_root.add_child(self)
+
+	stats.stat_mods = data.stat_mods
+	stats.reinit_on_load()
+
+	if effects != null:
+		effects.current_effects = data.current_effects
+		effects.saved_times_left = data.saved_times_left
+
+	if sprite is AnimatedSprite2D:
+		sprite.sprite_frames = load(data.sprite_frames_path)
+	else:
+		sprite.texture = load(data.texture_path)
+
+	health_component.health = data.health
+	health_component.shield = data.shield
+	health_component.armor = data.armor
+
+	move_fsm.anim_vector = data.anim_vector
+	move_fsm.knockback_vector = data.knockback_vector
+	move_fsm.verify_anim_vector()
+	if velocity.length() > 0 and move_fsm.has_node("Run"):
+		move_fsm._on_child_transition(move_fsm.current_state, "Run")
+
+	if stamina_component != null:
+		stamina_component.stamina = data.stamina
+		stamina_component.can_use_stamina = data.can_use_stamina
+		stamina_component.stamina_to_hunger_count = data.stamina_to_hunger_count
+		stamina_component.hunger_bars = data.hunger_bars
+		stamina_component.can_use_hunger_bars = data.can_use_hunger_bars
+
+	if effect_receiver.has_node("DmgHander"):
+		effect_receiver.get_node("DmgHandler").saved_dots = data.saved_dots
+	if effect_receiver.has_node("HealHandler"):
+		effect_receiver.get_node("HealHandler").saved_hots = data.saved_hots
+
+	if inv != null:
+		inv.inv_to_load_from_save = data.inv
+		inv.pickup_range = data.pickup_range
+
+	snare_factor = 0
+	if snare_timer != null: snare_timer.queue_free()
+	if data.snare_time_left > 0: request_time_snare(data.snare_factor, data.snare_time_left)
+
+	if data.is_player:
+		$PlayerUILayer/HotbarUI._change_active_slot_to_index_relative_to_full_inventory_size(data.active_slot_index)
+#endregion
 
 ## Making sure we know we have save logic, even if not set in editor.
 func _ready() -> void:
+	assert(has_node("MoveStateMachine"), name + " is a DynamicEntity but does not have a MoveStateMachine.")
+	assert(has_node("HealthComponent"), name + " is a DynamicEntity but does not have a HealthComponent.")
+
 	add_to_group("has_save_logic")
 	if team == GlobalData.Teams.PLAYER:
 		add_to_group("player_entities")

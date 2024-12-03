@@ -1,0 +1,107 @@
+[gd_scene load_steps=23 format=3 uid="uid://xsq1q0fffsin"]
+
+[ext_resource type="Script" path="res://Entities/EntityCore/EntityTypes/RigidEntity/RigidEntity.gd" id="1_6tnit"]
+[ext_resource type="PackedScene" uid="uid://dmv4k4j4lg3pw" path="res://Entities/EntityCore/EntityStaticSprite.tscn" id="3_rn076"]
+[ext_resource type="Shader" path="res://Entities/EntityCore/EntityEffectShader.gdshader" id="4_l6rwf"]
+[ext_resource type="Texture2D" uid="uid://2xf1pqc78iin" path="res://Assets/Icon/icon.svg" id="5_h2o7w"]
+[ext_resource type="PackedScene" uid="uid://cdfdy8m6ki3oq" path="res://Entities/Components/HealthComponent/HealthComponent.tscn" id="6_1wa26"]
+[ext_resource type="PackedScene" uid="uid://btba0jmsow1mx" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectReceiverComponent.tscn" id="7_ftqus"]
+[ext_resource type="PackedScene" uid="uid://dykiv0tlhwmox" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/KnockbackHandler.tscn" id="8_fapfi"]
+[ext_resource type="PackedScene" uid="uid://4gl24qwdyti3" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/DmgHandler.tscn" id="9_23lbg"]
+[ext_resource type="PackedScene" uid="uid://depnx3pnassrq" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/BurningHandler.tscn" id="10_87rpi"]
+[ext_resource type="PackedScene" uid="uid://ddj5ippwwkvop" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/HealHandler.tscn" id="11_e8ceb"]
+[ext_resource type="PackedScene" uid="uid://tc2awdm3onyi" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/PoisonHandler.tscn" id="12_ptlrc"]
+[ext_resource type="PackedScene" uid="uid://bhg7jmodo3t5t" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/FrostbiteHandler.tscn" id="13_0vlu7"]
+[ext_resource type="PackedScene" uid="uid://co3n6m7efg8pd" path="res://Entities/Components/EffectComponents/StatusEffectManager/StatusEffectManager.tscn" id="14_20kf8"]
+[ext_resource type="PackedScene" uid="uid://c4kt3bx0ot3c7" path="res://Entities/Components/ItemComponents/LootTableComponent/LootTableComponent.tscn" id="15_1vdsh"]
+[ext_resource type="Script" path="res://Entities/Components/ItemComponents/LootTableComponent/LootTableEntry.gd" id="16_fkdnf"]
+[ext_resource type="Resource" uid="uid://ciel2rrqq4dvv" path="res://Entities/Items/Weapons/ProjectileWeapons/LaserGun/LaserGun.tres" id="17_h3nqy"]
+[ext_resource type="Script" path="res://Entities/Components/ItemComponents/LootTableComponent/LootTable.gd" id="18_w6kaj"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_vww1a"]
+resource_local_to_scene = true
+shader = ExtResource("4_l6rwf")
+shader_parameter/glow_color = Color(1, 1, 1, 1)
+shader_parameter/glow_size = 4.5
+shader_parameter/glow_strength = 9.0
+shader_parameter/enable_fade = false
+shader_parameter/tint_color = Color(5.87195e-05, 0.303902, 0.871873, 0.911)
+shader_parameter/frame_uv_min = null
+shader_parameter/frame_uv_max = null
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_sbju2"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_wpovd"]
+size = Vector2(18, 18)
+
+[sub_resource type="Resource" id="Resource_l1o4x"]
+script = ExtResource("16_fkdnf")
+item = ExtResource("17_h3nqy")
+quantity = 1
+weighting = 1.0
+last_used = 0
+spawn_count = 0
+
+[sub_resource type="Resource" id="Resource_tcueq"]
+script = ExtResource("18_w6kaj")
+hit_loot_table = Array[ExtResource("16_fkdnf")]([])
+die_loot_table = Array[ExtResource("16_fkdnf")]([SubResource("Resource_l1o4x")])
+
+[node name="TestRigidEntity" type="RigidBody2D"]
+collision_layer = 32
+collision_mask = 245
+mass = 3.0
+gravity_scale = 0.0
+lock_rotation = true
+linear_damp = 2.5
+script = ExtResource("1_6tnit")
+team = 2
+
+[node name="EntitySprite" parent="." instance=ExtResource("3_rn076")]
+modulate = Color(0, 0.366846, 0.687652, 1)
+material = SubResource("ShaderMaterial_vww1a")
+position = Vector2(0, -10)
+scale = Vector2(0.156, 0.156)
+texture = ExtResource("5_h2o7w")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -10)
+shape = SubResource("RectangleShape2D_sbju2")
+debug_color = Color(1.44392e-06, 0.568839, 0.851513, 0.42)
+
+[node name="HealthComponent" parent="." instance=ExtResource("6_1wa26")]
+
+[node name="EffectReceiverComponent" parent="." node_paths=PackedStringArray("affected_entity", "health_component", "loot_table_component", "dmg_handler", "heal_handler", "knockback_handler", "poison_handler", "frostbite_handler", "burning_handler") instance=ExtResource("7_ftqus")]
+position = Vector2(0, -10)
+affected_entity = NodePath("..")
+health_component = NodePath("../HealthComponent")
+loot_table_component = NodePath("../LootTableComponent")
+dmg_handler = NodePath("DmgHandler")
+heal_handler = NodePath("HealHandler")
+knockback_handler = NodePath("KnockbackHandler")
+poison_handler = NodePath("PoisonHandler")
+frostbite_handler = NodePath("FrostbiteHandler")
+burning_handler = NodePath("BurningHandler")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="EffectReceiverComponent"]
+shape = SubResource("RectangleShape2D_wpovd")
+debug_color = Color(0.941042, 1.32841e-05, 0.612344, 0.42)
+
+[node name="KnockbackHandler" parent="EffectReceiverComponent" instance=ExtResource("8_fapfi")]
+
+[node name="DmgHandler" parent="EffectReceiverComponent" instance=ExtResource("9_23lbg")]
+
+[node name="BurningHandler" parent="EffectReceiverComponent" instance=ExtResource("10_87rpi")]
+
+[node name="HealHandler" parent="EffectReceiverComponent" instance=ExtResource("11_e8ceb")]
+
+[node name="PoisonHandler" parent="EffectReceiverComponent" instance=ExtResource("12_ptlrc")]
+
+[node name="FrostbiteHandler" parent="EffectReceiverComponent" instance=ExtResource("13_0vlu7")]
+
+[node name="StatusEffectManager" parent="." node_paths=PackedStringArray("effect_receiver") instance=ExtResource("14_20kf8")]
+effect_receiver = NodePath("../EffectReceiverComponent")
+print_effect_updates = true
+
+[node name="LootTableComponent" parent="." instance=ExtResource("15_1vdsh")]
+loot_table = SubResource("Resource_tcueq")
