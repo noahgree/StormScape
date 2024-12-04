@@ -160,25 +160,34 @@ func _physics_process(delta: float) -> void:
 func _unhandled_input(event: InputEvent) -> void:
 	move_fsm.state_machine_handle_input(event)
 
+## Sends a request to the move fsm for entering the stun state using a given duration.
 func request_stun(duration: float) -> void:
 	move_fsm.request_stun(duration)
 
+## Requests changing the knockback vector using the incoming knockback.
 func request_knockback(knockback: Vector2) -> void:
 	move_fsm.request_knockback(knockback)
 
+## Requests to start a time snare effect on the entity.
 func request_time_snare(factor: float, snare_time: float) -> void:
-	snare_timer = Timer.new()
-	snare_timer.one_shot = true
-	snare_timer.autostart = true
-	snare_timer.wait_time = max(0.001, snare_time)
-	snare_timer.timeout.connect(func(): snare_factor = 0)
-	snare_timer.timeout.connect(snare_timer.queue_free)
-	snare_timer.timeout.connect(func(): effects._stop_effect_fx("Time Snare"))
+	if snare_timer != null and is_instance_valid(snare_timer) and not snare_timer.is_stopped():
+		snare_timer.stop()
+		snare_timer.wait_time = max(0.001, snare_time)
+		snare_timer.start()
+	else:
+		snare_timer = Timer.new()
+		snare_timer.one_shot = true
+		snare_timer.autostart = true
+		snare_timer.wait_time = max(0.001, snare_time)
+		snare_timer.timeout.connect(func() -> void:
+			snare_factor = 0
+			snare_timer.queue_free()
+			)
+		add_child(snare_timer)
 
 	snare_factor = factor
 
-	add_child(snare_timer)
-
+## Requests performing whatever dying logic is given in the move fsm.
 func die() -> void:
 	move_fsm.die()
 
@@ -188,12 +197,12 @@ func _update_shader_with_new_sprite_frame_size() -> void:
 	if sprite is AnimatedSprite2D:
 		sprite.material.set_shader_parameter("enable_fading", true)
 
-		var texture = SpriteHelpers.SpriteDetails.get_frame_texture(sprite)
+		var texture: Texture2D = SpriteHelpers.SpriteDetails.get_frame_texture(sprite)
 
-		var frame_uv_min = Vector2(0.0, 0.0)
-		var frame_uv_max = Vector2(1.0, 1.0)
+		var frame_uv_min: Vector2 = Vector2(0, 0)
+		var frame_uv_max: Vector2 = Vector2(1, 1)
 
-		var region
+		var region: Rect2
 
 		# Ensure the texture is valid
 		if texture == null:
@@ -202,10 +211,10 @@ func _update_shader_with_new_sprite_frame_size() -> void:
 
 		# Calculate UV coordinates based on texture type
 		if texture is AtlasTexture:
-			var atlas_texture = texture as AtlasTexture
-			var atlas_source = atlas_texture.atlas
+			var atlas_texture: AtlasTexture = texture as AtlasTexture
+			var atlas_source: Texture2D = atlas_texture.atlas
 			region = atlas_texture.region
-			var atlas_size = atlas_source.get_size()
+			var atlas_size: Vector2 = atlas_source.get_size()
 
 			# Calculate UV coordinates
 			frame_uv_min = Vector2(region.position.x / atlas_size.x, region.position.y / atlas_size.y)
@@ -227,8 +236,8 @@ func _update_shader_with_new_sprite_frame_size() -> void:
 		sprite.material.set_shader_parameter("frame_uv_max", frame_uv_max)
 
 		# Calculate the UV pixel size
-		var frame_size = region.size if texture is AtlasTexture else texture.get_size()
-		var uv_pixel_size = Vector2(1.0 / frame_size.x, 1.0 / frame_size.y)
+		var frame_size: Vector2 = region.size if texture is AtlasTexture else texture.get_size()
+		var uv_pixel_size: Vector2 = Vector2(1.0 / frame_size.x, 1.0 / frame_size.y)
 		sprite.material.set_shader_parameter("uv_pixel_size", uv_pixel_size)
 	else:
 		sprite.material.set_shader_parameter("enable_fading", false)

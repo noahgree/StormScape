@@ -1,13 +1,15 @@
-[gd_resource type="Resource" script_class="ItemResource" load_steps=4 format=3 uid="uid://cwiqqp4tbd4em"]
+[gd_resource type="Resource" script_class="ItemResource" load_steps=5 format=3 uid="uid://cwiqqp4tbd4em"]
 
 [ext_resource type="Texture2D" uid="uid://1q78rueqnvgr" path="res://Entities/Items/WorldResources/spruce_log.png" id="1_gysts"]
 [ext_resource type="PackedScene" uid="uid://bhmmr2f1hs8mk" path="res://Entities/Items/WorldResources/WorldResource.tscn" id="2_vkuwq"]
 [ext_resource type="Script" path="res://Entities/Items/ItemCore/ItemResource.gd" id="3_1s1qr"]
+[ext_resource type="Script" path="res://UI/Inventory/PlayerInventory/Crafting/CraftingIngredient.gd" id="3_q52tn"]
 
 [resource]
 script = ExtResource("3_1s1qr")
 id = "spruce_log"
 name = "Spruce Log"
+tags = Array[String]([])
 icon = ExtResource("1_gysts")
 thumbnail = ExtResource("1_gysts")
 item_type = 4
@@ -17,6 +19,8 @@ stack_size = 64
 auto_pickup = true
 pickup_radius = 4
 info = "Logs from a spruce tree. Useful in crafting."
+recipe = Array[ExtResource("3_q52tn")]([])
+output_quantity = 1
 item_scene = ExtResource("2_vkuwq")
 rotation_lerping = 0.1
 holding_offset = Vector2(-7, -3)

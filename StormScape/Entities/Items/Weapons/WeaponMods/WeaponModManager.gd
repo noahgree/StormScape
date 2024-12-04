@@ -19,15 +19,14 @@ func handle_weapon_mod(weapon_mod: WeaponMod) -> void:
 	_add_weapon_mod(weapon_mod)
 
 ## Adds a weapon mod to the dictionary and then calls the on_added method inside the mod itself.
-func _add_weapon_mod(weapon_mod) -> void:
+func _add_weapon_mod(weapon_mod: WeaponMod) -> void:
 	if DebugFlags.PrintFlags.weapon_mod_changes and print_effect_updates:
 		print_rich("-------[color=green]Adding[/color][b] " + str(weapon_mod.mod_name) + str(weapon_mod.mod_lvl) + "[/b]-------")
 
 	weapon.stats.current_mods[weapon_mod.mod_name] = weapon_mod
 
-	for mod_resource in weapon_mod.wpn_stat_mods:
-		var mod: StatMod = (mod_resource as StatMod)
-		weapon.stats.s_mods.add_mods([mod] as Array[StatMod], null)
+	for mod_resource: StatMod in weapon_mod.wpn_stat_mods:
+		weapon.stats.s_mods.add_mods([mod_resource] as Array[StatMod], null)
 		_update_effect_source_stats(mod_resource.stat_id)
 
 	_update_effect_source_status_effects(false, weapon_mod.status_effects)
@@ -46,9 +45,8 @@ func _remove_weapon_mod(weapon_mod: WeaponMod) -> void:
 	if DebugFlags.PrintFlags.weapon_mod_changes and print_effect_updates:
 		print_rich("-------[color=red]Removed[/color][b] " + str(weapon_mod.mod_name) + str(weapon_mod.mod_lvl) + "[/b]-------")
 
-	for mod_resource in weapon_mod.wpn_stat_mods:
-		var mod: StatMod = (mod_resource as StatMod)
-		weapon.stats.s_mods.remove_mod(mod.stat_id, mod.mod_id, null)
+	for mod_resource: StatMod in weapon_mod.wpn_stat_mods:
+		weapon.stats.s_mods.remove_mod(mod_resource.stat_id, mod_resource.mod_id, null)
 		_update_effect_source_stats(mod_resource.stat_id)
 
 	if weapon_mod.mod_name in weapon.stats.current_mods:
@@ -94,7 +92,7 @@ func _update_effect_source_stats(stat_id: String) -> void:
 func _update_effect_source_status_effects(for_charged: bool, new_effects: Array[StatusEffect]) -> void:
 	var effect_source: EffectSource = weapon.stats.effect_source if not for_charged else weapon.stats.charge_effect_source
 
-	for new_effect in new_effects:
+	for new_effect: StatusEffect in new_effects:
 		var existing_effect_index: int = effect_source.check_for_effect_and_get_index(new_effect.effect_name)
 		if existing_effect_index != -1:
 			if new_effect.effect_lvl > effect_source.status_effects[existing_effect_index].effect_lvl:
@@ -109,7 +107,7 @@ func _remove_mod_status_effects_from_effect_source(for_charged: bool) -> void:
 
 	effect_source.status_effects = orig_array.duplicate()
 
-	for mod in weapon.stats.current_mods.values():
+	for mod: WeaponMod in weapon.stats.current_mods.values():
 		_update_effect_source_status_effects(for_charged, mod.status_effects if not for_charged else mod.charge_status_effects)
 
 ## Formats the updated lists of status effects and prints them out.

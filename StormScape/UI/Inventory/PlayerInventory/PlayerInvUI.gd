@@ -25,7 +25,7 @@ func _unhandled_key_input(_event: InputEvent) -> void:
 
 	# If we are dragging when we press any key, end the drag.
 	if get_viewport().gui_is_dragging():
-		var drag_end_event = InputEventMouseButton.new()
+		var drag_end_event: InputEventMouseButton = InputEventMouseButton.new()
 		drag_end_event.button_index = MOUSE_BUTTON_LEFT
 		drag_end_event.position = position
 		drag_end_event.pressed = false

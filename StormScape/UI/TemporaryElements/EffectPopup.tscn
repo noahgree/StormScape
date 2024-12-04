@@ -1,29 +1,49 @@
-[gd_scene load_steps=4 format=3 uid="uid://28ry06t64e8p"]
+[gd_scene load_steps=9 format=3 uid="uid://28ry06t64e8p"]
 
 [ext_resource type="Script" path="res://UI/TemporaryElements/EffectPopup.gd" id="1_obmtp"]
 [ext_resource type="Texture2D" uid="uid://dbm40lvpgbd8t" path="res://Entities/Items/ItemCore/Particles/item_rarity_light.png" id="2_8adlu"]
+[ext_resource type="Shader" path="res://UI/TemporaryElements/TextTexture.gdshader" id="3_57wk3"]
+[ext_resource type="FontFile" uid="uid://bp2lgrlhj8cet" path="res://Assets/Theming/Fonts/FontAssets/Pixel/C&C Red Alert [INET].ttf" id="4_dsjwj"]
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_7bmg7"]
 blend_mode = 1
 
+[sub_resource type="Gradient" id="Gradient_p5hh2"]
+resource_local_to_scene = true
+offsets = PackedFloat32Array(0.0234043, 0.0446809)
+colors = PackedColorArray(0.792793, 0.375947, 1.92523e-07, 1, 0.920371, 0, 0.246417, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_x05l0"]
+resource_local_to_scene = true
+gradient = SubResource("Gradient_p5hh2")
+width = 20
+use_hdr = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_pniof"]
+resource_local_to_scene = true
+shader = ExtResource("3_57wk3")
+shader_parameter/gradient_scale = 1.0
+shader_parameter/gradient_texture = SubResource("GradientTexture1D_x05l0")
+
 [node name="EffectPopup" type="Marker2D"]
 modulate = Color(1, 1, 1, 0.95)
 z_index = 10
-scale = Vector2(0.85, 0.85)
+scale = Vector2(0.68, 0.68)
 skew = -0.436332
 script = ExtResource("1_obmtp")
 
 [node name="Glow" type="TextureRect" parent="."]
-modulate = Color(1.1, 0.2, 0.25, 1)
+modulate = Color(1.25, 0.2, 0.3, 1)
 material = SubResource("CanvasItemMaterial_7bmg7")
-offset_left = -10.5882
-offset_top = -8.23529
-offset_right = 501.412
-offset_bottom = 503.765
-scale = Vector2(0.04, 0.035)
+offset_left = -14.75
+offset_top = -8.0
+offset_right = 497.25
+offset_bottom = 504.0
+scale = Vector2(0.062, 0.04)
 texture = ExtResource("2_8adlu")
 
 [node name="NumberLabel" type="Label" parent="."]
+material = SubResource("ShaderMaterial_pniof")
 offset_left = -6.0
 offset_top = -6.0
 offset_right = 6.0
@@ -37,5 +57,6 @@ theme_override_constants/shadow_offset_x = 0
 theme_override_constants/shadow_offset_y = 0
 theme_override_constants/outline_size = 0
 theme_override_constants/shadow_outline_size = 3
-text = "0"
+theme_override_fonts/font = ExtResource("4_dsjwj")
+text = "9"
 horizontal_alignment = 1

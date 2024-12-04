@@ -27,11 +27,11 @@ func load_game() -> void:
 
 	if DebugFlags.PrintFlags.saver_loader_status_changes:
 		print_rich("-------------------------------------[color=yellow][b]LOADING![/b][/color]-------------------------------------")
-	for item in saved_game.save_data:
+	for item: SaveData in saved_game.save_data:
 		if not (item is DynamicEntityData and item.is_player):
 			if item.scene_path != "":
-				var scene = load(item.scene_path) as PackedScene
-				var loaded_node = scene.instantiate()
+				var scene: PackedScene = load(item.scene_path) as PackedScene
+				var loaded_node: Node = scene.instantiate()
 				if loaded_node.has_method("_is_instance_on_load_game"):
 					loaded_node._is_instance_on_load_game(item)
 		else:

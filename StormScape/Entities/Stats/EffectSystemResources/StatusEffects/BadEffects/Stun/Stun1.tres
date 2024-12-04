@@ -6,10 +6,15 @@
 [resource]
 script = ExtResource("1_sdbli")
 stun_time = 0.5
-handler_type = 2
 effect_name = "Stun"
 effect_lvl = 1
 is_bad_effect = true
+affected_entities = 1
 effects_to_stop = Array[String]([])
 mod_time = 0.5
+apply_until_removed = false
 stat_mods = Array[ExtResource("2_vysiy")]([])
+audio_to_play = ""
+only_cue_on_player_hit = false
+spawn_particles = true
+particles_req_handler = true

@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="ProjWeaponResource" load_steps=42 format=3 uid="uid://ciel2rrqq4dvv"]
+[gd_resource type="Resource" script_class="ProjWeaponResource" load_steps=45 format=3 uid="uid://ciel2rrqq4dvv"]
 
 [ext_resource type="Script" path="res://Entities/Items/Weapons/ProjectileWeapons/ProjWeaponResource.gd" id="1_7bjnk"]
 [ext_resource type="Script" path="res://Entities/Stats/EffectSystemResources/EffectSources/EffectSource.gd" id="1_67okc"]
@@ -9,10 +9,11 @@
 [ext_resource type="Resource" uid="uid://c050ytbbmgfem" path="res://Entities/Stats/EffectSystemResources/StatusEffects/BadEffects/Slowness/Slowness1.tres" id="5_52wyp"]
 [ext_resource type="Script" path="res://Entities/Items/Hitscans/HitscanResource.gd" id="5_qsiix"]
 [ext_resource type="PackedScene" uid="uid://baxpb3crwepc0" path="res://Entities/Items/Weapons/ProjectileWeapons/LaserGun/LaserGun.tscn" id="6_gbfef"]
-[ext_resource type="Resource" uid="uid://c6aw6ev8jctgk" path="res://Entities/Stats/EffectSystemResources/StatusEffects/BadEffects/LifeSteal/LifeSteal2.tres" id="8_qhu50"]
+[ext_resource type="Resource" uid="uid://opqylasujopp" path="res://Entities/Stats/EffectSystemResources/StatusEffects/BadEffects/LifeSteal/LifeSteal1.tres" id="8_l5lgm"]
 [ext_resource type="Resource" uid="uid://c0gxq4ufi3snt" path="res://Entities/Stats/EffectSystemResources/StatusEffects/GoodEffects/Speed/Speed2.tres" id="9_566jc"]
-[ext_resource type="Resource" uid="uid://b0it5xmpw16sd" path="res://Entities/Stats/EffectSystemResources/StatusEffects/BadEffects/Knockback/Knockback1.tres" id="9_ao8k3"]
 [ext_resource type="Script" path="res://Entities/Items/Projectiles/ProjectileResource.gd" id="9_bgryc"]
+[ext_resource type="Resource" uid="uid://b2ekcx7kndqjb" path="res://Entities/Stats/EffectSystemResources/StatusEffects/BadEffects/Frostbite/Frostbite1.tres" id="9_ohi3o"]
+[ext_resource type="Resource" uid="uid://b0it5xmpw16sd" path="res://Entities/Stats/EffectSystemResources/StatusEffects/BadEffects/Knockback/Knockback1.tres" id="12_iv3qu"]
 [ext_resource type="Script" path="res://Entities/Stats/StatMod/StatModsCacheResource.gd" id="12_lft8x"]
 [ext_resource type="Script" path="res://UI/Inventory/PlayerInventory/Crafting/CraftingIngredient.gd" id="13_8mov7"]
 [ext_resource type="Resource" uid="uid://m8eslst1uuxh" path="res://Entities/Items/Ammo/LightAmmo.tres" id="14_8sjcv"]
@@ -154,9 +155,9 @@ scanned_phys_layers = 191
 can_hit_self = false
 bad_effect_affected_teams = 3
 good_effect_affected_teams = 3
-base_damage = 3
+base_damage = 10
 dmg_affected_stats = 2
-crit_chance = 5
+crit_chance = 100
 crit_multiplier = 1.5
 armor_penetration = 0
 base_healing = 0
@@ -167,7 +168,7 @@ cam_freeze_multiplier = 1.0
 cam_freeze_duration = 0.0
 impact_sound = ""
 hit_flash_color = Color(1, 1, 1, 0.45)
-status_effects = Array[ExtResource("2_ectm3")]([ExtResource("8_qhu50"), ExtResource("9_ao8k3")])
+status_effects = Array[ExtResource("2_ectm3")]([ExtResource("8_l5lgm"), ExtResource("9_ohi3o")])
 contact_position = Vector2(0, 0)
 movement_direction = Vector2(0, 0)
 
@@ -201,6 +202,10 @@ impact_particle_mult = 1.0
 beam_particle_color = Color(0.646492, 0.854506, 1, 1)
 beam_particle_mult = 1.0
 
+[sub_resource type="Curve" id="Curve_dmuuj"]
+_data = [Vector2(0, 0.757839), 0.0, 0.0, 0, 0, Vector2(1, 0.491462), 0.0, 0.0, 0, 0]
+point_count = 2
+
 [sub_resource type="Curve" id="Curve_a16jh"]
 _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.49935), 0.0, 0.0, 0, 0]
 point_count = 2
@@ -212,6 +217,30 @@ point_count = 2
 [sub_resource type="Curve" id="Curve_2iwdc"]
 _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.506669), 0.0, 0.0, 0, 0]
 point_count = 2
+
+[sub_resource type="Resource" id="Resource_n7vi7"]
+script = ExtResource("1_67okc")
+is_projectile = true
+scanned_phys_layers = 191
+can_hit_self = true
+bad_effect_affected_teams = 1
+good_effect_affected_teams = 2
+base_damage = 100
+dmg_affected_stats = 2
+crit_chance = 0
+crit_multiplier = 1.5
+armor_penetration = 0
+base_healing = 0
+heal_affected_stats = 2
+cam_shake_strength = 0.0
+cam_shake_duration = 0.0
+cam_freeze_multiplier = 1.0
+cam_freeze_duration = 0.0
+impact_sound = ""
+hit_flash_color = Color(1, 1, 1, 0.45)
+status_effects = Array[ExtResource("2_ectm3")]([ExtResource("12_iv3qu")])
+contact_position = Vector2(0, 0)
+movement_direction = Vector2(0, 0)
 
 [sub_resource type="Resource" id="Resource_tss3t"]
 script = ExtResource("9_bgryc")
@@ -249,8 +278,8 @@ launch_angle = 0.0
 arc_travel_distance = 125
 arc_speed = 550.0
 max_collision_height = 20
-grounding_free_delay = 0.0
-bounce_count = 2
+grounding_free_delay = 5.0
+bounce_count = 0
 bounce_falloff_curve = SubResource("Curve_a16jh")
 ping_pong_bounce = false
 number_of_splits = 0
@@ -262,11 +291,13 @@ split_cam_shakes_str = Array[float]([1.0])
 split_cam_shakes_dur = Array[float]([0.2])
 splash_radius = 0
 do_aoe_on_arc_land = true
+aoe_effect_falloff_curve = SubResource("Curve_dmuuj")
 bad_effects_aoe_falloff = true
 good_effects_aoe_falloff = false
 splash_effect_delay = 0.0
-splash_effect_dur = 0.05
+splash_effect_dur = 5.0
 splash_before_freeing = false
+splash_effect_source = SubResource("Resource_n7vi7")
 splash_sound = ""
 
 [sub_resource type="Resource" id="Resource_ct7xl"]
@@ -304,7 +335,7 @@ script = ExtResource("1_7bjnk")
 proj_weapon_type = 0
 projectile = ExtResource("1_sf3xp")
 projectile_logic = SubResource("Resource_tss3t")
-firing_mode = "Auto"
+firing_mode = "Semi Auto"
 initial_shot_delay = 0.0
 auto_fire_delay = 0.15
 firing_cam_shake_str = 0.68
@@ -350,7 +381,7 @@ use_ammo_per_burst_proj = true
 burst_bullet_delay = 0.1
 add_bloom_per_burst_shot = true
 barrage_count = 1
-angular_spread = 25
+angular_spread = 25.0
 auto_fire_delay_left = 0.0
 charge_fire_cooldown_left = 0.0
 current_warmth_level = 0.0

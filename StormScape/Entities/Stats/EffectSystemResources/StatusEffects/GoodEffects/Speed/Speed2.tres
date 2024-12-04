@@ -38,6 +38,7 @@ script = ExtResource("1_638x2")
 effect_name = "Speed"
 effect_lvl = 2
 is_bad_effect = false
+affected_entities = 1
 effects_to_stop = Array[String]([])
 mod_time = 5.0
 apply_until_removed = false

@@ -19,6 +19,7 @@ hot_resource = SubResource("Resource_m7vw8")
 effect_name = "Regen"
 effect_lvl = 1
 is_bad_effect = false
+affected_entities = 7
 effects_to_stop = Array[String]([])
 mod_time = 10.0
 apply_until_removed = false

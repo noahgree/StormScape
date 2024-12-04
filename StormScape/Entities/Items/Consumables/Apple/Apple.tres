@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="ConsumableResource" load_steps=8 format=3 uid="uid://cx1ydw2jde1y8"]
+[gd_resource type="Resource" script_class="ConsumableResource" load_steps=9 format=3 uid="uid://cx1ydw2jde1y8"]
 
 [ext_resource type="Script" path="res://Entities/Stats/EffectSystemResources/EffectSources/EffectSource.gd" id="1_bn713"]
 [ext_resource type="Script" path="res://Entities/Items/Consumables/ConsumableResource.gd" id="1_jepoi"]
@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://bdaogdtcus1ac" path="res://Entities/Items/Consumables/Consumable.tscn" id="2_1oeu8"]
 [ext_resource type="Script" path="res://Entities/Stats/EffectSystemResources/StatusEffects/StatusEffect.gd" id="2_kdgs1"]
 [ext_resource type="Texture2D" uid="uid://7v6u4kbfcjon" path="res://Entities/Items/Consumables/Apple/apple_thumb.png" id="4_upr2p"]
+[ext_resource type="Script" path="res://UI/Inventory/PlayerInventory/Crafting/CraftingIngredient.gd" id="5_jvpr1"]
 
 [sub_resource type="Resource" id="Resource_hsou2"]
 script = ExtResource("1_bn713")
@@ -43,6 +44,7 @@ consumption_sound = ""
 post_consumption_sound = ""
 id = "apple"
 name = "Apple"
+tags = Array[String]([])
 icon = ExtResource("1_vw2hi")
 thumbnail = ExtResource("4_upr2p")
 item_type = 0
@@ -52,6 +54,8 @@ stack_size = 5
 auto_pickup = true
 pickup_radius = 4
 info = "A simple snack."
+recipe = Array[ExtResource("5_jvpr1")]([])
+output_quantity = 1
 item_scene = ExtResource("2_1oeu8")
 rotation_lerping = 0.1
 holding_offset = Vector2(1, -3)

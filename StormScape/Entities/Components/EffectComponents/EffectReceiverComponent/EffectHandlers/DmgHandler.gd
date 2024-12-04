@@ -65,7 +65,7 @@ func _get_dmg_after_crit_then_armor(effect_source: EffectSource, is_crit: bool) 
 func handle_instant_damage(effect_source: EffectSource, life_steal_percent: float = 0.0) -> void:
 	var is_crit: bool = randf_range(0, 100) <= effect_source.crit_chance
 	var dmg_after_crit_then_armor: int = _get_dmg_after_crit_then_armor(effect_source, is_crit)
-	_send_handled_dmg(effect_source.dmg_affected_stats, dmg_after_crit_then_armor, is_crit, life_steal_percent)
+	_send_handled_dmg("BasicDamage" if not is_crit else "CritDamage", effect_source.dmg_affected_stats, dmg_after_crit_then_armor, life_steal_percent)
 
 ## Handles applying damage that is inflicted over time, whether with a delay, with burst intervals, or with both.
 func handle_over_time_dmg(dot_resource: DOTResource, source_type: String) -> void:
@@ -104,7 +104,7 @@ func handle_over_time_dmg(dot_resource: DOTResource, source_type: String) -> voi
 		else:
 			dot_timer.wait_time = max(0.01, dot_resource.time_between_ticks)
 
-		_send_handled_dmg(dot_resource.dmg_affected_stats, dot_resource.dmg_ticks_array[0], false)
+		_send_handled_dmg(source_type, dot_resource.dmg_affected_stats, dot_resource.dmg_ticks_array[0], false)
 		_add_timer_to_cache(source_type, dot_timer, dot_timers)
 		dot_timer.start()
 
@@ -123,7 +123,7 @@ func _add_timer_to_cache(source_type: String, timer: Timer, cache: Dictionary) -
 func _delete_timers_from_caches(source_type: String) -> void:
 	var timers: Array = dot_timers.get(source_type, [null])
 	if timers:
-		for timer: Timer in timers:
+		for timer: Variant in timers:
 			if timer != null:
 				timer.stop()
 				timer.queue_free()
@@ -131,7 +131,7 @@ func _delete_timers_from_caches(source_type: String) -> void:
 
 	var delay_timers: Array = dot_delay_timers.get(source_type, [null])
 	if delay_timers:
-		for delay_timer: Timer in delay_timers:
+		for delay_timer: Variant in delay_timers:
 			if delay_timer != null:
 				delay_timer.stop()
 				delay_timer.queue_free()
@@ -146,13 +146,13 @@ func _on_dot_timer_timeout(dot_timer: Timer, source_type: String) -> void:
 
 	if dot_resource.run_until_removed:
 		var damage: int = dot_resource.dmg_ticks_array[0]
-		_send_handled_dmg(dmg_affected_stats, damage, false)
+		_send_handled_dmg(source_type, dmg_affected_stats, damage, false)
 		dot_timer.set_meta("ticks_completed", ticks_completed + 1)
 	else:
 		var max_ticks: int = dot_resource.dmg_ticks_array.size()
 		if ticks_completed < max_ticks:
 			var damage: int = dot_resource.dmg_ticks_array[ticks_completed]
-			_send_handled_dmg(dmg_affected_stats, damage, false)
+			_send_handled_dmg(source_type, dmg_affected_stats, damage, false)
 			dot_timer.set_meta("ticks_completed", ticks_completed + 1)
 
 			if max_ticks == 1:
@@ -162,8 +162,7 @@ func _on_dot_timer_timeout(dot_timer: Timer, source_type: String) -> void:
 
 ## Sends the affected entity's health component the final damage values based on what stats the damage was
 ## allowed to affect.
-func _send_handled_dmg(dmg_affected_stats: GlobalData.DmgAffectedStats, handled_amount: int,
-						was_crit: bool, life_steal_percent: float = 0.0) -> void:
+func _send_handled_dmg(source_type: String, dmg_affected_stats: GlobalData.DmgAffectedStats, handled_amount: int, life_steal_percent: float = 0.0) -> void:
 	var dmg_weakness: float = get_parent().affected_entity.stats.get_stat("dmg_weakness")
 	var dmg_resistance: float = get_parent().affected_entity.stats.get_stat("dmg_resistance")
 	var positive_dmg: int = max(0, handled_amount * (1 + dmg_weakness - dmg_resistance))
@@ -172,14 +171,14 @@ func _send_handled_dmg(dmg_affected_stats: GlobalData.DmgAffectedStats, handled_
 
 	match dmg_affected_stats:
 		GlobalData.DmgAffectedStats.HEALTH_ONLY:
-			health_component.damage_health(positive_dmg, was_crit)
+			health_component.damage_health(positive_dmg, source_type)
 		GlobalData.DmgAffectedStats.SHIELD_ONLY:
-			health_component.damage_shield(positive_dmg, was_crit)
+			health_component.damage_shield(positive_dmg, source_type)
 		GlobalData.DmgAffectedStats.SHIELD_THEN_HEALTH:
-			health_component.damage_shield_then_health(positive_dmg, was_crit)
+			health_component.damage_shield_then_health(positive_dmg, source_type)
 		GlobalData.DmgAffectedStats.SIMULTANEOUS:
-			health_component.damage_shield(positive_dmg, was_crit)
-			health_component.damage_health(positive_dmg, was_crit)
+			health_component.damage_shield(positive_dmg, source_type)
+			health_component.damage_health(positive_dmg, source_type)
 
 
 func _pass_damage_to_potential_life_steal_handler(amount: int, percent_to_steal: float) -> void:

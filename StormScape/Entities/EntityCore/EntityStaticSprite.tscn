@@ -1,6 +1,8 @@
-[gd_scene load_steps=3 format=3 uid="uid://dmv4k4j4lg3pw"]
+[gd_scene load_steps=5 format=3 uid="uid://dmv4k4j4lg3pw"]
 
 [ext_resource type="Shader" path="res://Entities/EntityCore/EntityEffectShader.gdshader" id="1_qsycx"]
+[ext_resource type="Script" path="res://Entities/EntityCore/EntitySprite.gd" id="2_0d3rr"]
+[ext_resource type="Texture2D" uid="uid://u48xflvqdeh2" path="res://Entities/Items/ItemCore/Particles/simple_light_1.png" id="3_eo8kj"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_yb3gb"]
 resource_local_to_scene = true
@@ -15,3 +17,10 @@ shader_parameter/frame_uv_max = null
 
 [node name="EntitySprite" type="Sprite2D"]
 material = SubResource("ShaderMaterial_yb3gb")
+script = ExtResource("2_0d3rr")
+
+[node name="FloorColor" type="Sprite2D" parent="."]
+self_modulate = Color(0, 0.933, 0.469, 0.542)
+z_index = -2
+scale = Vector2(0.15, 0.08)
+texture = ExtResource("3_eo8kj")

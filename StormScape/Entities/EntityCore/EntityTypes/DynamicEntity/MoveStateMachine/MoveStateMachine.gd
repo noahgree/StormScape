@@ -33,7 +33,7 @@ func _ready() -> void:
 
 	rotation_lerping_factor = DEFAULT_ROTATION_LERPING_FACTOR
 
-	for child in get_children():
+	for child: Node in get_children():
 		if child is MoveState:
 			states[child.name.to_lower()] = child
 			child.transitioned.connect(_on_child_transition)
@@ -74,14 +74,14 @@ func update_anim_vector() -> void:
 
 ## Takes in a current direction of rotation and a target position to face, lerping it every frame.
 func get_lerped_mouse_direction_to_pos(current_direction: Vector2, target_position: Vector2) -> Vector2:
-	var target_direction = (entity.get_global_mouse_position() - target_position).normalized()
+	var target_direction: Vector2 = (entity.get_global_mouse_position() - target_position).normalized()
 
-	var current_angle = current_direction.angle()
-	var target_angle = target_direction.angle()
+	var current_angle: float = current_direction.angle()
+	var target_angle: float = target_direction.angle()
 
-	var angle_diff = angle_difference(current_angle, target_angle)
+	var angle_diff: float = angle_difference(current_angle, target_angle)
 
-	var new_angle = current_angle + angle_diff * rotation_lerping_factor
+	var new_angle: float = current_angle + angle_diff * rotation_lerping_factor
 
 	return Vector2.RIGHT.rotated(new_angle)
 
@@ -95,9 +95,9 @@ func verify_anim_vector() -> void:
 		current_state._animate()
 
 func create_footprint(offsets: Array) -> void:
-	for offset in offsets:
+	for offset: Vector2 in offsets:
 		var trans: Transform2D = Transform2D(atan2(anim_vector.y, anim_vector.x), get_parent().global_position + offset)
-		var footprint: SpriteGhost = SpriteGhost.create(trans, Vector2(0.8, 0.8), footstep_texture, 0.8)
+		var footprint: SpriteGhost = SpriteGhost.create(trans, Vector2(0.8, 0.8), footstep_texture, 3.0)
 		footprint.z_index = get_parent().sprite.z_index - 1
 		footprint.material.set_shader_parameter("tint_color", Color(0.0, 0.0, 0.0, 0.8))
 		GlobalData.world_root.add_child(footprint)
@@ -113,14 +113,14 @@ func request_knockback(knockback: Vector2) -> void:
 	knockback_vector = (knockback_vector + knockback).limit_length(MAX_KNOCKBACK)
 	if knockback_streak_nodes.is_empty() or (not is_instance_valid(knockback_streak_nodes[0])) or (knockback_streak_nodes[0] == null) or (knockback_streak_nodes[0].is_fading):
 		knockback_streak_nodes.clear()
-		for offset in footstreak_offsets:
+		for offset: Vector2 in footstreak_offsets:
 			var streak: FootStreak = FootStreak.create()
 			knockback_streak_nodes.append(streak)
 			GlobalData.world_root.add_child(streak)
 
 func update_knockback_streak() -> void:
 
-	for i in range(footstreak_offsets.size()):
+	for i: int in range(footstreak_offsets.size()):
 		if knockback_streak_nodes.size() >= (i + 1) and is_instance_valid(knockback_streak_nodes[i]) and knockback_streak_nodes[i] != null:
 			knockback_streak_nodes[i].update_trail_position(entity.global_position + footstreak_offsets[i], atan2(anim_vector.y, anim_vector.x))
 		else:

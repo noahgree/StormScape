@@ -86,7 +86,7 @@ static func create(proj_scene: PackedScene, proj_stats: ProjectileResource, stat
 ## Used for debugging the homing system & other collisions. Draws vectors to where we have scanned during the "FOV" method.
 func _draw() -> void:
 	if DebugFlags.Projectiles.show_movement_dir:
-		var local_movement_direction = movement_direction.rotated(-rotation) * 100
+		var local_movement_direction: Vector2 = movement_direction.rotated(-rotation) * 100
 		draw_line(Vector2.ZERO, local_movement_direction, Color(1, 1, 1, 0.5), 0.6)
 
 	if debug_recent_hit_location != Vector2.ZERO and DebugFlags.Projectiles.show_collision_points:
@@ -100,7 +100,7 @@ func _draw() -> void:
 	if not DebugFlags.Projectiles.show_homing_rays:
 		return
 
-	for ray in debug_homing_rays:
+	for ray: Dictionary in debug_homing_rays:
 		var from_pos: Vector2 = to_local(ray["from"])
 		var to_pos: Vector2 = to_local(ray["hit_position"])
 		var color: Color = Color(0, 1, 0, 0.4) if ray["hit"] else Color(1, 0, 0, 0.25)
@@ -133,7 +133,7 @@ func _ready() -> void:
 	lifetime_timer.timeout.connect(_on_lifetime_timer_timeout)
 	homing_delay_timer.timeout.connect(_start_homing)
 	homing_timer.timeout.connect(_on_homing_timer_timeout)
-	initial_boost_timer.timeout.connect(func(): current_initial_boost = 1.0)
+	initial_boost_timer.timeout.connect(func() -> void: current_initial_boost = 1.0)
 	lifetime_timer.start(stats.lifetime)
 
 	_set_up_potential_homing_delay()
@@ -309,7 +309,7 @@ func _find_target_in_fov() -> void:
 
 	var step: float = fov_radians / FOV_RAYCAST_COUNT
 
-	for i in range(FOV_RAYCAST_COUNT + 1):
+	for i: int in range(FOV_RAYCAST_COUNT + 1):
 		var angle_offset: float = -half_fov + step * i
 		var cast_direction: Vector2 = direction.rotated(angle_offset)
 		var from_pos: Vector2 = global_position
@@ -325,7 +325,7 @@ func _find_target_in_fov() -> void:
 		if not effect_source.can_hit_self:
 			exclusion_list.append(source_entity.get_rid())
 
-		for child in source_entity.get_children():
+		for child: Node in source_entity.get_children():
 			if child is Area2D:
 				exclusion_list.append(child.get_rid())
 
@@ -365,7 +365,7 @@ func _is_valid_homing_target(obj: Node) -> bool:
 func _select_closest_homing_target(targets: Array[Node], to_position: Vector2) -> Node:
 	var closest_target: Node = null
 	var closest_distance_squared: float = INF
-	for target in targets:
+	for target: Node in targets:
 		var distance_squared: float = to_position.distance_squared_to(target.global_position)
 		if distance_squared < closest_distance_squared:
 			closest_distance_squared = distance_squared
@@ -378,7 +378,7 @@ func _find_closest_target() -> void:
 	var group_name: String = "enemy_entities" if source_entity.team == GlobalData.Teams.PLAYER else "player_entities"
 	var max_range_squared: float = stats.homing_max_range * stats.homing_max_range
 
-	for entity in get_tree().get_nodes_in_group(group_name):
+	for entity: Node in get_tree().get_nodes_in_group(group_name):
 		if entity != source_entity and _is_valid_homing_target(entity):
 			var distance_squared: float = global_position.distance_squared_to(entity.global_position)
 			if distance_squared <= max_range_squared:
@@ -392,7 +392,7 @@ func _find_closest_target() -> void:
 
 func _choose_from_mouse_area_targets() -> void:
 	var candidates: Array[Node] = []
-	for obj in mouse_scan_targets:
+	for obj: Node in mouse_scan_targets:
 		if obj and _is_valid_homing_target(obj):
 			candidates.append(obj)
 
@@ -418,7 +418,7 @@ func _apply_homing_movement(delta: float) -> void:
 		return
 
 	var target_dir: Vector2 = (homing_target.global_position - global_position).normalized()
-	var current_dir = Vector2(cos(rotation), sin(rotation)).normalized()
+	var current_dir: Vector2 = Vector2(cos(rotation), sin(rotation)).normalized()
 	var angle_to_target: float = current_dir.angle_to(target_dir)
 	var turn_stat: float = s_mods.get_stat("proj_max_turn_rate") if not is_charge_fire else s_mods.get_stat("charge_proj_max_turn_rate")
 	var max_turn_rate: float = deg_to_rad(turn_stat) * delta
@@ -450,30 +450,30 @@ func _reset_arc_logic() -> void:
 	arc_time_counter = 0
 
 ## Calculates the distance we will travel in our arcing motion based on speed, angle, and height.
-func calculate_arc_distance(speed, angle, height):
-	var g = 9.8
-	var rad_angle = deg_to_rad(angle)
-	var sin_angle = sin(rad_angle)
-	var cos_angle = cos(rad_angle)
+func calculate_arc_distance(speed: float, angle: float, height: int) -> float:
+	const G: float = 9.8
+	var rad_angle: float = deg_to_rad(angle)
+	var sin_angle: float = sin(rad_angle)
+	var cos_angle: float = cos(rad_angle)
 
-	var v_sin = speed * sin_angle
-	var v_cos = speed * cos_angle
-	var discriminant = v_sin * v_sin + 2 * g * height
+	var v_sin: float = speed * sin_angle
+	var v_cos: float = speed * cos_angle
+	var discriminant: float = v_sin * v_sin + 2 * G * height
 	if discriminant < 0:
 		return 0
 
-	var time = (v_sin + sqrt(discriminant)) / g
+	var time: float = (v_sin + sqrt(discriminant)) / G
 	return v_cos * time
 
 ## Calculates the initial speed of the arcing motion based on the target distance and angle and starting height.
-func find_initial_arc_speed(target_distance, angle, height):
-	var low = 0.0
-	var high = 100.0
-	var epsilon = 1.0  # Precision
+func find_initial_arc_speed(target_distance: float, angle: float, height: int) -> float:
+	var low: float = 0
+	var high: float = 100.0
+	var epsilon: float = 1.0  # Precision
 
 	while high - low > epsilon:
-		var mid = (low + high) / 2
-		var distance = calculate_arc_distance(mid, angle, height)
+		var mid: float = (low + high) / 2
+		var distance: float = calculate_arc_distance(mid, angle, height)
 
 		if distance < target_distance:
 			low = mid
@@ -544,7 +544,7 @@ func _split_self() -> void:
 	var step_angle: float = (deg_to_rad(stats.angular_spreads[splits_so_far - 1]) / (stats.split_into_counts[splits_so_far - 1] - close_to_360_adjustment))
 	var start_angle: float = initial_rot - (deg_to_rad(stats.angular_spreads[splits_so_far - 1]) / 2)
 
-	for i in range(stats.split_into_counts[splits_so_far - 1]):
+	for i: int in range(stats.split_into_counts[splits_so_far - 1]):
 		var angle: float = start_angle + (i * step_angle)
 		var new_proj: Projectile = Projectile.create(split_proj_scene, stats, s_mods, effect_source, source_entity, position, angle, is_charge_fire)
 		new_proj.splits_so_far = splits_so_far
@@ -563,7 +563,7 @@ func _split_self() -> void:
 ## Calculates the new direction of the projectile when it bounces or reflects off a collider.
 func _handle_ricochet(object: Variant) -> void:
 	var collision_normal: Vector2 = (global_position - object.global_position).normalized()
-	var direction = Vector2(cos(rotation), sin(rotation))
+	var direction: Vector2 = Vector2(cos(rotation), sin(rotation))
 
 	var reflected_direction: Vector2
 	if (object is TileMapLayer) or (not stats.ricochet_angle_bounce):
@@ -593,7 +593,7 @@ func _handle_pierce() -> void:
 ## Begins a splash damage sequence by checking if we have a circle collision shape to work with.
 ## If so, it plays any needed animations and creates the defined waits for splash duration and delay.
 func _handle_aoe() -> void:
-	if collider.shape is not CircleShape2D or collider.shape is not CapsuleShape2D:
+	if collider.shape is not CircleShape2D and collider.shape is not CapsuleShape2D:
 		push_error("\"" + name + "\" projectile has AOE logic but its collision shape is not a circle or capsule.")
 		return
 
@@ -695,7 +695,7 @@ func _get_effect_source_adjusted_for_falloff(effect_src: EffectSource, handling_
 
 	if apply_to_bad:
 		falloff_effect_src.base_damage = int(ceil(falloff_effect_src.base_damage * falloff_mult))
-		for i in range(falloff_effect_src.status_effects.size()):
+		for i: int in range(falloff_effect_src.status_effects.size()):
 			if falloff_effect_src.status_effects[i] != null and falloff_effect_src.status_effects[i].is_bad_effect:
 				var new_stat_effect: StatusEffect = falloff_effect_src.status_effects[i].duplicate()
 				new_stat_effect.mod_time *= falloff_mult
@@ -706,7 +706,7 @@ func _get_effect_source_adjusted_for_falloff(effect_src: EffectSource, handling_
 
 	if apply_to_good:
 		falloff_effect_src.base_healing = int(ceil(falloff_effect_src.base_healing * falloff_mult))
-		for i in range(falloff_effect_src.status_effects.size()):
+		for i: int in range(falloff_effect_src.status_effects.size()):
 			if falloff_effect_src.status_effects[i] != null and not falloff_effect_src.status_effects[i].is_bad_effect:
 				var new_stat_effect: StatusEffect = falloff_effect_src.status_effects[i].duplicate()
 				new_stat_effect.mod_time *= falloff_mult

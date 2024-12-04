@@ -11,13 +11,15 @@ class SpriteDetails:
 			sprite_texture = sprite_node.texture
 		return sprite_texture
 
-	static func get_frame_rect(sprite_node: Node2D) -> Vector2:
+	static func get_frame_rect(sprite_node: Node2D, apply_node_scale: bool = true) -> Vector2:
 		var sprite_texture: Texture2D = null
 		if sprite_node is AnimatedSprite2D:
 			sprite_texture = _get_anim_sprite_texture(sprite_node)
 		elif sprite_node is Sprite2D:
 			sprite_texture = sprite_node.texture
-		return sprite_texture.get_size() * sprite_node.scale
+
+		var scalar: Vector2 = sprite_node.scale if apply_node_scale else Vector2(1, 1)
+		return sprite_texture.get_size() * scalar
 
 	static func _get_anim_sprite_texture(anim_sprite: AnimatedSprite2D) -> Texture2D:
 		var current_anim: String = anim_sprite.animation

@@ -1,4 +1,4 @@
-[gd_scene load_steps=48 format=3 uid="uid://co3n6m7efg8pd"]
+[gd_scene load_steps=49 format=3 uid="uid://co3n6m7efg8pd"]
 
 [ext_resource type="Script" path="res://Entities/Components/EffectComponents/StatusEffectManager/StatusEffectManager.gd" id="1_3tl8i"]
 [ext_resource type="Texture2D" uid="uid://cidg3ea0fltr" path="res://UI/TemporaryElements/StatusEffectBanner/snowflake.png" id="2_1kjve"]
@@ -7,26 +7,32 @@
 [ext_resource type="Texture2D" uid="uid://ubajhsoa1d30" path="res://UI/TemporaryElements/StatusEffectBanner/question.png" id="4_rr7my"]
 [ext_resource type="Texture2D" uid="uid://dp618rrm5wywy" path="res://UI/TemporaryElements/StatusEffectBanner/clocks.png" id="5_11lnt"]
 [ext_resource type="Texture2D" uid="uid://n85wp2rkfw7t" path="res://UI/TemporaryElements/StatusEffectBanner/heart.png" id="5_iqa26"]
-[ext_resource type="Texture2D" uid="uid://p8l30rk26hyl" path="res://UI/TemporaryElements/StatusEffectBanner/slow_arrows.png" id="5_mckup"]
+[ext_resource type="Texture2D" uid="uid://pcfm1w4oe8wi" path="res://UI/TemporaryElements/StatusEffectBanner/snail.png" id="5_r45v0"]
 [ext_resource type="Texture2D" uid="uid://b2jcsvncxjns3" path="res://UI/TemporaryElements/StatusEffectBanner/lightning.png" id="6_nm738"]
 [ext_resource type="Texture2D" uid="uid://cfdtcke5ye6kv" path="res://UI/TemporaryElements/StatusEffectBanner/speed_arrows.png" id="6_tths5"]
-[ext_resource type="Texture2D" uid="uid://cjtlx8r1y2cn2" path="res://UI/TemporaryElements/StatusEffectBanner/shields.png" id="11_fadof"]
+[ext_resource type="Texture2D" uid="uid://dngm6pnhj25hq" path="res://UI/TemporaryElements/StatusEffectBanner/shield.png" id="11_psfp8"]
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_w7ucw"]
 blend_mode = 1
 
-[sub_resource type="Curve" id="Curve_6d4xt"]
+[sub_resource type="Curve" id="Curve_y8p6g"]
+min_value = -200.0
+max_value = 200.0
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Curve" id="Curve_vnkh2"]
 min_value = -360.0
 max_value = 360.0
-_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.506849, 19.243), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
-point_count = 3
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 11.1297), 0.0, 0.0, 0, 0]
+point_count = 2
 
 [sub_resource type="Curve" id="Curve_xhbdq"]
-_data = [Vector2(0.00342466, 0.359578), 0.0, 0.0, 0, 0, Vector2(0.131849, 0.725802), 0.0, 0.0, 0, 0, Vector2(0.758562, 0.733314), 0.0, 0.0, 0, 0, Vector2(0.941781, 0.77651), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+_data = [Vector2(0.00342466, 0.359578), 0.0, 0.0, 0, 0, Vector2(0.121575, 0.707021), 0.0, 0.0, 0, 0, Vector2(0.756849, 0.842242), 0.0, 0.0, 0, 0, Vector2(0.941781, 0.77651), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
 point_count = 5
 
-[sub_resource type="Gradient" id="Gradient_b3odc"]
-offsets = PackedFloat32Array(0, 0.23384, 0.752852, 1)
+[sub_resource type="Gradient" id="Gradient_dhvb1"]
+offsets = PackedFloat32Array(0, 0.138783, 0.857414, 1)
 colors = PackedColorArray(0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0)
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_d6xoa"]
@@ -53,8 +59,8 @@ particles_anim_h_frames = 4
 particles_anim_v_frames = 1
 particles_anim_loop = true
 
-[sub_resource type="Curve" id="Curve_ghiwb"]
-_data = [Vector2(0.00342466, 0.359578), 0.0, 0.0, 0, 0, Vector2(0.131849, 0.725802), 0.0, 0.0, 0, 0, Vector2(0.758562, 0.733314), 0.0, 0.0, 0, 0, Vector2(0.941781, 0.77651), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+[sub_resource type="Curve" id="Curve_3oe74"]
+_data = [Vector2(0.00342466, 0.359578), 0.0, 0.0, 0, 0, Vector2(0.203767, 0.778388), 0.0, 0.0, 0, 0, Vector2(0.760274, 0.73707), 0.0, 0.0, 0, 0, Vector2(0.941781, 0.77651), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
 point_count = 5
 
 [sub_resource type="Gradient" id="Gradient_ihqhk"]
@@ -62,14 +68,13 @@ offsets = PackedFloat32Array(0, 0.23384, 0.752852, 1)
 colors = PackedColorArray(0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0)
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_qrigd"]
-blend_mode = 1
 particles_animation = true
-particles_anim_h_frames = 5
+particles_anim_h_frames = 6
 particles_anim_v_frames = 1
 particles_anim_loop = true
 
 [sub_resource type="Curve" id="Curve_27pcc"]
-_data = [Vector2(0.00342466, 0.359578), 0.0, 0.0, 0, 0, Vector2(0.131849, 0.725802), 0.0, 0.0, 0, 0, Vector2(0.758562, 0.733314), 0.0, 0.0, 0, 0, Vector2(0.941781, 0.77651), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+_data = [Vector2(0.00342466, 0.359578), 0.0, 0.0, 0, 0, Vector2(0.136986, 0.904218), 0.0, 0.0, 0, 0, Vector2(0.758562, 0.842242), 0.0, 0.0, 0, 0, Vector2(0.941781, 0.77651), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
 point_count = 5
 
 [sub_resource type="Gradient" id="Gradient_88l5w"]
@@ -97,12 +102,18 @@ particles_anim_h_frames = 8
 particles_anim_v_frames = 1
 particles_anim_loop = true
 
+[sub_resource type="Curve" id="Curve_uca4e"]
+min_value = -500.0
+max_value = 500.0
+_data = [Vector2(0, -1), 0.0, 0.0, 0, 0, Vector2(1, 0.5), 0.0, 0.0, 0, 0]
+point_count = 2
+
 [sub_resource type="Curve" id="Curve_i141l"]
 _data = [Vector2(0.00342466, 0.359578), 0.0, 0.0, 0, 0, Vector2(0.131849, 0.725802), 0.0, 0.0, 0, 0, Vector2(0.758562, 0.733314), 0.0, 0.0, 0, 0, Vector2(0.941781, 0.77651), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
 point_count = 5
 
 [sub_resource type="Gradient" id="Gradient_ifrph"]
-offsets = PackedFloat32Array(0, 0.23384, 0.752852, 1)
+offsets = PackedFloat32Array(0, 0.138783, 0.792776, 1)
 colors = PackedColorArray(0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0)
 
 [sub_resource type="Curve" id="Curve_tovas"]
@@ -137,7 +148,7 @@ _data = [Vector2(0, -8.6879), 0.0, 0.0, 0, 0, Vector2(1, 4.29407), 0.0, 0.0, 0, 
 point_count = 2
 
 [sub_resource type="Curve" id="Curve_cdmbq"]
-_data = [Vector2(0.00342466, 0.359578), 0.0, 0.0, 0, 0, Vector2(0.131849, 0.725802), 0.0, 0.0, 0, 0, Vector2(0.758562, 0.733314), 0.0, 0.0, 0, 0, Vector2(0.941781, 0.77651), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+_data = [Vector2(0.00342466, 0.359578), 0.0, 0.0, 0, 0, Vector2(0.138699, 0.661947), 0.0, 0.0, 0, 0, Vector2(0.765411, 0.772754), 0.0, 0.0, 0, 0, Vector2(0.909247, 0.814071), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
 point_count = 5
 
 [sub_resource type="Gradient" id="Gradient_eahjv"]
@@ -157,53 +168,50 @@ colors = PackedColorArray(0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0.519084,
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_jmsdf"]
 
-[sub_resource type="Curve" id="Curve_jxb74"]
-max_value = 90.0
-_data = [Vector2(0, 0), 0.0, 90.0, 0, 1, Vector2(1, 90), 90.0, 0.0, 1, 0]
-point_count = 2
-
 [sub_resource type="Curve" id="Curve_1je30"]
 max_value = 1.25
-_data = [Vector2(0, 1.00116), 0.0, 0.0, 0, 0, Vector2(0.5, 1.25), 0.0, 0.0, 0, 0, Vector2(1, 1.0035), 0.0, 0.0, 0, 0]
+_data = [Vector2(0, 1.00116), 0.0, 0.0, 0, 0, Vector2(0.503425, 1.2007), 0.0, 0.0, 0, 0, Vector2(1, 1.0035), 0.0, 0.0, 0, 0]
 point_count = 3
 
 [sub_resource type="Gradient" id="Gradient_7f0sj"]
-colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 1)
+offsets = PackedFloat32Array(0, 0.095057, 0.91635, 1)
+colors = PackedColorArray(1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0)
 
 [node name="StatusEffectManager" type="Node2D" groups=["has_save_logic"]]
 script = ExtResource("1_3tl8i")
 
 [node name="FrostbiteParticles" type="CPUParticles2D" parent="."]
 material = SubResource("CanvasItemMaterial_w7ucw")
-position = Vector2(0, -16)
 emitting = false
-amount = 7
+amount = 18
 lifetime = 2.0
 lifetime_randomness = 0.15
 local_coords = true
 texture = ExtResource("2_1kjve")
 emission_shape = 3
 emission_rect_extents = Vector2(8, 16)
-direction = Vector2(0, -1)
-spread = 25.0
-gravity = Vector2(0, 0)
-initial_velocity_max = 3.0
+direction = Vector2(0, 1)
+spread = 20.0
+gravity = Vector2(0, 11)
+initial_velocity_max = 1.0
 orbit_velocity_min = -0.05
 orbit_velocity_max = 0.05
+tangential_accel_min = -10.0
+tangential_accel_max = 10.0
+tangential_accel_curve = SubResource("Curve_y8p6g")
 angle_min = -10.0
 angle_max = 10.0
-angle_curve = SubResource("Curve_6d4xt")
-scale_amount_min = 0.25
-scale_amount_max = 0.5
+angle_curve = SubResource("Curve_vnkh2")
+scale_amount_min = 0.15
+scale_amount_max = 0.35
 scale_amount_curve = SubResource("Curve_xhbdq")
-color = Color(5, 5, 5, 1)
-color_ramp = SubResource("Gradient_b3odc")
+color = Color(0, 2.019, 2.526, 1)
+color_ramp = SubResource("Gradient_dhvb1")
 
 [node name="PoisonParticles" type="CPUParticles2D" parent="."]
 material = SubResource("CanvasItemMaterial_d6xoa")
-position = Vector2(0, -16)
 emitting = false
-amount = 10
+amount = 15
 lifetime = 1.75
 lifetime_randomness = 0.15
 local_coords = true
@@ -213,40 +221,37 @@ emission_rect_extents = Vector2(8, 16)
 direction = Vector2(0, -1)
 spread = 25.0
 gravity = Vector2(0, 0)
-initial_velocity_min = 3.0
-initial_velocity_max = 5.0
+initial_velocity_min = 2.0
+initial_velocity_max = 3.0
 orbit_velocity_min = -0.05
 orbit_velocity_max = 0.05
 angle_min = -10.0
 angle_max = 10.0
 angle_curve = SubResource("Curve_fbkmh")
-scale_amount_min = 0.2
-scale_amount_max = 0.4
+scale_amount_min = 0.13
+scale_amount_max = 0.3
 scale_amount_curve = SubResource("Curve_r0t3x")
-color = Color(5, 5, 5, 1)
+color = Color(3, 3, 3, 1)
 color_ramp = SubResource("Gradient_nwe1e")
 
 [node name="BurningParticles" type="CPUParticles2D" parent="."]
 material = SubResource("CanvasItemMaterial_v670q")
-position = Vector2(0, -16)
 emitting = false
-amount = 6
 lifetime = 1.5
 lifetime_randomness = 0.15
 local_coords = true
 texture = ExtResource("3_mlbok")
 emission_shape = 3
-emission_rect_extents = Vector2(8, 16)
+emission_rect_extents = Vector2(8, 0.5)
 direction = Vector2(0, -1)
 spread = 25.0
 gravity = Vector2(0, 0)
 initial_velocity_max = 3.0
 orbit_velocity_min = -0.05
 orbit_velocity_max = 0.05
-scale_amount_min = 0.25
-scale_amount_max = 0.5
-scale_amount_curve = SubResource("Curve_ghiwb")
-color = Color(2, 2, 2, 1)
+scale_amount_min = 0.65
+scale_amount_curve = SubResource("Curve_3oe74")
+color = Color(1.05, 1.05, 1.05, 1)
 color_ramp = SubResource("Gradient_ihqhk")
 anim_speed_min = 4.0
 anim_speed_max = 4.0
@@ -254,25 +259,24 @@ anim_offset_max = 1.0
 
 [node name="SlownessParticles" type="CPUParticles2D" parent="."]
 material = SubResource("CanvasItemMaterial_qrigd")
-position = Vector2(0, -16)
 emitting = false
-amount = 7
+amount = 5
 lifetime = 2.0
-lifetime_randomness = 0.15
+lifetime_randomness = 0.1
 local_coords = true
-texture = ExtResource("5_mckup")
-emission_shape = 3
-emission_rect_extents = Vector2(8, 16)
+texture = ExtResource("5_r45v0")
+emission_shape = 2
+emission_sphere_radius = 1.0
 direction = Vector2(0, -1)
 spread = 25.0
 gravity = Vector2(0, 0)
 initial_velocity_max = 3.0
 orbit_velocity_min = -0.05
 orbit_velocity_max = 0.05
-scale_amount_min = 0.35
-scale_amount_max = 0.6
+scale_amount_min = 0.45
+scale_amount_max = 0.7
 scale_amount_curve = SubResource("Curve_27pcc")
-color = Color(5, 5, 5, 1)
+color = Color(2, 2, 2, 1)
 color_ramp = SubResource("Gradient_88l5w")
 anim_speed_min = 1.6
 anim_speed_max = 1.6
@@ -280,15 +284,14 @@ anim_offset_max = 1.0
 
 [node name="SpeedParticles" type="CPUParticles2D" parent="."]
 material = SubResource("CanvasItemMaterial_d6sk5")
-position = Vector2(0, -16)
 emitting = false
 amount = 7
 lifetime = 2.0
 lifetime_randomness = 0.15
 local_coords = true
 texture = ExtResource("6_tths5")
-emission_shape = 3
-emission_rect_extents = Vector2(8, 16)
+emission_shape = 2
+emission_sphere_radius = 1.0
 direction = Vector2(0, -1)
 spread = 25.0
 gravity = Vector2(0, 0)
@@ -306,23 +309,22 @@ anim_offset_max = 1.0
 
 [node name="TimeSnareParticles" type="CPUParticles2D" parent="."]
 material = SubResource("CanvasItemMaterial_ob67e")
-position = Vector2(0, -16)
 emitting = false
-amount = 5
-lifetime = 1.75
+amount = 10
+lifetime = 1.5
 lifetime_randomness = 0.15
 local_coords = true
 texture = ExtResource("5_11lnt")
-emission_shape = 3
-emission_rect_extents = Vector2(8, 16)
-direction = Vector2(0, -1)
-spread = 25.0
+emission_shape = 2
+emission_sphere_radius = 1.0
+direction = Vector2(0, 0)
+spread = 0.0
 gravity = Vector2(0, 0)
-initial_velocity_max = 3.0
-orbit_velocity_min = -0.05
-orbit_velocity_max = 0.05
+orbit_velocity_min = 0.25
+orbit_velocity_max = 0.25
+orbit_velocity_curve = SubResource("Curve_uca4e")
 scale_amount_min = 0.25
-scale_amount_max = 0.5
+scale_amount_max = 0.45
 scale_amount_curve = SubResource("Curve_i141l")
 color = Color(4, 4, 4, 1)
 color_ramp = SubResource("Gradient_ifrph")
@@ -332,21 +334,20 @@ anim_speed_curve = SubResource("Curve_tovas")
 anim_offset_max = 1.0
 
 [node name="ConfusionParticles" type="CPUParticles2D" parent="."]
-position = Vector2(0, -16)
 emitting = false
-amount = 6
+amount = 10
 lifetime = 1.5
 lifetime_randomness = 0.15
 local_coords = true
 texture = ExtResource("4_rr7my")
-emission_shape = 3
-emission_rect_extents = Vector2(8, 16)
+emission_shape = 2
+emission_sphere_radius = 1.0
 direction = Vector2(0, -1)
 spread = 25.0
 gravity = Vector2(0, 0)
 initial_velocity_max = 3.0
-orbit_velocity_min = -0.05
-orbit_velocity_max = 0.05
+orbit_velocity_min = -0.25
+orbit_velocity_max = 0.25
 angle_min = -3.0
 angle_max = 3.0
 angle_curve = SubResource("Curve_u5pvh")
@@ -361,15 +362,13 @@ hue_variation_curve = SubResource("Curve_r4b6y")
 
 [node name="RegenParticles" type="CPUParticles2D" parent="."]
 material = SubResource("CanvasItemMaterial_56em0")
-position = Vector2(0, -16)
 emitting = false
-amount = 6
 lifetime = 1.5
 lifetime_randomness = 0.15
 local_coords = true
 texture = ExtResource("5_iqa26")
-emission_shape = 3
-emission_rect_extents = Vector2(8, 16)
+emission_shape = 2
+emission_sphere_radius = 1.0
 direction = Vector2(0, -1)
 spread = 25.0
 gravity = Vector2(0, 0)
@@ -379,8 +378,8 @@ orbit_velocity_max = 0.05
 angle_min = -3.0
 angle_max = 3.0
 angle_curve = SubResource("Curve_x4cfa")
-scale_amount_min = 0.18
-scale_amount_max = 0.42
+scale_amount_min = 0.2
+scale_amount_max = 0.35
 scale_amount_curve = SubResource("Curve_cdmbq")
 color = Color(0, 5.724, 2.076, 1)
 color_ramp = SubResource("Gradient_eahjv")
@@ -388,21 +387,18 @@ hue_variation_curve = SubResource("Curve_r4b6y")
 
 [node name="StormSyndromeParticles" type="CPUParticles2D" parent="."]
 material = SubResource("CanvasItemMaterial_3qh0v")
-position = Vector2(0, -16)
 emitting = false
-amount = 6
 lifetime = 1.5
 lifetime_randomness = 0.15
 local_coords = true
 texture = ExtResource("6_nm738")
-emission_shape = 3
-emission_rect_extents = Vector2(8, 16)
-direction = Vector2(0, -1)
+emission_shape = 2
+emission_sphere_radius = 1.0
+direction = Vector2(0, 0)
 spread = 25.0
 gravity = Vector2(0, 0)
-initial_velocity_max = 3.0
-orbit_velocity_min = -0.05
-orbit_velocity_max = 0.05
+orbit_velocity_min = -0.25
+orbit_velocity_max = 0.25
 scale_amount_min = 0.18
 scale_amount_max = 0.42
 scale_amount_curve = SubResource("Curve_57ir7")
@@ -412,19 +408,22 @@ hue_variation_curve = SubResource("Curve_r4b6y")
 
 [node name="UntouchableParticles" type="CPUParticles2D" parent="."]
 material = SubResource("CanvasItemMaterial_jmsdf")
-position = Vector2(0, -16)
 emitting = false
-amount = 1
-lifetime = 2.0
+amount = 7
+lifetime = 1.75
+lifetime_randomness = 0.15
 local_coords = true
-texture = ExtResource("11_fadof")
-direction = Vector2(0, -1)
+texture = ExtResource("11_psfp8")
+emission_shape = 2
+emission_sphere_radius = 32.0
+direction = Vector2(0, 0)
 spread = 0.0
 gravity = Vector2(0, 0)
-angle_min = 1.0
-angle_max = 1.0
-angle_curve = SubResource("Curve_jxb74")
+orbit_velocity_min = 0.5
+orbit_velocity_max = 0.5
+scale_amount_min = 0.5
+scale_amount_max = 0.5
 scale_amount_curve = SubResource("Curve_1je30")
-color = Color(3, 3, 3, 1)
+color = Color(5, 5, 5, 1)
 color_ramp = SubResource("Gradient_7f0sj")
 hue_variation_curve = SubResource("Curve_r4b6y")

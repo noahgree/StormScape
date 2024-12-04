@@ -6,9 +6,9 @@
 
 [sub_resource type="Resource" id="Resource_ge1fd"]
 script = ExtResource("1_ab1dr")
-damaging_time = 10.0
+damaging_time = 8.0
 dmg_ticks_array = Array[int]([5, 5, 5])
-delay_time = 3.0
+delay_time = 2.0
 dmg_affected_stats = 0
 run_until_removed = false
 time_between_ticks = 1.0
@@ -20,7 +20,6 @@ mod_id = "frostbite2"
 operation = "-%"
 value = 82.0
 priority = 1
-can_stack = false
 max_stack_count = 3
 override_all = false
 
@@ -31,7 +30,6 @@ mod_id = "frostbite2"
 operation = "-%"
 value = 82.0
 priority = 1
-can_stack = false
 max_stack_count = 3
 override_all = false
 

@@ -98,7 +98,7 @@ func on_stamina_changed(new_stamina: float) -> void:
 		stamina_recharge_timer.start()
 	previous_stamina = new_stamina
 
-	var tween = create_tween()
+	var tween: Tween = create_tween()
 	tween.tween_property(stamina_bar, "material:shader_parameter/opacity", 0.385, 0.2)
 	stamina_bar.material.set_shader_parameter(
 		"progress", 1.0 - new_stamina / player.stats.get_stat("max_stamina")
@@ -136,23 +136,23 @@ func on_stamina_wait_timer_state_change(wait_time: float, should_start: bool) ->
 		stamina_recharge_bar.value = 0
 
 func _on_health_changed_timer_timeout() -> void:
-	var tween = create_tween()
+	var tween: Tween = create_tween()
 	tween.tween_property(health_change, "value", health_bar.value, 0.2)
 
 func _on_shield_changed_timer_timeout() -> void:
-	var tween = create_tween()
+	var tween: Tween = create_tween()
 	tween.tween_property(shield_change, "value", shield_bar.value, 0.2)
 
 func _on_hunger_changed_timer_timeout() -> void:
-	var tween = create_tween()
+	var tween: Tween = create_tween()
 	tween.tween_property(hunger_change, "value", hunger_bar.value, 1.5)
 
 func _on_stamina_changed_timer_timeout() -> void:
-	var tween = create_tween()
+	var tween: Tween = create_tween()
 	tween.tween_property(stamina_change, "value", stamina_bar.value, 0.2)
 	tween.parallel().tween_property(stamina_bar, "material:shader_parameter/opacity", 0, 0.2)
 
 ## Called when stamina recharge has ended and we should fade out the tip shader.
 func _on_stamina_recharge_timer_timeout() -> void:
-	var tween = create_tween()
+	var tween: Tween = create_tween()
 	tween.tween_property(stamina_bar, "material:shader_parameter/opacity", 0, 0.2)

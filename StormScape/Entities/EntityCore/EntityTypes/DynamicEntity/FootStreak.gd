@@ -5,7 +5,7 @@ static var scene: PackedScene = load("res://Entities/EntityCore/EntityTypes/Dyna
 
 @onready var particles: CPUParticles2D = $CPUParticles2D
 
-const MAX_TRAIL_LENGTH = 50
+const MAX_TRAIL_LENGTH: float = 50.0
 var lifetime_timer: Timer = Timer.new()
 var is_fading: bool = false
 
@@ -37,9 +37,9 @@ func _on_lifetime_timer_timeout() -> void:
 	is_fading = true
 
 	var tween: Tween = create_tween()
-	tween.tween_method(func(new_value):
+	tween.tween_method(func(new_value: float) -> void:
 		modulate.a = new_value
 		gradient.set_offset(2, new_value),
 		1.0, 0.0, 5.0)
-	tween.parallel().tween_method(func(new_value): gradient.set_offset(1, new_value), gradient.get_offset(1), 0.0, 5.0)
+	tween.parallel().tween_method(func(new_value: float) -> void: gradient.set_offset(1, new_value), gradient.get_offset(1), 0.0, 5.0)
 	tween.chain().tween_callback(queue_free)

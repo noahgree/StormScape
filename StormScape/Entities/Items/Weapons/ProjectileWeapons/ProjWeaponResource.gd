@@ -77,7 +77,7 @@ enum ProjWeaponType { ## The kinds of projectile weapons.
 
 @export_group("Barrage Logic")
 @export var barrage_count: int = 1 ## Number of projectiles fired at 'angular-spread' degrees apart for each execute. Only applies when angular spread is greater than 0.
-@export_range(0, 360, 0.1, "suffix:degrees") var angular_spread = 25 ## Angular spread of barrage projectiles in degrees.
+@export_range(0, 360, 0.1, "suffix:degrees") var angular_spread: float = 25 ## Angular spread of barrage projectiles in degrees.
 
 
 # Unique Properties #

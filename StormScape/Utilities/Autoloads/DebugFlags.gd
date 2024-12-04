@@ -9,7 +9,7 @@ class PrintFlags:
 	static var current_effect_changes: bool = true
 	static var weapon_mod_changes: bool = true
 	static var saver_loader_status_changes: bool = true
-	static var ammo_updates: bool = true
+	static var ammo_updates: bool = false
 	static var sounds_starting: bool = false
 	static var storm_phases: bool = false
 	static var loot_table_updates: bool = false

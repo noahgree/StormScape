@@ -50,7 +50,7 @@ func _draw() -> void:
 	if not DebugFlags.Projectiles.show_hitscan_rays:
 		return
 
-	for ray in debug_rays:
+	for ray: Dictionary in debug_rays:
 		var from_pos: Vector2 = to_local(ray["from"])
 		var to_pos: Vector2 = to_local(ray["to"])
 		if ray["hit"]:
@@ -129,15 +129,15 @@ func _find_target_receivers() -> void:
 	var to_pos: Vector2 = global_position + (cast_direction * stats.hitscan_max_distance)
 
 	var exclusion_list: Array[RID] = [source_entity.get_rid()]
-	for child in source_entity.get_children():
+	for child: Node in source_entity.get_children():
 		if child is Area2D:
 			exclusion_list.append(child.get_rid())
 
-	var remaining_pierces = s_mods.get_stat("hitscan_pierce_count") if not is_charge_fire else s_mods.get_stat("charge_hitscan_pierce_count")
+	var remaining_pierces: int = int(s_mods.get_stat("hitscan_pierce_count")) if not is_charge_fire else int(s_mods.get_stat("charge_hitscan_pierce_count"))
 	var pierce_list: Dictionary ={}
 
 	while remaining_pierces >= 0:
-		var query = PhysicsRayQueryParameters2D.new()
+		var query: PhysicsRayQueryParameters2D = PhysicsRayQueryParameters2D.new()
 		query.from = from_pos
 		query.to = to_pos
 		query.exclude = exclusion_list
@@ -168,7 +168,7 @@ func _find_target_receivers() -> void:
 				from_pos = collision_point
 
 				exclusion_list.append(obj.get_rid())
-				for child in obj.get_children():
+				for child: Node in obj.get_children():
 					if child is Area2D:
 						exclusion_list.append(child.get_rid())
 
@@ -187,7 +187,7 @@ func _find_target_receivers() -> void:
 			end_point = to_local(to_pos)
 
 	if effect_tick_timer.is_stopped():
-		for i in range(candidates.size()):
+		for i: int in range(candidates.size()):
 			var receiver_index: int = _select_closest_receiver(candidates)
 			var receiver: Node = candidates[receiver_index]
 			var effect_receiver: EffectReceiverComponent = receiver.get_node_or_null("EffectReceiverComponent")
@@ -219,7 +219,7 @@ func _is_valid_receiver(obj: Node) -> bool:
 func _select_closest_receiver(targets: Array[Node]) -> int:
 	var closest_target: int = 0
 	var closest_distance_squared: float = INF
-	for i in range(targets.size()):
+	for i: int in range(targets.size()):
 		var distance_squared: float = global_position.distance_squared_to(targets[i].global_position)
 		if distance_squared < closest_distance_squared:
 			closest_distance_squared = distance_squared
@@ -227,7 +227,7 @@ func _select_closest_receiver(targets: Array[Node]) -> int:
 	return closest_target
 
 func _update_impact_particles(pierce_list: Dictionary) -> void:
-	for node in pierce_list.keys():
+	for node: Node in pierce_list.keys():
 		if node in impacted_nodes:
 			impacted_nodes[node].position = to_local(pierce_list[node].position)
 			impacted_nodes[node].global_rotation = pierce_list[node].normal.angle()
@@ -239,7 +239,7 @@ func _update_impact_particles(pierce_list: Dictionary) -> void:
 			add_child(particles)
 			particles.emitting = true
 
-	for node in impacted_nodes:
+	for node: Node in impacted_nodes:
 		if not node in pierce_list.keys():
 			impacted_nodes[node].queue_free()
 			impacted_nodes.erase(node)
@@ -272,7 +272,7 @@ func _get_effect_source_adjusted_for_falloff(effect_src: EffectSource, contact_p
 
 	if apply_to_bad:
 		falloff_effect_src.base_damage = int(ceil(falloff_effect_src.base_damage * falloff_mult))
-		for i in range(falloff_effect_src.status_effects.size()):
+		for i: int in range(falloff_effect_src.status_effects.size()):
 			if falloff_effect_src.status_effects[i] != null and falloff_effect_src.status_effects[i].is_bad_effect:
 				var new_stat_effect: StatusEffect = falloff_effect_src.status_effects[i].duplicate()
 				new_stat_effect.mod_time *= falloff_mult
@@ -283,7 +283,7 @@ func _get_effect_source_adjusted_for_falloff(effect_src: EffectSource, contact_p
 
 	if apply_to_good:
 		falloff_effect_src.base_healing = int(ceil(falloff_effect_src.base_healing * falloff_mult))
-		for i in range(falloff_effect_src.status_effects.size()):
+		for i: int in range(falloff_effect_src.status_effects.size()):
 			if falloff_effect_src.status_effects[i] != null and not falloff_effect_src.status_effects[i].is_bad_effect:
 				var new_stat_effect: StatusEffect = falloff_effect_src.status_effects[i].duplicate()
 				new_stat_effect.mod_time *= falloff_mult

@@ -2,7 +2,7 @@
 extends Node
 
 func update_editor_children_exports(node: EffectReceiverComponent, children: Array[Node]) -> void:
-	for child in children:
+	for child: Node in children:
 		if child is DmgHandler:
 			node.dmg_handler = child
 		if child is HealHandler:

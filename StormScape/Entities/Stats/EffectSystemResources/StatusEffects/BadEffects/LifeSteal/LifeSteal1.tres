@@ -5,10 +5,11 @@
 
 [resource]
 script = ExtResource("1_b8skv")
-dmg_steal_mult = 0.25
+dmg_steal = 25.0
 effect_name = "Life Steal"
 effect_lvl = 1
 is_bad_effect = true
+affected_entities = 7
 effects_to_stop = Array[String]([])
 mod_time = 0.5
 apply_until_removed = false

@@ -6,8 +6,8 @@ extends TileMapLayer
 ## https://github.com/GlitchedinOrbit/dual-grid-tilemap-system-godot-gdscript
 
 var display_tilemap: TileMapLayer = null
-var _filled_cells = []
-var _emptied_cells = []
+var _filled_cells: Array = []
+var _emptied_cells: Array = []
 ## Coordinates for the fully-filled tile in the Atlas that
 ## will be used to sketch in the World grid.
 ## Only this tile will be considered for autotiling.
@@ -44,7 +44,7 @@ enum _direction {
 
 ## Overlapping tiles from the World grid
 ## that a tile from the Dual grid has.
-const _NEIGHBORS := {
+const _NEIGHBORS: Dictionary = {
 	_direction.TOP  : TileSet.CellNeighbor.CELL_NEIGHBOR_TOP_SIDE,
 	_direction.LEFT : TileSet.CellNeighbor.CELL_NEIGHBOR_LEFT_SIDE,
 	_direction.RIGHT : TileSet.CellNeighbor.CELL_NEIGHBOR_RIGHT_SIDE,
@@ -59,7 +59,7 @@ const _NEIGHBORS := {
 ## that a tile from the Dual grid has.
 ## To be used ONLY with isometric tilesets.
 ## CellNighbors are literal, even for Isometric
-const _NEIGHBORS_ISOMETRIC := {
+const _NEIGHBORS_ISOMETRIC: Dictionary = {
 	_direction.TOP : TileSet.CellNeighbor.CELL_NEIGHBOR_TOP_RIGHT_SIDE,
 	_direction.LEFT : TileSet.CellNeighbor.CELL_NEIGHBOR_TOP_LEFT_SIDE,
 	_direction.RIGHT : TileSet.CellNeighbor.CELL_NEIGHBOR_BOTTOM_RIGHT_SIDE,
@@ -101,7 +101,7 @@ func _ready() -> void:
 		set_process(false)
 		self.changed.connect(_update_tileset, 1)
 
-func _process(_delta): # Only used inside the editor
+func _process(_delta: float) -> void: # Only used inside the editor
 	if not self.tile_set:
 		return
 	call_deferred('_update_tileset')
@@ -143,7 +143,7 @@ func update_full_tileset() -> void:
 	elif display_tilemap.tile_set != self.tile_set: # TO-DO: merge with the above
 		_set_display_tilemap()
 	_checked_cells = [true]
-	for _cell in self.get_used_cells():
+	for _cell: Vector2i in self.get_used_cells():
 		if _is_world_tile_sketched(_cell) == 1 or _is_world_tile_sketched(_cell) == 0:
 			update_tile(_cell)
 	_checked_cells = [false]
@@ -170,13 +170,13 @@ func _update_tileset() -> void:
 		)
 	_emptied_cells = _new_emptied_cells
 	_filled_cells = _new_filled_cells
-	for _cell in _changed_cells:
+	for _cell: Vector2i in _changed_cells:
 		update_tile(_cell)
 
 ## Return the values that are not shared between the arrays
 func exclude_arrays(a: Array, b: Array) -> Array:
-	var result = a.duplicate()
-	for item in b:
+	var result: Array = a.duplicate()
+	for item: Variant in b:
 		if result.has(item):
 			result.erase(item)
 		else:
@@ -186,7 +186,7 @@ func exclude_arrays(a: Array, b: Array) -> Array:
 ## Merge two arrays without duplicates
 func intersect_arrays(a: Array, b: Array) -> Array:
 	var result: Array = a.duplicate()
-	for item in b:
+	for item: Variant in b:
 		if not result.has(item):
 			result.append(item)
 	return result
@@ -199,11 +199,11 @@ func update_tile(world_cell: Vector2i, recurse: bool = true) -> void:
 	if (!recurse and _atlas_id == -1):
 		return
 
-	var __NEIGHBORS = _NEIGHBORS_ISOMETRIC if is_isometric else _NEIGHBORS
-	var _top_left = world_cell
-	var _low_left = display_tilemap.get_neighbor_cell(world_cell, __NEIGHBORS[_direction.BOTTOM])
-	var _top_right = display_tilemap.get_neighbor_cell(world_cell, __NEIGHBORS[_direction.RIGHT])
-	var _low_right = display_tilemap.get_neighbor_cell(world_cell, __NEIGHBORS[_direction.BOTTOM_RIGHT])
+	var __NEIGHBORS: Dictionary = _NEIGHBORS_ISOMETRIC if is_isometric else _NEIGHBORS
+	var _top_left: Vector2i = world_cell
+	var _low_left: Vector2i = display_tilemap.get_neighbor_cell(world_cell, __NEIGHBORS[_direction.BOTTOM])
+	var _top_right: Vector2i = display_tilemap.get_neighbor_cell(world_cell, __NEIGHBORS[_direction.RIGHT])
+	var _low_right: Vector2i = display_tilemap.get_neighbor_cell(world_cell, __NEIGHBORS[_direction.BOTTOM_RIGHT])
 	_update_displayed_tile(_top_left)
 	_update_displayed_tile(_low_left)
 	_update_displayed_tile(_top_right)
@@ -227,11 +227,11 @@ func _update_displayed_tile(_display_cell: Vector2i) -> void:
 			return
 		_checked_cells.append(_display_cell)
 
-	var __NEIGHBORS = _NEIGHBORS_ISOMETRIC if is_isometric else _NEIGHBORS
-	var _top_left = display_tilemap.get_neighbor_cell(_display_cell, __NEIGHBORS[_direction.TOP_LEFT])
-	var _low_left = display_tilemap.get_neighbor_cell(_display_cell, __NEIGHBORS[_direction.LEFT])
-	var _top_right = display_tilemap.get_neighbor_cell(_display_cell, __NEIGHBORS[_direction.TOP])
-	var _low_right = _display_cell
+	var __NEIGHBORS: Dictionary = _NEIGHBORS_ISOMETRIC if is_isometric else _NEIGHBORS
+	var _top_left: Vector2i = display_tilemap.get_neighbor_cell(_display_cell, __NEIGHBORS[_direction.TOP_LEFT])
+	var _low_left: Vector2i = display_tilemap.get_neighbor_cell(_display_cell, __NEIGHBORS[_direction.LEFT])
+	var _top_right: Vector2i = display_tilemap.get_neighbor_cell(_display_cell, __NEIGHBORS[_direction.TOP])
+	var _low_right: Vector2i = _display_cell
 
 	# We perform a bitwise summation over the sketched neighbours
 	var _tile_key: int = 0
@@ -249,8 +249,8 @@ func _update_displayed_tile(_display_cell: Vector2i) -> void:
 
 ## Return -1 if the cell is empty, 0 if sketched with the empty tile,
 ## and 1 if it is sketched with the fully-filled tile.
-func _is_world_tile_sketched(_world_cell: Vector2i):
-	var _atlas_coords = get_cell_atlas_coords(_world_cell)
+func _is_world_tile_sketched(_world_cell: Vector2i) -> int:
+	var _atlas_coords: Vector2i = get_cell_atlas_coords(_world_cell)
 	if _atlas_coords == full_tile:
 		return 1
 	elif _atlas_coords == empty_tile:

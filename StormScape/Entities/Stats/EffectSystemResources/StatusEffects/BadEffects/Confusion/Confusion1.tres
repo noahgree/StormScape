@@ -10,7 +10,6 @@ mod_id = "Confusion"
 operation = "+"
 value = 40.0
 priority = 1
-can_stack = false
 max_stack_count = 3
 override_all = false
 

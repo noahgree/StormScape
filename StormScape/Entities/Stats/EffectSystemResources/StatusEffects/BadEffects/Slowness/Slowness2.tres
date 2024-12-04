@@ -1,0 +1,29 @@
+[gd_resource type="Resource" script_class="StatusEffect" load_steps=4 format=3 uid="uid://dxpdtynptvt7b"]
+
+[ext_resource type="Script" path="res://Entities/Stats/EffectSystemResources/StatusEffects/StatusEffect.gd" id="1_egh7j"]
+[ext_resource type="Script" path="res://Entities/Stats/StatMod/StatMod.gd" id="2_dvarp"]
+
+[sub_resource type="Resource" id="Resource_moco0"]
+script = ExtResource("2_dvarp")
+stat_id = "max_speed"
+mod_id = "slowness_2"
+operation = "-%"
+value = 30.0
+priority = 1
+max_stack_count = 3
+override_all = false
+
+[resource]
+script = ExtResource("1_egh7j")
+effect_name = "Slowness"
+effect_lvl = 2
+is_bad_effect = true
+affected_entities = 1
+effects_to_stop = Array[String]([])
+mod_time = 5.0
+apply_until_removed = false
+stat_mods = Array[ExtResource("2_dvarp")]([SubResource("Resource_moco0")])
+audio_to_play = ""
+only_cue_on_player_hit = false
+spawn_particles = true
+particles_req_handler = false

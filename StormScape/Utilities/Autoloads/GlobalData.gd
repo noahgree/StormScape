@@ -13,6 +13,11 @@ func _ready() -> void:
 	player_node = await SignalBus.player_ready
 	player_camera = get_parent().get_node("Game/WorldRoot/PlayerCamera")
 
+# Entity Core
+var entity_type_flag_map: Dictionary = {
+	"DynamicEntity" : 1, "RigidEntity" : 2, "StaticEntity" : 4
+}
+
 # EffectReceiver & StatModManager
 enum Teams {
 	PLAYER = 1 << 0, ## The player team (against the enemies).

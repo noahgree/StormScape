@@ -3,23 +3,23 @@ extends Node2D
 class_name HandsComponent
 ## This component allows the entity to hold an item and interact with it.
 
-@export var main_hand_with_held_item_pos: Vector2 = Vector2(6, 1)
-@export var main_hand_with_proj_weapon_pos: Vector2 = Vector2(11, 0)
-@export var main_hand_with_melee_weapon_pos: Vector2 = Vector2(8, 0)
-@export var mouth_pos: Vector2 = Vector2(0, -8) ## Used for emitting food particles.
+@export var main_hand_with_held_item_pos: Vector2 = Vector2(6, 1) ## The position the main hand would be while doing nothing.
+@export var main_hand_with_proj_weapon_pos: Vector2 = Vector2(11, 0) ## The position the main hand would start at while holding a projectile weapon. This will most likely be farther out in the x-direction to give more rotational room for the weapon.
+@export var main_hand_with_melee_weapon_pos: Vector2 = Vector2(8, 0) ## The position the main hand would start at while holding a melee weapon. This will most likely be farther out in the x-direction to give more rotational room for the weapon.
+@export var mouth_pos: Vector2 = Vector2(0, -8) ## Used for emitting food particles from wherever the mouth should be.
 
-@onready var hands_anchor: Node2D = $HandsAnchor
-@onready var main_hand: Node2D = $HandsAnchor/MainHand
-@onready var main_hand_sprite: Sprite2D = $HandsAnchor/MainHandSprite
-@onready var off_hand_sprite: Sprite2D = $OffHandSprite
-@onready var drawn_off_hand: Sprite2D = $HandsAnchor/DrawnOffHand
+@onready var hands_anchor: Node2D = $HandsAnchor ## The anchor for rotating and potentially scaling the hands.
+@onready var main_hand: Node2D = $HandsAnchor/MainHand ## The main hand node who's child will any equipped item.
+@onready var main_hand_sprite: Sprite2D = $HandsAnchor/MainHandSprite ## The main hand sprite to draw if that equipped item needs it.
+@onready var off_hand_sprite: Sprite2D = $OffHandSprite ## The off hand sprite that is drawn when holding a one handed weapon.
+@onready var drawn_off_hand: Sprite2D = $HandsAnchor/DrawnOffHand ## The extra off hand sprite that is drawn on top of a weapon that needs it. See the equippability details inside the item resources for more info.
 
-var equipped_item: EquippableItem = null
-var current_x_direction: int = 1
-var scale_is_lerping: bool = false
-var is_mouse_button_held = false
-var been_holding_time: float = 0
-var equipped_item_should_follow_mouse: bool = true
+var equipped_item: EquippableItem = null ## The currently equipped equippable item that the entity is holding.
+var current_x_direction: int = 1 ## A pos or neg toggle for which direction the anim vector has us facing. Used to flip the x-scale.
+var scale_is_lerping: bool = false ## Whether or not the scale is currently lerping between being negative or positive.
+var is_mouse_button_held: bool = false ## If we are currently considering the trigger button to be held down.
+var been_holding_time: float = 0 ## How long we have considered the trigger button to have been held down so far.
+var equipped_item_should_follow_mouse: bool = true ## If the equipped item should rotate with the character and the mouse or not.
 
 
 #region Save & Load
@@ -30,7 +30,7 @@ func _on_before_load_game() -> void:
 func _ready() -> void:
 	main_hand_sprite.visible = false
 	off_hand_sprite.visible = false
-	SignalBus.focused_ui_opened.connect(func():
+	SignalBus.focused_ui_opened.connect(func() -> void:
 		is_mouse_button_held = false
 		been_holding_time = 0
 		)
@@ -152,9 +152,9 @@ func _manage_proj_weapon_hands(anim_vector: Vector2) -> void:
 
 	if equipped_item_should_follow_mouse:
 		var sprite_pos_with_offsets: Vector2 = hands_anchor.global_position + Vector2(0, equipped_item.proj_origin.y)
-		var direction_vector = Vector2.RIGHT.rotated(hands_anchor.global_rotation)
+		var direction_vector: Vector2 = Vector2.RIGHT.rotated(hands_anchor.global_rotation)
 
-		var lerped_direction_angle = get_parent().move_fsm.get_lerped_mouse_direction_to_pos(direction_vector, sprite_pos_with_offsets).angle()
+		var lerped_direction_angle: float = get_parent().move_fsm.get_lerped_mouse_direction_to_pos(direction_vector, sprite_pos_with_offsets).angle()
 
 		hands_anchor.global_rotation = lerped_direction_angle
 
@@ -179,12 +179,12 @@ func _do_melee_weapon_hand_placement(anim_vector: Vector2) -> void:
 		scale_is_lerping = false
 
 	if equipped_item_should_follow_mouse:
-		var swing_angle_offset = hands_anchor.scale.y * deg_to_rad(equipped_item.stats.swing_angle / 2.0)
-		var sprite_visual_rotation_offset = hands_anchor.scale.y * deg_to_rad(equipped_item.sprite_visual_rotation)
-		var target_position = hands_anchor.global_position - Vector2(0, hands_anchor.global_rotation - swing_angle_offset + sprite_visual_rotation_offset)
-		var direction_vector = Vector2.RIGHT.rotated(hands_anchor.global_rotation)
+		var swing_angle_offset: float = hands_anchor.scale.y * deg_to_rad(equipped_item.stats.swing_angle / 2.0)
+		var sprite_visual_rotation_offset: float = hands_anchor.scale.y * deg_to_rad(equipped_item.sprite_visual_rotation)
+		var target_position: Vector2 = hands_anchor.global_position - Vector2(0, hands_anchor.global_rotation - swing_angle_offset + sprite_visual_rotation_offset)
+		var direction_vector: Vector2 = Vector2.RIGHT.rotated(hands_anchor.global_rotation)
 
-		var lerped_direction_angle = get_parent().move_fsm.get_lerped_mouse_direction_to_pos(direction_vector, target_position).angle()
+		var lerped_direction_angle: float = get_parent().move_fsm.get_lerped_mouse_direction_to_pos(direction_vector, target_position).angle()
 
 		hands_anchor.global_rotation = lerped_direction_angle
 

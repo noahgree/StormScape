@@ -20,7 +20,7 @@ func _on_load_game() -> void:
 	if not cache_is_setup_after_load:
 		_setup_mod_cache()
 
-	for mod in stats.current_mods.values():
+	for mod: WeaponMod in stats.current_mods.values():
 		weapon_mod_manager._add_weapon_mod(mod)
 #endregion
 
@@ -183,7 +183,7 @@ func _spawn_ghost() -> void:
 	var sprite_texture: Texture2D = sprite.sprite_frames.get_frame_texture(current_anim, current_frame)
 
 	var adjusted_transform: Transform2D = sprite.transform
-	var rotated_offset = sprite.offset.rotated(sprite.rotation)
+	var rotated_offset: Vector2 = sprite.offset.rotated(sprite.rotation)
 	adjusted_transform.origin += rotated_offset
 
 	var ghost_instance: SpriteGhost = SpriteGhost.create(adjusted_transform, sprite.scale, sprite_texture, ghost_fade_time)

@@ -17,7 +17,7 @@ func _ready() -> void:
 	_setup_slots()
 
 func _setup_slots() -> void:
-	for i in range(hotbar.get_child_count()):
+	for i: int in range(hotbar.get_child_count()):
 		hotbar.get_child(i).is_hotbar_ui_preview_slot = true
 		hotbar.get_child(i).synced_inv = player_inv
 		hotbar.get_child(i).index = player_inv.inv_size - player_inv.hotbar_size + i
@@ -51,7 +51,7 @@ func _input(_event: InputEvent) -> void:
 
 func _change_active_slot_by_count(index_count: int) -> void:
 	active_slot.texture = active_slot.default_slot_texture
-	var new_index = (active_slot.index + index_count) % hotbar_slots.size()
+	var new_index: int = (active_slot.index + index_count) % hotbar_slots.size()
 	if new_index < 0:
 		new_index += hotbar_slots.size()
 	active_slot = hotbar_slots[new_index]

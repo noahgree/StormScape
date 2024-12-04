@@ -18,12 +18,12 @@ func _ready() -> void:
 ## dict afterwards.
 func _on_combination_attempt_timer_timeout() -> void:
 	var processed_items: Dictionary = {}
-	for grid_pos in grid.keys():
+	for grid_pos: Vector2 in grid.keys():
 		if grid[grid_pos].is_empty():
 			grid.erase(grid_pos)
 			continue
 
-		for item in grid[grid_pos]:
+		for item: Item in grid[grid_pos]:
 			if not processed_items.has(item):
 				_find_and_combine_neighbors(item, processed_items)
 
@@ -55,15 +55,15 @@ func remove_item(item: Item) -> void:
 func _find_and_combine_neighbors(item: Item, processed_items: Dictionary) -> void:
 	var grid_pos: Vector2 = _to_grid_position(item.position)
 	var neighbors: Array[Item] = []
-	for x in range(-1, 2):
-		for y in range(-1, 2):
+	for x: int in range(-1, 2):
+		for y: int in range(-1, 2):
 			var neighbor_pos: Vector2 = grid_pos + Vector2(x, y)
 			if grid.has(neighbor_pos):
 				var items_at_pos: Array = grid[neighbor_pos]
-				for neighbor in items_at_pos:
+				for neighbor: Item in items_at_pos:
 					neighbors.append(neighbor as Item)
 
-	for neighbor in neighbors:
+	for neighbor: Item in neighbors:
 		if neighbor != item and item.stats.is_same_as(neighbor.stats):
 			_combine_items(item, neighbor)
 			processed_items[neighbor] = true

@@ -39,7 +39,7 @@ func _on_load_game() -> void:
 	if not cache_is_setup_after_load:
 		_setup_mod_cache()
 
-	for mod in stats.current_mods.values():
+	for mod: WeaponMod in stats.current_mods.values():
 		weapon_mod_manager._add_weapon_mod(mod)
 #endregion
 
@@ -180,13 +180,13 @@ func _handle_reequipping_stats() -> void:
 func _check_if_needs_mouse_area_scanner() -> void:
 	if not stats.use_hitscan and stats.projectile_logic.homing_method == "Mouse Position":
 		mouse_area = Area2D.new()
-		var collision_shape = CollisionShape2D.new()
-		var circle_shape = CircleShape2D.new()
+		var collision_shape: CollisionShape2D = CollisionShape2D.new()
+		var circle_shape: CircleShape2D = CircleShape2D.new()
 
 		mouse_area.collision_layer = 0
 		mouse_area.collision_mask = stats.effect_source.scanned_phys_layers
-		mouse_area.area_entered.connect(func(area): mouse_scan_area_targets.append(area))
-		mouse_area.body_entered.connect(func(body): mouse_scan_area_targets.append(body))
+		mouse_area.area_entered.connect(func(area: Area2D) -> void: mouse_scan_area_targets.append(area))
+		mouse_area.body_entered.connect(func(body: Node2D) -> void: mouse_scan_area_targets.append(body))
 
 		circle_shape.radius = stats.projectile_logic.mouse_target_radius
 		collision_shape.shape = circle_shape
@@ -344,7 +344,7 @@ func _clean_up_hitscans() -> void:
 	if not current_hitscans.is_empty():
 		GlobalData.player_camera.update_persistent_shake_strength(-stats.firing_cam_shake_str)
 
-	for hitscan in current_hitscans:
+	for hitscan: Variant in current_hitscans:
 		if is_instance_valid(hitscan):
 			hitscan.queue_free()
 	current_hitscans.clear()
@@ -378,7 +378,7 @@ func _apply_burst_logic(was_charge_fire: bool = false) -> void:
 func _apply_ammo_consumption(shot_count: int, was_charge_fire: bool = false) -> void:
 	if not was_charge_fire:
 		if stats.use_ammo_per_burst_proj:
-			for i in range(shot_count):
+			for i: int in range(shot_count):
 				_consume_ammo(1)
 		else:
 			_consume_ammo(1)
@@ -388,7 +388,7 @@ func _apply_ammo_consumption(shot_count: int, was_charge_fire: bool = false) -> 
 	_handle_per_shot_delay_and_bloom(shot_count, was_charge_fire, (not is_holding_hitscan))
 
 func _handle_per_shot_delay_and_bloom(shot_count: int, was_charge_fire: bool = false, proceed_to_spawn: bool = true) -> void:
-	for i in range(shot_count):
+	for i: int in range(shot_count):
 		if stats.add_bloom_per_burst_shot or (stats.s_mods.get_stat("projectiles_per_fire") == 1):
 			_handle_bloom_increase(false)
 
@@ -404,10 +404,10 @@ func _apply_barrage_logic(was_charge_fire: bool = false) -> void:
 
 	var angular_spread_radians: float = deg_to_rad(stats.s_mods.get_stat("angular_spread"))
 	var close_to_360_adjustment: int = 0 if stats.s_mods.get_stat("angular_spread") > 310 else 1
-	var spread_segment_width = angular_spread_radians / (stats.s_mods.get_stat("barrage_count") - close_to_360_adjustment)
-	var start_rotation = global_rotation - (angular_spread_radians / 2.0)
+	var spread_segment_width: float = angular_spread_radians / (stats.s_mods.get_stat("barrage_count") - close_to_360_adjustment)
+	var start_rotation: float = global_rotation - (angular_spread_radians / 2.0)
 
-	for i in range(stats.barrage_count):
+	for i: int in range(stats.barrage_count):
 		if not stats.use_hitscan:
 			var proj_scene: PackedScene = stats.projectile if not was_charge_fire else stats.charge_projectile
 			var proj_stats: ProjectileResource = stats.projectile_logic if not was_charge_fire else stats.charge_projectile_logic
@@ -420,7 +420,7 @@ func _apply_barrage_logic(was_charge_fire: bool = false) -> void:
 				mouse_scan_area_targets.clear()
 				_enable_mouse_area()
 				var tree: SceneTree = get_tree()
-				for j in range(2): await tree.physics_frame
+				for j: int in range(2): await tree.physics_frame
 				proj.mouse_scan_targets = mouse_scan_area_targets
 				call_deferred("_disable_mouse_area")
 
@@ -605,10 +605,10 @@ func _attempt_reload() -> void:
 ## Searches through the source entity's inventory for more ammo to fill the magazine.
 func _get_more_reload_ammo(max_amount_needed: int) -> int:
 	var ammount_collected: int = 0
-	var inv_node = source_entity.inv
+	var inv_node: Inventory = source_entity.inv
 
-	for i in range(inv_node.inv_size):
-		var item = inv_node.inv[i]
+	for i: int in range(inv_node.inv_size):
+		var item: InvItemResource = inv_node.inv[i]
 		if item != null and (item.stats is ProjAmmoResource) and (item.stats.ammo_type == stats.ammo_type):
 			var amount_in_slot: int = item.quantity
 			var amount_still_needed: int = max_amount_needed - ammount_collected

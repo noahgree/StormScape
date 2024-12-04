@@ -6,13 +6,13 @@ extends Control
 
 
 func _on_test_hurt_btn_pressed() -> void:
-	health_component.damage_shield_then_health(12)
+	health_component.damage_shield_then_health(12, "BasicDamage")
 
 func _on_test_heal_btn_pressed() -> void:
-	health_component.heal_health_then_shield(15)
+	health_component.heal_health_then_shield(15, "BasicHealing")
 
 func _on_test_music_btn_pressed() -> void:
-	var audio_player = AudioManager.play_and_get_sound("MysteryTheme1", AudioManager.SoundType.MUSIC_2D, GlobalData.player_node, 0)
+	var audio_player: Variant = AudioManager.play_and_get_sound("MysteryTheme1", AudioManager.SoundType.MUSIC_2D, GlobalData.player_node, 0)
 	if audio_player:
 		#AudioManager.play_sound("PowerUp3", AudioManager.SoundType.SFX_GLOBAL)
 		await get_tree().create_timer(15).timeout
@@ -25,14 +25,14 @@ func _on_test_mod_btn_1_pressed() -> void:
 	#var mod2 = StatMod.new("stamina_use_per_hunger_deduction", "mod2", "=", 2, 2, true, 5, true)
 	#var arr: Array[StatMod] = [mod, mod2]
 	#get_parent().get_parent().stats.add_mods(arr, stats_ui)
-	for mod in mods:
+	for mod: WeaponMod in mods:
 		GlobalData.player_node.hands.equipped_item.weapon_mod_manager.handle_weapon_mod(mod)
 
 func _on_test_mod_btn_2_pressed() -> void:
 	#var stats_ui: Control = get_parent().get_node("PlayerStatsOverlay")
 	#get_parent().get_parent().stats.remove_mod("stamina_use_per_hunger_deduction", "mod2", stats_ui, 1)
 	#get_parent().get_parent().stats.remove_mod("stamina_use_per_hunger_deduction", "mod1", stats_ui, 1)
-	for mod in mods:
+	for mod: WeaponMod in mods:
 		GlobalData.player_node.hands.equipped_item.weapon_mod_manager.request_mod_removal(mod.mod_name)
 
 func _on_test_mod_btn_3_pressed() -> void:

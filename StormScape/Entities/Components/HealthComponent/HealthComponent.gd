@@ -36,13 +36,13 @@ func _emit_initial_values() -> void:
 
 #region Utils: Taking Damage
 ## Takes damage to both health and shield, starting with available shield then applying any remaining amount to health.
-func damage_shield_then_health(amount: int, was_crit: bool = false) -> void:
+func damage_shield_then_health(amount: int, source_type: String) -> void:
 	if amount > 0 and not is_dying:
 		if shield > 0:
-			EffectPopup.create_popup(EffectPopup.PopupTypes.CRIT_DMG if was_crit else EffectPopup.PopupTypes.SHIELD_DMG, amount, get_parent())
+			EffectPopup.create_popup(source_type if source_type != "BasicDamage" else "ShieldDamage", false, amount, get_parent())
 			_play_shield_damage_sound()
 		else:
-			EffectPopup.create_popup(EffectPopup.PopupTypes.CRIT_DMG if was_crit else EffectPopup.PopupTypes.HEALTH_DMG, amount, get_parent())
+			EffectPopup.create_popup(source_type if source_type != "BasicDamage" else "HealthDamage", false, amount, get_parent())
 
 	var spillover_damage: int = max(0, amount - shield)
 	@warning_ignore("narrowing_conversion") shield = max(0, shield - amount)
@@ -52,17 +52,17 @@ func damage_shield_then_health(amount: int, was_crit: bool = false) -> void:
 	_check_for_death()
 
 ## Decrements only the health value by the passed in amount.
-func damage_health(amount: int, was_crit: bool = false) -> void:
+func damage_health(amount: int, source_type: String) -> void:
 	if not is_dying:
 		health = max(0, health - amount)
-		EffectPopup.create_popup(EffectPopup.PopupTypes.CRIT_DMG if was_crit else EffectPopup.PopupTypes.HEALTH_DMG, amount, get_parent())
+		EffectPopup.create_popup(source_type if source_type != "BasicDamage" else "HealthDamage", false, amount, get_parent())
 		_check_for_death()
 
 ## Decrements only the shield value by the passed in amount.
-func damage_shield(amount: int, was_crit: bool = false) -> void:
+func damage_shield(amount: int, source_type: String) -> void:
 	if not is_dying:
 		shield = max(0, shield - amount)
-		EffectPopup.create_popup(EffectPopup.PopupTypes.CRIT_DMG if was_crit else EffectPopup.PopupTypes.SHIELD_DMG, amount, get_parent())
+		EffectPopup.create_popup(source_type if source_type != "BasicDamage" else "ShieldDamage", false, amount, get_parent())
 		if amount > 0: _play_shield_damage_sound()
 
 ## Handles what happens when health reaches 0 for the entity.
@@ -86,12 +86,12 @@ func set_armor(new_armor: int) -> void:
 
 #region Utils: Applying Healing
 ## Heals to both health and shield, starting with health then applying any remaining amount to shield.
-func heal_health_then_shield(amount: int) -> void:
+func heal_health_then_shield(amount: int, source_type: String) -> void:
 	if not is_dying:
 		if health < get_parent().stats.get_stat("max_health"):
-			EffectPopup.create_popup(EffectPopup.PopupTypes.HEALTH_HEAL, amount, get_parent())
+			EffectPopup.create_popup(source_type if source_type != "BasicHealing" else "HealthHealing", true, amount, get_parent())
 		else:
-			EffectPopup.create_popup(EffectPopup.PopupTypes.SHIELD_HEAL, amount, get_parent())
+			EffectPopup.create_popup(source_type if source_type != "BasicHealing" else "ShieldHealing", true, amount, get_parent())
 
 		var spillover_health: int = max(0, (amount + health) - get_parent().stats.get_stat("max_health"))
 		@warning_ignore("narrowing_conversion") health = clampi(health + amount, 0, get_parent().stats.get_stat("max_health"))
@@ -100,16 +100,16 @@ func heal_health_then_shield(amount: int) -> void:
 			@warning_ignore("narrowing_conversion") shield = clampi(shield + spillover_health, 0, get_parent().stats.get_stat("max_shield"))
 
 ## Heals only health.
-func heal_health(amount: int) -> void:
+func heal_health(amount: int, source_type: String) -> void:
 	if not is_dying:
 		health = min(health + amount, get_parent().stats.get_stat("max_health"))
-		EffectPopup.create_popup(EffectPopup.PopupTypes.HEALTH_HEAL, amount, get_parent())
+		EffectPopup.create_popup(source_type if source_type != "BasicHealing" else "HealthHealing", true, amount, get_parent())
 
 ## Heals only shield.
-func heal_shield(amount: int) -> void:
+func heal_shield(amount: int, source_type: String) -> void:
 	if not is_dying:
 		shield = min(shield + amount, get_parent().stats.get_stat("max_shield"))
-		EffectPopup.create_popup(EffectPopup.PopupTypes.SHIELD_HEAL, amount, get_parent())
+		EffectPopup.create_popup(source_type if source_type != "BasicHealing" else "ShieldHealing", true, amount, get_parent())
 #endregion
 
 #region Setters & On-Change Funcs

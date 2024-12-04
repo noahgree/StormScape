@@ -83,7 +83,7 @@ func enable_storm() -> void:
 		1.0,
 		0.35
 		)
-	tween.finished.connect(func(): changing_enabled_status = false)
+	tween.finished.connect(func() -> void: changing_enabled_status = false)
 
 	is_enabled = true
 
@@ -100,10 +100,10 @@ func enable_storm() -> void:
 	if storm_distortion_tween and storm_distortion_tween.is_valid(): storm_distortion_tween.play()
 
 	collision_shape.set_deferred("disabled", false)
-	for i in range(4):
+	for i: int in range(4):
 		await get_tree().physics_frame
 	var entities_with_effect: Array[Node] = get_tree().get_nodes_in_group("entities_out_of_safe_area")
-	for entity in entities_with_effect:
+	for entity: Node in entities_with_effect:
 		_add_effect_to_entity(entity, current_effect)
 		if entity is Player:
 			entity.sprite.material.set_shader_parameter("glow_color", Color(0.726, 0.504, 1))
@@ -123,7 +123,7 @@ func disable_storm() -> void:
 		0.0,
 		0.35
 		)
-	tween.finished.connect(func():
+	tween.finished.connect(func() -> void:
 		storm_circle.visible = false
 		visible = false
 		changing_enabled_status = false
@@ -143,7 +143,7 @@ func disable_storm() -> void:
 
 	collision_shape.set_deferred("disabled", true)
 	var entities_with_effect: Array[Node] = get_tree().get_nodes_in_group("entities_out_of_safe_area")
-	for entity in entities_with_effect:
+	for entity: Node in entities_with_effect:
 		_remove_current_effect_from_entity(entity)
 		if entity is Player:
 			entity.sprite.material.set_shader_parameter("glow_size", 0.0)
@@ -184,41 +184,41 @@ func _physics_process(_delta: float) -> void:
 #region Shader Positioning & Player See Thru
 ## Updates the shader's transform params with the current values.
 func _set_shader_transform_params() -> void:
-	var collision_radius = current_radius
+	var collision_radius: float = current_radius
 
 	# Setting up needed vars to do the calculations
-	var viewport_size = get_viewport().get_visible_rect().size
+	var viewport_size: Vector2 = get_viewport().get_visible_rect().size
 	storm_circle.material.set_shader_parameter("viewport_size", viewport_size)
-	var screen_center = _get_screen_point_from_world_coord(global_position)
+	var screen_center: Vector2 = _get_screen_point_from_world_coord(global_position)
 
 	# Calculating and assigning the vars in the shader that handle keeping the storm and noise in world space
-	var edge_point_world = global_position + Vector2(collision_radius, 0).rotated(global_rotation)
-	var screen_edge = _get_screen_point_from_world_coord(edge_point_world)
-	var noise_origin = _get_screen_point_from_world_coord(Vector2.ZERO)
+	var edge_point_world: Vector2 = global_position + Vector2(collision_radius, 0).rotated(global_rotation)
+	var screen_edge: Vector2 = _get_screen_point_from_world_coord(edge_point_world)
+	var noise_origin: Vector2 = _get_screen_point_from_world_coord(Vector2.ZERO)
 	storm_circle.material.set_shader_parameter("circle_center_pixels", screen_center)
 	storm_circle.material.set_shader_parameter("noise_world_position", noise_origin)
 
 	# Calculating and assigning the var that sets the radius of the shader circle in respect to world space
-	var radius_pixels = screen_edge.distance_to(screen_center)
+	var radius_pixels: float = screen_edge.distance_to(screen_center)
 	storm_circle.material.set_shader_parameter("radius_pixels", radius_pixels)
 
 	# Calculating and assigning the var that controls the see-thru distance for the player
 	var player_pos: Vector2 = GlobalData.player_node.global_position + (GlobalData.player_node.sprite.position / 2.0)
-	var see_through_point = _get_screen_point_from_world_coord(player_pos)
-	var see_through_point_world = global_position + Vector2(see_through_distance, 0).rotated(global_rotation)
-	var screen_edge_see_through = _get_screen_point_from_world_coord(see_through_point_world)
-	var radius_pixels_see_through = screen_edge_see_through.distance_to(screen_center)
+	var see_through_point: Vector2 = _get_screen_point_from_world_coord(player_pos)
+	var see_through_point_world: Vector2 = global_position + Vector2(see_through_distance, 0).rotated(global_rotation)
+	var screen_edge_see_through: Vector2 = _get_screen_point_from_world_coord(see_through_point_world)
+	var radius_pixels_see_through: float = screen_edge_see_through.distance_to(screen_center)
 	storm_circle.material.set_shader_parameter("see_through_radius", radius_pixels_see_through)
 	storm_circle.material.set_shader_parameter("see_through_center_pixels", see_through_point)
 
 ## Converts the world coordinate to a screen position based on camera position, rotation, and zoom.
 func _get_screen_point_from_world_coord(world_point: Vector2) -> Vector2:
 	var camera: Camera2D = GlobalData.player_camera
-	var viewport_size = get_viewport().get_visible_rect().size
-	var relative_position = world_point - camera.global_position - camera.offset
-	var rotated_position = relative_position.rotated(-camera.rotation)
-	var zoomed_position = rotated_position * camera.zoom
-	var screen_position = (viewport_size / 2) + zoomed_position
+	var viewport_size: Vector2 = get_viewport().get_visible_rect().size
+	var relative_position: Vector2 = world_point - camera.global_position - camera.offset
+	var rotated_position: Vector2 = relative_position.rotated(-camera.rotation)
+	var zoomed_position: Vector2 = rotated_position * camera.zoom
+	var screen_position: Vector2 = (viewport_size / 2) + zoomed_position
 
 	return screen_position
 
@@ -228,7 +228,7 @@ func _tween_player_see_through_distance() -> void:
 		player_see_thru_distance_tween.kill()
 	player_see_thru_distance_tween = create_tween().set_ease(Tween.EASE_OUT)
 
-	var pulse_target = (see_through_target_distance * see_through_distance_mult) + (5.0 * see_through_pulse_mult) if pulse_up else (see_through_target_distance * see_through_distance_mult) - (5.0 * see_through_distance_mult)
+	var pulse_target: float = (see_through_target_distance * see_through_distance_mult) + (5.0 * see_through_pulse_mult) if pulse_up else (see_through_target_distance * see_through_distance_mult) - (5.0 * see_through_distance_mult)
 
 	player_see_thru_distance_tween.tween_property(self, "see_through_distance", pulse_target, 1.0)
 	pulse_up = !pulse_up
@@ -367,7 +367,7 @@ func _apply_visual_overrides(new_visuals: StormVisuals) -> void:
 	else:
 		using_default_visuals = false
 
-	for i in range(4):
+	for i: int in range(4):
 		_tween_storm_colors(new_visuals)
 	_tween_storm_gradient_end(new_visuals)
 	_tween_glow_ring(new_visuals)
@@ -384,7 +384,7 @@ func _tween_storm_colors(new_visuals: StormVisuals) -> void:
 	if storm_colors_tween: storm_colors_tween.kill()
 	storm_colors_tween = create_tween().set_parallel(true)
 
-	for i in range(4):
+	for i: int in range(4):
 		storm_colors_tween.tween_property(
 		storm_circle.material,
 		"shader_parameter/color" + str(i + 1),
@@ -522,7 +522,7 @@ func _on_safe_zone_body_entered(body: Node2D) -> void:
 		body.remove_from_group("entities_out_of_safe_area")
 
 	if body is Player:
-		body.sprite.material.set_shader_parameter("glow_size", 0.0)
+		body.sprite.update_glow_color("Storm Syndrome", true)
 
 ## When a dynamic entity exits the inner safe circle, we apply the current storm effect.
 func _on_safe_zone_body_exited(body: Node2D) -> void:
@@ -532,13 +532,12 @@ func _on_safe_zone_body_exited(body: Node2D) -> void:
 		body.add_to_group("entities_out_of_safe_area")
 
 	if body is Player and is_enabled:
-		body.sprite.material.set_shader_parameter("glow_color", Color(0.726, 0.504, 1))
-		body.sprite.material.set_shader_parameter("glow_size", 5.0)
+		body.sprite.update_glow_color("Storm Syndrome", false)
 
 ## Removes the current effect from entities out of the safe area and applies the new one.
 ## The new one will be the default effect if we have no upcoming zone, otherwise it will be the effect for the new transform.
 func _swap_effect_applied_to_entities_out_of_safe_area(new_effect: StatusEffect) -> void:
-	for entity in get_tree().get_nodes_in_group("entities_out_of_safe_area"):
+	for entity: Node in get_tree().get_nodes_in_group("entities_out_of_safe_area"):
 		_remove_current_effect_from_entity(entity)
 		current_effect = new_effect
 		_add_effect_to_entity(entity, new_effect)

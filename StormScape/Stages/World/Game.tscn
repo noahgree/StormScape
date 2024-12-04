@@ -1,4 +1,4 @@
-[gd_scene load_steps=43 format=4 uid="uid://bscnr6a23l10m"]
+[gd_scene load_steps=52 format=4 uid="uid://bscnr6a23l10m"]
 
 [ext_resource type="Script" path="res://Utilities/Game/WorldRoot/WorldRoot.gd" id="1_q0i4n"]
 [ext_resource type="Script" path="res://Stages/World/BackgroundMusicManager.gd" id="1_q5pr2"]
@@ -11,7 +11,12 @@
 [ext_resource type="Script" path="res://Stages/World/WorldItemsManager.gd" id="8_g8y4o"]
 [ext_resource type="PackedScene" uid="uid://xsq1q0fffsin" path="res://Utilities/Debug/TestRigidEntity.tscn" id="9_37jga"]
 [ext_resource type="PackedScene" uid="uid://bond8rty1ljh" path="res://Utilities/Debug/TestStaticEntity.tscn" id="11_6kn41"]
+[ext_resource type="Script" path="res://Entities/Components/HitboxComponent/HitboxComponent.gd" id="11_j4dgk"]
+[ext_resource type="Script" path="res://Entities/Stats/EffectSystemResources/EffectSources/EffectSource.gd" id="12_jvc44"]
 [ext_resource type="Script" path="res://Entities/Stats/EffectSystemResources/StatusEffects/StatusEffect.gd" id="13_33bgr"]
+[ext_resource type="Resource" uid="uid://dpr7bbypm0g2j" path="res://Entities/Stats/EffectSystemResources/StatusEffects/BadEffects/Poison/Poison1.tres" id="14_jseuh"]
+[ext_resource type="Resource" uid="uid://b2ekcx7kndqjb" path="res://Entities/Stats/EffectSystemResources/StatusEffects/BadEffects/Frostbite/Frostbite1.tres" id="14_kcl4d"]
+[ext_resource type="Resource" uid="uid://b8yo5kmjiwnca" path="res://Entities/Stats/EffectSystemResources/StatusEffects/GoodEffects/Regen/Regen1.tres" id="15_iw6l8"]
 [ext_resource type="Script" path="res://Stages/World/Storm/Storm.gd" id="22_0op7h"]
 [ext_resource type="Script" path="res://Stages/Tilemaps/TileMapDual.gd" id="22_47ykm"]
 [ext_resource type="Texture2D" uid="uid://6saycs5sisdk" path="res://Stages/Tilemaps/GrassDirt/TILESET_GRASSDIRT.png" id="22_tnvqm"]
@@ -4161,6 +4166,81 @@ physics_layer_1/collision_layer = 128
 physics_layer_1/collision_mask = 0
 sources/0 = SubResource("TileSetAtlasSource_4rxbk")
 
+[sub_resource type="Resource" id="Resource_t15sm"]
+script = ExtResource("12_jvc44")
+is_projectile = false
+scanned_phys_layers = 191
+can_hit_self = false
+bad_effect_affected_teams = 3
+good_effect_affected_teams = 3
+base_damage = 0
+dmg_affected_stats = 2
+crit_chance = 0
+crit_multiplier = 1.5
+armor_penetration = 0
+base_healing = 0
+heal_affected_stats = 2
+cam_shake_strength = 0.0
+cam_shake_duration = 0.0
+cam_freeze_multiplier = 1.0
+cam_freeze_duration = 0.0
+impact_sound = ""
+hit_flash_color = Color(1, 1, 1, 0.45)
+status_effects = Array[ExtResource("13_33bgr")]([ExtResource("14_jseuh")])
+contact_position = Vector2(0, 0)
+movement_direction = Vector2(0, 0)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_rk2ia"]
+size = Vector2(14, 14)
+
+[sub_resource type="Resource" id="Resource_twwwg"]
+script = ExtResource("12_jvc44")
+is_projectile = false
+scanned_phys_layers = 191
+can_hit_self = false
+bad_effect_affected_teams = 3
+good_effect_affected_teams = 3
+base_damage = 0
+dmg_affected_stats = 2
+crit_chance = 0
+crit_multiplier = 1.5
+armor_penetration = 0
+base_healing = 0
+heal_affected_stats = 2
+cam_shake_strength = 0.0
+cam_shake_duration = 0.0
+cam_freeze_multiplier = 1.0
+cam_freeze_duration = 0.0
+impact_sound = ""
+hit_flash_color = Color(1, 1, 1, 0.45)
+status_effects = Array[ExtResource("13_33bgr")]([ExtResource("14_kcl4d")])
+contact_position = Vector2(0, 0)
+movement_direction = Vector2(0, 0)
+
+[sub_resource type="Resource" id="Resource_gr6jp"]
+script = ExtResource("12_jvc44")
+is_projectile = false
+scanned_phys_layers = 191
+can_hit_self = false
+bad_effect_affected_teams = 3
+good_effect_affected_teams = 3
+base_damage = 0
+dmg_affected_stats = 2
+crit_chance = 0
+crit_multiplier = 1.5
+armor_penetration = 0
+base_healing = 0
+heal_affected_stats = 2
+cam_shake_strength = 0.0
+cam_shake_duration = 0.0
+cam_freeze_multiplier = 1.0
+cam_freeze_duration = 0.0
+impact_sound = ""
+hit_flash_color = Color(1, 1, 1, 0.45)
+status_effects = Array[ExtResource("13_33bgr")]([ExtResource("15_iw6l8")])
+contact_position = Vector2(0, 0)
+movement_direction = Vector2(0, 0)
+
 [sub_resource type="LabelSettings" id="LabelSettings_lfc2v"]
 outline_size = 3
 outline_color = Color(0, 0, 0, 1)
@@ -4213,6 +4293,7 @@ script = ExtResource("13_33bgr")
 effect_name = "TestEffect"
 effect_lvl = 3
 is_bad_effect = true
+affected_entities = 7
 effects_to_stop = Array[String]([])
 mod_time = 5.0
 apply_until_removed = true
@@ -4422,6 +4503,45 @@ position = Vector2(126, 160)
 
 [node name="TestStaticEntity" parent="WorldRoot/Testing" instance=ExtResource("11_6kn41")]
 position = Vector2(221, 193)
+
+[node name="TestStaticEffectSource2" type="Area2D" parent="WorldRoot/Testing/TestStaticEntity" node_paths=PackedStringArray("source_entity")]
+position = Vector2(0, -7)
+script = ExtResource("11_j4dgk")
+effect_source = SubResource("Resource_t15sm")
+source_entity = NodePath("..")
+use_self_position = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="WorldRoot/Testing/TestStaticEntity/TestStaticEffectSource2"]
+shape = SubResource("RectangleShape2D_rk2ia")
+debug_color = Color(0.994, 0, 0.227, 0.225)
+
+[node name="TestStaticEntity2" parent="WorldRoot/Testing" instance=ExtResource("11_6kn41")]
+position = Vector2(283, 217)
+
+[node name="TestStaticEffectSource2" type="Area2D" parent="WorldRoot/Testing/TestStaticEntity2" node_paths=PackedStringArray("source_entity")]
+position = Vector2(0, -7)
+script = ExtResource("11_j4dgk")
+effect_source = SubResource("Resource_twwwg")
+source_entity = NodePath("..")
+use_self_position = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="WorldRoot/Testing/TestStaticEntity2/TestStaticEffectSource2"]
+shape = SubResource("RectangleShape2D_rk2ia")
+debug_color = Color(0.994, 0, 0.227, 0.225)
+
+[node name="TestStaticEntity3" parent="WorldRoot/Testing" instance=ExtResource("11_6kn41")]
+position = Vector2(343, 191)
+
+[node name="TestStaticEffectSource2" type="Area2D" parent="WorldRoot/Testing/TestStaticEntity3" node_paths=PackedStringArray("source_entity")]
+position = Vector2(0, -7)
+script = ExtResource("11_j4dgk")
+effect_source = SubResource("Resource_gr6jp")
+source_entity = NodePath("..")
+use_self_position = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="WorldRoot/Testing/TestStaticEntity3/TestStaticEffectSource2"]
+shape = SubResource("RectangleShape2D_rk2ia")
+debug_color = Color(0.994, 0, 0.227, 0.225)
 
 [node name="Player" parent="WorldRoot" instance=ExtResource("4_ptig0")]
 z_index = 0

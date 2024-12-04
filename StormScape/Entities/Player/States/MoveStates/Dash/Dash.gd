@@ -60,9 +60,9 @@ func _do_character_dash() -> void:
 	dynamic_entity.move_and_slide()
 
 	# handle collisions with rigid entities
-	for i in dynamic_entity.get_slide_collision_count():
-		var c = dynamic_entity.get_slide_collision(i)
-		var collider = c.get_collider()
+	for i: int in dynamic_entity.get_slide_collision_count():
+		var c: KinematicCollision2D = dynamic_entity.get_slide_collision(i)
+		var collider: Object = c.get_collider()
 		if collider is RigidEntity:
 			collider.apply_central_impulse(-c.get_normal().normalized() * dynamic_entity.velocity.length() / (5 / (dynamic_entity.stats.get_stat("dash_collision_impulse_factor"))))
 			if not collision_shake_complete:

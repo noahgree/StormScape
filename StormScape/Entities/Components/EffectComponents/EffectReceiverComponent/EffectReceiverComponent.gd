@@ -85,18 +85,18 @@ func handle_effect_source(effect_source: EffectSource, source_entity: PhysicsBod
 
 	if effect_source.base_damage > 0 and has_node("DmgHandler"):
 		if _check_same_team(source_entity) and _check_if_bad_effects_apply_to_allies(effect_source):
-			$DmgHandler.handle_instant_damage(effect_source, _get_life_steal(effect_source, source_entity))
+			dmg_handler.handle_instant_damage(effect_source, _get_life_steal(effect_source, source_entity))
 			if loot_table_component: loot_table_component.handle_effect_source(effect_source, source_entity)
 		elif not _check_same_team(source_entity) and _check_if_bad_effects_apply_to_enemies(effect_source):
-			$DmgHandler.handle_instant_damage(effect_source, _get_life_steal(effect_source, source_entity))
+			dmg_handler.handle_instant_damage(effect_source, _get_life_steal(effect_source, source_entity))
 			if loot_table_component: loot_table_component.handle_effect_source(effect_source, source_entity)
 
 	if effect_source.base_healing > 0 and has_node("HealHandler"):
 		if effect_source.base_healing > 0:
 			if _check_same_team(source_entity) and _check_if_good_effects_apply_to_allies(effect_source):
-				$HealHandler.handle_instant_heal(effect_source.base_healing, effect_source.heal_affected_stats)
+				heal_handler.handle_instant_heal(effect_source.base_healing, effect_source.heal_affected_stats)
 			elif not _check_same_team(source_entity) and _check_if_good_effects_apply_to_enemies(effect_source):
-				$HealHandler.handle_instant_heal(effect_source.base_healing, effect_source.heal_affected_stats)
+				heal_handler.handle_instant_heal(effect_source.base_healing, effect_source.heal_affected_stats)
 
 	if can_receive_status_effects:
 		if knockback_handler:
@@ -124,6 +124,8 @@ func _check_status_effect_team_logic(effect_source: EffectSource, source_entity:
 ## Checks for untouchability and handles the stat mods in the status effect.
 ## Then it passes the effect to have its main logic handled if it needs a handler.
 func handle_status_effect(status_effect: StatusEffect) -> void:
+	if not _check_if_applicable_entity_type_for_status_effect(status_effect):
+		return
 	if ("Untouchable" in affected_entity.effects.current_effects) and (status_effect.is_bad_effect):
 		return
 
@@ -186,6 +188,20 @@ func _check_if_good_effects_apply_to_allies(effect_source: EffectSource) -> bool
 ## Checks if the effect source should do good effects to enemies.
 func _check_if_good_effects_apply_to_enemies(effect_source: EffectSource) -> bool:
 	return effect_source.good_effect_affected_teams & GlobalData.GoodEffectAffectedTeams.ENEMIES != 0
+
+## Compares the flagged affected entities in the status effect to the type of entity this node is a child of to see if it applies.
+func _check_if_applicable_entity_type_for_status_effect(status_effect: StatusEffect) -> bool:
+	var class_int: int = 0
+	if affected_entity is DynamicEntity:
+		class_int = 1
+	elif affected_entity is RigidEntity:
+		class_int = 2
+	elif affected_entity is StaticEntity:
+		class_int = 4
+	if class_int & status_effect.affected_entities == 0:
+		return false
+	else:
+		return true
 
 ## Updates whether the hit flash is showing or not. Sets its color to the one specified in the effect source.
 func _update_hit_flash(effect_source: EffectSource = null, start: bool = false) -> void:

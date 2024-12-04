@@ -41,7 +41,7 @@ func _do_character_run(delta: float) -> void:
 	movement_vector = _calculate_move_vector(stats)
 
 	# Check if we should stop the sprint sound based on movement speed.
-	var actual_movement_speed = (dynamic_entity.global_position - previous_pos).length() / delta
+	var actual_movement_speed: float = (dynamic_entity.global_position - previous_pos).length() / delta
 	if ceil(actual_movement_speed) <= floor(stats.get_stat("max_speed")):
 		if is_sprint_audio_playing:
 			_stop_sprint_sound()
@@ -74,7 +74,7 @@ func _do_character_run(delta: float) -> void:
 ## Update the entity's velocity and animation speed during the sprint motion based on the current stats.
 func _do_sprinting(stats: StatModsCacheResource, delta: float) -> void:
 	# Do sprinting sounds if we are moving fast enough.
-	var actual_movement_speed = (dynamic_entity.global_position - previous_pos).length() / delta
+	var actual_movement_speed: float = (dynamic_entity.global_position - previous_pos).length() / delta
 	if actual_movement_speed > dynamic_entity.stats.get_stat("max_speed"):
 		_play_sprint_sound()
 		is_sprint_audio_playing = true
@@ -103,9 +103,9 @@ func _do_non_sprint_movement(stats: StatModsCacheResource, delta: float) -> void
 
 ## Handles moving rigid entities that we collided with in the last frame.
 func _handle_rigid_entity_collisions() -> void:
-	for i in dynamic_entity.get_slide_collision_count():
-		var c = dynamic_entity.get_slide_collision(i)
-		var collider = c.get_collider()
+	for i: int in dynamic_entity.get_slide_collision_count():
+		var c: KinematicCollision2D = dynamic_entity.get_slide_collision(i)
+		var collider: Object = c.get_collider()
 		if collider is RigidEntity:
 			collider.apply_central_impulse(-c.get_normal().normalized() * dynamic_entity.velocity.length() / (10 / (dynamic_entity.stats.get_stat("run_collision_impulse_factor"))))
 

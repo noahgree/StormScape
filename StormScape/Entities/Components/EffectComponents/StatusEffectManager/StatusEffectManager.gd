@@ -118,17 +118,32 @@ func _start_effect_fx(effect_name: String, requires_handler: bool) -> void:
 	var particle_node: CPUParticles2D = get_node_or_null((effect_name + "Particles").replace(" ", ""))
 	var allowed_to_receive: bool = effect_receiver.has_node((effect_name + "Handler").replace(" ", "")) or not requires_handler
 
-	if particle_node != null and allowed_to_receive:
-		var sprite_tex: Texture2D
-		var sprite: Node2D = get_parent().sprite
-		var scalar: Vector2 = sprite.scale
-		if sprite is AnimatedSprite2D:
-			var current_anim: String = sprite.animation
-			var current_frame: int = sprite.frame
-			sprite_tex = sprite.sprite_frames.get_frame_texture(current_anim, current_frame)
-		else:
-			sprite_tex = sprite.texture
-		particle_node.emission_rect_extents = Vector2((sprite_tex.get_width() / 4.0) * scalar.x, (sprite_tex.get_height() / 2.0) * scalar.y)
+	if not allowed_to_receive:
+		return
+
+	get_parent().sprite.update_floor_color(effect_name, false)
+	get_parent().sprite.update_glow_color(effect_name, false)
+
+	if particle_node != null:
+		var sprite_tex: Texture2D = SpriteHelpers.SpriteDetails.get_frame_texture(get_parent().sprite)
+		var scalar: Vector2 = get_parent().sprite.scale
+		var emission_shape: CPUParticles2D.EmissionShape = particle_node.get_emission_shape()
+
+		if emission_shape == CPUParticles2D.EmissionShape.EMISSION_SHAPE_SPHERE_SURFACE:
+			particle_node.emission_sphere_radius = (sprite_tex.get_width() / 2.0) * scalar.x
+			particle_node.position = Vector2(0, -(sprite_tex.get_height() / 2.0) * scalar.y)
+		elif emission_shape == CPUParticles2D.EmissionShape.EMISSION_SHAPE_RECTANGLE:
+			if effect_name != "Burning" and effect_name != "Frostbite":
+				particle_node.emission_rect_extents = Vector2((sprite_tex.get_width() / 4.0) * scalar.x, (sprite_tex.get_height() / 2.0) * scalar.y)
+				particle_node.position = Vector2(0, -(sprite_tex.get_height() / 2.0) * scalar.y)
+
+		if effect_name == "Burning":
+			particle_node.emission_rect_extents = Vector2((sprite_tex.get_width() / 4.0) * scalar.x, 0.5)
+			particle_node.position = Vector2(0, -2)
+		elif effect_name == "Frostbite":
+			particle_node.emission_rect_extents = Vector2((sprite_tex.get_width() / 3.5) * scalar.x, 3)
+			particle_node.position = Vector2(0, -(sprite_tex.get_height() * scalar.y) + 4)
+
 		particle_node.emitting = true
 
 ## Extends the duration of the timer associated with some current effect.
@@ -164,7 +179,7 @@ func _remove_status_effect(status_effect: StatusEffect) -> void:
 
 	var timer: Timer = effect_timers.get(status_effect.effect_name, null)
 	if timer != null:
-		if timer.has_meta("callable"): # so we can cancel any pending callables before freeing
+		if timer.has_meta("callable"): # So we can cancel any pending callables before freeing
 			var callable: Callable = timer.get_meta("callable")
 			timer.timeout.disconnect(callable)
 			timer.set_meta("callable", null)
@@ -178,6 +193,8 @@ func _remove_status_effect(status_effect: StatusEffect) -> void:
 func _stop_effect_fx(effect_name: String) -> void:
 	var particle_node: CPUParticles2D = get_node_or_null((effect_name + "Particles").replace(" ", ""))
 	if particle_node != null: particle_node.emitting = false
+	get_parent().sprite.update_floor_color(effect_name, true)
+	get_parent().sprite.update_glow_color(effect_name, true)
 
 ## Returns if any effect (no matter the level) of the passed in name is active.
 func check_if_has_effect(effect_name: String) -> bool:
@@ -195,7 +212,7 @@ func request_effect_removal(effect_name: String) -> void:
 
 ## Removes all bad status effects except for an optional exception effect that may be specified.
 func remove_all_bad_status_effects(effect_to_keep: String = "") -> void:
-	for status_effect in current_effects.keys():
+	for status_effect: String in current_effects.keys():
 		if effect_to_keep != "" and effect_to_keep == status_effect:
 			continue
 		elif current_effects[status_effect].is_bad_effect:
@@ -203,7 +220,7 @@ func remove_all_bad_status_effects(effect_to_keep: String = "") -> void:
 
 ## Removes all good status effects except for an optional exception effect that may be specified.
 func remove_all_good_status_effects(effect_to_keep: String = "") -> void:
-	for status_effect in current_effects.keys():
+	for status_effect: String in current_effects.keys():
 		if effect_to_keep != "" and effect_to_keep == status_effect:
 			continue
 		elif status_effect in GlobalData.GOOD_STATUS_EFFECTS:
