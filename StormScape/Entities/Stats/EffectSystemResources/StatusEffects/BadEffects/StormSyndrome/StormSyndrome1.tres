@@ -19,6 +19,7 @@ dot_resource = SubResource("Resource_dega7")
 effect_name = "Storm Syndrome"
 effect_lvl = 1
 is_bad_effect = true
+affected_entities = 7
 effects_to_stop = Array[String]([])
 mod_time = 0.0
 apply_until_removed = true

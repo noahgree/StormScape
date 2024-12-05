@@ -2,7 +2,6 @@ extends NinePatchRect
 class_name ItemInteractionHUD
 ## The HUD that shows a prompt for when the player can pick up an item.
 
-@onready var interact_text: Label = $InteractText ## The text that tells what to press to pickup the item.
 @onready var item_texture: TextureRect = $ItemTexture ## The texture of the item to pickup.
 @onready var quantity: Label = $Quantity ## The label showing the quantity of the item to pickup.
 @onready var item_glow: TextureRect = $ItemGlow ## The glow texture behind the item that represents its rarity.

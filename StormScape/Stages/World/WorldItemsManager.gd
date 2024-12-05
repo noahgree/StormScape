@@ -7,6 +7,9 @@ var grid: Dictionary = {} ## The grid containing all floor item locations & node
 var combination_attempt_timer: Timer = Timer.new() ## The timer that delays attempts to combine near floor items.
 
 
+func _on_before_load_game() -> void:
+	grid.clear()
+
 func _ready() -> void:
 	add_child(combination_attempt_timer)
 	combination_attempt_timer.one_shot = true

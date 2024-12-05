@@ -5,7 +5,8 @@
 [resource]
 script = ExtResource("1_5k1vd")
 name = "PlayerRunBase"
-sound_file_paths = Array[String](["res://Assets/Audio/Sfx/SfxRawAudio/Characters/Player/Movement/Run/Base/player_run_base_1.wav", "res://Assets/Audio/Sfx/SfxRawAudio/Characters/Player/Movement/Run/Base/player_run_base_2.wav", "res://Assets/Audio/Sfx/SfxRawAudio/Characters/Player/Movement/Run/Base/player_run_base_3.wav", "res://Assets/Audio/Sfx/SfxRawAudio/Characters/Player/Movement/Run/Base/player_run_base_4.wav"])
+sound_files_folder = "res://Assets/Audio/Sfx/SfxRawAudio/Characters/Player/Movement/Run/Base"
+sound_file_paths = Array[String]([])
 concurrent_limit = 1
 rhythmic_delay = 0.05
 volume = -13

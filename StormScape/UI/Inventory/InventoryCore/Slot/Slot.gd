@@ -7,8 +7,8 @@ signal is_hovered_over(index: int) ## Emitted when a slot is currently being hov
 signal is_not_hovered_over() ## Emitted when a slot is no longer being hovered over.
 
 @export var drag_preview: PackedScene = load("res://UI/Inventory/InventoryCore/Slot/SlotDragPreview.tscn") ## The control preview for a dragged slot.
-@export var default_slot_texture: Texture2D = load("res://UI/Inventory/InventoryCore/Slot/inv_slot_9_patch.png")
-@export var active_slot_texture: Texture2D = load("res://UI/Inventory/InventoryCore/Slot/inv_slot_active_9_patch.png")
+@export var default_slot_texture: Texture2D
+@export var active_slot_texture: Texture2D
 
 @onready var item_texture: TextureRect = $TextureMargins/ItemTexture ## The item texture node for this slot.
 @onready var quantity: Label = $QuantityMargins/Quantity ## The quantity label for this slot.

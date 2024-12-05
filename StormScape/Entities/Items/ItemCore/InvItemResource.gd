@@ -1,7 +1,7 @@
 extends Resource
 class_name InvItemResource
 
-@export var stats: ItemResource ## The resource driving the stats and type of item this is.
+@export var stats: ItemResource = ItemResource.new() ## The resource driving the stats and type of item this is.
 @export var quantity: int = 1 ## The quantity associated with the inventory item.
 
 

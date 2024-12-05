@@ -49,6 +49,7 @@ dot_resource = SubResource("Resource_d0iyw")
 effect_name = "Poison"
 effect_lvl = 1
 is_bad_effect = true
+affected_entities = 7
 effects_to_stop = Array[String]([])
 mod_time = 5.0
 apply_until_removed = false

@@ -5,9 +5,10 @@
 [resource]
 script = ExtResource("1_01431")
 name = "PlayerDashImpact"
-sound_file_paths = Array[String](["res://Assets/Audio/Sfx/SfxRawAudio/Characters/Player/Movement/Dash/player_dash_impact_1.wav", "res://Assets/Audio/Sfx/SfxRawAudio/Characters/Player/Movement/Dash/player_dash_impact_2.wav", "res://Assets/Audio/Sfx/SfxRawAudio/Characters/Player/Movement/Dash/player_dash_impact_3.wav"])
+sound_files_folder = "res://Assets/Audio/Sfx/SfxRawAudio/Characters/Player/Movement/Dash/DashImpact"
+sound_file_paths = Array[String]([])
 concurrent_limit = 1
-rythmic_delay = 0.0
+rhythmic_delay = 0.0
 volume = -8
 pitch_scale = 1.0
 pitch_randomness = 0.08

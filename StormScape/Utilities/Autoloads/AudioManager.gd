@@ -46,7 +46,23 @@ func _cache_audio_resources(folder_path: String, cache: Dictionary) -> void:
 	while file_name != "":
 		if not folder.current_is_dir() and file_name.ends_with(".tres"):
 			var resource_path: String = folder_path + "/" + file_name
-			var resource: Variant = load(resource_path)
+			var resource: AudioResource = load(resource_path)
+
+			if resource.sound_files_folder == "":
+				push_error(resource.name + " audio resource does not have a sound files folder specified.")
+				file_name = folder.get_next()
+				continue
+
+			var sound_files_folder: DirAccess = DirAccess.open(resource.sound_files_folder)
+			sound_files_folder.list_dir_begin()
+			var sound_path: String = sound_files_folder.get_next()
+			while sound_path != "":
+				if not sound_files_folder.current_is_dir():
+					if sound_path.ends_with(".mp3") or sound_path.ends_with(".wav") or sound_path.ends_with(".ogg"):
+						resource.sound_file_paths.append(resource.sound_files_folder + "/" + sound_path)
+				sound_path = sound_files_folder.get_next()
+			sound_files_folder.list_dir_end()
+
 			if resource and resource is AudioResource:
 				var audio_resource: AudioResource = resource as AudioResource
 				cache[audio_resource.name] = audio_resource

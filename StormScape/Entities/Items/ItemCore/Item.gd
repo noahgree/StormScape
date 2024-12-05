@@ -65,7 +65,7 @@ func _is_instance_on_load_game(item_data: ItemData) -> void:
 	stats = item_data.stats
 	quantity = item_data.quantity
 
-	GlobalData.world_root.get_node("WorldItemsManager").add_child(self)
+	GlobalData.world_root.get_node("WorldItemsManager").add_item(self)
 
 func _on_load_game() -> void:
 	pass

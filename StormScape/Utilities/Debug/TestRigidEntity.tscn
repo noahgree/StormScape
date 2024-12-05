@@ -16,10 +16,10 @@
 [ext_resource type="PackedScene" uid="uid://co3n6m7efg8pd" path="res://Entities/Components/EffectComponents/StatusEffectManager/StatusEffectManager.tscn" id="14_20kf8"]
 [ext_resource type="PackedScene" uid="uid://c4kt3bx0ot3c7" path="res://Entities/Components/ItemComponents/LootTableComponent/LootTableComponent.tscn" id="15_1vdsh"]
 [ext_resource type="Script" path="res://Entities/Components/ItemComponents/LootTableComponent/LootTableEntry.gd" id="16_fkdnf"]
-[ext_resource type="Resource" uid="uid://ciel2rrqq4dvv" path="res://Entities/Items/Weapons/ProjectileWeapons/LaserGun/LaserGun.tres" id="17_h3nqy"]
-[ext_resource type="Resource" uid="uid://bh18kqp2up3oe" path="res://Entities/Items/Weapons/MeleeWeapons/Pickaxe/Pickaxe.tres" id="18_j4lx6"]
+[ext_resource type="Resource" uid="uid://ciel2rrqq4dvv" path="res://Entities/Items/TRESItems/LaserGun(2).tres" id="17_h3nqy"]
+[ext_resource type="Resource" uid="uid://bh18kqp2up3oe" path="res://Entities/Items/TRESItems/Pickaxe(3).tres" id="18_j4lx6"]
 [ext_resource type="Script" path="res://Entities/Components/ItemComponents/LootTableComponent/LootTable.gd" id="18_w6kaj"]
-[ext_resource type="Resource" uid="uid://cx1ydw2jde1y8" path="res://Entities/Items/Consumables/Apple/Apple.tres" id="19_6vm5h"]
+[ext_resource type="Resource" uid="uid://cx1ydw2jde1y8" path="res://Entities/Items/TRESItems/Apple(0).tres" id="19_6vm5h"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_vww1a"]
 resource_local_to_scene = true

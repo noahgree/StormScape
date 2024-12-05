@@ -7,13 +7,15 @@ static var popup_scene: PackedScene = load("res://UI/TemporaryElements/EffectPop
 @export var text_colors: Dictionary = { ## The strings that have associated colors to change the text color to.
 	"Frostbite" : [Color(0.591, 0.884, 1), Color(0, 0.6, 0.933)],
 	"Burning" : [Color(1, 0.284, 0.25), Color(0.969, 0.694, 0)],
-	"Poison" : [Color(0, 0.933, 0.469), Color(0, 0.933, 0.469)],
+	"Poison" : [Color(0.609, 0.737, 0.352), Color(0.36, 0.612, 0)],
 	"Storm Syndrome" : [Color(1, 0.328, 0.899), Color(0.765, 0.654, 1)],
 	"Regen" : [Color(0, 0.853, 0.283), Color(0, 0.834, 0.62)],
-	"Life Steal" : [Color(0, 0.74, 0.554), Color(1, 0.4, 0.463)],
+	"Life Steal" : [Color(0.272, 0.749, 0), Color(1, 0.431, 0.158)],
 	"CritDamage" : [Color(2.0, 0.7, 0.1), Color(1.4, 1.25, 0.9)],
-	"ShieldDamage" : [Color(0.751, 0.403, 1), Color(0.751, 0.403, 1)],
-	"HealthDamage" : [Color(1, 0.274, 0.32), Color(1, 0.274, 0.32)],
+	"ShieldDamage" : [Color(0.595, 0.194, 1), Color(0.779, 0.49, 1)],
+	"HealthDamage" : [Color(0.893, 0, 0.174), Color(1, 0.347, 0.369)],
+	"ShieldHealing" : [Color(0.779, 0.49, 1), Color(0.595, 0.194, 1)],
+	"HealthHealing" : [Color(1, 0.347, 0.369), Color(0.893, 0, 0.174)]
 }
 
 @onready var number_label: Label = $NumberLabel
@@ -38,15 +40,12 @@ func _ready() -> void:
 	number_label.text = str(value)
 	position.x += (randf_range(-4.5, 4.5))
 
-	var gradient_texture = number_label.material.get_shader_parameter("gradient_texture")
-	var gradient = gradient_texture.gradient
+	var gradient_texture: GradientTexture1D = number_label.material.get_shader_parameter("gradient_texture")
+	var gradient: Gradient = gradient_texture.gradient
 
-	for i in range(gradient.get_point_count()):
-		var current_color = gradient.get_color(i)
-		var new_color: Color = text_colors.get(source_type, [Color(1, 1.0, 1.0), Color(1, 1.0, 1.0)])[i]
+	for i: int in range(gradient.get_point_count()):
+		var new_color: Color = text_colors.get(source_type, [Color(1.0, 1.0, 1.0), Color(1.0, 1.0, 1.0)])[i]
 		gradient.set_color(i, new_color)
-
-	print(source_type)
 
 	number_label.material.set_shader_parameter("gradient_texture", gradient_texture)
 

@@ -10,6 +10,7 @@ const DEFAULT_RUN_ANIM_TIME_SCALE: float = 1.5 ## How fast the run anim should p
 var movement_vector: Vector2 = Vector2.ZERO ## The current movement vector for the entity.
 var is_sprint_audio_playing: bool = false ## Whether the character's sprint is producing sprint audio.
 var previous_pos: Vector2 ## The previous position of the entity as of the last frame.
+var actual_movement_speed: float = 0 ## The movement speed determined by change in distance over time.
 
 
 func _ready() -> void:
@@ -36,12 +37,12 @@ func state_physics_process(delta: float) -> void:
 ## Besides appropriately applying velocity to the parent entity, this checks and potentially activates sprinting
 ## as well as calculates what vector the animation state machine should receive to play the matching directional anim.
 func _do_character_run(delta: float) -> void:
-	previous_pos = dynamic_entity.global_position
 	var stats: StatModsCacheResource = dynamic_entity.stats
 	movement_vector = _calculate_move_vector(stats)
+	actual_movement_speed = (dynamic_entity.global_position - previous_pos).length() / delta
+	previous_pos = dynamic_entity.global_position
 
 	# Check if we should stop the sprint sound based on movement speed.
-	var actual_movement_speed: float = (dynamic_entity.global_position - previous_pos).length() / delta
 	if ceil(actual_movement_speed) <= floor(stats.get_stat("max_speed")):
 		if is_sprint_audio_playing:
 			_stop_sprint_sound()
@@ -65,6 +66,8 @@ func _do_character_run(delta: float) -> void:
 		if Input.is_action_pressed("sprint"):
 			if stamina_component.use_stamina(dynamic_entity.stats.get_stat("sprint_stamina_usage") * delta):
 				_do_sprinting(stats, delta)
+			else:
+				_do_non_sprint_movement(stats, delta)
 		else:
 			_do_non_sprint_movement(stats, delta)
 
@@ -73,12 +76,6 @@ func _do_character_run(delta: float) -> void:
 
 ## Update the entity's velocity and animation speed during the sprint motion based on the current stats.
 func _do_sprinting(stats: StatModsCacheResource, delta: float) -> void:
-	# Do sprinting sounds if we are moving fast enough.
-	var actual_movement_speed: float = (dynamic_entity.global_position - previous_pos).length() / delta
-	if actual_movement_speed > dynamic_entity.stats.get_stat("max_speed"):
-		_play_sprint_sound()
-		is_sprint_audio_playing = true
-
 	# Remove the run sound's rhythmic delay during sprint since it needs to play faster.
 	AudioManager.change_sfx_resource_rhythmic_delay("PlayerRunBase", 0)
 
@@ -93,6 +90,11 @@ func _do_sprinting(stats: StatModsCacheResource, delta: float) -> void:
 	var acceleration: float = stats.get_stat("acceleration")
 	dynamic_entity.velocity += (movement_vector * acceleration * sprint_mult * delta)
 	dynamic_entity.velocity = dynamic_entity.velocity.limit_length(max_speed * sprint_mult)
+
+	# Do sprinting sounds if we are moving fast enough.
+	if actual_movement_speed > dynamic_entity.stats.get_stat("max_speed"):
+		_play_sprint_sound()
+		is_sprint_audio_playing = true
 
 ## Moves the entity with normal running movement based on the current stats.
 func _do_non_sprint_movement(stats: StatModsCacheResource, delta: float) -> void:

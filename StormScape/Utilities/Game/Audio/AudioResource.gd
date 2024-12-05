@@ -3,7 +3,8 @@ class_name AudioResource
 ## A resource for linking a sound file path with an associated volume, pitch settings, name, and max concurrent streams.
 
 @export var name: String ## The main name of the sound.
-@export_file("*.mp3", "*.wav", "*.ogg") var sound_file_paths: Array[String] ## The file paths to the sound variations. Restricted to mp3, wav, and ogg. Wav is highly recommended because of its efficiency.
+@export_dir var sound_files_folder: String ## The folder containing all the sound files that can be played for this resource.
+@export_file("*.mp3", "*.wav", "*.ogg") var sound_file_paths: Array[String] ## The file paths to the sound variations. Restricted to mp3, wav, and ogg. Wav is highly recommended because of its efficiency. This array gets filled with everything in the "sound_files_folder" at game load as well.
 @export_range(1, 25, 1) var concurrent_limit: int = 10 ## The max number of instances of this sound that can be played at the same time.
 @export var rhythmic_delay: float = 0 ## The time after a sound ends that should pass before decrementing the current count. Used for when short sounds must be played rythmically even when being triggered quickly and at random.
 @export_range(-40, 20, 0.1, "suffix:db") var volume: float = 0 ## The default volume associated with this sound.

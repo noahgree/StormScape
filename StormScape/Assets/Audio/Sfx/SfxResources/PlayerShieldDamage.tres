@@ -5,10 +5,11 @@
 [resource]
 script = ExtResource("1_lxbf2")
 name = "PlayerShieldDamage"
-sound_file_paths = Array[String](["res://Assets/Audio/Sfx/SfxRawAudio/Characters/Player/Health/ShieldDamage/player_shield_damag.wav"])
+sound_files_folder = "res://Assets/Audio/Sfx/SfxRawAudio/Characters/Player/Health/ShieldDamage"
+sound_file_paths = Array[String]([])
 concurrent_limit = 2
 rhythmic_delay = 0.0
-volume = -3
+volume = 0.0
 pitch_scale = 1.0
 pitch_randomness = 0.1
 restart_if_at_limit = true

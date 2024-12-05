@@ -2,6 +2,7 @@ extends NinePatchRect
 class_name HotbarUI
 ## The player's hotbar UI controller. Handles logic for the hotbar shown when the inventory is not open.
 
+@export var slot_scene: PackedScene = load("res://UI/Inventory/InventoryCore/Slot/Slot.tscn") ## The slot scene to be instantiated as children.
 @export var player_inv: Inventory ## The connected player inventory to reflect as a UI.
 
 @onready var hotbar: HBoxContainer = %HotbarUISlotGrid ## The container that holds the hotbar slots.
@@ -17,15 +18,20 @@ func _ready() -> void:
 	_setup_slots()
 
 func _setup_slots() -> void:
-	for i: int in range(hotbar.get_child_count()):
-		hotbar.get_child(i).is_hotbar_ui_preview_slot = true
-		hotbar.get_child(i).synced_inv = player_inv
-		hotbar.get_child(i).index = player_inv.inv_size - player_inv.hotbar_size + i
-		hotbar_slots.append(hotbar.get_child(i))
+	hotbar_slots.clear()
+	for child: Slot in hotbar.get_children():
+		child.queue_free()
 
-	if not hotbar_slots.is_empty():
-		active_slot = hotbar_slots[0]
-		active_slot.texture = active_slot.active_slot_texture
+	for i: int in range(player_inv.hotbar_size):
+		var slot: Slot = slot_scene.instantiate()
+		slot.is_hotbar_ui_preview_slot = true
+		slot.synced_inv = player_inv
+		slot.index = (player_inv.inv_size - player_inv.hotbar_size) + i
+		hotbar_slots.append(slot)
+		hotbar.add_child(slot)
+
+	active_slot = hotbar_slots[0]
+	active_slot.texture = active_slot.active_slot_texture
 
 ## When receiving the signal that a slot has changed, update the visuals.
 func _on_slot_updated(index: int, item: InvItemResource) -> void:
@@ -51,7 +57,8 @@ func _input(_event: InputEvent) -> void:
 
 func _change_active_slot_by_count(index_count: int) -> void:
 	active_slot.texture = active_slot.default_slot_texture
-	var new_index: int = (active_slot.index + index_count) % hotbar_slots.size()
+	var non_hotbar_size: int = player_inv.inv_size - player_inv.hotbar_size
+	var new_index: int = ((active_slot.index - non_hotbar_size) + index_count) % hotbar_slots.size()
 	if new_index < 0:
 		new_index += hotbar_slots.size()
 	active_slot = hotbar_slots[new_index]

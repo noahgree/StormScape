@@ -16,7 +16,7 @@
 [ext_resource type="Script" path="res://Entities/Stats/EffectSystemResources/StatusEffects/StatusEffect.gd" id="13_33bgr"]
 [ext_resource type="Resource" uid="uid://dpr7bbypm0g2j" path="res://Entities/Stats/EffectSystemResources/StatusEffects/BadEffects/Poison/Poison1.tres" id="14_jseuh"]
 [ext_resource type="Resource" uid="uid://b2ekcx7kndqjb" path="res://Entities/Stats/EffectSystemResources/StatusEffects/BadEffects/Frostbite/Frostbite1.tres" id="14_kcl4d"]
-[ext_resource type="Resource" uid="uid://b8yo5kmjiwnca" path="res://Entities/Stats/EffectSystemResources/StatusEffects/GoodEffects/Regen/Regen1.tres" id="15_iw6l8"]
+[ext_resource type="Resource" uid="uid://dvew5cy3k7s48" path="res://Entities/Stats/EffectSystemResources/StatusEffects/BadEffects/Burning/Burning1.tres" id="16_ky7ks"]
 [ext_resource type="Script" path="res://Stages/World/Storm/Storm.gd" id="22_0op7h"]
 [ext_resource type="Script" path="res://Stages/Tilemaps/TileMapDual.gd" id="22_47ykm"]
 [ext_resource type="Texture2D" uid="uid://6saycs5sisdk" path="res://Stages/Tilemaps/GrassDirt/TILESET_GRASSDIRT.png" id="22_tnvqm"]
@@ -4237,7 +4237,7 @@ cam_freeze_multiplier = 1.0
 cam_freeze_duration = 0.0
 impact_sound = ""
 hit_flash_color = Color(1, 1, 1, 0.45)
-status_effects = Array[ExtResource("13_33bgr")]([ExtResource("15_iw6l8")])
+status_effects = Array[ExtResource("13_33bgr")]([ExtResource("16_ky7ks")])
 contact_position = Vector2(0, 0)
 movement_direction = Vector2(0, 0)
 
@@ -4482,7 +4482,7 @@ tile_map_data = PackedByteArray("AAD5////AAACAAEAAAD5/wAAAAACAAEAAAD5/wEAAAACAAE
 tile_set = SubResource("TileSet_hhfml")
 script = ExtResource("22_47ykm")
 
-[node name="WorldItemsManager" type="Node2D" parent="WorldRoot" groups=["core"]]
+[node name="WorldItemsManager" type="Node2D" parent="WorldRoot" groups=["core", "has_save_logic"]]
 y_sort_enabled = true
 script = ExtResource("8_g8y4o")
 
@@ -4559,13 +4559,9 @@ smoothing_enabled = true
 [node name="DebugCanvasLayer" type="CanvasLayer" parent="WorldRoot"]
 
 [node name="FPS" type="Label" parent="WorldRoot/DebugCanvasLayer" groups=["core"]]
-anchors_preset = 5
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = -7.0
-offset_right = 33.0
+offset_left = 3.0
+offset_right = 43.0
 offset_bottom = 12.0
-grow_horizontal = 2
 label_settings = SubResource("LabelSettings_lfc2v")
 
 [node name="Storm" type="Node2D" parent="WorldRoot"]

@@ -18,6 +18,7 @@ class_name ItemResource
 @export_group("Crafting")
 @export var recipe: Array[CraftingIngredient] = [] ## The items & quantities required to craft an instance of this item.
 @export var output_quantity: int = 1 ## The number of resulting instances of this item that spawn when crafted.
+@export var recipe_unlocked: bool = false ## A flag to determine whether or not this item can be crafted.
 
 @export_group("Equippability Details")
 @export var item_scene: PackedScene = null ## The equippable representation of this item.
@@ -35,6 +36,10 @@ class_name ItemResource
 func _to_string() -> String:
 	return str(GlobalData.ItemType.keys()[item_type]) + ": " + str(GlobalData.ItemRarity.keys()[rarity]) + "_" + name
 
+## Returns the unique identifier used to distinguish the recipe of this item.
+func get_recipe_id() -> String:
+	return id + "(" + str(rarity) + ")"
+
 ## Whether the item is the same as another item when called externally to compare.
 func is_same_as(other_item: ItemResource) -> bool:
-	return (name == other_item.name) and (item_type == other_item.item_type) and (rarity == other_item.rarity)
+	return (str(self) == str(other_item))
