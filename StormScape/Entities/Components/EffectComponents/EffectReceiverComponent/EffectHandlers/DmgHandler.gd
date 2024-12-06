@@ -3,6 +3,7 @@ extends Node
 class_name DmgHandler
 ## A handler for using the data provided in the effect source to apply damage in different ways.
 
+@export var can_be_crit: bool = true ## When false, critical hits are impossible on this entity.
 @export var _dmg_weakness: float = 1.0 ## Multiplier for increasing ALL incoming damage.
 @export var _dmg_resistance: float = 1.0 ## Multiplier for decreasing ALL incoming damage.
 
@@ -63,7 +64,7 @@ func _get_dmg_after_crit_then_armor(effect_source: EffectSource, is_crit: bool) 
 
 ## Handles instantaneous damage that will be affected by armor.
 func handle_instant_damage(effect_source: EffectSource, life_steal_percent: float = 0.0) -> void:
-	var is_crit: bool = randf_range(0, 100) <= effect_source.crit_chance
+	var is_crit: bool = (randf_range(0, 100) <= effect_source.crit_chance) and can_be_crit
 	var dmg_after_crit_then_armor: int = _get_dmg_after_crit_then_armor(effect_source, is_crit)
 	_send_handled_dmg("BasicDamage" if not is_crit else "CritDamage", effect_source.dmg_affected_stats, dmg_after_crit_then_armor, life_steal_percent)
 

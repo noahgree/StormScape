@@ -8,14 +8,16 @@ enum ProjWeaponType { ## The kinds of projectile weapons.
 
 @export_group("General")
 @export var proj_weapon_type: ProjWeaponType = ProjWeaponType.PISTOL ## The kind of projectile weapon this is.
-@export var projectile: PackedScene ## The projectile scene to spawn on firing.
-@export var projectile_logic: ProjectileResource = ProjectileResource.new() ## The logic passed to the projectile for how to behave.
 @export_enum("Semi Auto", "Auto", "Charge") var firing_mode: String = "Semi Auto" ## Whether the weapon should fire projectiles once per click or allow holding down for auto firing logic.
 @export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var initial_shot_delay: float = 0 ## How long after we initiate a firing should we wait before the shot releases.
+@export_subgroup("Hitscanning")
+@export var use_hitscan: bool = false ## Whether to use hitscan firing and spawn the hitscan scene instead of the main projectile.
+@export var allow_hitscan_holding: bool = true ## Whether to keep the hitscan on and continue to consume ammo while the trigger is held.
+@export_group("Normal Firing Details")
 @export_range(0.03, 10, 0.01, "hide_slider", "or_greater", "suffix:seconds") var auto_fire_delay: float = 0.1 ## Time between fully auto projectile emmision. Also the minimum time that must elapse between clicks if set to semi-auto.
 @export_subgroup("Entity Effects")
 @export var post_firing_effect: StatusEffect = null ## The status effect to apply to the source entity after firing.
-@export_subgroup("General Firing FX")
+@export_subgroup("Firing FX")
 @export_range(0, 30, 0.01) var firing_cam_shake_str: float = 0.0 ## How strong the camera should shake when firing.
 @export_range(0, 2, 0.01) var firing_cam_shake_dur: float = 0.0 ## How long the camera shake when firing should take to decay.
 @export_range(0, 1, 0.01) var firing_cam_freeze_mult: float = 1.0 ## How strong the camera should freeze when firing.
@@ -23,10 +25,27 @@ enum ProjWeaponType { ## The kinds of projectile weapons.
 @export var firing_vfx_scene: PackedScene = null ## The scene that spawns and controls vfx when firing.
 @export var firing_sound: String = "" ## The sound to play when firing.
 
-@export_group("Hitscan Options")
-@export var use_hitscan: bool = false ## Whether to use hitscan firing and spawn the hitscan scene instead of the main projectile.
-@export var allow_hitscan_holding: bool = true ## Whether to keep the hitscan on and continue to consume ammo while the trigger is held.
+@export_group("Charge Firing Details")
+@export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var min_charge_time: float = 1 ## How long must the activation be held down before releasing the charge shot.
+@export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var charge_fire_cooldown: float = 0.5 ## How long after a charge shot must we wait before being able to fire again.
+@export var has_charge_fire_anim: bool = false ## If false, we can duplicate the regular fire anim and keep the speed scale.
+@export var ammo_use_per_charge: int = 3 ## How much ammo to consume on charge shots. Overrides all burst and barrage consumption to consume this amount no matter what.
+@export var charge_bloom_mult: float = 5.0 ## How much more should one charge shot count towards current bloom.
+@export_subgroup("Entity Effects")
+@export var charging_stat_effect: StatusEffect = null ## A status effect to apply to the entity while charging. Typically to slow them.
+@export var post_chg_shot_effect: StatusEffect = null ## The status effect to apply to the source entity after a charge shot.
+@export_subgroup("Firing FX")
+@export var charge_cam_fx_mult: float = 1.0 ## How much to multiply the cam fx by when doing a charge shot.
+@export var charge_firing_sound: String = "" ## The sound to play when charge firing.
+
+@export_group("Effect & Logic Resources")
+@export_subgroup("Normal Firing")
+@export var projectile_scn: PackedScene ## The projectile scene to spawn on firing.
+@export var projectile_logic: ProjectileResource = ProjectileResource.new() ## The logic passed to the projectile for how to behave.
 @export var hitscan_logic: HitscanResource ## The resource containing information on how to fire and operate the hitscan.
+@export_subgroup("Charge Firing")
+@export var charge_projectile_scn: PackedScene = null ## Overrides the normal projectile scene for charge shots.
+@export var charge_projectile_logic: ProjectileResource = null ## Overrides the normal projectile data for charge shots.
 @export var charge_hitscan_logic: HitscanResource ## The resource containing information on how to fire and operate the hitscan when charged.
 
 @export_group("Ammo & Reloading")
@@ -52,22 +71,6 @@ enum ProjWeaponType { ## The kinds of projectile weapons.
 @export var warmth_delay_curve: Curve = Curve.new() ## A curve for how long the time between shots should be based on how much we have been firing recently.
 @export var warmth_increase_rate: Curve = Curve.new() ## A curve for determining how much warmth to add depending on current warmth.
 @export var warmth_decrease_rate: Curve = Curve.new() ## A curve for determining how much warmth to remove depending on current warmth.
-
-@export_group("Hold Charging Logic")
-@export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var min_charge_time: float = 1 ## How long must the activation be held down before releasing the charge shot.
-@export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var charge_fire_cooldown: float = 0.5 ## How long after a charge shot must we wait before being able to fire again.
-@export var has_charge_fire_anim: bool = false ## If false, we can duplicate the regular fire anim and keep the speed scale.
-@export var ammo_use_per_charge: int = 3 ## How much ammo to consume on charge shots. Overrides all burst and barrage consumption to consume this amount no matter what.
-@export var charge_bloom_mult: float = 5.0 ## How much more should one charge shot count towards current bloom.
-@export var charge_projectile: PackedScene = null ## Overrides the normal projectile scene for charge shots.
-@export var charge_projectile_logic: ProjectileResource = null ## Overrides the normal projectile data for charge shots.
-@export var charge_effect_source: EffectSource = null ## Overrides the normal effect source for charge shots.
-@export_subgroup("Entity Effects")
-@export var charging_stat_effect: StatusEffect = null ## A status effect to apply to the entity while charging. Typically to slow them.
-@export var post_chg_shot_effect: StatusEffect = null ## The status effect to apply to the source entity after a charge shot.
-@export_subgroup("Charge Firing FX")
-@export var charge_cam_fx_mult: float = 1.0 ## How much to multiply the cam fx by when doing a charge shot.
-@export var charge_firing_sound: String = "" ## The sound to play when charge firing.
 
 @export_group("Burst Logic")
 @export_range(1, 100, 1) var projectiles_per_fire: int = 1 ## How many projectiles are emitted per burst execution.

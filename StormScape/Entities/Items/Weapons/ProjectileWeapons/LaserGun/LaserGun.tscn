@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://baxpb3crwepc0"]
+[gd_scene load_steps=13 format=3 uid="uid://baxpb3crwepc0"]
 
 [ext_resource type="Script" path="res://Entities/Items/Weapons/ProjectileWeapons/ProjectileWeapon.gd" id="1_v8yes"]
 [ext_resource type="Texture2D" uid="uid://dc02krbqhb7hu" path="res://Entities/Items/Weapons/ProjectileWeapons/LaserGun/laser_gun_base.png" id="2_rtlm0"]
@@ -145,6 +145,10 @@ _data = {
 "fire": SubResource("Animation_ea614")
 }
 
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_v5j41"]
+radius = 4.0
+height = 16.0
+
 [node name="LaserGun" type="Node2D"]
 script = ExtResource("1_v8yes")
 proj_origin = Vector2(8, -3)
@@ -168,3 +172,12 @@ texture = ExtResource("3_5j6aw")
 
 [node name="WeaponModManager" parent="." instance=ExtResource("4_eputi")]
 print_effect_updates = true
+
+[node name="ClippingDetector" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 241
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ClippingDetector"]
+position = Vector2(0, -2)
+rotation = -1.5708
+shape = SubResource("CapsuleShape2D_v5j41")

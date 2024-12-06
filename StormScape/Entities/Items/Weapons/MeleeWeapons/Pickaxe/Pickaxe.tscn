@@ -46,7 +46,6 @@ shape = SubResource("RectangleShape2D_sjv0y")
 disabled = true
 
 [node name="MainHandSprite" type="Sprite2D" parent="AnimatedSprite2D"]
-z_index = 1
 position = Vector2(8.01041, 4.01041)
 texture = ExtResource("5_llog1")
 

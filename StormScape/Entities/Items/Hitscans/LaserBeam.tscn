@@ -30,12 +30,12 @@ point_count = 2
 blend_mode = 1
 
 [node name="LaserBeam" type="Line2D"]
-z_index = -2
-points = PackedVector2Array(0, 0, 10, 0)
+points = PackedVector2Array(0, 0)
 width = 1.5
 width_curve = SubResource("Curve_rgawo")
 default_color = Color(2.86, 0.852, 0.78, 1)
 end_cap_mode = 2
+round_precision = 5
 script = ExtResource("1_i0es2")
 metadata/_edit_vertical_guides_ = [-81.0]
 

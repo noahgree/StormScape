@@ -37,4 +37,5 @@ stat_mods = Array[ExtResource("3_85854")]([SubResource("Resource_xigmb")])
 audio_to_play = ""
 only_cue_on_player_hit = false
 spawn_particles = true
+update_entity_glow = true
 particles_req_handler = true

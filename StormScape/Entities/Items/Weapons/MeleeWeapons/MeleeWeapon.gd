@@ -150,8 +150,8 @@ func _swing() -> void:
 
 		anim_player.speed_scale = 1.0 / stats.s_mods.get_stat("use_speed")
 		anim_player.play("MeleeWeaponAnimLibrary/use")
-		if stats.usage_sound != "":
-			AudioManager.play_sound(stats.usage_sound, AudioManager.SoundType.SFX_2D, source_entity.global_position)
+		if stats.use_sound != "":
+			AudioManager.play_sound(stats.use_sound, AudioManager.SoundType.SFX_2D, source_entity.global_position)
 
 ## Begins the logic for doing a charged swing.
 func _charge_swing(hold_time: float) -> void:

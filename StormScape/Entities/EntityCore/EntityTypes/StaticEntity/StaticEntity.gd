@@ -93,3 +93,62 @@ func _ready() -> void:
 
 	collision_layer = 0b00010000
 	collision_mask = 0b11110101
+
+func _physics_process(_delta: float) -> void:
+	_update_shader_with_new_sprite_frame_size()
+
+## Updates the shader every frame with information on the position of a sprite frame within its sprite sheet. Needed
+## to make the glow not produce artifacts along the edges of the sprite when using an animated sprite node.
+func _update_shader_with_new_sprite_frame_size() -> void:
+	if sprite.material.get_shader_parameter("glow_size") <= 0.0:
+		return
+
+	if sprite is AnimatedSprite2D:
+		sprite.material.set_shader_parameter("enable_fading", true)
+
+		var texture: Texture2D = SpriteHelpers.SpriteDetails.get_frame_texture(sprite)
+
+		var frame_uv_min: Vector2 = Vector2(0, 0)
+		var frame_uv_max: Vector2 = Vector2(1, 1)
+
+		var region: Rect2
+
+		# Ensure the texture is valid
+		if texture == null:
+			sprite.material.set_shader_parameter("enable_fading", false)
+			return
+
+		# Calculate UV coordinates based on texture type
+		if texture is AtlasTexture:
+			var atlas_texture: AtlasTexture = texture as AtlasTexture
+			var atlas_source: Texture2D = atlas_texture.atlas
+			region = atlas_texture.region
+			var atlas_size: Vector2 = atlas_source.get_size()
+
+			# Calculate UV coordinates
+			frame_uv_min = Vector2(region.position.x / atlas_size.x, region.position.y / atlas_size.y)
+			frame_uv_max = Vector2(
+				(region.position.x + region.size.x) / atlas_size.x,
+				(region.position.y + region.size.y) / atlas_size.y
+			)
+		elif texture is Texture2D:
+			# For regular textures, the UVs are (0,0) to (1,1)
+			frame_uv_min = Vector2(0.0, 0.0)
+			frame_uv_max = Vector2(1.0, 1.0)
+		else:
+			push_error("Unsupported texture type for adjusting glow shader on an entity.")
+			sprite.material.set_shader_parameter("enable_fading", false)
+			return
+
+		# Pass frame_uv_min and frame_uv_max to the shader
+		sprite.material.set_shader_parameter("frame_uv_min", frame_uv_min)
+		sprite.material.set_shader_parameter("frame_uv_max", frame_uv_max)
+
+		# Calculate the UV pixel size
+		var frame_size: Vector2 = region.size if texture is AtlasTexture else texture.get_size()
+		var uv_pixel_size: Vector2 = Vector2(1.0 / frame_size.x, 1.0 / frame_size.y)
+		sprite.material.set_shader_parameter("uv_pixel_size", uv_pixel_size)
+	else:
+		sprite.material.set_shader_parameter("enable_fading", false)
+		sprite.material.set_shader_parameter("frame_uv_min", Vector2(0.0, 0.0))
+		sprite.material.set_shader_parameter("frame_uv_max", Vector2(1.0, 1.0))

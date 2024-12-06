@@ -21,6 +21,7 @@ pickup_radius = 4
 info = "Ammo used in light weapons like pistols."
 recipe = Array[ExtResource("2_ip0fe")]([])
 output_quantity = 1
+recipe_unlocked = false
 rotation_lerping = 0.1
 holding_offset = Vector2(0, 0)
 holding_degrees = 0.0

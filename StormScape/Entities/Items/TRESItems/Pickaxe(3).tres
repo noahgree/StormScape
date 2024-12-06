@@ -8,14 +8,15 @@
 [ext_resource type="Script" path="res://Entities/Items/Weapons/MeleeWeapons/MeleeWeaponResource.gd" id="5_uecum"]
 [ext_resource type="Script" path="res://UI/Inventory/PlayerInventory/Crafting/CraftingIngredient.gd" id="5_x5580"]
 
-[sub_resource type="Resource" id="Resource_b14b1"]
+[sub_resource type="Resource" id="Resource_ykkhf"]
 script = ExtResource("1_urffy")
-is_projectile = true
+source_type = 5
+source_tags = Array[String](["Pickaxe"])
 scanned_phys_layers = 191
 can_hit_self = true
 bad_effect_affected_teams = 1
 good_effect_affected_teams = 2
-base_damage = 0
+base_damage = 199
 dmg_affected_stats = 2
 crit_chance = 0
 crit_multiplier = 1.5
@@ -27,14 +28,15 @@ cam_shake_duration = 0.0
 cam_freeze_multiplier = 1.0
 cam_freeze_duration = 0.0
 impact_sound = ""
-hit_flash_color = Color(1, 1, 1, 0.45)
+hit_flash_color = Color(1, 1, 1, 0.6)
 status_effects = Array[ExtResource("2_ypwee")]([])
 contact_position = Vector2(0, 0)
 movement_direction = Vector2(0, 0)
 
 [sub_resource type="Resource" id="Resource_63o7k"]
 script = ExtResource("1_urffy")
-is_projectile = false
+source_type = 5
+source_tags = Array[String](["Pickaxe"])
 scanned_phys_layers = 191
 can_hit_self = false
 bad_effect_affected_teams = 1
@@ -51,7 +53,7 @@ cam_shake_duration = 0.0
 cam_freeze_multiplier = 1.0
 cam_freeze_duration = 0.0
 impact_sound = ""
-hit_flash_color = Color(1, 1, 1, 0.7)
+hit_flash_color = Color(1, 1, 1, 0.6)
 status_effects = Array[ExtResource("2_ypwee")]([])
 contact_position = Vector2(0, 0)
 movement_direction = Vector2(0, 0)
@@ -67,20 +69,20 @@ stamina_cost = 3.0
 cooldown = 0.25
 use_speed = 0.2
 swing_angle = 80
-can_do_charge_use = false
+use_sound = ""
+can_do_charge_use = true
 min_charge_time = 2.0
 auto_do_charge_use = false
 charge_use_cooldown = 1.5
-charge_use_speed = 0.75
-charge_swing_angle = 720
-charge_effect_source = SubResource("Resource_b14b1")
+charge_use_speed = 0.25
+charge_swing_angle = 300
 charge_stamina_cost = 25
-usage_sound = ""
 charge_use_sound = ""
 cooldown_left = 0.0
 charge_cooldown_left = 0.0
 s_mods = SubResource("Resource_wwtqn")
 effect_source = SubResource("Resource_63o7k")
+charge_effect_source = SubResource("Resource_ykkhf")
 pullout_delay = 0.0
 blocked_mods = Array[String]([])
 time_last_equipped = 0.0
@@ -102,6 +104,7 @@ pickup_radius = 6
 info = "A handy pick."
 recipe = Array[ExtResource("5_x5580")]([])
 output_quantity = 1
+recipe_unlocked = false
 item_scene = ExtResource("4_6vlkm")
 rotation_lerping = 0.1
 holding_offset = Vector2(0, 0)

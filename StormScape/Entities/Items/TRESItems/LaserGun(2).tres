@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="ProjWeaponResource" load_steps=44 format=3 uid="uid://ciel2rrqq4dvv"]
+[gd_resource type="Resource" script_class="ProjWeaponResource" load_steps=38 format=3 uid="uid://ciel2rrqq4dvv"]
 
 [ext_resource type="Script" path="res://Entities/Stats/EffectSystemResources/EffectSources/EffectSource.gd" id="1_xn1yf"]
 [ext_resource type="Script" path="res://Entities/Stats/EffectSystemResources/StatusEffects/StatusEffect.gd" id="2_gdqw7"]
@@ -6,12 +6,9 @@
 [ext_resource type="Script" path="res://Entities/Items/Hitscans/HitscanResource.gd" id="4_w5523"]
 [ext_resource type="PackedScene" uid="uid://ckf7i8bnass5n" path="res://Entities/Items/Projectiles/Laser/Laser.tscn" id="5_xjmn2"]
 [ext_resource type="Script" path="res://Entities/Items/Projectiles/ProjectileResource.gd" id="6_ll0mi"]
-[ext_resource type="Resource" uid="uid://c050ytbbmgfem" path="res://Entities/Stats/EffectSystemResources/StatusEffects/BadEffects/Slowness/Slowness1.tres" id="7_wp73h"]
 [ext_resource type="Resource" uid="uid://opqylasujopp" path="res://Entities/Stats/EffectSystemResources/StatusEffects/BadEffects/LifeSteal/LifeSteal1.tres" id="8_6gpiv"]
 [ext_resource type="Texture2D" uid="uid://bjm0js8cfg2rm" path="res://Entities/Items/Weapons/ProjectileWeapons/LaserGun/laser_gun.png" id="10_iakvu"]
 [ext_resource type="PackedScene" uid="uid://baxpb3crwepc0" path="res://Entities/Items/Weapons/ProjectileWeapons/LaserGun/LaserGun.tscn" id="11_ykm1j"]
-[ext_resource type="Resource" uid="uid://c0gxq4ufi3snt" path="res://Entities/Stats/EffectSystemResources/StatusEffects/GoodEffects/Speed/Speed2.tres" id="12_temj5"]
-[ext_resource type="Resource" uid="uid://b0it5xmpw16sd" path="res://Entities/Stats/EffectSystemResources/StatusEffects/BadEffects/Knockback/Knockback1.tres" id="13_kf3jd"]
 [ext_resource type="Script" path="res://UI/Inventory/PlayerInventory/Crafting/CraftingIngredient.gd" id="14_c7ib1"]
 [ext_resource type="Resource" uid="uid://m8eslst1uuxh" path="res://Entities/Items/TRESItems/LightAmmo(0).tres" id="15_l541q"]
 [ext_resource type="Resource" uid="uid://cx1ydw2jde1y8" path="res://Entities/Items/TRESItems/Apple(0).tres" id="16_t22lp"]
@@ -32,7 +29,7 @@ point_count = 3
 
 [sub_resource type="Resource" id="Resource_erj5g"]
 script = ExtResource("1_xn1yf")
-is_projectile = true
+source_type = 1
 scanned_phys_layers = 191
 can_hit_self = true
 bad_effect_affected_teams = 1
@@ -49,60 +46,55 @@ cam_shake_duration = 0.0
 cam_freeze_multiplier = 1.0
 cam_freeze_duration = 0.0
 impact_sound = ""
-hit_flash_color = Color(1, 1, 1, 0.45)
+hit_flash_color = Color(1, 1, 1, 0.6)
 status_effects = Array[ExtResource("2_gdqw7")]([])
 contact_position = Vector2(0, 0)
 movement_direction = Vector2(0, 0)
 
-[sub_resource type="Curve" id="Curve_6bgjc"]
-_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.495125), 0.0, 0.0, 0, 0]
+[sub_resource type="Curve" id="Curve_plg5s"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.499148), 0.0, 0.0, 0, 0]
 point_count = 2
 
-[sub_resource type="Curve" id="Curve_sktml"]
-_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.50357), 0.0, 0.0, 0, 0]
-point_count = 2
-
-[sub_resource type="Resource" id="Resource_kdfyk"]
+[sub_resource type="Resource" id="Resource_jly4o"]
 script = ExtResource("4_w5523")
-hitscan = ExtResource("3_ujvf8")
+hitscan_scn = ExtResource("3_ujvf8")
 hitscan_duration = 0.0
 hitscan_effect_interval = -1.0
-hitscan_pierce_count = 1
-hitscan_max_distance = 150
-hitscan_falloff_curve = SubResource("Curve_6bgjc")
+hitscan_pierce_count = 2
+hitscan_max_distance = 100
+hitscan_effect_falloff = SubResource("Curve_plg5s")
 bad_effects_falloff = true
 good_effects_falloff = false
-override_vfx_defaults = true
-hitscan_max_width = 3.0
-hitscan_width_curve = SubResource("Curve_sktml")
-beam_color = Color(0.232506, 0.558263, 1, 1)
+override_vfx_defaults = false
+hitscan_max_width = 0.5
+beam_color = Color(1, 0.0784314, 0.576471, 1)
 glow_amount = 1.0
-start_particle_color = Color(0.614307, 0.869753, 1, 1)
+start_particle_color = Color(1, 0.752941, 0.796078, 1)
 start_particle_mult = 1.0
-impact_particle_color = Color(0.680526, 0.851642, 1, 1)
+impact_particle_color = Color(1, 0.752941, 0.796078, 1)
 impact_particle_mult = 1.0
-beam_particle_color = Color(0, 0.568798, 0.847188, 1)
+beam_particle_color = Color(1, 0, 0, 1)
 beam_particle_mult = 1.0
 
-[sub_resource type="Curve" id="Curve_dgqa3"]
-_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.49935), 0.0, 0.0, 0, 0]
+[sub_resource type="Curve" id="Curve_xand3"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.50358), 0.0, 0.0, 0, 0]
 point_count = 2
 
-[sub_resource type="Curve" id="Curve_r8g3p"]
-_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.596523), 0.0, 0.0, 0, 0]
+[sub_resource type="Curve" id="Curve_f7885"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
 point_count = 2
 
-[sub_resource type="Resource" id="Resource_ukv54"]
+[sub_resource type="Resource" id="Resource_jlima"]
 script = ExtResource("6_ll0mi")
-speed = 350
-initial_boost_time = 0.0
-initial_boost_mult = 2.0
+speed = 400
+speed_curve = SubResource("Curve_f7885")
+initial_boost_time = 0.08
+initial_boost_mult = 1.75
 lifetime = 3.0
 max_distance = 500
 override_gun_height = false
 height_override = 6
-speed_curve = SubResource("Curve_r8g3p")
-effect_falloff_curve = SubResource("Curve_dgqa3")
+effect_falloff_curve = SubResource("Curve_xand3")
 point_of_max_falloff = 500.0
 bad_effects_falloff = true
 good_effects_falloff = false
@@ -149,7 +141,7 @@ splash_sound = ""
 
 [sub_resource type="Resource" id="Resource_wic0i"]
 script = ExtResource("1_xn1yf")
-is_projectile = true
+source_type = 1
 scanned_phys_layers = 191
 can_hit_self = false
 bad_effect_affected_teams = 3
@@ -166,65 +158,56 @@ cam_shake_duration = 0.0
 cam_freeze_multiplier = 1.0
 cam_freeze_duration = 0.0
 impact_sound = ""
-hit_flash_color = Color(1, 1, 1, 0.45)
+hit_flash_color = Color(1, 1, 1, 0.6)
 status_effects = Array[ExtResource("2_gdqw7")]([ExtResource("8_6gpiv")])
 contact_position = Vector2(0, 0)
 movement_direction = Vector2(0, 0)
 
-[sub_resource type="Curve" id="Curve_3h45u"]
-_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+[sub_resource type="Curve" id="Curve_rk4a8"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.496931), 0.0, 0.0, 0, 0]
 point_count = 2
 
-[sub_resource type="Curve" id="Curve_cbe00"]
-_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.491271), 0.0, 0.0, 0, 0]
-point_count = 2
-
-[sub_resource type="Resource" id="Resource_2dr82"]
+[sub_resource type="Resource" id="Resource_woyhr"]
 script = ExtResource("4_w5523")
-hitscan = ExtResource("3_ujvf8")
+hitscan_scn = ExtResource("3_ujvf8")
 hitscan_duration = 1.0
-hitscan_effect_interval = 0.15
-hitscan_pierce_count = 2
-hitscan_max_distance = 350
-hitscan_falloff_curve = SubResource("Curve_3h45u")
+hitscan_effect_interval = -1.0
+hitscan_pierce_count = 1
+hitscan_max_distance = 200
+hitscan_effect_falloff = SubResource("Curve_rk4a8")
 bad_effects_falloff = true
-good_effects_falloff = true
+good_effects_falloff = false
 override_vfx_defaults = false
-hitscan_max_width = 1.0
-hitscan_width_curve = SubResource("Curve_cbe00")
-beam_color = Color(0, 0.581182, 0.977963, 1)
+hitscan_max_width = 0.5
+beam_color = Color(1, 0.0784314, 0.576471, 1)
 glow_amount = 1.0
-start_particle_color = Color(0.84359, 0.944003, 1, 1)
-start_particle_mult = 0.75
-impact_particle_color = Color(0.631846, 0.865228, 1, 1)
+start_particle_color = Color(1, 0.752941, 0.796078, 1)
+start_particle_mult = 1.0
+impact_particle_color = Color(1, 0.752941, 0.796078, 1)
 impact_particle_mult = 1.0
-beam_particle_color = Color(0.646492, 0.854506, 1, 1)
+beam_particle_color = Color(1, 0, 0, 1)
 beam_particle_mult = 1.0
 
-[sub_resource type="Curve" id="Curve_dmuuj"]
-_data = [Vector2(0, 0.757839), 0.0, 0.0, 0, 0, Vector2(1, 0.491462), 0.0, 0.0, 0, 0]
+[sub_resource type="Curve" id="Curve_3rmxf"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.651446), 0.0, 0.0, 0, 0]
 point_count = 2
 
-[sub_resource type="Curve" id="Curve_a16jh"]
-_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.49935), 0.0, 0.0, 0, 0]
+[sub_resource type="Curve" id="Curve_bhy44"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.501364), 0.0, 0.0, 0, 0]
 point_count = 2
 
-[sub_resource type="Curve" id="Curve_uaxhg"]
-_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+[sub_resource type="Curve" id="Curve_pesg6"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.69792), 0.0, 0.0, 0, 0]
 point_count = 2
 
-[sub_resource type="Curve" id="Curve_2iwdc"]
-_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.506669), 0.0, 0.0, 0, 0]
-point_count = 2
-
-[sub_resource type="Resource" id="Resource_n7vi7"]
+[sub_resource type="Resource" id="Resource_3ce5l"]
 script = ExtResource("1_xn1yf")
-is_projectile = true
+source_type = 3
 scanned_phys_layers = 191
 can_hit_self = true
 bad_effect_affected_teams = 1
 good_effect_affected_teams = 2
-base_damage = 100
+base_damage = 25
 dmg_affected_stats = 2
 crit_chance = 0
 crit_multiplier = 1.5
@@ -236,22 +219,22 @@ cam_shake_duration = 0.0
 cam_freeze_multiplier = 1.0
 cam_freeze_duration = 0.0
 impact_sound = ""
-hit_flash_color = Color(1, 1, 1, 0.45)
-status_effects = Array[ExtResource("2_gdqw7")]([ExtResource("13_kf3jd")])
+hit_flash_color = Color(1, 1, 1, 0.6)
+status_effects = Array[ExtResource("2_gdqw7")]([])
 contact_position = Vector2(0, 0)
 movement_direction = Vector2(0, 0)
 
-[sub_resource type="Resource" id="Resource_tss3t"]
+[sub_resource type="Resource" id="Resource_nhr3k"]
 script = ExtResource("6_ll0mi")
 speed = 350
+speed_curve = SubResource("Curve_pesg6")
 initial_boost_time = 0.0
 initial_boost_mult = 2.0
 lifetime = 3.0
 max_distance = 500
 override_gun_height = false
 height_override = 6
-speed_curve = SubResource("Curve_2iwdc")
-effect_falloff_curve = SubResource("Curve_uaxhg")
+effect_falloff_curve = SubResource("Curve_bhy44")
 point_of_max_falloff = 500.0
 bad_effects_falloff = true
 good_effects_falloff = false
@@ -260,7 +243,7 @@ max_ricochet = 0
 ricochet_angle_bounce = true
 homing_method = "None"
 homing_speed_mult = 1.0
-max_turn_rate = 200.0
+max_turn_rate = 100.0
 homing_fov_angle = 180.0
 homing_max_range = 850
 homing_duration = -1.0
@@ -275,11 +258,10 @@ move_in_rotated_dir = false
 shadow_matches_spin = false
 launch_angle = 0.0
 arc_travel_distance = 125
-arc_speed = 550.0
+arc_speed = 350.0
 max_collision_height = 20
-grounding_free_delay = 5.0
+grounding_free_delay = 0.0
 bounce_count = 0
-bounce_falloff_curve = SubResource("Curve_a16jh")
 ping_pong_bounce = false
 number_of_splits = 0
 split_into_counts = Array[int]([2])
@@ -290,13 +272,13 @@ split_cam_shakes_str = Array[float]([1.0])
 split_cam_shakes_dur = Array[float]([0.2])
 splash_radius = 0
 do_aoe_on_arc_land = true
-aoe_effect_falloff_curve = SubResource("Curve_dmuuj")
+aoe_effect_falloff_curve = SubResource("Curve_3rmxf")
 bad_effects_aoe_falloff = true
 good_effects_aoe_falloff = false
 splash_effect_delay = 0.0
-splash_effect_dur = 5.0
+splash_effect_dur = 0.05
 splash_before_freeing = false
-splash_effect_source = SubResource("Resource_n7vi7")
+splash_effect_source = SubResource("Resource_3ce5l")
 splash_sound = ""
 
 [sub_resource type="Resource" id="Resource_ct7xl"]
@@ -334,20 +316,29 @@ point_count = 2
 [resource]
 script = ExtResource("18_1rmpi")
 proj_weapon_type = 0
-projectile = ExtResource("5_xjmn2")
-projectile_logic = SubResource("Resource_tss3t")
-firing_mode = "Semi Auto"
+firing_mode = "Auto"
 initial_shot_delay = 0.0
+use_hitscan = false
+allow_hitscan_holding = true
 auto_fire_delay = 0.15
 firing_cam_shake_str = 0.68
 firing_cam_shake_dur = 0.3
 firing_cam_freeze_mult = 1.0
 firing_cam_freeze_dur = 0.0
 firing_sound = ""
-use_hitscan = false
-allow_hitscan_holding = true
-hitscan_logic = SubResource("Resource_2dr82")
-charge_hitscan_logic = SubResource("Resource_kdfyk")
+min_charge_time = 1.0
+charge_fire_cooldown = 0.5
+has_charge_fire_anim = false
+ammo_use_per_charge = 3
+charge_bloom_mult = 5.0
+charge_cam_fx_mult = 1.0
+charge_firing_sound = ""
+projectile_scn = ExtResource("5_xjmn2")
+projectile_logic = SubResource("Resource_nhr3k")
+hitscan_logic = SubResource("Resource_woyhr")
+charge_projectile_scn = ExtResource("5_xjmn2")
+charge_projectile_logic = SubResource("Resource_jlima")
+charge_hitscan_logic = SubResource("Resource_jly4o")
 ammo_type = 1
 mag_size = 50
 reload_type = "Magazine"
@@ -365,18 +356,6 @@ fully_cool_delay_time = 0.0
 warmth_delay_curve = SubResource("Curve_c3po6")
 warmth_increase_rate = SubResource("Curve_5x8xt")
 warmth_decrease_rate = SubResource("Curve_43cgp")
-min_charge_time = 1.0
-charge_fire_cooldown = 0.5
-has_charge_fire_anim = false
-ammo_use_per_charge = 3
-charge_bloom_mult = 5.0
-charge_projectile = ExtResource("5_xjmn2")
-charge_projectile_logic = SubResource("Resource_ukv54")
-charge_effect_source = SubResource("Resource_erj5g")
-charging_stat_effect = ExtResource("7_wp73h")
-post_chg_shot_effect = ExtResource("12_temj5")
-charge_cam_fx_mult = 3.0
-charge_firing_sound = ""
 projectiles_per_fire = 1
 use_ammo_per_burst_proj = true
 burst_bullet_delay = 0.1
@@ -390,6 +369,7 @@ current_bloom_level = 0.0
 ammo_in_mag = -1
 s_mods = SubResource("Resource_wi7kk")
 effect_source = SubResource("Resource_wic0i")
+charge_effect_source = SubResource("Resource_erj5g")
 pullout_delay = 0.3
 blocked_mods = Array[String]([])
 time_last_equipped = 0.0

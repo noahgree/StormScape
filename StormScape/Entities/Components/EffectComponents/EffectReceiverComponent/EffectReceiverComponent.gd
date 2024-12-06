@@ -8,8 +8,13 @@ class_name EffectReceiverComponent
 ## Add specific effect handlers as children of this node to be able to receive those effects on the entity.
 ## For all intensive purposes, this is acting as a hurtbox component via its receiver area.
 
-@export var can_receive_status_effects: bool = true ## Whether the affected entity can have status effects applied at all. This does not include base damage and base healing.
-@export var can_receive_stat_mods: bool = true ## Whether the affected entity can have its stats modded via received effect sources.
+@export var can_receive_status_effects: bool = true ## Whether the affected entity can have status effects applied at all. This does not include base damage and base healing. This also determines if the entity can have its stats modded.
+@export var absorb_full_hit: bool = false ## When true, any weapon's hitbox that sends an effect to this receiver will be disabled for the remainder of the attack afterwards. Useful for when you want something like a tree to take the full hit and not let an axe keep swinging through to hit enemies behind it.
+@export_group("Source Filtering")
+@export var filter_source_types: bool = false ## When true, only allow matching source types as specified in the below array.
+@export var allowed_source_types: Array[GlobalData.EffectSourceSourceType] = [GlobalData.EffectSourceSourceType.FROM_DEFAULT] ## The list of sources an effect source can come from in order to affect this effect receiver.
+@export var filter_source_tags: bool = false ## When true, only allow matching source tags as specified in the below array.
+@export var allowed_source_tags: Array[String] = []
 @export_group("Connected Nodes")
 @export var affected_entity: PhysicsBody2D  ## The connected entity to be affected by the effects be received.
 @export var health_component: HealthComponent
@@ -30,7 +35,7 @@ class_name EffectReceiverComponent
 
 @onready var tool_script: Node = $EffectReceiverToolScript
 
-var most_recent_handling: Dictionary = { "effect_source" : null, "source_entity" : null }
+var most_recent_effect_src: EffectSource = null
 var hit_flash_timer: Timer = Timer.new()
 
 
@@ -62,10 +67,20 @@ func _ready() -> void:
 ## Handles an incoming effect source, passing it to present receivers for further processing before changing
 ## entity stats.
 func handle_effect_source(effect_source: EffectSource, source_entity: PhysicsBody2D) -> void:
-	most_recent_handling = { "effect_source" : effect_source, "source_entity" : source_entity }
+	if filter_source_types and (effect_source.source_type not in allowed_source_types):
+		return
+	if filter_source_tags:
+		var match_found: bool = false
+		for tag: String in effect_source.source_tags:
+			if tag in allowed_source_tags:
+				match_found = true
+		if not match_found:
+			return
+
+	most_recent_effect_src = effect_source
 
 	if source_entity.team == GlobalData.Teams.PASSIVE or ((affected_entity is DynamicEntity) and not affected_entity.move_fsm.can_receive_effects):
-		if loot_table_component: loot_table_component.handle_effect_source(effect_source, source_entity)
+		if loot_table_component: loot_table_component.handle_effect_source(effect_source)
 		return
 
 	if effect_source.impact_vfx != null:
@@ -83,15 +98,17 @@ func handle_effect_source(effect_source: EffectSource, source_entity: PhysicsBod
 		if effect_source.cam_freeze_duration > 0:
 			GlobalData.player_camera.start_freeze(effect_source.cam_freeze_multiplier, effect_source.cam_freeze_duration)
 
-	if effect_source.base_damage > 0 and has_node("DmgHandler"):
+	if effect_source.base_damage > 0 and dmg_handler != null:
 		if _check_same_team(source_entity) and _check_if_bad_effects_apply_to_allies(effect_source):
 			dmg_handler.handle_instant_damage(effect_source, _get_life_steal(effect_source, source_entity))
-			if loot_table_component: loot_table_component.handle_effect_source(effect_source, source_entity)
+			if loot_table_component: loot_table_component.handle_effect_source(effect_source)
 		elif not _check_same_team(source_entity) and _check_if_bad_effects_apply_to_enemies(effect_source):
 			dmg_handler.handle_instant_damage(effect_source, _get_life_steal(effect_source, source_entity))
-			if loot_table_component: loot_table_component.handle_effect_source(effect_source, source_entity)
+			if loot_table_component: loot_table_component.handle_effect_source(effect_source)
+	elif loot_table_component and not loot_table_component.require_dmg_on_hit:
+		loot_table_component.handle_effect_source(effect_source)
 
-	if effect_source.base_healing > 0 and has_node("HealHandler"):
+	if effect_source.base_healing > 0 and heal_handler != null:
 		if effect_source.base_healing > 0:
 			if _check_same_team(source_entity) and _check_if_good_effects_apply_to_allies(effect_source):
 				heal_handler.handle_instant_heal(effect_source.base_healing, effect_source.heal_affected_stats)
@@ -102,7 +119,7 @@ func handle_effect_source(effect_source: EffectSource, source_entity: PhysicsBod
 		if knockback_handler:
 			knockback_handler.contact_position = effect_source.contact_position
 			knockback_handler.effect_movement_direction = effect_source.movement_direction
-			knockback_handler.is_source_moving_type = effect_source.is_projectile
+			knockback_handler.is_source_moving_type = (effect_source.source_type == GlobalData.EffectSourceSourceType.FROM_PROJECTILE)
 
 		_check_status_effect_team_logic(effect_source, source_entity)
 

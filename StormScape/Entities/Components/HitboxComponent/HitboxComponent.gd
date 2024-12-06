@@ -15,7 +15,7 @@ var movement_direction: Vector2 = Vector2.ZERO ## The current movement direction
 ## Also set collision mask to the matching flags.
 func _ready() -> void:
 	self.area_entered.connect(_on_area_entered)
-	self.body_entered.connect(_on_tilemap_collision)
+	self.body_entered.connect(_on_body_entered)
 	monitorable = true
 	collision_layer = 0
 	if effect_source:
@@ -31,23 +31,27 @@ func _on_area_entered(area: Area2D) -> void:
 
 	_process_hit(area)
 
-## If we hit the tilemap body, queue free.
-func _on_tilemap_collision(body: Node2D) -> void:
+## If we hit a body, process it. Any body you wish to make block or handle attacks should be given an effect receiver.
+func _on_body_entered(body: Node2D) -> void:
 	if body is TileMapLayer:
 		_process_hit(body)
 
-## Meant to interact with an EffectReceiverComponent that can handle effects supplied by this instance.
+## Meant to interact with an EffectReceiverComponent that can handle effects supplied by this instance. This version of the method
+## handles the general case, but specific behaviors defined in certain weapon weapon hitboxes may want to override it.
 func _start_being_handled(handling_area: EffectReceiverComponent) -> void:
 	effect_source = effect_source.duplicate()
 
-	if effect_source.is_projectile:
+	if effect_source.source_type == GlobalData.EffectSourceSourceType.FROM_PROJECTILE:
 		effect_source.movement_direction = movement_direction
 	if not use_self_position:
 		effect_source.contact_position = get_parent().global_position
 	else:
 		effect_source.contact_position = global_position
+
+	if handling_area.absorb_full_hit:
+		collider.set_deferred("disabled", true) # Does not apply to hitscans.
 	handling_area.handle_effect_source(effect_source, source_entity)
 
 ## Meant to be overridden by subclasses to determine what to do after hitting an object.
-func _process_hit(_area: Area2D) -> void:
+func _process_hit(_object: Node2D) -> void:
 	pass

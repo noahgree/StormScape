@@ -65,23 +65,22 @@ func handle_status_effect(status_effect: StatusEffect) -> void:
 		else:
 			print_rich("-------[color=green]Adding[/color][b] " + str(status_effect.effect_name) + str(status_effect.effect_lvl) + "[/b]-------")
 
-	if effect_receiver.can_receive_stat_mods:
-		_handle_status_effect_mods(status_effect)
+	_handle_status_effect_mods(status_effect)
 
 ## Checks if we already have a status effect of the same name and decides what to do depending on the level.
 func _handle_status_effect_mods(status_effect: StatusEffect) -> void:
 	if status_effect.effect_name in current_effects:
 		var existing_lvl: int = current_effects[status_effect.effect_name].effect_lvl
 
-		if existing_lvl > status_effect.effect_lvl: # new effect is lower lvl
+		if existing_lvl > status_effect.effect_lvl: # New effect is lower lvl
 			var time_to_add: float = status_effect.mod_time * (float(status_effect.effect_lvl) / float(existing_lvl))
 			_extend_effect_duration(status_effect.effect_name, time_to_add)
 			return
-		elif existing_lvl < status_effect.effect_lvl: # new effect is higher lvl
+		elif existing_lvl < status_effect.effect_lvl: # New effect is higher lvl
 			_remove_status_effect(current_effects[status_effect.effect_name])
 			_add_status_effect(status_effect)
 			return
-		else: # new effect is same lvl
+		else: # New effect is same lvl
 			_restart_effect_duration(status_effect.effect_name)
 			return
 	else:
@@ -108,21 +107,21 @@ func _add_status_effect(status_effect: StatusEffect) -> void:
 
 	effect_timers[status_effect.effect_name] = mod_timer
 
-	if status_effect.spawn_particles: _start_effect_fx(status_effect.effect_name, status_effect.particles_req_handler)
+	_start_effect_fx(status_effect)
 
 	for mod_resource: StatMod in status_effect.stat_mods:
 		get_parent().stats.add_mods([mod_resource] as Array[StatMod], stats_ui)
 
 ## Starts the status effects' associated visual FX like particles. Checks if the receiver has the matching handler node first.
-func _start_effect_fx(effect_name: String, requires_handler: bool) -> void:
-	var particle_node: CPUParticles2D = get_node_or_null((effect_name + "Particles").replace(" ", ""))
-	var allowed_to_receive: bool = effect_receiver.has_node((effect_name + "Handler").replace(" ", "")) or not requires_handler
+func _start_effect_fx(status_effect: StatusEffect) -> void:
+	if status_effect.update_entity_glow:
+		get_parent().sprite.update_floor_color(status_effect.effect_name, false)
+		get_parent().sprite.update_glow_color(status_effect.effect_name, false)
 
-	if not allowed_to_receive:
+	var particle_node: CPUParticles2D = get_node_or_null((status_effect.effect_name + "Particles").replace(" ", ""))
+	var spawn_particles: bool = status_effect.spawn_particles and (effect_receiver.has_node((status_effect.effect_name + "Handler").replace(" ", "")) or not status_effect.particles_req_handler)
+	if not spawn_particles:
 		return
-
-	get_parent().sprite.update_floor_color(effect_name, false)
-	get_parent().sprite.update_glow_color(effect_name, false)
 
 	if particle_node != null:
 		var sprite_tex: Texture2D = SpriteHelpers.SpriteDetails.get_frame_texture(get_parent().sprite)
@@ -133,14 +132,14 @@ func _start_effect_fx(effect_name: String, requires_handler: bool) -> void:
 			particle_node.emission_sphere_radius = (sprite_tex.get_width() / 2.0) * scalar.x
 			particle_node.position = Vector2(0, -(sprite_tex.get_height() / 2.0) * scalar.y)
 		elif emission_shape == CPUParticles2D.EmissionShape.EMISSION_SHAPE_RECTANGLE:
-			if effect_name != "Burning" and effect_name != "Frostbite":
+			if status_effect.effect_name != "Burning" and status_effect.effect_name != "Frostbite":
 				particle_node.emission_rect_extents = Vector2((sprite_tex.get_width() / 4.0) * scalar.x, (sprite_tex.get_height() / 2.0) * scalar.y)
 				particle_node.position = Vector2(0, -(sprite_tex.get_height() / 2.0) * scalar.y)
 
-		if effect_name == "Burning":
+		if status_effect.effect_name == "Burning":
 			particle_node.emission_rect_extents = Vector2((sprite_tex.get_width() / 4.0) * scalar.x, 0.5)
 			particle_node.position = Vector2(0, -2)
-		elif effect_name == "Frostbite":
+		elif status_effect.effect_name == "Frostbite":
 			particle_node.emission_rect_extents = Vector2((sprite_tex.get_width() / 3.5) * scalar.x, 3)
 			particle_node.position = Vector2(0, -(sprite_tex.get_height() * scalar.y) + 4)
 
@@ -187,14 +186,16 @@ func _remove_status_effect(status_effect: StatusEffect) -> void:
 		timer.queue_free()
 		effect_timers.erase(status_effect.effect_name)
 
-	_stop_effect_fx(status_effect.effect_name)
+	_stop_effect_fx(status_effect)
 
 ## Stops the status effects' associated visual FX like particles.
-func _stop_effect_fx(effect_name: String) -> void:
-	var particle_node: CPUParticles2D = get_node_or_null((effect_name + "Particles").replace(" ", ""))
+func _stop_effect_fx(status_effect: StatusEffect) -> void:
+	var particle_node: CPUParticles2D = get_node_or_null((status_effect.effect_name + "Particles").replace(" ", ""))
 	if particle_node != null: particle_node.emitting = false
-	get_parent().sprite.update_floor_color(effect_name, true)
-	get_parent().sprite.update_glow_color(effect_name, true)
+
+	if status_effect.update_entity_glow:
+		get_parent().sprite.update_floor_color(status_effect.effect_name, true)
+		get_parent().sprite.update_glow_color(status_effect.effect_name, true)
 
 ## Returns if any effect (no matter the level) of the passed in name is active.
 func check_if_has_effect(effect_name: String) -> bool:

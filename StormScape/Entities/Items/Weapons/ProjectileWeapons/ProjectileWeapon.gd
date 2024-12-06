@@ -137,6 +137,15 @@ func _ready() -> void:
 		single_reload_timer.timeout.connect(_on_single_reload_timer_timeout)
 		hitscan_hands_freeze_timer.timeout.connect(_on_hitscan_hands_freeze_timer_timeout)
 
+func disable() -> void:
+	source_entity.move_fsm.should_rotate = true
+	source_entity.hands.equipped_item_should_follow_mouse = true
+	is_holding_hitscan = false
+	is_reloading_single_and_has_since_released = true
+
+	if stats.charging_stat_effect != null:
+		source_entity.effects.request_effect_removal(stats.charging_stat_effect.effect_name)
+
 func enter() -> void:
 	if stats.s_mods.base_values.is_empty():
 		_setup_mod_cache()
@@ -409,10 +418,8 @@ func _apply_barrage_logic(was_charge_fire: bool = false) -> void:
 
 	for i: int in range(stats.barrage_count):
 		if not stats.use_hitscan:
-			var proj_scene: PackedScene = stats.projectile if not was_charge_fire else stats.charge_projectile
-			var proj_stats: ProjectileResource = stats.projectile_logic if not was_charge_fire else stats.charge_projectile_logic
 			var rotation_adjustment: float = start_rotation + (i * spread_segment_width)
-			var proj: Projectile = Projectile.create(proj_scene, proj_stats, stats.s_mods, effect_src, source_entity, proj_origin_node.global_position, global_rotation, was_charge_fire)
+			var proj: Projectile = Projectile.create(stats, source_entity, proj_origin_node.global_position, global_rotation, was_charge_fire)
 			proj.rotation = rotation_adjustment if stats.s_mods.get_stat("barrage_count") > 1 else proj.rotation
 			proj.starting_proj_height = -(source_entity.hands.position.y + proj_origin.y) / 2
 
@@ -426,9 +433,10 @@ func _apply_barrage_logic(was_charge_fire: bool = false) -> void:
 
 			_spawn_projectile(proj, was_charge_fire)
 		else:
-			var hitscan_scene: PackedScene = stats.hitscan_logic.hitscan
+			var hitscan_scene: PackedScene = stats.hitscan_logic.hitscan_scn
 			if was_charge_fire and stats.charge_hitscan_logic != null and stats.charge_hitscan_logic.hitscan != null:
-				hitscan_scene = stats.charge_hitscan_logic.hitscan
+				hitscan_scene = stats.charge_hitscan_logic.hitscan_scn
+
 			var rotation_adjustment: float = -angular_spread_radians / 2 + (i * spread_segment_width)
 			var hitscan: Hitscan = Hitscan.create(hitscan_scene, effect_src, self, source_entity, proj_origin_node.global_position, rotation_adjustment if stats.s_mods.get_stat("barrage_count") > 1 else 0.0, was_charge_fire)
 			_spawn_hitscan(hitscan, was_charge_fire)

@@ -5,8 +5,8 @@ class_name WeaponMod
 @export_group("General")
 @export var mod_name: String ## What the mod name is without the level attached.
 @export_range(1, 100, 1) var mod_lvl: int = 1 ## The level of the mod, 1 is the lowest.
-@export var allowed_proj_wpns: Array[ProjWeaponResource.ProjWeaponType] = [ProjWeaponResource.ProjWeaponType.PISTOL, ProjWeaponResource.ProjWeaponType.SHOTGUN, ProjWeaponResource.ProjWeaponType.SMG, ProjWeaponResource.ProjWeaponType.SNIPER, ProjWeaponResource.ProjWeaponType.RIFLE, ProjWeaponResource.ProjWeaponType.EXPLOSIVE, ProjWeaponResource.ProjWeaponType.PRIMITIVE, ProjWeaponResource.ProjWeaponType.MAGICAL, ProjWeaponResource.ProjWeaponType.SPECIAL] ## The allowed types of projectile weapons that can have this mod attached. Has all types allowed by default.
-@export var allowed_melee_wpns: Array[MeleeWeaponResource.MeleeWeaponType] = [MeleeWeaponResource.MeleeWeaponType.TOOL, MeleeWeaponResource.MeleeWeaponType.PHYSICAL, MeleeWeaponResource.MeleeWeaponType.COMBAT] ## The allowed types of melee weapons that can have this mod attached. Has all types allowed by default.
+@export var allowed_proj_wpns: Array[ProjWeaponResource.ProjWeaponType] = GlobalData.all_proj_weapons ## The allowed types of projectile weapons that can have this mod attached. Has all types allowed by default.
+@export var allowed_melee_wpns: Array[MeleeWeaponResource.MeleeWeaponType] = GlobalData.all_melee_wpns ## The allowed types of melee weapons that can have this mod attached. Has all types allowed by default.
 
 @export_group("Stat & Effect Mods")
 @export var wpn_stat_mods: Array[StatMod] ## The stat modifiers applied by this mod. Do not have duplicates in this array.

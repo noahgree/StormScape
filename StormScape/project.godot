@@ -49,7 +49,6 @@ gdscript/warnings/inferred_declaration=1
 
 window/size/viewport_width=480
 window/size/viewport_height=270
-window/size/always_on_top=true
 window/size/window_width_override=3840
 window/size/window_height_override=2160
 window/stretch/mode="canvas_items"
@@ -174,7 +173,7 @@ reload={
 
 2d_physics/layer_1="Player"
 2d_physics/layer_2="Player Attacks"
-2d_physics/layer_3="Enemy"
+2d_physics/layer_3="Moving Enemies"
 2d_physics/layer_4="Enemy Attacks"
 2d_physics/layer_5="Static Objects"
 2d_physics/layer_6="Movable Objects"

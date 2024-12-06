@@ -9,7 +9,8 @@ class_name HealthComponent
 @export var stats_ui: Control
 @export var _max_health: int = 100 ## The maximum amount of health the entity can have.
 @export var _max_shield: int = 100 ## The maximum amount of shield the entity can have.
-@export_range(0, 100, 1) var base_armor: int = 0
+@export_range(0, 100, 1) var base_armor: int = 0 ## The initial percentage of damage deflected.
+@export var infinte_hp: bool = false ## When true, the entity cannot run out of health or shield.
 
 var health: int: set = _set_health ## The current health of the entity.
 var shield: int: set = _set_shield ## The current shield of the entity.
@@ -44,6 +45,9 @@ func damage_shield_then_health(amount: int, source_type: String) -> void:
 		else:
 			EffectPopup.create_popup(source_type if source_type != "BasicDamage" else "HealthDamage", false, amount, get_parent())
 
+	if infinte_hp:
+		return
+
 	var spillover_damage: int = max(0, amount - shield)
 	@warning_ignore("narrowing_conversion") shield = max(0, shield - amount)
 
@@ -54,14 +58,16 @@ func damage_shield_then_health(amount: int, source_type: String) -> void:
 ## Decrements only the health value by the passed in amount.
 func damage_health(amount: int, source_type: String) -> void:
 	if not is_dying:
-		health = max(0, health - amount)
+		if not infinte_hp:
+			health = max(0, health - amount)
 		EffectPopup.create_popup(source_type if source_type != "BasicDamage" else "HealthDamage", false, amount, get_parent())
 		_check_for_death()
 
 ## Decrements only the shield value by the passed in amount.
 func damage_shield(amount: int, source_type: String) -> void:
 	if not is_dying:
-		shield = max(0, shield - amount)
+		if not infinte_hp:
+			shield = max(0, shield - amount)
 		EffectPopup.create_popup(source_type if source_type != "BasicDamage" else "ShieldDamage", false, amount, get_parent())
 		if amount > 0: _play_shield_damage_sound()
 

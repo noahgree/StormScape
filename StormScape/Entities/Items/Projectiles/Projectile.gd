@@ -55,6 +55,7 @@ var played_whiz_sound: bool = false ## Whether this has already played the whiz 
 var debug_homing_rays: Array[Dictionary] = [] ## An array of debug info about the FOV homing method raycasts.
 var debug_recent_hit_location: Vector2 ## The location of the most recent point we hit something.
 var is_charge_fire: bool = false ## When true, this projectile emitted as a result of a charged firing.
+var source_wpn_stats: ProjWeaponResource ## The projectile weapon resource for the weapon that fired this projectile.
 #endregion
 
 
@@ -65,18 +66,21 @@ func _on_before_load_game() -> void:
 
 #region Core
 ## Creates a projectile and assigns its needed variables in a specific order. Then it returns it.
-static func create(proj_scene: PackedScene, proj_stats: ProjectileResource, stat_cache: StatModsCacheResource,
-					effect_src: EffectSource, src_entity: PhysicsBody2D, pos: Vector2, rot: float, is_charged: bool) -> Projectile:
+static func create(wpn_stats: ProjWeaponResource, src_entity: PhysicsBody2D, pos: Vector2,
+					rot: float, is_charged: bool) -> Projectile:
+	var proj_scene: PackedScene = wpn_stats.projectile_scn if not is_charged else wpn_stats.charge_projectile_scn
 	var proj: Projectile = proj_scene.instantiate()
+	proj.source_wpn_stats = wpn_stats
 	proj.split_proj_scene = proj_scene
 	proj.global_position = pos
 	proj.rotation = rot
 
-	proj.stats = proj_stats
-	proj.s_mods = stat_cache
+	proj.stats = wpn_stats.projectile_logic if not is_charged else wpn_stats.charge_projectile_logic
+	proj.s_mods = wpn_stats.s_mods
 	if proj.stats.speed_curve.point_count == 0:
 		push_error("\"" + src_entity.name + "\" has a weapon attempting to fire projectiles, but the projectile resource within the weapon has a blank speed curve.")
 
+	var effect_src: EffectSource = wpn_stats.effect_source if not is_charged else wpn_stats.charge_effect_source
 	proj.effect_source = effect_src
 	proj.collision_mask = effect_src.scanned_phys_layers
 	proj.source_entity = src_entity
@@ -546,7 +550,7 @@ func _split_self() -> void:
 
 	for i: int in range(stats.split_into_counts[splits_so_far - 1]):
 		var angle: float = start_angle + (i * step_angle)
-		var new_proj: Projectile = Projectile.create(split_proj_scene, stats, s_mods, effect_source, source_entity, position, angle, is_charge_fire)
+		var new_proj: Projectile = Projectile.create(source_wpn_stats, source_entity, position, angle, is_charge_fire)
 		new_proj.splits_so_far = splits_so_far
 		new_proj.spin_dir = spin_dir
 		if stats.homing_method == "Mouse Position": new_proj.homing_target = homing_target
@@ -632,7 +636,7 @@ func _on_lifetime_timer_timeout() -> void:
 		queue_free()
 
 ## Overrides parent method. When we intersect with any kind of object, this processes what to do next.
-func _process_hit(object: Variant) -> void:
+func _process_hit(object: Node2D) -> void:
 	debug_recent_hit_location = global_position + Vector2(sprite.region_rect.size.x / 2, 0).rotated(rotation)
 	if not is_in_aoe_phase:
 		var ricochet_stat: int = int(s_mods.get_stat("proj_max_ricochet")) if not is_charge_fire else int(s_mods.get_stat("charge_proj_max_ricochet"))
@@ -666,7 +670,6 @@ func _start_being_handled(handling_area: EffectReceiverComponent) -> void:
 	else:
 		if stats.splash_effect_source == null: stats.splash_effect_source = effect_source
 		var modified_effect_src: EffectSource = _get_effect_source_adjusted_for_falloff(stats.splash_effect_source, handling_area, true)
-		modified_effect_src.is_projectile = false
 		modified_effect_src.contact_position = global_position
 		handling_area.handle_effect_source(modified_effect_src, source_entity)
 

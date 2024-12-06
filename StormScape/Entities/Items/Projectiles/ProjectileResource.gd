@@ -3,6 +3,7 @@ class_name ProjectileResource
 
 @export_group("General")
 @export var speed: int = 350 ## The highest speed the projectile can travel in.
+@export var speed_curve: Curve = Curve.new() ## How the speed changes based on time alive.
 @export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var initial_boost_time: float = 0 ## The duration of any initial boost we want to start with on.
 @export var initial_boost_mult: float = 2.0 ## The speed multiplier for the initial boost, if any.
 @export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var lifetime: float = 3 ## The max time this projectile can be in the air.
@@ -11,8 +12,7 @@ class_name ProjectileResource
 @export var override_gun_height: bool = false ## Whether to use this custom height or keep the height the gun passes in.
 @export_custom(PROPERTY_HINT_NONE, "suffix:pixels") var height_override: int = 6 ## How high off the ground to simulate this projectile being. Basically just moves the shadow's y offset.
 
-@export_subgroup("Falloff")
-@export var speed_curve: Curve = Curve.new() ## How the speed changes based on time alive.
+@export_subgroup("Effects Falloff")
 @export var effect_falloff_curve: Curve = Curve.new() ## The falloff curve for all effects in the effect source.
 @export_custom(PROPERTY_HINT_NONE, "suffix:pixels") var point_of_max_falloff: float = 500 ## The cumulative distance travelled at which the projectile attains the minimum remaining stats due to falloff.
 @export var bad_effects_falloff: bool = true ## Whether to apply the falloff curve to bad effects.

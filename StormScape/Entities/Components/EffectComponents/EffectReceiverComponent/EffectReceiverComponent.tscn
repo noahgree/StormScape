@@ -6,6 +6,8 @@
 [node name="EffectReceiverComponent" type="Area2D"]
 monitoring = false
 script = ExtResource("1_x67rl")
+filter_source_tags = null
+allowed_source_tags = null
 
 [node name="EffectReceiverToolScript" type="Node" parent="."]
 script = ExtResource("2_nlfld")

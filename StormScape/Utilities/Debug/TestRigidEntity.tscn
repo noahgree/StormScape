@@ -91,6 +91,8 @@ debug_color = Color(1.44392e-06, 0.568839, 0.851513, 0.42)
 
 [node name="EffectReceiverComponent" parent="." node_paths=PackedStringArray("affected_entity", "health_component", "loot_table_component", "dmg_handler", "heal_handler", "knockback_handler", "poison_handler", "frostbite_handler", "burning_handler", "life_steal_handler") instance=ExtResource("7_ftqus")]
 position = Vector2(0, -10)
+filter_source_tags = false
+allowed_source_tags = Array[String]([])
 affected_entity = NodePath("..")
 health_component = NodePath("../HealthComponent")
 loot_table_component = NodePath("../LootTableComponent")

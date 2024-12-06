@@ -102,13 +102,15 @@ func _physics_process(_delta: float) -> void:
 		global_position = equipped_item.proj_origin_node.global_position.rotated(equipped_item.rotation)
 		global_rotation = equipped_item.global_rotation + rotation_offset
 
-		beam_particles.position = points[1] * 0.5
-		beam_particles.emission_rect_extents.x = points[1].length() * 0.5
-		beam_particles.emitting = true
-
 		_find_target_receivers()
 
-		points[1] = end_point
+		if points.size() > 1:
+			points[1] = end_point
+			beam_particles.position = points[1] * 0.5
+			beam_particles.emission_rect_extents.x = points[1].length() * 0.5
+			beam_particles.emitting = true
+		else:
+			points = [points[0], end_point]
 	else:
 		queue_free()
 
@@ -239,7 +241,7 @@ func _update_impact_particles(pierce_list: Dictionary) -> void:
 			add_child(particles)
 			particles.emitting = true
 
-	for node: Node in impacted_nodes:
+	for node: Variant in impacted_nodes:
 		if not node in pierce_list.keys():
 			impacted_nodes[node].queue_free()
 			impacted_nodes.erase(node)
@@ -264,7 +266,7 @@ func _get_effect_source_adjusted_for_falloff(effect_src: EffectSource, contact_p
 	apply_to_good = stats.good_effects_falloff
 	var max_distance_stat: float = s_mods.get_stat("hitscan_max_distance") if not is_charge_fire else s_mods.get_stat("charge_hitscan_max_distance")
 	var point_to_sample: float = float(global_position.distance_to(contact_point) / max_distance_stat)
-	var sampled_point: float = stats.hitscan_falloff_curve.sample_baked(point_to_sample)
+	var sampled_point: float = stats.hitscan_effect_falloff.sample_baked(point_to_sample)
 	falloff_mult = max(0.05, sampled_point)
 
 	falloff_effect_src.cam_shake_strength *= falloff_mult

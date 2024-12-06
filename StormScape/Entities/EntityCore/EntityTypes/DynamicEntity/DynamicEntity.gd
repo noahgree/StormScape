@@ -8,14 +8,14 @@ class_name DynamicEntity
 @export var team: GlobalData.Teams = GlobalData.Teams.PLAYER ## What the effects received by this entity should consider as this entity's team.
 @export var stats: StatModsCacheResource = StatModsCacheResource.new() ## The resource that will cache and work with all stat mods for this entity.
 
-@onready var sprite: Node2D = $EntitySprite ## The visual representation of the entity. Needs to have the EntityEffectShader applied.
+@onready var sprite: Node2D = $YSorter/EntitySprite ## The visual representation of the entity. Needs to have the EntityEffectShader applied.
 @onready var effect_receiver: EffectReceiverComponent = get_node_or_null("EffectReceiverComponent") ## The component that handles incoming effect sources.
 @onready var effects: StatusEffectManager = get_node_or_null("StatusEffectManager") ## The node that will cache and manage all status effects for this entity.
 @onready var move_fsm: MoveStateMachine = $MoveStateMachine ## The FSM controlling the entity's movement.
 @onready var health_component: HealthComponent = $HealthComponent ## The component in charge of entity health and shield.
 @onready var stamina_component: StaminaComponent = get_node_or_null("StaminaComponent") ## The component in charge of entity stamina and hunger.
 @onready var inv: ItemReceiverComponent = get_node_or_null("ItemReceiverComponent") ## The inventory component for the entity.
-@onready var hands: HandsComponent = get_node_or_null("HandsComponent") ## The hands item component for the entity.
+@onready var hands: HandsComponent = get_node_or_null("YSorter/HandsComponent") ## The hands item component for the entity.
 
 var time_snare_counter: float = 0 ## The ticker that slows down delta when under a time snare.
 var snare_factor: float = 0 ## Multiplier for delta time during time snares.
@@ -140,9 +140,6 @@ func _ready() -> void:
 	elif team == GlobalData.Teams.ENEMY:
 		add_to_group("enemy_entities")
 
-	if sprite.material != null and sprite.material.shader != null:
-		_update_shader_with_new_sprite_frame_size()
-
 func _process(delta: float) -> void:
 	move_fsm.state_machine_process(delta)
 
@@ -194,6 +191,9 @@ func die() -> void:
 ## Updates the shader every frame with information on the position of a sprite frame within its sprite sheet. Needed
 ## to make the glow not produce artifacts along the edges of the sprite when using an animated sprite node.
 func _update_shader_with_new_sprite_frame_size() -> void:
+	if sprite.material.get_shader_parameter("glow_size") <= 0.0:
+		return
+
 	if sprite is AnimatedSprite2D:
 		sprite.material.set_shader_parameter("enable_fading", true)
 

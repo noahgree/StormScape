@@ -40,7 +40,7 @@ var current_sprite_glow_names: Array[String] = [] ## The queue for the next colo
 func _ready() -> void:
 	var frame_rect: Vector2 = SpriteHelpers.SpriteDetails.get_frame_rect(self, false)
 	floor_color.scale *= Vector2(frame_rect.x / 32.0, frame_rect.y / 32.0)
-	floor_color.position = Vector2(0, (frame_rect.y / 2.0))
+	floor_color.position = Vector2(-position.x, (frame_rect.y / 2.0))
 
 	floor_color.self_modulate = Color(0.0, 0.0, 0.0, 0.0)
 	floor_color.show()
@@ -70,8 +70,8 @@ func update_floor_color(effect_name: String, kill: bool = false) -> void:
 
 		var effect: String = current_floor_color_names[0]
 
-		floor_color_tween.tween_property(floor_color, "self_modulate", floor_colors.get(effect, Color(1.0, 1.0, 1.0, 0.0)), change_time_start).set_delay(0.25 if effect != "Stun" else 0.05)
-		floor_color_tween.tween_property(floor_color, "self_modulate:a", 0.1, 0.3).set_delay(0.25)
+		floor_color_tween.tween_property(floor_color, "self_modulate", floor_colors.get(effect, Color(1.0, 1.0, 1.0, 0.0)), change_time_start).set_delay(0.1 if effect != "Stun" else 0.05)
+		floor_color_tween.tween_property(floor_color, "self_modulate:a", floor_colors.get(effect, Color(1.0, 1.0, 1.0, 0.0)).a * 0.75, 0.3).set_delay(1.0)
 
 ## Updates the glow color using tweening.
 func update_glow_color(effect_name: String, kill: bool = false) -> void:

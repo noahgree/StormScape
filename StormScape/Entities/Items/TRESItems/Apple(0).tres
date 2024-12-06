@@ -56,6 +56,7 @@ pickup_radius = 4
 info = "A simple snack."
 recipe = Array[ExtResource("5_jvpr1")]([])
 output_quantity = 1
+recipe_unlocked = false
 item_scene = ExtResource("2_1oeu8")
 rotation_lerping = 0.1
 holding_offset = Vector2(1, -3)

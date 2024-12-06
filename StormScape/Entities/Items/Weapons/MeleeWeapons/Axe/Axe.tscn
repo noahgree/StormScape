@@ -26,6 +26,7 @@ animations = [{
 size = Vector2(10, 10)
 
 [node name="Axe" type="Node2D"]
+y_sort_enabled = true
 script = ExtResource("1_wke8h")
 ghost_fade_time = 0.2
 
@@ -44,7 +45,6 @@ metadata/_edit_group_ = true
 shape = SubResource("RectangleShape2D_sjv0y")
 
 [node name="MainHandSprite" type="Sprite2D" parent="AnimatedSprite2D"]
-z_index = 1
 position = Vector2(7, 0)
 texture = ExtResource("3_sm82p")
 offset = Vector2(4, -3)

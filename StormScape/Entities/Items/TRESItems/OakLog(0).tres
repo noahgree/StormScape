@@ -21,6 +21,7 @@ pickup_radius = 4
 info = "Logs from an oak tree. Useful in crafting."
 recipe = Array[ExtResource("3_hfl1u")]([])
 output_quantity = 1
+recipe_unlocked = false
 item_scene = ExtResource("2_wui75")
 rotation_lerping = 0.1
 holding_offset = Vector2(-7, -3)

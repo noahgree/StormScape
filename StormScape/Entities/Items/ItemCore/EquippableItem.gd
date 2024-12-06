@@ -5,8 +5,17 @@ class_name EquippableItem
 
 @export var stats: ItemResource = null: set = _set_stats ## The resource driving the stats and type of item. Do not set in editor, as this is automatically set on item creation via a static method.
 
+@onready var clipping_detector: Area2D = get_node_or_null("ClippingDetector") ## Used to detect when the item is overlapping with an in-game object that should block its use (i.e. a wall or tree).
+
 var source_slot: Slot ## The slot this equippable item is in whilst equipped.
 var source_entity: PhysicsBody2D ## The entity that is holding the equippable item.
+var enabled: bool = true:
+	set(new_value):
+		enabled = new_value
+		if not enabled:
+			disable()
+		else:
+			pass
 
 
 ## Creates an equippable item to be used via the slot it is currently in.
@@ -26,6 +35,22 @@ func _set_stats(new_stats: ItemResource) -> void:
 func _ready() -> void:
 	_set_stats(stats)
 	add_to_group("has_save_logic")
+
+	if clipping_detector != null:
+		clipping_detector.body_entered.connect(_on_item_starts_to_clip)
+		clipping_detector.body_exited.connect(_on_item_leaves_clipping_body)
+
+func _on_item_starts_to_clip(body: Node2D) -> void:
+	if body != source_entity:
+		enabled = false
+
+func _on_item_leaves_clipping_body(_body: Node2D) -> void:
+	var overlaps: Array[Node2D] = clipping_detector.get_overlapping_bodies()
+	if overlaps.is_empty() or (overlaps.size() == 1 and overlaps[0] == source_entity):
+		enabled = true
+
+func disable() -> void:
+	pass
 
 ## Intended to be overridden by child classes in order to specify what to do when this item is used.
 func activate() -> void:

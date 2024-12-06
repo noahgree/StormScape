@@ -16,5 +16,6 @@ apply_until_removed = false
 stat_mods = Array[ExtResource("2_pd8bh")]([])
 audio_to_play = ""
 only_cue_on_player_hit = false
-spawn_particles = true
+spawn_particles = false
+update_entity_glow = false
 particles_req_handler = true

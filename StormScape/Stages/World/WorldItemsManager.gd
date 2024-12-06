@@ -13,7 +13,7 @@ func _on_before_load_game() -> void:
 func _ready() -> void:
 	add_child(combination_attempt_timer)
 	combination_attempt_timer.one_shot = true
-	combination_attempt_timer.wait_time = randf_range(1.5, 5.0)
+	combination_attempt_timer.wait_time = randf_range(5.0, 15.0)
 	combination_attempt_timer.timeout.connect(_on_combination_attempt_timer_timeout)
 	combination_attempt_timer.start()
 
@@ -30,7 +30,7 @@ func _on_combination_attempt_timer_timeout() -> void:
 			if not processed_items.has(item):
 				_find_and_combine_neighbors(item, processed_items)
 
-	combination_attempt_timer.wait_time = randf_range(1.5, 5.0)
+	combination_attempt_timer.wait_time = randf_range(5.0, 15.0)
 	combination_attempt_timer.start()
 
 ## Gets a world position in terms of the grid coordinates.

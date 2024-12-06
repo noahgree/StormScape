@@ -28,11 +28,24 @@ enum DmgAffectedStats { HEALTH_ONLY, SHIELD_ONLY, SHIELD_THEN_HEALTH, SIMULTANEO
 enum HealAffectedStats { HEALTH_ONLY, SHIELD_ONLY, HEALTH_THEN_SHIELD, SIMULTANEOUS }
 enum BadEffectAffectedTeams { ENEMIES = 1 << 0, ALLIES = 1 << 1 }
 enum GoodEffectAffectedTeams { ENEMIES = 1 << 0, ALLIES = 1 << 1 }
+enum EffectSourceSourceType {
+	FROM_DEFAULT, ## For any effect source that does not come from any of the below types.
+	FROM_PROJECTILE, ## For damage coming from any normal projectile like a bullet from a sniper or pistol.
+	FROM_EXPLOSION, ## For damage coming from AOEs that explode.
+	FROM_GROUND_AOE, ## For damage coming from AOEs that exist on the ground like a poison puddle or aftermath of a molotov.
+	FROM_MAGIC, ## For magic weapons.
+	FROM_TOOL, ## For melee weapons like pickaxes and axes that exist primary to interact with the world resources.
+	FROM_PHYSICAL_CONTACT, ## For physcial interactions like a punch or running into something with a hitbox attached to the body.
+	FROM_COMBAT_MELEE ## For melee weapons that are primarily damaging weapons like a sword (not tools like the pickaxe).
+}
 
 # Items
 enum ItemType {
 	CONSUMABLE, WEAPON, AMMO, CLOTHING, WORLD_RESOURCE, SPECIAL
 }
+const all_proj_weapons: Array[ProjWeaponResource.ProjWeaponType] = [ProjWeaponResource.ProjWeaponType.PISTOL, ProjWeaponResource.ProjWeaponType.SHOTGUN, ProjWeaponResource.ProjWeaponType.SMG, ProjWeaponResource.ProjWeaponType.SNIPER, ProjWeaponResource.ProjWeaponType.RIFLE, ProjWeaponResource.ProjWeaponType.EXPLOSIVE, ProjWeaponResource.ProjWeaponType.PRIMITIVE, ProjWeaponResource.ProjWeaponType.MAGICAL, ProjWeaponResource.ProjWeaponType.SPECIAL]
+const all_melee_wpns: Array[MeleeWeaponResource.MeleeWeaponType] = [MeleeWeaponResource.MeleeWeaponType.TOOL, MeleeWeaponResource.MeleeWeaponType.PHYSICAL, MeleeWeaponResource.MeleeWeaponType.COMBAT]
+
 enum ItemRarity {
 	COMMON, UNCOMMON, RARE, EPIC, LEGENDARY, SINGULAR
 }

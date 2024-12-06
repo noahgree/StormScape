@@ -7,6 +7,7 @@ class_name LootTableComponent
 @export_range(0, 100, 0.1, "suffix:%") var hit_spawn_chance: float = 100.0
 @export_range(0, 100, 0.1, "suffix:%") var die_spawn_chance: float = 100.0
 @export var remove_when_dropped: bool = false
+@export var require_dmg_on_hit: bool = true ## When true, this will not trigger the "Hit" loot table when receiving a hit unless that hit dealt damage.
 
 ## [b]0[/b] = [color=white]COMMON[/color], [b]1[/b] = [color=green]UNCOMMON[/color], [b]2[/b] = [color=cyan]RARE[/color], [b]3[/b] = [color=purple]EPIC[/color], [b]4[/b] = [color=orange]LEGENDARY[/color], [b]5[/b] = [color=magenta]SINGULAR[/color]
 @export var rarity_scaling_factors: Dictionary = {
@@ -35,7 +36,7 @@ func _ready() -> void:
 		die_loot_table_total_weight += loot_table.die_loot_table[i].weighting
 		loot_table.die_loot_table[i].item = loot_table.die_loot_table[i].item.duplicate()
 
-func handle_effect_source(_effect_source: EffectSource, _source_entity: PhysicsBody2D) -> void:
+func handle_effect_source(_effect_source: EffectSource) -> void:
 	if is_dying: return
 
 	if not _roll_to_check_if_should_drop(true):
@@ -51,11 +52,8 @@ func handle_death() -> void:
 	if not _roll_to_check_if_should_drop(false):
 		return
 
-	var most_recent_handling: Dictionary = { "effect_source" : null, "source_entity" : null }
-	if effect_receiver: most_recent_handling = effect_receiver.most_recent_handling
-
-	if most_recent_handling.effect_source != null and most_recent_handling.source_entity != null:
-		pass
+	var most_recent_effect_src: EffectSource = null
+	if effect_receiver: most_recent_effect_src = effect_receiver.most_recent_effect_src
 
 	if loot_table.die_loot_table != null and not loot_table.die_loot_table.is_empty():
 		var entry: LootTableEntry = _get_random_loot_entry(false)
