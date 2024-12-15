@@ -43,7 +43,7 @@ enum EffectSourceSourceType {
 enum ItemType {
 	CONSUMABLE, WEAPON, AMMO, CLOTHING, WORLD_RESOURCE, SPECIAL
 }
-const all_proj_weapons: Array[ProjWeaponResource.ProjWeaponType] = [ProjWeaponResource.ProjWeaponType.PISTOL, ProjWeaponResource.ProjWeaponType.SHOTGUN, ProjWeaponResource.ProjWeaponType.SMG, ProjWeaponResource.ProjWeaponType.SNIPER, ProjWeaponResource.ProjWeaponType.RIFLE, ProjWeaponResource.ProjWeaponType.EXPLOSIVE, ProjWeaponResource.ProjWeaponType.PRIMITIVE, ProjWeaponResource.ProjWeaponType.MAGICAL, ProjWeaponResource.ProjWeaponType.SPECIAL]
+const all_proj_weapons: Array[ProjWeaponResource.ProjWeaponType] = [ProjWeaponResource.ProjWeaponType.PISTOL, ProjWeaponResource.ProjWeaponType.SHOTGUN, ProjWeaponResource.ProjWeaponType.SMG, ProjWeaponResource.ProjWeaponType.SNIPER, ProjWeaponResource.ProjWeaponType.RIFLE, ProjWeaponResource.ProjWeaponType.EXPLOSIVE, ProjWeaponResource.ProjWeaponType.PRIMITIVE, ProjWeaponResource.ProjWeaponType.MAGICAL, ProjWeaponResource.ProjWeaponType.THROWABLE, ProjWeaponResource.ProjWeaponType.SPECIAL]
 const all_melee_wpns: Array[MeleeWeaponResource.MeleeWeaponType] = [MeleeWeaponResource.MeleeWeaponType.TOOL, MeleeWeaponResource.MeleeWeaponType.PHYSICAL, MeleeWeaponResource.MeleeWeaponType.COMBAT]
 
 enum ItemRarity {

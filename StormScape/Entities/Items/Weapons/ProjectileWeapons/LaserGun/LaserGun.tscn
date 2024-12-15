@@ -1,9 +1,21 @@
-[gd_scene load_steps=13 format=3 uid="uid://baxpb3crwepc0"]
+[gd_scene load_steps=15 format=3 uid="uid://baxpb3crwepc0"]
 
 [ext_resource type="Script" path="res://Entities/Items/Weapons/ProjectileWeapons/ProjectileWeapon.gd" id="1_v8yes"]
+[ext_resource type="Shader" path="res://Entities/EntityCore/EntityEffectShader.gdshader" id="2_llewt"]
 [ext_resource type="Texture2D" uid="uid://dc02krbqhb7hu" path="res://Entities/Items/Weapons/ProjectileWeapons/LaserGun/laser_gun_base.png" id="2_rtlm0"]
 [ext_resource type="Texture2D" uid="uid://cs3clmnktksd6" path="res://Entities/Player/PlayerCore/player_hand.png" id="3_5j6aw"]
 [ext_resource type="PackedScene" uid="uid://batrfwan8r8ov" path="res://Entities/Items/Weapons/WeaponMods/WeaponModManager.tscn" id="4_eputi"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_1hxt5"]
+resource_local_to_scene = true
+shader = ExtResource("2_llewt")
+shader_parameter/glow_color = Color(1, 1, 1, 1)
+shader_parameter/glow_size = 4.5
+shader_parameter/glow_strength = 9.0
+shader_parameter/enable_fade = false
+shader_parameter/tint_color = Color(1, 1, 1, 0)
+shader_parameter/frame_uv_min = null
+shader_parameter/frame_uv_max = null
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_8p5n7"]
 atlas = ExtResource("2_rtlm0")
@@ -32,7 +44,7 @@ length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("AnimatedSprite2D:animation")
+tracks/0/path = NodePath("ItemSprite:animation")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -44,7 +56,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("AnimatedSprite2D:frame")
+tracks/1/path = NodePath("ItemSprite:frame")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -60,7 +72,7 @@ step = 0.1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("AnimatedSprite2D:animation")
+tracks/0/path = NodePath("ItemSprite:animation")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -72,28 +84,14 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("AnimatedSprite2D:frame")
+tracks/1/path = NodePath("ItemSprite:frame")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.5, 1),
+"times": PackedFloat32Array(0, 0.9, 1),
 "transitions": PackedFloat32Array(1, 1, 1),
 "update": 1,
 "values": [0, 1, 0]
-}
-tracks/2/type = "method"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath(".")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(1),
-"transitions": PackedFloat32Array(1),
-"values": [{
-"args": [true],
-"method": &"_on_firing_animation_ended"
-}]
 }
 
 [sub_resource type="Animation" id="Animation_ea614"]
@@ -102,7 +100,7 @@ step = 0.1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("AnimatedSprite2D:animation")
+tracks/0/path = NodePath("ItemSprite:animation")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -114,28 +112,14 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("AnimatedSprite2D:frame")
+tracks/1/path = NodePath("ItemSprite:frame")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.5, 1),
+"times": PackedFloat32Array(0, 0.9, 1),
 "transitions": PackedFloat32Array(1, 1, 1),
 "update": 1,
 "values": [0, 1, 0]
-}
-tracks/2/type = "method"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath(".")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(1),
-"transitions": PackedFloat32Array(1),
-"values": [{
-"args": [false],
-"method": &"_on_firing_animation_ended"
-}]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_7q2gn"]
@@ -153,7 +137,8 @@ height = 16.0
 script = ExtResource("1_v8yes")
 proj_origin = Vector2(8, -3)
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+[node name="ItemSprite" type="AnimatedSprite2D" parent="."]
+material = SubResource("ShaderMaterial_1hxt5")
 sprite_frames = SubResource("SpriteFrames_ggr15")
 animation = &"fire"
 

@@ -114,14 +114,15 @@ func _add_status_effect(status_effect: StatusEffect) -> void:
 
 ## Starts the status effects' associated visual FX like particles. Checks if the receiver has the matching handler node first.
 func _start_effect_fx(status_effect: StatusEffect) -> void:
-	if status_effect.update_entity_glow:
-		get_parent().sprite.update_floor_color(status_effect.effect_name, false)
-		get_parent().sprite.update_glow_color(status_effect.effect_name, false)
-
 	var particle_node: CPUParticles2D = get_node_or_null((status_effect.effect_name + "Particles").replace(" ", ""))
-	var spawn_particles: bool = status_effect.spawn_particles and (effect_receiver.has_node((status_effect.effect_name + "Handler").replace(" ", "")) or not status_effect.particles_req_handler)
+	var handler_check: bool = effect_receiver.has_node((status_effect.effect_name + "Handler").replace(" ", "")) or not status_effect.particles_req_handler
+	var spawn_particles: bool = status_effect.spawn_particles and handler_check
 	if not spawn_particles:
 		return
+	if status_effect.update_entity_glow and handler_check:
+		get_parent().sprite.update_floor_color(status_effect.effect_name, false)
+		if get_parent() is DynamicEntity:
+			get_parent().sprite.update_glow_color(status_effect.effect_name, false)
 
 	if particle_node != null:
 		var sprite_tex: Texture2D = SpriteHelpers.SpriteDetails.get_frame_texture(get_parent().sprite)
@@ -194,8 +195,10 @@ func _stop_effect_fx(status_effect: StatusEffect) -> void:
 	if particle_node != null: particle_node.emitting = false
 
 	if status_effect.update_entity_glow:
+		if get_parent() is DynamicEntity:
+			get_parent().sprite.update_glow_color(status_effect.effect_name, true)
 		get_parent().sprite.update_floor_color(status_effect.effect_name, true)
-		get_parent().sprite.update_glow_color(status_effect.effect_name, true)
+
 
 ## Returns if any effect (no matter the level) of the passed in name is active.
 func check_if_has_effect(effect_name: String) -> bool:

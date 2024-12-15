@@ -5,6 +5,7 @@ class_name EquippableItem
 
 @export var stats: ItemResource = null: set = _set_stats ## The resource driving the stats and type of item. Do not set in editor, as this is automatically set on item creation via a static method.
 
+@onready var sprite: Node2D = $ItemSprite ## The main sprite for the equippable item. Should have the entity effect shader attached.
 @onready var clipping_detector: Area2D = get_node_or_null("ClippingDetector") ## Used to detect when the item is overlapping with an in-game object that should block its use (i.e. a wall or tree).
 
 var source_slot: Slot ## The slot this equippable item is in whilst equipped.
@@ -14,8 +15,9 @@ var enabled: bool = true:
 		enabled = new_value
 		if not enabled:
 			disable()
+			sprite.material.set_shader_parameter("tint_color", Color(1, 0.188, 0.345, 0.463))
 		else:
-			pass
+			sprite.material.set_shader_parameter("tint_color", Color(1.0, 1.0, 1.0, 0.0))
 
 
 ## Creates an equippable item to be used via the slot it is currently in.

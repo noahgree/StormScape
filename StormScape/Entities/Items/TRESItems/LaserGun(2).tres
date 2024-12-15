@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="ProjWeaponResource" load_steps=38 format=3 uid="uid://ciel2rrqq4dvv"]
+[gd_resource type="Resource" script_class="ProjWeaponResource" load_steps=39 format=3 uid="uid://ciel2rrqq4dvv"]
 
 [ext_resource type="Script" path="res://Entities/Stats/EffectSystemResources/EffectSources/EffectSource.gd" id="1_xn1yf"]
 [ext_resource type="Script" path="res://Entities/Stats/EffectSystemResources/StatusEffects/StatusEffect.gd" id="2_gdqw7"]
@@ -24,12 +24,13 @@ _data = [Vector2(0, 0.0692444), 0.0, -0.246832, 0, 0, Vector2(0.365772, 0.488537
 point_count = 3
 
 [sub_resource type="Curve" id="Curve_mls34"]
-_data = [Vector2(0, 0.0138195), 0.0, 0.0609458, 0, 0, Vector2(0.809353, 0.228211), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.152751, 0.0, 0, 0]
+_data = [Vector2(0, 0.0138195), 0.0, 0.0609458, 0, 0, Vector2(0.808219, 0.151112), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.152751, 0.0, 0, 0]
 point_count = 3
 
 [sub_resource type="Resource" id="Resource_erj5g"]
 script = ExtResource("1_xn1yf")
 source_type = 1
+source_tags = Array[String]([])
 scanned_phys_layers = 191
 can_hit_self = true
 bad_effect_affected_teams = 1
@@ -101,6 +102,7 @@ good_effects_falloff = false
 max_pierce = 0
 max_ricochet = 0
 ricochet_angle_bounce = true
+ricochet_walls_only = false
 homing_method = "None"
 homing_speed_mult = 1.0
 max_turn_rate = 100.0
@@ -142,6 +144,7 @@ splash_sound = ""
 [sub_resource type="Resource" id="Resource_wic0i"]
 script = ExtResource("1_xn1yf")
 source_type = 1
+source_tags = Array[String]([])
 scanned_phys_layers = 191
 can_hit_self = false
 bad_effect_affected_teams = 3
@@ -192,6 +195,10 @@ beam_particle_mult = 1.0
 _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.651446), 0.0, 0.0, 0, 0]
 point_count = 2
 
+[sub_resource type="Curve" id="Curve_0ifmj"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.499148), 0.0, 0.0, 0, 0]
+point_count = 2
+
 [sub_resource type="Curve" id="Curve_bhy44"]
 _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.501364), 0.0, 0.0, 0, 0]
 point_count = 2
@@ -203,6 +210,7 @@ point_count = 2
 [sub_resource type="Resource" id="Resource_3ce5l"]
 script = ExtResource("1_xn1yf")
 source_type = 3
+source_tags = Array[String]([])
 scanned_phys_layers = 191
 can_hit_self = true
 bad_effect_affected_teams = 1
@@ -241,6 +249,7 @@ good_effects_falloff = false
 max_pierce = 0
 max_ricochet = 0
 ricochet_angle_bounce = true
+ricochet_walls_only = false
 homing_method = "None"
 homing_speed_mult = 1.0
 max_turn_rate = 100.0
@@ -258,18 +267,19 @@ move_in_rotated_dir = false
 shadow_matches_spin = false
 launch_angle = 0.0
 arc_travel_distance = 125
-arc_speed = 350.0
+arc_speed = 500.0
 max_collision_height = 20
 grounding_free_delay = 0.0
 bounce_count = 0
+bounce_falloff_curve = SubResource("Curve_0ifmj")
 ping_pong_bounce = false
 number_of_splits = 0
-split_into_counts = Array[int]([2])
-angular_spreads = Array[float]([45.0])
-split_delays = Array[float]([0.2])
-splitting_sounds = Array[String]([""])
-split_cam_shakes_str = Array[float]([1.0])
-split_cam_shakes_dur = Array[float]([0.2])
+split_into_counts = Array[int]([3, 10])
+angular_spreads = Array[float]([45.0, 360.0])
+split_delays = Array[float]([0.2, 0.15])
+splitting_sounds = Array[String](["", ""])
+split_cam_shakes_str = Array[float]([1.0, 0.0])
+split_cam_shakes_dur = Array[float]([0.2, 0.0])
 splash_radius = 0
 do_aoe_on_arc_land = true
 aoe_effect_falloff_curve = SubResource("Curve_3rmxf")
@@ -317,10 +327,10 @@ point_count = 2
 script = ExtResource("18_1rmpi")
 proj_weapon_type = 0
 firing_mode = "Auto"
-initial_shot_delay = 0.0
 use_hitscan = false
 allow_hitscan_holding = true
-auto_fire_delay = 0.15
+fire_cooldown = 0.05
+firing_duration = 0.03
 firing_cam_shake_str = 0.68
 firing_cam_shake_dur = 0.3
 firing_cam_freeze_mult = 1.0
@@ -328,11 +338,12 @@ firing_cam_freeze_dur = 0.0
 firing_sound = ""
 min_charge_time = 1.0
 charge_fire_cooldown = 0.5
-has_charge_fire_anim = false
+charge_firing_duration = 1.0
 ammo_use_per_charge = 3
 charge_bloom_mult = 5.0
-charge_cam_fx_mult = 1.0
+charge_cam_fx_mult = 3.0
 charge_firing_sound = ""
+charging_sound = ""
 projectile_scn = ExtResource("5_xjmn2")
 projectile_logic = SubResource("Resource_nhr3k")
 hitscan_logic = SubResource("Resource_woyhr")
@@ -362,7 +373,7 @@ burst_bullet_delay = 0.1
 add_bloom_per_burst_shot = true
 barrage_count = 1
 angular_spread = 25.0
-auto_fire_delay_left = 0.0
+fire_cooldown_left = 0.0
 charge_fire_cooldown_left = 0.0
 current_warmth_level = 0.0
 current_bloom_level = 0.0
@@ -380,8 +391,9 @@ original_charge_status_effects = Array[ExtResource("2_gdqw7")]([])
 id = "laser_gun"
 name = "Laser Gun"
 tags = Array[String]([])
-icon = ExtResource("10_iakvu")
-thumbnail = ExtResource("10_iakvu")
+inv_icon = ExtResource("10_iakvu")
+ground_icon = ExtResource("10_iakvu")
+in_hand_icon = ExtResource("10_iakvu")
 item_type = 1
 rarity = 2
 weight = 0

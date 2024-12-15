@@ -2,7 +2,7 @@ extends NinePatchRect
 class_name ItemInteractionHUD
 ## The HUD that shows a prompt for when the player can pick up an item.
 
-@onready var item_texture: TextureRect = $ItemTexture ## The texture of the item to pickup.
+@onready var item_texture: TextureRect = $TextureMargins/ItemTexture ## The texture of the item to pickup.
 @onready var quantity: Label = $Quantity ## The label showing the quantity of the item to pickup.
 @onready var item_glow: TextureRect = $ItemGlow ## The glow texture behind the item that represents its rarity.
 
@@ -13,7 +13,7 @@ func _ready() -> void:
 
 ## Shows the HUD after populating the appropriate item texture.
 func show_hud(item: Item) -> void:
-	item_texture.texture = item.stats.icon
+	item_texture.texture = item.stats.inv_icon
 	_update_glint(item.stats)
 	quantity.text = str(item.quantity)
 	visible = true

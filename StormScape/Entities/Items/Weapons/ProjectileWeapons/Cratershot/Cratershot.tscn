@@ -1,0 +1,81 @@
+[gd_scene load_steps=13 format=3 uid="uid://dwyof8hbs8fxr"]
+
+[ext_resource type="Script" path="res://Entities/Items/Weapons/ProjectileWeapons/ProjectileWeapon.gd" id="1_av7ge"]
+[ext_resource type="Shader" path="res://Entities/EntityCore/EntityEffectShader.gdshader" id="2_whcpg"]
+[ext_resource type="Texture2D" uid="uid://b2bgxo22c1tup" path="res://Entities/Items/Weapons/ProjectileWeapons/Cratershot/cratershot_base.png" id="3_2mx5p"]
+[ext_resource type="Texture2D" uid="uid://cs3clmnktksd6" path="res://Entities/Player/PlayerCore/player_hand.png" id="4_hgilo"]
+[ext_resource type="PackedScene" uid="uid://batrfwan8r8ov" path="res://Entities/Items/Weapons/WeaponMods/WeaponModManager.tscn" id="5_kd7vu"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_8unv1"]
+shader = ExtResource("2_whcpg")
+shader_parameter/glow_color = Color(1, 1, 1, 1)
+shader_parameter/glow_size = 4.5
+shader_parameter/glow_strength = 9.0
+shader_parameter/enable_fade = false
+shader_parameter/tint_color = Color(1, 1, 1, 0)
+shader_parameter/frame_uv_min = null
+shader_parameter/frame_uv_max = null
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_c1ett"]
+atlas = ExtResource("3_2mx5p")
+region = Rect2(0, 0, 28, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_5e15s"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_c1ett")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="Animation" id="Animation_gckmc"]
+resource_name = "charge_fire"
+step = 0.1
+
+[sub_resource type="Animation" id="Animation_5s4um"]
+resource_name = "fire"
+step = 0.1
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_lg6o7"]
+_data = {
+"charge_fire": SubResource("Animation_gckmc"),
+"fire": SubResource("Animation_5s4um")
+}
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_h2hct"]
+radius = 3.0
+height = 18.0
+
+[node name="Cratershot" type="Node2D"]
+script = ExtResource("1_av7ge")
+proj_origin = Vector2(13, 1)
+
+[node name="ItemSprite" type="AnimatedSprite2D" parent="."]
+material = SubResource("ShaderMaterial_8unv1")
+sprite_frames = SubResource("SpriteFrames_5e15s")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_lg6o7")
+}
+
+[node name="ProjectileOrigin" type="Marker2D" parent="."]
+position = Vector2(13, 1)
+
+[node name="MainHandSprite" type="Sprite2D" parent="."]
+position = Vector2(-3, 5)
+texture = ExtResource("4_hgilo")
+
+[node name="WeaponModManager" parent="." instance=ExtResource("5_kd7vu")]
+
+[node name="ClippingDetector" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 241
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ClippingDetector"]
+position = Vector2(4, 1)
+rotation = -1.5708
+shape = SubResource("CapsuleShape2D_h2hct")

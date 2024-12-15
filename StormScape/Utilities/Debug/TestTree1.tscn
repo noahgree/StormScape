@@ -28,7 +28,7 @@ shader_parameter/frame_uv_max = Vector2(0, 0)
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_l7ldg"]
 radius = 7.0
-height = 22.0
+height = 19.9999
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ij8lb"]
 size = Vector2(14, 19)
@@ -52,8 +52,9 @@ script = ExtResource("1_4yxmu")
 team = 2
 
 [node name="EntityShadow" parent="." instance=ExtResource("2_nnf0c")]
+self_modulate = Color(0, 0, 0, 0.164)
 position = Vector2(-1, 0)
-scale = Vector2(3.73333, 1.71429)
+scale = Vector2(4.69333, 2.75429)
 
 [node name="EntitySprite" parent="." instance=ExtResource("2_mgp78")]
 material = SubResource("ShaderMaterial_w83do")
@@ -93,7 +94,7 @@ can_be_crit = false
 
 [node name="LootTableComponent" parent="." instance=ExtResource("7_dpaaj")]
 loot_table = SubResource("Resource_vx2o2")
-hit_spawn_chance = 0.0
+hit_spawn_chance = 15.0
 require_dmg_on_hit = false
 
 [node name="StatusEffectManager" parent="." node_paths=PackedStringArray("effect_receiver") instance=ExtResource("7_7lx3c")]

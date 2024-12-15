@@ -1,0 +1,307 @@
+[gd_resource type="Resource" script_class="ProjWeaponResource" load_steps=21 format=3 uid="uid://duc0xfejpfs1"]
+
+[ext_resource type="Script" path="res://Entities/Stats/EffectSystemResources/StatusEffects/StatusEffect.gd" id="1_a6eqh"]
+[ext_resource type="Script" path="res://Entities/Stats/EffectSystemResources/EffectSources/EffectSource.gd" id="1_hh3cs"]
+[ext_resource type="Texture2D" uid="uid://on5kqhtv8tmw" path="res://Entities/Items/Weapons/ProjectileWeapons/EagleEye/eagle_eye_base.png" id="1_jqvl6"]
+[ext_resource type="Texture2D" uid="uid://bxq6pb3h6k2to" path="res://Entities/Items/Weapons/ProjectileWeapons/EagleEye/eagle_eye_base_thumb.png" id="2_o82og"]
+[ext_resource type="Script" path="res://UI/Inventory/PlayerInventory/Crafting/CraftingIngredient.gd" id="2_xxf6x"]
+[ext_resource type="Script" path="res://Entities/Items/Weapons/ProjectileWeapons/ProjWeaponResource.gd" id="3_3lc2b"]
+[ext_resource type="Script" path="res://Entities/Items/Hitscans/HitscanResource.gd" id="3_f7syj"]
+[ext_resource type="PackedScene" uid="uid://btaigaokvm7qx" path="res://Entities/Items/Weapons/ProjectileWeapons/EagleEye/EagleEye.tscn" id="3_uuh4c"]
+[ext_resource type="Script" path="res://Entities/Items/Projectiles/ProjectileResource.gd" id="4_w4cid"]
+[ext_resource type="PackedScene" uid="uid://bqkyplubhsx43" path="res://Entities/Items/Projectiles/Bullets/SmallBullet/SmallBullet.tscn" id="5_58e3c"]
+[ext_resource type="Script" path="res://Entities/Stats/StatMod/StatModsCacheResource.gd" id="10_v3ja1"]
+
+[sub_resource type="Resource" id="Resource_nq4po"]
+script = ExtResource("1_hh3cs")
+source_type = 1
+source_tags = Array[String]([])
+scanned_phys_layers = 191
+can_hit_self = true
+bad_effect_affected_teams = 1
+good_effect_affected_teams = 2
+base_damage = 0
+dmg_affected_stats = 2
+crit_chance = 0
+crit_multiplier = 1.5
+armor_penetration = 0
+base_healing = 0
+heal_affected_stats = 2
+cam_shake_strength = 0.0
+cam_shake_duration = 0.0
+cam_freeze_multiplier = 1.0
+cam_freeze_duration = 0.0
+impact_sound = ""
+hit_flash_color = Color(1, 1, 1, 0.6)
+status_effects = Array[ExtResource("1_a6eqh")]([])
+contact_position = Vector2(0, 0)
+movement_direction = Vector2(0, 0)
+
+[sub_resource type="Resource" id="Resource_pld62"]
+script = ExtResource("3_f7syj")
+hitscan_duration = 0.0
+hitscan_effect_interval = -1.0
+hitscan_pierce_count = 0
+hitscan_max_distance = 350
+bad_effects_falloff = true
+good_effects_falloff = false
+override_vfx_defaults = false
+hitscan_max_width = 0.5
+beam_color = Color(1, 0.0784314, 0.576471, 1)
+glow_amount = 1.0
+start_particle_color = Color(1, 0.752941, 0.796078, 1)
+start_particle_mult = 1.0
+impact_particle_color = Color(1, 0.752941, 0.796078, 1)
+impact_particle_mult = 1.0
+beam_particle_color = Color(1, 0, 0, 1)
+beam_particle_mult = 1.0
+
+[sub_resource type="Resource" id="Resource_8i1b8"]
+script = ExtResource("4_w4cid")
+speed = 350
+initial_boost_time = 0.0
+initial_boost_mult = 2.0
+lifetime = 3.0
+max_distance = 500
+override_gun_height = false
+height_override = 6
+point_of_max_falloff = 500.0
+bad_effects_falloff = true
+good_effects_falloff = false
+max_pierce = 0
+max_ricochet = 0
+ricochet_angle_bounce = true
+ricochet_walls_only = false
+homing_method = "None"
+homing_speed_mult = 1.0
+max_turn_rate = 100.0
+homing_fov_angle = 180.0
+homing_max_range = 850
+homing_duration = -1.0
+homing_start_delay = 0.0
+can_change_target = false
+boomerang_home_radius = 5.0
+mouse_target_radius = 50.0
+spin_speed = 0.0
+spin_both_ways = false
+spin_direction = "Forward"
+move_in_rotated_dir = false
+shadow_matches_spin = false
+launch_angle = 0.0
+arc_travel_distance = 125
+arc_speed = 350.0
+max_collision_height = 20
+grounding_free_delay = 0.0
+bounce_count = 0
+ping_pong_bounce = false
+number_of_splits = 0
+split_into_counts = Array[int]([2])
+angular_spreads = Array[float]([45.0])
+split_delays = Array[float]([0.2])
+splitting_sounds = Array[String]([""])
+split_cam_shakes_str = Array[float]([1.0])
+split_cam_shakes_dur = Array[float]([0.2])
+splash_radius = 0
+do_aoe_on_arc_land = true
+bad_effects_aoe_falloff = true
+good_effects_aoe_falloff = false
+splash_effect_delay = 0.0
+splash_effect_dur = 0.05
+splash_before_freeing = false
+splash_sound = ""
+
+[sub_resource type="Resource" id="Resource_3mxcx"]
+script = ExtResource("1_hh3cs")
+source_type = 1
+source_tags = Array[String]([])
+scanned_phys_layers = 191
+can_hit_self = true
+bad_effect_affected_teams = 1
+good_effect_affected_teams = 2
+base_damage = 85
+dmg_affected_stats = 2
+crit_chance = 0
+crit_multiplier = 1.5
+armor_penetration = 0
+base_healing = 0
+heal_affected_stats = 2
+cam_shake_strength = 0.0
+cam_shake_duration = 0.0
+cam_freeze_multiplier = 1.0
+cam_freeze_duration = 0.0
+impact_sound = ""
+hit_flash_color = Color(1, 1, 1, 0.6)
+status_effects = Array[ExtResource("1_a6eqh")]([])
+contact_position = Vector2(0, 0)
+movement_direction = Vector2(0, 0)
+
+[sub_resource type="Resource" id="Resource_8lm83"]
+script = ExtResource("3_f7syj")
+hitscan_duration = 0.0
+hitscan_effect_interval = -1.0
+hitscan_pierce_count = 0
+hitscan_max_distance = 350
+bad_effects_falloff = true
+good_effects_falloff = false
+override_vfx_defaults = false
+hitscan_max_width = 0.5
+beam_color = Color(1, 0.0784314, 0.576471, 1)
+glow_amount = 1.0
+start_particle_color = Color(1, 0.752941, 0.796078, 1)
+start_particle_mult = 1.0
+impact_particle_color = Color(1, 0.752941, 0.796078, 1)
+impact_particle_mult = 1.0
+beam_particle_color = Color(1, 0, 0, 1)
+beam_particle_mult = 1.0
+
+[sub_resource type="Curve" id="Curve_r1td5"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Curve" id="Curve_4y4hw"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.797205), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Resource" id="Resource_wluh4"]
+script = ExtResource("4_w4cid")
+speed = 750
+speed_curve = SubResource("Curve_4y4hw")
+initial_boost_time = 0.0
+initial_boost_mult = 2.0
+lifetime = 2.0
+max_distance = 500
+override_gun_height = false
+height_override = 6
+effect_falloff_curve = SubResource("Curve_r1td5")
+point_of_max_falloff = 500.0
+bad_effects_falloff = false
+good_effects_falloff = false
+max_pierce = 0
+max_ricochet = 0
+ricochet_angle_bounce = true
+ricochet_walls_only = false
+homing_method = "None"
+homing_speed_mult = 1.0
+max_turn_rate = 100.0
+homing_fov_angle = 180.0
+homing_max_range = 850
+homing_duration = -1.0
+homing_start_delay = 0.0
+can_change_target = false
+boomerang_home_radius = 5.0
+mouse_target_radius = 50.0
+spin_speed = 0.0
+spin_both_ways = false
+spin_direction = "Forward"
+move_in_rotated_dir = false
+shadow_matches_spin = false
+launch_angle = 0.0
+arc_travel_distance = 125
+arc_speed = 350.0
+max_collision_height = 20
+grounding_free_delay = 0.0
+bounce_count = 0
+ping_pong_bounce = false
+number_of_splits = 0
+split_into_counts = Array[int]([2])
+angular_spreads = Array[float]([45.0])
+split_delays = Array[float]([0.2])
+splitting_sounds = Array[String]([""])
+split_cam_shakes_str = Array[float]([1.0])
+split_cam_shakes_dur = Array[float]([0.2])
+splash_radius = 0
+do_aoe_on_arc_land = true
+bad_effects_aoe_falloff = true
+good_effects_aoe_falloff = false
+splash_effect_delay = 0.0
+splash_effect_dur = 0.05
+splash_before_freeing = false
+splash_sound = ""
+
+[sub_resource type="Resource" id="Resource_pm717"]
+script = ExtResource("10_v3ja1")
+debug_print_mod_changes = false
+
+[resource]
+script = ExtResource("3_3lc2b")
+proj_weapon_type = 3
+firing_mode = "Semi Auto"
+use_hitscan = false
+allow_hitscan_holding = true
+fire_cooldown = 0.1
+firing_duration = 0.0
+firing_cam_shake_str = 0.5
+firing_cam_shake_dur = 0.75
+firing_cam_freeze_mult = 1.0
+firing_cam_freeze_dur = 0.0
+firing_sound = ""
+min_charge_time = 1.0
+charge_fire_cooldown = 0.5
+charge_firing_duration = 0.0
+ammo_use_per_charge = 3
+charge_bloom_mult = 5.0
+charge_cam_fx_mult = 1.0
+charge_firing_sound = ""
+charging_sound = ""
+projectile_scn = ExtResource("5_58e3c")
+projectile_logic = SubResource("Resource_wluh4")
+hitscan_logic = SubResource("Resource_8lm83")
+charge_projectile_scn = ExtResource("5_58e3c")
+charge_projectile_logic = SubResource("Resource_8i1b8")
+charge_hitscan_logic = SubResource("Resource_pld62")
+ammo_type = 1
+mag_size = 1
+reload_type = "Magazine"
+mag_reload_time = 2.0
+single_proj_reload_time = 0.25
+stamina_use_per_proj = 0.5
+mag_reload_sound = ""
+proj_reload_sound = ""
+empty_mag_sound = ""
+max_bloom = 0.0
+fully_cool_delay_time = 0.0
+projectiles_per_fire = 1
+use_ammo_per_burst_proj = true
+burst_bullet_delay = 0.1
+add_bloom_per_burst_shot = true
+barrage_count = 1
+angular_spread = 25.0
+fire_cooldown_left = 0.0
+charge_fire_cooldown_left = 0.0
+current_warmth_level = 0.0
+current_bloom_level = 0.0
+ammo_in_mag = -1
+s_mods = SubResource("Resource_pm717")
+effect_source = SubResource("Resource_3mxcx")
+charge_effect_source = SubResource("Resource_nq4po")
+pullout_delay = 0.5
+blocked_mods = Array[String]([])
+time_last_equipped = 0.0
+cache_is_setup = false
+current_mods = {}
+original_status_effects = Array[ExtResource("1_a6eqh")]([])
+original_charge_status_effects = Array[ExtResource("1_a6eqh")]([])
+id = "eagle_eye"
+name = "Eagle Eye"
+tags = Array[String]([])
+inv_icon = ExtResource("2_o82og")
+ground_icon = ExtResource("1_jqvl6")
+in_hand_icon = ExtResource("1_jqvl6")
+item_type = 1
+rarity = 3
+weight = 0
+stack_size = 1
+auto_pickup = false
+pickup_radius = 7
+info = "A precision weapon meant for long range. Some may call it a sniper."
+recipe = Array[ExtResource("2_xxf6x")]([])
+output_quantity = 1
+recipe_unlocked = false
+item_scene = ExtResource("3_uuh4c")
+rotation_lerping = 0.1
+holding_offset = Vector2(5, 0)
+holding_degrees = 0.0
+is_gripped_by_one_hand = false
+draw_off_hand = true
+draw_off_hand_offset = Vector2(23, -1)
+main_hand_offset = Vector2(0, 0)

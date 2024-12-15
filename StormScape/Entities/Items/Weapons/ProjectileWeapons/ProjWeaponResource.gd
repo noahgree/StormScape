@@ -3,18 +3,18 @@ class_name ProjWeaponResource
 ## The resource that defines all stats for a projectile weapon. Passing this around essentially passes the weapon around.
 
 enum ProjWeaponType { ## The kinds of projectile weapons.
-	PISTOL, SHOTGUN, SMG, SNIPER, RIFLE, EXPLOSIVE, PRIMITIVE, MAGICAL, SPECIAL
+	PISTOL, SHOTGUN, SMG, SNIPER, RIFLE, EXPLOSIVE, PRIMITIVE, MAGICAL, THROWABLE, SPECIAL
 }
 
 @export_group("General")
 @export var proj_weapon_type: ProjWeaponType = ProjWeaponType.PISTOL ## The kind of projectile weapon this is.
 @export_enum("Semi Auto", "Auto", "Charge") var firing_mode: String = "Semi Auto" ## Whether the weapon should fire projectiles once per click or allow holding down for auto firing logic.
-@export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var initial_shot_delay: float = 0 ## How long after we initiate a firing should we wait before the shot releases.
 @export_subgroup("Hitscanning")
 @export var use_hitscan: bool = false ## Whether to use hitscan firing and spawn the hitscan scene instead of the main projectile.
 @export var allow_hitscan_holding: bool = true ## Whether to keep the hitscan on and continue to consume ammo while the trigger is held.
 @export_group("Normal Firing Details")
-@export_range(0.03, 10, 0.01, "hide_slider", "or_greater", "suffix:seconds") var auto_fire_delay: float = 0.1 ## Time between fully auto projectile emmision. Also the minimum time that must elapse between clicks if set to semi-auto.
+@export_range(0, 30, 0.01, "hide_slider", "or_greater", "suffix:seconds") var fire_cooldown: float = 0.05 ## Time between fully auto projectile emmision. Also the minimum time that must elapse between clicks if set to semi-auto.
+@export_range(0.03, 10, 0.01, "hide_slider", "or_greater", "suffix:seconds") var firing_duration: float = 0.1 ## How long it takes to release the projectile after initiating the action. Determines the animation speed as well. Set to 0 by default.
 @export_subgroup("Entity Effects")
 @export var post_firing_effect: StatusEffect = null ## The status effect to apply to the source entity after firing.
 @export_subgroup("Firing FX")
@@ -26,9 +26,9 @@ enum ProjWeaponType { ## The kinds of projectile weapons.
 @export var firing_sound: String = "" ## The sound to play when firing.
 
 @export_group("Charge Firing Details")
-@export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var min_charge_time: float = 1 ## How long must the activation be held down before releasing the charge shot.
-@export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var charge_fire_cooldown: float = 0.5 ## How long after a charge shot must we wait before being able to fire again.
-@export var has_charge_fire_anim: bool = false ## If false, we can duplicate the regular fire anim and keep the speed scale.
+@export_range(0.2, 10, 0.01, "hide_slider", "or_greater", "suffix:seconds") var min_charge_time: float = 1 ## How long must the activation be held down before releasing the charge shot.
+@export_range(0, 100, 0.01, "hide_slider", "or_greater", "suffix:seconds") var charge_fire_cooldown: float = 0.5 ## How long after a charge shot must we wait before being able to fire again.
+@export_range(0.03, 10, 0.01, "hide_slider", "or_greater", "suffix:seconds") var charge_firing_duration: float = 0.1 ## How long it takes to release the projectile after initiating the charge firing action. Determines the animation speed as well. Set to 0 by default.
 @export var ammo_use_per_charge: int = 3 ## How much ammo to consume on charge shots. Overrides all burst and barrage consumption to consume this amount no matter what.
 @export var charge_bloom_mult: float = 5.0 ## How much more should one charge shot count towards current bloom.
 @export_subgroup("Entity Effects")
@@ -37,6 +37,7 @@ enum ProjWeaponType { ## The kinds of projectile weapons.
 @export_subgroup("Firing FX")
 @export var charge_cam_fx_mult: float = 1.0 ## How much to multiply the cam fx by when doing a charge shot.
 @export var charge_firing_sound: String = "" ## The sound to play when charge firing.
+@export var charging_sound: String = "" ## The sound to play when charging.
 
 @export_group("Effect & Logic Resources")
 @export_subgroup("Normal Firing")
@@ -84,7 +85,7 @@ enum ProjWeaponType { ## The kinds of projectile weapons.
 
 
 # Unique Properties #
-@export_storage var auto_fire_delay_left: float = 0 ## How much time we have left to wait before being able to fire again.
+@export_storage var fire_cooldown_left: float = 0 ## How much time we have left to wait before being able to fire again.
 @export_storage var charge_fire_cooldown_left: float = 0 ## How much time we have left before being able to do a charge shot again.
 @export_storage var current_warmth_level: float = 0 ## The current warm-up level for this weapon.
 @export_storage var current_bloom_level: float = 0 ## The current bloom level for this weapon.

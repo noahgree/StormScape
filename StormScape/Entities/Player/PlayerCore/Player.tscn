@@ -1,4 +1,4 @@
-[gd_scene load_steps=153 format=3 uid="uid://dba8mrurjlekp"]
+[gd_scene load_steps=163 format=3 uid="uid://dba8mrurjlekp"]
 
 [ext_resource type="Script" path="res://Entities/Player/PlayerCore/Player.gd" id="1_m33tt"]
 [ext_resource type="Script" path="res://Entities/Stats/StatMod/StatModsCacheResource.gd" id="2_vetip"]
@@ -66,10 +66,14 @@
 [ext_resource type="Texture2D" uid="uid://l7chqvbfg16y" path="res://UI/PlayerStatsOverlay/Assets/Stamina Bar.png" id="45_3j47m"]
 [ext_resource type="Resource" uid="uid://ba8pkny735n2r" path="res://Entities/Items/Weapons/WeaponMods/ExtendedMag/ExtendedMag1.tres" id="46_2raqh"]
 [ext_resource type="Texture2D" uid="uid://1m3lv40blexn" path="res://UI/PlayerStatsOverlay/Assets/Stamina Under.png" id="46_l08yu"]
+[ext_resource type="Resource" uid="uid://dlfmjgnfk6nqj" path="res://Entities/Items/TRESItems/Revolver(0).tres" id="46_xbbnp"]
 [ext_resource type="Script" path="res://Entities/Items/Weapons/WeaponMods/WeaponMod.gd" id="46_xslb2"]
 [ext_resource type="Texture2D" uid="uid://dlx621mbgic4b" path="res://UI/PlayerStatsOverlay/Assets/Stamina Change.png" id="47_2ra1b"]
+[ext_resource type="Resource" uid="uid://duc0xfejpfs1" path="res://Entities/Items/TRESItems/EagleEye(3).tres" id="47_a0x8j"]
 [ext_resource type="Resource" uid="uid://caxftf2aer6g4" path="res://Entities/Items/Weapons/WeaponMods/BurningBullets/BurningBullets1.tres" id="47_l43tu"]
+[ext_resource type="Resource" uid="uid://14gw464h13vv" path="res://Entities/Items/TRESItems/Cratershot(1).tres" id="48_1kvwx"]
 [ext_resource type="Texture2D" uid="uid://ba6aut5vjc3g" path="res://UI/PlayerStatsOverlay/Assets/Shield.png" id="48_d5w3g"]
+[ext_resource type="Resource" uid="uid://4nvp28pvjtk3" path="res://Entities/Items/TRESItems/Boomerang(1).tres" id="49_gbpko"]
 [ext_resource type="Texture2D" uid="uid://csmk61f3sxw44" path="res://UI/PlayerStatsOverlay/Assets/Shield Under.png" id="49_ynd7x"]
 [ext_resource type="Texture2D" uid="uid://dcsw75wiocvy0" path="res://UI/PlayerStatsOverlay/Assets/Shield Change.png" id="50_86ubk"]
 [ext_resource type="Texture2D" uid="uid://b2v0527iatsjd" path="res://UI/PlayerStatsOverlay/Assets/Health.png" id="51_6cphe"]
@@ -77,13 +81,15 @@
 [ext_resource type="Texture2D" uid="uid://lj78cee4aa38" path="res://UI/PlayerStatsOverlay/Assets/Health Change.png" id="53_qsiea"]
 [ext_resource type="Script" path="res://UI/Inventory/PlayerInventory/HotbarUI.gd" id="58_i567i"]
 [ext_resource type="Texture2D" uid="uid://dbm40lvpgbd8t" path="res://Entities/Items/ItemCore/Particles/item_rarity_light.png" id="66_461tf"]
-[ext_resource type="Texture2D" uid="uid://ec7bui23pv1m" path="res://Entities/Items/Weapons/MeleeWeapons/Axe/axe.png" id="66_s2r6k"]
 [ext_resource type="Shader" path="res://UI/Shaders/GlintShader.gdshader" id="67_w57pe"]
 [ext_resource type="Texture2D" uid="uid://dtft3mljs2y5s" path="res://UI/Inventory/InventoryCore/Slot/trash_slot_icon.png" id="69_4ao77"]
 [ext_resource type="PackedScene" uid="uid://cpf3f502274om" path="res://UI/Inventory/PlayerInventory/Crafting/CraftingManager.tscn" id="71_qjjeg"]
 [ext_resource type="Texture2D" uid="uid://6p684ba74frr" path="res://UI/TemporaryElements/Prompt Icons/E_prompt.png" id="75_j0f4f"]
 [ext_resource type="Texture2D" uid="uid://bqxdg28d1twy1" path="res://UI/Inventory/InventoryCore/inv_background_thin.png" id="78_at8wu"]
 [ext_resource type="Texture2D" uid="uid://lqg70q4wj55g" path="res://UI/Inventory/InventoryCore/inv_background.png" id="78_jlc36"]
+[ext_resource type="Texture2D" uid="uid://byr74ri0yypu2" path="res://UI/Inventory/InventoryCore/inv_background_metal.png" id="79_u72uy"]
+[ext_resource type="Texture2D" uid="uid://b7wg7jft8vunb" path="res://UI/Inventory/InventoryCore/inv_background_thin_metal.png" id="81_5myae"]
+[ext_resource type="Script" path="res://UI/Inventory/PlayerInventory/WpnModSlotsUI.gd" id="82_dgpt2"]
 [ext_resource type="Texture2D" uid="uid://cwu8kh1lmceer" path="res://UI/Inventory/InventoryCore/button_9_patch_pressed.png" id="84_kbn30"]
 [ext_resource type="FontFile" uid="uid://bp2lgrlhj8cet" path="res://Assets/Theming/Fonts/FontAssets/Pixel/C&C Red Alert [INET].ttf" id="85_7xlwj"]
 [ext_resource type="Texture2D" uid="uid://de31272sm433q" path="res://UI/Inventory/InventoryCore/button_9_patch.png" id="86_ald0t"]
@@ -1146,8 +1152,9 @@ ammo_type = 1
 id = "light_ammo"
 name = "Light Ammo"
 tags = Array[String]([])
-icon = ExtResource("38_60ydo")
-thumbnail = ExtResource("38_60ydo")
+inv_icon = ExtResource("38_60ydo")
+ground_icon = ExtResource("38_60ydo")
+in_hand_icon = ExtResource("38_60ydo")
 item_type = 2
 rarity = 5
 weight = 0
@@ -1181,9 +1188,29 @@ script = ExtResource("32_ixmb3")
 stats = ExtResource("42_d3gh5")
 quantity = 16
 
+[sub_resource type="Resource" id="Resource_sx7hp"]
+script = ExtResource("32_ixmb3")
+stats = ExtResource("49_gbpko")
+quantity = 1
+
 [sub_resource type="Resource" id="Resource_0ta0y"]
 script = ExtResource("32_ixmb3")
 stats = ExtResource("37_a2tah")
+quantity = 1
+
+[sub_resource type="Resource" id="Resource_p5d28"]
+script = ExtResource("32_ixmb3")
+stats = ExtResource("46_xbbnp")
+quantity = 1
+
+[sub_resource type="Resource" id="Resource_6stk0"]
+script = ExtResource("32_ixmb3")
+stats = ExtResource("47_a0x8j")
+quantity = 1
+
+[sub_resource type="Resource" id="Resource_vpccy"]
+script = ExtResource("32_ixmb3")
+stats = ExtResource("48_1kvwx")
 quantity = 1
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_3wm74"]
@@ -1198,16 +1225,17 @@ shader_parameter/opacity = 0.385
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_8e40b"]
 blend_mode = 1
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_6l8uc"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_5ry76"]
+resource_local_to_scene = true
 shader = ExtResource("67_w57pe")
 shader_parameter/outline_color = Color(1, 1, 1, 0.3)
-shader_parameter/width = 0.4
+shader_parameter/width = 0.5
 shader_parameter/pattern = 2
 shader_parameter/inside = false
 shader_parameter/add_margins = true
 shader_parameter/size_effect = 0.4
 shader_parameter/speed = 0.9
-shader_parameter/highlight_strength = 0.4
+shader_parameter/highlight_strength = 0.0
 shader_parameter/color_mode_toggle = true
 shader_parameter/pause_duration = 1.0
 shader_parameter/angle = 35.0
@@ -1251,7 +1279,7 @@ font_size = 7
 font_color = Color(0.913725, 0.768627, 0.741176, 1)
 outline_color = Color(0.209203, 0.113957, 0.0471381, 1)
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_mobjd"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_pc124"]
 resource_local_to_scene = true
 shader = ExtResource("67_w57pe")
 shader_parameter/outline_color = Color(1, 1, 1, 0.3)
@@ -1304,8 +1332,6 @@ stats_ui = NodePath("../PlayerUILayer/PlayerStatsOverlay")
 stats_ui = NodePath("../PlayerUILayer/PlayerStatsOverlay")
 
 [node name="EffectReceiverComponent" parent="." node_paths=PackedStringArray("affected_entity", "health_component", "stamina_component", "dmg_handler", "heal_handler", "storm_syndrome_handler", "knockback_handler", "stun_handler", "poison_handler", "regen_handler", "frostbite_handler", "burning_handler", "time_snare_handler") instance=ExtResource("4_hhm8x")]
-filter_source_tags = false
-allowed_source_tags = Array[String]([])
 affected_entity = NodePath("..")
 health_component = NodePath("../HealthComponent")
 stamina_component = NodePath("../StaminaComponent")
@@ -1405,7 +1431,7 @@ parameters/run/blendspace2d/blend_position = Vector2(0, 0)
 
 [node name="ItemReceiverComponent" parent="." node_paths=PackedStringArray("inv_populator", "ui") instance=ExtResource("30_qgyag")]
 item_scene = ExtResource("31_8v2rb")
-starting_inv = Array[ExtResource("32_ixmb3")]([SubResource("Resource_pihal"), null, null, null, SubResource("Resource_kx1me"), SubResource("Resource_jrr0m"), SubResource("Resource_2ijsm"), null, SubResource("Resource_xlc3k"), null, null, null, SubResource("Resource_t7kvu"), null, null, SubResource("Resource_apvym"), SubResource("Resource_ur5wt"), null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, SubResource("Resource_0ta0y")])
+starting_inv = Array[ExtResource("32_ixmb3")]([SubResource("Resource_pihal"), null, null, null, SubResource("Resource_kx1me"), SubResource("Resource_jrr0m"), SubResource("Resource_2ijsm"), null, SubResource("Resource_xlc3k"), null, null, null, SubResource("Resource_t7kvu"), null, null, SubResource("Resource_apvym"), SubResource("Resource_ur5wt"), null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, SubResource("Resource_sx7hp"), SubResource("Resource_0ta0y"), SubResource("Resource_p5d28"), SubResource("Resource_6stk0"), SubResource("Resource_vpccy")])
 is_player_inv = true
 inv_size = 37
 hotbar_size = 5
@@ -1808,22 +1834,27 @@ grow_vertical = 2
 scale = Vector2(0.35, 0.35)
 texture = ExtResource("75_j0f4f")
 
-[node name="ItemTexture" type="TextureRect" parent="PlayerUILayer/ItemInteractionHUD"]
-material = SubResource("ShaderMaterial_6l8uc")
+[node name="TextureMargins" type="MarginContainer" parent="PlayerUILayer/ItemInteractionHUD"]
 layout_mode = 1
 anchors_preset = 6
 anchor_left = 1.0
 anchor_top = 0.5
 anchor_right = 1.0
 anchor_bottom = 0.5
-offset_left = -16.0
+offset_left = -15.0
 offset_top = -5.5
-offset_right = 16.0
-offset_bottom = 26.5
+offset_right = 1.0
+offset_bottom = 10.5
 grow_horizontal = 0
 grow_vertical = 2
-scale = Vector2(0.35, 0.35)
-texture = ExtResource("66_s2r6k")
+scale = Vector2(0.65, 0.65)
+
+[node name="ItemTexture" type="TextureRect" parent="PlayerUILayer/ItemInteractionHUD/TextureMargins"]
+material = SubResource("ShaderMaterial_5ry76")
+custom_minimum_size = Vector2(16, 16)
+layout_mode = 2
+expand_mode = 1
+stretch_mode = 6
 
 [node name="Quantity" type="Label" parent="PlayerUILayer/ItemInteractionHUD"]
 layout_mode = 1
@@ -1862,13 +1893,15 @@ theme_override_constants/margin_right = 0
 theme_override_constants/margin_bottom = 0
 
 [node name="HotbarUI" type="NinePatchRect" parent="PlayerUILayer/HotbarUISlotMargins" node_paths=PackedStringArray("player_inv") groups=["has_save_logic"]]
+unique_name_in_owner = true
 layout_mode = 2
-texture = ExtResource("78_at8wu")
+texture = ExtResource("79_u72uy")
 region_rect = Rect2(0, 0, 20, 20)
 patch_margin_left = 3
 patch_margin_top = 3
 patch_margin_right = 3
 patch_margin_bottom = 3
+axis_stretch_vertical = 1
 script = ExtResource("58_i567i")
 player_inv = NodePath("../../../ItemReceiverComponent")
 
@@ -1918,6 +1951,67 @@ metadata/_edit_lock_ = true
 [node name="ScrollDebounceTimer" type="Timer" parent="PlayerUILayer/HotbarUISlotMargins/HotbarUI"]
 wait_time = 0.1
 one_shot = true
+
+[node name="WpnModSlotMargins" type="MarginContainer" parent="PlayerUILayer"]
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -25.0
+offset_top = -85.0
+offset_right = 3.0
+offset_bottom = -13.0
+grow_horizontal = 0
+grow_vertical = 0
+scale = Vector2(0.8, 0.8)
+theme_override_constants/margin_left = 0
+theme_override_constants/margin_top = 0
+theme_override_constants/margin_right = 0
+theme_override_constants/margin_bottom = 0
+
+[node name="WpnModSlotsUI" type="NinePatchRect" parent="PlayerUILayer/WpnModSlotMargins" groups=["has_save_logic"]]
+layout_mode = 2
+texture = ExtResource("81_5myae")
+region_rect = Rect2(0, 0, 20, 20)
+patch_margin_left = 3
+patch_margin_top = 3
+patch_margin_right = 3
+patch_margin_bottom = 3
+axis_stretch_vertical = 1
+script = ExtResource("82_dgpt2")
+
+[node name="WpnModSlotsGrid" type="VBoxContainer" parent="PlayerUILayer/WpnModSlotMargins/WpnModSlotsUI"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -57.0
+offset_top = -55.0
+offset_right = 57.0
+offset_bottom = 55.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 0
+alignment = 1
+metadata/_edit_lock_ = true
+
+[node name="Slot1" parent="PlayerUILayer/WpnModSlotMargins/WpnModSlotsUI/WpnModSlotsGrid" instance=ExtResource("42_r422n")]
+layout_mode = 2
+size_flags_vertical = 4
+metadata/_edit_lock_ = true
+
+[node name="Slot2" parent="PlayerUILayer/WpnModSlotMargins/WpnModSlotsUI/WpnModSlotsGrid" instance=ExtResource("42_r422n")]
+layout_mode = 2
+size_flags_vertical = 4
+metadata/_edit_lock_ = true
+
+[node name="Slot3" parent="PlayerUILayer/WpnModSlotMargins/WpnModSlotsUI/WpnModSlotsGrid" instance=ExtResource("42_r422n")]
+layout_mode = 2
+size_flags_vertical = 4
+metadata/_edit_lock_ = true
 
 [node name="PlayerInvUI" type="ColorRect" parent="PlayerUILayer" node_paths=PackedStringArray("hotbar_ui")]
 process_mode = 3
@@ -2340,10 +2434,6 @@ grow_horizontal = 2
 grow_vertical = 2
 size_flags_vertical = 4
 region_rect = Rect2(0, 0, 20, 20)
-patch_margin_left = 1
-patch_margin_top = 1
-patch_margin_right = 1
-patch_margin_bottom = 1
 
 [node name="TrashTexture" type="TextureRect" parent="PlayerUILayer/PlayerInvUI/TrashSlotPanel/TrashSlot/TextureMargins" index="0"]
 unique_name_in_owner = true
@@ -2353,7 +2443,7 @@ texture = ExtResource("69_4ao77")
 stretch_mode = 3
 
 [node name="ItemTexture" parent="PlayerUILayer/PlayerInvUI/TrashSlotPanel/TrashSlot/TextureMargins" index="1"]
-material = SubResource("ShaderMaterial_mobjd")
+material = SubResource("ShaderMaterial_pc124")
 
 [node name="HotbarSlotMargins" type="MarginContainer" parent="PlayerUILayer/PlayerInvUI"]
 layout_mode = 1

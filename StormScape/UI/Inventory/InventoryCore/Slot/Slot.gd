@@ -28,7 +28,7 @@ func _set_item(new_item: InvItemResource) -> void:
 	item = new_item
 	if item:
 		if item.quantity > 0:
-			item_texture.texture = item.stats.icon
+			item_texture.texture = item.stats.inv_icon
 			item_texture.material.set_shader_parameter("outline_color", GlobalData.rarity_colors.outline_color.get(item.stats.rarity))
 			item_texture.material.set_shader_parameter("tint_color", GlobalData.rarity_colors.tint_color.get(item.stats.rarity))
 
@@ -83,9 +83,9 @@ func _get_drag_data(at_position: Vector2) -> Variant:
 ## Creates a drag preview to display at the mouse when a drag is in progress.
 func _make_drag_preview(at_position: Vector2) -> Control:
 	var c: Control = Control.new()
-	if item and item.stats.icon and item.quantity > 0:
+	if item and item.stats.inv_icon and item.quantity > 0:
 		var preview_scene: Control = drag_preview.instantiate()
-		preview_scene.get_node("TextureMargins/ItemTexture").texture = item.stats.icon
+		preview_scene.get_node("TextureMargins/ItemTexture").texture = item.stats.inv_icon
 		preview_scene.get_node("TextureMargins/ItemTexture").material.set_shader_parameter("width", 0.5)
 		preview_scene.get_node("TextureMargins/ItemTexture").material.set_shader_parameter("highlight_strength", 0.0)
 		preview_scene.get_node("TextureMargins/ItemTexture").material.set_shader_parameter("outline_color", GlobalData.rarity_colors.outline_color.get(item.stats.rarity))

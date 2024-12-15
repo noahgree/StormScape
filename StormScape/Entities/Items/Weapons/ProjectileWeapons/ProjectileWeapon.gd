@@ -13,9 +13,8 @@ class_name ProjectileWeapon
 @onready var proj_origin_node: Marker2D = $ProjectileOrigin ## The point at which projectiles should spawn from.
 
 #region Local Vars
-var firing_delay_timer: Timer = Timer.new() ## The timer tracking time between regular firing shots.
-var charge_fire_cooldown_timer: Timer = Timer.new() ## The timer tracking how long after charge shots we are on charge cooldown.
-var initial_shot_delay_timer: Timer = Timer.new() ## The timer tracking how long after we press fire before the proj spawns.
+var fire_cooldown_timer: Timer = Timer.new() ## The timer tracking time between firing shots.
+var firing_duration_timer: Timer = Timer.new() ## The timer tracking how long after we press fire before the proj spawns.
 var mag_reload_timer: Timer = Timer.new() ## The timer tracking the delay between full mag reload start and end.
 var single_reload_timer: Timer = Timer.new() ## The timer tracking the delay between single bullet reloads.
 var hitscan_hands_freeze_timer: Timer = Timer.new() ## The timer that tracks the brief moment after a semi-auto hitscan shot that we shouldn't be rotating.
@@ -23,7 +22,7 @@ var hold_just_released: bool = false ## Whether the mouse hold was just released
 var is_reloading: bool = false ## Whether some reload method is currently in progress.
 var is_reloading_single_and_has_since_released: bool = true ## Whether we've begun reloading one bullet at a time and have relased the mouse since starting.
 var is_charging: bool = false ## Whether the weapon is currently charging up for a charge shot.
-var hitscan_delay: float = 0 ## The calculated delay to be used instead of just the auto fire delay when using hitscans.
+var hitscan_delay: float = 0 ## The calculated delay to be used instead of just the fire cooldown when using hitscans.
 var is_holding_hitscan: bool = false: ## Whether we are currently holding down the fire button and keeping the hitscan alive.
 	set(new_value):
 		is_holding_hitscan = new_value
@@ -60,7 +59,7 @@ func _set_stats(new_stats: ItemResource) -> void:
 ## Sets up the base values for the stat mod cache so that weapon mods can be added and managed properly.
 func _setup_mod_cache() -> void:
 	var normal_moddable_stats: Dictionary = {
-		"auto_fire_delay" : stats.auto_fire_delay,
+		"fire_cooldown" : stats.fire_cooldown,
 		"mag_size" : stats.mag_size,
 		"mag_reload_time" : stats.mag_reload_time,
 		"single_proj_reload_time" : stats.single_proj_reload_time,
@@ -121,16 +120,14 @@ func _ready() -> void:
 	if not Engine.is_editor_hint():
 		super._ready()
 
-		add_child(firing_delay_timer)
-		add_child(charge_fire_cooldown_timer)
-		add_child(initial_shot_delay_timer)
+		add_child(fire_cooldown_timer)
+		add_child(firing_duration_timer)
 		add_child(mag_reload_timer)
 		add_child(single_reload_timer)
 		add_child(hitscan_hands_freeze_timer)
-		firing_delay_timer.one_shot = true
-		firing_delay_timer.timeout.connect(_on_firing_delay_timeout)
-		charge_fire_cooldown_timer.one_shot = true
-		initial_shot_delay_timer.one_shot = true
+		fire_cooldown_timer.one_shot = true
+		fire_cooldown_timer.timeout.connect(_on_fire_cooldown_timeout)
+		firing_duration_timer.one_shot = true
 		mag_reload_timer.one_shot = true
 		single_reload_timer.one_shot = true
 		hitscan_hands_freeze_timer.one_shot = true
@@ -145,6 +142,7 @@ func disable() -> void:
 
 	if stats.charging_stat_effect != null:
 		source_entity.effects.request_effect_removal(stats.charging_stat_effect.effect_name)
+	is_charging = false
 
 func enter() -> void:
 	if stats.s_mods.base_values.is_empty():
@@ -158,8 +156,8 @@ func enter() -> void:
 	else:
 		_get_has_needed_ammo_and_reload_if_not()
 
-	if stats.auto_fire_delay_left > 0:
-		firing_delay_timer.start(stats.auto_fire_delay_left)
+	if stats.fire_cooldown_left > 0:
+		fire_cooldown_timer.start(stats.fire_cooldown_left)
 
 	_check_if_needs_mouse_area_scanner()
 
@@ -173,10 +171,10 @@ func exit() -> void:
 	if stats.charging_stat_effect != null:
 		source_entity.effects.request_effect_removal(stats.charging_stat_effect.effect_name)
 
-	if not firing_delay_timer.is_stopped():
-		stats.auto_fire_delay_left = min(stats.s_mods.get_stat("auto_fire_delay"), firing_delay_timer.time_left)
+	if not fire_cooldown_timer.is_stopped():
+		stats.fire_cooldown_left = min(stats.s_mods.get_stat("fire_cooldown"), fire_cooldown_timer.time_left)
 	else:
-		stats.auto_fire_delay_left = 0
+		stats.fire_cooldown_left = 0
 
 	stats.time_last_equipped = Time.get_ticks_msec() / 1000.0
 
@@ -212,7 +210,7 @@ func _disable_mouse_area() -> void:
 
 ## Every frame we decrease the warmth and the bloom levels based on their decrease curves.
 func _process(delta: float) -> void:
-	if firing_delay_timer.is_stopped() and not Engine.is_editor_hint():
+	if not Engine.is_editor_hint() and fire_cooldown_timer.is_stopped():
 		if stats.current_bloom_level > 0:
 			var sampled_point: float = stats.bloom_decrease_rate.sample_baked(stats.current_bloom_level)
 			var bloom_decrease_amount: float = max(0.01 * delta, sampled_point * delta)
@@ -227,10 +225,10 @@ func _physics_process(_delta: float) -> void:
 	if mouse_area != null:
 		mouse_area.global_position = get_global_mouse_position()
 
-func _on_firing_delay_timeout() -> void:
+func _on_fire_cooldown_timeout() -> void:
 	if is_holding_hitscan:
 		_fire()
-		firing_delay_timer.start(stats.s_mods.get_stat("auto_fire_delay") + hitscan_delay)
+		fire_cooldown_timer.start(stats.s_mods.get_stat("fire_cooldown") + hitscan_delay)
 	else:
 		_clean_up_hitscans()
 #endregion
@@ -248,7 +246,7 @@ func activate() -> void:
 
 ## Called from the hands component when the mouse is held down. Includes how long it has been held down so far.
 func hold_activate(_hold_time: float) -> void:
-	if not pullout_delay_timer.is_stopped() or not mag_reload_timer.is_stopped():
+	if not pullout_delay_timer.is_stopped() or not mag_reload_timer.is_stopped() or not firing_duration_timer.is_stopped():
 		source_entity.hands.been_holding_time = 0
 		return
 
@@ -291,7 +289,7 @@ func reload() -> void:
 #region Firing Activations
 ## Check if we can do a normal firing, and if we can, start it.
 func _fire() -> void:
-	if not firing_delay_timer.is_stopped():
+	if not fire_cooldown_timer.is_stopped():
 		return
 	if not is_reloading_single_and_has_since_released:
 		is_holding_hitscan = false
@@ -303,19 +301,19 @@ func _fire() -> void:
 	single_reload_timer.stop()
 	is_reloading = false
 
-	if stats.initial_shot_delay > 0:
-		if initial_shot_delay_timer.is_stopped():
-			initial_shot_delay_timer.start(stats.initial_shot_delay)
-			await initial_shot_delay_timer.timeout
-		else:
-			return
-
 	if _get_warmth_firing_delay() > 0:
-		firing_delay_timer.start(_get_warmth_firing_delay())
-		await firing_delay_timer.timeout
+		fire_cooldown_timer.start(_get_warmth_firing_delay())
+		await fire_cooldown_timer.timeout
 		if hold_just_released:
 			hold_just_released = false
 			return
+
+	if not firing_duration_timer.is_stopped():
+		return
+	else:
+		firing_duration_timer.start(max(0.05, stats.firing_duration))
+		_start_firing_anim(false)
+		await firing_duration_timer.timeout
 
 	_set_up_hitscan(false)
 	_handle_warmth_increase()
@@ -335,10 +333,20 @@ func _charge_fire(hold_time: float) -> void:
 		source_entity.hands.been_holding_time = 0
 		return
 
-	if (hold_time >= stats.s_mods.get_stat("min_charge_time")) and (hold_time > 0) and charge_fire_cooldown_timer.is_stopped():
+	if (hold_time >= stats.s_mods.get_stat("min_charge_time")) and (hold_time > 0) and fire_cooldown_timer.is_stopped():
+		if stats.charge_firing_duration > 0:
+			firing_duration_timer.start(max(0.05, stats.charge_firing_duration))
+			_start_firing_anim(true)
+			await firing_duration_timer.timeout
+
 		_set_up_hitscan(true)
 		_apply_burst_logic(true)
 		_apply_post_firing_effect(true)
+
+	if stats.s_mods.get_stat("charge_fire_cooldown") > 0:
+		fire_cooldown_timer.start(stats.s_mods.get_stat("charge_fire_cooldown"))
+		await fire_cooldown_timer.timeout
+		source_entity.hands.been_holding_time = 0
 
 func _set_up_hitscan(was_charge_fire: bool = false) -> void:
 	if not stats.use_hitscan:
@@ -373,14 +381,14 @@ func _apply_burst_logic(was_charge_fire: bool = false) -> void:
 		delay = _get_warmth_firing_delay()
 	else:
 		if stats.firing_mode == "Auto" or stats.firing_mode == "Charge":
-			delay = stats.s_mods.get_stat("auto_fire_delay") + hitscan_delay
+			delay = stats.s_mods.get_stat("fire_cooldown") + hitscan_delay
 		elif stats.firing_mode == "Semi Auto":
-			delay = hitscan_delay
+			delay = stats.s_mods.get_stat("fire_cooldown") + hitscan_delay
 
 	if not stats.use_hitscan:
 		delay += (stats.burst_bullet_delay * (shots - 1))
 
-	firing_delay_timer.start(max(0.035, delay))
+	fire_cooldown_timer.start(max(0.03, delay))
 
 	_apply_ammo_consumption(shots, was_charge_fire)
 
@@ -444,12 +452,12 @@ func _apply_barrage_logic(was_charge_fire: bool = false) -> void:
 ## Spawns the projectile that has been passed to it. Reloads if we don't have enough for the next activation.
 func _spawn_projectile(proj: Projectile, was_charge_fire: bool = false) -> void:
 	proj.rotation += deg_to_rad(_get_bloom())
+
 	GlobalData.world_root.add_child(proj)
 
 	_do_firing_fx(was_charge_fire)
-	_start_firing_anim(was_charge_fire)
 
-	await firing_delay_timer.timeout
+	await fire_cooldown_timer.timeout
 	_get_has_needed_ammo_and_reload_if_not(was_charge_fire)
 
 ## Spawns the hitscan that has been passed to it. Reloads if we don't have enough for the next activation.
@@ -459,13 +467,12 @@ func _spawn_hitscan(hitscan: Hitscan, was_charge_fire: bool = false) -> void:
 	current_hitscans.append(hitscan)
 
 	_do_firing_fx(was_charge_fire)
-	_start_firing_anim(was_charge_fire)
 
 	if stats.firing_mode == "Semi Auto" or (stats.firing_mode == "Auto" and stats.s_mods.get_stat("hitscan_duration") < 0.65):
 		source_entity.hands.equipped_item_should_follow_mouse = false
 		hitscan_hands_freeze_timer.start(0.065)
 
-	await firing_delay_timer.timeout
+	await fire_cooldown_timer.timeout
 	_get_has_needed_ammo_and_reload_if_not(was_charge_fire)
 
 ## Takes away either the passed in amount from the appropriate ammo reserve.
@@ -512,12 +519,12 @@ func _get_bloom() -> float:
 ## Start the sounds and vfx that should play when firing.
 func _do_firing_fx(with_charge_mult: bool = false) -> void:
 	var multiplier: float = stats.charge_cam_fx_mult if with_charge_mult else 1.0
-	var auto_fire_delay: float = stats.s_mods.get_stat("auto_fire_delay")
+	var fire_cooldown: float = stats.s_mods.get_stat("fire_cooldown")
 	if stats.firing_cam_shake_dur > 0:
-		var dur: float = min(stats.firing_cam_shake_dur, max(0, auto_fire_delay + hitscan_delay - 0.01))
+		var dur: float = min(stats.firing_cam_shake_dur, max(0, fire_cooldown + hitscan_delay - 0.01))
 		GlobalData.player_camera.start_shake(stats.firing_cam_shake_str * multiplier, dur * multiplier)
 	if stats.firing_cam_freeze_dur > 0:
-		var dur: float = min(stats.firing_cam_freeze_dur, max(0, auto_fire_delay + hitscan_delay - 0.01))
+		var dur: float = min(stats.firing_cam_freeze_dur, max(0, fire_cooldown + hitscan_delay - 0.01))
 		GlobalData.player_camera.start_freeze(stats.firing_cam_freeze_mult * multiplier, dur * multiplier)
 
 	var sound: String = stats.firing_sound if not with_charge_mult else stats.charge_firing_sound
@@ -526,24 +533,12 @@ func _do_firing_fx(with_charge_mult: bool = false) -> void:
 ## Start the firing animation based on what kind of firing we are doing.
 func _start_firing_anim(was_charge_fire: bool = false) -> void:
 	if not was_charge_fire:
-		if stats.initial_shot_delay > 0 and anim_player.has_animation("delay_fire"):
-			anim_player.speed_scale = 1.0
-			anim_player.play("delay_fire")
-		else:
-			anim_player.speed_scale = 1.0 / (stats.s_mods.get_stat("auto_fire_delay") + hitscan_delay)
-			anim_player.play("fire")
+		anim_player.speed_scale = 1.0 / max(0.03, (stats.firing_duration + hitscan_delay))
+		if anim_player.has_animation("fire"): anim_player.play("fire")
 	else:
-		if stats.has_charge_fire_anim:
-			anim_player.speed_scale = 1.0
-		anim_player.play("charge_fire")
+		anim_player.speed_scale = 1.0 / max(0.03, (stats.charge_firing_duration + hitscan_delay))
+		if anim_player.has_animation("charge_fire"): anim_player.play("charge_fire")
 
-## When the firing animation ends, start the post firing cooldown if it was a charge shot.
-func _on_firing_animation_ended(was_charge_fire: bool = false) -> void:
-	if was_charge_fire:
-		if stats.s_mods.get_stat("charge_fire_cooldown") > 0:
-			charge_fire_cooldown_timer.start(stats.s_mods.get_stat("charge_fire_cooldown"))
-			await charge_fire_cooldown_timer.timeout
-			source_entity.hands.been_holding_time = 0
 
 ## Applies a status effect to the source entity after firing.
 func _apply_post_firing_effect(was_charge_fire: bool = false) -> void:
@@ -595,12 +590,10 @@ func _attempt_reload() -> void:
 
 	if stats.reload_type == "Single":
 		is_reloading_single_and_has_since_released = false
-		var ammo_available: int = _get_more_reload_ammo(1)
+		var ammo_available: int = _get_more_reload_ammo(1, false)
 		if ammo_available > 0:
-			if stats.proj_reload_sound != "": AudioManager.play_sound(stats.proj_reload_sound, AudioManager.SoundType.SFX_GLOBAL)
-		stats.ammo_in_mag += ammo_available
-		single_reload_timer.set_meta("reloads_left", ammo_needed - 1)
-		single_reload_timer.start(stats.s_mods.get_stat("single_proj_reload_time"))
+			single_reload_timer.set_meta("reloads_left", ammo_needed)
+			single_reload_timer.start(stats.s_mods.get_stat("single_proj_reload_time"))
 	else:
 		mag_reload_timer.start(stats.s_mods.get_stat("mag_reload_time"))
 		await mag_reload_timer.timeout
@@ -610,8 +603,9 @@ func _attempt_reload() -> void:
 		stats.ammo_in_mag += ammo_available
 		is_reloading = false
 
-## Searches through the source entity's inventory for more ammo to fill the magazine.
-func _get_more_reload_ammo(max_amount_needed: int) -> int:
+## Searches through the source entity's inventory for more ammo to fill the magazine. Can optionally be used to only check for ammo
+## when told not to take from the inventory when found.
+func _get_more_reload_ammo(max_amount_needed: int, take_from_inventory: bool = true) -> int:
 	var ammount_collected: int = 0
 	var inv_node: Inventory = source_entity.inv
 
@@ -621,7 +615,8 @@ func _get_more_reload_ammo(max_amount_needed: int) -> int:
 			var amount_in_slot: int = item.quantity
 			var amount_still_needed: int = max_amount_needed - ammount_collected
 			var amount_to_take_from_slot: int = min(amount_still_needed, amount_in_slot)
-			inv_node.remove_item(i, amount_to_take_from_slot)
+			if take_from_inventory:
+				inv_node.remove_item(i, amount_to_take_from_slot)
 			ammount_collected += amount_to_take_from_slot
 
 			if ammount_collected == max_amount_needed:

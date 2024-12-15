@@ -19,16 +19,18 @@ class_name ProjectileResource
 @export var good_effects_falloff: bool = false ## Whether to apply the falloff curve to good effects.
 
 @export_group("Piercing Logic")
-@export_range(0, 100, 1) var max_pierce: int = 0 ## The max amount of collisions this can take before freeing.
+@export_range(0, 100, 1, "or_greater") var max_pierce: int = 0 ## The max amount of collisions this can take before freeing.
 
 @export_group("Ricochet Logic")
 @export_range(0, 100, 1) var max_ricochet: int = 0 ## The max amount of ricochets this can do before trying to pierce and then freeing.
 @export var ricochet_angle_bounce: bool = true ## Whether the ricochets should bounce at an angle or just reverse the direction they were travelling in. Note that when colliding with TileMaps, it always just reverses direction.
+@export var ricochet_walls_only: bool = false ## When true, the projectile will only bounce off walls with no limit.
 
 @export_group("Homing Logic")
 @export_enum("None", "FOV", "Closest", "Mouse Position", "Boomerang") var homing_method: String = "None" ## Whether this projectile should home-in on its target.
 @export var homing_speed_mult: float = 1.0 ## Multiplies the speed by a factor unique to the homing movement.
 @export_custom(PROPERTY_HINT_NONE, "suffix:º/sec") var max_turn_rate: float = 100 ## The max turn rate in degrees per second.
+@export var turn_rate_curve: Curve = Curve.new() ## The change in turn rate as lifetime elapses.
 @export_range(0, 360, 1, "suffix:degrees") var homing_fov_angle: float = 180 ## The FOV for aquiring targets.
 @export var homing_max_range: int = 850 ## The max range for aquiring targets when using the "closest" method.
 @export var homing_duration: float = -1 ## The duration for which homing is active. -1 means 'always'.

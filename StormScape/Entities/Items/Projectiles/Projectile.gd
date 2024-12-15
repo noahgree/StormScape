@@ -425,7 +425,7 @@ func _apply_homing_movement(delta: float) -> void:
 	var current_dir: Vector2 = Vector2(cos(rotation), sin(rotation)).normalized()
 	var angle_to_target: float = current_dir.angle_to(target_dir)
 	var turn_stat: float = s_mods.get_stat("proj_max_turn_rate") if not is_charge_fire else s_mods.get_stat("charge_proj_max_turn_rate")
-	var max_turn_rate: float = deg_to_rad(turn_stat) * delta
+	var max_turn_rate: float = deg_to_rad(turn_stat * stats.turn_rate_curve.sample_baked((stats.lifetime - lifetime_timer.time_left) / stats.lifetime)) * delta
 
 	angle_to_target = clamp(angle_to_target, -max_turn_rate, max_turn_rate)
 	rotation += angle_to_target
@@ -437,8 +437,9 @@ func _apply_homing_movement(delta: float) -> void:
 	movement_direction = displacement.normalized()
 
 	if stats.homing_method == "Boomerang":
-		if global_position.distance_squared_to(source_entity.global_position) < pow(stats.boomerang_home_radius, 2):
-			queue_free()
+		if lifetime_timer.time_left <= max(0, stats.lifetime - 0.35): # So that the return distance doesn't trigger on throw
+			if global_position.distance_squared_to(source_entity.global_position) < pow(stats.boomerang_home_radius, 2):
+				queue_free()
 #endregion
 
 #region Arcing
@@ -640,6 +641,10 @@ func _process_hit(object: Node2D) -> void:
 	debug_recent_hit_location = global_position + Vector2(sprite.region_rect.size.x / 2, 0).rotated(rotation)
 	if not is_in_aoe_phase:
 		var ricochet_stat: int = int(s_mods.get_stat("proj_max_ricochet")) if not is_charge_fire else int(s_mods.get_stat("charge_proj_max_ricochet"))
+		if stats.ricochet_walls_only and object is TileMapLayer:
+			_handle_ricochet(object)
+			spin_dir *= -1
+			return
 		if ricochet_count < ricochet_stat:
 			_handle_ricochet(object)
 			return
@@ -656,7 +661,11 @@ func _process_hit(object: Node2D) -> void:
 			_handle_aoe()
 			return
 
-		queue_free()
+		_kill_projectile_on_hit()
+
+## Stops and frees the projectile on hit when it cannot pierce, ricochet, or AOE anymore. Meant to be overridden by child classes.
+func _kill_projectile_on_hit() -> void:
+	queue_free()
 
 ## Overrides parent method. When we overlap with an entity who can accept effect sources, pass the effect source to that
 ## entity's handler. Note that the effect source is duplicated on hit so that we can include unique info like move dir.

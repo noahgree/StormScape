@@ -2,7 +2,6 @@ extends EquippableItem
 class_name Weapon
 ## The base class for all equippable weapons in the game.
 
-@onready var sprite: AnimatedSprite2D = $AnimatedSprite2D ## The required animated sprite node for all weapons.
 @onready var weapon_mod_manager: WeaponModManager = $WeaponModManager ## The node managing weapon mods.
 
 var pullout_delay_timer: Timer = Timer.new() ## The timer managing the delay after a weapon is equipped before it can be used.

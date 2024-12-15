@@ -105,9 +105,6 @@ func enable_storm() -> void:
 	var entities_with_effect: Array[Node] = get_tree().get_nodes_in_group("entities_out_of_safe_area")
 	for entity: Node in entities_with_effect:
 		_add_effect_to_entity(entity, current_effect)
-		if entity is Player:
-			entity.sprite.material.set_shader_parameter("glow_color", Color(0.726, 0.504, 1))
-			entity.sprite.material.set_shader_parameter("glow_size", 5.0)
 
 ## Stops storm in its tracks and removes the current effect from entities out of the safe area.
 func disable_storm() -> void:
@@ -145,8 +142,6 @@ func disable_storm() -> void:
 	var entities_with_effect: Array[Node] = get_tree().get_nodes_in_group("entities_out_of_safe_area")
 	for entity: Node in entities_with_effect:
 		_remove_current_effect_from_entity(entity)
-		if entity is Player:
-			entity.sprite.material.set_shader_parameter("glow_size", 0.0)
 	is_enabled = false
 
 ## Reverts the storm visuals and storm entity effect to the defaults. Typically called when the queue is empty and auto-advance
@@ -521,18 +516,12 @@ func _on_safe_zone_body_entered(body: Node2D) -> void:
 		_remove_current_effect_from_entity(body)
 		body.remove_from_group("entities_out_of_safe_area")
 
-	if body is Player:
-		body.sprite.update_glow_color("Storm Syndrome", true)
-
 ## When a dynamic entity exits the inner safe circle, we apply the current storm effect.
 func _on_safe_zone_body_exited(body: Node2D) -> void:
 	if body is DynamicEntity:
 		if is_enabled:
 			_add_effect_to_entity(body, current_effect)
 		body.add_to_group("entities_out_of_safe_area")
-
-	if body is Player and is_enabled:
-		body.sprite.update_glow_color("Storm Syndrome", false)
 
 ## Removes the current effect from entities out of the safe area and applies the new one.
 ## The new one will be the default effect if we have no upcoming zone, otherwise it will be the effect for the new transform.

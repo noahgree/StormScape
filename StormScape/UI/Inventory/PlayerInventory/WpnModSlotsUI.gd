@@ -1,0 +1,2 @@
+extends NinePatchRect
+class_name WpnModSlotsUI

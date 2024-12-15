@@ -1,7 +1,6 @@
 extends EquippableItem
 class_name Consumable
 
-@onready var sprite: Sprite2D = $Sprite2D
 @onready var consumption_timer: Timer = $ConsumptionTimer
 @onready var consumption_delay_timer: Timer = $ConsumptionDelayTimer
 @onready var food_particles: CPUParticles2D = $FoodParticles
@@ -11,7 +10,7 @@ func _set_stats(new_stats: ItemResource) -> void:
 	super._set_stats(new_stats)
 
 	if sprite:
-		sprite.texture = stats.thumbnail
+		sprite.texture = stats.in_hand_icon
 
 func activate() -> void:
 	consume()

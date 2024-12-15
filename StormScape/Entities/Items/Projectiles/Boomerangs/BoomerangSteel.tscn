@@ -1,0 +1,30 @@
+[gd_scene load_steps=5 format=3 uid="uid://dna63yojpqy2n"]
+
+[ext_resource type="Script" path="res://Entities/Items/Projectiles/UniqueProjectile.gd" id="1_nc3c8"]
+[ext_resource type="Texture2D" uid="uid://1cupq4qi2cjx" path="res://Entities/Items/Weapons/ProjectileWeapons/Boomerang/boomerang_steel.png" id="2_ggjhd"]
+[ext_resource type="Texture2D" uid="uid://dcbwxgak6a0r8" path="res://Entities/EntityCore/entity_shadow.png" id="3_j8s1y"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_tj15o"]
+radius = 9.23075
+height = 18.4615
+
+[node name="BoomerangSteel" type="Area2D"]
+editor_description = "DO NOT SET EFFECT SOURCE IF BEING USED DIRECTLY WITH A WEAPON. THE WEAPON WILL SET IT FOR YOU."
+script = ExtResource("1_nc3c8")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+rotation = 1.5708
+shape = SubResource("CapsuleShape2D_tj15o")
+debug_color = Color(0.626, 0.349, 1, 0.196)
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2_ggjhd")
+region_rect = Rect2(2, 5, 12, 5)
+
+[node name="Shadow" type="Sprite2D" parent="."]
+self_modulate = Color(0.16, 0.16, 0.16, 0.185)
+top_level = true
+z_index = 1
+position = Vector2(0, 8)
+scale = Vector2(0.666667, 0.428572)
+texture = ExtResource("3_j8s1y")

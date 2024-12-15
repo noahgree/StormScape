@@ -102,19 +102,20 @@ func on_equipped_item_change(inv_item_slot: Slot) -> void:
 	if equipped_item.stats.item_type == GlobalData.ItemType.WEAPON:
 		main_hand_sprite.visible = false
 		if equipped_item is ProjectileWeapon:
-			main_hand.position = main_hand_with_proj_weapon_pos
+			main_hand.position = main_hand_with_proj_weapon_pos + equipped_item.stats.holding_offset
+			main_hand.rotation += deg_to_rad(equipped_item.stats.holding_degrees)
 			snap_y_scale()
 			_prep_for_pullout_anim()
 			_manage_proj_weapon_hands(_get_anim_vector())
 		elif equipped_item is MeleeWeapon:
-			main_hand.position = main_hand_with_melee_weapon_pos
+			main_hand.position = main_hand_with_melee_weapon_pos + equipped_item.stats.holding_offset
+			main_hand.rotation += deg_to_rad(equipped_item.stats.holding_degrees)
 			snap_y_scale()
 			_prep_for_pullout_anim()
 			_manage_melee_weapon_hands(_get_anim_vector())
 	elif equipped_item.stats.item_type == GlobalData.ItemType.CONSUMABLE or equipped_item.stats.item_type == GlobalData.ItemType.WORLD_RESOURCE:
 		hands_anchor.global_rotation = 0
-		main_hand.position.y = main_hand_with_held_item_pos.y + equipped_item.stats.holding_offset.y
-		main_hand.position.x = main_hand_with_held_item_pos.x + equipped_item.stats.holding_offset.x
+		main_hand.position = main_hand_with_held_item_pos + equipped_item.stats.holding_offset
 		main_hand.rotation += deg_to_rad(equipped_item.stats.holding_degrees)
 		main_hand_sprite.position = main_hand_with_held_item_pos + equipped_item.stats.main_hand_offset
 		main_hand_sprite.visible = true

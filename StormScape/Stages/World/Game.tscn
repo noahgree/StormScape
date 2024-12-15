@@ -1,4 +1,4 @@
-[gd_scene load_steps=53 format=4 uid="uid://bscnr6a23l10m"]
+[gd_scene load_steps=76 format=4 uid="uid://bscnr6a23l10m"]
 
 [ext_resource type="Script" path="res://Utilities/Game/WorldRoot/WorldRoot.gd" id="1_q0i4n"]
 [ext_resource type="Script" path="res://Stages/World/BackgroundMusicManager.gd" id="1_q5pr2"]
@@ -18,14 +18,29 @@
 [ext_resource type="Resource" uid="uid://b2ekcx7kndqjb" path="res://Entities/Stats/EffectSystemResources/StatusEffects/BadEffects/Frostbite/Frostbite1.tres" id="14_kcl4d"]
 [ext_resource type="Resource" uid="uid://dvew5cy3k7s48" path="res://Entities/Stats/EffectSystemResources/StatusEffects/BadEffects/Burning/Burning1.tres" id="16_ky7ks"]
 [ext_resource type="PackedScene" uid="uid://b52c5c7hj2vd" path="res://Utilities/Debug/TestTree1.tscn" id="17_45bjv"]
+[ext_resource type="Script" path="res://Entities/EntityCore/EntityTypes/StaticEntity/StaticEntity.gd" id="18_0310n"]
+[ext_resource type="PackedScene" uid="uid://cj2wy5f05cos4" path="res://Entities/EntityCore/EntityShadow.tscn" id="19_6wu7w"]
+[ext_resource type="PackedScene" uid="uid://dmv4k4j4lg3pw" path="res://Entities/EntityCore/EntityStaticSprite.tscn" id="20_0t2vf"]
+[ext_resource type="Shader" path="res://Entities/EntityCore/EntityEffectShader.gdshader" id="21_ogvde"]
 [ext_resource type="Script" path="res://Stages/World/Storm/Storm.gd" id="22_0op7h"]
 [ext_resource type="Script" path="res://Stages/Tilemaps/TileMapDual.gd" id="22_47ykm"]
+[ext_resource type="Texture2D" uid="uid://c418i6bvw1kh5" path="res://Entities/Environment/dead_tree_7.png" id="22_tl2qy"]
+[ext_resource type="Texture2D" uid="uid://cojcy3fw1cnir" path="res://Entities/Environment/dead_tree_4.png" id="22_tnqdg"]
 [ext_resource type="Texture2D" uid="uid://6saycs5sisdk" path="res://Stages/Tilemaps/GrassDirt/TILESET_GRASSDIRT.png" id="22_tnvqm"]
 [ext_resource type="Shader" path="res://Stages/World/Storm/StormShader.gdshader" id="23_05otm"]
 [ext_resource type="Resource" uid="uid://cucuggowaf55y" path="res://Entities/Stats/EffectSystemResources/StatusEffects/BadEffects/StormSyndrome/StormSyndrome1.tres" id="23_5x8gm"]
+[ext_resource type="PackedScene" uid="uid://cdfdy8m6ki3oq" path="res://Entities/Components/HealthComponent/HealthComponent.tscn" id="23_mdyae"]
+[ext_resource type="PackedScene" uid="uid://btba0jmsow1mx" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectReceiverComponent.tscn" id="24_xnqq6"]
+[ext_resource type="PackedScene" uid="uid://4gl24qwdyti3" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/DmgHandler.tscn" id="25_b8kol"]
 [ext_resource type="Script" path="res://Stages/World/Storm/StormTransform.gd" id="25_dqjbe"]
+[ext_resource type="PackedScene" uid="uid://depnx3pnassrq" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/BurningHandler.tscn" id="26_smatw"]
+[ext_resource type="PackedScene" uid="uid://c4kt3bx0ot3c7" path="res://Entities/Components/ItemComponents/LootTableComponent/LootTableComponent.tscn" id="27_4x873"]
 [ext_resource type="Resource" uid="uid://cx6t5cil24ca3" path="res://Stages/World/Storm/StormVisuals/DefaultStormVisuals.tres" id="27_5uvpk"]
 [ext_resource type="Script" path="res://Stages/World/Storm/StormVisuals/StormVisuals.gd" id="27_8kcf2"]
+[ext_resource type="Script" path="res://Entities/Components/ItemComponents/LootTableComponent/LootTableEntry.gd" id="28_1sv3s"]
+[ext_resource type="Resource" uid="uid://cwiqqp4tbd4em" path="res://Entities/Items/TRESItems/SpruceLog(0).tres" id="29_msqx1"]
+[ext_resource type="Script" path="res://Entities/Components/ItemComponents/LootTableComponent/LootTable.gd" id="30_pkymt"]
+[ext_resource type="PackedScene" uid="uid://co3n6m7efg8pd" path="res://Entities/Components/EffectComponents/StatusEffectManager/StatusEffectManager.tscn" id="31_cevla"]
 [ext_resource type="Script" path="res://Entities/Stats/StatMod/StatMod.gd" id="43_0c5fh"]
 
 [sub_resource type="Environment" id="Environment_2wouv"]
@@ -4245,6 +4260,70 @@ status_effects = Array[ExtResource("13_33bgr")]([ExtResource("16_ky7ks")])
 contact_position = Vector2(0, 0)
 movement_direction = Vector2(0, 0)
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_w83do"]
+resource_local_to_scene = true
+shader = ExtResource("21_ogvde")
+shader_parameter/glow_color = Color(1, 1, 1, 1)
+shader_parameter/glow_size = 4.5
+shader_parameter/glow_strength = 9.0
+shader_parameter/enable_fade = false
+shader_parameter/tint_color = Color(1, 1, 1, 0)
+shader_parameter/frame_uv_min = null
+shader_parameter/frame_uv_max = Vector2(0, 0)
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_qwr4q"]
+radius = 7.0
+height = 32.0
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_3vp3c"]
+size = Vector2(14, 28)
+
+[sub_resource type="Resource" id="Resource_m6yab"]
+script = ExtResource("28_1sv3s")
+item = ExtResource("29_msqx1")
+quantity = 1
+weighting = 1.0
+last_used = 0
+spawn_count = 0
+
+[sub_resource type="Resource" id="Resource_vx2o2"]
+script = ExtResource("30_pkymt")
+hit_loot_table = Array[ExtResource("28_1sv3s")]([SubResource("Resource_m6yab")])
+die_loot_table = Array[ExtResource("28_1sv3s")]([])
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_a5y7b"]
+resource_local_to_scene = true
+shader = ExtResource("21_ogvde")
+shader_parameter/glow_color = Color(1, 1, 1, 1)
+shader_parameter/glow_size = 4.5
+shader_parameter/glow_strength = 9.0
+shader_parameter/enable_fade = false
+shader_parameter/tint_color = Color(1, 1, 1, 0)
+shader_parameter/frame_uv_min = null
+shader_parameter/frame_uv_max = Vector2(0, 0)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_0ml2f"]
+resource_local_to_scene = true
+shader = ExtResource("21_ogvde")
+shader_parameter/glow_color = Color(1, 1, 1, 1)
+shader_parameter/glow_size = 4.5
+shader_parameter/glow_strength = 9.0
+shader_parameter/enable_fade = false
+shader_parameter/tint_color = Color(1, 1, 1, 0)
+shader_parameter/frame_uv_min = null
+shader_parameter/frame_uv_max = Vector2(0, 0)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_71en1"]
+resource_local_to_scene = true
+shader = ExtResource("21_ogvde")
+shader_parameter/glow_color = Color(1, 1, 1, 1)
+shader_parameter/glow_size = 4.5
+shader_parameter/glow_strength = 9.0
+shader_parameter/enable_fade = false
+shader_parameter/tint_color = Color(1, 1, 1, 0)
+shader_parameter/frame_uv_min = null
+shader_parameter/frame_uv_max = Vector2(0, 0)
+
 [sub_resource type="LabelSettings" id="LabelSettings_lfc2v"]
 outline_size = 3
 outline_color = Color(0, 0, 0, 1)
@@ -4491,8 +4570,7 @@ script = ExtResource("22_47ykm")
 y_sort_enabled = true
 script = ExtResource("8_g8y4o")
 
-[node name="Testing" type="Node2D" parent="WorldRoot"]
-y_sort_enabled = true
+[node name="Testing" type="Node" parent="WorldRoot"]
 
 [node name="TestRigidEntity" parent="WorldRoot/Testing" instance=ExtResource("9_37jga")]
 position = Vector2(127, 27)
@@ -4501,7 +4579,7 @@ position = Vector2(127, 27)
 position = Vector2(129, 87)
 
 [node name="TestRigidEntity3" parent="WorldRoot/Testing" instance=ExtResource("9_37jga")]
-position = Vector2(366, 119)
+position = Vector2(65, 118)
 
 [node name="TestRigidEntity4" parent="WorldRoot/Testing" instance=ExtResource("9_37jga")]
 position = Vector2(126, 160)
@@ -4549,10 +4627,245 @@ shape = SubResource("RectangleShape2D_rk2ia")
 debug_color = Color(0.994, 0, 0.227, 0.225)
 
 [node name="TestTree1" parent="WorldRoot/Testing" instance=ExtResource("17_45bjv")]
-position = Vector2(352, 112)
+position = Vector2(-41, 179)
+
+[node name="TestTree2" parent="WorldRoot/Testing" instance=ExtResource("17_45bjv")]
+position = Vector2(-92, 136)
+
+[node name="TestTree3" parent="WorldRoot/Testing" instance=ExtResource("17_45bjv")]
+position = Vector2(-184, 157)
+
+[node name="TestTree4" parent="WorldRoot/Testing" instance=ExtResource("17_45bjv")]
+position = Vector2(-164, 114)
+
+[node name="TestTree5" parent="WorldRoot/Testing" instance=ExtResource("17_45bjv")]
+position = Vector2(-15, 218)
+
+[node name="TestTree6" parent="WorldRoot/Testing" instance=ExtResource("17_45bjv")]
+position = Vector2(-242, 119)
+
+[node name="TestTreeOther1" type="StaticBody2D" parent="WorldRoot/Testing"]
+position = Vector2(-107, 221)
+collision_layer = 16
+script = ExtResource("18_0310n")
+team = 2
+
+[node name="EntityShadow" parent="WorldRoot/Testing/TestTreeOther1" instance=ExtResource("19_6wu7w")]
+self_modulate = Color(0, 0, 0, 0.164)
+position = Vector2(-1, 0)
+scale = Vector2(4.69333, 2.75429)
+
+[node name="EntitySprite" parent="WorldRoot/Testing/TestTreeOther1" instance=ExtResource("20_0t2vf")]
+material = SubResource("ShaderMaterial_w83do")
+position = Vector2(-1, -48)
+texture = ExtResource("22_tnqdg")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="WorldRoot/Testing/TestTreeOther1"]
+position = Vector2(-5, -7)
+rotation = -1.5708
+shape = SubResource("CapsuleShape2D_qwr4q")
+
+[node name="HealthComponent" parent="WorldRoot/Testing/TestTreeOther1" instance=ExtResource("23_mdyae")]
+_max_shield = 0
+infinte_hp = true
+
+[node name="EffectReceiverComponent" parent="WorldRoot/Testing/TestTreeOther1" node_paths=PackedStringArray("affected_entity", "health_component", "loot_table_component", "dmg_handler", "burning_handler") instance=ExtResource("24_xnqq6")]
+absorb_full_hit = true
+filter_source_types = true
+allowed_source_types = Array[int]([5])
+filter_source_tags = true
+allowed_source_tags = Array[String](["Axe"])
+affected_entity = NodePath("..")
+health_component = NodePath("../HealthComponent")
+loot_table_component = NodePath("../LootTableComponent")
+dmg_handler = NodePath("DmgHandler")
+burning_handler = NodePath("BurningHandler")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="WorldRoot/Testing/TestTreeOther1/EffectReceiverComponent"]
+position = Vector2(-5, -6.99998)
+rotation = -1.5708
+shape = SubResource("RectangleShape2D_3vp3c")
+
+[node name="DmgHandler" parent="WorldRoot/Testing/TestTreeOther1/EffectReceiverComponent" instance=ExtResource("25_b8kol")]
+can_be_crit = false
+
+[node name="BurningHandler" parent="WorldRoot/Testing/TestTreeOther1/EffectReceiverComponent" instance=ExtResource("26_smatw")]
+
+[node name="LootTableComponent" parent="WorldRoot/Testing/TestTreeOther1" instance=ExtResource("27_4x873")]
+loot_table = SubResource("Resource_vx2o2")
+hit_spawn_chance = 15.0
+require_dmg_on_hit = false
+
+[node name="StatusEffectManager" parent="WorldRoot/Testing/TestTreeOther1" node_paths=PackedStringArray("effect_receiver") instance=ExtResource("31_cevla")]
+effect_receiver = NodePath("../EffectReceiverComponent")
+
+[node name="TestTreeOther2" type="StaticBody2D" parent="WorldRoot/Testing"]
+position = Vector2(-205, 223)
+collision_layer = 16
+script = ExtResource("18_0310n")
+team = 2
+
+[node name="EntityShadow" parent="WorldRoot/Testing/TestTreeOther2" instance=ExtResource("19_6wu7w")]
+self_modulate = Color(0, 0, 0, 0.164)
+position = Vector2(-1, 0)
+scale = Vector2(4.69333, 2.75429)
+
+[node name="EntitySprite" parent="WorldRoot/Testing/TestTreeOther2" instance=ExtResource("20_0t2vf")]
+material = SubResource("ShaderMaterial_a5y7b")
+position = Vector2(-1, -48)
+texture = ExtResource("22_tnqdg")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="WorldRoot/Testing/TestTreeOther2"]
+position = Vector2(-5, -7)
+rotation = -1.5708
+shape = SubResource("CapsuleShape2D_qwr4q")
+
+[node name="HealthComponent" parent="WorldRoot/Testing/TestTreeOther2" instance=ExtResource("23_mdyae")]
+_max_shield = 0
+infinte_hp = true
+
+[node name="EffectReceiverComponent" parent="WorldRoot/Testing/TestTreeOther2" node_paths=PackedStringArray("affected_entity", "health_component", "loot_table_component", "dmg_handler", "burning_handler") instance=ExtResource("24_xnqq6")]
+absorb_full_hit = true
+filter_source_types = true
+allowed_source_types = Array[int]([5])
+filter_source_tags = true
+allowed_source_tags = Array[String](["Axe"])
+affected_entity = NodePath("..")
+health_component = NodePath("../HealthComponent")
+loot_table_component = NodePath("../LootTableComponent")
+dmg_handler = NodePath("DmgHandler")
+burning_handler = NodePath("BurningHandler")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="WorldRoot/Testing/TestTreeOther2/EffectReceiverComponent"]
+position = Vector2(-5, -6.99998)
+rotation = -1.5708
+shape = SubResource("RectangleShape2D_3vp3c")
+
+[node name="DmgHandler" parent="WorldRoot/Testing/TestTreeOther2/EffectReceiverComponent" instance=ExtResource("25_b8kol")]
+can_be_crit = false
+
+[node name="BurningHandler" parent="WorldRoot/Testing/TestTreeOther2/EffectReceiverComponent" instance=ExtResource("26_smatw")]
+
+[node name="LootTableComponent" parent="WorldRoot/Testing/TestTreeOther2" instance=ExtResource("27_4x873")]
+loot_table = SubResource("Resource_vx2o2")
+hit_spawn_chance = 15.0
+require_dmg_on_hit = false
+
+[node name="StatusEffectManager" parent="WorldRoot/Testing/TestTreeOther2" node_paths=PackedStringArray("effect_receiver") instance=ExtResource("31_cevla")]
+effect_receiver = NodePath("../EffectReceiverComponent")
+
+[node name="TestTreeOther3" type="StaticBody2D" parent="WorldRoot/Testing"]
+position = Vector2(-226, 66)
+collision_layer = 16
+script = ExtResource("18_0310n")
+team = 2
+
+[node name="EntityShadow" parent="WorldRoot/Testing/TestTreeOther3" instance=ExtResource("19_6wu7w")]
+self_modulate = Color(0, 0, 0, 0.164)
+position = Vector2(-1, 0)
+scale = Vector2(4.69333, 2.75429)
+
+[node name="EntitySprite" parent="WorldRoot/Testing/TestTreeOther3" instance=ExtResource("20_0t2vf")]
+material = SubResource("ShaderMaterial_0ml2f")
+position = Vector2(-1, -48)
+texture = ExtResource("22_tl2qy")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="WorldRoot/Testing/TestTreeOther3"]
+position = Vector2(-5, -7)
+rotation = -1.5708
+shape = SubResource("CapsuleShape2D_qwr4q")
+
+[node name="HealthComponent" parent="WorldRoot/Testing/TestTreeOther3" instance=ExtResource("23_mdyae")]
+_max_shield = 0
+infinte_hp = true
+
+[node name="EffectReceiverComponent" parent="WorldRoot/Testing/TestTreeOther3" node_paths=PackedStringArray("affected_entity", "health_component", "loot_table_component", "dmg_handler", "burning_handler") instance=ExtResource("24_xnqq6")]
+absorb_full_hit = true
+filter_source_types = true
+allowed_source_types = Array[int]([5])
+filter_source_tags = true
+allowed_source_tags = Array[String](["Axe"])
+affected_entity = NodePath("..")
+health_component = NodePath("../HealthComponent")
+loot_table_component = NodePath("../LootTableComponent")
+dmg_handler = NodePath("DmgHandler")
+burning_handler = NodePath("BurningHandler")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="WorldRoot/Testing/TestTreeOther3/EffectReceiverComponent"]
+position = Vector2(-5, -6.99998)
+rotation = -1.5708
+shape = SubResource("RectangleShape2D_3vp3c")
+
+[node name="DmgHandler" parent="WorldRoot/Testing/TestTreeOther3/EffectReceiverComponent" instance=ExtResource("25_b8kol")]
+can_be_crit = false
+
+[node name="BurningHandler" parent="WorldRoot/Testing/TestTreeOther3/EffectReceiverComponent" instance=ExtResource("26_smatw")]
+
+[node name="LootTableComponent" parent="WorldRoot/Testing/TestTreeOther3" instance=ExtResource("27_4x873")]
+loot_table = SubResource("Resource_vx2o2")
+hit_spawn_chance = 15.0
+require_dmg_on_hit = false
+
+[node name="StatusEffectManager" parent="WorldRoot/Testing/TestTreeOther3" node_paths=PackedStringArray("effect_receiver") instance=ExtResource("31_cevla")]
+effect_receiver = NodePath("../EffectReceiverComponent")
+
+[node name="TestTreeOther4" type="StaticBody2D" parent="WorldRoot/Testing"]
+position = Vector2(26, 100)
+collision_layer = 16
+script = ExtResource("18_0310n")
+team = 2
+
+[node name="EntityShadow" parent="WorldRoot/Testing/TestTreeOther4" instance=ExtResource("19_6wu7w")]
+self_modulate = Color(0, 0, 0, 0.164)
+position = Vector2(-1, 0)
+scale = Vector2(4.69333, 2.75429)
+
+[node name="EntitySprite" parent="WorldRoot/Testing/TestTreeOther4" instance=ExtResource("20_0t2vf")]
+material = SubResource("ShaderMaterial_71en1")
+position = Vector2(-1, -48)
+texture = ExtResource("22_tnqdg")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="WorldRoot/Testing/TestTreeOther4"]
+position = Vector2(-5, -7)
+rotation = -1.5708
+shape = SubResource("CapsuleShape2D_qwr4q")
+
+[node name="HealthComponent" parent="WorldRoot/Testing/TestTreeOther4" instance=ExtResource("23_mdyae")]
+_max_shield = 0
+infinte_hp = true
+
+[node name="EffectReceiverComponent" parent="WorldRoot/Testing/TestTreeOther4" node_paths=PackedStringArray("affected_entity", "health_component", "loot_table_component", "dmg_handler", "burning_handler") instance=ExtResource("24_xnqq6")]
+absorb_full_hit = true
+filter_source_types = true
+allowed_source_types = Array[int]([5])
+filter_source_tags = true
+allowed_source_tags = Array[String](["Axe"])
+affected_entity = NodePath("..")
+health_component = NodePath("../HealthComponent")
+loot_table_component = NodePath("../LootTableComponent")
+dmg_handler = NodePath("DmgHandler")
+burning_handler = NodePath("BurningHandler")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="WorldRoot/Testing/TestTreeOther4/EffectReceiverComponent"]
+position = Vector2(-5, -6.99998)
+rotation = -1.5708
+shape = SubResource("RectangleShape2D_3vp3c")
+
+[node name="DmgHandler" parent="WorldRoot/Testing/TestTreeOther4/EffectReceiverComponent" instance=ExtResource("25_b8kol")]
+can_be_crit = false
+
+[node name="BurningHandler" parent="WorldRoot/Testing/TestTreeOther4/EffectReceiverComponent" instance=ExtResource("26_smatw")]
+
+[node name="LootTableComponent" parent="WorldRoot/Testing/TestTreeOther4" instance=ExtResource("27_4x873")]
+loot_table = SubResource("Resource_vx2o2")
+hit_spawn_chance = 15.0
+require_dmg_on_hit = false
+
+[node name="StatusEffectManager" parent="WorldRoot/Testing/TestTreeOther4" node_paths=PackedStringArray("effect_receiver") instance=ExtResource("31_cevla")]
+effect_receiver = NodePath("../EffectReceiverComponent")
 
 [node name="Player" parent="WorldRoot" instance=ExtResource("4_ptig0")]
-position = Vector2(258, 85)
+position = Vector2(226, 75)
 collision_mask = 245
 
 [node name="PlayerCamera" type="Camera2D" parent="WorldRoot" node_paths=PackedStringArray("player") groups=["core"]]

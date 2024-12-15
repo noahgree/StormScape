@@ -5,8 +5,9 @@ class_name ItemResource
 @export var id: String ## The unique identifier for the item.
 @export var name: String ## The item's string name.
 @export var tags: Array[String] = [] ## The set of tags that are checked against when this item is potentially used for crafting.
-@export var icon: Texture2D ## The inventory representation of the item.
-@export var thumbnail: Texture2D ## The physical representation of the item.
+@export var inv_icon: Texture2D ## The inventory representation of the item.
+@export var ground_icon: Texture2D ## The on-ground representation of the item.
+@export var in_hand_icon: Texture2D ## The physical representation of the item.
 @export var item_type: GlobalData.ItemType = GlobalData.ItemType.CONSUMABLE ## The type that this item is.
 @export var rarity: GlobalData.ItemRarity = GlobalData.ItemRarity.COMMON ## The rarity of this item.
 @export var weight: int = 0 ## If greater than 0, holding this item in the main hand will affect stats like speed.
@@ -23,7 +24,7 @@ class_name ItemResource
 @export_group("Equippability Details")
 @export var item_scene: PackedScene = null ## The equippable representation of this item.
 @export_range(0, 1, 0.01) var rotation_lerping: float = 0.1 ## How fast the rotation lerping should be while holding this item.
-@export var holding_offset: Vector2 = Vector2.ZERO ## The offset for placing the thumbnail of the sprite in the entity's hand.
+@export var holding_offset: Vector2 = Vector2.ZERO ## The offset for placing the icon of the sprite in the entity's hand.
 @export_custom(PROPERTY_HINT_NONE, "suffix:degrees") var holding_degrees: float = 0 ## The rotation offset for holding the thumnbail sprite in the entity's hand.
 @export_subgroup("Manual Hands Positioning")
 @export var is_gripped_by_one_hand: bool = true ## Whether or not this item should only have one hand shown gripping it.

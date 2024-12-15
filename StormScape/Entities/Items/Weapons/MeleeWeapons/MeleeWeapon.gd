@@ -6,7 +6,7 @@ class_name MeleeWeapon
 @export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var ghost_fade_time: float = 0.25 ## How long ghosts take to fade.
 
 @onready var anim_player: AnimationPlayer = $AnimationPlayer ## The animation controller for this melee weapon.
-@onready var hitbox_component: HitboxComponent = $AnimatedSprite2D/HitboxComponent ## The hitbox responsible for applying the melee hit.
+@onready var hitbox_component: HitboxComponent = %HitboxComponent ## The hitbox responsible for applying the melee hit.
 
 var cooldown_timer: Timer = Timer.new() ## The timer tracking how long after performing a normal swing you must wait before doing it again.
 var charge_cooldown_timer: Timer = Timer.new() ## The timer tracking how long after performing a charged swing you must wait before doing it again.
@@ -145,7 +145,7 @@ func _swing() -> void:
 
 		var lib: AnimationLibrary = anim_player.get_animation_library("MeleeWeaponAnimLibrary")
 		var anim: Animation = lib.get_animation("use")
-		var main_sprite_track: int = anim.find_track("AnimatedSprite2D:rotation", Animation.TYPE_VALUE)
+		var main_sprite_track: int = anim.find_track("ItemSprite:rotation", Animation.TYPE_VALUE)
 		anim.track_set_key_value(main_sprite_track, 1, deg_to_rad(stats.s_mods.get_stat("swing_angle")))
 
 		anim_player.speed_scale = 1.0 / stats.s_mods.get_stat("use_speed")
@@ -168,7 +168,7 @@ func _charge_swing(hold_time: float) -> void:
 
 		var lib: AnimationLibrary = anim_player.get_animation_library("MeleeWeaponAnimLibrary")
 		var anim: Animation = lib.get_animation("charge_use")
-		var main_sprite_track: int = anim.find_track("AnimatedSprite2D:rotation", Animation.TYPE_VALUE)
+		var main_sprite_track: int = anim.find_track("ItemSprite:rotation", Animation.TYPE_VALUE)
 		anim.track_set_key_value(main_sprite_track, 1, deg_to_rad(stats.s_mods.get_stat("charge_swing_angle")))
 
 		anim_player.speed_scale = 1.0 / stats.s_mods.get_stat("charge_use_speed")

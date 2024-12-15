@@ -1,0 +1,30 @@
+[gd_scene load_steps=5 format=3 uid="uid://vdrq4v5hjc06"]
+
+[ext_resource type="Script" path="res://Entities/Items/Projectiles/UniqueProjectile.gd" id="1_ckait"]
+[ext_resource type="Texture2D" uid="uid://c7i0hkkoanp61" path="res://Entities/Items/Weapons/ProjectileWeapons/Boomerang/boomerang_wood.png" id="2_xih7m"]
+[ext_resource type="Texture2D" uid="uid://dcbwxgak6a0r8" path="res://Entities/EntityCore/entity_shadow.png" id="3_ra4co"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_augvi"]
+radius = 9.23075
+height = 18.4615
+
+[node name="BoomerangWood" type="Area2D"]
+editor_description = "DO NOT SET EFFECT SOURCE IF BEING USED DIRECTLY WITH A WEAPON. THE WEAPON WILL SET IT FOR YOU."
+script = ExtResource("1_ckait")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+rotation = 1.5708
+shape = SubResource("CapsuleShape2D_augvi")
+debug_color = Color(0.626, 0.349, 1, 0.196)
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2_xih7m")
+region_rect = Rect2(2, 5, 12, 5)
+
+[node name="Shadow" type="Sprite2D" parent="."]
+self_modulate = Color(0.16, 0.16, 0.16, 0.185)
+top_level = true
+z_index = 1
+position = Vector2(0, 8)
+scale = Vector2(0.666667, 0.428572)
+texture = ExtResource("3_ra4co")
