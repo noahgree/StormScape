@@ -4570,7 +4570,8 @@ script = ExtResource("22_47ykm")
 y_sort_enabled = true
 script = ExtResource("8_g8y4o")
 
-[node name="Testing" type="Node" parent="WorldRoot"]
+[node name="Testing" type="Node2D" parent="WorldRoot"]
+y_sort_enabled = true
 
 [node name="TestRigidEntity" parent="WorldRoot/Testing" instance=ExtResource("9_37jga")]
 position = Vector2(127, 27)

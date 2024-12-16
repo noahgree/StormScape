@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://b3ytiwwwpms23"
-path="res://.godot/imported/revolver_base_thumb.png-df681f55903d765ad86cdcb27b419086.ctex"
+uid="uid://ces4hq54n2lxc"
+path="res://.godot/imported/normal_slot.png-f50b90a50fbf361c913bdc187fe4c9f9.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Entities/Items/Weapons/ProjectileWeapons/Revolver/revolver_base_thumb.png"
-dest_files=["res://.godot/imported/revolver_base_thumb.png-df681f55903d765ad86cdcb27b419086.ctex"]
+source_file="res://UI/Inventory/InventoryCore/Slot/normal_slot.png"
+dest_files=["res://.godot/imported/normal_slot.png-f50b90a50fbf361c913bdc187fe4c9f9.ctex"]
 
 [params]
 

@@ -2,6 +2,7 @@ extends InventoryUI
 class_name PlayerInvUI
 
 @export var hotbar_ui: NinePatchRect ## The hotbar UI to control visibility for.
+@export var wpn_mod_slots_ui: NinePatchRect ## The weapon mod slots UI to control visibility for.
 @export var btn_up_texture: Texture2D
 @export var btn_down_texture: Texture2D
 
@@ -16,6 +17,7 @@ var is_open: bool = false:
 		visible = new_value
 		GlobalData.focused_ui_is_open = new_value
 		hotbar_ui.visible = !new_value
+		wpn_mod_slots_ui.visible = !new_value
 		get_tree().paused = new_value
 		if new_value:
 			SignalBus.focused_ui_opened.emit()

@@ -2,6 +2,7 @@ extends NinePatchRect
 class_name ItemInteractionHUD
 ## The HUD that shows a prompt for when the player can pick up an item.
 
+@onready var texture_margins: MarginContainer = $TextureMargins
 @onready var item_texture: TextureRect = $TextureMargins/ItemTexture ## The texture of the item to pickup.
 @onready var quantity: Label = $Quantity ## The label showing the quantity of the item to pickup.
 @onready var item_glow: TextureRect = $ItemGlow ## The glow texture behind the item that represents its rarity.
@@ -14,6 +15,9 @@ func _ready() -> void:
 ## Shows the HUD after populating the appropriate item texture.
 func show_hud(item: Item) -> void:
 	item_texture.texture = item.stats.inv_icon
+	texture_margins.position = Vector2(16, 0) + item.stats.inv_icon_offset
+	texture_margins.rotation_degrees = item.stats.inv_icon_rotation
+
 	_update_glint(item.stats)
 	quantity.text = str(item.quantity)
 	visible = true
@@ -25,13 +29,13 @@ func hide_hud() -> void:
 	quantity.text = ""
 
 func _update_glint(stats: ItemResource) -> void:
+	var outline_width: float = (0.5 * (max(item_texture.texture.get_width(), item_texture.texture.get_height()) / 16.0))
+	item_texture.material.set_shader_parameter("width", outline_width)
+
 	item_texture.material.set_shader_parameter("outline_color", GlobalData.rarity_colors.outline_color.get(stats.rarity))
-	item_texture.material.set_shader_parameter("tint_color", GlobalData.rarity_colors.tint_color.get(stats.rarity))
 	var gradient_texture: GradientTexture1D = GradientTexture1D.new()
 	gradient_texture.gradient = Gradient.new()
 	gradient_texture.gradient.add_point(0, GlobalData.rarity_colors.glint_color.get(stats.rarity))
 	item_texture.material.set_shader_parameter("color_gradient", gradient_texture)
-	if stats.rarity == GlobalData.ItemRarity.EPIC or stats.rarity == GlobalData.ItemRarity.LEGENDARY or  stats.rarity == GlobalData.ItemRarity.SINGULAR:
-		item_glow.self_modulate = GlobalData.rarity_colors.slot_glow.get(stats.rarity)
-	else:
-		item_glow.self_modulate = Color(1.0, 1.0, 1.0, 0.0)
+
+	item_glow.self_modulate = GlobalData.rarity_colors.slot_glow.get(stats.rarity)

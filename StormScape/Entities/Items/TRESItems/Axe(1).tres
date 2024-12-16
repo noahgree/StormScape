@@ -13,7 +13,7 @@
 [sub_resource type="Resource" id="Resource_quay2"]
 script = ExtResource("1_x4rfe")
 source_type = 5
-source_tags = Array[String](["Axe"])
+source_tags = Array[String](["chops_wood"])
 scanned_phys_layers = 191
 can_hit_self = true
 bad_effect_affected_teams = 1
@@ -38,7 +38,7 @@ movement_direction = Vector2(0, 0)
 [sub_resource type="Resource" id="Resource_63o7k"]
 script = ExtResource("1_x4rfe")
 source_type = 5
-source_tags = Array[String](["Axe"])
+source_tags = Array[String](["chops_wood"])
 scanned_phys_layers = 191
 can_hit_self = false
 bad_effect_affected_teams = 1
@@ -115,6 +115,9 @@ original_charge_status_effects = Array[ExtResource("2_kry0o")]([])
 id = "axe"
 name = "Axe"
 tags = Array[String]([])
+inv_icon_rotation = 0.0
+inv_icon_offset = Vector2(0, 0)
+inv_icon_scale = Vector2(1, 1)
 inv_icon = ExtResource("1_c61qv")
 ground_icon = ExtResource("1_c61qv")
 in_hand_icon = ExtResource("1_c61qv")

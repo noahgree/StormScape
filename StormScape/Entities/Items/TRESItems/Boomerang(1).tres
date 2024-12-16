@@ -7,9 +7,9 @@
 [ext_resource type="Script" path="res://Entities/Items/Weapons/ProjectileWeapons/ProjWeaponResource.gd" id="3_qvjon"]
 [ext_resource type="Script" path="res://Entities/Items/Hitscans/HitscanResource.gd" id="3_sx4mp"]
 [ext_resource type="Script" path="res://Entities/Items/Projectiles/ProjectileResource.gd" id="4_5tlmk"]
-[ext_resource type="PackedScene" uid="uid://b6v13q8eomso" path="res://Entities/Items/Weapons/ProjectileWeapons/Boomerang/Boomerang.tscn" id="4_a8rwq"]
-[ext_resource type="PackedScene" uid="uid://vdrq4v5hjc06" path="res://Entities/Items/Projectiles/Boomerangs/BoomerangWood.tscn" id="5_hjdy4"]
+[ext_resource type="PackedScene" uid="uid://vdrq4v5hjc06" path="res://Entities/Items/Projectiles/Boomerangs/BoomerangWoodProj.tscn" id="5_ixbes"]
 [ext_resource type="Script" path="res://Entities/Stats/StatMod/StatModsCacheResource.gd" id="6_10jum"]
+[ext_resource type="PackedScene" uid="uid://b6v13q8eomso" path="res://Entities/Items/Weapons/ProjectileWeapons/Boomerang/BoomerangWood.tscn" id="7_f3xvq"]
 
 [sub_resource type="Resource" id="Resource_jge04"]
 script = ExtResource("1_rpmcv")
@@ -180,7 +180,7 @@ effect_falloff_curve = SubResource("Curve_tmkit")
 point_of_max_falloff = 350.0
 bad_effects_falloff = true
 good_effects_falloff = true
-max_pierce = 3
+max_pierce = 2
 max_ricochet = 0
 ricochet_angle_bounce = true
 ricochet_walls_only = true
@@ -193,7 +193,7 @@ homing_max_range = 300
 homing_duration = -1.0
 homing_start_delay = 0.0
 can_change_target = false
-boomerang_home_radius = 15.0
+boomerang_home_radius = 10.0
 mouse_target_radius = 50.0
 spin_speed = 800.0
 spin_both_ways = false
@@ -248,10 +248,10 @@ charge_bloom_mult = 5.0
 charge_cam_fx_mult = 1.0
 charge_firing_sound = ""
 charging_sound = ""
-projectile_scn = ExtResource("5_hjdy4")
+projectile_scn = ExtResource("5_ixbes")
 projectile_logic = SubResource("Resource_075k1")
 hitscan_logic = SubResource("Resource_2m5jx")
-charge_projectile_scn = ExtResource("5_hjdy4")
+charge_projectile_scn = ExtResource("5_ixbes")
 charge_projectile_logic = SubResource("Resource_dos7y")
 charge_hitscan_logic = SubResource("Resource_pp6gn")
 ammo_type = 8
@@ -289,6 +289,9 @@ original_charge_status_effects = Array[ExtResource("1_71p75")]([])
 id = "boomerang"
 name = "Boomerang"
 tags = Array[String]([])
+inv_icon_rotation = 0.0
+inv_icon_offset = Vector2(0, 0)
+inv_icon_scale = Vector2(1, 1)
 inv_icon = ExtResource("1_83uvj")
 ground_icon = ExtResource("1_83uvj")
 in_hand_icon = ExtResource("1_83uvj")
@@ -302,7 +305,7 @@ info = "A throwable projectile that always finds its way home."
 recipe = Array[ExtResource("2_jgihx")]([])
 output_quantity = 1
 recipe_unlocked = false
-item_scene = ExtResource("4_a8rwq")
+item_scene = ExtResource("7_f3xvq")
 rotation_lerping = 0.08
 holding_offset = Vector2(0, -6)
 holding_degrees = 0.0

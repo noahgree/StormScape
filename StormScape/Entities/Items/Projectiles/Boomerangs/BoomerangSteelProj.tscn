@@ -8,7 +8,7 @@
 radius = 9.23075
 height = 18.4615
 
-[node name="BoomerangSteel" type="Area2D"]
+[node name="BoomerangSteelProj" type="Area2D"]
 editor_description = "DO NOT SET EFFECT SOURCE IF BEING USED DIRECTLY WITH A WEAPON. THE WEAPON WILL SET IT FOR YOU."
 script = ExtResource("1_nc3c8")
 

@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="ProjWeaponResource" load_steps=26 format=3 uid="uid://dlfmjgnfk6nqj"]
+[gd_resource type="Resource" script_class="ProjWeaponResource" load_steps=25 format=3 uid="uid://dlfmjgnfk6nqj"]
 
 [ext_resource type="Script" path="res://Entities/Stats/EffectSystemResources/StatusEffects/StatusEffect.gd" id="1_dlrja"]
 [ext_resource type="Script" path="res://Entities/Stats/EffectSystemResources/EffectSources/EffectSource.gd" id="1_f7ms2"]
@@ -8,7 +8,6 @@
 [ext_resource type="Script" path="res://Entities/Items/Hitscans/HitscanResource.gd" id="3_hy3sc"]
 [ext_resource type="PackedScene" uid="uid://ohg1k8yu1y3r" path="res://Entities/Items/Weapons/ProjectileWeapons/Revolver/Revolver.tscn" id="4_p3ec7"]
 [ext_resource type="Script" path="res://Entities/Items/Projectiles/ProjectileResource.gd" id="5_u6crx"]
-[ext_resource type="Texture2D" uid="uid://b3ytiwwwpms23" path="res://Entities/Items/Weapons/ProjectileWeapons/Revolver/revolver_base_thumb.png" id="6_c6wnj"]
 [ext_resource type="PackedScene" uid="uid://bqkyplubhsx43" path="res://Entities/Items/Projectiles/Bullets/SmallBullet/SmallBullet.tscn" id="6_moxye"]
 [ext_resource type="Script" path="res://Entities/Stats/StatMod/StatModsCacheResource.gd" id="8_fox7e"]
 
@@ -309,7 +308,10 @@ original_charge_status_effects = Array[ExtResource("1_dlrja")]([])
 id = "revolver"
 name = "Revolver"
 tags = Array[String]([])
-inv_icon = ExtResource("6_c6wnj")
+inv_icon_rotation = -38.0
+inv_icon_offset = Vector2(1, 0)
+inv_icon_scale = Vector2(1.05, 1.05)
+inv_icon = ExtResource("3_5qbqn")
 ground_icon = ExtResource("3_5qbqn")
 in_hand_icon = ExtResource("3_5qbqn")
 item_type = 1
@@ -318,7 +320,7 @@ weight = 0
 stack_size = 1
 auto_pickup = false
 pickup_radius = 5
-info = "A simple revolver. Good at short to medium range at dealing accurate damage."
+info = "A simple revolver. Good in short to medium range at dealing accurate damage."
 recipe = Array[ExtResource("2_ikjj6")]([])
 output_quantity = 1
 recipe_unlocked = false

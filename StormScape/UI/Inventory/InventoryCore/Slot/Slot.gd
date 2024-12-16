@@ -8,11 +8,14 @@ signal is_not_hovered_over() ## Emitted when a slot is no longer being hovered o
 
 @export var drag_preview: PackedScene = load("res://UI/Inventory/InventoryCore/Slot/SlotDragPreview.tscn") ## The control preview for a dragged slot.
 @export var default_slot_texture: Texture2D
-@export var active_slot_texture: Texture2D
+@export var no_item_slot_texture: Texture2D
 
+@onready var texture_margins: MarginContainer = $TextureMargins ## The item texture margins node for this slot.
+@onready var back_color: ColorRect = $BackColor ## The color behind the item.
 @onready var item_texture: TextureRect = $TextureMargins/ItemTexture ## The item texture node for this slot.
 @onready var quantity: Label = $QuantityMargins/Quantity ## The quantity label for this slot.
 @onready var rarity_glow: TextureRect = $RarityGlow
+@onready var selected_texture: TextureRect = $SelectedTexture
 
 var index: int ## The index that this slot represents inside the inventory.
 var synced_inv: Inventory ## The synced inventory that this slot is a part of.
@@ -29,19 +32,26 @@ func _set_item(new_item: InvItemResource) -> void:
 	if item:
 		if item.quantity > 0:
 			item_texture.texture = item.stats.inv_icon
-			item_texture.material.set_shader_parameter("outline_color", GlobalData.rarity_colors.outline_color.get(item.stats.rarity))
-			item_texture.material.set_shader_parameter("tint_color", GlobalData.rarity_colors.tint_color.get(item.stats.rarity))
+
+			back_color.color = GlobalData.rarity_colors.slot_fill.get(item.stats.rarity)
+			back_color.show()
+
+			item_texture.material.set_shader_parameter("width", 0.0)
+
+			texture_margins.rotation_degrees = item.stats.inv_icon_rotation
+			texture_margins.position = item.stats.inv_icon_offset
+			texture_margins.scale = item.stats.inv_icon_scale
+
+			rarity_glow.self_modulate = GlobalData.rarity_colors.slot_glow.get(item.stats.rarity)
+			rarity_glow.show()
 
 			if item.stats.rarity == GlobalData.ItemRarity.EPIC or item.stats.rarity == GlobalData.ItemRarity.LEGENDARY or item.stats.rarity == GlobalData.ItemRarity.SINGULAR:
-				rarity_glow.self_modulate = GlobalData.rarity_colors.slot_glow.get(item.stats.rarity)
-				rarity_glow.show()
 				var gradient_texture: GradientTexture1D = GradientTexture1D.new()
 				gradient_texture.gradient = Gradient.new()
 				gradient_texture.gradient.add_point(0, GlobalData.rarity_colors.glint_color.get(item.stats.rarity))
 				item_texture.material.set_shader_parameter("color_gradient", gradient_texture)
 				item_texture.material.set_shader_parameter("highlight_strength", 0.4)
 			else:
-				rarity_glow.hide()
 				item_texture.material.set_shader_parameter("highlight_strength", 0.0)
 
 			if item.quantity > 1:
@@ -53,18 +63,26 @@ func _set_item(new_item: InvItemResource) -> void:
 			item_texture.texture = null
 			quantity.text = ""
 			rarity_glow.hide()
+			back_color.hide()
+			texture_margins.rotation = 0
+			texture_margins.position = Vector2.ZERO
+			texture_margins.scale = Vector2.ONE
 			return
 	else:
 		item_texture.texture = null
 		quantity.text = ""
 		rarity_glow.hide()
+		back_color.hide()
+		texture_margins.rotation = 0
+		texture_margins.position = Vector2.ZERO
+		texture_margins.scale = Vector2.ONE
 
 ## Connects relevant mouse entered and exited functions.
 func _ready() -> void:
 	mouse_entered.connect(func() -> void: is_hovered_over.emit(index))
 	mouse_exited.connect(func() -> void: is_not_hovered_over.emit())
 	rarity_glow.hide()
-	item_texture.material.set_shader_parameter("width", 0.5)
+	selected_texture.hide()
 	item_texture.material.set_shader_parameter("highlight_strength", 0.0)
 
 ## Gets a reference to the data from the slot where the drag originated.
@@ -85,19 +103,28 @@ func _make_drag_preview(at_position: Vector2) -> Control:
 	var c: Control = Control.new()
 	if item and item.stats.inv_icon and item.quantity > 0:
 		var preview_scene: Control = drag_preview.instantiate()
+
 		preview_scene.get_node("TextureMargins/ItemTexture").texture = item.stats.inv_icon
-		preview_scene.get_node("TextureMargins/ItemTexture").material.set_shader_parameter("width", 0.5)
+
+		preview_scene.get_node("TextureMargins").rotation_degrees = item.stats.inv_icon_rotation
+		preview_scene.get_node("TextureMargins").position = item.stats.inv_icon_offset
+		preview_scene.get_node("TextureMargins").scale = item.stats.inv_icon_scale
+
+		var outline_width: float = (0.5 * (max(item_texture.texture.get_width() / item.stats.inv_icon_scale.x, item_texture.texture.get_height() / item.stats.inv_icon_scale.y) / 16.0))
+		preview_scene.get_node("TextureMargins/ItemTexture").material.set_shader_parameter("width", outline_width)
 		preview_scene.get_node("TextureMargins/ItemTexture").material.set_shader_parameter("highlight_strength", 0.0)
 		preview_scene.get_node("TextureMargins/ItemTexture").material.set_shader_parameter("outline_color", GlobalData.rarity_colors.outline_color.get(item.stats.rarity))
-		preview_scene.get_node("TextureMargins/ItemTexture").material.set_shader_parameter("tint_color", GlobalData.rarity_colors.tint_color.get(item.stats.rarity))
+
 		if dragging_only_one:
 			preview_scene.get_node("QuantityMargins/Quantity").text = str(1)
 		elif dragging_half_stack:
 			preview_scene.get_node("QuantityMargins/Quantity").text = str(int(floor(item.quantity / 2.0)))
 		else:
 			preview_scene.get_node("QuantityMargins/Quantity").text = str(item.quantity)
+
 		preview_scene.modulate.a = 0.65
 		preview_scene.position = -at_position
+
 		c.add_child(preview_scene)
 	return c
 
@@ -307,9 +334,13 @@ func _on_mouse_entered() -> void:
 			modulate = Color(1.2, 1.2, 1.2, 1.0)
 			if item == null:
 				item_texture.texture = drag_data.item_texture.texture
+				texture_margins.rotation_degrees = drag_data.item.stats.inv_icon_rotation
+				texture_margins.position = drag_data.item.stats.inv_icon_offset
+				texture_margins.scale = drag_data.item.stats.inv_icon_scale
 				item_texture.modulate.a = 0.5
+				var outline_width: float = (0.5 * (max(item_texture.texture.get_width() / drag_data.item.stats.inv_icon_scale.x, item_texture.texture.get_height() / drag_data.item.stats.inv_icon_scale.y) / 16.0))
+				item_texture.material.set_shader_parameter("width", outline_width)
 				item_texture.material.set_shader_parameter("outline_color", GlobalData.rarity_colors.outline_color.get(drag_data.item.stats.rarity))
-				item_texture.material.set_shader_parameter("tint_color", GlobalData.rarity_colors.tint_color.get(drag_data.item.stats.rarity))
 
 ## When mouse exits, if we are dragging, remove effects on this slot.
 func _on_mouse_exited() -> void:
@@ -321,6 +352,9 @@ func _on_mouse_exited() -> void:
 	modulate = Color(1, 1, 1, 1)
 	if item == null and drag_data:
 		item_texture.texture = null
+		texture_margins.rotation = 0
+		texture_margins.position = Vector2.ZERO
+		texture_margins.scale = Vector2.ONE
 		item_texture.modulate.a = 1.0
 
 ## When the system is notifed of a drag being over, call the method that resets slot highlight and drag preview effects.
@@ -335,10 +369,11 @@ func _reset_post_drag_mods() -> void:
 	modulate = Color(1, 1, 1, 1)
 	if item == null:
 		item_texture.texture = null
+		texture_margins.rotation = 0
+		texture_margins.position = Vector2.ZERO
+		texture_margins.scale = Vector2.ONE
 	elif item.quantity > 1:
 		quantity.text = str(item.quantity)
-		item_texture.material.set_shader_parameter("outline_color", GlobalData.rarity_colors.outline_color.get(item.stats.rarity))
-		item_texture.material.set_shader_parameter("tint_color", GlobalData.rarity_colors.tint_color.get(item.stats.rarity))
 	item_texture.modulate.a = 1.0
 
 ## Custom string representation of the item in this slot.

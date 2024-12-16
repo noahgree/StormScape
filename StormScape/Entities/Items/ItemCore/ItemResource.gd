@@ -5,6 +5,9 @@ class_name ItemResource
 @export var id: String ## The unique identifier for the item.
 @export var name: String ## The item's string name.
 @export var tags: Array[String] = [] ## The set of tags that are checked against when this item is potentially used for crafting.
+@export_range(-360, 360, 1, "suffix:degrees") var inv_icon_rotation: float = 0 ## How much to rotate the inv icon in a slot.
+@export var inv_icon_offset: Vector2 = Vector2.ZERO ## How much to offset the inv icon in a slot.
+@export var inv_icon_scale: Vector2 = Vector2.ONE ## How much to scale the inv icon in a slot.
 @export var inv_icon: Texture2D ## The inventory representation of the item.
 @export var ground_icon: Texture2D ## The on-ground representation of the item.
 @export var in_hand_icon: Texture2D ## The physical representation of the item.

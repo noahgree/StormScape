@@ -31,7 +31,8 @@ func _setup_slots() -> void:
 		hotbar.add_child(slot)
 
 	active_slot = hotbar_slots[0]
-	active_slot.texture = active_slot.active_slot_texture
+	await get_tree().process_frame
+	_apply_selected_slot_fx()
 
 ## When receiving the signal that a slot has changed, update the visuals.
 func _on_slot_updated(index: int, item: InvItemResource) -> void:
@@ -56,17 +57,36 @@ func _input(_event: InputEvent) -> void:
 		scroll_debounce_timer.start()
 
 func _change_active_slot_by_count(index_count: int) -> void:
-	active_slot.texture = active_slot.default_slot_texture
+	_remove_selected_slot_fx()
 	var non_hotbar_size: int = player_inv.inv_size - player_inv.hotbar_size
 	var new_index: int = ((active_slot.index - non_hotbar_size) + index_count) % hotbar_slots.size()
 	if new_index < 0:
 		new_index += hotbar_slots.size()
 	active_slot = hotbar_slots[new_index]
-	active_slot.texture = active_slot.active_slot_texture
+	_apply_selected_slot_fx()
 	GlobalData.player_node.hands.on_equipped_item_change(active_slot)
 
 func _change_active_slot_to_index_relative_to_full_inventory_size(new_index: int) -> void:
-	active_slot.texture = active_slot.default_slot_texture
+	_remove_selected_slot_fx()
 	active_slot = hotbar_slots[new_index - (player_inv.inv_size - player_inv.hotbar_size)]
-	active_slot.texture = active_slot.active_slot_texture
+	_apply_selected_slot_fx()
+
 	GlobalData.player_node.hands.on_equipped_item_change(active_slot)
+
+func _remove_selected_slot_fx() -> void:
+	active_slot.selected_texture.hide()
+	active_slot.texture = active_slot.default_slot_texture
+	active_slot.scale = Vector2.ONE
+	active_slot.z_index = 0
+
+func _apply_selected_slot_fx() -> void:
+	active_slot.selected_texture.show()
+	active_slot.texture = active_slot.no_item_slot_texture
+	active_slot.scale = Vector2(1.15, 1.15)
+	active_slot.z_index = 1
+
+func _on_visibility_changed() -> void:
+	if visible and is_node_ready():
+		await get_tree().process_frame
+		await get_tree().process_frame
+		_apply_selected_slot_fx()

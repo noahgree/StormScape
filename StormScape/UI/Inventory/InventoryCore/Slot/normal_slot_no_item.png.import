@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bn8ys1gg15slv"
-path="res://.godot/imported/cratershot_base_thumb.png-1a09743aed17963ed7ce2b4661594a17.ctex"
+uid="uid://3ygb1pbykma1"
+path="res://.godot/imported/normal_slot_no_item.png-081243f8170ee5b88093631ac73f2e6c.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Entities/Items/Weapons/ProjectileWeapons/Cratershot/cratershot_base_thumb.png"
-dest_files=["res://.godot/imported/cratershot_base_thumb.png-1a09743aed17963ed7ce2b4661594a17.ctex"]
+source_file="res://UI/Inventory/InventoryCore/Slot/normal_slot_no_item.png"
+dest_files=["res://.godot/imported/normal_slot_no_item.png-081243f8170ee5b88093631ac73f2e6c.ctex"]
 
 [params]
 

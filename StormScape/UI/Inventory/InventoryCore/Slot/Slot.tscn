@@ -1,10 +1,11 @@
-[gd_scene load_steps=11 format=3 uid="uid://m4ur3n2hwsp8"]
+[gd_scene load_steps=12 format=3 uid="uid://m4ur3n2hwsp8"]
 
-[ext_resource type="Texture2D" uid="uid://bckcwc1xslu54" path="res://UI/Inventory/InventoryCore/Slot/clear_slot.png" id="1_keqf5"]
+[ext_resource type="Texture2D" uid="uid://ces4hq54n2lxc" path="res://UI/Inventory/InventoryCore/Slot/normal_slot.png" id="1_tu6a1"]
 [ext_resource type="Script" path="res://UI/Inventory/InventoryCore/Slot/Slot.gd" id="2_ywtjc"]
 [ext_resource type="PackedScene" uid="uid://bacsel0a5l2iu" path="res://UI/Inventory/InventoryCore/Slot/SlotDragPreview.tscn" id="3_2ljmb"]
 [ext_resource type="FontVariation" uid="uid://blgkcg6c83yln" path="res://Assets/Theming/Fonts/GameFontResources/ui_pixel_font.tres" id="3_dimqv"]
 [ext_resource type="Texture2D" uid="uid://bopljhr43p6fx" path="res://UI/Inventory/InventoryCore/Slot/clear_slot_selected.png" id="4_jiyo0"]
+[ext_resource type="Texture2D" uid="uid://3ygb1pbykma1" path="res://UI/Inventory/InventoryCore/Slot/normal_slot_no_item.png" id="4_ylk5m"]
 [ext_resource type="Texture2D" uid="uid://dbm40lvpgbd8t" path="res://Entities/Items/ItemCore/Particles/item_rarity_light.png" id="5_dhreg"]
 [ext_resource type="Shader" path="res://UI/Shaders/GlintShader.gdshader" id="6_l1uky"]
 
@@ -40,29 +41,54 @@ shadow_offset = Vector2(0, 0)
 [node name="Slot" type="NinePatchRect"]
 clip_contents = true
 custom_minimum_size = Vector2(22, 22)
+offset_right = 22.0
+offset_bottom = 22.0
+pivot_offset = Vector2(11, 11)
 size_flags_horizontal = 4
 mouse_filter = 1
-texture = ExtResource("1_keqf5")
+texture = ExtResource("1_tu6a1")
 patch_margin_left = 1
 patch_margin_top = 1
 patch_margin_right = 1
 patch_margin_bottom = 1
 script = ExtResource("2_ywtjc")
 drag_preview = ExtResource("3_2ljmb")
-default_slot_texture = ExtResource("1_keqf5")
-active_slot_texture = ExtResource("4_jiyo0")
+default_slot_texture = ExtResource("1_tu6a1")
+no_item_slot_texture = ExtResource("4_ylk5m")
+
+[node name="BackColor" type="ColorRect" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -10.0
+offset_top = -10.0
+offset_right = 10.0
+offset_bottom = 10.0
+grow_horizontal = 2
+grow_vertical = 2
 
 [node name="RarityGlow" type="TextureRect" parent="."]
-visible = false
+self_modulate = Color(0.992144, 0.796898, 0.818481, 1)
 material = SubResource("CanvasItemMaterial_raets")
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -12.0
+offset_top = -12.0
+offset_right = 12.0
+offset_bottom = 12.0
 grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("5_dhreg")
 expand_mode = 1
+stretch_mode = 6
 
 [node name="TextureMargins" type="MarginContainer" parent="."]
 layout_mode = 1
@@ -82,7 +108,7 @@ material = SubResource("ShaderMaterial_h48ps")
 custom_minimum_size = Vector2(16, 16)
 layout_mode = 2
 expand_mode = 1
-stretch_mode = 6
+stretch_mode = 5
 
 [node name="QuantityMargins" type="MarginContainer" parent="."]
 layout_mode = 1
@@ -104,6 +130,23 @@ size_flags_vertical = 8
 label_settings = SubResource("LabelSettings_kd5f7")
 horizontal_alignment = 2
 vertical_alignment = 1
+
+[node name="SelectedTexture" type="TextureRect" parent="."]
+visible = false
+custom_minimum_size = Vector2(22, 22)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -11.0
+offset_top = -11.0
+offset_right = 11.0
+offset_bottom = 11.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("4_jiyo0")
 
 [connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]
 [connection signal="mouse_exited" from="." to="." method="_on_mouse_exited"]

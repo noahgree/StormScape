@@ -72,10 +72,8 @@ infinte_hp = true
 
 [node name="EffectReceiverComponent" parent="." node_paths=PackedStringArray("affected_entity", "health_component", "loot_table_component", "dmg_handler", "burning_handler") instance=ExtResource("6_bxml6")]
 absorb_full_hit = true
-filter_source_types = true
-allowed_source_types = Array[int]([5])
 filter_source_tags = true
-allowed_source_tags = Array[String](["Axe"])
+allowed_source_tags = Array[String](["chops_wood"])
 affected_entity = NodePath("..")
 health_component = NodePath("../HealthComponent")
 loot_table_component = NodePath("../LootTableComponent")
