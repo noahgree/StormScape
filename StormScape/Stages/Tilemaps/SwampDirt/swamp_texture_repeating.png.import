@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c70ga01h7omec"
-path="res://.godot/imported/TilesetWater.png-2a4aefac221ef26722e26faaac17c812.ctex"
+uid="uid://crqa3kb7ndjr5"
+path="res://.godot/imported/swamp_texture_repeating.png-f04d8d535420073f1dc6aa6818225c15.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Stages/Tilemaps/Old/TilesetWater.png"
-dest_files=["res://.godot/imported/TilesetWater.png-2a4aefac221ef26722e26faaac17c812.ctex"]
+source_file="res://Stages/Tilemaps/SwampDirt/swamp_texture_repeating.png"
+dest_files=["res://.godot/imported/swamp_texture_repeating.png-f04d8d535420073f1dc6aa6818225c15.ctex"]
 
 [params]
 

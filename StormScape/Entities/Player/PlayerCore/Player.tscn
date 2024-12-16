@@ -2446,9 +2446,6 @@ grow_vertical = 2
 size_flags_vertical = 4
 region_rect = Rect2(0, 0, 20, 20)
 
-[node name="RarityGlow" parent="PlayerUILayer/PlayerInvUI/TrashSlotPanel/TrashSlot" index="1"]
-visible = false
-
 [node name="ItemTexture" parent="PlayerUILayer/PlayerInvUI/TrashSlotPanel/TrashSlot/TextureMargins" index="0"]
 material = SubResource("ShaderMaterial_pc124")
 

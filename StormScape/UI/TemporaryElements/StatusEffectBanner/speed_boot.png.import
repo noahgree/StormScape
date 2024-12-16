@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://6saycs5sisdk"
-path="res://.godot/imported/TILESET_GRASSDIRT.png-1a45ff7a3cdc8e9ab77b4e41ebf079fe.ctex"
+uid="uid://diq0qnk7nax58"
+path="res://.godot/imported/speed_boot.png-ef329337f873315766d8f4ac774a1157.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Stages/Tilemaps/GrassDirt/TILESET_GRASSDIRT.png"
-dest_files=["res://.godot/imported/TILESET_GRASSDIRT.png-1a45ff7a3cdc8e9ab77b4e41ebf079fe.ctex"]
+source_file="res://UI/TemporaryElements/StatusEffectBanner/speed_boot.png"
+dest_files=["res://.godot/imported/speed_boot.png-ef329337f873315766d8f4ac774a1157.ctex"]
 
 [params]
 

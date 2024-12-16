@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://nvl4eoe0gf5y"
-path="res://.godot/imported/TilesetField.png-335b1a3d7c008cc01ec25e90f44e5c50.ctex"
+uid="uid://6saycs5sisdk"
+path="res://.godot/imported/dirt_replacement_RED.png-82792b265f56d2c929d6c51b7b079752.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Stages/Tilemaps/Old/TilesetField.png"
-dest_files=["res://.godot/imported/TilesetField.png-335b1a3d7c008cc01ec25e90f44e5c50.ctex"]
+source_file="res://Stages/Tilemaps/ReplacementTextures/dirt_replacement_RED.png"
+dest_files=["res://.godot/imported/dirt_replacement_RED.png-82792b265f56d2c929d6c51b7b079752.ctex"]
 
 [params]
 

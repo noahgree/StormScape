@@ -8,8 +8,8 @@
 [ext_resource type="Texture2D" uid="uid://dp618rrm5wywy" path="res://UI/TemporaryElements/StatusEffectBanner/clocks.png" id="5_11lnt"]
 [ext_resource type="Texture2D" uid="uid://n85wp2rkfw7t" path="res://UI/TemporaryElements/StatusEffectBanner/heart.png" id="5_iqa26"]
 [ext_resource type="Texture2D" uid="uid://pcfm1w4oe8wi" path="res://UI/TemporaryElements/StatusEffectBanner/snail.png" id="5_r45v0"]
+[ext_resource type="Texture2D" uid="uid://diq0qnk7nax58" path="res://UI/TemporaryElements/StatusEffectBanner/speed_boot.png" id="6_7a2tl"]
 [ext_resource type="Texture2D" uid="uid://b2jcsvncxjns3" path="res://UI/TemporaryElements/StatusEffectBanner/lightning.png" id="6_nm738"]
-[ext_resource type="Texture2D" uid="uid://cfdtcke5ye6kv" path="res://UI/TemporaryElements/StatusEffectBanner/speed_arrows.png" id="6_tths5"]
 [ext_resource type="Texture2D" uid="uid://dngm6pnhj25hq" path="res://UI/TemporaryElements/StatusEffectBanner/shield.png" id="11_psfp8"]
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_w7ucw"]
@@ -82,9 +82,8 @@ offsets = PackedFloat32Array(0, 0.138783, 0.830799, 1)
 colors = PackedColorArray(0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0)
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_d6sk5"]
-blend_mode = 1
 particles_animation = true
-particles_anim_h_frames = 5
+particles_anim_h_frames = 6
 particles_anim_v_frames = 1
 particles_anim_loop = true
 
@@ -285,26 +284,25 @@ anim_offset_max = 1.0
 [node name="SpeedParticles" type="CPUParticles2D" parent="."]
 material = SubResource("CanvasItemMaterial_d6sk5")
 emitting = false
-amount = 7
+amount = 5
 lifetime = 2.0
-lifetime_randomness = 0.15
 local_coords = true
-texture = ExtResource("6_tths5")
+texture = ExtResource("6_7a2tl")
 emission_shape = 2
 emission_sphere_radius = 1.0
 direction = Vector2(0, -1)
 spread = 25.0
 gravity = Vector2(0, 0)
 initial_velocity_max = 3.0
-orbit_velocity_min = -0.05
-orbit_velocity_max = 0.05
-scale_amount_min = 0.35
-scale_amount_max = 0.6
+orbit_velocity_min = -0.25
+orbit_velocity_max = 0.25
+scale_amount_min = 0.4
+scale_amount_max = 0.65
 scale_amount_curve = SubResource("Curve_u7tg0")
-color = Color(5, 5, 5, 1)
+color = Color(4, 4, 4, 1)
 color_ramp = SubResource("Gradient_fu7ho")
-anim_speed_min = 2.0
-anim_speed_max = 3.0
+anim_speed_min = 2.65
+anim_speed_max = 2.65
 anim_offset_max = 1.0
 
 [node name="TimeSnareParticles" type="CPUParticles2D" parent="."]

@@ -72,6 +72,7 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="RarityGlow" type="TextureRect" parent="."]
+visible = false
 self_modulate = Color(0.992144, 0.796898, 0.818481, 1)
 material = SubResource("CanvasItemMaterial_raets")
 layout_mode = 1
