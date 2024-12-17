@@ -50,7 +50,7 @@ enum ItemRarity {
 	COMMON, UNCOMMON, RARE, EPIC, LEGENDARY, SINGULAR
 }
 enum ProjAmmoType {
-	NONE, LIGHT, MEDIUM, HEAVY, SHELL, ROCKET, MAGIC, ION_CHARGE, STAMINA
+	NONE, SELF, LIGHT, MEDIUM, HEAVY, SHELL, ROCKET, MAGIC, ION_CHARGE, STAMINA
 }
 const rarity_colors: Dictionary = {
 	"ground_glow" : {

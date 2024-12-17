@@ -13,6 +13,7 @@ class_name ProjectileWeapon
 @onready var proj_origin_node: Marker2D = $ProjectileOrigin ## The point at which projectiles should spawn from.
 
 #region Local Vars
+var ammo_ui: CenterContainer ## The ui assigned by the hands component that displays the ammo. Only for the player.
 var fire_cooldown_timer: Timer = Timer.new() ## The timer tracking time between firing shots.
 var firing_duration_timer: Timer = Timer.new() ## The timer tracking how long after we press fire before the proj spawns.
 var mag_reload_timer: Timer = Timer.new() ## The timer tracking the delay between full mag reload start and end.
@@ -119,6 +120,9 @@ func _setup_mod_cache() -> void:
 func _ready() -> void:
 	if not Engine.is_editor_hint():
 		super._ready()
+		if stats.ammo_type == GlobalData.ProjAmmoType.STAMINA:
+			if source_entity is DynamicEntity:
+				source_entity.stamina_component.stamina_changed.connect(_update_ammo_ui)
 
 		add_child(fire_cooldown_timer)
 		add_child(firing_duration_timer)
@@ -155,6 +159,7 @@ func enter() -> void:
 		stats.ammo_in_mag = stats.mag_size
 	else:
 		_get_has_needed_ammo_and_reload_if_not()
+	_update_ammo_ui()
 
 	if stats.fire_cooldown_left > 0:
 		fire_cooldown_timer.start(stats.fire_cooldown_left)
@@ -280,7 +285,7 @@ func release_hold_activate(hold_time: float) -> void:
 
 ## Called from the hands component to try and start a reload.
 func reload() -> void:
-	if stats.ammo_type != GlobalData.ProjAmmoType.STAMINA:
+	if stats.ammo_type != GlobalData.ProjAmmoType.STAMINA and stats.ammo_type != GlobalData.ProjAmmoType.SELF:
 		if pullout_delay_timer.is_stopped() and mag_reload_timer.is_stopped() and single_reload_timer.is_stopped():
 			if not is_reloading:
 				_attempt_reload()
@@ -474,13 +479,6 @@ func _spawn_hitscan(hitscan: Hitscan, was_charge_fire: bool = false) -> void:
 
 	await fire_cooldown_timer.timeout
 	_get_has_needed_ammo_and_reload_if_not(was_charge_fire)
-
-## Takes away either the passed in amount from the appropriate ammo reserve.
-func _consume_ammo(amount: int) -> void:
-	if stats.ammo_type == GlobalData.ProjAmmoType.STAMINA:
-		(source_entity as DynamicEntity).stamina_component.use_stamina(amount * stats.stamina_use_per_proj)
-	else:
-		stats.ammo_in_mag -= amount
 #endregion
 
 #region Warmth & Bloom
@@ -569,6 +567,8 @@ func _get_has_needed_ammo_and_reload_if_not(was_charge_fire: bool = false) -> bo
 		var stamina_uses_left: int = int(floor(source_entity.stamina_component.stamina / (ammo_needed * stats.stamina_use_per_proj)))
 		if stamina_uses_left > 0:
 			result = true
+	elif stats.ammo_type == GlobalData.ProjAmmoType.SELF:
+		result = true
 	else:
 		if stats.ammo_in_mag >= ammo_needed:
 			result = true
@@ -579,6 +579,17 @@ func _get_has_needed_ammo_and_reload_if_not(was_charge_fire: bool = false) -> bo
 					AudioManager.play_sound(stats.empty_mag_sound, AudioManager.SoundType.SFX_GLOBAL)
 
 	return result
+
+## Takes away either the passed in amount from the appropriate ammo reserve.
+func _consume_ammo(amount: int) -> void:
+	if stats.ammo_type == GlobalData.ProjAmmoType.STAMINA:
+		(source_entity as DynamicEntity).stamina_component.use_stamina(amount * stats.stamina_use_per_proj)
+	elif stats.ammo_type == GlobalData.ProjAmmoType.SELF:
+		source_entity.inv.remove_item(source_slot.index, 1)
+	else:
+		stats.ammo_in_mag -= amount
+
+	_update_ammo_ui()
 
 ## Based on the reload method, starts the timer(s) needed to track how long the reload will take.
 func _attempt_reload() -> void:
@@ -594,6 +605,8 @@ func _attempt_reload() -> void:
 		if ammo_available > 0:
 			single_reload_timer.set_meta("reloads_left", ammo_needed)
 			single_reload_timer.start(stats.s_mods.get_stat("single_proj_reload_time"))
+		else:
+			is_reloading = false
 	else:
 		mag_reload_timer.start(stats.s_mods.get_stat("mag_reload_time"))
 		await mag_reload_timer.timeout
@@ -601,6 +614,7 @@ func _attempt_reload() -> void:
 		if ammo_available > 0:
 			if stats.mag_reload_sound != "": AudioManager.play_sound(stats.mag_reload_sound, AudioManager.SoundType.SFX_GLOBAL)
 		stats.ammo_in_mag += ammo_available
+		_update_ammo_ui()
 		is_reloading = false
 
 ## Searches through the source entity's inventory for more ammo to fill the magazine. Can optionally be used to only check for ammo
@@ -632,8 +646,22 @@ func _on_single_reload_timer_timeout() -> void:
 		if ammo_available == 1:
 			if stats.proj_reload_sound != "": AudioManager.play_sound(stats.proj_reload_sound, AudioManager.SoundType.SFX_GLOBAL)
 			stats.ammo_in_mag += ammo_available
+			_update_ammo_ui()
 			single_reload_timer.set_meta("reloads_left", reloads_left - 1)
 			single_reload_timer.start(stats.s_mods.get_stat("single_proj_reload_time"))
 	else:
 		is_reloading = false
+
+## Updates the ammo UI with the ammo in the magazine, assuming this is being used by a Player and the weapon uses
+## consumable ammo.
+func _update_ammo_ui() -> void:
+	if ammo_ui != null:
+		var count: int = -1
+		if stats.ammo_type == GlobalData.ProjAmmoType.SELF:
+			count = source_slot.item.quantity
+		elif stats.ammo_type == GlobalData.ProjAmmoType.STAMINA:
+			count = source_entity.stamina_component.stamina
+		elif stats.ammo_type != GlobalData.ProjAmmoType.NONE:
+			count = stats.ammo_in_mag
+		ammo_ui.update_mag_ammo(count)
 #endregion

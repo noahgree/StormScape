@@ -46,5 +46,5 @@ stat_mods = Array[ExtResource("2_l733c")]([SubResource("Resource_wakq2"), SubRes
 audio_to_play = ""
 only_cue_on_player_hit = false
 spawn_particles = true
+particle_hander_req = ""
 update_entity_glow = true
-particles_req_handler = false

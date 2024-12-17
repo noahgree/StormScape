@@ -17,4 +17,5 @@ stat_mods = Array[ExtResource("2_vysiy")]([])
 audio_to_play = ""
 only_cue_on_player_hit = false
 spawn_particles = true
-particles_req_handler = true
+particle_hander_req = "Stun"
+update_entity_glow = true

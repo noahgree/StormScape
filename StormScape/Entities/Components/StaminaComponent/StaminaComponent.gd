@@ -6,6 +6,8 @@ class_name StaminaComponent
 ## Has functions for handling using stamina and hunger.
 ## This class should always remain agnostic about the entity, and the UI it updates is optional.
 
+signal stamina_changed()
+
 @export var stats_ui: Control
 @export var _max_stamina: float = 100.0 ## The max amount of stamina the entity can have.
 @export_custom(PROPERTY_HINT_NONE, "suffix:per second") var _stamina_recharge_rate: float = 15.0 ## The amount of stamina that recharges per second during recharge.
@@ -87,6 +89,7 @@ func _set_stamina(new_value: float) -> void:
 	stamina = clampf(new_value, 0, get_parent().stats.get_stat("max_stamina"))
 	if stats_ui and stats_ui.has_method("on_stamina_changed"):
 		stats_ui.on_stamina_changed(stamina)
+	stamina_changed.emit()
 
 ## Setter for hunger. Clamps the new value to the allowed range and attempts to tell a linked ui about the update.
 func _set_hunger_bars(new_value: int) -> void:

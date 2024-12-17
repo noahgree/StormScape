@@ -1,0 +1,175 @@
+[gd_scene load_steps=13 format=3 uid="uid://c7gjhm55x8ymc"]
+
+[ext_resource type="Texture2D" uid="uid://dn0kb7oxrj6qi" path="res://Entities/Items/Weapons/ProjectileWeapons/BottleOFire/bottle_o_fire_base.png" id="1_87agt"]
+[ext_resource type="Shader" path="res://Entities/EntityCore/EntityEffectShader.gdshader" id="1_ghrnr"]
+[ext_resource type="Script" path="res://Entities/Items/Weapons/ProjectileWeapons/ProjectileWeapon.gd" id="1_sguuu"]
+[ext_resource type="Texture2D" uid="uid://cs3clmnktksd6" path="res://Entities/Player/PlayerCore/player_hand.png" id="3_2kylw"]
+[ext_resource type="PackedScene" uid="uid://batrfwan8r8ov" path="res://Entities/Items/Weapons/WeaponMods/WeaponModManager.tscn" id="4_w4ktg"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_t0vfb"]
+shader = ExtResource("1_ghrnr")
+shader_parameter/glow_color = Color(1, 1, 1, 1)
+shader_parameter/glow_size = 4.5
+shader_parameter/glow_strength = 9.0
+shader_parameter/enable_fade = false
+shader_parameter/tint_color = Color(1, 1, 1, 0)
+shader_parameter/frame_uv_min = null
+shader_parameter/frame_uv_max = null
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8x8uk"]
+atlas = ExtResource("1_87agt")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_h2gml"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_8x8uk")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="Animation" id="Animation_kmqcj"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("ItemSprite:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("ItemSprite:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("MainHandSprite:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(-4, 5)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("MainHandSprite:rotation")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+
+[sub_resource type="Animation" id="Animation_in3ed"]
+resource_name = "fire"
+length = 1.05
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("ItemSprite:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(-10, 0), Vector2(0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("ItemSprite:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [-1.5708, 0.0]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("MainHandSprite:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.5, 1),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(-5, 4), Vector2(-5, 6), Vector2(-4, 5)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("MainHandSprite:rotation")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [-1.5708, 0.0]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_u2nec"]
+_data = {
+"RESET": SubResource("Animation_kmqcj"),
+"fire": SubResource("Animation_in3ed")
+}
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_nbq8b"]
+radius = 2.82843
+height = 14.0
+
+[node name="BottleOFire" type="Node2D"]
+script = ExtResource("1_sguuu")
+
+[node name="ItemSprite" type="AnimatedSprite2D" parent="."]
+material = SubResource("ShaderMaterial_t0vfb")
+sprite_frames = SubResource("SpriteFrames_h2gml")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_u2nec")
+}
+
+[node name="ProjectileOrigin" type="Marker2D" parent="."]
+
+[node name="MainHandSprite" type="Sprite2D" parent="."]
+position = Vector2(-4, 5)
+texture = ExtResource("3_2kylw")
+
+[node name="WeaponModManager" parent="." instance=ExtResource("4_w4ktg")]
+
+[node name="ClippingDetector" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 241
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ClippingDetector"]
+position = Vector2(1, 0)
+rotation = 0.785398
+shape = SubResource("CapsuleShape2D_nbq8b")

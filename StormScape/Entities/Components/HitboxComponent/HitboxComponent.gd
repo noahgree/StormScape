@@ -23,8 +23,9 @@ func _ready() -> void:
 
 ## When detecting an area, start having it handled. This method can be overridden in subclasses.
 func _on_area_entered(area: Area2D) -> void:
-	if (area.get_parent() == source_entity) and not effect_source.can_hit_self:
-		return
+	if (area.get_parent() == source_entity):
+		if not effect_source.can_hit_self:
+			return
 
 	if area is EffectReceiverComponent:
 		_start_being_handled(area as EffectReceiverComponent)

@@ -1,21 +1,22 @@
-[gd_resource type="Resource" script_class="ProjAmmoResource" load_steps=4 format=3 uid="uid://m8eslst1uuxh"]
+[gd_resource type="Resource" script_class="ProjAmmoResource" load_steps=5 format=3 uid="uid://m8eslst1uuxh"]
 
-[ext_resource type="Texture2D" uid="uid://dd7trlkk62n13" path="res://Entities/Items/Ammo/pistol_bullet_default.png" id="1_xl0bg"]
+[ext_resource type="Texture2D" uid="uid://cknw64vph4b0s" path="res://Entities/Items/Ammo/Light/light_ammo_thumb.png" id="1_krlxe"]
+[ext_resource type="Texture2D" uid="uid://bo4vy1r7cbpx8" path="res://Entities/Items/Ammo/Light/light_ammo.png" id="2_2kj3h"]
 [ext_resource type="Script" path="res://UI/Inventory/PlayerInventory/Crafting/CraftingIngredient.gd" id="2_ip0fe"]
 [ext_resource type="Script" path="res://Entities/Items/Ammo/ProjAmmoResource.gd" id="3_0rybc"]
 
 [resource]
 script = ExtResource("3_0rybc")
-ammo_type = 1
+ammo_type = 2
 id = "light_ammo"
 name = "Light Ammo"
 tags = Array[String]([])
 inv_icon_rotation = 0.0
 inv_icon_offset = Vector2(0, 0)
 inv_icon_scale = Vector2(1, 1)
-inv_icon = ExtResource("1_xl0bg")
-ground_icon = ExtResource("1_xl0bg")
-in_hand_icon = ExtResource("1_xl0bg")
+inv_icon = ExtResource("2_2kj3h")
+ground_icon = ExtResource("1_krlxe")
+in_hand_icon = ExtResource("1_krlxe")
 item_type = 2
 rarity = 0
 weight = 0

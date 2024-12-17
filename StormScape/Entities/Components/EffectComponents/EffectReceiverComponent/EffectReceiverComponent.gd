@@ -52,7 +52,7 @@ func _notification(what: int) -> void:
 ## affected entity so that the effect sources only see it when they should.
 func _ready() -> void:
 	assert(affected_entity or get_parent() is SubViewport, get_parent().name + " has an effect receiver that is missing a reference to an entity.")
-	if can_receive_status_effects: assert(get_parent().has_node("StatusEffectManager"), get_parent().name + " has an effect receiver flagged as being able to handle status effects, yet has no StatusEffectManager.")
+	if can_receive_status_effects: assert(get_parent() is SubViewport or get_parent().has_node("StatusEffectManager"), get_parent().name + " has an effect receiver flagged as being able to handle status effects, yet has no StatusEffectManager.")
 
 	if not Engine.is_editor_hint():
 		collision_layer = affected_entity.collision_layer
@@ -66,7 +66,7 @@ func _ready() -> void:
 
 ## Handles an incoming effect source, passing it to present receivers for further processing before changing
 ## entity stats.
-func handle_effect_source(effect_source: EffectSource, source_entity: PhysicsBody2D) -> void:
+func handle_effect_source(effect_source: EffectSource, source_entity: PhysicsBody2D, process_status_effects: bool = true) -> void:
 	if filter_source_types and (effect_source.source_type not in allowed_source_types):
 		return
 	if filter_source_tags:
@@ -115,13 +115,14 @@ func handle_effect_source(effect_source: EffectSource, source_entity: PhysicsBod
 			elif not _check_same_team(source_entity) and _check_if_good_effects_apply_to_enemies(effect_source):
 				heal_handler.handle_instant_heal(effect_source.base_healing, effect_source.heal_affected_stats)
 
-	if can_receive_status_effects:
-		if knockback_handler:
-			knockback_handler.contact_position = effect_source.contact_position
-			knockback_handler.effect_movement_direction = effect_source.movement_direction
-			knockback_handler.is_source_moving_type = (effect_source.source_type == GlobalData.EffectSourceSourceType.FROM_PROJECTILE)
+	if process_status_effects:
+		if can_receive_status_effects:
+			if knockback_handler:
+				knockback_handler.contact_position = effect_source.contact_position
+				knockback_handler.effect_movement_direction = effect_source.movement_direction
+				knockback_handler.is_source_moving_type = (effect_source.source_type == GlobalData.EffectSourceSourceType.FROM_PROJECTILE)
 
-		_check_status_effect_team_logic(effect_source, source_entity)
+			_check_status_effect_team_logic(effect_source, source_entity)
 
 ## Checks if each status effect in the array applies to this entity via team logic, then passes it to be unpacked.
 func _check_status_effect_team_logic(effect_source: EffectSource, source_entity: PhysicsBody2D) -> void:

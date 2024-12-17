@@ -4,6 +4,7 @@ class_name HotbarUI
 
 @export var slot_scene: PackedScene = load("res://UI/Inventory/InventoryCore/Slot/Slot.tscn") ## The slot scene to be instantiated as children.
 @export var player_inv: Inventory ## The connected player inventory to reflect as a UI.
+@export var active_slot_info: CenterContainer ## The node that controls displaying the info about the active slot.
 
 @onready var hotbar: HBoxContainer = %HotbarUISlotGrid ## The container that holds the hotbar slots.
 @onready var scroll_debounce_timer: Timer = $ScrollDebounceTimer
@@ -36,15 +37,43 @@ func _setup_slots() -> void:
 
 ## When receiving the signal that a slot has changed, update the visuals.
 func _on_slot_updated(index: int, item: InvItemResource) -> void:
+	_update_inv_ammo_ui()
 	var hotbar_starting_index: int = player_inv.inv_size - player_inv.hotbar_size
 	var hotbar_index: int = index - hotbar_starting_index
 
 	if (index >= hotbar_starting_index) and (index < player_inv.inv_size):
 		if index == active_slot.index:
-			hotbar_slots[hotbar_index].item = item
-			GlobalData.player_node.hands.on_equipped_item_change(active_slot)
+			if (active_slot.item != null and item != null) and item.stats.is_same_as(active_slot.item.stats):
+				hotbar_slots[hotbar_index].item = item
+			else:
+				hotbar_slots[hotbar_index].item = item
+				_update_hands_about_new_active_item()
 		else:
 			hotbar_slots[hotbar_index].item = item
+
+## Updates the hands component with the new active slot and associated item if any. Then updates the UI for the new item
+## name. This must happen here since the signal's order isn't guaranteed, and we need the active slot to update first.
+func _update_hands_about_new_active_item() -> void:
+	GlobalData.player_node.hands.on_equipped_item_change(active_slot)
+
+	if active_slot.item != null:
+		active_slot_info.update_item_name(active_slot.item.stats.name)
+	else:
+		active_slot_info.update_item_name("Empty")
+
+func _update_inv_ammo_ui() -> void:
+	var count: int = -1
+
+	if active_slot.item != null and active_slot.item.stats is ProjWeaponResource:
+		var stats: ItemResource = active_slot.item.stats
+		if not (stats.ammo_type == GlobalData.ProjAmmoType.NONE or stats.ammo_type == GlobalData.ProjAmmoType.STAMINA or stats.ammo_type == GlobalData.ProjAmmoType.SELF):
+			count = 0
+			for i: int in range(player_inv.inv_size):
+				var item: InvItemResource = player_inv.inv[i]
+				if item != null and (item.stats is ProjAmmoResource) and (item.stats.ammo_type == active_slot.item.stats.ammo_type):
+					count += item.quantity
+
+	active_slot_info.update_inv_ammo(count)
 
 func _input(_event: InputEvent) -> void:
 	if DebugFlags.HotbarFlags.use_scroll_debounce and not scroll_debounce_timer.is_stopped(): return
@@ -64,14 +93,15 @@ func _change_active_slot_by_count(index_count: int) -> void:
 		new_index += hotbar_slots.size()
 	active_slot = hotbar_slots[new_index]
 	_apply_selected_slot_fx()
-	GlobalData.player_node.hands.on_equipped_item_change(active_slot)
+	_update_hands_about_new_active_item()
+	_update_inv_ammo_ui()
 
 func _change_active_slot_to_index_relative_to_full_inventory_size(new_index: int) -> void:
 	_remove_selected_slot_fx()
 	active_slot = hotbar_slots[new_index - (player_inv.inv_size - player_inv.hotbar_size)]
 	_apply_selected_slot_fx()
-
-	GlobalData.player_node.hands.on_equipped_item_change(active_slot)
+	_update_hands_about_new_active_item()
+	_update_inv_ammo_ui()
 
 func _remove_selected_slot_fx() -> void:
 	active_slot.selected_texture.hide()

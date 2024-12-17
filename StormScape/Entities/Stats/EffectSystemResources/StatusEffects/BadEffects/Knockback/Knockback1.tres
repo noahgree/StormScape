@@ -18,5 +18,5 @@ stat_mods = Array[ExtResource("2_rysxw")]([])
 audio_to_play = "Knockback"
 only_cue_on_player_hit = false
 spawn_particles = false
+particle_hander_req = ""
 update_entity_glow = false
-particles_req_handler = true

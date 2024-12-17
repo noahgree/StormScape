@@ -1,0 +1,36 @@
+[gd_resource type="Resource" script_class="ProjAmmoResource" load_steps=5 format=3 uid="uid://bdjhfsluk53lc"]
+
+[ext_resource type="Texture2D" uid="uid://cr1cdh1f8n7ut" path="res://Entities/Items/Ammo/Medium/medium_ammo_thumb.png" id="1_b2v7p"]
+[ext_resource type="Texture2D" uid="uid://bj8cxp5cf4lw0" path="res://Entities/Items/Ammo/Medium/medium_ammo.png" id="2_6f2gy"]
+[ext_resource type="Script" path="res://UI/Inventory/PlayerInventory/Crafting/CraftingIngredient.gd" id="3_yijnj"]
+[ext_resource type="Script" path="res://Entities/Items/Ammo/ProjAmmoResource.gd" id="4_yhhkm"]
+
+[resource]
+script = ExtResource("4_yhhkm")
+ammo_type = 3
+id = "medium_ammo"
+name = "Medium Ammo"
+tags = Array[String]([])
+inv_icon_rotation = 0.0
+inv_icon_offset = Vector2(0, 0)
+inv_icon_scale = Vector2(1, 1)
+inv_icon = ExtResource("2_6f2gy")
+ground_icon = ExtResource("1_b2v7p")
+in_hand_icon = ExtResource("1_b2v7p")
+item_type = 2
+rarity = 0
+weight = 0
+stack_size = 64
+auto_pickup = true
+pickup_radius = 4
+info = "Ammo used in medium-power weapons like rifles."
+recipe = Array[ExtResource("3_yijnj")]([])
+output_quantity = 1
+recipe_unlocked = false
+rotation_lerping = 0.1
+holding_offset = Vector2(0, 0)
+holding_degrees = 0.0
+is_gripped_by_one_hand = true
+draw_off_hand = false
+draw_off_hand_offset = Vector2(0, 0)
+main_hand_offset = Vector2(0, 0)

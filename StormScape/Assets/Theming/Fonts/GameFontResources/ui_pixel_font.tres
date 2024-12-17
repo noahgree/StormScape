@@ -1,9 +1,10 @@
 [gd_resource type="FontVariation" load_steps=2 format=3 uid="uid://blgkcg6c83yln"]
 
-[ext_resource type="FontFile" uid="uid://cj0mctn1mh06m" path="res://Assets/Theming/Fonts/FontAssets/Pixel/Kenney Pixel.ttf" id="1_ahfk5"]
+[ext_resource type="FontFile" uid="uid://bp2lgrlhj8cet" path="res://Assets/Theming/Fonts/FontAssets/Pixel/C&C Red Alert [INET].ttf" id="1_qk56b"]
 
 [resource]
-base_font = ExtResource("1_ahfk5")
+base_font = ExtResource("1_qk56b")
 opentype_features = {
-1667329140: 0
+1936928824: 1
 }
+spacing_bottom = -1

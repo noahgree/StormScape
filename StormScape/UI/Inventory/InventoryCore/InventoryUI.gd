@@ -47,8 +47,7 @@ func _drop_data(_at_position: Vector2, data: Variant) -> void:
 
 		Item.spawn_on_ground(ground_item_res, ground_item_quantity, GlobalData.player_node.global_position, 15)
 
-	var inv_to_reflect_main_size: int = inventory_to_reflect.inv_size - inventory_to_reflect.hotbar_size
-	if data.index >= inv_to_reflect_main_size: inventory_to_reflect.slot_updated.emit(data.index, data.item)
+	inventory_to_reflect.slot_updated.emit(data.index, data.item)
 
 	data._on_mouse_exited()
 

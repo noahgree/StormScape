@@ -17,8 +17,8 @@ class_name StatusEffect
 @export var audio_to_play: String = "" ## The audio resource to play as a sound effect when hitting an entity.
 @export var only_cue_on_player_hit: bool = false ## Whether to only play the associated audio when the status effect is received by the player.
 @export var spawn_particles: bool = true ## Whether to spawn particles based on the name of this status effect. If the name does not match any valid particle spawners, nothing will happen.
+@export var particle_hander_req: String = "" ## Whether the spawning of the particles should be conditional on a handler of the same name being in the entity. If left blank, they don't require a matching handler. Do not include "Handler" in the string.
 @export var update_entity_glow: bool = true ## When true, receiving this effect will attempt to update the entity's glow color if a color name matching this status effect name exists in it's Glow Colors dictionary.
-@export var particles_req_handler: bool = true ## Whether the spawning of the particles should be conditional on a handler of the same name being in the entity.
 
 
 ## Overrides the default to_string to print a more readable output when included in a print() call.

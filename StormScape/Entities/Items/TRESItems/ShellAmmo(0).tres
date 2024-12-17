@@ -1,0 +1,36 @@
+[gd_resource type="Resource" script_class="ProjAmmoResource" load_steps=5 format=3 uid="uid://cpxev3kvt74vw"]
+
+[ext_resource type="Texture2D" uid="uid://cv2fgiqbknwow" path="res://Entities/Items/Ammo/Shell/shell_ammo_thumb.png" id="1_6r7ll"]
+[ext_resource type="Texture2D" uid="uid://d3xj606lsbvfm" path="res://Entities/Items/Ammo/Shell/shell_ammo.png" id="2_ptjmx"]
+[ext_resource type="Script" path="res://UI/Inventory/PlayerInventory/Crafting/CraftingIngredient.gd" id="3_y6c6l"]
+[ext_resource type="Script" path="res://Entities/Items/Ammo/ProjAmmoResource.gd" id="4_j07wo"]
+
+[resource]
+script = ExtResource("4_j07wo")
+ammo_type = 5
+id = "shell_ammo"
+name = "Shell Ammo"
+tags = Array[String]([])
+inv_icon_rotation = 0.0
+inv_icon_offset = Vector2(0, 0)
+inv_icon_scale = Vector2(1, 1)
+inv_icon = ExtResource("2_ptjmx")
+ground_icon = ExtResource("1_6r7ll")
+in_hand_icon = ExtResource("1_6r7ll")
+item_type = 2
+rarity = 0
+weight = 0
+stack_size = 48
+auto_pickup = true
+pickup_radius = 4
+info = "Ammo used in shotgun weapons."
+recipe = Array[ExtResource("3_y6c6l")]([])
+output_quantity = 1
+recipe_unlocked = false
+rotation_lerping = 0.1
+holding_offset = Vector2(0, 0)
+holding_degrees = 0.0
+is_gripped_by_one_hand = true
+draw_off_hand = false
+draw_off_hand_offset = Vector2(0, 0)
+main_hand_offset = Vector2(0, 0)

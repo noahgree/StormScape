@@ -3,6 +3,7 @@ extends Node2D
 class_name HandsComponent
 ## This component allows the entity to hold an item and interact with it.
 
+@export var active_slot_info: CenterContainer ## UI for displaying information about the active slot's item. Only for the player.
 @export var main_hand_with_held_item_pos: Vector2 = Vector2(6, 1) ## The position the main hand would be while doing nothing.
 @export var main_hand_with_proj_weapon_pos: Vector2 = Vector2(11, 0) ## The position the main hand would start at while holding a projectile weapon. This will most likely be farther out in the x-direction to give more rotational room for the weapon.
 @export var main_hand_with_melee_weapon_pos: Vector2 = Vector2(8, 0) ## The position the main hand would start at while holding a melee weapon. This will most likely be farther out in the x-direction to give more rotational room for the weapon.
@@ -68,6 +69,10 @@ func _process(delta: float) -> void:
 
 ## Removes the currently equipped item after letting it clean itself up.
 func unequip_current_item() -> void:
+	active_slot_info.update_mag_ammo(-1)
+	active_slot_info.update_inv_ammo(-1)
+	active_slot_info.update_item_name("")
+
 	if equipped_item != null:
 		is_mouse_button_held = false
 		been_holding_time = 0
@@ -104,12 +109,14 @@ func on_equipped_item_change(inv_item_slot: Slot) -> void:
 		if equipped_item is ProjectileWeapon:
 			main_hand.position = main_hand_with_proj_weapon_pos + equipped_item.stats.holding_offset
 			main_hand.rotation += deg_to_rad(equipped_item.stats.holding_degrees)
+			equipped_item.ammo_ui = active_slot_info
 			snap_y_scale()
 			_prep_for_pullout_anim()
 			_manage_proj_weapon_hands(_get_anim_vector())
 		elif equipped_item is MeleeWeapon:
 			main_hand.position = main_hand_with_melee_weapon_pos + equipped_item.stats.holding_offset
 			main_hand.rotation += deg_to_rad(equipped_item.stats.holding_degrees)
+			equipped_item.ammo_ui = active_slot_info
 			snap_y_scale()
 			_prep_for_pullout_anim()
 			_manage_melee_weapon_hands(_get_anim_vector())
