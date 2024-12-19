@@ -1,6 +1,6 @@
 [gd_scene load_steps=13 format=3 uid="uid://c7gjhm55x8ymc"]
 
-[ext_resource type="Texture2D" uid="uid://dn0kb7oxrj6qi" path="res://Entities/Items/Weapons/ProjectileWeapons/BottleOFire/bottle_o_fire_base.png" id="1_87agt"]
+[ext_resource type="Texture2D" uid="uid://dn0kb7oxrj6qi" path="res://Entities/Items/Weapons/ProjectileWeapons/BottleOFire/fire_bottle_throwable.png" id="1_87agt"]
 [ext_resource type="Shader" path="res://Entities/EntityCore/EntityEffectShader.gdshader" id="1_ghrnr"]
 [ext_resource type="Script" path="res://Entities/Items/Weapons/ProjectileWeapons/ProjectileWeapon.gd" id="1_sguuu"]
 [ext_resource type="Texture2D" uid="uid://cs3clmnktksd6" path="res://Entities/Player/PlayerCore/player_hand.png" id="3_2kylw"]

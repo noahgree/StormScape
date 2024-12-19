@@ -8,7 +8,6 @@ class_name MeleeWeapon
 @onready var anim_player: AnimationPlayer = $AnimationPlayer ## The animation controller for this melee weapon.
 @onready var hitbox_component: HitboxComponent = %HitboxComponent ## The hitbox responsible for applying the melee hit.
 
-var ammo_ui: CenterContainer ## The ui assigned by the hands component that displays the ammo. Only for the player.
 var cooldown_timer: Timer = Timer.new() ## The timer tracking how long after performing a normal swing you must wait before doing it again.
 var charge_cooldown_timer: Timer = Timer.new() ## The timer tracking how long after performing a charged swing you must wait before doing it again.
 var is_swinging: bool = false ## Whether we are currently swinging the weapon in some fashion.
@@ -141,6 +140,7 @@ func release_hold_activate(hold_time: float) -> void:
 func _swing() -> void:
 	if source_entity.stamina_component.use_stamina(stats.s_mods.get_stat("stamina_cost")):
 		cooldown_timer.start(stats.cooldown + stats.s_mods.get_stat("use_speed"))
+		source_slot.update_tint_progress(cooldown_timer.wait_time)
 		is_swinging = true
 		source_entity.move_fsm.should_rotate = false
 
@@ -163,6 +163,7 @@ func _charge_swing(hold_time: float) -> void:
 
 	if source_entity.stamina_component.use_stamina(stats.s_mods.get_stat("charge_stamina_cost")):
 		cooldown_timer.start(stats.s_mods.get_stat("charge_use_cooldown") + stats.s_mods.get_stat("charge_use_speed"))
+		source_slot.update_tint_progress(cooldown_timer.wait_time)
 		is_swinging = true
 		source_entity.move_fsm.should_rotate = false
 		source_entity.hands.snap_y_scale()
@@ -213,5 +214,6 @@ func _on_use_animation_ended(was_charge_use: bool = false) -> void:
 
 	_apply_post_use_effect(was_charge_use)
 
+## If a connected ammo UI exists (i.e. for a player), update it with the new ammo available. Typically just reflects the sprint.
 func _update_ammo_ui() -> void:
 	if ammo_ui != null: ammo_ui.update_mag_ammo(source_entity.stamina_component.stamina)

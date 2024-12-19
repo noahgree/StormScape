@@ -24,6 +24,11 @@ var dragging_half_stack: bool = false ## Whether this slot is carrying only half
 var item: InvItemResource: set = _set_item ## The current inventory item represented in this slot.
 var is_hotbar_ui_preview_slot: bool = false ## Whether this slot is an inventory hotbar preview slot for the player's screen.
 var is_trash_slot: bool = false ## The slot, that if present, is used to discard items. It will have the highest index.
+var tint_tween: Tween = null
+var tint_progress: float = 100.0:
+	set(new_value):
+		tint_progress = new_value
+		back_color.material.set_shader_parameter("progress", new_value)
 
 
 ## Setter function for the item represented by this slot. Updates texture and quantity label.
@@ -33,7 +38,7 @@ func _set_item(new_item: InvItemResource) -> void:
 		if item.quantity > 0:
 			item_texture.texture = item.stats.inv_icon
 
-			back_color.color = GlobalData.rarity_colors.slot_fill.get(item.stats.rarity)
+			back_color.material.set_shader_parameter("main_color", GlobalData.rarity_colors.slot_fill.get(item.stats.rarity))
 			back_color.show()
 
 			item_texture.material.set_shader_parameter("width", 0.0)
@@ -85,6 +90,12 @@ func _ready() -> void:
 	selected_texture.hide()
 	item_texture.material.set_shader_parameter("highlight_strength", 0.0)
 
+func update_tint_progress(duration: float) -> void:
+	if tint_tween: tint_tween.kill()
+	tint_tween = create_tween()
+	tint_progress = 0
+	tint_tween.tween_property(self, "tint_progress", 100.0, duration)
+
 ## Gets a reference to the data from the slot where the drag originated.
 func _get_drag_data(at_position: Vector2) -> Variant:
 	dragging_half_stack = false
@@ -122,7 +133,6 @@ func _make_drag_preview(at_position: Vector2) -> Control:
 		else:
 			preview_scene.get_node("QuantityMargins/Quantity").text = str(item.quantity)
 
-		preview_scene.modulate.a = 0.65
 		preview_scene.position = -at_position
 
 		c.add_child(preview_scene)

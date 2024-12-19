@@ -76,8 +76,8 @@ stat_mods = Array[ExtResource("6_xvm3d")]([])
 audio_to_play = ""
 only_cue_on_player_hit = false
 spawn_particles = false
+particle_hander_req = ""
 update_entity_glow = false
-particles_req_handler = true
 
 [sub_resource type="Resource" id="Resource_ieaky"]
 script = ExtResource("6_iunw2")

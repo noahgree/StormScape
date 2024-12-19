@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://m4ur3n2hwsp8"]
+[gd_scene load_steps=14 format=3 uid="uid://m4ur3n2hwsp8"]
 
 [ext_resource type="Texture2D" uid="uid://ces4hq54n2lxc" path="res://UI/Inventory/InventoryCore/Slot/normal_slot.png" id="1_tu6a1"]
 [ext_resource type="Script" path="res://UI/Inventory/InventoryCore/Slot/Slot.gd" id="2_ywtjc"]
@@ -7,7 +7,14 @@
 [ext_resource type="Texture2D" uid="uid://bopljhr43p6fx" path="res://UI/Inventory/InventoryCore/Slot/clear_slot_selected.png" id="4_jiyo0"]
 [ext_resource type="Texture2D" uid="uid://3ygb1pbykma1" path="res://UI/Inventory/InventoryCore/Slot/normal_slot_no_item.png" id="4_ylk5m"]
 [ext_resource type="Texture2D" uid="uid://dbm40lvpgbd8t" path="res://Entities/Items/ItemCore/Particles/item_rarity_light.png" id="5_dhreg"]
+[ext_resource type="Shader" path="res://UI/Shaders/ProgressAlpha.gdshader" id="5_xform"]
 [ext_resource type="Shader" path="res://UI/Shaders/GlintShader.gdshader" id="6_l1uky"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_me41j"]
+resource_local_to_scene = true
+shader = ExtResource("5_xform")
+shader_parameter/progress = 100.0
+shader_parameter/main_color = Color(1.92523e-06, 0.663041, 0.561341, 1)
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_raets"]
 blend_mode = 1
@@ -33,7 +40,8 @@ shader_parameter/random_start_offset = 0.0
 [sub_resource type="LabelSettings" id="LabelSettings_kd5f7"]
 line_spacing = 0.0
 font = ExtResource("3_dimqv")
-outline_size = 2
+font_size = 12
+outline_size = 3
 outline_color = Color(0, 0, 0, 1)
 shadow_size = 0
 shadow_offset = Vector2(0, 0)
@@ -57,7 +65,7 @@ default_slot_texture = ExtResource("1_tu6a1")
 no_item_slot_texture = ExtResource("4_ylk5m")
 
 [node name="BackColor" type="ColorRect" parent="."]
-visible = false
+material = SubResource("ShaderMaterial_me41j")
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5

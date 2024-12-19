@@ -7,6 +7,7 @@ class_name StaminaComponent
 ## This class should always remain agnostic about the entity, and the UI it updates is optional.
 
 signal stamina_changed()
+signal max_stamina_changed()
 
 @export var stats_ui: Control
 @export var _max_stamina: float = 100.0 ## The max amount of stamina the entity can have.
@@ -117,6 +118,7 @@ func on_max_stamina_changed(new_max_stamina: float) -> void:
 		set_stamina_wait_timer_state_change(false)
 		stamina_wait_timer.start(get_parent().stats.get_stat("stamina_recharge_delay"))
 		set_stamina_wait_timer_state_change(true)
+	max_stamina_changed.emit()
 
 ## We need to make sure the curret hunger bars get limited to the new max value.
 func on_max_hunger_bars_changed(new_max_hunger_bars: int) -> void:

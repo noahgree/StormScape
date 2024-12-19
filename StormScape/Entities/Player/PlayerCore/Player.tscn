@@ -1,4 +1,4 @@
-[gd_scene load_steps=178 format=3 uid="uid://dba8mrurjlekp"]
+[gd_scene load_steps=187 format=3 uid="uid://dba8mrurjlekp"]
 
 [ext_resource type="Script" path="res://Entities/Player/PlayerCore/Player.gd" id="1_m33tt"]
 [ext_resource type="Script" path="res://Entities/Stats/StatMod/StatModsCacheResource.gd" id="2_vetip"]
@@ -14,6 +14,7 @@
 [ext_resource type="PackedScene" uid="uid://co3n6m7efg8pd" path="res://Entities/Components/EffectComponents/StatusEffectManager/StatusEffectManager.tscn" id="6_n0x5k"]
 [ext_resource type="Script" path="res://Entities/Player/States/MoveStates/Idle/Idle.gd" id="7_15a5x"]
 [ext_resource type="PackedScene" uid="uid://dykiv0tlhwmox" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/KnockbackHandler.tscn" id="7_k0pv8"]
+[ext_resource type="Texture2D" uid="uid://tdtv12ps6wk" path="res://UI/Reloading/reloading_progress.png" id="8_qhq3c"]
 [ext_resource type="Script" path="res://Entities/Player/States/MoveStates/Run/Run.gd" id="9_0dcld"]
 [ext_resource type="Script" path="res://Entities/Player/States/MoveStates/Dash/Dash.gd" id="9_a1qv1"]
 [ext_resource type="PackedScene" uid="uid://cx4b21058vypq" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/StunHandler.tscn" id="9_w4lel"]
@@ -85,7 +86,10 @@
 [ext_resource type="Texture2D" uid="uid://b2v0527iatsjd" path="res://UI/PlayerStatsOverlay/Assets/Health.png" id="51_6cphe"]
 [ext_resource type="Texture2D" uid="uid://dhvpkl1svbcys" path="res://UI/PlayerStatsOverlay/Assets/Health Under.png" id="52_dhyl8"]
 [ext_resource type="Texture2D" uid="uid://lj78cee4aa38" path="res://UI/PlayerStatsOverlay/Assets/Health Change.png" id="53_qsiea"]
+[ext_resource type="Script" path="res://UI/Reloading/ReloadingUI.gd" id="57_n8srl"]
+[ext_resource type="Texture2D" uid="uid://bd7ifq5lvur4v" path="res://UI/Reloading/reloading_back.png" id="58_hd6am"]
 [ext_resource type="Script" path="res://UI/Inventory/PlayerInventory/HotbarUI.gd" id="58_i567i"]
+[ext_resource type="Texture2D" uid="uid://b536l7eoo4wx0" path="res://UI/Reloading/reloading_over.png" id="59_fbicu"]
 [ext_resource type="Texture2D" uid="uid://dbm40lvpgbd8t" path="res://Entities/Items/ItemCore/Particles/item_rarity_light.png" id="66_461tf"]
 [ext_resource type="Shader" path="res://UI/Shaders/GlintShader.gdshader" id="67_w57pe"]
 [ext_resource type="Texture2D" uid="uid://dtft3mljs2y5s" path="res://UI/Inventory/InventoryCore/Slot/trash_slot_icon.png" id="69_4ao77"]
@@ -100,6 +104,10 @@
 [ext_resource type="Texture2D" uid="uid://de31272sm433q" path="res://UI/Inventory/InventoryCore/button_9_patch.png" id="86_ald0t"]
 [ext_resource type="FontVariation" uid="uid://blgkcg6c83yln" path="res://Assets/Theming/Fonts/GameFontResources/ui_pixel_font.tres" id="91_55d85"]
 [ext_resource type="Script" path="res://UI/PlayerStatsOverlay/ActiveSlotInfo.gd" id="91_qr476"]
+[ext_resource type="Texture2D" uid="uid://bj8cxp5cf4lw0" path="res://Entities/Items/Ammo/Medium/medium_ammo.png" id="92_2bavx"]
+[ext_resource type="Texture2D" uid="uid://cjuiqhgcljofe" path="res://Entities/Items/Ammo/Heavy/heavy_ammo.png" id="93_utxlp"]
+[ext_resource type="Texture2D" uid="uid://d3xj606lsbvfm" path="res://Entities/Items/Ammo/Shell/shell_ammo.png" id="94_36bov"]
+[ext_resource type="Shader" path="res://UI/Shaders/ProgressAlpha.gdshader" id="107_nyy6a"]
 
 [sub_resource type="Resource" id="Resource_rwbul"]
 script = ExtResource("2_vetip")
@@ -1289,17 +1297,16 @@ shadow_size = 0
 [sub_resource type="LabelSettings" id="LabelSettings_32mf4"]
 line_spacing = 0.0
 font = ExtResource("91_55d85")
-font_size = 15
-outline_size = 3
+font_size = 12
+outline_size = 2
 outline_color = Color(0, 0, 0, 1)
-shadow_size = 2
-shadow_color = Color(0, 0, 0, 0.411)
+shadow_color = Color(0, 0, 0, 0.497)
 shadow_offset = Vector2(0.75, 0.75)
 
 [sub_resource type="LabelSettings" id="LabelSettings_rybwt"]
 line_spacing = 0.0
 font = ExtResource("91_55d85")
-font_size = 10
+font_size = 8
 outline_size = 2
 outline_color = Color(0, 0, 0, 1)
 shadow_size = 0
@@ -1307,7 +1314,7 @@ shadow_size = 0
 [sub_resource type="LabelSettings" id="LabelSettings_ye7qx"]
 line_spacing = 0.0
 font = ExtResource("91_55d85")
-font_size = 9
+font_size = 8
 outline_size = 2
 outline_color = Color(0, 0, 0, 1)
 shadow_size = 0
@@ -1340,6 +1347,12 @@ font_size = 6
 font_color = Color(0.913725, 0.768627, 0.741176, 1)
 outline_size = 2
 outline_color = Color(0.209203, 0.113957, 0.0471381, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_xh2l0"]
+resource_local_to_scene = true
+shader = ExtResource("107_nyy6a")
+shader_parameter/progress = 100.0
+shader_parameter/main_color = Color(1.92523e-06, 0.663041, 0.561341, 1)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_pc124"]
 resource_local_to_scene = true
@@ -1386,13 +1399,13 @@ sprite_frames = ExtResource("5_vy6lk")
 animation = &"idle"
 
 [node name="HandsComponent" parent="YSorter" node_paths=PackedStringArray("active_slot_info") instance=ExtResource("39_ngono")]
-active_slot_info = NodePath("../../PlayerUILayer/ActiveSlotInfo")
+active_slot_info = NodePath("../../OverlayUI/ActiveSlotInfo")
 
 [node name="HealthComponent" parent="." node_paths=PackedStringArray("stats_ui") instance=ExtResource("3_ojev3")]
-stats_ui = NodePath("../PlayerUILayer/PlayerStatsOverlay")
+stats_ui = NodePath("../OverlayUI/PlayerStatsOverlay")
 
 [node name="StaminaComponent" parent="." node_paths=PackedStringArray("stats_ui") instance=ExtResource("5_k4fu6")]
-stats_ui = NodePath("../PlayerUILayer/PlayerStatsOverlay")
+stats_ui = NodePath("../OverlayUI/PlayerStatsOverlay")
 
 [node name="EffectReceiverComponent" parent="." node_paths=PackedStringArray("affected_entity", "health_component", "stamina_component", "dmg_handler", "heal_handler", "storm_syndrome_handler", "knockback_handler", "stun_handler", "poison_handler", "regen_handler", "frostbite_handler", "burning_handler", "time_snare_handler") instance=ExtResource("4_hhm8x")]
 affected_entity = NodePath("..")
@@ -1438,7 +1451,7 @@ debug_color = Color(1, 0.294, 0.588, 0.06)
 
 [node name="StatusEffectManager" parent="." node_paths=PackedStringArray("effect_receiver", "stats_ui") instance=ExtResource("6_n0x5k")]
 effect_receiver = NodePath("../EffectReceiverComponent")
-stats_ui = NodePath("../PlayerUILayer/PlayerStatsOverlay")
+stats_ui = NodePath("../OverlayUI/PlayerStatsOverlay")
 print_effect_updates = true
 
 [node name="MoveStateMachine" parent="." node_paths=PackedStringArray("entity", "anim_tree", "initial_state") instance=ExtResource("16_xoncr")]
@@ -1498,21 +1511,53 @@ starting_inv = Array[ExtResource("32_ixmb3")]([SubResource("Resource_pihal"), nu
 is_player_inv = true
 inv_size = 37
 hotbar_size = 5
-inv_populator = NodePath("../PlayerUILayer/PlayerInvUI/MainTextureMargins/InvPopulator")
-ui = NodePath("../PlayerUILayer/PlayerInvUI")
+inv_populator = NodePath("../OverlayUI/PlayerInvUI/MainTextureMargins/InvPopulator")
+ui = NodePath("../OverlayUI/PlayerInvUI")
 
 [node name="PlayerInvCommunicator" type="Node" parent="ItemReceiverComponent" node_paths=PackedStringArray("item_interact_hud")]
 script = ExtResource("31_mjpan")
-item_interact_hud = NodePath("../../PlayerUILayer/ItemInteractionHUD")
+item_interact_hud = NodePath("../../OverlayUI/ItemInteractionHUD")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="ItemReceiverComponent"]
 position = Vector2(0, -5)
 shape = SubResource("CircleShape2D_3wm74")
 debug_color = Color(0.800804, 0.389919, 9.62615e-07, 0.227451)
 
-[node name="PlayerUILayer" type="CanvasLayer" parent="."]
+[node name="ReloadingUI" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -35.0
+offset_right = -20.0
+offset_bottom = -35.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("57_n8srl")
 
-[node name="TestButtons" type="Control" parent="PlayerUILayer" node_paths=PackedStringArray("health_component")]
+[node name="ProgressBar" type="TextureProgressBar" parent="ReloadingUI"]
+layout_mode = 0
+offset_left = 9.0
+offset_right = 31.0
+offset_bottom = 4.0
+value = 15.0
+nine_patch_stretch = true
+stretch_margin_left = 1
+stretch_margin_top = 1
+stretch_margin_right = 1
+stretch_margin_bottom = 1
+texture_under = ExtResource("58_hd6am")
+texture_over = ExtResource("59_fbicu")
+texture_progress = ExtResource("8_qhq3c")
+tint_over = Color(1, 1, 1, 0.17)
+tint_progress = Color(0.428165, 0.752804, 0.889988, 1)
+
+[node name="OverlayUI" type="CanvasLayer" parent="."]
+
+[node name="TestButtons" type="Control" parent="OverlayUI" node_paths=PackedStringArray("health_component")]
 visible = false
 layout_mode = 3
 anchors_preset = 0
@@ -1523,7 +1568,7 @@ script = ExtResource("17_vdk5v")
 health_component = NodePath("../../HealthComponent")
 mods = Array[ExtResource("46_xslb2")]([ExtResource("47_l43tu"), ExtResource("46_2raqh")])
 
-[node name="TestHurtBtn" type="Button" parent="PlayerUILayer/TestButtons"]
+[node name="TestHurtBtn" type="Button" parent="OverlayUI/TestButtons"]
 layout_mode = 0
 offset_left = 114.0
 offset_top = 253.0
@@ -1533,7 +1578,7 @@ scale = Vector2(0.7, 0.7)
 focus_mode = 0
 text = "HURT"
 
-[node name="TestHealBtn" type="Button" parent="PlayerUILayer/TestButtons"]
+[node name="TestHealBtn" type="Button" parent="OverlayUI/TestButtons"]
 texture_filter = 1
 layout_mode = 0
 offset_left = 114.0
@@ -1546,7 +1591,7 @@ theme_override_fonts/font = ExtResource("11_1rxkv")
 theme_override_font_sizes/font_size = 16
 text = "HEAL"
 
-[node name="TestMusicBtn" type="Button" parent="PlayerUILayer/TestButtons"]
+[node name="TestMusicBtn" type="Button" parent="OverlayUI/TestButtons"]
 texture_filter = 1
 layout_mode = 0
 offset_left = 431.0
@@ -1559,7 +1604,7 @@ theme_override_fonts/font = ExtResource("11_1rxkv")
 theme_override_font_sizes/font_size = 16
 text = "TEST MUSIC"
 
-[node name="TestSaveBtn" type="Button" parent="PlayerUILayer/TestButtons"]
+[node name="TestSaveBtn" type="Button" parent="OverlayUI/TestButtons"]
 texture_filter = 1
 layout_mode = 0
 offset_left = 451.0
@@ -1572,7 +1617,7 @@ theme_override_fonts/font = ExtResource("11_1rxkv")
 theme_override_font_sizes/font_size = 16
 text = "SAVE"
 
-[node name="TestLoadBtn" type="Button" parent="PlayerUILayer/TestButtons"]
+[node name="TestLoadBtn" type="Button" parent="OverlayUI/TestButtons"]
 texture_filter = 1
 layout_mode = 0
 offset_left = 451.0
@@ -1585,7 +1630,7 @@ theme_override_fonts/font = ExtResource("11_1rxkv")
 theme_override_font_sizes/font_size = 16
 text = "LOAD"
 
-[node name="TestModBtn1" type="Button" parent="PlayerUILayer/TestButtons"]
+[node name="TestModBtn1" type="Button" parent="OverlayUI/TestButtons"]
 texture_filter = 1
 layout_mode = 0
 offset_left = 452.0
@@ -1598,7 +1643,7 @@ theme_override_fonts/font = ExtResource("11_1rxkv")
 theme_override_font_sizes/font_size = 16
 text = "MOD 1"
 
-[node name="TestModBtn2" type="Button" parent="PlayerUILayer/TestButtons"]
+[node name="TestModBtn2" type="Button" parent="OverlayUI/TestButtons"]
 texture_filter = 1
 layout_mode = 0
 offset_left = 452.0
@@ -1611,7 +1656,7 @@ theme_override_fonts/font = ExtResource("11_1rxkv")
 theme_override_font_sizes/font_size = 16
 text = "MOD 2"
 
-[node name="TestStormBtn" type="Button" parent="PlayerUILayer/TestButtons"]
+[node name="TestStormBtn" type="Button" parent="OverlayUI/TestButtons"]
 texture_filter = 1
 layout_mode = 0
 offset_left = 449.0
@@ -1624,7 +1669,7 @@ theme_override_fonts/font = ExtResource("11_1rxkv")
 theme_override_font_sizes/font_size = 16
 text = "STORM"
 
-[node name="TestStormBtn2" type="Button" parent="PlayerUILayer/TestButtons"]
+[node name="TestStormBtn2" type="Button" parent="OverlayUI/TestButtons"]
 texture_filter = 1
 layout_mode = 0
 offset_left = 432.0
@@ -1637,7 +1682,7 @@ theme_override_fonts/font = ExtResource("11_1rxkv")
 theme_override_font_sizes/font_size = 16
 text = "NEXT PHASE"
 
-[node name="TestCombineItems" type="Button" parent="PlayerUILayer/TestButtons"]
+[node name="TestCombineItems" type="Button" parent="OverlayUI/TestButtons"]
 texture_filter = 1
 layout_mode = 0
 offset_left = 419.0
@@ -1650,7 +1695,7 @@ theme_override_fonts/font = ExtResource("11_1rxkv")
 theme_override_font_sizes/font_size = 16
 text = "COMBINE ITEMS"
 
-[node name="TestCraft" type="Button" parent="PlayerUILayer/TestButtons"]
+[node name="TestCraft" type="Button" parent="OverlayUI/TestButtons"]
 texture_filter = 1
 layout_mode = 0
 offset_left = 450.0
@@ -1663,7 +1708,7 @@ theme_override_fonts/font = ExtResource("11_1rxkv")
 theme_override_font_sizes/font_size = 16
 text = "CRAFT"
 
-[node name="PlayerStatsOverlay" type="Control" parent="PlayerUILayer" node_paths=PackedStringArray("player")]
+[node name="PlayerStatsOverlay" type="Control" parent="OverlayUI" node_paths=PackedStringArray("player")]
 texture_filter = 2
 layout_mode = 3
 anchors_preset = 0
@@ -1676,25 +1721,25 @@ mouse_filter = 2
 script = ExtResource("35_yln51")
 player = NodePath("../..")
 
-[node name="PanelContainer" type="PanelContainer" parent="PlayerUILayer/PlayerStatsOverlay"]
+[node name="PanelContainer" type="PanelContainer" parent="OverlayUI/PlayerStatsOverlay"]
 self_modulate = Color(1, 1, 1, 0)
 layout_mode = 0
 offset_right = 40.0
 offset_bottom = 40.0
 scale = Vector2(0.08, 0.08)
 
-[node name="StatsBackground" type="TextureRect" parent="PlayerUILayer/PlayerStatsOverlay/PanelContainer"]
+[node name="StatsBackground" type="TextureRect" parent="OverlayUI/PlayerStatsOverlay/PanelContainer"]
 layout_mode = 2
 texture = ExtResource("36_vdy3t")
 
-[node name="MarginContainer" type="MarginContainer" parent="PlayerUILayer/PlayerStatsOverlay/PanelContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="OverlayUI/PlayerStatsOverlay/PanelContainer"]
 layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 4
 theme_override_constants/margin_left = 59
 theme_override_constants/margin_top = 4
 
-[node name="HungerProgressBar" type="TextureProgressBar" parent="PlayerUILayer/PlayerStatsOverlay/PanelContainer/MarginContainer"]
+[node name="HungerProgressBar" type="TextureProgressBar" parent="OverlayUI/PlayerStatsOverlay/PanelContainer/MarginContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 4
@@ -1705,7 +1750,7 @@ radial_fill_degrees = 157.0
 texture_under = ExtResource("37_32xjt")
 texture_progress = ExtResource("38_ht2cb")
 
-[node name="StaminaRechargeBar" type="TextureProgressBar" parent="PlayerUILayer/PlayerStatsOverlay/PanelContainer/MarginContainer"]
+[node name="StaminaRechargeBar" type="TextureProgressBar" parent="OverlayUI/PlayerStatsOverlay/PanelContainer/MarginContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 4
@@ -1716,7 +1761,7 @@ radial_fill_degrees = 157.0
 texture_under = ExtResource("39_ryeha")
 texture_progress = ExtResource("40_suqvl")
 
-[node name="HungerBar" type="TextureProgressBar" parent="PlayerUILayer/PlayerStatsOverlay/PanelContainer/MarginContainer"]
+[node name="HungerBar" type="TextureProgressBar" parent="OverlayUI/PlayerStatsOverlay/PanelContainer/MarginContainer"]
 unique_name_in_owner = true
 self_modulate = Color(1.39, 1.39, 1.39, 1)
 layout_mode = 2
@@ -1727,7 +1772,7 @@ radial_initial_angle = 201.0
 radial_fill_degrees = 157.0
 texture_progress = ExtResource("41_wehgh")
 
-[node name="HungerChange" type="TextureProgressBar" parent="PlayerUILayer/PlayerStatsOverlay/PanelContainer/MarginContainer/HungerBar"]
+[node name="HungerChange" type="TextureProgressBar" parent="OverlayUI/PlayerStatsOverlay/PanelContainer/MarginContainer/HungerBar"]
 unique_name_in_owner = true
 show_behind_parent = true
 layout_mode = 2
@@ -1741,7 +1786,7 @@ radial_fill_degrees = 157.0
 texture_under = ExtResource("42_im6xp")
 texture_progress = ExtResource("43_k8324")
 
-[node name="StaminaBar" type="TextureProgressBar" parent="PlayerUILayer/PlayerStatsOverlay/PanelContainer/MarginContainer"]
+[node name="StaminaBar" type="TextureProgressBar" parent="OverlayUI/PlayerStatsOverlay/PanelContainer/MarginContainer"]
 unique_name_in_owner = true
 material = SubResource("ShaderMaterial_0q2s6")
 layout_mode = 2
@@ -1752,7 +1797,7 @@ radial_initial_angle = 159.0
 radial_fill_degrees = 157.0
 texture_progress = ExtResource("45_3j47m")
 
-[node name="StaminaChange" type="TextureProgressBar" parent="PlayerUILayer/PlayerStatsOverlay/PanelContainer/MarginContainer/StaminaBar"]
+[node name="StaminaChange" type="TextureProgressBar" parent="OverlayUI/PlayerStatsOverlay/PanelContainer/MarginContainer/StaminaBar"]
 unique_name_in_owner = true
 show_behind_parent = true
 layout_mode = 2
@@ -1766,14 +1811,14 @@ radial_fill_degrees = 157.0
 texture_under = ExtResource("46_l08yu")
 texture_progress = ExtResource("47_2ra1b")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="PlayerUILayer/PlayerStatsOverlay/PanelContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="OverlayUI/PlayerStatsOverlay/PanelContainer"]
 custom_minimum_size = Vector2(1495, 0)
 layout_mode = 2
 size_flags_horizontal = 10
 size_flags_vertical = 4
 theme_override_constants/separation = 38
 
-[node name="ShieldBar" type="TextureProgressBar" parent="PlayerUILayer/PlayerStatsOverlay/PanelContainer/VBoxContainer"]
+[node name="ShieldBar" type="TextureProgressBar" parent="OverlayUI/PlayerStatsOverlay/PanelContainer/VBoxContainer"]
 unique_name_in_owner = true
 self_modulate = Color(1.7, 1.7, 1.7, 1)
 custom_minimum_size = Vector2(1439, 154)
@@ -1782,7 +1827,7 @@ value = 75.0
 texture_progress = ExtResource("48_d5w3g")
 texture_progress_offset = Vector2(16, 16)
 
-[node name="ShieldChange" type="TextureProgressBar" parent="PlayerUILayer/PlayerStatsOverlay/PanelContainer/VBoxContainer/ShieldBar"]
+[node name="ShieldChange" type="TextureProgressBar" parent="OverlayUI/PlayerStatsOverlay/PanelContainer/VBoxContainer/ShieldBar"]
 unique_name_in_owner = true
 show_behind_parent = true
 layout_mode = 0
@@ -1793,7 +1838,7 @@ texture_under = ExtResource("49_ynd7x")
 texture_progress = ExtResource("50_86ubk")
 texture_progress_offset = Vector2(16, 16)
 
-[node name="HealthBar" type="TextureProgressBar" parent="PlayerUILayer/PlayerStatsOverlay/PanelContainer/VBoxContainer"]
+[node name="HealthBar" type="TextureProgressBar" parent="OverlayUI/PlayerStatsOverlay/PanelContainer/VBoxContainer"]
 unique_name_in_owner = true
 self_modulate = Color(1.55, 1.55, 1.55, 1)
 custom_minimum_size = Vector2(1441, 156)
@@ -1802,7 +1847,7 @@ value = 100.0
 texture_progress = ExtResource("51_6cphe")
 texture_progress_offset = Vector2(16, 17)
 
-[node name="HealthChange" type="TextureProgressBar" parent="PlayerUILayer/PlayerStatsOverlay/PanelContainer/VBoxContainer/HealthBar"]
+[node name="HealthChange" type="TextureProgressBar" parent="OverlayUI/PlayerStatsOverlay/PanelContainer/VBoxContainer/HealthBar"]
 unique_name_in_owner = true
 show_behind_parent = true
 layout_mode = 0
@@ -1813,34 +1858,34 @@ texture_under = ExtResource("52_dhyl8")
 texture_progress = ExtResource("53_qsiea")
 texture_progress_offset = Vector2(16, 17)
 
-[node name="HealthChangedTimer" type="Timer" parent="PlayerUILayer/PlayerStatsOverlay"]
+[node name="HealthChangedTimer" type="Timer" parent="OverlayUI/PlayerStatsOverlay"]
 unique_name_in_owner = true
 wait_time = 0.5
 one_shot = true
 
-[node name="ShieldChangedTimer" type="Timer" parent="PlayerUILayer/PlayerStatsOverlay"]
+[node name="ShieldChangedTimer" type="Timer" parent="OverlayUI/PlayerStatsOverlay"]
 unique_name_in_owner = true
 wait_time = 0.5
 one_shot = true
 
-[node name="HungerChangedTimer" type="Timer" parent="PlayerUILayer/PlayerStatsOverlay"]
+[node name="HungerChangedTimer" type="Timer" parent="OverlayUI/PlayerStatsOverlay"]
 unique_name_in_owner = true
 wait_time = 0.5
 one_shot = true
 
-[node name="StaminaChangedTimer" type="Timer" parent="PlayerUILayer/PlayerStatsOverlay"]
+[node name="StaminaChangedTimer" type="Timer" parent="OverlayUI/PlayerStatsOverlay"]
 unique_name_in_owner = true
 wait_time = 0.5
 one_shot = true
 
-[node name="StaminaRechargeTimer" type="Timer" parent="PlayerUILayer/PlayerStatsOverlay"]
+[node name="StaminaRechargeTimer" type="Timer" parent="OverlayUI/PlayerStatsOverlay"]
 unique_name_in_owner = true
 wait_time = 0.3
 one_shot = true
 
-[node name="CraftingManager" parent="PlayerUILayer" instance=ExtResource("71_qjjeg")]
+[node name="CraftingManager" parent="OverlayUI" instance=ExtResource("71_qjjeg")]
 
-[node name="ItemInteractionHUD" type="NinePatchRect" parent="PlayerUILayer"]
+[node name="ItemInteractionHUD" type="NinePatchRect" parent="OverlayUI"]
 anchors_preset = 6
 anchor_left = 1.0
 anchor_top = 0.5
@@ -1862,7 +1907,7 @@ axis_stretch_vertical = 2
 script = ExtResource("35_45ikj")
 metadata/_edit_group_ = true
 
-[node name="ItemGlow" type="TextureRect" parent="PlayerUILayer/ItemInteractionHUD"]
+[node name="ItemGlow" type="TextureRect" parent="OverlayUI/ItemInteractionHUD"]
 self_modulate = Color(0, 0.369, 1.05, 1)
 material = SubResource("CanvasItemMaterial_8e40b")
 layout_mode = 1
@@ -1881,7 +1926,7 @@ texture = ExtResource("66_461tf")
 expand_mode = 1
 stretch_mode = 4
 
-[node name="InteractIndicator" type="TextureRect" parent="PlayerUILayer/ItemInteractionHUD"]
+[node name="InteractIndicator" type="TextureRect" parent="OverlayUI/ItemInteractionHUD"]
 self_modulate = Color(0.963, 0.899, 0.886, 0.7)
 layout_mode = 1
 anchors_preset = 8
@@ -1898,7 +1943,7 @@ grow_vertical = 2
 scale = Vector2(0.35, 0.35)
 texture = ExtResource("75_j0f4f")
 
-[node name="TextureMargins" type="MarginContainer" parent="PlayerUILayer/ItemInteractionHUD"]
+[node name="TextureMargins" type="MarginContainer" parent="OverlayUI/ItemInteractionHUD"]
 layout_mode = 1
 anchors_preset = 6
 anchor_left = 1.0
@@ -1914,14 +1959,14 @@ grow_vertical = 2
 scale = Vector2(0.65, 0.65)
 pivot_offset = Vector2(8, 8)
 
-[node name="ItemTexture" type="TextureRect" parent="PlayerUILayer/ItemInteractionHUD/TextureMargins"]
+[node name="ItemTexture" type="TextureRect" parent="OverlayUI/ItemInteractionHUD/TextureMargins"]
 material = SubResource("ShaderMaterial_5ry76")
 custom_minimum_size = Vector2(16, 16)
 layout_mode = 2
 expand_mode = 1
 stretch_mode = 5
 
-[node name="Quantity" type="Label" parent="PlayerUILayer/ItemInteractionHUD"]
+[node name="Quantity" type="Label" parent="OverlayUI/ItemInteractionHUD"]
 layout_mode = 1
 anchors_preset = 3
 anchor_left = 1.0
@@ -1939,7 +1984,7 @@ label_settings = SubResource("LabelSettings_5ehfk")
 horizontal_alignment = 2
 vertical_alignment = 1
 
-[node name="HotbarUISlotMargins" type="MarginContainer" parent="PlayerUILayer"]
+[node name="HotbarUISlotMargins" type="MarginContainer" parent="OverlayUI"]
 anchors_preset = 3
 anchor_left = 1.0
 anchor_top = 1.0
@@ -1957,7 +2002,7 @@ theme_override_constants/margin_top = 0
 theme_override_constants/margin_right = 0
 theme_override_constants/margin_bottom = 0
 
-[node name="HotbarUI" type="NinePatchRect" parent="PlayerUILayer/HotbarUISlotMargins" node_paths=PackedStringArray("player_inv", "active_slot_info") groups=["has_save_logic"]]
+[node name="HotbarUI" type="NinePatchRect" parent="OverlayUI/HotbarUISlotMargins" node_paths=PackedStringArray("player_inv", "active_slot_info") groups=["has_save_logic"]]
 unique_name_in_owner = true
 layout_mode = 2
 texture = ExtResource("78_jlc36")
@@ -1971,7 +2016,7 @@ script = ExtResource("58_i567i")
 player_inv = NodePath("../../../ItemReceiverComponent")
 active_slot_info = NodePath("../../ActiveSlotInfo")
 
-[node name="HotbarUISlotGrid" type="HBoxContainer" parent="PlayerUILayer/HotbarUISlotMargins/HotbarUI"]
+[node name="HotbarUISlotGrid" type="HBoxContainer" parent="OverlayUI/HotbarUISlotMargins/HotbarUI"]
 unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 8
@@ -1989,62 +2034,73 @@ theme_override_constants/separation = 0
 alignment = 1
 metadata/_edit_lock_ = true
 
-[node name="Slot1" parent="PlayerUILayer/HotbarUISlotMargins/HotbarUI/HotbarUISlotGrid" instance=ExtResource("42_r422n")]
+[node name="Slot1" parent="OverlayUI/HotbarUISlotMargins/HotbarUI/HotbarUISlotGrid" instance=ExtResource("42_r422n")]
 layout_mode = 2
 size_flags_vertical = 4
 metadata/_edit_lock_ = true
 
-[node name="Slot2" parent="PlayerUILayer/HotbarUISlotMargins/HotbarUI/HotbarUISlotGrid" instance=ExtResource("42_r422n")]
+[node name="Slot2" parent="OverlayUI/HotbarUISlotMargins/HotbarUI/HotbarUISlotGrid" instance=ExtResource("42_r422n")]
 layout_mode = 2
 size_flags_vertical = 4
 metadata/_edit_lock_ = true
 
-[node name="Slot3" parent="PlayerUILayer/HotbarUISlotMargins/HotbarUI/HotbarUISlotGrid" instance=ExtResource("42_r422n")]
+[node name="Slot3" parent="OverlayUI/HotbarUISlotMargins/HotbarUI/HotbarUISlotGrid" instance=ExtResource("42_r422n")]
 layout_mode = 2
 size_flags_vertical = 4
 metadata/_edit_lock_ = true
 
-[node name="Slot4" parent="PlayerUILayer/HotbarUISlotMargins/HotbarUI/HotbarUISlotGrid" instance=ExtResource("42_r422n")]
+[node name="Slot4" parent="OverlayUI/HotbarUISlotMargins/HotbarUI/HotbarUISlotGrid" instance=ExtResource("42_r422n")]
 layout_mode = 2
 size_flags_vertical = 4
 metadata/_edit_lock_ = true
 
-[node name="Slot5" parent="PlayerUILayer/HotbarUISlotMargins/HotbarUI/HotbarUISlotGrid" instance=ExtResource("42_r422n")]
+[node name="Slot5" parent="OverlayUI/HotbarUISlotMargins/HotbarUI/HotbarUISlotGrid" instance=ExtResource("42_r422n")]
 layout_mode = 2
 size_flags_vertical = 4
 metadata/_edit_lock_ = true
 
-[node name="ScrollDebounceTimer" type="Timer" parent="PlayerUILayer/HotbarUISlotMargins/HotbarUI"]
+[node name="ScrollDebounceTimer" type="Timer" parent="OverlayUI/HotbarUISlotMargins/HotbarUI"]
 wait_time = 0.1
 one_shot = true
 
-[node name="ActiveSlotInfo" type="CenterContainer" parent="PlayerUILayer"]
+[node name="ActiveSlotInfo" type="MarginContainer" parent="OverlayUI"]
 anchors_preset = 3
 anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -41.0
-offset_top = -53.0
+offset_left = -37.0
+offset_top = -47.0
 offset_right = -5.0
 offset_bottom = -29.0
 grow_horizontal = 0
 grow_vertical = 0
+size_flags_horizontal = 10
+size_flags_vertical = 8
 script = ExtResource("91_qr476")
+ammo_icon_textures = {
+"Heavy": ExtResource("93_utxlp"),
+"IonCharge": null,
+"Light": ExtResource("40_ftusj"),
+"Magic": null,
+"Medium": ExtResource("92_2bavx"),
+"Rocket": null,
+"Shell": ExtResource("94_36bov"),
+"Stamina": null
+}
 
-[node name="VBoxContainer" type="VBoxContainer" parent="PlayerUILayer/ActiveSlotInfo"]
+[node name="VBoxContainer" type="VBoxContainer" parent="OverlayUI/ActiveSlotInfo"]
 layout_mode = 2
+size_flags_horizontal = 8
 theme_override_constants/separation = 0
 
-[node name="AmmoInfo" type="HBoxContainer" parent="PlayerUILayer/ActiveSlotInfo/VBoxContainer"]
-custom_minimum_size = Vector2(40, 15)
+[node name="AmmoInfo" type="HBoxContainer" parent="OverlayUI/ActiveSlotInfo/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 8
 size_flags_vertical = 8
 theme_override_constants/separation = 2
-alignment = 2
 
-[node name="MagAmmo" type="Label" parent="PlayerUILayer/ActiveSlotInfo/VBoxContainer/AmmoInfo"]
+[node name="MagAmmo" type="Label" parent="OverlayUI/ActiveSlotInfo/VBoxContainer/AmmoInfo"]
 layout_mode = 2
 size_flags_vertical = 8
 text = "64"
@@ -2053,24 +2109,26 @@ horizontal_alignment = 2
 vertical_alignment = 2
 uppercase = true
 
-[node name="InvAmmo" type="Label" parent="PlayerUILayer/ActiveSlotInfo/VBoxContainer/AmmoInfo"]
+[node name="InvAmmo" type="Label" parent="OverlayUI/ActiveSlotInfo/VBoxContainer/AmmoInfo"]
 layout_mode = 2
 size_flags_vertical = 8
+text = "/ 128"
 label_settings = SubResource("LabelSettings_rybwt")
 horizontal_alignment = 2
 vertical_alignment = 2
 uppercase = true
 
-[node name="ItemName" type="Label" parent="PlayerUILayer/ActiveSlotInfo/VBoxContainer"]
+[node name="ItemName" type="Label" parent="OverlayUI/ActiveSlotInfo/VBoxContainer"]
 layout_mode = 2
+size_flags_horizontal = 8
 size_flags_vertical = 8
 text = "Laser Gun"
 label_settings = SubResource("LabelSettings_ye7qx")
 horizontal_alignment = 2
-vertical_alignment = 1
+vertical_alignment = 2
 uppercase = true
 
-[node name="WpnModSlotMargins" type="MarginContainer" parent="PlayerUILayer"]
+[node name="WpnModSlotMargins" type="MarginContainer" parent="OverlayUI"]
 visible = false
 anchors_preset = 3
 anchor_left = 1.0
@@ -2089,7 +2147,7 @@ theme_override_constants/margin_top = 0
 theme_override_constants/margin_right = 0
 theme_override_constants/margin_bottom = 0
 
-[node name="WpnModSlotsUI" type="NinePatchRect" parent="PlayerUILayer/WpnModSlotMargins" groups=["has_save_logic"]]
+[node name="WpnModSlotsUI" type="NinePatchRect" parent="OverlayUI/WpnModSlotMargins" groups=["has_save_logic"]]
 layout_mode = 2
 texture = ExtResource("81_5myae")
 region_rect = Rect2(0, 0, 20, 20)
@@ -2100,7 +2158,7 @@ patch_margin_bottom = 3
 axis_stretch_vertical = 1
 script = ExtResource("82_dgpt2")
 
-[node name="WpnModSlotsGrid" type="VBoxContainer" parent="PlayerUILayer/WpnModSlotMargins/WpnModSlotsUI"]
+[node name="WpnModSlotsGrid" type="VBoxContainer" parent="OverlayUI/WpnModSlotMargins/WpnModSlotsUI"]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -2117,22 +2175,22 @@ theme_override_constants/separation = 0
 alignment = 1
 metadata/_edit_lock_ = true
 
-[node name="Slot1" parent="PlayerUILayer/WpnModSlotMargins/WpnModSlotsUI/WpnModSlotsGrid" instance=ExtResource("42_r422n")]
+[node name="Slot1" parent="OverlayUI/WpnModSlotMargins/WpnModSlotsUI/WpnModSlotsGrid" instance=ExtResource("42_r422n")]
 layout_mode = 2
 size_flags_vertical = 4
 metadata/_edit_lock_ = true
 
-[node name="Slot2" parent="PlayerUILayer/WpnModSlotMargins/WpnModSlotsUI/WpnModSlotsGrid" instance=ExtResource("42_r422n")]
+[node name="Slot2" parent="OverlayUI/WpnModSlotMargins/WpnModSlotsUI/WpnModSlotsGrid" instance=ExtResource("42_r422n")]
 layout_mode = 2
 size_flags_vertical = 4
 metadata/_edit_lock_ = true
 
-[node name="Slot3" parent="PlayerUILayer/WpnModSlotMargins/WpnModSlotsUI/WpnModSlotsGrid" instance=ExtResource("42_r422n")]
+[node name="Slot3" parent="OverlayUI/WpnModSlotMargins/WpnModSlotsUI/WpnModSlotsGrid" instance=ExtResource("42_r422n")]
 layout_mode = 2
 size_flags_vertical = 4
 metadata/_edit_lock_ = true
 
-[node name="PlayerInvUI" type="ColorRect" parent="PlayerUILayer" node_paths=PackedStringArray("hotbar_ui", "wpn_mod_slots_ui")]
+[node name="PlayerInvUI" type="ColorRect" parent="OverlayUI" node_paths=PackedStringArray("hotbar_ui", "wpn_mod_slots_ui")]
 process_mode = 3
 visible = false
 material = SubResource("ShaderMaterial_2q23q")
@@ -2150,7 +2208,7 @@ btn_up_texture = ExtResource("86_ald0t")
 btn_down_texture = ExtResource("84_kbn30")
 item_scene = ExtResource("31_8v2rb")
 
-[node name="MainTextureMargins" type="MarginContainer" parent="PlayerUILayer/PlayerInvUI"]
+[node name="MainTextureMargins" type="MarginContainer" parent="OverlayUI/PlayerInvUI"]
 layout_mode = 2
 offset_right = 480.0
 offset_bottom = 270.0
@@ -2162,7 +2220,7 @@ theme_override_constants/margin_top = 55
 theme_override_constants/margin_right = 135
 theme_override_constants/margin_bottom = 70
 
-[node name="InvPopulator" type="VBoxContainer" parent="PlayerUILayer/PlayerInvUI/MainTextureMargins" node_paths=PackedStringArray("item_details_label", "main_slot_grid", "hotbar_grid", "trash_slot")]
+[node name="InvPopulator" type="VBoxContainer" parent="OverlayUI/PlayerInvUI/MainTextureMargins" node_paths=PackedStringArray("item_details_label", "main_slot_grid", "hotbar_grid", "trash_slot")]
 unique_name_in_owner = true
 layout_mode = 2
 mouse_filter = 0
@@ -2175,7 +2233,7 @@ main_slot_grid = NodePath("InventoryTexture/GridMargins/SlotGrid")
 hotbar_grid = NodePath("../../HotbarSlotMargins/HotbarTexture/HotbarSlotGrid")
 trash_slot = NodePath("../../TrashSlotPanel/TrashSlot")
 
-[node name="InventoryTexture" type="NinePatchRect" parent="PlayerUILayer/PlayerInvUI/MainTextureMargins/InvPopulator"]
+[node name="InventoryTexture" type="NinePatchRect" parent="OverlayUI/PlayerInvUI/MainTextureMargins/InvPopulator"]
 layout_mode = 2
 size_flags_vertical = 3
 texture = ExtResource("78_jlc36")
@@ -2185,7 +2243,7 @@ patch_margin_right = 4
 patch_margin_bottom = 4
 axis_stretch_vertical = 1
 
-[node name="InventoryTitle" type="Label" parent="PlayerUILayer/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture"]
+[node name="InventoryTitle" type="Label" parent="OverlayUI/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture"]
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
@@ -2200,7 +2258,7 @@ label_settings = SubResource("LabelSettings_xlxjq")
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="ItemDetails" type="Label" parent="PlayerUILayer/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture"]
+[node name="ItemDetails" type="Label" parent="OverlayUI/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture"]
 custom_minimum_size = Vector2(176, 16)
 layout_mode = 1
 anchors_preset = 8
@@ -2221,7 +2279,7 @@ autowrap_mode = 3
 text_overrun_behavior = 4
 uppercase = true
 
-[node name="SortByName" type="NinePatchRect" parent="PlayerUILayer/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture"]
+[node name="SortByName" type="NinePatchRect" parent="OverlayUI/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture"]
 unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 8
@@ -2241,7 +2299,7 @@ patch_margin_top = 2
 patch_margin_right = 2
 patch_margin_bottom = 2
 
-[node name="SortByNameBtn" type="Button" parent="PlayerUILayer/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/SortByName"]
+[node name="SortByNameBtn" type="Button" parent="OverlayUI/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/SortByName"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -2252,7 +2310,7 @@ focus_mode = 0
 flat = true
 metadata/_edit_lock_ = true
 
-[node name="Label" type="Label" parent="PlayerUILayer/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/SortByName"]
+[node name="Label" type="Label" parent="OverlayUI/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/SortByName"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -2265,7 +2323,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 metadata/_edit_lock_ = true
 
-[node name="SortByCount" type="NinePatchRect" parent="PlayerUILayer/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture"]
+[node name="SortByCount" type="NinePatchRect" parent="OverlayUI/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture"]
 unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 8
@@ -2285,7 +2343,7 @@ patch_margin_top = 2
 patch_margin_right = 2
 patch_margin_bottom = 2
 
-[node name="SortByCountBtn" type="Button" parent="PlayerUILayer/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/SortByCount"]
+[node name="SortByCountBtn" type="Button" parent="OverlayUI/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/SortByCount"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -2296,7 +2354,7 @@ focus_mode = 0
 flat = true
 metadata/_edit_lock_ = true
 
-[node name="Label" type="Label" parent="PlayerUILayer/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/SortByCount"]
+[node name="Label" type="Label" parent="OverlayUI/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/SortByCount"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -2309,7 +2367,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 metadata/_edit_lock_ = true
 
-[node name="SortByRarity" type="NinePatchRect" parent="PlayerUILayer/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture"]
+[node name="SortByRarity" type="NinePatchRect" parent="OverlayUI/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture"]
 unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 8
@@ -2328,7 +2386,7 @@ patch_margin_top = 2
 patch_margin_right = 2
 patch_margin_bottom = 2
 
-[node name="SortByRarityBtn" type="Button" parent="PlayerUILayer/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/SortByRarity"]
+[node name="SortByRarityBtn" type="Button" parent="OverlayUI/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/SortByRarity"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -2339,7 +2397,7 @@ focus_mode = 0
 flat = true
 metadata/_edit_lock_ = true
 
-[node name="Label" type="Label" parent="PlayerUILayer/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/SortByRarity"]
+[node name="Label" type="Label" parent="OverlayUI/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/SortByRarity"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -2352,7 +2410,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 metadata/_edit_lock_ = true
 
-[node name="AutoStack" type="NinePatchRect" parent="PlayerUILayer/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture"]
+[node name="AutoStack" type="NinePatchRect" parent="OverlayUI/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture"]
 unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 8
@@ -2372,7 +2430,7 @@ patch_margin_top = 2
 patch_margin_right = 2
 patch_margin_bottom = 2
 
-[node name="AutoStackBtn" type="Button" parent="PlayerUILayer/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/AutoStack"]
+[node name="AutoStackBtn" type="Button" parent="OverlayUI/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/AutoStack"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -2383,7 +2441,7 @@ focus_mode = 0
 flat = true
 metadata/_edit_lock_ = true
 
-[node name="Label" type="Label" parent="PlayerUILayer/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/AutoStack"]
+[node name="Label" type="Label" parent="OverlayUI/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/AutoStack"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -2396,7 +2454,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 metadata/_edit_lock_ = true
 
-[node name="GridMargins" type="MarginContainer" parent="PlayerUILayer/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture"]
+[node name="GridMargins" type="MarginContainer" parent="OverlayUI/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture"]
 editor_description = "THIS GRIDMARGIN MOUSE FILTER MUST STAY AS IGNORE TO MAKE SORT BUTTONS WORK!"
 layout_mode = 1
 anchors_preset = 8
@@ -2417,7 +2475,7 @@ theme_override_constants/margin_right = 0
 theme_override_constants/margin_bottom = 0
 metadata/_edit_lock_ = true
 
-[node name="SlotGrid" type="GridContainer" parent="PlayerUILayer/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/GridMargins"]
+[node name="SlotGrid" type="GridContainer" parent="OverlayUI/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/GridMargins"]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
@@ -2425,103 +2483,103 @@ theme_override_constants/h_separation = 0
 theme_override_constants/v_separation = 0
 columns = 8
 
-[node name="Slot1" parent="PlayerUILayer/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/GridMargins/SlotGrid" instance=ExtResource("42_r422n")]
+[node name="Slot1" parent="OverlayUI/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/GridMargins/SlotGrid" instance=ExtResource("42_r422n")]
 layout_mode = 2
 
-[node name="Slot2" parent="PlayerUILayer/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/GridMargins/SlotGrid" instance=ExtResource("42_r422n")]
+[node name="Slot2" parent="OverlayUI/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/GridMargins/SlotGrid" instance=ExtResource("42_r422n")]
 layout_mode = 2
 
-[node name="Slot3" parent="PlayerUILayer/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/GridMargins/SlotGrid" instance=ExtResource("42_r422n")]
+[node name="Slot3" parent="OverlayUI/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/GridMargins/SlotGrid" instance=ExtResource("42_r422n")]
 layout_mode = 2
 
-[node name="Slot4" parent="PlayerUILayer/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/GridMargins/SlotGrid" instance=ExtResource("42_r422n")]
+[node name="Slot4" parent="OverlayUI/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/GridMargins/SlotGrid" instance=ExtResource("42_r422n")]
 layout_mode = 2
 
-[node name="Slot5" parent="PlayerUILayer/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/GridMargins/SlotGrid" instance=ExtResource("42_r422n")]
+[node name="Slot5" parent="OverlayUI/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/GridMargins/SlotGrid" instance=ExtResource("42_r422n")]
 layout_mode = 2
 
-[node name="Slot6" parent="PlayerUILayer/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/GridMargins/SlotGrid" instance=ExtResource("42_r422n")]
+[node name="Slot6" parent="OverlayUI/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/GridMargins/SlotGrid" instance=ExtResource("42_r422n")]
 layout_mode = 2
 
-[node name="Slot7" parent="PlayerUILayer/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/GridMargins/SlotGrid" instance=ExtResource("42_r422n")]
+[node name="Slot7" parent="OverlayUI/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/GridMargins/SlotGrid" instance=ExtResource("42_r422n")]
 layout_mode = 2
 
-[node name="Slot8" parent="PlayerUILayer/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/GridMargins/SlotGrid" instance=ExtResource("42_r422n")]
+[node name="Slot8" parent="OverlayUI/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/GridMargins/SlotGrid" instance=ExtResource("42_r422n")]
 layout_mode = 2
 
-[node name="Slot9" parent="PlayerUILayer/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/GridMargins/SlotGrid" instance=ExtResource("42_r422n")]
+[node name="Slot9" parent="OverlayUI/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/GridMargins/SlotGrid" instance=ExtResource("42_r422n")]
 layout_mode = 2
 
-[node name="Slot10" parent="PlayerUILayer/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/GridMargins/SlotGrid" instance=ExtResource("42_r422n")]
+[node name="Slot10" parent="OverlayUI/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/GridMargins/SlotGrid" instance=ExtResource("42_r422n")]
 layout_mode = 2
 
-[node name="Slot11" parent="PlayerUILayer/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/GridMargins/SlotGrid" instance=ExtResource("42_r422n")]
+[node name="Slot11" parent="OverlayUI/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/GridMargins/SlotGrid" instance=ExtResource("42_r422n")]
 layout_mode = 2
 
-[node name="Slot12" parent="PlayerUILayer/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/GridMargins/SlotGrid" instance=ExtResource("42_r422n")]
+[node name="Slot12" parent="OverlayUI/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/GridMargins/SlotGrid" instance=ExtResource("42_r422n")]
 layout_mode = 2
 
-[node name="Slot13" parent="PlayerUILayer/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/GridMargins/SlotGrid" instance=ExtResource("42_r422n")]
+[node name="Slot13" parent="OverlayUI/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/GridMargins/SlotGrid" instance=ExtResource("42_r422n")]
 layout_mode = 2
 
-[node name="Slot14" parent="PlayerUILayer/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/GridMargins/SlotGrid" instance=ExtResource("42_r422n")]
+[node name="Slot14" parent="OverlayUI/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/GridMargins/SlotGrid" instance=ExtResource("42_r422n")]
 layout_mode = 2
 
-[node name="Slot15" parent="PlayerUILayer/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/GridMargins/SlotGrid" instance=ExtResource("42_r422n")]
+[node name="Slot15" parent="OverlayUI/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/GridMargins/SlotGrid" instance=ExtResource("42_r422n")]
 layout_mode = 2
 
-[node name="Slot16" parent="PlayerUILayer/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/GridMargins/SlotGrid" instance=ExtResource("42_r422n")]
+[node name="Slot16" parent="OverlayUI/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/GridMargins/SlotGrid" instance=ExtResource("42_r422n")]
 layout_mode = 2
 
-[node name="Slot17" parent="PlayerUILayer/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/GridMargins/SlotGrid" instance=ExtResource("42_r422n")]
+[node name="Slot17" parent="OverlayUI/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/GridMargins/SlotGrid" instance=ExtResource("42_r422n")]
 layout_mode = 2
 
-[node name="Slot18" parent="PlayerUILayer/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/GridMargins/SlotGrid" instance=ExtResource("42_r422n")]
+[node name="Slot18" parent="OverlayUI/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/GridMargins/SlotGrid" instance=ExtResource("42_r422n")]
 layout_mode = 2
 
-[node name="Slot19" parent="PlayerUILayer/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/GridMargins/SlotGrid" instance=ExtResource("42_r422n")]
+[node name="Slot19" parent="OverlayUI/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/GridMargins/SlotGrid" instance=ExtResource("42_r422n")]
 layout_mode = 2
 
-[node name="Slot20" parent="PlayerUILayer/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/GridMargins/SlotGrid" instance=ExtResource("42_r422n")]
+[node name="Slot20" parent="OverlayUI/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/GridMargins/SlotGrid" instance=ExtResource("42_r422n")]
 layout_mode = 2
 
-[node name="Slot21" parent="PlayerUILayer/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/GridMargins/SlotGrid" instance=ExtResource("42_r422n")]
+[node name="Slot21" parent="OverlayUI/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/GridMargins/SlotGrid" instance=ExtResource("42_r422n")]
 layout_mode = 2
 
-[node name="Slot22" parent="PlayerUILayer/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/GridMargins/SlotGrid" instance=ExtResource("42_r422n")]
+[node name="Slot22" parent="OverlayUI/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/GridMargins/SlotGrid" instance=ExtResource("42_r422n")]
 layout_mode = 2
 
-[node name="Slot23" parent="PlayerUILayer/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/GridMargins/SlotGrid" instance=ExtResource("42_r422n")]
+[node name="Slot23" parent="OverlayUI/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/GridMargins/SlotGrid" instance=ExtResource("42_r422n")]
 layout_mode = 2
 
-[node name="Slot24" parent="PlayerUILayer/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/GridMargins/SlotGrid" instance=ExtResource("42_r422n")]
+[node name="Slot24" parent="OverlayUI/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/GridMargins/SlotGrid" instance=ExtResource("42_r422n")]
 layout_mode = 2
 
-[node name="Slot25" parent="PlayerUILayer/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/GridMargins/SlotGrid" instance=ExtResource("42_r422n")]
+[node name="Slot25" parent="OverlayUI/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/GridMargins/SlotGrid" instance=ExtResource("42_r422n")]
 layout_mode = 2
 
-[node name="Slot26" parent="PlayerUILayer/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/GridMargins/SlotGrid" instance=ExtResource("42_r422n")]
+[node name="Slot26" parent="OverlayUI/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/GridMargins/SlotGrid" instance=ExtResource("42_r422n")]
 layout_mode = 2
 
-[node name="Slot27" parent="PlayerUILayer/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/GridMargins/SlotGrid" instance=ExtResource("42_r422n")]
+[node name="Slot27" parent="OverlayUI/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/GridMargins/SlotGrid" instance=ExtResource("42_r422n")]
 layout_mode = 2
 
-[node name="Slot28" parent="PlayerUILayer/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/GridMargins/SlotGrid" instance=ExtResource("42_r422n")]
+[node name="Slot28" parent="OverlayUI/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/GridMargins/SlotGrid" instance=ExtResource("42_r422n")]
 layout_mode = 2
 
-[node name="Slot29" parent="PlayerUILayer/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/GridMargins/SlotGrid" instance=ExtResource("42_r422n")]
+[node name="Slot29" parent="OverlayUI/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/GridMargins/SlotGrid" instance=ExtResource("42_r422n")]
 layout_mode = 2
 
-[node name="Slot30" parent="PlayerUILayer/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/GridMargins/SlotGrid" instance=ExtResource("42_r422n")]
+[node name="Slot30" parent="OverlayUI/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/GridMargins/SlotGrid" instance=ExtResource("42_r422n")]
 layout_mode = 2
 
-[node name="Slot31" parent="PlayerUILayer/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/GridMargins/SlotGrid" instance=ExtResource("42_r422n")]
+[node name="Slot31" parent="OverlayUI/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/GridMargins/SlotGrid" instance=ExtResource("42_r422n")]
 layout_mode = 2
 
-[node name="Slot32" parent="PlayerUILayer/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/GridMargins/SlotGrid" instance=ExtResource("42_r422n")]
+[node name="Slot32" parent="OverlayUI/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/GridMargins/SlotGrid" instance=ExtResource("42_r422n")]
 layout_mode = 2
 
-[node name="TrashSlotPanel" type="NinePatchRect" parent="PlayerUILayer/PlayerInvUI"]
+[node name="TrashSlotPanel" type="NinePatchRect" parent="OverlayUI/PlayerInvUI"]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
 offset_left = 313.0
@@ -2538,7 +2596,7 @@ patch_margin_right = 3
 patch_margin_bottom = 3
 metadata/_edit_group_ = true
 
-[node name="TrashSlot" parent="PlayerUILayer/PlayerInvUI/TrashSlotPanel" instance=ExtResource("42_r422n")]
+[node name="TrashSlot" parent="OverlayUI/PlayerInvUI/TrashSlotPanel" instance=ExtResource("42_r422n")]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -2554,10 +2612,13 @@ grow_vertical = 2
 size_flags_vertical = 4
 region_rect = Rect2(0, 0, 20, 20)
 
-[node name="ItemTexture" parent="PlayerUILayer/PlayerInvUI/TrashSlotPanel/TrashSlot/TextureMargins" index="0"]
+[node name="BackColor" parent="OverlayUI/PlayerInvUI/TrashSlotPanel/TrashSlot" index="0"]
+material = SubResource("ShaderMaterial_xh2l0")
+
+[node name="ItemTexture" parent="OverlayUI/PlayerInvUI/TrashSlotPanel/TrashSlot/TextureMargins" index="0"]
 material = SubResource("ShaderMaterial_pc124")
 
-[node name="TrashTexture" type="TextureRect" parent="PlayerUILayer/PlayerInvUI/TrashSlotPanel/TrashSlot"]
+[node name="TrashTexture" type="TextureRect" parent="OverlayUI/PlayerInvUI/TrashSlotPanel/TrashSlot"]
 unique_name_in_owner = true
 self_modulate = Color(0, 0, 0, 0.23)
 layout_mode = 2
@@ -2568,7 +2629,7 @@ offset_bottom = 19.0
 texture = ExtResource("69_4ao77")
 stretch_mode = 3
 
-[node name="HotbarSlotMargins" type="MarginContainer" parent="PlayerUILayer/PlayerInvUI"]
+[node name="HotbarSlotMargins" type="MarginContainer" parent="OverlayUI/PlayerInvUI"]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -2587,7 +2648,7 @@ theme_override_constants/margin_top = 0
 theme_override_constants/margin_right = 0
 theme_override_constants/margin_bottom = 0
 
-[node name="HotbarTexture" type="NinePatchRect" parent="PlayerUILayer/PlayerInvUI/HotbarSlotMargins"]
+[node name="HotbarTexture" type="NinePatchRect" parent="OverlayUI/PlayerInvUI/HotbarSlotMargins"]
 layout_mode = 2
 texture = ExtResource("78_jlc36")
 patch_margin_left = 4
@@ -2595,7 +2656,7 @@ patch_margin_top = 4
 patch_margin_right = 4
 patch_margin_bottom = 4
 
-[node name="HotbarSlotGrid" type="HBoxContainer" parent="PlayerUILayer/PlayerInvUI/HotbarSlotMargins/HotbarTexture"]
+[node name="HotbarSlotGrid" type="HBoxContainer" parent="OverlayUI/PlayerInvUI/HotbarSlotMargins/HotbarTexture"]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -2611,58 +2672,58 @@ grow_vertical = 2
 theme_override_constants/separation = 0
 alignment = 1
 
-[node name="Slot1" parent="PlayerUILayer/PlayerInvUI/HotbarSlotMargins/HotbarTexture/HotbarSlotGrid" instance=ExtResource("42_r422n")]
+[node name="Slot1" parent="OverlayUI/PlayerInvUI/HotbarSlotMargins/HotbarTexture/HotbarSlotGrid" instance=ExtResource("42_r422n")]
 layout_mode = 2
 size_flags_vertical = 4
 
-[node name="Slot2" parent="PlayerUILayer/PlayerInvUI/HotbarSlotMargins/HotbarTexture/HotbarSlotGrid" instance=ExtResource("42_r422n")]
+[node name="Slot2" parent="OverlayUI/PlayerInvUI/HotbarSlotMargins/HotbarTexture/HotbarSlotGrid" instance=ExtResource("42_r422n")]
 layout_mode = 2
 size_flags_vertical = 4
 
-[node name="Slot3" parent="PlayerUILayer/PlayerInvUI/HotbarSlotMargins/HotbarTexture/HotbarSlotGrid" instance=ExtResource("42_r422n")]
+[node name="Slot3" parent="OverlayUI/PlayerInvUI/HotbarSlotMargins/HotbarTexture/HotbarSlotGrid" instance=ExtResource("42_r422n")]
 layout_mode = 2
 size_flags_vertical = 4
 
-[node name="Slot4" parent="PlayerUILayer/PlayerInvUI/HotbarSlotMargins/HotbarTexture/HotbarSlotGrid" instance=ExtResource("42_r422n")]
+[node name="Slot4" parent="OverlayUI/PlayerInvUI/HotbarSlotMargins/HotbarTexture/HotbarSlotGrid" instance=ExtResource("42_r422n")]
 layout_mode = 2
 size_flags_vertical = 4
 
-[node name="Slot5" parent="PlayerUILayer/PlayerInvUI/HotbarSlotMargins/HotbarTexture/HotbarSlotGrid" instance=ExtResource("42_r422n")]
+[node name="Slot5" parent="OverlayUI/PlayerInvUI/HotbarSlotMargins/HotbarTexture/HotbarSlotGrid" instance=ExtResource("42_r422n")]
 layout_mode = 2
 size_flags_vertical = 4
 
 [connection signal="timeout" from="MoveStateMachine/Dash/DashTimer" to="MoveStateMachine/Dash" method="_on_dash_timer_timeout"]
 [connection signal="timeout" from="MoveStateMachine/Stunned/StunnedTimer" to="MoveStateMachine/Stunned" method="_on_stunned_timer_timeout"]
-[connection signal="pressed" from="PlayerUILayer/TestButtons/TestHurtBtn" to="PlayerUILayer/TestButtons" method="_on_test_hurt_btn_pressed"]
-[connection signal="pressed" from="PlayerUILayer/TestButtons/TestHealBtn" to="PlayerUILayer/TestButtons" method="_on_test_heal_btn_pressed"]
-[connection signal="pressed" from="PlayerUILayer/TestButtons/TestMusicBtn" to="PlayerUILayer/TestButtons" method="_on_test_music_btn_pressed"]
-[connection signal="pressed" from="PlayerUILayer/TestButtons/TestSaveBtn" to="PlayerUILayer/TestButtons" method="_on_test_save_btn_pressed"]
-[connection signal="pressed" from="PlayerUILayer/TestButtons/TestLoadBtn" to="PlayerUILayer/TestButtons" method="_on_test_load_btn_pressed"]
-[connection signal="pressed" from="PlayerUILayer/TestButtons/TestModBtn1" to="PlayerUILayer/TestButtons" method="_on_test_mod_btn_1_pressed"]
-[connection signal="pressed" from="PlayerUILayer/TestButtons/TestModBtn2" to="PlayerUILayer/TestButtons" method="_on_test_mod_btn_2_pressed"]
-[connection signal="pressed" from="PlayerUILayer/TestButtons/TestStormBtn" to="PlayerUILayer/TestButtons" method="_on_test_mod_btn_3_pressed"]
-[connection signal="pressed" from="PlayerUILayer/TestButtons/TestStormBtn2" to="PlayerUILayer/TestButtons" method="_on_test_storm_btn_2_pressed"]
-[connection signal="pressed" from="PlayerUILayer/TestButtons/TestCombineItems" to="PlayerUILayer/TestButtons" method="_on_test_combine_items_pressed"]
-[connection signal="pressed" from="PlayerUILayer/TestButtons/TestCraft" to="PlayerUILayer/TestButtons" method="_on_test_craft_pressed"]
-[connection signal="tree_entered" from="PlayerUILayer/PlayerStatsOverlay" to="PlayerUILayer/PlayerStatsOverlay" method="_on_tree_entered"]
-[connection signal="tree_exiting" from="PlayerUILayer/PlayerStatsOverlay" to="PlayerUILayer/PlayerStatsOverlay" method="_on_tree_exiting"]
-[connection signal="timeout" from="PlayerUILayer/PlayerStatsOverlay/HealthChangedTimer" to="PlayerUILayer/PlayerStatsOverlay" method="_on_health_changed_timer_timeout"]
-[connection signal="timeout" from="PlayerUILayer/PlayerStatsOverlay/ShieldChangedTimer" to="PlayerUILayer/PlayerStatsOverlay" method="_on_shield_changed_timer_timeout"]
-[connection signal="timeout" from="PlayerUILayer/PlayerStatsOverlay/HungerChangedTimer" to="PlayerUILayer/PlayerStatsOverlay" method="_on_hunger_changed_timer_timeout"]
-[connection signal="timeout" from="PlayerUILayer/PlayerStatsOverlay/StaminaChangedTimer" to="PlayerUILayer/PlayerStatsOverlay" method="_on_stamina_changed_timer_timeout"]
-[connection signal="timeout" from="PlayerUILayer/PlayerStatsOverlay/StaminaRechargeTimer" to="PlayerUILayer/PlayerStatsOverlay" method="_on_stamina_recharge_timer_timeout"]
-[connection signal="visibility_changed" from="PlayerUILayer/HotbarUISlotMargins/HotbarUI" to="PlayerUILayer/HotbarUISlotMargins/HotbarUI" method="_on_visibility_changed"]
-[connection signal="button_down" from="PlayerUILayer/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/SortByName/SortByNameBtn" to="PlayerUILayer/PlayerInvUI" method="_on_sort_by_name_btn_button_down"]
-[connection signal="button_up" from="PlayerUILayer/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/SortByName/SortByNameBtn" to="PlayerUILayer/PlayerInvUI" method="_on_sort_by_name_btn_button_up"]
-[connection signal="pressed" from="PlayerUILayer/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/SortByName/SortByNameBtn" to="PlayerUILayer/PlayerInvUI" method="_on_sort_by_name_btn_pressed"]
-[connection signal="button_down" from="PlayerUILayer/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/SortByCount/SortByCountBtn" to="PlayerUILayer/PlayerInvUI" method="_on_sort_by_count_btn_button_down"]
-[connection signal="button_up" from="PlayerUILayer/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/SortByCount/SortByCountBtn" to="PlayerUILayer/PlayerInvUI" method="_on_sort_by_count_btn_button_up"]
-[connection signal="pressed" from="PlayerUILayer/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/SortByCount/SortByCountBtn" to="PlayerUILayer/PlayerInvUI" method="_on_sort_by_count_btn_pressed"]
-[connection signal="button_down" from="PlayerUILayer/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/SortByRarity/SortByRarityBtn" to="PlayerUILayer/PlayerInvUI" method="_on_sort_by_rarity_btn_button_down"]
-[connection signal="button_up" from="PlayerUILayer/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/SortByRarity/SortByRarityBtn" to="PlayerUILayer/PlayerInvUI" method="_on_sort_by_rarity_btn_button_up"]
-[connection signal="pressed" from="PlayerUILayer/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/SortByRarity/SortByRarityBtn" to="PlayerUILayer/PlayerInvUI" method="_on_sort_by_rarity_btn_pressed"]
-[connection signal="button_down" from="PlayerUILayer/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/AutoStack/AutoStackBtn" to="PlayerUILayer/PlayerInvUI" method="_on_auto_stack_btn_button_down"]
-[connection signal="button_up" from="PlayerUILayer/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/AutoStack/AutoStackBtn" to="PlayerUILayer/PlayerInvUI" method="_on_auto_stack_btn_button_up"]
-[connection signal="pressed" from="PlayerUILayer/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/AutoStack/AutoStackBtn" to="PlayerUILayer/PlayerInvUI" method="_on_auto_stack_btn_pressed"]
+[connection signal="pressed" from="OverlayUI/TestButtons/TestHurtBtn" to="OverlayUI/TestButtons" method="_on_test_hurt_btn_pressed"]
+[connection signal="pressed" from="OverlayUI/TestButtons/TestHealBtn" to="OverlayUI/TestButtons" method="_on_test_heal_btn_pressed"]
+[connection signal="pressed" from="OverlayUI/TestButtons/TestMusicBtn" to="OverlayUI/TestButtons" method="_on_test_music_btn_pressed"]
+[connection signal="pressed" from="OverlayUI/TestButtons/TestSaveBtn" to="OverlayUI/TestButtons" method="_on_test_save_btn_pressed"]
+[connection signal="pressed" from="OverlayUI/TestButtons/TestLoadBtn" to="OverlayUI/TestButtons" method="_on_test_load_btn_pressed"]
+[connection signal="pressed" from="OverlayUI/TestButtons/TestModBtn1" to="OverlayUI/TestButtons" method="_on_test_mod_btn_1_pressed"]
+[connection signal="pressed" from="OverlayUI/TestButtons/TestModBtn2" to="OverlayUI/TestButtons" method="_on_test_mod_btn_2_pressed"]
+[connection signal="pressed" from="OverlayUI/TestButtons/TestStormBtn" to="OverlayUI/TestButtons" method="_on_test_mod_btn_3_pressed"]
+[connection signal="pressed" from="OverlayUI/TestButtons/TestStormBtn2" to="OverlayUI/TestButtons" method="_on_test_storm_btn_2_pressed"]
+[connection signal="pressed" from="OverlayUI/TestButtons/TestCombineItems" to="OverlayUI/TestButtons" method="_on_test_combine_items_pressed"]
+[connection signal="pressed" from="OverlayUI/TestButtons/TestCraft" to="OverlayUI/TestButtons" method="_on_test_craft_pressed"]
+[connection signal="tree_entered" from="OverlayUI/PlayerStatsOverlay" to="OverlayUI/PlayerStatsOverlay" method="_on_tree_entered"]
+[connection signal="tree_exiting" from="OverlayUI/PlayerStatsOverlay" to="OverlayUI/PlayerStatsOverlay" method="_on_tree_exiting"]
+[connection signal="timeout" from="OverlayUI/PlayerStatsOverlay/HealthChangedTimer" to="OverlayUI/PlayerStatsOverlay" method="_on_health_changed_timer_timeout"]
+[connection signal="timeout" from="OverlayUI/PlayerStatsOverlay/ShieldChangedTimer" to="OverlayUI/PlayerStatsOverlay" method="_on_shield_changed_timer_timeout"]
+[connection signal="timeout" from="OverlayUI/PlayerStatsOverlay/HungerChangedTimer" to="OverlayUI/PlayerStatsOverlay" method="_on_hunger_changed_timer_timeout"]
+[connection signal="timeout" from="OverlayUI/PlayerStatsOverlay/StaminaChangedTimer" to="OverlayUI/PlayerStatsOverlay" method="_on_stamina_changed_timer_timeout"]
+[connection signal="timeout" from="OverlayUI/PlayerStatsOverlay/StaminaRechargeTimer" to="OverlayUI/PlayerStatsOverlay" method="_on_stamina_recharge_timer_timeout"]
+[connection signal="visibility_changed" from="OverlayUI/HotbarUISlotMargins/HotbarUI" to="OverlayUI/HotbarUISlotMargins/HotbarUI" method="_on_visibility_changed"]
+[connection signal="button_down" from="OverlayUI/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/SortByName/SortByNameBtn" to="OverlayUI/PlayerInvUI" method="_on_sort_by_name_btn_button_down"]
+[connection signal="button_up" from="OverlayUI/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/SortByName/SortByNameBtn" to="OverlayUI/PlayerInvUI" method="_on_sort_by_name_btn_button_up"]
+[connection signal="pressed" from="OverlayUI/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/SortByName/SortByNameBtn" to="OverlayUI/PlayerInvUI" method="_on_sort_by_name_btn_pressed"]
+[connection signal="button_down" from="OverlayUI/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/SortByCount/SortByCountBtn" to="OverlayUI/PlayerInvUI" method="_on_sort_by_count_btn_button_down"]
+[connection signal="button_up" from="OverlayUI/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/SortByCount/SortByCountBtn" to="OverlayUI/PlayerInvUI" method="_on_sort_by_count_btn_button_up"]
+[connection signal="pressed" from="OverlayUI/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/SortByCount/SortByCountBtn" to="OverlayUI/PlayerInvUI" method="_on_sort_by_count_btn_pressed"]
+[connection signal="button_down" from="OverlayUI/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/SortByRarity/SortByRarityBtn" to="OverlayUI/PlayerInvUI" method="_on_sort_by_rarity_btn_button_down"]
+[connection signal="button_up" from="OverlayUI/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/SortByRarity/SortByRarityBtn" to="OverlayUI/PlayerInvUI" method="_on_sort_by_rarity_btn_button_up"]
+[connection signal="pressed" from="OverlayUI/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/SortByRarity/SortByRarityBtn" to="OverlayUI/PlayerInvUI" method="_on_sort_by_rarity_btn_pressed"]
+[connection signal="button_down" from="OverlayUI/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/AutoStack/AutoStackBtn" to="OverlayUI/PlayerInvUI" method="_on_auto_stack_btn_button_down"]
+[connection signal="button_up" from="OverlayUI/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/AutoStack/AutoStackBtn" to="OverlayUI/PlayerInvUI" method="_on_auto_stack_btn_button_up"]
+[connection signal="pressed" from="OverlayUI/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/AutoStack/AutoStackBtn" to="OverlayUI/PlayerInvUI" method="_on_auto_stack_btn_pressed"]
 
-[editable path="PlayerUILayer/PlayerInvUI/TrashSlotPanel/TrashSlot"]
+[editable path="OverlayUI/PlayerInvUI/TrashSlotPanel/TrashSlot"]

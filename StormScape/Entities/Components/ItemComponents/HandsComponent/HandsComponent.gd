@@ -3,7 +3,7 @@ extends Node2D
 class_name HandsComponent
 ## This component allows the entity to hold an item and interact with it.
 
-@export var active_slot_info: CenterContainer ## UI for displaying information about the active slot's item. Only for the player.
+@export var active_slot_info: MarginContainer ## UI for displaying information about the active slot's item. Only for the player.
 @export var main_hand_with_held_item_pos: Vector2 = Vector2(6, 1) ## The position the main hand would be while doing nothing.
 @export var main_hand_with_proj_weapon_pos: Vector2 = Vector2(11, 0) ## The position the main hand would start at while holding a projectile weapon. This will most likely be farther out in the x-direction to give more rotational room for the weapon.
 @export var main_hand_with_melee_weapon_pos: Vector2 = Vector2(8, 0) ## The position the main hand would start at while holding a melee weapon. This will most likely be farther out in the x-direction to give more rotational room for the weapon.
@@ -41,6 +41,9 @@ func _ready() -> void:
 
 func _unhandled_input(event: InputEvent) -> void:
 	if equipped_item != null:
+		if Input.is_action_pressed("reload") and equipped_item is ProjectileWeapon: # We can reload even when activation is disabled
+			equipped_item.reload()
+
 		if not equipped_item.enabled:
 			if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
 				is_mouse_button_held = event.pressed
@@ -51,13 +54,12 @@ func _unhandled_input(event: InputEvent) -> void:
 				if event.is_pressed():
 					equipped_item.activate()
 			is_mouse_button_held = event.pressed
-		elif Input.is_action_pressed("reload") and equipped_item is ProjectileWeapon:
-			equipped_item.reload()
 
 func _process(delta: float) -> void:
 	if equipped_item != null:
 		if not equipped_item.enabled:
 			return
+
 		if is_mouse_button_held:
 			been_holding_time += delta
 			if not scale_is_lerping:
@@ -72,6 +74,8 @@ func unequip_current_item() -> void:
 	active_slot_info.update_mag_ammo(-1)
 	active_slot_info.update_inv_ammo(-1)
 	active_slot_info.update_item_name("")
+
+	if entity is Player: entity.get_node("ReloadingUI").hide()
 
 	if equipped_item != null:
 		is_mouse_button_held = false
@@ -109,14 +113,12 @@ func on_equipped_item_change(inv_item_slot: Slot) -> void:
 		if equipped_item is ProjectileWeapon:
 			main_hand.position = main_hand_with_proj_weapon_pos + equipped_item.stats.holding_offset
 			main_hand.rotation += deg_to_rad(equipped_item.stats.holding_degrees)
-			equipped_item.ammo_ui = active_slot_info
 			snap_y_scale()
 			_prep_for_pullout_anim()
 			_manage_proj_weapon_hands(_get_anim_vector())
 		elif equipped_item is MeleeWeapon:
 			main_hand.position = main_hand_with_melee_weapon_pos + equipped_item.stats.holding_offset
 			main_hand.rotation += deg_to_rad(equipped_item.stats.holding_degrees)
-			equipped_item.ammo_ui = active_slot_info
 			snap_y_scale()
 			_prep_for_pullout_anim()
 			_manage_melee_weapon_hands(_get_anim_vector())
@@ -127,6 +129,8 @@ func on_equipped_item_change(inv_item_slot: Slot) -> void:
 		main_hand_sprite.position = main_hand_with_held_item_pos + equipped_item.stats.main_hand_offset
 		main_hand_sprite.visible = true
 		_manage_normal_hands(_get_anim_vector())
+
+	equipped_item.ammo_ui = active_slot_info
 
 	main_hand.add_child(equipped_item)
 	equipped_item.enter()
@@ -233,7 +237,7 @@ func _check_for_drawing_off_hand() -> void:
 func _change_y_sort(anim_vector: Vector2) -> void:
 	if anim_vector.y < 0:
 		position = entity.sprite.position - Vector2(0, 1)
-		hands_anchor.position = Vector2(0, 8)
+		hands_anchor.position.y = starting_hands_component_height - position.y
 	else:
 		position = Vector2(0, starting_hands_component_height)
 		hands_anchor.position = Vector2(0, 0)

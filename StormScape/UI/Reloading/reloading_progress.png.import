@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cpo3fkry82ihj"
-path="res://.godot/imported/bottle_o_fire_base.png-46603ad1dde25e6b4cd20e5a3794f701.ctex"
+uid="uid://tdtv12ps6wk"
+path="res://.godot/imported/reloading_progress.png-eeaffa7853ce6443c26077929d2ef09d.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Entities/Items/Weapons/ProjectileWeapons/BottleOFire/bottle_o_fire_base.png"
-dest_files=["res://.godot/imported/bottle_o_fire_base.png-46603ad1dde25e6b4cd20e5a3794f701.ctex"]
+source_file="res://UI/Reloading/reloading_progress.png"
+dest_files=["res://.godot/imported/reloading_progress.png-eeaffa7853ce6443c26077929d2ef09d.ctex"]
 
 [params]
 

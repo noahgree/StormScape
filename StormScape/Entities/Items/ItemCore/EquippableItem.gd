@@ -10,7 +10,8 @@ class_name EquippableItem
 
 var source_slot: Slot ## The slot this equippable item is in whilst equipped.
 var source_entity: PhysicsBody2D ## The entity that is holding the equippable item.
-var enabled: bool = true:
+var ammo_ui: MarginContainer ## The ui assigned by the hands component that displays the ammo. Only for the player.
+var enabled: bool = true: ## When false, any activation or reload actions are blocked.
 	set(new_value):
 		enabled = new_value
 		if not enabled:
@@ -42,15 +43,18 @@ func _ready() -> void:
 		clipping_detector.body_entered.connect(_on_item_starts_to_clip)
 		clipping_detector.body_exited.connect(_on_item_leaves_clipping_body)
 
+## Disables the item when it starts to clip. Only applies to items with clipping detectors.
 func _on_item_starts_to_clip(body: Node2D) -> void:
 	if body != source_entity:
 		enabled = false
 
+## Enables the item when it stops clipping. Only applies to items with clipping detectors.
 func _on_item_leaves_clipping_body(_body: Node2D) -> void:
 	var overlaps: Array[Node2D] = clipping_detector.get_overlapping_bodies()
 	if overlaps.is_empty() or (overlaps.size() == 1 and overlaps[0] == source_entity):
 		enabled = true
 
+## Intended to be overridden by child classes in order to specify what to do when this item is disabled.
 func disable() -> void:
 	pass
 

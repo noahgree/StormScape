@@ -1,7 +1,7 @@
 @tool
 extends Weapon
 class_name ProjectileWeapon
-## Base class for all weapons that spawn any sort of projectile or hitscan.
+## Base class for all weapons that spawn any sort of projectile or hitscan or AOE.
 
 @export var proj_origin: Vector2 = Vector2.ZERO: ## Where the projectile spawns from in local space of the weapon scene.
 	set(new_origin):
@@ -13,14 +13,19 @@ class_name ProjectileWeapon
 @onready var proj_origin_node: Marker2D = $ProjectileOrigin ## The point at which projectiles should spawn from.
 
 #region Local Vars
-var ammo_ui: CenterContainer ## The ui assigned by the hands component that displays the ammo. Only for the player.
 var fire_cooldown_timer: Timer = Timer.new() ## The timer tracking time between firing shots.
 var firing_duration_timer: Timer = Timer.new() ## The timer tracking how long after we press fire before the proj spawns.
-var mag_reload_timer: Timer = Timer.new() ## The timer tracking the delay between full mag reload start and end.
+var reload_timer: Timer = Timer.new() ## The timer tracking the delay between reload start and end.
 var single_reload_timer: Timer = Timer.new() ## The timer tracking the delay between single bullet reloads.
 var hitscan_hands_freeze_timer: Timer = Timer.new() ## The timer that tracks the brief moment after a semi-auto hitscan shot that we shouldn't be rotating.
 var hold_just_released: bool = false ## Whether the mouse hold was just released.
-var is_reloading: bool = false ## Whether some reload method is currently in progress.
+var is_reloading: bool = false: ## Whether some reload method is currently in progress.
+	set(new_value):
+		is_reloading = new_value
+		if is_reloading and reloading_ui:
+			reloading_ui.show()
+		elif reloading_ui:
+			reloading_ui.hide()
 var is_reloading_single_and_has_since_released: bool = true ## Whether we've begun reloading one bullet at a time and have relased the mouse since starting.
 var is_charging: bool = false ## Whether the weapon is currently charging up for a charge shot.
 var hitscan_delay: float = 0 ## The calculated delay to be used instead of just the fire cooldown when using hitscans.
@@ -31,6 +36,7 @@ var is_holding_hitscan: bool = false: ## Whether we are currently holding down t
 var current_hitscans: Array[Hitscan] = [] ## The currently spawned array of hitscans to get cleaned up when we unequip this weapon.
 var mouse_scan_area_targets: Array[Node] = [] ## The array of potential targets found and passed to the proj when using the "Mouse Position" homing method.
 var mouse_area: Area2D ## The area around the mouse that scans for targets when using the "Mouse Position" homing method
+var reloading_ui: Control
 #endregion
 
 
@@ -123,18 +129,22 @@ func _ready() -> void:
 		if stats.ammo_type == GlobalData.ProjAmmoType.STAMINA:
 			if source_entity is DynamicEntity:
 				source_entity.stamina_component.stamina_changed.connect(_update_ammo_ui)
+		elif stats.ammo_type != GlobalData.ProjAmmoType.NONE and stats.ammo_type != GlobalData.ProjAmmoType.SELF:
+			if source_entity is Player:
+				reloading_ui = source_entity.get_node("ReloadingUI")
 
 		add_child(fire_cooldown_timer)
 		add_child(firing_duration_timer)
-		add_child(mag_reload_timer)
+		add_child(reload_timer)
 		add_child(single_reload_timer)
 		add_child(hitscan_hands_freeze_timer)
 		fire_cooldown_timer.one_shot = true
 		fire_cooldown_timer.timeout.connect(_on_fire_cooldown_timeout)
 		firing_duration_timer.one_shot = true
-		mag_reload_timer.one_shot = true
+		reload_timer.one_shot = true
 		single_reload_timer.one_shot = true
 		hitscan_hands_freeze_timer.one_shot = true
+		reload_timer.timeout.connect(_on_reload_timer_timeout)
 		single_reload_timer.timeout.connect(_on_single_reload_timer_timeout)
 		hitscan_hands_freeze_timer.timeout.connect(_on_hitscan_hands_freeze_timer_timeout)
 
@@ -215,7 +225,13 @@ func _disable_mouse_area() -> void:
 
 ## Every frame we decrease the warmth and the bloom levels based on their decrease curves.
 func _process(delta: float) -> void:
-	if not Engine.is_editor_hint() and fire_cooldown_timer.is_stopped():
+	if Engine.is_editor_hint():
+		return
+
+	if reloading_ui and is_reloading:
+		reloading_ui.update_progress((1 - (reload_timer.time_left / reload_timer.wait_time)) * 100)
+
+	if fire_cooldown_timer.is_stopped():
 		if stats.current_bloom_level > 0:
 			var sampled_point: float = stats.bloom_decrease_rate.sample_baked(stats.current_bloom_level)
 			var bloom_decrease_amount: float = max(0.01 * delta, sampled_point * delta)
@@ -241,7 +257,7 @@ func _on_fire_cooldown_timeout() -> void:
 #region Called From HandsComponent
 ## Called from the hands component when the mouse is clicked.
 func activate() -> void:
-	if not pullout_delay_timer.is_stopped() or not mag_reload_timer.is_stopped():
+	if not pullout_delay_timer.is_stopped() or not reload_timer.is_stopped():
 		return
 
 	is_reloading_single_and_has_since_released = true
@@ -251,7 +267,7 @@ func activate() -> void:
 
 ## Called from the hands component when the mouse is held down. Includes how long it has been held down so far.
 func hold_activate(_hold_time: float) -> void:
-	if not pullout_delay_timer.is_stopped() or not mag_reload_timer.is_stopped() or not firing_duration_timer.is_stopped():
+	if not pullout_delay_timer.is_stopped() or not reload_timer.is_stopped() or not firing_duration_timer.is_stopped():
 		source_entity.hands.been_holding_time = 0
 		return
 
@@ -269,7 +285,7 @@ func release_hold_activate(hold_time: float) -> void:
 	if stats.firing_mode == "Auto" and stats.allow_hitscan_holding and is_holding_hitscan:
 		is_holding_hitscan = false
 
-	if not pullout_delay_timer.is_stopped() or not mag_reload_timer.is_stopped():
+	if not pullout_delay_timer.is_stopped() or not reload_timer.is_stopped():
 		source_entity.hands.been_holding_time = 0
 		return
 
@@ -286,8 +302,8 @@ func release_hold_activate(hold_time: float) -> void:
 ## Called from the hands component to try and start a reload.
 func reload() -> void:
 	if stats.ammo_type != GlobalData.ProjAmmoType.STAMINA and stats.ammo_type != GlobalData.ProjAmmoType.SELF:
-		if pullout_delay_timer.is_stopped() and mag_reload_timer.is_stopped() and single_reload_timer.is_stopped():
-			if not is_reloading:
+		if pullout_delay_timer.is_stopped() and reload_timer.is_stopped() and single_reload_timer.is_stopped():
+			if not is_reloading and not stats.ammo_in_mag >= stats.mag_size:
 				_attempt_reload()
 #endregion
 
@@ -394,6 +410,8 @@ func _apply_burst_logic(was_charge_fire: bool = false) -> void:
 		delay += (stats.burst_bullet_delay * (shots - 1))
 
 	fire_cooldown_timer.start(max(0.03, delay))
+	if stats.proj_weapon_type == ProjWeaponResource.ProjWeaponType.THROWABLE:
+		source_slot.update_tint_progress(fire_cooldown_timer.wait_time)
 
 	_apply_ammo_consumption(shots, was_charge_fire)
 
@@ -593,6 +611,10 @@ func _consume_ammo(amount: int) -> void:
 
 ## Based on the reload method, starts the timer(s) needed to track how long the reload will take.
 func _attempt_reload() -> void:
+	var any_ammo: bool = _get_more_reload_ammo(1, false) > 0
+	if not any_ammo:
+		return
+
 	is_reloading = true
 
 	var ammo_needed: int = int(stats.s_mods.get_stat("mag_size")) - stats.ammo_in_mag
@@ -601,21 +623,14 @@ func _attempt_reload() -> void:
 
 	if stats.reload_type == "Single":
 		is_reloading_single_and_has_since_released = false
-		var ammo_available: int = _get_more_reload_ammo(1, false)
-		if ammo_available > 0:
-			single_reload_timer.set_meta("reloads_left", ammo_needed)
-			single_reload_timer.start(stats.s_mods.get_stat("single_proj_reload_time"))
-		else:
-			is_reloading = false
+		var single_reload_time: float = stats.s_mods.get_stat("single_proj_reload_time")
+
+		reload_timer.start(single_reload_time * ammo_needed)
+		single_reload_timer.set_meta("reloads_left", ammo_needed)
+		single_reload_timer.start(single_reload_time)
 	else:
-		mag_reload_timer.start(stats.s_mods.get_stat("mag_reload_time"))
-		await mag_reload_timer.timeout
-		var ammo_available: int = _get_more_reload_ammo(ammo_needed)
-		if ammo_available > 0:
-			if stats.mag_reload_sound != "": AudioManager.play_sound(stats.mag_reload_sound, AudioManager.SoundType.SFX_GLOBAL)
-		stats.ammo_in_mag += ammo_available
-		_update_ammo_ui()
-		is_reloading = false
+		if stats.mag_reload_sound != "": AudioManager.play_sound(stats.mag_reload_sound, AudioManager.SoundType.SFX_GLOBAL)
+		reload_timer.start(stats.s_mods.get_stat("mag_reload_time"))
 
 ## Searches through the source entity's inventory for more ammo to fill the magazine. Can optionally be used to only check for ammo
 ## when told not to take from the inventory when found.
@@ -638,19 +653,33 @@ func _get_more_reload_ammo(max_amount_needed: int, take_from_inventory: bool = t
 
 	return ammount_collected
 
+func _on_reload_timer_timeout() -> void:
+	if stats.reload_type != "Magazine":
+		return
+
+	var ammo_needed: int = int(stats.s_mods.get_stat("mag_size")) - stats.ammo_in_mag
+	var ammo_available: int = _get_more_reload_ammo(ammo_needed)
+	stats.ammo_in_mag += ammo_available
+	_update_ammo_ui()
+	is_reloading = false
+
 ## When the single projectile reload timer ends, try and grab a bullet and see if we need to start it up again.
 func _on_single_reload_timer_timeout() -> void:
 	var reloads_left: int = single_reload_timer.get_meta("reloads_left")
-	if reloads_left > 0:
-		var ammo_available: int = _get_more_reload_ammo(1)
-		if ammo_available == 1:
-			if stats.proj_reload_sound != "": AudioManager.play_sound(stats.proj_reload_sound, AudioManager.SoundType.SFX_GLOBAL)
-			stats.ammo_in_mag += ammo_available
-			_update_ammo_ui()
+	var ammo_available: int = _get_more_reload_ammo(1)
+	if ammo_available == 1:
+		if stats.proj_reload_sound != "": AudioManager.play_sound(stats.proj_reload_sound, AudioManager.SoundType.SFX_GLOBAL)
+		stats.ammo_in_mag += ammo_available
+
+		_update_ammo_ui()
+		if reloading_ui: reloading_ui.update_progress(stats.ammo_in_mag)
+
+		if reloads_left > 1:
 			single_reload_timer.set_meta("reloads_left", reloads_left - 1)
 			single_reload_timer.start(stats.s_mods.get_stat("single_proj_reload_time"))
-	else:
-		is_reloading = false
+			return
+
+	is_reloading = false
 
 ## Updates the ammo UI with the ammo in the magazine, assuming this is being used by a Player and the weapon uses
 ## consumable ammo.
@@ -658,7 +687,10 @@ func _update_ammo_ui() -> void:
 	if ammo_ui != null:
 		var count: int = -1
 		if stats.ammo_type == GlobalData.ProjAmmoType.SELF:
-			count = source_slot.item.quantity
+			if source_slot.item == null:
+				count = -1
+			else:
+				count = source_slot.item.quantity
 		elif stats.ammo_type == GlobalData.ProjAmmoType.STAMINA:
 			count = source_entity.stamina_component.stamina
 		elif stats.ammo_type != GlobalData.ProjAmmoType.NONE:
