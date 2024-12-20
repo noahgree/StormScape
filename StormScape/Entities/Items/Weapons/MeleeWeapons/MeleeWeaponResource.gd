@@ -34,7 +34,3 @@ enum MeleeWeaponType { ## The kinds of melee weapons.
 @export_subgroup("Usage FX")
 @export var charge_use_vfx_scene: PackedScene = null ## The scene that spawns and controls usage vfx.
 @export var charge_use_sound: String = "" ## The sound to play when a charge use happens.
-
-# Unique Properties #
-@export_storage var cooldown_left: float = 0.0 ## The cooldown time for regular use that was left when we unequipped the weapon.
-@export_storage var charge_cooldown_left: float = 0.0 ## The cooldown time for charged use that was left when we unequipped the weapon.

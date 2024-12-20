@@ -56,7 +56,6 @@ metadata/_edit_group_ = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="ItemSprite/HitboxComponent"]
 shape = SubResource("RectangleShape2D_sjv0y")
-disabled = true
 
 [node name="MainHandSprite" type="Sprite2D" parent="ItemSprite"]
 position = Vector2(7, 0)

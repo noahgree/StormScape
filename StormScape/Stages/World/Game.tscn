@@ -507,7 +507,6 @@ shader_parameter/noise_texture2 = SubResource("NoiseTexture2D_uwlga")
 
 [node name="WorldRoot" type="Node2D" parent="." groups=["core"]]
 unique_name_in_owner = true
-process_mode = 3
 y_sort_enabled = true
 script = ExtResource("1_q0i4n")
 

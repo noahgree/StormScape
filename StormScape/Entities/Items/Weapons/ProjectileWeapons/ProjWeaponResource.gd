@@ -85,8 +85,6 @@ enum ProjWeaponType { ## The kinds of projectile weapons.
 
 
 # Unique Properties #
-@export_storage var fire_cooldown_left: float = 0 ## How much time we have left to wait before being able to fire again.
-@export_storage var charge_fire_cooldown_left: float = 0 ## How much time we have left before being able to do a charge shot again.
 @export_storage var current_warmth_level: float = 0 ## The current warm-up level for this weapon.
 @export_storage var current_bloom_level: float = 0 ## The current bloom level for this weapon.
 @export_storage var ammo_in_mag: int = -1: ## The current ammo in the mag.

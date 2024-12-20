@@ -36,7 +36,7 @@ static func spawn_on_ground(item_stats: ItemResource, quant: int, location: Vect
 	var quantity_count: int = quant
 	while quantity_count > 0:
 		var item_to_spawn: Item = item_scene.instantiate()
-		item_to_spawn.stats = item_stats.duplicate()
+		item_to_spawn.stats = item_stats.duplicate_item_res()
 
 		var quant_to_use: int = min(quantity_count, item_stats.stack_size)
 		item_to_spawn.quantity = quant_to_use

@@ -102,14 +102,16 @@ split_delays = Array[float]([0.2])
 splitting_sounds = Array[String]([""])
 split_cam_shakes_str = Array[float]([1.0])
 split_cam_shakes_dur = Array[float]([0.2])
-splash_radius = 0
+aoe_radius = 0
 do_aoe_on_arc_land = true
+aoe_before_freeing = false
 bad_effects_aoe_falloff = true
 good_effects_aoe_falloff = false
-splash_effect_delay = 0.0
-splash_effect_dur = 0.05
-splash_before_freeing = false
-splash_sound = ""
+aoe_delay = 0.0
+aoe_effect_dur = 0.05
+aoe_effect_interval = 1.0
+aoe_effects_delay = 0.5
+aoe_sound = ""
 
 [sub_resource type="Resource" id="Resource_qy5am"]
 script = ExtResource("5_jastm")
@@ -159,19 +161,7 @@ beam_particle_mult = 1.0
 _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
 point_count = 2
 
-[sub_resource type="Curve" id="Curve_hfy8v"]
-_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
-point_count = 2
-
-[sub_resource type="Curve" id="Curve_8o5b1"]
-_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
-point_count = 2
-
-[sub_resource type="Curve" id="Curve_qq1e0"]
-_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
-point_count = 2
-
-[sub_resource type="Resource" id="Resource_fobim"]
+[sub_resource type="Resource" id="Resource_cfkuc"]
 script = ExtResource("5_jastm")
 source_type = 3
 source_tags = Array[String]([])
@@ -195,6 +185,18 @@ hit_flash_color = Color(1, 1, 1, 0.6)
 status_effects = Array[ExtResource("1_fshhe")]([ExtResource("8_d66cu")])
 contact_position = Vector2(0, 0)
 movement_direction = Vector2(0, 0)
+
+[sub_resource type="Curve" id="Curve_hfy8v"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Curve" id="Curve_8o5b1"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Curve" id="Curve_qq1e0"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
 
 [sub_resource type="Resource" id="Resource_0j8mo"]
 script = ExtResource("2_4ioui")
@@ -244,16 +246,18 @@ split_delays = Array[float]([0.2])
 splitting_sounds = Array[String]([""])
 split_cam_shakes_str = Array[float]([1.0])
 split_cam_shakes_dur = Array[float]([0.2])
-splash_radius = 35
+aoe_radius = 40
+aoe_effect_source = SubResource("Resource_cfkuc")
 do_aoe_on_arc_land = true
+aoe_before_freeing = false
 aoe_effect_falloff_curve = SubResource("Curve_2b1hi")
 bad_effects_aoe_falloff = true
 good_effects_aoe_falloff = false
-splash_effect_delay = 0.0
-splash_effect_dur = 5.0
-splash_before_freeing = false
-splash_effect_source = SubResource("Resource_fobim")
-splash_sound = ""
+aoe_delay = 0.0
+aoe_effect_dur = 5.0
+aoe_effect_interval = 1.0
+aoe_effects_delay = 1.0
+aoe_sound = ""
 
 [sub_resource type="Resource" id="Resource_xpvhm"]
 script = ExtResource("11_3anyb")
@@ -265,7 +269,7 @@ proj_weapon_type = 8
 firing_mode = "Semi Auto"
 use_hitscan = false
 allow_hitscan_holding = true
-fire_cooldown = 1.0
+fire_cooldown = 5.0
 firing_duration = 0.15
 firing_cam_shake_str = 0.0
 firing_cam_shake_dur = 0.0

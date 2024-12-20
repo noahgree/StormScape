@@ -8,8 +8,6 @@ class_name MeleeWeapon
 @onready var anim_player: AnimationPlayer = $AnimationPlayer ## The animation controller for this melee weapon.
 @onready var hitbox_component: HitboxComponent = %HitboxComponent ## The hitbox responsible for applying the melee hit.
 
-var cooldown_timer: Timer = Timer.new() ## The timer tracking how long after performing a normal swing you must wait before doing it again.
-var charge_cooldown_timer: Timer = Timer.new() ## The timer tracking how long after performing a charged swing you must wait before doing it again.
 var is_swinging: bool = false ## Whether we are currently swinging the weapon in some fashion.
 var is_holding: bool = false ## Whether we are holding down the trigger so as to potentially charge up a charge swing.
 const HOLDING_THRESHOLD: float = 0.1 ## How long a hold press must be to start tracking a potential charge up.
@@ -75,11 +73,6 @@ func _ready() -> void:
 	_update_ammo_ui()
 	source_entity.stamina_component.stamina_changed.connect(_update_ammo_ui)
 
-	add_child(cooldown_timer)
-	add_child(charge_cooldown_timer)
-	cooldown_timer.one_shot = true
-	charge_cooldown_timer.one_shot = true
-
 	hitbox_component.source_entity = source_entity
 
 ## Disables the hitbox collider for the weapon.
@@ -91,16 +84,8 @@ func enter() -> void:
 		_setup_mod_cache()
 		cache_is_setup_after_load = true
 
-	if stats.cooldown_left > 0:
-		cooldown_timer.start(stats.cooldown_left)
-	if stats.charge_cooldown_left > 0:
-		charge_cooldown_timer.start(stats.charge_cooldown_left)
-
 func exit() -> void:
 	source_entity.move_fsm.should_rotate = true
-
-	stats.cooldown_left = cooldown_timer.time_left
-	stats.charge_cooldown_left = charge_cooldown_timer.time_left
 
 	stats.time_last_equipped = Time.get_ticks_msec() / 1000.0
 
@@ -112,13 +97,13 @@ func activate() -> void:
 	is_holding = false
 	await get_tree().create_timer(HOLDING_THRESHOLD, false, false, false).timeout
 	if not is_holding or not stats.can_do_charge_use:
-		if pullout_delay_timer.is_stopped() and cooldown_timer.is_stopped():
+		if pullout_delay_timer.is_stopped() and CooldownManager.get_cooldown(stats.session_uid) == 0:
 			if not source_entity.hands.scale_is_lerping:
 				_swing()
 
 ## Overrides the parent method to specify what to do on holding use while equipped.
 func hold_activate(hold_time: float) -> void:
-	if not pullout_delay_timer.is_stopped() or not cooldown_timer.is_stopped() or not charge_cooldown_timer.is_stopped() or is_swinging:
+	if not pullout_delay_timer.is_stopped() or not CooldownManager.get_cooldown(stats.session_uid) == 0 or is_swinging:
 		source_entity.hands.been_holding_time = 0
 		return
 
@@ -129,7 +114,7 @@ func hold_activate(hold_time: float) -> void:
 
 ## Overrides the parent method to specify what to do on release of a holding use while equipped.
 func release_hold_activate(hold_time: float) -> void:
-	if not pullout_delay_timer.is_stopped() or not cooldown_timer.is_stopped() or not charge_cooldown_timer.is_stopped() or is_swinging:
+	if not pullout_delay_timer.is_stopped() or not CooldownManager.get_cooldown(stats.session_uid) == 0 or is_swinging:
 		source_entity.hands.been_holding_time = 0
 		return
 
@@ -139,8 +124,9 @@ func release_hold_activate(hold_time: float) -> void:
 ## Begins the logic for doing a normal weapon swing.
 func _swing() -> void:
 	if source_entity.stamina_component.use_stamina(stats.s_mods.get_stat("stamina_cost")):
-		cooldown_timer.start(stats.cooldown + stats.s_mods.get_stat("use_speed"))
-		source_slot.update_tint_progress(cooldown_timer.wait_time)
+		var cooldown_time: float = stats.cooldown + stats.s_mods.get_stat("use_speed")
+		CooldownManager.add_cooldown(stats.session_uid, cooldown_time)
+		if source_entity is Player: source_slot.update_tint_progress(cooldown_time)
 		is_swinging = true
 		source_entity.move_fsm.should_rotate = false
 
@@ -162,8 +148,9 @@ func _charge_swing(hold_time: float) -> void:
 		return
 
 	if source_entity.stamina_component.use_stamina(stats.s_mods.get_stat("charge_stamina_cost")):
-		cooldown_timer.start(stats.s_mods.get_stat("charge_use_cooldown") + stats.s_mods.get_stat("charge_use_speed"))
-		source_slot.update_tint_progress(cooldown_timer.wait_time)
+		var cooldown_time: float = stats.s_mods.get_stat("charge_use_cooldown") + stats.s_mods.get_stat("charge_use_speed")
+		CooldownManager.add_cooldown(stats.session_uid, cooldown_time)
+		if source_entity is Player: source_slot.update_tint_progress(cooldown_time)
 		is_swinging = true
 		source_entity.move_fsm.should_rotate = false
 		source_entity.hands.snap_y_scale()

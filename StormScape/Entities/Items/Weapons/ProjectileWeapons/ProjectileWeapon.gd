@@ -13,7 +13,6 @@ class_name ProjectileWeapon
 @onready var proj_origin_node: Marker2D = $ProjectileOrigin ## The point at which projectiles should spawn from.
 
 #region Local Vars
-var fire_cooldown_timer: Timer = Timer.new() ## The timer tracking time between firing shots.
 var firing_duration_timer: Timer = Timer.new() ## The timer tracking how long after we press fire before the proj spawns.
 var reload_timer: Timer = Timer.new() ## The timer tracking the delay between reload start and end.
 var single_reload_timer: Timer = Timer.new() ## The timer tracking the delay between single bullet reloads.
@@ -91,7 +90,7 @@ func _setup_mod_cache() -> void:
 		"proj_homing_duration" : stats.projectile_logic.homing_duration,
 		"proj_arc_travel_distance" : stats.projectile_logic.arc_travel_distance,
 		"proj_bounce_count" : stats.projectile_logic.bounce_count,
-		"proj_splash_radius" : stats.projectile_logic.splash_radius,
+		"proj_aoe_radius" : stats.projectile_logic.aoe_radius,
 		"hitscan_duration" : stats.hitscan_logic.hitscan_duration,
 		"hitscan_effect_interval" : stats.hitscan_logic.hitscan_effect_interval,
 		"hitscan_pierce_count" : stats.hitscan_logic.hitscan_pierce_count,
@@ -112,7 +111,7 @@ func _setup_mod_cache() -> void:
 		"charge_proj_homing_duration" : stats.charge_projectile_logic.homing_duration,
 		"charge_proj_arc_travel_distance" : stats.charge_projectile_logic.arc_travel_distance,
 		"charge_proj_bounce_count" : stats.charge_projectile_logic.bounce_count,
-		"charge_proj_splash_radius" : stats.charge_projectile_logic.splash_radius,
+		"charge_proj_aoe_radius" : stats.charge_projectile_logic.aoe_radius,
 		"charge_hitscan_duration" : stats.charge_hitscan_logic.hitscan_duration,
 		"charge_hitscan_max_distance" : stats.charge_hitscan_logic.hitscan_max_distance,
 		"charge_hitscan_effect_interval" : stats.charge_hitscan_logic.hitscan_effect_interval,
@@ -133,13 +132,12 @@ func _ready() -> void:
 			if source_entity is Player:
 				reloading_ui = source_entity.get_node("ReloadingUI")
 
-		add_child(fire_cooldown_timer)
+		CooldownManager.cooldown_ended.connect(_on_fire_cooldown_timeout)
+
 		add_child(firing_duration_timer)
 		add_child(reload_timer)
 		add_child(single_reload_timer)
 		add_child(hitscan_hands_freeze_timer)
-		fire_cooldown_timer.one_shot = true
-		fire_cooldown_timer.timeout.connect(_on_fire_cooldown_timeout)
 		firing_duration_timer.one_shot = true
 		reload_timer.one_shot = true
 		single_reload_timer.one_shot = true
@@ -171,9 +169,6 @@ func enter() -> void:
 		_get_has_needed_ammo_and_reload_if_not()
 	_update_ammo_ui()
 
-	if stats.fire_cooldown_left > 0:
-		fire_cooldown_timer.start(stats.fire_cooldown_left)
-
 	_check_if_needs_mouse_area_scanner()
 
 func exit() -> void:
@@ -186,12 +181,7 @@ func exit() -> void:
 	if stats.charging_stat_effect != null:
 		source_entity.effects.request_effect_removal(stats.charging_stat_effect.effect_name)
 
-	if not fire_cooldown_timer.is_stopped():
-		stats.fire_cooldown_left = min(stats.s_mods.get_stat("fire_cooldown"), fire_cooldown_timer.time_left)
-	else:
-		stats.fire_cooldown_left = 0
-
-	stats.time_last_equipped = Time.get_ticks_msec() / 1000.0
+	stats.time_last_equipped = Time.get_ticks_msec() / 1000.0 ## FIXME to account for game sessions when engine restarts.
 
 ## Checks how long since we last had this equipped and changes bloom accordingly.
 func _handle_reequipping_stats() -> void:
@@ -199,6 +189,7 @@ func _handle_reequipping_stats() -> void:
 	var forgiveness_factor: float = min(1.0, time_since_last_equipped / 5.0)
 	stats.current_bloom_level = stats.current_bloom_level * (1 - forgiveness_factor)
 
+## If we are set to do mouse position-based homing, we set up the mouse area and its signals and add it as a child.
 func _check_if_needs_mouse_area_scanner() -> void:
 	if not stats.use_hitscan and stats.projectile_logic.homing_method == "Mouse Position":
 		mouse_area = Area2D.new()
@@ -231,7 +222,7 @@ func _process(delta: float) -> void:
 	if reloading_ui and is_reloading:
 		reloading_ui.update_progress((1 - (reload_timer.time_left / reload_timer.wait_time)) * 100)
 
-	if fire_cooldown_timer.is_stopped():
+	if CooldownManager.get_cooldown(stats.session_uid) == 0:
 		if stats.current_bloom_level > 0:
 			var sampled_point: float = stats.bloom_decrease_rate.sample_baked(stats.current_bloom_level)
 			var bloom_decrease_amount: float = max(0.01 * delta, sampled_point * delta)
@@ -246,12 +237,20 @@ func _physics_process(_delta: float) -> void:
 	if mouse_area != null:
 		mouse_area.global_position = get_global_mouse_position()
 
-func _on_fire_cooldown_timeout() -> void:
+func _on_fire_cooldown_timeout(item_id: int) -> void:
+	if item_id != stats.session_uid:
+		return
+
 	if is_holding_hitscan:
 		_fire()
-		fire_cooldown_timer.start(stats.s_mods.get_stat("fire_cooldown") + hitscan_delay)
+		CooldownManager.add_cooldown(stats.session_uid, stats.s_mods.get_stat("fire_cooldown") + hitscan_delay)
 	else:
 		_clean_up_hitscans()
+
+func _update_cooldown_with_potential_visuals(duration: float) -> void:
+	CooldownManager.add_cooldown(stats.session_uid, duration)
+	if stats.proj_weapon_type == ProjWeaponResource.ProjWeaponType.THROWABLE and source_entity is Player:
+		source_slot.update_tint_progress(duration)
 #endregion
 
 #region Called From HandsComponent
@@ -310,7 +309,7 @@ func reload() -> void:
 #region Firing Activations
 ## Check if we can do a normal firing, and if we can, start it.
 func _fire() -> void:
-	if not fire_cooldown_timer.is_stopped():
+	if CooldownManager.get_cooldown(stats.session_uid) > 0:
 		return
 	if not is_reloading_single_and_has_since_released:
 		is_holding_hitscan = false
@@ -323,8 +322,10 @@ func _fire() -> void:
 	is_reloading = false
 
 	if _get_warmth_firing_delay() > 0:
-		fire_cooldown_timer.start(_get_warmth_firing_delay())
-		await fire_cooldown_timer.timeout
+		CooldownManager.add_cooldown(stats.session_uid, _get_warmth_firing_delay())
+		while CooldownManager.get_cooldown(stats.session_uid) > 0: # Signal fires for all ending cooldowns, so we loop until ours has ended
+			await CooldownManager.cooldown_ended
+
 		if hold_just_released:
 			hold_just_released = false
 			return
@@ -354,7 +355,7 @@ func _charge_fire(hold_time: float) -> void:
 		source_entity.hands.been_holding_time = 0
 		return
 
-	if (hold_time >= stats.s_mods.get_stat("min_charge_time")) and (hold_time > 0) and fire_cooldown_timer.is_stopped():
+	if (hold_time >= stats.s_mods.get_stat("min_charge_time")) and (hold_time > 0) and CooldownManager.get_cooldown(stats.session_uid) == 0:
 		if stats.charge_firing_duration > 0:
 			firing_duration_timer.start(max(0.05, stats.charge_firing_duration))
 			_start_firing_anim(true)
@@ -365,8 +366,9 @@ func _charge_fire(hold_time: float) -> void:
 		_apply_post_firing_effect(true)
 
 	if stats.s_mods.get_stat("charge_fire_cooldown") > 0:
-		fire_cooldown_timer.start(stats.s_mods.get_stat("charge_fire_cooldown"))
-		await fire_cooldown_timer.timeout
+		CooldownManager.add_cooldown(stats.session_uid, stats.s_mods.get_stat("charge_fire_cooldown"))
+		while CooldownManager.get_cooldown(stats.session_uid) > 0: # Signal fires for all ending cooldowns, so we loop until ours has ended
+			await CooldownManager.cooldown_ended
 		source_entity.hands.been_holding_time = 0
 
 func _set_up_hitscan(was_charge_fire: bool = false) -> void:
@@ -378,6 +380,7 @@ func _set_up_hitscan(was_charge_fire: bool = false) -> void:
 		else:
 			hitscan_delay = 0
 
+## When hitscans have ended or we swap off the weapon, remove persistent cam fx and free the hitscan itself.
 func _clean_up_hitscans() -> void:
 	if not current_hitscans.is_empty():
 		GlobalData.player_camera.update_persistent_shake_strength(-stats.firing_cam_shake_str)
@@ -387,6 +390,7 @@ func _clean_up_hitscans() -> void:
 			hitscan.queue_free()
 	current_hitscans.clear()
 
+# When the timer that runs when we shouldn't follow the mouse (because of an active hitscan) ends, allow mouse following again.
 func _on_hitscan_hands_freeze_timer_timeout() -> void:
 	source_entity.hands.equipped_item_should_follow_mouse = true
 #endregion
@@ -409,9 +413,10 @@ func _apply_burst_logic(was_charge_fire: bool = false) -> void:
 	if not stats.use_hitscan:
 		delay += (stats.burst_bullet_delay * (shots - 1))
 
-	fire_cooldown_timer.start(max(0.03, delay))
-	if stats.proj_weapon_type == ProjWeaponResource.ProjWeaponType.THROWABLE:
-		source_slot.update_tint_progress(fire_cooldown_timer.wait_time)
+	var final_delay: float = max(0.03, delay)
+
+	_update_cooldown_with_potential_visuals(final_delay)
+
 
 	_apply_ammo_consumption(shots, was_charge_fire)
 
@@ -480,7 +485,8 @@ func _spawn_projectile(proj: Projectile, was_charge_fire: bool = false) -> void:
 
 	_do_firing_fx(was_charge_fire)
 
-	await fire_cooldown_timer.timeout
+	while CooldownManager.get_cooldown(stats.session_uid) > 0: # Signal fires for all ending cooldowns, so we loop until ours has ended
+		await CooldownManager.cooldown_ended
 	_get_has_needed_ammo_and_reload_if_not(was_charge_fire)
 
 ## Spawns the hitscan that has been passed to it. Reloads if we don't have enough for the next activation.
@@ -495,7 +501,8 @@ func _spawn_hitscan(hitscan: Hitscan, was_charge_fire: bool = false) -> void:
 		source_entity.hands.equipped_item_should_follow_mouse = false
 		hitscan_hands_freeze_timer.start(0.065)
 
-	await fire_cooldown_timer.timeout
+	while CooldownManager.get_cooldown(stats.session_uid) > 0: # Signal fires for all ending cooldowns, so we loop until ours has ended
+		await CooldownManager.cooldown_ended
 	_get_has_needed_ammo_and_reload_if_not(was_charge_fire)
 #endregion
 

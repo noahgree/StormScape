@@ -50,7 +50,7 @@ func _start_being_handled(handling_area: EffectReceiverComponent) -> void:
 		effect_source.contact_position = global_position
 
 	if handling_area.absorb_full_hit:
-		collider.set_deferred("disabled", true) # Does not apply to hitscans.
+		collider.set_deferred("disabled", true) # Does not apply to hitscans
 	handling_area.handle_effect_source(effect_source, source_entity)
 
 ## Meant to be overridden by subclasses to determine what to do after hitting an object.

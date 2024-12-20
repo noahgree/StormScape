@@ -14,7 +14,7 @@ func _ready() -> void:
 	mag_ammo.text = ""
 	inv_ammo.text = ""
 
-## Updates the magazine ammo portion of the current equipped item info.
+## Updates the magazine ammo portion of the current equipped item inf`o.
 func update_mag_ammo(mag_count: int) -> void:
 	if mag_count == -1:
 		mag_ammo.text = ""

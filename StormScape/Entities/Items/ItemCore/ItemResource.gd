@@ -36,6 +36,13 @@ class_name ItemResource
 @export var main_hand_offset: Vector2 = Vector2.ZERO ## The offset for placing the main hand sprite when holding this item.
 
 
+# Unique Properties #
+@export_storage var session_uid: int ## The unique id for this resource instance that is relevant only for the current game load.
+
+
+func _init() -> void:
+	session_uid = UIDHelper.generate_session_uid()
+
 ## The custom string representation of this item resource.
 func _to_string() -> String:
 	return str(GlobalData.ItemType.keys()[item_type]) + ": " + str(GlobalData.ItemRarity.keys()[rarity]) + "_" + name
@@ -47,3 +54,12 @@ func get_recipe_id() -> String:
 ## Whether the item is the same as another item when called externally to compare.
 func is_same_as(other_item: ItemResource) -> bool:
 	return (str(self) == str(other_item))
+
+## Custom duplication method that passes a cooldown along to the new copy if there is one.
+func duplicate_item_res(duplicate_subresources: bool = false) -> ItemResource:
+	var duplicated: ItemResource = self.duplicate(duplicate_subresources)
+
+	var cooldown_left: float = CooldownManager.get_cooldown(session_uid)
+	if cooldown_left > 0: CooldownManager.add_cooldown(duplicated.session_uid, cooldown_left)
+
+	return duplicated

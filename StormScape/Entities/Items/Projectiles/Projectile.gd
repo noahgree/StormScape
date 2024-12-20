@@ -20,7 +20,7 @@ var stats: ProjectileResource ## The logic for how to operate this projectile.
 var s_mods: StatModsCacheResource ## The cache containing the current numerical values for firing metrics.
 var starting_proj_height: int ## The starting height the projectile is at when calculating the fake z axis.
 var lifetime_timer: Timer = Timer.new() ## The timer tracking how long the projectile has left to exist.
-var splash_effect_delay_timer: Timer = Timer.new() ## The timer tracking how long after starting an AOE do we wait before enabling damage again.
+var aoe_delay_timer: Timer = Timer.new() ## The timer tracking how long after starting an AOE do we wait before enabling damage again.
 var homing_timer: Timer = Timer.new() ## Timer to control homing duration.
 var homing_delay_timer: Timer = Timer.new() ## Timer for homing start delay.
 var initial_boost_timer: Timer = Timer.new() ## The timer that tracks how long we have left in an initial boost.
@@ -56,7 +56,7 @@ var debug_homing_rays: Array[Dictionary] = [] ## An array of debug info about th
 var debug_recent_hit_location: Vector2 ## The location of the most recent point we hit something.
 var is_charge_fire: bool = false ## When true, this projectile emitted as a result of a charged firing.
 var source_wpn_stats: ProjWeaponResource ## The projectile weapon resource for the weapon that fired this projectile.
-var aoe_overlapped_receivers: Array[Node2D] = []
+var aoe_overlapped_receivers: Dictionary = {}
 #endregion
 
 
@@ -120,18 +120,17 @@ func _draw() -> void:
 func _ready() -> void:
 	super._ready()
 	add_to_group("has_save_logic")
-	tree_exiting.connect(_on_aoe_tree_exiting)
 	shadow.visible = false
 	previous_position = global_position
 	sprite.self_modulate = glow_color * (1.0 + (glow_strength / 100.0))
 
 	add_child(lifetime_timer)
-	add_child(splash_effect_delay_timer)
+	add_child(aoe_delay_timer)
 	add_child(homing_timer)
 	add_child(homing_delay_timer)
 	add_child(initial_boost_timer)
 	lifetime_timer.one_shot = true
-	splash_effect_delay_timer.one_shot = true
+	aoe_delay_timer.one_shot = true
 	homing_delay_timer.one_shot = true
 	homing_timer.one_shot = true
 	initial_boost_timer.one_shot = true
@@ -526,7 +525,7 @@ func _do_arc_movement(delta: float) -> void:
 	else:
 		z_index = 0
 		is_arcing = false
-		if stats.do_aoe_on_arc_land and (stats.splash_radius > 0):
+		if stats.do_aoe_on_arc_land and (stats.aoe_radius > 0):
 			if not is_in_aoe_phase:
 				lifetime_timer.stop()
 				_handle_aoe()
@@ -600,8 +599,8 @@ func _handle_pierce() -> void:
 #endregion
 
 #region AOE
-## Begins a splash damage sequence by checking if we have a circle collision shape to work with.
-## If so, it plays any needed animations and creates the defined waits for splash duration and delay.
+## Begins a aoe damage sequence by checking if we have a circle collision shape to work with.
+## If so, it plays any needed animations and creates the defined waits for aoe duration and delay.
 func _handle_aoe() -> void:
 	if collider.shape is not CircleShape2D and collider.shape is not CapsuleShape2D:
 		push_error("\"" + name + "\" projectile has AOE logic but its collision shape is not a circle or capsule.")
@@ -611,85 +610,100 @@ func _handle_aoe() -> void:
 	set_deferred("monitoring", false)
 	area_exited.connect(_on_area_exited)
 
-	if stats.splash_effect_delay > 0:
+	if stats.aoe_delay > 0:
 		call_deferred("_disable_collider")
 		if anim_player != null and anim_player.get_animation_library("ProjectileAnimLibrary").has_animation("aoe"):
-			anim_player.speed_scale = 1 / stats.splash_effect_delay
+			anim_player.speed_scale = 1 / stats.aoe_delay
 			anim_player.play("ProjectileAnimLibrary/aoe")
 
-		splash_effect_delay_timer.start(stats.splash_effect_delay)
-		await splash_effect_delay_timer.timeout
+		aoe_delay_timer.start(stats.aoe_delay)
+		await aoe_delay_timer.timeout
 
 	var new_shape: Shape2D = collider.shape.duplicate()
-	call_deferred("_assign_new_collider_shape_and_splash_entities", new_shape)
+	call_deferred("_assign_new_collider_shape_and_aoe_entities", new_shape)
 
-	await get_tree().create_timer(max(0.05, stats.splash_effect_dur), false, true, false).timeout
+	await get_tree().create_timer(max(0.05, stats.aoe_effect_dur), false, true, false).timeout
 	queue_free()
 
 ## Assigns the collider to a new shape and re-enables it. Takes into account scaling of the projectile itself to preserve aoe radius.
-## This also applies the initial hit of the splash effect source to entities in range. The handling function won't apply status
+## This also applies the initial hit of the aoe effect source to entities in range. The handling function won't apply status
 ## effects as a result of this hit.
-func _assign_new_collider_shape_and_splash_entities(new_shape: Shape2D) -> void:
-	new_shape.radius = (s_mods.get_stat("proj_splash_radius") / scale.x) if not is_charge_fire else (s_mods.get_stat("charge_proj_splash_radius") / scale.x)
+func _assign_new_collider_shape_and_aoe_entities(new_shape: Shape2D) -> void:
+	new_shape.radius = (s_mods.get_stat("proj_aoe_radius") / scale.x) if not is_charge_fire else (s_mods.get_stat("charge_proj_aoe_radius") / scale.x)
 	collider.shape = new_shape
 	_enable_collider()
 	set_deferred("monitoring", true)
 
-	# Handling initial hit of the splash source. This is like how an explosion hits once but the ground burning will be separate.
+	# Handling initial hit of the aoe source. This is like how an explosion hits once but the ground burning will be separate.
 	await get_tree().physics_frame
 	for area: Area2D in get_overlapping_areas():
-		if (area.get_parent() == source_entity) and not stats.splash_effect_source.can_hit_self:
+		if (area.get_parent() == source_entity) and not stats.aoe_effect_source.can_hit_self:
 			return
 		elif area is EffectReceiverComponent:
 			_start_being_handled(area as EffectReceiverComponent)
 	for body: Node2D in get_overlapping_bodies():
 		_on_body_entered(body)
-
-## When about to queue free, remove all AOE status effects from entities affected by them.
-func _on_aoe_tree_exiting() -> void:
-	if is_in_aoe_phase:
-		for area: EffectReceiverComponent in aoe_overlapped_receivers:
-			_remove_all_aoe_status_effects_from_entity(area)
-
-## Removes all AOE status effects from affected entities.
-func _remove_all_aoe_status_effects_from_entity(entity: Area2D) -> void:
-	if entity.get_parent().effects != null:
-		for status_effect: StatusEffect in stats.splash_effect_source.status_effects:
-			entity.get_parent().effects.request_effect_removal(status_effect.effect_name)
 #endregion
 
 #region Lifetime & Handling
 ## When the lifetime ends, either start an AOE or queue free.
 func _on_lifetime_timer_timeout() -> void:
-	var original_radius: float = s_mods.get_original_stat("proj_splash_radius") if not is_charge_fire else s_mods.get_original_stat("charge_proj_splash_radius")
-	if original_radius > 0 and stats.splash_before_freeing:
+	var original_radius: float = s_mods.get_original_stat("proj_aoe_radius") if not is_charge_fire else s_mods.get_original_stat("charge_proj_aoe_radius")
+	if original_radius > 0 and stats.aoe_before_freeing:
 		_handle_aoe()
 	else:
 		queue_free()
 
-## Overrides parent hitbox. When not in AOE, we add new entities to an array and apply the status effects.
+## Overrides parent hitbox. When in AOE, we add new entities to a dictionary with an associated timer that applies the status
+## effects on an interval.
 func _on_area_entered(area: Area2D) -> void:
 	if not is_in_aoe_phase:
 		super._on_area_entered(area)
 		return
 
-	if (area.get_parent() == source_entity) and not stats.splash_effect_source.can_hit_self:
+	if (area.get_parent() == source_entity) and not stats.aoe_effect_source.can_hit_self:
 		return
 	if area is EffectReceiverComponent:
+		await get_tree().create_timer(stats.aoe_effects_delay, false, true, false).timeout
+		if not is_instance_valid(area):
+			return
+
 		if area not in aoe_overlapped_receivers:
-			aoe_overlapped_receivers.append(area)
-			for status_effect: StatusEffect in stats.splash_effect_source.status_effects:
+			var timer: Timer = Timer.new()
+			timer.set_meta("area", area)
+			timer.timeout.connect(_on_aoe_interval_timer_timeout.bind(timer))
+			aoe_overlapped_receivers[area] = timer
+
+			for status_effect: StatusEffect in stats.aoe_effect_source.status_effects:
 				area.handle_status_effect(status_effect)
 
-## When not in AOE, we remove entities from an array and call for their status effects that came from the AOE to get removed.
+			add_child(timer)
+			timer.start(stats.aoe_effect_interval)
+
+## When the status effect interval timer ends, check if the area still exists, then apply the effects again.
+func _on_aoe_interval_timer_timeout(timer: Timer) -> void:
+	var area: Area2D = timer.get_meta("area")
+	if area not in aoe_overlapped_receivers:
+		timer.queue_free()
+		return
+	elif not is_instance_valid(area):
+		aoe_overlapped_receivers.erase(area)
+		timer.queue_free()
+		return
+
+	for status_effect: StatusEffect in stats.aoe_effect_source.status_effects:
+		area.handle_status_effect(status_effect)
+
+## When in AOE, remove the area from the dictionary and free its associated timer on exiting the AOE zone.
 func _on_area_exited(area: Area2D) -> void:
 	if not is_in_aoe_phase:
 		return
 
 	if area is EffectReceiverComponent:
-		var index: int = aoe_overlapped_receivers.find(area)
-		if index != -1: aoe_overlapped_receivers.remove_at(index)
-		_remove_all_aoe_status_effects_from_entity(area)
+		var timer: Timer = aoe_overlapped_receivers.get(area, null)
+		if timer:
+			timer.queue_free()
+			aoe_overlapped_receivers.erase(area)
 
 ## Overrides parent method. When we intersect with any kind of object, this processes what to do next.
 func _process_hit(object: Node2D) -> void:
@@ -710,7 +724,7 @@ func _process_hit(object: Node2D) -> void:
 				_handle_pierce()
 				return
 
-		var original_radius: float = s_mods.get_original_stat("proj_splash_radius") if not is_charge_fire else s_mods.get_original_stat("charge_proj_splash_radius")
+		var original_radius: float = s_mods.get_original_stat("proj_aoe_radius") if not is_charge_fire else s_mods.get_original_stat("charge_proj_aoe_radius")
 		if original_radius > 0:
 			lifetime_timer.stop()
 			_handle_aoe()
@@ -732,8 +746,8 @@ func _start_being_handled(handling_area: EffectReceiverComponent) -> void:
 		modified_effect_src.contact_position = get_parent().global_position
 		handling_area.handle_effect_source(modified_effect_src, source_entity)
 	else:
-		if stats.splash_effect_source == null: stats.splash_effect_source = effect_source
-		var modified_effect_src: EffectSource = _get_effect_source_adjusted_for_falloff(stats.splash_effect_source, handling_area, true)
+		if stats.aoe_effect_source == null: stats.aoe_effect_source = effect_source
+		var modified_effect_src: EffectSource = _get_effect_source_adjusted_for_falloff(stats.aoe_effect_source, handling_area, true)
 		modified_effect_src.contact_position = global_position
 		handling_area.handle_effect_source(modified_effect_src, source_entity, false) # Don't reapply status effects.
 
@@ -748,7 +762,7 @@ func _get_effect_source_adjusted_for_falloff(effect_src: EffectSource, handling_
 	if is_aoe:
 		apply_to_bad = stats.bad_effects_aoe_falloff
 		apply_to_good = stats.good_effects_aoe_falloff
-		var radius_stat: float = s_mods.get_stat("proj_splash_radius") if not is_charge_fire else s_mods.get_stat("charge_proj_splash_radius")
+		var radius_stat: float = s_mods.get_stat("proj_aoe_radius") if not is_charge_fire else s_mods.get_stat("charge_proj_aoe_radius")
 		falloff_mult = max(0.05, stats.aoe_effect_falloff_curve.sample_baked(dist_to_center / radius_stat))
 	else:
 		apply_to_bad = stats.bad_effects_falloff

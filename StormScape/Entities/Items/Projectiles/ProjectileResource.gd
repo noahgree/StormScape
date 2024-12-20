@@ -68,15 +68,17 @@ class_name ProjectileResource
 @export_range(0, 2, 0.01) var split_cam_shakes_dur: Array[float] = [0.2] ## For each split index, you should determine how long the camera shake will last after the split.
 
 @export_group("Area of Effect")
-@export_range(0, 200, 1, "suffix:pixels") var splash_radius: int = 0 ## If above 0, this projectile will do AOE damage after hitting something.
+@export_range(0, 200, 1, "suffix:pixels") var aoe_radius: int = 0 ## If above 0, this projectile will do AOE damage after hitting something.
+@export var aoe_effect_source: EffectSource = null ## The effect source to apply when something is hit by aoe damage. If null, this will just use the default effect source for this projectile.
 @export var do_aoe_on_arc_land: bool = true ## Whether to trigger an AOE when we land after an arc shot.
-@export var aoe_effect_falloff_curve: Curve = Curve.new() ## Changes damage and mod times for the effect source based on how far away from the origin of the splash damage the receiver was hit.
+@export var aoe_before_freeing: bool = false ## Whether to trigger the aoe once we reach end of lifetime if we haven't hit anything yet.
+@export var aoe_effect_falloff_curve: Curve = Curve.new() ## Changes damage and mod times for the effect source based on how far away from the origin of the aoe damage the receiver was hit.
 @export var bad_effects_aoe_falloff: bool = true ## Whether to apply the falloff curve to bad effects in an aoe hit.
 @export var good_effects_aoe_falloff: bool = false ## Whether to apply the falloff curve to good effects in an aoe hit.
-@export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var splash_effect_delay: float = 0.0 ## How long after triggering the AOE does the projectile sit in wait before re-enabling the larger collider.
-@export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var splash_effect_dur: float = 0.05 ## How long the larger collider will be enabled for once a splash is triggered.
-@export var splash_before_freeing: bool = false ## Whether to trigger the splash once we reach end of lifetime if we haven't hit anything yet.
-@export var splash_effect_source: EffectSource = null ## The effect source to apply when something is hit by splash damage. If null, this will just use the default effect source for this projectile.
+@export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var aoe_delay: float = 0.0 ## How long after triggering the AOE does the projectile sit in wait before re-enabling the larger collider.
+@export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var aoe_effect_dur: float = 0.05 ## How long the larger collider will be enabled for once a aoe is triggered.
+@export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var aoe_effect_interval: float = 1 ## How long between applications of the status effects of the AOE to each entity inside it.
+@export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var aoe_effects_delay: float = 0.5 ## How long after an entity enters the AOE effect area before applying the first status effect pulse.
 @export_subgroup("AOE FX")
-@export var splash_vfx: PackedScene = null ## The scene to instance when activating the aoe.
-@export var splash_sound: String = "" ## The sound to play when activating the aoe.
+@export var aoe_vfx: PackedScene = null ## The scene to instance when activating the aoe.
+@export var aoe_sound: String = "" ## The sound to play when activating the aoe.

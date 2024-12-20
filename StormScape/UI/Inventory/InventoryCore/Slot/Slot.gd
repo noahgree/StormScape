@@ -7,15 +7,15 @@ signal is_hovered_over(index: int) ## Emitted when a slot is currently being hov
 signal is_not_hovered_over() ## Emitted when a slot is no longer being hovered over.
 
 @export var drag_preview: PackedScene = load("res://UI/Inventory/InventoryCore/Slot/SlotDragPreview.tscn") ## The control preview for a dragged slot.
-@export var default_slot_texture: Texture2D
-@export var no_item_slot_texture: Texture2D
+@export var default_slot_texture: Texture2D ## The default texture of the slot with an item in it.
+@export var no_item_slot_texture: Texture2D ## The texture of the slot with no item when it is selected or active.
 
 @onready var texture_margins: MarginContainer = $TextureMargins ## The item texture margins node for this slot.
 @onready var back_color: ColorRect = $BackColor ## The color behind the item.
 @onready var item_texture: TextureRect = $TextureMargins/ItemTexture ## The item texture node for this slot.
 @onready var quantity: Label = $QuantityMargins/Quantity ## The quantity label for this slot.
-@onready var rarity_glow: TextureRect = $RarityGlow
-@onready var selected_texture: TextureRect = $SelectedTexture
+@onready var rarity_glow: TextureRect = $RarityGlow ## The glow behind the weapon in the slot.
+@onready var selected_texture: TextureRect = $SelectedTexture ## The texture that appears when this slot is selected or active.
 
 var index: int ## The index that this slot represents inside the inventory.
 var synced_inv: Inventory ## The synced inventory that this slot is a part of.
@@ -24,8 +24,8 @@ var dragging_half_stack: bool = false ## Whether this slot is carrying only half
 var item: InvItemResource: set = _set_item ## The current inventory item represented in this slot.
 var is_hotbar_ui_preview_slot: bool = false ## Whether this slot is an inventory hotbar preview slot for the player's screen.
 var is_trash_slot: bool = false ## The slot, that if present, is used to discard items. It will have the highest index.
-var tint_tween: Tween = null
-var tint_progress: float = 100.0:
+var tint_tween: Tween = null ## The tween animating the tint progress.
+var tint_progress: float = 100.0: ## How much of the tint should be filled upwards. Runs from 0 - 100
 	set(new_value):
 		tint_progress = new_value
 		back_color.material.set_shader_parameter("progress", new_value)
@@ -34,46 +34,40 @@ var tint_progress: float = 100.0:
 ## Setter function for the item represented by this slot. Updates texture and quantity label.
 func _set_item(new_item: InvItemResource) -> void:
 	item = new_item
-	if item:
-		if item.quantity > 0:
-			item_texture.texture = item.stats.inv_icon
 
-			back_color.material.set_shader_parameter("main_color", GlobalData.rarity_colors.slot_fill.get(item.stats.rarity))
-			back_color.show()
+	if item and item.quantity > 0:
+		update_tint_progress(CooldownManager.get_cooldown(item.stats.session_uid))
 
-			item_texture.material.set_shader_parameter("width", 0.0)
+		item_texture.texture = item.stats.inv_icon
 
-			texture_margins.rotation_degrees = item.stats.inv_icon_rotation
-			texture_margins.position = item.stats.inv_icon_offset
-			texture_margins.scale = item.stats.inv_icon_scale
+		back_color.material.set_shader_parameter("main_color", GlobalData.rarity_colors.slot_fill.get(item.stats.rarity))
+		back_color.show()
 
-			rarity_glow.self_modulate = GlobalData.rarity_colors.slot_glow.get(item.stats.rarity)
-			rarity_glow.show()
+		item_texture.material.set_shader_parameter("width", 0.0)
 
-			if item.stats.rarity == GlobalData.ItemRarity.EPIC or item.stats.rarity == GlobalData.ItemRarity.LEGENDARY or item.stats.rarity == GlobalData.ItemRarity.SINGULAR:
-				var gradient_texture: GradientTexture1D = GradientTexture1D.new()
-				gradient_texture.gradient = Gradient.new()
-				gradient_texture.gradient.add_point(0, GlobalData.rarity_colors.glint_color.get(item.stats.rarity))
-				item_texture.material.set_shader_parameter("color_gradient", gradient_texture)
-				item_texture.material.set_shader_parameter("highlight_strength", 0.4)
-			else:
-				item_texture.material.set_shader_parameter("highlight_strength", 0.0)
+		texture_margins.rotation_degrees = item.stats.inv_icon_rotation
+		texture_margins.position = item.stats.inv_icon_offset
+		texture_margins.scale = item.stats.inv_icon_scale
 
-			if item.quantity > 1:
-				quantity.text = str(item.quantity)
-			else:
-				quantity.text = ""
+		rarity_glow.self_modulate = GlobalData.rarity_colors.slot_glow.get(item.stats.rarity)
+		rarity_glow.show()
+
+		if item.stats.rarity == GlobalData.ItemRarity.EPIC or item.stats.rarity == GlobalData.ItemRarity.LEGENDARY or item.stats.rarity == GlobalData.ItemRarity.SINGULAR:
+			var gradient_texture: GradientTexture1D = GradientTexture1D.new()
+			gradient_texture.gradient = Gradient.new()
+			gradient_texture.gradient.add_point(0, GlobalData.rarity_colors.glint_color.get(item.stats.rarity))
+			item_texture.material.set_shader_parameter("color_gradient", gradient_texture)
+			item_texture.material.set_shader_parameter("highlight_strength", 0.4)
 		else:
-			item = null
-			item_texture.texture = null
+			item_texture.material.set_shader_parameter("highlight_strength", 0.0)
+
+		if item.quantity > 1:
+			quantity.text = str(item.quantity)
+		else:
 			quantity.text = ""
-			rarity_glow.hide()
-			back_color.hide()
-			texture_margins.rotation = 0
-			texture_margins.position = Vector2.ZERO
-			texture_margins.scale = Vector2.ONE
-			return
 	else:
+		update_tint_progress(0)
+		item = null
 		item_texture.texture = null
 		quantity.text = ""
 		rarity_glow.hide()
@@ -81,6 +75,7 @@ func _set_item(new_item: InvItemResource) -> void:
 		texture_margins.rotation = 0
 		texture_margins.position = Vector2.ZERO
 		texture_margins.scale = Vector2.ONE
+		return
 
 ## Connects relevant mouse entered and exited functions.
 func _ready() -> void:
@@ -90,11 +85,21 @@ func _ready() -> void:
 	selected_texture.hide()
 	item_texture.material.set_shader_parameter("highlight_strength", 0.0)
 
+## When this is shown or hidden and different slots are displayed, update the local tint progress with the current item.
+func _on_visibility_changed() -> void:
+	await get_tree().process_frame
+	update_tint_progress(CooldownManager.get_cooldown(item.stats.session_uid) if item != null else 0.0)
+
+## Updates the upwards fill tinting that represents an item on cooldown.
 func update_tint_progress(duration: float) -> void:
-	if tint_tween: tint_tween.kill()
-	tint_tween = create_tween()
-	tint_progress = 0
-	tint_tween.tween_property(self, "tint_progress", 100.0, duration)
+	if duration > 0:
+		if tint_tween: tint_tween.kill()
+		tint_progress = (1 - (duration / CooldownManager.get_original_cooldown(item.stats.session_uid))) * 100
+		if not GlobalData.focused_ui_is_open:
+			tint_tween = create_tween()
+			tint_tween.tween_property(self, "tint_progress", 100.0, duration)
+	else:
+		tint_progress = 100.0
 
 ## Gets a reference to the data from the slot where the drag originated.
 func _get_drag_data(at_position: Vector2) -> Variant:

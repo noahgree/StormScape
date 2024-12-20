@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="ProjWeaponResource" load_steps=39 format=3 uid="uid://ciel2rrqq4dvv"]
+[gd_resource type="Resource" script_class="ProjWeaponResource" load_steps=38 format=3 uid="uid://ciel2rrqq4dvv"]
 
 [ext_resource type="Script" path="res://Entities/Stats/EffectSystemResources/EffectSources/EffectSource.gd" id="1_xn1yf"]
 [ext_resource type="Script" path="res://Entities/Stats/EffectSystemResources/StatusEffects/StatusEffect.gd" id="2_gdqw7"]
@@ -132,14 +132,16 @@ split_delays = Array[float]([0.2])
 splitting_sounds = Array[String]([""])
 split_cam_shakes_str = Array[float]([1.0])
 split_cam_shakes_dur = Array[float]([0.2])
-splash_radius = 0
+aoe_radius = 0
 do_aoe_on_arc_land = true
+aoe_before_freeing = false
 bad_effects_aoe_falloff = true
 good_effects_aoe_falloff = false
-splash_effect_delay = 0.0
-splash_effect_dur = 0.05
-splash_before_freeing = false
-splash_sound = ""
+aoe_delay = 0.0
+aoe_effect_dur = 0.05
+aoe_effect_interval = 1.0
+aoe_effects_delay = 0.5
+aoe_sound = ""
 
 [sub_resource type="Resource" id="Resource_wic0i"]
 script = ExtResource("1_xn1yf")
@@ -207,31 +209,6 @@ point_count = 2
 _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.69792), 0.0, 0.0, 0, 0]
 point_count = 2
 
-[sub_resource type="Resource" id="Resource_3ce5l"]
-script = ExtResource("1_xn1yf")
-source_type = 3
-source_tags = Array[String]([])
-scanned_phys_layers = 191
-can_hit_self = true
-bad_effect_affected_teams = 1
-good_effect_affected_teams = 2
-base_damage = 25
-dmg_affected_stats = 2
-crit_chance = 0
-crit_multiplier = 1.5
-armor_penetration = 0
-base_healing = 0
-heal_affected_stats = 2
-cam_shake_strength = 0.0
-cam_shake_duration = 0.0
-cam_freeze_multiplier = 1.0
-cam_freeze_duration = 0.0
-impact_sound = ""
-hit_flash_color = Color(1, 1, 1, 0.6)
-status_effects = Array[ExtResource("2_gdqw7")]([])
-contact_position = Vector2(0, 0)
-movement_direction = Vector2(0, 0)
-
 [sub_resource type="Resource" id="Resource_nhr3k"]
 script = ExtResource("6_ll0mi")
 speed = 350
@@ -280,16 +257,17 @@ split_delays = Array[float]([0.2, 0.15])
 splitting_sounds = Array[String](["", ""])
 split_cam_shakes_str = Array[float]([1.0, 0.0])
 split_cam_shakes_dur = Array[float]([0.2, 0.0])
-splash_radius = 0
+aoe_radius = 0
 do_aoe_on_arc_land = true
+aoe_before_freeing = false
 aoe_effect_falloff_curve = SubResource("Curve_3rmxf")
 bad_effects_aoe_falloff = true
 good_effects_aoe_falloff = false
-splash_effect_delay = 0.0
-splash_effect_dur = 0.05
-splash_before_freeing = false
-splash_effect_source = SubResource("Resource_3ce5l")
-splash_sound = ""
+aoe_delay = 0.0
+aoe_effect_dur = 0.05
+aoe_effect_interval = 1.0
+aoe_effects_delay = 0.5
+aoe_sound = ""
 
 [sub_resource type="Resource" id="Resource_ct7xl"]
 script = ExtResource("14_c7ib1")

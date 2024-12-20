@@ -3,11 +3,12 @@ class_name EquippableItem
 ## The base class for all items that can be used by the HandsComponent. In order to be equipped and shown on screen in
 ## some place other than the inventory, the item resource must have an associated equippable item scene.
 
-@export var stats: ItemResource = null: set = _set_stats ## The resource driving the stats and type of item. Do not set in editor, as this is automatically set on item creation via a static method.
+@export_storage var stats: ItemResource = null: set = _set_stats ## The resource driving the stats and type of item.
 
 @onready var sprite: Node2D = $ItemSprite ## The main sprite for the equippable item. Should have the entity effect shader attached.
 @onready var clipping_detector: Area2D = get_node_or_null("ClippingDetector") ## Used to detect when the item is overlapping with an in-game object that should block its use (i.e. a wall or tree).
 
+var stats_already_duplicated: bool = false
 var source_slot: Slot ## The slot this equippable item is in whilst equipped.
 var source_entity: PhysicsBody2D ## The entity that is holding the equippable item.
 var ammo_ui: MarginContainer ## The ui assigned by the hands component that displays the ammo. Only for the player.
@@ -26,18 +27,20 @@ static func create_from_slot(item_source_slot: Slot) -> EquippableItem:
 	var item: EquippableItem = item_source_slot.item.stats.item_scene.instantiate()
 	item.source_slot = item_source_slot
 	item.stats = item_source_slot.item.stats
+	item.stats_already_duplicated = true
 	item.source_entity = item_source_slot.synced_inv.get_parent()
 	return item
 
 ## Sets the item stats when changed. Can be overridden by child classes to do specific things on change.
 func _set_stats(new_stats: ItemResource) -> void:
-	stats = new_stats.duplicate()
+	if not stats_already_duplicated:
+		stats = new_stats.duplicate_item_res()
 	source_slot.synced_inv.inv[source_slot.index].stats = stats
 	source_slot.item.stats = stats
 
 func _ready() -> void:
-	_set_stats(stats)
 	add_to_group("has_save_logic")
+	_set_stats(stats)
 
 	if clipping_detector != null:
 		clipping_detector.body_entered.connect(_on_item_starts_to_clip)

@@ -1,5 +1,6 @@
 extends Resource
 class_name InvItemResource
+## An item resource with an associated quantity.
 
 @export var stats: ItemResource = ItemResource.new() ## The resource driving the stats and type of item this is.
 @export var quantity: int = 1 ## The quantity associated with the inventory item.
@@ -13,7 +14,3 @@ func _init(item_stats: ItemResource = null, item_quantity: int = 1) -> void:
 ## Custom print logic for determining more about the item that just a randomly assigned ID.
 func _to_string() -> String:
 	return "(" + str(quantity) + ") " + str(GlobalData.ItemRarity.keys()[stats.rarity]) + "_" + stats.name
-
-## Intended to be overridden by all subclasses in order to determine what to do when used.
-func use_item() -> void:
-	pass

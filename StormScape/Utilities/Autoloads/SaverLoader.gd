@@ -23,6 +23,8 @@ func load_game() -> void:
 
 	if DebugFlags.PrintFlags.saver_loader_status_changes:
 		print_rich("[color=yellow]Performing 'Before Load' Functions...[/color]")
+
+	UIDHelper.session_uid_counter = 0
 	get_tree().call_group("has_save_logic", "_on_before_load_game")
 
 	if DebugFlags.PrintFlags.saver_loader_status_changes:

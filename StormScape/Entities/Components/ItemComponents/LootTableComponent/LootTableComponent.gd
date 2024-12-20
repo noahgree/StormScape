@@ -31,10 +31,10 @@ func _ready() -> void:
 	loot_table = loot_table.duplicate()
 	for i: int in range(loot_table.hit_loot_table.size()):
 		hit_loot_table_total_weight += loot_table.hit_loot_table[i].weighting
-		loot_table.hit_loot_table[i].item = loot_table.hit_loot_table[i].item.duplicate()
+		loot_table.hit_loot_table[i].item = loot_table.hit_loot_table[i].item.duplicate_item_res()
 	for i: int in range(loot_table.die_loot_table.size()):
 		die_loot_table_total_weight += loot_table.die_loot_table[i].weighting
-		loot_table.die_loot_table[i].item = loot_table.die_loot_table[i].item.duplicate()
+		loot_table.die_loot_table[i].item = loot_table.die_loot_table[i].item.duplicate_item_res()
 
 func handle_effect_source(_effect_source: EffectSource) -> void:
 	if is_dying: return
@@ -44,7 +44,7 @@ func handle_effect_source(_effect_source: EffectSource) -> void:
 
 	if loot_table.hit_loot_table != null and not loot_table.hit_loot_table.is_empty():
 		var entry: LootTableEntry = _get_random_loot_entry(true)
-		Item.spawn_on_ground(entry.item.duplicate(), entry.quantity, get_parent().global_position, 15.0)
+		Item.spawn_on_ground(entry.item.duplicate_item_res(), entry.quantity, get_parent().global_position, 15.0)
 
 func handle_death() -> void:
 	is_dying = true
@@ -57,7 +57,7 @@ func handle_death() -> void:
 
 	if loot_table.die_loot_table != null and not loot_table.die_loot_table.is_empty():
 		var entry: LootTableEntry = _get_random_loot_entry(false)
-		Item.spawn_on_ground(entry.item.duplicate(), entry.quantity, get_parent().global_position, 15.0)
+		Item.spawn_on_ground(entry.item.duplicate_item_res(), entry.quantity, get_parent().global_position, 15.0)
 
 func _roll_to_check_if_should_drop(was_hit: bool) -> bool:
 	var spawn_chance: float = (hit_spawn_chance if was_hit else die_spawn_chance) / 100.0

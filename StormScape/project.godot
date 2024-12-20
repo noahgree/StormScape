@@ -39,6 +39,7 @@ AudioManager="*res://Utilities/Autoloads/AudioManager.tscn"
 GlobalData="*res://Utilities/Autoloads/GlobalData.gd"
 SaverLoader="*res://Utilities/Autoloads/SaverLoader.gd"
 RuntimeDebugTools="*res://addons/runtime_debug_tools/scenes/remote_inspector.tscn"
+CooldownManager="*res://Utilities/Autoloads/CooldownManager.gd"
 
 [debug]
 

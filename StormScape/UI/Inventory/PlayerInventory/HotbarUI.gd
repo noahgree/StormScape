@@ -55,7 +55,7 @@ func _on_slot_updated(index: int, item: InvItemResource) -> void:
 			hotbar_slots[hotbar_index].item = item
 
 	_update_inv_ammo_ui()
-	_default_ammo_update_method() # Called after the hotbar item is updated above to reflect
+	_default_ammo_update_method() # Called after the hotbar item is updated above to reflect the new item
 
 ## Updates the hands component with the new active slot and associated item if any. Then updates the UI for the new item
 ## name. This must happen here since the signal's order isn't guaranteed, and we need the active slot to update first.

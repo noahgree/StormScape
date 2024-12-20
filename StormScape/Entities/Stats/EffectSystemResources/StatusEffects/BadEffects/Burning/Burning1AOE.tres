@@ -8,9 +8,9 @@
 script = ExtResource("1_bub1n")
 damaging_time = 1.0
 dmg_ticks_array = Array[int]([3])
-delay_time = 1.0
+delay_time = 0.0
 dmg_affected_stats = 0
-run_until_removed = true
+run_until_removed = false
 time_between_ticks = 1.0
 
 [sub_resource type="Resource" id="Resource_xigmb"]
@@ -32,7 +32,7 @@ is_bad_effect = true
 affected_entities = 7
 effects_to_stop = Array[String](["Frostbite"])
 mod_time = 1.0
-apply_until_removed = true
+apply_until_removed = false
 stat_mods = Array[ExtResource("3_64ygk")]([SubResource("Resource_xigmb")])
 audio_to_play = ""
 only_cue_on_player_hit = false
