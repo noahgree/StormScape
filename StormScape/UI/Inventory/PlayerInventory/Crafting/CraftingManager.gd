@@ -23,6 +23,7 @@ func _cache_recipes() -> void:
 		if file_name.ends_with(".tres"):
 			var file_path: String = tres_folder + "/" + file_name
 			var item: ItemResource = load(file_path)
+			item.session_uid = 0 # This triggers the setter function inside the item resource to make sure its given an suid
 			var recipe: Array[CraftingIngredient] = item.recipe
 			cached_recipes[item.get_recipe_id()] = recipe
 		file_name = dir.get_next()

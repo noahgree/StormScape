@@ -7,26 +7,26 @@ class_name EntitySprite
 	"Burning" : Color(1, 0.582, 0.484, 0.5),
 	"Poison" : Color(0, 0.933, 0.469, 0.542),
 	"Slowness" : Color(1, 0.568, 0.56, 0.3),
-	"Storm Syndrome" : Color(0.861, 0.573, 1, 0.5),
+	"StormSyndrome" : Color(0.861, 0.573, 1, 0.5),
 	"Confusion" : Color(0.73, 0.703, 0.701, 0.4),
 	"Regen" : Color(0, 0.85, 0.393, 0.526),
 	"Speed" : Color(0.692, 0.76, 0, 0.526),
 	"Untouchable" : Color(0.29, 0.713, 0.75),
 	"Stun" : Color(1, 0.909, 0.544, 0.6),
-	"Time Snare": Color(1, 0.4, 0.463, 0.599)
+	"TimeSnare": Color(1, 0.4, 0.463, 0.599)
 }
 @export var glow_colors: Dictionary = { ## The status effect names that have associated colors to change the floor color to.
 	"Frostbite" : Color(0.435, 0.826, 1),
 	"Burning" : Color(1, 0.582, 0.484),
 	"Poison" : Color(0, 0.933, 0.469),
 	"Slowness" : Color(1, 0.568, 0.56),
-	"Storm Syndrome" : Color(0.861, 0.573, 1),
+	"StormSyndrome" : Color(0.861, 0.573, 1),
 	"Confusion" : Color(0.73, 0.703, 0.701),
 	"Regen" : Color(0, 0.8, 0.3),
 	"Speed" : Color(0.692, 0.76, 0),
 	"Untouchable" : Color(0.29, 0.713, 0.75),
 	"Stun" : Color(1, 0.909, 0.544),
-	"Time Snare": Color(1, 0.4, 0.463)
+	"TimeSnare": Color(1, 0.4, 0.463)
 }
 
 @onready var floor_color: Sprite2D = $FloorColor ## The floor color sprite that becomes a visible color when triggered.

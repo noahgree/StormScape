@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="ProjWeaponResource" load_steps=38 format=3 uid="uid://ciel2rrqq4dvv"]
+[gd_resource type="Resource" script_class="ProjWeaponResource" load_steps=37 format=3 uid="uid://ciel2rrqq4dvv"]
 
 [ext_resource type="Script" path="res://Entities/Stats/EffectSystemResources/EffectSources/EffectSource.gd" id="1_xn1yf"]
 [ext_resource type="Script" path="res://Entities/Stats/EffectSystemResources/StatusEffects/StatusEffect.gd" id="2_gdqw7"]
@@ -6,7 +6,6 @@
 [ext_resource type="Script" path="res://Entities/Items/Hitscans/HitscanResource.gd" id="4_w5523"]
 [ext_resource type="PackedScene" uid="uid://ckf7i8bnass5n" path="res://Entities/Items/Projectiles/Laser/Laser.tscn" id="5_xjmn2"]
 [ext_resource type="Script" path="res://Entities/Items/Projectiles/ProjectileResource.gd" id="6_ll0mi"]
-[ext_resource type="Resource" uid="uid://opqylasujopp" path="res://Entities/Stats/EffectSystemResources/StatusEffects/BadEffects/LifeSteal/LifeSteal1.tres" id="8_6gpiv"]
 [ext_resource type="Texture2D" uid="uid://bjm0js8cfg2rm" path="res://Entities/Items/Weapons/ProjectileWeapons/LaserGun/laser_gun.png" id="10_iakvu"]
 [ext_resource type="PackedScene" uid="uid://baxpb3crwepc0" path="res://Entities/Items/Weapons/ProjectileWeapons/LaserGun/LaserGun.tscn" id="11_ykm1j"]
 [ext_resource type="Script" path="res://UI/Inventory/PlayerInventory/Crafting/CraftingIngredient.gd" id="14_c7ib1"]
@@ -164,7 +163,7 @@ cam_freeze_multiplier = 1.0
 cam_freeze_duration = 0.0
 impact_sound = ""
 hit_flash_color = Color(1, 1, 1, 0.6)
-status_effects = Array[ExtResource("2_gdqw7")]([ExtResource("8_6gpiv")])
+status_effects = Array[ExtResource("2_gdqw7")]([])
 contact_position = Vector2(0, 0)
 movement_direction = Vector2(0, 0)
 
@@ -242,7 +241,7 @@ spin_both_ways = false
 spin_direction = "Forward"
 move_in_rotated_dir = false
 shadow_matches_spin = false
-launch_angle = 70.0
+launch_angle = 0.0
 arc_travel_distance = 100
 arc_speed = 350.0
 max_collision_height = 20
@@ -337,7 +336,7 @@ stamina_use_per_proj = 0.5
 mag_reload_sound = ""
 proj_reload_sound = ""
 empty_mag_sound = ""
-max_bloom = 15.0
+max_bloom = 10.0
 bloom_curve = SubResource("Curve_kfl3v")
 bloom_increase_rate = SubResource("Curve_mls34")
 bloom_decrease_rate = SubResource("Curve_7cqvo")
@@ -351,15 +350,13 @@ burst_bullet_delay = 0.1
 add_bloom_per_burst_shot = true
 barrage_count = 1
 angular_spread = 25.0
-fire_cooldown_left = 0.0
-charge_fire_cooldown_left = 0.0
 current_warmth_level = 0.0
 current_bloom_level = 0.0
 ammo_in_mag = -1
 s_mods = SubResource("Resource_wi7kk")
 effect_source = SubResource("Resource_wic0i")
 charge_effect_source = SubResource("Resource_erj5g")
-pullout_delay = 0.3
+pullout_delay = 0.25
 blocked_mods = Array[String]([])
 time_last_equipped = 0.0
 cache_is_setup = false
@@ -386,6 +383,8 @@ recipe = Array[ExtResource("14_c7ib1")]([SubResource("Resource_ct7xl"), SubResou
 output_quantity = 1
 recipe_unlocked = false
 item_scene = ExtResource("11_ykm1j")
+cooldowns_per_suid = true
+show_cooldown_fill = false
 rotation_lerping = 0.15
 holding_offset = Vector2(0, 0)
 holding_degrees = 0.0
@@ -393,3 +392,4 @@ is_gripped_by_one_hand = true
 draw_off_hand = false
 draw_off_hand_offset = Vector2(0, 0)
 main_hand_offset = Vector2(0, 0)
+session_uid = 0

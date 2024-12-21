@@ -34,7 +34,7 @@ static func create_from_slot(item_source_slot: Slot) -> EquippableItem:
 ## Sets the item stats when changed. Can be overridden by child classes to do specific things on change.
 func _set_stats(new_stats: ItemResource) -> void:
 	if not stats_already_duplicated:
-		stats = new_stats.duplicate_item_res()
+		stats = new_stats.duplicate_with_suid()
 	source_slot.synced_inv.inv[source_slot.index].stats = stats
 	source_slot.item.stats = stats
 

@@ -664,16 +664,17 @@ func _on_area_entered(area: Area2D) -> void:
 	if (area.get_parent() == source_entity) and not stats.aoe_effect_source.can_hit_self:
 		return
 	if area is EffectReceiverComponent:
-		await get_tree().create_timer(stats.aoe_effects_delay, false, true, false).timeout
-		if not is_instance_valid(area):
-			return
+		var timer: Timer = Timer.new()
+		timer.set_meta("area", area)
+		timer.timeout.connect(_on_aoe_interval_timer_timeout.bind(timer))
+		aoe_overlapped_receivers[area] = timer
 
-		if area not in aoe_overlapped_receivers:
-			var timer: Timer = Timer.new()
-			timer.set_meta("area", area)
-			timer.timeout.connect(_on_aoe_interval_timer_timeout.bind(timer))
-			aoe_overlapped_receivers[area] = timer
+		if stats.aoe_effects_delay > 0:
+			await get_tree().create_timer(stats.aoe_effects_delay, false, true, false).timeout
+			if not is_instance_valid(area):
+				return
 
+		if area in aoe_overlapped_receivers:
 			for status_effect: StatusEffect in stats.aoe_effect_source.status_effects:
 				area.handle_status_effect(status_effect)
 

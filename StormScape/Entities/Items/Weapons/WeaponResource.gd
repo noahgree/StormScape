@@ -6,7 +6,7 @@ class_name WeaponResource
 @export var s_mods: StatModsCacheResource = StatModsCacheResource.new() ## The cache of all up to date stats for this weapon with mods factored in.
 @export var effect_source: EffectSource = EffectSource.new() ## The resource that defines what happens to the entity that is hit by this weapon. Includes things like damage and status effects.
 @export var charge_effect_source: EffectSource = EffectSource.new() ## Overrides the normal effect source for charge uses.
-@export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var pullout_delay: float = 0.3 ## How long after equipping must we wait before we can use this weapon.
+@export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var pullout_delay: float = 0.25 ## How long after equipping must we wait before we can use this weapon.
 @export_subgroup("Modding Details")
 @export var blocked_mods: Array[String] = [] ## The string names of weapon mod titles that are not allowed to be applied to this weapon.
 

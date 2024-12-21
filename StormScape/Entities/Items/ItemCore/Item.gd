@@ -31,12 +31,14 @@ func _set_item(item_stats: ItemResource) -> void:
 			ground_glow.scale.y = 0.05 * (icon.texture.get_height() / 32.0)
 			ground_glow.position.y = ceil(icon.texture.get_height() / 2.0) + ceil(7.0 / 2.0) - 2 + icon.position.y
 
-## Spawns an item with the passed in details on the ground.
-static func spawn_on_ground(item_stats: ItemResource, quant: int, location: Vector2, location_range: float) -> void:
+## Spawns an item with the passed in details on the ground. Keep suid means we should duplicate the item's stats and pass the
+## old session uid along to it.
+static func spawn_on_ground(item_stats: ItemResource, quant: int, location: Vector2,
+							location_range: float, keep_suid: bool = true) -> void:
 	var quantity_count: int = quant
 	while quantity_count > 0:
 		var item_to_spawn: Item = item_scene.instantiate()
-		item_to_spawn.stats = item_stats.duplicate_item_res()
+		item_to_spawn.stats = item_stats.duplicate_with_suid() if keep_suid else item_stats.duplicate()
 
 		var quant_to_use: int = min(quantity_count, item_stats.stack_size)
 		item_to_spawn.quantity = quant_to_use

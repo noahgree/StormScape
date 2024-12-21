@@ -45,7 +45,7 @@ func _drop_data(_at_position: Vector2, data: Variant) -> void:
 			data.item = null
 			inventory_to_reflect.inv[data.index] = null
 
-		Item.spawn_on_ground(ground_item_res, ground_item_quantity, GlobalData.player_node.global_position, 15)
+		Item.spawn_on_ground(ground_item_res, ground_item_quantity, GlobalData.player_node.global_position, 15, true)
 
 	inventory_to_reflect.slot_updated.emit(data.index, data.item)
 

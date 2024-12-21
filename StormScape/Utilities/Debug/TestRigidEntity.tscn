@@ -1,4 +1,4 @@
-[gd_scene load_steps=28 format=3 uid="uid://xsq1q0fffsin"]
+[gd_scene load_steps=30 format=3 uid="uid://xsq1q0fffsin"]
 
 [ext_resource type="Script" path="res://Entities/EntityCore/EntityTypes/RigidEntity/RigidEntity.gd" id="1_6tnit"]
 [ext_resource type="PackedScene" uid="uid://dmv4k4j4lg3pw" path="res://Entities/EntityCore/EntityStaticSprite.tscn" id="3_rn076"]
@@ -20,6 +20,7 @@
 [ext_resource type="Resource" uid="uid://bh18kqp2up3oe" path="res://Entities/Items/TRESItems/Pickaxe(3).tres" id="18_j4lx6"]
 [ext_resource type="Script" path="res://Entities/Components/ItemComponents/LootTableComponent/LootTable.gd" id="18_w6kaj"]
 [ext_resource type="Resource" uid="uid://cx1ydw2jde1y8" path="res://Entities/Items/TRESItems/Apple(0).tres" id="19_6vm5h"]
+[ext_resource type="Resource" uid="uid://3avt5jvd3dye" path="res://Entities/Items/TRESItems/BottleOFire(3).tres" id="20_uc3ly"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_vww1a"]
 resource_local_to_scene = true
@@ -61,9 +62,17 @@ weighting = 20.0
 last_used = 0
 spawn_count = 0
 
+[sub_resource type="Resource" id="Resource_dqa6c"]
+script = ExtResource("16_fkdnf")
+item = ExtResource("20_uc3ly")
+quantity = 2
+weighting = 20.0
+last_used = 0
+spawn_count = 0
+
 [sub_resource type="Resource" id="Resource_tcueq"]
 script = ExtResource("18_w6kaj")
-hit_loot_table = Array[ExtResource("16_fkdnf")]([SubResource("Resource_tbuv6"), SubResource("Resource_q3pta")])
+hit_loot_table = Array[ExtResource("16_fkdnf")]([SubResource("Resource_tbuv6"), SubResource("Resource_q3pta"), SubResource("Resource_dqa6c")])
 die_loot_table = Array[ExtResource("16_fkdnf")]([SubResource("Resource_l1o4x")])
 
 [node name="TestRigidEntity" type="RigidBody2D"]
@@ -91,8 +100,6 @@ debug_color = Color(1.44392e-06, 0.568839, 0.851513, 0.42)
 
 [node name="EffectReceiverComponent" parent="." node_paths=PackedStringArray("affected_entity", "health_component", "loot_table_component", "dmg_handler", "heal_handler", "knockback_handler", "poison_handler", "frostbite_handler", "burning_handler", "life_steal_handler") instance=ExtResource("7_ftqus")]
 position = Vector2(0, -10)
-filter_source_tags = false
-allowed_source_tags = Array[String]([])
 affected_entity = NodePath("..")
 health_component = NodePath("../HealthComponent")
 loot_table_component = NodePath("../LootTableComponent")

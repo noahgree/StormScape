@@ -130,6 +130,7 @@ recipe = Array[ExtResource("6_nkp1e")]([])
 output_quantity = 1
 recipe_unlocked = false
 item_scene = ExtResource("2_50myi")
+cooldowns_per_suid = true
 rotation_lerping = 0.1
 holding_offset = Vector2(0, 0)
 holding_degrees = 0.0

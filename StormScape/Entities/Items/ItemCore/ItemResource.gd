@@ -1,5 +1,6 @@
 extends Resource
 class_name ItemResource
+## The top level resource class for all items in the game.
 
 @export_group("Item Details")
 @export var id: String ## The unique identifier for the item.
@@ -8,7 +9,7 @@ class_name ItemResource
 @export_range(-360, 360, 1, "suffix:degrees") var inv_icon_rotation: float = 0 ## How much to rotate the inv icon in a slot.
 @export var inv_icon_offset: Vector2 = Vector2.ZERO ## How much to offset the inv icon in a slot.
 @export var inv_icon_scale: Vector2 = Vector2.ONE ## How much to scale the inv icon in a slot.
-@export var inv_icon: Texture2D ## The inventory representation of the item.
+@export var inv_icon: Texture2D ## The inventordy representation of the item.
 @export var ground_icon: Texture2D ## The on-ground representation of the item.
 @export var in_hand_icon: Texture2D ## The physical representation of the item.
 @export var item_type: GlobalData.ItemType = GlobalData.ItemType.CONSUMABLE ## The type that this item is.
@@ -25,7 +26,9 @@ class_name ItemResource
 @export var recipe_unlocked: bool = false ## A flag to determine whether or not this item can be crafted.
 
 @export_group("Equippability Details")
-@export var item_scene: PackedScene = null ## The equippable representation of this item.
+@export var item_scene: PackedScene = null ## The equippable representation of this item. If left null, this item cannot be equipped.
+@export var cooldowns_per_suid: bool = true ## When true, cooldowns will be based on instances of this item as they were picked up or added to the inventory. They will not be shared amongst all items of the same base id.
+@export var show_cooldown_fill: bool = false ## Whether to show the vertical fill on the slot when the player invokes a cooldown on this item.
 @export_range(0, 1, 0.01) var rotation_lerping: float = 0.1 ## How fast the rotation lerping should be while holding this item.
 @export var holding_offset: Vector2 = Vector2.ZERO ## The offset for placing the icon of the sprite in the entity's hand.
 @export_custom(PROPERTY_HINT_NONE, "suffix:degrees") var holding_degrees: float = 0 ## The rotation offset for holding the thumnbail sprite in the entity's hand.
@@ -37,11 +40,17 @@ class_name ItemResource
 
 
 # Unique Properties #
-@export_storage var session_uid: int ## The unique id for this resource instance that is relevant only for the current game load.
+@export_storage var session_uid: int: ## The unique id for this resource instance that is relevant only for the current game load.
+	## Sets the session uid based on the new value. If it is negative, it means we want to keep the old suid and can simply
+	## absolute value it and decrement the UIDHelper's var since it will have already triggered the increment once before on the
+	## duplication call. Otherwise, we generate a new one.
+	set(new_value):
+		if new_value >= 0:
+			session_uid = UIDHelper.generate_session_uid()
+		else:
+			session_uid = abs(new_value)
+			UIDHelper.session_uid_counter -= 1
 
-
-func _init() -> void:
-	session_uid = UIDHelper.generate_session_uid()
 
 ## The custom string representation of this item resource.
 func _to_string() -> String:
@@ -51,15 +60,19 @@ func _to_string() -> String:
 func get_recipe_id() -> String:
 	return id + "(" + str(rarity) + ")"
 
+## Returns the cooldown id based on how cooldowns are determined for this item.
+func get_cooldown_id() -> String:
+	if not cooldowns_per_suid:
+		return id
+	else:
+		return str(session_uid)
+
 ## Whether the item is the same as another item when called externally to compare.
 func is_same_as(other_item: ItemResource) -> bool:
 	return (str(self) == str(other_item))
 
-## Custom duplication method that passes a cooldown along to the new copy if there is one.
-func duplicate_item_res(duplicate_subresources: bool = false) -> ItemResource:
+## Custom duplication method that passes the old session_uid as a negative in order to trick the setter function to keeping it.
+func duplicate_with_suid(duplicate_subresources: bool = false) -> ItemResource:
 	var duplicated: ItemResource = self.duplicate(duplicate_subresources)
-
-	var cooldown_left: float = CooldownManager.get_cooldown(session_uid)
-	if cooldown_left > 0: CooldownManager.add_cooldown(duplicated.session_uid, cooldown_left)
-
+	duplicated.session_uid = -session_uid
 	return duplicated

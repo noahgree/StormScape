@@ -36,7 +36,7 @@ func _set_item(new_item: InvItemResource) -> void:
 	item = new_item
 
 	if item and item.quantity > 0:
-		update_tint_progress(CooldownManager.get_cooldown(item.stats.session_uid))
+		update_tint_progress(GlobalData.player_node.hands.cooldown_manager.get_cooldown(item.stats.get_cooldown_id()))
 
 		item_texture.texture = item.stats.inv_icon
 
@@ -88,13 +88,13 @@ func _ready() -> void:
 ## When this is shown or hidden and different slots are displayed, update the local tint progress with the current item.
 func _on_visibility_changed() -> void:
 	await get_tree().process_frame
-	update_tint_progress(CooldownManager.get_cooldown(item.stats.session_uid) if item != null else 0.0)
+	update_tint_progress(GlobalData.player_node.hands.cooldown_manager.get_cooldown(item.stats.get_cooldown_id()) if item != null else 0.0)
 
 ## Updates the upwards fill tinting that represents an item on cooldown.
 func update_tint_progress(duration: float) -> void:
-	if duration > 0:
+	if duration > 0 and item.stats.show_cooldown_fill:
 		if tint_tween: tint_tween.kill()
-		tint_progress = (1 - (duration / CooldownManager.get_original_cooldown(item.stats.session_uid))) * 100
+		tint_progress = (1 - (duration / GlobalData.player_node.hands.cooldown_manager.get_original_cooldown(item.stats.get_cooldown_id()))) * 100
 		if not GlobalData.focused_ui_is_open:
 			tint_tween = create_tween()
 			tint_tween.tween_property(self, "tint_progress", 100.0, duration)
@@ -132,11 +132,11 @@ func _make_drag_preview(at_position: Vector2) -> Control:
 		preview_scene.get_node("TextureMargins/ItemTexture").material.set_shader_parameter("outline_color", GlobalData.rarity_colors.outline_color.get(item.stats.rarity))
 
 		if dragging_only_one:
-			preview_scene.get_node("QuantityMargins/Quantity").text = str(1)
+			preview_scene.get_node("QuantityMargins/Quantity").text = ""
 		elif dragging_half_stack:
 			preview_scene.get_node("QuantityMargins/Quantity").text = str(int(floor(item.quantity / 2.0)))
 		else:
-			preview_scene.get_node("QuantityMargins/Quantity").text = str(item.quantity)
+			preview_scene.get_node("QuantityMargins/Quantity").text = str(item.quantity) if item.quantity > 1 else ""
 
 		preview_scene.position = -at_position
 

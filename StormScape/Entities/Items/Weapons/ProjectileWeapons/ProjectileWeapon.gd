@@ -132,7 +132,7 @@ func _ready() -> void:
 			if source_entity is Player:
 				reloading_ui = source_entity.get_node("ReloadingUI")
 
-		CooldownManager.cooldown_ended.connect(_on_fire_cooldown_timeout)
+		source_entity.hands.cooldown_manager.cooldown_ended.connect(_on_fire_cooldown_timeout)
 
 		add_child(firing_duration_timer)
 		add_child(reload_timer)
@@ -222,7 +222,7 @@ func _process(delta: float) -> void:
 	if reloading_ui and is_reloading:
 		reloading_ui.update_progress((1 - (reload_timer.time_left / reload_timer.wait_time)) * 100)
 
-	if CooldownManager.get_cooldown(stats.session_uid) == 0:
+	if source_entity.hands.cooldown_manager.get_cooldown(stats.get_cooldown_id()) == 0:
 		if stats.current_bloom_level > 0:
 			var sampled_point: float = stats.bloom_decrease_rate.sample_baked(stats.current_bloom_level)
 			var bloom_decrease_amount: float = max(0.01 * delta, sampled_point * delta)
@@ -237,18 +237,18 @@ func _physics_process(_delta: float) -> void:
 	if mouse_area != null:
 		mouse_area.global_position = get_global_mouse_position()
 
-func _on_fire_cooldown_timeout(item_id: int) -> void:
-	if item_id != stats.session_uid:
+func _on_fire_cooldown_timeout(item_id: String) -> void:
+	if item_id != stats.get_cooldown_id():
 		return
 
 	if is_holding_hitscan:
 		_fire()
-		CooldownManager.add_cooldown(stats.session_uid, stats.s_mods.get_stat("fire_cooldown") + hitscan_delay)
+		source_entity.hands.cooldown_manager.add_cooldown(stats.get_cooldown_id(), stats.s_mods.get_stat("fire_cooldown") + hitscan_delay)
 	else:
 		_clean_up_hitscans()
 
 func _update_cooldown_with_potential_visuals(duration: float) -> void:
-	CooldownManager.add_cooldown(stats.session_uid, duration)
+	source_entity.hands.cooldown_manager.add_cooldown(stats.get_cooldown_id(), duration)
 	if stats.proj_weapon_type == ProjWeaponResource.ProjWeaponType.THROWABLE and source_entity is Player:
 		source_slot.update_tint_progress(duration)
 #endregion
@@ -256,7 +256,7 @@ func _update_cooldown_with_potential_visuals(duration: float) -> void:
 #region Called From HandsComponent
 ## Called from the hands component when the mouse is clicked.
 func activate() -> void:
-	if not pullout_delay_timer.is_stopped() or not reload_timer.is_stopped():
+	if not pullout_delay_timer.is_stopped() or (not reload_timer.is_stopped() and stats.reload_type == "Magazine"):
 		return
 
 	is_reloading_single_and_has_since_released = true
@@ -266,7 +266,7 @@ func activate() -> void:
 
 ## Called from the hands component when the mouse is held down. Includes how long it has been held down so far.
 func hold_activate(_hold_time: float) -> void:
-	if not pullout_delay_timer.is_stopped() or not reload_timer.is_stopped() or not firing_duration_timer.is_stopped():
+	if not pullout_delay_timer.is_stopped() or (not reload_timer.is_stopped() and stats.reload_type == "Magazine") or not firing_duration_timer.is_stopped():
 		source_entity.hands.been_holding_time = 0
 		return
 
@@ -284,7 +284,7 @@ func release_hold_activate(hold_time: float) -> void:
 	if stats.firing_mode == "Auto" and stats.allow_hitscan_holding and is_holding_hitscan:
 		is_holding_hitscan = false
 
-	if not pullout_delay_timer.is_stopped() or not reload_timer.is_stopped():
+	if not pullout_delay_timer.is_stopped() or (not reload_timer.is_stopped() and stats.reload_type == "Magazine"):
 		source_entity.hands.been_holding_time = 0
 		return
 
@@ -309,7 +309,7 @@ func reload() -> void:
 #region Firing Activations
 ## Check if we can do a normal firing, and if we can, start it.
 func _fire() -> void:
-	if CooldownManager.get_cooldown(stats.session_uid) > 0:
+	if source_entity.hands.cooldown_manager.get_cooldown(stats.get_cooldown_id()) > 0:
 		return
 	if not is_reloading_single_and_has_since_released:
 		is_holding_hitscan = false
@@ -322,9 +322,9 @@ func _fire() -> void:
 	is_reloading = false
 
 	if _get_warmth_firing_delay() > 0:
-		CooldownManager.add_cooldown(stats.session_uid, _get_warmth_firing_delay())
-		while CooldownManager.get_cooldown(stats.session_uid) > 0: # Signal fires for all ending cooldowns, so we loop until ours has ended
-			await CooldownManager.cooldown_ended
+		source_entity.hands.cooldown_manager.add_cooldown(stats.get_cooldown_id(), _get_warmth_firing_delay())
+		while source_entity.hands.cooldown_manager.get_cooldown(stats.get_cooldown_id()) > 0: # Signal fires for all ending cooldowns, so we loop until ours has ended
+			await source_entity.hands.cooldown_manager.cooldown_ended
 
 		if hold_just_released:
 			hold_just_released = false
@@ -355,7 +355,7 @@ func _charge_fire(hold_time: float) -> void:
 		source_entity.hands.been_holding_time = 0
 		return
 
-	if (hold_time >= stats.s_mods.get_stat("min_charge_time")) and (hold_time > 0) and CooldownManager.get_cooldown(stats.session_uid) == 0:
+	if (hold_time >= stats.s_mods.get_stat("min_charge_time")) and (hold_time > 0) and source_entity.hands.cooldown_manager.get_cooldown(stats.get_cooldown_id()) == 0:
 		if stats.charge_firing_duration > 0:
 			firing_duration_timer.start(max(0.05, stats.charge_firing_duration))
 			_start_firing_anim(true)
@@ -366,9 +366,9 @@ func _charge_fire(hold_time: float) -> void:
 		_apply_post_firing_effect(true)
 
 	if stats.s_mods.get_stat("charge_fire_cooldown") > 0:
-		CooldownManager.add_cooldown(stats.session_uid, stats.s_mods.get_stat("charge_fire_cooldown"))
-		while CooldownManager.get_cooldown(stats.session_uid) > 0: # Signal fires for all ending cooldowns, so we loop until ours has ended
-			await CooldownManager.cooldown_ended
+		source_entity.hands.cooldown_manager.add_cooldown(stats.get_cooldown_id(), stats.s_mods.get_stat("charge_fire_cooldown"))
+		while source_entity.hands.cooldown_manager.get_cooldown(stats.get_cooldown_id()) > 0: # Signal fires for all ending cooldowns, so we loop until ours has ended
+			await source_entity.hands.cooldown_manager.cooldown_ended
 		source_entity.hands.been_holding_time = 0
 
 func _set_up_hitscan(was_charge_fire: bool = false) -> void:
@@ -485,8 +485,8 @@ func _spawn_projectile(proj: Projectile, was_charge_fire: bool = false) -> void:
 
 	_do_firing_fx(was_charge_fire)
 
-	while CooldownManager.get_cooldown(stats.session_uid) > 0: # Signal fires for all ending cooldowns, so we loop until ours has ended
-		await CooldownManager.cooldown_ended
+	while source_entity.hands.cooldown_manager.get_cooldown(stats.get_cooldown_id()) > 0: # Signal fires for all ending cooldowns, so we loop until ours has ended
+		await source_entity.hands.cooldown_manager.cooldown_ended
 	_get_has_needed_ammo_and_reload_if_not(was_charge_fire)
 
 ## Spawns the hitscan that has been passed to it. Reloads if we don't have enough for the next activation.
@@ -501,8 +501,8 @@ func _spawn_hitscan(hitscan: Hitscan, was_charge_fire: bool = false) -> void:
 		source_entity.hands.equipped_item_should_follow_mouse = false
 		hitscan_hands_freeze_timer.start(0.065)
 
-	while CooldownManager.get_cooldown(stats.session_uid) > 0: # Signal fires for all ending cooldowns, so we loop until ours has ended
-		await CooldownManager.cooldown_ended
+	while source_entity.hands.cooldown_manager.get_cooldown(stats.get_cooldown_id()) > 0: # Signal fires for all ending cooldowns, so we loop until ours has ended
+		await source_entity.hands.cooldown_manager.cooldown_ended
 	_get_has_needed_ammo_and_reload_if_not(was_charge_fire)
 #endregion
 

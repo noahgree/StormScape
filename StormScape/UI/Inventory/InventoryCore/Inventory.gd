@@ -36,7 +36,7 @@ func fill_inventory(inv_to_fill_from: Array[InvItemResource]) -> void:
 			var inv_item: InvItemResource = inv_to_fill_from[i].duplicate()
 
 			if inv_item.quantity > inv_item.stats.stack_size:
-				Item.spawn_on_ground(inv_item.stats, inv_item.quantity - inv_item.stats.stack_size, global_position, 14.0)
+				Item.spawn_on_ground(inv_item.stats, inv_item.quantity - inv_item.stats.stack_size, global_position, 14.0, true)
 				inv_item.quantity = inv_item.stats.stack_size
 
 			inv[i] = inv_item
@@ -228,7 +228,7 @@ func print_inv(include_null_spots: bool = false) -> void:
 	for i: int in range(inv_size):
 		if inv[i] == null and not include_null_spots:
 			continue
-		to_print = to_print + str(inv[i])
+		to_print = to_print + str(inv[i]) + str(inv[i].stats.get_cooldown_id())
 		if (i + 1) % 5 == 0 and i != inv_size - 1: to_print += "\n"
 		elif i != inv_size - 1: to_print += "  |  "
 	if to_print.ends_with("\n"): to_print = to_print.substr(0, to_print.length() - 1)

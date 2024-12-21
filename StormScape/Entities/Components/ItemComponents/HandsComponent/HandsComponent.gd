@@ -14,6 +14,7 @@ class_name HandsComponent
 @onready var main_hand_sprite: Sprite2D = $HandsAnchor/MainHandSprite ## The main hand sprite to draw if that equipped item needs it.
 @onready var off_hand_sprite: Sprite2D = $OffHandSprite ## The off hand sprite that is drawn when holding a one handed weapon.
 @onready var drawn_off_hand: Sprite2D = $HandsAnchor/DrawnOffHand ## The extra off hand sprite that is drawn on top of a weapon that needs it. See the equippability details inside the item resources for more info.
+@onready var cooldown_manager: Node = $CooldownManager ## The script controlling the cooldowns for this entity.
 @onready var entity: PhysicsBody2D = get_parent().get_parent() ## The entity using this hands component.
 
 var equipped_item: EquippableItem = null ## The currently equipped equippable item that the entity is holding.

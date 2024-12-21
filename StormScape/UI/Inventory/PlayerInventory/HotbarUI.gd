@@ -56,6 +56,7 @@ func _on_slot_updated(index: int, item: InvItemResource) -> void:
 
 	_update_inv_ammo_ui()
 	_default_ammo_update_method() # Called after the hotbar item is updated above to reflect the new item
+	update_hotbar_tint_progresses()
 
 ## Updates the hands component with the new active slot and associated item if any. Then updates the UI for the new item
 ## name. This must happen here since the signal's order isn't guaranteed, and we need the active slot to update first.
@@ -68,7 +69,7 @@ func _update_hands_about_new_active_item() -> void:
 		active_slot_info.update_item_name("Empty")
 
 ## This will update the mag ammo display with the item quantity by default if no ammo method is defined in the equippable
-## item subclass. This also updates the ammo icon.
+## item subclass.
 func _default_ammo_update_method() -> void:
 	if active_slot.item != null:
 		var equipped_item: EquippableItem = GlobalData.player_node.hands.equipped_item
@@ -77,6 +78,13 @@ func _default_ammo_update_method() -> void:
 
 		if not equipped_item.has_method("_update_ammo_ui"):
 			active_slot_info.update_mag_ammo(active_slot.item.quantity)
+
+func update_hotbar_tint_progresses() -> void:
+	for slot: Slot in hotbar_slots:
+		if slot.item != null:
+			slot.update_tint_progress(GlobalData.player_node.hands.cooldown_manager.get_cooldown(slot.item.stats.get_cooldown_id()))
+		else:
+			slot.update_tint_progress(0)
 
 ## Updates the ammo UI with the cumulative total of the ammo that corresponds to the currently equipped item.
 func _update_inv_ammo_ui() -> void:

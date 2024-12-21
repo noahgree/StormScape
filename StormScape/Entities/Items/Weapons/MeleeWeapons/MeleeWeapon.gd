@@ -97,13 +97,13 @@ func activate() -> void:
 	is_holding = false
 	await get_tree().create_timer(HOLDING_THRESHOLD, false, false, false).timeout
 	if not is_holding or not stats.can_do_charge_use:
-		if pullout_delay_timer.is_stopped() and CooldownManager.get_cooldown(stats.session_uid) == 0:
+		if pullout_delay_timer.is_stopped() and source_entity.hands.cooldown_manager.get_cooldown(stats.get_cooldown_id()) == 0:
 			if not source_entity.hands.scale_is_lerping:
 				_swing()
 
 ## Overrides the parent method to specify what to do on holding use while equipped.
 func hold_activate(hold_time: float) -> void:
-	if not pullout_delay_timer.is_stopped() or not CooldownManager.get_cooldown(stats.session_uid) == 0 or is_swinging:
+	if not pullout_delay_timer.is_stopped() or not source_entity.hands.cooldown_manager.get_cooldown(stats.get_cooldown_id()) == 0 or is_swinging:
 		source_entity.hands.been_holding_time = 0
 		return
 
@@ -114,7 +114,7 @@ func hold_activate(hold_time: float) -> void:
 
 ## Overrides the parent method to specify what to do on release of a holding use while equipped.
 func release_hold_activate(hold_time: float) -> void:
-	if not pullout_delay_timer.is_stopped() or not CooldownManager.get_cooldown(stats.session_uid) == 0 or is_swinging:
+	if not pullout_delay_timer.is_stopped() or not source_entity.hands.cooldown_manager.get_cooldown(stats.get_cooldown_id()) == 0 or is_swinging:
 		source_entity.hands.been_holding_time = 0
 		return
 
@@ -125,7 +125,7 @@ func release_hold_activate(hold_time: float) -> void:
 func _swing() -> void:
 	if source_entity.stamina_component.use_stamina(stats.s_mods.get_stat("stamina_cost")):
 		var cooldown_time: float = stats.cooldown + stats.s_mods.get_stat("use_speed")
-		CooldownManager.add_cooldown(stats.session_uid, cooldown_time)
+		source_entity.hands.cooldown_manager.add_cooldown(stats.get_cooldown_id(), cooldown_time)
 		if source_entity is Player: source_slot.update_tint_progress(cooldown_time)
 		is_swinging = true
 		source_entity.move_fsm.should_rotate = false
@@ -149,7 +149,7 @@ func _charge_swing(hold_time: float) -> void:
 
 	if source_entity.stamina_component.use_stamina(stats.s_mods.get_stat("charge_stamina_cost")):
 		var cooldown_time: float = stats.s_mods.get_stat("charge_use_cooldown") + stats.s_mods.get_stat("charge_use_speed")
-		CooldownManager.add_cooldown(stats.session_uid, cooldown_time)
+		source_entity.hands.cooldown_manager.add_cooldown(stats.get_cooldown_id(), cooldown_time)
 		if source_entity is Player: source_slot.update_tint_progress(cooldown_time)
 		is_swinging = true
 		source_entity.move_fsm.should_rotate = false
