@@ -49,9 +49,6 @@ const all_melee_wpns: Array[MeleeWeaponResource.MeleeWeaponType] = [MeleeWeaponR
 enum ItemRarity {
 	COMMON, UNCOMMON, RARE, EPIC, LEGENDARY, SINGULAR
 }
-enum ProjAmmoType {
-	NONE, SELF, LIGHT, MEDIUM, HEAVY, SHELL, ROCKET, MAGIC, ION_CHARGE, STAMINA
-}
 const rarity_colors: Dictionary = {
 	"ground_glow" : {
 		ItemRarity.COMMON : Color(0.617, 0.625, 0.633),

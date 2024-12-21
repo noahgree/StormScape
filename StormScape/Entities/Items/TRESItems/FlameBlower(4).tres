@@ -1,25 +1,26 @@
-[gd_resource type="Resource" script_class="ProjWeaponResource" load_steps=20 format=3 uid="uid://duc0xfejpfs1"]
+[gd_resource type="Resource" script_class="ProjWeaponResource" load_steps=24 format=3 uid="uid://dpmwqsai6gxsr"]
 
-[ext_resource type="Script" path="res://Entities/Stats/EffectSystemResources/StatusEffects/StatusEffect.gd" id="1_a6eqh"]
-[ext_resource type="Script" path="res://Entities/Stats/EffectSystemResources/EffectSources/EffectSource.gd" id="1_hh3cs"]
-[ext_resource type="Texture2D" uid="uid://on5kqhtv8tmw" path="res://Entities/Items/Weapons/ProjectileWeapons/EagleEye/eagle_eye_base.png" id="1_jqvl6"]
-[ext_resource type="Script" path="res://UI/Inventory/PlayerInventory/Crafting/CraftingIngredient.gd" id="2_xxf6x"]
-[ext_resource type="Script" path="res://Entities/Items/Weapons/ProjectileWeapons/ProjWeaponResource.gd" id="3_3lc2b"]
-[ext_resource type="Script" path="res://Entities/Items/Hitscans/HitscanResource.gd" id="3_f7syj"]
-[ext_resource type="PackedScene" uid="uid://btaigaokvm7qx" path="res://Entities/Items/Weapons/ProjectileWeapons/EagleEye/EagleEye.tscn" id="3_uuh4c"]
-[ext_resource type="Script" path="res://Entities/Items/Projectiles/ProjectileResource.gd" id="4_w4cid"]
-[ext_resource type="PackedScene" uid="uid://bqkyplubhsx43" path="res://Entities/Items/Projectiles/Bullets/SmallBullet/SmallBullet.tscn" id="5_58e3c"]
-[ext_resource type="Script" path="res://Entities/Stats/StatMod/StatModsCacheResource.gd" id="10_v3ja1"]
+[ext_resource type="PackedScene" uid="uid://dxv8dhn3gmufw" path="res://Entities/Items/Weapons/ProjectileWeapons/FlameBlower/FlameBlower.tscn" id="1_2lqvl"]
+[ext_resource type="Script" path="res://Entities/Stats/EffectSystemResources/EffectSources/EffectSource.gd" id="1_qrb8v"]
+[ext_resource type="Script" path="res://Entities/Stats/EffectSystemResources/StatusEffects/StatusEffect.gd" id="1_sti8o"]
+[ext_resource type="Script" path="res://UI/Inventory/PlayerInventory/Crafting/CraftingIngredient.gd" id="2_ae7tv"]
+[ext_resource type="Script" path="res://Entities/Items/Weapons/ProjectileWeapons/ProjWeaponResource.gd" id="3_58le7"]
+[ext_resource type="PackedScene" uid="uid://dynh8j4rfi62r" path="res://Entities/Items/Projectiles/Flame/Flame.tscn" id="5_4ypmg"]
+[ext_resource type="Script" path="res://Entities/Items/Hitscans/HitscanResource.gd" id="5_i2wga"]
+[ext_resource type="Script" path="res://Entities/Stats/StatMod/StatModsCacheResource.gd" id="6_13gru"]
+[ext_resource type="Resource" uid="uid://c8reitxej77jy" path="res://Entities/Stats/EffectSystemResources/StatusEffects/BadEffects/Burning/Burning1FlameBlower.tres" id="6_l8ogr"]
+[ext_resource type="Texture2D" uid="uid://dwtjxkvqe21h4" path="res://Entities/Items/Weapons/ProjectileWeapons/FlameBlower/flame_blower_base_frame.png" id="7_dkcnt"]
+[ext_resource type="Script" path="res://Entities/Items/Projectiles/ProjectileResource.gd" id="7_hqj7u"]
 
-[sub_resource type="Resource" id="Resource_nq4po"]
-script = ExtResource("1_hh3cs")
+[sub_resource type="Resource" id="Resource_k2wyg"]
+script = ExtResource("1_qrb8v")
 source_type = 1
 source_tags = Array[String]([])
 scanned_phys_layers = 191
-can_hit_self = true
+can_hit_self = false
 bad_effect_affected_teams = 1
 good_effect_affected_teams = 2
-base_damage = 0
+base_damage = 15
 dmg_affected_stats = 2
 crit_chance = 0
 crit_multiplier = 1.5
@@ -32,12 +33,12 @@ cam_freeze_multiplier = 1.0
 cam_freeze_duration = 0.0
 impact_sound = ""
 hit_flash_color = Color(1, 1, 1, 0.6)
-status_effects = Array[ExtResource("1_a6eqh")]([])
+status_effects = Array[ExtResource("1_sti8o")]([])
 contact_position = Vector2(0, 0)
 movement_direction = Vector2(0, 0)
 
-[sub_resource type="Resource" id="Resource_pld62"]
-script = ExtResource("3_f7syj")
+[sub_resource type="Resource" id="Resource_f4j7y"]
+script = ExtResource("5_i2wga")
 hitscan_duration = 0.0
 hitscan_effect_interval = -1.0
 hitscan_pierce_count = 0
@@ -55,8 +56,8 @@ impact_particle_mult = 1.0
 beam_particle_color = Color(1, 0, 0, 1)
 beam_particle_mult = 1.0
 
-[sub_resource type="Resource" id="Resource_8i1b8"]
-script = ExtResource("4_w4cid")
+[sub_resource type="Resource" id="Resource_oo0r6"]
+script = ExtResource("7_hqj7u")
 speed = 350
 initial_boost_time = 0.0
 initial_boost_mult = 2.0
@@ -84,6 +85,7 @@ mouse_target_radius = 50.0
 spin_speed = 0.0
 spin_both_ways = false
 spin_direction = "Forward"
+do_y_axis_reflection = false
 move_in_rotated_dir = false
 shadow_matches_spin = false
 launch_angle = 0.0
@@ -111,15 +113,15 @@ aoe_effect_interval = 1.0
 aoe_effects_delay = 0.5
 aoe_sound = ""
 
-[sub_resource type="Resource" id="Resource_3mxcx"]
-script = ExtResource("1_hh3cs")
+[sub_resource type="Resource" id="Resource_xjta8"]
+script = ExtResource("1_qrb8v")
 source_type = 1
 source_tags = Array[String]([])
 scanned_phys_layers = 191
-can_hit_self = true
+can_hit_self = false
 bad_effect_affected_teams = 1
 good_effect_affected_teams = 2
-base_damage = 85
+base_damage = 10
 dmg_affected_stats = 2
 crit_chance = 0
 crit_multiplier = 1.5
@@ -132,12 +134,12 @@ cam_freeze_multiplier = 1.0
 cam_freeze_duration = 0.0
 impact_sound = ""
 hit_flash_color = Color(1, 1, 1, 0.6)
-status_effects = Array[ExtResource("1_a6eqh")]([])
+status_effects = Array[ExtResource("1_sti8o")]([ExtResource("6_l8ogr")])
 contact_position = Vector2(0, 0)
 movement_direction = Vector2(0, 0)
 
-[sub_resource type="Resource" id="Resource_8lm83"]
-script = ExtResource("3_f7syj")
+[sub_resource type="Resource" id="Resource_awnew"]
+script = ExtResource("5_i2wga")
 hitscan_duration = 0.0
 hitscan_effect_interval = -1.0
 hitscan_pierce_count = 0
@@ -155,27 +157,27 @@ impact_particle_mult = 1.0
 beam_particle_color = Color(1, 0, 0, 1)
 beam_particle_mult = 1.0
 
-[sub_resource type="Curve" id="Curve_r1td5"]
-_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+[sub_resource type="Curve" id="Curve_mdooa"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.496463), 0.0, 0.0, 0, 0]
 point_count = 2
 
-[sub_resource type="Curve" id="Curve_4y4hw"]
-_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.797205), 0.0, 0.0, 0, 0]
+[sub_resource type="Curve" id="Curve_wsuli"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.204465), 0.0, 0.0, 0, 0]
 point_count = 2
 
-[sub_resource type="Resource" id="Resource_wluh4"]
-script = ExtResource("4_w4cid")
-speed = 750
-speed_curve = SubResource("Curve_4y4hw")
+[sub_resource type="Resource" id="Resource_fa03q"]
+script = ExtResource("7_hqj7u")
+speed = 200
+speed_curve = SubResource("Curve_wsuli")
 initial_boost_time = 0.0
 initial_boost_mult = 2.0
-lifetime = 2.0
-max_distance = 500
+lifetime = 1.0
+max_distance = 150
 override_gun_height = false
 height_override = 6
-effect_falloff_curve = SubResource("Curve_r1td5")
-point_of_max_falloff = 500.0
-bad_effects_falloff = false
+effect_falloff_curve = SubResource("Curve_mdooa")
+point_of_max_falloff = 150.0
+bad_effects_falloff = true
 good_effects_falloff = false
 max_pierce = 0
 max_ricochet = 0
@@ -194,6 +196,7 @@ mouse_target_radius = 50.0
 spin_speed = 0.0
 spin_both_ways = false
 spin_direction = "Forward"
+do_y_axis_reflection = true
 move_in_rotated_dir = false
 shadow_matches_spin = false
 launch_angle = 0.0
@@ -221,94 +224,116 @@ aoe_effect_interval = 1.0
 aoe_effects_delay = 0.5
 aoe_sound = ""
 
-[sub_resource type="Resource" id="Resource_pm717"]
-script = ExtResource("10_v3ja1")
+[sub_resource type="Resource" id="Resource_7cfgi"]
+script = ExtResource("6_13gru")
 debug_print_mod_changes = false
 
+[sub_resource type="Curve" id="Curve_lm546"]
+_data = [Vector2(0, 0.123905), 0.0, 0.0, 0, 0]
+point_count = 1
+
+[sub_resource type="Curve" id="Curve_kj8op"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.495812, 0.691149), -1.29955, -1.29955, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="Curve" id="Curve_pca6u"]
+_data = [Vector2(0, 0.149619), 0.0, 0.0, 0, 0]
+point_count = 1
+
 [resource]
-script = ExtResource("3_3lc2b")
-proj_weapon_type = 3
-firing_mode = "Semi Auto"
+script = ExtResource("3_58le7")
+proj_weapon_type = 9
+firing_mode = "Auto"
 use_hitscan = false
 allow_hitscan_holding = true
-fire_cooldown = 0.1
-firing_duration = 0.0
-firing_cam_shake_str = 0.5
-firing_cam_shake_dur = 0.75
+fire_cooldown = 0.0
+firing_duration = 0.03
+override_anim_dur = 0.0
+anim_speed_mult = 0.1
+firing_cam_shake_str = 0.0
+firing_cam_shake_dur = 0.0
 firing_cam_freeze_mult = 1.0
 firing_cam_freeze_dur = 0.0
 firing_sound = ""
 min_charge_time = 1.0
 charge_fire_cooldown = 0.5
-charge_firing_duration = 0.0
+charge_firing_duration = 0.1
 ammo_use_per_charge = 3
 charge_bloom_mult = 5.0
+override_chg_anim_dur = 0.0
+chg_anim_speed_mult = 1.0
 charge_cam_fx_mult = 1.0
 charge_firing_sound = ""
 charging_sound = ""
-projectile_scn = ExtResource("5_58e3c")
-projectile_logic = SubResource("Resource_wluh4")
-hitscan_logic = SubResource("Resource_8lm83")
-charge_projectile_scn = ExtResource("5_58e3c")
-charge_projectile_logic = SubResource("Resource_8i1b8")
-charge_hitscan_logic = SubResource("Resource_pld62")
-ammo_type = 4
-mag_size = 1
+projectile_scn = ExtResource("5_4ypmg")
+projectile_logic = SubResource("Resource_fa03q")
+hitscan_logic = SubResource("Resource_awnew")
+charge_projectile_scn = ExtResource("5_4ypmg")
+charge_projectile_logic = SubResource("Resource_oo0r6")
+charge_hitscan_logic = SubResource("Resource_f4j7y")
+ammo_type = 0
+mag_size = 30
 reload_type = "Magazine"
-mag_reload_time = 2.0
+mag_reload_time = 1.0
 single_proj_reload_time = 0.25
 stamina_use_per_proj = 0.5
+dont_consume_ammo = false
+recharge_time = 3.0
 mag_reload_sound = ""
 proj_reload_sound = ""
 empty_mag_sound = ""
 max_bloom = 0.0
-fully_cool_delay_time = 0.0
+initial_fire_rate_delay = 0.1
+warmup_delay_curve = SubResource("Curve_kj8op")
+warmup_increase_rate = SubResource("Curve_pca6u")
+warmup_decrease_rate = SubResource("Curve_lm546")
+overheating_type = "Empty Mag"
 projectiles_per_fire = 1
 use_ammo_per_burst_proj = true
 burst_bullet_delay = 0.1
 add_bloom_per_burst_shot = true
-barrage_count = 1
-angular_spread = 25.0
-current_warmth_level = 0.0
-current_bloom_level = 0.0
+barrage_count = 5
+angular_spread = 21.0
+warmup_level = 0.0
+bloom_level = 0.0
 ammo_in_mag = -1
-s_mods = SubResource("Resource_pm717")
-effect_source = SubResource("Resource_3mxcx")
-charge_effect_source = SubResource("Resource_nq4po")
-pullout_delay = 0.5
+s_mods = SubResource("Resource_7cfgi")
+effect_source = SubResource("Resource_xjta8")
+charge_effect_source = SubResource("Resource_k2wyg")
+pullout_delay = 0.25
 blocked_mods = Array[String]([])
 time_last_equipped = 0.0
 cache_is_setup = false
 current_mods = {}
-original_status_effects = Array[ExtResource("1_a6eqh")]([])
-original_charge_status_effects = Array[ExtResource("1_a6eqh")]([])
-id = "eagle_eye"
-name = "Eagle Eye"
+original_status_effects = Array[ExtResource("1_sti8o")]([])
+original_charge_status_effects = Array[ExtResource("1_sti8o")]([])
+id = "flame_blower"
+name = "Flame Blower"
 tags = Array[String]([])
-inv_icon_rotation = -38.0
-inv_icon_offset = Vector2(0, 0)
-inv_icon_scale = Vector2(1.3, 1.3)
-inv_icon = ExtResource("1_jqvl6")
-ground_icon = ExtResource("1_jqvl6")
-in_hand_icon = ExtResource("1_jqvl6")
+inv_icon_rotation = -42.0
+inv_icon_offset = Vector2(-0.5, -1)
+inv_icon_scale = Vector2(1.27, 1.27)
+inv_icon = ExtResource("7_dkcnt")
+ground_icon = ExtResource("7_dkcnt")
+in_hand_icon = ExtResource("7_dkcnt")
 item_type = 1
-rarity = 3
+rarity = 4
 weight = 0
 stack_size = 1
 auto_pickup = false
-pickup_radius = 7
-info = "A precision weapon meant for long range. Some may call it a sniper."
-recipe = Array[ExtResource("2_xxf6x")]([])
+pickup_radius = 6
+info = "Not quite a flame thrower..."
+recipe = Array[ExtResource("2_ae7tv")]([])
 output_quantity = 1
 recipe_unlocked = false
-item_scene = ExtResource("3_uuh4c")
+item_scene = ExtResource("1_2lqvl")
 cooldowns_per_suid = true
 show_cooldown_fill = false
-rotation_lerping = 0.1
-holding_offset = Vector2(5, 0)
+rotation_lerping = 0.055
+holding_offset = Vector2(3, -1)
 holding_degrees = 0.0
 is_gripped_by_one_hand = false
 draw_off_hand = true
-draw_off_hand_offset = Vector2(18, -1)
+draw_off_hand_offset = Vector2(18, 5)
 main_hand_offset = Vector2(0, 0)
 session_uid = 0

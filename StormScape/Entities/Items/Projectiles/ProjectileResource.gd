@@ -43,6 +43,7 @@ class_name ProjectileResource
 @export_range(0, 10000, 1, "suffix:º/sec") var spin_speed: float = 0.0 ## How fast this projectile should spin while in the air.
 @export var spin_both_ways: bool = false ## Whether each projectile should choose a direction at random or depend on the spin_direction.
 @export_enum("Forward", "Backward") var spin_direction: String = "Forward" ## If spin_both_ways is false, all projectiles will spin this direction.
+@export var do_y_axis_reflection: bool = false ## When true, the sprite will be flipped horizontally if its initial rotation is past the vertical line, meaning facing left. This allows for a consistent bottom edge even when rotated beyond the y-axis.
 @export var move_in_rotated_dir: bool = false ## When true, projectiles will travel in the direction of their current rotation, determined by spinning it. If false, they will keep their original trajectory despite the spins. Note that this does nothing if we are arcing.
 @export var shadow_matches_spin: bool = false ## Whether the shadow should rotate with the spin or not. This is always overridden to be false when arcing.
 

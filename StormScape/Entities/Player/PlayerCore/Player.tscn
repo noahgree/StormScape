@@ -1,4 +1,4 @@
-[gd_scene load_steps=187 format=3 uid="uid://dba8mrurjlekp"]
+[gd_scene load_steps=189 format=3 uid="uid://dba8mrurjlekp"]
 
 [ext_resource type="Script" path="res://Entities/Player/PlayerCore/Player.gd" id="1_m33tt"]
 [ext_resource type="Script" path="res://Entities/Stats/StatMod/StatModsCacheResource.gd" id="2_vetip"]
@@ -85,6 +85,7 @@
 [ext_resource type="Texture2D" uid="uid://dcsw75wiocvy0" path="res://UI/PlayerStatsOverlay/Assets/Shield Change.png" id="50_86ubk"]
 [ext_resource type="Texture2D" uid="uid://b2v0527iatsjd" path="res://UI/PlayerStatsOverlay/Assets/Health.png" id="51_6cphe"]
 [ext_resource type="Texture2D" uid="uid://dhvpkl1svbcys" path="res://UI/PlayerStatsOverlay/Assets/Health Under.png" id="52_dhyl8"]
+[ext_resource type="Resource" uid="uid://dpmwqsai6gxsr" path="res://Entities/Items/TRESItems/FlameBlower(4).tres" id="52_ebist"]
 [ext_resource type="Texture2D" uid="uid://lj78cee4aa38" path="res://UI/PlayerStatsOverlay/Assets/Health Change.png" id="53_qsiea"]
 [ext_resource type="Script" path="res://UI/Reloading/ReloadingUI.gd" id="57_n8srl"]
 [ext_resource type="Texture2D" uid="uid://bd7ifq5lvur4v" path="res://UI/Reloading/reloading_back.png" id="58_hd6am"]
@@ -1202,6 +1203,7 @@ is_gripped_by_one_hand = true
 draw_off_hand = false
 draw_off_hand_offset = Vector2(0, 0)
 main_hand_offset = Vector2(0, 0)
+show_cooldown_fill_override_flag = false
 session_uid = 0
 
 [sub_resource type="Resource" id="Resource_t7kvu"]
@@ -1229,9 +1231,19 @@ script = ExtResource("32_ixmb3")
 stats = ExtResource("45_xur7q")
 quantity = 1
 
+[sub_resource type="Resource" id="Resource_vpccy"]
+script = ExtResource("32_ixmb3")
+stats = ExtResource("48_1kvwx")
+quantity = 1
+
 [sub_resource type="Resource" id="Resource_sx7hp"]
 script = ExtResource("32_ixmb3")
 stats = ExtResource("49_gbpko")
+quantity = 1
+
+[sub_resource type="Resource" id="Resource_wjnk6"]
+script = ExtResource("32_ixmb3")
+stats = ExtResource("52_ebist")
 quantity = 1
 
 [sub_resource type="Resource" id="Resource_hevqc"]
@@ -1252,11 +1264,6 @@ quantity = 1
 [sub_resource type="Resource" id="Resource_6stk0"]
 script = ExtResource("32_ixmb3")
 stats = ExtResource("47_a0x8j")
-quantity = 1
-
-[sub_resource type="Resource" id="Resource_vpccy"]
-script = ExtResource("32_ixmb3")
-stats = ExtResource("48_1kvwx")
 quantity = 1
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_3wm74"]
@@ -1510,7 +1517,7 @@ parameters/run/blendspace2d/blend_position = Vector2(0, 0)
 
 [node name="ItemReceiverComponent" parent="." node_paths=PackedStringArray("inv_populator", "ui") instance=ExtResource("30_qgyag")]
 item_scene = ExtResource("31_8v2rb")
-starting_inv = Array[ExtResource("32_ixmb3")]([SubResource("Resource_pihal"), null, null, null, SubResource("Resource_kx1me"), SubResource("Resource_jrr0m"), SubResource("Resource_2ijsm"), null, SubResource("Resource_xlc3k"), null, SubResource("Resource_3by25"), SubResource("Resource_oxva3"), SubResource("Resource_t7kvu"), SubResource("Resource_x8o50"), null, SubResource("Resource_apvym"), SubResource("Resource_ur5wt"), null, null, SubResource("Resource_dyejk"), null, null, null, null, null, null, null, null, null, null, SubResource("Resource_sx7hp"), null, SubResource("Resource_hevqc"), SubResource("Resource_0ta0y"), SubResource("Resource_p5d28"), SubResource("Resource_6stk0"), SubResource("Resource_vpccy")])
+starting_inv = Array[ExtResource("32_ixmb3")]([SubResource("Resource_pihal"), null, null, null, SubResource("Resource_kx1me"), SubResource("Resource_jrr0m"), SubResource("Resource_2ijsm"), null, SubResource("Resource_xlc3k"), null, SubResource("Resource_3by25"), SubResource("Resource_oxva3"), SubResource("Resource_t7kvu"), SubResource("Resource_x8o50"), null, SubResource("Resource_apvym"), SubResource("Resource_ur5wt"), null, null, SubResource("Resource_dyejk"), null, null, null, null, null, null, SubResource("Resource_vpccy"), null, null, null, null, SubResource("Resource_sx7hp"), SubResource("Resource_wjnk6"), SubResource("Resource_hevqc"), SubResource("Resource_0ta0y"), SubResource("Resource_p5d28"), SubResource("Resource_6stk0")])
 is_player_inv = true
 inv_size = 37
 hotbar_size = 5
@@ -1561,6 +1568,7 @@ tint_progress = Color(0.428165, 0.752804, 0.889988, 1)
 [node name="OverlayUI" type="CanvasLayer" parent="."]
 
 [node name="TestButtons" type="Control" parent="OverlayUI" node_paths=PackedStringArray("health_component")]
+visible = false
 layout_mode = 3
 anchors_preset = 0
 offset_right = 40.0

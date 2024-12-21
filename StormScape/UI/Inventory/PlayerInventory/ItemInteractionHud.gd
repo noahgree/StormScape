@@ -15,7 +15,7 @@ func _ready() -> void:
 ## Shows the HUD after populating the appropriate item texture.
 func show_hud(item: Item) -> void:
 	item_texture.texture = item.stats.inv_icon
-	texture_margins.position = Vector2(16, 0) + item.stats.inv_icon_offset
+	texture_margins.position = Vector2(16, 0)
 	texture_margins.rotation_degrees = item.stats.inv_icon_rotation
 
 	_update_glint(item.stats)

@@ -10,7 +10,7 @@ class_name Projectile
 @export var impact_vfx: PackedScene = null ## The VFX to spawn at the site of impact. Could be a decal or something.
 @export var impact_sound: String = "" ## The sound to play at the site of impact.
 
-@onready var sprite: Sprite2D = $Sprite2D ## The sprite for this projectile.
+@onready var sprite: Node2D = $ProjSprite ## The sprite for this projectile.
 @onready var shadow: Sprite2D = $Shadow ## The shadow sprite for this projectile.
 @onready var anim_player: AnimationPlayer = get_node_or_null("AnimationPlayer") ## The anim player for this projectile.
 
@@ -168,6 +168,11 @@ func _disable_collider() -> void:
 ## Assigns a random spin direction if we need one, otherwise picks from the pre-chosen direction.
 ## Then it determines where to start shooting from based on how big its sprite texture is.
 func _set_up_starting_transform_and_spin_logic() -> void:
+	if stats.do_y_axis_reflection:
+		var angle: float = wrapf(rotation, 0, TAU)
+		if (angle > (PI / 2) and angle < (3 * PI / 2)):
+			sprite.flip_v = true
+
 	if stats.spin_both_ways:
 		spin_dir = -1 if randf() < 0.5 else 1
 	else:
@@ -178,7 +183,8 @@ func _set_up_starting_transform_and_spin_logic() -> void:
 			else:
 				spin_dir = 1 if hands_rot > PI / 2 and hands_rot < 3 * PI / 2 else -1
 
-	var start_offset: int = int(floor(sprite.region_rect.size.x / (4.0 if (stats.launch_angle > 0 and stats.homing_method == "None") else 2.0)))
+	var sprite_rect: Vector2 = SpriteHelpers.SpriteDetails.get_frame_rect(sprite)
+	var start_offset: int = int(ceil(sprite_rect.x / (4.0 if (stats.launch_angle > 0 and stats.homing_method == "None") else 2.0)) * scale.x)
 	var sprite_offset: Vector2 = Vector2(start_offset, 0).rotated(global_rotation)
 	global_position += sprite_offset if splits_so_far < 1 else Vector2.ZERO
 
@@ -708,7 +714,8 @@ func _on_area_exited(area: Area2D) -> void:
 
 ## Overrides parent method. When we intersect with any kind of object, this processes what to do next.
 func _process_hit(object: Node2D) -> void:
-	debug_recent_hit_location = global_position + Vector2(sprite.region_rect.size.x / 2, 0).rotated(rotation)
+	var sprite_rect: Vector2 = SpriteHelpers.SpriteDetails.get_frame_rect(sprite)
+	debug_recent_hit_location = global_position + Vector2(sprite_rect.x / 2, 0).rotated(rotation)
 	if not is_in_aoe_phase:
 		var ricochet_stat: int = int(s_mods.get_stat("proj_max_ricochet")) if not is_charge_fire else int(s_mods.get_stat("charge_proj_max_ricochet"))
 		if stats.ricochet_walls_only and object is TileMapLayer:

@@ -1,0 +1,68 @@
+[gd_scene load_steps=10 format=3 uid="uid://dynh8j4rfi62r"]
+
+[ext_resource type="Script" path="res://Entities/Items/Projectiles/Projectile.gd" id="1_clc7f"]
+[ext_resource type="Texture2D" uid="uid://dqa0skapfbtrg" path="res://Entities/Items/Projectiles/Flame/flames.png" id="2_hea5g"]
+[ext_resource type="Texture2D" uid="uid://dcbwxgak6a0r8" path="res://Entities/EntityCore/entity_shadow.png" id="3_vm36o"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_gicwb"]
+radius = 5.0
+height = 14.0
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2m4dc"]
+atlas = ExtResource("2_hea5g")
+region = Rect2(0, 0, 15, 15)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vyprf"]
+atlas = ExtResource("2_hea5g")
+region = Rect2(15, 0, 15, 15)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_k0qil"]
+atlas = ExtResource("2_hea5g")
+region = Rect2(30, 0, 15, 15)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_g8hjs"]
+atlas = ExtResource("2_hea5g")
+region = Rect2(45, 0, 15, 15)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_wi72s"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2m4dc")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vyprf")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_k0qil")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_g8hjs")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[node name="Flame" type="Area2D"]
+editor_description = "DO NOT SET EFFECT SOURCE IF BEING USED DIRECTLY WITH A WEAPON. THE WEAPON WILL SET IT FOR YOU."
+scale = Vector2(0.65, 0.65)
+script = ExtResource("1_clc7f")
+glow_strength = 26.0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CapsuleShape2D_gicwb")
+debug_color = Color(0.626, 0.349, 1, 0.196)
+
+[node name="ProjSprite" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_wi72s")
+autoplay = "default"
+speed_scale = 2.0
+
+[node name="Shadow" type="Sprite2D" parent="."]
+self_modulate = Color(0.16, 0.16, 0.16, 0)
+top_level = true
+z_index = 1
+position = Vector2(0, 10)
+scale = Vector2(0.45, 0.35)
+texture = ExtResource("3_vm36o")

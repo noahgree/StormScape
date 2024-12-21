@@ -126,7 +126,6 @@ func _swing() -> void:
 	if source_entity.stamina_component.use_stamina(stats.s_mods.get_stat("stamina_cost")):
 		var cooldown_time: float = stats.cooldown + stats.s_mods.get_stat("use_speed")
 		source_entity.hands.cooldown_manager.add_cooldown(stats.get_cooldown_id(), cooldown_time)
-		if source_entity is Player: source_slot.update_tint_progress(cooldown_time)
 		is_swinging = true
 		source_entity.move_fsm.should_rotate = false
 
@@ -150,7 +149,6 @@ func _charge_swing(hold_time: float) -> void:
 	if source_entity.stamina_component.use_stamina(stats.s_mods.get_stat("charge_stamina_cost")):
 		var cooldown_time: float = stats.s_mods.get_stat("charge_use_cooldown") + stats.s_mods.get_stat("charge_use_speed")
 		source_entity.hands.cooldown_manager.add_cooldown(stats.get_cooldown_id(), cooldown_time)
-		if source_entity is Player: source_slot.update_tint_progress(cooldown_time)
 		is_swinging = true
 		source_entity.move_fsm.should_rotate = false
 		source_entity.hands.snap_y_scale()

@@ -10,7 +10,7 @@
 [ext_resource type="Texture2D" uid="uid://cpo3fkry82ihj" path="res://Entities/Items/Weapons/ProjectileWeapons/BottleOFire/bottle_o_fire_base.png" id="6_14vfc"]
 [ext_resource type="PackedScene" uid="uid://b26uwbeam6drq" path="res://Entities/Items/Projectiles/FireBottle/FireBottle.tscn" id="7_0ultu"]
 [ext_resource type="Texture2D" uid="uid://dn0kb7oxrj6qi" path="res://Entities/Items/Weapons/ProjectileWeapons/BottleOFire/fire_bottle_throwable.png" id="7_16qjf"]
-[ext_resource type="Resource" uid="uid://b3g5m3fso6e40" path="res://Entities/Stats/EffectSystemResources/StatusEffects/BadEffects/Burning/Burning1AOE.tres" id="8_d66cu"]
+[ext_resource type="Resource" uid="uid://blryd3h2c6dsl" path="res://Entities/Stats/EffectSystemResources/StatusEffects/BadEffects/Burning/Burning1Rapid.tres" id="8_ngyy3"]
 [ext_resource type="Script" path="res://Entities/Stats/StatMod/StatModsCacheResource.gd" id="11_3anyb"]
 
 [sub_resource type="Resource" id="Resource_mk6ko"]
@@ -86,6 +86,7 @@ mouse_target_radius = 50.0
 spin_speed = 0.0
 spin_both_ways = false
 spin_direction = "Forward"
+do_y_axis_reflection = false
 move_in_rotated_dir = false
 shadow_matches_spin = false
 launch_angle = 0.0
@@ -182,7 +183,7 @@ cam_freeze_multiplier = 1.0
 cam_freeze_duration = 0.0
 impact_sound = ""
 hit_flash_color = Color(1, 1, 1, 0.6)
-status_effects = Array[ExtResource("1_fshhe")]([ExtResource("8_d66cu")])
+status_effects = Array[ExtResource("1_fshhe")]([ExtResource("8_ngyy3")])
 contact_position = Vector2(0, 0)
 movement_direction = Vector2(0, 0)
 
@@ -229,6 +230,7 @@ mouse_target_radius = 50.0
 spin_speed = 200.0
 spin_both_ways = false
 spin_direction = "Forward"
+do_y_axis_reflection = false
 move_in_rotated_dir = false
 shadow_matches_spin = false
 launch_angle = 70.0
@@ -271,6 +273,7 @@ use_hitscan = false
 allow_hitscan_holding = true
 fire_cooldown = 1.0
 firing_duration = 0.15
+override_anim_dur = 0.0
 firing_cam_shake_str = 0.0
 firing_cam_shake_dur = 0.0
 firing_cam_freeze_mult = 1.0
@@ -281,6 +284,7 @@ charge_fire_cooldown = 0.5
 charge_firing_duration = 0.1
 ammo_use_per_charge = 3
 charge_bloom_mult = 5.0
+override_chg_anim_dur = 0.0
 charge_cam_fx_mult = 1.0
 charge_firing_sound = ""
 charging_sound = ""
@@ -296,19 +300,22 @@ reload_type = "Magazine"
 mag_reload_time = 1.0
 single_proj_reload_time = 0.25
 stamina_use_per_proj = 0.5
+dont_consume_ammo = false
+recharge_time = 3.0
 mag_reload_sound = ""
 proj_reload_sound = ""
 empty_mag_sound = ""
 max_bloom = 0.0
-fully_cool_delay_time = 0.0
+initial_fire_rate_delay = 0.0
+overheat_on_mag_empty = 1
 projectiles_per_fire = 1
 use_ammo_per_burst_proj = true
 burst_bullet_delay = 0.1
 add_bloom_per_burst_shot = true
 barrage_count = 1
 angular_spread = 25.0
-current_warmth_level = 0.0
-current_bloom_level = 0.0
+warmup_level = 0.0
+bloom_level = 0.0
 ammo_in_mag = -1
 s_mods = SubResource("Resource_xpvhm")
 effect_source = SubResource("Resource_qy5am")

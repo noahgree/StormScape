@@ -29,12 +29,12 @@ class_name ItemResource
 @export var item_scene: PackedScene = null ## The equippable representation of this item. If left null, this item cannot be equipped.
 @export var cooldowns_per_suid: bool = true ## When true, cooldowns will be based on instances of this item as they were picked up or added to the inventory. They will not be shared amongst all items of the same base id.
 @export var show_cooldown_fill: bool = false ## Whether to show the vertical fill on the slot when the player invokes a cooldown on this item.
-@export_range(0, 1, 0.01) var rotation_lerping: float = 0.1 ## How fast the rotation lerping should be while holding this item.
+@export_range(0, 1, 0.001) var rotation_lerping: float = 0.1 ## How fast the rotation lerping should be while holding this item.
 @export var holding_offset: Vector2 = Vector2.ZERO ## The offset for placing the icon of the sprite in the entity's hand.
 @export_custom(PROPERTY_HINT_NONE, "suffix:degrees") var holding_degrees: float = 0 ## The rotation offset for holding the thumnbail sprite in the entity's hand.
 @export_subgroup("Manual Hands Positioning")
 @export var is_gripped_by_one_hand: bool = true ## Whether or not this item should only have one hand shown gripping it.
-@export var draw_off_hand: bool = false ## When true, the hands component will draw the off hand for it as well (hiding the idly animated off hand). This only applies when is_gripped_by_one_hand is false. Must have a Marker2D titled "OffHandLocation" in the item scene.
+@export var draw_off_hand: bool = false ## When true, the hands component will draw the off hand for it as well (hiding the idly animated off hand). This only applies when is_gripped_by_one_hand is false.
 @export var draw_off_hand_offset: Vector2 = Vector2.ZERO ## The offset for placing the off hand sprite when holding this item, assuming that draw_off_hand is true and is_gripped_by_one_hand is false.
 @export var main_hand_offset: Vector2 = Vector2.ZERO ## The offset for placing the main hand sprite when holding this item.
 

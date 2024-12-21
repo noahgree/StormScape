@@ -1,4 +1,4 @@
 extends ItemResource
 class_name ProjAmmoResource
 
-@export var ammo_type: GlobalData.ProjAmmoType = GlobalData.ProjAmmoType.LIGHT
+@export var ammo_type: ProjWeaponResource.ProjAmmoType = ProjWeaponResource.ProjAmmoType.LIGHT

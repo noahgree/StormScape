@@ -73,8 +73,8 @@ func _setup_mod_cache() -> void:
 		"max_bloom" : stats.max_bloom,
 		"bloom_increase_rate_multiplier" : 1.0,
 		"bloom_decrease_rate_multiplier" : 1.0,
-		"fully_cool_delay_time" : stats.fully_cool_delay_time,
-		"warmth_increase_rate_multiplier" : 1.0,
+		"initial_fire_rate_delay" : stats.initial_fire_rate_delay,
+		"warmup_increase_rate_multiplier" : 1.0,
 		"projectiles_per_fire" : stats.projectiles_per_fire,
 		"barrage_count" : stats.barrage_count,
 		"angular_spread" : stats.angular_spread,
@@ -125,10 +125,11 @@ func _setup_mod_cache() -> void:
 func _ready() -> void:
 	if not Engine.is_editor_hint():
 		super._ready()
-		if stats.ammo_type == GlobalData.ProjAmmoType.STAMINA:
+
+		if stats.ammo_type == ProjWeaponResource.ProjAmmoType.STAMINA:
 			if source_entity is DynamicEntity:
 				source_entity.stamina_component.stamina_changed.connect(_update_ammo_ui)
-		elif stats.ammo_type != GlobalData.ProjAmmoType.NONE and stats.ammo_type != GlobalData.ProjAmmoType.SELF:
+		elif stats.ammo_type != ProjWeaponResource.ProjAmmoType.NONE and stats.ammo_type != ProjWeaponResource.ProjAmmoType.SELF and stats.ammo_type != ProjWeaponResource.ProjAmmoType.CHARGES:
 			if source_entity is Player:
 				reloading_ui = source_entity.get_node("ReloadingUI")
 
@@ -163,7 +164,7 @@ func enter() -> void:
 
 	_handle_reequipping_stats()
 
-	if (stats.ammo_in_mag == -1) and (stats.ammo_type != GlobalData.ProjAmmoType.STAMINA):
+	if (stats.ammo_in_mag == -1) and (stats.ammo_type != ProjWeaponResource.ProjAmmoType.STAMINA):
 		stats.ammo_in_mag = stats.mag_size
 	else:
 		_get_has_needed_ammo_and_reload_if_not()
@@ -174,7 +175,6 @@ func enter() -> void:
 func exit() -> void:
 	source_entity.move_fsm.should_rotate = true
 	source_entity.hands.equipped_item_should_follow_mouse = true
-	stats.current_warmth_level = 0
 	_clean_up_hitscans()
 	if mouse_area: mouse_area.queue_free()
 
@@ -187,7 +187,8 @@ func exit() -> void:
 func _handle_reequipping_stats() -> void:
 	var time_since_last_equipped: float = (Time.get_ticks_msec() / 1000.0) - stats.time_last_equipped
 	var forgiveness_factor: float = min(1.0, time_since_last_equipped / 5.0)
-	stats.current_bloom_level = stats.current_bloom_level * (1 - forgiveness_factor)
+	stats.bloom_level = stats.bloom_level * (1 - forgiveness_factor)
+	stats.warmup_level = stats.warmup_level * (1 - forgiveness_factor)
 
 ## If we are set to do mouse position-based homing, we set up the mouse area and its signals and add it as a child.
 func _check_if_needs_mouse_area_scanner() -> void:
@@ -214,7 +215,7 @@ func _enable_mouse_area() -> void:
 func _disable_mouse_area() -> void:
 	if mouse_area: mouse_area.get_child(0).disabled = true
 
-## Every frame we decrease the warmth and the bloom levels based on their decrease curves.
+## Every frame we decrease the warmup and the bloom levels based on their decrease curves.
 func _process(delta: float) -> void:
 	if Engine.is_editor_hint():
 		return
@@ -223,20 +224,21 @@ func _process(delta: float) -> void:
 		reloading_ui.update_progress((1 - (reload_timer.time_left / reload_timer.wait_time)) * 100)
 
 	if source_entity.hands.cooldown_manager.get_cooldown(stats.get_cooldown_id()) == 0:
-		if stats.current_bloom_level > 0:
-			var sampled_point: float = stats.bloom_decrease_rate.sample_baked(stats.current_bloom_level)
+		if stats.bloom_level > 0:
+			var sampled_point: float = stats.bloom_decrease_rate.sample_baked(stats.bloom_level)
 			var bloom_decrease_amount: float = max(0.01 * delta, sampled_point * delta)
 			var bloom_decrease_mult: float = stats.s_mods.get_stat("bloom_decrease_rate_multiplier")
-			stats.current_bloom_level = max(0, stats.current_bloom_level - (bloom_decrease_amount * bloom_decrease_mult))
+			stats.bloom_level = max(0, stats.bloom_level - (bloom_decrease_amount * bloom_decrease_mult))
 
-		if stats.current_warmth_level > 0:
-			var warmth_decrease_amount: float = max(0.01 * delta, stats.warmth_decrease_rate.sample_baked(stats.current_warmth_level) * delta)
-			stats.current_warmth_level = max(0, stats.current_warmth_level - warmth_decrease_amount)
+		if stats.warmup_level > 0:
+			var warmup_decrease_amount: float = max(0.01 * delta, stats.warmup_decrease_rate.sample_baked(stats.warmup_level) * delta)
+			stats.warmup_level = max(0, stats.warmup_level - warmup_decrease_amount)
 
 func _physics_process(_delta: float) -> void:
 	if mouse_area != null:
 		mouse_area.global_position = get_global_mouse_position()
 
+## When the cooldown manager from the hands component fires a signal with the matching item id, process the aftermath.
 func _on_fire_cooldown_timeout(item_id: String) -> void:
 	if item_id != stats.get_cooldown_id():
 		return
@@ -247,10 +249,10 @@ func _on_fire_cooldown_timeout(item_id: String) -> void:
 	else:
 		_clean_up_hitscans()
 
+## This is the standard method of triggering a cooldown, but child proj weapon scripts can override this if they want to
+## do something else or skip cooldowns. For example, Unique Proj Weapons override this to prevent visuals from updating.
 func _update_cooldown_with_potential_visuals(duration: float) -> void:
 	source_entity.hands.cooldown_manager.add_cooldown(stats.get_cooldown_id(), duration)
-	if stats.proj_weapon_type == ProjWeaponResource.ProjWeaponType.THROWABLE and source_entity is Player:
-		source_slot.update_tint_progress(duration)
 #endregion
 
 #region Called From HandsComponent
@@ -300,7 +302,7 @@ func release_hold_activate(hold_time: float) -> void:
 
 ## Called from the hands component to try and start a reload.
 func reload() -> void:
-	if stats.ammo_type != GlobalData.ProjAmmoType.STAMINA and stats.ammo_type != GlobalData.ProjAmmoType.SELF:
+	if stats.ammo_type != ProjWeaponResource.ProjAmmoType.STAMINA and stats.ammo_type != ProjWeaponResource.ProjAmmoType.SELF and stats.ammmo_type != ProjWeaponResource.ProjAmmoType.CHARGES:
 		if pullout_delay_timer.is_stopped() and reload_timer.is_stopped() and single_reload_timer.is_stopped():
 			if not is_reloading and not stats.ammo_in_mag >= stats.mag_size:
 				_attempt_reload()
@@ -321,8 +323,8 @@ func _fire() -> void:
 	single_reload_timer.stop()
 	is_reloading = false
 
-	if _get_warmth_firing_delay() > 0:
-		source_entity.hands.cooldown_manager.add_cooldown(stats.get_cooldown_id(), _get_warmth_firing_delay())
+	if _get_warmup_firing_delay() > 0:
+		source_entity.hands.cooldown_manager.add_cooldown(stats.get_cooldown_id(), _get_warmup_firing_delay())
 		while source_entity.hands.cooldown_manager.get_cooldown(stats.get_cooldown_id()) > 0: # Signal fires for all ending cooldowns, so we loop until ours has ended
 			await source_entity.hands.cooldown_manager.cooldown_ended
 
@@ -338,7 +340,7 @@ func _fire() -> void:
 		await firing_duration_timer.timeout
 
 	_set_up_hitscan(false)
-	_handle_warmth_increase()
+	_handle_warmup_increase()
 	if not is_holding_hitscan:
 		_apply_burst_logic(false)
 	else:
@@ -356,10 +358,9 @@ func _charge_fire(hold_time: float) -> void:
 		return
 
 	if (hold_time >= stats.s_mods.get_stat("min_charge_time")) and (hold_time > 0) and source_entity.hands.cooldown_manager.get_cooldown(stats.get_cooldown_id()) == 0:
-		if stats.charge_firing_duration > 0:
-			firing_duration_timer.start(max(0.05, stats.charge_firing_duration))
-			_start_firing_anim(true)
-			await firing_duration_timer.timeout
+		firing_duration_timer.start(max(0.05, stats.charge_firing_duration))
+		_start_firing_anim(true)
+		await firing_duration_timer.timeout
 
 		_set_up_hitscan(true)
 		_apply_burst_logic(true)
@@ -402,8 +403,8 @@ func _apply_burst_logic(was_charge_fire: bool = false) -> void:
 	var shots: int = int(stats.s_mods.get_stat("projectiles_per_fire"))
 
 	var delay: float
-	if _get_warmth_firing_delay() > 0:
-		delay = _get_warmth_firing_delay()
+	if _get_warmup_firing_delay() > 0:
+		delay = _get_warmup_firing_delay()
 	else:
 		if stats.firing_mode == "Auto" or stats.firing_mode == "Charge":
 			delay = stats.s_mods.get_stat("fire_cooldown") + hitscan_delay
@@ -413,14 +414,15 @@ func _apply_burst_logic(was_charge_fire: bool = false) -> void:
 	if not stats.use_hitscan:
 		delay += (stats.burst_bullet_delay * (shots - 1))
 
-	var final_delay: float = max(0.03, delay)
-
-	_update_cooldown_with_potential_visuals(final_delay)
-
+	if delay > 0: _update_cooldown_with_potential_visuals(delay)
 
 	_apply_ammo_consumption(shots, was_charge_fire)
 
 func _apply_ammo_consumption(shot_count: int, was_charge_fire: bool = false) -> void:
+	if stats.dont_consume_ammo:
+		_handle_per_shot_delay_and_bloom(shot_count, was_charge_fire, (not is_holding_hitscan))
+		return
+
 	if not was_charge_fire:
 		if stats.use_ammo_per_burst_proj:
 			for i: int in range(shot_count):
@@ -487,7 +489,10 @@ func _spawn_projectile(proj: Projectile, was_charge_fire: bool = false) -> void:
 
 	while source_entity.hands.cooldown_manager.get_cooldown(stats.get_cooldown_id()) > 0: # Signal fires for all ending cooldowns, so we loop until ours has ended
 		await source_entity.hands.cooldown_manager.cooldown_ended
-	_get_has_needed_ammo_and_reload_if_not(was_charge_fire)
+	if not _get_has_needed_ammo_and_reload_if_not(was_charge_fire):
+		if stats.overheating_type == "Empty Mag": ## FIXME!!!!!!!!!!!!!!!!!!!!!!!
+			stats.show_cooldown_fill_override_flag = true
+			source_entity.hands.cooldown_manager.add_cooldown(stats.get_cooldown_id(), 5.0)
 
 ## Spawns the hitscan that has been passed to it. Reloads if we don't have enough for the next activation.
 func _spawn_hitscan(hitscan: Hitscan, was_charge_fire: bool = false) -> void:
@@ -506,32 +511,32 @@ func _spawn_hitscan(hitscan: Hitscan, was_charge_fire: bool = false) -> void:
 	_get_has_needed_ammo_and_reload_if_not(was_charge_fire)
 #endregion
 
-#region Warmth & Bloom
-## Increases current warmth level via sampling the increase curve using the current warmth.
-func _handle_warmth_increase() -> void:
-	var sampled_point: float = stats.warmth_increase_rate.sample_baked(stats.current_warmth_level)
-	var increase_amount: float = max(0.01, sampled_point * stats.s_mods.get_stat("warmth_increase_rate_multiplier"))
-	stats.current_warmth_level = min(1, stats.current_warmth_level + increase_amount)
+#region Warmup & Bloom
+## Increases current warmup level via sampling the increase curve using the current warmup.
+func _handle_warmup_increase() -> void:
+	var sampled_point: float = stats.warmup_increase_rate.sample_baked(stats.warmup_level)
+	var increase_amount: float = max(0.01, sampled_point * stats.s_mods.get_stat("warmup_increase_rate_multiplier"))
+	stats.warmup_level = min(1, stats.warmup_level + increase_amount)
 
-## Grabs a point from the warmth curve based on current warmth level.
-func _get_warmth_firing_delay() -> float:
-	if stats.s_mods.get_stat("fully_cool_delay_time") > 0 and stats.firing_mode == "Auto":
-		var sampled_delay: float = stats.warmth_delay_curve.sample_baked(stats.current_warmth_level)
-		return max(0.02, sampled_delay * stats.s_mods.get_stat("fully_cool_delay_time")) + hitscan_delay
+## Grabs a point from the warmup curve based on current warmup level.
+func _get_warmup_firing_delay() -> float:
+	if stats.s_mods.get_stat("initial_fire_rate_delay") > 0 and stats.firing_mode == "Auto":
+		var sampled_delay: float = stats.warmup_delay_curve.sample_baked(stats.warmup_level)
+		return max(0.02, sampled_delay * stats.s_mods.get_stat("initial_fire_rate_delay")) + hitscan_delay
 	else:
 		return 0
 
 ## Increases current bloom level via sampling the increase curve using the current bloom.
 func _handle_bloom_increase(was_charge_fire: bool = false) -> void:
-	var sampled_point: float = stats.bloom_increase_rate.sample_baked(stats.current_bloom_level)
+	var sampled_point: float = stats.bloom_increase_rate.sample_baked(stats.bloom_level)
 	var increase_amount: float = max(0.01, sampled_point * stats.s_mods.get_stat("bloom_increase_rate_multiplier"))
 	var charge_shot_mult: float = 1.0 if not was_charge_fire else stats.charge_bloom_mult
-	stats.current_bloom_level = min(1, stats.current_bloom_level + (increase_amount * charge_shot_mult))
+	stats.bloom_level = min(1, stats.bloom_level + (increase_amount * charge_shot_mult))
 
 ## Grabs a point from the bloom curve based on current bloom level.
 func _get_bloom() -> float:
 	if stats.s_mods.get_stat("max_bloom") > 0:
-		var deviation: float = stats.bloom_curve.sample_baked(stats.current_bloom_level)
+		var deviation: float = stats.bloom_curve.sample_baked(stats.bloom_level)
 		var random_direction: int = 1 if randf() < 0.5 else -1
 		return deviation * stats.s_mods.get_stat("max_bloom") * random_direction * randf()
 	else:
@@ -555,13 +560,22 @@ func _do_firing_fx(with_charge_mult: bool = false) -> void:
 
 ## Start the firing animation based on what kind of firing we are doing.
 func _start_firing_anim(was_charge_fire: bool = false) -> void:
+	if anim_player.is_playing():
+		return
 	if not was_charge_fire:
-		anim_player.speed_scale = 1.0 / max(0.03, (stats.firing_duration + hitscan_delay))
+		if stats.override_anim_dur > 0:
+			anim_player.speed_scale = 1.0 / stats.override_anim_dur
+		else:
+			anim_player.speed_scale = 1.0 / max(0.03, (stats.firing_duration + hitscan_delay))
+		anim_player.speed_scale *= stats.anim_speed_mult
 		if anim_player.has_animation("fire"): anim_player.play("fire")
 	else:
-		anim_player.speed_scale = 1.0 / max(0.03, (stats.charge_firing_duration + hitscan_delay))
+		if stats.override_chg_anim_dur > 0   :
+			anim_player.speed_scale = 1.0 / stats.override_chg_anim_dur
+		else:
+			anim_player.speed_scale = 1.0 / max(0.03, (stats.charge_firing_duration + hitscan_delay))
+		anim_player.speed_scale *= stats.chg_anim_speed_mult
 		if anim_player.has_animation("charge_fire"): anim_player.play("charge_fire")
-
 
 ## Applies a status effect to the source entity after firing.
 func _apply_post_firing_effect(was_charge_fire: bool = false) -> void:
@@ -573,7 +587,7 @@ func _apply_post_firing_effect(was_charge_fire: bool = false) -> void:
 #region Reloading
 ## Checks if we have enough ammo to execute a single firing. Calls for a reload if we don't.
 func _get_has_needed_ammo_and_reload_if_not(was_charge_fire: bool = false) -> bool:
-	if stats.ammo_type == GlobalData.ProjAmmoType.STAMINA and (source_entity is not DynamicEntity):
+	if stats.ammo_type == ProjWeaponResource.ProjAmmoType.STAMINA and (source_entity is not DynamicEntity):
 		push_error(source_entity.name + " is using a weapon with ammo type \"Stamina\" but is not a dynamic entity.")
 		return false
 
@@ -588,11 +602,11 @@ func _get_has_needed_ammo_and_reload_if_not(was_charge_fire: bool = false) -> bo
 		else:
 			ammo_needed = 1
 
-	if stats.ammo_type == GlobalData.ProjAmmoType.STAMINA:
+	if stats.ammo_type == ProjWeaponResource.ProjAmmoType.STAMINA:
 		var stamina_uses_left: int = int(floor(source_entity.stamina_component.stamina / (ammo_needed * stats.stamina_use_per_proj)))
 		if stamina_uses_left > 0:
 			result = true
-	elif stats.ammo_type == GlobalData.ProjAmmoType.SELF:
+	elif stats.ammo_type == ProjWeaponResource.ProjAmmoType.SELF:
 		result = true
 	else:
 		if stats.ammo_in_mag >= ammo_needed:
@@ -607,9 +621,9 @@ func _get_has_needed_ammo_and_reload_if_not(was_charge_fire: bool = false) -> bo
 
 ## Takes away either the passed in amount from the appropriate ammo reserve.
 func _consume_ammo(amount: int) -> void:
-	if stats.ammo_type == GlobalData.ProjAmmoType.STAMINA:
+	if stats.ammo_type == ProjWeaponResource.ProjAmmoType.STAMINA:
 		(source_entity as DynamicEntity).stamina_component.use_stamina(amount * stats.stamina_use_per_proj)
-	elif stats.ammo_type == GlobalData.ProjAmmoType.SELF:
+	elif stats.ammo_type == ProjWeaponResource.ProjAmmoType.SELF:
 		source_entity.inv.remove_item(source_slot.index, 1)
 	else:
 		stats.ammo_in_mag -= amount
@@ -645,18 +659,21 @@ func _get_more_reload_ammo(max_amount_needed: int, take_from_inventory: bool = t
 	var ammount_collected: int = 0
 	var inv_node: Inventory = source_entity.inv
 
-	for i: int in range(inv_node.inv_size):
-		var item: InvItemResource = inv_node.inv[i]
-		if item != null and (item.stats is ProjAmmoResource) and (item.stats.ammo_type == stats.ammo_type):
-			var amount_in_slot: int = item.quantity
-			var amount_still_needed: int = max_amount_needed - ammount_collected
-			var amount_to_take_from_slot: int = min(amount_still_needed, amount_in_slot)
-			if take_from_inventory:
-				inv_node.remove_item(i, amount_to_take_from_slot)
-			ammount_collected += amount_to_take_from_slot
+	if stats.ammo_type == ProjWeaponResource.ProjAmmoType.NONE:
+		ammount_collected = stats.mag_size
+	else:
+		for i: int in range(inv_node.inv_size):
+			var item: InvItemResource = inv_node.inv[i]
+			if item != null and (item.stats is ProjAmmoResource) and (item.stats.ammo_type == stats.ammo_type):
+				var amount_in_slot: int = item.quantity
+				var amount_still_needed: int = max_amount_needed - ammount_collected
+				var amount_to_take_from_slot: int = min(amount_still_needed, amount_in_slot)
+				if take_from_inventory:
+					inv_node.remove_item(i, amount_to_take_from_slot)
+				ammount_collected += amount_to_take_from_slot
 
-			if ammount_collected == max_amount_needed:
-				break
+				if ammount_collected == max_amount_needed:
+					break
 
 	return ammount_collected
 
@@ -693,14 +710,14 @@ func _on_single_reload_timer_timeout() -> void:
 func _update_ammo_ui() -> void:
 	if ammo_ui != null:
 		var count: int = -1
-		if stats.ammo_type == GlobalData.ProjAmmoType.SELF:
+		if stats.ammo_type == ProjWeaponResource.ProjAmmoType.SELF:
 			if source_slot.item == null:
 				count = -1
 			else:
 				count = source_slot.item.quantity
-		elif stats.ammo_type == GlobalData.ProjAmmoType.STAMINA:
+		elif stats.ammo_type == ProjWeaponResource.ProjAmmoType.STAMINA:
 			count = source_entity.stamina_component.stamina
-		elif stats.ammo_type != GlobalData.ProjAmmoType.NONE:
+		elif stats.ammo_type != ProjWeaponResource.ProjAmmoType.NONE:
 			count = stats.ammo_in_mag
 		ammo_ui.update_mag_ammo(count)
 #endregion

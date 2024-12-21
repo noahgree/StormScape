@@ -93,13 +93,13 @@ func _update_inv_ammo_ui() -> void:
 	if active_slot.item != null:
 		if active_slot.item.stats is ProjWeaponResource:
 			var stats: ItemResource = active_slot.item.stats
-			if not (stats.ammo_type == GlobalData.ProjAmmoType.NONE or stats.ammo_type == GlobalData.ProjAmmoType.STAMINA or stats.ammo_type == GlobalData.ProjAmmoType.SELF):
+			if not (stats.ammo_type == ProjWeaponResource.ProjAmmoType.NONE or stats.ammo_type == ProjWeaponResource.ProjAmmoType.STAMINA or stats.ammo_type == ProjWeaponResource.ProjAmmoType.SELF):
 				count = 0
 				for i: int in range(player_inv.inv_size):
 					var item: InvItemResource = player_inv.inv[i]
 					if item != null and (item.stats is ProjAmmoResource) and (item.stats.ammo_type == active_slot.item.stats.ammo_type):
 						count += item.quantity
-			elif stats.ammo_type == GlobalData.ProjAmmoType.STAMINA:
+			elif stats.ammo_type == ProjWeaponResource.ProjAmmoType.STAMINA:
 				count = int(floor(GlobalData.player_node.stats.get_stat("max_stamina")))
 		elif active_slot.item.stats is MeleeWeaponResource:
 			count = int(floor(GlobalData.player_node.stats.get_stat("max_stamina")))

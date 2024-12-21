@@ -232,7 +232,7 @@ func _change_off_hand_sprite_visibility(show_off_hand: bool) -> void:
 
 func _check_for_drawing_off_hand() -> void:
 	if equipped_item.stats.draw_off_hand and not equipped_item.stats.is_gripped_by_one_hand:
-		drawn_off_hand.position = off_hand_sprite.position + equipped_item.stats.draw_off_hand_offset
+		drawn_off_hand.position = off_hand_sprite.position + equipped_item.stats.draw_off_hand_offset + equipped_item.stats.holding_offset
 		drawn_off_hand.visible = true
 
 func _change_y_sort(anim_vector: Vector2) -> void:

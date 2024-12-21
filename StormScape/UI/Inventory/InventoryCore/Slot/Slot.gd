@@ -92,7 +92,9 @@ func _on_visibility_changed() -> void:
 
 ## Updates the upwards fill tinting that represents an item on cooldown.
 func update_tint_progress(duration: float) -> void:
-	if duration > 0 and item.stats.show_cooldown_fill:
+	if duration > 0:
+		if not item.stats.show_cooldown_fill:
+			return
 		if tint_tween: tint_tween.kill()
 		tint_progress = (1 - (duration / GlobalData.player_node.hands.cooldown_manager.get_original_cooldown(item.stats.get_cooldown_id()))) * 100
 		if not GlobalData.focused_ui_is_open:
