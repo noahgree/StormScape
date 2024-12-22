@@ -32,9 +32,9 @@ enum ProjAmmoType { ## The types of projectile ammo.
 @export var firing_sound: String = "" ## The sound to play when firing.
 
 @export_group("Charge Firing Details")
-@export_range(0.2, 10, 0.01, "hide_slider", "or_greater", "suffix:seconds") var min_charge_time: float = 1 ## How long must the activation be held down before releasing the charge shot.
-@export_range(0, 100, 0.01, "hide_slider", "or_greater", "suffix:seconds") var charge_fire_cooldown: float = 0.5 ## How long after a charge shot must we wait before being able to fire again.
-@export_range(0.03, 10, 0.01, "hide_slider", "or_greater", "suffix:seconds") var charge_firing_duration: float = 0.1 ## How long it takes to release the projectile after initiating the charge firing action. Determines the animation speed as well. Set to 0 by default.
+@export_range(0.1, 10, 0.01, "hide_slider", "or_greater", "suffix:seconds") var min_charge_time: float = 1 ## How long must the activation be held down before releasing the charge shot.
+@export_range(0, 1000, 0.01, "hide_slider", "or_greater", "suffix:seconds") var charge_fire_cooldown: float = 0.5 ## How long after a charge shot must we wait before being able to fire again.
+@export_range(0, 10, 0.01, "hide_slider", "or_greater", "suffix:seconds") var charge_firing_duration: float = 0.1 ## How long it takes to release the projectile after initiating the charge firing action. Determines the animation speed as well. Set to 0 by default.
 @export var ammo_use_per_charge: int = 3 ## How much ammo to consume on charge shots. Overrides all burst and barrage consumption to consume this amount no matter what.
 @export var charge_bloom_mult: float = 5.0 ## How much more should one charge shot count towards current bloom.
 @export_subgroup("Firing Animation")
@@ -65,10 +65,16 @@ enum ProjAmmoType { ## The types of projectile ammo.
 @export_enum("Magazine", "Single") var reload_type: String = "Magazine" ## Whether to reload over time or all at once at the end.
 @export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var mag_reload_time: float = 1.0 ## How long it takes to reload an entire mag.
 @export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var single_proj_reload_time: float = 0.25 ## How long it takes to reload a single projectile if the reload type is set to "single".
+@export var single_reload_quantity: int = 1 ## How much to add to the mag when the single proj timer elapses each time.
 @export var stamina_use_per_proj: float = 0.5 ## How much stamina is needed per projectile when stamina is the ammo type.
 @export var dont_consume_ammo: bool = false ## When true, this acts like infinite ammo where the weapon doesn't decrement the ammo in mag upon firing.
 @export_subgroup("Recharging")
-@export var recharge_time: float = 3.0 ## How long it takes to recouperate a single charge.
+@export var auto_ammo_interval: float = 0 ## How long it takes to recouperate a single ammo when given automatically. Most useful when using the "Charges" ammo type but can also be used to simply grant ammo over time. Anything above 0 activates this feature. Only works with consumable ammo types, meaning not "Self" or "Stamina".
+@export var auto_ammo_count: int = 1 ## How much ammo to grant after the interval is up.
+@export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var auto_ammo_delay: float = 0.5 ## How long after firing must we wait before the grant interval countdown starts.
+@export_subgroup("UI")
+@export var hide_ammo_ui: bool = false ## When a player uses this, should the ammo UI be hidden.
+@export var hide_reload_ui: bool = false ## When a player uses this, should the reloading UI be hidden.
 @export_subgroup("Reloading FX")
 @export var mag_reload_sound: String = "" ## The sound to play when reloading a whole mag.
 @export var proj_reload_sound: String = "" ## The sound to play when reloading a single projectile.
@@ -76,15 +82,17 @@ enum ProjAmmoType { ## The types of projectile ammo.
 
 @export_group("Blooming Logic")
 @export_custom(PROPERTY_HINT_NONE, "suffix:degrees") var max_bloom: float = 0 ## The max amount of bloom the weapon can have.
-@export var bloom_curve: Curve = Curve.new() ## How to apply blooming logic over time.
-@export var bloom_increase_rate: Curve = Curve.new() ## How much bloom to add per shot based on current bloom.
-@export var bloom_decrease_rate: Curve = Curve.new() ## How much bloom to take away per second based on current bloom.
+@export var bloom_curve: Curve ## X value is bloom amount (0-1), Y value is multiplier on max_bloom.
+@export var bloom_increase_rate: Curve ## How much bloom to add per shot based on current bloom.
+@export var bloom_decrease_rate: Curve ## How much bloom to take away per second based on current bloom.
+@export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var bloom_decrease_delay: float = 1.0 ## How long after the last bloom increase must we wait before starting to decrease it.
 
 @export_group("Auto Fire Warmup Logic")
-@export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var initial_fire_rate_delay: float = 0 ## At the lowest warmth level, how long must we wait before a shot fires. This only works when the firing mode is set to "Auto".
-@export var warmup_delay_curve: Curve = Curve.new() ## X value is warmup amount, Y value is multiplier on initial_fire_rate_delay.
-@export var warmup_increase_rate: Curve = Curve.new() ## A curve for determining how much warmth to add depending on current warmth.
-@export var warmup_decrease_rate: Curve = Curve.new() ## A curve for determining how much warmth to remove depending on current warmth.
+@export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var initial_fire_rate_delay: float = 0 ## At the lowest warmup level, how long must we wait before a shot fires. This only works when the firing mode is set to "Auto".
+@export var warmup_delay_curve: Curve ## X value is warmup amount (0-1), Y value is multiplier on initial_fire_rate_delay.
+@export var warmup_increase_rate: Curve ## A curve for determining how much warmth to add per shot depending on current warmup.
+@export var warmup_decrease_rate: Curve ## How much warmup do we remove per second based on current warmup.
+@export var warmup_decrease_delay: float = 0.75 ## How long after the last warmup increase must we wait before starting to decrease it.
 
 @export_group("Overheating Logic")
 @export_enum("None", "Empty Mag", "Curve") var overheating_type: String = "None"
@@ -101,8 +109,6 @@ enum ProjAmmoType { ## The types of projectile ammo.
 
 
 # Unique Properties #
-@export_storage var warmup_level: float = 0 ## The current warm-up level for this weapon.
-@export_storage var bloom_level: float = 0 ## The current bloom level for this weapon.
 @export_storage var ammo_in_mag: int = -1: ## The current ammo in the mag.
 	set(new_ammo_amount):
 		ammo_in_mag = new_ammo_amount

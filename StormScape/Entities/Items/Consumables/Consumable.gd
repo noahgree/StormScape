@@ -16,7 +16,7 @@ func activate() -> void:
 
 func consume() -> void:
 	var stamina_component: StaminaComponent = source_entity.get_node_or_null("StaminaComponent")
-	if stamina_component and source_entity.hands.cooldown_manager.get_cooldown(stats.get_cooldown_id()) == 0 and consumption_timer.is_stopped():
+	if stamina_component and source_entity.inv.auto_decrementer.get_cooldown(stats.get_cooldown_id()) == 0 and consumption_timer.is_stopped():
 		food_particles.global_position = source_entity.hands.global_position + source_entity.hands.mouth_pos
 		food_particles.lifetime = max(0.2, stats.consumption_time / 2.0)
 		food_particles.color = stats.particles_color
@@ -24,7 +24,7 @@ func consume() -> void:
 
 		consumption_timer.start(stats.consumption_time)
 		await consumption_timer.timeout
-		source_entity.hands.cooldown_manager.add_cooldown(stats.get_cooldown_id(), stats.consumption_cooldown)
+		source_entity.inv.auto_decrementer.add_cooldown(stats.get_cooldown_id(), stats.consumption_cooldown)
 
 		stamina_component.gain_hunger_bars(stats.hunger_bar_gain)
 		stamina_component.use_hunger_bars(stats.hunger_bar_deduction)

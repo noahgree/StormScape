@@ -12,7 +12,6 @@ class_name WeaponResource
 
 
 # Unique Properties #
-@export_storage var time_last_equipped: float = 0 ## The time that this weapon was last equipped.
 @export_storage var cache_is_setup: bool = false ## Whether the stats cache has been setup for this weapon before. If it has, we don't want to set it up again after re-equipping. This also determines whether the effect sources are unique to this instance.
 @export_storage var current_mods: Dictionary = {} ## The current mods applied to this weapon.
 @export_storage var original_status_effects: Array[StatusEffect] = [] ## The original status effect list of the effect source before any mods are applied.

@@ -12,7 +12,7 @@ class_name ItemReceiverComponent
 
 @onready var player_communicator: Node = get_node_or_null("PlayerInvCommunicator")
 
-var items_in_range: Array[Item] = []
+var items_in_range: Array[Item] = [] ## The items in range of being picked up.
 
 
 #region Save & Load

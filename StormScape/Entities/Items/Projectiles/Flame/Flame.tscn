@@ -60,9 +60,9 @@ autoplay = "default"
 speed_scale = 2.0
 
 [node name="Shadow" type="Sprite2D" parent="."]
-self_modulate = Color(0.16, 0.16, 0.16, 0)
+self_modulate = Color(0.16, 0.16, 0.16, 0.228)
 top_level = true
 z_index = 1
-position = Vector2(0, 10)
-scale = Vector2(0.45, 0.35)
+position = Vector2(0, 8)
+scale = Vector2(0.266667, 0.35)
 texture = ExtResource("3_vm36o")

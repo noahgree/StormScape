@@ -1203,7 +1203,6 @@ is_gripped_by_one_hand = true
 draw_off_hand = false
 draw_off_hand_offset = Vector2(0, 0)
 main_hand_offset = Vector2(0, 0)
-show_cooldown_fill_override_flag = false
 session_uid = 0
 
 [sub_resource type="Resource" id="Resource_t7kvu"]
@@ -2103,6 +2102,7 @@ ammo_icon_textures = {
 layout_mode = 2
 size_flags_horizontal = 8
 theme_override_constants/separation = 0
+alignment = 2
 
 [node name="AmmoInfo" type="HBoxContainer" parent="OverlayUI/ActiveSlotInfo/VBoxContainer"]
 layout_mode = 2
@@ -2333,7 +2333,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 metadata/_edit_lock_ = true
 
-[node name="SortByCount" type="NinePatchRect" parent="OverlayUI/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture"]
+[node name="SortByType" type="NinePatchRect" parent="OverlayUI/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture"]
 unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 8
@@ -2353,7 +2353,7 @@ patch_margin_top = 2
 patch_margin_right = 2
 patch_margin_bottom = 2
 
-[node name="SortByCountBtn" type="Button" parent="OverlayUI/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/SortByCount"]
+[node name="SortByTypeBtn" type="Button" parent="OverlayUI/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/SortByType"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -2364,14 +2364,14 @@ focus_mode = 0
 flat = true
 metadata/_edit_lock_ = true
 
-[node name="Label" type="Label" parent="OverlayUI/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/SortByCount"]
+[node name="Label" type="Label" parent="OverlayUI/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/SortByType"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-text = "SORT BY COUNT"
+text = "SORT BY TYPE"
 label_settings = SubResource("LabelSettings_83b3b")
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -2726,9 +2726,9 @@ size_flags_vertical = 4
 [connection signal="button_down" from="OverlayUI/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/SortByName/SortByNameBtn" to="OverlayUI/PlayerInvUI" method="_on_sort_by_name_btn_button_down"]
 [connection signal="button_up" from="OverlayUI/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/SortByName/SortByNameBtn" to="OverlayUI/PlayerInvUI" method="_on_sort_by_name_btn_button_up"]
 [connection signal="pressed" from="OverlayUI/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/SortByName/SortByNameBtn" to="OverlayUI/PlayerInvUI" method="_on_sort_by_name_btn_pressed"]
-[connection signal="button_down" from="OverlayUI/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/SortByCount/SortByCountBtn" to="OverlayUI/PlayerInvUI" method="_on_sort_by_count_btn_button_down"]
-[connection signal="button_up" from="OverlayUI/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/SortByCount/SortByCountBtn" to="OverlayUI/PlayerInvUI" method="_on_sort_by_count_btn_button_up"]
-[connection signal="pressed" from="OverlayUI/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/SortByCount/SortByCountBtn" to="OverlayUI/PlayerInvUI" method="_on_sort_by_count_btn_pressed"]
+[connection signal="button_down" from="OverlayUI/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/SortByType/SortByTypeBtn" to="OverlayUI/PlayerInvUI" method="_on_sort_by_type_btn_button_down"]
+[connection signal="button_up" from="OverlayUI/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/SortByType/SortByTypeBtn" to="OverlayUI/PlayerInvUI" method="_on_sort_by_type_btn_button_up"]
+[connection signal="pressed" from="OverlayUI/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/SortByType/SortByTypeBtn" to="OverlayUI/PlayerInvUI" method="_on_sort_by_type_btn_pressed"]
 [connection signal="button_down" from="OverlayUI/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/SortByRarity/SortByRarityBtn" to="OverlayUI/PlayerInvUI" method="_on_sort_by_rarity_btn_button_down"]
 [connection signal="button_up" from="OverlayUI/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/SortByRarity/SortByRarityBtn" to="OverlayUI/PlayerInvUI" method="_on_sort_by_rarity_btn_button_up"]
 [connection signal="pressed" from="OverlayUI/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/SortByRarity/SortByRarityBtn" to="OverlayUI/PlayerInvUI" method="_on_sort_by_rarity_btn_pressed"]

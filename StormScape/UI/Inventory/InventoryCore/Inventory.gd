@@ -12,6 +12,8 @@ signal slot_updated(index: int, item: InvItemResource)
 @export var inv_populator: InventoryPopulator ## The control node that is responsible for populating its connected slots.
 @export var ui: InventoryUI ## The parent control node that contains all inventory UI nodes as children.
 
+@onready var auto_decrementer: AutoDecrementer = AutoDecrementer.new() ## The script controlling the cooldowns, warmups, overheats, and recharges for this entity's inventory items.
+
 var inv: Array[InvItemResource] = [] ## The current inventory. Main source of truth.
 var inv_to_load_from_save: Array[InvItemResource] = [] ## Gets loaded when a game is loaded so that it can be iterated into the main inv array.
 
@@ -24,6 +26,14 @@ func _ready() -> void:
 	inv_populator.connect_inventory(self)
 	ui.connect_inventory(self)
 	call_deferred("fill_inventory", starting_inv)
+
+	if is_player_inv: auto_decrementer.owning_entity_is_player = true
+
+func _process(delta: float) -> void:
+	auto_decrementer._update_cooldowns(delta)
+	auto_decrementer._update_warmups(delta)
+	auto_decrementer._update_blooms(delta)
+	auto_decrementer._update_recharges(delta)
 
 ## Fills the main inventory from an array of inventory items. If an item exceeds stack size, the quantity that does not fit into ## one slot is instantiated on the ground as a physical item. This method respects null spots in the list.
 func fill_inventory(inv_to_fill_from: Array[InvItemResource]) -> void:
@@ -172,10 +182,10 @@ func activate_sort_by_rarity() -> void:
 		inv[i] = arr[i]
 	_update_all_connected_slots()
 
-## Called in order to start sorting by count of items in the inventory. Does not sort hotbar if present.
-func activate_sort_by_count() -> void:
+## Called in order to start sorting by type of items in the inventory. Does not sort hotbar if present.
+func activate_sort_by_type() -> void:
 	var arr: Array[InvItemResource] = inv.slice(0, inv_size - hotbar_size)
-	arr.sort_custom(_count_sort_logic)
+	arr.sort_custom(_type_sort_logic)
 	for i: int in range(inv_size - hotbar_size):
 		inv[i] = arr[i]
 	_update_all_connected_slots()
@@ -199,14 +209,14 @@ func _rarity_sort_logic(a: InvItemResource, b: InvItemResource) -> bool:
 	else:
 		return a.stats.name < b.stats.name
 
-## Implements the comparison logic for sorting by count.
-func _count_sort_logic(a: InvItemResource, b: InvItemResource) -> bool:
+## Implements the comparison logic for sorting by item type.
+func _type_sort_logic(a: InvItemResource, b: InvItemResource) -> bool:
 	if a == null and b == null: return false
 	if a == null: return false
 	if b == null: return true
 
-	if a.quantity != b.quantity:
-		return a.quantity > b.quantity
+	if a.stats.item_type != b.stats.item_type:
+		return a.stats.item_type > b.stats.item_type
 	else:
 		return a.stats.name < b.stats.name
 

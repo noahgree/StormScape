@@ -15,16 +15,16 @@
 [ext_resource type="Script" path="res://Entities/Items/Weapons/ProjectileWeapons/ProjWeaponResource.gd" id="18_1rmpi"]
 
 [sub_resource type="Curve" id="Curve_kfl3v"]
-_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.757194, 0.277558), 0.0, 0.0, 0, 0, Vector2(1, 1), 2.89929, 0.0, 0, 0]
-point_count = 3
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.259631, 0), 0.0, 0.0, 0, 0, Vector2(0.757194, 0.277558), 0.0, 0.0, 0, 0, Vector2(1, 1), 2.89929, 0.0, 0, 0]
+point_count = 4
 
-[sub_resource type="Curve" id="Curve_7cqvo"]
-_data = [Vector2(0, 0.0692444), 0.0, -0.246832, 0, 0, Vector2(0.365772, 0.488537), 0.0, 0.0, 0, 0, Vector2(1, 0.383668), 0.658218, 0.0, 0, 0]
+[sub_resource type="Curve" id="Curve_uquue"]
+_data = [Vector2(0, 0.204046), 0.0, 0.0, 0, 0, Vector2(0.822446, 0.437008), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
 point_count = 3
 
 [sub_resource type="Curve" id="Curve_mls34"]
-_data = [Vector2(0, 0.0138195), 0.0, 0.0609458, 0, 0, Vector2(0.808219, 0.151112), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.152751, 0.0, 0, 0]
-point_count = 3
+_data = [Vector2(0, 0.0137044), 0.0, 0.0609458, 0, 0, Vector2(1, 0.0522747), 0.0, 0.0, 0, 0]
+point_count = 2
 
 [sub_resource type="Resource" id="Resource_erj5g"]
 script = ExtResource("1_xn1yf")
@@ -115,6 +115,7 @@ mouse_target_radius = 50.0
 spin_speed = 0.0
 spin_both_ways = false
 spin_direction = "Forward"
+do_y_axis_reflection = false
 move_in_rotated_dir = false
 shadow_matches_spin = false
 launch_angle = 0.0
@@ -239,6 +240,7 @@ mouse_target_radius = 50.0
 spin_speed = 0.0
 spin_both_ways = false
 spin_direction = "Forward"
+do_y_axis_reflection = false
 move_in_rotated_dir = false
 shadow_matches_spin = false
 launch_angle = 0.0
@@ -288,16 +290,16 @@ rarity_match = "No"
 script = ExtResource("17_ayb4m")
 debug_print_mod_changes = true
 
-[sub_resource type="Curve" id="Curve_43cgp"]
-_data = [Vector2(0, 0.350592), 0.0, 0.0, 0, 0, Vector2(1, 0.133465), 0.0, 0.0, 0, 0]
+[sub_resource type="Curve" id="Curve_21u6p"]
+_data = [Vector2(0, 0.0632948), 0.0, 0.0, 0, 0, Vector2(1, 0.0743148), 0.0, 0.0, 0, 0]
 point_count = 2
 
-[sub_resource type="Curve" id="Curve_c3po6"]
-_data = [Vector2(0, 0.506529), 0.0, 0.0, 0, 0, Vector2(1, 0.0999089), 0.0, 0.0, 0, 0]
+[sub_resource type="Curve" id="Curve_6cio3"]
+_data = [Vector2(0, 1), 0.0, -0.563477, 0, 0, Vector2(1, 0), -1.10683, 0.0, 0, 0]
 point_count = 2
 
-[sub_resource type="Curve" id="Curve_5x8xt"]
-_data = [Vector2(0, 0.0545096), 0.0, 0.233214, 0, 0, Vector2(1, 0.129517), 0.0, 0.0, 0, 0]
+[sub_resource type="Curve" id="Curve_uh021"]
+_data = [Vector2(0, 0.0669681), 0.0, -0.0477536, 0, 1, Vector2(1, 0.0192145), 0.0, 0.0, 0, 0]
 point_count = 2
 
 [resource]
@@ -308,16 +310,20 @@ use_hitscan = false
 allow_hitscan_holding = true
 fire_cooldown = 0.05
 firing_duration = 0.03
+override_anim_dur = 0.0
+anim_speed_mult = 1.0
 firing_cam_shake_str = 0.68
 firing_cam_shake_dur = 0.3
 firing_cam_freeze_mult = 1.0
 firing_cam_freeze_dur = 0.0
 firing_sound = ""
-min_charge_time = 1.0
-charge_fire_cooldown = 0.5
-charge_firing_duration = 1.0
+min_charge_time = 0.1
+charge_fire_cooldown = 1.0
+charge_firing_duration = 0.03
 ammo_use_per_charge = 3
 charge_bloom_mult = 5.0
+override_chg_anim_dur = 0.0
+chg_anim_speed_mult = 1.0
 charge_cam_fx_mult = 3.0
 charge_firing_sound = ""
 charging_sound = ""
@@ -332,33 +338,38 @@ mag_size = 50
 reload_type = "Magazine"
 mag_reload_time = 2.2
 single_proj_reload_time = 0.5
+single_reload_quantity = 1
 stamina_use_per_proj = 0.5
+dont_consume_ammo = false
+ammo_grant_delay = 0.0
+hide_ammo_ui = false
+hide_reload_ui = false
 mag_reload_sound = ""
 proj_reload_sound = ""
 empty_mag_sound = ""
 max_bloom = 10.0
 bloom_curve = SubResource("Curve_kfl3v")
 bloom_increase_rate = SubResource("Curve_mls34")
-bloom_decrease_rate = SubResource("Curve_7cqvo")
-fully_cool_delay_time = 0.0
-warmth_delay_curve = SubResource("Curve_c3po6")
-warmth_increase_rate = SubResource("Curve_5x8xt")
-warmth_decrease_rate = SubResource("Curve_43cgp")
+bloom_decrease_rate = SubResource("Curve_uquue")
+bloom_decrease_delay = 1.0
+initial_fire_rate_delay = 0.0
+warmup_delay_curve = SubResource("Curve_6cio3")
+warmup_increase_rate = SubResource("Curve_uh021")
+warmup_decrease_rate = SubResource("Curve_21u6p")
+warmup_decrease_delay = 0.75
+overheating_type = "None"
 projectiles_per_fire = 1
 use_ammo_per_burst_proj = true
 burst_bullet_delay = 0.1
 add_bloom_per_burst_shot = true
 barrage_count = 1
 angular_spread = 25.0
-current_warmth_level = 0.0
-current_bloom_level = 0.0
 ammo_in_mag = -1
 s_mods = SubResource("Resource_wi7kk")
 effect_source = SubResource("Resource_wic0i")
 charge_effect_source = SubResource("Resource_erj5g")
 pullout_delay = 0.25
 blocked_mods = Array[String]([])
-time_last_equipped = 0.0
 cache_is_setup = false
 current_mods = {}
 original_status_effects = Array[ExtResource("2_gdqw7")]([])

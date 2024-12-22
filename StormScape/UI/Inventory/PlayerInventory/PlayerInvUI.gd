@@ -7,7 +7,7 @@ class_name PlayerInvUI
 @export var btn_down_texture: Texture2D
 
 @onready var sort_by_name: NinePatchRect = %SortByName
-@onready var sort_by_count: NinePatchRect = %SortByCount
+@onready var sort_by_type: NinePatchRect = %SortByType
 @onready var sort_by_rarity: NinePatchRect = %SortByRarity
 @onready var auto_stack: NinePatchRect = %AutoStack
 
@@ -62,12 +62,12 @@ func _on_sort_by_rarity_btn_button_up() -> void:
 	sort_by_rarity.texture = btn_up_texture
 
 ## Activates sorting this inventory by count.
-func _on_sort_by_count_btn_pressed() -> void:
-	GlobalData.player_node.get_node("ItemReceiverComponent").activate_sort_by_count()
-func _on_sort_by_count_btn_button_down() -> void:
-	sort_by_count.texture = btn_down_texture
-func _on_sort_by_count_btn_button_up() -> void:
-	sort_by_count.texture = btn_up_texture
+func _on_sort_by_type_btn_pressed() -> void:
+	GlobalData.player_node.get_node("ItemReceiverComponent").activate_sort_by_type()
+func _on_sort_by_type_btn_button_down() -> void:
+	sort_by_type.texture = btn_down_texture
+func _on_sort_by_type_btn_button_up() -> void:
+	sort_by_type.texture = btn_up_texture
 
 ## Activates auto-stacking this inventory.
 func _on_auto_stack_btn_pressed() -> void:

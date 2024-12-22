@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="ProjWeaponResource" load_steps=24 format=3 uid="uid://dpmwqsai6gxsr"]
+[gd_resource type="Resource" script_class="ProjWeaponResource" load_steps=26 format=3 uid="uid://dpmwqsai6gxsr"]
 
 [ext_resource type="PackedScene" uid="uid://dxv8dhn3gmufw" path="res://Entities/Items/Weapons/ProjectileWeapons/FlameBlower/FlameBlower.tscn" id="1_2lqvl"]
 [ext_resource type="Script" path="res://Entities/Stats/EffectSystemResources/EffectSources/EffectSource.gd" id="1_qrb8v"]
@@ -157,6 +157,10 @@ impact_particle_mult = 1.0
 beam_particle_color = Color(1, 0, 0, 1)
 beam_particle_mult = 1.0
 
+[sub_resource type="Curve" id="Curve_40cbt"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0]
+point_count = 1
+
 [sub_resource type="Curve" id="Curve_mdooa"]
 _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.496463), 0.0, 0.0, 0, 0]
 point_count = 2
@@ -164,6 +168,10 @@ point_count = 2
 [sub_resource type="Curve" id="Curve_wsuli"]
 _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.204465), 0.0, 0.0, 0, 0]
 point_count = 2
+
+[sub_resource type="Curve" id="Curve_6jggd"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0]
+point_count = 1
 
 [sub_resource type="Resource" id="Resource_fa03q"]
 script = ExtResource("7_hqj7u")
@@ -185,7 +193,8 @@ ricochet_angle_bounce = true
 ricochet_walls_only = false
 homing_method = "None"
 homing_speed_mult = 1.0
-max_turn_rate = 100.0
+max_turn_rate = 300.0
+turn_rate_curve = SubResource("Curve_6jggd")
 homing_fov_angle = 180.0
 homing_max_range = 850
 homing_duration = -1.0
@@ -205,14 +214,15 @@ arc_speed = 350.0
 max_collision_height = 20
 grounding_free_delay = 0.0
 bounce_count = 0
+bounce_falloff_curve = SubResource("Curve_40cbt")
 ping_pong_bounce = false
 number_of_splits = 0
 split_into_counts = Array[int]([2])
 angular_spreads = Array[float]([45.0])
 split_delays = Array[float]([0.2])
 splitting_sounds = Array[String]([""])
-split_cam_shakes_str = Array[float]([1.0])
-split_cam_shakes_dur = Array[float]([0.2])
+split_cam_shakes_str = Array[float]([0.0])
+split_cam_shakes_dur = Array[float]([0.0])
 aoe_radius = 0
 do_aoe_on_arc_land = true
 aoe_before_freeing = false
@@ -249,7 +259,7 @@ allow_hitscan_holding = true
 fire_cooldown = 0.0
 firing_duration = 0.03
 override_anim_dur = 0.0
-anim_speed_mult = 0.1
+anim_speed_mult = 0.2
 firing_cam_shake_str = 0.0
 firing_cam_shake_dur = 0.0
 firing_cam_freeze_mult = 1.0
@@ -271,38 +281,42 @@ hitscan_logic = SubResource("Resource_awnew")
 charge_projectile_scn = ExtResource("5_4ypmg")
 charge_projectile_logic = SubResource("Resource_oo0r6")
 charge_hitscan_logic = SubResource("Resource_f4j7y")
-ammo_type = 0
-mag_size = 30
+ammo_type = 10
+mag_size = 100
 reload_type = "Magazine"
 mag_reload_time = 1.0
 single_proj_reload_time = 0.25
+single_reload_quantity = 1
 stamina_use_per_proj = 0.5
 dont_consume_ammo = false
-recharge_time = 3.0
+auto_ammo_interval = 0.08
+auto_ammo_count = 1
+auto_ammo_delay = 0.35
+hide_ammo_ui = false
+hide_reload_ui = false
 mag_reload_sound = ""
 proj_reload_sound = ""
 empty_mag_sound = ""
 max_bloom = 0.0
+bloom_decrease_delay = 1.0
 initial_fire_rate_delay = 0.1
 warmup_delay_curve = SubResource("Curve_kj8op")
 warmup_increase_rate = SubResource("Curve_pca6u")
 warmup_decrease_rate = SubResource("Curve_lm546")
+warmup_decrease_delay = 0.75
 overheating_type = "Empty Mag"
 projectiles_per_fire = 1
 use_ammo_per_burst_proj = true
 burst_bullet_delay = 0.1
 add_bloom_per_burst_shot = true
 barrage_count = 5
-angular_spread = 21.0
-warmup_level = 0.0
-bloom_level = 0.0
+angular_spread = 20.0
 ammo_in_mag = -1
 s_mods = SubResource("Resource_7cfgi")
 effect_source = SubResource("Resource_xjta8")
 charge_effect_source = SubResource("Resource_k2wyg")
 pullout_delay = 0.25
 blocked_mods = Array[String]([])
-time_last_equipped = 0.0
 cache_is_setup = false
 current_mods = {}
 original_status_effects = Array[ExtResource("1_sti8o")]([])

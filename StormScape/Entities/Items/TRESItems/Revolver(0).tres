@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="ProjWeaponResource" load_steps=25 format=3 uid="uid://dlfmjgnfk6nqj"]
+[gd_resource type="Resource" script_class="ProjWeaponResource" load_steps=22 format=3 uid="uid://dlfmjgnfk6nqj"]
 
 [ext_resource type="Script" path="res://Entities/Stats/EffectSystemResources/StatusEffects/StatusEffect.gd" id="1_dlrja"]
 [ext_resource type="Script" path="res://Entities/Stats/EffectSystemResources/EffectSources/EffectSource.gd" id="1_f7ms2"]
@@ -10,18 +10,6 @@
 [ext_resource type="Script" path="res://Entities/Items/Projectiles/ProjectileResource.gd" id="5_u6crx"]
 [ext_resource type="PackedScene" uid="uid://bqkyplubhsx43" path="res://Entities/Items/Projectiles/Bullets/SmallBullet/SmallBullet.tscn" id="6_moxye"]
 [ext_resource type="Script" path="res://Entities/Stats/StatMod/StatModsCacheResource.gd" id="8_fox7e"]
-
-[sub_resource type="Curve" id="Curve_lpj3p"]
-_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.75, 0), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
-point_count = 3
-
-[sub_resource type="Curve" id="Curve_5ffd0"]
-_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
-point_count = 2
-
-[sub_resource type="Curve" id="Curve_hpv4d"]
-_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(1, 0.151112), 0.0, 0.0, 0, 0]
-point_count = 2
 
 [sub_resource type="Resource" id="Resource_kg30o"]
 script = ExtResource("1_f7ms2")
@@ -106,6 +94,7 @@ mouse_target_radius = 50.0
 spin_speed = 0.0
 spin_both_ways = false
 spin_direction = "Forward"
+do_y_axis_reflection = false
 move_in_rotated_dir = false
 shadow_matches_spin = false
 launch_angle = 0.0
@@ -216,6 +205,7 @@ mouse_target_radius = 50.0
 spin_speed = 0.0
 spin_both_ways = false
 spin_direction = "Forward"
+do_y_axis_reflection = false
 move_in_rotated_dir = false
 shadow_matches_spin = false
 launch_angle = 0.0
@@ -255,6 +245,8 @@ use_hitscan = false
 allow_hitscan_holding = true
 fire_cooldown = 0.1
 firing_duration = 0.0
+override_anim_dur = 0.0
+anim_speed_mult = 1.0
 firing_cam_shake_str = 0.45
 firing_cam_shake_dur = 0.6
 firing_cam_freeze_mult = 1.0
@@ -265,6 +257,8 @@ charge_fire_cooldown = 0.5
 charge_firing_duration = 0.0
 ammo_use_per_charge = 3
 charge_bloom_mult = 5.0
+override_chg_anim_dur = 0.0
+chg_anim_speed_mult = 1.0
 charge_cam_fx_mult = 1.0
 charge_firing_sound = ""
 charging_sound = ""
@@ -279,30 +273,34 @@ mag_size = 6
 reload_type = "Single"
 mag_reload_time = 1.0
 single_proj_reload_time = 0.75
+single_reload_quantity = 1
 stamina_use_per_proj = 0.5
+dont_consume_ammo = false
+auto_ammo_interval = 0.0
+auto_ammo_count = 1
+auto_ammo_delay = 0.5
+hide_ammo_ui = false
+hide_reload_ui = false
 mag_reload_sound = ""
 proj_reload_sound = ""
 empty_mag_sound = ""
-max_bloom = 3.0
-bloom_curve = SubResource("Curve_lpj3p")
-bloom_increase_rate = SubResource("Curve_hpv4d")
-bloom_decrease_rate = SubResource("Curve_5ffd0")
-fully_cool_delay_time = 0.0
+max_bloom = 0.0
+bloom_decrease_delay = 1.0
+initial_fire_rate_delay = 0.0
+warmup_decrease_delay = 0.75
+overheating_type = "None"
 projectiles_per_fire = 1
 use_ammo_per_burst_proj = true
 burst_bullet_delay = 0.1
 add_bloom_per_burst_shot = true
 barrage_count = 1
 angular_spread = 25.0
-current_warmth_level = 0.0
-current_bloom_level = 0.0
 ammo_in_mag = -1
 s_mods = SubResource("Resource_7cjse")
 effect_source = SubResource("Resource_41nj1")
 charge_effect_source = SubResource("Resource_kg30o")
 pullout_delay = 0.3
 blocked_mods = Array[String]([])
-time_last_equipped = 0.0
 cache_is_setup = false
 current_mods = {}
 original_status_effects = Array[ExtResource("1_dlrja")]([])
@@ -327,6 +325,8 @@ recipe = Array[ExtResource("2_ikjj6")]([])
 output_quantity = 1
 recipe_unlocked = false
 item_scene = ExtResource("4_p3ec7")
+cooldowns_per_suid = true
+show_cooldown_fill = false
 rotation_lerping = 0.15
 holding_offset = Vector2(0, 0)
 holding_degrees = 0.0
@@ -334,3 +334,4 @@ is_gripped_by_one_hand = true
 draw_off_hand = false
 draw_off_hand_offset = Vector2(0, 0)
 main_hand_offset = Vector2(0, 0)
+session_uid = 0

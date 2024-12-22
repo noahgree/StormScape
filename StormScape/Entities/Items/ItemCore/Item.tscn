@@ -36,6 +36,9 @@ point_count = 2
 offsets = PackedFloat32Array(0, 0.486692, 1)
 colors = PackedColorArray(0, 0, 0, 0, 1, 1, 1, 0.631, 1, 1, 1, 0)
 
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_mrolm"]
+blend_mode = 1
+
 [sub_resource type="Gradient" id="Gradient_8c7dk"]
 offsets = PackedFloat32Array(0.321277)
 colors = PackedColorArray(0.931609, 0, 0.320733, 1)
@@ -198,9 +201,6 @@ _data = {
 "spawn": SubResource("Animation_i3ewg")
 }
 
-[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_mrolm"]
-blend_mode = 1
-
 [node name="Item" type="Area2D" groups=["Items", "has_save_logic"]]
 collision_layer = 0
 collision_mask = 256
@@ -263,6 +263,13 @@ color = Color(2, 0.304, 0.606, 1)
 color_ramp = SubResource("Gradient_yr7lw")
 anim_offset_max = 1.0
 
+[node name="GroundGlowScaler" type="Node2D" parent="."]
+
+[node name="GroundGlow" type="Sprite2D" parent="GroundGlowScaler"]
+material = SubResource("CanvasItemMaterial_mrolm")
+scale = Vector2(0.05, 0.035)
+texture = ExtResource("5_2unly")
+
 [node name="Sprite2D" type="Sprite2D" parent="."]
 material = SubResource("ShaderMaterial_qrrcp")
 position = Vector2(0, -8)
@@ -273,13 +280,6 @@ libraries = {
 "": SubResource("AnimationLibrary_wgl0c")
 }
 autoplay = "spawn"
-
-[node name="GroundGlowScaler" type="Node2D" parent="."]
-
-[node name="GroundGlow" type="Sprite2D" parent="GroundGlowScaler"]
-material = SubResource("CanvasItemMaterial_mrolm")
-scale = Vector2(0.05, 0.035)
-texture = ExtResource("5_2unly")
 
 [connection signal="area_entered" from="." to="." method="_on_area_entered"]
 [connection signal="area_exited" from="." to="." method="_on_area_exited"]

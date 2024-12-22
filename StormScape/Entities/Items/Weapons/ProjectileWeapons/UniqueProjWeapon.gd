@@ -42,7 +42,7 @@ func _on_tree_exiting() -> void:
 func _add_cooldown() -> void:
 	var cooldown: float = stats.fire_cooldown if stats.firing_mode != "Charge" else stats.charge_fire_cooldown
 	if cooldown > 0:
-		source_entity.hands.cooldown_manager.add_cooldown(stats.get_cooldown_id(), cooldown)
+		source_entity.inv.auto_decrementer.add_cooldown(stats.get_cooldown_id(), cooldown)
 
 ## Only exists to override the parent function so that we can do our own, different logic here. Does nothing on purpose in this script.
 func _update_cooldown_with_potential_visuals(_duration: float) -> void:

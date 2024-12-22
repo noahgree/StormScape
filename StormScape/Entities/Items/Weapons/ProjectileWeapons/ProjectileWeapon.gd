@@ -69,6 +69,9 @@ func _setup_mod_cache() -> void:
 		"mag_size" : stats.mag_size,
 		"mag_reload_time" : stats.mag_reload_time,
 		"single_proj_reload_time" : stats.single_proj_reload_time,
+		"single_reload_quantity" : stats.single_reload_quantity,
+		"auto_ammo_interval" : stats.auto_ammo_interval,
+		"auto_ammo_count" : stats.auto_ammo_count,
 		"pullout_delay" : stats.pullout_delay,
 		"max_bloom" : stats.max_bloom,
 		"bloom_increase_rate_multiplier" : 1.0,
@@ -127,13 +130,14 @@ func _ready() -> void:
 		super._ready()
 
 		if stats.ammo_type == ProjWeaponResource.ProjAmmoType.STAMINA:
-			if source_entity is DynamicEntity:
+			if source_entity is DynamicEntity and not stats.hide_ammo_ui:
 				source_entity.stamina_component.stamina_changed.connect(_update_ammo_ui)
-		elif stats.ammo_type != ProjWeaponResource.ProjAmmoType.NONE and stats.ammo_type != ProjWeaponResource.ProjAmmoType.SELF and stats.ammo_type != ProjWeaponResource.ProjAmmoType.CHARGES:
-			if source_entity is Player:
+		elif stats.ammo_type != ProjWeaponResource.ProjAmmoType.SELF and stats.ammo_type != ProjWeaponResource.ProjAmmoType.CHARGES:
+			if source_entity is Player and not stats.hide_reload_ui:
 				reloading_ui = source_entity.get_node("ReloadingUI")
 
-		source_entity.hands.cooldown_manager.cooldown_ended.connect(_on_fire_cooldown_timeout)
+		source_entity.inv.auto_decrementer.cooldown_ended.connect(_on_fire_cooldown_timeout)
+		source_entity.inv.auto_decrementer.recharge_completed.connect(_on_ammo_recharge_completed)
 
 		add_child(firing_duration_timer)
 		add_child(reload_timer)
@@ -162,13 +166,12 @@ func enter() -> void:
 		_setup_mod_cache()
 		cache_is_setup_after_load = true
 
-	_handle_reequipping_stats()
-
 	if (stats.ammo_in_mag == -1) and (stats.ammo_type != ProjWeaponResource.ProjAmmoType.STAMINA):
-		stats.ammo_in_mag = stats.mag_size
+		stats.ammo_in_mag = stats.s_mods.get_stat("mag_size")
 	else:
 		_get_has_needed_ammo_and_reload_if_not()
 	_update_ammo_ui()
+	_request_ammo_recharge()
 
 	_check_if_needs_mouse_area_scanner()
 
@@ -180,15 +183,6 @@ func exit() -> void:
 
 	if stats.charging_stat_effect != null:
 		source_entity.effects.request_effect_removal(stats.charging_stat_effect.effect_name)
-
-	stats.time_last_equipped = Time.get_ticks_msec() / 1000.0 ## FIXME to account for game sessions when engine restarts.
-
-## Checks how long since we last had this equipped and changes bloom accordingly.
-func _handle_reequipping_stats() -> void:
-	var time_since_last_equipped: float = (Time.get_ticks_msec() / 1000.0) - stats.time_last_equipped
-	var forgiveness_factor: float = min(1.0, time_since_last_equipped / 5.0)
-	stats.bloom_level = stats.bloom_level * (1 - forgiveness_factor)
-	stats.warmup_level = stats.warmup_level * (1 - forgiveness_factor)
 
 ## If we are set to do mouse position-based homing, we set up the mouse area and its signals and add it as a child.
 func _check_if_needs_mouse_area_scanner() -> void:
@@ -216,23 +210,13 @@ func _disable_mouse_area() -> void:
 	if mouse_area: mouse_area.get_child(0).disabled = true
 
 ## Every frame we decrease the warmup and the bloom levels based on their decrease curves.
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
+	#print(source_entity.inv.auto_decrementer.get_bloom(str(stats.session_uid)))
 	if Engine.is_editor_hint():
 		return
 
 	if reloading_ui and is_reloading:
 		reloading_ui.update_progress((1 - (reload_timer.time_left / reload_timer.wait_time)) * 100)
-
-	if source_entity.hands.cooldown_manager.get_cooldown(stats.get_cooldown_id()) == 0:
-		if stats.bloom_level > 0:
-			var sampled_point: float = stats.bloom_decrease_rate.sample_baked(stats.bloom_level)
-			var bloom_decrease_amount: float = max(0.01 * delta, sampled_point * delta)
-			var bloom_decrease_mult: float = stats.s_mods.get_stat("bloom_decrease_rate_multiplier")
-			stats.bloom_level = max(0, stats.bloom_level - (bloom_decrease_amount * bloom_decrease_mult))
-
-		if stats.warmup_level > 0:
-			var warmup_decrease_amount: float = max(0.01 * delta, stats.warmup_decrease_rate.sample_baked(stats.warmup_level) * delta)
-			stats.warmup_level = max(0, stats.warmup_level - warmup_decrease_amount)
 
 func _physics_process(_delta: float) -> void:
 	if mouse_area != null:
@@ -245,14 +229,14 @@ func _on_fire_cooldown_timeout(item_id: String) -> void:
 
 	if is_holding_hitscan:
 		_fire()
-		source_entity.hands.cooldown_manager.add_cooldown(stats.get_cooldown_id(), stats.s_mods.get_stat("fire_cooldown") + hitscan_delay)
+		_handle_adding_cooldown(stats.s_mods.get_stat("fire_cooldown") + hitscan_delay)
 	else:
 		_clean_up_hitscans()
 
 ## This is the standard method of triggering a cooldown, but child proj weapon scripts can override this if they want to
 ## do something else or skip cooldowns. For example, Unique Proj Weapons override this to prevent visuals from updating.
 func _update_cooldown_with_potential_visuals(duration: float) -> void:
-	source_entity.hands.cooldown_manager.add_cooldown(stats.get_cooldown_id(), duration)
+	_handle_adding_cooldown(duration)
 #endregion
 
 #region Called From HandsComponent
@@ -302,16 +286,16 @@ func release_hold_activate(hold_time: float) -> void:
 
 ## Called from the hands component to try and start a reload.
 func reload() -> void:
-	if stats.ammo_type != ProjWeaponResource.ProjAmmoType.STAMINA and stats.ammo_type != ProjWeaponResource.ProjAmmoType.SELF and stats.ammmo_type != ProjWeaponResource.ProjAmmoType.CHARGES:
+	if stats.ammo_type != ProjWeaponResource.ProjAmmoType.STAMINA and stats.ammo_type != ProjWeaponResource.ProjAmmoType.SELF and stats.ammo_type != ProjWeaponResource.ProjAmmoType.CHARGES:
 		if pullout_delay_timer.is_stopped() and reload_timer.is_stopped() and single_reload_timer.is_stopped():
-			if not is_reloading and not stats.ammo_in_mag >= stats.mag_size:
+			if not is_reloading and not stats.ammo_in_mag >= stats.s_mods.get_stat("mag_size"):
 				_attempt_reload()
 #endregion
 
 #region Firing Activations
 ## Check if we can do a normal firing, and if we can, start it.
 func _fire() -> void:
-	if source_entity.hands.cooldown_manager.get_cooldown(stats.get_cooldown_id()) > 0:
+	if _get_cooldown() > 0:
 		return
 	if not is_reloading_single_and_has_since_released:
 		is_holding_hitscan = false
@@ -324,9 +308,9 @@ func _fire() -> void:
 	is_reloading = false
 
 	if _get_warmup_firing_delay() > 0:
-		source_entity.hands.cooldown_manager.add_cooldown(stats.get_cooldown_id(), _get_warmup_firing_delay())
-		while source_entity.hands.cooldown_manager.get_cooldown(stats.get_cooldown_id()) > 0: # Signal fires for all ending cooldowns, so we loop until ours has ended
-			await source_entity.hands.cooldown_manager.cooldown_ended
+		_handle_adding_cooldown(_get_warmup_firing_delay())
+		while _get_cooldown() > 0: # Signal fires for all ending cooldowns, so we loop until ours has ended
+			await source_entity.inv.auto_decrementer.cooldown_ended
 
 		if hold_just_released:
 			hold_just_released = false
@@ -346,6 +330,8 @@ func _fire() -> void:
 	else:
 		_apply_ammo_consumption(int(stats.s_mods.get_stat("projectiles_per_fire")), false)
 	_apply_post_firing_effect(false)
+	_get_has_needed_ammo_and_reload_if_not(false)
+	_notify_recharge_of_a_recent_firing()
 
 	if stats.use_hitscan and stats.allow_hitscan_holding and stats.firing_mode == "Auto" and not is_holding_hitscan:
 		is_holding_hitscan = true
@@ -357,7 +343,7 @@ func _charge_fire(hold_time: float) -> void:
 		source_entity.hands.been_holding_time = 0
 		return
 
-	if (hold_time >= stats.s_mods.get_stat("min_charge_time")) and (hold_time > 0) and source_entity.hands.cooldown_manager.get_cooldown(stats.get_cooldown_id()) == 0:
+	if (hold_time >= stats.s_mods.get_stat("min_charge_time")) and (hold_time > 0) and _get_cooldown() == 0:
 		firing_duration_timer.start(max(0.05, stats.charge_firing_duration))
 		_start_firing_anim(true)
 		await firing_duration_timer.timeout
@@ -365,13 +351,14 @@ func _charge_fire(hold_time: float) -> void:
 		_set_up_hitscan(true)
 		_apply_burst_logic(true)
 		_apply_post_firing_effect(true)
+		_get_has_needed_ammo_and_reload_if_not(true)
+		_notify_recharge_of_a_recent_firing()
 
-	if stats.s_mods.get_stat("charge_fire_cooldown") > 0:
-		source_entity.hands.cooldown_manager.add_cooldown(stats.get_cooldown_id(), stats.s_mods.get_stat("charge_fire_cooldown"))
-		while source_entity.hands.cooldown_manager.get_cooldown(stats.get_cooldown_id()) > 0: # Signal fires for all ending cooldowns, so we loop until ours has ended
-			await source_entity.hands.cooldown_manager.cooldown_ended
+		while _get_cooldown() > 0: # Signal fires for all ending cooldowns, so we loop until ours has ended
+			await source_entity.inv.auto_decrementer.cooldown_ended
 		source_entity.hands.been_holding_time = 0
 
+## Set up the delay we will use if we have a non-holding or charged hitscan. This basically increases the shot duration.
 func _set_up_hitscan(was_charge_fire: bool = false) -> void:
 	if not stats.use_hitscan:
 		hitscan_delay = 0
@@ -391,7 +378,7 @@ func _clean_up_hitscans() -> void:
 			hitscan.queue_free()
 	current_hitscans.clear()
 
-# When the timer that runs when we shouldn't follow the mouse (because of an active hitscan) ends, allow mouse following again.
+## When the timer that runs when we shouldn't follow the mouse (because of an active hitscan) ends, allow mouse following again.
 func _on_hitscan_hands_freeze_timer_timeout() -> void:
 	source_entity.hands.equipped_item_should_follow_mouse = true
 #endregion
@@ -402,14 +389,14 @@ func _apply_burst_logic(was_charge_fire: bool = false) -> void:
 	if stats.s_mods.get_stat("projectiles_per_fire") > 1 and not stats.add_bloom_per_burst_shot: _handle_bloom_increase(was_charge_fire)
 	var shots: int = int(stats.s_mods.get_stat("projectiles_per_fire"))
 
-	var delay: float
+	var delay: float = 0
 	if _get_warmup_firing_delay() > 0:
 		delay = _get_warmup_firing_delay()
 	else:
-		if stats.firing_mode == "Auto" or stats.firing_mode == "Charge":
+		if stats.firing_mode == "Auto" or stats.firing_mode == "Semi Auto":
 			delay = stats.s_mods.get_stat("fire_cooldown") + hitscan_delay
-		elif stats.firing_mode == "Semi Auto":
-			delay = stats.s_mods.get_stat("fire_cooldown") + hitscan_delay
+		elif stats.firing_mode == "Charge":
+			delay = stats.s_mods.get_stat("charge_fire_cooldown") + hitscan_delay
 
 	if not stats.use_hitscan:
 		delay += (stats.burst_bullet_delay * (shots - 1))
@@ -418,6 +405,7 @@ func _apply_burst_logic(was_charge_fire: bool = false) -> void:
 
 	_apply_ammo_consumption(shots, was_charge_fire)
 
+## Calls to consume ammo based on how many shots we performed.
 func _apply_ammo_consumption(shot_count: int, was_charge_fire: bool = false) -> void:
 	if stats.dont_consume_ammo:
 		_handle_per_shot_delay_and_bloom(shot_count, was_charge_fire, (not is_holding_hitscan))
@@ -434,6 +422,7 @@ func _apply_ammo_consumption(shot_count: int, was_charge_fire: bool = false) -> 
 
 	_handle_per_shot_delay_and_bloom(shot_count, was_charge_fire, (not is_holding_hitscan))
 
+## Calls to increase the bloom and awaits burst bullet delays if we have them. Can be told not to spawn afterwards as well.
 func _handle_per_shot_delay_and_bloom(shot_count: int, was_charge_fire: bool = false, proceed_to_spawn: bool = true) -> void:
 	for i: int in range(shot_count):
 		if stats.add_bloom_per_burst_shot or (stats.s_mods.get_stat("projectiles_per_fire") == 1):
@@ -443,7 +432,7 @@ func _handle_per_shot_delay_and_bloom(shot_count: int, was_charge_fire: bool = f
 			_apply_barrage_logic(was_charge_fire)
 
 			if i != (shot_count - 1):
-				await get_tree().create_timer(stats.burst_bullet_delay, false, true, false).timeout
+				await get_tree().create_timer(max(0.03, stats.burst_bullet_delay), false, true, false).timeout
 
 ## Applies barrage logic to potentially spawn multiple projectiles at a specific angle apart.
 func _apply_barrage_logic(was_charge_fire: bool = false) -> void:
@@ -487,13 +476,6 @@ func _spawn_projectile(proj: Projectile, was_charge_fire: bool = false) -> void:
 
 	_do_firing_fx(was_charge_fire)
 
-	while source_entity.hands.cooldown_manager.get_cooldown(stats.get_cooldown_id()) > 0: # Signal fires for all ending cooldowns, so we loop until ours has ended
-		await source_entity.hands.cooldown_manager.cooldown_ended
-	if not _get_has_needed_ammo_and_reload_if_not(was_charge_fire):
-		if stats.overheating_type == "Empty Mag": ## FIXME!!!!!!!!!!!!!!!!!!!!!!!
-			stats.show_cooldown_fill_override_flag = true
-			source_entity.hands.cooldown_manager.add_cooldown(stats.get_cooldown_id(), 5.0)
-
 ## Spawns the hitscan that has been passed to it. Reloads if we don't have enough for the next activation.
 func _spawn_hitscan(hitscan: Hitscan, was_charge_fire: bool = false) -> void:
 	hitscan.rotation_offset += deg_to_rad(_get_bloom())
@@ -505,42 +487,58 @@ func _spawn_hitscan(hitscan: Hitscan, was_charge_fire: bool = false) -> void:
 	if stats.firing_mode == "Semi Auto" or (stats.firing_mode == "Auto" and stats.s_mods.get_stat("hitscan_duration") < 0.65):
 		source_entity.hands.equipped_item_should_follow_mouse = false
 		hitscan_hands_freeze_timer.start(0.065)
-
-	while source_entity.hands.cooldown_manager.get_cooldown(stats.get_cooldown_id()) > 0: # Signal fires for all ending cooldowns, so we loop until ours has ended
-		await source_entity.hands.cooldown_manager.cooldown_ended
-	_get_has_needed_ammo_and_reload_if_not(was_charge_fire)
 #endregion
 
-#region Warmup & Bloom
+#region Warmup & Bloom & Cooldown & Recharge
 ## Increases current warmup level via sampling the increase curve using the current warmup.
 func _handle_warmup_increase() -> void:
-	var sampled_point: float = stats.warmup_increase_rate.sample_baked(stats.warmup_level)
-	var increase_amount: float = max(0.01, sampled_point * stats.s_mods.get_stat("warmup_increase_rate_multiplier"))
-	stats.warmup_level = min(1, stats.warmup_level + increase_amount)
-
-## Grabs a point from the warmup curve based on current warmup level.
-func _get_warmup_firing_delay() -> float:
 	if stats.s_mods.get_stat("initial_fire_rate_delay") > 0 and stats.firing_mode == "Auto":
-		var sampled_delay: float = stats.warmup_delay_curve.sample_baked(stats.warmup_level)
-		return max(0.02, sampled_delay * stats.s_mods.get_stat("initial_fire_rate_delay")) + hitscan_delay
+		var current_warmup: float = source_entity.inv.auto_decrementer.get_warmup(str(stats.session_uid))
+		var sampled_point: float = stats.warmup_increase_rate.sample_baked(current_warmup)
+		var increase_amount: float = max(0.01, sampled_point * stats.s_mods.get_stat("warmup_increase_rate_multiplier"))
+		source_entity.inv.auto_decrementer.add_warmup(str(stats.session_uid), min(1, increase_amount), stats.warmup_decrease_rate, stats.warmup_decrease_delay)
+
+## Grabs a point from the warmup curve based on current warmup level given by the auto decrementer.
+func _get_warmup_firing_delay() -> float:
+	var current_warmup: float = source_entity.inv.auto_decrementer.get_warmup(str(stats.session_uid))
+	if current_warmup > 0:
+		var sampled_delay: float = stats.warmup_delay_curve.sample_baked(current_warmup)
+		return (sampled_delay * stats.s_mods.get_stat("initial_fire_rate_delay")) + hitscan_delay
 	else:
 		return 0
 
 ## Increases current bloom level via sampling the increase curve using the current bloom.
 func _handle_bloom_increase(was_charge_fire: bool = false) -> void:
-	var sampled_point: float = stats.bloom_increase_rate.sample_baked(stats.bloom_level)
-	var increase_amount: float = max(0.01, sampled_point * stats.s_mods.get_stat("bloom_increase_rate_multiplier"))
-	var charge_shot_mult: float = 1.0 if not was_charge_fire else stats.charge_bloom_mult
-	stats.bloom_level = min(1, stats.bloom_level + (increase_amount * charge_shot_mult))
-
-## Grabs a point from the bloom curve based on current bloom level.
-func _get_bloom() -> float:
 	if stats.s_mods.get_stat("max_bloom") > 0:
-		var deviation: float = stats.bloom_curve.sample_baked(stats.bloom_level)
+		var current_bloom: float = source_entity.inv.auto_decrementer.get_bloom(str(stats.session_uid))
+		var sampled_point: float = stats.bloom_increase_rate.sample_baked(current_bloom)
+		var increase_amount: float = max(0.01, sampled_point * stats.s_mods.get_stat("bloom_increase_rate_multiplier"))
+		var charge_shot_mult: float = 1.0 if not was_charge_fire else stats.charge_bloom_mult
+		source_entity.inv.auto_decrementer.add_bloom(str(stats.session_uid), min(1, (increase_amount * charge_shot_mult)), stats.bloom_decrease_rate, stats.bloom_decrease_delay)
+
+## Grabs a point from the bloom curve based on current bloom level given by the auto decrementer.
+func _get_bloom() -> float:
+	var current_bloom: float = source_entity.inv.auto_decrementer.get_bloom(str(stats.session_uid))
+	if current_bloom > 0:
+		var deviation: float = stats.bloom_curve.sample_baked(current_bloom)
 		var random_direction: int = 1 if randf() < 0.5 else -1
 		return deviation * stats.s_mods.get_stat("max_bloom") * random_direction * randf()
 	else:
 		return 0
+
+## Adds a cooldown to the auto decrementer for the current cooldown id.
+func _handle_adding_cooldown(duration: float) -> void:
+	source_entity.inv.auto_decrementer.add_cooldown(stats.get_cooldown_id(), duration)
+
+## Gets a current cooldown level from the auto decrementer based on the cooldown id.
+func _get_cooldown() -> float:
+	return source_entity.inv.auto_decrementer.get_cooldown(stats.get_cooldown_id())
+
+func _handle_requesting_recharge() -> void:
+	pass
+
+func _get_charges() -> int:
+	return 0
 #endregion
 
 #region FX & Animations
@@ -627,6 +625,7 @@ func _consume_ammo(amount: int) -> void:
 		source_entity.inv.remove_item(source_slot.index, 1)
 	else:
 		stats.ammo_in_mag -= amount
+		_request_ammo_recharge()
 
 	_update_ammo_ui()
 
@@ -645,9 +644,10 @@ func _attempt_reload() -> void:
 	if stats.reload_type == "Single":
 		is_reloading_single_and_has_since_released = false
 		var single_reload_time: float = stats.s_mods.get_stat("single_proj_reload_time")
+		var reloads_needed: int = int(ceil(float(ammo_needed) / stats.s_mods.get_stat("single_reload_quantity")))
 
-		reload_timer.start(single_reload_time * ammo_needed)
-		single_reload_timer.set_meta("reloads_left", ammo_needed)
+		reload_timer.start(single_reload_time * reloads_needed)
+		single_reload_timer.set_meta("reloads_left", reloads_needed)
 		single_reload_timer.start(single_reload_time)
 	else:
 		if stats.mag_reload_sound != "": AudioManager.play_sound(stats.mag_reload_sound, AudioManager.SoundType.SFX_GLOBAL)
@@ -660,7 +660,7 @@ func _get_more_reload_ammo(max_amount_needed: int, take_from_inventory: bool = t
 	var inv_node: Inventory = source_entity.inv
 
 	if stats.ammo_type == ProjWeaponResource.ProjAmmoType.NONE:
-		ammount_collected = stats.mag_size
+		ammount_collected = max_amount_needed
 	else:
 		for i: int in range(inv_node.inv_size):
 			var item: InvItemResource = inv_node.inv[i]
@@ -690,25 +690,45 @@ func _on_reload_timer_timeout() -> void:
 ## When the single projectile reload timer ends, try and grab a bullet and see if we need to start it up again.
 func _on_single_reload_timer_timeout() -> void:
 	var reloads_left: int = single_reload_timer.get_meta("reloads_left")
-	var ammo_available: int = _get_more_reload_ammo(1)
-	if ammo_available == 1:
+	var ammo_needed: int = stats.s_mods.get_stat("mag_size") - stats.ammo_in_mag
+	var ammo_available: int = _get_more_reload_ammo(min(ammo_needed, stats.s_mods.get_stat("single_reload_quantity")))
+	if ammo_available > 0:
 		if stats.proj_reload_sound != "": AudioManager.play_sound(stats.proj_reload_sound, AudioManager.SoundType.SFX_GLOBAL)
-		stats.ammo_in_mag += ammo_available
 
+		stats.ammo_in_mag = min(stats.s_mods.get_stat("mag_size"), stats.ammo_in_mag + ammo_available)
 		_update_ammo_ui()
 		if reloading_ui: reloading_ui.update_progress(stats.ammo_in_mag)
 
-		if reloads_left > 1:
+		if reloads_left > 1 and (stats.ammo_in_mag != stats.s_mods.get_stat("mag_size")):
 			single_reload_timer.set_meta("reloads_left", reloads_left - 1)
 			single_reload_timer.start(stats.s_mods.get_stat("single_proj_reload_time"))
 			return
 
 	is_reloading = false
 
+func _notify_recharge_of_a_recent_firing() -> void:
+	if stats.s_mods.get_stat("auto_ammo_interval") > 0:
+		source_entity.inv.auto_decrementer.update_recharge_delay(str(stats.session_uid), stats.auto_ammo_delay)
+
+func _request_ammo_recharge() -> void:
+	if stats.s_mods.get_stat("auto_ammo_interval") > 0:
+		source_entity.inv.auto_decrementer.request_recharge(str(stats.session_uid), stats.s_mods.get_stat("auto_ammo_interval"))
+
+func _on_ammo_recharge_completed(item_id: String) -> void:
+	if item_id != str(stats.session_uid):
+		return
+
+	var ammo_needed: int = int(stats.s_mods.get_stat("mag_size")) - stats.ammo_in_mag
+	if ammo_needed > 1:
+		_request_ammo_recharge()
+
+	stats.ammo_in_mag = min(stats.s_mods.get_stat("mag_size"), stats.ammo_in_mag + stats.s_mods.get_stat("auto_ammo_count"))
+	_update_ammo_ui()
+
 ## Updates the ammo UI with the ammo in the magazine, assuming this is being used by a Player and the weapon uses
 ## consumable ammo.
 func _update_ammo_ui() -> void:
-	if ammo_ui != null:
+	if ammo_ui != null and not stats.hide_ammo_ui:
 		var count: int = -1
 		if stats.ammo_type == ProjWeaponResource.ProjAmmoType.SELF:
 			if source_slot.item == null:
@@ -717,7 +737,7 @@ func _update_ammo_ui() -> void:
 				count = source_slot.item.quantity
 		elif stats.ammo_type == ProjWeaponResource.ProjAmmoType.STAMINA:
 			count = source_entity.stamina_component.stamina
-		elif stats.ammo_type != ProjWeaponResource.ProjAmmoType.NONE:
+		else:
 			count = stats.ammo_in_mag
 		ammo_ui.update_mag_ammo(count)
 #endregion

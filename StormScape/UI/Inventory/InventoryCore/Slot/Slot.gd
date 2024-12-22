@@ -36,7 +36,7 @@ func _set_item(new_item: InvItemResource) -> void:
 	item = new_item
 
 	if item and item.quantity > 0:
-		update_tint_progress(GlobalData.player_node.hands.cooldown_manager.get_cooldown(item.stats.get_cooldown_id()))
+		update_tint_progress(GlobalData.player_node.inv.auto_decrementer.get_cooldown(item.stats.get_cooldown_id()))
 
 		item_texture.texture = item.stats.inv_icon
 
@@ -88,7 +88,7 @@ func _ready() -> void:
 ## When this is shown or hidden and different slots are displayed, update the local tint progress with the current item.
 func _on_visibility_changed() -> void:
 	await get_tree().process_frame
-	update_tint_progress(GlobalData.player_node.hands.cooldown_manager.get_cooldown(item.stats.get_cooldown_id()) if item != null else 0.0)
+	update_tint_progress(GlobalData.player_node.inv.auto_decrementer.get_cooldown(item.stats.get_cooldown_id()) if item != null else 0.0)
 
 ## Updates the upwards fill tinting that represents an item on cooldown.
 func update_tint_progress(duration: float) -> void:
@@ -96,7 +96,7 @@ func update_tint_progress(duration: float) -> void:
 		if not item.stats.show_cooldown_fill:
 			return
 		if tint_tween: tint_tween.kill()
-		tint_progress = (1 - (duration / GlobalData.player_node.hands.cooldown_manager.get_original_cooldown(item.stats.get_cooldown_id()))) * 100
+		tint_progress = (1 - (duration / GlobalData.player_node.inv.auto_decrementer.get_original_cooldown(item.stats.get_cooldown_id()))) * 100
 		if not GlobalData.focused_ui_is_open:
 			tint_tween = create_tween()
 			tint_tween.tween_property(self, "tint_progress", 100.0, duration)

@@ -79,10 +79,11 @@ func _default_ammo_update_method() -> void:
 		if not equipped_item.has_method("_update_ammo_ui"):
 			active_slot_info.update_mag_ammo(active_slot.item.quantity)
 
+## Updates all tint progresses for cooldowns on the hotbar slots.
 func update_hotbar_tint_progresses() -> void:
 	for slot: Slot in hotbar_slots:
 		if slot.item != null:
-			slot.update_tint_progress(GlobalData.player_node.hands.cooldown_manager.get_cooldown(slot.item.stats.get_cooldown_id()))
+			slot.update_tint_progress(GlobalData.player_node.inv.auto_decrementer.get_cooldown(slot.item.stats.get_cooldown_id()))
 		else:
 			slot.update_tint_progress(0)
 
@@ -91,9 +92,9 @@ func _update_inv_ammo_ui() -> void:
 	var count: int = -1
 
 	if active_slot.item != null:
-		if active_slot.item.stats is ProjWeaponResource:
-			var stats: ItemResource = active_slot.item.stats
-			if not (stats.ammo_type == ProjWeaponResource.ProjAmmoType.NONE or stats.ammo_type == ProjWeaponResource.ProjAmmoType.STAMINA or stats.ammo_type == ProjWeaponResource.ProjAmmoType.SELF):
+		var stats: ItemResource = active_slot.item.stats
+		if stats is ProjWeaponResource and not stats.hide_ammo_ui:
+			if not (stats.ammo_type == ProjWeaponResource.ProjAmmoType.NONE or stats.ammo_type == ProjWeaponResource.ProjAmmoType.STAMINA or stats.ammo_type == ProjWeaponResource.ProjAmmoType.SELF or stats.ammo_type == ProjWeaponResource.ProjAmmoType.CHARGES):
 				count = 0
 				for i: int in range(player_inv.inv_size):
 					var item: InvItemResource = player_inv.inv[i]
@@ -101,7 +102,7 @@ func _update_inv_ammo_ui() -> void:
 						count += item.quantity
 			elif stats.ammo_type == ProjWeaponResource.ProjAmmoType.STAMINA:
 				count = int(floor(GlobalData.player_node.stats.get_stat("max_stamina")))
-		elif active_slot.item.stats is MeleeWeaponResource:
+		elif stats is MeleeWeaponResource:
 			count = int(floor(GlobalData.player_node.stats.get_stat("max_stamina")))
 
 	active_slot_info.update_inv_ammo(count)
