@@ -37,6 +37,7 @@ enum ProjAmmoType { ## The types of projectile ammo.
 @export_range(0, 10, 0.01, "hide_slider", "or_greater", "suffix:seconds") var charge_firing_duration: float = 0.1 ## How long it takes to release the projectile after initiating the charge firing action. Determines the animation speed as well. Set to 0 by default.
 @export var ammo_use_per_charge: int = 3 ## How much ammo to consume on charge shots. Overrides all burst and barrage consumption to consume this amount no matter what.
 @export var charge_bloom_mult: float = 5.0 ## How much more should one charge shot count towards current bloom.
+@export var charge_overheat_mult: float = 5.0 ## How much more should one charge shot count towards current overheat.
 @export_subgroup("Firing Animation")
 @export var override_chg_anim_dur: float = 0 ## When greater than 0, the charge fire animation will run at this override time per loop.
 @export var chg_anim_speed_mult: float = 1.0 ## Multiplies the speed scale of the charge firing animation.
@@ -87,21 +88,25 @@ enum ProjAmmoType { ## The types of projectile ammo.
 @export var bloom_decrease_rate: Curve ## How much bloom to take away per second based on current bloom.
 @export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var bloom_decrease_delay: float = 1.0 ## How long after the last bloom increase must we wait before starting to decrease it.
 
-@export_group("Auto Fire Warmup Logic")
+@export_group("Warmup Logic")
 @export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var initial_fire_rate_delay: float = 0 ## At the lowest warmup level, how long must we wait before a shot fires. This only works when the firing mode is set to "Auto".
 @export var warmup_delay_curve: Curve ## X value is warmup amount (0-1), Y value is multiplier on initial_fire_rate_delay.
 @export var warmup_increase_rate: Curve ## A curve for determining how much warmth to add per shot depending on current warmup.
 @export var warmup_decrease_rate: Curve ## How much warmup do we remove per second based on current warmup.
-@export var warmup_decrease_delay: float = 0.75 ## How long after the last warmup increase must we wait before starting to decrease it.
+@export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var warmup_decrease_delay: float = 0.75 ## How long after the last warmup increase must we wait before starting to decrease it.
 
 @export_group("Overheating Logic")
-@export_enum("None", "Empty Mag", "Curve") var overheating_type: String = "None"
+@export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var overheat_penalty: float = 0 ## When we reach max overheating, how long is the penalty before being able to use the weapon again. Anything above 0 activates this feature.
+@export var overheat_inc_rate: Curve ## X value is overheat amount (0-1), Y value is how much we add to overheat amount per shot.
+@export var overheat_dec_rate: Curve ## X value is overheat amount (0-1), Y value is how much we take away from overheat amount per second.
+@export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var overheat_dec_delay: float = 0.75
 
 @export_group("Burst Logic")
 @export_range(1, 100, 1) var projectiles_per_fire: int = 1 ## How many projectiles are emitted per burst execution.
 @export var use_ammo_per_burst_proj: bool = true ## Whether to consume ammo per projectile emmitted or consume 1 per full burst.
 @export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var burst_bullet_delay: float = 0.1 ## Time between burst shots after execute.
 @export var add_bloom_per_burst_shot: bool = true ## Whether or not each bullet from a burst fire increases bloom individually.
+@export var add_overheat_per_burst_shot: bool = true ## Whether or not each bullet from a burst fire increases overheat individually.
 
 @export_group("Barrage Logic")
 @export var barrage_count: int = 1 ## Number of projectiles fired at 'angular-spread' degrees apart for each execute. Only applies when angular spread is greater than 0.

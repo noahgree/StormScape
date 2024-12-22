@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="ProjWeaponResource" load_steps=26 format=3 uid="uid://dpmwqsai6gxsr"]
+[gd_resource type="Resource" script_class="ProjWeaponResource" load_steps=28 format=3 uid="uid://dpmwqsai6gxsr"]
 
 [ext_resource type="PackedScene" uid="uid://dxv8dhn3gmufw" path="res://Entities/Items/Weapons/ProjectileWeapons/FlameBlower/FlameBlower.tscn" id="1_2lqvl"]
 [ext_resource type="Script" path="res://Entities/Stats/EffectSystemResources/EffectSources/EffectSource.gd" id="1_qrb8v"]
@@ -157,6 +157,16 @@ impact_particle_mult = 1.0
 beam_particle_color = Color(1, 0, 0, 1)
 beam_particle_mult = 1.0
 
+[sub_resource type="Curve" id="Curve_pnq7a"]
+max_value = 0.5
+_data = [Vector2(0, 0.297966), 0.0, 0.0, 0, 0, Vector2(1, 0.203377), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Curve" id="Curve_tw3jb"]
+max_value = 0.1
+_data = [Vector2(0, 0.005), 0.0, 0.0051865, 0, 0, Vector2(1, 0.0101865), 0.0051865, 0.0, 0, 0]
+point_count = 2
+
 [sub_resource type="Curve" id="Curve_40cbt"]
 _data = [Vector2(0, 1), 0.0, 0.0, 0, 0]
 point_count = 1
@@ -179,7 +189,7 @@ speed = 200
 speed_curve = SubResource("Curve_wsuli")
 initial_boost_time = 0.0
 initial_boost_mult = 2.0
-lifetime = 1.0
+lifetime = 5.0
 max_distance = 150
 override_gun_height = false
 height_override = 6
@@ -208,9 +218,9 @@ spin_direction = "Forward"
 do_y_axis_reflection = true
 move_in_rotated_dir = false
 shadow_matches_spin = false
-launch_angle = 0.0
+launch_angle = 25.0
 arc_travel_distance = 125
-arc_speed = 350.0
+arc_speed = 600.0
 max_collision_height = 20
 grounding_free_delay = 0.0
 bounce_count = 0
@@ -270,6 +280,7 @@ charge_fire_cooldown = 0.5
 charge_firing_duration = 0.1
 ammo_use_per_charge = 3
 charge_bloom_mult = 5.0
+charge_overheat_mult = 5.0
 override_chg_anim_dur = 0.0
 chg_anim_speed_mult = 1.0
 charge_cam_fx_mult = 1.0
@@ -281,18 +292,18 @@ hitscan_logic = SubResource("Resource_awnew")
 charge_projectile_scn = ExtResource("5_4ypmg")
 charge_projectile_logic = SubResource("Resource_oo0r6")
 charge_hitscan_logic = SubResource("Resource_f4j7y")
-ammo_type = 10
+ammo_type = 0
 mag_size = 100
 reload_type = "Magazine"
 mag_reload_time = 1.0
 single_proj_reload_time = 0.25
 single_reload_quantity = 1
 stamina_use_per_proj = 0.5
-dont_consume_ammo = false
-auto_ammo_interval = 0.08
+dont_consume_ammo = true
+auto_ammo_interval = 0.0
 auto_ammo_count = 1
-auto_ammo_delay = 0.35
-hide_ammo_ui = false
+auto_ammo_delay = 0.5
+hide_ammo_ui = true
 hide_reload_ui = false
 mag_reload_sound = ""
 proj_reload_sound = ""
@@ -304,11 +315,15 @@ warmup_delay_curve = SubResource("Curve_kj8op")
 warmup_increase_rate = SubResource("Curve_pca6u")
 warmup_decrease_rate = SubResource("Curve_lm546")
 warmup_decrease_delay = 0.75
-overheating_type = "Empty Mag"
+overheat_penalty = 5.0
+overheat_inc_rate = SubResource("Curve_tw3jb")
+overheat_dec_rate = SubResource("Curve_pnq7a")
+overheat_dec_delay = 0.75
 projectiles_per_fire = 1
 use_ammo_per_burst_proj = true
 burst_bullet_delay = 0.1
 add_bloom_per_burst_shot = true
+add_overheat_per_burst_shot = true
 barrage_count = 5
 angular_spread = 20.0
 ammo_in_mag = -1
@@ -325,8 +340,8 @@ id = "flame_blower"
 name = "Flame Blower"
 tags = Array[String]([])
 inv_icon_rotation = -42.0
-inv_icon_offset = Vector2(-0.5, -1)
-inv_icon_scale = Vector2(1.27, 1.27)
+inv_icon_offset = Vector2(-0.5, -0.5)
+inv_icon_scale = Vector2(1.29, 1.29)
 inv_icon = ExtResource("7_dkcnt")
 ground_icon = ExtResource("7_dkcnt")
 in_hand_icon = ExtResource("7_dkcnt")

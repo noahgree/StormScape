@@ -248,7 +248,7 @@ func _handle_y_scale_lerping(anim_vector: Vector2) -> void:
 	elif anim_vector.x < -0.12:
 		current_x_direction = -1
 
-	_update_anchor_scale("y", lerp(hands_anchor.scale.y, -1.0 if current_x_direction == -1 else 1.0, 0.22))
+	_update_anchor_scale("y", lerp(hands_anchor.scale.y, -1.0 if current_x_direction == -1 else 1.0, 0.24))
 
 func snap_y_scale() -> void:
 	if _get_anim_vector().x > 0.12:

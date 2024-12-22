@@ -30,10 +30,7 @@ func _ready() -> void:
 	if is_player_inv: auto_decrementer.owning_entity_is_player = true
 
 func _process(delta: float) -> void:
-	auto_decrementer._update_cooldowns(delta)
-	auto_decrementer._update_warmups(delta)
-	auto_decrementer._update_blooms(delta)
-	auto_decrementer._update_recharges(delta)
+	auto_decrementer.process(delta)
 
 ## Fills the main inventory from an array of inventory items. If an item exceeds stack size, the quantity that does not fit into ## one slot is instantiated on the ground as a physical item. This method respects null spots in the list.
 func fill_inventory(inv_to_fill_from: Array[InvItemResource]) -> void:

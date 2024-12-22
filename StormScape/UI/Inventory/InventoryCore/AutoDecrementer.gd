@@ -9,9 +9,16 @@ var cooldowns: Dictionary = {} ## Represents any active cooldowns where the key 
 var warmups: Dictionary = {} ## Represents any active warmups where the key is an item's id and the value is an array with the following: [current_warmup_value, decrease_rate_curve, decrease_delay_counter]
 var blooms: Dictionary = {} ## Represents any active blooms where the key is an item's id and the value is an array with the following: [current_bloom_value, decrease_rate_curve, decrease_delay_counter]
 var overheats: Dictionary = {}
-var recharges: Dictionary = {}
+var recharges: Dictionary = {} ## Represents any active recharges where the key is an item's id and the value is an array with the following: [current_recharge_progress, item_stats, recharge_delay_counter]
 var owning_entity_is_player: bool = false ## When true, the entity owning the inv this script operates on is a Player.
 
+
+func process(delta: float) -> void:
+	_update_cooldowns(delta)
+	_update_warmups(delta)
+	_update_blooms(delta)
+	_update_overheats(delta)
+	_update_recharges(delta)
 
 #region Cooldowns
 ## Adds a cooldown to the dictionary.
@@ -104,26 +111,45 @@ func get_bloom(item_id: String) -> float:
 #endregion
 
 #region Overheats
-func add_overheat(_item_id: String, _duration: float) -> void:
-	pass
+## Adds a overheat to the dictionary.
+func add_overheat(item_id: String, amount: float, decrease_rate: Curve, decrease_delay: float) -> void:
+	if item_id in overheats:
+		overheats[item_id] = [min(1, overheats[item_id][0] + amount), decrease_rate, decrease_delay]
+	else:
+		overheats[item_id] = [min(1, amount), decrease_rate, decrease_delay]
 
-func _update_overheats(_delta: float) -> void:
-	pass
+## Called every frame to update each overheat value and its potential delay counter.
+func _update_overheats(delta: float) -> void:
+	var to_remove: Array[String] = []
+	for item_id: String in overheats.keys():
+		var current: Array = overheats[item_id]
+		if current[2] <= 0:
+			overheats[item_id][0] -= delta * max(0.01, current[1].sample_baked(current[0]))
+		else:
+			overheats[item_id][2] -= delta
 
+		if overheats[item_id][0] <= 0:
+			to_remove.append(item_id)
+
+	for item_id: String in to_remove:
+		overheats.erase(item_id)
+
+## Returns a positive float representing the current overheat value or 0 if one does not exist.
 func get_overheat(item_id: String) -> float:
 	return overheats.get(item_id, [0, null, 0])[0]
 #endregion
 
 #region Recharges
 ## Adds a recharge request to the dictionary.
-func request_recharge(item_id: String, duration: float) -> void:
-	if item_id not in recharges:
-		recharges[item_id] = [duration, duration, 0]
+func request_recharge(item_id: String, stats: ProjWeaponResource) -> void:
+	if item_id in recharges:
+		recharges[item_id] = [recharges[item_id][0], stats, 0]
+	else:
+		recharges[item_id] = [stats.s_mods.get_stat("auto_ammo_interval"), stats, 0]
 
 ## Adds a delay to the recharge.
 func update_recharge_delay(item_id: String, delay_duration: float) -> void:
 	if item_id in recharges:
-		recharges[item_id][0] = recharges[item_id][1]
 		recharges[item_id][2] = delay_duration
 
 ## Called every frame to update each recharge value and its potential delay counter.
@@ -137,7 +163,17 @@ func _update_recharges(delta: float) -> void:
 			recharges[item_id][2] -= delta
 
 		if recharges[item_id][0] <= 0:
-			to_remove.append(item_id)
+			if is_instance_valid(current[1]):
+				var mag_size: int = current[1].s_mods.get_stat("mag_size")
+				current[1].ammo_in_mag = min(mag_size, current[1].ammo_in_mag + current[1].s_mods.get_stat("auto_ammo_count"))
+				recharge_completed.emit(item_id)
+
+				if current[1].ammo_in_mag < mag_size:
+					recharges[item_id][0] = current[1].s_mods.get_stat("auto_ammo_interval")
+				else:
+					to_remove.append(item_id)
+			else:
+				to_remove.append(item_id)
 
 	for item_id: String in to_remove:
 		recharges.erase(item_id)

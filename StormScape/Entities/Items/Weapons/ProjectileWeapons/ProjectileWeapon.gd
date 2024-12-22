@@ -78,6 +78,8 @@ func _setup_mod_cache() -> void:
 		"bloom_decrease_rate_multiplier" : 1.0,
 		"initial_fire_rate_delay" : stats.initial_fire_rate_delay,
 		"warmup_increase_rate_multiplier" : 1.0,
+		"overheat_penalty" : stats.overheat_penalty,
+		"overheat_increase_rate_multiplier" : 1.0,
 		"projectiles_per_fire" : stats.projectiles_per_fire,
 		"barrage_count" : stats.barrage_count,
 		"angular_spread" : stats.angular_spread,
@@ -171,7 +173,10 @@ func enter() -> void:
 	else:
 		_get_has_needed_ammo_and_reload_if_not()
 	_update_ammo_ui()
-	_request_ammo_recharge()
+
+	if stats.ammo_type != ProjWeaponResource.ProjAmmoType.SELF and stats.ammo_type != ProjWeaponResource.ProjAmmoType.STAMINA:
+		if stats.ammo_in_mag < stats.s_mods.get_stat("mag_size"):
+			_request_ammo_recharge()
 
 	_check_if_needs_mouse_area_scanner()
 
@@ -211,7 +216,7 @@ func _disable_mouse_area() -> void:
 
 ## Every frame we decrease the warmup and the bloom levels based on their decrease curves.
 func _process(_delta: float) -> void:
-	#print(source_entity.inv.auto_decrementer.get_bloom(str(stats.session_uid)))
+	print(source_entity.inv.auto_decrementer.get_overheat(str(stats.session_uid)))
 	if Engine.is_editor_hint():
 		return
 
@@ -386,7 +391,9 @@ func _on_hitscan_hands_freeze_timer_timeout() -> void:
 #region Projectile Spawning
 ## Applies bursting logic to potentially shoot more than one projectile at a short, set interval.
 func _apply_burst_logic(was_charge_fire: bool = false) -> void:
-	if stats.s_mods.get_stat("projectiles_per_fire") > 1 and not stats.add_bloom_per_burst_shot: _handle_bloom_increase(was_charge_fire)
+	if stats.s_mods.get_stat("projectiles_per_fire") > 1:
+		if not stats.add_bloom_per_burst_shot: _handle_bloom_increase(was_charge_fire)
+		if not stats.add_overheat_per_burst_shot: _handle_overheat_increase(was_charge_fire)
 	var shots: int = int(stats.s_mods.get_stat("projectiles_per_fire"))
 
 	var delay: float = 0
@@ -426,7 +433,9 @@ func _apply_ammo_consumption(shot_count: int, was_charge_fire: bool = false) -> 
 func _handle_per_shot_delay_and_bloom(shot_count: int, was_charge_fire: bool = false, proceed_to_spawn: bool = true) -> void:
 	for i: int in range(shot_count):
 		if stats.add_bloom_per_burst_shot or (stats.s_mods.get_stat("projectiles_per_fire") == 1):
-			_handle_bloom_increase(false)
+			_handle_bloom_increase(false) # Never trigger charge fire mult if we are bursting
+		if stats.add_overheat_per_burst_shot or (stats.s_mods.get_stat("projectiles_per_fire") == 1):
+			_handle_overheat_increase(false) # Never trigger charge fire mult if we are bursting
 
 		if proceed_to_spawn:
 			_apply_barrage_logic(was_charge_fire)
@@ -489,7 +498,7 @@ func _spawn_hitscan(hitscan: Hitscan, was_charge_fire: bool = false) -> void:
 		hitscan_hands_freeze_timer.start(0.065)
 #endregion
 
-#region Warmup & Bloom & Cooldown & Recharge
+#region Warmup & Bloom & Cooldown & Overheat
 ## Increases current warmup level via sampling the increase curve using the current warmup.
 func _handle_warmup_increase() -> void:
 	if stats.s_mods.get_stat("initial_fire_rate_delay") > 0 and stats.firing_mode == "Auto":
@@ -534,11 +543,21 @@ func _handle_adding_cooldown(duration: float) -> void:
 func _get_cooldown() -> float:
 	return source_entity.inv.auto_decrementer.get_cooldown(stats.get_cooldown_id())
 
-func _handle_requesting_recharge() -> void:
-	pass
+## Increases current overheat level via sampling the increase curve using the current overheat.
+func _handle_overheat_increase(was_charge_fire: bool = false) -> void:
+	if stats.s_mods.get_stat("overheat_penalty") > 0:
+		var current_overheat: float = source_entity.inv.auto_decrementer.get_overheat(str(stats.session_uid))
+		var sampled_point: float = stats.overheat_inc_rate.sample_baked(current_overheat)
+		var increase_amount: float = max(0.005, sampled_point * stats.s_mods.get_stat("overheat_increase_rate_multiplier"))
+		var charge_shot_mult: float = 1.0 if not was_charge_fire else stats.charge_overheat_mult
+		source_entity.inv.auto_decrementer.add_overheat(str(stats.session_uid), min(1, (increase_amount * charge_shot_mult)), stats.overheat_dec_rate, stats.overheat_dec_delay)
 
-func _get_charges() -> int:
-	return 0
+		if source_entity.inv.auto_decrementer.get_overheat(str(stats.session_uid)) >= 1:
+			_handle_max_overheat_reached()
+
+## When we reach max overheat, add a cooldown of some kind.
+func _handle_max_overheat_reached() -> void:
+	_handle_adding_cooldown(stats.s_mods.get_stat("overheat_penalty"))
 #endregion
 
 #region FX & Animations
@@ -582,7 +601,7 @@ func _apply_post_firing_effect(was_charge_fire: bool = false) -> void:
 		source_entity.effect_receiver.handle_status_effect(effect)
 #endregion
 
-#region Reloading
+#region Reloading & Recharging
 ## Checks if we have enough ammo to execute a single firing. Calls for a reload if we don't.
 func _get_has_needed_ammo_and_reload_if_not(was_charge_fire: bool = false) -> bool:
 	if stats.ammo_type == ProjWeaponResource.ProjAmmoType.STAMINA and (source_entity is not DynamicEntity):
@@ -712,18 +731,13 @@ func _notify_recharge_of_a_recent_firing() -> void:
 
 func _request_ammo_recharge() -> void:
 	if stats.s_mods.get_stat("auto_ammo_interval") > 0:
-		source_entity.inv.auto_decrementer.request_recharge(str(stats.session_uid), stats.s_mods.get_stat("auto_ammo_interval"))
+		source_entity.inv.auto_decrementer.request_recharge(str(stats.session_uid), stats)
 
 func _on_ammo_recharge_completed(item_id: String) -> void:
 	if item_id != str(stats.session_uid):
 		return
-
-	var ammo_needed: int = int(stats.s_mods.get_stat("mag_size")) - stats.ammo_in_mag
-	if ammo_needed > 1:
-		_request_ammo_recharge()
-
-	stats.ammo_in_mag = min(stats.s_mods.get_stat("mag_size"), stats.ammo_in_mag + stats.s_mods.get_stat("auto_ammo_count"))
-	_update_ammo_ui()
+	else:
+		_update_ammo_ui()
 
 ## Updates the ammo UI with the ammo in the magazine, assuming this is being used by a Player and the weapon uses
 ## consumable ammo.
