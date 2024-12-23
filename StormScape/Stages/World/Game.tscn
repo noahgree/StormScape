@@ -11,9 +11,9 @@
 [ext_resource type="PackedScene" uid="uid://bond8rty1ljh" path="res://Utilities/Debug/TestStaticEntity.tscn" id="11_6kn41"]
 [ext_resource type="Script" path="res://Entities/Components/HitboxComponent/HitboxComponent.gd" id="11_j4dgk"]
 [ext_resource type="Script" path="res://Entities/Stats/EffectSystemResources/EffectSources/EffectSource.gd" id="12_jvc44"]
+[ext_resource type="Resource" uid="uid://b8yo5kmjiwnca" path="res://Entities/Stats/EffectSystemResources/StatusEffects/GoodEffects/Regen/Regen1.tres" id="13_27bcd"]
 [ext_resource type="Script" path="res://Entities/Stats/EffectSystemResources/StatusEffects/StatusEffect.gd" id="13_33bgr"]
 [ext_resource type="Resource" uid="uid://dpr7bbypm0g2j" path="res://Entities/Stats/EffectSystemResources/StatusEffects/BadEffects/Poison/Poison1.tres" id="14_jseuh"]
-[ext_resource type="Resource" uid="uid://brjtdk41hym1c" path="res://Entities/Stats/EffectSystemResources/StatusEffects/GoodEffects/Speed/Speed1.tres" id="15_bj8fs"]
 [ext_resource type="Resource" uid="uid://dvew5cy3k7s48" path="res://Entities/Stats/EffectSystemResources/StatusEffects/BadEffects/Burning/Burning1.tres" id="16_ky7ks"]
 [ext_resource type="PackedScene" uid="uid://b52c5c7hj2vd" path="res://Utilities/Debug/TestTree1.tscn" id="17_45bjv"]
 [ext_resource type="Script" path="res://Entities/EntityCore/EntityTypes/StaticEntity/StaticEntity.gd" id="18_0310n"]
@@ -190,7 +190,7 @@ cam_freeze_multiplier = 1.0
 cam_freeze_duration = 0.0
 impact_sound = ""
 hit_flash_color = Color(1, 1, 1, 0.6)
-status_effects = Array[ExtResource("13_33bgr")]([ExtResource("15_bj8fs")])
+status_effects = Array[ExtResource("13_33bgr")]([ExtResource("13_27bcd")])
 contact_position = Vector2(0, 0)
 movement_direction = Vector2(0, 0)
 

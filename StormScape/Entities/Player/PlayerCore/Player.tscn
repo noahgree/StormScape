@@ -1567,7 +1567,6 @@ tint_progress = Color(0.428165, 0.752804, 0.889988, 1)
 [node name="OverlayUI" type="CanvasLayer" parent="."]
 
 [node name="TestButtons" type="Control" parent="OverlayUI" node_paths=PackedStringArray("health_component")]
-visible = false
 layout_mode = 3
 anchors_preset = 0
 offset_right = 40.0

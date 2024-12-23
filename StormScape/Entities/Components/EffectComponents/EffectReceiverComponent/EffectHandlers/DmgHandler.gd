@@ -66,14 +66,14 @@ func _get_dmg_after_crit_then_armor(effect_source: EffectSource, is_crit: bool) 
 func handle_instant_damage(effect_source: EffectSource, life_steal_percent: float = 0.0) -> void:
 	var is_crit: bool = (randf_range(0, 100) <= effect_source.crit_chance) and can_be_crit
 	var dmg_after_crit_then_armor: int = _get_dmg_after_crit_then_armor(effect_source, is_crit)
-	_send_handled_dmg("BasicDamage" if not is_crit else "CritDamage", effect_source.dmg_affected_stats, dmg_after_crit_then_armor, life_steal_percent)
+	_send_handled_dmg("BasicDamage", effect_source.dmg_affected_stats, dmg_after_crit_then_armor, life_steal_percent, is_crit)
 
 ## Handles applying damage that is inflicted over time, whether with a delay, with burst intervals, or with both.
 func handle_over_time_dmg(dot_resource: DOTResource, source_type: String) -> void:
 	var dot_timer: Timer = Timer.new()
 	dot_timer.set_meta("dot_resource", dot_resource)
 	dot_timer.one_shot = false
-	dot_timer.timeout.connect(func() -> void: _on_dot_timer_timeout(dot_timer, source_type))
+	dot_timer.timeout.connect(_on_dot_timer_timeout.bind(dot_timer, source_type))
 	dot_timer.name = source_type + "_timer" + str(randf())
 	add_child(dot_timer)
 
@@ -89,7 +89,7 @@ func handle_over_time_dmg(dot_resource: DOTResource, source_type: String) -> voi
 		else:
 			dot_timer.wait_time = max(0.01, dot_resource.time_between_ticks)
 
-		delay_timer.timeout.connect(func() -> void: _on_dot_timer_timeout(dot_timer, source_type))
+		delay_timer.timeout.connect(_on_dot_timer_timeout.bind(dot_timer, source_type))
 		delay_timer.timeout.connect(dot_timer.start)
 		delay_timer.timeout.connect(delay_timer.queue_free)
 		delay_timer.name = source_type + "_delayTimer" + str(randf())
@@ -101,7 +101,7 @@ func handle_over_time_dmg(dot_resource: DOTResource, source_type: String) -> voi
 		dot_timer.set_meta("ticks_completed", 1)
 
 		if not dot_resource.run_until_removed:
-			dot_timer.wait_time = max(0.001, (dot_resource.damaging_time / (dot_resource.dmg_ticks_array.size())))
+			dot_timer.wait_time = max(0.01, (dot_resource.damaging_time / (dot_resource.dmg_ticks_array.size() - 1)))
 		else:
 			dot_timer.wait_time = max(0.01, dot_resource.time_between_ticks)
 
@@ -120,14 +120,18 @@ func _add_timer_to_cache(source_type: String, timer: Timer, cache: Dictionary) -
 	else:
 		cache[source_type] = [timer]
 
-## Deletes all timers for a source type from the timer cache dict.
-func _delete_timers_from_caches(source_type: String) -> void:
+## Deletes all timers for a source type from the timer cache dict. Can optionally send a single timer to be the only one removed.
+func _delete_timers_from_caches(source_type: String, specific_timer: Timer = null) -> void:
 	var timers: Array = dot_timers.get(source_type, [null])
 	if timers:
-		for timer: Variant in timers:
-			if timer != null:
-				timer.stop()
-				timer.queue_free()
+		for i: int in range(timers.size()):
+			if timers[i] != null:
+				if timers[i] == specific_timer:
+					timers[i].queue_free()
+					timers.remove_at(i)
+					return
+				else:
+					timers[i].queue_free()
 		dot_timers.erase(source_type)
 
 	var delay_timers: Array = dot_delay_timers.get(source_type, [null])
@@ -136,6 +140,7 @@ func _delete_timers_from_caches(source_type: String) -> void:
 			if delay_timer != null:
 				delay_timer.stop()
 				delay_timer.queue_free()
+
 		dot_delay_timers.erase(source_type)
 
 ## When the damage over time interval timer ends, check what sourced the timer and see if that source
@@ -157,13 +162,14 @@ func _on_dot_timer_timeout(dot_timer: Timer, source_type: String) -> void:
 			dot_timer.set_meta("ticks_completed", ticks_completed + 1)
 
 			if max_ticks == 1:
-				_delete_timers_from_caches(source_type)
+				_delete_timers_from_caches(source_type, dot_timer)
 		else:
-			_delete_timers_from_caches(source_type)
+			_delete_timers_from_caches(source_type, dot_timer)
 
 ## Sends the affected entity's health component the final damage values based on what stats the damage was
 ## allowed to affect.
-func _send_handled_dmg(source_type: String, dmg_affected_stats: GlobalData.DmgAffectedStats, handled_amount: int, life_steal_percent: float = 0.0) -> void:
+func _send_handled_dmg(source_type: String, dmg_affected_stats: GlobalData.DmgAffectedStats,
+						handled_amount: int, life_steal_percent: float = 0.0, was_crit: bool = false) -> void:
 	var dmg_weakness: float = get_parent().affected_entity.stats.get_stat("dmg_weakness")
 	var dmg_resistance: float = get_parent().affected_entity.stats.get_stat("dmg_resistance")
 	var positive_dmg: int = max(0, handled_amount * (1 + dmg_weakness - dmg_resistance))
@@ -172,14 +178,14 @@ func _send_handled_dmg(source_type: String, dmg_affected_stats: GlobalData.DmgAf
 
 	match dmg_affected_stats:
 		GlobalData.DmgAffectedStats.HEALTH_ONLY:
-			health_component.damage_health(positive_dmg, source_type)
+			health_component.damage_health(positive_dmg, source_type, was_crit)
 		GlobalData.DmgAffectedStats.SHIELD_ONLY:
-			health_component.damage_shield(positive_dmg, source_type)
+			health_component.damage_shield(positive_dmg, source_type, was_crit)
 		GlobalData.DmgAffectedStats.SHIELD_THEN_HEALTH:
-			health_component.damage_shield_then_health(positive_dmg, source_type)
+			health_component.damage_shield_then_health(positive_dmg, source_type, was_crit)
 		GlobalData.DmgAffectedStats.SIMULTANEOUS:
-			health_component.damage_shield(positive_dmg, source_type)
-			health_component.damage_health(positive_dmg, source_type)
+			health_component.damage_shield(positive_dmg, source_type, was_crit)
+			health_component.damage_health(positive_dmg, source_type, was_crit)
 
 
 func _pass_damage_to_potential_life_steal_handler(amount: int, percent_to_steal: float) -> void:

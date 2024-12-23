@@ -8,8 +8,8 @@
 script = ExtResource("1_vgior")
 healing_time = 8.0
 heal_ticks_array = Array[int]([10, 10, 10])
-delay_time = 3.0
-heal_affected_stats = 1
+delay_time = 2.0
+heal_affected_stats = 2
 run_until_removed = false
 time_between_ticks = 1.0
 

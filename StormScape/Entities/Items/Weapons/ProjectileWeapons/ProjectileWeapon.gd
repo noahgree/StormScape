@@ -216,7 +216,6 @@ func _disable_mouse_area() -> void:
 
 ## Every frame we decrease the warmup and the bloom levels based on their decrease curves.
 func _process(_delta: float) -> void:
-	print(source_entity.inv.auto_decrementer.get_overheat(str(stats.session_uid)))
 	if Engine.is_editor_hint():
 		return
 
@@ -451,6 +450,7 @@ func _apply_barrage_logic(was_charge_fire: bool = false) -> void:
 	var close_to_360_adjustment: int = 0 if stats.s_mods.get_stat("angular_spread") > 310 else 1
 	var spread_segment_width: float = angular_spread_radians / (stats.s_mods.get_stat("barrage_count") - close_to_360_adjustment)
 	var start_rotation: float = global_rotation - (angular_spread_radians / 2.0)
+	var multishot_id: int = UIDHelper.generate_multishot_uid()
 
 	for i: int in range(stats.barrage_count):
 		if not stats.use_hitscan:
@@ -467,7 +467,7 @@ func _apply_barrage_logic(was_charge_fire: bool = false) -> void:
 				proj.mouse_scan_targets = mouse_scan_area_targets
 				call_deferred("_disable_mouse_area")
 
-			_spawn_projectile(proj, was_charge_fire)
+			_spawn_projectile(proj)
 		else:
 			var hitscan_scene: PackedScene = stats.hitscan_logic.hitscan_scn
 			if was_charge_fire and stats.charge_hitscan_logic != null and stats.charge_hitscan_logic.hitscan != null:
@@ -475,23 +475,21 @@ func _apply_barrage_logic(was_charge_fire: bool = false) -> void:
 
 			var rotation_adjustment: float = -angular_spread_radians / 2 + (i * spread_segment_width)
 			var hitscan: Hitscan = Hitscan.create(hitscan_scene, effect_src, self, source_entity, proj_origin_node.global_position, rotation_adjustment if stats.s_mods.get_stat("barrage_count") > 1 else 0.0, was_charge_fire)
-			_spawn_hitscan(hitscan, was_charge_fire)
+			_spawn_hitscan(hitscan)
+
+	_do_firing_fx(was_charge_fire)
 
 ## Spawns the projectile that has been passed to it. Reloads if we don't have enough for the next activation.
-func _spawn_projectile(proj: Projectile, was_charge_fire: bool = false) -> void:
+func _spawn_projectile(proj: Projectile) -> void:
 	proj.rotation += deg_to_rad(_get_bloom())
 
 	GlobalData.world_root.add_child(proj)
 
-	_do_firing_fx(was_charge_fire)
-
 ## Spawns the hitscan that has been passed to it. Reloads if we don't have enough for the next activation.
-func _spawn_hitscan(hitscan: Hitscan, was_charge_fire: bool = false) -> void:
+func _spawn_hitscan(hitscan: Hitscan) -> void:
 	hitscan.rotation_offset += deg_to_rad(_get_bloom())
 	GlobalData.world_root.add_child(hitscan)
 	current_hitscans.append(hitscan)
-
-	_do_firing_fx(was_charge_fire)
 
 	if stats.firing_mode == "Semi Auto" or (stats.firing_mode == "Auto" and stats.s_mods.get_stat("hitscan_duration") < 0.65):
 		source_entity.hands.equipped_item_should_follow_mouse = false
@@ -696,6 +694,7 @@ func _get_more_reload_ammo(max_amount_needed: int, take_from_inventory: bool = t
 
 	return ammount_collected
 
+## When the main reload timer ends and we are in "Magazine" mode, reload the magazine.
 func _on_reload_timer_timeout() -> void:
 	if stats.reload_type != "Magazine":
 		return
@@ -725,14 +724,18 @@ func _on_single_reload_timer_timeout() -> void:
 
 	is_reloading = false
 
+## When we hav recently fired, we should not instantly keep recharging ammo, so we send a cooldown to the recharger.
 func _notify_recharge_of_a_recent_firing() -> void:
 	if stats.s_mods.get_stat("auto_ammo_interval") > 0:
 		source_entity.inv.auto_decrementer.update_recharge_delay(str(stats.session_uid), stats.auto_ammo_delay)
 
+## This is called (usually after firing) to request a new ammo recharge instance. It is also called when first entering if we
+## aren't at max ammo already.
 func _request_ammo_recharge() -> void:
 	if stats.s_mods.get_stat("auto_ammo_interval") > 0:
 		source_entity.inv.auto_decrementer.request_recharge(str(stats.session_uid), stats)
 
+## When an ammo recharge ends, if it matches our item id, update the ammo ui.
 func _on_ammo_recharge_completed(item_id: String) -> void:
 	if item_id != str(stats.session_uid):
 		return

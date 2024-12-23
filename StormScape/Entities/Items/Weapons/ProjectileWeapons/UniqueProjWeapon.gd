@@ -29,10 +29,10 @@ func _charge_fire(hold_time: float) -> void:
 	if returned:
 		super._charge_fire(hold_time)
 
-func _spawn_projectile(proj: Projectile, was_charge_fire: bool = false) -> void:
+func _spawn_projectile(proj: Projectile) -> void:
 	returned = false
 	proj.source_weapon_instance = self
-	super._spawn_projectile(proj, was_charge_fire)
+	super._spawn_projectile(proj)
 
 func _on_tree_exiting() -> void:
 	if not returned:

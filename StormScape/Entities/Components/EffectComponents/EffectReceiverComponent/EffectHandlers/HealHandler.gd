@@ -52,11 +52,11 @@ func handle_over_time_heal(hot_resource: HOTResource, source_type: String) -> vo
 	var hot_timer: Timer = Timer.new()
 	hot_timer.set_meta("hot_resource", hot_resource)
 	hot_timer.one_shot = false
-	hot_timer.timeout.connect(func() -> void: _on_hot_timer_timeout(hot_timer, source_type))
+	hot_timer.timeout.connect(_on_hot_timer_timeout.bind(hot_timer, source_type))
 	hot_timer.name = source_type + "_timer"
 	add_child(hot_timer)
 
-	if hot_resource.delay_time > 0: # we have a delay before the healing starts
+	if hot_resource.delay_time > 0: # We have a delay before the healing starts
 		var delay_timer: Timer = Timer.new()
 		delay_timer.one_shot = true
 		delay_timer.wait_time = hot_resource.delay_time
@@ -68,7 +68,7 @@ func handle_over_time_heal(hot_resource: HOTResource, source_type: String) -> vo
 		else:
 			hot_timer.wait_time = max(0.01, hot_resource.time_between_ticks)
 
-		delay_timer.timeout.connect(func() -> void: _on_hot_timer_timeout(hot_timer, source_type))
+		delay_timer.timeout.connect(_on_hot_timer_timeout.bind(hot_timer, source_type))
 		delay_timer.timeout.connect(hot_timer.start)
 		delay_timer.timeout.connect(delay_timer.queue_free)
 		delay_timer.name = source_type + "_delayTimer"
@@ -76,11 +76,11 @@ func handle_over_time_heal(hot_resource: HOTResource, source_type: String) -> vo
 		delay_timer.start()
 		_add_timer_to_cache(source_type, hot_timer, hot_timers)
 		_add_timer_to_cache(source_type, delay_timer, hot_delay_timers)
-	else: # there is no delay needed
+	else: # There is no delay needed
 		hot_timer.set_meta("ticks_completed", 1)
 
 		if not hot_resource.run_until_removed:
-			hot_timer.wait_time = max(0.01, (hot_resource.healing_time / (hot_resource.heal_ticks_array.size())))
+			hot_timer.wait_time = max(0.01, (hot_resource.healing_time / (hot_resource.heal_ticks_array.size() - 1)))
 		else:
 			hot_timer.wait_time = max(0.01, hot_resource.time_between_ticks)
 
@@ -99,14 +99,18 @@ func _add_timer_to_cache(source_type: String, timer: Timer, cache: Dictionary) -
 	else:
 		cache[source_type] = [timer]
 
-## Deletes all timers for a source type from the timer cache dict.
-func _delete_timers_from_caches(source_type: String) -> void:
+## Deletes all timers for a source type from the timer cache dict. Can optionally send a single timer to be the only one removed.
+func _delete_timers_from_caches(source_type: String, specific_timer: Timer = null) -> void:
 	var timers: Array = hot_timers.get(source_type, [null])
 	if timers:
-		for timer: Variant in timers:
-			if timer != null:
-				timer.stop()
-				timer.queue_free()
+		for i: int in range(timers.size()):
+			if timers[i] != null:
+				if timers[i] == specific_timer:
+					timers[i].queue_free()
+					timers.remove_at(i)
+					return
+				else:
+					timers[i].queue_free()
 		hot_timers.erase(source_type)
 
 	var delay_timers: Array = hot_delay_timers.get(source_type, [null])
@@ -115,6 +119,7 @@ func _delete_timers_from_caches(source_type: String) -> void:
 			if delay_timer != null:
 				delay_timer.stop()
 				delay_timer.queue_free()
+
 		hot_delay_timers.erase(source_type)
 
 ## When the healing over time interval timer ends, check what sourced the timer and see if that source
@@ -136,9 +141,9 @@ func _on_hot_timer_timeout(hot_timer: Timer, source_type: String) -> void:
 			hot_timer.set_meta("ticks_completed", ticks_completed + 1)
 
 			if max_ticks == 1:
-				_delete_timers_from_caches(source_type)
+				_delete_timers_from_caches(source_type, hot_timer)
 		else:
-			_delete_timers_from_caches(source_type)
+			_delete_timers_from_caches(source_type, hot_timer)
 
 ## Sends the affected entity's health component the final healing values based on what stats the heal was
 ## allowed to affect.

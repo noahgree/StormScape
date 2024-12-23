@@ -12,10 +12,13 @@ class_name HealthComponent
 @export_range(0, 100, 1) var base_armor: int = 0 ## The initial percentage of damage deflected.
 @export var infinte_hp: bool = false ## When true, the entity cannot run out of health or shield.
 
+@onready var entity: PhysicsBody2D = get_parent()
+
 var health: int: set = _set_health ## The current health of the entity.
 var shield: int: set = _set_shield ## The current shield of the entity.
 var armor: int = 0: set = _set_armor ## The current armor of the entity. This is the percent of dmg that is blocked.
 var is_dying: bool = false ## Whether the entity is actively dying or not.
+var popups: Dictionary = {} ## The current effect popup displays that are active and can be added to.
 const MAX_ARMOR: int = 100 ## The maximum amount of armor the entity can have.
 
 
@@ -24,26 +27,28 @@ func _ready() -> void:
 	var moddable_stats: Dictionary = {
 		"max_health" : _max_health, "max_shield" : _max_shield
 	}
-	get_parent().stats.add_moddable_stats(moddable_stats)
+	entity.stats.add_moddable_stats(moddable_stats)
 	call_deferred("_emit_initial_values")
 
 ## Called from a deferred method caller in order to let any associated ui ready up first.
 ## Then it emits the initially loaded values.
 func _emit_initial_values() -> void:
-	@warning_ignore("narrowing_conversion") health = get_parent().stats.get_stat("max_health")
-	@warning_ignore("narrowing_conversion") shield = get_parent().stats.get_stat("max_shield")
+	@warning_ignore("narrowing_conversion") health = entity.stats.get_stat("max_health")
+	@warning_ignore("narrowing_conversion") shield = entity.stats.get_stat("max_shield")
 	armor = base_armor
 #endregion
 
 #region Utils: Taking Damage
 ## Takes damage to both health and shield, starting with available shield then applying any remaining amount to health.
-func damage_shield_then_health(amount: int, source_type: String) -> void:
+func damage_shield_then_health(amount: int, source_type: String, was_crit: bool) -> void:
 	if amount > 0 and not is_dying:
 		if shield > 0:
-			EffectPopup.create_popup(source_type if source_type != "BasicDamage" else "ShieldDamage", false, amount, get_parent())
+			var src_type: String = source_type if source_type != "BasicDamage" else "ShieldDamage"
+			_create_or_update_popup_for_src_type(src_type, false, was_crit, amount)
 			_play_shield_damage_sound()
 		else:
-			EffectPopup.create_popup(source_type if source_type != "BasicDamage" else "HealthDamage", false, amount, get_parent())
+			var src_type: String = source_type if source_type != "BasicDamage" else "HealthDamage"
+			_create_or_update_popup_for_src_type(src_type, false, was_crit, amount)
 
 	if infinte_hp:
 		return
@@ -56,32 +61,34 @@ func damage_shield_then_health(amount: int, source_type: String) -> void:
 	_check_for_death()
 
 ## Decrements only the health value by the passed in amount.
-func damage_health(amount: int, source_type: String) -> void:
+func damage_health(amount: int, source_type: String, was_crit: bool) -> void:
 	if not is_dying:
 		if not infinte_hp:
 			health = max(0, health - amount)
-		EffectPopup.create_popup(source_type if source_type != "BasicDamage" else "HealthDamage", false, amount, get_parent())
+		var src_type: String = source_type if source_type != "BasicDamage" else "HealthDamage"
+		_create_or_update_popup_for_src_type(src_type, false, was_crit, amount)
 		_check_for_death()
 
 ## Decrements only the shield value by the passed in amount.
-func damage_shield(amount: int, source_type: String) -> void:
+func damage_shield(amount: int, source_type: String, was_crit: bool) -> void:
 	if not is_dying:
 		if not infinte_hp:
 			shield = max(0, shield - amount)
-		EffectPopup.create_popup(source_type if source_type != "BasicDamage" else "ShieldDamage", false, amount, get_parent())
+		var src_type: String = source_type if source_type != "BasicDamage" else "ShieldDamage"
+		_create_or_update_popup_for_src_type(src_type, false, was_crit, amount)
 		if amount > 0: _play_shield_damage_sound()
 
 ## Handles what happens when health reaches 0 for the entity.
 func _check_for_death() -> void:
 	if health <= 0 and not is_dying:
 		is_dying = true
-		var loot_table: LootTableComponent = get_parent().get_node_or_null("LootTableComponent")
+		var loot_table: LootTableComponent = entity.get_node_or_null("LootTableComponent")
 		if loot_table != null: loot_table.handle_death()
 
-		if get_parent().has_method("die"):
-			get_parent().die()
+		if entity.has_method("die"):
+			entity.die()
 		else:
-			get_parent().queue_free()
+			entity.queue_free()
 #endregion
 
 #region Changing Armor
@@ -94,40 +101,44 @@ func set_armor(new_armor: int) -> void:
 ## Heals to both health and shield, starting with health then applying any remaining amount to shield.
 func heal_health_then_shield(amount: int, source_type: String) -> void:
 	if not is_dying:
-		if health < get_parent().stats.get_stat("max_health"):
-			EffectPopup.create_popup(source_type if source_type != "BasicHealing" else "HealthHealing", true, amount, get_parent())
+		if health < entity.stats.get_stat("max_health"):
+			var src_type: String = source_type if source_type != "BasicHealing" else "HealthHealing"
+			_create_or_update_popup_for_src_type(src_type, true, false, amount)
 		else:
-			EffectPopup.create_popup(source_type if source_type != "BasicHealing" else "ShieldHealing", true, amount, get_parent())
+			var src_type: String = source_type if source_type != "BasicHealing" else "ShieldHealing"
+			_create_or_update_popup_for_src_type(src_type, true, false, amount)
 
-		var spillover_health: int = max(0, (amount + health) - get_parent().stats.get_stat("max_health"))
-		@warning_ignore("narrowing_conversion") health = clampi(health + amount, 0, get_parent().stats.get_stat("max_health"))
+		var spillover_health: int = max(0, (amount + health) - entity.stats.get_stat("max_health"))
+		@warning_ignore("narrowing_conversion") health = clampi(health + amount, 0, entity.stats.get_stat("max_health"))
 
 		if spillover_health > 0:
-			@warning_ignore("narrowing_conversion") shield = clampi(shield + spillover_health, 0, get_parent().stats.get_stat("max_shield"))
+			@warning_ignore("narrowing_conversion") shield = clampi(shield + spillover_health, 0, entity.stats.get_stat("max_shield"))
 
 ## Heals only health.
 func heal_health(amount: int, source_type: String) -> void:
 	if not is_dying:
-		health = min(health + amount, get_parent().stats.get_stat("max_health"))
-		EffectPopup.create_popup(source_type if source_type != "BasicHealing" else "HealthHealing", true, amount, get_parent())
+		health = min(health + amount, entity.stats.get_stat("max_health"))
+		var src_type: String = source_type if source_type != "BasicHealing" else "HealthHealing"
+		_create_or_update_popup_for_src_type(src_type, true, false, amount)
 
 ## Heals only shield.
 func heal_shield(amount: int, source_type: String) -> void:
 	if not is_dying:
-		shield = min(shield + amount, get_parent().stats.get_stat("max_shield"))
-		EffectPopup.create_popup(source_type if source_type != "BasicHealing" else "ShieldHealing", true, amount, get_parent())
+		shield = min(shield + amount, entity.stats.get_stat("max_shield"))
+		var src_type: String = source_type if source_type != "BasicHealing" else "ShieldHealing"
+		_create_or_update_popup_for_src_type(src_type, true, false, amount)
 #endregion
 
 #region Setters & On-Change Funcs
 ## Setter for the current health. Clamps the new value to the allowed range and updates any connected UI.
 func _set_health(new_value: int) -> void:
-	@warning_ignore("narrowing_conversion") health = clampi(new_value, 0, get_parent().stats.get_stat("max_health"))
+	@warning_ignore("narrowing_conversion") health = clampi(new_value, 0, entity.stats.get_stat("max_health"))
 	if stats_ui and stats_ui.has_method("on_health_changed"):
 		stats_ui.on_health_changed(health)
 
 ## Setter for the current shield. Clamps the new value to the allowed range and updates any connected UI.
 func _set_shield(new_value: int) -> void:
-	@warning_ignore("narrowing_conversion") shield = clampi(new_value, 0, get_parent().stats.get_stat("max_shield"))
+	@warning_ignore("narrowing_conversion") shield = clampi(new_value, 0, entity.stats.get_stat("max_shield"))
 	if stats_ui and stats_ui.has_method("on_shield_changed"):
 		stats_ui.on_shield_changed(shield)
 
@@ -144,5 +155,19 @@ func on_max_shield_changed(new_max_shield: int) -> void:
 	shield = min(shield, new_max_shield)
 
 func _play_shield_damage_sound() -> void:
-	AudioManager.play_sound("PlayerShieldDamage", AudioManager.SoundType.SFX_2D, get_parent().global_position)
+	AudioManager.play_sound("PlayerShieldDamage", AudioManager.SoundType.SFX_2D, entity.global_position)
+#endregion
+
+#region Popups
+func _create_or_update_popup_for_src_type(src_type: String, was_healing: bool, was_crit: bool, amount: int) -> void:
+	if src_type in popups:
+		popups[src_type].update_popup(amount, was_crit)
+	else:
+		var new_popup: EffectPopup = EffectPopup.create_popup(src_type, was_healing, was_crit, amount, entity)
+		new_popup.tree_exiting.connect(_on_popup_completed.bind(src_type))
+		popups[src_type] = new_popup
+
+func _on_popup_completed(src_type: String) -> void:
+	if src_type in popups:
+		popups.erase(src_type)
 #endregion

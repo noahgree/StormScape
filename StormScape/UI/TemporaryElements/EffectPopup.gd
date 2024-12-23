@@ -5,74 +5,95 @@ class_name EffectPopup
 static var popup_scene: PackedScene = load("res://UI/TemporaryElements/EffectPopup.tscn") ## The popup scene to be instantiated when a popup is created above something.
 
 @export var text_colors: Dictionary = { ## The strings that have associated colors to change the text color to.
-	"Frostbite" : [Color(0.591, 0.884, 1), Color(0, 0.6, 0.933)],
-	"Burning" : [Color(1, 0.284, 0.25), Color(0.969, 0.694, 0)],
-	"Poison" : [Color(0.609, 0.737, 0.352), Color(0.36, 0.612, 0)],
-	"Storm Syndrome" : [Color(1, 0.328, 0.899), Color(0.765, 0.654, 1)],
-	"Regen" : [Color(0, 0.853, 0.283), Color(0, 0.834, 0.62)],
-	"Life Steal" : [Color(0.272, 0.749, 0), Color(1, 0.431, 0.158)],
-	"CritDamage" : [Color(2.0, 0.7, 0.1), Color(1.4, 1.25, 0.9)],
-	"ShieldDamage" : [Color(0.595, 0.194, 1), Color(0.779, 0.49, 1)],
-	"HealthDamage" : [Color(0.893, 0, 0.174), Color(1, 0.347, 0.369)],
-	"ShieldHealing" : [Color(0.779, 0.49, 1), Color(0.595, 0.194, 1)],
-	"HealthHealing" : [Color(1, 0.347, 0.369), Color(0.893, 0, 0.174)]
+	"Frostbite" : null,
+	"Burning" : null,
+	"Poison" : null,
+	"Storm Syndrome" : null,
+	"Regen" : null,
+	"Life Steal" : null,
+	"CritDamage" : null,
+	"ShieldDamage" : null,
+	"HealthDamage" : null,
+	"ShieldHealing" : null,
+	"HealthHealing" : null
 }
 
-@onready var number_label: Label = $NumberLabel
-@onready var glow: TextureRect = $Glow
+@onready var number_label: Label = $CenterContainer/NumberLabel
+@onready var number_outline: Label = $CenterContainer/NumberOutline
+@onready var glow: TextureRect = $CenterContainer/Glow
+@onready var gradient_tex: TextureRect = $CenterContainer/NumberLabel/GradientTex
 
+
+var starting_scale: Vector2
+var starting_offset: float
 var source_type: String
 var is_healing: bool
+var is_crit: bool
 var value: int = 0
+var parent_node: PhysicsBody2D
+var tween: Tween
 
 
-static func create_popup(src_type: String, was_healing: bool, popup_value: int, node: PhysicsBody2D) -> void:
+static func create_popup(src_type: String, was_healing: bool, was_crit: bool, popup_value: int, node: PhysicsBody2D) -> EffectPopup:
 	var popup: EffectPopup = popup_scene.instantiate()
 
 	popup.source_type = src_type
-	popup.value = popup_value
 	popup.is_healing = was_healing
+	popup.is_crit = was_crit
+	popup.value = popup_value
+	popup.parent_node = node
 
 	popup.global_position = node.global_position - Vector2(0, SpriteHelpers.SpriteDetails.get_frame_rect(node.sprite).y)
 	GlobalData.world_root.add_child(popup)
+	return popup
 
 func _ready() -> void:
+	starting_scale = scale
+	starting_offset = randf_range(-4.5, 4.5)
+	update_popup(0, is_crit)
+
+func update_popup(new_value: int, was_crit: bool) -> void:
+	value += new_value
 	number_label.text = str(value)
-	position.x += (randf_range(-4.5, 4.5))
+	global_position = parent_node.global_position - Vector2(0, SpriteHelpers.SpriteDetails.get_frame_rect(parent_node.sprite).y)
+	position.x += starting_offset
 
-	var gradient_texture: GradientTexture1D = number_label.material.get_shader_parameter("gradient_texture")
-	var gradient: Gradient = gradient_texture.gradient
-
-	for i: int in range(gradient.get_point_count()):
-		var new_color: Color = text_colors.get(source_type, [Color(1.0, 1.0, 1.0), Color(1.0, 1.0, 1.0)])[i]
-		gradient.set_color(i, new_color)
-
-	number_label.material.set_shader_parameter("gradient_texture", gradient_texture)
+	var src_type: String = source_type if not was_crit else "CritDamage"
+	gradient_tex.texture = text_colors.get(src_type, GradientTexture1D.new())
 
 	if is_healing:
-		glow.modulate = Color(0.1, 0.90, 0.0, 1.0)
+		glow.modulate = Color(0, 0.859, 0.18, 0.9)
 		number_label.text = "+" + number_label.text
 	else:
 		glow.modulate = Color(1.25, 0.2, 0.3, 1.0)
-	if source_type == "CritDamage": scale *= 1.15
 
-	glow.scale.x = max(0.062, 0.031 * str(value).length())
-	glow.position.x = min(-14.75, -7.375 * str(value).length())
+	modulate.a = 1.0
+	skew = -deg_to_rad(15)
+	number_outline.text = number_label.text
+
+	if was_crit:
+		scale = starting_scale * 1.15
+	else:
+		scale = starting_scale
+
+	glow.custom_minimum_size.x = 20 + (10 * (number_label.text.length() - 1))
+	gradient_tex.size.x = 278 * number_label.text.length()
 
 	_tween_self()
 
 ## Tweens the animated properties of the popup then frees it.
 func _tween_self() -> void:
-	var tween: Tween = create_tween()
+	if tween: tween.kill()
+	tween = create_tween()
 
-	tween.tween_property(self, "scale", scale * 1.25, 0.1).set_trans(Tween.TRANS_SPRING)
-	tween.parallel().tween_property(self, "skew", 0.0, 0.1)
-	tween.parallel().tween_property(self, "position", position + Vector2(2, 2), 0.05)
+	tween.tween_property(self, "scale", scale * 1.25, 0.14).set_trans(Tween.TRANS_SPRING)
+	tween.parallel().tween_property(self, "skew", 0.0, 0.14)
+	tween.parallel().tween_property(self, "position", position + Vector2(2, 2), 0.06)
 
-	tween.tween_interval(0.1)
+	tween.tween_interval(0.14)
 
-	tween.chain().tween_property(self, "global_position", global_position + Vector2(0, -5), 0.2)
-	tween.parallel().tween_property(self, "scale", scale * 0.5, 0.2)
-	tween.parallel().tween_property(self, "modulate:a", 0.35, 0.2)
-	tween.parallel().tween_property(self, "skew", deg_to_rad(5.0), 0.2)
+	tween.chain().tween_property(self, "global_position", global_position + Vector2(0, -5), 0.25)
+	tween.parallel().tween_property(self, "scale", scale * 0.5, 0.25)
+	tween.parallel().tween_property(self, "modulate:a", 0.35, 0.25)
+	tween.parallel().tween_property(self, "skew", deg_to_rad(5.0), 0.25)
 	tween.chain().tween_callback(queue_free)
