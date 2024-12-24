@@ -1,3 +1,4 @@
+@icon("res://Utilities/Debug/EditorIcons/knockback_effect.png")
 extends StatusEffect
 class_name KnockbackEffect
 

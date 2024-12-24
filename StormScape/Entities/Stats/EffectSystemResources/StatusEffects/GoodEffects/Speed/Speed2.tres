@@ -1,12 +1,12 @@
-[gd_resource type="Resource" script_class="StatusEffect" load_steps=6 format=3 uid="uid://c0gxq4ufi3snt"]
+[gd_resource type="Resource" script_class="SpeedEffect" load_steps=6 format=3 uid="uid://74dy87f8jte1"]
 
-[ext_resource type="Script" path="res://Entities/Stats/EffectSystemResources/StatusEffects/StatusEffect.gd" id="1_638x2"]
-[ext_resource type="Script" path="res://Entities/Stats/StatMod/StatMod.gd" id="2_o6fme"]
+[ext_resource type="Script" uid="uid://3q7wgh1obvja" path="res://Entities/Stats/EffectSystemResources/StatusEffects/GoodEffects/Speed/SpeedEffect.gd" id="1_dinqh"]
+[ext_resource type="Script" uid="uid://bcjwesiannbd0" path="res://Entities/Stats/StatMod/StatMod.gd" id="2_o6fme"]
 
 [sub_resource type="Resource" id="Resource_wakq2"]
 script = ExtResource("2_o6fme")
 stat_id = "max_speed"
-mod_id = "speed2"
+mod_id = "speed1"
 operation = "+%"
 value = 25.0
 priority = 1
@@ -16,9 +16,9 @@ override_all = false
 [sub_resource type="Resource" id="Resource_r3x4i"]
 script = ExtResource("2_o6fme")
 stat_id = "friction"
-mod_id = "speed2"
+mod_id = "speed1"
 operation = "+%"
-value = 25.0
+value = 15.0
 priority = 1
 max_stack_count = 3
 override_all = false
@@ -26,17 +26,17 @@ override_all = false
 [sub_resource type="Resource" id="Resource_ncnec"]
 script = ExtResource("2_o6fme")
 stat_id = "acceleration"
-mod_id = "speed2"
+mod_id = "speed1"
 operation = "+%"
-value = 25.0
+value = 15.0
 priority = 1
 max_stack_count = 3
 override_all = false
 
 [resource]
-script = ExtResource("1_638x2")
+script = ExtResource("1_dinqh")
 effect_name = "Speed"
-effect_lvl = 2
+effect_lvl = 1
 is_bad_effect = false
 affected_entities = 1
 effects_to_stop = Array[String]([])
@@ -46,4 +46,6 @@ stat_mods = Array[ExtResource("2_o6fme")]([SubResource("Resource_wakq2"), SubRes
 audio_to_play = ""
 only_cue_on_player_hit = false
 spawn_particles = true
-particles_req_handler = false
+particle_hander_req = ""
+update_entity_glow = true
+metadata/_custom_type_script = ExtResource("1_dinqh")

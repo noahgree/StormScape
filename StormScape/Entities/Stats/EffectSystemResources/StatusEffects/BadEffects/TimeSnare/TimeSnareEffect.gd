@@ -1,3 +1,4 @@
+@icon("res://Utilities/Debug/EditorIcons/time_snare_effect.png")
 extends StatusEffect
 class_name TimeSnareEffect
 

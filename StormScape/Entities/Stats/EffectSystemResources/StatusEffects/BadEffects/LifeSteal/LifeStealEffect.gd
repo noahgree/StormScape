@@ -1,3 +1,4 @@
+@icon("res://Utilities/Debug/EditorIcons/life_steal_effect.png")
 extends StatusEffect
 class_name LifeStealEffect
 ## Resource type for all life steal effects.

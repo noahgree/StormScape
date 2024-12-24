@@ -1,7 +1,7 @@
 [gd_resource type="Resource" script_class="KnockbackEffect" load_steps=3 format=3 uid="uid://b0it5xmpw16sd"]
 
-[ext_resource type="Script" path="res://Entities/Stats/EffectSystemResources/StatusEffects/BadEffects/Knockback/KnockbackEffect.gd" id="1_ofqhb"]
-[ext_resource type="Script" path="res://Entities/Stats/StatMod/StatMod.gd" id="2_rysxw"]
+[ext_resource type="Script" uid="uid://yepywua50vc1" path="res://Entities/Stats/EffectSystemResources/StatusEffects/BadEffects/Knockback/KnockbackEffect.gd" id="1_ofqhb"]
+[ext_resource type="Script" uid="uid://bcjwesiannbd0" path="res://Entities/Stats/StatMod/StatMod.gd" id="2_rysxw"]
 
 [resource]
 script = ExtResource("1_ofqhb")

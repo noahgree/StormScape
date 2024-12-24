@@ -1,10 +1,10 @@
-[gd_resource type="Resource" script_class="StatusEffect" load_steps=6 format=3 uid="uid://brjtdk41hym1c"]
+[gd_resource type="Resource" script_class="SpeedEffect" load_steps=6 format=3 uid="uid://jcbukl7ckq0g"]
 
-[ext_resource type="Script" path="res://Entities/Stats/EffectSystemResources/StatusEffects/StatusEffect.gd" id="1_oflmh"]
-[ext_resource type="Script" path="res://Entities/Stats/StatMod/StatMod.gd" id="2_l733c"]
+[ext_resource type="Script" uid="uid://3q7wgh1obvja" path="res://Entities/Stats/EffectSystemResources/StatusEffects/GoodEffects/Speed/SpeedEffect.gd" id="1_ljkli"]
+[ext_resource type="Script" uid="uid://bcjwesiannbd0" path="res://Entities/Stats/StatMod/StatMod.gd" id="2_inc2p"]
 
 [sub_resource type="Resource" id="Resource_wakq2"]
-script = ExtResource("2_l733c")
+script = ExtResource("2_inc2p")
 stat_id = "max_speed"
 mod_id = "speed1"
 operation = "+%"
@@ -14,7 +14,7 @@ max_stack_count = 3
 override_all = false
 
 [sub_resource type="Resource" id="Resource_r3x4i"]
-script = ExtResource("2_l733c")
+script = ExtResource("2_inc2p")
 stat_id = "friction"
 mod_id = "speed1"
 operation = "+%"
@@ -24,7 +24,7 @@ max_stack_count = 3
 override_all = false
 
 [sub_resource type="Resource" id="Resource_ncnec"]
-script = ExtResource("2_l733c")
+script = ExtResource("2_inc2p")
 stat_id = "acceleration"
 mod_id = "speed1"
 operation = "+%"
@@ -34,7 +34,7 @@ max_stack_count = 3
 override_all = false
 
 [resource]
-script = ExtResource("1_oflmh")
+script = ExtResource("1_ljkli")
 effect_name = "Speed"
 effect_lvl = 1
 is_bad_effect = false
@@ -42,9 +42,10 @@ affected_entities = 1
 effects_to_stop = Array[String]([])
 mod_time = 5.0
 apply_until_removed = false
-stat_mods = Array[ExtResource("2_l733c")]([SubResource("Resource_wakq2"), SubResource("Resource_r3x4i"), SubResource("Resource_ncnec")])
+stat_mods = Array[ExtResource("2_inc2p")]([SubResource("Resource_wakq2"), SubResource("Resource_r3x4i"), SubResource("Resource_ncnec")])
 audio_to_play = ""
 only_cue_on_player_hit = false
 spawn_particles = true
 particle_hander_req = ""
 update_entity_glow = true
+metadata/_custom_type_script = ExtResource("1_ljkli")

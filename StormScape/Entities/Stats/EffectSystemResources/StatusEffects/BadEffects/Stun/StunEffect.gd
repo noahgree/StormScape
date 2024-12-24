@@ -1,3 +1,4 @@
+@icon("res://Utilities/Debug/EditorIcons/stun_effect.png")
 extends StatusEffect
 class_name StunEffect
 
