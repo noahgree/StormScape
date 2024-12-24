@@ -1,3 +1,4 @@
+@icon("res://Utilities/Debug/EditorIcons/proj_weapon_resource.png")
 extends WeaponResource
 class_name ProjWeaponResource
 ## The resource that defines all stats for a projectile weapon. Passing this around essentially passes the weapon around.

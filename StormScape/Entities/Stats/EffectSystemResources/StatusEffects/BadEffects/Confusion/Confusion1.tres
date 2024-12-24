@@ -1,30 +1,32 @@
-[gd_resource type="Resource" script_class="StatusEffect" load_steps=4 format=3 uid="uid://0o1e12ryupye"]
+[gd_resource type="Resource" script_class="ConfusionEffect" load_steps=4 format=3 uid="uid://g2e32s8xlp2q"]
 
-[ext_resource type="Script" path="res://Entities/Stats/EffectSystemResources/StatusEffects/StatusEffect.gd" id="1_h4nev"]
-[ext_resource type="Script" path="res://Entities/Stats/StatMod/StatMod.gd" id="2_2qesc"]
+[ext_resource type="Script" uid="uid://dowo7vjco2b7c" path="res://Entities/Stats/EffectSystemResources/StatusEffects/BadEffects/Confusion/ConfusionEffect.gd" id="1_7xxcl"]
+[ext_resource type="Script" uid="uid://bcjwesiannbd0" path="res://Entities/Stats/StatMod/StatMod.gd" id="2_c5w3g"]
 
-[sub_resource type="Resource" id="Resource_4kxph"]
-script = ExtResource("2_2qesc")
+[sub_resource type="Resource" id="Resource_7xxcl"]
+script = ExtResource("2_c5w3g")
 stat_id = "confusion_amount"
 mod_id = "Confusion"
-operation = "+"
+operation = "+%"
 value = 40.0
 priority = 1
 max_stack_count = 3
 override_all = false
+metadata/_custom_type_script = ExtResource("2_c5w3g")
 
 [resource]
-script = ExtResource("1_h4nev")
+script = ExtResource("1_7xxcl")
 effect_name = "Confusion"
-effect_lvl = 0
+effect_lvl = 1
 is_bad_effect = true
 affected_entities = 7
 effects_to_stop = Array[String]([])
 mod_time = 3.0
 apply_until_removed = false
-stat_mods = Array[ExtResource("2_2qesc")]([SubResource("Resource_4kxph")])
+stat_mods = Array[ExtResource("2_c5w3g")]([SubResource("Resource_7xxcl")])
 audio_to_play = ""
 only_cue_on_player_hit = false
 spawn_particles = true
 particle_hander_req = "Confusion"
 update_entity_glow = true
+metadata/_custom_type_script = ExtResource("1_7xxcl")

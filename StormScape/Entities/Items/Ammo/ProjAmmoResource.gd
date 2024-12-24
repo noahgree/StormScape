@@ -1,3 +1,4 @@
+@icon("res://Utilities/Debug/EditorIcons/proj_ammo_resource.png")
 extends ItemResource
 class_name ProjAmmoResource
 

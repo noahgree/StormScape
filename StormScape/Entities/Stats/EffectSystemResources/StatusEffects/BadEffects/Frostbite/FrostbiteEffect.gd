@@ -1,3 +1,4 @@
+@icon("res://Utilities/Debug/EditorIcons/frostbite_effect.png")
 extends StatusEffect
 class_name FrostbiteEffect
 

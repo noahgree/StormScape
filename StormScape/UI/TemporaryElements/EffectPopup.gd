@@ -4,7 +4,7 @@ class_name EffectPopup
 
 static var popup_scene: PackedScene = load("res://UI/TemporaryElements/EffectPopup.tscn") ## The popup scene to be instantiated when a popup is created above something.
 
-@export var text_colors: Dictionary = { ## The strings that have associated colors to change the text color to.
+@export var text_colors: Dictionary[String, GradientTexture1D] = { ## The strings that have associated colors to change the text color to.
 	"Frostbite" : null,
 	"Burning" : null,
 	"Poison" : null,

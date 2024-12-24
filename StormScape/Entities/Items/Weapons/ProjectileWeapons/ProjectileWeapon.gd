@@ -1,4 +1,3 @@
-@tool
 extends Weapon
 class_name ProjectileWeapon
 ## Base class for all weapons that spawn any sort of projectile or hitscan or AOE.
@@ -128,30 +127,29 @@ func _setup_mod_cache() -> void:
 	stats.cache_is_setup = true
 
 func _ready() -> void:
-	if not Engine.is_editor_hint():
-		super._ready()
+	super._ready()
 
-		if stats.ammo_type == ProjWeaponResource.ProjAmmoType.STAMINA:
-			if source_entity is DynamicEntity and not stats.hide_ammo_ui:
-				source_entity.stamina_component.stamina_changed.connect(_update_ammo_ui)
-		elif stats.ammo_type != ProjWeaponResource.ProjAmmoType.SELF and stats.ammo_type != ProjWeaponResource.ProjAmmoType.CHARGES:
-			if source_entity is Player and not stats.hide_reload_ui:
-				reloading_ui = source_entity.get_node("ReloadingUI")
+	if stats.ammo_type == ProjWeaponResource.ProjAmmoType.STAMINA:
+		if source_entity is DynamicEntity and not stats.hide_ammo_ui:
+			source_entity.stamina_component.stamina_changed.connect(_update_ammo_ui)
+	elif stats.ammo_type != ProjWeaponResource.ProjAmmoType.SELF and stats.ammo_type != ProjWeaponResource.ProjAmmoType.CHARGES:
+		if source_entity is Player and not stats.hide_reload_ui:
+			reloading_ui = source_entity.get_node("ReloadingUI")
 
-		source_entity.inv.auto_decrementer.cooldown_ended.connect(_on_fire_cooldown_timeout)
-		source_entity.inv.auto_decrementer.recharge_completed.connect(_on_ammo_recharge_completed)
+	source_entity.inv.auto_decrementer.cooldown_ended.connect(_on_fire_cooldown_timeout)
+	source_entity.inv.auto_decrementer.recharge_completed.connect(_on_ammo_recharge_completed)
 
-		add_child(firing_duration_timer)
-		add_child(reload_timer)
-		add_child(single_reload_timer)
-		add_child(hitscan_hands_freeze_timer)
-		firing_duration_timer.one_shot = true
-		reload_timer.one_shot = true
-		single_reload_timer.one_shot = true
-		hitscan_hands_freeze_timer.one_shot = true
-		reload_timer.timeout.connect(_on_reload_timer_timeout)
-		single_reload_timer.timeout.connect(_on_single_reload_timer_timeout)
-		hitscan_hands_freeze_timer.timeout.connect(_on_hitscan_hands_freeze_timer_timeout)
+	add_child(firing_duration_timer)
+	add_child(reload_timer)
+	add_child(single_reload_timer)
+	add_child(hitscan_hands_freeze_timer)
+	firing_duration_timer.one_shot = true
+	reload_timer.one_shot = true
+	single_reload_timer.one_shot = true
+	hitscan_hands_freeze_timer.one_shot = true
+	reload_timer.timeout.connect(_on_reload_timer_timeout)
+	single_reload_timer.timeout.connect(_on_single_reload_timer_timeout)
+	hitscan_hands_freeze_timer.timeout.connect(_on_hitscan_hands_freeze_timer_timeout)
 
 func disable() -> void:
 	source_entity.move_fsm.should_rotate = true
@@ -450,7 +448,7 @@ func _apply_barrage_logic(was_charge_fire: bool = false) -> void:
 	var close_to_360_adjustment: int = 0 if stats.s_mods.get_stat("angular_spread") > 310 else 1
 	var spread_segment_width: float = angular_spread_radians / (stats.s_mods.get_stat("barrage_count") - close_to_360_adjustment)
 	var start_rotation: float = global_rotation - (angular_spread_radians / 2.0)
-	var multishot_id: int = UIDHelper.generate_multishot_uid()
+	#var multishot_id: int = UIDHelper.generate_multishot_uid()
 
 	for i: int in range(stats.barrage_count):
 		if not stats.use_hitscan:

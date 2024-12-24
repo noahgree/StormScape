@@ -1,3 +1,4 @@
+@icon("res://Utilities/Debug/EditorIcons/consumable_resource.png")
 extends ItemResource
 class_name ConsumableResource
 

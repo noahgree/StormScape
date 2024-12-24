@@ -1,8 +1,8 @@
 [gd_resource type="Resource" script_class="StormSyndromeEffect" load_steps=5 format=3 uid="uid://cucuggowaf55y"]
 
-[ext_resource type="Script" path="res://Entities/Stats/EffectSystemResources/EffectOverTimeResources/DOTResource.gd" id="1_byjya"]
-[ext_resource type="Script" path="res://Entities/Stats/EffectSystemResources/StatusEffects/BadEffects/StormSyndrome/StormSyndromeEffect.gd" id="1_lgscn"]
-[ext_resource type="Script" path="res://Entities/Stats/StatMod/StatMod.gd" id="2_tlg1s"]
+[ext_resource type="Script" uid="uid://20acrt2hb6y" path="res://Entities/Stats/EffectSystemResources/EffectOverTimeResources/DOTResource.gd" id="1_byjya"]
+[ext_resource type="Script" uid="uid://bq0632kqw53el" path="res://Entities/Stats/EffectSystemResources/StatusEffects/BadEffects/StormSyndrome/StormSyndromeEffect.gd" id="1_lgscn"]
+[ext_resource type="Script" uid="uid://bcjwesiannbd0" path="res://Entities/Stats/StatMod/StatMod.gd" id="2_tlg1s"]
 
 [sub_resource type="Resource" id="Resource_dega7"]
 script = ExtResource("1_byjya")

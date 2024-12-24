@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="StormVisuals" load_steps=2 format=3 uid="uid://cx6t5cil24ca3"]
 
-[ext_resource type="Script" path="res://Stages/World/Storm/StormVisuals/StormVisuals.gd" id="1_a2p73"]
+[ext_resource type="Script" uid="uid://cgese4xtht2od" path="res://Stages/World/Storm/StormVisuals/StormVisuals.gd" id="1_a2p73"]
 
 [resource]
 script = ExtResource("1_a2p73")

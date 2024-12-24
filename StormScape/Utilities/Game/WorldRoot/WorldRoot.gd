@@ -14,4 +14,4 @@ func _ready() -> void:
 		fps_label.text = ""
 
 func _process(_delta: float) -> void:
-	fps_label.text = str(Engine.get_frames_per_second())
+	fps_label.text = str(int(Engine.get_frames_per_second()))

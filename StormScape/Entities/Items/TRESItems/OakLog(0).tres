@@ -1,21 +1,21 @@
-[gd_resource type="Resource" script_class="ItemResource" load_steps=5 format=3 uid="uid://b6tg3hfcver2x"]
+[gd_resource type="Resource" script_class="WorldResourceResource" load_steps=5 format=3 uid="uid://bs4rqdt46yav7"]
 
-[ext_resource type="Texture2D" uid="uid://bptqv05di5d2o" path="res://Entities/Items/WorldResources/oak_log.png" id="1_u3qs1"]
-[ext_resource type="Script" path="res://Entities/Items/ItemCore/ItemResource.gd" id="2_unbsk"]
-[ext_resource type="PackedScene" uid="uid://bhmmr2f1hs8mk" path="res://Entities/Items/WorldResources/WorldResource.tscn" id="2_wui75"]
-[ext_resource type="Script" path="res://UI/Inventory/PlayerInventory/Crafting/CraftingIngredient.gd" id="3_hfl1u"]
+[ext_resource type="Texture2D" uid="uid://bptqv05di5d2o" path="res://Entities/Items/WorldResources/oak_log.png" id="1_x5w4q"]
+[ext_resource type="Script" uid="uid://crlmvnjkf7c3g" path="res://Entities/Items/WorldResources/WorldResourceResource.gd" id="1_xl3qb"]
+[ext_resource type="Script" uid="uid://ctxa7i1mbt7ab" path="res://UI/Inventory/PlayerInventory/Crafting/CraftingIngredient.gd" id="2_7glxp"]
+[ext_resource type="PackedScene" uid="uid://bhmmr2f1hs8mk" path="res://Entities/Items/WorldResources/WorldResource.tscn" id="2_ud1xk"]
 
 [resource]
-script = ExtResource("2_unbsk")
+script = ExtResource("1_xl3qb")
 id = "oak_log"
 name = "Oak Log"
 tags = Array[String]([])
 inv_icon_rotation = 0.0
 inv_icon_offset = Vector2(0, 0)
 inv_icon_scale = Vector2(1, 1)
-inv_icon = ExtResource("1_u3qs1")
-ground_icon = ExtResource("1_u3qs1")
-in_hand_icon = ExtResource("1_u3qs1")
+inv_icon = ExtResource("1_x5w4q")
+ground_icon = ExtResource("1_x5w4q")
+in_hand_icon = ExtResource("1_x5w4q")
 item_type = 4
 rarity = 0
 weight = 0
@@ -23,10 +23,10 @@ stack_size = 64
 auto_pickup = true
 pickup_radius = 4
 info = "Logs from an oak tree. Useful in crafting."
-recipe = Array[ExtResource("3_hfl1u")]([])
+recipe = Array[ExtResource("2_7glxp")]([])
 output_quantity = 1
 recipe_unlocked = false
-item_scene = ExtResource("2_wui75")
+item_scene = ExtResource("2_ud1xk")
 cooldowns_per_suid = true
 show_cooldown_fill = false
 rotation_lerping = 0.1
@@ -37,3 +37,4 @@ draw_off_hand = true
 draw_off_hand_offset = Vector2(7, 3)
 main_hand_offset = Vector2(0, 0)
 session_uid = 0
+metadata/_custom_type_script = ExtResource("1_xl3qb")

@@ -1,3 +1,4 @@
+@icon("res://Utilities/Debug/EditorIcons/hitbox_component.svg")
 extends Area2D
 class_name HitboxComponent
 ## The area2d that defines where an effect source comes from.

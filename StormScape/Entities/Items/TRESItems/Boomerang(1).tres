@@ -1,15 +1,15 @@
 [gd_resource type="Resource" script_class="ProjWeaponResource" load_steps=21 format=3 uid="uid://4nvp28pvjtk3"]
 
-[ext_resource type="Script" path="res://Entities/Stats/EffectSystemResources/StatusEffects/StatusEffect.gd" id="1_71p75"]
+[ext_resource type="Script" uid="uid://boo31eu083dqd" path="res://Entities/Stats/EffectSystemResources/StatusEffects/StatusEffect.gd" id="1_71p75"]
 [ext_resource type="Texture2D" uid="uid://c7i0hkkoanp61" path="res://Entities/Items/Weapons/ProjectileWeapons/Boomerang/boomerang_wood.png" id="1_83uvj"]
-[ext_resource type="Script" path="res://Entities/Stats/EffectSystemResources/EffectSources/EffectSource.gd" id="1_rpmcv"]
-[ext_resource type="Script" path="res://UI/Inventory/PlayerInventory/Crafting/CraftingIngredient.gd" id="2_jgihx"]
-[ext_resource type="Script" path="res://Entities/Items/Weapons/ProjectileWeapons/ProjWeaponResource.gd" id="3_qvjon"]
-[ext_resource type="Script" path="res://Entities/Items/Hitscans/HitscanResource.gd" id="3_sx4mp"]
-[ext_resource type="Script" path="res://Entities/Items/Projectiles/ProjectileResource.gd" id="4_5tlmk"]
+[ext_resource type="Script" uid="uid://dkfssottmsrch" path="res://Entities/Stats/EffectSystemResources/EffectSources/EffectSource.gd" id="1_rpmcv"]
+[ext_resource type="Script" uid="uid://dvasncq3tgljs" path="res://Entities/Items/Weapons/ProjectileWeapons/ProjWeaponResource.gd" id="3_qvjon"]
+[ext_resource type="Script" uid="uid://cje5bobi6o8bo" path="res://Entities/Items/Hitscans/HitscanResource.gd" id="3_sx4mp"]
+[ext_resource type="Script" uid="uid://bj3r5oopspj6l" path="res://Entities/Items/Projectiles/ProjectileResource.gd" id="4_5tlmk"]
 [ext_resource type="PackedScene" uid="uid://vdrq4v5hjc06" path="res://Entities/Items/Projectiles/Boomerangs/BoomerangWoodProj.tscn" id="5_ixbes"]
-[ext_resource type="Script" path="res://Entities/Stats/StatMod/StatModsCacheResource.gd" id="6_10jum"]
+[ext_resource type="Script" uid="uid://c2gdoebfp12dq" path="res://Entities/Stats/StatMod/StatModsCacheResource.gd" id="6_10jum"]
 [ext_resource type="PackedScene" uid="uid://b6v13q8eomso" path="res://Entities/Items/Weapons/ProjectileWeapons/Boomerang/BoomerangWood.tscn" id="7_f3xvq"]
+[ext_resource type="Script" uid="uid://ctxa7i1mbt7ab" path="res://UI/Inventory/PlayerInventory/Crafting/CraftingIngredient.gd" id="8_280ga"]
 
 [sub_resource type="Resource" id="Resource_jge04"]
 script = ExtResource("1_rpmcv")
@@ -165,7 +165,7 @@ _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
 point_count = 2
 
 [sub_resource type="Curve" id="Curve_iyot4"]
-max_value = 5.0
+_limits = [0.0, 5.0, 0.0, 1.0]
 _data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.0710173, 1.0047), 0.0, 0.0, 0, 0, Vector2(0.347409, 5), 0.0, 0.0, 0, 0, Vector2(1, 5), 0.0, 0.0, 0, 0]
 point_count = 4
 
@@ -253,6 +253,7 @@ charge_fire_cooldown = 0.5
 charge_firing_duration = 0.1
 ammo_use_per_charge = 3
 charge_bloom_mult = 5.0
+charge_overheat_mult = 5.0
 override_chg_anim_dur = 0.0
 chg_anim_speed_mult = 1.0
 charge_cam_fx_mult = 1.0
@@ -284,11 +285,13 @@ max_bloom = 0.0
 bloom_decrease_delay = 1.0
 initial_fire_rate_delay = 0.0
 warmup_decrease_delay = 0.75
-overheating_type = "None"
+overheat_penalty = 0.0
+overheat_dec_delay = 0.75
 projectiles_per_fire = 1
 use_ammo_per_burst_proj = true
 burst_bullet_delay = 0.1
 add_bloom_per_burst_shot = true
+add_overheat_per_burst_shot = true
 barrage_count = 1
 angular_spread = 25.0
 ammo_in_mag = -1
@@ -317,7 +320,7 @@ stack_size = 1
 auto_pickup = false
 pickup_radius = 5
 info = "A throwable projectile that always finds its way home."
-recipe = Array[ExtResource("2_jgihx")]([])
+recipe = Array[ExtResource("8_280ga")]([])
 output_quantity = 1
 recipe_unlocked = false
 item_scene = ExtResource("7_f3xvq")

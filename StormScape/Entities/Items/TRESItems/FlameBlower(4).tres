@@ -1,16 +1,16 @@
 [gd_resource type="Resource" script_class="ProjWeaponResource" load_steps=28 format=3 uid="uid://dpmwqsai6gxsr"]
 
 [ext_resource type="PackedScene" uid="uid://dxv8dhn3gmufw" path="res://Entities/Items/Weapons/ProjectileWeapons/FlameBlower/FlameBlower.tscn" id="1_2lqvl"]
-[ext_resource type="Script" path="res://Entities/Stats/EffectSystemResources/EffectSources/EffectSource.gd" id="1_qrb8v"]
-[ext_resource type="Script" path="res://Entities/Stats/EffectSystemResources/StatusEffects/StatusEffect.gd" id="1_sti8o"]
-[ext_resource type="Script" path="res://UI/Inventory/PlayerInventory/Crafting/CraftingIngredient.gd" id="2_ae7tv"]
-[ext_resource type="Script" path="res://Entities/Items/Weapons/ProjectileWeapons/ProjWeaponResource.gd" id="3_58le7"]
+[ext_resource type="Script" uid="uid://dkfssottmsrch" path="res://Entities/Stats/EffectSystemResources/EffectSources/EffectSource.gd" id="1_qrb8v"]
+[ext_resource type="Script" uid="uid://boo31eu083dqd" path="res://Entities/Stats/EffectSystemResources/StatusEffects/StatusEffect.gd" id="1_sti8o"]
+[ext_resource type="Script" uid="uid://dvasncq3tgljs" path="res://Entities/Items/Weapons/ProjectileWeapons/ProjWeaponResource.gd" id="3_58le7"]
 [ext_resource type="PackedScene" uid="uid://dynh8j4rfi62r" path="res://Entities/Items/Projectiles/Flame/Flame.tscn" id="5_4ypmg"]
-[ext_resource type="Script" path="res://Entities/Items/Hitscans/HitscanResource.gd" id="5_i2wga"]
-[ext_resource type="Script" path="res://Entities/Stats/StatMod/StatModsCacheResource.gd" id="6_13gru"]
+[ext_resource type="Script" uid="uid://cje5bobi6o8bo" path="res://Entities/Items/Hitscans/HitscanResource.gd" id="5_i2wga"]
+[ext_resource type="Script" uid="uid://c2gdoebfp12dq" path="res://Entities/Stats/StatMod/StatModsCacheResource.gd" id="6_13gru"]
 [ext_resource type="Resource" uid="uid://c8reitxej77jy" path="res://Entities/Stats/EffectSystemResources/StatusEffects/BadEffects/Burning/Burning1FlameBlower.tres" id="6_l8ogr"]
 [ext_resource type="Texture2D" uid="uid://dwtjxkvqe21h4" path="res://Entities/Items/Weapons/ProjectileWeapons/FlameBlower/flame_blower_base_frame.png" id="7_dkcnt"]
-[ext_resource type="Script" path="res://Entities/Items/Projectiles/ProjectileResource.gd" id="7_hqj7u"]
+[ext_resource type="Script" uid="uid://bj3r5oopspj6l" path="res://Entities/Items/Projectiles/ProjectileResource.gd" id="7_hqj7u"]
+[ext_resource type="Script" uid="uid://ctxa7i1mbt7ab" path="res://UI/Inventory/PlayerInventory/Crafting/CraftingIngredient.gd" id="9_h3bvq"]
 
 [sub_resource type="Resource" id="Resource_k2wyg"]
 script = ExtResource("1_qrb8v")
@@ -158,12 +158,12 @@ beam_particle_color = Color(1, 0, 0, 1)
 beam_particle_mult = 1.0
 
 [sub_resource type="Curve" id="Curve_pnq7a"]
-max_value = 0.5
+_limits = [0.0, 0.5, 0.0, 1.0]
 _data = [Vector2(0, 0.297966), 0.0, 0.0, 0, 0, Vector2(1, 0.203377), 0.0, 0.0, 0, 0]
 point_count = 2
 
 [sub_resource type="Curve" id="Curve_tw3jb"]
-max_value = 0.1
+_limits = [0.0, 0.1, 0.0, 1.0]
 _data = [Vector2(0, 0.005), 0.0, 0.0051865, 0, 0, Vector2(1, 0.0101865), 0.0051865, 0.0, 0, 0]
 point_count = 2
 
@@ -352,7 +352,7 @@ stack_size = 1
 auto_pickup = false
 pickup_radius = 6
 info = "Not quite a flame thrower..."
-recipe = Array[ExtResource("2_ae7tv")]([])
+recipe = Array[ExtResource("9_h3bvq")]([])
 output_quantity = 1
 recipe_unlocked = false
 item_scene = ExtResource("1_2lqvl")

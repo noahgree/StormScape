@@ -1,22 +1,22 @@
 [gd_scene load_steps=189 format=3 uid="uid://dba8mrurjlekp"]
 
-[ext_resource type="Script" path="res://Entities/Player/PlayerCore/Player.gd" id="1_m33tt"]
-[ext_resource type="Script" path="res://Entities/Stats/StatMod/StatModsCacheResource.gd" id="2_vetip"]
+[ext_resource type="Script" uid="uid://c3rpxq8pnbdje" path="res://Entities/Player/PlayerCore/Player.gd" id="1_m33tt"]
+[ext_resource type="Script" uid="uid://c2gdoebfp12dq" path="res://Entities/Stats/StatMod/StatModsCacheResource.gd" id="2_vetip"]
 [ext_resource type="PackedScene" uid="uid://cj2wy5f05cos4" path="res://Entities/EntityCore/EntityShadow.tscn" id="3_05f62"]
 [ext_resource type="PackedScene" uid="uid://cdfdy8m6ki3oq" path="res://Entities/Components/HealthComponent/HealthComponent.tscn" id="3_ojev3"]
 [ext_resource type="PackedScene" uid="uid://dh4ydl7l86ywq" path="res://Entities/EntityCore/EntityAnimSprite.tscn" id="4_fmbcv"]
 [ext_resource type="PackedScene" uid="uid://btba0jmsow1mx" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectReceiverComponent.tscn" id="4_hhm8x"]
-[ext_resource type="Shader" path="res://Entities/EntityCore/EntityEffectShader.gdshader" id="4_ubhyl"]
+[ext_resource type="Shader" uid="uid://cfbagv3hrtar2" path="res://Entities/EntityCore/EntityEffectShader.gdshader" id="4_ubhyl"]
 [ext_resource type="PackedScene" uid="uid://4gl24qwdyti3" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/DmgHandler.tscn" id="5_g3ixu"]
 [ext_resource type="PackedScene" uid="uid://cxpv7l7rcaq1o" path="res://Entities/Components/StaminaComponent/StaminaComponent.tscn" id="5_k4fu6"]
 [ext_resource type="SpriteFrames" uid="uid://cl72xrd8yy3d" path="res://Entities/Player/Sprites/Base/PlayerBaseFrames.tres" id="5_vy6lk"]
 [ext_resource type="PackedScene" uid="uid://ddj5ippwwkvop" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/HealHandler.tscn" id="6_5e1ju"]
 [ext_resource type="PackedScene" uid="uid://co3n6m7efg8pd" path="res://Entities/Components/EffectComponents/StatusEffectManager/StatusEffectManager.tscn" id="6_n0x5k"]
-[ext_resource type="Script" path="res://Entities/Player/States/MoveStates/Idle/Idle.gd" id="7_15a5x"]
+[ext_resource type="Script" uid="uid://c2sjdkql76qca" path="res://Entities/Player/States/MoveStates/Idle/Idle.gd" id="7_15a5x"]
 [ext_resource type="PackedScene" uid="uid://dykiv0tlhwmox" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/KnockbackHandler.tscn" id="7_k0pv8"]
 [ext_resource type="Texture2D" uid="uid://tdtv12ps6wk" path="res://UI/Reloading/reloading_progress.png" id="8_qhq3c"]
-[ext_resource type="Script" path="res://Entities/Player/States/MoveStates/Run/Run.gd" id="9_0dcld"]
-[ext_resource type="Script" path="res://Entities/Player/States/MoveStates/Dash/Dash.gd" id="9_a1qv1"]
+[ext_resource type="Script" uid="uid://dxekqhvcykqrq" path="res://Entities/Player/States/MoveStates/Run/Run.gd" id="9_0dcld"]
+[ext_resource type="Script" uid="uid://cy73p3okq3cic" path="res://Entities/Player/States/MoveStates/Dash/Dash.gd" id="9_a1qv1"]
 [ext_resource type="PackedScene" uid="uid://cx4b21058vypq" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/StunHandler.tscn" id="9_w4lel"]
 [ext_resource type="FontFile" uid="uid://cj0mctn1mh06m" path="res://Assets/Theming/Fonts/FontAssets/Pixel/Kenney Pixel.ttf" id="11_1rxkv"]
 [ext_resource type="PackedScene" uid="uid://tc2awdm3onyi" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/PoisonHandler.tscn" id="11_rtl41"]
@@ -24,61 +24,61 @@
 [ext_resource type="PackedScene" uid="uid://bhg7jmodo3t5t" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/FrostbiteHandler.tscn" id="13_hqb6d"]
 [ext_resource type="PackedScene" uid="uid://d1ml6s716obw0" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/TimeSnareHandler.tscn" id="14_63vgk"]
 [ext_resource type="PackedScene" uid="uid://depnx3pnassrq" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/BurningHandler.tscn" id="14_q2ueb"]
-[ext_resource type="Script" path="res://Entities/Player/States/MoveStates/Stunned/Stunned.gd" id="15_eiig3"]
+[ext_resource type="Script" uid="uid://cbyg4eleptthh" path="res://Entities/Player/States/MoveStates/Stunned/Stunned.gd" id="15_eiig3"]
 [ext_resource type="PackedScene" uid="uid://cueo26qpyouhj" path="res://Entities/EntityCore/EntityTypes/DynamicEntity/MoveStateMachine/MoveStateMachine.tscn" id="16_xoncr"]
 [ext_resource type="PackedScene" uid="uid://csrq1m4rp52vf" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/StormSyndromeHandler.tscn" id="17_2cms1"]
-[ext_resource type="Script" path="res://Entities/Player/States/MoveStates/Spawn/Spawn.gd" id="17_fwsnm"]
-[ext_resource type="Script" path="res://Utilities/Debug/TestButtons.gd" id="17_vdk5v"]
-[ext_resource type="Script" path="res://Entities/Player/States/MoveStates/Die/Die.gd" id="18_jcofa"]
-[ext_resource type="Script" path="res://Entities/Player/States/MoveStates/Sneak/Sneak.gd" id="19_alhqe"]
+[ext_resource type="Script" uid="uid://i7ucoc123rpe" path="res://Entities/Player/States/MoveStates/Spawn/Spawn.gd" id="17_fwsnm"]
+[ext_resource type="Script" uid="uid://clmf6cxgxu6kb" path="res://Utilities/Debug/TestButtons.gd" id="17_vdk5v"]
+[ext_resource type="Script" uid="uid://cbuaklpos5jdp" path="res://Entities/Player/States/MoveStates/Die/Die.gd" id="18_jcofa"]
+[ext_resource type="Script" uid="uid://cf7pyv5l3pefi" path="res://Entities/Player/States/MoveStates/Sneak/Sneak.gd" id="19_alhqe"]
 [ext_resource type="PackedScene" uid="uid://b4bmp3jehto3g" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/LifeStealHandler.tscn" id="20_f770q"]
 [ext_resource type="Texture2D" uid="uid://crawnbhc5weqf" path="res://Entities/EntityCore/EntityTypes/DynamicEntity/entity_footstep.png" id="22_7y82q"]
 [ext_resource type="PackedScene" uid="uid://biduyqlpqhmrp" path="res://Entities/Player/States/MoveStates/Stunned/StunIndicator.tscn" id="27_fyxoi"]
 [ext_resource type="PackedScene" uid="uid://c4n604w30gx8m" path="res://Entities/Components/ItemComponents/ItemReceiverComponent/ItemReceiverComponent.tscn" id="30_qgyag"]
 [ext_resource type="PackedScene" uid="uid://ccfnvvfj0yyrq" path="res://Entities/Items/ItemCore/Item.tscn" id="31_8v2rb"]
-[ext_resource type="Script" path="res://UI/Inventory/PlayerInventory/PlayerInvCommunicator.gd" id="31_mjpan"]
-[ext_resource type="Script" path="res://UI/Inventory/PlayerInventory/PlayerInvUI.gd" id="32_3a185"]
-[ext_resource type="Script" path="res://Entities/Items/ItemCore/InvItemResource.gd" id="32_ixmb3"]
+[ext_resource type="Script" uid="uid://i6jv5dqqpf3n" path="res://UI/Inventory/PlayerInventory/PlayerInvCommunicator.gd" id="31_mjpan"]
+[ext_resource type="Script" uid="uid://dq62ojsc43p8o" path="res://UI/Inventory/PlayerInventory/PlayerInvUI.gd" id="32_3a185"]
+[ext_resource type="Script" uid="uid://dp8osf7r6xkkt" path="res://Entities/Items/ItemCore/InvItemResource.gd" id="32_ixmb3"]
 [ext_resource type="Resource" uid="uid://cx1ydw2jde1y8" path="res://Entities/Items/TRESItems/Apple(0).tres" id="33_0qw5e"]
 [ext_resource type="Resource" uid="uid://bh18kqp2up3oe" path="res://Entities/Items/TRESItems/Pickaxe(3).tres" id="34_i8j5r"]
-[ext_resource type="Script" path="res://UI/Inventory/PlayerInventory/ItemInteractionHud.gd" id="35_45ikj"]
+[ext_resource type="Script" uid="uid://ccdihncnoj7dh" path="res://UI/Inventory/PlayerInventory/ItemInteractionHud.gd" id="35_45ikj"]
 [ext_resource type="Resource" uid="uid://bper7kxtsf7f1" path="res://Entities/Items/TRESItems/Axe(1).tres" id="35_g2eu7"]
 [ext_resource type="Resource" uid="uid://m8eslst1uuxh" path="res://Entities/Items/TRESItems/LightAmmo(0).tres" id="35_qbswt"]
-[ext_resource type="Script" path="res://UI/PlayerStatsOverlay/PlayerStatsOverlay.gd" id="35_yln51"]
+[ext_resource type="Script" uid="uid://di5hu6fk5mbfe" path="res://UI/PlayerStatsOverlay/PlayerStatsOverlay.gd" id="35_yln51"]
 [ext_resource type="Texture2D" uid="uid://dwo0fuwylfxeq" path="res://UI/PlayerStatsOverlay/Assets/Stats Panel Bckgrd.png" id="36_vdy3t"]
 [ext_resource type="Texture2D" uid="uid://k0o25ihgea1n" path="res://UI/PlayerStatsOverlay/Assets/Hunger Progress Under.png" id="37_32xjt"]
 [ext_resource type="Resource" uid="uid://ciel2rrqq4dvv" path="res://Entities/Items/TRESItems/LaserGun(2).tres" id="37_a2tah"]
 [ext_resource type="Texture2D" uid="uid://bdgevpcheclv5" path="res://UI/PlayerStatsOverlay/Assets/Hunger Progress Bar.png" id="38_ht2cb"]
-[ext_resource type="Script" path="res://Entities/Items/Ammo/ProjAmmoResource.gd" id="39_7aiab"]
+[ext_resource type="Script" uid="uid://bpc1cwr4a6lgo" path="res://Entities/Items/Ammo/ProjAmmoResource.gd" id="39_7aiab"]
 [ext_resource type="PackedScene" uid="uid://b7gdy01q8wsjx" path="res://Entities/Components/ItemComponents/HandsComponent/HandsComponent.tscn" id="39_ngono"]
-[ext_resource type="Shader" path="res://UI/Shaders/BlurBehind.gdshader" id="39_r4tgk"]
+[ext_resource type="Shader" uid="uid://c0de04pgeen76" path="res://UI/Shaders/BlurBehind.gdshader" id="39_r4tgk"]
 [ext_resource type="Texture2D" uid="uid://xnppg0u7t7w4" path="res://UI/PlayerStatsOverlay/Assets/Stamina Recharge Under.png" id="39_ryeha"]
-[ext_resource type="Script" path="res://UI/Inventory/PlayerInventory/Crafting/CraftingIngredient.gd" id="40_3yx82"]
+[ext_resource type="Script" uid="uid://ctxa7i1mbt7ab" path="res://UI/Inventory/PlayerInventory/Crafting/CraftingIngredient.gd" id="40_3yx82"]
 [ext_resource type="Resource" uid="uid://bcvljie626314" path="res://Entities/Items/TRESItems/HeavyAmmo(0).tres" id="40_7ipu6"]
 [ext_resource type="Texture2D" uid="uid://bo4vy1r7cbpx8" path="res://Entities/Items/Ammo/Light/light_ammo.png" id="40_ftusj"]
 [ext_resource type="Texture2D" uid="uid://cknw64vph4b0s" path="res://Entities/Items/Ammo/Light/light_ammo_thumb.png" id="40_hgjjf"]
 [ext_resource type="Resource" uid="uid://bdjhfsluk53lc" path="res://Entities/Items/TRESItems/MediumAmmo(0).tres" id="40_r220t"]
 [ext_resource type="Texture2D" uid="uid://gfbxblly7q78" path="res://UI/PlayerStatsOverlay/Assets/Stamina Recharge Bar.png" id="40_suqvl"]
-[ext_resource type="Script" path="res://UI/Inventory/InventoryCore/InventoryPopulator.gd" id="41_nwjbq"]
-[ext_resource type="Resource" uid="uid://b6tg3hfcver2x" path="res://Entities/Items/TRESItems/OakLog(0).tres" id="41_sesym"]
+[ext_resource type="Script" uid="uid://co5w78bykccb6" path="res://UI/Inventory/InventoryCore/InventoryPopulator.gd" id="41_nwjbq"]
 [ext_resource type="Texture2D" uid="uid://br8kgmxe41gh0" path="res://UI/PlayerStatsOverlay/Assets/Hunger Bar.png" id="41_wehgh"]
-[ext_resource type="Resource" uid="uid://cwiqqp4tbd4em" path="res://Entities/Items/TRESItems/SpruceLog(0).tres" id="42_d3gh5"]
 [ext_resource type="Texture2D" uid="uid://cjjobaebw8uwu" path="res://UI/PlayerStatsOverlay/Assets/Hunger Under.png" id="42_im6xp"]
 [ext_resource type="PackedScene" uid="uid://m4ur3n2hwsp8" path="res://UI/Inventory/InventoryCore/Slot/Slot.tscn" id="42_r422n"]
 [ext_resource type="Texture2D" uid="uid://c5mo0gxdddlte" path="res://UI/PlayerStatsOverlay/Assets/Hunger Change.png" id="43_k8324"]
 [ext_resource type="Resource" uid="uid://cpxev3kvt74vw" path="res://Entities/Items/TRESItems/ShellAmmo(0).tres" id="44_q38m2"]
-[ext_resource type="Shader" path="res://UI/PlayerStatsOverlay/StaminaBarTipGlow.gdshader" id="44_vk3bi"]
+[ext_resource type="Shader" uid="uid://c7jh4yrgpc0u" path="res://UI/PlayerStatsOverlay/StaminaBarTipGlow.gdshader" id="44_vk3bi"]
 [ext_resource type="Texture2D" uid="uid://l7chqvbfg16y" path="res://UI/PlayerStatsOverlay/Assets/Stamina Bar.png" id="45_3j47m"]
 [ext_resource type="Resource" uid="uid://kmidnuyti5xi" path="res://Entities/Items/TRESItems/Boomerang(2).tres" id="45_xur7q"]
 [ext_resource type="Resource" uid="uid://ba8pkny735n2r" path="res://Entities/Items/Weapons/WeaponMods/ExtendedMag/ExtendedMag1.tres" id="46_2raqh"]
 [ext_resource type="Texture2D" uid="uid://1m3lv40blexn" path="res://UI/PlayerStatsOverlay/Assets/Stamina Under.png" id="46_l08yu"]
 [ext_resource type="Resource" uid="uid://dlfmjgnfk6nqj" path="res://Entities/Items/TRESItems/Revolver(0).tres" id="46_xbbnp"]
-[ext_resource type="Script" path="res://Entities/Items/Weapons/WeaponMods/WeaponMod.gd" id="46_xslb2"]
+[ext_resource type="Script" uid="uid://ct7n8wo1p3b20" path="res://Entities/Items/Weapons/WeaponMods/WeaponMod.gd" id="46_xslb2"]
 [ext_resource type="Texture2D" uid="uid://dlx621mbgic4b" path="res://UI/PlayerStatsOverlay/Assets/Stamina Change.png" id="47_2ra1b"]
+[ext_resource type="Resource" uid="uid://bs4rqdt46yav7" path="res://Entities/Items/TRESItems/OakLog(0).tres" id="47_3uq13"]
 [ext_resource type="Resource" uid="uid://duc0xfejpfs1" path="res://Entities/Items/TRESItems/EagleEye(3).tres" id="47_a0x8j"]
 [ext_resource type="Resource" uid="uid://3avt5jvd3dye" path="res://Entities/Items/TRESItems/BottleOFire(3).tres" id="47_devgv"]
 [ext_resource type="Resource" uid="uid://caxftf2aer6g4" path="res://Entities/Items/Weapons/WeaponMods/BurningBullets/BurningBullets1.tres" id="47_l43tu"]
 [ext_resource type="Resource" uid="uid://14gw464h13vv" path="res://Entities/Items/TRESItems/Cratershot(1).tres" id="48_1kvwx"]
+[ext_resource type="Resource" uid="uid://dbnhbsphiw4oe" path="res://Entities/Items/TRESItems/SpruceLog(0).tres" id="48_3uq13"]
 [ext_resource type="Texture2D" uid="uid://ba6aut5vjc3g" path="res://UI/PlayerStatsOverlay/Assets/Shield.png" id="48_d5w3g"]
 [ext_resource type="Resource" uid="uid://4nvp28pvjtk3" path="res://Entities/Items/TRESItems/Boomerang(1).tres" id="49_gbpko"]
 [ext_resource type="Texture2D" uid="uid://csmk61f3sxw44" path="res://UI/PlayerStatsOverlay/Assets/Shield Under.png" id="49_ynd7x"]
@@ -87,28 +87,28 @@
 [ext_resource type="Texture2D" uid="uid://dhvpkl1svbcys" path="res://UI/PlayerStatsOverlay/Assets/Health Under.png" id="52_dhyl8"]
 [ext_resource type="Resource" uid="uid://dpmwqsai6gxsr" path="res://Entities/Items/TRESItems/FlameBlower(4).tres" id="52_ebist"]
 [ext_resource type="Texture2D" uid="uid://lj78cee4aa38" path="res://UI/PlayerStatsOverlay/Assets/Health Change.png" id="53_qsiea"]
-[ext_resource type="Script" path="res://UI/Reloading/ReloadingUI.gd" id="57_n8srl"]
+[ext_resource type="Script" uid="uid://dih45lqhjg0xx" path="res://UI/Reloading/ReloadingUI.gd" id="57_n8srl"]
 [ext_resource type="Texture2D" uid="uid://bd7ifq5lvur4v" path="res://UI/Reloading/reloading_back.png" id="58_hd6am"]
-[ext_resource type="Script" path="res://UI/Inventory/PlayerInventory/HotbarUI.gd" id="58_i567i"]
+[ext_resource type="Script" uid="uid://c0n0ja8tkrnkf" path="res://UI/Inventory/PlayerInventory/HotbarUI.gd" id="58_i567i"]
 [ext_resource type="Texture2D" uid="uid://b536l7eoo4wx0" path="res://UI/Reloading/reloading_over.png" id="59_fbicu"]
 [ext_resource type="Texture2D" uid="uid://dbm40lvpgbd8t" path="res://Entities/Items/ItemCore/Particles/item_rarity_light.png" id="66_461tf"]
-[ext_resource type="Shader" path="res://UI/Shaders/GlintShader.gdshader" id="67_w57pe"]
+[ext_resource type="Shader" uid="uid://cwbeekjoy0uyh" path="res://UI/Shaders/GlintShader.gdshader" id="67_w57pe"]
 [ext_resource type="Texture2D" uid="uid://dtft3mljs2y5s" path="res://UI/Inventory/InventoryCore/Slot/trash_slot_icon.png" id="69_4ao77"]
 [ext_resource type="PackedScene" uid="uid://cpf3f502274om" path="res://UI/Inventory/PlayerInventory/Crafting/CraftingManager.tscn" id="71_qjjeg"]
 [ext_resource type="Texture2D" uid="uid://6p684ba74frr" path="res://UI/TemporaryElements/Prompt Icons/E_prompt.png" id="75_j0f4f"]
 [ext_resource type="Texture2D" uid="uid://bqxdg28d1twy1" path="res://UI/Inventory/InventoryCore/inv_background_thin.png" id="78_at8wu"]
 [ext_resource type="Texture2D" uid="uid://lqg70q4wj55g" path="res://UI/Inventory/InventoryCore/inv_background.png" id="78_jlc36"]
 [ext_resource type="Texture2D" uid="uid://b7wg7jft8vunb" path="res://UI/Inventory/InventoryCore/inv_background_thin_metal.png" id="81_5myae"]
-[ext_resource type="Script" path="res://UI/Inventory/PlayerInventory/WpnModSlotsUI.gd" id="82_dgpt2"]
+[ext_resource type="Script" uid="uid://r0j8jlj5c8ji" path="res://UI/Inventory/PlayerInventory/WpnModSlotsUI.gd" id="82_dgpt2"]
 [ext_resource type="Texture2D" uid="uid://cwu8kh1lmceer" path="res://UI/Inventory/InventoryCore/button_9_patch_pressed.png" id="84_kbn30"]
 [ext_resource type="FontFile" uid="uid://bp2lgrlhj8cet" path="res://Assets/Theming/Fonts/FontAssets/Pixel/C&C Red Alert [INET].ttf" id="85_7xlwj"]
 [ext_resource type="Texture2D" uid="uid://de31272sm433q" path="res://UI/Inventory/InventoryCore/button_9_patch.png" id="86_ald0t"]
 [ext_resource type="FontVariation" uid="uid://blgkcg6c83yln" path="res://Assets/Theming/Fonts/GameFontResources/ui_pixel_font.tres" id="91_55d85"]
-[ext_resource type="Script" path="res://UI/PlayerStatsOverlay/ActiveSlotInfo.gd" id="91_qr476"]
+[ext_resource type="Script" uid="uid://dbc2ecb1mkugh" path="res://UI/PlayerStatsOverlay/ActiveSlotInfo.gd" id="91_qr476"]
 [ext_resource type="Texture2D" uid="uid://bj8cxp5cf4lw0" path="res://Entities/Items/Ammo/Medium/medium_ammo.png" id="92_2bavx"]
 [ext_resource type="Texture2D" uid="uid://cjuiqhgcljofe" path="res://Entities/Items/Ammo/Heavy/heavy_ammo.png" id="93_utxlp"]
 [ext_resource type="Texture2D" uid="uid://d3xj606lsbvfm" path="res://Entities/Items/Ammo/Shell/shell_ammo.png" id="94_36bov"]
-[ext_resource type="Shader" path="res://UI/Shaders/ProgressAlpha.gdshader" id="107_nyy6a"]
+[ext_resource type="Shader" uid="uid://bhox1e3shq3iq" path="res://UI/Shaders/ProgressAlpha.gdshader" id="107_nyy6a"]
 
 [sub_resource type="Resource" id="Resource_rwbul"]
 script = ExtResource("2_vetip")
@@ -1002,21 +1002,21 @@ tracks/4/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_xrucm"]
 _data = {
-"RESET": SubResource("Animation_sys1a"),
-"die": SubResource("Animation_y7dy5"),
-"idle_down": SubResource("Animation_0xfck"),
-"idle_left_down": SubResource("Animation_o53sl"),
-"idle_left_up": SubResource("Animation_4m1p0"),
-"idle_right_down": SubResource("Animation_dhw8r"),
-"idle_right_up": SubResource("Animation_ytq0g"),
-"idle_up": SubResource("Animation_cx0jk"),
-"run_down": SubResource("Animation_t8fbm"),
-"run_left_down": SubResource("Animation_60xdl"),
-"run_left_up": SubResource("Animation_cje5g"),
-"run_right_down": SubResource("Animation_x20u6"),
-"run_right_up": SubResource("Animation_4qi3l"),
-"run_up": SubResource("Animation_8rao3"),
-"spawn": SubResource("Animation_4hltv")
+&"RESET": SubResource("Animation_sys1a"),
+&"die": SubResource("Animation_y7dy5"),
+&"idle_down": SubResource("Animation_0xfck"),
+&"idle_left_down": SubResource("Animation_o53sl"),
+&"idle_left_up": SubResource("Animation_4m1p0"),
+&"idle_right_down": SubResource("Animation_dhw8r"),
+&"idle_right_up": SubResource("Animation_ytq0g"),
+&"idle_up": SubResource("Animation_cx0jk"),
+&"run_down": SubResource("Animation_t8fbm"),
+&"run_left_down": SubResource("Animation_60xdl"),
+&"run_left_up": SubResource("Animation_cje5g"),
+&"run_right_down": SubResource("Animation_x20u6"),
+&"run_right_up": SubResource("Animation_4qi3l"),
+&"run_up": SubResource("Animation_8rao3"),
+&"spawn": SubResource("Animation_4hltv")
 }
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_gqh27"]
@@ -1217,12 +1217,12 @@ quantity = 48
 
 [sub_resource type="Resource" id="Resource_apvym"]
 script = ExtResource("32_ixmb3")
-stats = ExtResource("41_sesym")
+stats = ExtResource("47_3uq13")
 quantity = 8
 
 [sub_resource type="Resource" id="Resource_ur5wt"]
 script = ExtResource("32_ixmb3")
-stats = ExtResource("42_d3gh5")
+stats = ExtResource("48_3uq13")
 quantity = 16
 
 [sub_resource type="Resource" id="Resource_dyejk"]
@@ -1502,7 +1502,7 @@ one_shot = true
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
-"": SubResource("AnimationLibrary_xrucm")
+&"": SubResource("AnimationLibrary_xrucm")
 }
 
 [node name="AnimationTree" type="AnimationTree" parent="."]

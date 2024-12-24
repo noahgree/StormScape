@@ -1,8 +1,8 @@
 [gd_resource type="Resource" script_class="WeaponMod" load_steps=5 format=3 uid="uid://caxftf2aer6g4"]
 
-[ext_resource type="Script" path="res://Entities/Stats/EffectSystemResources/StatusEffects/StatusEffect.gd" id="1_iqqgs"]
-[ext_resource type="Script" path="res://Entities/Items/Weapons/WeaponMods/WeaponMod.gd" id="2_s8niq"]
-[ext_resource type="Script" path="res://Entities/Stats/StatMod/StatMod.gd" id="3_nbora"]
+[ext_resource type="Script" uid="uid://boo31eu083dqd" path="res://Entities/Stats/EffectSystemResources/StatusEffects/StatusEffect.gd" id="1_iqqgs"]
+[ext_resource type="Script" uid="uid://ct7n8wo1p3b20" path="res://Entities/Items/Weapons/WeaponMods/WeaponMod.gd" id="2_s8niq"]
+[ext_resource type="Script" uid="uid://bcjwesiannbd0" path="res://Entities/Stats/StatMod/StatMod.gd" id="3_nbora"]
 [ext_resource type="Resource" uid="uid://dvew5cy3k7s48" path="res://Entities/Stats/EffectSystemResources/StatusEffects/BadEffects/Burning/Burning1.tres" id="3_s73up"]
 
 [resource]

@@ -1,17 +1,17 @@
 [gd_resource type="Resource" script_class="ProjWeaponResource" load_steps=25 format=3 uid="uid://3avt5jvd3dye"]
 
-[ext_resource type="Script" path="res://Entities/Stats/EffectSystemResources/StatusEffects/StatusEffect.gd" id="1_fshhe"]
-[ext_resource type="Script" path="res://Entities/Items/Hitscans/HitscanResource.gd" id="1_kxj7m"]
-[ext_resource type="Script" path="res://Entities/Items/Projectiles/ProjectileResource.gd" id="2_4ioui"]
-[ext_resource type="Script" path="res://UI/Inventory/PlayerInventory/Crafting/CraftingIngredient.gd" id="2_nbaee"]
-[ext_resource type="Script" path="res://Entities/Items/Weapons/ProjectileWeapons/ProjWeaponResource.gd" id="3_ru3fl"]
+[ext_resource type="Script" uid="uid://boo31eu083dqd" path="res://Entities/Stats/EffectSystemResources/StatusEffects/StatusEffect.gd" id="1_fshhe"]
+[ext_resource type="Script" uid="uid://cje5bobi6o8bo" path="res://Entities/Items/Hitscans/HitscanResource.gd" id="1_kxj7m"]
+[ext_resource type="Script" uid="uid://bj3r5oopspj6l" path="res://Entities/Items/Projectiles/ProjectileResource.gd" id="2_4ioui"]
+[ext_resource type="Script" uid="uid://dvasncq3tgljs" path="res://Entities/Items/Weapons/ProjectileWeapons/ProjWeaponResource.gd" id="3_ru3fl"]
 [ext_resource type="PackedScene" uid="uid://c7gjhm55x8ymc" path="res://Entities/Items/Weapons/ProjectileWeapons/BottleOFire/BottleOFire.tscn" id="3_yykgi"]
-[ext_resource type="Script" path="res://Entities/Stats/EffectSystemResources/EffectSources/EffectSource.gd" id="5_jastm"]
+[ext_resource type="Script" uid="uid://dkfssottmsrch" path="res://Entities/Stats/EffectSystemResources/EffectSources/EffectSource.gd" id="5_jastm"]
 [ext_resource type="Texture2D" uid="uid://cpo3fkry82ihj" path="res://Entities/Items/Weapons/ProjectileWeapons/BottleOFire/bottle_o_fire_base.png" id="6_14vfc"]
 [ext_resource type="PackedScene" uid="uid://b26uwbeam6drq" path="res://Entities/Items/Projectiles/FireBottle/FireBottle.tscn" id="7_0ultu"]
 [ext_resource type="Texture2D" uid="uid://dn0kb7oxrj6qi" path="res://Entities/Items/Weapons/ProjectileWeapons/BottleOFire/fire_bottle_throwable.png" id="7_16qjf"]
 [ext_resource type="Resource" uid="uid://blryd3h2c6dsl" path="res://Entities/Stats/EffectSystemResources/StatusEffects/BadEffects/Burning/Burning1Rapid.tres" id="8_ngyy3"]
-[ext_resource type="Script" path="res://Entities/Stats/StatMod/StatModsCacheResource.gd" id="11_3anyb"]
+[ext_resource type="Script" uid="uid://ctxa7i1mbt7ab" path="res://UI/Inventory/PlayerInventory/Crafting/CraftingIngredient.gd" id="10_u7xjj"]
+[ext_resource type="Script" uid="uid://c2gdoebfp12dq" path="res://Entities/Stats/StatMod/StatModsCacheResource.gd" id="11_3anyb"]
 
 [sub_resource type="Resource" id="Resource_mk6ko"]
 script = ExtResource("5_jastm")
@@ -285,6 +285,7 @@ charge_fire_cooldown = 0.5
 charge_firing_duration = 0.1
 ammo_use_per_charge = 3
 charge_bloom_mult = 5.0
+charge_overheat_mult = 5.0
 override_chg_anim_dur = 0.0
 chg_anim_speed_mult = 1.0
 charge_cam_fx_mult = 1.0
@@ -316,11 +317,13 @@ max_bloom = 0.0
 bloom_decrease_delay = 1.0
 initial_fire_rate_delay = 0.0
 warmup_decrease_delay = 0.75
-overheating_type = "None"
+overheat_penalty = 0.0
+overheat_dec_delay = 0.75
 projectiles_per_fire = 1
 use_ammo_per_burst_proj = true
 burst_bullet_delay = 0.1
 add_bloom_per_burst_shot = true
+add_overheat_per_burst_shot = true
 barrage_count = 1
 angular_spread = 25.0
 ammo_in_mag = -1
@@ -349,7 +352,7 @@ stack_size = 10
 auto_pickup = false
 pickup_radius = 5
 info = "A cocktail of fuel, rigged to explode on impact."
-recipe = Array[ExtResource("2_nbaee")]([])
+recipe = Array[ExtResource("10_u7xjj")]([])
 output_quantity = 1
 recipe_unlocked = false
 item_scene = ExtResource("3_yykgi")

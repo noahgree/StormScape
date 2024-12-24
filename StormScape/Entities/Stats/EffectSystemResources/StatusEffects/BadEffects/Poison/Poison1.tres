@@ -1,8 +1,8 @@
 [gd_resource type="Resource" script_class="PoisonEffect" load_steps=8 format=3 uid="uid://dpr7bbypm0g2j"]
 
-[ext_resource type="Script" path="res://Entities/Stats/EffectSystemResources/StatusEffects/BadEffects/Poison/PoisonEffect.gd" id="1_1d4mc"]
-[ext_resource type="Script" path="res://Entities/Stats/EffectSystemResources/EffectOverTimeResources/DOTResource.gd" id="1_nu123"]
-[ext_resource type="Script" path="res://Entities/Stats/StatMod/StatMod.gd" id="2_epos6"]
+[ext_resource type="Script" uid="uid://cklor1366be7n" path="res://Entities/Stats/EffectSystemResources/StatusEffects/BadEffects/Poison/PoisonEffect.gd" id="1_1d4mc"]
+[ext_resource type="Script" uid="uid://20acrt2hb6y" path="res://Entities/Stats/EffectSystemResources/EffectOverTimeResources/DOTResource.gd" id="1_nu123"]
+[ext_resource type="Script" uid="uid://bcjwesiannbd0" path="res://Entities/Stats/StatMod/StatMod.gd" id="2_epos6"]
 
 [sub_resource type="Resource" id="Resource_d0iyw"]
 script = ExtResource("1_nu123")
