@@ -44,9 +44,9 @@ func _ready() -> void:
 		initial_state.enter()
 		current_state = initial_state
 
-	var moddable_stats: Dictionary = {
-		"sprint_stamina_usage" : _sprint_stamina_usage, "dash_stamina_usage" : _dash_stamina_usage,
-		"friction" : _friction, "confusion_amount" : _confusion_amount
+	var moddable_stats: Dictionary[StringName, float] = {
+		&"sprint_stamina_usage" : _sprint_stamina_usage, &"dash_stamina_usage" : _dash_stamina_usage,
+		&"friction" : _friction, &"confusion_amount" : _confusion_amount
 	}
 	entity.stats.add_moddable_stats(moddable_stats)
 

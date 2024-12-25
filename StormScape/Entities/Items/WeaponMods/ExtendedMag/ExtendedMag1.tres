@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="ExtendedMagMod" load_steps=5 format=3 uid="uid://ba8pkny735n2r"]
 
-[ext_resource type="Script" uid="uid://w5ys6kqn83qm" path="res://Entities/Items/Weapons/WeaponMods/ExtendedMag/ExtendedMagMod.gd" id="1_gpcn0"]
+[ext_resource type="Script" uid="uid://w5ys6kqn83qm" path="res://Entities/Items/WeaponMods/ExtendedMag/ExtendedMagMod.gd" id="1_gpcn0"]
 [ext_resource type="Script" uid="uid://boo31eu083dqd" path="res://Entities/Stats/EffectSystemResources/StatusEffects/StatusEffect.gd" id="2_bi2ip"]
 [ext_resource type="Script" uid="uid://bcjwesiannbd0" path="res://Entities/Stats/StatMod/StatMod.gd" id="3_5t506"]
 
@@ -16,10 +16,10 @@ override_all = false
 
 [resource]
 script = ExtResource("1_gpcn0")
-mod_name = "Extended Mag"
+mod_name = &"Extended Mag"
 mod_lvl = 1
 allowed_proj_wpns = Array[int]([0, 1, 2, 3, 4, 5, 6, 7, 8])
-allowed_melee_wpns = Array[int]([0, 1, 2])
+allowed_melee_wpns = Array[int]([])
 wpn_stat_mods = Array[ExtResource("3_5t506")]([SubResource("Resource_1h5ud")])
 status_effects = Array[ExtResource("2_bi2ip")]([])
 charge_status_effects = Array[ExtResource("2_bi2ip")]([])

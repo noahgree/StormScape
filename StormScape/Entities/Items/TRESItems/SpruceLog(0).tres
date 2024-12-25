@@ -9,7 +9,7 @@
 script = ExtResource("3_iauve")
 id = "spruce_log"
 name = "Spruce Log"
-tags = Array[String]([])
+tags = Array[StringName]([])
 inv_icon_rotation = 0.0
 inv_icon_offset = Vector2(0, 0)
 inv_icon_scale = Vector2(1, 1)

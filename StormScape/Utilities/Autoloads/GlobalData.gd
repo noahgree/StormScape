@@ -13,11 +13,6 @@ func _ready() -> void:
 	player_node = await SignalBus.player_ready
 	player_camera = get_parent().get_node("Game/WorldRoot/PlayerCamera")
 
-# Entity Core
-var entity_type_flag_map: Dictionary = {
-	"DynamicEntity" : 1, "RigidEntity" : 2, "StaticEntity" : 4
-}
-
 # EffectReceiver & StatModManager
 enum Teams {
 	PLAYER = 1 << 0, ## The player team (against the enemies).
@@ -47,9 +42,14 @@ const all_proj_weapons: Array[ProjWeaponResource.ProjWeaponType] = [ProjWeaponRe
 const all_melee_wpns: Array[MeleeWeaponResource.MeleeWeaponType] = [MeleeWeaponResource.MeleeWeaponType.TOOL, MeleeWeaponResource.MeleeWeaponType.PHYSICAL, MeleeWeaponResource.MeleeWeaponType.COMBAT]
 
 enum ItemRarity {
-	COMMON, UNCOMMON, RARE, EPIC, LEGENDARY, SINGULAR
+	COMMON,  ## [b][color=darkgray]0[/color][/b]
+	UNCOMMON, ## [b][color=green]1[/color][/b]
+	RARE, ## [b][color=dodgerblue]2[/color][/b]
+	EPIC, ## [b][color=purple]3[/color][/b]
+	LEGENDARY, ## [b][color=gold]4[/color][/b]
+	SINGULAR ## [b][color=deeppink]5[/color][/b]
 }
-const rarity_colors: Dictionary = {
+const rarity_colors: Dictionary[String, Dictionary] = {
 	"ground_glow" : {
 		ItemRarity.COMMON : Color(0.617, 0.625, 0.633),
 		ItemRarity.UNCOMMON : Color(0, 0.743, 0.433),

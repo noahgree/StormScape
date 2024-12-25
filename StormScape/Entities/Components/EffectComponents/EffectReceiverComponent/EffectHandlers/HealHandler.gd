@@ -5,9 +5,9 @@ class_name HealHandler
 
 @onready var health_component: HealthComponent = get_parent().health_component ## The health component to be affected by the healing.
 
-var hot_timers: Dictionary = {} ## Holds references to all timers currently tracking active HOT.
-var hot_delay_timers: Dictionary = {} ## Holds references to all timers current tracking delays for active HOT.
-var saved_hots: Dictionary = {} ## Saves the running HOT instances and the progress so far when the game saves. Keys are source type names and values are an array of modified duplicated HOT resources.
+var hot_timers: Dictionary[String, Array] = {} ## Holds references to all timers currently tracking active HOT.
+var hot_delay_timers: Dictionary[String, Array] = {} ## Holds references to all timers current tracking delays for active HOT.
+var saved_hots: Dictionary[String, Array] = {} ## Saves the running HOT instances and the progress so far when the game saves. Keys are source type names and values are an array of modified duplicated HOT resources.
 
 
 #region Save & Load
@@ -111,14 +111,18 @@ func _delete_timers_from_caches(source_type: String, specific_timer: Timer = nul
 					return
 				else:
 					timers[i].queue_free()
+			else:
+				timers.remove_at(i)
 		hot_timers.erase(source_type)
 
 	var delay_timers: Array = hot_delay_timers.get(source_type, [null])
 	if delay_timers:
-		for delay_timer: Variant in delay_timers:
-			if delay_timer != null:
-				delay_timer.stop()
-				delay_timer.queue_free()
+		for i: int in range(delay_timers.size()):
+			if delay_timers[i] != null:
+				delay_timers[i].stop()
+				delay_timers[i].queue_free()
+			else:
+				delay_timers.remove_at(i)
 
 		hot_delay_timers.erase(source_type)
 

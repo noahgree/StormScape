@@ -12,8 +12,8 @@ class_name TimeSnareHandler
 func _ready() -> void:
 	assert(get_parent().get_parent() is DynamicEntity, get_parent().affected_entity.name + " has an effect receiver intended to handle time snares, but the affected entity is not a DynamicEntity.")
 
-	var moddable_stats: Dictionary = {
-		"time_snare_immunity" : _time_snare_immunity
+	var moddable_stats: Dictionary[StringName, float] = {
+		&"time_snare_immunity" : _time_snare_immunity
 	}
 	effect_receiver.affected_entity.stats.add_moddable_stats(moddable_stats)
 

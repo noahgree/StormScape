@@ -17,9 +17,9 @@ func exit() -> void:
 	dynamic_entity.current_stealth = 0
 
 func _ready() -> void:
-	var moddable_stats: Dictionary = {
-		"max_stealth" : _max_stealth, "max_sneak_speed" : _max_sneak_speed,
-		"sneak_acceleration" : _sneak_acceleration, "sneak_collision_impulse_factor" : _sneak_collision_impulse_factor
+	var moddable_stats: Dictionary[StringName, float] = {
+		&"max_stealth" : _max_stealth, &"max_sneak_speed" : _max_sneak_speed,
+		&"sneak_acceleration" : _sneak_acceleration, &"sneak_collision_impulse_factor" : _sneak_collision_impulse_factor
 	}
 	get_parent().entity.stats.add_moddable_stats(moddable_stats)
 

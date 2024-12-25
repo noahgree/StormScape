@@ -13,19 +13,11 @@ var is_holding: bool = false ## Whether we are holding down the trigger so as to
 const HOLDING_THRESHOLD: float = 0.1 ## How long a hold press must be to start tracking a potential charge up.
 
 
-#region Saving & Loading
-func _on_load_game() -> void:
-	if not cache_is_setup_after_load:
-		_setup_mod_cache()
-
-	for mod: WeaponMod in stats.current_mods.values():
-		weapon_mod_manager._add_weapon_mod(mod)
-#endregion
-
 func _set_stats(new_stats: ItemResource) -> void:
 	super._set_stats(new_stats)
 
 	# Duplicates the cache & effect sources to be unique and then calls for the cache to get loaded.
+	# stats.cache_is_setup gets set to true the first time the cache is setup on first load. From there on it is saved as true even during in-game save and loads.
 	if not stats.cache_is_setup:
 		stats.s_mods = stats.s_mods.duplicate()
 		stats.effect_source = stats.effect_source.duplicate()
@@ -40,27 +32,27 @@ func _set_stats(new_stats: ItemResource) -> void:
 
 ## Sets up the base values for the stat mod cache so that weapon mods can be added and managed properly.
 func _setup_mod_cache() -> void:
-	var normal_moddable_stats: Dictionary = {
-		"stamina_cost" : stats.stamina_cost,
-		"cooldown" : stats.cooldown,
-		"use_speed" : stats.use_speed,
-		"swing_angle" : stats.swing_angle,
-		"base_damage" : stats.effect_source.base_damage,
-		"base_healing" : stats.effect_source.base_healing,
-		"crit_chance" : stats.effect_source.crit_chance,
-		"armor_penetration" : stats.effect_source.armor_penetration,
-		"pullout_delay" : stats.pullout_delay
+	var normal_moddable_stats: Dictionary[StringName, float] = {
+		&"stamina_cost" : stats.stamina_cost,
+		&"cooldown" : stats.cooldown,
+		&"use_speed" : stats.use_speed,
+		&"swing_angle" : stats.swing_angle,
+		&"base_damage" : stats.effect_source.base_damage,
+		&"base_healing" : stats.effect_source.base_healing,
+		&"crit_chance" : stats.effect_source.crit_chance,
+		&"armor_penetration" : stats.effect_source.armor_penetration,
+		&"pullout_delay" : stats.pullout_delay
 	}
-	var charge_moddable_stats: Dictionary = {
-		"min_charge_time" : stats.min_charge_time,
-		"charge_stamina_cost" : stats.charge_stamina_cost,
-		"charge_use_cooldown" : stats.charge_use_cooldown,
-		"charge_use_speed" : stats.charge_use_speed,
-		"charge_swing_angle" : stats.charge_swing_angle,
-		"charge_base_damage" : stats.charge_effect_source.base_damage,
-		"charge_base_healing" : stats.charge_effect_source.base_healing,
-		"charge_crit_chance" : stats.charge_effect_source.crit_chance,
-		"charge_armor_penetration" : stats.charge_effect_source.armor_penetration
+	var charge_moddable_stats: Dictionary[StringName, float] = {
+		&"min_charge_time" : stats.min_charge_time,
+		&"charge_stamina_cost" : stats.charge_stamina_cost,
+		&"charge_use_cooldown" : stats.charge_use_cooldown,
+		&"charge_use_speed" : stats.charge_use_speed,
+		&"charge_swing_angle" : stats.charge_swing_angle,
+		&"charge_base_damage" : stats.charge_effect_source.base_damage,
+		&"charge_base_healing" : stats.charge_effect_source.base_healing,
+		&"charge_crit_chance" : stats.charge_effect_source.crit_chance,
+		&"charge_armor_penetration" : stats.charge_effect_source.armor_penetration
 	}
 
 	stats.s_mods.add_moddable_stats(normal_moddable_stats)
@@ -82,7 +74,11 @@ func _disable_collider() -> void:
 func enter() -> void:
 	if stats.s_mods.base_values.is_empty():
 		_setup_mod_cache()
-		cache_is_setup_after_load = true
+
+	if stats.weapon_mods_need_to_be_readded_after_save:
+		for weapon_mod: WeaponMod in stats.current_mods.values():
+			weapon_mod_manager.handle_weapon_mod(weapon_mod)
+		stats.weapon_mods_need_to_be_readded_after_save = false
 
 func exit() -> void:
 	source_entity.move_fsm.should_rotate = true

@@ -3,7 +3,7 @@ class_name WorldItemsManager
 ## Manages all world floor items by attempting to combine them into stacks every so often.
 
 const GRID_SIZE: float = 30.0 ## The size of the grid partitions in pixels.
-var grid: Dictionary = {} ## The grid containing all floor item locations & node references.
+var grid: Dictionary[Vector2i, Array] = {} ## The grid containing all floor item locations & node references.
 var combination_attempt_timer: Timer = Timer.new() ## The timer that delays attempts to combine near floor items.
 
 
@@ -20,8 +20,8 @@ func _ready() -> void:
 ## When the timer ends, start attempting to combine nearby items on the ground. This also cleans up empty grid locations from our
 ## dict afterwards.
 func _on_combination_attempt_timer_timeout() -> void:
-	var processed_items: Dictionary = {}
-	for grid_pos: Vector2 in grid.keys():
+	var processed_items: Dictionary[Item, bool] = {}
+	for grid_pos: Vector2i in grid.keys():
 		if grid[grid_pos].is_empty():
 			grid.erase(grid_pos)
 			continue
@@ -34,14 +34,14 @@ func _on_combination_attempt_timer_timeout() -> void:
 	combination_attempt_timer.start()
 
 ## Gets a world position in terms of the grid coordinates.
-func _to_grid_position(pos: Vector2) -> Vector2:
-	return Vector2(floor(pos.x / GRID_SIZE), floor(pos.y / GRID_SIZE))
+func _to_grid_position(pos: Vector2) -> Vector2i:
+	return Vector2i(floor(pos.x / GRID_SIZE), floor(pos.y / GRID_SIZE))
 
 ## Called anytime we spawn something on the ground and want it to be considered in our combination grid.
 func add_item(item: Item) -> void:
 	add_child(item)
 
-	var grid_pos: Vector2 = _to_grid_position(item.position)
+	var grid_pos: Vector2i = _to_grid_position(item.position)
 	if not grid.has(grid_pos):
 		grid[grid_pos] = []
 	grid[grid_pos].append(item)
@@ -50,17 +50,17 @@ func add_item(item: Item) -> void:
 
 ## Removes an item from the combination grid.
 func remove_item(item: Item) -> void:
-	var grid_pos: Vector2 = _to_grid_position(item.position)
+	var grid_pos: Vector2i = _to_grid_position(item.position)
 	if grid.has(grid_pos):
 		grid[grid_pos].erase(item)
 
 ## Searches the current grid location and the 8 surrounding locations for items to combine with.
-func _find_and_combine_neighbors(item: Item, processed_items: Dictionary) -> void:
-	var grid_pos: Vector2 = _to_grid_position(item.position)
+func _find_and_combine_neighbors(item: Item, processed_items: Dictionary[Item, bool]) -> void:
+	var grid_pos: Vector2i = _to_grid_position(item.position)
 	var neighbors: Array[Item] = []
 	for x: int in range(-1, 2):
 		for y: int in range(-1, 2):
-			var neighbor_pos: Vector2 = grid_pos + Vector2(x, y)
+			var neighbor_pos: Vector2i = grid_pos + Vector2i(x, y)
 			if grid.has(neighbor_pos):
 				var items_at_pos: Array = grid[neighbor_pos]
 				for neighbor: Item in items_at_pos:

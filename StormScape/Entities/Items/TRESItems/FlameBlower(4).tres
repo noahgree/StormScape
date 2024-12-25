@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="ProjWeaponResource" load_steps=28 format=3 uid="uid://dpmwqsai6gxsr"]
+[gd_resource type="Resource" script_class="ProjWeaponResource" load_steps=29 format=3 uid="uid://dpmwqsai6gxsr"]
 
 [ext_resource type="PackedScene" uid="uid://dxv8dhn3gmufw" path="res://Entities/Items/Weapons/ProjectileWeapons/FlameBlower/FlameBlower.tscn" id="1_2lqvl"]
 [ext_resource type="Script" uid="uid://dkfssottmsrch" path="res://Entities/Stats/EffectSystemResources/EffectSources/EffectSource.gd" id="1_qrb8v"]
@@ -7,6 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://dynh8j4rfi62r" path="res://Entities/Items/Projectiles/Flame/Flame.tscn" id="5_4ypmg"]
 [ext_resource type="Script" uid="uid://cje5bobi6o8bo" path="res://Entities/Items/Hitscans/HitscanResource.gd" id="5_i2wga"]
 [ext_resource type="Script" uid="uid://c2gdoebfp12dq" path="res://Entities/Stats/StatMod/StatModsCacheResource.gd" id="6_13gru"]
+[ext_resource type="Script" uid="uid://ct7n8wo1p3b20" path="res://Entities/Items/WeaponMods/WeaponMod.gd" id="6_31ep3"]
 [ext_resource type="Resource" uid="uid://c8reitxej77jy" path="res://Entities/Stats/EffectSystemResources/StatusEffects/BadEffects/Burning/Burning1FlameBlower.tres" id="6_l8ogr"]
 [ext_resource type="Texture2D" uid="uid://dwtjxkvqe21h4" path="res://Entities/Items/Weapons/ProjectileWeapons/FlameBlower/flame_blower_base_frame.png" id="7_dkcnt"]
 [ext_resource type="Script" uid="uid://bj3r5oopspj6l" path="res://Entities/Items/Projectiles/ProjectileResource.gd" id="7_hqj7u"]
@@ -333,12 +334,13 @@ charge_effect_source = SubResource("Resource_k2wyg")
 pullout_delay = 0.25
 blocked_mods = Array[String]([])
 cache_is_setup = false
-current_mods = {}
+weapon_mods_need_to_be_readded_after_save = false
+current_mods = Dictionary[StringName, ExtResource("6_31ep3")]({})
 original_status_effects = Array[ExtResource("1_sti8o")]([])
 original_charge_status_effects = Array[ExtResource("1_sti8o")]([])
 id = "flame_blower"
 name = "Flame Blower"
-tags = Array[String]([])
+tags = Array[StringName]([])
 inv_icon_rotation = -42.0
 inv_icon_offset = Vector2(-0.5, -0.5)
 inv_icon_scale = Vector2(1.29, 1.29)

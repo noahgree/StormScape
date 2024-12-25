@@ -2,7 +2,7 @@ extends Resource
 class_name AudioResource
 ## A resource for linking a sound file path with an associated volume, pitch settings, name, and max concurrent streams.
 
-@export var name: String ## The main name of the sound.
+@export var name: StringName ## The main name of the sound. [b]Must be unique.[/b]
 @export_dir var sound_files_folder: String ## The folder containing all the sound files that can be played for this resource.
 @export_file("*.mp3", "*.wav", "*.ogg") var sound_file_paths: Array[String] ## The file paths to the sound variations. Restricted to mp3, wav, and ogg. Wav is highly recommended because of its efficiency. This array gets filled with everything in the "sound_files_folder" at game load as well.
 @export_range(1, 25, 1) var concurrent_limit: int = 10 ## The max number of instances of this sound that can be played at the same time.

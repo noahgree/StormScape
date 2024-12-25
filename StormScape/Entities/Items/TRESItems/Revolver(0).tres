@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="ProjWeaponResource" load_steps=22 format=3 uid="uid://dlfmjgnfk6nqj"]
+[gd_resource type="Resource" script_class="ProjWeaponResource" load_steps=23 format=3 uid="uid://dlfmjgnfk6nqj"]
 
 [ext_resource type="Script" uid="uid://boo31eu083dqd" path="res://Entities/Stats/EffectSystemResources/StatusEffects/StatusEffect.gd" id="1_dlrja"]
 [ext_resource type="Script" uid="uid://dkfssottmsrch" path="res://Entities/Stats/EffectSystemResources/EffectSources/EffectSource.gd" id="1_f7ms2"]
@@ -8,6 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://ohg1k8yu1y3r" path="res://Entities/Items/Weapons/ProjectileWeapons/Revolver/Revolver.tscn" id="4_p3ec7"]
 [ext_resource type="Script" uid="uid://bj3r5oopspj6l" path="res://Entities/Items/Projectiles/ProjectileResource.gd" id="5_u6crx"]
 [ext_resource type="PackedScene" uid="uid://bqkyplubhsx43" path="res://Entities/Items/Projectiles/Bullets/SmallBullet/SmallBullet.tscn" id="6_moxye"]
+[ext_resource type="Script" uid="uid://ct7n8wo1p3b20" path="res://Entities/Items/WeaponMods/WeaponMod.gd" id="6_ur6hj"]
 [ext_resource type="Script" uid="uid://ctxa7i1mbt7ab" path="res://UI/Inventory/PlayerInventory/Crafting/CraftingIngredient.gd" id="8_cxrhl"]
 [ext_resource type="Script" uid="uid://c2gdoebfp12dq" path="res://Entities/Stats/StatMod/StatModsCacheResource.gd" id="8_fox7e"]
 
@@ -305,12 +306,13 @@ charge_effect_source = SubResource("Resource_kg30o")
 pullout_delay = 0.3
 blocked_mods = Array[String]([])
 cache_is_setup = false
-current_mods = {}
+weapon_mods_need_to_be_readded_after_save = false
+current_mods = Dictionary[StringName, ExtResource("6_ur6hj")]({})
 original_status_effects = Array[ExtResource("1_dlrja")]([])
 original_charge_status_effects = Array[ExtResource("1_dlrja")]([])
 id = "revolver"
 name = "Revolver"
-tags = Array[String]([])
+tags = Array[StringName]([])
 inv_icon_rotation = -38.0
 inv_icon_offset = Vector2(1, 0)
 inv_icon_scale = Vector2(1.05, 1.05)

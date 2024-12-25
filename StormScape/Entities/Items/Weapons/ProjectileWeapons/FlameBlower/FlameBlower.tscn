@@ -1,10 +1,10 @@
 [gd_scene load_steps=16 format=3 uid="uid://dxv8dhn3gmufw"]
 
-[ext_resource type="Script" path="res://Entities/Items/Weapons/ProjectileWeapons/ProjectileWeapon.gd" id="1_7mk4f"]
-[ext_resource type="Shader" path="res://Entities/EntityCore/EntityEffectShader.gdshader" id="2_8r6wi"]
+[ext_resource type="Script" uid="uid://ca8xdltgdyjys" path="res://Entities/Items/Weapons/ProjectileWeapons/ProjectileWeapon.gd" id="1_7mk4f"]
+[ext_resource type="Shader" uid="uid://cfbagv3hrtar2" path="res://Entities/EntityCore/EntityEffectShader.gdshader" id="2_8r6wi"]
 [ext_resource type="Texture2D" uid="uid://cs3clmnktksd6" path="res://Entities/Player/PlayerCore/player_hand.png" id="2_bk7kb"]
 [ext_resource type="Texture2D" uid="uid://bmt8xnj8le8cd" path="res://Entities/Items/Weapons/ProjectileWeapons/FlameBlower/flame_blower_base.png" id="2_coi1e"]
-[ext_resource type="PackedScene" uid="uid://batrfwan8r8ov" path="res://Entities/Items/Weapons/WeaponMods/WeaponModManager.tscn" id="3_7a8dm"]
+[ext_resource type="PackedScene" uid="uid://batrfwan8r8ov" path="res://Entities/Items/WeaponMods/WeaponModManager.tscn" id="3_7a8dm"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_qv0hn"]
 shader = ExtResource("2_8r6wi")

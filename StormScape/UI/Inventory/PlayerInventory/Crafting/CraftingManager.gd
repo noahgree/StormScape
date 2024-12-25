@@ -4,7 +4,7 @@ class_name CraftingManager
 @export_dir var tres_folder: String
 @export var selected_items: Array[InvItemResource] = []
 
-var cached_recipes: Dictionary = {}
+var cached_recipes: Dictionary[StringName, Array] = {}
 
 
 func _ready() -> void:
@@ -29,33 +29,33 @@ func _cache_recipes() -> void:
 		file_name = dir.get_next()
 	dir.list_dir_end()
 
-func _preprocess_selected_items() -> Dictionary:
-	var item_quantities: Dictionary = {}
-	var tag_quantities: Dictionary = {}
+func _preprocess_selected_items() -> Dictionary[StringName, Dictionary]:
+	var item_quantities: Dictionary[StringName, Array] = {}
+	var tag_quantities: Dictionary[StringName, Array] = {}
 
 	for inv_item: InvItemResource in selected_items:
-		var item_id: String = inv_item.stats.get_recipe_id()
+		var item_id: StringName = inv_item.stats.get_recipe_id()
 		if item_id in item_quantities:
 			item_quantities[item_id].append([inv_item.quantity, inv_item.stats.rarity])
 		else:
 			item_quantities[item_id] = [[inv_item.quantity, inv_item.stats.rarity]]
 
-		for tag: String in inv_item.stats.tags:
+		for tag: StringName in inv_item.stats.tags:
 			if tag in tag_quantities:
 				tag_quantities[tag].append([inv_item.quantity, inv_item.stats.rarity])
 			else:
 				tag_quantities[tag] = [[inv_item.quantity, inv_item.stats.rarity]]
 
-	return {"items": item_quantities, "tags": tag_quantities}
+	return {&"items": item_quantities, &"tags": tag_quantities}
 
 func is_recipe_craftable(recipe: Array[CraftingIngredient]) -> bool:
-	var quantities: Dictionary = _preprocess_selected_items()
-	var item_quantities: Dictionary = quantities.items
-	var tag_quantities: Dictionary = quantities.tags
+	var quantities: Dictionary[StringName, Dictionary] = _preprocess_selected_items()
+	var item_quantities: Dictionary[StringName, Array] = quantities.items
+	var tag_quantities: Dictionary[StringName, Array] = quantities.tags
 
 	for ingredient: CraftingIngredient in recipe:
 		var total_quantity: int = 0
-		var str_ingredient: String = ingredient.item.get_recipe_id()
+		var str_ingredient: StringName = ingredient.item.get_recipe_id()
 
 		if ingredient.type == "Item":
 			if str_ingredient in item_quantities:
@@ -63,7 +63,7 @@ func is_recipe_craftable(recipe: Array[CraftingIngredient]) -> bool:
 					if _check_rarity_condition(ingredient.rarity_match, ingredient.item.rarity, entry[1]):
 						total_quantity += entry[0]
 		elif ingredient.type == "Tags":
-			for tag: String in ingredient.tags:
+			for tag: StringName in ingredient.tags:
 				if tag in tag_quantities:
 					for entry: Array in tag_quantities[tag]:
 						if _check_rarity_condition(ingredient.rarity_match, ingredient.item.rarity, entry[1]):

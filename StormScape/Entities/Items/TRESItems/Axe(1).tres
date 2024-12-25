@@ -1,10 +1,11 @@
-[gd_resource type="Resource" script_class="MeleeWeaponResource" load_steps=14 format=3 uid="uid://bper7kxtsf7f1"]
+[gd_resource type="Resource" script_class="MeleeWeaponResource" load_steps=15 format=3 uid="uid://bper7kxtsf7f1"]
 
 [ext_resource type="Script" uid="uid://djlk3y511igng" path="res://Entities/Items/Weapons/MeleeWeapons/MeleeWeaponResource.gd" id="1_0xu6s"]
 [ext_resource type="Texture2D" uid="uid://ec7bui23pv1m" path="res://Entities/Items/Weapons/MeleeWeapons/Axe/axe.png" id="1_c61qv"]
 [ext_resource type="Script" uid="uid://dkfssottmsrch" path="res://Entities/Stats/EffectSystemResources/EffectSources/EffectSource.gd" id="1_x4rfe"]
 [ext_resource type="PackedScene" uid="uid://bgj0b83wrmlon" path="res://Entities/Items/Weapons/MeleeWeapons/Axe/Axe.tscn" id="2_50myi"]
 [ext_resource type="Script" uid="uid://boo31eu083dqd" path="res://Entities/Stats/EffectSystemResources/StatusEffects/StatusEffect.gd" id="2_kry0o"]
+[ext_resource type="Script" uid="uid://ct7n8wo1p3b20" path="res://Entities/Items/WeaponMods/WeaponMod.gd" id="3_klx1g"]
 [ext_resource type="Script" uid="uid://ig4jcnxaphcg" path="res://Entities/Stats/EffectSystemResources/StatusEffects/GoodEffects/SelfKnockback/SelfKnockbackEffect.gd" id="5_wehu8"]
 [ext_resource type="Script" uid="uid://c2gdoebfp12dq" path="res://Entities/Stats/StatMod/StatModsCacheResource.gd" id="6_iunw2"]
 [ext_resource type="Script" uid="uid://ctxa7i1mbt7ab" path="res://UI/Inventory/PlayerInventory/Crafting/CraftingIngredient.gd" id="6_nkp1e"]
@@ -106,12 +107,13 @@ charge_effect_source = SubResource("Resource_quay2")
 pullout_delay = 0.0
 blocked_mods = Array[String]([])
 cache_is_setup = false
-current_mods = {}
+weapon_mods_need_to_be_readded_after_save = false
+current_mods = Dictionary[StringName, ExtResource("3_klx1g")]({})
 original_status_effects = Array[ExtResource("2_kry0o")]([])
 original_charge_status_effects = Array[ExtResource("2_kry0o")]([])
 id = "axe"
 name = "Axe"
-tags = Array[String]([])
+tags = Array[StringName]([])
 inv_icon_rotation = 0.0
 inv_icon_offset = Vector2(0, 0)
 inv_icon_scale = Vector2(1, 1)

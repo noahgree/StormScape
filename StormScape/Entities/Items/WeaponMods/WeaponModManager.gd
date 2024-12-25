@@ -21,7 +21,7 @@ func handle_weapon_mod(weapon_mod: WeaponMod) -> void:
 ## Adds a weapon mod to the dictionary and then calls the on_added method inside the mod itself.
 func _add_weapon_mod(weapon_mod: WeaponMod) -> void:
 	if DebugFlags.PrintFlags.weapon_mod_changes and print_effect_updates:
-		print_rich("-------[color=green]Adding[/color][b] " + str(weapon_mod.mod_name) + str(weapon_mod.mod_lvl) + "[/b]-------")
+		print_rich("-------[color=green]Adding[/color][b] " + str(weapon_mod.mod_name) + " " + str(weapon_mod.mod_lvl) + "[/b]-------")
 
 	weapon.stats.current_mods[weapon_mod.mod_name] = weapon_mod
 
@@ -43,7 +43,7 @@ func _add_weapon_mod(weapon_mod: WeaponMod) -> void:
 ## Removes the weapon mod from the dictionary after calling the on_removal method inside the mod itself.
 func _remove_weapon_mod(weapon_mod: WeaponMod) -> void:
 	if DebugFlags.PrintFlags.weapon_mod_changes and print_effect_updates:
-		print_rich("-------[color=red]Removed[/color][b] " + str(weapon_mod.mod_name) + str(weapon_mod.mod_lvl) + "[/b]-------")
+		print_rich("-------[color=red]Removed[/color][b] " + str(weapon_mod.mod_name) + " " + str(weapon_mod.mod_lvl) + "[/b]-------")
 
 	for mod_resource: StatMod in weapon_mod.wpn_stat_mods:
 		weapon.stats.s_mods.remove_mod(mod_resource.stat_id, mod_resource.mod_id, null)
@@ -64,29 +64,29 @@ func _remove_weapon_mod(weapon_mod: WeaponMod) -> void:
 		AudioManager.play_sound(weapon_mod.removal_audio, AudioManager.SoundType.SFX_GLOBAL)
 
 ## Called externally to request that a mod get removed. If the mod was not in dictionary of current mods, nothing happens.
-func request_mod_removal(mod_name: String) -> void:
+func request_mod_removal(mod_name: StringName) -> void:
 	var existing_mod: WeaponMod = weapon.stats.current_mods.get(mod_name, null)
 	if existing_mod: _remove_weapon_mod(existing_mod)
 
 ## When mods are added or removed that affect the effect source stats, we use this to recalculate them.
-func _update_effect_source_stats(stat_id: String) -> void:
+func _update_effect_source_stats(stat_id: StringName) -> void:
 	match stat_id:
-		"base_damage":
+		&"base_damage":
 			weapon.stats.effect_source.base_damage = weapon.stats.s_mods.get_stat("base_damage")
-		"base_healing":
+		&"base_healing":
 			weapon.stats.effect_source.base_healing = weapon.stats.s_mods.get_stat("base_healing")
-		"crit_chance":
+		&"crit_chance":
 			weapon.stats.effect_source.crit_chance = weapon.stats.s_mods.get_stat("crit_chance")
-		"armor_penetration":
+		&"armor_penetration":
 			weapon.stats.effect_source.armor_penetration = weapon.stats.s_mods.get_stat("armor_penetration")
-		"charge_base_damage":
-			weapon.stats.charge_effect_source.base_damage = weapon.stats.s_mods.get_stat("base_damage")
-		"charge_base_healing":
-			weapon.stats.charge_effect_source.base_healing = weapon.stats.s_mods.get_stat("base_healing")
-		"charge_crit_chance":
-			weapon.stats.charge_effect_source.crit_chance = weapon.stats.s_mods.get_stat("crit_chance")
-		"charge_armor_penetration":
-			weapon.stats.charge_effect_source.armor_penetration = weapon.stats.s_mods.get_stat("armor_penetration")
+		&"charge_base_damage":
+			weapon.stats.charge_effect_source.base_damage = weapon.stats.s_mods.get_stat("charge_base_damage")
+		&"charge_base_healing":
+			weapon.stats.charge_effect_source.base_healing = weapon.stats.s_mods.get_stat("charge_base_healing")
+		&"charge_crit_chance":
+			weapon.stats.charge_effect_source.crit_chance = weapon.stats.s_mods.get_stat("charge_crit_chance")
+		&"charge_armor_penetration":
+			weapon.stats.charge_effect_source.armor_penetration = weapon.stats.s_mods.get_stat("charge_armor_penetration")
 
 ## Updates the effect source status effect lists based on an incoming stat mod. Handles duplicates by keeping the highest level.
 func _update_effect_source_status_effects(for_charged: bool, new_effects: Array[StatusEffect]) -> void:

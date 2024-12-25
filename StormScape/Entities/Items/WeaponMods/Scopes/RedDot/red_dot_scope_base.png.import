@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://hn7gkf7dcvfn"
-path="res://.godot/imported/silencer_base.png-685d9eb7b16867cb896f540dc35fa569.ctex"
+uid="uid://bi4vuwg8pdwgu"
+path="res://.godot/imported/red_dot_scope_base.png-fa10b2e6d21cb2d8d9b81d1f28b53ab8.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Entities/Items/Weapons/WeaponMods/Silencer/silencer_base.png"
-dest_files=["res://.godot/imported/silencer_base.png-685d9eb7b16867cb896f540dc35fa569.ctex"]
+source_file="res://Entities/Items/WeaponMods/Scopes/RedDot/red_dot_scope_base.png"
+dest_files=["res://.godot/imported/red_dot_scope_base.png-fa10b2e6d21cb2d8d9b81d1f28b53ab8.ctex"]
 
 [params]
 

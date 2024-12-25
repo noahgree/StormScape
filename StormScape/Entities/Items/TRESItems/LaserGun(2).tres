@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="ProjWeaponResource" load_steps=37 format=3 uid="uid://ciel2rrqq4dvv"]
+[gd_resource type="Resource" script_class="ProjWeaponResource" load_steps=39 format=3 uid="uid://ciel2rrqq4dvv"]
 
 [ext_resource type="Script" uid="uid://dkfssottmsrch" path="res://Entities/Stats/EffectSystemResources/EffectSources/EffectSource.gd" id="1_xn1yf"]
 [ext_resource type="Script" uid="uid://boo31eu083dqd" path="res://Entities/Stats/EffectSystemResources/StatusEffects/StatusEffect.gd" id="2_gdqw7"]
@@ -6,6 +6,7 @@
 [ext_resource type="Script" uid="uid://cje5bobi6o8bo" path="res://Entities/Items/Hitscans/HitscanResource.gd" id="4_w5523"]
 [ext_resource type="PackedScene" uid="uid://ckf7i8bnass5n" path="res://Entities/Items/Projectiles/Laser/Laser.tscn" id="5_xjmn2"]
 [ext_resource type="Script" uid="uid://bj3r5oopspj6l" path="res://Entities/Items/Projectiles/ProjectileResource.gd" id="6_ll0mi"]
+[ext_resource type="Script" uid="uid://ct7n8wo1p3b20" path="res://Entities/Items/WeaponMods/WeaponMod.gd" id="7_v1b1g"]
 [ext_resource type="Texture2D" uid="uid://bjm0js8cfg2rm" path="res://Entities/Items/Weapons/ProjectileWeapons/LaserGun/laser_gun.png" id="10_iakvu"]
 [ext_resource type="PackedScene" uid="uid://baxpb3crwepc0" path="res://Entities/Items/Weapons/ProjectileWeapons/LaserGun/LaserGun.tscn" id="11_ykm1j"]
 [ext_resource type="Script" uid="uid://ctxa7i1mbt7ab" path="res://UI/Inventory/PlayerInventory/Crafting/CraftingIngredient.gd" id="14_c7ib1"]
@@ -209,6 +210,10 @@ point_count = 2
 _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.69792), 0.0, 0.0, 0, 0]
 point_count = 2
 
+[sub_resource type="Curve" id="Curve_v1b1g"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
 [sub_resource type="Resource" id="Resource_nhr3k"]
 script = ExtResource("6_ll0mi")
 speed = 350
@@ -230,6 +235,7 @@ ricochet_walls_only = false
 homing_method = "None"
 homing_speed_mult = 1.0
 max_turn_rate = 100.0
+turn_rate_curve = SubResource("Curve_v1b1g")
 homing_fov_angle = 180.0
 homing_max_range = 850
 homing_duration = -1.0
@@ -275,7 +281,7 @@ script = ExtResource("14_c7ib1")
 type = "Item"
 item = ExtResource("15_l541q")
 quantity = 3
-tags = Array[String]([])
+tags = Array[StringName]([])
 rarity_match = "No"
 
 [sub_resource type="Resource" id="Resource_0uuw3"]
@@ -283,7 +289,7 @@ script = ExtResource("14_c7ib1")
 type = "Item"
 item = ExtResource("16_t22lp")
 quantity = 2
-tags = Array[String]([])
+tags = Array[StringName]([])
 rarity_match = "No"
 
 [sub_resource type="Resource" id="Resource_wi7kk"]
@@ -376,12 +382,13 @@ charge_effect_source = SubResource("Resource_erj5g")
 pullout_delay = 0.25
 blocked_mods = Array[String]([])
 cache_is_setup = false
-current_mods = {}
+weapon_mods_need_to_be_readded_after_save = false
+current_mods = Dictionary[StringName, ExtResource("7_v1b1g")]({})
 original_status_effects = Array[ExtResource("2_gdqw7")]([])
 original_charge_status_effects = Array[ExtResource("2_gdqw7")]([])
 id = "laser_gun"
 name = "Laser Gun"
-tags = Array[String]([])
+tags = Array[StringName]([])
 inv_icon_rotation = -35.0
 inv_icon_offset = Vector2(1, 0)
 inv_icon_scale = Vector2(0.85, 0.85)

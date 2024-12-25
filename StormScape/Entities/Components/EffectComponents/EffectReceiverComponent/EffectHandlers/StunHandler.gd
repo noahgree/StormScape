@@ -13,8 +13,8 @@ class_name StunHandler
 func _ready() -> void:
 	assert(get_parent().get_parent() is DynamicEntity, get_parent().affected_entity.name + " has an effect receiver intended to handle stuns, but the affected entity is not a DynamicEntity.")
 
-	var moddable_stats: Dictionary = {
-		"stun_weakness" : _stun_weakness, "stun_resistance" : _stun_resistance
+	var moddable_stats: Dictionary[StringName, float] = {
+		&"stun_weakness" : _stun_weakness, &"stun_resistance" : _stun_resistance
 	}
 	affected_entity.stats.add_moddable_stats(moddable_stats)
 

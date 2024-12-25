@@ -56,7 +56,7 @@ var debug_homing_rays: Array[Dictionary] = [] ## An array of debug info about th
 var debug_recent_hit_location: Vector2 ## The location of the most recent point we hit something.
 var is_charge_fire: bool = false ## When true, this projectile emitted as a result of a charged firing.
 var source_wpn_stats: ProjWeaponResource ## The projectile weapon resource for the weapon that fired this projectile.
-var aoe_overlapped_receivers: Dictionary = {}
+var aoe_overlapped_receivers: Dictionary[Area2D, Timer] = {} ## The areas that are currently in an AOE area.
 #endregion
 
 
@@ -105,7 +105,7 @@ func _draw() -> void:
 	if not DebugFlags.Projectiles.show_homing_rays:
 		return
 
-	for ray: Dictionary in debug_homing_rays:
+	for ray: Dictionary[String, Variant] in debug_homing_rays:
 		var from_pos: Vector2 = to_local(ray["from"])
 		var to_pos: Vector2 = to_local(ray["hit_position"])
 		var color: Color = Color(0, 1, 0, 0.4) if ray["hit"] else Color(1, 0, 0, 0.25)
@@ -343,9 +343,9 @@ func _find_target_in_fov() -> void:
 		query.collide_with_bodies = true
 		query.collide_with_areas = true
 
-		var result: Dictionary = space_state.intersect_ray(query)
+		var result: Dictionary[Variant, Variant] = space_state.intersect_ray(query)
 
-		var debug_ray_info: Dictionary
+		var debug_ray_info: Dictionary[String, Variant]
 		if DebugFlags.Projectiles.show_homing_rays: debug_ray_info = { "from": from_pos, "to": to_pos, "hit": false, "hit_position": to_pos }
 
 		if result:

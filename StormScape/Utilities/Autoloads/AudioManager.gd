@@ -12,8 +12,8 @@ enum SoundType { MUSIC_GLOBAL, MUSIC_2D, SFX_GLOBAL, SFX_2D } ## Combines the tw
 const DISTANCE_FROM_PLAYER_BUFFER: int = 100 ## How far beyond max_distance the player can from the sound origin for a 2d sound to still get created.
 const MAX_SPATIAL_POOL_SIZE: int = 12 ## How many 2d audio player nodes can be waiting around in the pool.
 const MAX_GLOBAL_POOL_SIZE: int = 15 ## How many global audio player nodes can be waiting around in the pool.
-var sfx_cache: Dictionary = {} ## The dict of the file paths to all sfx resources, using the sfx name as the key.
-var music_cache: Dictionary = {} ## The dict of the file paths to all music resources, using the music name as the key.
+var sfx_cache: Dictionary[StringName, AudioResource] = {} ## The dict of the file paths to all sfx resources, using the sfx name as the key.
+var music_cache: Dictionary[StringName, AudioResource] = {} ## The dict of the file paths to all music resources, using the music name as the key.
 
 var spatial_pool: Array[AudioStreamPlayer2D] ## The 2d audio players current waiting around in memory.
 var global_pool: Array[AudioStreamPlayer] ## The global audio players current waiting around in memory.
@@ -38,7 +38,7 @@ func _ready() -> void:
 
 ## Stores a key-value pair in the appropriate cache dict using the name specified in the sound resource as the key.
 ## Given a key, the cache created by this method will return a file path to the specified audio name.
-func _cache_audio_resources(folder_path: String, cache: Dictionary) -> void:
+func _cache_audio_resources(folder_path: String, cache: Dictionary[StringName, AudioResource]) -> void:
 	var folder: DirAccess = DirAccess.open(folder_path)
 	folder.list_dir_begin()
 
@@ -72,11 +72,11 @@ func _cache_audio_resources(folder_path: String, cache: Dictionary) -> void:
 
 ## Attempts to retrive an AudioStreamPlayer or AudioStreamPlayer2D from the list of active nodes.
 ## If there is no active stream under the given name, the function returns null.
-func _get_active_audio_players_by_sound_name(sound_name: String) -> Array:
+func _get_active_audio_players_by_sound_name(sound_name: StringName) -> Array:
 	return get_tree().get_nodes_in_group(sound_name)
 
 ## Returns a reference to a cached audio resource if it exists.
-func _get_audio_resource_by_type(sound_name: String, type: SoundType) -> AudioResource:
+func _get_audio_resource_by_type(sound_name: StringName, type: SoundType) -> AudioResource:
 	var audio_resource: AudioResource
 	match type:
 		SoundType.MUSIC_GLOBAL:
@@ -123,24 +123,24 @@ func _trim_pools() -> void:
 
 #region Starting Sounds
 ## Called externally to request creating a sound. Lets this singleton manage all starting and stopping logic.
-func play_sound(sound_name: String, type: SoundType, location: Vector2 = Vector2.ZERO) -> void:
+func play_sound(sound_name: StringName, type: SoundType, location: Vector2 = Vector2.ZERO) -> void:
 	_create_audio_player(sound_name, type, location, 0, self)
 
 ## Called externally to request creating a sound with a custom fade in time. Lets this singleton manage
 ## all starting and stopping logic.
-func fade_in_sound(sound_name: String, type: SoundType, fade_in_time: float = 0.5,
+func fade_in_sound(sound_name: StringName, type: SoundType, fade_in_time: float = 0.5,
 					location: Vector2 = Vector2.ZERO) -> void:
 	_create_audio_player(sound_name, type, location, fade_in_time, self)
 
 ## Called externally to not only setup a sound instance by name, but return a reference to its player for external management.
 ## Fade-in time is optional and if left as 0 will not start with fade.
-func play_and_get_sound(sound_name: String, type: SoundType, parent_node: Node,
+func play_and_get_sound(sound_name: StringName, type: SoundType, parent_node: Node,
 						fade_in_time: float = 0, location: Vector2 = Vector2.ZERO) -> Variant:
 	var audio_player: Variant = _create_audio_player(sound_name, type, location, fade_in_time, parent_node)
 	return audio_player
 
 ## Pulls a sound resource from one of the caches and sends it to be setup if it exists.
-func _create_audio_player(sound_name: String, type: SoundType, location: Vector2, fade_in_time: float, parent_node: Node) -> Variant:
+func _create_audio_player(sound_name: StringName, type: SoundType, location: Vector2, fade_in_time: float, parent_node: Node) -> Variant:
 	var is_2d: bool = true if type == SoundType.MUSIC_2D or type == SoundType.SFX_2D else false
 	var is_music: bool = true if type == SoundType.MUSIC_GLOBAL or type == SoundType.MUSIC_2D else false
 	var audio_resource: AudioResource = _get_audio_resource_by_type(sound_name, type)
@@ -185,8 +185,8 @@ func _create_or_restart_audio_player_from_resource(audio_resource: AudioResource
 		if is_music: audio_player.bus = "Music"
 		else: audio_player.bus = "SFX"
 
-		audio_player.add_to_group(audio_resource.name)
-		audio_player.set_meta("sound_name", audio_resource.name)
+		audio_player.add_to_group(str(audio_resource.name))
+		audio_player.set_meta("sound_name", str(audio_resource.name))
 
 		audio_player.volume_db = audio_resource.volume
 		audio_player.pitch_scale = audio_resource.pitch_scale
@@ -221,7 +221,7 @@ func _start_audio_player_in_tree(audio_player: Variant, volume: float, fade_in_t
 			print_rich("\"[b]" + audio_player.get_meta("sound_name") + "[/b]\" sound is starting")
 
 ## Restarts the first sound in the group belonging to the passed in sound name, fading if necessary.
-func _restart_sound_by_name_due_to_limit(sound_name: String, volume: float, fade_in_time: float) -> void:
+func _restart_sound_by_name_due_to_limit(sound_name: StringName, volume: float, fade_in_time: float) -> void:
 	var playing_sounds: Array = _get_active_audio_players_by_sound_name(sound_name)
 	if playing_sounds[0]:
 		playing_sounds[0].stop()
@@ -259,10 +259,10 @@ func _on_looped_audio_player_end(audio_player: Variant) -> void:
 #region Changing Active Sounds
 ## Changes the volume of all streams of an active sound by either adjusting it by an amount or setting
 ## it to that amount.
-func change_volume_by_sound_name(sound_name: String, amount: float, set_to_amount: bool = false) -> void:
+func change_volume_by_sound_name(sound_name: StringName, amount: float, set_to_amount: bool = false) -> void:
 	var playing_sounds: Array = _get_active_audio_players_by_sound_name(sound_name)
 	for sound: Variant in playing_sounds:
-		if sound: # to eliminate data race conditions
+		if sound:
 			if set_to_amount:
 				sound.volume_db = clampf(amount, -40, 20)
 			else:
@@ -270,24 +270,24 @@ func change_volume_by_sound_name(sound_name: String, amount: float, set_to_amoun
 
 ## Changes the pitch of all streams of an active sound by either adjusting it by an amount or setting
 ## it to that amount.
-func change_pitch_by_sound_name(sound_name: String, amount: float, set_to_amount: bool = false) -> void:
+func change_pitch_by_sound_name(sound_name: StringName, amount: float, set_to_amount: bool = false) -> void:
 	var playing_sounds: Array = _get_active_audio_players_by_sound_name(sound_name)
 	for sound: Variant in playing_sounds:
-		if sound: # to eliminate data race conditions
+		if sound:
 			if set_to_amount:
 				sound.pitch_scale = clampf(amount, 0, 4)
 			else:
 				sound.pitch_scale = clampf(sound.pitch_scale + amount, 0, 4)
 
 ## Sets the attenuation max distance for the sound.
-func change_attenuation_distance_by_sound_name(sound_name: String, distance: int) -> void:
+func change_attenuation_distance_by_sound_name(sound_name: StringName, distance: int) -> void:
 	var playing_sounds: Array = _get_active_audio_players_by_sound_name(sound_name)
 	for sound: Variant in playing_sounds:
 		if sound is AudioStreamPlayer2D:
 			sound.max_distance = max(1, distance)
 
 ## Sets the attenuation falloff exponent for the sound.
-func change_attenuation_exponent_by_sound_name(sound_name: String, exponent: float) -> void:
+func change_attenuation_exponent_by_sound_name(sound_name: StringName, exponent: float) -> void:
 	var playing_sounds: Array = _get_active_audio_players_by_sound_name(sound_name)
 	for sound: Variant in playing_sounds:
 		if sound is AudioStreamPlayer2D:
@@ -295,7 +295,7 @@ func change_attenuation_exponent_by_sound_name(sound_name: String, exponent: flo
 
 ## Changes the minimum interval between an audio ending and a spot opening up for when things like footsteps need to occur
 ## at different rhythms and not in bursts. Resets to default on game load.
-func change_sfx_resource_rhythmic_delay(sound_name: String, new_delay: float) -> void:
+func change_sfx_resource_rhythmic_delay(sound_name: StringName, new_delay: float) -> void:
 	var audio_resource: AudioResource = sfx_cache.get(sound_name, null)
 	if audio_resource:
 		audio_resource.rhythmic_delay = max(0, new_delay)
@@ -303,12 +303,12 @@ func change_sfx_resource_rhythmic_delay(sound_name: String, new_delay: float) ->
 
 #region Stopping Sounds
 ## Stops all sounds of a sound_name by default, or can stop a specific number if given a value besides 0.
-func stop_sound_by_name(sound_name: String, number_of_instances_to_stop: int = 0) -> void:
+func stop_sound_by_name(sound_name: StringName, number_of_instances_to_stop: int = 0) -> void:
 	_destroy_sounds_by_sound_name(sound_name, number_of_instances_to_stop, 0.0, false)
 
 ## Fades out all sounds of a sound_name by default, or can stop a specific number if given a value besides 0
 ## (up to 10 can actually fade out at once, though).
-func fade_out_sound_by_name(sound_name: String, fade_out_time: float = 0.5,
+func fade_out_sound_by_name(sound_name: StringName, fade_out_time: float = 0.5,
 					number_of_instances_to_stop: int = 0, open_spots_during_fade: bool = false) -> void:
 	_destroy_sounds_by_sound_name(sound_name, min(10, number_of_instances_to_stop), fade_out_time, open_spots_during_fade)
 
@@ -320,7 +320,7 @@ func stop_audio_player(audio_player: Variant, fade_out_time: float = 0, open_spo
 		_open_audio_resource_spot(audio_player, true)
 
 ## Handles destroying a certain number of audio stream players for a sound name and optionally fading them out.
-func _destroy_sounds_by_sound_name(sound_name: String, number_of_instances_to_stop: int,
+func _destroy_sounds_by_sound_name(sound_name: StringName, number_of_instances_to_stop: int,
 					fade_out_time: float, open_spots_during_fade: bool) -> void:
 	var playing_sounds: Array = _get_active_audio_players_by_sound_name(sound_name)
 	if number_of_instances_to_stop != 0:

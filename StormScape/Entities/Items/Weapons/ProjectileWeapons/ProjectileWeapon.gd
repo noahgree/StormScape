@@ -34,18 +34,9 @@ var is_holding_hitscan: bool = false: ## Whether we are currently holding down t
 var current_hitscans: Array[Hitscan] = [] ## The currently spawned array of hitscans to get cleaned up when we unequip this weapon.
 var mouse_scan_area_targets: Array[Node] = [] ## The array of potential targets found and passed to the proj when using the "Mouse Position" homing method.
 var mouse_area: Area2D ## The area around the mouse that scans for targets when using the "Mouse Position" homing method
-var reloading_ui: Control
+var reloading_ui: Control ## The UI showing the reloading in progress. Only applicable and non-null for players.
 #endregion
 
-
-#region Saving & Loading
-func _on_load_game() -> void:
-	if not cache_is_setup_after_load:
-		_setup_mod_cache()
-
-	for mod: WeaponMod in stats.current_mods.values():
-		weapon_mod_manager._add_weapon_mod(mod)
-#endregion
 
 #region Core
 ## Sets the new stats by duplicating the old ones (to ensure unique resource instance) and sets up the cache if we haven't already.
@@ -53,6 +44,7 @@ func _set_stats(new_stats: ItemResource) -> void:
 	super._set_stats(new_stats)
 
 	# Duplicates the cache & effect sources to be unique and then calls for the cache to get loaded.
+	# stats.cache_is_setup gets set to true the first time the cache is setup on first load. From there on it is saved as true even during in-game save and loads.
 	if not stats.cache_is_setup:
 		stats.s_mods = stats.s_mods.duplicate()
 		stats.effect_source = stats.effect_source.duplicate()
@@ -63,63 +55,63 @@ func _set_stats(new_stats: ItemResource) -> void:
 
 ## Sets up the base values for the stat mod cache so that weapon mods can be added and managed properly.
 func _setup_mod_cache() -> void:
-	var normal_moddable_stats: Dictionary = {
-		"fire_cooldown" : stats.fire_cooldown,
-		"mag_size" : stats.mag_size,
-		"mag_reload_time" : stats.mag_reload_time,
-		"single_proj_reload_time" : stats.single_proj_reload_time,
-		"single_reload_quantity" : stats.single_reload_quantity,
-		"auto_ammo_interval" : stats.auto_ammo_interval,
-		"auto_ammo_count" : stats.auto_ammo_count,
-		"pullout_delay" : stats.pullout_delay,
-		"max_bloom" : stats.max_bloom,
-		"bloom_increase_rate_multiplier" : 1.0,
-		"bloom_decrease_rate_multiplier" : 1.0,
-		"initial_fire_rate_delay" : stats.initial_fire_rate_delay,
-		"warmup_increase_rate_multiplier" : 1.0,
-		"overheat_penalty" : stats.overheat_penalty,
-		"overheat_increase_rate_multiplier" : 1.0,
-		"projectiles_per_fire" : stats.projectiles_per_fire,
-		"barrage_count" : stats.barrage_count,
-		"angular_spread" : stats.angular_spread,
-		"base_damage" : stats.effect_source.base_damage,
-		"base_healing" : stats.effect_source.base_healing,
-		"crit_chance" : stats.effect_source.crit_chance,
-		"armor_penetration" : stats.effect_source.armor_penetration,
-		"proj_speed" : stats.projectile_logic.speed,
-		"proj_max_distance" : stats.projectile_logic.max_distance,
-		"proj_max_pierce" : stats.projectile_logic.max_pierce,
-		"proj_max_ricochet" : stats.projectile_logic.max_ricochet,
-		"proj_max_turn_rate" : stats.projectile_logic.max_turn_rate,
-		"proj_homing_duration" : stats.projectile_logic.homing_duration,
-		"proj_arc_travel_distance" : stats.projectile_logic.arc_travel_distance,
-		"proj_bounce_count" : stats.projectile_logic.bounce_count,
-		"proj_aoe_radius" : stats.projectile_logic.aoe_radius,
-		"hitscan_duration" : stats.hitscan_logic.hitscan_duration,
-		"hitscan_effect_interval" : stats.hitscan_logic.hitscan_effect_interval,
-		"hitscan_pierce_count" : stats.hitscan_logic.hitscan_pierce_count,
-		"hitscan_max_distance" : stats.hitscan_logic.hitscan_max_distance
+	var normal_moddable_stats: Dictionary[StringName, float] = {
+		&"fire_cooldown" : stats.fire_cooldown,
+		&"mag_size" : stats.mag_size,
+		&"mag_reload_time" : stats.mag_reload_time,
+		&"single_proj_reload_time" : stats.single_proj_reload_time,
+		&"single_reload_quantity" : stats.single_reload_quantity,
+		&"auto_ammo_interval" : stats.auto_ammo_interval,
+		&"auto_ammo_count" : stats.auto_ammo_count,
+		&"pullout_delay" : stats.pullout_delay,
+		&"max_bloom" : stats.max_bloom,
+		&"bloom_increase_rate_multiplier" : 1.0,
+		&"bloom_decrease_rate_multiplier" : 1.0,
+		&"initial_fire_rate_delay" : stats.initial_fire_rate_delay,
+		&"warmup_increase_rate_multiplier" : 1.0,
+		&"overheat_penalty" : stats.overheat_penalty,
+		&"overheat_increase_rate_multiplier" : 1.0,
+		&"projectiles_per_fire" : stats.projectiles_per_fire,
+		&"barrage_count" : stats.barrage_count,
+		&"angular_spread" : stats.angular_spread,
+		&"base_damage" : stats.effect_source.base_damage,
+		&"base_healing" : stats.effect_source.base_healing,
+		&"crit_chance" : stats.effect_source.crit_chance,
+		&"armor_penetration" : stats.effect_source.armor_penetration,
+		&"proj_speed" : stats.projectile_logic.speed,
+		&"proj_max_distance" : stats.projectile_logic.max_distance,
+		&"proj_max_pierce" : stats.projectile_logic.max_pierce,
+		&"proj_max_ricochet" : stats.projectile_logic.max_ricochet,
+		&"proj_max_turn_rate" : stats.projectile_logic.max_turn_rate,
+		&"proj_homing_duration" : stats.projectile_logic.homing_duration,
+		&"proj_arc_travel_distance" : stats.projectile_logic.arc_travel_distance,
+		&"proj_bounce_count" : stats.projectile_logic.bounce_count,
+		&"proj_aoe_radius" : stats.projectile_logic.aoe_radius,
+		&"hitscan_duration" : stats.hitscan_logic.hitscan_duration,
+		&"hitscan_effect_interval" : stats.hitscan_logic.hitscan_effect_interval,
+		&"hitscan_pierce_count" : stats.hitscan_logic.hitscan_pierce_count,
+		&"hitscan_max_distance" : stats.hitscan_logic.hitscan_max_distance
 	}
-	var charge_moddable_stats: Dictionary = {
-		"min_charge_time" : stats.min_charge_time,
-		"charge_fire_cooldown" : stats.charge_fire_cooldown,
-		"charge_base_damage" : stats.charge_effect_source.base_damage,
-		"charge_base_healing" : stats.charge_effect_source.base_healing,
-		"charge_crit_chance" : stats.charge_effect_source.crit_chance,
-		"charge_armor_penetration" : stats.charge_effect_source.armor_penetration,
-		"charge_proj_speed" : stats.charge_projectile_logic.speed,
-		"charge_proj_max_distance" : stats.charge_projectile_logic.max_distance,
-		"charge_proj_max_pierce" : stats.charge_projectile_logic.max_pierce,
-		"charge_proj_max_ricochet" : stats.charge_projectile_logic.max_ricochet,
-		"charge_proj_max_turn_rate" : stats.charge_projectile_logic.max_turn_rate,
-		"charge_proj_homing_duration" : stats.charge_projectile_logic.homing_duration,
-		"charge_proj_arc_travel_distance" : stats.charge_projectile_logic.arc_travel_distance,
-		"charge_proj_bounce_count" : stats.charge_projectile_logic.bounce_count,
-		"charge_proj_aoe_radius" : stats.charge_projectile_logic.aoe_radius,
-		"charge_hitscan_duration" : stats.charge_hitscan_logic.hitscan_duration,
-		"charge_hitscan_max_distance" : stats.charge_hitscan_logic.hitscan_max_distance,
-		"charge_hitscan_effect_interval" : stats.charge_hitscan_logic.hitscan_effect_interval,
-		"charge_hitscan_pierce_count" : stats.charge_hitscan_logic.hitscan_pierce_count
+	var charge_moddable_stats: Dictionary[StringName, float] = {
+		&"min_charge_time" : stats.min_charge_time,
+		&"charge_fire_cooldown" : stats.charge_fire_cooldown,
+		&"charge_base_damage" : stats.charge_effect_source.base_damage,
+		&"charge_base_healing" : stats.charge_effect_source.base_healing,
+		&"charge_crit_chance" : stats.charge_effect_source.crit_chance,
+		&"charge_armor_penetration" : stats.charge_effect_source.armor_penetration,
+		&"charge_proj_speed" : stats.charge_projectile_logic.speed,
+		&"charge_proj_max_distance" : stats.charge_projectile_logic.max_distance,
+		&"charge_proj_max_pierce" : stats.charge_projectile_logic.max_pierce,
+		&"charge_proj_max_ricochet" : stats.charge_projectile_logic.max_ricochet,
+		&"charge_proj_max_turn_rate" : stats.charge_projectile_logic.max_turn_rate,
+		&"charge_proj_homing_duration" : stats.charge_projectile_logic.homing_duration,
+		&"charge_proj_arc_travel_distance" : stats.charge_projectile_logic.arc_travel_distance,
+		&"charge_proj_bounce_count" : stats.charge_projectile_logic.bounce_count,
+		&"charge_proj_aoe_radius" : stats.charge_projectile_logic.aoe_radius,
+		&"charge_hitscan_duration" : stats.charge_hitscan_logic.hitscan_duration,
+		&"charge_hitscan_max_distance" : stats.charge_hitscan_logic.hitscan_max_distance,
+		&"charge_hitscan_effect_interval" : stats.charge_hitscan_logic.hitscan_effect_interval,
+		&"charge_hitscan_pierce_count" : stats.charge_hitscan_logic.hitscan_pierce_count
 	}
 
 	stats.s_mods.add_moddable_stats(normal_moddable_stats)
@@ -164,7 +156,6 @@ func disable() -> void:
 func enter() -> void:
 	if stats.s_mods.base_values.is_empty():
 		_setup_mod_cache()
-		cache_is_setup_after_load = true
 
 	if (stats.ammo_in_mag == -1) and (stats.ammo_type != ProjWeaponResource.ProjAmmoType.STAMINA):
 		stats.ammo_in_mag = stats.s_mods.get_stat("mag_size")
@@ -177,6 +168,11 @@ func enter() -> void:
 			_request_ammo_recharge()
 
 	_check_if_needs_mouse_area_scanner()
+
+	if stats.weapon_mods_need_to_be_readded_after_save:
+		for weapon_mod: WeaponMod in stats.current_mods.values():
+			weapon_mod_manager.handle_weapon_mod(weapon_mod)
+		stats.weapon_mods_need_to_be_readded_after_save = false
 
 func exit() -> void:
 	source_entity.move_fsm.should_rotate = true
@@ -225,7 +221,7 @@ func _physics_process(_delta: float) -> void:
 		mouse_area.global_position = get_global_mouse_position()
 
 ## When the cooldown manager from the hands component fires a signal with the matching item id, process the aftermath.
-func _on_fire_cooldown_timeout(item_id: String) -> void:
+func _on_fire_cooldown_timeout(item_id: StringName) -> void:
 	if item_id != stats.get_cooldown_id():
 		return
 
@@ -288,7 +284,9 @@ func release_hold_activate(hold_time: float) -> void:
 
 ## Called from the hands component to try and start a reload.
 func reload() -> void:
-	if stats.ammo_type != ProjWeaponResource.ProjAmmoType.STAMINA and stats.ammo_type != ProjWeaponResource.ProjAmmoType.SELF and stats.ammo_type != ProjWeaponResource.ProjAmmoType.CHARGES:
+	if (stats.ammo_type != ProjWeaponResource.ProjAmmoType.STAMINA
+		and stats.ammo_type != ProjWeaponResource.ProjAmmoType.SELF
+		and stats.ammo_type != ProjWeaponResource.ProjAmmoType.CHARGES):
 		if pullout_delay_timer.is_stopped() and reload_timer.is_stopped() and single_reload_timer.is_stopped():
 			if not is_reloading and not stats.ammo_in_mag >= stats.s_mods.get_stat("mag_size"):
 				_attempt_reload()
@@ -501,7 +499,11 @@ func _handle_warmup_increase() -> void:
 		var current_warmup: float = source_entity.inv.auto_decrementer.get_warmup(str(stats.session_uid))
 		var sampled_point: float = stats.warmup_increase_rate.sample_baked(current_warmup)
 		var increase_amount: float = max(0.01, sampled_point * stats.s_mods.get_stat("warmup_increase_rate_multiplier"))
-		source_entity.inv.auto_decrementer.add_warmup(str(stats.session_uid), min(1, increase_amount), stats.warmup_decrease_rate, stats.warmup_decrease_delay)
+		source_entity.inv.auto_decrementer.add_warmup(
+			StringName(str(stats.session_uid)),
+			min(1, increase_amount),
+			stats.warmup_decrease_rate,
+			stats.warmup_decrease_delay)
 
 ## Grabs a point from the warmup curve based on current warmup level given by the auto decrementer.
 func _get_warmup_firing_delay() -> float:
@@ -519,7 +521,11 @@ func _handle_bloom_increase(was_charge_fire: bool = false) -> void:
 		var sampled_point: float = stats.bloom_increase_rate.sample_baked(current_bloom)
 		var increase_amount: float = max(0.01, sampled_point * stats.s_mods.get_stat("bloom_increase_rate_multiplier"))
 		var charge_shot_mult: float = 1.0 if not was_charge_fire else stats.charge_bloom_mult
-		source_entity.inv.auto_decrementer.add_bloom(str(stats.session_uid), min(1, (increase_amount * charge_shot_mult)), stats.bloom_decrease_rate, stats.bloom_decrease_delay)
+		source_entity.inv.auto_decrementer.add_bloom(
+			StringName(str(stats.session_uid)),
+			min(1, (increase_amount * charge_shot_mult)),
+			stats.bloom_decrease_rate,
+			stats.bloom_decrease_delay)
 
 ## Grabs a point from the bloom curve based on current bloom level given by the auto decrementer.
 func _get_bloom() -> float:
@@ -546,7 +552,11 @@ func _handle_overheat_increase(was_charge_fire: bool = false) -> void:
 		var sampled_point: float = stats.overheat_inc_rate.sample_baked(current_overheat)
 		var increase_amount: float = max(0.005, sampled_point * stats.s_mods.get_stat("overheat_increase_rate_multiplier"))
 		var charge_shot_mult: float = 1.0 if not was_charge_fire else stats.charge_overheat_mult
-		source_entity.inv.auto_decrementer.add_overheat(str(stats.session_uid), min(1, (increase_amount * charge_shot_mult)), stats.overheat_dec_rate, stats.overheat_dec_delay)
+		source_entity.inv.auto_decrementer.add_overheat(
+			StringName(str(stats.session_uid)),
+			min(1, (increase_amount * charge_shot_mult)),
+			stats.overheat_dec_rate,
+			stats.overheat_dec_delay)
 
 		if source_entity.inv.auto_decrementer.get_overheat(str(stats.session_uid)) >= 1:
 			_handle_max_overheat_reached()
@@ -731,10 +741,10 @@ func _notify_recharge_of_a_recent_firing() -> void:
 ## aren't at max ammo already.
 func _request_ammo_recharge() -> void:
 	if stats.s_mods.get_stat("auto_ammo_interval") > 0:
-		source_entity.inv.auto_decrementer.request_recharge(str(stats.session_uid), stats)
+		source_entity.inv.auto_decrementer.request_recharge(StringName(str(stats.session_uid)), stats)
 
 ## When an ammo recharge ends, if it matches our item id, update the ammo ui.
-func _on_ammo_recharge_completed(item_id: String) -> void:
+func _on_ammo_recharge_completed(item_id: StringName) -> void:
 	if item_id != str(stats.session_uid):
 		return
 	else:

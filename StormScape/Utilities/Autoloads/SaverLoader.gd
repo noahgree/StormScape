@@ -11,6 +11,7 @@ func save_game() -> void:
 	var save_data: Array[SaveData] = []
 	get_tree().call_group("has_save_logic", "_on_before_save_game")
 	get_tree().call_group("has_save_logic", "_on_save_game", save_data)
+	get_tree().call_group("has_save_logic", "_on_game_finished_saving")
 	saved_game.save_data = save_data
 
 	ResourceSaver.save(saved_game, "user://savegame1.tres")

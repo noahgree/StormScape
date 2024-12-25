@@ -1,4 +1,4 @@
-[gd_scene load_steps=189 format=3 uid="uid://dba8mrurjlekp"]
+[gd_scene load_steps=186 format=3 uid="uid://dba8mrurjlekp"]
 
 [ext_resource type="Script" uid="uid://c3rpxq8pnbdje" path="res://Entities/Player/PlayerCore/Player.gd" id="1_m33tt"]
 [ext_resource type="Script" uid="uid://c2gdoebfp12dq" path="res://Entities/Stats/StatMod/StatModsCacheResource.gd" id="2_vetip"]
@@ -68,15 +68,12 @@
 [ext_resource type="Shader" uid="uid://c7jh4yrgpc0u" path="res://UI/PlayerStatsOverlay/StaminaBarTipGlow.gdshader" id="44_vk3bi"]
 [ext_resource type="Texture2D" uid="uid://l7chqvbfg16y" path="res://UI/PlayerStatsOverlay/Assets/Stamina Bar.png" id="45_3j47m"]
 [ext_resource type="Resource" uid="uid://kmidnuyti5xi" path="res://Entities/Items/TRESItems/Boomerang(2).tres" id="45_xur7q"]
-[ext_resource type="Resource" uid="uid://ba8pkny735n2r" path="res://Entities/Items/Weapons/WeaponMods/ExtendedMag/ExtendedMag1.tres" id="46_2raqh"]
 [ext_resource type="Texture2D" uid="uid://1m3lv40blexn" path="res://UI/PlayerStatsOverlay/Assets/Stamina Under.png" id="46_l08yu"]
 [ext_resource type="Resource" uid="uid://dlfmjgnfk6nqj" path="res://Entities/Items/TRESItems/Revolver(0).tres" id="46_xbbnp"]
-[ext_resource type="Script" uid="uid://ct7n8wo1p3b20" path="res://Entities/Items/Weapons/WeaponMods/WeaponMod.gd" id="46_xslb2"]
 [ext_resource type="Texture2D" uid="uid://dlx621mbgic4b" path="res://UI/PlayerStatsOverlay/Assets/Stamina Change.png" id="47_2ra1b"]
 [ext_resource type="Resource" uid="uid://bs4rqdt46yav7" path="res://Entities/Items/TRESItems/OakLog(0).tres" id="47_3uq13"]
 [ext_resource type="Resource" uid="uid://duc0xfejpfs1" path="res://Entities/Items/TRESItems/EagleEye(3).tres" id="47_a0x8j"]
 [ext_resource type="Resource" uid="uid://3avt5jvd3dye" path="res://Entities/Items/TRESItems/BottleOFire(3).tres" id="47_devgv"]
-[ext_resource type="Resource" uid="uid://caxftf2aer6g4" path="res://Entities/Items/Weapons/WeaponMods/BurningBullets/BurningBullets1.tres" id="47_l43tu"]
 [ext_resource type="Resource" uid="uid://14gw464h13vv" path="res://Entities/Items/TRESItems/Cratershot(1).tres" id="48_1kvwx"]
 [ext_resource type="Resource" uid="uid://dbnhbsphiw4oe" path="res://Entities/Items/TRESItems/SpruceLog(0).tres" id="48_3uq13"]
 [ext_resource type="Texture2D" uid="uid://ba6aut5vjc3g" path="res://UI/PlayerStatsOverlay/Assets/Shield.png" id="48_d5w3g"]
@@ -91,6 +88,9 @@
 [ext_resource type="Texture2D" uid="uid://bd7ifq5lvur4v" path="res://UI/Reloading/reloading_back.png" id="58_hd6am"]
 [ext_resource type="Script" uid="uid://c0n0ja8tkrnkf" path="res://UI/Inventory/PlayerInventory/HotbarUI.gd" id="58_i567i"]
 [ext_resource type="Texture2D" uid="uid://b536l7eoo4wx0" path="res://UI/Reloading/reloading_over.png" id="59_fbicu"]
+[ext_resource type="Script" uid="uid://ct7n8wo1p3b20" path="res://Entities/Items/WeaponMods/WeaponMod.gd" id="63_qvtc6"]
+[ext_resource type="Resource" uid="uid://ba8pkny735n2r" path="res://Entities/Items/WeaponMods/ExtendedMag/ExtendedMag1.tres" id="64_14ixx"]
+[ext_resource type="Resource" uid="uid://caxftf2aer6g4" path="res://Entities/Items/WeaponMods/BurningBullets/BurningBullets1.tres" id="65_14ixx"]
 [ext_resource type="Texture2D" uid="uid://dbm40lvpgbd8t" path="res://Entities/Items/ItemCore/Particles/item_rarity_light.png" id="66_461tf"]
 [ext_resource type="Shader" uid="uid://cwbeekjoy0uyh" path="res://UI/Shaders/GlintShader.gdshader" id="67_w57pe"]
 [ext_resource type="Texture2D" uid="uid://dtft3mljs2y5s" path="res://UI/Inventory/InventoryCore/Slot/trash_slot_icon.png" id="69_4ao77"]
@@ -105,9 +105,6 @@
 [ext_resource type="Texture2D" uid="uid://de31272sm433q" path="res://UI/Inventory/InventoryCore/button_9_patch.png" id="86_ald0t"]
 [ext_resource type="FontVariation" uid="uid://blgkcg6c83yln" path="res://Assets/Theming/Fonts/GameFontResources/ui_pixel_font.tres" id="91_55d85"]
 [ext_resource type="Script" uid="uid://dbc2ecb1mkugh" path="res://UI/PlayerStatsOverlay/ActiveSlotInfo.gd" id="91_qr476"]
-[ext_resource type="Texture2D" uid="uid://bj8cxp5cf4lw0" path="res://Entities/Items/Ammo/Medium/medium_ammo.png" id="92_2bavx"]
-[ext_resource type="Texture2D" uid="uid://cjuiqhgcljofe" path="res://Entities/Items/Ammo/Heavy/heavy_ammo.png" id="93_utxlp"]
-[ext_resource type="Texture2D" uid="uid://d3xj606lsbvfm" path="res://Entities/Items/Ammo/Shell/shell_ammo.png" id="94_36bov"]
 [ext_resource type="Shader" uid="uid://bhox1e3shq3iq" path="res://UI/Shaders/ProgressAlpha.gdshader" id="107_nyy6a"]
 
 [sub_resource type="Resource" id="Resource_rwbul"]
@@ -1177,7 +1174,7 @@ script = ExtResource("39_7aiab")
 ammo_type = 2
 id = "light_ammo"
 name = "Light Ammo"
-tags = Array[String]([])
+tags = Array[StringName]([])
 inv_icon_rotation = 0.0
 inv_icon_offset = Vector2(0, 0)
 inv_icon_scale = Vector2(1, 1)
@@ -1574,7 +1571,7 @@ offset_bottom = 40.0
 mouse_filter = 1
 script = ExtResource("17_vdk5v")
 health_component = NodePath("../../HealthComponent")
-mods = Array[ExtResource("46_xslb2")]([ExtResource("47_l43tu"), ExtResource("46_2raqh")])
+mods = Array[ExtResource("63_qvtc6")]([ExtResource("64_14ixx"), ExtResource("65_14ixx")])
 
 [node name="TestHurtBtn" type="Button" parent="OverlayUI/TestButtons"]
 layout_mode = 0
@@ -1615,10 +1612,10 @@ text = "TEST MUSIC"
 [node name="TestSaveBtn" type="Button" parent="OverlayUI/TestButtons"]
 texture_filter = 1
 layout_mode = 0
-offset_left = 451.0
-offset_top = 215.0
-offset_right = 487.0
-offset_bottom = 235.0
+offset_left = 353.0
+offset_top = 236.0
+offset_right = 389.0
+offset_bottom = 256.0
 scale = Vector2(0.7, 0.7)
 focus_mode = 0
 theme_override_fonts/font = ExtResource("11_1rxkv")
@@ -1628,10 +1625,10 @@ text = "SAVE"
 [node name="TestLoadBtn" type="Button" parent="OverlayUI/TestButtons"]
 texture_filter = 1
 layout_mode = 0
-offset_left = 451.0
-offset_top = 231.0
-offset_right = 487.0
-offset_bottom = 251.0
+offset_left = 353.0
+offset_top = 252.0
+offset_right = 389.0
+offset_bottom = 272.0
 scale = Vector2(0.7, 0.7)
 focus_mode = 0
 theme_override_fonts/font = ExtResource("11_1rxkv")
@@ -2086,16 +2083,6 @@ grow_vertical = 0
 size_flags_horizontal = 10
 size_flags_vertical = 8
 script = ExtResource("91_qr476")
-ammo_icon_textures = {
-"Heavy": ExtResource("93_utxlp"),
-"IonCharge": null,
-"Light": ExtResource("40_ftusj"),
-"Magic": null,
-"Medium": ExtResource("92_2bavx"),
-"Rocket": null,
-"Shell": ExtResource("94_36bov"),
-"Stamina": null
-}
 
 [node name="VBoxContainer" type="VBoxContainer" parent="OverlayUI/ActiveSlotInfo"]
 layout_mode = 2

@@ -7,11 +7,11 @@ class_name StaticEntityData
 @export var sprite_texture_path: String
 
 # Stats
-@export var stat_mods: Dictionary
+@export var stat_mods: Dictionary[StringName, Dictionary]
 
 # Effects
-@export var current_effects: Dictionary
-@export var saved_times_left: Dictionary
+@export var current_effects: Dictionary[String, StatusEffect]
+@export var saved_times_left: Dictionary[String, float]
 
 # HealthComponent
 @export var health: int
@@ -19,10 +19,10 @@ class_name StaticEntityData
 @export var armor: int
 
 # DmgHandler
-@export var saved_dots: Dictionary
+@export var saved_dots: Dictionary[String, Array]
 
 # HealHandler
-@export var saved_hots: Dictionary
+@export var saved_hots: Dictionary[String, Array]
 
 # ItemReceiverComponent
 @export var inv: Array[InvItemResource]

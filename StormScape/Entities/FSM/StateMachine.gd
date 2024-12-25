@@ -13,7 +13,7 @@ var current_state: State: ## The current state the state machine is in.
 		current_state = new_state
 		if DebugFlags.PrintFlags.state_machine_swaps:
 			print_rich("DEBUG: " + get_parent().name + " entered [color=pink]" + current_state.name.to_lower() + "[/color]")
-var states: Dictionary = {} ## A dict of all current children states of the state machine node.
+var states: Dictionary[String, State] = {} ## A dict of all current children states of the state machine node.
 
 ## Caches the child states and sets them up.
 func _ready() -> void:

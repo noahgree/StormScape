@@ -1,8 +1,6 @@
 extends MarginContainer
 ## Updates the info for the player's UI that shows the active slot item and any extra necessary info.
 
-@export var ammo_icon_textures: Dictionary
-
 @onready var item_name: Label = $VBoxContainer/ItemName ## The label that shows the item name.
 @onready var mag_ammo: Label = $VBoxContainer/AmmoInfo/MagAmmo ## The label that shows the mag ammo.
 @onready var inv_ammo: Label = $VBoxContainer/AmmoInfo/InvAmmo ## The label that shows the inventory ammo.

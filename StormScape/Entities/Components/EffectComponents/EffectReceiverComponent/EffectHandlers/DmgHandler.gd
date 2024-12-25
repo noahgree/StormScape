@@ -9,9 +9,9 @@ class_name DmgHandler
 
 @onready var health_component: HealthComponent = get_parent().health_component ## The health component to be affected by the damage.
 
-var dot_timers: Dictionary = {} ## Holds references to all timers currently tracking active DOT. Keys are source type names and values are an array of all matching timers of that type.
-var dot_delay_timers: Dictionary = {} ## Holds references to all timers current tracking delays for active DOT.
-var saved_dots: Dictionary = {} ## Saves the running DOT instances and the progress so far when the game saves. Keys are source type names and values are an array of modified duplicated DOT resources.
+var dot_timers: Dictionary[String, Array] = {} ## Holds references to all timers currently tracking active DOT. Keys are source type names and values are an array of all matching timers of that type.
+var dot_delay_timers: Dictionary[String, Array] = {} ## Holds references to all timers current tracking delays for active DOT.
+var saved_dots: Dictionary[String, Array] = {} ## Saves the running DOT instances and the progress so far when the game saves. Keys are source type names and values are an array of modified duplicated DOT resources.
 
 
 #region Save & Load
@@ -47,8 +47,8 @@ func _on_game_finished_loading() -> void:
 func _ready() -> void:
 	assert(get_parent().health_component, get_parent().affected_entity.name + " has an effect receiver that is intended to handle damage, but no health component is connected.")
 
-	var moddable_stats: Dictionary = {
-		"dmg_weakness" : _dmg_weakness, "dmg_resistance" : _dmg_resistance
+	var moddable_stats: Dictionary[StringName, float] = {
+		&"dmg_weakness" : _dmg_weakness, &"dmg_resistance" : _dmg_resistance
 	}
 	get_parent().affected_entity.stats.add_moddable_stats(moddable_stats)
 
@@ -132,14 +132,18 @@ func _delete_timers_from_caches(source_type: String, specific_timer: Timer = nul
 					return
 				else:
 					timers[i].queue_free()
+			else:
+				timers.remove_at(i)
 		dot_timers.erase(source_type)
 
 	var delay_timers: Array = dot_delay_timers.get(source_type, [null])
 	if delay_timers:
-		for delay_timer: Variant in delay_timers:
-			if delay_timer != null:
-				delay_timer.stop()
-				delay_timer.queue_free()
+		for i: int in range(delay_timers.size()):
+			if delay_timers[i] != null:
+				delay_timers[i].stop()
+				delay_timers[i].queue_free()
+			else:
+				delay_timers.remove_at(i)
 
 		dot_delay_timers.erase(source_type)
 

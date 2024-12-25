@@ -44,7 +44,7 @@ enum _direction {
 
 ## Overlapping tiles from the World grid
 ## that a tile from the Dual grid has.
-const _NEIGHBORS: Dictionary = {
+const _NEIGHBORS: Dictionary[int, int] = {
 	_direction.TOP  : TileSet.CellNeighbor.CELL_NEIGHBOR_TOP_SIDE,
 	_direction.LEFT : TileSet.CellNeighbor.CELL_NEIGHBOR_LEFT_SIDE,
 	_direction.RIGHT : TileSet.CellNeighbor.CELL_NEIGHBOR_RIGHT_SIDE,
@@ -59,7 +59,7 @@ const _NEIGHBORS: Dictionary = {
 ## that a tile from the Dual grid has.
 ## To be used ONLY with isometric tilesets.
 ## CellNighbors are literal, even for Isometric
-const _NEIGHBORS_ISOMETRIC: Dictionary = {
+const _NEIGHBORS_ISOMETRIC: Dictionary[int, int] = {
 	_direction.TOP : TileSet.CellNeighbor.CELL_NEIGHBOR_TOP_RIGHT_SIDE,
 	_direction.LEFT : TileSet.CellNeighbor.CELL_NEIGHBOR_TOP_LEFT_SIDE,
 	_direction.RIGHT : TileSet.CellNeighbor.CELL_NEIGHBOR_BOTTOM_RIGHT_SIDE,
@@ -74,7 +74,7 @@ const _NEIGHBORS_ISOMETRIC: Dictionary = {
 ## summation over all sketched NEIGHBOURS.
 ## Follows the official 2x2 template.
 ## Works for isometric as well.
-const _NEIGHBORS_TO_ATLAS: Dictionary = {
+const _NEIGHBORS_TO_ATLAS: Dictionary[int, Vector2i] = {
 	 0: Vector2i(0,3),
 	 1: Vector2i(3,3),
 	 2: Vector2i(0,0),
@@ -199,7 +199,7 @@ func update_tile(world_cell: Vector2i, recurse: bool = true) -> void:
 	if (!recurse and _atlas_id == -1):
 		return
 
-	var __NEIGHBORS: Dictionary = _NEIGHBORS_ISOMETRIC if is_isometric else _NEIGHBORS
+	var __NEIGHBORS: Dictionary[int, int] = _NEIGHBORS_ISOMETRIC if is_isometric else _NEIGHBORS
 	var _top_left: Vector2i = world_cell
 	var _low_left: Vector2i = display_tilemap.get_neighbor_cell(world_cell, __NEIGHBORS[_direction.BOTTOM])
 	var _top_right: Vector2i = display_tilemap.get_neighbor_cell(world_cell, __NEIGHBORS[_direction.RIGHT])
@@ -227,7 +227,7 @@ func _update_displayed_tile(_display_cell: Vector2i) -> void:
 			return
 		_checked_cells.append(_display_cell)
 
-	var __NEIGHBORS: Dictionary = _NEIGHBORS_ISOMETRIC if is_isometric else _NEIGHBORS
+	var __NEIGHBORS: Dictionary[int, int] = _NEIGHBORS_ISOMETRIC if is_isometric else _NEIGHBORS
 	var _top_left: Vector2i = display_tilemap.get_neighbor_cell(_display_cell, __NEIGHBORS[_direction.TOP_LEFT])
 	var _low_left: Vector2i = display_tilemap.get_neighbor_cell(_display_cell, __NEIGHBORS[_direction.LEFT])
 	var _top_right: Vector2i = display_tilemap.get_neighbor_cell(_display_cell, __NEIGHBORS[_direction.TOP])

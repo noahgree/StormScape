@@ -21,7 +21,7 @@ var is_hitting_something: bool = false: ## Whether at any point along the hitsca
 	set(new_value):
 		is_hitting_something = new_value
 		impact_particles.emitting = new_value
-var impacted_nodes: Dictionary = {} ## The nodes being hit at current moment.
+var impacted_nodes: Dictionary[Node, CPUParticles2D] = {} ## The nodes being hit at current moment along with their hit particles.
 var holding_allowed: bool = false ## Whether we are allowed to do holding and keep the hitscan active while the fire button is held.
 var is_charge_fire: bool = false ## Whether this hitscan was the result of a charged firing from the source weapon.
 
@@ -50,7 +50,7 @@ func _draw() -> void:
 	if not DebugFlags.Projectiles.show_hitscan_rays:
 		return
 
-	for ray: Dictionary in debug_rays:
+	for ray: Dictionary[String, Variant] in debug_rays:
 		var from_pos: Vector2 = to_local(ray["from"])
 		var to_pos: Vector2 = to_local(ray["to"])
 		if ray["hit"]:
@@ -136,7 +136,7 @@ func _find_target_receivers() -> void:
 			exclusion_list.append(child.get_rid())
 
 	var remaining_pierces: int = int(s_mods.get_stat("hitscan_pierce_count")) if not is_charge_fire else int(s_mods.get_stat("charge_hitscan_pierce_count"))
-	var pierce_list: Dictionary ={}
+	var pierce_list: Dictionary[Node, Variant] = {}
 
 	while remaining_pierces >= 0:
 		var query: PhysicsRayQueryParameters2D = PhysicsRayQueryParameters2D.new()
@@ -146,9 +146,9 @@ func _find_target_receivers() -> void:
 		query.collision_mask = effect_source.scanned_phys_layers
 		query.collide_with_bodies = true
 		query.collide_with_areas = true
-		var result: Dictionary = space_state.intersect_ray(query)
+		var result: Dictionary[Variant, Variant] = space_state.intersect_ray(query)
 
-		var debug_ray_info: Dictionary
+		var debug_ray_info: Dictionary[String, Variant]
 		if DebugFlags.Projectiles.show_hitscan_rays: debug_ray_info = { "from": from_pos, "to": to_pos, "hit": false, "hit_position": to_pos }
 
 		if result:

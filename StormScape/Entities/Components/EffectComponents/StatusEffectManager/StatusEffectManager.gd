@@ -10,16 +10,16 @@ class_name StatusEffectManager
 @export_subgroup("Debug")
 @export var print_effect_updates: bool = false ## Whether to print when this entity has status effects added and removed.
 
-var current_effects: Dictionary = {} ## Keys are general status effect titles like "Poison", and values are the effect resources themselves.
-var effect_timers: Dictionary = {} ## Holds references to all timers currently tracking active status effects.
-var saved_times_left: Dictionary = {} ## Holds time remaining for status effects that were applied during a game save.
+var current_effects: Dictionary[String, StatusEffect] = {} ## Keys are general status effect titles like "Poison", and values are the effect resources themselves.
+var effect_timers: Dictionary[String, Timer] = {} ## Holds references to all timers currently tracking active status effects.
+var saved_times_left: Dictionary[String, float] = {} ## Holds time remaining for status effects that were applied during a game save.
 
 
 #region Save & Load
 ## We save every effect timer that is in progress into the saved_times_left.
 func _on_save_game(_save_data: Array[SaveData]) -> void:
 	for effect_name: String in effect_timers.keys():
-		saved_times_left[effect_name] = effect_timers.get(effect_name, 0.001).time_left
+		saved_times_left[effect_name] = effect_timers.get(effect_name, 0.05).time_left
 
 ## We must clear out any existing effect timers and remove all exiting status effects.
 func _on_before_load_game() -> void:
@@ -38,13 +38,11 @@ func _on_load_game() -> void:
 		var effect_delay: float = 0
 
 		if "dot_resource" in clean_status_effect:
-			clean_status_effect.dot_resource = null
 			effect_delay = status_effect.dot_resource.delay_time
 		if "hot_resource" in clean_status_effect:
-			clean_status_effect.hot_resource = null
 			effect_delay = status_effect.hot_resource.delay_time
 
-		clean_status_effect.mod_time = saved_times_left.get(status_effect.effect_name, 0.001) + effect_delay
+		clean_status_effect.mod_time = saved_times_left.get(status_effect.effect_name, 0.05) + effect_delay
 
 		if DebugFlags.PrintFlags.current_effect_changes and print_effect_updates:
 			print_rich("-------[color=green]Restoring[/color][b] " + str(status_effect.effect_name) + str(status_effect.effect_lvl) + "[/b]-------")
@@ -61,9 +59,9 @@ func _ready() -> void:
 func handle_status_effect(status_effect: StatusEffect) -> void:
 	if DebugFlags.PrintFlags.current_effect_changes and print_effect_updates:
 		if status_effect is StormSyndromeEffect:
-			print_rich("-------[color=green]Adding[/color][b] [color=pink]" + str(status_effect.effect_name) + str(status_effect.effect_lvl) + "[/color][/b]-------")
+			print_rich("-------[color=green]Adding[/color][b] [color=pink]" + str(status_effect.effect_name) + " " + str(status_effect.effect_lvl) + "[/color][/b]-------")
 		else:
-			print_rich("-------[color=green]Adding[/color][b] " + str(status_effect.effect_name) + str(status_effect.effect_lvl) + "[/b]-------")
+			print_rich("-------[color=green]Adding[/color][b] " + str(status_effect.effect_name) + " " + str(status_effect.effect_lvl) + "[/b]-------")
 
 	_handle_status_effect_mods(status_effect)
 
@@ -168,9 +166,9 @@ func _restart_effect_duration(effect_name: String) -> void:
 func _remove_status_effect(status_effect: StatusEffect) -> void:
 	if DebugFlags.PrintFlags.current_effect_changes and print_effect_updates:
 		if status_effect is StormSyndromeEffect:
-			print_rich("-------[color=red]Removed[/color][b] [color=pink]" + str(status_effect.effect_name) + str(status_effect.effect_lvl) + "[/color][/b]-------")
+			print_rich("-------[color=red]Removed[/color][b] [color=pink]" + str(status_effect.effect_name) + " " + str(status_effect.effect_lvl) + "[/color][/b]-------")
 		else:
-			print_rich("-------[color=red]Removed[/color][b] " + str(status_effect.effect_name) + str(status_effect.effect_lvl) + "[/b]-------")
+			print_rich("-------[color=red]Removed[/color][b] " + str(status_effect.effect_name) + " " + str(status_effect.effect_lvl) + "[/b]-------")
 
 	for mod_resource: StatMod in status_effect.stat_mods:
 		get_parent().stats.remove_mod(mod_resource.stat_id, mod_resource.mod_id, stats_ui)

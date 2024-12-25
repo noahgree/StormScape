@@ -3,7 +3,7 @@ class_name WeaponMod
 ## Base class for all weapon mods in the game.
 
 @export_group("General")
-@export var mod_name: String ## What the mod name is without the level attached.
+@export var mod_name: StringName ## What the mod name is without the level attached. [b]Must be unique.[/b]
 @export_range(1, 100, 1) var mod_lvl: int = 1 ## The level of the mod, 1 is the lowest.
 @export var allowed_proj_wpns: Array[ProjWeaponResource.ProjWeaponType] = GlobalData.all_proj_weapons ## The allowed types of projectile weapons that can have this mod attached. Has all types allowed by default.
 @export var allowed_melee_wpns: Array[MeleeWeaponResource.MeleeWeaponType] = GlobalData.all_melee_wpns ## The allowed types of melee weapons that can have this mod attached. Has all types allowed by default.

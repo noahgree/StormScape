@@ -13,8 +13,8 @@ class_name PoisonHandler
 func _ready() -> void:
 	assert(get_parent().has_node("DmgHandler"), get_parent().get_parent().name + " has a PoisonHandler but no DmgHandler.")
 
-	var moddable_stats: Dictionary = {
-		"poison_weakness" : _poison_weakness, "poison_resistance" : _poison_resistance
+	var moddable_stats: Dictionary[StringName, float] = {
+		&"poison_weakness" : _poison_weakness, &"poison_resistance" : _poison_resistance
 	}
 	effect_receiver.affected_entity.stats.add_moddable_stats(moddable_stats)
 

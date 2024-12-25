@@ -13,18 +13,17 @@ class_name BurningHandler
 func _ready() -> void:
 	assert(get_parent().has_node("DmgHandler"), get_parent().get_parent().name + " has a BurningHandler but no DmgHandler.")
 
-	var moddable_stats: Dictionary = {
-		"burning_weakness" : _burning_weakness, "burning_resistance" : _burning_resistance
+	var moddable_stats: Dictionary[StringName, float] = {
+		&"burning_weakness" : _burning_weakness, &"burning_resistance" : _burning_resistance
 	}
 	effect_receiver.affected_entity.stats.add_moddable_stats(moddable_stats)
 
 func handle_burning(burning_effect: BurningEffect) -> void:
-	if burning_effect.dot_resource != null: # needed for when we nullify on game load
-		var local_dot_resource: DOTResource = burning_effect.dot_resource.duplicate()
-		var burning_weakness: float = effect_receiver.affected_entity.stats.get_stat("burning_weakness")
-		var burning_resistance: float = effect_receiver.affected_entity.stats.get_stat("burning_resistance")
+	var local_dot_resource: DOTResource = burning_effect.dot_resource.duplicate()
+	var burning_weakness: float = effect_receiver.affected_entity.stats.get_stat("burning_weakness")
+	var burning_resistance: float = effect_receiver.affected_entity.stats.get_stat("burning_resistance")
 
-		for i: int in range(local_dot_resource.dmg_ticks_array.size()):
-			local_dot_resource.dmg_ticks_array[i] = int(roundf(local_dot_resource.dmg_ticks_array[i] * (1 + burning_weakness - burning_resistance)))
+	for i: int in range(local_dot_resource.dmg_ticks_array.size()):
+		local_dot_resource.dmg_ticks_array[i] = int(roundf(local_dot_resource.dmg_ticks_array[i] * (1 + burning_weakness - burning_resistance)))
 
-		(effect_receiver.get_node("DmgHandler") as DmgHandler).handle_over_time_dmg(local_dot_resource, burning_effect.effect_name)
+	(effect_receiver.get_node("DmgHandler") as DmgHandler).handle_over_time_dmg(local_dot_resource, burning_effect.effect_name)

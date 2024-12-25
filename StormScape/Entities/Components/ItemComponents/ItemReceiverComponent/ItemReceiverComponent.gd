@@ -17,7 +17,10 @@ var items_in_range: Array[Item] = [] ## The items in range of being picked up.
 
 #region Save & Load
 func _on_save_game(_save_data: Array[SaveData]) -> void:
-	pass
+	# Weapons need to have their mods reloaded into the new duplicated stats instance after a game is loaded, so before we save the game we mark all weapon resources as needing to have this done. Because the weapons themselves get freed then reinstantiated, the inventory component has to call this logic from here (and not do it in each weapon, because they get freed on load).
+	for item: InvItemResource in inv:
+		if item != null and item.stats is WeaponResource:
+			item.stats.weapon_mods_need_to_be_readded_after_save = true
 
 func _on_before_load_game() -> void:
 	inv_to_load_from_save = []

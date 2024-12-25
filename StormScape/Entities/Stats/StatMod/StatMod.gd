@@ -2,8 +2,8 @@ extends Resource
 class_name StatMod
 ## A resource that holds information on how to modify a base stat like max_speed.
 
-@export var stat_id: String ## The id of the specific stat to get modded.
-@export var mod_id: String ## The id of the specific mod applied to some stat.
+@export var stat_id: StringName ## The id of the specific stat to get modded.
+@export var mod_id: StringName ## The id of the specific mod applied to some stat.
 @export_enum("+%", "-%", "+", "-", "*", "/", "=") var operation: String = "+%" ## The operation to apply the value. [b]+% adds the percentage[/b] of the base stat value. [b]-% subtracts the percentage[/b] of the base state value. [b]+ adds[/b] the value to the existing stat value. [b]- subtracts[/b] the value from the existing stat value. [b]* multiplies[/b] the value by the existing stat value. [b]/ divides[/b] the value by the existing stat value. [b]= sets the stat equal[/b] to the value (use [b]override_all[/b] to make this the only determinant of the stat).
 @export var value: float ## The value that will be applied according to the specified operation.
 
@@ -16,7 +16,7 @@ var stack_count: int = 1 ## The current number of times this mod is applied (via
 var before_stack_value: float = 0 ## The original value before stacking got applied.
 
 
-func _init(sid: String = "UntitledStat", mid: String = "UntitledMod", op: String = "%", val: float = 1.0,
+func _init(sid: StringName = &"UntitledStat", mid: StringName = &"UntitledMod", op: String = "%", val: float = 1.0,
 			prio: int = 1, max_stack: int = 1, override: bool = false) -> void:
 	stat_id = sid
 	mod_id = mid

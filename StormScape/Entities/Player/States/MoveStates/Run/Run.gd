@@ -14,9 +14,9 @@ var actual_movement_speed: float = 0 ## The movement speed determined by change 
 
 
 func _ready() -> void:
-	var moddable_stats: Dictionary = {
-		"max_speed" : _max_speed, "acceleration" : _acceleration,
-		"sprint_multiplier" : _sprint_multiplier, "run_collision_impulse_factor" : _run_collision_impulse_factor
+	var moddable_stats: Dictionary[StringName, float] = {
+		&"max_speed" : _max_speed, &"acceleration" : _acceleration,
+		&"sprint_multiplier" : _sprint_multiplier, &"run_collision_impulse_factor" : _run_collision_impulse_factor
 	}
 	get_parent().entity.stats.add_moddable_stats(moddable_stats)
 

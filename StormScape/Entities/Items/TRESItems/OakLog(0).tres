@@ -9,7 +9,7 @@
 script = ExtResource("1_xl3qb")
 id = "oak_log"
 name = "Oak Log"
-tags = Array[String]([])
+tags = Array[StringName]([])
 inv_icon_rotation = 0.0
 inv_icon_offset = Vector2(0, 0)
 inv_icon_scale = Vector2(1, 1)

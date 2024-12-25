@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bi4vuwg8pdwgu"
-path="res://.godot/imported/red_dot_scope_base.png-c0e6f89f8b06cb121ed86512a4d3acd3.ctex"
+uid="uid://dmeygsqe36hkb"
+path="res://.godot/imported/acog_base.png-f1e6903ebb071fc446ad1ef614b99eb7.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Entities/Items/Weapons/WeaponMods/Scopes/RedDot/red_dot_scope_base.png"
-dest_files=["res://.godot/imported/red_dot_scope_base.png-c0e6f89f8b06cb121ed86512a4d3acd3.ctex"]
+source_file="res://Entities/Items/WeaponMods/Scopes/ACOG/acog_base.png"
+dest_files=["res://.godot/imported/acog_base.png-f1e6903ebb071fc446ad1ef614b99eb7.ctex"]
 
 [params]
 

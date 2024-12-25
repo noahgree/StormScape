@@ -31,12 +31,12 @@ var stamina_recharge_tween: Tween ## A tween for slowly incrementing the stamina
 func _ready() -> void:
 	assert(get_parent() is DynamicEntity, get_parent().name + " has a StaminaComponent but is not a DynamicEntity.")
 
-	var moddable_stats: Dictionary = {
-		"max_stamina" : _max_stamina, "max_hunger_bars" : _max_hunger_bars,
-		"stamina_recharge_rate" : _stamina_recharge_rate,
-		"stamina_use_per_hunger_deduction" : _stamina_use_per_hunger_deduction,
-		"hunger_cost_per_stamina_bar" : _hunger_cost_per_stamina_bar,
-		"stamina_recharge_delay" : _stamina_recharge_delay
+	var moddable_stats: Dictionary[StringName, float] = {
+		&"max_stamina" : _max_stamina, &"max_hunger_bars" : _max_hunger_bars,
+		&"stamina_recharge_rate" : _stamina_recharge_rate,
+		&"stamina_use_per_hunger_deduction" : _stamina_use_per_hunger_deduction,
+		&"hunger_cost_per_stamina_bar" : _hunger_cost_per_stamina_bar,
+		&"stamina_recharge_delay" : _stamina_recharge_delay
 	}
 	get_parent().stats.add_moddable_stats(moddable_stats)
 	call_deferred("_emit_initial_values")

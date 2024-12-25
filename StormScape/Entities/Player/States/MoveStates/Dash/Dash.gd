@@ -17,9 +17,9 @@ var collision_shake_complete: bool = false ## Whether the character hit a collid
 
 
 func _ready() -> void:
-	var moddable_stats: Dictionary = {
-		"dash_speed" : _dash_speed, "dash_duration" : _dash_duration,
-		"dash_cooldown" : _dash_cooldown, "dash_collision_impulse_factor" : _dash_collision_impulse_factor
+	var moddable_stats: Dictionary[StringName, float] = {
+		&"dash_speed" : _dash_speed, &"dash_duration" : _dash_duration,
+		&"dash_cooldown" : _dash_cooldown, &"dash_collision_impulse_factor" : _dash_collision_impulse_factor
 	}
 	get_parent().entity.stats.add_moddable_stats(moddable_stats)
 

@@ -17,8 +17,8 @@ var is_source_moving_type: bool = false ## Set by the status effect component fo
 
 ## Sets up moddable stats.
 func _ready() -> void:
-	var moddable_stats: Dictionary = {
-		"knockback_boost" : _knockback_boost, "knockback_resistance" : _knockback_resistance
+	var moddable_stats: Dictionary[StringName, float] = {
+		&"knockback_boost" : _knockback_boost, &"knockback_resistance" : _knockback_resistance
 	}
 	get_parent().affected_entity.stats.add_moddable_stats(moddable_stats)
 

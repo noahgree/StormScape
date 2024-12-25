@@ -13,8 +13,8 @@ class_name RegenHandler
 func _ready() -> void:
 	assert(get_parent().has_node("HealHandler"), get_parent().get_parent().name + " has a RegenHandler but no HealHandler.")
 
-	var moddable_stats: Dictionary = {
-		"regen_boost" : _regen_boost, "regen_penalty" : _regen_penalty
+	var moddable_stats: Dictionary[StringName, float] = {
+		&"regen_boost" : _regen_boost, &"regen_penalty" : _regen_penalty
 	}
 	effect_receiver.affected_entity.stats.add_moddable_stats(moddable_stats)
 

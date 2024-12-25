@@ -14,8 +14,8 @@ func _ready() -> void:
 	assert(get_parent().get_parent() is DynamicEntity, get_parent().affected_entity.name + " has an effect receiver intended to handle storm syndrome, but the affected entity is not a DynamicEntity.")
 	assert(get_parent().has_node("DmgHandler"), get_parent().get_parent().name + " has a StormSyndromeHandler but no DmgHandler.")
 
-	var moddable_stats: Dictionary = {
-		"storm_weakness" : _storm_weakness, "storm_resistance" : _storm_resistance
+	var moddable_stats: Dictionary[StringName, float] = {
+		&"storm_weakness" : _storm_weakness, &"storm_resistance" : _storm_resistance
 	}
 	effect_receiver.affected_entity.stats.add_moddable_stats(moddable_stats)
 

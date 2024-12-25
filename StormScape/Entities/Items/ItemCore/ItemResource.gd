@@ -5,7 +5,7 @@ class_name ItemResource
 @export_group("Item Details")
 @export var id: String ## The unique identifier for the item.
 @export var name: String ## The item's string name.
-@export var tags: Array[String] = [] ## The set of tags that are checked against when this item is potentially used for crafting.
+@export var tags: Array[StringName] = [] ## The set of tags that are checked against when this item is potentially used for crafting.
 @export_range(-360, 360, 1, "suffix:degrees") var inv_icon_rotation: float = 0 ## How much to rotate the inv icon in a slot.
 @export var inv_icon_offset: Vector2 = Vector2.ZERO ## How much to offset the inv icon in a slot.
 @export var inv_icon_scale: Vector2 = Vector2.ONE ## How much to scale the inv icon in a slot.
@@ -57,15 +57,15 @@ func _to_string() -> String:
 	return str(GlobalData.ItemType.keys()[item_type]) + ": " + str(GlobalData.ItemRarity.keys()[rarity]) + "_" + name
 
 ## Returns the unique identifier used to distinguish the recipe of this item.
-func get_recipe_id() -> String:
-	return id + "(" + str(rarity) + ")"
+func get_recipe_id() -> StringName:
+	return StringName(id + "(" + str(rarity) + ")")
 
 ## Returns the cooldown id based on how cooldowns are determined for this item.
-func get_cooldown_id() -> String:
+func get_cooldown_id() -> StringName:
 	if not cooldowns_per_suid:
-		return id
+		return StringName(id)
 	else:
-		return str(session_uid)
+		return StringName(str(session_uid))
 
 ## Whether the item is the same as another item when called externally to compare.
 func is_same_as(other_item: ItemResource) -> bool:

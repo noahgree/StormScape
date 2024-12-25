@@ -5,9 +5,9 @@ class_name StatModsCacheResource
 @export_group("Debug", "debug_")
 @export var debug_print_mod_changes: bool = false ## Prints out stat mod recalculations in the editor if checked.
 
-var stat_mods: Dictionary = {} ## The cache of mod resources currently applied to the entity's stats.
-var cached_stats: Dictionary = {} ## The up-to-date and calculated stats to be used by anything that depend on them.
-var base_values: Dictionary = {} ## The unchanging base values of each moddable stat, usually set by copying the exported values from the component into a dictionary that is passed into the setup function below.
+var stat_mods: Dictionary[StringName, Dictionary] = {} ## The cache of mod resources currently applied to the entity's stats.
+var cached_stats: Dictionary[StringName, float] = {} ## The up-to-date and calculated stats to be used by anything that depend on them.
+var base_values: Dictionary[StringName, float] = {} ## The unchanging base values of each moddable stat, usually set by copying the exported values from the component into a dictionary that is passed into the setup function below.
 
 
 ## Clears out the cached stats and recalculates everything based on base values.
@@ -20,10 +20,10 @@ func reinit_on_load() -> void:
 	debug_print_mod_changes = temp_debug_print_changes
 
 ## Sets up the base values dict and calculates initial values based on any already present mods.
-func add_moddable_stats(base_valued_stats: Dictionary, stats_ui: Control = null) -> void:
+func add_moddable_stats(base_valued_stats: Dictionary[StringName, float], stats_ui: Control = null) -> void:
 	var temp_debug_print_changes: bool = debug_print_mod_changes
 	debug_print_mod_changes = false
-	for stat_id: String in base_valued_stats.keys():
+	for stat_id: StringName in base_valued_stats.keys():
 		var base_value: float = base_valued_stats[stat_id]
 		stat_mods[stat_id] = {}
 		base_values[stat_id] = base_value
@@ -31,7 +31,7 @@ func add_moddable_stats(base_valued_stats: Dictionary, stats_ui: Control = null)
 	debug_print_mod_changes = temp_debug_print_changes
 
 ## Recalculates a cached stat. Usually called once something has changed like from an update or removal.
-func _recalculate_stat(stat_id: String, base_value: float, stats_ui: Control = null) -> void:
+func _recalculate_stat(stat_id: StringName, base_value: float, stats_ui: Control = null) -> void:
 	var mods: Array = stat_mods[stat_id].values()
 	mods.sort_custom(_compare_by_priority)
 
@@ -51,9 +51,9 @@ func _recalculate_stat(stat_id: String, base_value: float, stats_ui: Control = n
 		print_rich("[color=cyan]" + stat_id + base_text + "[/color]: [b]" + str(cached_stats[stat_id]) + "[/b]")
 
 ## Updates an optionally connected UI when a watched stat changes.
-func _update_ui_for_stat(stat_id: String, new_value: float, stats_ui: Node) -> void:
-	var method_name: String = "on_" + stat_id + "_changed"
+func _update_ui_for_stat(stat_id: StringName, new_value: float, stats_ui: Node) -> void:
 	if stats_ui:
+		var method_name: String = "on_" + stat_id + "_changed"
 		if stats_ui.has_method(method_name):
 			stats_ui.call_deferred("call", method_name, new_value)
 
@@ -64,7 +64,7 @@ func _compare_by_priority(a: StatMod, b: StatMod) -> int:
 
 ## Updates a mod's value by a given mod_id that must exist on a given stat_id.
 ## This will automatically update any stacking as well.
-func update_mod_by_id(stat_id: String, mod_id: String, new_value: float) -> void:
+func update_mod_by_id(stat_id: StringName, mod_id: StringName, new_value: float) -> void:
 	var existing_mod: StatMod = _get_mod(stat_id, mod_id)
 	if existing_mod:
 		existing_mod.before_stack_value = new_value
@@ -95,7 +95,7 @@ func add_mods(mod_array: Array[StatMod], stats_ui: Control = null) -> void:
 			_push_mod_not_found_warning(mod.stat_id, mod.mod_id)
 
 ## Removes a mod from a stat. If it has been stacked, it removes the number of instances specified by the count.
-func remove_mod(stat_id: String, mod_id: String, stats_ui: Control = null, count: int = 0) -> void:
+func remove_mod(stat_id: StringName, mod_id: StringName, stats_ui: Control = null, count: int = 0) -> void:
 	var existing_mod: StatMod = _get_mod(stat_id, mod_id)
 	if existing_mod:
 		if count == 0:
@@ -117,7 +117,7 @@ func _recalculate_mod_value_with_new_stack_count(mod: StatMod) -> void:
 		mod.value = mod.before_stack_value * mod.stack_count
 
 ## Undoes any stacking applied to a mod, setting it back to as if there was only one instance active.
-func undo_mod_stacking(stat_id: String, mod_id: String, stats_ui: Control = null) -> void:
+func undo_mod_stacking(stat_id: StringName, mod_id: StringName, stats_ui: Control = null) -> void:
 	var existing_mod: StatMod = _get_mod(stat_id, mod_id)
 	if existing_mod:
 		existing_mod.stack_count = 1
@@ -126,19 +126,19 @@ func undo_mod_stacking(stat_id: String, mod_id: String, stats_ui: Control = null
 		_recalculate_stat(stat_id, base_values[stat_id], stats_ui)
 
 ## Gets the current cached value of a stat.
-func get_stat(stat_id: String) -> float:
+func get_stat(stat_id: StringName) -> float:
 	var value: float = cached_stats.get(stat_id, null)
 	assert(value != null, stat_id + " was null when trying to be retrieved from a stat mods cache.")
 	return value
 
 ## Returns the original cached value of a stat before any modifications.
-func get_original_stat(stat_id: String) -> float:
+func get_original_stat(stat_id: StringName) -> float:
 	var value: float = base_values.get(stat_id, null)
 	assert(value != null, stat_id + " was null when trying to be retrieved from a stat mods cache.")
 	return value
 
 ## Gets the StatMod for the stat_id based on the mod_id. Pushes an error if it can't be found.
-func _get_mod(stat_id: String, mod_id: String) -> StatMod:
+func _get_mod(stat_id: StringName, mod_id: StringName) -> StatMod:
 	if stat_id in stat_mods and mod_id in stat_mods[stat_id]:
 		return stat_mods[stat_id].get(mod_id, null)
 	else:
@@ -146,6 +146,6 @@ func _get_mod(stat_id: String, mod_id: String) -> StatMod:
 		return null
 
 ## Pushes an error to the console with the stat id and the mod id for the mod that could not be found.
-func _push_mod_not_found_warning(stat_id: String, mod_id: String) -> void:
+func _push_mod_not_found_warning(stat_id: StringName, mod_id: StringName) -> void:
 	if DebugFlags.PushErrors.mod_not_in_cache:
 		push_warning("The mod for stat \"" + stat_id + "\"" + " with mod_id of: \"" + mod_id + "\" was not in the cache: \"" + str(self) + "\".")

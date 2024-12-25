@@ -18,14 +18,14 @@ var health: int: set = _set_health ## The current health of the entity.
 var shield: int: set = _set_shield ## The current shield of the entity.
 var armor: int = 0: set = _set_armor ## The current armor of the entity. This is the percent of dmg that is blocked.
 var is_dying: bool = false ## Whether the entity is actively dying or not.
-var popups: Dictionary = {} ## The current effect popup displays that are active and can be added to.
+var popups: Dictionary[String, EffectPopup] = {} ## The current effect popup displays that are active and can be added to.
 const MAX_ARMOR: int = 100 ## The maximum amount of armor the entity can have.
 
 
 #region Setup
 func _ready() -> void:
-	var moddable_stats: Dictionary = {
-		"max_health" : _max_health, "max_shield" : _max_shield
+	var moddable_stats: Dictionary[StringName, float] = {
+		&"max_health" : _max_health, &"max_shield" : _max_shield
 	}
 	entity.stats.add_moddable_stats(moddable_stats)
 	call_deferred("_emit_initial_values")
