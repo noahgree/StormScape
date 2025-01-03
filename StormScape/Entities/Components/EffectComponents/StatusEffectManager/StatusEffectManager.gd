@@ -45,7 +45,7 @@ func _on_load_game() -> void:
 		clean_status_effect.mod_time = saved_times_left.get(status_effect.effect_name, 0.05) + effect_delay
 
 		if DebugFlags.PrintFlags.current_effect_changes and print_effect_updates:
-			print_rich("-------[color=green]Restoring[/color][b] " + str(status_effect.effect_name) + str(status_effect.effect_lvl) + "[/b]-------")
+			print_rich("-------[color=green]Restoring[/color][b] " + str(status_effect.effect_name) + " " + str(status_effect.effect_lvl) + "[/b]-------")
 		_add_status_effect(clean_status_effect)
 	saved_times_left = {}
 #endregion

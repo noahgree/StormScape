@@ -36,9 +36,46 @@ var pulse_up: bool = true ## Tracking the changing pulse direction of the player
 var see_through_pulse_mult: float = 1.0 ## The current multiplier for the pulsing amount on the player's see thru effect.
 var see_through_distance_mult: float = 1.0 ## The current distance multiplier for the player's see thru effect.
 var using_default_visuals: bool = false ## Whether we are currently using default visuals for the storm FX.
+var current_visuals: StormVisuals ## The current visuals being used. Mainly stored for when we save and might end up loading a "keep previous".
 var current_effect: StatusEffect ##  The up-to-date effect to apply to entities leaving the safe area while the zone is active.
 var zone_count: int = 0 ## The number of zones we have popped off the transform queue.
 var just_replaced_queue: bool = false ## Whether we just replaced the old queue with a new one and should not pop the next phase.
+#endregion
+
+
+#region Saving & Loading
+func _on_save_game(save_data: Array[SaveData]) -> void:
+	var storm_data: StormData = StormData.new()
+
+	storm_data.is_enabled = is_enabled
+	storm_data.global_pos = global_position
+	storm_data.current_radius = current_radius
+	storm_data.transform_queue = transform_queue
+	storm_data.recent_visuals = current_visuals
+	storm_data.recent_effect = current_effect
+
+	save_data.append(storm_data)
+
+func _on_before_load_game() -> void:
+	disable_storm(true)
+
+	for entity: Variant in get_tree().get_nodes_in_group("entities_out_of_safe_area"):
+		if entity: entity.remove_from_group("entities_out_of_safe_area")
+
+func _is_instance_on_load_game(data: StormData) -> void:
+	global_position = data.global_pos
+	current_radius = data.current_radius
+	replace_current_queue(data.transform_queue)
+	var visuals: StormVisuals = data.recent_visuals.duplicate()
+	visuals.viusal_change_time = 0.05
+	_apply_visual_overrides(visuals)
+	current_effect = data.recent_effect
+
+	if data.is_enabled: ## FIXME!!!!!
+		enable_storm(true)
+		_pop_current_transform_and_check_for_next_phase()
+	else:
+		disable_storm(true)
 #endregion
 
 #region Storm Core
@@ -56,6 +93,7 @@ func _ready() -> void:
 
 	current_radius = collision_shape.shape.radius
 	current_effect = default_storm_effect
+	current_visuals = default_storm_visuals
 
 	see_through_target_distance = see_through_distance
 
@@ -67,7 +105,7 @@ func _ready() -> void:
 	_tween_player_see_through_distance()
 
 ## Enables the storm to pick up where it left off. Re-enables all fx and the effect for current phase.
-func enable_storm() -> void:
+func enable_storm(from_save: bool = false) -> void:
 	if changing_enabled_status:
 		return
 	else:
@@ -76,55 +114,66 @@ func enable_storm() -> void:
 	storm_circle.visible = true
 	visible = true
 
-	var tween: Tween = create_tween().set_ease(Tween.EASE_OUT)
-	tween.tween_property(
-		storm_circle.material,
-		"shader_parameter/override_all_alpha",
-		1.0,
-		0.35
-		)
-	tween.finished.connect(func() -> void: changing_enabled_status = false)
+	if from_save:
+		storm_circle.material.set_shader_parameter("override_all_alpha", 1.0)
+		changing_enabled_status = false
+	else:
+		var tween: Tween = create_tween().set_ease(Tween.EASE_OUT)
+		tween.tween_property(
+			storm_circle.material,
+			"shader_parameter/override_all_alpha",
+			1.0,
+			0.35
+			)
+		tween.finished.connect(func() -> void: changing_enabled_status = false)
 
 	is_enabled = true
 
 	storm_change_delay_timer.paused = false
 	current_storm_transform_time_timer.paused = false
-	if radius_tween and radius_tween.is_valid(): radius_tween.play()
-	if location_tween and location_tween.is_valid(): location_tween.play()
-	if see_thru_tween and see_thru_tween.is_valid(): see_thru_tween.play()
-	if storm_colors_tween and storm_colors_tween.is_valid(): storm_colors_tween.play()
-	if storm_gradient_end_tween and storm_gradient_end_tween.is_valid(): storm_gradient_end_tween.play()
-	if glow_ring_tween and glow_ring_tween.is_valid(): glow_ring_tween.play()
-	if storm_wind_tween and storm_wind_tween.is_valid(): storm_wind_tween.play()
-	if storm_rain_tween and storm_rain_tween.is_valid(): storm_rain_tween.play()
-	if storm_distortion_tween and storm_distortion_tween.is_valid(): storm_distortion_tween.play()
+
+	if not from_save:
+		if radius_tween and radius_tween.is_valid(): radius_tween.play()
+		if location_tween and location_tween.is_valid(): location_tween.play()
+		if see_thru_tween and see_thru_tween.is_valid(): see_thru_tween.play()
+		if storm_colors_tween and storm_colors_tween.is_valid(): storm_colors_tween.play()
+		if storm_gradient_end_tween and storm_gradient_end_tween.is_valid(): storm_gradient_end_tween.play()
+		if glow_ring_tween and glow_ring_tween.is_valid(): glow_ring_tween.play()
+		if storm_wind_tween and storm_wind_tween.is_valid(): storm_wind_tween.play()
+		if storm_rain_tween and storm_rain_tween.is_valid(): storm_rain_tween.play()
+		if storm_distortion_tween and storm_distortion_tween.is_valid(): storm_distortion_tween.play()
 
 	collision_shape.set_deferred("disabled", false)
-	for i: int in range(4):
-		await get_tree().physics_frame
-	var entities_with_effect: Array[Node] = get_tree().get_nodes_in_group("entities_out_of_safe_area")
-	for entity: Node in entities_with_effect:
-		_add_effect_to_entity(entity, current_effect)
+	if not from_save:
+		for i: int in range(4):
+			await get_tree().physics_frame
+		var entities_with_effect: Array[Node] = get_tree().get_nodes_in_group("entities_out_of_safe_area")
+		for entity: Node in entities_with_effect:
+			_add_effect_to_entity(entity, current_effect)
 
 ## Stops storm in its tracks and removes the current effect from entities out of the safe area.
-func disable_storm() -> void:
+func disable_storm(from_save: bool = false) -> void:
 	if changing_enabled_status:
 		return
 	else:
 		changing_enabled_status = true
 
-	var tween: Tween = create_tween().set_ease(Tween.EASE_OUT)
-	tween.tween_property(
-		storm_circle.material,
-		"shader_parameter/override_all_alpha",
-		0.0,
-		0.35
-		)
-	tween.finished.connect(func() -> void:
-		storm_circle.visible = false
-		visible = false
+	if from_save:
+		storm_circle.material.set_shader_parameter("override_all_alpha", 0.0)
 		changing_enabled_status = false
-		)
+	else:
+		var tween: Tween = create_tween().set_ease(Tween.EASE_OUT)
+		tween.tween_property(
+			storm_circle.material,
+			"shader_parameter/override_all_alpha",
+			0.0,
+			0.35
+			)
+		tween.finished.connect(func() -> void:
+			storm_circle.visible = false
+			visible = false
+			changing_enabled_status = false
+			)
 
 	storm_change_delay_timer.paused = true
 	current_storm_transform_time_timer.paused = true
@@ -253,6 +302,7 @@ func _pop_current_transform_and_check_for_next_phase() -> void:
 			transform_queue.pop_front()
 		else:
 			just_replaced_queue = false
+
 		_process_next_transform_in_queue()
 	else:
 		_revert_to_default_zone()
@@ -307,16 +357,16 @@ func _on_storm_change_delay_timer_timeout() -> void:
 
 ## Starts the next zone sequence using a new passed in storm transform resource.
 func _start_zone(new_transform: StormTransform) -> void:
-	# Check if we need to override visuals or reset them to default.
+	# Check if we need to override visuals or reset them to default
 	if new_transform.visuals_setting == "Override":
 		_apply_visual_overrides(new_transform.storm_visuals)
 	elif new_transform.visuals_setting == "Revert to Default":
 		_apply_visual_overrides(default_storm_visuals)
 
-	# Start the actual zone movement and resize.
+	# Start the actual zone movement and resize
 	_tween_to_new_zone_position_and_radius(new_transform)
 
-	# Check if we need to override the status effect or reset it to default.
+	# Check if we need to override the status effect or reset it to default
 	if new_transform.effect_setting == "Override":
 		_swap_effect_applied_to_entities_out_of_safe_area(new_transform.status_effect)
 	elif new_transform.effect_setting == "Revert to Default":
@@ -355,6 +405,7 @@ func _on_current_storm_transform_time_timer_timeout() -> void:
 ## Applies all new visual overrides in the new storm visuals resource. If we are already using default visuals and another
 ## request comes in to transition to them, ignore it.
 func _apply_visual_overrides(new_visuals: StormVisuals) -> void:
+	current_visuals = new_visuals
 	if (new_visuals == default_storm_visuals) and using_default_visuals:
 		return
 	elif (new_visuals == default_storm_visuals):
@@ -540,6 +591,6 @@ func _remove_current_effect_from_entity(body: DynamicEntity) -> void:
 ## Adds the passed in effect to the passed in entity.
 func _add_effect_to_entity(body: DynamicEntity, effect_to_add: StatusEffect) -> void:
 	var receiver: EffectReceiverComponent = body.get_node_or_null("EffectReceiverComponent")
-	if receiver != null:
+	if receiver != null and not body.effects.check_if_has_effect(effect_to_add.effect_name):
 		receiver.handle_status_effect(effect_to_add)
 #endregion

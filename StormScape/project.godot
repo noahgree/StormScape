@@ -55,6 +55,7 @@ window/stretch/mode="canvas_items"
 
 [editor]
 
+movie_writer/movie_file="/Users/noahgreene/Developer/Game Dev/Godot/StormScape/Progress Media/recording_1.avi"
 naming/scene_name_casing=1
 naming/script_name_casing=1
 version_control/plugin_name="GitPlugin"
@@ -80,7 +81,6 @@ folder_colors={
 
 core="Nodes that are core to every scene like the root and the lighting environment."
 has_save_logic="A collection of all nodes in the game that must be saved and subsequently loaded."
-Items=""
 
 [gui]
 

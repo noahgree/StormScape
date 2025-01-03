@@ -429,7 +429,7 @@ delay = 0.0
 time_to_move = 10.0
 time_to_resize = 10.0
 auto_advance = true
-effect_setting = "Keep Previous"
+effect_setting = "Revert to Default"
 visuals_setting = "Override"
 storm_visuals = SubResource("Resource_j2wa6")
 
@@ -847,7 +847,7 @@ offset_right = 43.0
 offset_bottom = 12.0
 label_settings = SubResource("LabelSettings_lfc2v")
 
-[node name="Storm" type="Node2D" parent="WorldRoot"]
+[node name="Storm" type="Node2D" parent="WorldRoot" groups=["core", "has_save_logic"]]
 visible = false
 z_index = -2
 z_as_relative = false

@@ -23,7 +23,8 @@ func _on_before_save_game() -> void:
 			var clean_resource: DOTResource = timer.get_meta("dot_resource").duplicate()
 			var ticks_completed: int = timer.get_meta("ticks_completed")
 			var original_tick_count: int = clean_resource.dmg_ticks_array.size()
-			clean_resource.dmg_ticks_array = clean_resource.dmg_ticks_array.slice(ticks_completed, clean_resource.dmg_ticks_array.size())
+			if not clean_resource.run_until_removed:
+				clean_resource.dmg_ticks_array = clean_resource.dmg_ticks_array.slice(ticks_completed, original_tick_count)
 			clean_resource.delay_time = max(randf(), clean_resource.delay_time + randf()) # So it doesn't insta dmg on load
 			clean_resource.damaging_time = clean_resource.damaging_time * (1 - (float(ticks_completed) / float(original_tick_count)))
 			if source_type in saved_dots:
@@ -124,6 +125,7 @@ func _add_timer_to_cache(source_type: String, timer: Timer, cache: Dictionary) -
 func _delete_timers_from_caches(source_type: String, specific_timer: Timer = null) -> void:
 	var timers: Array = dot_timers.get(source_type, [null])
 	if timers:
+		var to_remove: Array[int] = []
 		for i: int in range(timers.size()):
 			if timers[i] != null:
 				if timers[i] == specific_timer:
@@ -133,17 +135,21 @@ func _delete_timers_from_caches(source_type: String, specific_timer: Timer = nul
 				else:
 					timers[i].queue_free()
 			else:
-				timers.remove_at(i)
+				to_remove.append(i)
+
+		for i: int in range(to_remove.size()):
+			timers.remove_at(to_remove[i])
+
 		dot_timers.erase(source_type)
 
 	var delay_timers: Array = dot_delay_timers.get(source_type, [null])
 	if delay_timers:
-		for i: int in range(delay_timers.size()):
-			if delay_timers[i] != null:
-				delay_timers[i].stop()
-				delay_timers[i].queue_free()
-			else:
-				delay_timers.remove_at(i)
+		delay_timers = delay_timers.filter(func(timer: Variant) -> bool:
+			if timer != null:
+				timer.queue_free()
+				return false  # Remove this timer
+			return true  # Keep this timer
+		)
 
 		dot_delay_timers.erase(source_type)
 

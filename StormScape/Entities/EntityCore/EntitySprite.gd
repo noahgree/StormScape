@@ -37,7 +37,14 @@ var current_floor_color_names: Array[String] = [] ## The queue for the next colo
 var current_sprite_glow_names: Array[String] = [] ## The queue for the next colors to show when the previous ones finish.
 
 
+#region Saving & Loading
+func _on_before_load_game() -> void:
+	current_floor_color_names = []
+	current_sprite_glow_names = []
+#endregion
+
 func _ready() -> void:
+	add_to_group("has_save_logic")
 	var frame_rect: Vector2 = SpriteHelpers.SpriteDetails.get_frame_rect(self, false)
 	floor_color.scale *= Vector2(frame_rect.x / 32.0, frame_rect.y / 32.0)
 	floor_color.position = Vector2(-position.x, (frame_rect.y / 2.0))
