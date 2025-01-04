@@ -63,6 +63,7 @@ func _ready() -> void:
 		hit_flash_timer.one_shot = true
 		hit_flash_timer.wait_time = 0.05
 		hit_flash_timer.timeout.connect(_update_hit_flash)
+		hit_flash_timer.name = "Hit_Flash_Timer"
 
 ## Handles an incoming effect source, passing it to present receivers for further processing before changing
 ## entity stats.

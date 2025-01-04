@@ -213,7 +213,8 @@ func _physics_process(delta: float) -> void:
 			_do_projectile_movement(delta)
 
 	split_delay_counter += delta
-	if splits_so_far < stats.number_of_splits and split_delay_counter >= stats.split_delays[splits_so_far]:
+	var delay_to_use: float = ArrayHelpers.get_or_default(stats.split_delays, splits_so_far, stats.split_delays[0])
+	if splits_so_far < stats.number_of_splits and split_delay_counter >= delay_to_use:
 		shadow.visible = false
 		_split_self()
 
@@ -549,17 +550,18 @@ func _do_arc_movement(delta: float) -> void:
 #region Splitting, Ricocheting, Piercing
 ## Splits the projectile into multiple instances across a specified angle.
 func _split_self() -> void:
-	if not (splits_so_far < stats.number_of_splits) or (stats.split_into_counts[splits_so_far] < 2):
+	var split_into_count: int = ArrayHelpers.get_or_default(stats.split_into_counts, splits_so_far, stats.split_into_counts[0])
+	if not (splits_so_far < stats.number_of_splits) or (split_into_count < 2):
 		return
 
-	var initial_rot: float = starting_rotation if is_arcing else rotation
-
 	splits_so_far += 1
-	var close_to_360_adjustment: int = 0 if stats.angular_spreads[splits_so_far - 1] > 310 else 1
-	var step_angle: float = (deg_to_rad(stats.angular_spreads[splits_so_far - 1]) / (stats.split_into_counts[splits_so_far - 1] - close_to_360_adjustment))
-	var start_angle: float = initial_rot - (deg_to_rad(stats.angular_spreads[splits_so_far - 1]) / 2)
+	var angular_spread: float = ArrayHelpers.get_or_default(stats.angular_spreads, splits_so_far - 1, stats.angular_spreads[0])
+	var split_into_count_offset_by_one: float = ArrayHelpers.get_or_default(stats.split_into_counts, splits_so_far - 1, stats.split_into_counts[0])
+	var close_to_360_adjustment: int = 0 if angular_spread > 310 else 1
+	var step_angle: float = (deg_to_rad(angular_spread) / (split_into_count_offset_by_one - close_to_360_adjustment))
+	var start_angle: float = starting_rotation - (deg_to_rad(angular_spread) / 2)
 
-	for i: int in range(stats.split_into_counts[splits_so_far - 1]):
+	for i: int in range(split_into_count_offset_by_one):
 		var angle: float = start_angle + (i * step_angle)
 		var new_proj: Projectile = Projectile.create(source_wpn_stats, source_entity, position, angle, is_charge_fire)
 		new_proj.splits_so_far = splits_so_far
@@ -568,10 +570,14 @@ func _split_self() -> void:
 
 		get_parent().add_child(new_proj)
 
-	if stats.splitting_sounds[splits_so_far - 1] != "":
-		AudioManager.play_sound(stats.splitting_sounds[splits_so_far - 1], AudioManager.SoundType.SFX_2D, global_position)
-	if stats.split_cam_shakes_dur[splits_so_far - 1] > 0:
-		GlobalData.player_camera.start_shake(stats.split_cam_shakes_str[splits_so_far - 1], stats.split_cam_shakes_dur[splits_so_far - 1])
+	var sound: String = ArrayHelpers.get_or_default(stats.splitting_sounds, splits_so_far - 1, stats.splitting_sounds[0])
+	if sound != "":
+		AudioManager.play_sound(sound, AudioManager.SoundType.SFX_2D, global_position)
+
+	var shake_dur: float = ArrayHelpers.get_or_default(stats.split_cam_shakes_dur, splits_so_far - 1, stats.split_cam_shakes_dur[0])
+	if shake_dur > 0:
+		var shake_str: float = ArrayHelpers.get_or_default(stats.split_cam_shakes_str, splits_so_far - 1, stats.split_cam_shakes_str[0])
+		GlobalData.player_camera.start_shake(shake_str, shake_dur)
 
 	queue_free()
 
@@ -784,23 +790,9 @@ func _get_effect_source_adjusted_for_falloff(effect_src: EffectSource, handling_
 
 	if apply_to_bad:
 		falloff_effect_src.base_damage = int(min(falloff_effect_src.base_damage, ceil(falloff_effect_src.base_damage * falloff_mult)))
-		for i: int in range(falloff_effect_src.status_effects.size()):
-			if falloff_effect_src.status_effects[i] != null and falloff_effect_src.status_effects[i].is_bad_effect:
-				var new_stat_effect: StatusEffect = falloff_effect_src.status_effects[i].duplicate()
-				new_stat_effect.mod_time *= falloff_mult
-				if new_stat_effect is KnockbackEffect:
-					new_stat_effect.knockback_force *= falloff_mult
-
-				falloff_effect_src.status_effects[i] = new_stat_effect
 
 	if apply_to_good:
 		falloff_effect_src.base_healing = int(min(falloff_effect_src.base_healing, ceil(falloff_effect_src.base_healing * falloff_mult)))
-		for i: int in range(falloff_effect_src.status_effects.size()):
-			if falloff_effect_src.status_effects[i] != null and not falloff_effect_src.status_effects[i].is_bad_effect:
-				var new_stat_effect: StatusEffect = falloff_effect_src.status_effects[i].duplicate()
-				new_stat_effect.mod_time *= falloff_mult
-
-				falloff_effect_src.status_effects[i] = new_stat_effect
 
 	return falloff_effect_src
 #endregion

@@ -65,8 +65,8 @@ class_name ProjectileResource
 @export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var split_delays: Array[float] = [0.2] ## For each split index, you should assign how long after the last projectile spawn to wait before splitting again. The first delay is the delay before the initial split.
 @export_subgroup("Splitting FX")
 @export var splitting_sounds: Array[String] = [""] ## For each split index, you should assign the sound to be played during the split.
-@export_range(0, 30, 0.01) var split_cam_shakes_str: Array[float] = [1.0] ## For each split index, you should determine how strong the camera shake will be at the split.
-@export_range(0, 2, 0.01) var split_cam_shakes_dur: Array[float] = [0.2] ## For each split index, you should determine how long the camera shake will last after the split.
+@export_range(0, 30, 0.01) var split_cam_shakes_str: Array[float] = [0.5] ## For each split index, you should determine how strong the camera shake will be at the split.
+@export_range(0, 2, 0.01) var split_cam_shakes_dur: Array[float] = [0.0] ## For each split index, you should determine how long the camera shake will last after the split.
 
 @export_group("Area of Effect")
 @export_range(0, 200, 1, "suffix:pixels") var aoe_radius: int = 0 ## If above 0, this projectile will do AOE damage after hitting something.

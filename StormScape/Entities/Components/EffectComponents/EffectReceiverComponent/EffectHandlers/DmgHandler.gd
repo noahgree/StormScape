@@ -174,7 +174,7 @@ func _send_handled_dmg(source_type: String, dmg_affected_stats: GlobalData.DmgAf
 			health_component.damage_shield(positive_dmg, source_type, was_crit)
 			health_component.damage_health(positive_dmg, source_type, was_crit)
 
-
+## If we should do life steal, pass that information on to the potential life steal handler.
 func _pass_damage_to_potential_life_steal_handler(amount: int, percent_to_steal: float) -> void:
 	if percent_to_steal > 0:
 		var handler: LifeStealHandler = get_parent().life_steal_handler

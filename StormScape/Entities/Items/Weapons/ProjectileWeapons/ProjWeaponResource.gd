@@ -20,6 +20,7 @@ enum ProjAmmoType { ## The types of projectile ammo.
 @export_range(0, 30, 0.01, "hide_slider", "or_greater", "suffix:seconds") var fire_cooldown: float = 0.05 ## Time between fully auto projectile emmision. Also the minimum time that must elapse between clicks if set to semi-auto.
 @export_range(0, 10, 0.01, "hide_slider", "or_greater", "suffix:seconds") var firing_duration: float = 0.1 ## How long it takes to release the projectile after initiating the action. Determines the animation speed as well. Set to 0 by default.
 @export_subgroup("Firing Animation")
+@export var one_frame_per_fire: bool = false ## When true, the sprite frames will only advance one frame when firing normally.
 @export var override_anim_dur: float = 0 ## When greater than 0, the fire animation will run at this override time per loop.
 @export var anim_speed_mult: float = 1.0 ## Multiplies the speed scale of the firing animation.
 @export_subgroup("Entity Effects")
@@ -40,6 +41,7 @@ enum ProjAmmoType { ## The types of projectile ammo.
 @export var charge_bloom_mult: float = 5.0 ## How much more should one charge shot count towards current bloom.
 @export var charge_overheat_mult: float = 5.0 ## How much more should one charge shot count towards current overheat.
 @export_subgroup("Firing Animation")
+@export var one_frame_per_chg_fire: bool = false ## When true, the sprite frames will only advance one frame when firing with charge.
 @export var override_chg_anim_dur: float = 0 ## When greater than 0, the charge fire animation will run at this override time per loop.
 @export var chg_anim_speed_mult: float = 1.0 ## Multiplies the speed scale of the charge firing animation.
 

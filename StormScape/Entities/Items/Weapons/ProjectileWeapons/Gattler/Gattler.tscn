@@ -1,0 +1,125 @@
+[gd_scene load_steps=16 format=3 uid="uid://c17oqm8amalvy"]
+
+[ext_resource type="Script" uid="uid://ca8xdltgdyjys" path="res://Entities/Items/Weapons/ProjectileWeapons/ProjectileWeapon.gd" id="1_vuacj"]
+[ext_resource type="Shader" uid="uid://cfbagv3hrtar2" path="res://Entities/EntityCore/EntityEffectShader.gdshader" id="2_v1sfn"]
+[ext_resource type="Texture2D" uid="uid://beenod82tvkv1" path="res://Entities/Items/Weapons/ProjectileWeapons/Gattler/gattler_base.png" id="3_fnsui"]
+[ext_resource type="Texture2D" uid="uid://cs3clmnktksd6" path="res://Entities/Player/PlayerCore/player_hand.png" id="4_7qqje"]
+[ext_resource type="PackedScene" uid="uid://batrfwan8r8ov" path="res://Entities/Items/WeaponMods/WeaponModManager.tscn" id="5_yhkb2"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_fnsui"]
+shader = ExtResource("2_v1sfn")
+shader_parameter/glow_color = Color(1, 1, 1, 1)
+shader_parameter/glow_size = 4.5
+shader_parameter/glow_strength = 9.0
+shader_parameter/enable_fade = false
+shader_parameter/tint_color = Color(1, 1, 1, 0)
+shader_parameter/frame_uv_min = null
+shader_parameter/frame_uv_max = null
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_c0tnr"]
+atlas = ExtResource("3_fnsui")
+region = Rect2(0, 0, 38, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_74nn5"]
+atlas = ExtResource("3_fnsui")
+region = Rect2(38, 0, 38, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_c50xj"]
+atlas = ExtResource("3_fnsui")
+region = Rect2(76, 0, 38, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ol8xj"]
+atlas = ExtResource("3_fnsui")
+region = Rect2(114, 0, 38, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_gua5r"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_c0tnr")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_74nn5")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_c50xj")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ol8xj")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="Animation" id="Animation_wj1f7"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("ItemSprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+
+[sub_resource type="Animation" id="Animation_q35vr"]
+resource_name = "fire"
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("ItemSprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.25, 0.5, 0.75),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_fnsui"]
+_data = {
+&"RESET": SubResource("Animation_wj1f7"),
+&"fire": SubResource("Animation_q35vr")
+}
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_c0tnr"]
+radius = 4.0
+height = 24.0
+
+[node name="Gattler" type="Node2D"]
+script = ExtResource("1_vuacj")
+proj_origin = Vector2(18, -1)
+
+[node name="ItemSprite" type="AnimatedSprite2D" parent="."]
+material = SubResource("ShaderMaterial_fnsui")
+sprite_frames = SubResource("SpriteFrames_gua5r")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_fnsui")
+}
+
+[node name="ProjectileOrigin" type="Marker2D" parent="."]
+position = Vector2(18, -1)
+
+[node name="MainHandSprite" type="Sprite2D" parent="."]
+position = Vector2(-17, 0)
+texture = ExtResource("4_7qqje")
+
+[node name="WeaponModManager" parent="." instance=ExtResource("5_yhkb2")]
+
+[node name="ClippingDetector" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 241
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ClippingDetector"]
+position = Vector2(6, -1)
+rotation = -1.5708
+shape = SubResource("CapsuleShape2D_c0tnr")

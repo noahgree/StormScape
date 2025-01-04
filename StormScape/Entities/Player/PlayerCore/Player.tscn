@@ -1,4 +1,4 @@
-[gd_scene load_steps=186 format=3 uid="uid://dba8mrurjlekp"]
+[gd_scene load_steps=188 format=3 uid="uid://dba8mrurjlekp"]
 
 [ext_resource type="Script" uid="uid://c3rpxq8pnbdje" path="res://Entities/Player/PlayerCore/Player.gd" id="1_m33tt"]
 [ext_resource type="Script" uid="uid://c2gdoebfp12dq" path="res://Entities/Stats/StatMod/StatModsCacheResource.gd" id="2_vetip"]
@@ -83,6 +83,7 @@
 [ext_resource type="Texture2D" uid="uid://b2v0527iatsjd" path="res://UI/PlayerStatsOverlay/Assets/Health.png" id="51_6cphe"]
 [ext_resource type="Texture2D" uid="uid://dhvpkl1svbcys" path="res://UI/PlayerStatsOverlay/Assets/Health Under.png" id="52_dhyl8"]
 [ext_resource type="Resource" uid="uid://dpmwqsai6gxsr" path="res://Entities/Items/TRESItems/FlameBlower(4).tres" id="52_ebist"]
+[ext_resource type="Resource" uid="uid://1q7rlned2r23" path="res://Entities/Items/TRESItems/Gattler(3).tres" id="53_lo25j"]
 [ext_resource type="Texture2D" uid="uid://lj78cee4aa38" path="res://UI/PlayerStatsOverlay/Assets/Health Change.png" id="53_qsiea"]
 [ext_resource type="Script" uid="uid://dih45lqhjg0xx" path="res://UI/Reloading/ReloadingUI.gd" id="57_n8srl"]
 [ext_resource type="Texture2D" uid="uid://bd7ifq5lvur4v" path="res://UI/Reloading/reloading_back.png" id="58_hd6am"]
@@ -1242,6 +1243,12 @@ script = ExtResource("32_ixmb3")
 stats = ExtResource("52_ebist")
 quantity = 1
 
+[sub_resource type="Resource" id="Resource_rdrbb"]
+script = ExtResource("32_ixmb3")
+stats = ExtResource("53_lo25j")
+quantity = 1
+metadata/_custom_type_script = ExtResource("32_ixmb3")
+
 [sub_resource type="Resource" id="Resource_hevqc"]
 script = ExtResource("32_ixmb3")
 stats = ExtResource("47_devgv")
@@ -1513,7 +1520,7 @@ parameters/run/blendspace2d/blend_position = Vector2(0, 0)
 
 [node name="ItemReceiverComponent" parent="." node_paths=PackedStringArray("inv_populator", "ui") instance=ExtResource("30_qgyag")]
 item_scene = ExtResource("31_8v2rb")
-starting_inv = Array[ExtResource("32_ixmb3")]([SubResource("Resource_pihal"), null, null, null, SubResource("Resource_kx1me"), SubResource("Resource_jrr0m"), SubResource("Resource_2ijsm"), null, SubResource("Resource_xlc3k"), null, SubResource("Resource_3by25"), SubResource("Resource_oxva3"), SubResource("Resource_t7kvu"), SubResource("Resource_x8o50"), null, SubResource("Resource_apvym"), SubResource("Resource_ur5wt"), null, null, SubResource("Resource_dyejk"), null, null, null, null, null, null, SubResource("Resource_vpccy"), null, null, null, null, SubResource("Resource_sx7hp"), SubResource("Resource_wjnk6"), SubResource("Resource_hevqc"), SubResource("Resource_0ta0y"), SubResource("Resource_p5d28"), SubResource("Resource_6stk0")])
+starting_inv = Array[ExtResource("32_ixmb3")]([SubResource("Resource_pihal"), null, null, null, SubResource("Resource_kx1me"), SubResource("Resource_jrr0m"), SubResource("Resource_2ijsm"), null, SubResource("Resource_xlc3k"), null, SubResource("Resource_3by25"), SubResource("Resource_oxva3"), SubResource("Resource_t7kvu"), SubResource("Resource_x8o50"), null, SubResource("Resource_apvym"), SubResource("Resource_ur5wt"), null, null, SubResource("Resource_dyejk"), null, null, null, null, null, null, SubResource("Resource_vpccy"), null, null, SubResource("Resource_sx7hp"), SubResource("Resource_wjnk6"), null, SubResource("Resource_rdrbb"), SubResource("Resource_hevqc"), SubResource("Resource_0ta0y"), SubResource("Resource_p5d28"), SubResource("Resource_6stk0")])
 is_player_inv = true
 inv_size = 37
 hotbar_size = 5
@@ -1577,10 +1584,11 @@ mods = Array[ExtResource("63_qvtc6")]([ExtResource("64_14ixx"), ExtResource("65_
 layout_mode = 0
 offset_left = 114.0
 offset_top = 253.0
-offset_right = 146.0
-offset_bottom = 273.0
+offset_right = 145.0
+offset_bottom = 272.0
 scale = Vector2(0.7, 0.7)
 focus_mode = 0
+theme_override_font_sizes/font_size = 12
 text = "HURT"
 
 [node name="TestHealBtn" type="Button" parent="OverlayUI/TestButtons"]
@@ -1588,12 +1596,11 @@ texture_filter = 1
 layout_mode = 0
 offset_left = 114.0
 offset_top = 238.0
-offset_right = 145.0
-offset_bottom = 258.0
+offset_right = 143.0
+offset_bottom = 257.0
 scale = Vector2(0.7, 0.7)
 focus_mode = 0
-theme_override_fonts/font = ExtResource("11_1rxkv")
-theme_override_font_sizes/font_size = 16
+theme_override_font_sizes/font_size = 12
 text = "HEAL"
 
 [node name="TestMusicBtn" type="Button" parent="OverlayUI/TestButtons"]

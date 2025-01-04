@@ -139,6 +139,7 @@ func _restart_effect_duration(effect_name: String) -> void:
 ## Removes the status effect from the current effects dict and removes all its mods. Additionally removes its
 ## associated timer from the timer dict.
 func _remove_status_effect(status_effect: StatusEffect) -> void:
+	print(Time.get_ticks_msec() / 1000.0)
 	if DebugFlags.PrintFlags.current_effect_changes and print_effect_updates:
 		if status_effect is StormSyndromeEffect:
 			print_rich("-------[color=red]Removed[/color][b] [color=pink]" + str(status_effect.effect_name) + " " + str(status_effect.effect_lvl) + "[/color][/b]-------")

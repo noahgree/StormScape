@@ -586,6 +586,10 @@ func _start_firing_anim(was_charge_fire: bool = false) -> void:
 	if anim_player.is_playing():
 		return
 	if not was_charge_fire:
+		if stats.one_frame_per_fire:
+			# If using one frame per fire, we know it is an animated sprite
+			sprite.frame = ((sprite as AnimatedSprite2D).frame + 1) % (sprite as AnimatedSprite2D).sprite_frames.get_frame_count(sprite.animation)
+			return
 		if stats.override_anim_dur > 0:
 			anim_player.speed_scale = 1.0 / stats.override_anim_dur
 		else:
@@ -593,6 +597,10 @@ func _start_firing_anim(was_charge_fire: bool = false) -> void:
 		anim_player.speed_scale *= stats.anim_speed_mult
 		if anim_player.has_animation("fire"): anim_player.play("fire")
 	else:
+		if stats.one_frame_per_chg_fire:
+			# If using one frame per charge fire, we know it is an animated sprite
+			sprite.frame = ((sprite as AnimatedSprite2D).frame + 1) % (sprite as AnimatedSprite2D).sprite_frames.get_frame_count(sprite.animation)
+			return
 		if stats.override_chg_anim_dur > 0   :
 			anim_player.speed_scale = 1.0 / stats.override_chg_anim_dur
 		else:
