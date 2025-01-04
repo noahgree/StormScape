@@ -34,10 +34,6 @@ func _on_save_game(save_data: Array[SaveData]) -> void:
 
 	data.stat_mods = stats.stat_mods
 
-	if effects != null:
-		data.current_effects = effects.current_effects
-		data.saved_times_left = effects.saved_times_left
-
 	if sprite is AnimatedSprite2D:
 		data.sprite_frames_path = sprite.sprite_frames.resource_path
 	else:
@@ -56,11 +52,6 @@ func _on_save_game(save_data: Array[SaveData]) -> void:
 		data.stamina_to_hunger_count = stamina_component.stamina_to_hunger_count
 		data.hunger_bars = stamina_component.hunger_bars
 		data.can_use_hunger_bars = stamina_component.can_use_hunger_bars
-
-	if effect_receiver.has_node("DmgHander"):
-		data.saved_dots = effect_receiver.get_node("DmgHandler").saved_dots
-	if effect_receiver.has_node("HealHandler"):
-		data.saved_hots = effect_receiver.get_node("HealHandler").saved_hots
 
 	if inv != null:
 		data.inv = inv.inv
@@ -86,10 +77,6 @@ func _is_instance_on_load_game(data: DynamicEntityData) -> void:
 	stats.stat_mods = data.stat_mods
 	stats.reinit_on_load()
 
-	if effects != null:
-		effects.current_effects = data.current_effects
-		effects.saved_times_left = data.saved_times_left
-
 	if sprite is AnimatedSprite2D:
 		sprite.sprite_frames = load(data.sprite_frames_path)
 	else:
@@ -111,11 +98,6 @@ func _is_instance_on_load_game(data: DynamicEntityData) -> void:
 		stamina_component.stamina_to_hunger_count = data.stamina_to_hunger_count
 		stamina_component.hunger_bars = data.hunger_bars
 		stamina_component.can_use_hunger_bars = data.can_use_hunger_bars
-
-	if effect_receiver.has_node("DmgHander"):
-		effect_receiver.get_node("DmgHandler").saved_dots = data.saved_dots
-	if effect_receiver.has_node("HealHandler"):
-		effect_receiver.get_node("HealHandler").saved_hots = data.saved_hots
 
 	if inv != null:
 		inv.inv_to_load_from_save = data.inv

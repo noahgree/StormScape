@@ -24,10 +24,6 @@ func _on_save_game(save_data: Array[SaveData]) -> void:
 
 	data.stat_mods = stats.stat_mods
 
-	if effects != null:
-		data.current_effects = effects.current_effects
-		data.saved_times_left = effects.saved_times_left
-
 	if sprite is AnimatedSprite2D:
 		data.sprite_frames_path = sprite.sprite_frames.resource_path
 	else:
@@ -37,11 +33,6 @@ func _on_save_game(save_data: Array[SaveData]) -> void:
 		data.health = $HealthComponent.health
 		data.shield = $HealthComponent.shield
 		data.armor = $HealthComponent.armor
-
-	if has_node("EffectReceiverComponent/DmgHandler"):
-		data.saved_dots = effect_receiver.get_node("DmgHandler").saved_dots
-	if has_node("EffectReceiverComponent/HealHandler"):
-		data.saved_hots = effect_receiver.get_node("HealHandler").saved_hots
 
 	if inv != null:
 		data.inv = inv.inv
@@ -60,10 +51,6 @@ func _is_instance_on_load_game(data: RigidEntityData) -> void:
 	stats.stat_mods = data.stat_mods
 	stats.reinit_on_load()
 
-	if effects != null:
-		effects.current_effects = data.current_effects
-		effects.saved_times_left = data.saved_times_left
-
 	if sprite is AnimatedSprite2D:
 		sprite.sprite_frames = load(data.sprite_frames_path)
 	else:
@@ -73,11 +60,6 @@ func _is_instance_on_load_game(data: RigidEntityData) -> void:
 		$HealthComponent.health = data.health
 		$HealthComponent.shield = data.shield
 		$HealthComponent.armor = data.armor
-
-	if has_node("EffectReceiverComponent/DmgHandler"):
-		effect_receiver.get_node("DmgHandler").saved_dots = data.saved_dots
-	if has_node("EffectReceiverComponent/HealHandler"):
-		effect_receiver.get_node("HealHandler").saved_hots = data.saved_hots
 
 	if inv != null:
 		inv.inv_to_load_from_save = data.inv

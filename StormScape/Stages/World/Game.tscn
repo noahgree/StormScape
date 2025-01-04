@@ -429,7 +429,7 @@ delay = 0.0
 time_to_move = 10.0
 time_to_resize = 10.0
 auto_advance = true
-effect_setting = "Revert to Default"
+effect_setting = "Keep Previous"
 visuals_setting = "Override"
 storm_visuals = SubResource("Resource_j2wa6")
 

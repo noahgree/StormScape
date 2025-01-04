@@ -12,15 +12,9 @@ class_name StatusEffectManager
 
 var current_effects: Dictionary[String, StatusEffect] = {} ## Keys are general status effect titles like "Poison", and values are the effect resources themselves.
 var effect_timers: Dictionary[String, Timer] = {} ## Holds references to all timers currently tracking active status effects.
-var saved_times_left: Dictionary[String, float] = {} ## Holds time remaining for status effects that were applied during a game save.
 
 
 #region Save & Load
-## We save every effect timer that is in progress into the saved_times_left.
-func _on_save_game(_save_data: Array[SaveData]) -> void:
-	for effect_name: String in effect_timers.keys():
-		saved_times_left[effect_name] = effect_timers.get(effect_name, 0.05).time_left
-
 ## We must clear out any existing effect timers and remove all exiting status effects.
 func _on_before_load_game() -> void:
 	effect_timers = {}
@@ -29,25 +23,6 @@ func _on_before_load_game() -> void:
 	for child: Variant in get_children():
 		if child is Timer:
 			child.queue_free()
-
-## For every effect that was saved into current_effects, we duplicate a clean instance, clear out dot/hot resources,
-## set the time remaining on the effect from when it got saved, and add the effect back.
-func _on_load_game() -> void:
-	for status_effect: StatusEffect in current_effects.values():
-		var clean_status_effect: StatusEffect = status_effect.duplicate()
-		var effect_delay: float = 0
-
-		if "dot_resource" in clean_status_effect:
-			effect_delay = status_effect.dot_resource.delay_time
-		if "hot_resource" in clean_status_effect:
-			effect_delay = status_effect.hot_resource.delay_time
-
-		clean_status_effect.mod_time = saved_times_left.get(status_effect.effect_name, 0.05) + effect_delay
-
-		if DebugFlags.PrintFlags.current_effect_changes and print_effect_updates:
-			print_rich("-------[color=green]Restoring[/color][b] " + str(status_effect.effect_name) + " " + str(status_effect.effect_lvl) + "[/b]-------")
-		_add_status_effect(clean_status_effect)
-	saved_times_left = {}
 #endregion
 
 ## Assert that this node has a connected effect receiver from which it can receive status effects.

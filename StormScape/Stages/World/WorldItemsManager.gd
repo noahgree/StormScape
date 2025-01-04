@@ -7,8 +7,17 @@ var grid: Dictionary[Vector2i, Array] = {} ## The grid containing all floor item
 var combination_attempt_timer: Timer = Timer.new() ## The timer that delays attempts to combine near floor items.
 
 
+#region Saving & Loading
+func _on_save_game(_save_data: Array[SaveData]) -> void:
+	# Weapons need to have their mods reloaded into the new duplicated stats instance after a game is loaded, so before we save the game we mark all weapon resources on the ground as needing to have this done. Because the weapons themselves get freed then reinstantiated, the world items component has to call this logic from here (and not do it in each weapon, because they get freed on load). This is also called in the item receiver component script.
+	for grid_pos: Vector2i in grid.keys():
+		for item: Item in grid[grid_pos]:
+			if item.stats is WeaponResource:
+				item.stats.weapon_mods_need_to_be_readded_after_save = true
+
 func _on_before_load_game() -> void:
 	grid.clear()
+#endregion
 
 func _ready() -> void:
 	add_child(combination_attempt_timer)

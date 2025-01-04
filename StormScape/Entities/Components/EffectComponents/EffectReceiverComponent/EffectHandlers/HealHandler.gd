@@ -7,37 +7,14 @@ class_name HealHandler
 
 var hot_timers: Dictionary[String, Array] = {} ## Holds references to all timers currently tracking active HOT.
 var hot_delay_timers: Dictionary[String, Array] = {} ## Holds references to all timers current tracking delays for active HOT.
-var saved_hots: Dictionary[String, Array] = {} ## Saves the running HOT instances and the progress so far when the game saves. Keys are source type names and values are an array of modified duplicated HOT resources.
 
 
 #region Save & Load
-func _on_before_save_game() -> void:
-	saved_hots.clear()
-
-	for source_type: String in hot_timers.keys():
-		for timer: Timer in hot_timers[source_type]:
-			var clean_resource: HOTResource = timer.get_meta("hot_resource").duplicate()
-			var ticks_completed: int = timer.get_meta("ticks_completed")
-			var original_tick_count: int = clean_resource.heal_ticks_array.size()
-			if not clean_resource.run_until_removed:
-				clean_resource.heal_ticks_array = clean_resource.heal_ticks_array.slice(ticks_completed, original_tick_count)
-			clean_resource.delay_time = max(randf(), clean_resource.delay_time + randf())
-			clean_resource.healing_time = clean_resource.healing_time * (1 - (float(ticks_completed) / float(original_tick_count)))
-			if source_type in saved_hots:
-				saved_hots[source_type].append(clean_resource)
-			else:
-				saved_hots[source_type] = [clean_resource]
-
 func _on_before_load_game() -> void:
 	hot_timers = {}
 	hot_delay_timers = {}
 	for child: Timer in get_children():
 		child.queue_free()
-
-func _on_game_finished_loading() -> void:
-	for source_type: String in saved_hots.keys():
-		for hot_instance: HOTResource in saved_hots.get(source_type):
-			handle_over_time_heal(hot_instance, source_type)
 #endregion
 
 ## Asserts that there is a valid health component on the affected entity before trying to handle healing.

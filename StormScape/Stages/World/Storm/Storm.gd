@@ -48,6 +48,7 @@ func _on_save_game(save_data: Array[SaveData]) -> void:
 	var storm_data: StormData = StormData.new()
 
 	storm_data.is_enabled = is_enabled
+	storm_data.zone_count = zone_count
 	storm_data.global_pos = global_position
 	storm_data.current_radius = current_radius
 	storm_data.transform_queue = transform_queue
@@ -59,21 +60,28 @@ func _on_save_game(save_data: Array[SaveData]) -> void:
 func _on_before_load_game() -> void:
 	disable_storm(true)
 
-	for entity: Variant in get_tree().get_nodes_in_group("entities_out_of_safe_area"):
-		if entity: entity.remove_from_group("entities_out_of_safe_area")
+	#for entity: Variant in get_tree().get_nodes_in_group("entities_out_of_safe_area"):
+		#if entity: entity.remove_from_group("entities_out_of_safe_area")
 
 func _is_instance_on_load_game(data: StormData) -> void:
 	global_position = data.global_pos
 	current_radius = data.current_radius
+	zone_count = data.zone_count
+
 	replace_current_queue(data.transform_queue)
+
 	var visuals: StormVisuals = data.recent_visuals.duplicate()
 	visuals.viusal_change_time = 0.05
 	_apply_visual_overrides(visuals)
+
 	current_effect = data.recent_effect
 
-	if data.is_enabled: ## FIXME!!!!!
-		enable_storm(true)
-		_pop_current_transform_and_check_for_next_phase()
+	if data.is_enabled:
+		if zone_count == 0 and not auto_start:
+			disable_storm(true)
+		else:
+			enable_storm(true)
+			_pop_current_transform_and_check_for_next_phase()
 	else:
 		disable_storm(true)
 #endregion
@@ -160,6 +168,8 @@ func disable_storm(from_save: bool = false) -> void:
 
 	if from_save:
 		storm_circle.material.set_shader_parameter("override_all_alpha", 0.0)
+		storm_circle.visible = false
+		visible = false
 		changing_enabled_status = false
 	else:
 		var tween: Tween = create_tween().set_ease(Tween.EASE_OUT)

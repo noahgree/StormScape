@@ -17,3 +17,8 @@ class_name WeaponResource
 @export_storage var current_mods: Dictionary[StringName, WeaponMod] = {} ## The current mods applied to this weapon.
 @export_storage var original_status_effects: Array[StatusEffect] = [] ## The original status effect list of the effect source before any mods are applied.
 @export_storage var original_charge_status_effects: Array[StatusEffect] = [] ## The original status effect list of the charge effect source before any mods are applied.
+
+
+## Whether the weapon is the same as another weapon when called externally to compare. Overrides base method to also compare weapon mods.
+func is_same_as(other_item: ItemResource) -> bool:
+	return (str(self) == str(other_item)) and (self.current_mods == other_item.current_mods)

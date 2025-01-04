@@ -11,37 +11,14 @@ class_name DmgHandler
 
 var dot_timers: Dictionary[String, Array] = {} ## Holds references to all timers currently tracking active DOT. Keys are source type names and values are an array of all matching timers of that type.
 var dot_delay_timers: Dictionary[String, Array] = {} ## Holds references to all timers current tracking delays for active DOT.
-var saved_dots: Dictionary[String, Array] = {} ## Saves the running DOT instances and the progress so far when the game saves. Keys are source type names and values are an array of modified duplicated DOT resources.
 
 
 #region Save & Load
-func _on_before_save_game() -> void:
-	saved_dots.clear()
-
-	for source_type: String in dot_timers.keys():
-		for timer: Timer in dot_timers[source_type]:
-			var clean_resource: DOTResource = timer.get_meta("dot_resource").duplicate()
-			var ticks_completed: int = timer.get_meta("ticks_completed")
-			var original_tick_count: int = clean_resource.dmg_ticks_array.size()
-			if not clean_resource.run_until_removed:
-				clean_resource.dmg_ticks_array = clean_resource.dmg_ticks_array.slice(ticks_completed, original_tick_count)
-			clean_resource.delay_time = max(randf(), clean_resource.delay_time + randf()) # So it doesn't insta dmg on load
-			clean_resource.damaging_time = clean_resource.damaging_time * (1 - (float(ticks_completed) / float(original_tick_count)))
-			if source_type in saved_dots:
-				saved_dots[source_type].append(clean_resource)
-			else:
-				saved_dots[source_type] = [clean_resource]
-
 func _on_before_load_game() -> void:
 	dot_timers = {}
 	dot_delay_timers = {}
 	for child: Timer in get_children():
 		child.queue_free()
-
-func _on_game_finished_loading() -> void:
-	for source_type: String in saved_dots.keys():
-		for dot_instance: DOTResource in saved_dots.get(source_type):
-			handle_over_time_dmg(dot_instance, source_type)
 #endregion
 
 ## Asserts that there is a valid health component on the affected entity before trying to handle damage.

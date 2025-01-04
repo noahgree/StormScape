@@ -9,10 +9,6 @@ class_name DynamicEntityData
 # Stats
 @export var stat_mods: Dictionary[StringName, Dictionary]
 
-# Effects
-@export var current_effects: Dictionary[String, StatusEffect]
-@export var saved_times_left: Dictionary[String, float]
-
 # Movement
 @export var velocity: Vector2
 @export var snare_factor: float
@@ -31,12 +27,6 @@ class_name DynamicEntityData
 @export var stamina_to_hunger_count: float
 @export var hunger_bars: int
 @export var can_use_hunger_bars: bool
-
-# DmgHandler
-@export var saved_dots: Dictionary[String, Array]
-
-# HealHandler
-@export var saved_hots: Dictionary[String, Array]
 
 # ItemReceiverComponent
 @export var inv: Array[InvItemResource]
