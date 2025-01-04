@@ -38,7 +38,6 @@ SignalBus="*res://Utilities/Autoloads/SignalBus.gd"
 AudioManager="*res://Utilities/Autoloads/AudioManager.tscn"
 GlobalData="*res://Utilities/Autoloads/GlobalData.gd"
 SaverLoader="*res://Utilities/Autoloads/SaverLoader.gd"
-RuntimeDebugTools="*res://addons/runtime_debug_tools/scenes/remote_inspector.tscn"
 
 [debug]
 
@@ -63,7 +62,7 @@ version_control/autoload_on_startup=true
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/runtime_debug_tools/plugin.cfg", "res://addons/script-ide/plugin.cfg")
+enabled=PackedStringArray("res://addons/script-ide/plugin.cfg")
 
 [file_customization]
 
