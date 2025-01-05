@@ -60,9 +60,6 @@ func _on_save_game(save_data: Array[SaveData]) -> void:
 func _on_before_load_game() -> void:
 	disable_storm(true)
 
-	#for entity: Variant in get_tree().get_nodes_in_group("entities_out_of_safe_area"):
-		#if entity: entity.remove_from_group("entities_out_of_safe_area")
-
 func _is_instance_on_load_game(data: StormData) -> void:
 	global_position = data.global_pos
 	current_radius = data.current_radius

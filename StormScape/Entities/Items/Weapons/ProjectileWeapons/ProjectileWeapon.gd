@@ -7,6 +7,7 @@ class_name ProjectileWeapon
 		proj_origin = new_origin
 		if proj_origin_node:
 			proj_origin_node.position = proj_origin
+@export var vfx_scene: PackedScene = load("res://Entities/Items/Weapons/WeaponVFX/Simple/SimpleVFX.tscn")
 
 @onready var anim_player: AnimationPlayer = $AnimationPlayer ## The animation controller for this projectile weapon.
 @onready var proj_origin_node: Marker2D = $ProjectileOrigin ## The point at which projectiles should spawn from.
@@ -580,6 +581,16 @@ func _do_firing_fx(with_charge_mult: bool = false) -> void:
 
 	var sound: String = stats.firing_sound if not with_charge_mult else stats.charge_firing_sound
 	if sound != "": AudioManager.play_sound(sound, AudioManager.SoundType.SFX_2D, global_position)
+
+	if stats.muzzle_flash != null and vfx_scene != null:
+		var vfx: WeaponVFX = vfx_scene.instantiate()
+		vfx.texture = stats.muzzle_flash
+
+		var vfx_length: float = SpriteHelpers.SpriteDetails.get_frame_rect(vfx).x
+		vfx.position = proj_origin
+		vfx.position.x += (vfx_length / 2)
+
+		add_child(vfx)
 
 ## Start the firing animation based on what kind of firing we are doing.
 func _start_firing_anim(was_charge_fire: bool = false) -> void:

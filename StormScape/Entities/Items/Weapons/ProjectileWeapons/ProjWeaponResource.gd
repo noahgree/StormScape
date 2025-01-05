@@ -30,7 +30,7 @@ enum ProjAmmoType { ## The types of projectile ammo.
 @export_range(0, 2, 0.01) var firing_cam_shake_dur: float = 0.0 ## How long the camera shake when firing should take to decay.
 @export_range(0, 1, 0.01) var firing_cam_freeze_mult: float = 1.0 ## How strong the camera should freeze when firing.
 @export_range(0, 1, 0.01) var firing_cam_freeze_dur: float = 0.0 ## How long the camera freeze when firing should take to decay.
-@export var firing_vfx_scene: PackedScene = null ## The scene that spawns and controls vfx when firing.
+@export var muzzle_flash: Texture2D = null ## The texture to show as the muzzle flash when firing.
 @export var firing_sound: String = "" ## The sound to play when firing.
 
 @export_group("Charge Firing Details")

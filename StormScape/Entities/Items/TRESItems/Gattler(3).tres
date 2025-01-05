@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="ProjWeaponResource" load_steps=28 format=3 uid="uid://1q7rlned2r23"]
+[gd_resource type="Resource" script_class="ProjWeaponResource" load_steps=29 format=3 uid="uid://1q7rlned2r23"]
 
 [ext_resource type="Script" uid="uid://ct7n8wo1p3b20" path="res://Entities/Items/WeaponMods/WeaponMod.gd" id="1_3n4ne"]
 [ext_resource type="Script" uid="uid://dkfssottmsrch" path="res://Entities/Stats/EffectSystemResources/EffectSources/EffectSource.gd" id="1_lbh37"]
@@ -10,6 +10,7 @@
 [ext_resource type="PackedScene" uid="uid://c17oqm8amalvy" path="res://Entities/Items/Weapons/ProjectileWeapons/Gattler/Gattler.tscn" id="6_huwqf"]
 [ext_resource type="Script" uid="uid://bj3r5oopspj6l" path="res://Entities/Items/Projectiles/ProjectileResource.gd" id="8_evybt"]
 [ext_resource type="PackedScene" uid="uid://bqkyplubhsx43" path="res://Entities/Items/Projectiles/Bullets/SmallBullet/SmallBullet.tscn" id="9_pxe5r"]
+[ext_resource type="Texture2D" uid="uid://bj4xowuewlfds" path="res://Entities/Items/Weapons/WeaponVFX/Simple/simple_1.png" id="10_g5312"]
 [ext_resource type="Script" uid="uid://c2gdoebfp12dq" path="res://Entities/Stats/StatMod/StatModsCacheResource.gd" id="11_ojoph"]
 
 [sub_resource type="Curve" id="Curve_upocd"]
@@ -280,6 +281,7 @@ firing_cam_shake_str = 0.0
 firing_cam_shake_dur = 0.0
 firing_cam_freeze_mult = 1.0
 firing_cam_freeze_dur = 0.0
+muzzle_flash = ExtResource("10_g5312")
 firing_sound = ""
 min_charge_time = 1.0
 charge_fire_cooldown = 0.5
@@ -302,7 +304,7 @@ charge_hitscan_logic = SubResource("Resource_lbh37")
 ammo_type = 2
 mag_size = 100
 reload_type = "Magazine"
-mag_reload_time = 5.0
+mag_reload_time = 4.5
 single_proj_reload_time = 0.25
 single_reload_quantity = 1
 stamina_use_per_proj = 0.5

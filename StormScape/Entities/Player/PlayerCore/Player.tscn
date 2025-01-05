@@ -1,4 +1,4 @@
-[gd_scene load_steps=188 format=3 uid="uid://dba8mrurjlekp"]
+[gd_scene load_steps=187 format=3 uid="uid://dba8mrurjlekp"]
 
 [ext_resource type="Script" uid="uid://c3rpxq8pnbdje" path="res://Entities/Player/PlayerCore/Player.gd" id="1_m33tt"]
 [ext_resource type="Script" uid="uid://c2gdoebfp12dq" path="res://Entities/Stats/StatMod/StatModsCacheResource.gd" id="2_vetip"]
@@ -1145,15 +1145,10 @@ script = ExtResource("32_ixmb3")
 stats = ExtResource("35_g2eu7")
 quantity = 1
 
-[sub_resource type="Resource" id="Resource_jrr0m"]
-script = ExtResource("32_ixmb3")
-stats = ExtResource("35_qbswt")
-quantity = 64
-
 [sub_resource type="Resource" id="Resource_2ijsm"]
 script = ExtResource("32_ixmb3")
 stats = ExtResource("35_qbswt")
-quantity = 64
+quantity = 999
 
 [sub_resource type="Resource" id="Resource_xlc3k"]
 script = ExtResource("32_ixmb3")
@@ -1163,12 +1158,12 @@ quantity = 1
 [sub_resource type="Resource" id="Resource_3by25"]
 script = ExtResource("32_ixmb3")
 stats = ExtResource("40_7ipu6")
-quantity = 32
+quantity = 800
 
 [sub_resource type="Resource" id="Resource_oxva3"]
 script = ExtResource("32_ixmb3")
 stats = ExtResource("40_r220t")
-quantity = 64
+quantity = 900
 
 [sub_resource type="Resource" id="Resource_mp6mc"]
 script = ExtResource("39_7aiab")
@@ -1211,7 +1206,7 @@ quantity = 1
 [sub_resource type="Resource" id="Resource_x8o50"]
 script = ExtResource("32_ixmb3")
 stats = ExtResource("44_q38m2")
-quantity = 48
+quantity = 500
 
 [sub_resource type="Resource" id="Resource_apvym"]
 script = ExtResource("32_ixmb3")
@@ -1520,7 +1515,7 @@ parameters/run/blendspace2d/blend_position = Vector2(0, 0)
 
 [node name="ItemReceiverComponent" parent="." node_paths=PackedStringArray("inv_populator", "ui") instance=ExtResource("30_qgyag")]
 item_scene = ExtResource("31_8v2rb")
-starting_inv = Array[ExtResource("32_ixmb3")]([SubResource("Resource_pihal"), null, null, null, SubResource("Resource_kx1me"), SubResource("Resource_jrr0m"), SubResource("Resource_2ijsm"), null, SubResource("Resource_xlc3k"), null, SubResource("Resource_3by25"), SubResource("Resource_oxva3"), SubResource("Resource_t7kvu"), SubResource("Resource_x8o50"), null, SubResource("Resource_apvym"), SubResource("Resource_ur5wt"), null, null, SubResource("Resource_dyejk"), null, null, null, null, null, null, SubResource("Resource_vpccy"), null, null, SubResource("Resource_sx7hp"), SubResource("Resource_wjnk6"), null, SubResource("Resource_rdrbb"), SubResource("Resource_hevqc"), SubResource("Resource_0ta0y"), SubResource("Resource_p5d28"), SubResource("Resource_6stk0")])
+starting_inv = Array[ExtResource("32_ixmb3")]([SubResource("Resource_pihal"), null, null, null, SubResource("Resource_kx1me"), SubResource("Resource_2ijsm"), null, SubResource("Resource_xlc3k"), null, SubResource("Resource_3by25"), SubResource("Resource_oxva3"), SubResource("Resource_t7kvu"), SubResource("Resource_x8o50"), null, SubResource("Resource_apvym"), SubResource("Resource_ur5wt"), null, null, SubResource("Resource_dyejk"), null, null, null, null, null, null, SubResource("Resource_vpccy"), null, null, SubResource("Resource_sx7hp"), SubResource("Resource_wjnk6"), null, null, SubResource("Resource_rdrbb"), SubResource("Resource_hevqc"), SubResource("Resource_0ta0y"), SubResource("Resource_p5d28"), SubResource("Resource_6stk0")])
 is_player_inv = true
 inv_size = 37
 hotbar_size = 5

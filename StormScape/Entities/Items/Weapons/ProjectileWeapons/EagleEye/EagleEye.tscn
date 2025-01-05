@@ -41,8 +41,8 @@ step = 0.1
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_bdea2"]
 _data = {
-"charge_fire": SubResource("Animation_8rr2f"),
-"fire": SubResource("Animation_c8xfh")
+&"charge_fire": SubResource("Animation_8rr2f"),
+&"fire": SubResource("Animation_c8xfh")
 }
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_p16mq"]
@@ -59,7 +59,7 @@ sprite_frames = SubResource("SpriteFrames_xf3nw")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
-"": SubResource("AnimationLibrary_bdea2")
+&"": SubResource("AnimationLibrary_bdea2")
 }
 
 [node name="ProjectileOrigin" type="Marker2D" parent="."]

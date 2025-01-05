@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="ProjWeaponResource" load_steps=21 format=3 uid="uid://14gw464h13vv"]
+[gd_resource type="Resource" script_class="ProjWeaponResource" load_steps=22 format=3 uid="uid://14gw464h13vv"]
 
 [ext_resource type="Script" uid="uid://boo31eu083dqd" path="res://Entities/Stats/EffectSystemResources/StatusEffects/StatusEffect.gd" id="1_oi18d"]
 [ext_resource type="Script" uid="uid://dkfssottmsrch" path="res://Entities/Stats/EffectSystemResources/EffectSources/EffectSource.gd" id="1_qcxpp"]
@@ -10,6 +10,7 @@
 [ext_resource type="Script" uid="uid://ct7n8wo1p3b20" path="res://Entities/Items/WeaponMods/WeaponMod.gd" id="6_ey58o"]
 [ext_resource type="PackedScene" uid="uid://dwyof8hbs8fxr" path="res://Entities/Items/Weapons/ProjectileWeapons/Cratershot/Cratershot.tscn" id="8_af8pb"]
 [ext_resource type="Script" uid="uid://ctxa7i1mbt7ab" path="res://UI/Inventory/PlayerInventory/Crafting/CraftingIngredient.gd" id="8_rff8j"]
+[ext_resource type="Texture2D" uid="uid://bj4xowuewlfds" path="res://Entities/Items/Weapons/WeaponVFX/Simple/simple_1.png" id="9_je5ma"]
 [ext_resource type="Script" uid="uid://c2gdoebfp12dq" path="res://Entities/Stats/StatMod/StatModsCacheResource.gd" id="9_yxw3n"]
 
 [sub_resource type="Resource" id="Resource_r0hb1"]
@@ -243,6 +244,7 @@ firing_cam_shake_str = 0.35
 firing_cam_shake_dur = 0.5
 firing_cam_freeze_mult = 1.0
 firing_cam_freeze_dur = 0.0
+muzzle_flash = ExtResource("9_je5ma")
 firing_sound = ""
 min_charge_time = 1.0
 charge_fire_cooldown = 0.5
