@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="ProjWeaponResource" load_steps=29 format=3 uid="uid://1q7rlned2r23"]
+[gd_resource type="Resource" script_class="ProjWeaponResource" load_steps=31 format=3 uid="uid://1q7rlned2r23"]
 
 [ext_resource type="Script" uid="uid://ct7n8wo1p3b20" path="res://Entities/Items/WeaponMods/WeaponMod.gd" id="1_3n4ne"]
 [ext_resource type="Script" uid="uid://dkfssottmsrch" path="res://Entities/Stats/EffectSystemResources/EffectSources/EffectSource.gd" id="1_lbh37"]
@@ -41,12 +41,18 @@ crit_multiplier = 1.5
 armor_penetration = 0
 base_healing = 0
 heal_affected_stats = 2
-cam_shake_strength = 0.0
-cam_shake_duration = 0.0
-cam_freeze_multiplier = 1.0
-cam_freeze_duration = 0.0
 impact_sound = ""
 hit_flash_color = Color(1, 1, 1, 0.6)
+cam_shake_strength = 0.0
+cam_shake_duration = 0.0
+cam_shake_on_player_hit_only = false
+cam_shake_max_distance = 100
+cam_shake_does_falloff = true
+cam_freeze_multiplier = 1.0
+cam_freeze_duration = 0.0
+cam_freeze_on_player_hit_only = true
+cam_freeze_max_distance = 100
+cam_freeze_does_falloff = true
 status_effects = Array[ExtResource("3_gsntq")]([])
 contact_position = Vector2(0, 0)
 movement_direction = Vector2(0, 0)
@@ -145,12 +151,18 @@ crit_multiplier = 1.5
 armor_penetration = 0
 base_healing = 0
 heal_affected_stats = 2
-cam_shake_strength = 0.5
-cam_shake_duration = 0.1
-cam_freeze_multiplier = 1.0
-cam_freeze_duration = 0.0
 impact_sound = ""
 hit_flash_color = Color(1, 1, 1, 0.6)
+cam_shake_strength = 0.5
+cam_shake_duration = 0.1
+cam_shake_on_player_hit_only = false
+cam_shake_max_distance = 100
+cam_shake_does_falloff = true
+cam_freeze_multiplier = 1.0
+cam_freeze_duration = 0.0
+cam_freeze_on_player_hit_only = true
+cam_freeze_max_distance = 100
+cam_freeze_does_falloff = true
 status_effects = Array[ExtResource("3_gsntq")]([])
 contact_position = Vector2(0, 0)
 movement_direction = Vector2(0, 0)
@@ -175,6 +187,16 @@ impact_particle_mult = 1.0
 beam_particle_color = Color(1, 0, 0, 1)
 beam_particle_mult = 1.0
 metadata/_custom_type_script = ExtResource("5_ajwg5")
+
+[sub_resource type="Curve" id="Curve_g5312"]
+_limits = [0.0, 0.5, 0.0, 1.0]
+_data = [Vector2(1e-05, 0.301371), 0.0, 0.0, 0, 0, Vector2(1, 0.0973737), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Curve" id="Curve_ajwg5"]
+_limits = [0.0, 0.1, 0.0, 1.0]
+_data = [Vector2(0, 0.013), 0.0, 0.0, 0, 0, Vector2(1, 0.017), 0.0, 0.0, 0, 0]
+point_count = 2
 
 [sub_resource type="Curve" id="Curve_lbh37"]
 _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
@@ -277,8 +299,8 @@ firing_duration = 0.0
 one_frame_per_fire = true
 override_anim_dur = 0.0
 anim_speed_mult = 1.0
-firing_cam_shake_str = 0.0
-firing_cam_shake_dur = 0.0
+firing_cam_shake_str = 0.35
+firing_cam_shake_dur = 0.25
 firing_cam_freeze_mult = 1.0
 firing_cam_freeze_dur = 0.0
 muzzle_flash = ExtResource("10_g5312")
@@ -317,7 +339,7 @@ hide_reload_ui = false
 mag_reload_sound = ""
 proj_reload_sound = ""
 empty_mag_sound = ""
-max_bloom = 10.0
+max_bloom = 8.0
 bloom_curve = SubResource("Curve_upocd")
 bloom_increase_rate = SubResource("Curve_bebc4")
 bloom_decrease_rate = SubResource("Curve_usy0t")
@@ -327,7 +349,9 @@ warmup_delay_curve = SubResource("Curve_ipjc4")
 warmup_increase_rate = SubResource("Curve_sbmlx")
 warmup_decrease_rate = SubResource("Curve_5bj6f")
 warmup_decrease_delay = 0.75
-overheat_penalty = 0.0
+overheat_penalty = 5.0
+overheat_inc_rate = SubResource("Curve_ajwg5")
+overheat_dec_rate = SubResource("Curve_g5312")
 overheat_dec_delay = 0.75
 projectiles_per_fire = 1
 use_ammo_per_burst_proj = true

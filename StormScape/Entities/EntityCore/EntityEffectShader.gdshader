@@ -6,6 +6,7 @@ uniform float glow_strength = 9.0;
 uniform bool enable_fade = false;
 
 uniform vec4 tint_color : source_color = vec4(1.0, 1.0, 1.0, 0.0);
+uniform float final_alpha = 1.0;
 
 uniform vec2 frame_uv_min;
 uniform vec2 frame_uv_max;
@@ -59,4 +60,6 @@ void fragment() {
         vec3 tinted_rgb = mix(tex_color.rgb, tint_color.rgb, tint_color.a);
 		COLOR = vec4(tinted_rgb, tex_color.a);
     }
+	
+	COLOR.a *= final_alpha;
 }

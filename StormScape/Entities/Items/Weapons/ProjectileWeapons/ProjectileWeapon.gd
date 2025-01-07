@@ -13,6 +13,7 @@ class_name ProjectileWeapon
 @onready var proj_origin_node: Marker2D = $ProjectileOrigin ## The point at which projectiles should spawn from.
 
 #region Local Vars
+const OVERHEATED_TINT_COLOR: Color = Color(1.0, 0.0, 0.0, 0.52)
 var firing_duration_timer: Timer = Timer.new() ## The timer tracking how long after we press fire before the proj spawns.
 var reload_timer: Timer = Timer.new() ## The timer tracking the delay between reload start and end.
 var single_reload_timer: Timer = Timer.new() ## The timer tracking the delay between single bullet reloads.
@@ -21,10 +22,10 @@ var hold_just_released: bool = false ## Whether the mouse hold was just released
 var is_reloading: bool = false: ## Whether some reload method is currently in progress.
 	set(new_value):
 		is_reloading = new_value
-		if is_reloading and reloading_ui:
-			reloading_ui.show()
-		elif reloading_ui:
-			reloading_ui.hide()
+		if is_reloading and overhead_ui:
+			overhead_ui.reload_bar.show()
+		elif overhead_ui:
+			overhead_ui.reload_bar.hide()
 var is_reloading_single_and_has_since_released: bool = true ## Whether we've begun reloading one bullet at a time and have relased the mouse since starting.
 var is_charging: bool = false ## Whether the weapon is currently charging up for a charge shot.
 var hitscan_delay: float = 0 ## The calculated delay to be used instead of just the fire cooldown when using hitscans.
@@ -35,7 +36,7 @@ var is_holding_hitscan: bool = false: ## Whether we are currently holding down t
 var current_hitscans: Array[Hitscan] = [] ## The currently spawned array of hitscans to get cleaned up when we unequip this weapon.
 var mouse_scan_area_targets: Array[Node] = [] ## The array of potential targets found and passed to the proj when using the "Mouse Position" homing method.
 var mouse_area: Area2D ## The area around the mouse that scans for targets when using the "Mouse Position" homing method
-var reloading_ui: Control ## The UI showing the reloading in progress. Only applicable and non-null for players.
+var overhead_ui: PlayerOverheadUI ## The UI showing the overhead stat changes (like reloading) in progress. Only applicable and non-null for players.
 #endregion
 
 
@@ -121,15 +122,15 @@ func _setup_mod_cache() -> void:
 
 func _ready() -> void:
 	super._ready()
+	if source_entity is Player:
+		overhead_ui = source_entity.overhead_ui
+		source_entity.inv.auto_decrementer.overheat_empty.connect(_on_overheat_emptied)
 
 	if stats.ammo_type == ProjWeaponResource.ProjAmmoType.STAMINA:
 		if source_entity is DynamicEntity and not stats.hide_ammo_ui:
 			source_entity.stamina_component.stamina_changed.connect(_update_ammo_ui)
-	elif stats.ammo_type != ProjWeaponResource.ProjAmmoType.SELF and stats.ammo_type != ProjWeaponResource.ProjAmmoType.CHARGES:
-		if source_entity is Player and not stats.hide_reload_ui:
-			reloading_ui = source_entity.get_node("ReloadingUI")
 
-	source_entity.inv.auto_decrementer.cooldown_ended.connect(_on_fire_cooldown_timeout)
+	source_entity.inv.auto_decrementer.cooldown_ended.connect(_on_cooldown_timeout)
 	source_entity.inv.auto_decrementer.recharge_completed.connect(_on_ammo_recharge_completed)
 
 	add_child(firing_duration_timer)
@@ -154,6 +155,11 @@ func disable() -> void:
 		source_entity.effects.request_effect_removal(stats.charging_stat_effect.effect_name)
 	is_charging = false
 
+func enable() -> void:
+	if overhead_ui:
+		if source_entity.inv.auto_decrementer.get_cooldown_source_title(str(stats.session_uid)) == "overheat_penalty":
+			sprite.material.set_shader_parameter("tint_color", OVERHEATED_TINT_COLOR)
+
 func enter() -> void:
 	if stats.s_mods.base_values.is_empty():
 		_setup_mod_cache()
@@ -168,6 +174,14 @@ func enter() -> void:
 		if stats.ammo_in_mag < stats.s_mods.get_stat("mag_size"):
 			_request_ammo_recharge()
 
+	if overhead_ui:
+		if source_entity.inv.auto_decrementer.get_cooldown_source_title(str(stats.session_uid)) == "overheat_penalty":
+			overhead_ui.update_visuals_for_max_overheat()
+			overhead_ui.overheat_bar.show()
+			sprite.material.set_shader_parameter("tint_color", OVERHEATED_TINT_COLOR)
+		elif source_entity.inv.auto_decrementer.get_overheat(str(stats.session_uid)) > 0:
+			overhead_ui.overheat_bar.show()
+
 	_check_if_needs_mouse_area_scanner()
 
 	if stats.weapon_mods_need_to_be_readded_after_save:
@@ -176,6 +190,7 @@ func enter() -> void:
 		stats.weapon_mods_need_to_be_readded_after_save = false
 
 func exit() -> void:
+	super.exit()
 	source_entity.move_fsm.should_rotate = true
 	source_entity.hands.equipped_item_should_follow_mouse = true
 	_clean_up_hitscans()
@@ -211,24 +226,38 @@ func _disable_mouse_area() -> void:
 
 ## Every frame we decrease the warmup and the bloom levels based on their decrease curves.
 func _process(_delta: float) -> void:
-	if Engine.is_editor_hint():
+	if not overhead_ui:
 		return
 
-	if reloading_ui and is_reloading:
-		reloading_ui.update_progress((1 - (reload_timer.time_left / reload_timer.wait_time)) * 100)
+	if is_reloading and not stats.hide_reload_ui:
+		overhead_ui.update_reload_progress(int((1 - (reload_timer.time_left / reload_timer.wait_time)) * 100))
+
+	var current_overheat: float = source_entity.inv.auto_decrementer.get_overheat(str(stats.session_uid))
+	if current_overheat > 0:
+		if source_entity.inv.auto_decrementer.get_cooldown_source_title(str(stats.session_uid)) != "overheat_penalty":
+			overhead_ui.update_overheat_progress(int(current_overheat * 100.0))
+		else:
+			overhead_ui.update_overheat_progress(100)
 
 func _physics_process(_delta: float) -> void:
 	if mouse_area != null:
 		mouse_area.global_position = get_global_mouse_position()
 
 ## When the cooldown manager from the hands component fires a signal with the matching item id, process the aftermath.
-func _on_fire_cooldown_timeout(item_id: StringName) -> void:
+func _on_cooldown_timeout(item_id: StringName, cooldown_source_title: String) -> void:
 	if item_id != stats.get_cooldown_id():
 		return
 
+	if cooldown_source_title == "overheat_penalty":
+		overhead_ui.update_visuals_for_max_overheat(true)
+		if enabled:
+			sprite.material.set_shader_parameter("tint_color", Color(1.0, 1.0, 1.0, 0.0))
+		if source_entity.inv.auto_decrementer.get_overheat(str(stats.session_uid)) == 0:
+			overhead_ui.overheat_bar.hide()
+
 	if is_holding_hitscan:
 		_fire()
-		_handle_adding_cooldown(stats.s_mods.get_stat("fire_cooldown") + hitscan_delay)
+		_handle_adding_cooldown(stats.s_mods.get_stat("fire_cooldown") + hitscan_delay, cooldown_source_title)
 	else:
 		_clean_up_hitscans()
 
@@ -539,8 +568,8 @@ func _get_bloom() -> float:
 		return 0
 
 ## Adds a cooldown to the auto decrementer for the current cooldown id.
-func _handle_adding_cooldown(duration: float) -> void:
-	source_entity.inv.auto_decrementer.add_cooldown(stats.get_cooldown_id(), duration)
+func _handle_adding_cooldown(duration: float, title: String = "Default") -> void:
+	source_entity.inv.auto_decrementer.add_cooldown(stats.get_cooldown_id(), duration, title)
 
 ## Gets a current cooldown level from the auto decrementer based on the cooldown id.
 func _get_cooldown() -> float:
@@ -559,25 +588,34 @@ func _handle_overheat_increase(was_charge_fire: bool = false) -> void:
 			stats.overheat_dec_rate,
 			stats.overheat_dec_delay)
 
+		overhead_ui.overheat_bar.show()
+
 		if source_entity.inv.auto_decrementer.get_overheat(str(stats.session_uid)) >= 1:
 			_handle_max_overheat_reached()
 
 ## When we reach max overheat, add a cooldown of some kind.
 func _handle_max_overheat_reached() -> void:
-	_handle_adding_cooldown(stats.s_mods.get_stat("overheat_penalty"))
+	_handle_adding_cooldown(stats.s_mods.get_stat("overheat_penalty"), "overheat_penalty")
+	overhead_ui.update_visuals_for_max_overheat()
+	sprite.material.set_shader_parameter("tint_color", OVERHEATED_TINT_COLOR)
+
+## When we receive a signal that any overheat has ended, if it matches this weapon, we potentially take action.
+func _on_overheat_emptied(item_id: StringName) -> void:
+	if item_id != str(stats.session_uid):
+		return
+
+	if source_entity.inv.auto_decrementer.get_cooldown_source_title(str(stats.session_uid)) != "overheat_penalty":
+		overhead_ui.overheat_bar.hide()
 #endregion
 
 #region FX & Animations
 ## Start the sounds and vfx that should play when firing.
 func _do_firing_fx(with_charge_mult: bool = false) -> void:
 	var multiplier: float = stats.charge_cam_fx_mult if with_charge_mult else 1.0
-	var fire_cooldown: float = stats.s_mods.get_stat("fire_cooldown")
 	if stats.firing_cam_shake_dur > 0:
-		var dur: float = min(stats.firing_cam_shake_dur, max(0, fire_cooldown + hitscan_delay - 0.01))
-		GlobalData.player_camera.start_shake(stats.firing_cam_shake_str * multiplier, dur * multiplier)
+		GlobalData.player_camera.start_shake(stats.firing_cam_shake_str * multiplier, stats.firing_cam_shake_dur * multiplier)
 	if stats.firing_cam_freeze_dur > 0:
-		var dur: float = min(stats.firing_cam_freeze_dur, max(0, fire_cooldown + hitscan_delay - 0.01))
-		GlobalData.player_camera.start_freeze(stats.firing_cam_freeze_mult * multiplier, dur * multiplier)
+		GlobalData.player_camera.start_freeze(stats.firing_cam_freeze_mult * multiplier, stats.firing_cam_freeze_dur * multiplier)
 
 	var sound: String = stats.firing_sound if not with_charge_mult else stats.charge_firing_sound
 	if sound != "": AudioManager.play_sound(sound, AudioManager.SoundType.SFX_2D, global_position)
@@ -742,7 +780,7 @@ func _on_single_reload_timer_timeout() -> void:
 
 		stats.ammo_in_mag = min(stats.s_mods.get_stat("mag_size"), stats.ammo_in_mag + ammo_available)
 		_update_ammo_ui()
-		if reloading_ui: reloading_ui.update_progress(stats.ammo_in_mag)
+		if overhead_ui and not stats.hide_reload_ui: overhead_ui.update_reload_progress(stats.ammo_in_mag)
 
 		if reloads_left > 1 and (stats.ammo_in_mag != stats.s_mods.get_stat("mag_size")):
 			single_reload_timer.set_meta("reloads_left", reloads_left - 1)

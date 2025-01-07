@@ -78,9 +78,7 @@ func get_lerped_mouse_direction_to_pos(current_direction: Vector2, target_positi
 
 	var current_angle: float = current_direction.angle()
 	var target_angle: float = target_direction.angle()
-
 	var angle_diff: float = angle_difference(current_angle, target_angle)
-
 	var new_angle: float = current_angle + angle_diff * rotation_lerping_factor
 
 	return Vector2.RIGHT.rotated(new_angle)
@@ -118,8 +116,8 @@ func request_knockback(knockback: Vector2) -> void:
 			knockback_streak_nodes.append(streak)
 			GlobalData.world_root.add_child(streak)
 
+## Updates the knockback streak points array that determines how the streak line is drawn.
 func update_knockback_streak() -> void:
-
 	for i: int in range(footstreak_offsets.size()):
 		if knockback_streak_nodes.size() >= (i + 1) and is_instance_valid(knockback_streak_nodes[i]) and knockback_streak_nodes[i] != null:
 			knockback_streak_nodes[i].update_trail_position(entity.global_position + footstreak_offsets[i], atan2(anim_vector.y, anim_vector.x))

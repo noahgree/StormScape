@@ -2,10 +2,11 @@ extends Node
 class_name AutoDecrementer
 ## Manages entity-specific item cooldowns, warmups, blooming, overheating, and recharging via item identifiers.
 
-signal cooldown_ended(item_id: StringName) ## Emitted when any cooldown ends.
+signal cooldown_ended(item_id: StringName, cooldown_title: String) ## Emitted when any cooldown ends.
+signal overheat_empty(item_id: StringName) ## Emitted when any overheat reaches 0 and is removed.
 signal recharge_completed(item_id: StringName) ## Emitted when any recharge completes.
 
-var cooldowns: Dictionary[StringName, Array] = {} ## Represents any active cooldowns where the key is an item's id and the value is an array with the following: [remaining_cooldown, original_cooldown_duration]
+var cooldowns: Dictionary[StringName, Array] = {} ## Represents any active cooldowns where the key is an item's id and the value is an array with the following: [remaining_cooldown, original_cooldown_duration, cooldown_source]
 var warmups: Dictionary[StringName, Array] = {} ## Represents any active warmups where the key is an item's id and the value is an array with the following: [current_warmup_value, decrease_rate_curve, decrease_delay_counter]
 var blooms: Dictionary[StringName, Array] = {} ## Represents any active blooms where the key is an item's id and the value is an array with the following: [current_bloom_value, decrease_rate_curve, decrease_delay_counter]
 var overheats: Dictionary[StringName, Array] = {} ## Represents any active overheats where the key is an item's id and the value is an array with the following: [current_overheat_progress, decrease_rate_curve, overheat_delay_counter]
@@ -22,30 +23,34 @@ func process(delta: float) -> void:
 
 #region Cooldowns
 ## Adds a cooldown to the dictionary.
-func add_cooldown(item_id: StringName, duration: float, initial_duration_override: float = -1) -> void:
+func add_cooldown(item_id: StringName, duration: float, title: String = "Default") -> void:
 	if item_id in cooldowns:
 		cooldowns[item_id][0] = duration
 	else:
-		cooldowns[item_id] = [duration, duration if initial_duration_override == -1 else initial_duration_override]
+		cooldowns[item_id] = [duration, duration, title]
 
 	if owning_entity_is_player:
 		GlobalData.player_node.hotbar_ui.update_hotbar_tint_progresses()
 
 ## Called every frame to update each cooldown value.
 func _update_cooldowns(delta: float) -> void:
-	var to_remove: Array[StringName] = []
+	var to_remove: Array[Array] = []
 	for item_id: StringName in cooldowns.keys():
 		cooldowns[item_id][0] -= delta
 		if cooldowns[item_id][0] <= 0:
-			to_remove.append(item_id)
+			to_remove.append([item_id, cooldowns[item_id][2]])
 
-	for item_id: StringName in to_remove:
-		cooldowns.erase(item_id)
-		cooldown_ended.emit(item_id)
+	for item: Array in to_remove:
+		cooldowns.erase(item[0])
+		cooldown_ended.emit(item[0], item[1])
 
 ## Returns a positive float representing the remaining cooldown or 0 if one does not exist.
 func get_cooldown(item_id: StringName) -> float:
-	return cooldowns.get(item_id, [0, 0])[0]
+	return cooldowns.get(item_id, [0, 0, "Default"])[0]
+
+## Returns a string representing the cooldown source title if one exists, otherwise it returns a string of "Null".
+func get_cooldown_source_title(item_id: StringName) -> String:
+	return cooldowns.get(item_id, [0, 0, "Null"])[2]
 
 ## Returns a positive float representing the original duration of an active cooldown or 0 if it does not exist.
 func get_original_cooldown(item_id: StringName) -> float:
@@ -133,6 +138,7 @@ func _update_overheats(delta: float) -> void:
 
 	for item_id: StringName in to_remove:
 		overheats.erase(item_id)
+		overheat_empty.emit(item_id)
 
 ## Returns a positive float representing the current overheat value or 0 if one does not exist.
 func get_overheat(item_id: StringName) -> float:

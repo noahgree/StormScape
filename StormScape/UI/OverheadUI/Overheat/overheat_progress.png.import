@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bd7ifq5lvur4v"
-path="res://.godot/imported/reloading_back.png-dfa9b704a30eb99ba3aa18b3006899ab.ctex"
+uid="uid://7wf7omw2r50u"
+path="res://.godot/imported/overheat_progress.png-76b87a2520d33f8c86ceac7ae6e804b9.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://UI/Reloading/reloading_back.png"
-dest_files=["res://.godot/imported/reloading_back.png-dfa9b704a30eb99ba3aa18b3006899ab.ctex"]
+source_file="res://UI/OverheadUI/Overheat/overheat_progress.png"
+dest_files=["res://.godot/imported/overheat_progress.png-76b87a2520d33f8c86ceac7ae6e804b9.ctex"]
 
 [params]
 

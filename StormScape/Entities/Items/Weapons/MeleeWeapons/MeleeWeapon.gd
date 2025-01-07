@@ -81,6 +81,7 @@ func enter() -> void:
 		stats.weapon_mods_need_to_be_readded_after_save = false
 
 func exit() -> void:
+	super.exit()
 	source_entity.move_fsm.should_rotate = true
 
 ## Overrides the parent method to specify what to do on use while equipped.

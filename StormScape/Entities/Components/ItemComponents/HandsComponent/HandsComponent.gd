@@ -75,7 +75,7 @@ func unequip_current_item() -> void:
 	active_slot_info.update_inv_ammo(-1)
 	active_slot_info.update_item_name("")
 
-	if entity is Player: entity.get_node("ReloadingUI").hide()
+	if entity is Player: entity.overhead_ui.reset_all()
 
 	if equipped_item != null:
 		is_mouse_button_held = false

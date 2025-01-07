@@ -757,7 +757,7 @@ func _start_being_handled(handling_area: EffectReceiverComponent) -> void:
 		effect_source = effect_source.duplicate()
 		var modified_effect_src: EffectSource = _get_effect_source_adjusted_for_falloff(effect_source, handling_area, false)
 		modified_effect_src.movement_direction = movement_direction
-		modified_effect_src.contact_position = get_parent().global_position
+		modified_effect_src.contact_position = global_position
 		handling_area.handle_effect_source(modified_effect_src, source_entity)
 	else:
 		if stats.aoe_effect_source == null: stats.aoe_effect_source = effect_source
@@ -784,9 +784,6 @@ func _get_effect_source_adjusted_for_falloff(effect_src: EffectSource, handling_
 		var point_to_sample: float = 1.0 - (max(0, float(stats.point_of_max_falloff) - cumulative_distance) / stats.point_of_max_falloff)
 		var sampled_point: float = stats.effect_falloff_curve.sample_baked(point_to_sample)
 		falloff_mult = max(0.05, sampled_point)
-
-	falloff_effect_src.cam_shake_strength *= falloff_mult
-	falloff_effect_src.cam_freeze_multiplier *= falloff_mult
 
 	if apply_to_bad:
 		falloff_effect_src.base_damage = int(min(falloff_effect_src.base_damage, ceil(falloff_effect_src.base_damage * falloff_mult)))

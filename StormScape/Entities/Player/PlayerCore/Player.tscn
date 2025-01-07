@@ -1,4 +1,4 @@
-[gd_scene load_steps=187 format=3 uid="uid://dba8mrurjlekp"]
+[gd_scene load_steps=190 format=3 uid="uid://dba8mrurjlekp"]
 
 [ext_resource type="Script" uid="uid://c3rpxq8pnbdje" path="res://Entities/Player/PlayerCore/Player.gd" id="1_m33tt"]
 [ext_resource type="Script" uid="uid://c2gdoebfp12dq" path="res://Entities/Stats/StatMod/StatModsCacheResource.gd" id="2_vetip"]
@@ -14,7 +14,7 @@
 [ext_resource type="PackedScene" uid="uid://co3n6m7efg8pd" path="res://Entities/Components/EffectComponents/StatusEffectManager/StatusEffectManager.tscn" id="6_n0x5k"]
 [ext_resource type="Script" uid="uid://c2sjdkql76qca" path="res://Entities/Player/States/MoveStates/Idle/Idle.gd" id="7_15a5x"]
 [ext_resource type="PackedScene" uid="uid://dykiv0tlhwmox" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/KnockbackHandler.tscn" id="7_k0pv8"]
-[ext_resource type="Texture2D" uid="uid://tdtv12ps6wk" path="res://UI/Reloading/reloading_progress.png" id="8_qhq3c"]
+[ext_resource type="Texture2D" uid="uid://tdtv12ps6wk" path="res://UI/OverheadUI/Reloading/reloading_progress.png" id="8_qhq3c"]
 [ext_resource type="Script" uid="uid://dxekqhvcykqrq" path="res://Entities/Player/States/MoveStates/Run/Run.gd" id="9_0dcld"]
 [ext_resource type="Script" uid="uid://cy73p3okq3cic" path="res://Entities/Player/States/MoveStates/Dash/Dash.gd" id="9_a1qv1"]
 [ext_resource type="PackedScene" uid="uid://cx4b21058vypq" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/StunHandler.tscn" id="9_w4lel"]
@@ -85,12 +85,15 @@
 [ext_resource type="Resource" uid="uid://dpmwqsai6gxsr" path="res://Entities/Items/TRESItems/FlameBlower(4).tres" id="52_ebist"]
 [ext_resource type="Resource" uid="uid://1q7rlned2r23" path="res://Entities/Items/TRESItems/Gattler(3).tres" id="53_lo25j"]
 [ext_resource type="Texture2D" uid="uid://lj78cee4aa38" path="res://UI/PlayerStatsOverlay/Assets/Health Change.png" id="53_qsiea"]
-[ext_resource type="Script" uid="uid://dih45lqhjg0xx" path="res://UI/Reloading/ReloadingUI.gd" id="57_n8srl"]
-[ext_resource type="Texture2D" uid="uid://bd7ifq5lvur4v" path="res://UI/Reloading/reloading_back.png" id="58_hd6am"]
+[ext_resource type="Script" uid="uid://dih45lqhjg0xx" path="res://UI/OverheadUI/PlayerOverheadUI.gd" id="57_n8srl"]
+[ext_resource type="Texture2D" uid="uid://bd7ifq5lvur4v" path="res://UI/OverheadUI/Reloading/reloading_back.png" id="58_hd6am"]
 [ext_resource type="Script" uid="uid://c0n0ja8tkrnkf" path="res://UI/Inventory/PlayerInventory/HotbarUI.gd" id="58_i567i"]
-[ext_resource type="Texture2D" uid="uid://b536l7eoo4wx0" path="res://UI/Reloading/reloading_over.png" id="59_fbicu"]
+[ext_resource type="Texture2D" uid="uid://b536l7eoo4wx0" path="res://UI/OverheadUI/Reloading/reloading_over.png" id="59_fbicu"]
+[ext_resource type="Texture2D" uid="uid://bq3d1uclexvcm" path="res://UI/OverheadUI/Overheat/overheat_progress_tintable.png" id="61_6wv7y"]
+[ext_resource type="Texture2D" uid="uid://barp24qvngy0m" path="res://UI/OverheadUI/Overheat/overheat_back.png" id="63_3uq13"]
 [ext_resource type="Script" uid="uid://ct7n8wo1p3b20" path="res://Entities/Items/WeaponMods/WeaponMod.gd" id="63_qvtc6"]
 [ext_resource type="Resource" uid="uid://ba8pkny735n2r" path="res://Entities/Items/WeaponMods/ExtendedMag/ExtendedMag1.tres" id="64_14ixx"]
+[ext_resource type="Texture2D" uid="uid://7wf7omw2r50u" path="res://UI/OverheadUI/Overheat/overheat_progress.png" id="64_o382h"]
 [ext_resource type="Resource" uid="uid://caxftf2aer6g4" path="res://Entities/Items/WeaponMods/BurningBullets/BurningBullets1.tres" id="65_14ixx"]
 [ext_resource type="Texture2D" uid="uid://dbm40lvpgbd8t" path="res://Entities/Items/ItemCore/Particles/item_rarity_light.png" id="66_461tf"]
 [ext_resource type="Shader" uid="uid://cwbeekjoy0uyh" path="res://UI/Shaders/GlintShader.gdshader" id="67_w57pe"]
@@ -124,6 +127,7 @@ shader_parameter/glow_size = 4.5
 shader_parameter/glow_strength = 9.0
 shader_parameter/enable_fade = false
 shader_parameter/tint_color = Color(0.683077, 0.683077, 0.683077, 0)
+shader_parameter/final_alpha = 1.0
 shader_parameter/frame_uv_min = null
 shader_parameter/frame_uv_max = null
 
@@ -1531,7 +1535,8 @@ position = Vector2(0, -5)
 shape = SubResource("CircleShape2D_3wm74")
 debug_color = Color(0.800804, 0.389919, 9.62615e-07, 0.227451)
 
-[node name="ReloadingUI" type="Control" parent="."]
+[node name="OverheadUI" type="Control" parent="."]
+unique_name_in_owner = true
 layout_mode = 3
 anchors_preset = 8
 anchor_left = 0.5
@@ -1545,13 +1550,33 @@ offset_bottom = -35.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("57_n8srl")
+tintable_overheat_progress_texture = ExtResource("61_6wv7y")
+max_overheat_progress_tint_color = Color(1.8, 0.26, 0.236, 1)
 
-[node name="ProgressBar" type="TextureProgressBar" parent="ReloadingUI"]
+[node name="VBoxContainer" type="VBoxContainer" parent="OverheadUI"]
+custom_minimum_size = Vector2(22, 8)
 layout_mode = 0
 offset_left = 9.0
+offset_top = -2.0
 offset_right = 31.0
-offset_bottom = 4.0
-value = 15.0
+offset_bottom = 6.0
+theme_override_constants/separation = 1
+alignment = 2
+
+[node name="OverheatBar" type="TextureProgressBar" parent="OverheadUI/VBoxContainer"]
+custom_minimum_size = Vector2(0, 3)
+layout_mode = 2
+nine_patch_stretch = true
+stretch_margin_left = 1
+stretch_margin_top = 1
+stretch_margin_right = 1
+stretch_margin_bottom = 1
+texture_under = ExtResource("63_3uq13")
+texture_progress = ExtResource("64_o382h")
+
+[node name="ReloadBar" type="TextureProgressBar" parent="OverheadUI/VBoxContainer"]
+custom_minimum_size = Vector2(0, 4)
+layout_mode = 2
 nine_patch_stretch = true
 stretch_margin_left = 1
 stretch_margin_top = 1

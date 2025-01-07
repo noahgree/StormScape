@@ -12,7 +12,7 @@ var shake_strength: float = 0 ## The current shake strength of the camera. Autom
 var persistent_shake_strength: float = 0 ## The amount of persistent strength that must be manually removed and does not lerp down.
 var shake_time: float = 0 ## How long the shake strength should take to return to 0. Can be updated on the fly.
 var shake_tween: Tween = null ## Tween for automatically decreasing the camera shake strength.
-const MAX_SHAKE_STRENGTH: float = 30.0 ## The max amount of cumulative shake strength this camera can have at any given time.
+const MAX_SHAKE_STRENGTH: float = 25.0 ## The max amount of cumulative shake strength this camera can have at any given time.
 const MAX_SHAKE_TIME: float = 2.0 ## The max amount of cumulative shake time this camera can have at any given point.
 
 
@@ -27,7 +27,7 @@ func _physics_process(delta: float) -> void:
 		offset = Vector2(randf_range(-strength, strength), randf_range(-strength, strength))
 
 	if shake_time > 0:
-		shake_time -= delta
+		shake_time = max(0, shake_time - delta)
 
 	if player != null:
 		if smoothing_enabled:
@@ -54,27 +54,34 @@ func _physics_process(delta: float) -> void:
 			global_position = player.global_position
 
 ## Starts a camera shake effect that can be stacked with already existing effects if they are still running.
-func start_shake(strength: float, shake_duration: float) -> void:
-	if shake_duration > 0:
-		shake_time = min(MAX_SHAKE_TIME, shake_time + shake_duration)
-		shake_strength = min(MAX_SHAKE_STRENGTH, shake_strength + strength)
+func start_shake(strength: float, duration: float) -> void:
+	if duration <= 0 or strength <= 0:
+		return
 
-		if shake_tween:
-			shake_tween.stop()
-			shake_tween.kill()
-		shake_tween = create_tween()
-		shake_tween.tween_property(self, "shake_strength", 0.0, shake_time)
+	var clamped_strength: float = clampf(strength, 0, MAX_SHAKE_STRENGTH)
+	var clamped_time: float = clampf(max(duration, shake_time), 0.05, MAX_SHAKE_TIME)
+
+	if clamped_strength > shake_strength:
+		shake_strength = clamped_strength
+		shake_time = clamped_time
+
+	if shake_tween:
+		shake_tween.stop()
+		shake_tween.kill()
+	shake_tween = create_tween()
+	shake_tween.tween_property(self, "shake_strength", 0.0, shake_time)
 
 ## Updates the persistent shake strength that does not decrease over time.
 func update_persistent_shake_strength(strength: float) -> void:
-	persistent_shake_strength = max(0, persistent_shake_strength + strength)
+	persistent_shake_strength = clampf(persistent_shake_strength + strength, 0, MAX_SHAKE_STRENGTH)
 
+## Resets the persistent shake strength back to 0.
 func reset_persistent_shake_strength() -> void:
 	persistent_shake_strength = 0
 
 ## Starts a freeze/slow effect for the whole engine.
 func start_freeze(time_multiplier: float, freeze_duration: float) -> void:
-	if freeze_duration > 0 and Engine.time_scale == 1.0:
+	if freeze_duration > 0 and Engine.time_scale == 1.0 and time_multiplier < 1.0:
 		Engine.time_scale = time_multiplier
 		await get_tree().create_timer(freeze_duration, false, false, true).timeout
 		Engine.time_scale = 1.0

@@ -17,9 +17,12 @@ var enabled: bool = true: ## When false, any activation or reload actions are bl
 		enabled = new_value
 		if not enabled:
 			disable()
-			sprite.material.set_shader_parameter("tint_color", Color(1, 0.188, 0.345, 0.463))
+			sprite.material.set_shader_parameter("tint_color", Color(1, 0.188, 0.345, 0.45))
+			sprite.material.set_shader_parameter("final_alpha", 0.65)
 		else:
 			sprite.material.set_shader_parameter("tint_color", Color(1.0, 1.0, 1.0, 0.0))
+			sprite.material.set_shader_parameter("final_alpha", 1.0)
+			enable()
 
 
 ## Creates an equippable item to be used via the slot it is currently in.
@@ -61,6 +64,10 @@ func _on_item_leaves_clipping_body(_body: Node2D) -> void:
 func disable() -> void:
 	pass
 
+## Intended to be overridden by child classes in order to specify what to do when this item is enabled.
+func enable() -> void:
+	pass
+
 ## Intended to be overridden by child classes in order to specify what to do when this item is used.
 func activate() -> void:
 	pass
@@ -77,6 +84,7 @@ func release_hold_activate(_hold_time: float) -> void:
 func enter() -> void:
 	pass
 
-## Intended to be overridden by child classes in order to specify what to do when this item is unequipped.
+## Intended to be overridden by child classes in order to specify what to do when this item is unequipped. Should call super.exit()
+## first, though.
 func exit() -> void:
-	pass
+	set_process(false)

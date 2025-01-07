@@ -28,12 +28,18 @@ crit_multiplier = 1.5
 armor_penetration = 0
 base_healing = 0
 heal_affected_stats = 2
-cam_shake_strength = 0.0
-cam_shake_duration = 0.0
-cam_freeze_multiplier = 1.0
-cam_freeze_duration = 0.0
 impact_sound = ""
 hit_flash_color = Color(1, 1, 1, 0.6)
+cam_shake_strength = 0.0
+cam_shake_duration = 0.0
+cam_shake_on_player_hit_only = false
+cam_shake_max_distance = 100
+cam_shake_does_falloff = true
+cam_freeze_multiplier = 1.0
+cam_freeze_duration = 0.0
+cam_freeze_on_player_hit_only = true
+cam_freeze_max_distance = 100
+cam_freeze_does_falloff = true
 status_effects = Array[ExtResource("1_sti8o")]([])
 contact_position = Vector2(0, 0)
 movement_direction = Vector2(0, 0)
@@ -129,12 +135,18 @@ crit_multiplier = 1.5
 armor_penetration = 0
 base_healing = 0
 heal_affected_stats = 2
-cam_shake_strength = 0.0
-cam_shake_duration = 0.0
-cam_freeze_multiplier = 1.0
-cam_freeze_duration = 0.0
 impact_sound = ""
 hit_flash_color = Color(1, 1, 1, 0.6)
+cam_shake_strength = 0.0
+cam_shake_duration = 0.0
+cam_shake_on_player_hit_only = false
+cam_shake_max_distance = 100
+cam_shake_does_falloff = true
+cam_freeze_multiplier = 1.0
+cam_freeze_duration = 0.0
+cam_freeze_on_player_hit_only = true
+cam_freeze_max_distance = 100
+cam_freeze_does_falloff = true
 status_effects = Array[ExtResource("1_sti8o")]([ExtResource("6_l8ogr")])
 contact_position = Vector2(0, 0)
 movement_direction = Vector2(0, 0)
@@ -165,7 +177,7 @@ point_count = 2
 
 [sub_resource type="Curve" id="Curve_tw3jb"]
 _limits = [0.0, 0.1, 0.0, 1.0]
-_data = [Vector2(0, 0.005), 0.0, 0.0051865, 0, 0, Vector2(1, 0.0101865), 0.0051865, 0.0, 0, 0]
+_data = [Vector2(0, 0.013), 0.0, 0.0051865, 0, 0, Vector2(1, 0.026), 0.0051865, 0.0, 0, 0]
 point_count = 2
 
 [sub_resource type="Curve" id="Curve_40cbt"]
@@ -250,16 +262,16 @@ script = ExtResource("6_13gru")
 debug_print_mod_changes = false
 
 [sub_resource type="Curve" id="Curve_lm546"]
-_data = [Vector2(0, 0.123905), 0.0, 0.0, 0, 0]
-point_count = 1
+_data = [Vector2(0, 0.14), 0.0, 0.0, 0, 0, Vector2(1, 0.12), 0.0, 0.0, 0, 0]
+point_count = 2
 
 [sub_resource type="Curve" id="Curve_kj8op"]
-_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.495812, 0.691149), -1.29955, -1.29955, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
-point_count = 3
+_data = [Vector2(0, 1), 0.0, -1.0, 0, 1, Vector2(1, 0), -1.0, 0.0, 1, 0]
+point_count = 2
 
 [sub_resource type="Curve" id="Curve_pca6u"]
-_data = [Vector2(0, 0.149619), 0.0, 0.0, 0, 0]
-point_count = 1
+_data = [Vector2(0, 0.06), 0.0, 0.0, 0, 0, Vector2(1, 0.11), 0.0, 0.0, 0, 0]
+point_count = 2
 
 [resource]
 script = ExtResource("3_58le7")
@@ -272,8 +284,8 @@ firing_duration = 0.03
 one_frame_per_fire = true
 override_anim_dur = 0.0
 anim_speed_mult = 0.2
-firing_cam_shake_str = 0.0
-firing_cam_shake_dur = 0.0
+firing_cam_shake_str = 0.15
+firing_cam_shake_dur = 0.2
 firing_cam_freeze_mult = 1.0
 firing_cam_freeze_dur = 0.0
 firing_sound = ""
@@ -313,12 +325,12 @@ proj_reload_sound = ""
 empty_mag_sound = ""
 max_bloom = 0.0
 bloom_decrease_delay = 1.0
-initial_fire_rate_delay = 0.1
+initial_fire_rate_delay = 0.14
 warmup_delay_curve = SubResource("Curve_kj8op")
 warmup_increase_rate = SubResource("Curve_pca6u")
 warmup_decrease_rate = SubResource("Curve_lm546")
 warmup_decrease_delay = 0.75
-overheat_penalty = 5.0
+overheat_penalty = 3.2
 overheat_inc_rate = SubResource("Curve_tw3jb")
 overheat_dec_rate = SubResource("Curve_pnq7a")
 overheat_dec_delay = 0.75

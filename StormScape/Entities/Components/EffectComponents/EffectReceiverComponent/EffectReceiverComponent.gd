@@ -93,11 +93,7 @@ func handle_effect_source(effect_source: EffectSource, source_entity: PhysicsBod
 
 	_update_hit_flash(effect_source, true)
 
-	if (affected_entity is Player):
-		if effect_source.cam_shake_duration > 0:
-			GlobalData.player_camera.start_shake(effect_source.cam_shake_strength, effect_source.cam_shake_duration)
-		if effect_source.cam_freeze_duration > 0:
-			GlobalData.player_camera.start_freeze(effect_source.cam_freeze_multiplier, effect_source.cam_freeze_duration)
+	_handle_cam_fx(effect_source)
 
 	if effect_source.base_damage > 0 and dmg_handler != null:
 		if _check_same_team(source_entity) and _check_if_bad_effects_apply_to_allies(effect_source):
@@ -231,6 +227,31 @@ func _update_hit_flash(effect_source: EffectSource = null, start: bool = false) 
 	else:
 		affected_entity.sprite.material.set_shader_parameter("tint_color", Color(1.0, 1.0, 1.0, 0.0))
 
+## Starts the player camera fx from the effect source details.
+func _handle_cam_fx(effect_source: EffectSource) -> void:
+	if effect_source.cam_freeze_duration == 0 and effect_source.cam_shake_duration == 0:
+		return
+
+	var is_player: bool = (affected_entity is Player)
+	var dist_to_player: float = 0
+	var shake_strength: float = effect_source.cam_shake_strength
+	var freeze_multiplier: float = effect_source.cam_freeze_multiplier
+
+	dist_to_player = max(0, effect_source.contact_position.distance_to(GlobalData.player_node.global_position) - 16) # Buffer for player's arm distance
+	if effect_source.cam_shake_does_falloff: # Can only falloff up to a quarter of the original strength
+		shake_strength *= (1 - min(0.25, (dist_to_player / effect_source.cam_shake_max_distance)))
+	if dist_to_player > effect_source.cam_shake_max_distance:
+		shake_strength = 0
+	if effect_source.cam_freeze_does_falloff: # Can only falloff up to a quarter the original multiplier
+		freeze_multiplier += min(1.0, min(0.75, (dist_to_player / effect_source.cam_freeze_max_distance)))
+	if dist_to_player > effect_source.cam_freeze_max_distance:
+		freeze_multiplier = 1.0
+
+	if not (effect_source.cam_shake_on_player_hit_only and not is_player):
+		GlobalData.player_camera.start_shake(shake_strength, effect_source.cam_shake_duration)
+	if not (effect_source.cam_freeze_on_player_hit_only and not is_player):
+		GlobalData.player_camera.start_freeze(freeze_multiplier, effect_source.cam_freeze_duration)
+
 ## Checks if there is a life steal effect in the status effects and returns the percent to steal if so.
 func _get_life_steal(effect_source: EffectSource, source_entity: PhysicsBody2D) -> float:
 	if can_receive_status_effects and life_steal_handler != null:
@@ -238,5 +259,4 @@ func _get_life_steal(effect_source: EffectSource, source_entity: PhysicsBody2D) 
 			if status_effect is LifeStealEffect:
 				life_steal_handler.source_entity = source_entity
 				return status_effect.dmg_steal
-
 	return 0.0

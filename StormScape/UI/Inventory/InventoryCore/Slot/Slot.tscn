@@ -1,14 +1,14 @@
 [gd_scene load_steps=14 format=3 uid="uid://m4ur3n2hwsp8"]
 
 [ext_resource type="Texture2D" uid="uid://ces4hq54n2lxc" path="res://UI/Inventory/InventoryCore/Slot/normal_slot.png" id="1_tu6a1"]
-[ext_resource type="Script" path="res://UI/Inventory/InventoryCore/Slot/Slot.gd" id="2_ywtjc"]
+[ext_resource type="Script" uid="uid://bh1a5w0hw0r0s" path="res://UI/Inventory/InventoryCore/Slot/Slot.gd" id="2_ywtjc"]
 [ext_resource type="PackedScene" uid="uid://bacsel0a5l2iu" path="res://UI/Inventory/InventoryCore/Slot/SlotDragPreview.tscn" id="3_2ljmb"]
 [ext_resource type="FontVariation" uid="uid://blgkcg6c83yln" path="res://Assets/Theming/Fonts/GameFontResources/ui_pixel_font.tres" id="3_dimqv"]
 [ext_resource type="Texture2D" uid="uid://bopljhr43p6fx" path="res://UI/Inventory/InventoryCore/Slot/clear_slot_selected.png" id="4_jiyo0"]
 [ext_resource type="Texture2D" uid="uid://3ygb1pbykma1" path="res://UI/Inventory/InventoryCore/Slot/normal_slot_no_item.png" id="4_ylk5m"]
 [ext_resource type="Texture2D" uid="uid://dbm40lvpgbd8t" path="res://Entities/Items/ItemCore/Particles/item_rarity_light.png" id="5_dhreg"]
-[ext_resource type="Shader" path="res://UI/Shaders/ProgressAlpha.gdshader" id="5_xform"]
-[ext_resource type="Shader" path="res://UI/Shaders/GlintShader.gdshader" id="6_l1uky"]
+[ext_resource type="Shader" uid="uid://bhox1e3shq3iq" path="res://UI/Shaders/ProgressAlpha.gdshader" id="5_xform"]
+[ext_resource type="Shader" uid="uid://cwbeekjoy0uyh" path="res://UI/Shaders/GlintShader.gdshader" id="6_l1uky"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_me41j"]
 resource_local_to_scene = true
