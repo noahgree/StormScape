@@ -9,7 +9,7 @@
 script = ExtResource("2_s8niq")
 mod_name = &"Burning Bullets"
 mod_lvl = 1
-allowed_proj_wpns = Array[int]([0, 1, 2, 3, 4, 5, 6, 7, 8])
+allowed_proj_wpns = Array[int]([0, 1, 2, 3, 4, 5, 6, 7, 8, 9])
 allowed_melee_wpns = Array[int]([0, 1, 2])
 wpn_stat_mods = Array[ExtResource("3_nbora")]([])
 status_effects = Array[ExtResource("1_iqqgs")]([ExtResource("3_s73up")])

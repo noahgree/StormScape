@@ -30,6 +30,7 @@ shader_parameter/glow_size = 4.5
 shader_parameter/glow_strength = 9.0
 shader_parameter/enable_fade = false
 shader_parameter/tint_color = Color(5.87195e-05, 0.303902, 0.871873, 0.911)
+shader_parameter/final_alpha = 1.0
 shader_parameter/frame_uv_min = null
 shader_parameter/frame_uv_max = null
 
@@ -130,6 +131,7 @@ debug_color = Color(0.941042, 1.32841e-05, 0.612344, 0.42)
 [node name="LifeStealHandler" parent="EffectReceiverComponent" instance=ExtResource("13_mscgs")]
 
 [node name="StatusEffectManager" parent="." node_paths=PackedStringArray("effect_receiver") instance=ExtResource("14_20kf8")]
+unique_name_in_owner = true
 effect_receiver = NodePath("../EffectReceiverComponent")
 print_effect_updates = true
 

@@ -14,6 +14,7 @@ class_name HandsComponent
 @onready var main_hand_sprite: Sprite2D = $HandsAnchor/MainHandSprite ## The main hand sprite to draw if that equipped item needs it.
 @onready var off_hand_sprite: Sprite2D = $OffHandSprite ## The off hand sprite that is drawn when holding a one handed weapon.
 @onready var drawn_off_hand: Sprite2D = $HandsAnchor/DrawnOffHand ## The extra off hand sprite that is drawn on top of a weapon that needs it. See the equippability details inside the item resources for more info.
+@onready var smoke_particles: CPUParticles2D = $HandsAnchor/SmokeParticles ## The smoke particles used when an item has overheated.
 @onready var entity: PhysicsBody2D = get_parent().get_parent() ## The entity using this hands component.
 
 var equipped_item: EquippableItem = null ## The currently equipped equippable item that the entity is holding.
@@ -23,6 +24,7 @@ var is_mouse_button_held: bool = false ## If we are currently considering the tr
 var been_holding_time: float = 0 ## How long we have considered the trigger button to have been held down so far.
 var equipped_item_should_follow_mouse: bool = true ## If the equipped item should rotate with the character and the mouse or not.
 var starting_hands_component_height: float ## The height relative to the bottom of the entity sprite that this component operates at.
+var starting_off_hand_sprite_height: float ## The height relative to the hands component scene that the off hand sprite node starts at (and is usually animated from).
 
 
 #region Save & Load
@@ -38,6 +40,7 @@ func _ready() -> void:
 		been_holding_time = 0
 		)
 	starting_hands_component_height = position.y
+	starting_off_hand_sprite_height = off_hand_sprite.position.y
 
 func _unhandled_input(event: InputEvent) -> void:
 	if equipped_item != null:
@@ -231,16 +234,23 @@ func _change_off_hand_sprite_visibility(show_off_hand: bool) -> void:
 
 func _check_for_drawing_off_hand() -> void:
 	if equipped_item.stats.draw_off_hand and not equipped_item.stats.is_gripped_by_one_hand:
-		drawn_off_hand.position = off_hand_sprite.position + equipped_item.stats.draw_off_hand_offset + equipped_item.stats.holding_offset
+		drawn_off_hand.position = Vector2(off_hand_sprite.position.x, starting_off_hand_sprite_height) + equipped_item.stats.draw_off_hand_offset + equipped_item.stats.holding_offset
 		drawn_off_hand.visible = true
 
 func _change_y_sort(anim_vector: Vector2) -> void:
-	if anim_vector.y < 0:
+	if anim_vector.y < 0: # Facing up
 		position = entity.sprite.position - Vector2(0, 1)
 		hands_anchor.position.y = starting_hands_component_height - position.y
+		off_hand_sprite.position.y = starting_off_hand_sprite_height + starting_hands_component_height - position.y
 	else:
-		position = Vector2(0, starting_hands_component_height)
-		hands_anchor.position = Vector2(0, 0)
+		if entity.effects != null: # Needed to place held items over the status effect particles on the entity when facing down
+			position = entity.effects.position + Vector2(0, 1)
+			hands_anchor.position.y = starting_hands_component_height - position.y
+			off_hand_sprite.position.y = starting_off_hand_sprite_height + starting_hands_component_height - position.y
+		else: # If no effects node, this handles facing down normally
+			position = Vector2(0, starting_hands_component_height)
+			hands_anchor.position.y = 0
+			off_hand_sprite.position.y = starting_off_hand_sprite_height
 
 func _handle_y_scale_lerping(anim_vector: Vector2) -> void:
 	if anim_vector.x > 0.12:

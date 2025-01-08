@@ -10,6 +10,7 @@ enum MeleeWeaponType { ## The kinds of melee weapons.
 @export_group("General")
 @export var melee_weapon_type: MeleeWeaponType = MeleeWeaponType.TOOL ## The kind of melee weapon this is.
 @export_group("Normal Use Details")
+@export var effect_source: EffectSource ## The resource that defines what happens to the entity that is hit by this weapon. Includes things like damage and status effects.
 @export var stamina_cost: float = 3.0 ## The amount of stamina to consume per use.
 @export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var cooldown: float = 0.5 ## The minimum time between usages.
 @export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var use_speed: float = 0.25 ## How long one swing, punch, or other kind of "usage" of this melee item takes.
@@ -23,6 +24,7 @@ enum MeleeWeaponType { ## The kinds of melee weapons.
 
 @export_group("Charge Use Details")
 @export var can_do_charge_use: bool = false ## Whether this weapon has a charge use method or not.
+@export var charge_effect_source: EffectSource ## The resource that defines what happens to the entity that is hit by this weapon. Includes things like damage and status effects.
 @export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var min_charge_time: float = 2 ## How long must the activation be held down before releasing the charge.
 @export var auto_do_charge_use: bool = false ## Whether to auto start a charge use when min_charge_time is reached.
 @export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var charge_use_cooldown: float = 1.5 ## How long after a charge use must we wait before being able to do it again.

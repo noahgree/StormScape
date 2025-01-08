@@ -52,7 +52,7 @@ func _notification(what: int) -> void:
 ## affected entity so that the effect sources only see it when they should.
 func _ready() -> void:
 	assert(affected_entity or get_parent() is SubViewport, get_parent().name + " has an effect receiver that is missing a reference to an entity.")
-	if can_receive_status_effects: assert(get_parent() is SubViewport or get_parent().has_node("StatusEffectManager"), get_parent().name + " has an effect receiver flagged as being able to handle status effects, yet has no StatusEffectManager.")
+	if can_receive_status_effects: assert(get_parent() is SubViewport or get_parent().has_node("%StatusEffectManager"), get_parent().name + " has an effect receiver flagged as being able to handle status effects, yet has no StatusEffectManager.")
 
 	if not Engine.is_editor_hint():
 		collision_layer = affected_entity.collision_layer

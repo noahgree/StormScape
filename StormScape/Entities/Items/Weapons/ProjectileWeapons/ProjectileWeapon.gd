@@ -1,3 +1,4 @@
+@tool
 extends Weapon
 class_name ProjectileWeapon
 ## Base class for all weapons that spawn any sort of projectile or hitscan or AOE.
@@ -7,13 +8,24 @@ class_name ProjectileWeapon
 		proj_origin = new_origin
 		if proj_origin_node:
 			proj_origin_node.position = proj_origin
-@export var vfx_scene: PackedScene = load("res://Entities/Items/Weapons/WeaponVFX/Simple/SimpleVFX.tscn")
+@export var vfx_scene: PackedScene = load("res://Entities/Items/Weapons/WeaponVFX/FiringVFX/Simple/SimpleFiringVFX.tscn")
+@export var particle_emission_extents: Vector2:
+	set(new_value):
+		particle_emission_extents = new_value
+		if debug_emission_box:
+			_debug_update_particle_emission_box()
+@export var particle_emission_origin: Vector2:
+	set(new_value):
+		particle_emission_origin = new_value
+		if debug_emission_box:
+			_debug_update_particle_emission_box()
 
 @onready var anim_player: AnimationPlayer = $AnimationPlayer ## The animation controller for this projectile weapon.
 @onready var proj_origin_node: Marker2D = $ProjectileOrigin ## The point at which projectiles should spawn from.
+@onready var debug_emission_box: Polygon2D = get_node_or_null("DebugEmissionBox")
+@onready var overheat_overlay: TextureRect = get_node_or_null("ItemSprite/OverheatOverlay")
 
 #region Local Vars
-const OVERHEATED_TINT_COLOR: Color = Color(1.0, 0.0, 0.0, 0.52)
 var firing_duration_timer: Timer = Timer.new() ## The timer tracking how long after we press fire before the proj spawns.
 var reload_timer: Timer = Timer.new() ## The timer tracking the delay between reload start and end.
 var single_reload_timer: Timer = Timer.new() ## The timer tracking the delay between single bullet reloads.
@@ -37,8 +49,19 @@ var current_hitscans: Array[Hitscan] = [] ## The currently spawned array of hits
 var mouse_scan_area_targets: Array[Node] = [] ## The array of potential targets found and passed to the proj when using the "Mouse Position" homing method.
 var mouse_area: Area2D ## The area around the mouse that scans for targets when using the "Mouse Position" homing method
 var overhead_ui: PlayerOverheadUI ## The UI showing the overhead stat changes (like reloading) in progress. Only applicable and non-null for players.
+var is_tweening_overheat_overlay: bool = false ## Whether the post-overheat penalty tween is lowering the opacity of the overlay.
 #endregion
 
+
+#region Debug
+func _debug_update_particle_emission_box() -> void:
+	if debug_emission_box == null or not Engine.is_editor_hint():
+		return
+	var top_left: Vector2 = particle_emission_origin - particle_emission_extents
+	var bottom_right: Vector2 = particle_emission_origin + particle_emission_extents
+	var points: Array[Vector2] = [top_left, Vector2(bottom_right.x, top_left.y), bottom_right, Vector2(top_left.x, bottom_right.y)]
+	debug_emission_box.polygon = points
+#endregion
 
 #region Core
 ## Sets the new stats by duplicating the old ones (to ensure unique resource instance) and sets up the cache if we haven't already.
@@ -50,15 +73,14 @@ func _set_stats(new_stats: ItemResource) -> void:
 	if not stats.cache_is_setup:
 		stats.s_mods = stats.s_mods.duplicate()
 		stats.effect_source = stats.effect_source.duplicate()
-		stats.charge_effect_source = stats.charge_effect_source.duplicate()
 		stats.original_status_effects = stats.effect_source.status_effects.duplicate()
-		stats.original_charge_status_effects = stats.charge_effect_source.status_effects.duplicate()
 		_setup_mod_cache()
 
 ## Sets up the base values for the stat mod cache so that weapon mods can be added and managed properly.
 func _setup_mod_cache() -> void:
 	var normal_moddable_stats: Dictionary[StringName, float] = {
 		&"fire_cooldown" : stats.fire_cooldown,
+		&"min_charge_time" : stats.min_charge_time,
 		&"mag_size" : stats.mag_size,
 		&"mag_reload_time" : stats.mag_reload_time,
 		&"single_proj_reload_time" : stats.single_proj_reload_time,
@@ -94,33 +116,14 @@ func _setup_mod_cache() -> void:
 		&"hitscan_pierce_count" : stats.hitscan_logic.hitscan_pierce_count,
 		&"hitscan_max_distance" : stats.hitscan_logic.hitscan_max_distance
 	}
-	var charge_moddable_stats: Dictionary[StringName, float] = {
-		&"min_charge_time" : stats.min_charge_time,
-		&"charge_fire_cooldown" : stats.charge_fire_cooldown,
-		&"charge_base_damage" : stats.charge_effect_source.base_damage,
-		&"charge_base_healing" : stats.charge_effect_source.base_healing,
-		&"charge_crit_chance" : stats.charge_effect_source.crit_chance,
-		&"charge_armor_penetration" : stats.charge_effect_source.armor_penetration,
-		&"charge_proj_speed" : stats.charge_projectile_logic.speed,
-		&"charge_proj_max_distance" : stats.charge_projectile_logic.max_distance,
-		&"charge_proj_max_pierce" : stats.charge_projectile_logic.max_pierce,
-		&"charge_proj_max_ricochet" : stats.charge_projectile_logic.max_ricochet,
-		&"charge_proj_max_turn_rate" : stats.charge_projectile_logic.max_turn_rate,
-		&"charge_proj_homing_duration" : stats.charge_projectile_logic.homing_duration,
-		&"charge_proj_arc_travel_distance" : stats.charge_projectile_logic.arc_travel_distance,
-		&"charge_proj_bounce_count" : stats.charge_projectile_logic.bounce_count,
-		&"charge_proj_aoe_radius" : stats.charge_projectile_logic.aoe_radius,
-		&"charge_hitscan_duration" : stats.charge_hitscan_logic.hitscan_duration,
-		&"charge_hitscan_max_distance" : stats.charge_hitscan_logic.hitscan_max_distance,
-		&"charge_hitscan_effect_interval" : stats.charge_hitscan_logic.hitscan_effect_interval,
-		&"charge_hitscan_pierce_count" : stats.charge_hitscan_logic.hitscan_pierce_count
-	}
 
 	stats.s_mods.add_moddable_stats(normal_moddable_stats)
-	stats.s_mods.add_moddable_stats(charge_moddable_stats)
 	stats.cache_is_setup = true
 
 func _ready() -> void:
+	if Engine.is_editor_hint():
+		return
+
 	super._ready()
 	if source_entity is Player:
 		overhead_ui = source_entity.overhead_ui
@@ -158,29 +161,34 @@ func disable() -> void:
 func enable() -> void:
 	if overhead_ui:
 		if source_entity.inv.auto_decrementer.get_cooldown_source_title(str(stats.session_uid)) == "overheat_penalty":
-			sprite.material.set_shader_parameter("tint_color", OVERHEATED_TINT_COLOR)
+			_do_weapon_overheat_visuals()
 
 func enter() -> void:
 	if stats.s_mods.base_values.is_empty():
 		_setup_mod_cache()
 
+	# The first time a weapon resource is loaded it has a default ammo_in_mag value of -1, this takes care of setting it to mag_size
 	if (stats.ammo_in_mag == -1) and (stats.ammo_type != ProjWeaponResource.ProjAmmoType.STAMINA):
 		stats.ammo_in_mag = stats.s_mods.get_stat("mag_size")
 	else:
 		_get_has_needed_ammo_and_reload_if_not()
 	_update_ammo_ui()
 
+	# Checking to see if we are out of ammo and should reload upon equipping
 	if stats.ammo_type != ProjWeaponResource.ProjAmmoType.SELF and stats.ammo_type != ProjWeaponResource.ProjAmmoType.STAMINA:
 		if stats.ammo_in_mag < stats.s_mods.get_stat("mag_size"):
 			_request_ammo_recharge()
 
+	# Updating the overheating visuals and overlays if needed
 	if overhead_ui:
 		if source_entity.inv.auto_decrementer.get_cooldown_source_title(str(stats.session_uid)) == "overheat_penalty":
 			overhead_ui.update_visuals_for_max_overheat()
 			overhead_ui.overheat_bar.show()
-			sprite.material.set_shader_parameter("tint_color", OVERHEATED_TINT_COLOR)
+			overheat_overlay.self_modulate.a = source_entity.inv.auto_decrementer.get_overheat(str(stats.session_uid))
+			_do_weapon_overheat_visuals()
 		elif source_entity.inv.auto_decrementer.get_overheat(str(stats.session_uid)) > 0:
 			overhead_ui.overheat_bar.show()
+			overheat_overlay.self_modulate.a = source_entity.inv.auto_decrementer.get_overheat(str(stats.session_uid)) / 2.0
 
 	_check_if_needs_mouse_area_scanner()
 
@@ -190,6 +198,7 @@ func enter() -> void:
 		stats.weapon_mods_need_to_be_readded_after_save = false
 
 func exit() -> void:
+	set_process(false)
 	super.exit()
 	source_entity.move_fsm.should_rotate = true
 	source_entity.hands.equipped_item_should_follow_mouse = true
@@ -198,6 +207,9 @@ func exit() -> void:
 
 	if stats.charging_stat_effect != null:
 		source_entity.effects.request_effect_removal(stats.charging_stat_effect.effect_name)
+
+	source_entity.hands.smoke_particles.emitting = false
+	source_entity.hands.smoke_particles.visible = false
 
 ## If we are set to do mouse position-based homing, we set up the mouse area and its signals and add it as a child.
 func _check_if_needs_mouse_area_scanner() -> void:
@@ -226,7 +238,7 @@ func _disable_mouse_area() -> void:
 
 ## Every frame we decrease the warmup and the bloom levels based on their decrease curves.
 func _process(_delta: float) -> void:
-	if not overhead_ui:
+	if Engine.is_editor_hint() or not overhead_ui:
 		return
 
 	if is_reloading and not stats.hide_reload_ui:
@@ -236,6 +248,8 @@ func _process(_delta: float) -> void:
 	if current_overheat > 0:
 		if source_entity.inv.auto_decrementer.get_cooldown_source_title(str(stats.session_uid)) != "overheat_penalty":
 			overhead_ui.update_overheat_progress(int(current_overheat * 100.0))
+			if not is_tweening_overheat_overlay:
+				overheat_overlay.self_modulate.a = current_overheat / 2.0
 		else:
 			overhead_ui.update_overheat_progress(100)
 
@@ -250,10 +264,16 @@ func _on_cooldown_timeout(item_id: StringName, cooldown_source_title: String) ->
 
 	if cooldown_source_title == "overheat_penalty":
 		overhead_ui.update_visuals_for_max_overheat(true)
-		if enabled:
-			sprite.material.set_shader_parameter("tint_color", Color(1.0, 1.0, 1.0, 0.0))
-		if source_entity.inv.auto_decrementer.get_overheat(str(stats.session_uid)) == 0:
+		source_entity.hands.smoke_particles.emitting = false
+
+		var current_overheat: float = source_entity.inv.auto_decrementer.get_overheat(str(stats.session_uid))
+		if current_overheat == 0:
 			overhead_ui.overheat_bar.hide()
+		else:
+			is_tweening_overheat_overlay = true
+			var tween: Tween = create_tween()
+			tween.tween_property(overheat_overlay, "self_modulate:a", current_overheat, 0.15)
+			tween.tween_callback(func() -> void: is_tweening_overheat_overlay = false)
 
 	if is_holding_hitscan:
 		_fire()
@@ -274,7 +294,6 @@ func activate() -> void:
 		return
 
 	is_reloading_single_and_has_since_released = true
-
 	if stats.firing_mode == "Semi Auto":
 		_fire()
 
@@ -312,7 +331,6 @@ func release_hold_activate(hold_time: float) -> void:
 
 	hold_just_released = true
 
-## Called from the hands component to try and start a reload.
 func reload() -> void:
 	if (stats.ammo_type != ProjWeaponResource.ProjAmmoType.STAMINA
 		and stats.ammo_type != ProjWeaponResource.ProjAmmoType.SELF
@@ -330,7 +348,7 @@ func _fire() -> void:
 	if not is_reloading_single_and_has_since_released:
 		is_holding_hitscan = false
 		return
-	if not _get_has_needed_ammo_and_reload_if_not(false):
+	if not _get_has_needed_ammo_and_reload_if_not():
 		is_holding_hitscan = false
 		return
 
@@ -350,17 +368,17 @@ func _fire() -> void:
 		return
 	else:
 		firing_duration_timer.start(max(0.05, stats.firing_duration))
-		_start_firing_anim(false)
+		_start_firing_anim()
 		await firing_duration_timer.timeout
 
-	_set_up_hitscan(false)
+	_set_up_hitscan()
 	_handle_warmup_increase()
 	if not is_holding_hitscan:
-		_apply_burst_logic(false)
+		_apply_burst_logic()
 	else:
-		_apply_ammo_consumption(int(stats.s_mods.get_stat("projectiles_per_fire")), false)
-	_apply_post_firing_effect(false)
-	_get_has_needed_ammo_and_reload_if_not(false)
+		_apply_ammo_consumption(int(stats.s_mods.get_stat("projectiles_per_fire")))
+	_apply_post_firing_effect()
+	_get_has_needed_ammo_and_reload_if_not()
 	_notify_recharge_of_a_recent_firing()
 
 	if stats.use_hitscan and stats.allow_hitscan_holding and stats.firing_mode == "Auto" and not is_holding_hitscan:
@@ -369,19 +387,19 @@ func _fire() -> void:
 
 ## Check if we can do a charge firing, and if we can, start it.
 func _charge_fire(hold_time: float) -> void:
-	if not _get_has_needed_ammo_and_reload_if_not(true):
+	if not _get_has_needed_ammo_and_reload_if_not():
 		source_entity.hands.been_holding_time = 0
 		return
 
 	if (hold_time >= stats.s_mods.get_stat("min_charge_time")) and (hold_time > 0) and _get_cooldown() == 0:
-		firing_duration_timer.start(max(0.05, stats.charge_firing_duration))
-		_start_firing_anim(true)
+		firing_duration_timer.start(max(0.05, stats.firing_duration))
+		_start_firing_anim()
 		await firing_duration_timer.timeout
 
-		_set_up_hitscan(true)
-		_apply_burst_logic(true)
-		_apply_post_firing_effect(true)
-		_get_has_needed_ammo_and_reload_if_not(true)
+		_set_up_hitscan()
+		_apply_burst_logic()
+		_apply_post_firing_effect()
+		_get_has_needed_ammo_and_reload_if_not()
 		_notify_recharge_of_a_recent_firing()
 
 		while _get_cooldown() > 0: # Signal fires for all ending cooldowns, so we loop until ours has ended
@@ -389,12 +407,12 @@ func _charge_fire(hold_time: float) -> void:
 		source_entity.hands.been_holding_time = 0
 
 ## Set up the delay we will use if we have a non-holding or charged hitscan. This basically increases the shot duration.
-func _set_up_hitscan(was_charge_fire: bool = false) -> void:
+func _set_up_hitscan() -> void:
 	if not stats.use_hitscan:
 		hitscan_delay = 0
 	else:
-		if not stats.allow_hitscan_holding or was_charge_fire:
-			hitscan_delay = stats.s_mods.get_stat("hitscan_duration") if not was_charge_fire else stats.s_mods.get_stat("charge_hitscan_duration")
+		if not stats.allow_hitscan_holding or stats.firing_mode == "Charge":
+			hitscan_delay = stats.s_mods.get_stat("hitscan_duration")
 		else:
 			hitscan_delay = 0
 
@@ -415,75 +433,68 @@ func _on_hitscan_hands_freeze_timer_timeout() -> void:
 
 #region Projectile Spawning
 ## Applies bursting logic to potentially shoot more than one projectile at a short, set interval.
-func _apply_burst_logic(was_charge_fire: bool = false) -> void:
+func _apply_burst_logic() -> void:
 	if stats.s_mods.get_stat("projectiles_per_fire") > 1:
-		if not stats.add_bloom_per_burst_shot: _handle_bloom_increase(was_charge_fire)
-		if not stats.add_overheat_per_burst_shot: _handle_overheat_increase(was_charge_fire)
+		if not stats.add_bloom_per_burst_shot: _handle_bloom_increase()
+		if not stats.add_overheat_per_burst_shot: _handle_overheat_increase()
 	var shots: int = int(stats.s_mods.get_stat("projectiles_per_fire"))
 
 	var delay: float = 0
 	if _get_warmup_firing_delay() > 0:
 		delay = _get_warmup_firing_delay()
 	else:
-		if stats.firing_mode == "Auto" or stats.firing_mode == "Semi Auto":
-			delay = stats.s_mods.get_stat("fire_cooldown") + hitscan_delay
-		elif stats.firing_mode == "Charge":
-			delay = stats.s_mods.get_stat("charge_fire_cooldown") + hitscan_delay
+		delay = stats.s_mods.get_stat("fire_cooldown") + hitscan_delay
 
 	if not stats.use_hitscan:
 		delay += (stats.burst_bullet_delay * (shots - 1))
 
 	if delay > 0: _update_cooldown_with_potential_visuals(delay)
 
-	_apply_ammo_consumption(shots, was_charge_fire)
+	_apply_ammo_consumption(shots)
 
 ## Calls to consume ammo based on how many shots we performed.
-func _apply_ammo_consumption(shot_count: int, was_charge_fire: bool = false) -> void:
+func _apply_ammo_consumption(shot_count: int) -> void:
 	if stats.dont_consume_ammo:
-		_handle_per_shot_delay_and_bloom(shot_count, was_charge_fire, (not is_holding_hitscan))
+		_handle_per_shot_delay_and_bloom(shot_count, (not is_holding_hitscan))
 		return
 
-	if not was_charge_fire:
-		if stats.use_ammo_per_burst_proj:
-			for i: int in range(shot_count):
-				_consume_ammo(1)
-		else:
+	if stats.use_ammo_per_burst_proj:
+		for i: int in range(shot_count):
 			_consume_ammo(1)
 	else:
-		_consume_ammo(stats.ammo_use_per_charge)
+		_consume_ammo(1)
 
-	_handle_per_shot_delay_and_bloom(shot_count, was_charge_fire, (not is_holding_hitscan))
+	_handle_per_shot_delay_and_bloom(shot_count, (not is_holding_hitscan))
 
 ## Calls to increase the bloom and awaits burst bullet delays if we have them. Can be told not to spawn afterwards as well.
-func _handle_per_shot_delay_and_bloom(shot_count: int, was_charge_fire: bool = false, proceed_to_spawn: bool = true) -> void:
+func _handle_per_shot_delay_and_bloom(shot_count: int, proceed_to_spawn: bool = true) -> void:
 	for i: int in range(shot_count):
 		if stats.add_bloom_per_burst_shot or (stats.s_mods.get_stat("projectiles_per_fire") == 1):
-			_handle_bloom_increase(false) # Never trigger charge fire mult if we are bursting
+			_handle_bloom_increase()
 		if stats.add_overheat_per_burst_shot or (stats.s_mods.get_stat("projectiles_per_fire") == 1):
-			_handle_overheat_increase(false) # Never trigger charge fire mult if we are bursting
+			_handle_overheat_increase()
 
 		if proceed_to_spawn:
-			_apply_barrage_logic(was_charge_fire)
+			_apply_barrage_logic()
 
 			if i != (shot_count - 1):
 				await get_tree().create_timer(max(0.03, stats.burst_bullet_delay), false, true, false).timeout
 
 ## Applies barrage logic to potentially spawn multiple projectiles at a specific angle apart.
-func _apply_barrage_logic(was_charge_fire: bool = false) -> void:
-	var effect_src: EffectSource = stats.effect_source if not was_charge_fire else stats.charge_effect_source
+func _apply_barrage_logic() -> void:
+	var effect_src: EffectSource = stats.effect_source
 
 	var angular_spread_radians: float = deg_to_rad(stats.s_mods.get_stat("angular_spread"))
 	var close_to_360_adjustment: int = 0 if stats.s_mods.get_stat("angular_spread") > 310 else 1
 	var spread_segment_width: float = angular_spread_radians / (stats.s_mods.get_stat("barrage_count") - close_to_360_adjustment)
 	var start_rotation: float = global_rotation - (angular_spread_radians / 2.0)
-	#var multishot_id: int = UIDHelper.generate_multishot_uid()
 
 	for i: int in range(stats.barrage_count):
 		if not stats.use_hitscan:
 			var rotation_adjustment: float = start_rotation + (i * spread_segment_width)
-			var proj: Projectile = Projectile.create(stats, source_entity, proj_origin_node.global_position, global_rotation, was_charge_fire)
+			var proj: Projectile = Projectile.create(stats, source_entity, proj_origin_node.global_position, global_rotation)
 			proj.rotation = rotation_adjustment if stats.s_mods.get_stat("barrage_count") > 1 else proj.rotation
-			proj.starting_proj_height = -(source_entity.hands.position.y + proj_origin.y) / 2
+			proj.starting_proj_height = -(source_entity.hands.position.y + proj_origin.y + source_entity.hands.main_hand.position.y) / 2
 
 			if stats.projectile_logic.homing_method == "Mouse Position":
 				mouse_scan_area_targets.clear()
@@ -496,14 +507,11 @@ func _apply_barrage_logic(was_charge_fire: bool = false) -> void:
 			_spawn_projectile(proj)
 		else:
 			var hitscan_scene: PackedScene = stats.hitscan_logic.hitscan_scn
-			if was_charge_fire and stats.charge_hitscan_logic != null and stats.charge_hitscan_logic.hitscan != null:
-				hitscan_scene = stats.charge_hitscan_logic.hitscan_scn
-
 			var rotation_adjustment: float = -angular_spread_radians / 2 + (i * spread_segment_width)
-			var hitscan: Hitscan = Hitscan.create(hitscan_scene, effect_src, self, source_entity, proj_origin_node.global_position, rotation_adjustment if stats.s_mods.get_stat("barrage_count") > 1 else 0.0, was_charge_fire)
+			var hitscan: Hitscan = Hitscan.create(hitscan_scene, effect_src, self, source_entity, proj_origin_node.global_position, rotation_adjustment if stats.s_mods.get_stat("barrage_count") > 1 else 0.0, stats.firing_mode == "Charge")
 			_spawn_hitscan(hitscan)
 
-	_do_firing_fx(was_charge_fire)
+	_do_firing_fx()
 
 ## Spawns the projectile that has been passed to it. Reloads if we don't have enough for the next activation.
 func _spawn_projectile(proj: Projectile) -> void:
@@ -545,15 +553,14 @@ func _get_warmup_firing_delay() -> float:
 		return 0
 
 ## Increases current bloom level via sampling the increase curve using the current bloom.
-func _handle_bloom_increase(was_charge_fire: bool = false) -> void:
+func _handle_bloom_increase() -> void:
 	if stats.s_mods.get_stat("max_bloom") > 0:
 		var current_bloom: float = source_entity.inv.auto_decrementer.get_bloom(str(stats.session_uid))
 		var sampled_point: float = stats.bloom_increase_rate.sample_baked(current_bloom)
 		var increase_amount: float = max(0.01, sampled_point * stats.s_mods.get_stat("bloom_increase_rate_multiplier"))
-		var charge_shot_mult: float = 1.0 if not was_charge_fire else stats.charge_bloom_mult
 		source_entity.inv.auto_decrementer.add_bloom(
 			StringName(str(stats.session_uid)),
-			min(1, (increase_amount * charge_shot_mult)),
+			min(1, (increase_amount)),
 			stats.bloom_decrease_rate,
 			stats.bloom_decrease_delay)
 
@@ -576,15 +583,14 @@ func _get_cooldown() -> float:
 	return source_entity.inv.auto_decrementer.get_cooldown(stats.get_cooldown_id())
 
 ## Increases current overheat level via sampling the increase curve using the current overheat.
-func _handle_overheat_increase(was_charge_fire: bool = false) -> void:
+func _handle_overheat_increase() -> void:
 	if stats.s_mods.get_stat("overheat_penalty") > 0:
 		var current_overheat: float = source_entity.inv.auto_decrementer.get_overheat(str(stats.session_uid))
 		var sampled_point: float = stats.overheat_inc_rate.sample_baked(current_overheat)
 		var increase_amount: float = max(0.005, sampled_point * stats.s_mods.get_stat("overheat_increase_rate_multiplier"))
-		var charge_shot_mult: float = 1.0 if not was_charge_fire else stats.charge_overheat_mult
 		source_entity.inv.auto_decrementer.add_overheat(
 			StringName(str(stats.session_uid)),
-			min(1, (increase_amount * charge_shot_mult)),
+			min(1, (increase_amount)),
 			stats.overheat_dec_rate,
 			stats.overheat_dec_delay)
 
@@ -596,8 +602,19 @@ func _handle_overheat_increase(was_charge_fire: bool = false) -> void:
 ## When we reach max overheat, add a cooldown of some kind.
 func _handle_max_overheat_reached() -> void:
 	_handle_adding_cooldown(stats.s_mods.get_stat("overheat_penalty"), "overheat_penalty")
+	if stats.overheated_sound != "": AudioManager.play_sound(stats.overheated_sound, AudioManager.SoundType.SFX_GLOBAL)
 	overhead_ui.update_visuals_for_max_overheat()
-	sprite.material.set_shader_parameter("tint_color", OVERHEATED_TINT_COLOR)
+	_do_weapon_overheat_visuals()
+
+## Setup and start the overheating visuals.
+func _do_weapon_overheat_visuals() -> void:
+	overheat_overlay.self_modulate.a = 1.0
+
+	var smoke_particles: CPUParticles2D = source_entity.hands.smoke_particles
+	smoke_particles.visible = true
+	smoke_particles.emission_rect_extents = particle_emission_extents
+	smoke_particles.position = particle_emission_origin + source_entity.hands.main_hand.position
+	smoke_particles.emitting = true
 
 ## When we receive a signal that any overheat has ended, if it matches this weapon, we potentially take action.
 func _on_overheat_emptied(item_id: StringName) -> void:
@@ -610,18 +627,16 @@ func _on_overheat_emptied(item_id: StringName) -> void:
 
 #region FX & Animations
 ## Start the sounds and vfx that should play when firing.
-func _do_firing_fx(with_charge_mult: bool = false) -> void:
-	var multiplier: float = stats.charge_cam_fx_mult if with_charge_mult else 1.0
+func _do_firing_fx() -> void:
 	if stats.firing_cam_shake_dur > 0:
-		GlobalData.player_camera.start_shake(stats.firing_cam_shake_str * multiplier, stats.firing_cam_shake_dur * multiplier)
+		GlobalData.player_camera.start_shake(stats.firing_cam_shake_str, stats.firing_cam_shake_dur)
 	if stats.firing_cam_freeze_dur > 0:
-		GlobalData.player_camera.start_freeze(stats.firing_cam_freeze_mult * multiplier, stats.firing_cam_freeze_dur * multiplier)
+		GlobalData.player_camera.start_freeze(stats.firing_cam_freeze_mult, stats.firing_cam_freeze_dur)
 
-	var sound: String = stats.firing_sound if not with_charge_mult else stats.charge_firing_sound
-	if sound != "": AudioManager.play_sound(sound, AudioManager.SoundType.SFX_2D, global_position)
+	if stats.firing_sound != "": AudioManager.play_sound(stats.firing_sound, AudioManager.SoundType.SFX_2D, global_position)
 
 	if stats.muzzle_flash != null and vfx_scene != null:
-		var vfx: WeaponVFX = vfx_scene.instantiate()
+		var vfx: WeaponFiringVFX = vfx_scene.instantiate()
 		vfx.texture = stats.muzzle_flash
 
 		var vfx_length: float = SpriteHelpers.SpriteDetails.get_frame_rect(vfx).x
@@ -631,42 +646,34 @@ func _do_firing_fx(with_charge_mult: bool = false) -> void:
 		add_child(vfx)
 
 ## Start the firing animation based on what kind of firing we are doing.
-func _start_firing_anim(was_charge_fire: bool = false) -> void:
+func _start_firing_anim() -> void:
 	if anim_player.is_playing():
 		return
-	if not was_charge_fire:
-		if stats.one_frame_per_fire:
-			# If using one frame per fire, we know it is an animated sprite
-			sprite.frame = ((sprite as AnimatedSprite2D).frame + 1) % (sprite as AnimatedSprite2D).sprite_frames.get_frame_count(sprite.animation)
-			return
-		if stats.override_anim_dur > 0:
-			anim_player.speed_scale = 1.0 / stats.override_anim_dur
-		else:
-			anim_player.speed_scale = 1.0 / max(0.03, (stats.firing_duration + hitscan_delay))
-		anim_player.speed_scale *= stats.anim_speed_mult
-		if anim_player.has_animation("fire"): anim_player.play("fire")
+
+	if stats.one_frame_per_fire:
+		# If using one frame per fire, we know it is an animated sprite
+		sprite.frame = ((sprite as AnimatedSprite2D).frame + 1) % (sprite as AnimatedSprite2D).sprite_frames.get_frame_count(sprite.animation)
+		return
+	if stats.override_anim_dur > 0:
+		anim_player.speed_scale = 1.0 / stats.override_anim_dur
 	else:
-		if stats.one_frame_per_chg_fire:
-			# If using one frame per charge fire, we know it is an animated sprite
-			sprite.frame = ((sprite as AnimatedSprite2D).frame + 1) % (sprite as AnimatedSprite2D).sprite_frames.get_frame_count(sprite.animation)
-			return
-		if stats.override_chg_anim_dur > 0   :
-			anim_player.speed_scale = 1.0 / stats.override_chg_anim_dur
-		else:
-			anim_player.speed_scale = 1.0 / max(0.03, (stats.charge_firing_duration + hitscan_delay))
-		anim_player.speed_scale *= stats.chg_anim_speed_mult
-		if anim_player.has_animation("charge_fire"): anim_player.play("charge_fire")
+		anim_player.speed_scale = 1.0 / max(0.03, (stats.firing_duration + hitscan_delay))
+	anim_player.speed_scale *= stats.anim_speed_mult
+	if anim_player.has_animation("fire"): anim_player.play("fire")
+
+func _start_post_firing_anim() -> void:
+	if anim_player.is_playing():
+		return
 
 ## Applies a status effect to the source entity after firing.
-func _apply_post_firing_effect(was_charge_fire: bool = false) -> void:
-	var effect: StatusEffect = stats.post_firing_effect if not was_charge_fire else stats.post_chg_shot_effect
-	if effect != null:
-		source_entity.effect_receiver.handle_status_effect(effect)
+func _apply_post_firing_effect() -> void:
+	if stats.post_firing_effect != null:
+		source_entity.effect_receiver.handle_status_effect(stats.post_firing_effect)
 #endregion
 
 #region Reloading & Recharging
 ## Checks if we have enough ammo to execute a single firing. Calls for a reload if we don't.
-func _get_has_needed_ammo_and_reload_if_not(was_charge_fire: bool = false) -> bool:
+func _get_has_needed_ammo_and_reload_if_not() -> bool:
 	if stats.ammo_type == ProjWeaponResource.ProjAmmoType.STAMINA and (source_entity is not DynamicEntity):
 		push_error(source_entity.name + " is using a weapon with ammo type \"Stamina\" but is not a dynamic entity.")
 		return false
@@ -674,13 +681,10 @@ func _get_has_needed_ammo_and_reload_if_not(was_charge_fire: bool = false) -> bo
 	var result: bool = false
 	var ammo_needed: int = 0
 
-	if was_charge_fire:
-		ammo_needed = stats.ammo_use_per_charge
+	if stats.use_ammo_per_burst_proj:
+		ammo_needed += int(stats.s_mods.get_stat("projectiles_per_fire"))
 	else:
-		if stats.use_ammo_per_burst_proj:
-			ammo_needed += int(stats.s_mods.get_stat("projectiles_per_fire"))
-		else:
-			ammo_needed = 1
+		ammo_needed = 1
 
 	if stats.ammo_type == ProjWeaponResource.ProjAmmoType.STAMINA:
 		var stamina_uses_left: int = int(floor(source_entity.stamina_component.stamina / (ammo_needed * stats.stamina_use_per_proj)))

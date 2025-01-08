@@ -1,0 +1,8 @@
+[gd_scene load_steps=3 format=3 uid="uid://bdi8o2g5plcnb"]
+
+[ext_resource type="Texture2D" uid="uid://bj4xowuewlfds" path="res://Entities/Items/Weapons/WeaponVFX/FiringVFX/Simple/simple_1.png" id="1_5iem6"]
+[ext_resource type="Script" uid="uid://bpcygysciavk1" path="res://Entities/Items/Weapons/WeaponVFX/FiringVFX/WeaponFiringVFX.gd" id="2_p3q1k"]
+
+[node name="SimpleFiringVFX" type="Sprite2D"]
+texture = ExtResource("1_5iem6")
+script = ExtResource("2_p3q1k")

@@ -1,7 +1,8 @@
-[gd_scene load_steps=13 format=3 uid="uid://btaigaokvm7qx"]
+[gd_scene load_steps=14 format=3 uid="uid://btaigaokvm7qx"]
 
 [ext_resource type="Script" uid="uid://ca8xdltgdyjys" path="res://Entities/Items/Weapons/ProjectileWeapons/ProjectileWeapon.gd" id="1_37k38"]
 [ext_resource type="Shader" uid="uid://cfbagv3hrtar2" path="res://Entities/EntityCore/EntityEffectShader.gdshader" id="2_7kgqp"]
+[ext_resource type="PackedScene" uid="uid://bdi8o2g5plcnb" path="res://Entities/Items/Weapons/WeaponVFX/FiringVFX/Simple/SimpleFiringVFX.tscn" id="2_8dt34"]
 [ext_resource type="Texture2D" uid="uid://on5kqhtv8tmw" path="res://Entities/Items/Weapons/ProjectileWeapons/EagleEye/eagle_eye_base.png" id="3_p7c6k"]
 [ext_resource type="Texture2D" uid="uid://cs3clmnktksd6" path="res://Entities/Player/PlayerCore/player_hand.png" id="4_xfide"]
 [ext_resource type="PackedScene" uid="uid://batrfwan8r8ov" path="res://Entities/Items/WeaponMods/WeaponModManager.tscn" id="5_qkcwx"]
@@ -13,6 +14,7 @@ shader_parameter/glow_size = 4.5
 shader_parameter/glow_strength = 9.0
 shader_parameter/enable_fade = false
 shader_parameter/tint_color = Color(1, 1, 1, 0)
+shader_parameter/final_alpha = 1.0
 shader_parameter/frame_uv_min = null
 shader_parameter/frame_uv_max = null
 
@@ -52,6 +54,7 @@ height = 28.0
 [node name="EagleEye" type="Node2D"]
 script = ExtResource("1_37k38")
 proj_origin = Vector2(16, -2)
+vfx_scene = ExtResource("2_8dt34")
 
 [node name="ItemSprite" type="AnimatedSprite2D" parent="."]
 material = SubResource("ShaderMaterial_ej2m0")
@@ -64,6 +67,10 @@ libraries = {
 
 [node name="ProjectileOrigin" type="Marker2D" parent="."]
 position = Vector2(16, -2)
+
+[node name="OffHandSprite" type="Sprite2D" parent="."]
+position = Vector2(0, 1)
+texture = ExtResource("4_xfide")
 
 [node name="MainHandSprite" type="Sprite2D" parent="."]
 position = Vector2(-7, 3)

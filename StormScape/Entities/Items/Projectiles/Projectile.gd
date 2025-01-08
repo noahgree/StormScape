@@ -54,7 +54,6 @@ var mouse_scan_targets: Array[Node] ## The current list of targets in range of t
 var played_whiz_sound: bool = false ## Whether this has already played the whiz sound once or not.
 var debug_homing_rays: Array[Dictionary] = [] ## An array of debug info about the FOV homing method raycasts.
 var debug_recent_hit_location: Vector2 ## The location of the most recent point we hit something.
-var is_charge_fire: bool = false ## When true, this projectile emitted as a result of a charged firing.
 var source_wpn_stats: ProjWeaponResource ## The projectile weapon resource for the weapon that fired this projectile.
 var aoe_overlapped_receivers: Dictionary[Area2D, Timer] = {} ## The areas that are currently in an AOE area.
 #endregion
@@ -67,25 +66,23 @@ func _on_before_load_game() -> void:
 
 #region Core
 ## Creates a projectile and assigns its needed variables in a specific order. Then it returns it.
-static func create(wpn_stats: ProjWeaponResource, src_entity: PhysicsBody2D, pos: Vector2,
-					rot: float, is_charged: bool) -> Projectile:
-	var proj_scene: PackedScene = wpn_stats.projectile_scn if not is_charged else wpn_stats.charge_projectile_scn
+static func create(wpn_stats: ProjWeaponResource, src_entity: PhysicsBody2D, pos: Vector2, rot: float) -> Projectile:
+	var proj_scene: PackedScene = wpn_stats.projectile_scn
 	var proj: Projectile = proj_scene.instantiate()
 	proj.source_wpn_stats = wpn_stats
 	proj.split_proj_scene = proj_scene
 	proj.global_position = pos
 	proj.rotation = rot
 
-	proj.stats = wpn_stats.projectile_logic if not is_charged else wpn_stats.charge_projectile_logic
+	proj.stats = wpn_stats.projectile_logic
 	proj.s_mods = wpn_stats.s_mods
 	if proj.stats.speed_curve.point_count == 0:
 		push_error("\"" + src_entity.name + "\" has a weapon attempting to fire projectiles, but the projectile resource within the weapon has a blank speed curve.")
 
-	var effect_src: EffectSource = wpn_stats.effect_source if not is_charged else wpn_stats.charge_effect_source
+	var effect_src: EffectSource = wpn_stats.effect_source
 	proj.effect_source = effect_src
 	proj.collision_mask = effect_src.scanned_phys_layers
 	proj.source_entity = src_entity
-	proj.is_charge_fire = is_charged
 	return proj
 
 ## Used for debugging the homing system & other collisions. Draws vectors to where we have scanned during the "FOV" method.
@@ -199,7 +196,7 @@ func _physics_process(delta: float) -> void:
 
 	previous_position = global_position
 
-	var max_dist: float = s_mods.get_stat("proj_max_distance") if not is_charge_fire else s_mods.get_stat("charge_proj_max_distance")
+	var max_dist: float = s_mods.get_stat("proj_max_distance")
 	if (global_position - starting_position).length() >= max_dist:
 		queue_free()
 
@@ -227,7 +224,7 @@ func _physics_process(delta: float) -> void:
 ## This moves the projectile based on the current method, accounting for current rotation if we need to.
 ## It chooses speed from the speed curve based on lifetime remaining.
 func _do_projectile_movement(delta: float) -> void:
-	var speed: float = s_mods.get_stat("proj_speed") if not is_charge_fire else s_mods.get_stat("charge_proj_speed")
+	var speed: float = s_mods.get_stat("proj_speed")
 	var sampled_point: float = stats.speed_curve.sample_baked(1 - (lifetime_timer.time_left / stats.lifetime))
 	current_sampled_speed = sampled_point * speed * current_initial_boost
 
@@ -284,9 +281,9 @@ func _set_up_potential_homing_delay() -> void:
 ## Starts the homing sequence by turning it on and starting the homing timer if needed. Then calls for us to find a target.
 func _start_homing() -> void:
 	is_homing_active = true
-	var original_dur: float = s_mods.get_original_stat("proj_homing_duration") if not is_charge_fire else s_mods.get_original_stat("charge_proj_homing_duration")
+	var original_dur: float = s_mods.get_original_stat("proj_homing_duration")
 	if original_dur > -1:
-		homing_timer.start(s_mods.get_stat("proj_homing_duration") if not is_charge_fire else s_mods.get_stat("charge_proj_homing_duration"))
+		homing_timer.start(s_mods.get_stat("proj_homing_duration"))
 	_find_homing_target_based_on_method()
 
 ## Choses the proper way to pick a target based on the current homing method.
@@ -431,7 +428,7 @@ func _apply_homing_movement(delta: float) -> void:
 	var target_dir: Vector2 = (homing_target.global_position - global_position).normalized()
 	var current_dir: Vector2 = Vector2(cos(rotation), sin(rotation)).normalized()
 	var angle_to_target: float = current_dir.angle_to(target_dir)
-	var turn_stat: float = s_mods.get_stat("proj_max_turn_rate") if not is_charge_fire else s_mods.get_stat("charge_proj_max_turn_rate")
+	var turn_stat: float = s_mods.get_stat("proj_max_turn_rate")
 	var max_turn_rate: float = deg_to_rad(turn_stat * stats.turn_rate_curve.sample_baked((stats.lifetime - lifetime_timer.time_left) / stats.lifetime)) * delta
 
 	angle_to_target = clamp(angle_to_target, -max_turn_rate, max_turn_rate)
@@ -453,7 +450,7 @@ func _apply_homing_movement(delta: float) -> void:
 ## Sets up starting arcing variables like initial speed based on kinematics.
 func _reset_arc_logic() -> void:
 	var falloff_mult: float = max(0.01, stats.bounce_falloff_curve.sample_baked(1 - (lifetime_timer.time_left / stats.lifetime)))
-	var dist_stat: float = s_mods.get_stat("proj_arc_travel_distance") if not is_charge_fire else s_mods.get_stat("charge_proj_arc_travel_distance")
+	var dist_stat: float = s_mods.get_stat("proj_arc_travel_distance")
 	var dist: float = dist_stat * falloff_mult
 	updated_arc_angle = stats.launch_angle * falloff_mult
 
@@ -501,7 +498,7 @@ func _do_arc_movement(delta: float) -> void:
 	fake_z_axis = starting_arc_speed * sin(deg_to_rad(updated_arc_angle)) * arc_time_counter - 0.5 * 9.8 * pow(arc_time_counter, 2)
 
 	var ground_level: float = -(starting_proj_height) if bounces_so_far == 0 else 0
-	var bounce_stat: int = int(s_mods.get_stat("proj_bounce_count")) if not is_charge_fire else int(s_mods.get_stat("charge_proj_bounce_count"))
+	var bounce_stat: int = int(s_mods.get_stat("proj_bounce_count"))
 
 	if fake_z_axis > ground_level:
 		z_index = 3
@@ -563,7 +560,7 @@ func _split_self() -> void:
 
 	for i: int in range(split_into_count_offset_by_one):
 		var angle: float = start_angle + (i * step_angle)
-		var new_proj: Projectile = Projectile.create(source_wpn_stats, source_entity, position, angle, is_charge_fire)
+		var new_proj: Projectile = Projectile.create(source_wpn_stats, source_entity, position, angle)
 		new_proj.splits_so_far = splits_so_far
 		new_proj.spin_dir = spin_dir
 		if stats.homing_method == "Mouse Position": new_proj.homing_target = homing_target
@@ -641,7 +638,7 @@ func _handle_aoe() -> void:
 ## This also applies the initial hit of the aoe effect source to entities in range. The handling function won't apply status
 ## effects as a result of this hit.
 func _assign_new_collider_shape_and_aoe_entities(new_shape: Shape2D) -> void:
-	new_shape.radius = (s_mods.get_stat("proj_aoe_radius") / scale.x) if not is_charge_fire else (s_mods.get_stat("charge_proj_aoe_radius") / scale.x)
+	new_shape.radius = (s_mods.get_stat("proj_aoe_radius") / scale.x)
 	collider.shape = new_shape
 	_enable_collider()
 	set_deferred("monitoring", true)
@@ -660,7 +657,7 @@ func _assign_new_collider_shape_and_aoe_entities(new_shape: Shape2D) -> void:
 #region Lifetime & Handling
 ## When the lifetime ends, either start an AOE or queue free.
 func _on_lifetime_timer_timeout() -> void:
-	var original_radius: float = s_mods.get_original_stat("proj_aoe_radius") if not is_charge_fire else s_mods.get_original_stat("charge_proj_aoe_radius")
+	var original_radius: float = s_mods.get_original_stat("proj_aoe_radius")
 	if original_radius > 0 and stats.aoe_before_freeing:
 		_handle_aoe()
 	else:
@@ -723,7 +720,7 @@ func _process_hit(object: Node2D) -> void:
 	var sprite_rect: Vector2 = SpriteHelpers.SpriteDetails.get_frame_rect(sprite)
 	debug_recent_hit_location = global_position + Vector2(sprite_rect.x / 2, 0).rotated(rotation)
 	if not is_in_aoe_phase:
-		var ricochet_stat: int = int(s_mods.get_stat("proj_max_ricochet")) if not is_charge_fire else int(s_mods.get_stat("charge_proj_max_ricochet"))
+		var ricochet_stat: int = int(s_mods.get_stat("proj_max_ricochet"))
 		if stats.ricochet_walls_only and object is TileMapLayer:
 			_handle_ricochet(object)
 			spin_dir *= -1
@@ -732,13 +729,13 @@ func _process_hit(object: Node2D) -> void:
 			_handle_ricochet(object)
 			return
 
-		var pierce_stat: int = int(s_mods.get_stat("proj_max_pierce")) if not is_charge_fire else int(s_mods.get_stat("charge_proj_max_pierce"))
+		var pierce_stat: int = int(s_mods.get_stat("proj_max_pierce"))
 		if pierce_count < pierce_stat:
 			if object is DynamicEntity or object is RigidEntity or object is StaticEntity or object is EffectReceiverComponent:
 				_handle_pierce()
 				return
 
-		var original_radius: float = s_mods.get_original_stat("proj_aoe_radius") if not is_charge_fire else s_mods.get_original_stat("charge_proj_aoe_radius")
+		var original_radius: float = s_mods.get_original_stat("proj_aoe_radius")
 		if original_radius > 0:
 			lifetime_timer.stop()
 			_handle_aoe()
@@ -776,7 +773,7 @@ func _get_effect_source_adjusted_for_falloff(effect_src: EffectSource, handling_
 	if is_aoe:
 		apply_to_bad = stats.bad_effects_aoe_falloff
 		apply_to_good = stats.good_effects_aoe_falloff
-		var radius_stat: float = s_mods.get_stat("proj_aoe_radius") if not is_charge_fire else s_mods.get_stat("charge_proj_aoe_radius")
+		var radius_stat: float = s_mods.get_stat("proj_aoe_radius")
 		falloff_mult = max(0.05, stats.aoe_effect_falloff_curve.sample_baked(dist_to_center / radius_stat))
 	else:
 		apply_to_bad = stats.bad_effects_falloff

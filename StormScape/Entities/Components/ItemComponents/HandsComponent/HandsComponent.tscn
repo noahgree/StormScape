@@ -1,7 +1,32 @@
-[gd_scene load_steps=3 format=3 uid="uid://b7gdy01q8wsjx"]
+[gd_scene load_steps=9 format=3 uid="uid://b7gdy01q8wsjx"]
 
-[ext_resource type="Script" path="res://Entities/Components/ItemComponents/HandsComponent/HandsComponent.gd" id="1_y5huf"]
+[ext_resource type="Script" uid="uid://djte4e8x884jb" path="res://Entities/Components/ItemComponents/HandsComponent/HandsComponent.gd" id="1_y5huf"]
 [ext_resource type="Texture2D" uid="uid://cs3clmnktksd6" path="res://Entities/Player/PlayerCore/player_hand.png" id="2_lwexw"]
+[ext_resource type="Texture2D" uid="uid://3uh61et78avp" path="res://Entities/Items/Weapons/WeaponVFX/Particles/overheat_smoke.png" id="3_xaok7"]
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_aqhie"]
+blend_mode = 1
+particles_animation = true
+particles_anim_h_frames = 5
+particles_anim_v_frames = 1
+particles_anim_loop = false
+
+[sub_resource type="Curve" id="Curve_xaok7"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.553353), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Gradient" id="Gradient_aqhie"]
+offsets = PackedFloat32Array(0.336245, 1)
+colors = PackedColorArray(1, 1, 1, 0.53, 1, 1, 1, 0)
+
+[sub_resource type="Curve" id="Curve_x601s"]
+_limits = [-1.0, 1.0, 0.0, 1.0]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, -0.000660777), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Curve" id="Curve_ouukf"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
 
 [node name="HandsComponent" type="Node2D" groups=["has_save_logic"]]
 position = Vector2(0, -9)
@@ -20,6 +45,33 @@ texture = ExtResource("2_lwexw")
 visible = false
 position = Vector2(-7, 1)
 texture = ExtResource("2_lwexw")
+
+[node name="SmokeParticles" type="CPUParticles2D" parent="HandsAnchor"]
+material = SubResource("CanvasItemMaterial_aqhie")
+emitting = false
+amount = 22
+lifetime = 0.8
+local_coords = true
+texture = ExtResource("3_xaok7")
+emission_shape = 3
+emission_rect_extents = Vector2(4, 1)
+direction = Vector2(0, -1)
+spread = 25.0
+gravity = Vector2(0, -4)
+initial_velocity_min = 4.0
+initial_velocity_max = 9.0
+angle_min = -180.0
+angle_max = 180.0
+scale_amount_min = 0.2
+scale_amount_max = 0.5
+scale_amount_curve = SubResource("Curve_xaok7")
+color_ramp = SubResource("Gradient_aqhie")
+hue_variation_max = 0.04
+hue_variation_curve = SubResource("Curve_x601s")
+anim_speed_min = 1.0
+anim_speed_max = 1.0
+anim_offset_max = 1.0
+anim_offset_curve = SubResource("Curve_ouukf")
 
 [node name="OffHandSprite" type="Sprite2D" parent="."]
 position = Vector2(-7, 1)

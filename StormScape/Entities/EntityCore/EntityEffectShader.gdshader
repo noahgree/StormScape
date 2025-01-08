@@ -60,6 +60,6 @@ void fragment() {
         vec3 tinted_rgb = mix(tex_color.rgb, tint_color.rgb, tint_color.a);
 		COLOR = vec4(tinted_rgb, tex_color.a);
     }
-	
+
 	COLOR.a *= final_alpha;
 }

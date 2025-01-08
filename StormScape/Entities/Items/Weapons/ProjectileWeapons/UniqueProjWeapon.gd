@@ -1,9 +1,13 @@
+@tool
 extends ProjectileWeapon
 class_name UniqueProjWeapon
 ## A subclass of projectile weapon that adds extra logic for handling unique projectiles. These cannot hitscan.
 
 var returned: bool = true: ## Whether the unique projectile has come back yet. Gets reset when dropped, but any cooldowns are saved.
 	set(new_value):
+		if Engine.is_editor_hint():
+			return
+
 		if returned == false and new_value == true:
 			_add_cooldown()
 
@@ -16,6 +20,9 @@ var returned: bool = true: ## Whether the unique projectile has come back yet. G
 
 
 func _ready() -> void:
+	if Engine.is_editor_hint():
+		return
+
 	tree_exiting.connect(_on_tree_exiting)
 	if not returned:
 		sprite.hide()

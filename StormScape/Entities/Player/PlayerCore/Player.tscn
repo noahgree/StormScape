@@ -1410,6 +1410,12 @@ position = Vector2(0, -16)
 sprite_frames = ExtResource("5_vy6lk")
 animation = &"idle"
 
+[node name="StatusEffectManager" parent="YSorter" node_paths=PackedStringArray("effect_receiver", "stats_ui") instance=ExtResource("6_n0x5k")]
+unique_name_in_owner = true
+effect_receiver = NodePath("../../EffectReceiverComponent")
+stats_ui = NodePath("../../OverlayUI/PlayerStatsOverlay")
+print_effect_updates = true
+
 [node name="HandsComponent" parent="YSorter" node_paths=PackedStringArray("active_slot_info") instance=ExtResource("39_ngono")]
 active_slot_info = NodePath("../../OverlayUI/ActiveSlotInfo")
 
@@ -1460,11 +1466,6 @@ debug_color = Color(1, 0.294, 0.588, 0.06)
 [node name="TimeSnareHandler" parent="EffectReceiverComponent" instance=ExtResource("14_63vgk")]
 
 [node name="LifeStealHandler" parent="EffectReceiverComponent" instance=ExtResource("20_f770q")]
-
-[node name="StatusEffectManager" parent="." node_paths=PackedStringArray("effect_receiver", "stats_ui") instance=ExtResource("6_n0x5k")]
-effect_receiver = NodePath("../EffectReceiverComponent")
-stats_ui = NodePath("../OverlayUI/PlayerStatsOverlay")
-print_effect_updates = true
 
 [node name="MoveStateMachine" parent="." node_paths=PackedStringArray("entity", "anim_tree", "initial_state") instance=ExtResource("16_xoncr")]
 entity = NodePath("..")

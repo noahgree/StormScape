@@ -26,10 +26,6 @@ func _set_stats(new_stats: ItemResource) -> void:
 		stats.original_charge_status_effects = stats.charge_effect_source.status_effects.duplicate()
 		_setup_mod_cache()
 
-	if hitbox_component:
-		hitbox_component.effect_source = stats.effect_source
-		hitbox_component.collision_mask = hitbox_component.effect_source.scanned_phys_layers
-
 ## Sets up the base values for the stat mod cache so that weapon mods can be added and managed properly.
 func _setup_mod_cache() -> void:
 	var normal_moddable_stats: Dictionary[StringName, float] = {
@@ -119,6 +115,9 @@ func release_hold_activate(hold_time: float) -> void:
 ## Begins the logic for doing a normal weapon swing.
 func _swing() -> void:
 	if source_entity.stamina_component.use_stamina(stats.s_mods.get_stat("stamina_cost")):
+		hitbox_component.effect_source = stats.effect_source
+		hitbox_component.collision_mask = hitbox_component.effect_source.scanned_phys_layers
+
 		var cooldown_time: float = stats.cooldown + stats.s_mods.get_stat("use_speed")
 		source_entity.inv.auto_decrementer.add_cooldown(stats.get_cooldown_id(), cooldown_time)
 		is_swinging = true
@@ -140,6 +139,9 @@ func _swing() -> void:
 func _charge_swing(hold_time: float) -> void:
 	if not (hold_time >= stats.s_mods.get_stat("min_charge_time")):
 		return
+
+	hitbox_component.effect_source = stats.charge_effect_source
+	hitbox_component.collision_mask = hitbox_component.effect_source.scanned_phys_layers
 
 	if source_entity.stamina_component.use_stamina(stats.s_mods.get_stat("charge_stamina_cost")):
 		var cooldown_time: float = stats.s_mods.get_stat("charge_use_cooldown") + stats.s_mods.get_stat("charge_use_speed")

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bj4xowuewlfds"
-path="res://.godot/imported/simple_1.png-936cb6f12550a3934b69b83823ab1e07.ctex"
+uid="uid://3uh61et78avp"
+path="res://.godot/imported/overheat_smoke.png-d27c9e36f2558cd07ebffd4c5ca4a738.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Entities/Items/Weapons/WeaponVFX/Simple/simple_1.png"
-dest_files=["res://.godot/imported/simple_1.png-936cb6f12550a3934b69b83823ab1e07.ctex"]
+source_file="res://Entities/Items/Weapons/WeaponVFX/Particles/overheat_smoke.png"
+dest_files=["res://.godot/imported/overheat_smoke.png-d27c9e36f2558cd07ebffd4c5ca4a738.ctex"]
 
 [params]
 

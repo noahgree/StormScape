@@ -11,6 +11,7 @@ class_name HitscanResource
 @export var hitscan_effect_falloff: Curve = Curve.new() ## The falloff for the effects applied to the receiver of the hitscan.
 @export var bad_effects_falloff: bool = true ## Whether the bad effects of the effect source falloff.
 @export var good_effects_falloff: bool = false ## Whether the good effects of the effect source falloff.
+
 @export_group("Visual Override Options")
 @export var override_vfx_defaults: bool = false ## Whether to use these properties below or leave the defaults.
 @export_custom(PROPERTY_HINT_NONE, "suffix:pixels") var hitscan_max_width: float = 0.5 ## The max width the hitscan ray will be when affected by the width curve.

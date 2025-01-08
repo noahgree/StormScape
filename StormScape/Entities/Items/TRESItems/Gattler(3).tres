@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="ProjWeaponResource" load_steps=31 format=3 uid="uid://1q7rlned2r23"]
+[gd_resource type="Resource" script_class="ProjWeaponResource" load_steps=28 format=3 uid="uid://1q7rlned2r23"]
 
 [ext_resource type="Script" uid="uid://ct7n8wo1p3b20" path="res://Entities/Items/WeaponMods/WeaponMod.gd" id="1_3n4ne"]
 [ext_resource type="Script" uid="uid://dkfssottmsrch" path="res://Entities/Stats/EffectSystemResources/EffectSources/EffectSource.gd" id="1_lbh37"]
@@ -10,7 +10,7 @@
 [ext_resource type="PackedScene" uid="uid://c17oqm8amalvy" path="res://Entities/Items/Weapons/ProjectileWeapons/Gattler/Gattler.tscn" id="6_huwqf"]
 [ext_resource type="Script" uid="uid://bj3r5oopspj6l" path="res://Entities/Items/Projectiles/ProjectileResource.gd" id="8_evybt"]
 [ext_resource type="PackedScene" uid="uid://bqkyplubhsx43" path="res://Entities/Items/Projectiles/Bullets/SmallBullet/SmallBullet.tscn" id="9_pxe5r"]
-[ext_resource type="Texture2D" uid="uid://bj4xowuewlfds" path="res://Entities/Items/Weapons/WeaponVFX/Simple/simple_1.png" id="10_g5312"]
+[ext_resource type="Texture2D" uid="uid://bj4xowuewlfds" path="res://Entities/Items/Weapons/WeaponVFX/FiringVFX/Simple/simple_1.png" id="10_g5312"]
 [ext_resource type="Script" uid="uid://c2gdoebfp12dq" path="res://Entities/Stats/StatMod/StatModsCacheResource.gd" id="11_ojoph"]
 
 [sub_resource type="Curve" id="Curve_upocd"]
@@ -25,116 +25,6 @@ point_count = 3
 _limits = [0.0, 0.1, 0.0, 1.0]
 _data = [Vector2(0, 0.008), 0.0, 0.0, 0, 0, Vector2(0.504, 0.012), 0.0, 0.0, 0, 0, Vector2(1, 0.0324032), 0.0, 0.0, 0, 0]
 point_count = 3
-
-[sub_resource type="Resource" id="Resource_vriu0"]
-script = ExtResource("1_lbh37")
-source_type = 1
-source_tags = Array[String]([])
-scanned_phys_layers = 191
-can_hit_self = true
-bad_effect_affected_teams = 1
-good_effect_affected_teams = 2
-base_damage = 0
-dmg_affected_stats = 2
-crit_chance = 0
-crit_multiplier = 1.5
-armor_penetration = 0
-base_healing = 0
-heal_affected_stats = 2
-impact_sound = ""
-hit_flash_color = Color(1, 1, 1, 0.6)
-cam_shake_strength = 0.0
-cam_shake_duration = 0.0
-cam_shake_on_player_hit_only = false
-cam_shake_max_distance = 100
-cam_shake_does_falloff = true
-cam_freeze_multiplier = 1.0
-cam_freeze_duration = 0.0
-cam_freeze_on_player_hit_only = true
-cam_freeze_max_distance = 100
-cam_freeze_does_falloff = true
-status_effects = Array[ExtResource("3_gsntq")]([])
-contact_position = Vector2(0, 0)
-movement_direction = Vector2(0, 0)
-metadata/_custom_type_script = ExtResource("1_lbh37")
-
-[sub_resource type="Resource" id="Resource_lbh37"]
-script = ExtResource("5_ajwg5")
-hitscan_duration = 0.0
-hitscan_effect_interval = -1.0
-hitscan_pierce_count = 0
-hitscan_max_distance = 350
-bad_effects_falloff = true
-good_effects_falloff = false
-override_vfx_defaults = false
-hitscan_max_width = 0.5
-beam_color = Color(1, 0.0784314, 0.576471, 1)
-glow_amount = 1.0
-start_particle_color = Color(1, 0.752941, 0.796078, 1)
-start_particle_mult = 1.0
-impact_particle_color = Color(1, 0.752941, 0.796078, 1)
-impact_particle_mult = 1.0
-beam_particle_color = Color(1, 0, 0, 1)
-beam_particle_mult = 1.0
-metadata/_custom_type_script = ExtResource("5_ajwg5")
-
-[sub_resource type="Resource" id="Resource_g5312"]
-script = ExtResource("8_evybt")
-speed = 350
-initial_boost_time = 0.0
-initial_boost_mult = 2.0
-lifetime = 3.0
-max_distance = 500
-override_gun_height = false
-height_override = 6
-point_of_max_falloff = 500.0
-bad_effects_falloff = true
-good_effects_falloff = false
-max_pierce = 0
-max_ricochet = 0
-ricochet_angle_bounce = true
-ricochet_walls_only = false
-homing_method = "None"
-homing_speed_mult = 1.0
-max_turn_rate = 100.0
-homing_fov_angle = 180.0
-homing_max_range = 850
-homing_duration = -1.0
-homing_start_delay = 0.0
-can_change_target = false
-boomerang_home_radius = 5.0
-mouse_target_radius = 50.0
-spin_speed = 0.0
-spin_both_ways = false
-spin_direction = "Forward"
-do_y_axis_reflection = false
-move_in_rotated_dir = false
-shadow_matches_spin = false
-launch_angle = 0.0
-arc_travel_distance = 125
-arc_speed = 350.0
-max_collision_height = 20
-grounding_free_delay = 0.0
-bounce_count = 0
-ping_pong_bounce = false
-number_of_splits = 0
-split_into_counts = Array[int]([2])
-angular_spreads = Array[float]([45.0])
-split_delays = Array[float]([0.2])
-splitting_sounds = Array[String]([""])
-split_cam_shakes_str = Array[float]([0.5])
-split_cam_shakes_dur = Array[float]([0.0])
-aoe_radius = 0
-do_aoe_on_arc_land = true
-aoe_before_freeing = false
-bad_effects_aoe_falloff = true
-good_effects_aoe_falloff = false
-aoe_delay = 0.0
-aoe_effect_dur = 0.05
-aoe_effect_interval = 1.0
-aoe_effects_delay = 0.5
-aoe_sound = ""
-metadata/_custom_type_script = ExtResource("8_evybt")
 
 [sub_resource type="Resource" id="Resource_3vie0"]
 script = ExtResource("1_lbh37")
@@ -195,7 +85,7 @@ point_count = 2
 
 [sub_resource type="Curve" id="Curve_ajwg5"]
 _limits = [0.0, 0.1, 0.0, 1.0]
-_data = [Vector2(0, 0.013), 0.0, 0.0, 0, 0, Vector2(1, 0.017), 0.0, 0.0, 0, 0]
+_data = [Vector2(0, 0.014), 0.0, 0.0, 0, 0, Vector2(1, 0.017), 0.0, 0.0, 0, 0]
 point_count = 2
 
 [sub_resource type="Curve" id="Curve_lbh37"]
@@ -292,37 +182,27 @@ point_count = 2
 script = ExtResource("2_mpv0r")
 proj_weapon_type = 9
 firing_mode = "Auto"
+projectile_scn = ExtResource("9_pxe5r")
 use_hitscan = false
 allow_hitscan_holding = true
 fire_cooldown = 0.0
 firing_duration = 0.0
+min_charge_time = 1.0
 one_frame_per_fire = true
 override_anim_dur = 0.0
 anim_speed_mult = 1.0
+has_post_firing_anim = false
+post_firing_anim_dur = 0.5
 firing_cam_shake_str = 0.35
 firing_cam_shake_dur = 0.25
 firing_cam_freeze_mult = 1.0
 firing_cam_freeze_dur = 0.0
 muzzle_flash = ExtResource("10_g5312")
 firing_sound = ""
-min_charge_time = 1.0
-charge_fire_cooldown = 0.5
-charge_firing_duration = 0.1
-ammo_use_per_charge = 3
-charge_bloom_mult = 5.0
-charge_overheat_mult = 5.0
-one_frame_per_chg_fire = true
-override_chg_anim_dur = 0.0
-chg_anim_speed_mult = 1.0
-charge_cam_fx_mult = 1.0
-charge_firing_sound = ""
 charging_sound = ""
-projectile_scn = ExtResource("9_pxe5r")
 projectile_logic = SubResource("Resource_h0q16")
 hitscan_logic = SubResource("Resource_vt4jh")
-charge_projectile_scn = ExtResource("9_pxe5r")
-charge_projectile_logic = SubResource("Resource_g5312")
-charge_hitscan_logic = SubResource("Resource_lbh37")
+effect_source = SubResource("Resource_3vie0")
 ammo_type = 2
 mag_size = 100
 reload_type = "Magazine"
@@ -353,6 +233,7 @@ overheat_penalty = 5.0
 overheat_inc_rate = SubResource("Curve_ajwg5")
 overheat_dec_rate = SubResource("Curve_g5312")
 overheat_dec_delay = 0.75
+overheated_sound = ""
 projectiles_per_fire = 1
 use_ammo_per_burst_proj = true
 burst_bullet_delay = 0.1
@@ -362,8 +243,6 @@ barrage_count = 1
 angular_spread = 25.0
 ammo_in_mag = -1
 s_mods = SubResource("Resource_fe8se")
-effect_source = SubResource("Resource_3vie0")
-charge_effect_source = SubResource("Resource_vriu0")
 pullout_delay = 0.5
 blocked_mods = Array[String]([])
 cache_is_setup = false
@@ -397,8 +276,8 @@ rotation_lerping = 0.07
 holding_offset = Vector2(3, 3)
 holding_degrees = 0.0
 is_gripped_by_one_hand = false
-draw_off_hand = true
-draw_off_hand_offset = Vector2(11, -8)
+draw_off_hand = false
+draw_off_hand_offset = Vector2(0, 0)
 main_hand_offset = Vector2(0, 0)
 session_uid = 0
 metadata/_custom_type_script = ExtResource("2_mpv0r")

@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="ProjWeaponResource" load_steps=22 format=3 uid="uid://duc0xfejpfs1"]
+[gd_resource type="Resource" script_class="ProjWeaponResource" load_steps=19 format=3 uid="uid://duc0xfejpfs1"]
 
 [ext_resource type="Script" uid="uid://boo31eu083dqd" path="res://Entities/Stats/EffectSystemResources/StatusEffects/StatusEffect.gd" id="1_a6eqh"]
 [ext_resource type="Script" uid="uid://dkfssottmsrch" path="res://Entities/Stats/EffectSystemResources/EffectSources/EffectSource.gd" id="1_hh3cs"]
@@ -10,115 +10,8 @@
 [ext_resource type="PackedScene" uid="uid://bqkyplubhsx43" path="res://Entities/Items/Projectiles/Bullets/SmallBullet/SmallBullet.tscn" id="5_58e3c"]
 [ext_resource type="Script" uid="uid://ct7n8wo1p3b20" path="res://Entities/Items/WeaponMods/WeaponMod.gd" id="6_fdtox"]
 [ext_resource type="Script" uid="uid://ctxa7i1mbt7ab" path="res://UI/Inventory/PlayerInventory/Crafting/CraftingIngredient.gd" id="8_377c5"]
-[ext_resource type="Texture2D" uid="uid://bj4xowuewlfds" path="res://Entities/Items/Weapons/WeaponVFX/Simple/simple_1.png" id="9_0nyok"]
+[ext_resource type="Texture2D" uid="uid://bj4xowuewlfds" path="res://Entities/Items/Weapons/WeaponVFX/FiringVFX/Simple/simple_1.png" id="9_0nyok"]
 [ext_resource type="Script" uid="uid://c2gdoebfp12dq" path="res://Entities/Stats/StatMod/StatModsCacheResource.gd" id="10_v3ja1"]
-
-[sub_resource type="Resource" id="Resource_nq4po"]
-script = ExtResource("1_hh3cs")
-source_type = 1
-source_tags = Array[String]([])
-scanned_phys_layers = 191
-can_hit_self = true
-bad_effect_affected_teams = 1
-good_effect_affected_teams = 2
-base_damage = 0
-dmg_affected_stats = 2
-crit_chance = 0
-crit_multiplier = 1.5
-armor_penetration = 0
-base_healing = 0
-heal_affected_stats = 2
-impact_sound = ""
-hit_flash_color = Color(1, 1, 1, 0.6)
-cam_shake_strength = 0.0
-cam_shake_duration = 0.0
-cam_shake_on_player_hit_only = false
-cam_shake_max_distance = 100
-cam_shake_does_falloff = true
-cam_freeze_multiplier = 1.0
-cam_freeze_duration = 0.0
-cam_freeze_on_player_hit_only = true
-cam_freeze_max_distance = 100
-cam_freeze_does_falloff = true
-status_effects = Array[ExtResource("1_a6eqh")]([])
-contact_position = Vector2(0, 0)
-movement_direction = Vector2(0, 0)
-
-[sub_resource type="Resource" id="Resource_pld62"]
-script = ExtResource("3_f7syj")
-hitscan_duration = 0.0
-hitscan_effect_interval = -1.0
-hitscan_pierce_count = 0
-hitscan_max_distance = 350
-bad_effects_falloff = true
-good_effects_falloff = false
-override_vfx_defaults = false
-hitscan_max_width = 0.5
-beam_color = Color(1, 0.0784314, 0.576471, 1)
-glow_amount = 1.0
-start_particle_color = Color(1, 0.752941, 0.796078, 1)
-start_particle_mult = 1.0
-impact_particle_color = Color(1, 0.752941, 0.796078, 1)
-impact_particle_mult = 1.0
-beam_particle_color = Color(1, 0, 0, 1)
-beam_particle_mult = 1.0
-
-[sub_resource type="Resource" id="Resource_8i1b8"]
-script = ExtResource("4_w4cid")
-speed = 350
-initial_boost_time = 0.0
-initial_boost_mult = 2.0
-lifetime = 3.0
-max_distance = 500
-override_gun_height = false
-height_override = 6
-point_of_max_falloff = 500.0
-bad_effects_falloff = true
-good_effects_falloff = false
-max_pierce = 0
-max_ricochet = 0
-ricochet_angle_bounce = true
-ricochet_walls_only = false
-homing_method = "None"
-homing_speed_mult = 1.0
-max_turn_rate = 100.0
-homing_fov_angle = 180.0
-homing_max_range = 850
-homing_duration = -1.0
-homing_start_delay = 0.0
-can_change_target = false
-boomerang_home_radius = 5.0
-mouse_target_radius = 50.0
-spin_speed = 0.0
-spin_both_ways = false
-spin_direction = "Forward"
-do_y_axis_reflection = false
-move_in_rotated_dir = false
-shadow_matches_spin = false
-launch_angle = 0.0
-arc_travel_distance = 125
-arc_speed = 350.0
-max_collision_height = 20
-grounding_free_delay = 0.0
-bounce_count = 0
-ping_pong_bounce = false
-number_of_splits = 0
-split_into_counts = Array[int]([2])
-angular_spreads = Array[float]([45.0])
-split_delays = Array[float]([0.2])
-splitting_sounds = Array[String]([""])
-split_cam_shakes_str = Array[float]([1.0])
-split_cam_shakes_dur = Array[float]([0.2])
-aoe_radius = 0
-do_aoe_on_arc_land = true
-aoe_before_freeing = false
-bad_effects_aoe_falloff = true
-good_effects_aoe_falloff = false
-aoe_delay = 0.0
-aoe_effect_dur = 0.05
-aoe_effect_interval = 1.0
-aoe_effects_delay = 0.5
-aoe_sound = ""
 
 [sub_resource type="Resource" id="Resource_3mxcx"]
 script = ExtResource("1_hh3cs")
@@ -245,37 +138,27 @@ debug_print_mod_changes = false
 script = ExtResource("3_3lc2b")
 proj_weapon_type = 3
 firing_mode = "Semi Auto"
+projectile_scn = ExtResource("5_58e3c")
 use_hitscan = false
 allow_hitscan_holding = true
 fire_cooldown = 0.1
 firing_duration = 0.0
+min_charge_time = 1.0
 one_frame_per_fire = false
 override_anim_dur = 0.0
 anim_speed_mult = 1.0
+has_post_firing_anim = false
+post_firing_anim_dur = 0.5
 firing_cam_shake_str = 0.5
 firing_cam_shake_dur = 0.75
 firing_cam_freeze_mult = 1.0
 firing_cam_freeze_dur = 0.0
 muzzle_flash = ExtResource("9_0nyok")
 firing_sound = ""
-min_charge_time = 1.0
-charge_fire_cooldown = 0.5
-charge_firing_duration = 0.0
-ammo_use_per_charge = 3
-charge_bloom_mult = 5.0
-charge_overheat_mult = 5.0
-one_frame_per_chg_fire = false
-override_chg_anim_dur = 0.0
-chg_anim_speed_mult = 1.0
-charge_cam_fx_mult = 1.0
-charge_firing_sound = ""
 charging_sound = ""
-projectile_scn = ExtResource("5_58e3c")
 projectile_logic = SubResource("Resource_wluh4")
 hitscan_logic = SubResource("Resource_8lm83")
-charge_projectile_scn = ExtResource("5_58e3c")
-charge_projectile_logic = SubResource("Resource_8i1b8")
-charge_hitscan_logic = SubResource("Resource_pld62")
+effect_source = SubResource("Resource_3mxcx")
 ammo_type = 4
 mag_size = 1
 reload_type = "Magazine"
@@ -298,6 +181,7 @@ initial_fire_rate_delay = 0.0
 warmup_decrease_delay = 0.75
 overheat_penalty = 0.0
 overheat_dec_delay = 0.75
+overheated_sound = ""
 projectiles_per_fire = 1
 use_ammo_per_burst_proj = true
 burst_bullet_delay = 0.1
@@ -307,8 +191,6 @@ barrage_count = 1
 angular_spread = 25.0
 ammo_in_mag = -1
 s_mods = SubResource("Resource_pm717")
-effect_source = SubResource("Resource_3mxcx")
-charge_effect_source = SubResource("Resource_nq4po")
 pullout_delay = 0.5
 blocked_mods = Array[String]([])
 cache_is_setup = false
@@ -342,7 +224,7 @@ rotation_lerping = 0.1
 holding_offset = Vector2(5, 0)
 holding_degrees = 0.0
 is_gripped_by_one_hand = false
-draw_off_hand = true
-draw_off_hand_offset = Vector2(18, -1)
+draw_off_hand = false
+draw_off_hand_offset = Vector2(0, 0)
 main_hand_offset = Vector2(0, 0)
 session_uid = 0

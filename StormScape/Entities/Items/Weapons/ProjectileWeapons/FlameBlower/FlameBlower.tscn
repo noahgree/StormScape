@@ -1,9 +1,10 @@
-[gd_scene load_steps=16 format=3 uid="uid://dxv8dhn3gmufw"]
+[gd_scene load_steps=19 format=3 uid="uid://dxv8dhn3gmufw"]
 
 [ext_resource type="Script" uid="uid://ca8xdltgdyjys" path="res://Entities/Items/Weapons/ProjectileWeapons/ProjectileWeapon.gd" id="1_7mk4f"]
 [ext_resource type="Shader" uid="uid://cfbagv3hrtar2" path="res://Entities/EntityCore/EntityEffectShader.gdshader" id="2_8r6wi"]
 [ext_resource type="Texture2D" uid="uid://cs3clmnktksd6" path="res://Entities/Player/PlayerCore/player_hand.png" id="2_bk7kb"]
 [ext_resource type="Texture2D" uid="uid://bmt8xnj8le8cd" path="res://Entities/Items/Weapons/ProjectileWeapons/FlameBlower/flame_blower_base.png" id="2_coi1e"]
+[ext_resource type="PackedScene" uid="uid://bdi8o2g5plcnb" path="res://Entities/Items/Weapons/WeaponVFX/FiringVFX/Simple/SimpleFiringVFX.tscn" id="2_qpgmn"]
 [ext_resource type="PackedScene" uid="uid://batrfwan8r8ov" path="res://Entities/Items/WeaponMods/WeaponModManager.tscn" id="3_7a8dm"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_qv0hn"]
@@ -13,6 +14,7 @@ shader_parameter/glow_size = 4.5
 shader_parameter/glow_strength = 9.0
 shader_parameter/enable_fade = false
 shader_parameter/tint_color = Color(1, 1, 1, 0)
+shader_parameter/final_alpha = 1.0
 shader_parameter/frame_uv_min = null
 shader_parameter/frame_uv_max = null
 
@@ -51,6 +53,13 @@ animations = [{
 "name": &"default",
 "speed": 5.0
 }]
+
+[sub_resource type="Gradient" id="Gradient_qpgmn"]
+colors = PackedColorArray(1, 0.15, 0.219, 0.019, 0.995, 0, 0.145, 0.382)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_xc27p"]
+gradient = SubResource("Gradient_qpgmn")
+width = 15
 
 [sub_resource type="Animation" id="Animation_wj1f7"]
 length = 0.001
@@ -95,10 +104,22 @@ radius = 6.0
 [node name="FlameBlower" type="Node2D"]
 script = ExtResource("1_7mk4f")
 proj_origin = Vector2(19, 3)
+vfx_scene = ExtResource("2_qpgmn")
+particle_emission_extents = Vector2(6, 1)
+particle_emission_origin = Vector2(11, 2)
 
 [node name="ItemSprite" type="AnimatedSprite2D" parent="."]
+clip_children = 2
 material = SubResource("ShaderMaterial_qv0hn")
 sprite_frames = SubResource("SpriteFrames_8pr6a")
+
+[node name="OverheatOverlay" type="TextureRect" parent="ItemSprite"]
+self_modulate = Color(1, 1, 1, 0)
+offset_left = 4.0
+offset_top = 1.0
+offset_right = 19.0
+offset_bottom = 7.0
+texture = SubResource("GradientTexture1D_xc27p")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
@@ -107,6 +128,10 @@ libraries = {
 
 [node name="ProjectileOrigin" type="Marker2D" parent="."]
 position = Vector2(19, 3)
+
+[node name="OffHandSprite" type="Sprite2D" parent="."]
+position = Vector2(1, 7)
+texture = ExtResource("2_bk7kb")
 
 [node name="MainHandSprite" type="Sprite2D" parent="."]
 position = Vector2(-16, 3)
@@ -122,3 +147,8 @@ collision_mask = 241
 position = Vector2(4, 2)
 rotation = -1.5708
 shape = SubResource("CapsuleShape2D_0s14j")
+
+[node name="DebugEmissionBox" type="Polygon2D" parent="."]
+visible = false
+z_index = 5
+polygon = PackedVector2Array(5, 1, 17, 1, 17, 3, 5, 3)

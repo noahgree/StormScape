@@ -1,7 +1,8 @@
-[gd_scene load_steps=13 format=3 uid="uid://ohg1k8yu1y3r"]
+[gd_scene load_steps=14 format=3 uid="uid://ohg1k8yu1y3r"]
 
 [ext_resource type="Script" uid="uid://ca8xdltgdyjys" path="res://Entities/Items/Weapons/ProjectileWeapons/ProjectileWeapon.gd" id="1_ek4d5"]
 [ext_resource type="Texture2D" uid="uid://dcbsk1tsq047q" path="res://Entities/Items/Weapons/ProjectileWeapons/Revolver/revolver_base.png" id="1_mthhb"]
+[ext_resource type="PackedScene" uid="uid://bdi8o2g5plcnb" path="res://Entities/Items/Weapons/WeaponVFX/FiringVFX/Simple/SimpleFiringVFX.tscn" id="2_1bvjq"]
 [ext_resource type="Shader" uid="uid://cfbagv3hrtar2" path="res://Entities/EntityCore/EntityEffectShader.gdshader" id="2_gjcg2"]
 [ext_resource type="Texture2D" uid="uid://cs3clmnktksd6" path="res://Entities/Player/PlayerCore/player_hand.png" id="2_qrvtt"]
 [ext_resource type="PackedScene" uid="uid://batrfwan8r8ov" path="res://Entities/Items/WeaponMods/WeaponModManager.tscn" id="3_q5a14"]
@@ -13,6 +14,7 @@ shader_parameter/glow_size = 4.5
 shader_parameter/glow_strength = 9.0
 shader_parameter/enable_fade = false
 shader_parameter/tint_color = Color(1, 1, 1, 0)
+shader_parameter/final_alpha = 1.0
 shader_parameter/frame_uv_min = null
 shader_parameter/frame_uv_max = null
 
@@ -39,8 +41,8 @@ resource_name = "fire"
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_sen2k"]
 _data = {
-"charge_fire": SubResource("Animation_jbwub"),
-"fire": SubResource("Animation_iaeg5")
+&"charge_fire": SubResource("Animation_jbwub"),
+&"fire": SubResource("Animation_iaeg5")
 }
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_d15iv"]
@@ -50,6 +52,7 @@ height = 18.0
 [node name="Revolver" type="Node2D"]
 script = ExtResource("1_ek4d5")
 proj_origin = Vector2(10, -4)
+vfx_scene = ExtResource("2_1bvjq")
 
 [node name="ItemSprite" type="AnimatedSprite2D" parent="."]
 material = SubResource("ShaderMaterial_i1ire")
@@ -57,7 +60,7 @@ sprite_frames = SubResource("SpriteFrames_a2dle")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
-"": SubResource("AnimationLibrary_sen2k")
+&"": SubResource("AnimationLibrary_sen2k")
 }
 
 [node name="ProjectileOrigin" type="Marker2D" parent="."]
@@ -68,6 +71,7 @@ position = Vector2(-7, 2)
 texture = ExtResource("2_qrvtt")
 
 [node name="WeaponModManager" parent="." instance=ExtResource("3_q5a14")]
+print_effect_updates = true
 
 [node name="ClippingDetector" type="Area2D" parent="."]
 collision_layer = 0

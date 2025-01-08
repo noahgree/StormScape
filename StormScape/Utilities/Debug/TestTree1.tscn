@@ -23,6 +23,7 @@ shader_parameter/glow_size = 4.5
 shader_parameter/glow_strength = 9.0
 shader_parameter/enable_fade = false
 shader_parameter/tint_color = Color(1, 1, 1, 0)
+shader_parameter/final_alpha = 1.0
 shader_parameter/frame_uv_min = null
 shader_parameter/frame_uv_max = Vector2(0, 0)
 
@@ -96,4 +97,5 @@ hit_spawn_chance = 15.0
 require_dmg_on_hit = false
 
 [node name="StatusEffectManager" parent="." node_paths=PackedStringArray("effect_receiver") instance=ExtResource("7_7lx3c")]
+unique_name_in_owner = true
 effect_receiver = NodePath("../EffectReceiverComponent")

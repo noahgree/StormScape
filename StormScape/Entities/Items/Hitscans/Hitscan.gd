@@ -39,9 +39,8 @@ static func create(hitscan_scene: PackedScene, effect_src: EffectSource, source_
 
 	hitscan.is_charge_fire = was_charged
 
-	if was_charged and source_wpn.stats.charge_hitscan_logic != null:
-			hitscan.stats = source_wpn.stats.charge_hitscan_logic
-	if source_wpn.stats.allow_hitscan_holding: hitscan.holding_allowed = true
+	if source_wpn.stats.allow_hitscan_holding:
+		hitscan.holding_allowed = true
 
 	hitscan.source_item = source_wpn
 	return hitscan
@@ -69,7 +68,7 @@ func _ready() -> void:
 	effect_tick_timer.one_shot = true
 	lifetime_timer.timeout.connect(queue_free)
 	if not holding_allowed or is_charge_fire:
-		var dur_stat: float = s_mods.get_stat("hitscan_duration") if not is_charge_fire else s_mods.get_stat("charge_hitscan_duration")
+		var dur_stat: float = s_mods.get_stat("hitscan_duration")
 		lifetime_timer.start(max(0.05, dur_stat))
 	start_particles.emitting = true
 
@@ -135,7 +134,7 @@ func _find_target_receivers() -> void:
 		if child is Area2D:
 			exclusion_list.append(child.get_rid())
 
-	var remaining_pierces: int = int(s_mods.get_stat("hitscan_pierce_count")) if not is_charge_fire else int(s_mods.get_stat("charge_hitscan_pierce_count"))
+	var remaining_pierces: int = int(s_mods.get_stat("hitscan_pierce_count"))
 	var pierce_list: Dictionary[Node, Variant] = {}
 
 	while remaining_pierces >= 0:
@@ -201,11 +200,11 @@ func _find_target_receivers() -> void:
 
 				effect_tick_timer.stop()
 
-				var original_interval: float = s_mods.get_original_stat("hitscan_effect_interval") if not is_charge_fire else s_mods.get_original_stat("charge_hitscan_effect_interval")
+				var original_interval: float = s_mods.get_original_stat("hitscan_effect_interval")
 				if original_interval == -1:
 					effect_tick_timer.start(1000.0)
 				else:
-					var effect_time: float = s_mods.get_stat("hitscan_effect_interval") if not is_charge_fire else s_mods.get_stat("charge_hitscan_effect_interval")
+					var effect_time: float = s_mods.get_stat("hitscan_effect_interval")
 					effect_tick_timer.start(effect_time)
 
 	_update_impact_particles(pierce_list)
@@ -241,7 +240,13 @@ func _update_impact_particles(pierce_list: Dictionary) -> void:
 			add_child(particles)
 			particles.emitting = true
 
-	for node: Variant in impacted_nodes:
+			node.tree_exiting.connect(func() -> void:
+				var particles_node: CPUParticles2D = impacted_nodes.get(node)
+				if is_instance_valid(particles_node):
+					particles_node.queue_free()
+				impacted_nodes.erase(node))
+
+	for node: Variant in impacted_nodes.keys():
 		if not node in pierce_list.keys():
 			impacted_nodes[node].queue_free()
 			impacted_nodes.erase(node)
@@ -264,7 +269,7 @@ func _get_effect_source_adjusted_for_falloff(effect_src: EffectSource, contact_p
 
 	apply_to_bad = stats.bad_effects_falloff
 	apply_to_good = stats.good_effects_falloff
-	var max_distance_stat: float = s_mods.get_stat("hitscan_max_distance") if not is_charge_fire else s_mods.get_stat("charge_hitscan_max_distance")
+	var max_distance_stat: float = s_mods.get_stat("hitscan_max_distance")
 	var point_to_sample: float = float(global_position.distance_to(contact_point) / max_distance_stat)
 	var sampled_point: float = stats.hitscan_effect_falloff.sample_baked(point_to_sample)
 	falloff_mult = max(0.05, sampled_point)

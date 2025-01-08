@@ -10,7 +10,7 @@ class_name DynamicEntity
 
 @onready var sprite: Node2D = $YSorter/EntitySprite ## The visual representation of the entity. Needs to have the EntityEffectShader applied.
 @onready var effect_receiver: EffectReceiverComponent = get_node_or_null("EffectReceiverComponent") ## The component that handles incoming effect sources.
-@onready var effects: StatusEffectManager = get_node_or_null("StatusEffectManager") ## The node that will cache and manage all status effects for this entity.
+@onready var effects: StatusEffectManager = get_node_or_null("%StatusEffectManager") ## The node that will cache and manage all status effects for this entity.
 @onready var move_fsm: MoveStateMachine = $MoveStateMachine ## The FSM controlling the entity's movement.
 @onready var health_component: HealthComponent = $HealthComponent ## The component in charge of entity health and shield.
 @onready var stamina_component: StaminaComponent = get_node_or_null("StaminaComponent") ## The component in charge of entity stamina and hunger.

@@ -7,6 +7,8 @@ class_name EquippableItem
 
 @onready var sprite: Node2D = $ItemSprite ## The main sprite for the equippable item. Should have the entity effect shader attached.
 @onready var clipping_detector: Area2D = get_node_or_null("ClippingDetector") ## Used to detect when the item is overlapping with an in-game object that should block its use (i.e. a wall or tree).
+@onready var off_hand_sprite: Sprite2D = get_node_or_null("OffHandSprite")
+@onready var main_hand_sprite: Sprite2D = get_node_or_null("MainHandSprite")
 
 var stats_already_duplicated: bool = false ## Whether the stats have already been duplicated when they were first created in the slot.
 var source_slot: Slot ## The slot this equippable item is in whilst equipped.
@@ -55,9 +57,9 @@ func _on_item_starts_to_clip(body: Node2D) -> void:
 		enabled = false
 
 ## Enables the item when it stops clipping. Only applies to items with clipping detectors.
-func _on_item_leaves_clipping_body(_body: Node2D) -> void:
+func _on_item_leaves_clipping_body(body: Node2D) -> void:
 	var overlaps: Array[Node2D] = clipping_detector.get_overlapping_bodies()
-	if overlaps.is_empty() or (overlaps.size() == 1 and overlaps[0] == source_entity):
+	if (overlaps.is_empty() and body != source_entity) or (overlaps.size() == 1 and overlaps[0] == source_entity):
 		enabled = true
 
 ## Intended to be overridden by child classes in order to specify what to do when this item is disabled.

@@ -6,6 +6,7 @@ class_name StatMod
 @export var mod_id: StringName ## The id of the specific mod applied to some stat.
 @export_enum("+%", "-%", "+", "-", "*", "/", "=") var operation: String = "+%" ## The operation to apply the value. [b]+% adds the percentage[/b] of the base stat value. [b]-% subtracts the percentage[/b] of the base state value. [b]+ adds[/b] the value to the existing stat value. [b]- subtracts[/b] the value from the existing stat value. [b]* multiplies[/b] the value by the existing stat value. [b]/ divides[/b] the value by the existing stat value. [b]= sets the stat equal[/b] to the value (use [b]override_all[/b] to make this the only determinant of the stat).
 @export var value: float ## The value that will be applied according to the specified operation.
+@export_enum("Exact", "Round Up", "Round Down", "Round Closest") var rounding: String = "Exact" ## How to round the value after the operation.
 
 @export_group("More Options")
 @export_range(1, 5, 1) var priority: int = 1 ## The relative ordering in which it should be applied. 5 goes first.
@@ -16,35 +17,37 @@ var stack_count: int = 1 ## The current number of times this mod is applied (via
 var before_stack_value: float = 0 ## The original value before stacking got applied.
 
 
-func _init(sid: StringName = &"UntitledStat", mid: StringName = &"UntitledMod", op: String = "%", val: float = 1.0,
-			prio: int = 1, max_stack: int = 1, override: bool = false) -> void:
-	stat_id = sid
-	mod_id = mid
-	operation = op
-	value = val
-	priority = prio
-	max_stack_count = max_stack
-	before_stack_value = val
-	override_all = override
-
 func apply(base_stat_value: float, value_before_mod: float) -> float:
+	var new_value: float = value
 	match operation:
 		"+%":
-			return value_before_mod + (base_stat_value * (value / 100))
+			new_value = value_before_mod + (base_stat_value * (value / 100))
 		"-%":
-			return value_before_mod - (base_stat_value * (value / 100))
+			new_value = value_before_mod - (base_stat_value * (value / 100))
 		"+":
-			return value_before_mod + value
+			new_value = value_before_mod + value
 		"-":
-			return value_before_mod - value
+			new_value = value_before_mod - value
 		"*":
-			return value_before_mod * value
+			new_value = value_before_mod * value
 		"/":
 			if value != 0:
-				return value_before_mod / value
+				new_value = value_before_mod / value
 			else:
-				return value_before_mod
+				new_value = value_before_mod
 		"=":
-			return value
+			new_value = value
 		_:
-			return value_before_mod
+			new_value = value_before_mod
+
+	match rounding:
+		"Exact":
+			return new_value
+		"Round Up":
+			return ceilf(new_value)
+		"Round Down":
+			return floorf(new_value)
+		"Round Closest":
+			return roundf(new_value)
+		_:
+			return new_value

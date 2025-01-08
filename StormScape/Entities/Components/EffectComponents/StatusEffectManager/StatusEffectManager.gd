@@ -12,6 +12,7 @@ class_name StatusEffectManager
 
 var current_effects: Dictionary[String, StatusEffect] = {} ## Keys are general status effect titles like "Poison", and values are the effect resources themselves.
 var effect_timers: Dictionary[String, Timer] = {} ## Holds references to all timers currently tracking active status effects.
+var affected_entity: PhysicsBody2D
 
 
 #region Save & Load
@@ -27,7 +28,8 @@ func _on_before_load_game() -> void:
 
 ## Assert that this node has a connected effect receiver from which it can receive status effects.
 func _ready() -> void:
-	assert(effect_receiver != null, get_parent().name + " has a StatusEffectManager without a connected EffectReceiverComponent.")
+	affected_entity = effect_receiver.affected_entity
+	assert(effect_receiver != null, affected_entity.name + " has a StatusEffectManager without a connected EffectReceiverComponent.")
 
 ## Handles an incoming status effect. It starts by adding any stat mods provided by the status effect, and then
 ## it passes the effect logic to the relevant handler if it exists.
@@ -83,7 +85,7 @@ func _add_status_effect(status_effect: StatusEffect) -> void:
 	_start_effect_fx(status_effect)
 
 	for mod_resource: StatMod in status_effect.stat_mods:
-		get_parent().stats.add_mods([mod_resource] as Array[StatMod], stats_ui)
+		affected_entity.stats.add_mods([mod_resource] as Array[StatMod], stats_ui)
 
 ## Starts the status effects' associated visual FX like particles. Checks if the receiver has the matching handler node first.
 func _start_effect_fx(status_effect: StatusEffect) -> void:
@@ -94,13 +96,13 @@ func _start_effect_fx(status_effect: StatusEffect) -> void:
 	if not spawn_particles:
 		return
 	if status_effect.update_entity_glow and handler_check:
-		get_parent().sprite.update_floor_color(effect_name, false)
-		if get_parent() is DynamicEntity:
-			get_parent().sprite.update_glow_color(effect_name, false)
+		affected_entity.sprite.update_floor_color(effect_name, false)
+		if affected_entity is DynamicEntity:
+			affected_entity.sprite.update_glow_color(effect_name, false)
 
 	if particle_node != null:
-		var sprite_tex: Texture2D = SpriteHelpers.SpriteDetails.get_frame_texture(get_parent().sprite)
-		var scalar: Vector2 = get_parent().sprite.scale
+		var sprite_tex: Texture2D = SpriteHelpers.SpriteDetails.get_frame_texture(affected_entity.sprite)
+		var scalar: Vector2 = affected_entity.sprite.scale
 		var emission_shape: CPUParticles2D.EmissionShape = particle_node.get_emission_shape()
 
 		if emission_shape == CPUParticles2D.EmissionShape.EMISSION_SHAPE_SPHERE_SURFACE:
@@ -146,7 +148,7 @@ func _remove_status_effect(status_effect: StatusEffect) -> void:
 			print_rich("-------[color=red]Removed[/color][b] " + str(status_effect.effect_name) + " " + str(status_effect.effect_lvl) + "[/b]-------")
 
 	for mod_resource: StatMod in status_effect.stat_mods:
-		get_parent().stats.remove_mod(mod_resource.stat_id, mod_resource.mod_id, stats_ui)
+		affected_entity.stats.remove_mod(mod_resource.stat_id, mod_resource.mod_id, stats_ui)
 
 	if status_effect.effect_name in current_effects:
 		current_effects.erase(status_effect.effect_name)
@@ -170,9 +172,9 @@ func _stop_effect_fx(status_effect: StatusEffect) -> void:
 	if particle_node != null: particle_node.emitting = false
 
 	if status_effect.update_entity_glow:
-		if get_parent() is DynamicEntity:
-			get_parent().sprite.update_glow_color(effect_name, true)
-		get_parent().sprite.update_floor_color(effect_name, true)
+		if affected_entity is DynamicEntity:
+			affected_entity.sprite.update_glow_color(effect_name, true)
+		affected_entity.sprite.update_floor_color(effect_name, true)
 
 ## Returns if any effect (no matter the level) of the passed in name is active.
 func check_if_has_effect(effect_name: String) -> bool:

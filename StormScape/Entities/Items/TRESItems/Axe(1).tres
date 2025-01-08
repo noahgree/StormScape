@@ -11,15 +11,15 @@
 [ext_resource type="Script" uid="uid://ctxa7i1mbt7ab" path="res://UI/Inventory/PlayerInventory/Crafting/CraftingIngredient.gd" id="6_nkp1e"]
 [ext_resource type="Script" uid="uid://bcjwesiannbd0" path="res://Entities/Stats/StatMod/StatMod.gd" id="6_xvm3d"]
 
-[sub_resource type="Resource" id="Resource_quay2"]
+[sub_resource type="Resource" id="Resource_klx1g"]
 script = ExtResource("1_x4rfe")
 source_type = 5
 source_tags = Array[String](["chops_wood"])
 scanned_phys_layers = 191
-can_hit_self = true
+can_hit_self = false
 bad_effect_affected_teams = 1
 good_effect_affected_teams = 2
-base_damage = 50
+base_damage = 25
 dmg_affected_stats = 2
 crit_chance = 0
 crit_multiplier = 1.5
@@ -28,8 +28,8 @@ base_healing = 0
 heal_affected_stats = 2
 impact_sound = ""
 hit_flash_color = Color(1, 1, 1, 0.6)
-cam_shake_strength = 0.0
-cam_shake_duration = 0.0
+cam_shake_strength = 0.3
+cam_shake_duration = 0.25
 cam_shake_on_player_hit_only = false
 cam_shake_max_distance = 100
 cam_shake_does_falloff = true
@@ -41,8 +41,9 @@ cam_freeze_does_falloff = true
 status_effects = Array[ExtResource("2_kry0o")]([])
 contact_position = Vector2(0, 0)
 movement_direction = Vector2(0, 0)
+metadata/_custom_type_script = ExtResource("1_x4rfe")
 
-[sub_resource type="Resource" id="Resource_63o7k"]
+[sub_resource type="Resource" id="Resource_c7rci"]
 script = ExtResource("1_x4rfe")
 source_type = 5
 source_tags = Array[String](["chops_wood"])
@@ -52,15 +53,15 @@ bad_effect_affected_teams = 1
 good_effect_affected_teams = 2
 base_damage = 10
 dmg_affected_stats = 2
-crit_chance = 5
+crit_chance = 0
 crit_multiplier = 1.5
 armor_penetration = 0
 base_healing = 0
 heal_affected_stats = 2
 impact_sound = ""
 hit_flash_color = Color(1, 1, 1, 0.6)
-cam_shake_strength = 0.0
-cam_shake_duration = 0.0
+cam_shake_strength = 0.3
+cam_shake_duration = 0.25
 cam_shake_on_player_hit_only = false
 cam_shake_max_distance = 100
 cam_shake_does_falloff = true
@@ -72,6 +73,7 @@ cam_freeze_does_falloff = true
 status_effects = Array[ExtResource("2_kry0o")]([])
 contact_position = Vector2(0, 0)
 movement_direction = Vector2(0, 0)
+metadata/_custom_type_script = ExtResource("1_x4rfe")
 
 [sub_resource type="Resource" id="Resource_05bou"]
 script = ExtResource("5_wehu8")
@@ -99,12 +101,14 @@ debug_print_mod_changes = true
 [resource]
 script = ExtResource("1_0xu6s")
 melee_weapon_type = 0
+effect_source = SubResource("Resource_c7rci")
 stamina_cost = 3.0
 cooldown = 0.15
 use_speed = 0.25
 swing_angle = 125
 use_sound = ""
 can_do_charge_use = true
+charge_effect_source = SubResource("Resource_klx1g")
 min_charge_time = 2.0
 auto_do_charge_use = false
 charge_use_cooldown = 1.5
@@ -114,8 +118,6 @@ charge_stamina_cost = 25
 post_chg_use_effect = SubResource("Resource_05bou")
 charge_use_sound = ""
 s_mods = SubResource("Resource_ieaky")
-effect_source = SubResource("Resource_63o7k")
-charge_effect_source = SubResource("Resource_quay2")
 pullout_delay = 0.0
 blocked_mods = Array[String]([])
 cache_is_setup = false

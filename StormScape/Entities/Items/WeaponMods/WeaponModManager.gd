@@ -12,6 +12,10 @@ class_name WeaponModManager
 func handle_weapon_mod(weapon_mod: WeaponMod) -> void:
 	if weapon_mod.mod_name in weapon.stats.blocked_mods:
 		return
+	if weapon is MeleeWeapon and weapon.stats.melee_weapon_type not in weapon_mod.allowed_melee_wpns:
+		return
+	elif weapon is ProjectileWeapon and weapon.stats.proj_weapon_type not in weapon_mod.allowed_proj_wpns:
+		return
 
 	if weapon_mod.mod_name in weapon.stats.current_mods:
 		_remove_weapon_mod(weapon.stats.current_mods[weapon_mod.mod_name])
@@ -30,7 +34,8 @@ func _add_weapon_mod(weapon_mod: WeaponMod) -> void:
 		_update_effect_source_stats(mod_resource.stat_id)
 
 	_update_effect_source_status_effects(false, weapon_mod.status_effects)
-	_update_effect_source_status_effects(true, weapon_mod.charge_status_effects)
+	if weapon is MeleeWeapon:
+		_update_effect_source_status_effects(true, weapon_mod.charge_status_effects)
 
 	if DebugFlags.PrintFlags.weapon_mod_changes and print_effect_updates:
 		_debug_print_status_effect_lists()
@@ -42,7 +47,7 @@ func _add_weapon_mod(weapon_mod: WeaponMod) -> void:
 
 ## Removes the weapon mod from the dictionary after calling the on_removal method inside the mod itself.
 func _remove_weapon_mod(weapon_mod: WeaponMod) -> void:
-	if DebugFlags.PrintFlags.weapon_mod_changes and print_effect_updates:
+	if DebugFlags.PrintFlags.weapon_mod_changes and print_effect_updates and (weapon_mod.mod_name in weapon.stats.current_mods):
 		print_rich("-------[color=red]Removed[/color][b] " + str(weapon_mod.mod_name) + " " + str(weapon_mod.mod_lvl) + "[/b]-------")
 
 	for mod_resource: StatMod in weapon_mod.wpn_stat_mods:
@@ -53,7 +58,8 @@ func _remove_weapon_mod(weapon_mod: WeaponMod) -> void:
 		weapon.stats.current_mods.erase(weapon_mod.mod_name)
 
 	_remove_mod_status_effects_from_effect_source(false)
-	_remove_mod_status_effects_from_effect_source(true)
+	if weapon is MeleeWeapon:
+		_remove_mod_status_effects_from_effect_source(true)
 
 	if DebugFlags.PrintFlags.weapon_mod_changes and print_effect_updates:
 		_debug_print_status_effect_lists()
@@ -79,14 +85,17 @@ func _update_effect_source_stats(stat_id: StringName) -> void:
 			weapon.stats.effect_source.crit_chance = weapon.stats.s_mods.get_stat("crit_chance")
 		&"armor_penetration":
 			weapon.stats.effect_source.armor_penetration = weapon.stats.s_mods.get_stat("armor_penetration")
-		&"charge_base_damage":
-			weapon.stats.charge_effect_source.base_damage = weapon.stats.s_mods.get_stat("charge_base_damage")
-		&"charge_base_healing":
-			weapon.stats.charge_effect_source.base_healing = weapon.stats.s_mods.get_stat("charge_base_healing")
-		&"charge_crit_chance":
-			weapon.stats.charge_effect_source.crit_chance = weapon.stats.s_mods.get_stat("charge_crit_chance")
-		&"charge_armor_penetration":
-			weapon.stats.charge_effect_source.armor_penetration = weapon.stats.s_mods.get_stat("charge_armor_penetration")
+
+	if weapon is MeleeWeapon: # Projectile weapons don't have separate charge stats since they can only be one firing type
+		match(stat_id):
+			&"charge_base_damage":
+				weapon.stats.charge_effect_source.base_damage = weapon.stats.s_mods.get_stat("charge_base_damage")
+			&"charge_base_healing":
+				weapon.stats.charge_effect_source.base_healing = weapon.stats.s_mods.get_stat("charge_base_healing")
+			&"charge_crit_chance":
+				weapon.stats.charge_effect_source.crit_chance = weapon.stats.s_mods.get_stat("charge_crit_chance")
+			&"charge_armor_penetration":
+				weapon.stats.charge_effect_source.armor_penetration = weapon.stats.s_mods.get_stat("charge_armor_penetration")
 
 ## Updates the effect source status effect lists based on an incoming stat mod. Handles duplicates by keeping the highest level.
 func _update_effect_source_status_effects(for_charged: bool, new_effects: Array[StatusEffect]) -> void:
@@ -113,6 +122,7 @@ func _remove_mod_status_effects_from_effect_source(for_charged: bool) -> void:
 ## Formats the updated lists of status effects and prints them out.
 func _debug_print_status_effect_lists() -> void:
 	var is_normal_base: bool = true if weapon.stats.effect_source.status_effects == weapon.stats.original_status_effects else false
-	var is_normal_charge: bool = true if weapon.stats.charge_effect_source.status_effects == weapon.stats.original_charge_status_effects else false
 	print_rich("[color=cyan]Normal Effects[/color]" + ("[color=gray][i](base)[/i][/color]" if is_normal_base else "") + ": [b]"+ str(weapon.stats.effect_source.status_effects) + "[/b]")
-	print_rich("[color=cyan]Charge Effects[/color]" + ("[color=gray][i](base)[/i][/color]" if is_normal_charge else "") + ": [b]"+ str(weapon.stats.charge_effect_source.status_effects) + "[/b]")
+	if weapon is MeleeWeapon:
+		var is_normal_charge: bool = true if weapon.stats.charge_effect_source.status_effects == weapon.stats.original_charge_status_effects else false
+		print_rich("[color=cyan]Charge Effects[/color]" + ("[color=gray][i](base)[/i][/color]" if is_normal_charge else "") + ": [b]"+ str(weapon.stats.charge_effect_source.status_effects) + "[/b]")

@@ -1,5 +1,5 @@
 extends Sprite2D
-class_name WeaponVFX
+class_name WeaponFiringVFX
 
 @export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var lifetime: float = 0.02
 
