@@ -378,6 +378,7 @@ func _fire() -> void:
 	else:
 		_apply_ammo_consumption(int(stats.s_mods.get_stat("projectiles_per_fire")))
 	_apply_post_firing_effect()
+	_start_post_fire_anim()
 	_get_has_needed_ammo_and_reload_if_not()
 	_notify_recharge_of_a_recent_firing()
 
@@ -399,6 +400,7 @@ func _charge_fire(hold_time: float) -> void:
 		_set_up_hitscan()
 		_apply_burst_logic()
 		_apply_post_firing_effect()
+		_start_post_fire_anim()
 		_get_has_needed_ammo_and_reload_if_not()
 		_notify_recharge_of_a_recent_firing()
 
@@ -645,7 +647,7 @@ func _do_firing_fx() -> void:
 
 		add_child(vfx)
 
-## Start the firing animation based on what kind of firing we are doing.
+## Start the firing animation.
 func _start_firing_anim() -> void:
 	if anim_player.is_playing():
 		return
@@ -658,12 +660,28 @@ func _start_firing_anim() -> void:
 		anim_player.speed_scale = 1.0 / stats.override_anim_dur
 	else:
 		anim_player.speed_scale = 1.0 / max(0.03, (stats.firing_duration + hitscan_delay))
+
 	anim_player.speed_scale *= stats.anim_speed_mult
+
 	if anim_player.has_animation("fire"): anim_player.play("fire")
 
-func _start_post_firing_anim() -> void:
-	if anim_player.is_playing():
+## Start the post-firing animation if we have one.
+func _start_post_fire_anim() -> void:
+	if anim_player.is_playing() or not stats.has_post_fire_anim:
 		return
+
+	var adjusted_post_fire_anim_delay: float = max(0.05, stats.post_fire_anim_delay) if stats.post_fire_anim_delay > 0 else 0
+
+	if stats.post_fire_anim_dur > 0:
+		anim_player.speed_scale = 1.0 / (min(stats.fire_cooldown, stats.post_fire_anim_dur) - adjusted_post_fire_anim_delay)
+	else:
+		anim_player.speed_scale = 1.0 / (stats.fire_cooldown - adjusted_post_fire_anim_delay)
+
+	if adjusted_post_fire_anim_delay > 0 and anim_player.speed_scale > 0:
+		await get_tree().create_timer(adjusted_post_fire_anim_delay, false, false, false).timeout
+
+	if anim_player.speed_scale > 0:
+		anim_player.play("post_fire")
 
 ## Applies a status effect to the source entity after firing.
 func _apply_post_firing_effect() -> void:
@@ -742,26 +760,10 @@ func _attempt_reload() -> void:
 ## Searches through the source entity's inventory for more ammo to fill the magazine. Can optionally be used to only check for ammo
 ## when told not to take from the inventory when found.
 func _get_more_reload_ammo(max_amount_needed: int, take_from_inventory: bool = true) -> int:
-	var ammount_collected: int = 0
-	var inv_node: Inventory = source_entity.inv
-
 	if stats.ammo_type == ProjWeaponResource.ProjAmmoType.NONE:
-		ammount_collected = max_amount_needed
+		return max_amount_needed
 	else:
-		for i: int in range(inv_node.inv_size):
-			var item: InvItemResource = inv_node.inv[i]
-			if item != null and (item.stats is ProjAmmoResource) and (item.stats.ammo_type == stats.ammo_type):
-				var amount_in_slot: int = item.quantity
-				var amount_still_needed: int = max_amount_needed - ammount_collected
-				var amount_to_take_from_slot: int = min(amount_still_needed, amount_in_slot)
-				if take_from_inventory:
-					inv_node.remove_item(i, amount_to_take_from_slot)
-				ammount_collected += amount_to_take_from_slot
-
-				if ammount_collected == max_amount_needed:
-					break
-
-	return ammount_collected
+		return source_entity.inv.get_more_ammo(max_amount_needed, take_from_inventory, stats.ammo_type)
 
 ## When the main reload timer ends and we are in "Magazine" mode, reload the magazine.
 func _on_reload_timer_timeout() -> void:

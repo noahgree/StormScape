@@ -12,6 +12,7 @@ var blooms: Dictionary[StringName, Array] = {} ## Represents any active blooms w
 var overheats: Dictionary[StringName, Array] = {} ## Represents any active overheats where the key is an item's id and the value is an array with the following: [current_overheat_progress, decrease_rate_curve, overheat_delay_counter]
 var recharges: Dictionary[StringName, Array] = {} ## Represents any active recharges where the key is an item's id and the value is an array with the following: [current_recharge_progress, item_stats, recharge_delay_counter]
 var owning_entity_is_player: bool = false ## When true, the entity owning the inv this script operates on is a Player.
+var inv: Inventory ## The inventory that controls this auto decrementer.
 
 
 func process(delta: float) -> void:
@@ -171,7 +172,12 @@ func _update_recharges(delta: float) -> void:
 		if recharges[item_id][0] <= 0:
 			if is_instance_valid(current[1]):
 				var mag_size: int = current[1].s_mods.get_stat("mag_size")
-				current[1].ammo_in_mag = min(mag_size, current[1].ammo_in_mag + current[1].s_mods.get_stat("auto_ammo_count"))
+				var auto_ammo_count: int = int(current[1].s_mods.get_stat("auto_ammo_count"))
+				if current[1].recharge_uses_inv:
+					var ammo_needed: int = min(mag_size - current[1].ammo_in_mag, auto_ammo_count)
+					current[1].ammo_in_mag += inv.get_more_ammo(ammo_needed, true, current[1].ammo_type)
+				else:
+					current[1].ammo_in_mag = min(mag_size, current[1].ammo_in_mag + auto_ammo_count)
 				recharge_completed.emit(item_id)
 
 				if current[1].ammo_in_mag < mag_size:

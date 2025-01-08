@@ -18,19 +18,19 @@ enum ProjAmmoType { ## The types of projectile ammo.
 @export var use_hitscan: bool = false ## Whether to use hitscan firing and spawn the hitscan scene instead of the main projectile.
 @export var allow_hitscan_holding: bool = true ## Whether to keep the hitscan on and continue to consume ammo while the trigger is held.
 @export_group("Firing Details")
-@export_range(0, 30, 0.01, "hide_slider", "or_greater", "suffix:seconds") var fire_cooldown: float = 0.05 ## Time between fully auto projectile emmision. Also the minimum time that must elapse between clicks if set to semi-auto.
 @export_range(0, 10, 0.01, "hide_slider", "or_greater", "suffix:seconds") var firing_duration: float = 0.1 ## How long it takes to release the projectile after initiating the action. Determines the animation speed as well. Set to 0 by default.
+@export_range(0, 30, 0.01, "hide_slider", "or_greater", "suffix:seconds") var fire_cooldown: float = 0.05 ## Time between fully auto projectile emmision. Also the minimum time that must elapse between clicks if set to semi-auto.
 @export_range(0.1, 10, 0.01, "hide_slider", "or_greater", "suffix:seconds") var min_charge_time: float = 1 ## How long must the activation be held down before releasing the charge shot. [b]Only used when firing mode is set to "Charge"[/b].
-@export_subgroup("Firing Animation")
+@export_subgroup("Animation")
 @export var one_frame_per_fire: bool = false ## When true, the sprite frames will only advance one frame when firing normally.
 @export var override_anim_dur: float = 0 ## When greater than 0, the fire animation will run at this override time per loop.
 @export var anim_speed_mult: float = 1.0 ## Multiplies the speed scale of the firing animation.
-@export var has_post_firing_anim: bool = false ## When true, an animation will play for the specified duration of the cooldown after firing, unless a custom time is given below.
-@export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var post_firing_anim_dur: float = 0.5 ## The override time for how long the animation should be that plays after firing. Note that this is shared between regular and charge firing.
+@export var has_post_fire_anim: bool = false ## When true, an animation will play for the specified duration of the cooldown after firing, unless a custom time is given below.
+@export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var post_fire_anim_delay: float = 0 ## The delay after the firing duration ends before starting the post-fire animation if one exists.
+@export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var post_fire_anim_dur: float = 0 ## The override time for how long the animation should be that plays after firing. Anything greater than 0 activates this override.
 @export_subgroup("Entity Effects")
 @export var post_firing_effect: StatusEffect = null ## The status effect to apply to the source entity after firing.
 @export var charging_stat_effect: StatusEffect = null ## A status effect to apply to the entity while charging. Typically to slow them.
-@export var post_chg_shot_effect: StatusEffect = null ## The status effect to apply to the source entity after a charge shot.
 @export_subgroup("Firing FX")
 @export_range(0, 30, 0.01) var firing_cam_shake_str: float = 0.0 ## How strong the camera should shake when firing.
 @export_range(0, 2, 0.01) var firing_cam_shake_dur: float = 0.0 ## How long the camera shake when firing should take to decay.
@@ -57,7 +57,8 @@ enum ProjAmmoType { ## The types of projectile ammo.
 @export_subgroup("Recharging")
 @export var auto_ammo_interval: float = 0 ## How long it takes to recouperate a single ammo when given automatically. Most useful when using the "Charges" ammo type but can also be used to simply grant ammo over time. Anything above 0 activates this feature. Only works with consumable ammo types, meaning not "Self" or "Stamina".
 @export var auto_ammo_count: int = 1 ## How much ammo to grant after the interval is up.
-@export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var auto_ammo_delay: float = 0.5 ## How long after firing must we wait before the grant interval countdown starts.
+@export_range(0.05, 1000, 0.01, "suffix:seconds", "hide_slider", "or_greater") var auto_ammo_delay: float = 0.5 ## How long after firing must we wait before the grant interval countdown starts.
+@export var recharge_uses_inv: bool = false ## When true, the ammo will recharge by consuming ammo from the inventory. When none is left, the recharges will stop.
 @export_subgroup("UI")
 @export var hide_ammo_ui: bool = false ## When a player uses this, should the ammo UI be hidden.
 @export var hide_reload_ui: bool = false ## When a player uses this, should the reloading UI be hidden.

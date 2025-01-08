@@ -27,7 +27,9 @@ func _ready() -> void:
 	ui.connect_inventory(self)
 	call_deferred("fill_inventory", starting_inv)
 
-	if is_player_inv: auto_decrementer.owning_entity_is_player = true
+	if is_player_inv:
+		auto_decrementer.owning_entity_is_player = true
+	auto_decrementer.inv = self
 
 func _process(delta: float) -> void:
 	auto_decrementer.process(delta)
@@ -229,6 +231,27 @@ func _name_sort_logic(a: InvItemResource, b: InvItemResource) -> bool:
 		return a.quantity < b.quantity
 #endregion
 
+#region Projectile Weapon Helpers
+func get_more_ammo(max_amount_needed: int, take_from_inventory: bool, ammo_type: ProjWeaponResource.ProjAmmoType) -> int:
+	var ammount_collected: int = 0
+
+	for i: int in range(inv_size):
+		var item: InvItemResource = inv[i]
+		if item != null and (item.stats is ProjAmmoResource) and (item.stats.ammo_type == ammo_type):
+			var amount_in_slot: int = item.quantity
+			var amount_still_needed: int = max_amount_needed - ammount_collected
+			var amount_to_take_from_slot: int = min(amount_still_needed, amount_in_slot)
+			if take_from_inventory:
+				remove_item(i, amount_to_take_from_slot)
+			ammount_collected += amount_to_take_from_slot
+
+			if ammount_collected == max_amount_needed:
+				break
+
+	return ammount_collected
+#endregion
+
+#region Debug
 ## Custom method for printing the rich details of all inventory array spots.
 func print_inv(include_null_spots: bool = false) -> void:
 	var to_print: String = "[b]-----------------------------------------------------------------------------------------------------------------------------------[/b]\n"
@@ -241,3 +264,4 @@ func print_inv(include_null_spots: bool = false) -> void:
 	if to_print.ends_with("\n"): to_print = to_print.substr(0, to_print.length() - 1)
 	elif to_print.ends_with("|  "): to_print = to_print.substr(0, to_print.length() - 3)
 	print_rich(to_print + "\n[b]-----------------------------------------------------------------------------------------------------------------------------------[/b]")
+#endregion

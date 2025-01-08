@@ -53,7 +53,7 @@ resource_name = "charge_fire"
 step = 0.1
 
 [sub_resource type="Animation" id="Animation_5s4um"]
-resource_name = "fire"
+resource_name = "post_fire"
 step = 0.05
 tracks/0/type = "value"
 tracks/0/imported = false
@@ -72,7 +72,7 @@ tracks/0/keys = {
 _data = {
 &"RESET": SubResource("Animation_jdyr6"),
 &"charge_fire": SubResource("Animation_gckmc"),
-&"fire": SubResource("Animation_5s4um")
+&"post_fire": SubResource("Animation_5s4um")
 }
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_h2hct"]
@@ -105,6 +105,7 @@ position = Vector2(-3, 5)
 texture = ExtResource("4_hgilo")
 
 [node name="WeaponModManager" parent="." instance=ExtResource("5_kd7vu")]
+print_effect_updates = true
 
 [node name="ClippingDetector" type="Area2D" parent="."]
 collision_layer = 0

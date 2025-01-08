@@ -7,6 +7,7 @@ extends MoveState
 @export var _run_collision_impulse_factor: float = 1.0 ## A multiplier that controls how much impulse gets applied to rigid entites when colliding with them during the run state.
 
 const DEFAULT_RUN_ANIM_TIME_SCALE: float = 1.5 ## How fast the run anim should play before stat mods.
+const MAX_RUN_ANIM_TIME_SCALE: float = 4.0 ## How fast the run anim can play at most.
 var movement_vector: Vector2 = Vector2.ZERO ## The current movement vector for the entity.
 var is_sprint_audio_playing: bool = false ## Whether the character's sprint is producing sprint audio.
 var previous_pos: Vector2 ## The previous position of the entity as of the last frame.
@@ -84,7 +85,7 @@ func _do_sprinting(stats: StatModsCacheResource, delta: float) -> void:
 	var max_speed: float = stats.get_stat("max_speed")
 	var max_speed_change_factor: float = max_speed / stats.get_original_stat("max_speed")
 	var anim_speed_mult: float = sprint_mult * (max_speed_change_factor)
-	fsm.anim_tree.set("parameters/run/TimeScale/scale", DEFAULT_RUN_ANIM_TIME_SCALE * anim_speed_mult)
+	fsm.anim_tree.set("parameters/run/TimeScale/scale", min(MAX_RUN_ANIM_TIME_SCALE, DEFAULT_RUN_ANIM_TIME_SCALE * anim_speed_mult))
 
 	# Update entity velocity.
 	var acceleration: float = stats.get_stat("acceleration")
@@ -98,7 +99,7 @@ func _do_sprinting(stats: StatModsCacheResource, delta: float) -> void:
 
 ## Moves the entity with normal running movement based on the current stats.
 func _do_non_sprint_movement(stats: StatModsCacheResource, delta: float) -> void:
-	fsm.anim_tree.set("parameters/run/TimeScale/scale", DEFAULT_RUN_ANIM_TIME_SCALE * (stats.get_stat("max_speed") / stats.get_original_stat("max_speed")))
+	fsm.anim_tree.set("parameters/run/TimeScale/scale", min(MAX_RUN_ANIM_TIME_SCALE, DEFAULT_RUN_ANIM_TIME_SCALE * (stats.get_stat("max_speed") / stats.get_original_stat("max_speed"))))
 
 	dynamic_entity.velocity += (movement_vector * stats.get_stat("acceleration") * delta)
 	dynamic_entity.velocity = dynamic_entity.velocity.limit_length(stats.get_stat("max_speed"))
