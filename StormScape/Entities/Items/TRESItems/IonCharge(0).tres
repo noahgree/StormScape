@@ -1,0 +1,40 @@
+[gd_resource type="Resource" script_class="ProjAmmoResource" load_steps=5 format=3 uid="uid://c5jim46mul7ex"]
+
+[ext_resource type="Texture2D" uid="uid://d2xxsglbagj2x" path="res://Entities/Items/Ammo/IonCharge/ion_charge_thumb.png" id="1_2kknk"]
+[ext_resource type="Texture2D" uid="uid://egdmabwj4ceh" path="res://Entities/Items/Ammo/IonCharge/ion_charge.png" id="2_7ctb4"]
+[ext_resource type="Script" uid="uid://bpc1cwr4a6lgo" path="res://Entities/Items/Ammo/ProjAmmoResource.gd" id="3_h00y8"]
+[ext_resource type="Script" uid="uid://ctxa7i1mbt7ab" path="res://UI/Inventory/PlayerInventory/Crafting/CraftingIngredient.gd" id="4_wobl8"]
+
+[resource]
+script = ExtResource("3_h00y8")
+ammo_type = 8
+id = "ion_charge"
+name = "Ion Charge"
+tags = Array[StringName]([])
+inv_icon_rotation = 0.0
+inv_icon_offset = Vector2(0, 0)
+inv_icon_scale = Vector2(1, 1)
+inv_icon = ExtResource("2_7ctb4")
+ground_icon = ExtResource("1_2kknk")
+in_hand_icon = ExtResource("1_2kknk")
+item_type = 2
+rarity = 0
+weight = 0
+stack_size = 100
+auto_pickup = true
+pickup_radius = 4
+info = "Like a battery, but better. Specially designed to power electric weapons."
+recipe = Array[ExtResource("4_wobl8")]([])
+output_quantity = 1
+recipe_unlocked = false
+cooldowns_per_suid = true
+show_cooldown_fill = false
+rotation_lerping = 0.1
+holding_offset = Vector2(0, 0)
+holding_degrees = 0.0
+is_gripped_by_one_hand = true
+draw_off_hand = false
+draw_off_hand_offset = Vector2(0, 0)
+main_hand_offset = Vector2(0, 0)
+session_uid = 0
+metadata/_custom_type_script = ExtResource("3_h00y8")

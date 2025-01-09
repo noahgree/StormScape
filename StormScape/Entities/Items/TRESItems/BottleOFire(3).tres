@@ -44,6 +44,7 @@ cam_freeze_does_falloff = true
 status_effects = Array[ExtResource("1_fshhe")]([])
 contact_position = Vector2(0, 0)
 movement_direction = Vector2(0, 0)
+multishot_id = -1
 
 [sub_resource type="Resource" id="Resource_t7dv8"]
 script = ExtResource("1_kxj7m")
@@ -98,6 +99,7 @@ cam_freeze_does_falloff = true
 status_effects = Array[ExtResource("1_fshhe")]([ExtResource("8_ngyy3")])
 contact_position = Vector2(0, 0)
 movement_direction = Vector2(0, 0)
+multishot_id = -1
 
 [sub_resource type="Curve" id="Curve_hfy8v"]
 _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
@@ -263,7 +265,7 @@ output_quantity = 1
 recipe_unlocked = false
 item_scene = ExtResource("3_yykgi")
 cooldowns_per_suid = false
-show_cooldown_fill = true
+shown_cooldown_fills = Array[String](["default"])
 rotation_lerping = 0.1
 holding_offset = Vector2(0, 0)
 holding_degrees = 0.0

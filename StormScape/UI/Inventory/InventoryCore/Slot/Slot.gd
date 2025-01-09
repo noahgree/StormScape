@@ -25,7 +25,7 @@ var item: InvItemResource: set = _set_item ## The current inventory item represe
 var is_hotbar_ui_preview_slot: bool = false ## Whether this slot is an inventory hotbar preview slot for the player's screen.
 var is_trash_slot: bool = false ## The slot, that if present, is used to discard items. It will have the highest index.
 var tint_tween: Tween = null ## The tween animating the tint progress.
-var tint_progress: float = 100.0: ## How much of the tint should be filled upwards. Runs from 0 - 100
+var tint_progress: float = 100.0: ## How much of the tint should be filled upwards. Runs from 0 - 100.
 	set(new_value):
 		tint_progress = new_value
 		back_color.material.set_shader_parameter("progress", new_value)
@@ -93,8 +93,10 @@ func _on_visibility_changed() -> void:
 ## Updates the upwards fill tinting that represents an item on cooldown.
 func update_tint_progress(duration: float) -> void:
 	if duration > 0:
-		if not item.stats.show_cooldown_fill:
+		var cooldown_source: String = GlobalData.player_node.inv.auto_decrementer.get_cooldown_source_title(item.stats.get_cooldown_id())
+		if cooldown_source not in item.stats.shown_cooldown_fills:
 			return
+
 		if tint_tween: tint_tween.kill()
 		tint_progress = (1 - (duration / GlobalData.player_node.inv.auto_decrementer.get_original_cooldown(item.stats.get_cooldown_id()))) * 100
 		if not GlobalData.focused_ui_is_open:

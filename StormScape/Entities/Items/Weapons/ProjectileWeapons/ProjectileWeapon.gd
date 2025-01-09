@@ -160,7 +160,7 @@ func disable() -> void:
 
 func enable() -> void:
 	if overhead_ui:
-		if source_entity.inv.auto_decrementer.get_cooldown_source_title(str(stats.session_uid)) == "overheat_penalty":
+		if source_entity.inv.auto_decrementer.get_cooldown_source_title(stats.get_cooldown_id()) == "overheat_penalty":
 			_do_weapon_overheat_visuals()
 
 func enter() -> void:
@@ -181,7 +181,7 @@ func enter() -> void:
 
 	# Updating the overheating visuals and overlays if needed
 	if overhead_ui:
-		if source_entity.inv.auto_decrementer.get_cooldown_source_title(str(stats.session_uid)) == "overheat_penalty":
+		if source_entity.inv.auto_decrementer.get_cooldown_source_title(stats.get_cooldown_id()) == "overheat_penalty":
 			overhead_ui.update_visuals_for_max_overheat()
 			overhead_ui.overheat_bar.show()
 			overheat_overlay.self_modulate.a = source_entity.inv.auto_decrementer.get_overheat(str(stats.session_uid))
@@ -246,7 +246,7 @@ func _process(_delta: float) -> void:
 
 	var current_overheat: float = source_entity.inv.auto_decrementer.get_overheat(str(stats.session_uid))
 	if current_overheat > 0:
-		if source_entity.inv.auto_decrementer.get_cooldown_source_title(str(stats.session_uid)) != "overheat_penalty":
+		if source_entity.inv.auto_decrementer.get_cooldown_source_title(stats.get_cooldown_id()) != "overheat_penalty":
 			overhead_ui.update_overheat_progress(int(current_overheat * 100.0))
 			if not is_tweening_overheat_overlay:
 				overheat_overlay.self_modulate.a = current_overheat / 2.0
@@ -379,6 +379,7 @@ func _fire() -> void:
 		_apply_ammo_consumption(int(stats.s_mods.get_stat("projectiles_per_fire")))
 	_apply_post_firing_effect()
 	_start_post_fire_anim()
+	_start_post_fire_fx()
 	_get_has_needed_ammo_and_reload_if_not()
 	_notify_recharge_of_a_recent_firing()
 
@@ -401,6 +402,7 @@ func _charge_fire(hold_time: float) -> void:
 		_apply_burst_logic()
 		_apply_post_firing_effect()
 		_start_post_fire_anim()
+		_start_post_fire_fx()
 		_get_has_needed_ammo_and_reload_if_not()
 		_notify_recharge_of_a_recent_firing()
 
@@ -490,6 +492,7 @@ func _apply_barrage_logic() -> void:
 	var close_to_360_adjustment: int = 0 if stats.s_mods.get_stat("angular_spread") > 310 else 1
 	var spread_segment_width: float = angular_spread_radians / (stats.s_mods.get_stat("barrage_count") - close_to_360_adjustment)
 	var start_rotation: float = global_rotation - (angular_spread_radians / 2.0)
+	var multishot_id: int = UIDHelper.generate_multishot_uid()
 
 	for i: int in range(stats.barrage_count):
 		if not stats.use_hitscan:
@@ -497,6 +500,7 @@ func _apply_barrage_logic() -> void:
 			var proj: Projectile = Projectile.create(stats, source_entity, proj_origin_node.global_position, global_rotation)
 			proj.rotation = rotation_adjustment if stats.s_mods.get_stat("barrage_count") > 1 else proj.rotation
 			proj.starting_proj_height = -(source_entity.hands.position.y + proj_origin.y + source_entity.hands.main_hand.position.y) / 2
+			proj.multishot_id = multishot_id
 
 			if stats.projectile_logic.homing_method == "Mouse Position":
 				mouse_scan_area_targets.clear()
@@ -577,7 +581,7 @@ func _get_bloom() -> float:
 		return 0
 
 ## Adds a cooldown to the auto decrementer for the current cooldown id.
-func _handle_adding_cooldown(duration: float, title: String = "Default") -> void:
+func _handle_adding_cooldown(duration: float, title: String = "default") -> void:
 	source_entity.inv.auto_decrementer.add_cooldown(stats.get_cooldown_id(), duration, title)
 
 ## Gets a current cooldown level from the auto decrementer based on the cooldown id.
@@ -623,7 +627,7 @@ func _on_overheat_emptied(item_id: StringName) -> void:
 	if item_id != str(stats.session_uid):
 		return
 
-	if source_entity.inv.auto_decrementer.get_cooldown_source_title(str(stats.session_uid)) != "overheat_penalty":
+	if source_entity.inv.auto_decrementer.get_cooldown_source_title(stats.get_cooldown_id()) != "overheat_penalty":
 		overhead_ui.overheat_bar.hide()
 #endregion
 
@@ -655,7 +659,7 @@ func _start_firing_anim() -> void:
 	if stats.one_frame_per_fire:
 		# If using one frame per fire, we know it is an animated sprite
 		sprite.frame = ((sprite as AnimatedSprite2D).frame + 1) % (sprite as AnimatedSprite2D).sprite_frames.get_frame_count(sprite.animation)
-		return
+
 	if stats.override_anim_dur > 0:
 		anim_player.speed_scale = 1.0 / stats.override_anim_dur
 	else:
@@ -665,23 +669,35 @@ func _start_firing_anim() -> void:
 
 	if anim_player.has_animation("fire"): anim_player.play("fire")
 
-## Start the post-firing animation if we have one.
+## Starts the post-firing animation if we have one.
 func _start_post_fire_anim() -> void:
-	if anim_player.is_playing() or not stats.has_post_fire_anim:
+	if not stats.has_post_fire_anim:
 		return
+	elif anim_player.is_playing():
+		await anim_player.animation_finished
 
 	var adjusted_post_fire_anim_delay: float = max(0.05, stats.post_fire_anim_delay) if stats.post_fire_anim_delay > 0 else 0
+	var available_time: float = max(0.03, stats.fire_cooldown - adjusted_post_fire_anim_delay)
+	var anim_duration: float = stats.post_fire_anim_dur if stats.post_fire_anim_dur > 0 else available_time
 
-	if stats.post_fire_anim_dur > 0:
-		anim_player.speed_scale = 1.0 / (min(stats.fire_cooldown, stats.post_fire_anim_dur) - adjusted_post_fire_anim_delay)
-	else:
-		anim_player.speed_scale = 1.0 / (stats.fire_cooldown - adjusted_post_fire_anim_delay)
+	anim_duration = min(anim_duration, available_time)
+	anim_player.speed_scale = 1.0 / anim_duration
 
-	if adjusted_post_fire_anim_delay > 0 and anim_player.speed_scale > 0:
-		await get_tree().create_timer(adjusted_post_fire_anim_delay, false, false, false).timeout
+	if adjusted_post_fire_anim_delay > 0:
+		await get_tree().create_timer(adjusted_post_fire_anim_delay).timeout
 
-	if anim_player.speed_scale > 0:
-		anim_player.play("post_fire")
+	anim_player.play("post_fire")
+
+## Starts the post-firing sound if we have one.
+func _start_post_fire_fx() -> void:
+	if stats.post_fire_sound == "":
+		return
+
+	var adjusted_post_fire_sound_delay: float = min(stats.fire_cooldown - 0.05, stats.post_fire_sound_delay) if stats.post_fire_sound_delay > 0 else 0
+	if adjusted_post_fire_sound_delay > 0.05:
+		await get_tree().create_timer(adjusted_post_fire_sound_delay).timeout
+
+	AudioManager.play_sound(stats.post_fire_sound, AudioManager.SoundType.SFX_2D, global_position)
 
 ## Applies a status effect to the source entity after firing.
 func _apply_post_firing_effect() -> void:

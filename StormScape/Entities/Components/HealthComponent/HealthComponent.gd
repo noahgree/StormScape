@@ -19,6 +19,7 @@ var shield: int: set = _set_shield ## The current shield of the entity.
 var armor: int = 0: set = _set_armor ## The current armor of the entity. This is the percent of dmg that is blocked.
 var is_dying: bool = false ## Whether the entity is actively dying or not.
 var popups: Dictionary[String, EffectPopup] = {} ## The current effect popup displays that are active and can be added to.
+var current_sounds: Dictionary[StringName, Array] = {}
 const MAX_ARMOR: int = 100 ## The maximum amount of armor the entity can have.
 
 
@@ -40,15 +41,15 @@ func _emit_initial_values() -> void:
 
 #region Utils: Taking Damage
 ## Takes damage to both health and shield, starting with available shield then applying any remaining amount to health.
-func damage_shield_then_health(amount: int, source_type: String, was_crit: bool) -> void:
+func damage_shield_then_health(amount: int, source_type: String, was_crit: bool, multishot_id: int) -> void:
 	if amount > 0 and not is_dying:
 		if shield > 0:
 			var src_type: String = source_type if source_type != "BasicDamage" else "ShieldDamage"
-			_create_or_update_popup_for_src_type(src_type, false, was_crit, amount)
-			_play_shield_damage_sound()
-		else:
+			_create_or_update_popup_for_src_type(src_type, false, was_crit, min(shield, amount))
+			_play_sound("PlayerShieldDamage", multishot_id)
+		if amount - shield > 0:
 			var src_type: String = source_type if source_type != "BasicDamage" else "HealthDamage"
-			_create_or_update_popup_for_src_type(src_type, false, was_crit, amount)
+			_create_or_update_popup_for_src_type(src_type, false, was_crit, (amount - shield))
 
 	if infinte_hp:
 		return
@@ -61,7 +62,7 @@ func damage_shield_then_health(amount: int, source_type: String, was_crit: bool)
 	_check_for_death()
 
 ## Decrements only the health value by the passed in amount.
-func damage_health(amount: int, source_type: String, was_crit: bool) -> void:
+func damage_health(amount: int, source_type: String, was_crit: bool, _multishot_id: int) -> void:
 	if not is_dying:
 		if not infinte_hp:
 			health = max(0, health - amount)
@@ -70,13 +71,13 @@ func damage_health(amount: int, source_type: String, was_crit: bool) -> void:
 		_check_for_death()
 
 ## Decrements only the shield value by the passed in amount.
-func damage_shield(amount: int, source_type: String, was_crit: bool) -> void:
+func damage_shield(amount: int, source_type: String, was_crit: bool, multishot_id: int) -> void:
 	if not is_dying:
 		if not infinte_hp:
 			shield = max(0, shield - amount)
 		var src_type: String = source_type if source_type != "BasicDamage" else "ShieldDamage"
 		_create_or_update_popup_for_src_type(src_type, false, was_crit, amount)
-		if amount > 0: _play_shield_damage_sound()
+		if amount > 0: _play_sound("PlayerShieldDamage", multishot_id)
 
 ## Handles what happens when health reaches 0 for the entity.
 func _check_for_death() -> void:
@@ -99,7 +100,7 @@ func set_armor(new_armor: int) -> void:
 
 #region Utils: Applying Healing
 ## Heals to both health and shield, starting with health then applying any remaining amount to shield.
-func heal_health_then_shield(amount: int, source_type: String) -> void:
+func heal_health_then_shield(amount: int, source_type: String, _multishot_id: int) -> void:
 	if not is_dying:
 		if health < entity.stats.get_stat("max_health"):
 			var src_type: String = source_type if source_type != "BasicHealing" else "HealthHealing"
@@ -115,14 +116,14 @@ func heal_health_then_shield(amount: int, source_type: String) -> void:
 			@warning_ignore("narrowing_conversion") shield = clampi(shield + spillover_health, 0, entity.stats.get_stat("max_shield"))
 
 ## Heals only health.
-func heal_health(amount: int, source_type: String) -> void:
+func heal_health(amount: int, source_type: String, _multishot_id: int) -> void:
 	if not is_dying:
 		health = min(health + amount, entity.stats.get_stat("max_health"))
 		var src_type: String = source_type if source_type != "BasicHealing" else "HealthHealing"
 		_create_or_update_popup_for_src_type(src_type, true, false, amount)
 
 ## Heals only shield.
-func heal_shield(amount: int, source_type: String) -> void:
+func heal_shield(amount: int, source_type: String, _multishot_id: int) -> void:
 	if not is_dying:
 		shield = min(shield + amount, entity.stats.get_stat("max_shield"))
 		var src_type: String = source_type if source_type != "BasicHealing" else "ShieldHealing"
@@ -154,8 +155,31 @@ func on_max_health_changed(new_max_health: int) -> void:
 func on_max_shield_changed(new_max_shield: int) -> void:
 	shield = min(shield, new_max_shield)
 
-func _play_shield_damage_sound() -> void:
-	AudioManager.play_sound("PlayerShieldDamage", AudioManager.SoundType.SFX_2D, entity.global_position)
+## Handles playing sounds for this class and respects the fact that multishots should all share a sound.
+func _play_sound(sound_name: String, multishot_id: int) -> void:
+	var string_name_sound_name: StringName = StringName(sound_name)
+
+	if multishot_id != -1:
+		if (string_name_sound_name in current_sounds.keys()) and (multishot_id in current_sounds[string_name_sound_name]):
+			return
+
+		var player: Variant = AudioManager.play_and_get_sound(sound_name, AudioManager.SoundType.SFX_2D, GlobalData.world_root, 0, entity.global_position)
+		if player != null:
+			if string_name_sound_name in current_sounds.keys():
+				current_sounds[string_name_sound_name].append(multishot_id)
+			else:
+				current_sounds[string_name_sound_name] = [multishot_id]
+
+			var callable: Callable = Callable(func() -> void:
+				current_sounds[string_name_sound_name].erase(multishot_id)
+				if current_sounds[string_name_sound_name].is_empty():
+					current_sounds.erase(string_name_sound_name)
+				)
+			var finish_callables: Variant = player.get_meta("finish_callables")
+			finish_callables.append(callable)
+			player.set_meta("finish_callables", finish_callables)
+	else:
+		AudioManager.play_sound(sound_name, AudioManager.SoundType.SFX_2D, entity.global_position)
 #endregion
 
 #region Popups

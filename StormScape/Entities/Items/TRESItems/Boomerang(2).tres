@@ -42,6 +42,7 @@ cam_freeze_does_falloff = true
 status_effects = Array[ExtResource("2_8ufau")]([])
 contact_position = Vector2(0, 0)
 movement_direction = Vector2(0, 0)
+multishot_id = -1
 
 [sub_resource type="Resource" id="Resource_ot56n"]
 script = ExtResource("3_46awu")
@@ -146,7 +147,7 @@ firing_mode = "Semi Auto"
 projectile_scn = ExtResource("5_23285")
 use_hitscan = false
 allow_hitscan_holding = true
-firing_duration = 0.08
+firing_duration = 0.15
 fire_cooldown = 1.0
 min_charge_time = 1.0
 one_frame_per_fire = false
@@ -225,7 +226,7 @@ output_quantity = 1
 recipe_unlocked = false
 item_scene = ExtResource("7_fxomq")
 cooldowns_per_suid = true
-show_cooldown_fill = true
+shown_cooldown_fills = Array[String](["default"])
 rotation_lerping = 0.08
 holding_offset = Vector2(0, -6)
 holding_degrees = 0.0

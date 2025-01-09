@@ -38,6 +38,7 @@ cam_freeze_does_falloff = true
 status_effects = Array[ExtResource("2_kdgs1")]([])
 contact_position = Vector2(0, 0)
 movement_direction = Vector2(0, 0)
+multishot_id = -1
 
 [resource]
 script = ExtResource("1_jepoi")

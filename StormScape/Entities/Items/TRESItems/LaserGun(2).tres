@@ -3,11 +3,11 @@
 [ext_resource type="Script" uid="uid://boo31eu083dqd" path="res://Entities/Stats/EffectSystemResources/StatusEffects/StatusEffect.gd" id="2_gdqw7"]
 [ext_resource type="Script" uid="uid://dkfssottmsrch" path="res://Entities/Stats/EffectSystemResources/EffectSources/EffectSource.gd" id="2_v1b1g"]
 [ext_resource type="PackedScene" uid="uid://c3e5wour08d6u" path="res://Entities/Items/Hitscans/LaserBeam.tscn" id="3_ujvf8"]
+[ext_resource type="Texture2D" uid="uid://cbejnd21g2010" path="res://Entities/Items/Weapons/ProjectileWeapons/LaserGun/laser_gun_base_frame.png" id="4_v1b1g"]
 [ext_resource type="Script" uid="uid://cje5bobi6o8bo" path="res://Entities/Items/Hitscans/HitscanResource.gd" id="4_w5523"]
 [ext_resource type="PackedScene" uid="uid://ckf7i8bnass5n" path="res://Entities/Items/Projectiles/Laser/Laser.tscn" id="5_xjmn2"]
 [ext_resource type="Script" uid="uid://bj3r5oopspj6l" path="res://Entities/Items/Projectiles/ProjectileResource.gd" id="6_ll0mi"]
 [ext_resource type="Script" uid="uid://ct7n8wo1p3b20" path="res://Entities/Items/WeaponMods/WeaponMod.gd" id="7_v1b1g"]
-[ext_resource type="Texture2D" uid="uid://bjm0js8cfg2rm" path="res://Entities/Items/Weapons/ProjectileWeapons/LaserGun/laser_gun.png" id="10_iakvu"]
 [ext_resource type="PackedScene" uid="uid://baxpb3crwepc0" path="res://Entities/Items/Weapons/ProjectileWeapons/LaserGun/LaserGun.tscn" id="11_ykm1j"]
 [ext_resource type="Script" uid="uid://ctxa7i1mbt7ab" path="res://UI/Inventory/PlayerInventory/Crafting/CraftingIngredient.gd" id="14_c7ib1"]
 [ext_resource type="Resource" uid="uid://m8eslst1uuxh" path="res://Entities/Items/TRESItems/LightAmmo(0).tres" id="15_l541q"]
@@ -36,7 +36,7 @@ scanned_phys_layers = 191
 can_hit_self = false
 bad_effect_affected_teams = 1
 good_effect_affected_teams = 2
-base_damage = 5
+base_damage = 1
 dmg_affected_stats = 2
 crit_chance = 0
 crit_multiplier = 1.5
@@ -58,6 +58,7 @@ cam_freeze_does_falloff = true
 status_effects = Array[ExtResource("2_gdqw7")]([])
 contact_position = Vector2(0, 0)
 movement_direction = Vector2(0, 0)
+multishot_id = -1
 metadata/_custom_type_script = ExtResource("2_v1b1g")
 
 [sub_resource type="Curve" id="Curve_rk4a8"]
@@ -206,8 +207,8 @@ firing_mode = "Auto"
 projectile_scn = ExtResource("5_xjmn2")
 use_hitscan = false
 allow_hitscan_holding = true
-firing_duration = 0.1
-fire_cooldown = 0.03
+firing_duration = 0.03
+fire_cooldown = 0.1
 min_charge_time = 1.0
 one_frame_per_fire = false
 override_anim_dur = 0.0
@@ -224,7 +225,7 @@ charging_sound = ""
 projectile_logic = SubResource("Resource_nhr3k")
 hitscan_logic = SubResource("Resource_woyhr")
 effect_source = SubResource("Resource_nt47o")
-ammo_type = 2
+ammo_type = 8
 mag_size = 50
 reload_type = "Magazine"
 mag_reload_time = 2.2
@@ -276,9 +277,9 @@ tags = Array[StringName]([])
 inv_icon_rotation = -35.0
 inv_icon_offset = Vector2(1, 0)
 inv_icon_scale = Vector2(0.85, 0.85)
-inv_icon = ExtResource("10_iakvu")
-ground_icon = ExtResource("10_iakvu")
-in_hand_icon = ExtResource("10_iakvu")
+inv_icon = ExtResource("4_v1b1g")
+ground_icon = ExtResource("4_v1b1g")
+in_hand_icon = ExtResource("4_v1b1g")
 item_type = 1
 rarity = 2
 weight = 0

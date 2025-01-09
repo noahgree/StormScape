@@ -6,18 +6,17 @@ extends Control
 
 
 func _on_test_hurt_btn_pressed() -> void:
-	health_component.damage_shield_then_health(12, "BasicDamage", false)
+	health_component.damage_shield_then_health(12, "BasicDamage", false, -1)
 
 func _on_test_heal_btn_pressed() -> void:
-	health_component.heal_health_then_shield(15, "BasicHealing")
+	health_component.heal_health_then_shield(15, "BasicHealing", -1)
 
 func _on_test_music_btn_pressed() -> void:
 	var audio_player: Variant = AudioManager.play_and_get_sound("MysteryTheme1", AudioManager.SoundType.MUSIC_GLOBAL, GlobalData.player_node, 0)
-	(audio_player as AudioStreamPlayer).process_mode = Node.PROCESS_MODE_ALWAYS
-	#if audio_player:
-		#AudioManager.play_sound("PowerUp3", AudioManager.SoundType.SFX_GLOBAL)
-		#await get_tree().create_timer(15).timeout
-		#AudioManager.fade_out_sounds("SummerTide", 1.0, 1)
+	if audio_player:
+		(audio_player as AudioStreamPlayer).process_mode = Node.PROCESS_MODE_ALWAYS
+		await get_tree().create_timer(2.5).timeout
+		#audio_player.queue_free()
 		#AudioManager.stop_audio_player(audio_player)
 
 func _on_test_mod_btn_1_pressed() -> void:

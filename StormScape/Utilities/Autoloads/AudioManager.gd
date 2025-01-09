@@ -95,12 +95,18 @@ func _get_audio_resource_by_type(sound_name: StringName, type: SoundType) -> Aud
 ## Gets a 2d audio player from the pool or creates one if they are all busy.
 func _get_or_create_2d_player() -> AudioStreamPlayer2D:
 	if spatial_pool.size() > 0: return spatial_pool.pop_front()
-	else: return AudioStreamPlayer2D.new()
+	else:
+		var player: AudioStreamPlayer2D = AudioStreamPlayer2D.new()
+		player.tree_exiting.connect(_open_audio_resource_spot.bind(player, false))
+		return player
 
 ## Gets a global audio player from the pool or creates one if they are all busy.
 func _get_or_create_global_player() -> AudioStreamPlayer:
 	if global_pool.size() > 0: return global_pool.pop_front()
-	else: return AudioStreamPlayer.new()
+	else:
+		var player: AudioStreamPlayer = AudioStreamPlayer.new()
+		player.tree_exiting.connect(_open_audio_resource_spot.bind(player, false))
+		return player
 
 ## Puts an audio player back in the pool and removes it from the tree.
 func _return_player_to_pool(audio_player: Variant) -> void:
@@ -134,41 +140,54 @@ func fade_in_sound(sound_name: StringName, type: SoundType, fade_in_time: float 
 
 ## Called externally to not only setup a sound instance by name, but return a reference to its player for external management.
 ## Fade-in time is optional and if left as 0 will not start with fade.
+## The parent node should typically either be the world_root or the player, otherwise the 2d distance can be buggy.
 func play_and_get_sound(sound_name: StringName, type: SoundType, parent_node: Node,
 						fade_in_time: float = 0, location: Vector2 = Vector2.ZERO) -> Variant:
 	var audio_player: Variant = _create_audio_player(sound_name, type, location, fade_in_time, parent_node)
 	return audio_player
 
 ## Pulls a sound resource from one of the caches and sends it to be setup if it exists.
-func _create_audio_player(sound_name: StringName, type: SoundType, location: Vector2, fade_in_time: float, parent_node: Node) -> Variant:
+func _create_audio_player(sound_name: StringName, type: SoundType, location: Vector2,
+							fade_in_time: float, parent_node: Node) -> Variant:
 	var is_2d: bool = true if type == SoundType.MUSIC_2D or type == SoundType.SFX_2D else false
 	var is_music: bool = true if type == SoundType.MUSIC_GLOBAL or type == SoundType.MUSIC_2D else false
+
 	var audio_resource: AudioResource = _get_audio_resource_by_type(sound_name, type)
 	if audio_resource == null:
 		push_error("Sound name: \"" + sound_name + "\" did not exist as a sound resource in the cache.")
-		return
-	if is_2d and not _is_close_enough_to_play_2d(audio_resource, location): return
+		return null
+
+	if is_2d and not _is_close_enough_to_play_2d(audio_resource, location):
+		return null
 
 	var audio_stream: AudioStream = _create_stream_resource_from_audio_resource(audio_resource)
-	if audio_stream == null: return
+	if audio_stream == null:
+		return null
 
-	var audio_player: Variant = _create_or_restart_audio_player_from_resource(audio_resource, is_2d, is_music, location, fade_in_time)
-	if audio_player: audio_player.stream = audio_stream
-	else: return
+	var audio_player: Variant = _create_or_restart_audio_player_from_resource(audio_resource, is_2d, is_music, location)
+	if audio_player:
+		audio_player.stream = audio_stream
+	else:
+		return null
 
 	if parent_node == self:
 		_add_audio_player_to_tree_at_node(audio_player, self)
 		_start_audio_player_in_tree(audio_player, audio_resource.volume, fade_in_time)
+		return null
 	else:
 		_add_audio_player_to_tree_at_node(audio_player, parent_node)
 		_start_audio_player_in_tree(audio_player, audio_resource.volume, fade_in_time)
 		return audio_player
-	return
 
 ## Applies the settings from the audio resource to the audio player and returns it if it isn't null.
 func _create_or_restart_audio_player_from_resource(audio_resource: AudioResource, is_2d: bool,
-												is_music: bool, location: Vector2, fade_in_time: float) -> Variant:
-	if audio_resource.has_available_stream():
+												is_music: bool, location: Vector2) -> Variant:
+	if (not audio_resource.has_available_stream()) and (not audio_resource.restart_if_at_limit):
+		return null
+	else:
+		if (not audio_resource.has_available_stream()) and (audio_resource.restart_if_at_limit):
+			_stop_sound_by_name_due_to_limit(audio_resource.name)
+
 		audio_resource.increment_current_count()
 
 		var audio_player: Variant
@@ -192,20 +211,15 @@ func _create_or_restart_audio_player_from_resource(audio_resource: AudioResource
 		audio_player.pitch_scale = audio_resource.pitch_scale
 		audio_player.pitch_scale += randf_range(-audio_resource.pitch_randomness, audio_resource.pitch_randomness)
 
+		audio_player.finished.connect(_on_player_finished_playing.bind(audio_player))
+		var callable: Callable
 		if audio_resource.should_loop:
-			var callable: Callable = Callable(self, "_on_looped_audio_player_end").bind(audio_player)
-			audio_player.finished.connect(callable)
-			audio_player.set_meta("callable", callable)
+			callable = Callable(self, "_on_looped_audio_player_end").bind(audio_player)
 		else:
-			var callable: Callable = Callable(self, "_open_audio_resource_spot").bind(audio_player, true)
-			audio_player.finished.connect(callable)
-			audio_player.set_meta("callable", callable)
+			callable = Callable(self, "_open_audio_resource_spot").bind(audio_player, true)
+		audio_player.set_meta("finish_callables", [callable])
 
 		return audio_player
-	elif audio_resource.restart_if_at_limit:
-		_restart_sound_by_name_due_to_limit(audio_resource.name, audio_resource.volume, fade_in_time)
-
-	return
 
 ## Adds an audio player to the tree as a child of the passed in node.
 func _add_audio_player_to_tree_at_node(audio_player: Variant, parent_node: Node) -> void:
@@ -220,17 +234,11 @@ func _start_audio_player_in_tree(audio_player: Variant, volume: float, fade_in_t
 		if DebugFlags.PrintFlags.sounds_starting:
 			print_rich("\"[b]" + audio_player.get_meta("sound_name") + "[/b]\" sound is starting")
 
-## Restarts the first sound in the group belonging to the passed in sound name, fading if necessary.
-func _restart_sound_by_name_due_to_limit(sound_name: StringName, volume: float, fade_in_time: float) -> void:
+## Stops the first sound in the group belonging to the passed in sound name, fading if necessary.
+func _stop_sound_by_name_due_to_limit(sound_name: StringName) -> void:
 	var playing_sounds: Array = _get_active_audio_players_by_sound_name(sound_name)
 	if playing_sounds[0]:
-		playing_sounds[0].stop()
-		if fade_in_time != 0.0:
-			_start_audio_player_fade_in(playing_sounds[0], volume, fade_in_time)
-		else:
-			playing_sounds[0].play()
-			if DebugFlags.PrintFlags.sounds_starting:
-				print_rich("\"[b]" + sound_name + "[/b]\" sound is starting")
+		stop_audio_player(playing_sounds[0])
 
 ## Picks a random sound from the array in the sound name's resource and creates an audio stream resource from it.
 func _create_stream_resource_from_audio_resource(audio_resource: AudioResource) -> AudioStream:
@@ -242,7 +250,8 @@ func _is_close_enough_to_play_2d(audio_resource: AudioResource, location: Vector
 	var distance_to_player: float = GlobalData.player_node.global_position.distance_to(location)
 	if distance_to_player > (audio_resource.max_distance + DISTANCE_FROM_PLAYER_BUFFER):
 		return false
-	else: return true
+	else:
+		return true
 
 ## Handles fading in the audio player up to the originally specified volume over the specified duration.
 func _start_audio_player_fade_in(audio_player: Variant, final_volume: float, fade_in_time: float) -> void:
@@ -302,6 +311,13 @@ func change_sfx_resource_rhythmic_delay(sound_name: StringName, new_delay: float
 #endregion
 
 #region Stopping Sounds
+## Calls all needed callables after finishing playing.
+func _on_player_finished_playing(audio_player: Variant) -> void:
+	var finish_callables: Variant = audio_player.get_meta("finish_callables", [])
+	for custom_callable: Callable in finish_callables:
+		if custom_callable.is_valid():
+			custom_callable.call()
+
 ## Stops all sounds of a sound_name by default, or can stop a specific number if given a value besides 0.
 func stop_sound_by_name(sound_name: StringName, number_of_instances_to_stop: int = 0) -> void:
 	_destroy_sounds_by_sound_name(sound_name, number_of_instances_to_stop, 0.0, false)
@@ -313,6 +329,7 @@ func fade_out_sound_by_name(sound_name: StringName, fade_out_time: float = 0.5,
 	_destroy_sounds_by_sound_name(sound_name, min(10, number_of_instances_to_stop), fade_out_time, open_spots_during_fade)
 
 ## Stops a single sound via stopping its audio player, optionally wide a fade out.
+## This is called to stop a stored audio player after using play_and_get_sound.
 func stop_audio_player(audio_player: Variant, fade_out_time: float = 0, open_spot_during_fade: bool = false) -> void:
 	if fade_out_time > 0:
 		_start_audio_player_fade_out(audio_player, fade_out_time, open_spot_during_fade)
@@ -356,7 +373,10 @@ func _start_audio_player_fade_out(audio_player: Variant, fade_out_time: float, o
 ## Tell the audio resource that we can open up a spot by decrementing the current count of the sound playing.
 ## Also removes it from its group.
 func _open_audio_resource_spot(audio_player: Variant, return_player_to_pool: bool) -> void:
-	var sound_name: String = audio_player.get_meta("sound_name")
+	var sound_name: String = audio_player.get_meta("sound_name", "")
+	if sound_name == "": # When audio players are freed before ending, they always call this method, but they may not have been set up with a sound yet, so this checks for that
+		return
+
 	_remove_meta_from_audio_player(audio_player)
 	audio_player.remove_from_group(sound_name)
 
@@ -376,9 +396,8 @@ func _open_audio_resource_spot(audio_player: Variant, return_player_to_pool: boo
 
 ## Removes the callable and sound name meta from the audio player.
 func _remove_meta_from_audio_player(audio_player: Variant) -> void:
-	var callable: Callable = audio_player.get_meta("callable")
-	audio_player.finished.disconnect(callable)
-	audio_player.set_meta("callable", null)
+	audio_player.set_meta("finish_callables", [])
+	audio_player.finished.disconnect(_on_player_finished_playing)
 	audio_player.set_meta("sound_name", null)
 
 ## Returns the audio stream player to its pool after.

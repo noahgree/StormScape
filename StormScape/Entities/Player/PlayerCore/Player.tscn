@@ -1,4 +1,4 @@
-[gd_scene load_steps=190 format=3 uid="uid://dba8mrurjlekp"]
+[gd_scene load_steps=192 format=3 uid="uid://dba8mrurjlekp"]
 
 [ext_resource type="Script" uid="uid://c3rpxq8pnbdje" path="res://Entities/Player/PlayerCore/Player.gd" id="1_m33tt"]
 [ext_resource type="Script" uid="uid://c2gdoebfp12dq" path="res://Entities/Stats/StatMod/StatModsCacheResource.gd" id="2_vetip"]
@@ -54,6 +54,7 @@
 [ext_resource type="Shader" uid="uid://c0de04pgeen76" path="res://UI/Shaders/BlurBehind.gdshader" id="39_r4tgk"]
 [ext_resource type="Texture2D" uid="uid://xnppg0u7t7w4" path="res://UI/PlayerStatsOverlay/Assets/Stamina Recharge Under.png" id="39_ryeha"]
 [ext_resource type="Script" uid="uid://ctxa7i1mbt7ab" path="res://UI/Inventory/PlayerInventory/Crafting/CraftingIngredient.gd" id="40_3yx82"]
+[ext_resource type="Resource" uid="uid://c5jim46mul7ex" path="res://Entities/Items/TRESItems/IonCharge(0).tres" id="40_6wv7y"]
 [ext_resource type="Resource" uid="uid://bcvljie626314" path="res://Entities/Items/TRESItems/HeavyAmmo(0).tres" id="40_7ipu6"]
 [ext_resource type="Texture2D" uid="uid://bo4vy1r7cbpx8" path="res://Entities/Items/Ammo/Light/light_ammo.png" id="40_ftusj"]
 [ext_resource type="Texture2D" uid="uid://cknw64vph4b0s" path="res://Entities/Items/Ammo/Light/light_ammo_thumb.png" id="40_hgjjf"]
@@ -126,7 +127,7 @@ shader_parameter/glow_color = Color(1, 1, 1, 1)
 shader_parameter/glow_size = 4.5
 shader_parameter/glow_strength = 9.0
 shader_parameter/enable_fade = false
-shader_parameter/tint_color = Color(0.683077, 0.683077, 0.683077, 0)
+shader_parameter/tint_color = Color(1, 1, 1, 0)
 shader_parameter/final_alpha = 1.0
 shader_parameter/frame_uv_min = null
 shader_parameter/frame_uv_max = null
@@ -1159,6 +1160,12 @@ script = ExtResource("32_ixmb3")
 stats = ExtResource("34_i8j5r")
 quantity = 1
 
+[sub_resource type="Resource" id="Resource_n4o3n"]
+script = ExtResource("32_ixmb3")
+stats = ExtResource("40_6wv7y")
+quantity = 100
+metadata/_custom_type_script = ExtResource("32_ixmb3")
+
 [sub_resource type="Resource" id="Resource_3by25"]
 script = ExtResource("32_ixmb3")
 stats = ExtResource("40_7ipu6")
@@ -1192,7 +1199,7 @@ recipe = Array[ExtResource("40_3yx82")]([])
 output_quantity = 1
 recipe_unlocked = false
 cooldowns_per_suid = true
-show_cooldown_fill = false
+shown_cooldown_fills = Array[String]([])
 rotation_lerping = 0.1
 holding_offset = Vector2(0, 0)
 holding_degrees = 0.0
@@ -1520,7 +1527,7 @@ parameters/run/blendspace2d/blend_position = Vector2(0, 0)
 
 [node name="ItemReceiverComponent" parent="." node_paths=PackedStringArray("inv_populator", "ui") instance=ExtResource("30_qgyag")]
 item_scene = ExtResource("31_8v2rb")
-starting_inv = Array[ExtResource("32_ixmb3")]([SubResource("Resource_pihal"), null, null, null, SubResource("Resource_kx1me"), SubResource("Resource_2ijsm"), null, SubResource("Resource_xlc3k"), null, SubResource("Resource_3by25"), SubResource("Resource_oxva3"), SubResource("Resource_t7kvu"), SubResource("Resource_x8o50"), null, SubResource("Resource_apvym"), SubResource("Resource_ur5wt"), null, null, SubResource("Resource_dyejk"), null, null, null, null, null, null, SubResource("Resource_vpccy"), null, null, SubResource("Resource_sx7hp"), SubResource("Resource_wjnk6"), null, null, SubResource("Resource_rdrbb"), SubResource("Resource_hevqc"), SubResource("Resource_0ta0y"), SubResource("Resource_p5d28"), SubResource("Resource_6stk0")])
+starting_inv = Array[ExtResource("32_ixmb3")]([SubResource("Resource_pihal"), null, null, null, SubResource("Resource_kx1me"), SubResource("Resource_2ijsm"), null, SubResource("Resource_xlc3k"), SubResource("Resource_n4o3n"), SubResource("Resource_3by25"), SubResource("Resource_oxva3"), SubResource("Resource_t7kvu"), SubResource("Resource_x8o50"), null, SubResource("Resource_apvym"), SubResource("Resource_ur5wt"), null, null, SubResource("Resource_dyejk"), null, null, null, null, null, null, SubResource("Resource_vpccy"), null, null, SubResource("Resource_sx7hp"), SubResource("Resource_wjnk6"), null, null, SubResource("Resource_rdrbb"), SubResource("Resource_hevqc"), SubResource("Resource_0ta0y"), SubResource("Resource_p5d28"), SubResource("Resource_6stk0")])
 is_player_inv = true
 inv_size = 37
 hotbar_size = 5

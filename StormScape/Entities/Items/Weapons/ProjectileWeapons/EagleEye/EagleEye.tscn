@@ -33,17 +33,64 @@ animations = [{
 "speed": 5.0
 }]
 
-[sub_resource type="Animation" id="Animation_8rr2f"]
-resource_name = "charge_fire"
-step = 0.1
-
 [sub_resource type="Animation" id="Animation_c8xfh"]
 resource_name = "fire"
 step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("ItemSprite:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2, 1),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(0, 0), Vector2(-1.2, 0), Vector2(0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("ItemSprite:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.2, 1),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(0.92, 1), Vector2(1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_8dt34"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("ItemSprite:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("ItemSprite:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_bdea2"]
 _data = {
-&"charge_fire": SubResource("Animation_8rr2f"),
+&"RESET": SubResource("Animation_8dt34"),
 &"fire": SubResource("Animation_c8xfh")
 }
 
@@ -60,6 +107,15 @@ vfx_scene = ExtResource("2_8dt34")
 material = SubResource("ShaderMaterial_ej2m0")
 sprite_frames = SubResource("SpriteFrames_xf3nw")
 
+[node name="OffHandSprite" type="Sprite2D" parent="ItemSprite"]
+position = Vector2(1.11111, 1)
+scale = Vector2(1.11111, 1)
+texture = ExtResource("4_xfide")
+
+[node name="MainHandSprite" type="Sprite2D" parent="ItemSprite"]
+position = Vector2(-7, 3)
+texture = ExtResource("4_xfide")
+
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
 &"": SubResource("AnimationLibrary_bdea2")
@@ -67,14 +123,6 @@ libraries = {
 
 [node name="ProjectileOrigin" type="Marker2D" parent="."]
 position = Vector2(16, -2)
-
-[node name="OffHandSprite" type="Sprite2D" parent="."]
-position = Vector2(0, 1)
-texture = ExtResource("4_xfide")
-
-[node name="MainHandSprite" type="Sprite2D" parent="."]
-position = Vector2(-7, 3)
-texture = ExtResource("4_xfide")
 
 [node name="WeaponModManager" parent="." instance=ExtResource("5_qkcwx")]
 

@@ -43,6 +43,7 @@ cam_freeze_does_falloff = true
 status_effects = Array[ExtResource("1_a6eqh")]([])
 contact_position = Vector2(0, 0)
 movement_direction = Vector2(0, 0)
+multishot_id = -1
 
 [sub_resource type="Resource" id="Resource_8lm83"]
 script = ExtResource("3_f7syj")
@@ -141,8 +142,8 @@ firing_mode = "Semi Auto"
 projectile_scn = ExtResource("5_58e3c")
 use_hitscan = false
 allow_hitscan_holding = true
-firing_duration = 0.0
-fire_cooldown = 0.7
+firing_duration = 0.07
+fire_cooldown = 0.65
 min_charge_time = 1.0
 one_frame_per_fire = false
 override_anim_dur = 0.0
@@ -223,7 +224,7 @@ item_scene = ExtResource("3_uuh4c")
 cooldowns_per_suid = true
 show_cooldown_fill = false
 rotation_lerping = 0.1
-holding_offset = Vector2(5, 0)
+holding_offset = Vector2(1, -3)
 holding_degrees = 0.0
 is_gripped_by_one_hand = false
 draw_off_hand = false

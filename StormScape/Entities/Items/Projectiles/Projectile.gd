@@ -56,6 +56,7 @@ var debug_homing_rays: Array[Dictionary] = [] ## An array of debug info about th
 var debug_recent_hit_location: Vector2 ## The location of the most recent point we hit something.
 var source_wpn_stats: ProjWeaponResource ## The projectile weapon resource for the weapon that fired this projectile.
 var aoe_overlapped_receivers: Dictionary[Area2D, Timer] = {} ## The areas that are currently in an AOE area.
+var multishot_id: int = 0 ## The id passed in on creation that relates the sibling projectiles spawned on the same multishot barrage.
 #endregion
 
 
@@ -140,7 +141,7 @@ func _ready() -> void:
 	_set_up_potential_homing_delay()
 
 	if stats.override_gun_height and splits_so_far == 0:
-			starting_proj_height = stats.height_override
+		starting_proj_height = stats.height_override
 
 	_set_up_starting_transform_and_spin_logic()
 	if stats.launch_angle > 0 and stats.homing_method == "None":
@@ -557,12 +558,14 @@ func _split_self() -> void:
 	var close_to_360_adjustment: int = 0 if angular_spread > 310 else 1
 	var step_angle: float = (deg_to_rad(angular_spread) / (split_into_count_offset_by_one - close_to_360_adjustment))
 	var start_angle: float = starting_rotation - (deg_to_rad(angular_spread) / 2)
+	var new_multishot_id: int = UIDHelper.generate_multishot_uid()
 
 	for i: int in range(split_into_count_offset_by_one):
 		var angle: float = start_angle + (i * step_angle)
 		var new_proj: Projectile = Projectile.create(source_wpn_stats, source_entity, position, angle)
 		new_proj.splits_so_far = splits_so_far
 		new_proj.spin_dir = spin_dir
+		new_proj.multishot_id = new_multishot_id
 		if stats.homing_method == "Mouse Position": new_proj.homing_target = homing_target
 
 		get_parent().add_child(new_proj)
@@ -595,6 +598,8 @@ func _handle_ricochet(object: Variant) -> void:
 	_reset_arc_logic()
 	starting_rotation = reflected_direction.angle()
 	rotation = reflected_direction.angle()
+
+	multishot_id = UIDHelper.generate_multishot_uid()
 
 	ricochet_count += 1
 
@@ -752,6 +757,7 @@ func _kill_projectile_on_hit() -> void:
 func _start_being_handled(handling_area: EffectReceiverComponent) -> void:
 	if not is_in_aoe_phase:
 		effect_source = effect_source.duplicate()
+		effect_source.multishot_id = multishot_id
 		var modified_effect_src: EffectSource = _get_effect_source_adjusted_for_falloff(effect_source, handling_area, false)
 		modified_effect_src.movement_direction = movement_direction
 		modified_effect_src.contact_position = global_position

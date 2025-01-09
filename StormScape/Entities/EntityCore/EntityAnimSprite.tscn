@@ -1,7 +1,7 @@
 [gd_scene load_steps=5 format=3 uid="uid://dh4ydl7l86ywq"]
 
-[ext_resource type="Shader" path="res://Entities/EntityCore/EntityEffectShader.gdshader" id="1_w5sdq"]
-[ext_resource type="Script" path="res://Entities/EntityCore/EntitySprite.gd" id="2_13vmj"]
+[ext_resource type="Shader" uid="uid://cfbagv3hrtar2" path="res://Entities/EntityCore/EntityEffectShader.gdshader" id="1_w5sdq"]
+[ext_resource type="Script" uid="uid://ripiioihhkbc" path="res://Entities/EntityCore/EntitySprite.gd" id="2_13vmj"]
 [ext_resource type="Texture2D" uid="uid://u48xflvqdeh2" path="res://Entities/Items/ItemCore/Particles/simple_light_1.png" id="2_jc20c"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_yb3gb"]
@@ -12,6 +12,7 @@ shader_parameter/glow_size = 4.5
 shader_parameter/glow_strength = 9.0
 shader_parameter/enable_fade = false
 shader_parameter/tint_color = Color(1, 1, 1, 0)
+shader_parameter/final_alpha = 1.0
 shader_parameter/frame_uv_min = null
 shader_parameter/frame_uv_max = null
 
@@ -20,7 +21,7 @@ material = SubResource("ShaderMaterial_yb3gb")
 script = ExtResource("2_13vmj")
 
 [node name="FloorColor" type="Sprite2D" parent="."]
-self_modulate = Color(1, 0.400065, 0.463272, 0.599)
+self_modulate = Color(1, 1, 1, 0)
 z_index = -2
 scale = Vector2(0.15, 0.08)
 texture = ExtResource("2_jc20c")

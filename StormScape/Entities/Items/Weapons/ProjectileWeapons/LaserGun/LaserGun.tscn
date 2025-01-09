@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://ca8xdltgdyjys" path="res://Entities/Items/Weapons/ProjectileWeapons/ProjectileWeapon.gd" id="1_v8yes"]
 [ext_resource type="Shader" uid="uid://cfbagv3hrtar2" path="res://Entities/EntityCore/EntityEffectShader.gdshader" id="2_llewt"]
 [ext_resource type="Texture2D" uid="uid://dc02krbqhb7hu" path="res://Entities/Items/Weapons/ProjectileWeapons/LaserGun/laser_gun_base.png" id="2_rtlm0"]
+[ext_resource type="PackedScene" uid="uid://bdi8o2g5plcnb" path="res://Entities/Items/Weapons/WeaponVFX/FiringVFX/Simple/SimpleFiringVFX.tscn" id="2_w5kxq"]
 [ext_resource type="Texture2D" uid="uid://cs3clmnktksd6" path="res://Entities/Player/PlayerCore/player_hand.png" id="3_5j6aw"]
 [ext_resource type="PackedScene" uid="uid://batrfwan8r8ov" path="res://Entities/Items/WeaponMods/WeaponModManager.tscn" id="4_eputi"]
 
@@ -14,6 +15,7 @@ shader_parameter/glow_size = 4.5
 shader_parameter/glow_strength = 9.0
 shader_parameter/enable_fade = false
 shader_parameter/tint_color = Color(1, 1, 1, 0)
+shader_parameter/final_alpha = 1.0
 shader_parameter/frame_uv_min = null
 shader_parameter/frame_uv_max = null
 
@@ -65,33 +67,29 @@ tracks/1/keys = {
 "update": 1,
 "values": [0]
 }
-
-[sub_resource type="Animation" id="Animation_7lamj"]
-resource_name = "charge_fire"
-step = 0.1
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("ItemSprite:animation")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("ItemSprite:scale")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [&"fire"]
+"update": 0,
+"values": [Vector2(1, 1)]
 }
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("ItemSprite:frame")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.9, 1),
-"transitions": PackedFloat32Array(1, 1, 1),
-"update": 1,
-"values": [0, 1, 0]
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("ItemSprite:position")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, 0)]
 }
 
 [sub_resource type="Animation" id="Animation_ea614"]
@@ -116,17 +114,40 @@ tracks/1/path = NodePath("ItemSprite:frame")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.9, 1),
+"times": PackedFloat32Array(0, 0.2, 1),
 "transitions": PackedFloat32Array(1, 1, 1),
 "update": 1,
 "values": [0, 1, 0]
 }
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("ItemSprite:scale")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.2, 1),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(0.98, 1), Vector2(1, 1)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("ItemSprite:position")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.2, 1),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(0, 0), Vector2(-0.25, 0), Vector2(0, 0)]
+}
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_7q2gn"]
 _data = {
-"RESET": SubResource("Animation_tjfuh"),
-"charge_fire": SubResource("Animation_7lamj"),
-"fire": SubResource("Animation_ea614")
+&"RESET": SubResource("Animation_tjfuh"),
+&"fire": SubResource("Animation_ea614")
 }
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_v5j41"]
@@ -136,24 +157,26 @@ height = 16.0
 [node name="LaserGun" type="Node2D"]
 script = ExtResource("1_v8yes")
 proj_origin = Vector2(8, -3)
+vfx_scene = ExtResource("2_w5kxq")
 
 [node name="ItemSprite" type="AnimatedSprite2D" parent="."]
 material = SubResource("ShaderMaterial_1hxt5")
 sprite_frames = SubResource("SpriteFrames_ggr15")
 animation = &"fire"
 
+[node name="MainHandSprite" type="Sprite2D" parent="ItemSprite"]
+position = Vector2(-4.84694, 1)
+scale = Vector2(1.02041, 1)
+texture = ExtResource("3_5j6aw")
+
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
-"": SubResource("AnimationLibrary_7q2gn")
+&"": SubResource("AnimationLibrary_7q2gn")
 }
 speed_scale = 6.0
 
 [node name="ProjectileOrigin" type="Marker2D" parent="."]
 position = Vector2(8, -3)
-
-[node name="MainHandSprite" type="Sprite2D" parent="."]
-position = Vector2(-5, 1)
-texture = ExtResource("3_5j6aw")
 
 [node name="WeaponModManager" parent="." instance=ExtResource("4_eputi")]
 print_effect_updates = true

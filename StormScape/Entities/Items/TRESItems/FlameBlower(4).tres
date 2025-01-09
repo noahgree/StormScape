@@ -21,7 +21,7 @@ scanned_phys_layers = 191
 can_hit_self = false
 bad_effect_affected_teams = 1
 good_effect_affected_teams = 2
-base_damage = 10
+base_damage = 2
 dmg_affected_stats = 2
 crit_chance = 0
 crit_multiplier = 1.5
@@ -43,6 +43,7 @@ cam_freeze_does_falloff = true
 status_effects = Array[ExtResource("1_sti8o")]([ExtResource("6_l8ogr")])
 contact_position = Vector2(0, 0)
 movement_direction = Vector2(0, 0)
+multishot_id = -1
 
 [sub_resource type="Resource" id="Resource_awnew"]
 script = ExtResource("5_i2wga")
@@ -70,7 +71,7 @@ point_count = 2
 
 [sub_resource type="Curve" id="Curve_tw3jb"]
 _limits = [0.0, 0.1, 0.0, 1.0]
-_data = [Vector2(0, 0.013), 0.0, 0.0051865, 0, 0, Vector2(1, 0.026), 0.0051865, 0.0, 0, 0]
+_data = [Vector2(0, 0.011), 0.0, 0.0051865, 0, 0, Vector2(1, 0.022), 0.0051865, 0.0, 0, 0]
 point_count = 2
 
 [sub_resource type="Curve" id="Curve_40cbt"]
@@ -124,7 +125,7 @@ spin_direction = "Forward"
 do_y_axis_reflection = true
 move_in_rotated_dir = false
 shadow_matches_spin = false
-launch_angle = 25.0
+launch_angle = 0.0
 arc_travel_distance = 125
 arc_speed = 600.0
 max_collision_height = 20
@@ -163,7 +164,7 @@ _data = [Vector2(0, 1), 0.0, -1.0, 0, 1, Vector2(1, 0), -1.0, 0.0, 1, 0]
 point_count = 2
 
 [sub_resource type="Curve" id="Curve_pca6u"]
-_data = [Vector2(0, 0.06), 0.0, 0.0, 0, 0, Vector2(1, 0.11), 0.0, 0.0, 0, 0]
+_data = [Vector2(0, 0.07), 0.0, 0.0, 0, 0, Vector2(1, 0.11), 0.0, 0.0, 0, 0]
 point_count = 2
 
 [resource]
@@ -174,11 +175,11 @@ projectile_scn = ExtResource("5_4ypmg")
 use_hitscan = false
 allow_hitscan_holding = true
 firing_duration = 0.03
-fire_cooldown = 0.0
+fire_cooldown = 0.04
 min_charge_time = 1.0
 one_frame_per_fire = true
 override_anim_dur = 0.0
-anim_speed_mult = 0.2
+anim_speed_mult = 1.0
 has_post_fire_anim = false
 post_fire_anim_delay = 0.0
 post_fire_anim_dur = 0.0
@@ -187,6 +188,8 @@ firing_cam_shake_dur = 0.2
 firing_cam_freeze_mult = 1.0
 firing_cam_freeze_dur = 0.0
 firing_sound = ""
+post_fire_sound = ""
+post_fire_sound_delay = 0.0
 charging_sound = ""
 projectile_logic = SubResource("Resource_fa03q")
 hitscan_logic = SubResource("Resource_awnew")
@@ -210,7 +213,7 @@ proj_reload_sound = ""
 empty_mag_sound = ""
 max_bloom = 0.0
 bloom_decrease_delay = 1.0
-initial_fire_rate_delay = 0.14
+initial_fire_rate_delay = 0.13
 warmup_delay_curve = SubResource("Curve_kj8op")
 warmup_increase_rate = SubResource("Curve_pca6u")
 warmup_decrease_rate = SubResource("Curve_lm546")
@@ -257,7 +260,7 @@ output_quantity = 1
 recipe_unlocked = false
 item_scene = ExtResource("1_2lqvl")
 cooldowns_per_suid = true
-show_cooldown_fill = false
+shown_cooldown_fills = Array[String](["overheat_penalty"])
 rotation_lerping = 0.055
 holding_offset = Vector2(3, -1)
 holding_degrees = 0.0

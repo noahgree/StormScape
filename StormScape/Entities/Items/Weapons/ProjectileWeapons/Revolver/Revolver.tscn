@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://ohg1k8yu1y3r"]
+[gd_scene load_steps=16 format=3 uid="uid://ohg1k8yu1y3r"]
 
 [ext_resource type="Script" uid="uid://ca8xdltgdyjys" path="res://Entities/Items/Weapons/ProjectileWeapons/ProjectileWeapon.gd" id="1_ek4d5"]
 [ext_resource type="Texture2D" uid="uid://dcbsk1tsq047q" path="res://Entities/Items/Weapons/ProjectileWeapons/Revolver/revolver_base.png" id="1_mthhb"]
@@ -18,30 +18,92 @@ shader_parameter/final_alpha = 1.0
 shader_parameter/frame_uv_min = null
 shader_parameter/frame_uv_max = null
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_glbry"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_1bvjq"]
 atlas = ExtResource("1_mthhb")
 region = Rect2(0, 0, 20, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qcgld"]
+atlas = ExtResource("1_mthhb")
+region = Rect2(20, 0, 20, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_v3wvt"]
+atlas = ExtResource("1_mthhb")
+region = Rect2(40, 0, 20, 16)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_a2dle"]
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_glbry")
+"texture": SubResource("AtlasTexture_1bvjq")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_qcgld")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_v3wvt")
 }],
 "loop": true,
 "name": &"default",
 "speed": 5.0
 }]
 
-[sub_resource type="Animation" id="Animation_jbwub"]
-resource_name = "charge_fire"
+[sub_resource type="Animation" id="Animation_1bvjq"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("ItemSprite:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("ItemSprite:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
 
 [sub_resource type="Animation" id="Animation_iaeg5"]
 resource_name = "fire"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("ItemSprite:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2, 1),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(0, 0), Vector2(-1, 0), Vector2(0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("ItemSprite:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.2, 1),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(0.91, 1), Vector2(1, 1)]
+}
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_sen2k"]
 _data = {
-&"charge_fire": SubResource("Animation_jbwub"),
+&"RESET": SubResource("Animation_1bvjq"),
 &"fire": SubResource("Animation_iaeg5")
 }
 
@@ -58,6 +120,10 @@ vfx_scene = ExtResource("2_1bvjq")
 material = SubResource("ShaderMaterial_i1ire")
 sprite_frames = SubResource("SpriteFrames_a2dle")
 
+[node name="MainHandSprite" type="Sprite2D" parent="ItemSprite"]
+position = Vector2(-7, 2)
+texture = ExtResource("2_qrvtt")
+
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
 &"": SubResource("AnimationLibrary_sen2k")
@@ -65,10 +131,6 @@ libraries = {
 
 [node name="ProjectileOrigin" type="Marker2D" parent="."]
 position = Vector2(10, -4)
-
-[node name="MainHandSprite" type="Sprite2D" parent="."]
-position = Vector2(-7, 2)
-texture = ExtResource("2_qrvtt")
 
 [node name="WeaponModManager" parent="." instance=ExtResource("3_q5a14")]
 print_effect_updates = true

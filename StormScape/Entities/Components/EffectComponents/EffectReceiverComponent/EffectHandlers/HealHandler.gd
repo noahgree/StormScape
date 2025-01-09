@@ -22,8 +22,8 @@ func _ready() -> void:
 	assert(get_parent().health_component, get_parent().affected_entity.name + " has an effect receiver that is intended to handle healing, but no health component is connected.")
 
 ## Handles applying instant, one-shot healing to the affected entity.
-func handle_instant_heal(base_healing: int, heal_affected_stats: GlobalData.HealAffectedStats) -> void:
-	_send_handled_healing("BasicHealing", heal_affected_stats, base_healing)
+func handle_instant_heal(effect_source: EffectSource, heal_affected_stats: GlobalData.HealAffectedStats) -> void:
+	_send_handled_healing("BasicHealing", heal_affected_stats, effect_source.base_healing, effect_source.multishot_id)
 
 ## Handles applying damage that is inflicted over time, whether with a delay, with burst intervals, or with both.
 func handle_over_time_heal(hot_resource: HOTResource, source_type: String) -> void:
@@ -62,7 +62,7 @@ func handle_over_time_heal(hot_resource: HOTResource, source_type: String) -> vo
 		else:
 			hot_timer.wait_time = max(0.01, hot_resource.time_between_ticks)
 
-		_send_handled_healing(source_type, hot_resource.heal_affected_stats, hot_resource.heal_ticks_array[0])
+		_send_handled_healing(source_type, hot_resource.heal_affected_stats, hot_resource.heal_ticks_array[0], -1)
 		_add_timer_to_cache(source_type, hot_timer, hot_timers)
 		hot_timer.start()
 
@@ -118,13 +118,13 @@ func _on_hot_timer_timeout(hot_timer: Timer, source_type: String) -> void:
 
 	if hot_resource.run_until_removed:
 		var healing: int = hot_resource.heal_ticks_array[0]
-		_send_handled_healing(source_type, heal_affected_stats, healing)
+		_send_handled_healing(source_type, heal_affected_stats, healing, -1)
 		hot_timer.set_meta("ticks_completed", ticks_completed + 1)
 	else:
 		var max_ticks: int = hot_resource.heal_ticks_array.size()
 		if ticks_completed < max_ticks:
 			var healing: int = hot_resource.heal_ticks_array[ticks_completed]
-			_send_handled_healing(source_type, heal_affected_stats, healing)
+			_send_handled_healing(source_type, heal_affected_stats, healing, -1)
 			hot_timer.set_meta("ticks_completed", ticks_completed + 1)
 
 			if max_ticks == 1:
@@ -134,15 +134,16 @@ func _on_hot_timer_timeout(hot_timer: Timer, source_type: String) -> void:
 
 ## Sends the affected entity's health component the final healing values based on what stats the heal was
 ## allowed to affect.
-func _send_handled_healing(source_type: String, heal_affected_stats: GlobalData.HealAffectedStats, handled_amount: int) -> void:
+func _send_handled_healing(source_type: String, heal_affected_stats: GlobalData.HealAffectedStats,
+							handled_amount: int, multishot_id: int) -> void:
 	var positive_healing: int = max(0, handled_amount)
 	match heal_affected_stats:
 		GlobalData.HealAffectedStats.HEALTH_ONLY:
-			health_component.heal_health(positive_healing, source_type)
+			health_component.heal_health(positive_healing, source_type, multishot_id)
 		GlobalData.HealAffectedStats.SHIELD_ONLY:
-			health_component.heal_shield(positive_healing, source_type)
+			health_component.heal_shield(positive_healing, source_type, multishot_id)
 		GlobalData.HealAffectedStats.HEALTH_THEN_SHIELD:
-			health_component.heal_health_then_shield(positive_healing, source_type)
+			health_component.heal_health_then_shield(positive_healing, source_type, multishot_id)
 		GlobalData.HealAffectedStats.SIMULTANEOUS:
-			health_component.heal_health(positive_healing, source_type)
-			health_component.heal_shield(positive_healing, source_type)
+			health_component.heal_health(positive_healing, source_type, multishot_id)
+			health_component.heal_shield(positive_healing, source_type, multishot_id)

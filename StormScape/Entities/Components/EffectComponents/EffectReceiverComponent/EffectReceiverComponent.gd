@@ -37,6 +37,7 @@ class_name EffectReceiverComponent
 
 var most_recent_effect_src: EffectSource = null
 var hit_flash_timer: Timer = Timer.new()
+var current_impact_sounds: Array[int] = []
 
 
 ## This works with the tool script defined above to assign export vars automatically in-editor once added to the tree.
@@ -88,8 +89,8 @@ func handle_effect_source(effect_source: EffectSource, source_entity: PhysicsBod
 		var vfx: Node2D = effect_source.impact_vfx.instantiate()
 		vfx.global_position = affected_entity.global_position
 		add_child(vfx)
-	if effect_source.impact_sound != "":
-		AudioManager.play_sound(effect_source.impact_sound, AudioManager.SoundType.SFX_2D, affected_entity.global_position)
+
+	_handle_impact_sound(effect_source)
 
 	_update_hit_flash(effect_source, true)
 
@@ -108,9 +109,9 @@ func handle_effect_source(effect_source: EffectSource, source_entity: PhysicsBod
 	if effect_source.base_healing > 0 and heal_handler != null:
 		if effect_source.base_healing > 0:
 			if _check_same_team(source_entity) and _check_if_good_effects_apply_to_allies(effect_source):
-				heal_handler.handle_instant_heal(effect_source.base_healing, effect_source.heal_affected_stats)
+				heal_handler.handle_instant_heal(effect_source, effect_source.heal_affected_stats)
 			elif not _check_same_team(source_entity) and _check_if_good_effects_apply_to_enemies(effect_source):
-				heal_handler.handle_instant_heal(effect_source.base_healing, effect_source.heal_affected_stats)
+				heal_handler.handle_instant_heal(effect_source, effect_source.heal_affected_stats)
 
 	if process_status_effects:
 		if can_receive_status_effects:
@@ -217,6 +218,23 @@ func _check_if_applicable_entity_type_for_status_effect(status_effect: StatusEff
 		return false
 	else:
 		return true
+
+## Only plays the impact sound if one exists and one is not already playing for a matching multishot id.
+func _handle_impact_sound(effect_source: EffectSource) -> void:
+	if effect_source.impact_sound != "":
+		var multishot_id: int = effect_source.multishot_id
+		if multishot_id != -1:
+			if multishot_id not in current_impact_sounds:
+				var player: Variant = AudioManager.play_and_get_sound(effect_source.impact_sound, AudioManager.SoundType.SFX_2D, GlobalData.world_root, 0, affected_entity.global_position)
+				if player:
+					current_impact_sounds.append(multishot_id)
+
+					var callable: Callable = Callable(func() -> void: current_impact_sounds.erase(multishot_id))
+					var finish_callables: Variant = player.get_meta("finish_callables")
+					finish_callables.append(callable)
+					player.set_meta("finish_callables", finish_callables)
+		else:
+			AudioManager.play_sound(effect_source.impact_sound, AudioManager.SoundType.SFX_2D, affected_entity.global_position)
 
 ## Updates whether the hit flash is showing or not. Sets its color to the one specified in the effect source.
 func _update_hit_flash(effect_source: EffectSource = null, start: bool = false) -> void:

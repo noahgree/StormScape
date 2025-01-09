@@ -21,4 +21,4 @@ func handle_life_steal(dmg_amount: int, percent_to_steal: float) -> void:
 		var self_hp: int = self_health_component.health + self_health_component.shield
 		var steal_amount: int = int(floor(min(self_hp, dmg_amount) * (percent_to_steal / 100.0)))
 
-		src_health_component.heal_health_then_shield(max(1, steal_amount), "LifeSteal")
+		src_health_component.heal_health_then_shield(max(1, steal_amount), "LifeSteal", -1)

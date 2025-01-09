@@ -24,11 +24,8 @@ func process(delta: float) -> void:
 
 #region Cooldowns
 ## Adds a cooldown to the dictionary.
-func add_cooldown(item_id: StringName, duration: float, title: String = "Default") -> void:
-	if item_id in cooldowns:
-		cooldowns[item_id][0] = duration
-	else:
-		cooldowns[item_id] = [duration, duration, title]
+func add_cooldown(item_id: StringName, duration: float, title: String = "default") -> void:
+	cooldowns[item_id] = [duration, duration, title]
 
 	if owning_entity_is_player:
 		GlobalData.player_node.hotbar_ui.update_hotbar_tint_progresses()
@@ -47,11 +44,11 @@ func _update_cooldowns(delta: float) -> void:
 
 ## Returns a positive float representing the remaining cooldown or 0 if one does not exist.
 func get_cooldown(item_id: StringName) -> float:
-	return cooldowns.get(item_id, [0, 0, "Default"])[0]
+	return cooldowns.get(item_id, [0, 0, "default"])[0]
 
-## Returns a string representing the cooldown source title if one exists, otherwise it returns a string of "Null".
+## Returns a string representing the cooldown source title if one exists, otherwise it returns a string of "null".
 func get_cooldown_source_title(item_id: StringName) -> String:
-	return cooldowns.get(item_id, [0, 0, "Null"])[2]
+	return cooldowns.get(item_id, [0, 0, "null"])[2]
 
 ## Returns a positive float representing the original duration of an active cooldown or 0 if it does not exist.
 func get_original_cooldown(item_id: StringName) -> float:
@@ -175,7 +172,10 @@ func _update_recharges(delta: float) -> void:
 				var auto_ammo_count: int = int(current[1].s_mods.get_stat("auto_ammo_count"))
 				if current[1].recharge_uses_inv:
 					var ammo_needed: int = min(mag_size - current[1].ammo_in_mag, auto_ammo_count)
-					current[1].ammo_in_mag += inv.get_more_ammo(ammo_needed, true, current[1].ammo_type)
+					var retrieved_ammo: int = inv.get_more_ammo(ammo_needed, true, current[1].ammo_type)
+					current[1].ammo_in_mag += retrieved_ammo
+					if retrieved_ammo == 0:
+						to_remove.append(item_id)
 				else:
 					current[1].ammo_in_mag = min(mag_size, current[1].ammo_in_mag + auto_ammo_count)
 				recharge_completed.emit(item_id)

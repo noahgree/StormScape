@@ -54,6 +54,7 @@ class_name EffectSource
 # Unique Properties #
 @export_storage var contact_position: Vector2 ## The position of what the effect source is attached to when it makes contact with a receiver.
 @export_storage var movement_direction: Vector2 ## The direction vector of this effect source at contact used for knockback.
+@export_storage var multishot_id: int = -1 ## The id used to relate multishot projectiles with each other. Unique to each game load. -1 means it did not come from a multishot.
 
 
 ## Looks to see if there is a status effect with the matching name in this effect source's array of status effects. Return its index

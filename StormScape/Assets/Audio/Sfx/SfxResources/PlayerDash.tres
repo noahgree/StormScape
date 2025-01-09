@@ -1,13 +1,13 @@
 [gd_resource type="Resource" script_class="AudioResource" load_steps=2 format=3 uid="uid://dalv82plgsllj"]
 
-[ext_resource type="Script" path="res://Utilities/Game/Audio/AudioResource.gd" id="1_rfrqa"]
+[ext_resource type="Script" uid="uid://dwic8harmmplg" path="res://Utilities/Game/Audio/AudioResource.gd" id="1_rfrqa"]
 
 [resource]
 script = ExtResource("1_rfrqa")
 name = "PlayerDash"
 sound_files_folder = "res://Assets/Audio/Sfx/SfxRawAudio/Characters/Player/Movement/Dash/DashBase"
 sound_file_paths = Array[String]([])
-concurrent_limit = 1
+concurrent_limit = 2
 rhythmic_delay = 0.0
 volume = -5
 pitch_scale = 1.0

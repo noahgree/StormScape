@@ -2,10 +2,10 @@
 
 [ext_resource type="Script" uid="uid://boo31eu083dqd" path="res://Entities/Stats/EffectSystemResources/StatusEffects/StatusEffect.gd" id="1_dlrja"]
 [ext_resource type="Script" uid="uid://dkfssottmsrch" path="res://Entities/Stats/EffectSystemResources/EffectSources/EffectSource.gd" id="1_f7ms2"]
-[ext_resource type="Texture2D" uid="uid://dcbsk1tsq047q" path="res://Entities/Items/Weapons/ProjectileWeapons/Revolver/revolver_base.png" id="3_5qbqn"]
 [ext_resource type="Script" uid="uid://dvasncq3tgljs" path="res://Entities/Items/Weapons/ProjectileWeapons/ProjWeaponResource.gd" id="3_ctqw8"]
 [ext_resource type="Script" uid="uid://cje5bobi6o8bo" path="res://Entities/Items/Hitscans/HitscanResource.gd" id="3_hy3sc"]
 [ext_resource type="PackedScene" uid="uid://ohg1k8yu1y3r" path="res://Entities/Items/Weapons/ProjectileWeapons/Revolver/Revolver.tscn" id="4_p3ec7"]
+[ext_resource type="Texture2D" uid="uid://c5iikcmayrs4h" path="res://Entities/Items/Weapons/ProjectileWeapons/Revolver/revolver_base_frame.png" id="4_xnuh3"]
 [ext_resource type="Script" uid="uid://bj3r5oopspj6l" path="res://Entities/Items/Projectiles/ProjectileResource.gd" id="5_u6crx"]
 [ext_resource type="PackedScene" uid="uid://bqkyplubhsx43" path="res://Entities/Items/Projectiles/Bullets/SmallBullet/SmallBullet.tscn" id="6_moxye"]
 [ext_resource type="Script" uid="uid://ct7n8wo1p3b20" path="res://Entities/Items/WeaponMods/WeaponMod.gd" id="6_ur6hj"]
@@ -43,6 +43,7 @@ cam_freeze_does_falloff = true
 status_effects = Array[ExtResource("1_dlrja")]([])
 contact_position = Vector2(0, 0)
 movement_direction = Vector2(0, 0)
+multishot_id = -1
 
 [sub_resource type="Resource" id="Resource_y0rw7"]
 script = ExtResource("3_hy3sc")
@@ -144,7 +145,7 @@ allow_hitscan_holding = true
 firing_duration = 0.0
 fire_cooldown = 0.1
 min_charge_time = 1.0
-one_frame_per_fire = false
+one_frame_per_fire = true
 override_anim_dur = 0.0
 anim_speed_mult = 1.0
 has_post_fire_anim = false
@@ -206,9 +207,9 @@ tags = Array[StringName]([])
 inv_icon_rotation = -38.0
 inv_icon_offset = Vector2(1, 0)
 inv_icon_scale = Vector2(1.05, 1.05)
-inv_icon = ExtResource("3_5qbqn")
-ground_icon = ExtResource("3_5qbqn")
-in_hand_icon = ExtResource("3_5qbqn")
+inv_icon = ExtResource("4_xnuh3")
+ground_icon = ExtResource("4_xnuh3")
+in_hand_icon = ExtResource("4_xnuh3")
 item_type = 1
 rarity = 0
 weight = 0

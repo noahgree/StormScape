@@ -38,6 +38,8 @@ enum ProjAmmoType { ## The types of projectile ammo.
 @export_range(0, 1, 0.01) var firing_cam_freeze_dur: float = 0.0 ## How long the camera freeze when firing should take to decay.
 @export var muzzle_flash: Texture2D = null ## The texture to show as the muzzle flash when firing.
 @export var firing_sound: String = "" ## The sound to play when firing.
+@export var post_fire_sound: String = "" ## The sound to play after firing before the cooldown ends.
+@export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var post_fire_sound_delay: float = 0 ## When greater than 0, the post-firing sound waits this delay after the firing duration ends before playing.
 @export var charging_sound: String = "" ## The sound to play when charging.
 
 @export_group("Effect & Logic Resources")
@@ -96,7 +98,7 @@ enum ProjAmmoType { ## The types of projectile ammo.
 @export var add_overheat_per_burst_shot: bool = true ## Whether or not each bullet from a burst fire increases overheat individually.
 
 @export_group("Barrage Logic")
-@export var barrage_count: int = 1 ## Number of projectiles fired at 'angular-spread' degrees apart for each execute. Only applies when angular spread is greater than 0.
+@export_range(1, 50, 1) var barrage_count: int = 1 ## Number of projectiles fired at 'angular-spread' degrees apart for each execute. Only applies when angular spread is greater than 0.
 @export_range(0, 360, 0.1, "suffix:degrees") var angular_spread: float = 25 ## Angular spread of barrage projectiles in degrees.
 
 

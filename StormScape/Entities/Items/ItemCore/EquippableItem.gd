@@ -7,8 +7,6 @@ class_name EquippableItem
 
 @onready var sprite: Node2D = $ItemSprite ## The main sprite for the equippable item. Should have the entity effect shader attached.
 @onready var clipping_detector: Area2D = get_node_or_null("ClippingDetector") ## Used to detect when the item is overlapping with an in-game object that should block its use (i.e. a wall or tree).
-@onready var off_hand_sprite: Sprite2D = get_node_or_null("OffHandSprite")
-@onready var main_hand_sprite: Sprite2D = get_node_or_null("MainHandSprite")
 
 var stats_already_duplicated: bool = false ## Whether the stats have already been duplicated when they were first created in the slot.
 var source_slot: Slot ## The slot this equippable item is in whilst equipped.
