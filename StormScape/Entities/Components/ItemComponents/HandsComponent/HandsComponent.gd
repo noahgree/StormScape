@@ -3,6 +3,7 @@ extends Node2D
 class_name HandsComponent
 ## This component allows the entity to hold an item and interact with it.
 
+@export var hand_texture: Texture2D ## The hand texture that will be used for all EntityHandSprites on this entity.
 @export var active_slot_info: MarginContainer ## UI for displaying information about the active slot's item. Only for the player.
 @export var main_hand_with_held_item_pos: Vector2 = Vector2(6, 1) ## The position the main hand would be while doing nothing.
 @export var main_hand_with_proj_weapon_pos: Vector2 = Vector2(11, 0) ## The position the main hand would start at while holding a projectile weapon. This will most likely be farther out in the x-direction to give more rotational room for the weapon.
@@ -35,6 +36,7 @@ func _on_before_load_game() -> void:
 func _ready() -> void:
 	main_hand_sprite.visible = false
 	off_hand_sprite.visible = false
+	drawn_off_hand.visible = false
 	SignalBus.focused_ui_opened.connect(func() -> void:
 		is_mouse_button_held = false
 		been_holding_time = 0

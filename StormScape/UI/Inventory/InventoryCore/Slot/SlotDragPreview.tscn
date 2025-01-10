@@ -1,7 +1,7 @@
 [gd_scene load_steps=5 format=3 uid="uid://bacsel0a5l2iu"]
 
 [ext_resource type="FontVariation" uid="uid://blgkcg6c83yln" path="res://Assets/Theming/Fonts/GameFontResources/ui_pixel_font.tres" id="1_35dku"]
-[ext_resource type="Shader" path="res://UI/Shaders/GlintShader.gdshader" id="1_75hkq"]
+[ext_resource type="Shader" uid="uid://cwbeekjoy0uyh" path="res://Utilities/Game/Shaders/GlintShader.gdshader" id="1_75hkq"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_73rrd"]
 resource_local_to_scene = true

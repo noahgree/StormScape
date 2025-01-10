@@ -1,8 +1,9 @@
-[gd_scene load_steps=30 format=3 uid="uid://xsq1q0fffsin"]
+[gd_scene load_steps=33 format=3 uid="uid://xsq1q0fffsin"]
 
 [ext_resource type="Script" uid="uid://nup3um166s32" path="res://Entities/EntityCore/EntityTypes/RigidEntity/RigidEntity.gd" id="1_6tnit"]
+[ext_resource type="Script" uid="uid://c2gdoebfp12dq" path="res://Entities/Stats/StatMod/StatModsCacheResource.gd" id="2_ps53t"]
 [ext_resource type="PackedScene" uid="uid://dmv4k4j4lg3pw" path="res://Entities/EntityCore/EntityStaticSprite.tscn" id="3_rn076"]
-[ext_resource type="Shader" uid="uid://cfbagv3hrtar2" path="res://Entities/EntityCore/EntityEffectShader.gdshader" id="4_l6rwf"]
+[ext_resource type="Shader" uid="uid://cfbagv3hrtar2" path="res://Utilities/Game/Shaders/EntityEffectShader.gdshader" id="4_l6rwf"]
 [ext_resource type="Texture2D" uid="uid://2xf1pqc78iin" path="res://Assets/Icon/icon.svg" id="5_h2o7w"]
 [ext_resource type="PackedScene" uid="uid://cdfdy8m6ki3oq" path="res://Entities/Components/HealthComponent/HealthComponent.tscn" id="6_1wa26"]
 [ext_resource type="PackedScene" uid="uid://btba0jmsow1mx" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectReceiverComponent.tscn" id="7_ftqus"]
@@ -22,17 +23,22 @@
 [ext_resource type="Resource" uid="uid://cx1ydw2jde1y8" path="res://Entities/Items/TRESItems/Apple(0).tres" id="19_6vm5h"]
 [ext_resource type="Resource" uid="uid://3avt5jvd3dye" path="res://Entities/Items/TRESItems/BottleOFire(3).tres" id="20_uc3ly"]
 
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_7o0qb"]
+rough = true
+
+[sub_resource type="Resource" id="Resource_8lyar"]
+script = ExtResource("2_ps53t")
+debug_print_mod_changes = false
+
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_vww1a"]
 resource_local_to_scene = true
 shader = ExtResource("4_l6rwf")
-shader_parameter/glow_color = Color(1, 1, 1, 1)
-shader_parameter/glow_size = 4.5
-shader_parameter/glow_strength = 9.0
-shader_parameter/enable_fade = false
+shader_parameter/outline_color = Color(1, 1, 1, 1)
+shader_parameter/outline_thickness = 1.0
 shader_parameter/tint_color = Color(5.87195e-05, 0.303902, 0.871873, 0.911)
 shader_parameter/final_alpha = 1.0
-shader_parameter/frame_uv_min = null
-shader_parameter/frame_uv_max = null
+shader_parameter/override_color = Color(1, 1, 1, 0)
+shader_parameter/use_override_color = false
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_sbju2"]
 
@@ -80,13 +86,16 @@ die_loot_table = Array[ExtResource("16_fkdnf")]([SubResource("Resource_l1o4x")])
 collision_layer = 32
 collision_mask = 245
 mass = 3.0
+physics_material_override = SubResource("PhysicsMaterial_7o0qb")
 gravity_scale = 0.0
 lock_rotation = true
-linear_damp = 2.5
+linear_damp = 4.5
 script = ExtResource("1_6tnit")
 team = 2
+stats = SubResource("Resource_8lyar")
 
 [node name="EntitySprite" parent="." instance=ExtResource("3_rn076")]
+unique_name_in_owner = true
 material = SubResource("ShaderMaterial_vww1a")
 position = Vector2(0, -10)
 scale = Vector2(0.156, 0.156)

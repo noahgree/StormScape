@@ -1,3 +1,4 @@
+@tool
 extends CharacterBody2D
 class_name DynamicEntity
 ## An entity that has vitals stats and can move.
@@ -8,14 +9,14 @@ class_name DynamicEntity
 @export var team: GlobalData.Teams = GlobalData.Teams.PLAYER ## What the effects received by this entity should consider as this entity's team.
 @export var stats: StatModsCacheResource = StatModsCacheResource.new() ## The resource that will cache and work with all stat mods for this entity.
 
-@onready var sprite: Node2D = $YSorter/EntitySprite ## The visual representation of the entity. Needs to have the EntityEffectShader applied.
+@onready var sprite: Node2D = %EntitySprite ## The visual representation of the entity. Needs to have the EntityEffectShader applied.
 @onready var effect_receiver: EffectReceiverComponent = get_node_or_null("EffectReceiverComponent") ## The component that handles incoming effect sources.
 @onready var effects: StatusEffectManager = get_node_or_null("%StatusEffectManager") ## The node that will cache and manage all status effects for this entity.
 @onready var move_fsm: MoveStateMachine = $MoveStateMachine ## The FSM controlling the entity's movement.
 @onready var health_component: HealthComponent = $HealthComponent ## The component in charge of entity health and shield.
 @onready var stamina_component: StaminaComponent = get_node_or_null("StaminaComponent") ## The component in charge of entity stamina and hunger.
 @onready var inv: ItemReceiverComponent = get_node_or_null("ItemReceiverComponent") ## The inventory component for the entity.
-@onready var hands: HandsComponent = get_node_or_null("YSorter/HandsComponent") ## The hands item component for the entity.
+@onready var hands: HandsComponent = get_node_or_null("%HandsComponent") ## The hands item component for the entity.
 
 var time_snare_counter: float = 0 ## The ticker that slows down delta when under a time snare.
 var snare_factor: float = 0 ## Multiplier for delta time during time snares.
@@ -111,8 +112,17 @@ func _is_instance_on_load_game(data: DynamicEntityData) -> void:
 		%HotbarUI._change_active_slot_to_index_relative_to_full_inventory_size(data.active_slot_index)
 #endregion
 
+## Edits editor warnings for easier debugging.
+func _get_configuration_warnings() -> PackedStringArray:
+	if get_node_or_null("%EntitySprite") == null or not %EntitySprite is EntitySprite:
+		return ["This entity must have an EntitySprite typed sprite node."]
+	return []
+
 ## Making sure we know we have save logic, even if not set in editor.
 func _ready() -> void:
+	if Engine.is_editor_hint():
+		return
+
 	assert(has_node("MoveStateMachine"), name + " is a DynamicEntity but does not have a MoveStateMachine.")
 	assert(has_node("HealthComponent"), name + " is a DynamicEntity but does not have a HealthComponent.")
 
@@ -123,9 +133,15 @@ func _ready() -> void:
 		add_to_group("enemy_entities")
 
 func _process(delta: float) -> void:
+	if Engine.is_editor_hint():
+		return
+
 	move_fsm.state_machine_process(delta)
 
 func _physics_process(delta: float) -> void:
+	if Engine.is_editor_hint():
+		return
+
 	if snare_factor > 0:
 		time_snare_counter += delta * snare_factor
 		while time_snare_counter > delta:
@@ -134,9 +150,10 @@ func _physics_process(delta: float) -> void:
 	else:
 		move_fsm.state_machine_physics_process(delta)
 
-	_update_shader_with_new_sprite_frame_size()
-
 func _unhandled_input(event: InputEvent) -> void:
+	if Engine.is_editor_hint():
+		return
+
 	move_fsm.state_machine_handle_input(event)
 
 ## Sends a request to the move fsm for entering the stun state using a given duration.
@@ -169,57 +186,3 @@ func request_time_snare(factor: float, snare_time: float) -> void:
 ## Requests performing whatever dying logic is given in the move fsm.
 func die() -> void:
 	move_fsm.die()
-
-## Updates the shader every frame with information on the position of a sprite frame within its sprite sheet. Needed
-## to make the glow not produce artifacts along the edges of the sprite when using an animated sprite node.
-func _update_shader_with_new_sprite_frame_size() -> void:
-	if sprite.material.get_shader_parameter("glow_size") <= 0.0:
-		return
-
-	if sprite is AnimatedSprite2D:
-		sprite.material.set_shader_parameter("enable_fading", true)
-
-		var texture: Texture2D = SpriteHelpers.SpriteDetails.get_frame_texture(sprite)
-
-		var frame_uv_min: Vector2 = Vector2(0, 0)
-		var frame_uv_max: Vector2 = Vector2(1, 1)
-
-		var region: Rect2
-
-		# Ensure the texture is valid
-		if texture == null:
-			sprite.material.set_shader_parameter("enable_fading", false)
-			return
-
-		# Calculate UV coordinates based on texture type
-		if texture is AtlasTexture:
-			var atlas_texture: AtlasTexture = texture as AtlasTexture
-			var atlas_source: Texture2D = atlas_texture.atlas
-			region = atlas_texture.region
-			var atlas_size: Vector2 = atlas_source.get_size()
-
-			# Calculate UV coordinates
-			frame_uv_min = Vector2(region.position.x / atlas_size.x, region.position.y / atlas_size.y)
-			frame_uv_max = Vector2(
-				(region.position.x + region.size.x) / atlas_size.x,
-				(region.position.y + region.size.y) / atlas_size.y
-			)
-		elif texture is Texture2D:
-			# For regular textures, the UVs are (0,0) to (1,1)
-			frame_uv_min = Vector2(0.0, 0.0)
-			frame_uv_max = Vector2(1.0, 1.0)
-		else:
-			push_error("Unsupported texture type for adjusting glow shader on an entity.")
-			sprite.material.set_shader_parameter("enable_fading", false)
-			return
-
-		# Pass frame_uv_min and frame_uv_max to the shader
-		sprite.material.set_shader_parameter("frame_uv_min", frame_uv_min)
-		sprite.material.set_shader_parameter("frame_uv_max", frame_uv_max)
-
-		# Calculate the UV pixel size
-		var frame_size: Vector2 = region.size if texture is AtlasTexture else texture.get_size()
-		var uv_pixel_size: Vector2 = Vector2(1.0 / frame_size.x, 1.0 / frame_size.y)
-		sprite.material.set_shader_parameter("uv_pixel_size", uv_pixel_size)
-	else:
-		sprite.material.set_shader_parameter("enable_fading", false)

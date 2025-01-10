@@ -1,0 +1,8 @@
+[gd_resource type="CanvasTexture" load_steps=3 format=3 uid="uid://damxkqnfy7nie"]
+
+[ext_resource type="Texture2D" uid="uid://d2xxsglbagj2x" path="res://Entities/Items/Ammo/IonCharge/ion_charge_thumb.png" id="1_axoue"]
+[ext_resource type="Texture2D" uid="uid://qw37u3sdgjoi" path="res://Entities/Items/Ammo/IonCharge/ion_charge_thumb_n.png" id="2_kqve0"]
+
+[resource]
+diffuse_texture = ExtResource("1_axoue")
+normal_texture = ExtResource("2_kqve0")

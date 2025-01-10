@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="ProjWeaponResource" load_steps=19 format=3 uid="uid://4nvp28pvjtk3"]
+[gd_resource type="Resource" script_class="ProjWeaponResource" load_steps=20 format=3 uid="uid://4nvp28pvjtk3"]
 
 [ext_resource type="Script" uid="uid://boo31eu083dqd" path="res://Entities/Stats/EffectSystemResources/StatusEffects/StatusEffect.gd" id="1_71p75"]
 [ext_resource type="Texture2D" uid="uid://c7i0hkkoanp61" path="res://Entities/Items/Weapons/ProjectileWeapons/Boomerang/boomerang_wood.png" id="1_83uvj"]
@@ -6,6 +6,7 @@
 [ext_resource type="Script" uid="uid://dvasncq3tgljs" path="res://Entities/Items/Weapons/ProjectileWeapons/ProjWeaponResource.gd" id="3_qvjon"]
 [ext_resource type="Script" uid="uid://cje5bobi6o8bo" path="res://Entities/Items/Hitscans/HitscanResource.gd" id="3_sx4mp"]
 [ext_resource type="Script" uid="uid://bj3r5oopspj6l" path="res://Entities/Items/Projectiles/ProjectileResource.gd" id="4_5tlmk"]
+[ext_resource type="Texture2D" uid="uid://ln38htpivqou" path="res://Entities/Items/Weapons/ProjectileWeapons/Boomerang/BoomerangWoodCT.tres" id="4_w0uge"]
 [ext_resource type="PackedScene" uid="uid://vdrq4v5hjc06" path="res://Entities/Items/Projectiles/Boomerangs/BoomerangWoodProj.tscn" id="5_ixbes"]
 [ext_resource type="Script" uid="uid://c2gdoebfp12dq" path="res://Entities/Stats/StatMod/StatModsCacheResource.gd" id="6_10jum"]
 [ext_resource type="Script" uid="uid://ct7n8wo1p3b20" path="res://Entities/Items/WeaponMods/WeaponMod.gd" id="6_rpj3x"]
@@ -161,6 +162,8 @@ firing_cam_shake_dur = 0.0
 firing_cam_freeze_mult = 1.0
 firing_cam_freeze_dur = 0.0
 firing_sound = ""
+post_fire_sound = ""
+post_fire_sound_delay = 0.0
 charging_sound = ""
 projectile_logic = SubResource("Resource_075k1")
 hitscan_logic = SubResource("Resource_2m5jx")
@@ -212,8 +215,8 @@ inv_icon_rotation = 0.0
 inv_icon_offset = Vector2(0, 0)
 inv_icon_scale = Vector2(1, 1)
 inv_icon = ExtResource("1_83uvj")
-ground_icon = ExtResource("1_83uvj")
-in_hand_icon = ExtResource("1_83uvj")
+ground_icon = ExtResource("4_w0uge")
+in_hand_icon = ExtResource("4_w0uge")
 item_type = 1
 rarity = 1
 weight = 0

@@ -1,0 +1,8 @@
+[gd_resource type="CanvasTexture" load_steps=3 format=3 uid="uid://qp0t0dscakun"]
+
+[ext_resource type="Texture2D" uid="uid://cknw64vph4b0s" path="res://Entities/Items/Ammo/Light/light_ammo_thumb.png" id="1_4myee"]
+[ext_resource type="Texture2D" uid="uid://cse0c6tm411jc" path="res://Entities/Items/Ammo/Light/light_ammo_thumb_n.png" id="2_e7quw"]
+
+[resource]
+diffuse_texture = ExtResource("1_4myee")
+normal_texture = ExtResource("2_e7quw")

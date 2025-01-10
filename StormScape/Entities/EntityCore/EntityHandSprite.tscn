@@ -1,0 +1,25 @@
+[gd_scene load_steps=3 format=3 uid="uid://lw5fgm5pgoif"]
+
+[ext_resource type="Script" uid="uid://br7vb3lat22hk" path="res://Entities/EntityCore/EntityHandSprite.gd" id="2_vydpp"]
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_6yyv1"]
+blend_mode = 1
+light_mode = 1
+
+[node name="EntityHandSprite" type="Sprite2D"]
+clip_children = 2
+script = ExtResource("2_vydpp")
+
+[node name="Overlay" type="ColorRect" parent="."]
+self_modulate = Color(1, 1, 1, 0.22)
+material = SubResource("CanvasItemMaterial_6yyv1")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -3.0
+offset_top = -3.0
+offset_right = -3.0
+offset_bottom = -3.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(1, 1, 1, 0)

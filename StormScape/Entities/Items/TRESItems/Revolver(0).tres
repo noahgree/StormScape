@@ -1,9 +1,10 @@
-[gd_resource type="Resource" script_class="ProjWeaponResource" load_steps=19 format=3 uid="uid://dlfmjgnfk6nqj"]
+[gd_resource type="Resource" script_class="ProjWeaponResource" load_steps=20 format=3 uid="uid://dlfmjgnfk6nqj"]
 
 [ext_resource type="Script" uid="uid://boo31eu083dqd" path="res://Entities/Stats/EffectSystemResources/StatusEffects/StatusEffect.gd" id="1_dlrja"]
 [ext_resource type="Script" uid="uid://dkfssottmsrch" path="res://Entities/Stats/EffectSystemResources/EffectSources/EffectSource.gd" id="1_f7ms2"]
 [ext_resource type="Script" uid="uid://dvasncq3tgljs" path="res://Entities/Items/Weapons/ProjectileWeapons/ProjWeaponResource.gd" id="3_ctqw8"]
 [ext_resource type="Script" uid="uid://cje5bobi6o8bo" path="res://Entities/Items/Hitscans/HitscanResource.gd" id="3_hy3sc"]
+[ext_resource type="Texture2D" uid="uid://bn15edu8bniii" path="res://Entities/Items/Weapons/ProjectileWeapons/Revolver/RevolverBaseFrameCT.tres" id="4_4xu4l"]
 [ext_resource type="PackedScene" uid="uid://ohg1k8yu1y3r" path="res://Entities/Items/Weapons/ProjectileWeapons/Revolver/Revolver.tscn" id="4_p3ec7"]
 [ext_resource type="Texture2D" uid="uid://c5iikcmayrs4h" path="res://Entities/Items/Weapons/ProjectileWeapons/Revolver/revolver_base_frame.png" id="4_xnuh3"]
 [ext_resource type="Script" uid="uid://bj3r5oopspj6l" path="res://Entities/Items/Projectiles/ProjectileResource.gd" id="5_u6crx"]
@@ -157,6 +158,8 @@ firing_cam_freeze_mult = 0.45
 firing_cam_freeze_dur = 0.02
 muzzle_flash = ExtResource("9_xnuh3")
 firing_sound = ""
+post_fire_sound = ""
+post_fire_sound_delay = 0.0
 charging_sound = ""
 projectile_logic = SubResource("Resource_ysh4t")
 hitscan_logic = SubResource("Resource_y0rw7")
@@ -208,8 +211,8 @@ inv_icon_rotation = -38.0
 inv_icon_offset = Vector2(1, 0)
 inv_icon_scale = Vector2(1.05, 1.05)
 inv_icon = ExtResource("4_xnuh3")
-ground_icon = ExtResource("4_xnuh3")
-in_hand_icon = ExtResource("4_xnuh3")
+ground_icon = ExtResource("4_4xu4l")
+in_hand_icon = ExtResource("4_4xu4l")
 item_type = 1
 rarity = 0
 weight = 0
@@ -222,7 +225,7 @@ output_quantity = 1
 recipe_unlocked = false
 item_scene = ExtResource("4_p3ec7")
 cooldowns_per_suid = true
-show_cooldown_fill = false
+shown_cooldown_fills = Array[String]([])
 rotation_lerping = 0.15
 holding_offset = Vector2(0, 0)
 holding_degrees = 0.0

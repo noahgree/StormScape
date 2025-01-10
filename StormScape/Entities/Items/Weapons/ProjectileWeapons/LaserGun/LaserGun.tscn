@@ -1,40 +1,35 @@
 [gd_scene load_steps=15 format=3 uid="uid://baxpb3crwepc0"]
 
 [ext_resource type="Script" uid="uid://ca8xdltgdyjys" path="res://Entities/Items/Weapons/ProjectileWeapons/ProjectileWeapon.gd" id="1_v8yes"]
-[ext_resource type="Shader" uid="uid://cfbagv3hrtar2" path="res://Entities/EntityCore/EntityEffectShader.gdshader" id="2_llewt"]
-[ext_resource type="Texture2D" uid="uid://dc02krbqhb7hu" path="res://Entities/Items/Weapons/ProjectileWeapons/LaserGun/laser_gun_base.png" id="2_rtlm0"]
 [ext_resource type="PackedScene" uid="uid://bdi8o2g5plcnb" path="res://Entities/Items/Weapons/WeaponVFX/FiringVFX/Simple/SimpleFiringVFX.tscn" id="2_w5kxq"]
-[ext_resource type="Texture2D" uid="uid://cs3clmnktksd6" path="res://Entities/Player/PlayerCore/player_hand.png" id="3_5j6aw"]
+[ext_resource type="Shader" uid="uid://cugs1eqtkjsbd" path="res://Utilities/Game/Shaders/TintAndGlow.gdshader" id="3_w5kxq"]
 [ext_resource type="PackedScene" uid="uid://batrfwan8r8ov" path="res://Entities/Items/WeaponMods/WeaponModManager.tscn" id="4_eputi"]
+[ext_resource type="Texture2D" uid="uid://d4fispahsus1d" path="res://Entities/Items/Weapons/ProjectileWeapons/LaserGun/LaserGunBaseCT.tres" id="4_w5kxq"]
+[ext_resource type="PackedScene" uid="uid://lw5fgm5pgoif" path="res://Entities/EntityCore/EntityHandSprite.tscn" id="7_o1grk"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_1hxt5"]
 resource_local_to_scene = true
-shader = ExtResource("2_llewt")
-shader_parameter/glow_color = Color(1, 1, 1, 1)
-shader_parameter/glow_size = 4.5
-shader_parameter/glow_strength = 9.0
-shader_parameter/enable_fade = false
+shader = ExtResource("3_w5kxq")
 shader_parameter/tint_color = Color(1, 1, 1, 0)
+shader_parameter/glow_intensity = 1.0
 shader_parameter/final_alpha = 1.0
-shader_parameter/frame_uv_min = null
-shader_parameter/frame_uv_max = null
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_8p5n7"]
-atlas = ExtResource("2_rtlm0")
+[sub_resource type="AtlasTexture" id="AtlasTexture_o1grk"]
+atlas = ExtResource("4_w5kxq")
 region = Rect2(0, 0, 16, 16)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_ogv0o"]
-atlas = ExtResource("2_rtlm0")
+[sub_resource type="AtlasTexture" id="AtlasTexture_nv3qp"]
+atlas = ExtResource("4_w5kxq")
 region = Rect2(16, 0, 16, 16)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_ggr15"]
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_8p5n7")
+"texture": SubResource("AtlasTexture_o1grk")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_ogv0o")
+"texture": SubResource("AtlasTexture_nv3qp")
 }],
 "loop": true,
 "name": &"fire",
@@ -164,10 +159,8 @@ material = SubResource("ShaderMaterial_1hxt5")
 sprite_frames = SubResource("SpriteFrames_ggr15")
 animation = &"fire"
 
-[node name="MainHandSprite" type="Sprite2D" parent="ItemSprite"]
-position = Vector2(-4.84694, 1)
-scale = Vector2(1.02041, 1)
-texture = ExtResource("3_5j6aw")
+[node name="MainHandSprite" parent="ItemSprite" instance=ExtResource("7_o1grk")]
+position = Vector2(-5, 1)
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {

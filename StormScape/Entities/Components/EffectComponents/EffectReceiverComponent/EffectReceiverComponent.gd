@@ -240,10 +240,13 @@ func _handle_impact_sound(effect_source: EffectSource) -> void:
 func _update_hit_flash(effect_source: EffectSource = null, start: bool = false) -> void:
 	if start:
 		hit_flash_timer.stop()
-		affected_entity.sprite.material.set_shader_parameter("tint_color", effect_source.hit_flash_color)
+		affected_entity.sprite.material.set_shader_parameter("use_override_color", true)
+		affected_entity.sprite.material.set_shader_parameter("override_color", effect_source.hit_flash_color)
 		hit_flash_timer.start()
 	else:
-		affected_entity.sprite.material.set_shader_parameter("tint_color", Color(1.0, 1.0, 1.0, 0.0))
+		affected_entity.sprite.material.set_shader_parameter("use_override_color", false)
+		affected_entity.sprite.material.set_shader_parameter("override_color", Color(1.0, 1.0, 1.0, 0.0))
+	pass
 
 ## Starts the player camera fx from the effect source details.
 func _handle_cam_fx(effect_source: EffectSource) -> void:

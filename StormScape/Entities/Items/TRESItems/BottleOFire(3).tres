@@ -1,15 +1,16 @@
-[gd_resource type="Resource" script_class="ProjWeaponResource" load_steps=23 format=3 uid="uid://3avt5jvd3dye"]
+[gd_resource type="Resource" script_class="ProjWeaponResource" load_steps=24 format=3 uid="uid://3avt5jvd3dye"]
 
 [ext_resource type="Script" uid="uid://boo31eu083dqd" path="res://Entities/Stats/EffectSystemResources/StatusEffects/StatusEffect.gd" id="1_fshhe"]
 [ext_resource type="Script" uid="uid://cje5bobi6o8bo" path="res://Entities/Items/Hitscans/HitscanResource.gd" id="1_kxj7m"]
 [ext_resource type="Script" uid="uid://bj3r5oopspj6l" path="res://Entities/Items/Projectiles/ProjectileResource.gd" id="2_4ioui"]
 [ext_resource type="Script" uid="uid://dvasncq3tgljs" path="res://Entities/Items/Weapons/ProjectileWeapons/ProjWeaponResource.gd" id="3_ru3fl"]
 [ext_resource type="PackedScene" uid="uid://c7gjhm55x8ymc" path="res://Entities/Items/Weapons/ProjectileWeapons/BottleOFire/BottleOFire.tscn" id="3_yykgi"]
+[ext_resource type="Texture2D" uid="uid://btbju7m01l8x2" path="res://Entities/Items/Weapons/ProjectileWeapons/BottleOFire/BottleOFireBaseCT.tres" id="4_l2ckt"]
 [ext_resource type="Script" uid="uid://dkfssottmsrch" path="res://Entities/Stats/EffectSystemResources/EffectSources/EffectSource.gd" id="5_jastm"]
 [ext_resource type="Script" uid="uid://ct7n8wo1p3b20" path="res://Entities/Items/WeaponMods/WeaponMod.gd" id="6_5xrva"]
 [ext_resource type="Texture2D" uid="uid://cpo3fkry82ihj" path="res://Entities/Items/Weapons/ProjectileWeapons/BottleOFire/bottle_o_fire_base.png" id="6_14vfc"]
+[ext_resource type="Texture2D" uid="uid://b4bumm88u2qmw" path="res://Entities/Items/Weapons/ProjectileWeapons/BottleOFire/FireBottleThrowableCT.tres" id="6_m6fyr"]
 [ext_resource type="PackedScene" uid="uid://b26uwbeam6drq" path="res://Entities/Items/Projectiles/FireBottle/FireBottle.tscn" id="7_0ultu"]
-[ext_resource type="Texture2D" uid="uid://dn0kb7oxrj6qi" path="res://Entities/Items/Weapons/ProjectileWeapons/BottleOFire/fire_bottle_throwable.png" id="7_16qjf"]
 [ext_resource type="Resource" uid="uid://blryd3h2c6dsl" path="res://Entities/Stats/EffectSystemResources/StatusEffects/BadEffects/Burning/Burning1Rapid.tres" id="8_ngyy3"]
 [ext_resource type="Script" uid="uid://ctxa7i1mbt7ab" path="res://UI/Inventory/PlayerInventory/Crafting/CraftingIngredient.gd" id="10_u7xjj"]
 [ext_resource type="Script" uid="uid://c2gdoebfp12dq" path="res://Entities/Stats/StatMod/StatModsCacheResource.gd" id="11_3anyb"]
@@ -200,6 +201,8 @@ firing_cam_shake_dur = 0.0
 firing_cam_freeze_mult = 1.0
 firing_cam_freeze_dur = 0.0
 firing_sound = ""
+post_fire_sound = ""
+post_fire_sound_delay = 0.0
 charging_sound = ""
 projectile_logic = SubResource("Resource_0j8mo")
 hitscan_logic = SubResource("Resource_t7dv8")
@@ -251,8 +254,8 @@ inv_icon_rotation = 0.0
 inv_icon_offset = Vector2(0, 0)
 inv_icon_scale = Vector2(1, 1)
 inv_icon = ExtResource("6_14vfc")
-ground_icon = ExtResource("6_14vfc")
-in_hand_icon = ExtResource("7_16qjf")
+ground_icon = ExtResource("4_l2ckt")
+in_hand_icon = ExtResource("6_m6fyr")
 item_type = 1
 rarity = 3
 weight = 0

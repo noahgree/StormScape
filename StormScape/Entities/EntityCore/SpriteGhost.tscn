@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=3 uid="uid://bv3ae77701mrg"]
 
-[ext_resource type="Shader" path="res://UI/Shaders/Whitener.gdshader" id="1_74nwb"]
-[ext_resource type="Script" path="res://Entities/EntityCore/SpriteGhost.gd" id="1_obiud"]
+[ext_resource type="Shader" uid="uid://cgiba7ik7jnt6" path="res://Utilities/Game/Shaders/Whitener.gdshader" id="1_74nwb"]
+[ext_resource type="Script" uid="uid://b7ralej5r1ah8" path="res://Entities/EntityCore/SpriteGhost.gd" id="1_obiud"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_l252u"]
 resource_local_to_scene = true

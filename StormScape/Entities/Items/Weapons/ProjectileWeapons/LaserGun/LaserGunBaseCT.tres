@@ -1,0 +1,8 @@
+[gd_resource type="CanvasTexture" load_steps=3 format=3 uid="uid://d4fispahsus1d"]
+
+[ext_resource type="Texture2D" uid="uid://dc02krbqhb7hu" path="res://Entities/Items/Weapons/ProjectileWeapons/LaserGun/laser_gun_base.png" id="1_u61vr"]
+[ext_resource type="Texture2D" uid="uid://dmu47oqrowpt2" path="res://Entities/Items/Weapons/ProjectileWeapons/LaserGun/laser_gun_base_n.png" id="2_etrue"]
+
+[resource]
+diffuse_texture = ExtResource("1_u61vr")
+normal_texture = ExtResource("2_etrue")

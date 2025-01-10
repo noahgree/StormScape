@@ -1,4 +1,5 @@
 @tool
+@icon("res://Utilities/Debug/EditorIcons/projectile_weapon.png")
 extends Weapon
 class_name ProjectileWeapon
 ## Base class for all weapons that spawn any sort of projectile or hitscan or AOE.

@@ -1,3 +1,5 @@
+@tool
+@icon("res://Utilities/Debug/EditorIcons/melee_weapon.png")
 extends Weapon
 class_name MeleeWeapon
 ## The base class for all melee weapons. Melee weapons are based on swings and have all needed behavior logic defined here.
@@ -56,6 +58,9 @@ func _setup_mod_cache() -> void:
 	stats.cache_is_setup = true
 
 func _ready() -> void:
+	if Engine.is_editor_hint():
+		return
+
 	super._ready()
 	call_deferred("_disable_collider")
 	_update_ammo_ui()

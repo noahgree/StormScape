@@ -1,30 +1,28 @@
-[gd_scene load_steps=13 format=3 uid="uid://c7gjhm55x8ymc"]
+[gd_scene load_steps=14 format=3 uid="uid://c7gjhm55x8ymc"]
 
-[ext_resource type="Texture2D" uid="uid://dn0kb7oxrj6qi" path="res://Entities/Items/Weapons/ProjectileWeapons/BottleOFire/fire_bottle_throwable.png" id="1_87agt"]
-[ext_resource type="Shader" uid="uid://cfbagv3hrtar2" path="res://Entities/EntityCore/EntityEffectShader.gdshader" id="1_ghrnr"]
 [ext_resource type="Script" uid="uid://ca8xdltgdyjys" path="res://Entities/Items/Weapons/ProjectileWeapons/ProjectileWeapon.gd" id="1_sguuu"]
-[ext_resource type="Texture2D" uid="uid://cs3clmnktksd6" path="res://Entities/Player/PlayerCore/player_hand.png" id="3_2kylw"]
+[ext_resource type="PackedScene" uid="uid://bdi8o2g5plcnb" path="res://Entities/Items/Weapons/WeaponVFX/FiringVFX/Simple/SimpleFiringVFX.tscn" id="2_hbtxu"]
+[ext_resource type="Shader" uid="uid://cugs1eqtkjsbd" path="res://Utilities/Game/Shaders/TintAndGlow.gdshader" id="3_riusn"]
+[ext_resource type="Texture2D" uid="uid://b4bumm88u2qmw" path="res://Entities/Items/Weapons/ProjectileWeapons/BottleOFire/FireBottleThrowableCT.tres" id="4_hbtxu"]
 [ext_resource type="PackedScene" uid="uid://batrfwan8r8ov" path="res://Entities/Items/WeaponMods/WeaponModManager.tscn" id="4_w4ktg"]
+[ext_resource type="PackedScene" uid="uid://lw5fgm5pgoif" path="res://Entities/EntityCore/EntityHandSprite.tscn" id="5_hbtxu"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_t0vfb"]
-shader = ExtResource("1_ghrnr")
-shader_parameter/glow_color = Color(1, 1, 1, 1)
-shader_parameter/glow_size = 4.5
-shader_parameter/glow_strength = 9.0
-shader_parameter/enable_fade = false
+resource_local_to_scene = true
+shader = ExtResource("3_riusn")
 shader_parameter/tint_color = Color(1, 1, 1, 0)
-shader_parameter/frame_uv_min = null
-shader_parameter/frame_uv_max = null
+shader_parameter/glow_intensity = 1.0
+shader_parameter/final_alpha = 1.0
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_8x8uk"]
-atlas = ExtResource("1_87agt")
+[sub_resource type="AtlasTexture" id="AtlasTexture_riusn"]
+atlas = ExtResource("4_hbtxu")
 region = Rect2(0, 0, 16, 16)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_h2gml"]
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_8x8uk")
+"texture": SubResource("AtlasTexture_riusn")
 }],
 "loop": true,
 "name": &"default",
@@ -137,8 +135,8 @@ tracks/3/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_u2nec"]
 _data = {
-"RESET": SubResource("Animation_kmqcj"),
-"fire": SubResource("Animation_in3ed")
+&"RESET": SubResource("Animation_kmqcj"),
+&"fire": SubResource("Animation_in3ed")
 }
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_nbq8b"]
@@ -147,6 +145,7 @@ height = 14.0
 
 [node name="BottleOFire" type="Node2D"]
 script = ExtResource("1_sguuu")
+vfx_scene = ExtResource("2_hbtxu")
 
 [node name="ItemSprite" type="AnimatedSprite2D" parent="."]
 material = SubResource("ShaderMaterial_t0vfb")
@@ -154,14 +153,13 @@ sprite_frames = SubResource("SpriteFrames_h2gml")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
-"": SubResource("AnimationLibrary_u2nec")
+&"": SubResource("AnimationLibrary_u2nec")
 }
 
 [node name="ProjectileOrigin" type="Marker2D" parent="."]
 
-[node name="MainHandSprite" type="Sprite2D" parent="."]
+[node name="MainHandSprite" parent="." instance=ExtResource("5_hbtxu")]
 position = Vector2(-4, 5)
-texture = ExtResource("3_2kylw")
 
 [node name="WeaponModManager" parent="." instance=ExtResource("4_w4ktg")]
 

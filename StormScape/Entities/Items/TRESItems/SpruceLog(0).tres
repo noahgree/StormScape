@@ -1,7 +1,8 @@
-[gd_resource type="Resource" script_class="WorldResourceResource" load_steps=5 format=3 uid="uid://dbnhbsphiw4oe"]
+[gd_resource type="Resource" script_class="WorldResourceResource" load_steps=6 format=3 uid="uid://dbnhbsphiw4oe"]
 
-[ext_resource type="Texture2D" uid="uid://1q78rueqnvgr" path="res://Entities/Items/WorldResources/spruce_log.png" id="1_uryt5"]
+[ext_resource type="Texture2D" uid="uid://cvuqjp8xvpr3i" path="res://Entities/Items/WorldResources/SpruceLog/SpruceLogCT.tres" id="1_hnjw2"]
 [ext_resource type="PackedScene" uid="uid://bhmmr2f1hs8mk" path="res://Entities/Items/WorldResources/WorldResource.tscn" id="2_a84rt"]
+[ext_resource type="Texture2D" uid="uid://1q78rueqnvgr" path="res://Entities/Items/WorldResources/SpruceLog/spruce_log.png" id="2_hnhwf"]
 [ext_resource type="Script" uid="uid://crlmvnjkf7c3g" path="res://Entities/Items/WorldResources/WorldResourceResource.gd" id="3_iauve"]
 [ext_resource type="Script" uid="uid://ctxa7i1mbt7ab" path="res://UI/Inventory/PlayerInventory/Crafting/CraftingIngredient.gd" id="4_ryo35"]
 
@@ -13,9 +14,9 @@ tags = Array[StringName]([])
 inv_icon_rotation = 0.0
 inv_icon_offset = Vector2(0, 0)
 inv_icon_scale = Vector2(1, 1)
-inv_icon = ExtResource("1_uryt5")
-ground_icon = ExtResource("1_uryt5")
-in_hand_icon = ExtResource("1_uryt5")
+inv_icon = ExtResource("2_hnhwf")
+ground_icon = ExtResource("1_hnjw2")
+in_hand_icon = ExtResource("1_hnjw2")
 item_type = 4
 rarity = 0
 weight = 0
@@ -28,7 +29,7 @@ output_quantity = 1
 recipe_unlocked = false
 item_scene = ExtResource("2_a84rt")
 cooldowns_per_suid = true
-show_cooldown_fill = false
+shown_cooldown_fills = Array[String]([])
 rotation_lerping = 0.1
 holding_offset = Vector2(-7, -3)
 holding_degrees = 45.0

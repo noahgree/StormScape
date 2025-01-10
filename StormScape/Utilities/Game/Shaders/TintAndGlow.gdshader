@@ -1,7 +1,8 @@
 shader_type canvas_item;
 
-uniform vec4 tint_color: source_color = vec4(1.0, 1.0, 1.0, 0.0);
+uniform vec4 tint_color : source_color = vec4(1.0, 1.0, 1.0, 0.0);
 uniform float glow_intensity : hint_range(0.0, 2.0) = 1.0;
+uniform float final_alpha = 1.0;
 
 void fragment() {
     vec2 uv = UV;
@@ -16,6 +17,9 @@ void fragment() {
 
     // Apply the glow intensity to the final color
     final_color.rgb *= glow_intensity;
+
+    // Apply the final alpha
+    final_color.a *= final_alpha;
 
     COLOR = final_color;
 }

@@ -1,0 +1,8 @@
+[gd_resource type="CanvasTexture" load_steps=3 format=3 uid="uid://ln38htpivqou"]
+
+[ext_resource type="Texture2D" uid="uid://c7i0hkkoanp61" path="res://Entities/Items/Weapons/ProjectileWeapons/Boomerang/boomerang_wood.png" id="1_eyt82"]
+[ext_resource type="Texture2D" uid="uid://s8vhytr5d4vs" path="res://Entities/Items/Weapons/ProjectileWeapons/Boomerang/boomerang_wood_n.png" id="2_bvmsv"]
+
+[resource]
+diffuse_texture = ExtResource("1_eyt82")
+normal_texture = ExtResource("2_bvmsv")

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://b6q76o13tanxi"
-path="res://.godot/imported/pickaxe.png-9b556b3d056df8077f79e625f507b1c6.ctex"
+uid="uid://bejgqgxs8v5ma"
+path="res://.godot/imported/entity_shadow.svg-799e668f848b2ae008596e23670aa013.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Entities/Items/Weapons/MeleeWeapons/Pickaxe/pickaxe.png"
-dest_files=["res://.godot/imported/pickaxe.png-9b556b3d056df8077f79e625f507b1c6.ctex"]
+source_file="res://Utilities/Debug/EditorIcons/entity_shadow.svg"
+dest_files=["res://.godot/imported/entity_shadow.svg-799e668f848b2ae008596e23670aa013.ctex"]
 
 [params]
 
@@ -32,3 +32,6 @@ process/hdr_as_srgb=false
 process/hdr_clamp_exposure=false
 process/size_limit=0
 detect_3d/compress_to=1
+svg/scale=1.0
+editor/scale_with_editor_scale=false
+editor/convert_colors_with_editor_theme=false

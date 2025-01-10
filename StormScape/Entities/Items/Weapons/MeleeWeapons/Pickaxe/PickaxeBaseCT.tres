@@ -1,0 +1,8 @@
+[gd_resource type="CanvasTexture" load_steps=3 format=3 uid="uid://byxhss0dhepgs"]
+
+[ext_resource type="Texture2D" uid="uid://b6q76o13tanxi" path="res://Entities/Items/Weapons/MeleeWeapons/Pickaxe/pickaxe_base.png" id="1_ow7m3"]
+[ext_resource type="Texture2D" uid="uid://dktrnw5roaim0" path="res://Entities/Items/Weapons/MeleeWeapons/Pickaxe/pickaxe_base_n.png" id="2_wlxvi"]
+
+[resource]
+diffuse_texture = ExtResource("1_ow7m3")
+normal_texture = ExtResource("2_wlxvi")

@@ -1,3 +1,4 @@
+@tool
 extends StaticBody2D
 class_name StaticEntity
 ## An entity without the ability to move at all and that also cannot have non HP stats like stamina and hunger.
@@ -66,7 +67,16 @@ func _is_instance_on_load_game(data: StaticEntityData) -> void:
 		inv.pickup_range = data.pickup_range
 #endregion
 
+## Edits editor warnings for easier debugging.
+func _get_configuration_warnings() -> PackedStringArray:
+	if get_node_or_null("%EntitySprite") == null or not %EntitySprite is EntitySprite:
+		return ["This entity must have an EntitySprite typed sprite node."]
+	return []
+
 func _ready() -> void:
+	if Engine.is_editor_hint():
+		return
+
 	add_to_group("has_save_logic")
 	if team == GlobalData.Teams.PLAYER:
 		add_to_group("player_entities")

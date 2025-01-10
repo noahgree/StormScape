@@ -14,6 +14,7 @@
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_w7ucw"]
 blend_mode = 1
+light_mode = 1
 
 [sub_resource type="Curve" id="Curve_y8p6g"]
 _limits = [-200.0, 200.0, 0.0, 1.0]
@@ -35,6 +36,7 @@ colors = PackedColorArray(0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0)
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_d6xoa"]
 blend_mode = 1
+light_mode = 1
 
 [sub_resource type="Curve" id="Curve_fbkmh"]
 _limits = [-360.0, 360.0, 0.0, 1.0]
@@ -51,6 +53,7 @@ colors = PackedColorArray(0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1)
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_v670q"]
 blend_mode = 1
+light_mode = 1
 particles_animation = true
 particles_anim_h_frames = 4
 particles_anim_v_frames = 1
@@ -61,10 +64,11 @@ _data = [Vector2(0.00342466, 0.359578), 0.0, 0.0, 0, 0, Vector2(0.203767, 0.7783
 point_count = 5
 
 [sub_resource type="Gradient" id="Gradient_ihqhk"]
-offsets = PackedFloat32Array(0, 0.23384, 0.752852, 1)
+offsets = PackedFloat32Array(0, 0.205394, 0.794606, 1)
 colors = PackedColorArray(0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0)
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_qrigd"]
+light_mode = 1
 particles_animation = true
 particles_anim_h_frames = 6
 particles_anim_v_frames = 1
@@ -79,6 +83,7 @@ offsets = PackedFloat32Array(0, 0.138783, 0.830799, 1)
 colors = PackedColorArray(0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0)
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_d6sk5"]
+light_mode = 1
 particles_animation = true
 particles_anim_h_frames = 6
 particles_anim_v_frames = 1
@@ -93,6 +98,7 @@ offsets = PackedFloat32Array(0, 0.138783, 0.830799, 1)
 colors = PackedColorArray(0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0)
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_ob67e"]
+light_mode = 1
 particles_animation = true
 particles_anim_h_frames = 8
 particles_anim_v_frames = 1
@@ -134,6 +140,7 @@ _data = [Vector2(0, -0.319833), 0.0, 0.0, 0, 0, Vector2(1, 0.195839), 0.0, 0.0, 
 point_count = 2
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_56em0"]
+light_mode = 1
 
 [sub_resource type="Curve" id="Curve_x4cfa"]
 _limits = [-360.0, 360.0, 0.0, 1.0]
@@ -150,6 +157,7 @@ colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 1)
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_3qh0v"]
 blend_mode = 1
+light_mode = 1
 
 [sub_resource type="Curve" id="Curve_57ir7"]
 _data = [Vector2(0.00342466, 0.359578), 0.0, 0.0, 0, 0, Vector2(0.131849, 0.725802), 0.0, 0.0, 0, 0, Vector2(0.758562, 0.733314), 0.0, 0.0, 0, 0, Vector2(0.941781, 0.77651), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
@@ -160,6 +168,7 @@ offsets = PackedFloat32Array(0, 0.23384, 0.750951, 0.844106, 0.874525, 0.903042,
 colors = PackedColorArray(0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0.519084, 1, 1, 1, 1, 1, 1, 1, 0.389313, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0)
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_jmsdf"]
+light_mode = 1
 
 [sub_resource type="Curve" id="Curve_1je30"]
 _limits = [0.0, 1.25, 0.0, 1.0]
@@ -244,7 +253,7 @@ orbit_velocity_min = -0.05
 orbit_velocity_max = 0.05
 scale_amount_min = 0.65
 scale_amount_curve = SubResource("Curve_3oe74")
-color = Color(1.05, 1.05, 1.05, 1)
+color = Color(0.752302, 0.752302, 0.752302, 1)
 color_ramp = SubResource("Gradient_ihqhk")
 anim_speed_min = 4.0
 anim_speed_max = 4.0

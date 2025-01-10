@@ -2,31 +2,27 @@
 
 [ext_resource type="Script" uid="uid://b67bgqwsld0w4" path="res://Entities/Items/Weapons/ProjectileWeapons/UniqueProjWeapon.gd" id="1_38q5c"]
 [ext_resource type="PackedScene" uid="uid://bdi8o2g5plcnb" path="res://Entities/Items/Weapons/WeaponVFX/FiringVFX/Simple/SimpleFiringVFX.tscn" id="2_dn0cg"]
-[ext_resource type="Shader" uid="uid://cfbagv3hrtar2" path="res://Entities/EntityCore/EntityEffectShader.gdshader" id="2_facdc"]
-[ext_resource type="Texture2D" uid="uid://c7i0hkkoanp61" path="res://Entities/Items/Weapons/ProjectileWeapons/Boomerang/boomerang_wood.png" id="3_mfu04"]
-[ext_resource type="Texture2D" uid="uid://cs3clmnktksd6" path="res://Entities/Player/PlayerCore/player_hand.png" id="4_vlgbf"]
+[ext_resource type="Shader" uid="uid://cugs1eqtkjsbd" path="res://Utilities/Game/Shaders/TintAndGlow.gdshader" id="3_dn0cg"]
+[ext_resource type="Texture2D" uid="uid://ln38htpivqou" path="res://Entities/Items/Weapons/ProjectileWeapons/Boomerang/BoomerangWoodCT.tres" id="4_dn0cg"]
+[ext_resource type="PackedScene" uid="uid://lw5fgm5pgoif" path="res://Entities/EntityCore/EntityHandSprite.tscn" id="5_dn0cg"]
 [ext_resource type="PackedScene" uid="uid://batrfwan8r8ov" path="res://Entities/Items/WeaponMods/WeaponModManager.tscn" id="5_emppi"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_78dqe"]
-shader = ExtResource("2_facdc")
-shader_parameter/glow_color = Color(1, 1, 1, 1)
-shader_parameter/glow_size = 4.5
-shader_parameter/glow_strength = 9.0
-shader_parameter/enable_fade = false
+resource_local_to_scene = true
+shader = ExtResource("3_dn0cg")
 shader_parameter/tint_color = Color(1, 1, 1, 0)
+shader_parameter/glow_intensity = 1.0
 shader_parameter/final_alpha = 1.0
-shader_parameter/frame_uv_min = null
-shader_parameter/frame_uv_max = null
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_xdmjw"]
-atlas = ExtResource("3_mfu04")
+[sub_resource type="AtlasTexture" id="AtlasTexture_kpe1e"]
+atlas = ExtResource("4_dn0cg")
 region = Rect2(0, 0, 16, 16)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_4dmjn"]
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_xdmjw")
+"texture": SubResource("AtlasTexture_kpe1e")
 }],
 "loop": true,
 "name": &"default",
@@ -195,7 +191,7 @@ _data = {
 radius = 4.94975
 height = 16.9706
 
-[node name="Boomerang" type="Node2D"]
+[node name="BoomerangWood" type="Node2D"]
 script = ExtResource("1_38q5c")
 vfx_scene = ExtResource("2_dn0cg")
 
@@ -210,9 +206,8 @@ libraries = {
 
 [node name="ProjectileOrigin" type="Marker2D" parent="."]
 
-[node name="MainHandSprite" type="Sprite2D" parent="."]
+[node name="MainHandSprite" parent="." instance=ExtResource("5_dn0cg")]
 position = Vector2(-5, 5)
-texture = ExtResource("4_vlgbf")
 
 [node name="WeaponModManager" parent="." instance=ExtResource("5_emppi")]
 

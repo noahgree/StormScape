@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="ProjAmmoResource" load_steps=5 format=3 uid="uid://bcvljie626314"]
 
-[ext_resource type="Texture2D" uid="uid://emfg6q1q42wm" path="res://Entities/Items/Ammo/Heavy/heavy_ammo_thumb.png" id="1_nec57"]
+[ext_resource type="Texture2D" uid="uid://vfauehk04qjf" path="res://Entities/Items/Ammo/Heavy/HeavyAmmoThumbCT.tres" id="1_uyrbc"]
 [ext_resource type="Texture2D" uid="uid://cjuiqhgcljofe" path="res://Entities/Items/Ammo/Heavy/heavy_ammo.png" id="2_7d8ms"]
 [ext_resource type="Script" uid="uid://ctxa7i1mbt7ab" path="res://UI/Inventory/PlayerInventory/Crafting/CraftingIngredient.gd" id="3_koqs0"]
 [ext_resource type="Script" uid="uid://bpc1cwr4a6lgo" path="res://Entities/Items/Ammo/ProjAmmoResource.gd" id="4_emao0"]
@@ -15,8 +15,8 @@ inv_icon_rotation = 0.0
 inv_icon_offset = Vector2(0, 0)
 inv_icon_scale = Vector2(1, 1)
 inv_icon = ExtResource("2_7d8ms")
-ground_icon = ExtResource("1_nec57")
-in_hand_icon = ExtResource("1_nec57")
+ground_icon = ExtResource("1_uyrbc")
+in_hand_icon = ExtResource("1_uyrbc")
 item_type = 2
 rarity = 0
 weight = 0
@@ -28,7 +28,7 @@ recipe = Array[ExtResource("3_koqs0")]([])
 output_quantity = 1
 recipe_unlocked = false
 cooldowns_per_suid = true
-show_cooldown_fill = false
+shown_cooldown_fills = Array[String]([])
 rotation_lerping = 0.1
 holding_offset = Vector2(0, 0)
 holding_degrees = 0.0

@@ -1,0 +1,8 @@
+[gd_resource type="CanvasTexture" load_steps=3 format=3 uid="uid://bfoy8x1f7gqq7"]
+
+[ext_resource type="Texture2D" uid="uid://on5kqhtv8tmw" path="res://Entities/Items/Weapons/ProjectileWeapons/EagleEye/eagle_eye_base.png" id="1_lhxwr"]
+[ext_resource type="Texture2D" uid="uid://g0suddwg5qq6" path="res://Entities/Items/Weapons/ProjectileWeapons/EagleEye/eagle_eye_base_n.png" id="2_th5wx"]
+
+[resource]
+diffuse_texture = ExtResource("1_lhxwr")
+normal_texture = ExtResource("2_th5wx")

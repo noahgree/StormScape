@@ -1,53 +1,49 @@
 [gd_scene load_steps=19 format=3 uid="uid://dxv8dhn3gmufw"]
 
 [ext_resource type="Script" uid="uid://ca8xdltgdyjys" path="res://Entities/Items/Weapons/ProjectileWeapons/ProjectileWeapon.gd" id="1_7mk4f"]
-[ext_resource type="Shader" uid="uid://cfbagv3hrtar2" path="res://Entities/EntityCore/EntityEffectShader.gdshader" id="2_8r6wi"]
-[ext_resource type="Texture2D" uid="uid://cs3clmnktksd6" path="res://Entities/Player/PlayerCore/player_hand.png" id="2_bk7kb"]
-[ext_resource type="Texture2D" uid="uid://bmt8xnj8le8cd" path="res://Entities/Items/Weapons/ProjectileWeapons/FlameBlower/flame_blower_base.png" id="2_coi1e"]
 [ext_resource type="PackedScene" uid="uid://bdi8o2g5plcnb" path="res://Entities/Items/Weapons/WeaponVFX/FiringVFX/Simple/SimpleFiringVFX.tscn" id="2_qpgmn"]
 [ext_resource type="PackedScene" uid="uid://batrfwan8r8ov" path="res://Entities/Items/WeaponMods/WeaponModManager.tscn" id="3_7a8dm"]
+[ext_resource type="Shader" uid="uid://cugs1eqtkjsbd" path="res://Utilities/Game/Shaders/TintAndGlow.gdshader" id="3_qpgmn"]
+[ext_resource type="Texture2D" uid="uid://t54taecjg640" path="res://Entities/Items/Weapons/ProjectileWeapons/FlameBlower/FlameBlowerBaseCT.tres" id="4_qpgmn"]
+[ext_resource type="PackedScene" uid="uid://lw5fgm5pgoif" path="res://Entities/EntityCore/EntityHandSprite.tscn" id="7_xc27p"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_qv0hn"]
-shader = ExtResource("2_8r6wi")
-shader_parameter/glow_color = Color(1, 1, 1, 1)
-shader_parameter/glow_size = 4.5
-shader_parameter/glow_strength = 9.0
-shader_parameter/enable_fade = false
+resource_local_to_scene = true
+shader = ExtResource("3_qpgmn")
 shader_parameter/tint_color = Color(1, 1, 1, 0)
+shader_parameter/glow_intensity = 1.0
 shader_parameter/final_alpha = 1.0
-shader_parameter/frame_uv_min = null
-shader_parameter/frame_uv_max = null
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_me1kl"]
-atlas = ExtResource("2_coi1e")
+[sub_resource type="AtlasTexture" id="AtlasTexture_xc27p"]
+atlas = ExtResource("4_qpgmn")
 region = Rect2(0, 0, 38, 16)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_3flqe"]
-atlas = ExtResource("2_coi1e")
+[sub_resource type="AtlasTexture" id="AtlasTexture_yltag"]
+atlas = ExtResource("4_qpgmn")
 region = Rect2(38, 0, 38, 16)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_5qp60"]
-atlas = ExtResource("2_coi1e")
+[sub_resource type="AtlasTexture" id="AtlasTexture_sy7ca"]
+atlas = ExtResource("4_qpgmn")
 region = Rect2(76, 0, 38, 16)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_r5lu1"]
-atlas = ExtResource("2_coi1e")
+[sub_resource type="AtlasTexture" id="AtlasTexture_3pvvh"]
+atlas = ExtResource("4_qpgmn")
 region = Rect2(114, 0, 38, 16)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_8pr6a"]
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_me1kl")
+"texture": SubResource("AtlasTexture_xc27p")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_3flqe")
+"texture": SubResource("AtlasTexture_yltag")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_5qp60")
+"texture": SubResource("AtlasTexture_sy7ca")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_r5lu1")
+"texture": SubResource("AtlasTexture_3pvvh")
 }],
 "loop": true,
 "name": &"default",
@@ -161,17 +157,16 @@ libraries = {
 [node name="ProjectileOrigin" type="Marker2D" parent="."]
 position = Vector2(19, 3)
 
-[node name="OffHandSprite" type="Sprite2D" parent="."]
+[node name="OffHandSprite" parent="." instance=ExtResource("7_xc27p")]
 position = Vector2(1, 7)
-texture = ExtResource("2_bk7kb")
 
-[node name="MainHandSprite" type="Sprite2D" parent="."]
+[node name="MainHandSprite" parent="." instance=ExtResource("7_xc27p")]
 position = Vector2(-16, 3)
-texture = ExtResource("2_bk7kb")
 
 [node name="WeaponModManager" parent="." instance=ExtResource("3_7a8dm")]
 
 [node name="ClippingDetector" type="Area2D" parent="."]
+visible = false
 collision_layer = 0
 collision_mask = 241
 

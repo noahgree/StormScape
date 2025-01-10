@@ -2,24 +2,20 @@
 
 [ext_resource type="Script" uid="uid://ca8xdltgdyjys" path="res://Entities/Items/Weapons/ProjectileWeapons/ProjectileWeapon.gd" id="1_av7ge"]
 [ext_resource type="PackedScene" uid="uid://bdi8o2g5plcnb" path="res://Entities/Items/Weapons/WeaponVFX/FiringVFX/Simple/SimpleFiringVFX.tscn" id="2_jdyr6"]
-[ext_resource type="Shader" uid="uid://cfbagv3hrtar2" path="res://Entities/EntityCore/EntityEffectShader.gdshader" id="2_whcpg"]
-[ext_resource type="Texture2D" uid="uid://b2bgxo22c1tup" path="res://Entities/Items/Weapons/ProjectileWeapons/Cratershot/cratershot_base.png" id="3_2mx5p"]
-[ext_resource type="Texture2D" uid="uid://cs3clmnktksd6" path="res://Entities/Player/PlayerCore/player_hand.png" id="4_hgilo"]
+[ext_resource type="Shader" uid="uid://cugs1eqtkjsbd" path="res://Utilities/Game/Shaders/TintAndGlow.gdshader" id="3_jdyr6"]
+[ext_resource type="Texture2D" uid="uid://bicdpq4he2mgo" path="res://Entities/Items/Weapons/ProjectileWeapons/Cratershot/CratershotBaseCT.tres" id="4_jdyr6"]
+[ext_resource type="PackedScene" uid="uid://lw5fgm5pgoif" path="res://Entities/EntityCore/EntityHandSprite.tscn" id="5_jdyr6"]
 [ext_resource type="PackedScene" uid="uid://batrfwan8r8ov" path="res://Entities/Items/WeaponMods/WeaponModManager.tscn" id="5_kd7vu"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_8unv1"]
-shader = ExtResource("2_whcpg")
-shader_parameter/glow_color = Color(1, 1, 1, 1)
-shader_parameter/glow_size = 4.5
-shader_parameter/glow_strength = 9.0
-shader_parameter/enable_fade = false
+resource_local_to_scene = true
+shader = ExtResource("3_jdyr6")
 shader_parameter/tint_color = Color(1, 1, 1, 0)
+shader_parameter/glow_intensity = 1.0
 shader_parameter/final_alpha = 1.0
-shader_parameter/frame_uv_min = null
-shader_parameter/frame_uv_max = null
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_jdyr6"]
-atlas = ExtResource("3_2mx5p")
+atlas = ExtResource("4_jdyr6")
 region = Rect2(0, 0, 28, 10)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_5e15s"]
@@ -72,22 +68,6 @@ tracks/2/keys = {
 "values": [Vector2(1, 1)]
 }
 
-[sub_resource type="Animation" id="Animation_5s4um"]
-resource_name = "post_fire"
-step = 0.05
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("ItemSprite/OffHandSprite:position")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.5, 1),
-"transitions": PackedFloat32Array(1, 1, 1),
-"update": 1,
-"values": [Vector2(6, 3), Vector2(9, 3), Vector2(6, 3)]
-}
-
 [sub_resource type="Animation" id="Animation_oaoxh"]
 resource_name = "fire"
 step = 0.05
@@ -116,6 +96,22 @@ tracks/1/keys = {
 "values": [Vector2(1, 1), Vector2(0.85, 1), Vector2(1, 1)]
 }
 
+[sub_resource type="Animation" id="Animation_5s4um"]
+resource_name = "post_fire"
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("ItemSprite/OffHandSprite:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5, 1),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [Vector2(6, 3), Vector2(9, 3), Vector2(6, 3)]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_lg6o7"]
 _data = {
 &"RESET": SubResource("Animation_jdyr6"),
@@ -136,13 +132,11 @@ vfx_scene = ExtResource("2_jdyr6")
 material = SubResource("ShaderMaterial_8unv1")
 sprite_frames = SubResource("SpriteFrames_5e15s")
 
-[node name="OffHandSprite" type="Sprite2D" parent="ItemSprite"]
+[node name="OffHandSprite" parent="ItemSprite" instance=ExtResource("5_jdyr6")]
 position = Vector2(6, 3)
-texture = ExtResource("4_hgilo")
 
-[node name="MainHandSprite" type="Sprite2D" parent="ItemSprite"]
+[node name="MainHandSprite" parent="ItemSprite" instance=ExtResource("5_jdyr6")]
 position = Vector2(-3, 5)
-texture = ExtResource("4_hgilo")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {

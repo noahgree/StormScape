@@ -1,8 +1,9 @@
-[gd_resource type="Resource" script_class="ProjWeaponResource" load_steps=33 format=3 uid="uid://ciel2rrqq4dvv"]
+[gd_resource type="Resource" script_class="ProjWeaponResource" load_steps=34 format=3 uid="uid://ciel2rrqq4dvv"]
 
 [ext_resource type="Script" uid="uid://boo31eu083dqd" path="res://Entities/Stats/EffectSystemResources/StatusEffects/StatusEffect.gd" id="2_gdqw7"]
 [ext_resource type="Script" uid="uid://dkfssottmsrch" path="res://Entities/Stats/EffectSystemResources/EffectSources/EffectSource.gd" id="2_v1b1g"]
 [ext_resource type="PackedScene" uid="uid://c3e5wour08d6u" path="res://Entities/Items/Hitscans/LaserBeam.tscn" id="3_ujvf8"]
+[ext_resource type="Texture2D" uid="uid://dhi85kahpnkpu" path="res://Entities/Items/Weapons/ProjectileWeapons/LaserGun/LaserGunBaseFrameCT.tres" id="4_nt47o"]
 [ext_resource type="Texture2D" uid="uid://cbejnd21g2010" path="res://Entities/Items/Weapons/ProjectileWeapons/LaserGun/laser_gun_base_frame.png" id="4_v1b1g"]
 [ext_resource type="Script" uid="uid://cje5bobi6o8bo" path="res://Entities/Items/Hitscans/HitscanResource.gd" id="4_w5523"]
 [ext_resource type="PackedScene" uid="uid://ckf7i8bnass5n" path="res://Entities/Items/Projectiles/Laser/Laser.tscn" id="5_xjmn2"]
@@ -221,6 +222,8 @@ firing_cam_shake_dur = 0.0
 firing_cam_freeze_mult = 1.0
 firing_cam_freeze_dur = 0.0
 firing_sound = ""
+post_fire_sound = ""
+post_fire_sound_delay = 0.0
 charging_sound = ""
 projectile_logic = SubResource("Resource_nhr3k")
 hitscan_logic = SubResource("Resource_woyhr")
@@ -278,8 +281,8 @@ inv_icon_rotation = -35.0
 inv_icon_offset = Vector2(1, 0)
 inv_icon_scale = Vector2(0.85, 0.85)
 inv_icon = ExtResource("4_v1b1g")
-ground_icon = ExtResource("4_v1b1g")
-in_hand_icon = ExtResource("4_v1b1g")
+ground_icon = ExtResource("4_nt47o")
+in_hand_icon = ExtResource("4_nt47o")
 item_type = 1
 rarity = 2
 weight = 0
@@ -292,7 +295,7 @@ output_quantity = 1
 recipe_unlocked = false
 item_scene = ExtResource("11_ykm1j")
 cooldowns_per_suid = true
-show_cooldown_fill = false
+shown_cooldown_fills = Array[String]([])
 rotation_lerping = 0.15
 holding_offset = Vector2(0, 0)
 holding_degrees = 0.0

@@ -1,46 +1,42 @@
 [gd_scene load_steps=16 format=3 uid="uid://ohg1k8yu1y3r"]
 
 [ext_resource type="Script" uid="uid://ca8xdltgdyjys" path="res://Entities/Items/Weapons/ProjectileWeapons/ProjectileWeapon.gd" id="1_ek4d5"]
-[ext_resource type="Texture2D" uid="uid://dcbsk1tsq047q" path="res://Entities/Items/Weapons/ProjectileWeapons/Revolver/revolver_base.png" id="1_mthhb"]
 [ext_resource type="PackedScene" uid="uid://bdi8o2g5plcnb" path="res://Entities/Items/Weapons/WeaponVFX/FiringVFX/Simple/SimpleFiringVFX.tscn" id="2_1bvjq"]
-[ext_resource type="Shader" uid="uid://cfbagv3hrtar2" path="res://Entities/EntityCore/EntityEffectShader.gdshader" id="2_gjcg2"]
-[ext_resource type="Texture2D" uid="uid://cs3clmnktksd6" path="res://Entities/Player/PlayerCore/player_hand.png" id="2_qrvtt"]
+[ext_resource type="Shader" uid="uid://cugs1eqtkjsbd" path="res://Utilities/Game/Shaders/TintAndGlow.gdshader" id="3_1bvjq"]
 [ext_resource type="PackedScene" uid="uid://batrfwan8r8ov" path="res://Entities/Items/WeaponMods/WeaponModManager.tscn" id="3_q5a14"]
+[ext_resource type="Texture2D" uid="uid://bii14bglra82s" path="res://Entities/Items/Weapons/ProjectileWeapons/Revolver/RevolverBaseCT.tres" id="4_1bvjq"]
+[ext_resource type="PackedScene" uid="uid://lw5fgm5pgoif" path="res://Entities/EntityCore/EntityHandSprite.tscn" id="5_1bvjq"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_i1ire"]
-shader = ExtResource("2_gjcg2")
-shader_parameter/glow_color = Color(1, 1, 1, 1)
-shader_parameter/glow_size = 4.5
-shader_parameter/glow_strength = 9.0
-shader_parameter/enable_fade = false
+resource_local_to_scene = true
+shader = ExtResource("3_1bvjq")
 shader_parameter/tint_color = Color(1, 1, 1, 0)
+shader_parameter/glow_intensity = 1.0
 shader_parameter/final_alpha = 1.0
-shader_parameter/frame_uv_min = null
-shader_parameter/frame_uv_max = null
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_1bvjq"]
-atlas = ExtResource("1_mthhb")
-region = Rect2(0, 0, 20, 16)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_qcgld"]
-atlas = ExtResource("1_mthhb")
-region = Rect2(20, 0, 20, 16)
+atlas = ExtResource("4_1bvjq")
+region = Rect2(0, 0, 20, 16)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_v3wvt"]
-atlas = ExtResource("1_mthhb")
+atlas = ExtResource("4_1bvjq")
+region = Rect2(20, 0, 20, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4vgqh"]
+atlas = ExtResource("4_1bvjq")
 region = Rect2(40, 0, 20, 16)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_a2dle"]
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_1bvjq")
-}, {
-"duration": 1.0,
 "texture": SubResource("AtlasTexture_qcgld")
 }, {
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_v3wvt")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4vgqh")
 }],
 "loop": true,
 "name": &"default",
@@ -120,9 +116,8 @@ vfx_scene = ExtResource("2_1bvjq")
 material = SubResource("ShaderMaterial_i1ire")
 sprite_frames = SubResource("SpriteFrames_a2dle")
 
-[node name="MainHandSprite" type="Sprite2D" parent="ItemSprite"]
+[node name="MainHandSprite" parent="ItemSprite" instance=ExtResource("5_1bvjq")]
 position = Vector2(-7, 2)
-texture = ExtResource("2_qrvtt")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {

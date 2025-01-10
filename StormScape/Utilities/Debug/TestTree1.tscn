@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://cn2gulskgn7k3" path="res://Entities/EntityCore/EntityTypes/StaticEntity/StaticEntity.gd" id="1_4yxmu"]
 [ext_resource type="PackedScene" uid="uid://dmv4k4j4lg3pw" path="res://Entities/EntityCore/EntityStaticSprite.tscn" id="2_mgp78"]
 [ext_resource type="PackedScene" uid="uid://cj2wy5f05cos4" path="res://Entities/EntityCore/EntityShadow.tscn" id="2_nnf0c"]
-[ext_resource type="Shader" uid="uid://cfbagv3hrtar2" path="res://Entities/EntityCore/EntityEffectShader.gdshader" id="3_epxnw"]
+[ext_resource type="Shader" uid="uid://cfbagv3hrtar2" path="res://Utilities/Game/Shaders/EntityEffectShader.gdshader" id="3_epxnw"]
 [ext_resource type="Texture2D" uid="uid://b0witw234r46t" path="res://Entities/Environment/dead_tree_1.png" id="4_tx18i"]
 [ext_resource type="PackedScene" uid="uid://btba0jmsow1mx" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectReceiverComponent.tscn" id="6_bxml6"]
 [ext_resource type="PackedScene" uid="uid://co3n6m7efg8pd" path="res://Entities/Components/EffectComponents/StatusEffectManager/StatusEffectManager.tscn" id="7_7lx3c"]
@@ -18,14 +18,12 @@
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_w83do"]
 resource_local_to_scene = true
 shader = ExtResource("3_epxnw")
-shader_parameter/glow_color = Color(1, 1, 1, 1)
-shader_parameter/glow_size = 4.5
-shader_parameter/glow_strength = 9.0
-shader_parameter/enable_fade = false
+shader_parameter/outline_color = Color(1, 1, 1, 1)
+shader_parameter/outline_thickness = 0.0
 shader_parameter/tint_color = Color(1, 1, 1, 0)
 shader_parameter/final_alpha = 1.0
-shader_parameter/frame_uv_min = null
-shader_parameter/frame_uv_max = Vector2(0, 0)
+shader_parameter/override_color = Color(1, 1, 1, 0)
+shader_parameter/use_override_color = false
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_l7ldg"]
 radius = 7.0
@@ -58,6 +56,7 @@ position = Vector2(-1, 0)
 scale = Vector2(4.69333, 2.75429)
 
 [node name="EntitySprite" parent="." instance=ExtResource("2_mgp78")]
+unique_name_in_owner = true
 material = SubResource("ShaderMaterial_w83do")
 position = Vector2(13, -48)
 texture = ExtResource("4_tx18i")

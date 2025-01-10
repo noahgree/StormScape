@@ -1,0 +1,8 @@
+[gd_resource type="CanvasTexture" load_steps=3 format=3 uid="uid://btbju7m01l8x2"]
+
+[ext_resource type="Texture2D" uid="uid://cpo3fkry82ihj" path="res://Entities/Items/Weapons/ProjectileWeapons/BottleOFire/bottle_o_fire_base.png" id="1_xdep5"]
+[ext_resource type="Texture2D" uid="uid://xsyap63n1a0g" path="res://Entities/Items/Weapons/ProjectileWeapons/BottleOFire/bottle_o_fire_base_n.png" id="2_s0mdk"]
+
+[resource]
+diffuse_texture = ExtResource("1_xdep5")
+normal_texture = ExtResource("2_s0mdk")

@@ -1,37 +1,33 @@
 [gd_scene load_steps=19 format=3 uid="uid://c17oqm8amalvy"]
 
-[ext_resource type="Script" uid="uid://ca8xdltgdyjys" path="res://Entities/Items/Weapons/ProjectileWeapons/ProjectileWeapon.gd" id="1_vuacj"]
-[ext_resource type="PackedScene" uid="uid://bdi8o2g5plcnb" path="res://Entities/Items/Weapons/WeaponVFX/FiringVFX/Simple/SimpleFiringVFX.tscn" id="2_c0tnr"]
-[ext_resource type="Shader" uid="uid://cfbagv3hrtar2" path="res://Entities/EntityCore/EntityEffectShader.gdshader" id="2_v1sfn"]
-[ext_resource type="Texture2D" uid="uid://beenod82tvkv1" path="res://Entities/Items/Weapons/ProjectileWeapons/Gattler/gattler_base.png" id="3_fnsui"]
-[ext_resource type="Texture2D" uid="uid://cs3clmnktksd6" path="res://Entities/Player/PlayerCore/player_hand.png" id="4_7qqje"]
+[ext_resource type="Script" uid="uid://ca8xdltgdyjys" path="res://Entities/Items/Weapons/ProjectileWeapons/ProjectileWeapon.gd" id="1_c0tnr"]
+[ext_resource type="PackedScene" uid="uid://bdi8o2g5plcnb" path="res://Entities/Items/Weapons/WeaponVFX/FiringVFX/Simple/SimpleFiringVFX.tscn" id="2_74nn5"]
+[ext_resource type="Shader" uid="uid://cugs1eqtkjsbd" path="res://Utilities/Game/Shaders/TintAndGlow.gdshader" id="3_c0tnr"]
+[ext_resource type="Texture2D" uid="uid://nmamppdlgu5h" path="res://Entities/Items/Weapons/ProjectileWeapons/Gattler/GattlerBaseCT.tres" id="4_c0tnr"]
+[ext_resource type="PackedScene" uid="uid://lw5fgm5pgoif" path="res://Entities/EntityCore/EntityHandSprite.tscn" id="5_74nn5"]
 [ext_resource type="PackedScene" uid="uid://batrfwan8r8ov" path="res://Entities/Items/WeaponMods/WeaponModManager.tscn" id="5_yhkb2"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_fnsui"]
-shader = ExtResource("2_v1sfn")
-shader_parameter/glow_color = Color(1, 1, 1, 1)
-shader_parameter/glow_size = 4.5
-shader_parameter/glow_strength = 9.0
-shader_parameter/enable_fade = false
+resource_local_to_scene = true
+shader = ExtResource("3_c0tnr")
 shader_parameter/tint_color = Color(1, 1, 1, 0)
+shader_parameter/glow_intensity = 1.0
 shader_parameter/final_alpha = 1.0
-shader_parameter/frame_uv_min = null
-shader_parameter/frame_uv_max = null
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_c0tnr"]
-atlas = ExtResource("3_fnsui")
+atlas = ExtResource("4_c0tnr")
 region = Rect2(0, 0, 38, 16)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_74nn5"]
-atlas = ExtResource("3_fnsui")
+atlas = ExtResource("4_c0tnr")
 region = Rect2(38, 0, 38, 16)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_c50xj"]
-atlas = ExtResource("3_fnsui")
+atlas = ExtResource("4_c0tnr")
 region = Rect2(76, 0, 38, 16)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ol8xj"]
-atlas = ExtResource("3_fnsui")
+atlas = ExtResource("4_c0tnr")
 region = Rect2(114, 0, 38, 16)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_gua5r"]
@@ -127,11 +123,11 @@ radius = 4.0
 height = 24.0
 
 [node name="Gattler" type="Node2D"]
-script = ExtResource("1_vuacj")
+script = ExtResource("1_c0tnr")
 proj_origin = Vector2(18, -1)
-vfx_scene = ExtResource("2_c0tnr")
-particle_emission_extents = Vector2(7, 1)
-particle_emission_origin = Vector2(11, -3)
+vfx_scene = ExtResource("2_74nn5")
+particle_emission_extents = Vector2(8, 1)
+particle_emission_origin = Vector2(8, -3)
 
 [node name="ItemSprite" type="AnimatedSprite2D" parent="."]
 clip_children = 2
@@ -162,13 +158,11 @@ libraries = {
 [node name="ProjectileOrigin" type="Marker2D" parent="."]
 position = Vector2(18, -1)
 
-[node name="OffHandSprite" type="Sprite2D" parent="."]
+[node name="OffHandSprite" parent="." instance=ExtResource("5_74nn5")]
 position = Vector2(-17, 0)
-texture = ExtResource("4_7qqje")
 
-[node name="MainHandSprite" type="Sprite2D" parent="."]
+[node name="MainHandSprite" parent="." instance=ExtResource("5_74nn5")]
 position = Vector2(-7, -8)
-texture = ExtResource("4_7qqje")
 
 [node name="WeaponModManager" parent="." instance=ExtResource("5_yhkb2")]
 print_effect_updates = true
@@ -186,4 +180,4 @@ debug_color = Color(0, 0.6, 0.7, 0.123)
 [node name="DebugEmissionBox" type="Polygon2D" parent="."]
 visible = false
 z_index = 5
-polygon = PackedVector2Array(4, -4, 18, -4, 18, -2, 4, -2)
+polygon = PackedVector2Array(0, -4, 16, -4, 16, -2, 0, -2)

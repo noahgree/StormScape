@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://b4acjy3ujbtoy"
-path="res://.godot/imported/apple.png-a4cf8d27f492c4089d9f5edfd82ee03f.ctex"
+uid="uid://dkh18jshh418j"
+path="res://.godot/imported/heavy_ammo_thumb_n.png-afc0a000df827f1064a9e30e05ddb599.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Entities/Items/Consumables/Apple/apple.png"
-dest_files=["res://.godot/imported/apple.png-a4cf8d27f492c4089d9f5edfd82ee03f.ctex"]
+source_file="res://Entities/Items/Ammo/Heavy/heavy_ammo_thumb_n.png"
+dest_files=["res://.godot/imported/heavy_ammo_thumb_n.png-afc0a000df827f1064a9e30e05ddb599.ctex"]
 
 [params]
 

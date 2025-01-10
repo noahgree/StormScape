@@ -1,32 +1,29 @@
 [gd_scene load_steps=12 format=3 uid="uid://b0wwbgbbfkso4"]
 
 [ext_resource type="Script" uid="uid://ut1n80th00qw" path="res://Entities/Items/Weapons/MeleeWeapons/MeleeWeapon.gd" id="1_rnhoy"]
-[ext_resource type="Shader" uid="uid://cfbagv3hrtar2" path="res://Entities/EntityCore/EntityEffectShader.gdshader" id="2_lfms1"]
-[ext_resource type="Texture2D" uid="uid://b6q76o13tanxi" path="res://Entities/Items/Weapons/MeleeWeapons/Pickaxe/pickaxe.png" id="3_j3tj5"]
+[ext_resource type="Shader" uid="uid://cugs1eqtkjsbd" path="res://Utilities/Game/Shaders/TintAndGlow.gdshader" id="2_avyyt"]
+[ext_resource type="Texture2D" uid="uid://byxhss0dhepgs" path="res://Entities/Items/Weapons/MeleeWeapons/Pickaxe/PickaxeBaseCT.tres" id="3_avyyt"]
 [ext_resource type="PackedScene" uid="uid://b7ckcb2xdimpo" path="res://Entities/Components/HitboxComponent/HitboxComponent.tscn" id="4_047ac"]
-[ext_resource type="Texture2D" uid="uid://cs3clmnktksd6" path="res://Entities/Player/PlayerCore/player_hand.png" id="5_llog1"]
+[ext_resource type="PackedScene" uid="uid://lw5fgm5pgoif" path="res://Entities/EntityCore/EntityHandSprite.tscn" id="5_avyyt"]
 [ext_resource type="PackedScene" uid="uid://batrfwan8r8ov" path="res://Entities/Items/WeaponMods/WeaponModManager.tscn" id="7_fdu24"]
 [ext_resource type="AnimationLibrary" uid="uid://dk7m82xohebji" path="res://Entities/Items/Weapons/MeleeWeapons/MeleeWeaponAnimLibrary.res" id="7_huo2n"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_k6dlg"]
-shader = ExtResource("2_lfms1")
-shader_parameter/glow_color = Color(1, 1, 1, 1)
-shader_parameter/glow_size = 4.5
-shader_parameter/glow_strength = 9.0
-shader_parameter/enable_fade = false
+resource_local_to_scene = true
+shader = ExtResource("2_avyyt")
 shader_parameter/tint_color = Color(1, 1, 1, 0)
-shader_parameter/frame_uv_min = null
-shader_parameter/frame_uv_max = null
+shader_parameter/glow_intensity = 1.0
+shader_parameter/final_alpha = 1.0
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_iu4vy"]
-atlas = ExtResource("3_j3tj5")
+[sub_resource type="AtlasTexture" id="AtlasTexture_m0m3t"]
+atlas = ExtResource("3_avyyt")
 region = Rect2(0, 0, 16, 16)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_8uuyi"]
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_iu4vy")
+"texture": SubResource("AtlasTexture_m0m3t")
 }],
 "loop": true,
 "name": &"default",
@@ -58,13 +55,12 @@ rotation = 0.785398
 shape = SubResource("RectangleShape2D_sjv0y")
 disabled = true
 
-[node name="MainHandSprite" type="Sprite2D" parent="ItemSprite"]
-position = Vector2(8.01041, 4.01041)
-texture = ExtResource("5_llog1")
+[node name="MainHandSprite" parent="ItemSprite" instance=ExtResource("5_avyyt")]
+position = Vector2(8, 4)
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
-"MeleeWeaponAnimLibrary": ExtResource("7_huo2n")
+&"MeleeWeaponAnimLibrary": ExtResource("7_huo2n")
 }
 
 [node name="WeaponModManager" parent="." instance=ExtResource("7_fdu24")]

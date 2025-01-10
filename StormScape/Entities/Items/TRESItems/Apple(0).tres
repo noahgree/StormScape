@@ -2,10 +2,10 @@
 
 [ext_resource type="Script" uid="uid://dkfssottmsrch" path="res://Entities/Stats/EffectSystemResources/EffectSources/EffectSource.gd" id="1_bn713"]
 [ext_resource type="Script" uid="uid://5qg77uqxh5yw" path="res://Entities/Items/Consumables/ConsumableResource.gd" id="1_jepoi"]
-[ext_resource type="Texture2D" uid="uid://b4acjy3ujbtoy" path="res://Entities/Items/Consumables/Apple/apple.png" id="1_vw2hi"]
 [ext_resource type="PackedScene" uid="uid://bdaogdtcus1ac" path="res://Entities/Items/Consumables/Consumable.tscn" id="2_1oeu8"]
 [ext_resource type="Script" uid="uid://boo31eu083dqd" path="res://Entities/Stats/EffectSystemResources/StatusEffects/StatusEffect.gd" id="2_kdgs1"]
-[ext_resource type="Texture2D" uid="uid://7v6u4kbfcjon" path="res://Entities/Items/Consumables/Apple/apple_thumb.png" id="4_upr2p"]
+[ext_resource type="Texture2D" uid="uid://bibinc8ql8wl1" path="res://Entities/Items/Consumables/Apple/AppleThumbCT.tres" id="3_7kd7o"]
+[ext_resource type="Texture2D" uid="uid://b4acjy3ujbtoy" path="res://Entities/Items/Consumables/Apple/apple_base.png" id="4_8vr7p"]
 [ext_resource type="Script" uid="uid://ctxa7i1mbt7ab" path="res://UI/Inventory/PlayerInventory/Crafting/CraftingIngredient.gd" id="5_jvpr1"]
 
 [sub_resource type="Resource" id="Resource_hsou2"]
@@ -56,9 +56,9 @@ tags = Array[StringName]([])
 inv_icon_rotation = 0.0
 inv_icon_offset = Vector2(0, 0)
 inv_icon_scale = Vector2(1, 1)
-inv_icon = ExtResource("1_vw2hi")
-ground_icon = ExtResource("4_upr2p")
-in_hand_icon = ExtResource("4_upr2p")
+inv_icon = ExtResource("4_8vr7p")
+ground_icon = ExtResource("3_7kd7o")
+in_hand_icon = ExtResource("3_7kd7o")
 item_type = 0
 rarity = 0
 weight = 0
@@ -71,7 +71,7 @@ output_quantity = 1
 recipe_unlocked = false
 item_scene = ExtResource("2_1oeu8")
 cooldowns_per_suid = false
-show_cooldown_fill = true
+shown_cooldown_fills = Array[String]([])
 rotation_lerping = 1.0
 holding_offset = Vector2(1, -3)
 holding_degrees = 0.0

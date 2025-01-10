@@ -1,3 +1,4 @@
+@tool
 extends RigidBody2D
 class_name RigidEntity
 ## An entity that can move with physics and that also cannot have non-HP stats like stamina and hunger.
@@ -8,7 +9,7 @@ class_name RigidEntity
 @export var team: GlobalData.Teams = GlobalData.Teams.PLAYER ## What the effects received by this entity should consider as this entity's team.
 @export var stats: StatModsCacheResource = StatModsCacheResource.new() ## The resource that will cache and work with all stat mods for this entity.
 
-@onready var sprite: Node2D = $EntitySprite ## The visual representation of the entity. Needs to have the EntityEffectShader applied.
+@onready var sprite: Node2D = %EntitySprite ## The visual representation of the entity. Needs to have the EntityEffectShader applied.
 @onready var effect_receiver: EffectReceiverComponent = get_node_or_null("EffectReceiverComponent") ## The component that handles incoming effect sources.
 @onready var effects: StatusEffectManager = get_node_or_null("%StatusEffectManager") ## The node that will cache and manage all status effects for this entity.
 @onready var inv: ItemReceiverComponent = get_node_or_null("ItemReceiverComponent")
@@ -66,8 +67,17 @@ func _is_instance_on_load_game(data: RigidEntityData) -> void:
 		inv.pickup_range = data.pickup_range
 #endregion
 
+## Edits editor warnings for easier debugging.
+func _get_configuration_warnings() -> PackedStringArray:
+	if get_node_or_null("%EntitySprite") == null or not %EntitySprite is EntitySprite:
+		return ["This entity must have an EntitySprite typed sprite node."]
+	return []
+
 ## Making sure we know we have save logic, even if not set in editor. Then set up rigid body physics.
 func _ready() -> void:
+	if Engine.is_editor_hint():
+		return
+
 	add_to_group("has_save_logic")
 	if team == GlobalData.Teams.PLAYER:
 		add_to_group("player_entities")

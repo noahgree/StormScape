@@ -1,3 +1,4 @@
+@icon("res://Utilities/Debug/EditorIcons/consumable.png")
 extends EquippableItem
 class_name Consumable
 

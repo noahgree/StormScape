@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://ec7bui23pv1m"
-path="res://.godot/imported/axe.png-4a5dfcb3b06b5695ba6697bb366da323.ctex"
+uid="uid://b312nbh17tgbh"
+path="res://.godot/imported/spitter_base_n.png-0816f563d5fd2dc6c5662337b4201691.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Entities/Items/Weapons/MeleeWeapons/Axe/axe.png"
-dest_files=["res://.godot/imported/axe.png-4a5dfcb3b06b5695ba6697bb366da323.ctex"]
+source_file="res://Entities/Enemies/Spitter/spitter_base_n.png"
+dest_files=["res://.godot/imported/spitter_base_n.png-0816f563d5fd2dc6c5662337b4201691.ctex"]
 
 [params]
 

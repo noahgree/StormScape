@@ -1,9 +1,10 @@
-[gd_resource type="Resource" script_class="ProjWeaponResource" load_steps=19 format=3 uid="uid://kmidnuyti5xi"]
+[gd_resource type="Resource" script_class="ProjWeaponResource" load_steps=20 format=3 uid="uid://kmidnuyti5xi"]
 
 [ext_resource type="Script" uid="uid://dkfssottmsrch" path="res://Entities/Stats/EffectSystemResources/EffectSources/EffectSource.gd" id="1_pnsqi"]
 [ext_resource type="Script" uid="uid://boo31eu083dqd" path="res://Entities/Stats/EffectSystemResources/StatusEffects/StatusEffect.gd" id="2_8ufau"]
 [ext_resource type="Script" uid="uid://cje5bobi6o8bo" path="res://Entities/Items/Hitscans/HitscanResource.gd" id="3_46awu"]
 [ext_resource type="Script" uid="uid://bj3r5oopspj6l" path="res://Entities/Items/Projectiles/ProjectileResource.gd" id="4_7qce5"]
+[ext_resource type="Texture2D" uid="uid://cqsoww8i0aya3" path="res://Entities/Items/Weapons/ProjectileWeapons/Boomerang/BoomerangSteelCT.tres" id="4_gupq0"]
 [ext_resource type="PackedScene" uid="uid://dna63yojpqy2n" path="res://Entities/Items/Projectiles/Boomerangs/BoomerangSteelProj.tscn" id="5_23285"]
 [ext_resource type="Texture2D" uid="uid://1cupq4qi2cjx" path="res://Entities/Items/Weapons/ProjectileWeapons/Boomerang/boomerang_steel.png" id="6_2lgcn"]
 [ext_resource type="Script" uid="uid://ct7n8wo1p3b20" path="res://Entities/Items/WeaponMods/WeaponMod.gd" id="6_gcm3h"]
@@ -161,6 +162,8 @@ firing_cam_shake_dur = 0.0
 firing_cam_freeze_mult = 1.0
 firing_cam_freeze_dur = 0.0
 firing_sound = ""
+post_fire_sound = ""
+post_fire_sound_delay = 0.0
 charging_sound = ""
 projectile_logic = SubResource("Resource_n65by")
 hitscan_logic = SubResource("Resource_ot56n")
@@ -212,8 +215,8 @@ inv_icon_rotation = 0.0
 inv_icon_offset = Vector2(0, 0)
 inv_icon_scale = Vector2(1, 1)
 inv_icon = ExtResource("6_2lgcn")
-ground_icon = ExtResource("6_2lgcn")
-in_hand_icon = ExtResource("6_2lgcn")
+ground_icon = ExtResource("4_gupq0")
+in_hand_icon = ExtResource("4_gupq0")
 item_type = 1
 rarity = 2
 weight = 0

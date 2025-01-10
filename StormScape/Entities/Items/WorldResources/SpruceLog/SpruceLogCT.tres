@@ -1,0 +1,8 @@
+[gd_resource type="CanvasTexture" load_steps=3 format=3 uid="uid://cvuqjp8xvpr3i"]
+
+[ext_resource type="Texture2D" uid="uid://1q78rueqnvgr" path="res://Entities/Items/WorldResources/SpruceLog/spruce_log.png" id="1_h4r0r"]
+[ext_resource type="Texture2D" uid="uid://bxewsmiyv4jcc" path="res://Entities/Items/WorldResources/SpruceLog/spruce_log_n.png" id="2_fk818"]
+
+[resource]
+diffuse_texture = ExtResource("1_h4r0r")
+normal_texture = ExtResource("2_fk818")

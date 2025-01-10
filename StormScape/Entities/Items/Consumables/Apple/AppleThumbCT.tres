@@ -1,0 +1,8 @@
+[gd_resource type="CanvasTexture" load_steps=3 format=3 uid="uid://bibinc8ql8wl1"]
+
+[ext_resource type="Texture2D" uid="uid://7v6u4kbfcjon" path="res://Entities/Items/Consumables/Apple/apple_thumb.png" id="1_tnwg7"]
+[ext_resource type="Texture2D" uid="uid://dexhp313vjpj7" path="res://Entities/Items/Consumables/Apple/apple_thumb_n.png" id="2_vjjrp"]
+
+[resource]
+diffuse_texture = ExtResource("1_tnwg7")
+normal_texture = ExtResource("2_vjjrp")

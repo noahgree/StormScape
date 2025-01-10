@@ -1,0 +1,8 @@
+[gd_resource type="CanvasTexture" load_steps=3 format=3 uid="uid://bhse86b50y7vx"]
+
+[ext_resource type="Texture2D" uid="uid://dwtjxkvqe21h4" path="res://Entities/Items/Weapons/ProjectileWeapons/FlameBlower/flame_blower_base_frame.png" id="1_i4nxp"]
+[ext_resource type="Texture2D" uid="uid://w6rs7af0g6bo" path="res://Entities/Items/Weapons/ProjectileWeapons/FlameBlower/flame_blower_base_frame_n.png" id="2_u51oh"]
+
+[resource]
+diffuse_texture = ExtResource("1_i4nxp")
+normal_texture = ExtResource("2_u51oh")

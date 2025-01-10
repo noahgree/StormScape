@@ -1,3 +1,4 @@
+@icon("res://Utilities/Debug/EditorIcons/world_resource.png")
 extends EquippableItem
 class_name WorldResource
 

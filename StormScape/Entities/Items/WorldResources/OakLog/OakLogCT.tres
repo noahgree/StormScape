@@ -1,0 +1,8 @@
+[gd_resource type="CanvasTexture" load_steps=3 format=3 uid="uid://dwu1ysi53om1u"]
+
+[ext_resource type="Texture2D" uid="uid://bptqv05di5d2o" path="res://Entities/Items/WorldResources/OakLog/oak_log.png" id="1_5t6sa"]
+[ext_resource type="Texture2D" uid="uid://bvpy51w3ysncn" path="res://Entities/Items/WorldResources/OakLog/oak_log_n.png" id="2_g8y7t"]
+
+[resource]
+diffuse_texture = ExtResource("1_5t6sa")
+normal_texture = ExtResource("2_g8y7t")

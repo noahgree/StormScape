@@ -1,11 +1,12 @@
-[gd_resource type="Resource" script_class="MeleeWeaponResource" load_steps=12 format=3 uid="uid://bh18kqp2up3oe"]
+[gd_resource type="Resource" script_class="MeleeWeaponResource" load_steps=13 format=3 uid="uid://bh18kqp2up3oe"]
 
 [ext_resource type="Script" uid="uid://dkfssottmsrch" path="res://Entities/Stats/EffectSystemResources/EffectSources/EffectSource.gd" id="1_urffy"]
 [ext_resource type="Script" uid="uid://boo31eu083dqd" path="res://Entities/Stats/EffectSystemResources/StatusEffects/StatusEffect.gd" id="2_ypwee"]
 [ext_resource type="Script" uid="uid://ct7n8wo1p3b20" path="res://Entities/Items/WeaponMods/WeaponMod.gd" id="3_e3dpw"]
-[ext_resource type="Texture2D" uid="uid://b6q76o13tanxi" path="res://Entities/Items/Weapons/MeleeWeapons/Pickaxe/pickaxe.png" id="3_mtxs0"]
+[ext_resource type="Texture2D" uid="uid://byxhss0dhepgs" path="res://Entities/Items/Weapons/MeleeWeapons/Pickaxe/PickaxeBaseCT.tres" id="4_3csw6"]
 [ext_resource type="PackedScene" uid="uid://b0wwbgbbfkso4" path="res://Entities/Items/Weapons/MeleeWeapons/Pickaxe/Pickaxe.tscn" id="4_6vlkm"]
 [ext_resource type="Script" uid="uid://c2gdoebfp12dq" path="res://Entities/Stats/StatMod/StatModsCacheResource.gd" id="5_3g32j"]
+[ext_resource type="Texture2D" uid="uid://b6q76o13tanxi" path="res://Entities/Items/Weapons/MeleeWeapons/Pickaxe/pickaxe_base.png" id="5_s4oy3"]
 [ext_resource type="Script" uid="uid://djlk3y511igng" path="res://Entities/Items/Weapons/MeleeWeapons/MeleeWeaponResource.gd" id="5_uecum"]
 [ext_resource type="Script" uid="uid://ctxa7i1mbt7ab" path="res://UI/Inventory/PlayerInventory/Crafting/CraftingIngredient.gd" id="5_x5580"]
 
@@ -111,9 +112,9 @@ tags = Array[StringName]([])
 inv_icon_rotation = 0.0
 inv_icon_offset = Vector2(0, 0)
 inv_icon_scale = Vector2(1, 1)
-inv_icon = ExtResource("3_mtxs0")
-ground_icon = ExtResource("3_mtxs0")
-in_hand_icon = ExtResource("3_mtxs0")
+inv_icon = ExtResource("5_s4oy3")
+ground_icon = ExtResource("4_3csw6")
+in_hand_icon = ExtResource("4_3csw6")
 item_type = 1
 rarity = 3
 weight = 0

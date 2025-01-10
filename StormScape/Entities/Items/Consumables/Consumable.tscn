@@ -1,6 +1,6 @@
 [gd_scene load_steps=5 format=3 uid="uid://bdaogdtcus1ac"]
 
-[ext_resource type="Script" path="res://Entities/Items/Consumables/Consumable.gd" id="1_uttff"]
+[ext_resource type="Script" uid="uid://ddlcihnqaj03s" path="res://Entities/Items/Consumables/Consumable.gd" id="1_uttff"]
 
 [sub_resource type="Animation" id="Animation_uwhct"]
 resource_name = "consume"
@@ -8,11 +8,11 @@ step = 0.1
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_3f4dj"]
 _data = {
-"consume": SubResource("Animation_uwhct")
+&"consume": SubResource("Animation_uwhct")
 }
 
 [sub_resource type="Curve" id="Curve_v3l01"]
-min_value = -1.0
+_limits = [-1.0, 1.0, 0.0, 1.0]
 _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, -1), 0.0, 0.0, 0, 0]
 point_count = 2
 
@@ -23,7 +23,7 @@ script = ExtResource("1_uttff")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
-"": SubResource("AnimationLibrary_3f4dj")
+&"": SubResource("AnimationLibrary_3f4dj")
 }
 
 [node name="FoodParticles" type="CPUParticles2D" parent="."]

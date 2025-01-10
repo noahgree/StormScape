@@ -1,0 +1,8 @@
+[gd_resource type="CanvasTexture" load_steps=3 format=3 uid="uid://bn15edu8bniii"]
+
+[ext_resource type="Texture2D" uid="uid://c5iikcmayrs4h" path="res://Entities/Items/Weapons/ProjectileWeapons/Revolver/revolver_base_frame.png" id="1_cr58k"]
+[ext_resource type="Texture2D" uid="uid://0hu4r4syvr3q" path="res://Entities/Items/Weapons/ProjectileWeapons/Revolver/revolver_base_frame_n.png" id="2_fb5vs"]
+
+[resource]
+diffuse_texture = ExtResource("1_cr58k")
+normal_texture = ExtResource("2_fb5vs")

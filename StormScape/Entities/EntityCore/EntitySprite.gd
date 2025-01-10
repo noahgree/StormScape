@@ -1,6 +1,9 @@
+@icon("res://Utilities/Debug/EditorIcons/entity_sprite.svg")
 extends Node2D
 class_name EntitySprite
 ## The main sprite node that is attached to any game entity.
+
+signal overlay_changed(color: Color)
 
 @export var floor_colors: Dictionary[StringName, Color] = { ## The status effect names that have associated colors to change the floor color to.
 	&"Frostbite" : Color(0.435, 0.826, 1, 0.558),
@@ -30,6 +33,7 @@ class_name EntitySprite
 }
 
 @onready var floor_color: Sprite2D = $FloorColor ## The floor color sprite that becomes a visible color when triggered.
+@onready var overlay: TextureRect = $Overlay ## The color overlay that shows when a status effect triggers it.
 
 var floor_color_tween: Tween = null ## The tween controlling the floor color's self-modulate.
 var glow_color_tween: Tween = null ## The tween controlling the glow color.
@@ -45,19 +49,29 @@ func _on_before_load_game() -> void:
 
 func _ready() -> void:
 	add_to_group("has_save_logic")
-	var frame_rect: Vector2 = SpriteHelpers.SpriteDetails.get_frame_rect(self, false)
-	floor_color.scale *= Vector2(frame_rect.x / 32.0, frame_rect.y / 32.0)
-	floor_color.position = Vector2(-position.x, (frame_rect.y / 2.0))
 
-	floor_color.self_modulate = Color(0.0, 0.0, 0.0, 0.0)
+	var sprite_size: Vector2 = SpriteHelpers.SpriteDetails.get_frame_rect(self, false)
+	_setup_floor_color_size(sprite_size)
+	call_deferred("_setup_overlay_size", sprite_size)
+
+## Sets up the floor color size to be proportional to the sprite boundaries.
+func _setup_floor_color_size(sprite_size: Vector2) -> void:
+	floor_color.scale *= Vector2(sprite_size.x / 32.0, sprite_size.y / 32.0)
+	floor_color.position = Vector2(-position.x, (sprite_size.y / 2.0))
+
+	floor_color.self_modulate = Color.TRANSPARENT
 	floor_color.show()
 
-	material.set_shader_parameter("glow_size", 0.0)
+## Sets up the overlay size to be twice as big at the sprite boundaries.
+func _setup_overlay_size(sprite_size: Vector2) -> void:
+	overlay.size = sprite_size * 2
+	overlay.position = Vector2(overlay.size.y * -0.5, overlay.size.x * 0.5)
 
 ## Updates the floor color using tweening.
 func update_floor_color(effect_name: String, kill: bool = false) -> void:
 	if floor_color_tween:
 		floor_color_tween.kill()
+
 	var change_time_start: float = 0.3 if effect_name != "Stun" else 0.1
 	var change_time_end: float = 1.25 if effect_name != "Stun" else 0.1
 
@@ -69,7 +83,7 @@ func update_floor_color(effect_name: String, kill: bool = false) -> void:
 
 	if current_floor_color_names.is_empty():
 		floor_color_tween = create_tween()
-		floor_color_tween.tween_property(floor_color, "self_modulate", Color(0.0, 0.0, 0.0, 0.0), change_time_end)
+		floor_color_tween.tween_property(floor_color, "self_modulate", Color.TRANSPARENT, change_time_end)
 	else:
 		floor_color_tween = create_tween()
 		if effect_name != "Stun":
@@ -77,13 +91,14 @@ func update_floor_color(effect_name: String, kill: bool = false) -> void:
 
 		var effect: String = current_floor_color_names[0]
 
-		floor_color_tween.tween_property(floor_color, "self_modulate", floor_colors.get(effect, Color(1.0, 1.0, 1.0, 0.0)), change_time_start).set_delay(0.1 if effect != "Stun" else 0.05)
-		floor_color_tween.tween_property(floor_color, "self_modulate:a", floor_colors.get(effect, Color(1.0, 1.0, 1.0, 0.0)).a * 0.75, 0.3).set_delay(1.0)
+		floor_color_tween.tween_property(floor_color, "self_modulate", floor_colors.get(effect, Color.TRANSPARENT), change_time_start).set_delay(0.1 if effect != "Stun" else 0.05)
+		floor_color_tween.tween_property(floor_color, "self_modulate:a", floor_colors.get(effect, Color.TRANSPARENT).a * 0.75, 0.3).set_delay(1.0)
 
 ## Updates the glow color using tweening.
 func update_glow_color(effect_name: String, kill: bool = false) -> void:
 	if glow_color_tween:
 		glow_color_tween.kill()
+
 	var change_time_start: float = 0.2 if effect_name != "Stun" else 0.05
 	var change_time_end: float = 0.2 if effect_name != "Stun" else 0.05
 
@@ -95,13 +110,13 @@ func update_glow_color(effect_name: String, kill: bool = false) -> void:
 
 	if current_sprite_glow_names.is_empty():
 		glow_color_tween = create_tween()
-		glow_color_tween.tween_property(material, "shader_parameter/glow_size", 0.0, change_time_end)
+		glow_color_tween.tween_property(overlay, "self_modulate:a", 0, change_time_end)
+		overlay_changed.emit(Color.TRANSPARENT)
 	else:
 		glow_color_tween = create_tween()
-		if effect_name != "Stun":
-			glow_color_tween.set_loops()
-
 		var effect: String = current_sprite_glow_names[0]
+		var new_color: Color = glow_colors.get(effect, Color.WHITE)
 
-		glow_color_tween.tween_property(material, "shader_parameter/glow_color", glow_colors.get(effect, Color(1.0, 1.0, 1.0, 1.0)), change_time_start)
-		glow_color_tween.tween_property(material, "shader_parameter/glow_size", 5.0, change_time_start)
+		overlay.texture.gradient.set_color(0, new_color)
+		glow_color_tween.tween_property(overlay, "self_modulate:a", 0.25, change_time_start)
+		overlay_changed.emit(new_color)

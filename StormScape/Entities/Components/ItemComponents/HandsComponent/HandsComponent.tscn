@@ -1,7 +1,7 @@
 [gd_scene load_steps=9 format=3 uid="uid://b7gdy01q8wsjx"]
 
 [ext_resource type="Script" uid="uid://djte4e8x884jb" path="res://Entities/Components/ItemComponents/HandsComponent/HandsComponent.gd" id="1_y5huf"]
-[ext_resource type="Texture2D" uid="uid://cs3clmnktksd6" path="res://Entities/Player/PlayerCore/player_hand.png" id="2_lwexw"]
+[ext_resource type="PackedScene" uid="uid://lw5fgm5pgoif" path="res://Entities/EntityCore/EntityHandSprite.tscn" id="2_aqhie"]
 [ext_resource type="Texture2D" uid="uid://3uh61et78avp" path="res://Entities/Items/Weapons/WeaponVFX/Particles/overheat_smoke.png" id="3_xaok7"]
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_aqhie"]
@@ -37,14 +37,11 @@ script = ExtResource("1_y5huf")
 [node name="MainHand" type="Node2D" parent="HandsAnchor"]
 position = Vector2(9, 1)
 
-[node name="MainHandSprite" type="Sprite2D" parent="HandsAnchor"]
+[node name="MainHandSprite" parent="HandsAnchor" instance=ExtResource("2_aqhie")]
 position = Vector2(9, 1)
-texture = ExtResource("2_lwexw")
 
-[node name="DrawnOffHand" type="Sprite2D" parent="HandsAnchor"]
-visible = false
+[node name="DrawnOffHand" parent="HandsAnchor" instance=ExtResource("2_aqhie")]
 position = Vector2(-7, 1)
-texture = ExtResource("2_lwexw")
 
 [node name="SmokeParticles" type="CPUParticles2D" parent="HandsAnchor"]
 material = SubResource("CanvasItemMaterial_aqhie")
@@ -73,6 +70,5 @@ anim_speed_max = 1.0
 anim_offset_max = 1.0
 anim_offset_curve = SubResource("Curve_ouukf")
 
-[node name="OffHandSprite" type="Sprite2D" parent="."]
+[node name="OffHandSprite" parent="." instance=ExtResource("2_aqhie")]
 position = Vector2(-7, 1)
-texture = ExtResource("2_lwexw")

@@ -1,3 +1,4 @@
+@tool
 extends EquippableItem
 class_name Weapon
 ## The base class for all equippable weapons in the game.
@@ -14,6 +15,16 @@ func _on_before_load_game() -> void:
 	stats.current_mods.clear()
 #endregion
 
+## Edits warnings for the editor for easier debugging.
+func _get_configuration_warnings() -> PackedStringArray:
+	var warnings: PackedStringArray = []
+	if not sprite.material is ShaderMaterial:
+		warnings.append("Weapon sprites must have the \"TintAndGlow\" shader applied.")
+	if not has_node("WeaponModManager"):
+		warnings.append("This node must have a WeaponModManager attached.")
+	return warnings
+
+## Calls the super method to set the stats.
 func _set_stats(new_stats: ItemResource) -> void:
 	super._set_stats(new_stats)
 
