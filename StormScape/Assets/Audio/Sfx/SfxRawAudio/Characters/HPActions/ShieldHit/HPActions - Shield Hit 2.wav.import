@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://dvb440sdqot4n"
+path="res://.godot/imported/HPActions - Shield Hit 2.wav-aeeba0c5bc3fd54f7afa0253ecc4c899.sample"
+
+[deps]
+
+source_file="res://Assets/Audio/Sfx/SfxRawAudio/Characters/HPActions/ShieldHit/HPActions - Shield Hit 2.wav"
+dest_files=["res://.godot/imported/HPActions - Shield Hit 2.wav-aeeba0c5bc3fd54f7afa0253ecc4c899.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=2

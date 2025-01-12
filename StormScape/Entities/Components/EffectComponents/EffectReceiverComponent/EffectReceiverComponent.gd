@@ -229,7 +229,10 @@ func _handle_impact_sound(effect_source: EffectSource) -> void:
 				if player:
 					current_impact_sounds.append(multishot_id)
 
-					var callable: Callable = Callable(func() -> void: current_impact_sounds.erase(multishot_id))
+					var callable: Callable = Callable(func() -> void:
+						if is_instance_valid(player):
+							current_impact_sounds.erase(multishot_id)
+						)
 					var finish_callables: Variant = player.get_meta("finish_callables")
 					finish_callables.append(callable)
 					player.set_meta("finish_callables", finish_callables)

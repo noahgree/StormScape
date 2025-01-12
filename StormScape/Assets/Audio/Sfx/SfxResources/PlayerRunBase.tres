@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="AudioResource" load_steps=2 format=3 uid="uid://dm4eq3xm13a38"]
 
-[ext_resource type="Script" path="res://Utilities/Game/Audio/AudioResource.gd" id="1_5k1vd"]
+[ext_resource type="Script" uid="uid://dwic8harmmplg" path="res://Utilities/Game/Audio/AudioResource.gd" id="1_5k1vd"]
 
 [resource]
 script = ExtResource("1_5k1vd")

@@ -46,7 +46,7 @@ func damage_shield_then_health(amount: int, source_type: String, was_crit: bool,
 		if shield > 0:
 			var src_type: String = source_type if source_type != "BasicDamage" else "ShieldDamage"
 			_create_or_update_popup_for_src_type(src_type, false, was_crit, min(shield, amount))
-			_play_sound("PlayerShieldDamage", multishot_id)
+			_play_sound("ShieldHit", multishot_id)
 		if amount - shield > 0:
 			var src_type: String = source_type if source_type != "BasicDamage" else "HealthDamage"
 			_create_or_update_popup_for_src_type(src_type, false, was_crit, (amount - shield))
@@ -77,7 +77,7 @@ func damage_shield(amount: int, source_type: String, was_crit: bool, multishot_i
 			shield = max(0, shield - amount)
 		var src_type: String = source_type if source_type != "BasicDamage" else "ShieldDamage"
 		_create_or_update_popup_for_src_type(src_type, false, was_crit, amount)
-		if amount > 0: _play_sound("PlayerShieldDamage", multishot_id)
+		if amount > 0: _play_sound("ShieldHit", multishot_id)
 
 ## Handles what happens when health reaches 0 for the entity.
 func _check_for_death() -> void:
@@ -171,9 +171,10 @@ func _play_sound(sound_name: String, multishot_id: int) -> void:
 				current_sounds[string_name_sound_name] = [multishot_id]
 
 			var callable: Callable = Callable(func() -> void:
-				current_sounds[string_name_sound_name].erase(multishot_id)
-				if current_sounds[string_name_sound_name].is_empty():
-					current_sounds.erase(string_name_sound_name)
+				if is_instance_valid(player):
+					current_sounds[string_name_sound_name].erase(multishot_id)
+					if current_sounds[string_name_sound_name].is_empty():
+						current_sounds.erase(string_name_sound_name)
 				)
 			var finish_callables: Variant = player.get_meta("finish_callables")
 			finish_callables.append(callable)

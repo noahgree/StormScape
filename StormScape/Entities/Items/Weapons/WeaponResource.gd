@@ -2,10 +2,9 @@ extends ItemResource
 class_name WeaponResource
 ## The base resource for all weapons. This will be subclasses to define more traits, but everything here applies to all weapons.
 
-@export_group("General Weapon Details")
 @export var s_mods: StatModsCacheResource = StatModsCacheResource.new() ## The cache of all up to date stats for this weapon with mods factored in.
 @export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var pullout_delay: float = 0.25 ## How long after equipping must we wait before we can use this weapon.
-@export_subgroup("Modding Details")
+@export_group("Modding Details")
 @export var blocked_mods: Array[String] = [] ## The string names of weapon mod titles that are not allowed to be applied to this weapon.
 
 

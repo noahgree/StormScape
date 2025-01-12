@@ -26,11 +26,24 @@ var been_holding_time: float = 0 ## How long we have considered the trigger butt
 var equipped_item_should_follow_mouse: bool = true ## If the equipped item should rotate with the character and the mouse or not.
 var starting_hands_component_height: float ## The height relative to the bottom of the entity sprite that this component operates at.
 var starting_off_hand_sprite_height: float ## The height relative to the hands component scene that the off hand sprite node starts at (and is usually animated from).
+var debug_origin_of_projectile_vector: Vector2 ## Used for debug drawing the origin of the projectile aiming vector.
 
 
 #region Save & Load
 func _on_before_load_game() -> void:
 	unequip_current_item()
+#endregion
+
+#region Debug
+func _draw() -> void:
+	if equipped_item:
+		# Draw the equipped item position
+		var local_position: Vector2 = to_local(debug_origin_of_projectile_vector)
+		draw_circle(local_position, 4, Color.CORAL)
+
+		# Draw the direction vector
+		var direction_vector: Vector2 = Vector2.RIGHT.rotated(hands_anchor.rotation)
+		draw_line(local_position, local_position + direction_vector * 50, Color.GREEN, 0.25)
 #endregion
 
 func _ready() -> void:
@@ -99,6 +112,7 @@ func on_equipped_item_change(inv_item_slot: Slot) -> void:
 		main_hand_sprite.visible = false
 		off_hand_sprite.visible = false
 		entity.move_fsm.rotation_lerping_factor = entity.move_fsm.DEFAULT_ROTATION_LERPING_FACTOR
+		CursorManager.change_cursor(CursorManager.default_cursor, Color.BLACK)
 		return
 
 	equipped_item = EquippableItem.create_from_slot(inv_item_slot)
@@ -136,6 +150,8 @@ func on_equipped_item_change(inv_item_slot: Slot) -> void:
 		_manage_normal_hands(_get_anim_vector())
 
 	equipped_item.ammo_ui = active_slot_info
+
+	CursorManager.change_cursor(equipped_item.stats.base_cursor, equipped_item.stats.base_cursor_tint)
 
 	main_hand.add_child(equipped_item)
 	equipped_item.enter()
@@ -178,12 +194,19 @@ func _manage_proj_weapon_hands(anim_vector: Vector2) -> void:
 		_change_off_hand_sprite_visibility(true)
 
 	if equipped_item_should_follow_mouse:
-		var sprite_pos_with_offsets: Vector2 = hands_anchor.global_position + Vector2(0, equipped_item.proj_origin.y)
+		var y_offset: float = equipped_item.proj_origin.y + equipped_item.stats.holding_offset.y
+		y_offset *= -1 if hands_anchor.scale.y < 0 else 1
+		var rotated_offset: Vector2 = Vector2(0, y_offset).rotated(hands_anchor.global_rotation)
+		var sprite_pos_with_offsets: Vector2 = hands_anchor.global_position + rotated_offset
+
 		var direction_vector: Vector2 = Vector2.RIGHT.rotated(hands_anchor.global_rotation)
 
 		var lerped_direction_angle: float = entity.move_fsm.get_lerped_mouse_direction_to_pos(direction_vector, sprite_pos_with_offsets).angle()
-
 		hands_anchor.global_rotation = lerped_direction_angle
+
+		if DebugFlags.Projectiles.show_aiming_direction:
+			debug_origin_of_projectile_vector = sprite_pos_with_offsets
+			queue_redraw()
 
 func _manage_melee_weapon_hands(anim_vector: Vector2) -> void:
 	if not equipped_item.is_node_ready():

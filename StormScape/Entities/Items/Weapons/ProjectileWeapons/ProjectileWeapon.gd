@@ -228,7 +228,7 @@ func _check_if_needs_mouse_area_scanner() -> void:
 		collision_shape.shape = circle_shape
 		collision_shape.disabled = true
 		mouse_area.add_child(collision_shape)
-		mouse_area.global_position = get_global_mouse_position()
+		mouse_area.global_position = CursorManager.get_cursor_mouse_position()
 		GlobalData.world_root.add_child(mouse_area)
 
 func _enable_mouse_area() -> void:
@@ -256,7 +256,7 @@ func _process(_delta: float) -> void:
 
 func _physics_process(_delta: float) -> void:
 	if mouse_area != null:
-		mouse_area.global_position = get_global_mouse_position()
+		mouse_area.global_position = CursorManager.get_cursor_mouse_position()
 
 ## When the cooldown manager from the hands component fires a signal with the matching item id, process the aftermath.
 func _on_cooldown_timeout(item_id: StringName, cooldown_source_title: String) -> void:
@@ -270,6 +270,7 @@ func _on_cooldown_timeout(item_id: StringName, cooldown_source_title: String) ->
 		var current_overheat: float = source_entity.inv.auto_decrementer.get_overheat(str(stats.session_uid))
 		if current_overheat == 0:
 			overhead_ui.overheat_bar.hide()
+			overheat_overlay.self_modulate.a = 0
 		else:
 			is_tweening_overheat_overlay = true
 			var tween: Tween = create_tween()
@@ -282,8 +283,9 @@ func _on_cooldown_timeout(item_id: StringName, cooldown_source_title: String) ->
 	else:
 		_clean_up_hitscans()
 
-## This is the standard method of triggering a cooldown, but child proj weapon scripts can override this if they want to
-## do something else or skip cooldowns. For example, Unique Proj Weapons override this to prevent visuals from updating.
+## This is the standard method of triggering a cooldown with visuals, but child proj weapon scripts can override
+## this if they want to do something else or skip cooldowns. For example, Unique Proj Weapons override
+## this to prevent visuals from updating.
 func _update_cooldown_with_potential_visuals(duration: float) -> void:
 	_handle_adding_cooldown(duration)
 #endregion
@@ -356,8 +358,9 @@ func _fire() -> void:
 	single_reload_timer.stop()
 	is_reloading = false
 
-	if _get_warmup_firing_delay() > 0:
-		_handle_adding_cooldown(_get_warmup_firing_delay())
+	var warmup_firing_delay: float = _get_warmup_firing_delay()
+	if warmup_firing_delay > 0:
+		_handle_adding_cooldown(warmup_firing_delay, "warmup")
 		while _get_cooldown() > 0: # Signal fires for all ending cooldowns, so we loop until ours has ended
 			await source_entity.inv.auto_decrementer.cooldown_ended
 
@@ -444,16 +447,13 @@ func _apply_burst_logic() -> void:
 		if not stats.add_overheat_per_burst_shot: _handle_overheat_increase()
 	var shots: int = int(stats.s_mods.get_stat("projectiles_per_fire"))
 
-	var delay: float = 0
-	if _get_warmup_firing_delay() > 0:
-		delay = _get_warmup_firing_delay()
-	else:
-		delay = stats.s_mods.get_stat("fire_cooldown") + hitscan_delay
+	var total_cooldown_afterwards: float = stats.s_mods.get_stat("fire_cooldown") + hitscan_delay
 
 	if not stats.use_hitscan:
-		delay += (stats.burst_bullet_delay * (shots - 1))
+		total_cooldown_afterwards += (stats.burst_bullet_delay * (shots - 1))
 
-	if delay > 0: _update_cooldown_with_potential_visuals(delay)
+	if total_cooldown_afterwards > 0:
+		_update_cooldown_with_potential_visuals(total_cooldown_afterwards)
 
 	_apply_ammo_consumption(shots)
 
@@ -500,7 +500,7 @@ func _apply_barrage_logic() -> void:
 			var rotation_adjustment: float = start_rotation + (i * spread_segment_width)
 			var proj: Projectile = Projectile.create(stats, source_entity, proj_origin_node.global_position, global_rotation)
 			proj.rotation = rotation_adjustment if stats.s_mods.get_stat("barrage_count") > 1 else proj.rotation
-			proj.starting_proj_height = -(source_entity.hands.position.y + proj_origin.y + source_entity.hands.main_hand.position.y) / 2
+			proj.starting_proj_height = -(source_entity.hands.position.y + proj_origin.y + source_entity.hands.main_hand.position.y + source_entity.hands.hands_anchor.position.y) / 2
 			proj.multishot_id = multishot_id
 
 			if stats.projectile_logic.homing_method == "Mouse Position":
@@ -655,6 +655,7 @@ func _do_firing_fx() -> void:
 ## Start the firing animation.
 func _start_firing_anim() -> void:
 	if anim_player.is_playing():
+		push_warning(source_entity.name + " has a projectile weapon that has a firing animation lasting longer than the firing duration. This will result in skipped animations.")
 		return
 
 	if stats.one_frame_per_fire:
@@ -662,9 +663,9 @@ func _start_firing_anim() -> void:
 		sprite.frame = ((sprite as AnimatedSprite2D).frame + 1) % (sprite as AnimatedSprite2D).sprite_frames.get_frame_count(sprite.animation)
 
 	if stats.override_anim_dur > 0:
-		anim_player.speed_scale = 1.0 / stats.override_anim_dur
+		anim_player.speed_scale = 1.0 / max(0.03, max(stats.firing_duration - 0.01, stats.override_anim_dur)) # The 0.01 is a buffer since animations aren't as precise in timing
 	else:
-		anim_player.speed_scale = 1.0 / max(0.03, (stats.firing_duration + hitscan_delay))
+		anim_player.speed_scale = 1.0 / max(0.03, stats.firing_duration - 0.01) # The 0.01 is a buffer since animations aren't as precise in timing
 
 	anim_player.speed_scale *= stats.anim_speed_mult
 
@@ -682,7 +683,7 @@ func _start_post_fire_anim() -> void:
 	var anim_duration: float = stats.post_fire_anim_dur if stats.post_fire_anim_dur > 0 else available_time
 
 	anim_duration = min(anim_duration, available_time)
-	anim_player.speed_scale = 1.0 / anim_duration
+	anim_player.speed_scale = 1.0 / (anim_duration - 0.01) # The 0.01 is a buffer since animations aren't as precise in timing
 
 	if adjusted_post_fire_anim_delay > 0:
 		await get_tree().create_timer(adjusted_post_fire_anim_delay).timeout

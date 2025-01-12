@@ -206,6 +206,7 @@ func _create_or_restart_audio_player_from_resource(audio_resource: AudioResource
 
 		audio_player.add_to_group(str(audio_resource.name))
 		audio_player.set_meta("sound_name", str(audio_resource.name))
+		audio_player.set_meta("loops_completed", 0)
 
 		audio_player.volume_db = audio_resource.volume
 		audio_player.pitch_scale = audio_resource.pitch_scale
@@ -262,6 +263,10 @@ func _start_audio_player_fade_in(audio_player: Variant, final_volume: float, fad
 
 ## Keeps a looped audio from stopping once it ends.
 func _on_looped_audio_player_end(audio_player: Variant) -> void:
+	var loops_completed: int = audio_player.get_meta("loops_completed", 0)
+	loops_completed += 1
+	audio_player.set_meta("loops_completed", loops_completed)
+
 	audio_player.play()
 #endregion
 
@@ -312,10 +317,24 @@ func change_sfx_resource_rhythmic_delay(sound_name: StringName, new_delay: float
 
 #region Stopping Sounds
 ## Calls all needed callables after finishing playing.
+## Each added callable with a lambda must check if the audio player is valid within it:
+## [codeblock]
+## var callable: Callable = Callable(func() -> void:
+##     if is_instance_valid(player):
+##         current_impact_sounds.erase(multishot_id)
+## )
+## var finish_callables: Variant = player.get_meta("finish_callables")
+## finish_callables.append(callable)
+## player.set_meta("finish_callables", finish_callables)
+## [/codeblock]
 func _on_player_finished_playing(audio_player: Variant) -> void:
+	var loops_completed: int = audio_player.get_meta("loops_completed", 0)
 	var finish_callables: Variant = audio_player.get_meta("finish_callables", [])
+
 	for custom_callable: Callable in finish_callables:
 		if custom_callable.is_valid():
+			if loops_completed > 0 and custom_callable.get_method() != "_on_looped_audio_player_end":
+				continue
 			custom_callable.call()
 
 ## Stops all sounds of a sound_name by default, or can stop a specific number if given a value besides 0.
@@ -399,6 +418,7 @@ func _remove_meta_from_audio_player(audio_player: Variant) -> void:
 	audio_player.set_meta("finish_callables", [])
 	audio_player.finished.disconnect(_on_player_finished_playing)
 	audio_player.set_meta("sound_name", null)
+	audio_player.set_meta("loops_completed", null)
 
 ## Returns the audio stream player to its pool after.
 func _return_audio_player(audio_player: Variant) -> void:

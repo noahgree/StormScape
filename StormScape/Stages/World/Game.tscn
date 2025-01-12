@@ -313,7 +313,7 @@ debug_print_mod_changes = false
 resource_local_to_scene = true
 shader = ExtResource("21_ogvde")
 shader_parameter/outline_color = Color(1, 1, 1, 1)
-shader_parameter/outline_thickness = 1.0
+shader_parameter/outline_thickness = 0.0
 shader_parameter/tint_color = Color(1, 1, 1, 0)
 shader_parameter/final_alpha = 1.0
 shader_parameter/override_color = Color(1, 1, 1, 0)
@@ -433,11 +433,11 @@ ring_pulse_speed = 4.0
 
 [sub_resource type="Resource" id="Resource_32mph"]
 script = ExtResource("25_dqjbe")
-new_location = Vector2(0, 0)
+new_location = Vector2(25, -15)
 offset_location = true
-new_radius = 50.0
+new_radius = 100.0
 offset_radius = false
-delay = 0.0
+delay = 3.0
 time_to_move = 5.0
 time_to_resize = 5.0
 auto_advance = true
@@ -477,11 +477,11 @@ ring_pulse_speed = 4.0
 
 [sub_resource type="Resource" id="Resource_nc4mn"]
 script = ExtResource("25_dqjbe")
-new_location = Vector2(0, 0)
+new_location = Vector2(-50, 40)
 offset_location = true
-new_radius = 50.0
+new_radius = 60.0
 offset_radius = false
-delay = 0.0
+delay = 5.0
 time_to_move = 10.0
 time_to_resize = 10.0
 auto_advance = true
@@ -747,11 +747,11 @@ collision_mask = 245
 [node name="PointLight2D" type="PointLight2D" parent="WorldRoot"]
 position = Vector2(245, 78)
 scale = Vector2(0.144531, 0.140625)
-color = Color(0.859916, 0.827117, 0, 1)
+color = Color(1, 0.684396, 0.33276, 1)
 energy = 1.5
 texture = ExtResource("30_s2x07")
 texture_scale = 1.64
-height = 44.0
+height = 32.0
 
 [node name="PlayerCamera" type="Camera2D" parent="WorldRoot" node_paths=PackedStringArray("player") groups=["core"]]
 unique_name_in_owner = true

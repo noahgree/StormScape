@@ -74,10 +74,11 @@ func update_anim_vector() -> void:
 
 ## Takes in a current direction of rotation and a target position to face, lerping it every frame.
 func get_lerped_mouse_direction_to_pos(current_direction: Vector2, target_position: Vector2) -> Vector2:
-	var target_direction: Vector2 = (entity.get_global_mouse_position() - target_position).normalized()
+	var target_direction: Vector2 = (CursorManager.get_cursor_mouse_position() - target_position)
 
 	var current_angle: float = current_direction.angle()
 	var target_angle: float = target_direction.angle()
+
 	var angle_diff: float = angle_difference(current_angle, target_angle)
 	var new_angle: float = current_angle + angle_diff * rotation_lerping_factor
 
@@ -85,7 +86,7 @@ func get_lerped_mouse_direction_to_pos(current_direction: Vector2, target_positi
 
 func get_mouse_direction_to_pos() -> Vector2:
 	var entity_loc_with_sprite_offset: Vector2 = entity.sprite.position / 2.0 + entity.global_position
-	return (entity.get_global_mouse_position() - entity_loc_with_sprite_offset).normalized()
+	return (CursorManager.get_cursor_mouse_position() - entity_loc_with_sprite_offset).normalized()
 
 ## Assists in turning the character to the right direction upon game loads.
 func verify_anim_vector() -> void:

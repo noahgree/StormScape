@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="AudioResource" load_steps=2 format=3 uid="uid://dssfngfcyaea0"]
+
+[ext_resource type="Script" uid="uid://dwic8harmmplg" path="res://Utilities/Game/Audio/AudioResource.gd" id="1_0c1ag"]
+
+[resource]
+script = ExtResource("1_0c1ag")
+name = &"ShieldHit"
+sound_files_folder = "res://Assets/Audio/Sfx/SfxRawAudio/Characters/HPActions/ShieldHit"
+sound_file_paths = Array[String]([])
+concurrent_limit = 10
+rhythmic_delay = 0.0
+volume = -10.0
+pitch_scale = 1.0
+pitch_randomness = 0.085
+restart_if_at_limit = true
+should_loop = false
+max_distance = 500
+attentuation_falloff = 1.0
+metadata/_custom_type_script = ExtResource("1_0c1ag")

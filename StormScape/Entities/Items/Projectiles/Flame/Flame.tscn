@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://dynh8j4rfi62r"]
+[gd_scene load_steps=11 format=3 uid="uid://dynh8j4rfi62r"]
 
 [ext_resource type="Script" uid="uid://d1uexupra43i8" path="res://Entities/Items/Projectiles/Projectile.gd" id="1_clc7f"]
 [ext_resource type="Texture2D" uid="uid://dqa0skapfbtrg" path="res://Entities/Items/Projectiles/Flame/flames.png" id="2_hea5g"]
@@ -7,6 +7,9 @@
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_gicwb"]
 radius = 5.0
 height = 14.0
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_mbfhr"]
+light_mode = 1
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_2m4dc"]
 atlas = ExtResource("2_hea5g")
@@ -55,6 +58,7 @@ shape = SubResource("CapsuleShape2D_gicwb")
 debug_color = Color(0.626, 0.349, 1, 0.196)
 
 [node name="ProjSprite" type="AnimatedSprite2D" parent="."]
+material = SubResource("CanvasItemMaterial_mbfhr")
 sprite_frames = SubResource("SpriteFrames_wi72s")
 autoplay = "default"
 speed_scale = 2.0

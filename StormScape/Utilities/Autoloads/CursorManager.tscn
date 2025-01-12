@@ -1,0 +1,50 @@
+[gd_scene load_steps=8 format=3 uid="uid://6kn3nwojv4l1"]
+
+[ext_resource type="Script" uid="uid://bl8i118soy6a5" path="res://Utilities/Autoloads/CursorManager.gd" id="1_it73m"]
+[ext_resource type="Texture2D" uid="uid://ftbtsdurncq" path="res://UI/Cursors/default_cursor.png" id="2_g8fuh"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7re0i"]
+atlas = ExtResource("2_g8fuh")
+region = Rect2(0, 0, 10, 10)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_43v78"]
+atlas = ExtResource("2_g8fuh")
+region = Rect2(10, 0, 10, 10)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_g5vca"]
+atlas = ExtResource("2_g8fuh")
+region = Rect2(20, 0, 10, 10)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_62xth"]
+atlas = ExtResource("2_g8fuh")
+region = Rect2(30, 0, 10, 10)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_62xth"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7re0i")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_43v78")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_g5vca")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_62xth")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[node name="CursorManager" type="CanvasLayer"]
+process_mode = 3
+layer = 100
+follow_viewport_enabled = true
+script = ExtResource("1_it73m")
+
+[node name="Cursor" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_62xth")
+autoplay = "default"

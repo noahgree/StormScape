@@ -406,7 +406,7 @@ func _choose_from_mouse_area_targets() -> void:
 			candidates.append(obj)
 
 	if candidates.size() > 0:
-		homing_target = _select_closest_homing_target(candidates, get_global_mouse_position())
+		homing_target = _select_closest_homing_target(candidates, CursorManager.get_cursor_mouse_position())
 	else:
 		homing_target = null
 		is_homing_active = false

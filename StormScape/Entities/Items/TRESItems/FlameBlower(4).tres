@@ -67,12 +67,12 @@ beam_particle_mult = 1.0
 
 [sub_resource type="Curve" id="Curve_pnq7a"]
 _limits = [0.0, 0.5, 0.0, 1.0]
-_data = [Vector2(0, 0.297966), 0.0, 0.0, 0, 0, Vector2(1, 0.203377), 0.0, 0.0, 0, 0]
+_data = [Vector2(0, 0.400583), 0.0, 0.0, 0, 0, Vector2(1, 0.248896), 0.0, 0.0, 0, 0]
 point_count = 2
 
 [sub_resource type="Curve" id="Curve_tw3jb"]
 _limits = [0.0, 0.1, 0.0, 1.0]
-_data = [Vector2(0, 0.011), 0.0, 0.0051865, 0, 0, Vector2(1, 0.022), 0.0051865, 0.0, 0, 0]
+_data = [Vector2(0, 0.015), 0.0, 0.0051865, 0, 0, Vector2(1, 0.024), 0.0051865, 0.0, 0, 0]
 point_count = 2
 
 [sub_resource type="Curve" id="Curve_40cbt"]
@@ -99,8 +99,8 @@ initial_boost_time = 0.0
 initial_boost_mult = 2.0
 lifetime = 5.0
 max_distance = 150
-override_gun_height = false
-height_override = 6
+override_gun_height = true
+height_override = 5
 effect_falloff_curve = SubResource("Curve_mdooa")
 point_of_max_falloff = 150.0
 bad_effects_falloff = true
@@ -157,7 +157,7 @@ script = ExtResource("6_13gru")
 debug_print_mod_changes = false
 
 [sub_resource type="Curve" id="Curve_lm546"]
-_data = [Vector2(0, 0.14), 0.0, 0.0, 0, 0, Vector2(1, 0.12), 0.0, 0.0, 0, 0]
+_data = [Vector2(0, 0.296909), 0.0, -0.222926, 0, 0, Vector2(1, 0.180069), 0.0, 0.0, 0, 0]
 point_count = 2
 
 [sub_resource type="Curve" id="Curve_kj8op"]
@@ -173,8 +173,6 @@ script = ExtResource("3_58le7")
 proj_weapon_type = 9
 firing_mode = "Auto"
 projectile_scn = ExtResource("5_4ypmg")
-use_hitscan = false
-allow_hitscan_holding = true
 firing_duration = 0.03
 fire_cooldown = 0.04
 min_charge_time = 1.0
@@ -219,10 +217,10 @@ warmup_delay_curve = SubResource("Curve_kj8op")
 warmup_increase_rate = SubResource("Curve_pca6u")
 warmup_decrease_rate = SubResource("Curve_lm546")
 warmup_decrease_delay = 0.75
-overheat_penalty = 3.5
+overheat_penalty = 4.0
 overheat_inc_rate = SubResource("Curve_tw3jb")
 overheat_dec_rate = SubResource("Curve_pnq7a")
-overheat_dec_delay = 0.75
+overheat_dec_delay = 1.5
 overheated_sound = ""
 projectiles_per_fire = 1
 use_ammo_per_burst_proj = true
@@ -231,6 +229,8 @@ add_bloom_per_burst_shot = true
 add_overheat_per_burst_shot = true
 barrage_count = 5
 angular_spread = 20.0
+use_hitscan = false
+allow_hitscan_holding = true
 ammo_in_mag = -1
 s_mods = SubResource("Resource_7cfgi")
 pullout_delay = 0.25
@@ -243,25 +243,23 @@ original_charge_status_effects = Array[ExtResource("1_sti8o")]([])
 id = "flame_blower"
 name = "Flame Blower"
 tags = Array[StringName]([])
-inv_icon_rotation = -42.0
-inv_icon_offset = Vector2(-0.5, -0.5)
-inv_icon_scale = Vector2(1.29, 1.29)
-inv_icon = ExtResource("7_dkcnt")
-ground_icon = ExtResource("5_iem60")
-in_hand_icon = ExtResource("5_iem60")
 item_type = 1
 rarity = 4
-weight = 0
 stack_size = 1
 auto_pickup = false
 pickup_radius = 6
 info = "Not quite a flame thrower..."
+ground_icon = ExtResource("5_iem60")
+in_hand_icon = ExtResource("5_iem60")
+inv_icon = ExtResource("7_dkcnt")
+inv_icon_offset = Vector2(-0.5, -0.5)
+inv_icon_scale = Vector2(1.32, 1.32)
+inv_icon_rotation = -45.0
+cursor_anim_frames = 1
 recipe = Array[ExtResource("9_h3bvq")]([])
 output_quantity = 1
 recipe_unlocked = false
 item_scene = ExtResource("1_2lqvl")
-cooldowns_per_suid = true
-shown_cooldown_fills = Array[String](["overheat_penalty"])
 rotation_lerping = 0.055
 holding_offset = Vector2(3, -1)
 holding_degrees = 0.0
@@ -269,4 +267,6 @@ is_gripped_by_one_hand = false
 draw_off_hand = false
 draw_off_hand_offset = Vector2(0, 0)
 main_hand_offset = Vector2(0, 0)
+cooldowns_per_suid = true
+shown_cooldown_fills = Array[String](["overheat_penalty"])
 session_uid = 0

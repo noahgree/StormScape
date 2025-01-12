@@ -10,13 +10,10 @@ enum ProjAmmoType { ## The types of projectile ammo.
 	NONE, SELF, LIGHT, MEDIUM, HEAVY, SHELL, ROCKET, MAGIC, ION_CHARGE, STAMINA, CHARGES
 }
 
-@export_group("General")
 @export var proj_weapon_type: ProjWeaponType = ProjWeaponType.PISTOL ## The kind of projectile weapon this is.
 @export_enum("Semi Auto", "Auto", "Charge") var firing_mode: String = "Semi Auto" ## Whether the weapon should fire projectiles once per click or allow holding down for auto firing logic.
 @export var projectile_scn: PackedScene ## The projectile scene to spawn on firing.
-@export_subgroup("Hitscanning")
-@export var use_hitscan: bool = false ## Whether to use hitscan firing and spawn the hitscan scene instead of the main projectile.
-@export var allow_hitscan_holding: bool = true ## Whether to keep the hitscan on and continue to consume ammo while the trigger is held.
+
 @export_group("Firing Details")
 @export_range(0, 10, 0.01, "hide_slider", "or_greater", "suffix:seconds") var firing_duration: float = 0.1 ## How long it takes to release the projectile after initiating the action. Determines the animation speed as well. Set to 0 by default.
 @export_range(0, 30, 0.01, "hide_slider", "or_greater", "suffix:seconds") var fire_cooldown: float = 0.05 ## Time between fully auto projectile emmision. Also the minimum time that must elapse between clicks if set to semi-auto.
@@ -100,6 +97,10 @@ enum ProjAmmoType { ## The types of projectile ammo.
 @export_group("Barrage Logic")
 @export_range(1, 50, 1) var barrage_count: int = 1 ## Number of projectiles fired at 'angular-spread' degrees apart for each execute. Only applies when angular spread is greater than 0.
 @export_range(0, 360, 0.1, "suffix:degrees") var angular_spread: float = 25 ## Angular spread of barrage projectiles in degrees.
+
+@export_group("Hitscan Logic")
+@export var use_hitscan: bool = false ## Whether to use hitscan firing and spawn the hitscan scene instead of the main projectile.
+@export var allow_hitscan_holding: bool = true ## Whether to keep the hitscan on and continue to consume ammo while the trigger is held.
 
 
 # Unique Properties #

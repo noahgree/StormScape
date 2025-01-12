@@ -1,6 +1,6 @@
-[gd_scene load_steps=5 format=3 uid="uid://ckf7i8bnass5n"]
+[gd_scene load_steps=6 format=3 uid="uid://ckf7i8bnass5n"]
 
-[ext_resource type="Script" path="res://Entities/Items/Projectiles/Projectile.gd" id="1_23wck"]
+[ext_resource type="Script" uid="uid://d1uexupra43i8" path="res://Entities/Items/Projectiles/Projectile.gd" id="1_23wck"]
 [ext_resource type="Texture2D" uid="uid://dbkn88m72bsus" path="res://Entities/Items/Projectiles/Laser/laser_default.png" id="2_xaeia"]
 [ext_resource type="Texture2D" uid="uid://dcbwxgak6a0r8" path="res://Entities/EntityCore/entity_shadow.png" id="4_jjt2l"]
 
@@ -8,11 +8,14 @@
 radius = 3.0
 height = 13.0
 
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_tssue"]
+light_mode = 1
+
 [node name="Laser" type="Area2D"]
 scale = Vector2(0.6, 0.6)
 script = ExtResource("1_23wck")
 whiz_sound = "PlayerDash"
-glow_strength = 35.0
+glow_strength = 38.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 editor_description = "DO NOT SET EFFECT SOURCE IF BEING USED DIRECTLY WITH A WEAPON. THE WEAPON WILL SET IT FOR YOU."
@@ -21,6 +24,7 @@ shape = SubResource("CapsuleShape2D_hgbw0")
 debug_color = Color(0.626, 0.349, 1, 0.196)
 
 [node name="ProjSprite" type="Sprite2D" parent="."]
+material = SubResource("CanvasItemMaterial_tssue")
 texture = ExtResource("2_xaeia")
 region_enabled = true
 region_rect = Rect2(2, 5, 12, 5)
@@ -30,5 +34,5 @@ self_modulate = Color(0.16, 0.16, 0.16, 0.185)
 top_level = true
 z_index = 1
 position = Vector2(0, 8)
-scale = Vector2(0.666667, 0.504307)
+scale = Vector2(0.4, 0.285714)
 texture = ExtResource("4_jjt2l")

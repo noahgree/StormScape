@@ -7,7 +7,6 @@ enum MeleeWeaponType { ## The kinds of melee weapons.
 	TOOL, PHYSICAL, COMBAT
 }
 
-@export_group("General")
 @export var melee_weapon_type: MeleeWeaponType = MeleeWeaponType.TOOL ## The kind of melee weapon this is.
 @export_group("Normal Use Details")
 @export var effect_source: EffectSource ## The resource that defines what happens to the entity that is hit by this weapon. Includes things like damage and status effects.

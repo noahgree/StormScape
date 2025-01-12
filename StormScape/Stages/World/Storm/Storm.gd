@@ -586,8 +586,8 @@ func _on_safe_zone_body_exited(body: Node2D) -> void:
 func _swap_effect_applied_to_entities_out_of_safe_area(new_effect: StatusEffect) -> void:
 	for entity: Node in get_tree().get_nodes_in_group("entities_out_of_safe_area"):
 		_remove_current_effect_from_entity(entity)
-		current_effect = new_effect
 		_add_effect_to_entity(entity, new_effect)
+	current_effect = new_effect
 
 ## Removes the effect held in the current effect variable from all affected entities.
 func _remove_current_effect_from_entity(body: DynamicEntity) -> void:

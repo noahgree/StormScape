@@ -38,6 +38,7 @@ SignalBus="*res://Utilities/Autoloads/SignalBus.gd"
 AudioManager="*res://Utilities/Autoloads/AudioManager.tscn"
 GlobalData="*res://Utilities/Autoloads/GlobalData.gd"
 SaverLoader="*res://Utilities/Autoloads/SaverLoader.gd"
+CursorManager="*res://Utilities/Autoloads/CursorManager.tscn"
 
 [debug]
 
