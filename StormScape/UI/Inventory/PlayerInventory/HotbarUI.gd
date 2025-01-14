@@ -94,7 +94,7 @@ func _update_inv_ammo_ui() -> void:
 	if active_slot.item != null:
 		var stats: ItemResource = active_slot.item.stats
 		if stats is ProjWeaponResource and not stats.hide_ammo_ui:
-			if not (stats.ammo_type == ProjWeaponResource.ProjAmmoType.NONE or stats.ammo_type == ProjWeaponResource.ProjAmmoType.STAMINA or stats.ammo_type == ProjWeaponResource.ProjAmmoType.SELF or stats.ammo_type == ProjWeaponResource.ProjAmmoType.CHARGES):
+			if stats.ammo_type not in [ProjWeaponResource.ProjAmmoType.NONE, ProjWeaponResource.ProjAmmoType.STAMINA, ProjWeaponResource.ProjAmmoType.SELF, ProjWeaponResource.ProjAmmoType.CHARGES]:
 				count = 0
 				for i: int in range(player_inv.inv_size):
 					var item: InvItemResource = player_inv.inv[i]

@@ -1,0 +1,25 @@
+[gd_resource type="Resource" script_class="CamFXResource" load_steps=2 format=3 uid="uid://bvwjter36hojx"]
+
+[ext_resource type="Script" uid="uid://dvirx67s12tmd" path="res://Entities/Player/PlayerCore/PlayerCamera/CamFXResource.gd" id="1_5crte"]
+
+[resource]
+script = ExtResource("1_5crte")
+shake_strength = 8.0
+shake_duration = 0.9
+shake_trans_type = 0
+shake_ease_type = 1
+freeze_multiplier = 0.0
+freeze_duration = 0.18
+freeze_trans_type = 2
+freeze_ease_type = 0
+zoom_multiplier = 1.025
+zoom_duration = 0.05
+zoom_trans_type = 9
+zoom_ease_type = 1
+trans_player_only = false
+trans_max_dist = 175
+trans_use_falloff = true
+freeze_player_only = true
+freeze_max_dist = 175
+freeze_uses_falloff = true
+metadata/_custom_type_script = ExtResource("1_5crte")

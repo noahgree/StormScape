@@ -4,6 +4,7 @@ class_name EquippableItem
 ## some place other than the inventory, the item resource must have an associated equippable item scene.
 
 @export_storage var stats: ItemResource = null: set = _set_stats ## The resource driving the stats and type of item.
+@export var sprites_to_tint: Array[Node2D] ## All sprites that should be affected by tinting during events such as "disable".
 
 @onready var sprite: Node2D = $ItemSprite ## The main sprite for the equippable item. Should have the entity effect shader attached.
 @onready var clipping_detector: Area2D = get_node_or_null("ClippingDetector") ## Used to detect when the item is overlapping with an in-game object that should block its use (i.e. a wall or tree).
@@ -17,11 +18,13 @@ var enabled: bool = true: ## When false, any activation or reload actions are bl
 		enabled = new_value
 		if not enabled:
 			disable()
-			sprite.material.set_shader_parameter("tint_color", Color(1, 0.188, 0.345, 0.45))
-			sprite.material.set_shader_parameter("final_alpha", 0.65)
+			for sprite_node: Node2D in sprites_to_tint:
+				sprite_node.material.set_shader_parameter("tint_color", Color(1, 0.188, 0.345, 0.45))
+				sprite_node.material.set_shader_parameter("final_alpha", 0.65)
 		else:
-			sprite.material.set_shader_parameter("tint_color", Color(1.0, 1.0, 1.0, 0.0))
-			sprite.material.set_shader_parameter("final_alpha", 1.0)
+			for sprite_node: Node2D in sprites_to_tint:
+				sprite_node.material.set_shader_parameter("tint_color", Color(1.0, 1.0, 1.0, 0.0))
+				sprite_node.material.set_shader_parameter("final_alpha", 1.0)
 			enable()
 
 

@@ -68,6 +68,17 @@ func _ready() -> void:
 
 	hitbox_component.source_entity = source_entity
 
+func _process(_delta: float) -> void:
+	if Engine.is_editor_hint():
+		return
+
+	var cooldown_remaining: float = source_entity.inv.auto_decrementer.get_cooldown(stats.get_cooldown_id())
+	var original_cooldown: float = source_entity.inv.auto_decrementer.get_original_cooldown(stats.get_cooldown_id())
+	if cooldown_remaining > 0:
+		CursorManager.update_vertical_tint_progress((1 - (cooldown_remaining / original_cooldown)) * 100.0)
+	else:
+		CursorManager.update_vertical_tint_progress(100.0)
+
 ## Disables the hitbox collider for the weapon.
 func _disable_collider() -> void:
 	hitbox_component.collider.disabled = true

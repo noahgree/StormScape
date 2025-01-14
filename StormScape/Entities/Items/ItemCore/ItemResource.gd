@@ -19,9 +19,8 @@ class_name ItemResource
 @export var inv_icon_offset: Vector2 = Vector2.ZERO ## How much to offset the inv icon in a slot.
 @export var inv_icon_scale: Vector2 = Vector2.ONE ## How much to scale the inv icon in a slot.
 @export_range(-360, 360, 1, "suffix:degrees") var inv_icon_rotation: float = 0 ## How much to rotate the inv icon in a slot.
-@export_subgroup("Cursor")
-@export var base_cursor: SpriteFrames ## The default cursor that will show when this item is equipped. Must be a SpriteFrames resource.
-@export var base_cursor_tint: Color = Color.WHITE ## The tint to apply to the base cursor. Especially helpful when the cursor sprites are white.
+@export_subgroup("Cursors")
+@export var cursors: SpriteFrames ## The cursors that can show when this item is equipped. Must be a SpriteFrames resource. Can have additional cursor animations within the resource to change depending on scenario (such as a different reloading cursor).
 
 @export_group("Crafting")
 @export var recipe: Array[CraftingIngredient] = [] ## The items & quantities required to craft an instance of this item.
@@ -43,6 +42,7 @@ class_name ItemResource
 @export_group("Cooldown Details")
 @export var cooldowns_per_suid: bool = true ## When true, cooldowns will be based on instances of this item as they were picked up or added to the inventory. They will not be shared amongst all items of the same base id.
 @export var shown_cooldown_fills: Array[String] = [] ## Which cooldown source's can show the vertical fill on the slot when the player invokes a cooldown on this item.
+@export var show_cursor_cooldown: bool = false ## When true, the cursor will vertically fill for any cooldown in the array above instead of ever vertically filling for reloads in progress.
 
 
 # Unique Properties #

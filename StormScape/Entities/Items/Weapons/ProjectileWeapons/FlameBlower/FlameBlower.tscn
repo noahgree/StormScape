@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3 uid="uid://dxv8dhn3gmufw"]
+[gd_scene load_steps=20 format=3 uid="uid://dxv8dhn3gmufw"]
 
 [ext_resource type="Script" uid="uid://ca8xdltgdyjys" path="res://Entities/Items/Weapons/ProjectileWeapons/ProjectileWeapon.gd" id="1_7mk4f"]
 [ext_resource type="PackedScene" uid="uid://bdi8o2g5plcnb" path="res://Entities/Items/Weapons/WeaponVFX/FiringVFX/Simple/SimpleFiringVFX.tscn" id="2_qpgmn"]
@@ -136,21 +136,39 @@ tracks/2/keys = {
 "values": [0.0, -0.0523599, 0.0]
 }
 
+[sub_resource type="Animation" id="Animation_qpgmn"]
+resource_name = "overheat"
+step = 0.025
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("ItemSprite:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.025, 0.05, 0.075, 0.1, 0.125, 0.15, 0.175, 0.2, 0.225, 0.25, 0.275, 0.3, 0.325, 0.35, 0.375, 0.4, 0.425, 0.45, 0.475, 0.5, 0.525, 0.55, 0.575, 0.6, 0.625, 0.65, 0.675, 0.7, 0.725, 0.85, 1),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [-0.349066, -0.436332, -0.349066, -0.436332, -0.349066, -0.436332, -0.349066, -0.436332, -0.349066, -0.436332, -0.261799, -0.349066, -0.261799, -0.349066, -0.261799, -0.349066, -0.261799, -0.349066, -0.174533, -0.261799, -0.174533, -0.261799, -0.174533, -0.261799, -0.174533, -0.261799, -0.174533, -0.261799, -0.174533, -0.261799, -0.0872665, 0.0]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_aonid"]
 _data = {
 &"RESET": SubResource("Animation_wj1f7"),
-&"fire": SubResource("Animation_q35vr")
+&"fire": SubResource("Animation_q35vr"),
+&"overheat": SubResource("Animation_qpgmn")
 }
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_0s14j"]
 radius = 6.0
 
-[node name="FlameBlower" type="Node2D"]
+[node name="FlameBlower" type="Node2D" node_paths=PackedStringArray("sprites_to_tint")]
 script = ExtResource("1_7mk4f")
 proj_origin = Vector2(19, 3)
 vfx_scene = ExtResource("2_qpgmn")
 particle_emission_extents = Vector2(6, 1)
 particle_emission_origin = Vector2(11, 2)
+sprites_to_tint = [NodePath("ItemSprite")]
 
 [node name="ItemSprite" type="AnimatedSprite2D" parent="."]
 clip_children = 2
@@ -182,10 +200,12 @@ libraries = {
 position = Vector2(19, 3)
 
 [node name="OffHandSprite" parent="." instance=ExtResource("7_xc27p")]
-position = Vector2(1, 7)
+position = Vector2(1.60628, 6.88621)
+rotation = -0.0872665
 
 [node name="MainHandSprite" parent="." instance=ExtResource("7_xc27p")]
-position = Vector2(-16, 3)
+position = Vector2(-15.6776, 4.38308)
+rotation = -0.0872665
 
 [node name="WeaponModManager" parent="." instance=ExtResource("3_7a8dm")]
 

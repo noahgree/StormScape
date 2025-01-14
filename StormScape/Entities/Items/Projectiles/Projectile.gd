@@ -56,6 +56,7 @@ var debug_homing_rays: Array[Dictionary] = [] ## An array of debug info about th
 var debug_recent_hit_location: Vector2 ## The location of the most recent point we hit something.
 var source_wpn_stats: ProjWeaponResource ## The projectile weapon resource for the weapon that fired this projectile.
 var aoe_overlapped_receivers: Dictionary[Area2D, Timer] = {} ## The areas that are currently in an AOE area.
+var is_disabling_monitoring: bool = false ## When true, we are waiting on the deferred call to disable collision monitoring.
 var multishot_id: int = 0 ## The id passed in on creation that relates the sibling projectiles spawned on the same multishot barrage.
 #endregion
 
@@ -160,6 +161,10 @@ func _enable_collider() -> void:
 ## Disables the main projectile collider.
 func _disable_collider() -> void:
 	collider.disabled = true
+
+func _disable_monitoring() -> void:
+	monitoring = false
+	is_disabling_monitoring = false
 #endregion
 
 #region General
@@ -574,10 +579,8 @@ func _split_self() -> void:
 	if sound != "":
 		AudioManager.play_sound(sound, AudioManager.SoundType.SFX_2D, global_position)
 
-	var shake_dur: float = ArrayHelpers.get_or_default(stats.split_cam_shakes_dur, splits_so_far - 1, stats.split_cam_shakes_dur[0])
-	if shake_dur > 0:
-		var shake_str: float = ArrayHelpers.get_or_default(stats.split_cam_shakes_str, splits_so_far - 1, stats.split_cam_shakes_str[0])
-		GlobalData.player_camera.start_shake(shake_str, shake_dur)
+	var split_cam_fx: CamFXResource = ArrayHelpers.get_or_default(stats.split_cam_fx, splits_so_far - 1, stats.split_cam_fx[0])
+	split_cam_fx.activate_all()
 
 	queue_free()
 
@@ -621,7 +624,8 @@ func _handle_aoe() -> void:
 		return
 
 	is_in_aoe_phase = true
-	set_deferred("monitoring", false)
+	is_disabling_monitoring = true
+	call_deferred("_disable_monitoring")
 	area_exited.connect(_on_area_exited)
 
 	if stats.aoe_delay > 0:
@@ -677,6 +681,7 @@ func _on_area_entered(area: Area2D) -> void:
 
 	if (area.get_parent() == source_entity) and not stats.aoe_effect_source.can_hit_self:
 		return
+
 	if area is EffectReceiverComponent:
 		var timer: Timer = Timer.new()
 		timer.set_meta("area", area)
@@ -685,7 +690,7 @@ func _on_area_entered(area: Area2D) -> void:
 
 		if stats.aoe_effects_delay > 0:
 			await get_tree().create_timer(stats.aoe_effects_delay, false, true, false).timeout
-			if not is_instance_valid(area):
+			if not is_instance_valid(area) or not is_instance_valid(timer):
 				return
 
 		if area in aoe_overlapped_receivers:
@@ -711,7 +716,7 @@ func _on_aoe_interval_timer_timeout(timer: Timer) -> void:
 
 ## When in AOE, remove the area from the dictionary and free its associated timer on exiting the AOE zone.
 func _on_area_exited(area: Area2D) -> void:
-	if not is_in_aoe_phase:
+	if not is_in_aoe_phase or is_disabling_monitoring:
 		return
 
 	if area is EffectReceiverComponent:

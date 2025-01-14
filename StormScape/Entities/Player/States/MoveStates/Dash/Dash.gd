@@ -7,6 +7,7 @@ extends MoveState
 @export var _dash_collision_impulse_factor: float = 1.0 ## A multiplier that controls how much impulse gets applied to rigid entites when colliding with them during a dash.
 @export var ghost_count: int = 8 ## How many ghosts to make during the dash.
 @export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var ghost_fade_time: float = 0.1 ## How long ghosts take to fade.
+@export var dash_impact_cam_fx: CamFXResource
 
 @onready var dash_timer: Timer = $DashTimer ## Timer to enforce how long the dash lasts for.
 
@@ -59,14 +60,14 @@ func _do_character_dash() -> void:
 	dynamic_entity.velocity = movement_vector * dynamic_entity.stats.get_stat("dash_speed")
 	dynamic_entity.move_and_slide()
 
-	# handle collisions with rigid entities
+	# Handle collisions with rigid entities
 	for i: int in dynamic_entity.get_slide_collision_count():
 		var c: KinematicCollision2D = dynamic_entity.get_slide_collision(i)
 		var collider: Object = c.get_collider()
 		if collider is RigidEntity:
 			collider.apply_central_impulse(-c.get_normal().normalized() * dynamic_entity.velocity.length() / (5 / (dynamic_entity.stats.get_stat("dash_collision_impulse_factor"))))
 			if not collision_shake_complete:
-				GlobalData.player_camera.start_shake(2.2, 0.15)
+				dash_impact_cam_fx.activate_all()
 				if dynamic_entity.effects.check_if_has_effect("KineticImpact"):
 					AudioManager.play_sound("KineticImpactHit", AudioManager.SoundType.SFX_2D, dynamic_entity.global_position)
 				else:

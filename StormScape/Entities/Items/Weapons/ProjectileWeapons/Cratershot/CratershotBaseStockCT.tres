@@ -1,0 +1,8 @@
+[gd_resource type="CanvasTexture" load_steps=3 format=3 uid="uid://bmxv14dddeyq8"]
+
+[ext_resource type="Texture2D" uid="uid://dgsgdqlqg3s3x" path="res://Entities/Items/Weapons/ProjectileWeapons/Cratershot/cratershot_base_stock.png" id="1_jpfcu"]
+[ext_resource type="Texture2D" uid="uid://djvdn0wa4c8db" path="res://Entities/Items/Weapons/ProjectileWeapons/Cratershot/cratershot_base_stock_n.png" id="2_2e7jb"]
+
+[resource]
+diffuse_texture = ExtResource("1_jpfcu")
+normal_texture = ExtResource("2_2e7jb")

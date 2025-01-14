@@ -1,7 +1,13 @@
-[gd_scene load_steps=8 format=3 uid="uid://6kn3nwojv4l1"]
+[gd_scene load_steps=10 format=3 uid="uid://6kn3nwojv4l1"]
 
 [ext_resource type="Script" uid="uid://bl8i118soy6a5" path="res://Utilities/Autoloads/CursorManager.gd" id="1_it73m"]
-[ext_resource type="Texture2D" uid="uid://ftbtsdurncq" path="res://UI/Cursors/default_cursor.png" id="2_g8fuh"]
+[ext_resource type="Shader" uid="uid://bhox1e3shq3iq" path="res://Utilities/Game/Shaders/ProgressAlpha.gdshader" id="2_7re0i"]
+[ext_resource type="Texture2D" uid="uid://ftbtsdurncq" path="res://UI/Cursors/default.png" id="2_g8fuh"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_43v78"]
+shader = ExtResource("2_7re0i")
+shader_parameter/progress = 100.0
+shader_parameter/main_color = Color(1, 1, 1, 1)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_7re0i"]
 atlas = ExtResource("2_g8fuh")
@@ -46,5 +52,6 @@ follow_viewport_enabled = true
 script = ExtResource("1_it73m")
 
 [node name="Cursor" type="AnimatedSprite2D" parent="."]
+material = SubResource("ShaderMaterial_43v78")
 sprite_frames = SubResource("SpriteFrames_62xth")
 autoplay = "default"

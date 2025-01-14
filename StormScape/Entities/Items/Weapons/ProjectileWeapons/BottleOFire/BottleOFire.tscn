@@ -143,9 +143,10 @@ _data = {
 radius = 2.82843
 height = 14.0
 
-[node name="BottleOFire" type="Node2D"]
+[node name="BottleOFire" type="Node2D" node_paths=PackedStringArray("sprites_to_tint")]
 script = ExtResource("1_sguuu")
 vfx_scene = ExtResource("2_hbtxu")
+sprites_to_tint = [NodePath("ItemSprite")]
 
 [node name="ItemSprite" type="AnimatedSprite2D" parent="."]
 material = SubResource("ShaderMaterial_t0vfb")

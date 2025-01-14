@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bd7ifq5lvur4v"
-path="res://.godot/imported/reloading_back.png-9b3b4e3f09f65ef977b74c6b15d16fd5.ctex"
+uid="uid://dhr8ihto1v76c"
+path="res://.godot/imported/laser_gun_base_mag_n.png-4cf841ec2322a8cb8648ad007e8f8952.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://UI/OverheadUI/Reloading/reloading_back.png"
-dest_files=["res://.godot/imported/reloading_back.png-9b3b4e3f09f65ef977b74c6b15d16fd5.ctex"]
+source_file="res://Entities/Items/Weapons/ProjectileWeapons/LaserGun/laser_gun_base_mag_n.png"
+dest_files=["res://.godot/imported/laser_gun_base_mag_n.png-4cf841ec2322a8cb8648ad007e8f8952.ctex"]
 
 [params]
 

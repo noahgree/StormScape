@@ -1,5 +1,6 @@
-[gd_resource type="Resource" script_class="MeleeWeaponResource" load_steps=13 format=3 uid="uid://bh18kqp2up3oe"]
+[gd_resource type="Resource" script_class="MeleeWeaponResource" load_steps=15 format=3 uid="uid://bh18kqp2up3oe"]
 
+[ext_resource type="Resource" uid="uid://dctg7ykgjoe8u" path="res://Entities/Player/PlayerCore/PlayerCamera/CamFXPresets/3.tres" id="1_77plg"]
 [ext_resource type="Script" uid="uid://dkfssottmsrch" path="res://Entities/Stats/EffectSystemResources/EffectSources/EffectSource.gd" id="1_urffy"]
 [ext_resource type="Script" uid="uid://boo31eu083dqd" path="res://Entities/Stats/EffectSystemResources/StatusEffects/StatusEffect.gd" id="2_ypwee"]
 [ext_resource type="Script" uid="uid://ct7n8wo1p3b20" path="res://Entities/Items/WeaponMods/WeaponMod.gd" id="3_e3dpw"]
@@ -7,6 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://b0wwbgbbfkso4" path="res://Entities/Items/Weapons/MeleeWeapons/Pickaxe/Pickaxe.tscn" id="4_6vlkm"]
 [ext_resource type="Script" uid="uid://c2gdoebfp12dq" path="res://Entities/Stats/StatMod/StatModsCacheResource.gd" id="5_3g32j"]
 [ext_resource type="Texture2D" uid="uid://b6q76o13tanxi" path="res://Entities/Items/Weapons/MeleeWeapons/Pickaxe/pickaxe_base.png" id="5_s4oy3"]
+[ext_resource type="Resource" uid="uid://jdmp0abbwxm5" path="res://Entities/Player/PlayerCore/PlayerCamera/CamFXPresets/1.tres" id="5_teohe"]
 [ext_resource type="Script" uid="uid://djlk3y511igng" path="res://Entities/Items/Weapons/MeleeWeapons/MeleeWeaponResource.gd" id="5_uecum"]
 [ext_resource type="Script" uid="uid://ctxa7i1mbt7ab" path="res://UI/Inventory/PlayerInventory/Crafting/CraftingIngredient.gd" id="5_x5580"]
 
@@ -25,18 +27,9 @@ crit_multiplier = 1.5
 armor_penetration = 0
 base_healing = 0
 heal_affected_stats = 2
+impact_cam_fx = ExtResource("1_77plg")
 impact_sound = ""
 hit_flash_color = Color(1, 1, 1, 0.6)
-cam_shake_strength = 0.3
-cam_shake_duration = 0.25
-cam_shake_on_player_hit_only = false
-cam_shake_max_distance = 100
-cam_shake_does_falloff = true
-cam_freeze_multiplier = 1.0
-cam_freeze_duration = 0.0
-cam_freeze_on_player_hit_only = true
-cam_freeze_max_distance = 100
-cam_freeze_does_falloff = true
 status_effects = Array[ExtResource("2_ypwee")]([])
 contact_position = Vector2(0, 0)
 movement_direction = Vector2(0, 0)
@@ -58,18 +51,9 @@ crit_multiplier = 1.5
 armor_penetration = 0
 base_healing = 0
 heal_affected_stats = 2
+impact_cam_fx = ExtResource("5_teohe")
 impact_sound = ""
 hit_flash_color = Color(1, 1, 1, 0.6)
-cam_shake_strength = 0.3
-cam_shake_duration = 0.25
-cam_shake_on_player_hit_only = false
-cam_shake_max_distance = 100
-cam_shake_does_falloff = true
-cam_freeze_multiplier = 1.0
-cam_freeze_duration = 0.0
-cam_freeze_on_player_hit_only = true
-cam_freeze_max_distance = 100
-cam_freeze_does_falloff = true
 status_effects = Array[ExtResource("2_ypwee")]([])
 contact_position = Vector2(0, 0)
 movement_direction = Vector2(0, 0)
@@ -121,7 +105,6 @@ inv_icon = ExtResource("5_s4oy3")
 inv_icon_offset = Vector2(0, 0)
 inv_icon_scale = Vector2(1, 1)
 inv_icon_rotation = 0.0
-cursor_anim_frames = 1
 recipe = Array[ExtResource("5_x5580")]([])
 output_quantity = 1
 recipe_unlocked = false
@@ -135,4 +118,5 @@ draw_off_hand_offset = Vector2(0, 0)
 main_hand_offset = Vector2(0, 0)
 cooldowns_per_suid = true
 shown_cooldown_fills = Array[String](["default"])
+show_cursor_cooldown = false
 session_uid = 0

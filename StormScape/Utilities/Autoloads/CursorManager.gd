@@ -2,14 +2,13 @@ extends CanvasLayer
 ## This singleton manages the game's cursor and its behavior in certain instances like getting too close to the player.
 
 @onready var cursor: AnimatedSprite2D = $Cursor ## The animated sprite node responsible for displaying the cursor.
+@onready var default_cursor: SpriteFrames = cursor.sprite_frames ## The default sprite frames used as the cursor when one isn't specified.
 
 var previous_angle: float = 0 ## The angle of the cursor relative to the player as of the last frame. Used for lerping.
-var default_cursor: SpriteFrames ## The default sprite frames used as the cursor when one isn't specified.
 
 
 func _ready() -> void:
 	Input.mouse_mode = Input.MOUSE_MODE_HIDDEN
-	default_cursor = cursor.sprite_frames
 
 func _process(_delta: float) -> void:
 	var mouse_position: Vector2 = cursor.get_global_mouse_position()
@@ -33,8 +32,30 @@ func _process(_delta: float) -> void:
 func get_cursor_mouse_position() -> Vector2:
 	return cursor.global_position
 
+## Called to reset the cursor visuals.
+func reset() -> void:
+	change_cursor(default_cursor)
+	update_vertical_tint_progress(100.0)
+
 ## Changes the cursor animation. If null is passed in instead of a sprite frames resource, the old cursor will remain.
-func change_cursor(sprite_frames: SpriteFrames, tint: Color) -> void:
+func change_cursor(sprite_frames: SpriteFrames, animation: StringName = &"default", tint: Color = Color.WHITE) -> void:
+	update_vertical_tint_progress(100.0)
+
 	if sprite_frames != null:
 		cursor.sprite_frames = sprite_frames
-	cursor.modulate = tint
+	if cursor.sprite_frames.has_animation(animation):
+		cursor.play(animation)
+	else:
+		cursor.play(&"default")
+	change_cursor_tint(tint)
+
+## Updates the cursor's tint.
+func change_cursor_tint(tint: Color) -> void:
+	cursor.material.set_shader_parameter("main_color", tint)
+
+func get_cursor_tint() -> Color:
+	return cursor.material.get_shader_parameter("main_color")
+
+## Updates the shader controlling the vertical fill progress.
+func update_vertical_tint_progress(value: float) -> void:
+	cursor.material.set_shader_parameter("progress", clampf(value, 0.0, 100.0))

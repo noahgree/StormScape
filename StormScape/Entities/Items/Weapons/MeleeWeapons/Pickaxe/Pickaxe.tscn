@@ -33,10 +33,11 @@ animations = [{
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_sjv0y"]
 size = Vector2(18.3848, 9)
 
-[node name="Pickaxe" type="Node2D"]
+[node name="Pickaxe" type="Node2D" node_paths=PackedStringArray("sprites_to_tint")]
 script = ExtResource("1_rnhoy")
 sprite_visual_rotation = 0.0
 ghost_fade_time = 0.2
+sprites_to_tint = [NodePath("ItemSprite")]
 
 [node name="ItemSprite" type="AnimatedSprite2D" parent="."]
 material = SubResource("ShaderMaterial_k6dlg")

@@ -18,21 +18,17 @@ enum ProjAmmoType { ## The types of projectile ammo.
 @export_range(0, 10, 0.01, "hide_slider", "or_greater", "suffix:seconds") var firing_duration: float = 0.1 ## How long it takes to release the projectile after initiating the action. Determines the animation speed as well. Set to 0 by default.
 @export_range(0, 30, 0.01, "hide_slider", "or_greater", "suffix:seconds") var fire_cooldown: float = 0.05 ## Time between fully auto projectile emmision. Also the minimum time that must elapse between clicks if set to semi-auto.
 @export_range(0.1, 10, 0.01, "hide_slider", "or_greater", "suffix:seconds") var min_charge_time: float = 1 ## How long must the activation be held down before releasing the charge shot. [b]Only used when firing mode is set to "Charge"[/b].
-@export_subgroup("Animation")
+@export_subgroup("Firing Animations")
 @export var one_frame_per_fire: bool = false ## When true, the sprite frames will only advance one frame when firing normally.
 @export var override_anim_dur: float = 0 ## When greater than 0, the fire animation will run at this override time per loop.
 @export var anim_speed_mult: float = 1.0 ## Multiplies the speed scale of the firing animation.
-@export var has_post_fire_anim: bool = false ## When true, an animation will play for the specified duration of the cooldown after firing, unless a custom time is given below.
 @export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var post_fire_anim_delay: float = 0 ## The delay after the firing duration ends before starting the post-fire animation if one exists.
-@export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var post_fire_anim_dur: float = 0 ## The override time for how long the animation should be that plays after firing. Anything greater than 0 activates this override.
+@export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var post_fire_anim_dur: float = 0 ## The override time for how long the animation should be that plays after firing (if it exists). Anything greater than 0 activates this override.
 @export_subgroup("Entity Effects")
 @export var post_firing_effect: StatusEffect = null ## The status effect to apply to the source entity after firing.
 @export var charging_stat_effect: StatusEffect = null ## A status effect to apply to the entity while charging. Typically to slow them.
 @export_subgroup("Firing FX")
-@export_range(0, 30, 0.01) var firing_cam_shake_str: float = 0.0 ## How strong the camera should shake when firing.
-@export_range(0, 2, 0.01) var firing_cam_shake_dur: float = 0.0 ## How long the camera shake when firing should take to decay.
-@export_range(0, 1, 0.01) var firing_cam_freeze_mult: float = 1.0 ## How strong the camera should freeze when firing.
-@export_range(0, 1, 0.01) var firing_cam_freeze_dur: float = 0.0 ## How long the camera freeze when firing should take to decay.
+@export var firing_cam_fx: CamFXResource ## The resource defining how the camera should react to firing.
 @export var muzzle_flash: Texture2D = null ## The texture to show as the muzzle flash when firing.
 @export var firing_sound: String = "" ## The sound to play when firing.
 @export var post_fire_sound: String = "" ## The sound to play after firing before the cooldown ends.
@@ -50,6 +46,7 @@ enum ProjAmmoType { ## The types of projectile ammo.
 @export_enum("Magazine", "Single") var reload_type: String = "Magazine" ## Whether to reload over time or all at once at the end.
 @export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var mag_reload_time: float = 1.0 ## How long it takes to reload an entire mag.
 @export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var single_proj_reload_time: float = 0.25 ## How long it takes to reload a single projectile if the reload type is set to "single".
+@export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var single_proj_reload_delay: float = 0.5 ## An additional delay that occurs before the first single proj is reloaded after triggering a reload.
 @export var single_reload_quantity: int = 1 ## How much to add to the mag when the single proj timer elapses each time.
 @export var stamina_use_per_proj: float = 0.5 ## How much stamina is needed per projectile when stamina is the ammo type.
 @export var dont_consume_ammo: bool = false ## When true, this acts like infinite ammo where the weapon doesn't decrement the ammo in mag upon firing.
@@ -58,6 +55,9 @@ enum ProjAmmoType { ## The types of projectile ammo.
 @export var auto_ammo_count: int = 1 ## How much ammo to grant after the interval is up.
 @export_range(0.05, 1000, 0.01, "suffix:seconds", "hide_slider", "or_greater") var auto_ammo_delay: float = 0.5 ## How long after firing must we wait before the grant interval countdown starts.
 @export var recharge_uses_inv: bool = false ## When true, the ammo will recharge by consuming ammo from the inventory. When none is left, the recharges will stop.
+@export_subgroup("Reloading Animations")
+@export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var reload_anim_dur: float = 0 ## The override time for how long the animation should be that plays during a reload (if it exists). Anything greater than 0 activates this override.
+@export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var before_reload_anim_dur: float = 0 ## The override time for how long the animation should be that plays during the delay before a single reload (if it exists). Anything greater than 0 activates this override.
 @export_subgroup("UI")
 @export var hide_ammo_ui: bool = false ## When a player uses this, should the ammo UI be hidden.
 @export var hide_reload_ui: bool = false ## When a player uses this, should the reloading UI be hidden.
@@ -86,6 +86,7 @@ enum ProjAmmoType { ## The types of projectile ammo.
 @export var overheat_dec_rate: Curve ## X value is overheat amount (0-1), Y value is how much we take away from overheat amount per second.
 @export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var overheat_dec_delay: float = 0.75
 @export var overheated_sound: String = "" ## The sound to play when the weapon reaches max overheat.
+@export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var overheat_anim_dur: float = 0.5 ## How long one loop of the overheat animation should take (if one exists).
 
 @export_group("Burst Logic")
 @export_range(1, 100, 1) var projectiles_per_fire: int = 1 ## How many projectiles are emitted per burst execution.

@@ -36,7 +36,7 @@ func _on_before_load_game() -> void:
 
 #region Debug
 func _draw() -> void:
-	if equipped_item:
+	if equipped_item and DebugFlags.Projectiles.show_aiming_direction:
 		# Draw the equipped item position
 		var local_position: Vector2 = to_local(debug_origin_of_projectile_vector)
 		draw_circle(local_position, 4, Color.CORAL)
@@ -112,7 +112,7 @@ func on_equipped_item_change(inv_item_slot: Slot) -> void:
 		main_hand_sprite.visible = false
 		off_hand_sprite.visible = false
 		entity.move_fsm.rotation_lerping_factor = entity.move_fsm.DEFAULT_ROTATION_LERPING_FACTOR
-		CursorManager.change_cursor(CursorManager.default_cursor, Color.BLACK)
+		CursorManager.reset()
 		return
 
 	equipped_item = EquippableItem.create_from_slot(inv_item_slot)
@@ -151,7 +151,10 @@ func on_equipped_item_change(inv_item_slot: Slot) -> void:
 
 	equipped_item.ammo_ui = active_slot_info
 
-	CursorManager.change_cursor(equipped_item.stats.base_cursor, equipped_item.stats.base_cursor_tint)
+	if equipped_item.stats.cursors != null:
+		CursorManager.change_cursor(equipped_item.stats.cursors, &"default", Color.WHITE)
+	else:
+		CursorManager.reset()
 
 	main_hand.add_child(equipped_item)
 	equipped_item.enter()
@@ -204,9 +207,8 @@ func _manage_proj_weapon_hands(anim_vector: Vector2) -> void:
 		var lerped_direction_angle: float = entity.move_fsm.get_lerped_mouse_direction_to_pos(direction_vector, sprite_pos_with_offsets).angle()
 		hands_anchor.global_rotation = lerped_direction_angle
 
-		if DebugFlags.Projectiles.show_aiming_direction:
-			debug_origin_of_projectile_vector = sprite_pos_with_offsets
-			queue_redraw()
+		debug_origin_of_projectile_vector = sprite_pos_with_offsets
+		queue_redraw()
 
 func _manage_melee_weapon_hands(anim_vector: Vector2) -> void:
 	if not equipped_item.is_node_ready():

@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="ProjWeaponResource" load_steps=20 format=3 uid="uid://14gw464h13vv"]
+[gd_resource type="Resource" script_class="ProjWeaponResource" load_steps=24 format=3 uid="uid://14gw464h13vv"]
 
 [ext_resource type="Script" uid="uid://boo31eu083dqd" path="res://Entities/Stats/EffectSystemResources/StatusEffects/StatusEffect.gd" id="1_oi18d"]
 [ext_resource type="Script" uid="uid://dkfssottmsrch" path="res://Entities/Stats/EffectSystemResources/EffectSources/EffectSource.gd" id="1_qcxpp"]
@@ -6,6 +6,7 @@
 [ext_resource type="Script" uid="uid://cje5bobi6o8bo" path="res://Entities/Items/Hitscans/HitscanResource.gd" id="3_nvevl"]
 [ext_resource type="Script" uid="uid://bj3r5oopspj6l" path="res://Entities/Items/Projectiles/ProjectileResource.gd" id="4_8o3cg"]
 [ext_resource type="Texture2D" uid="uid://bicdpq4he2mgo" path="res://Entities/Items/Weapons/ProjectileWeapons/Cratershot/CratershotBaseCT.tres" id="4_arskj"]
+[ext_resource type="Resource" uid="uid://cvqddapopo145" path="res://Entities/Player/PlayerCore/PlayerCamera/CamFXPresets/5.tres" id="4_qi223"]
 [ext_resource type="PackedScene" uid="uid://bqkyplubhsx43" path="res://Entities/Items/Projectiles/Bullets/SmallBullet/SmallBullet.tscn" id="5_ilshb"]
 [ext_resource type="Texture2D" uid="uid://b2bgxo22c1tup" path="res://Entities/Items/Weapons/ProjectileWeapons/Cratershot/cratershot_base.png" id="6_2s01n"]
 [ext_resource type="Script" uid="uid://ct7n8wo1p3b20" path="res://Entities/Items/WeaponMods/WeaponMod.gd" id="6_ey58o"]
@@ -13,6 +14,8 @@
 [ext_resource type="Script" uid="uid://ctxa7i1mbt7ab" path="res://UI/Inventory/PlayerInventory/Crafting/CraftingIngredient.gd" id="8_rff8j"]
 [ext_resource type="Texture2D" uid="uid://bj4xowuewlfds" path="res://Entities/Items/Weapons/WeaponVFX/FiringVFX/Simple/simple_1.png" id="9_je5ma"]
 [ext_resource type="Script" uid="uid://c2gdoebfp12dq" path="res://Entities/Stats/StatMod/StatModsCacheResource.gd" id="9_yxw3n"]
+[ext_resource type="Script" uid="uid://ig4jcnxaphcg" path="res://Entities/Stats/EffectSystemResources/StatusEffects/GoodEffects/SelfKnockback/SelfKnockbackEffect.gd" id="10_c3au3"]
+[ext_resource type="Script" uid="uid://bcjwesiannbd0" path="res://Entities/Stats/StatMod/StatMod.gd" id="11_7gqp2"]
 
 [sub_resource type="Resource" id="Resource_7puc1"]
 script = ExtResource("1_qcxpp")
@@ -31,16 +34,6 @@ base_healing = 0
 heal_affected_stats = 2
 impact_sound = ""
 hit_flash_color = Color(1, 1, 1, 0.6)
-cam_shake_strength = 1.0
-cam_shake_duration = 0.45
-cam_shake_on_player_hit_only = false
-cam_shake_max_distance = 100
-cam_shake_does_falloff = true
-cam_freeze_multiplier = 1.0
-cam_freeze_duration = 0.0
-cam_freeze_on_player_hit_only = true
-cam_freeze_max_distance = 100
-cam_freeze_does_falloff = true
 status_effects = Array[ExtResource("1_oi18d")]([])
 contact_position = Vector2(0, 0)
 movement_direction = Vector2(0, 0)
@@ -64,6 +57,26 @@ impact_particle_color = Color(1, 0.752941, 0.796078, 1)
 impact_particle_mult = 1.0
 beam_particle_color = Color(1, 0, 0, 1)
 beam_particle_mult = 1.0
+
+[sub_resource type="Resource" id="Resource_byj8c"]
+script = ExtResource("10_c3au3")
+direction_method = "Hands Rotation"
+knockback_force = 150
+custom_knockback_direction = Vector2(0, 0)
+effect_name = "Self Knockback"
+effect_lvl = 1
+is_bad_effect = false
+affected_entities = 7
+effects_to_stop = Array[String]([])
+mod_time = 0.25
+apply_until_removed = false
+stat_mods = Array[ExtResource("11_7gqp2")]([])
+audio_to_play = ""
+only_cue_on_player_hit = false
+spawn_particles = false
+particle_hander_req = ""
+update_entity_glow = false
+metadata/_custom_type_script = ExtResource("10_c3au3")
 
 [sub_resource type="Curve" id="Curve_ubs5c"]
 _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.297477), 0.0, 0.0, 0, 0]
@@ -119,8 +132,7 @@ split_into_counts = Array[int]([2])
 angular_spreads = Array[float]([45.0])
 split_delays = Array[float]([0.2])
 splitting_sounds = Array[String]([""])
-split_cam_shakes_str = Array[float]([1.0])
-split_cam_shakes_dur = Array[float]([0.2])
+split_cam_fx = null
 aoe_radius = 0
 do_aoe_on_arc_land = true
 aoe_before_freeing = false
@@ -141,19 +153,16 @@ script = ExtResource("3_br5vb")
 proj_weapon_type = 1
 firing_mode = "Auto"
 projectile_scn = ExtResource("5_ilshb")
-firing_duration = 0.06
-fire_cooldown = 0.48
+firing_duration = 0.0
+fire_cooldown = 0.65
 min_charge_time = 1.0
 one_frame_per_fire = false
 override_anim_dur = 0.0
 anim_speed_mult = 1.0
-has_post_fire_anim = true
 post_fire_anim_delay = 0.15
 post_fire_anim_dur = 0.22
-firing_cam_shake_str = 0.8
-firing_cam_shake_dur = 0.7
-firing_cam_freeze_mult = 0.22
-firing_cam_freeze_dur = 0.03
+post_firing_effect = SubResource("Resource_byj8c")
+firing_cam_fx = ExtResource("4_qi223")
 muzzle_flash = ExtResource("9_je5ma")
 firing_sound = ""
 post_fire_sound = ""
@@ -166,7 +175,8 @@ ammo_type = 5
 mag_size = 8
 reload_type = "Single"
 mag_reload_time = 1.0
-single_proj_reload_time = 0.9
+single_proj_reload_time = 0.35
+single_proj_reload_delay = 1.0
 single_reload_quantity = 1
 stamina_use_per_proj = 0.5
 dont_consume_ammo = false
@@ -174,6 +184,8 @@ auto_ammo_interval = 0.0
 auto_ammo_count = 1
 auto_ammo_delay = 0.5
 recharge_uses_inv = false
+reload_anim_dur = 0.0
+before_reload_anim_dur = 0.0
 hide_ammo_ui = false
 hide_reload_ui = false
 mag_reload_sound = ""
@@ -186,6 +198,7 @@ warmup_decrease_delay = 0.75
 overheat_penalty = 0.0
 overheat_dec_delay = 0.75
 overheated_sound = ""
+overheat_anim_dur = 0.5
 projectiles_per_fire = 1
 use_ammo_per_burst_proj = true
 burst_bullet_delay = 0.1
@@ -219,7 +232,6 @@ inv_icon = ExtResource("6_2s01n")
 inv_icon_offset = Vector2(0, 0)
 inv_icon_scale = Vector2(1.3, 1.3)
 inv_icon_rotation = -45.0
-base_cursor_tint = Color(1, 1, 1, 1)
 recipe = Array[ExtResource("8_rff8j")]([])
 output_quantity = 1
 recipe_unlocked = false
@@ -233,4 +245,5 @@ draw_off_hand_offset = Vector2(0, 0)
 main_hand_offset = Vector2(0, 0)
 cooldowns_per_suid = true
 shown_cooldown_fills = Array[String]([])
+show_cursor_cooldown = false
 session_uid = 0

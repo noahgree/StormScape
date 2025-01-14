@@ -191,9 +191,10 @@ _data = {
 radius = 4.94975
 height = 16.9706
 
-[node name="BoomerangWood" type="Node2D"]
+[node name="BoomerangWood" type="Node2D" node_paths=PackedStringArray("sprites_to_tint")]
 script = ExtResource("1_38q5c")
 vfx_scene = ExtResource("2_dn0cg")
+sprites_to_tint = [NodePath("ItemSprite")]
 
 [node name="ItemSprite" type="AnimatedSprite2D" parent="."]
 material = SubResource("ShaderMaterial_78dqe")

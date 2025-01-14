@@ -52,5 +52,5 @@ func _add_cooldown() -> void:
 		source_entity.inv.auto_decrementer.add_cooldown(stats.get_cooldown_id(), cooldown)
 
 ## Only exists to override the parent function so that we can do our own, different logic here. Does nothing on purpose in this script.
-func _update_cooldown_with_potential_visuals(_duration: float) -> void:
+func _handle_adding_cooldown(_duration: float, _title: String = "default") -> void:
 	return

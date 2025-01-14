@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bq3d1uclexvcm"
-path="res://.godot/imported/overheat_progress_tintable.png-5e3de1232b058e8216a3269591d5bfac.ctex"
+uid="uid://fkcs2l6prctw"
+path="res://.godot/imported/laser_gun_base_sprite_no_mag_n.png-cd8bcc49fb6a19790b0c7f852119cd5a.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://UI/OverheadUI/Overheat/overheat_progress_tintable.png"
-dest_files=["res://.godot/imported/overheat_progress_tintable.png-5e3de1232b058e8216a3269591d5bfac.ctex"]
+source_file="res://Entities/Items/Weapons/ProjectileWeapons/LaserGun/laser_gun_base_sprite_no_mag_n.png"
+dest_files=["res://.godot/imported/laser_gun_base_sprite_no_mag_n.png-cd8bcc49fb6a19790b0c7f852119cd5a.ctex"]
 
 [params]
 

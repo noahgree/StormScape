@@ -1,4 +1,4 @@
-[gd_scene load_steps=195 format=3 uid="uid://dba8mrurjlekp"]
+[gd_scene load_steps=194 format=3 uid="uid://dba8mrurjlekp"]
 
 [ext_resource type="Script" uid="uid://c3rpxq8pnbdje" path="res://Entities/Player/PlayerCore/Player.gd" id="1_m33tt"]
 [ext_resource type="Script" uid="uid://c2gdoebfp12dq" path="res://Entities/Stats/StatMod/StatModsCacheResource.gd" id="2_vetip"]
@@ -14,7 +14,6 @@
 [ext_resource type="PackedScene" uid="uid://co3n6m7efg8pd" path="res://Entities/Components/EffectComponents/StatusEffectManager/StatusEffectManager.tscn" id="6_n0x5k"]
 [ext_resource type="Script" uid="uid://c2sjdkql76qca" path="res://Entities/Player/States/MoveStates/Idle/Idle.gd" id="7_15a5x"]
 [ext_resource type="PackedScene" uid="uid://dykiv0tlhwmox" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/KnockbackHandler.tscn" id="7_k0pv8"]
-[ext_resource type="Texture2D" uid="uid://tdtv12ps6wk" path="res://UI/OverheadUI/Reloading/reloading_progress.png" id="8_qhq3c"]
 [ext_resource type="Script" uid="uid://dxekqhvcykqrq" path="res://Entities/Player/States/MoveStates/Run/Run.gd" id="9_0dcld"]
 [ext_resource type="Script" uid="uid://cy73p3okq3cic" path="res://Entities/Player/States/MoveStates/Dash/Dash.gd" id="9_a1qv1"]
 [ext_resource type="Texture2D" uid="uid://cs3clmnktksd6" path="res://Entities/Player/PlayerCore/player_hand.png" id="9_n4o3n"]
@@ -40,6 +39,7 @@
 [ext_resource type="Script" uid="uid://i6jv5dqqpf3n" path="res://UI/Inventory/PlayerInventory/PlayerInvCommunicator.gd" id="31_mjpan"]
 [ext_resource type="Script" uid="uid://dq62ojsc43p8o" path="res://UI/Inventory/PlayerInventory/PlayerInvUI.gd" id="32_3a185"]
 [ext_resource type="Script" uid="uid://dp8osf7r6xkkt" path="res://Entities/Items/ItemCore/InvItemResource.gd" id="32_ixmb3"]
+[ext_resource type="Script" uid="uid://dvirx67s12tmd" path="res://Entities/Player/PlayerCore/PlayerCamera/CamFXResource.gd" id="32_o382h"]
 [ext_resource type="Resource" uid="uid://cx1ydw2jde1y8" path="res://Entities/Items/TRESItems/Apple(0).tres" id="33_0qw5e"]
 [ext_resource type="Resource" uid="uid://bh18kqp2up3oe" path="res://Entities/Items/TRESItems/Pickaxe(3).tres" id="34_i8j5r"]
 [ext_resource type="Script" uid="uid://ccdihncnoj7dh" path="res://UI/Inventory/PlayerInventory/ItemInteractionHud.gd" id="35_45ikj"]
@@ -88,10 +88,8 @@
 [ext_resource type="Resource" uid="uid://1q7rlned2r23" path="res://Entities/Items/TRESItems/Gattler(3).tres" id="53_lo25j"]
 [ext_resource type="Texture2D" uid="uid://lj78cee4aa38" path="res://UI/PlayerStatsOverlay/Assets/Health Change.png" id="53_qsiea"]
 [ext_resource type="Script" uid="uid://dih45lqhjg0xx" path="res://UI/OverheadUI/PlayerOverheadUI.gd" id="57_n8srl"]
-[ext_resource type="Texture2D" uid="uid://bd7ifq5lvur4v" path="res://UI/OverheadUI/Reloading/reloading_back.png" id="58_hd6am"]
 [ext_resource type="Script" uid="uid://c0n0ja8tkrnkf" path="res://UI/Inventory/PlayerInventory/HotbarUI.gd" id="58_i567i"]
-[ext_resource type="Texture2D" uid="uid://b536l7eoo4wx0" path="res://UI/OverheadUI/Reloading/reloading_over.png" id="59_fbicu"]
-[ext_resource type="Texture2D" uid="uid://bq3d1uclexvcm" path="res://UI/OverheadUI/Overheat/overheat_progress_tintable.png" id="61_6wv7y"]
+[ext_resource type="Texture2D" uid="uid://bq3d1uclexvcm" path="res://UI/OverheadUI/progress_tintable.png" id="61_6wv7y"]
 [ext_resource type="Texture2D" uid="uid://barp24qvngy0m" path="res://UI/OverheadUI/Overheat/overheat_back.png" id="63_3uq13"]
 [ext_resource type="Script" uid="uid://ct7n8wo1p3b20" path="res://Entities/Items/WeaponMods/WeaponMod.gd" id="63_qvtc6"]
 [ext_resource type="Resource" uid="uid://ba8pkny735n2r" path="res://Entities/Items/WeaponMods/ExtendedMag/ExtendedMag1.tres" id="64_14ixx"]
@@ -133,6 +131,28 @@ shader_parameter/use_override_color = false
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_7dc0v"]
 size = Vector2(14, 15)
+
+[sub_resource type="Resource" id="Resource_6wv7y"]
+script = ExtResource("32_o382h")
+shake_strength = 2.2
+shake_duration = 0.3
+shake_trans_type = 2
+shake_ease_type = 0
+freeze_multiplier = 1.0
+freeze_duration = 0.03
+freeze_trans_type = 2
+freeze_ease_type = 0
+zoom_multiplier = 1.0
+zoom_duration = 0.04
+zoom_trans_type = 0
+zoom_ease_type = 2
+trans_player_only = false
+trans_max_dist = 125
+trans_use_falloff = true
+freeze_player_only = false
+freeze_max_dist = 125
+freeze_uses_falloff = true
+metadata/_custom_type_script = ExtResource("32_o382h")
 
 [sub_resource type="Animation" id="Animation_sys1a"]
 length = 0.001
@@ -1181,7 +1201,6 @@ inv_icon = ExtResource("40_ftusj")
 inv_icon_offset = Vector2(0, 0)
 inv_icon_scale = Vector2(1, 1)
 inv_icon_rotation = 0.0
-base_cursor_tint = Color(1, 1, 1, 1)
 recipe = Array[ExtResource("40_3yx82")]([])
 output_quantity = 1
 recipe_unlocked = false
@@ -1194,6 +1213,7 @@ draw_off_hand_offset = Vector2(0, 0)
 main_hand_offset = Vector2(0, 0)
 cooldowns_per_suid = true
 shown_cooldown_fills = Array[String]([])
+show_cursor_cooldown = false
 session_uid = 0
 
 [sub_resource type="Resource" id="Resource_t7kvu"]
@@ -1221,10 +1241,11 @@ script = ExtResource("32_ixmb3")
 stats = ExtResource("45_xur7q")
 quantity = 1
 
-[sub_resource type="Resource" id="Resource_vpccy"]
+[sub_resource type="Resource" id="Resource_rdrbb"]
 script = ExtResource("32_ixmb3")
-stats = ExtResource("48_1kvwx")
+stats = ExtResource("53_lo25j")
 quantity = 1
+metadata/_custom_type_script = ExtResource("32_ixmb3")
 
 [sub_resource type="Resource" id="Resource_sx7hp"]
 script = ExtResource("32_ixmb3")
@@ -1236,11 +1257,10 @@ script = ExtResource("32_ixmb3")
 stats = ExtResource("52_ebist")
 quantity = 1
 
-[sub_resource type="Resource" id="Resource_rdrbb"]
+[sub_resource type="Resource" id="Resource_vpccy"]
 script = ExtResource("32_ixmb3")
-stats = ExtResource("53_lo25j")
+stats = ExtResource("48_1kvwx")
 quantity = 1
-metadata/_custom_type_script = ExtResource("32_ixmb3")
 
 [sub_resource type="Resource" id="Resource_hevqc"]
 script = ExtResource("32_ixmb3")
@@ -1493,6 +1513,7 @@ script = ExtResource("19_alhqe")
 
 [node name="Dash" type="Node" parent="MoveStateMachine"]
 script = ExtResource("9_a1qv1")
+dash_impact_cam_fx = SubResource("Resource_6wv7y")
 
 [node name="DashTimer" type="Timer" parent="MoveStateMachine/Dash"]
 one_shot = true
@@ -1523,7 +1544,7 @@ parameters/run/blendspace2d/blend_position = Vector2(0, 0)
 
 [node name="ItemReceiverComponent" parent="." node_paths=PackedStringArray("inv_populator", "ui") instance=ExtResource("30_qgyag")]
 item_scene = ExtResource("31_8v2rb")
-starting_inv = Array[ExtResource("32_ixmb3")]([SubResource("Resource_pihal"), null, null, null, SubResource("Resource_kx1me"), SubResource("Resource_2ijsm"), null, SubResource("Resource_xlc3k"), SubResource("Resource_n4o3n"), SubResource("Resource_3by25"), SubResource("Resource_oxva3"), SubResource("Resource_t7kvu"), SubResource("Resource_x8o50"), null, SubResource("Resource_apvym"), SubResource("Resource_ur5wt"), null, null, SubResource("Resource_dyejk"), null, null, null, null, null, null, SubResource("Resource_vpccy"), null, null, SubResource("Resource_sx7hp"), SubResource("Resource_wjnk6"), null, null, SubResource("Resource_rdrbb"), SubResource("Resource_hevqc"), SubResource("Resource_0ta0y"), SubResource("Resource_p5d28"), SubResource("Resource_6stk0")])
+starting_inv = Array[ExtResource("32_ixmb3")]([SubResource("Resource_pihal"), null, null, null, SubResource("Resource_kx1me"), SubResource("Resource_2ijsm"), null, SubResource("Resource_xlc3k"), SubResource("Resource_n4o3n"), SubResource("Resource_3by25"), SubResource("Resource_oxva3"), SubResource("Resource_t7kvu"), SubResource("Resource_x8o50"), null, SubResource("Resource_apvym"), SubResource("Resource_ur5wt"), null, null, SubResource("Resource_dyejk"), null, null, null, null, null, null, SubResource("Resource_rdrbb"), null, null, SubResource("Resource_sx7hp"), SubResource("Resource_wjnk6"), null, null, SubResource("Resource_vpccy"), SubResource("Resource_hevqc"), SubResource("Resource_0ta0y"), SubResource("Resource_p5d28"), SubResource("Resource_6stk0")])
 is_player_inv = true
 inv_size = 37
 hotbar_size = 5
@@ -1581,18 +1602,16 @@ texture_progress = ExtResource("64_o382h")
 
 [node name="ReloadBar" type="TextureProgressBar" parent="OverheadUI/VBoxContainer"]
 material = SubResource("CanvasItemMaterial_n4o3n")
-custom_minimum_size = Vector2(0, 4)
+custom_minimum_size = Vector2(0, 3)
 layout_mode = 2
 nine_patch_stretch = true
 stretch_margin_left = 1
 stretch_margin_top = 1
 stretch_margin_right = 1
 stretch_margin_bottom = 1
-texture_under = ExtResource("58_hd6am")
-texture_over = ExtResource("59_fbicu")
-texture_progress = ExtResource("8_qhq3c")
-tint_over = Color(1, 1, 1, 0.17)
-tint_progress = Color(0.428165, 0.752804, 0.889988, 1)
+texture_under = ExtResource("63_3uq13")
+texture_progress = ExtResource("61_6wv7y")
+tint_progress = Color(0.483324, 0.860906, 0.955996, 1)
 
 [node name="OverlayUI" type="CanvasLayer" parent="."]
 

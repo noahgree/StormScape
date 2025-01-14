@@ -31,21 +31,10 @@ class_name EffectSource
 @export var heal_affected_stats: GlobalData.HealAffectedStats = GlobalData.HealAffectedStats.HEALTH_THEN_SHIELD ## Which entity stats are affected by this healing source.
 
 @export_group("Impact FX")
+@export var impact_cam_fx: CamFXResource ## The resource defining how the camera should react to firing.
 @export var impact_vfx: PackedScene = null ## The vfx to spawn when impacting something.
 @export var impact_sound: String = "" ## The sound to play when impacting something.
 @export var hit_flash_color: Color = Color(1, 1, 1, 0.6) ## The color to flash the hit entity to on being hit.
-@export_subgroup("Camera Shake", "cam_shake_")
-@export_range(0, 30, 0.01) var cam_shake_strength: float = 0.3 ## How strong the camera should shake if this source hits the player
-@export_range(0, 2, 0.01) var cam_shake_duration: float = 0.25 ## How long the shake should take to fade out.
-@export var cam_shake_on_player_hit_only: bool = false ## When true, the shake will only play when the effect source is received by the player.
-@export_range(1, 1000, 1, "hide_slider", "or_greater") var cam_shake_max_distance: int = 100 ## How close the player must be from the site of the effect source application to start to feel the cam shake.
-@export var cam_shake_does_falloff: bool = true ## When true, the camera shake falls off from up to the cam_shake_max_distance.
-@export_subgroup("Camera Freeze", "cam_freeze_")
-@export_range(0, 1, 0.01) var cam_freeze_multiplier: float = 1.0 ## The multiplier for the speed of the camera updates, with a value of 0 freezing it entirely.
-@export_range(0, 1, 0.01) var cam_freeze_duration: float = 0 ## How long the camera should freeze or slow for upon hitting the player.
-@export var cam_freeze_on_player_hit_only: bool = true ## When true, the freeze will only play when the effect source is received by the player.
-@export_range(1, 1000, 1, "hide_slider", "or_greater") var cam_freeze_max_distance: int = 100 ## How close the player must be from the site of the effect source application to start to feel the cam freeze.
-@export var cam_freeze_does_falloff: bool = true ## When true, the camera freeze multiplier falls off from up to the cam_freeze_max_distance.
 
 @export_group("Status Effects")
 @export var status_effects: Array[StatusEffect] ## The array of status effects that can be applied to the receiving entity.

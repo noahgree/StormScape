@@ -4,7 +4,7 @@
 [ext_resource type="Script" uid="uid://dpbgynf55anlv" path="res://Stages/World/BackgroundMusicManager.gd" id="1_q5pr2"]
 [ext_resource type="Shader" uid="uid://diiwbinm5w26h" path="res://Utilities/Game/Shaders/RepeatingTextureOverlay.gdshader" id="2_dbic0"]
 [ext_resource type="PackedScene" uid="uid://dba8mrurjlekp" path="res://Entities/Player/PlayerCore/Player.tscn" id="4_ptig0"]
-[ext_resource type="Script" uid="uid://bnm2n1k4gffwu" path="res://Entities/Player/PlayerCore/PlayerCamera.gd" id="4_tj8qg"]
+[ext_resource type="Script" uid="uid://dyqicorpbp2le" path="res://Entities/Player/PlayerCore/PlayerCamera/PlayerCamera.gd" id="4_tj8qg"]
 [ext_resource type="Texture2D" uid="uid://crqa3kb7ndjr5" path="res://Stages/Tilemaps/SwampDirt/swamp_texture_repeating.png" id="5_g65la"]
 [ext_resource type="Script" uid="uid://cncnc3v2hpov8" path="res://Stages/World/WorldItemsManager.gd" id="8_g8y4o"]
 [ext_resource type="Script" uid="uid://c2gdoebfp12dq" path="res://Entities/Stats/StatMod/StatModsCacheResource.gd" id="8_iotvt"]
@@ -191,16 +191,6 @@ base_healing = 0
 heal_affected_stats = 2
 impact_sound = ""
 hit_flash_color = Color(1, 1, 1, 0.6)
-cam_shake_strength = 0.3
-cam_shake_duration = 0.25
-cam_shake_on_player_hit_only = false
-cam_shake_max_distance = 100
-cam_shake_does_falloff = true
-cam_freeze_multiplier = 1.0
-cam_freeze_duration = 0.0
-cam_freeze_on_player_hit_only = true
-cam_freeze_max_distance = 100
-cam_freeze_does_falloff = true
 status_effects = Array[ExtResource("13_33bgr")]([ExtResource("12_s2x07")])
 contact_position = Vector2(0, 0)
 movement_direction = Vector2(0, 0)
@@ -230,16 +220,6 @@ base_healing = 0
 heal_affected_stats = 2
 impact_sound = ""
 hit_flash_color = Color(1, 1, 1, 0.6)
-cam_shake_strength = 0.3
-cam_shake_duration = 0.25
-cam_shake_on_player_hit_only = false
-cam_shake_max_distance = 100
-cam_shake_does_falloff = true
-cam_freeze_multiplier = 1.0
-cam_freeze_duration = 0.0
-cam_freeze_on_player_hit_only = true
-cam_freeze_max_distance = 100
-cam_freeze_does_falloff = true
 status_effects = Array[ExtResource("13_33bgr")]([ExtResource("13_27bcd")])
 contact_position = Vector2(0, 0)
 movement_direction = Vector2(0, 0)
@@ -266,16 +246,6 @@ base_healing = 0
 heal_affected_stats = 2
 impact_sound = ""
 hit_flash_color = Color(1, 1, 1, 0.6)
-cam_shake_strength = 0.3
-cam_shake_duration = 0.25
-cam_shake_on_player_hit_only = false
-cam_shake_max_distance = 100
-cam_shake_does_falloff = true
-cam_freeze_multiplier = 1.0
-cam_freeze_duration = 0.0
-cam_freeze_on_player_hit_only = true
-cam_freeze_max_distance = 100
-cam_freeze_does_falloff = true
 status_effects = Array[ExtResource("13_33bgr")]([ExtResource("16_ky7ks")])
 contact_position = Vector2(0, 0)
 movement_direction = Vector2(0, 0)

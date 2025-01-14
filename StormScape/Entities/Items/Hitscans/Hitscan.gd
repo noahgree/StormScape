@@ -263,38 +263,17 @@ func _start_being_handled(handling_area: EffectReceiverComponent, contact_point:
 ## When we hit a handling area during a hitscan, we apply falloff to the components of the effect source.
 func _get_effect_source_adjusted_for_falloff(effect_src: EffectSource, contact_point: Vector2) -> EffectSource:
 	var falloff_effect_src: EffectSource = effect_src.duplicate()
-	var falloff_mult: float
-	var apply_to_bad: bool
-	var apply_to_good: bool
+	var apply_to_bad: bool = stats.bad_effects_falloff
+	var apply_to_good: bool = stats.good_effects_falloff
 
-	apply_to_bad = stats.bad_effects_falloff
-	apply_to_good = stats.good_effects_falloff
-	var max_distance_stat: float = s_mods.get_stat("hitscan_max_distance")
-	var point_to_sample: float = float(global_position.distance_to(contact_point) / max_distance_stat)
+	var point_to_sample: float = float(global_position.distance_to(contact_point) / s_mods.get_stat("hitscan_max_distance"))
 	var sampled_point: float = stats.hitscan_effect_falloff.sample_baked(point_to_sample)
-	falloff_mult = max(0.05, sampled_point)
-
-	falloff_effect_src.cam_shake_strength *= falloff_mult
-	falloff_effect_src.cam_freeze_multiplier *= falloff_mult
+	var falloff_mult: float = max(0.05, sampled_point)
 
 	if apply_to_bad:
-		falloff_effect_src.base_damage = int(ceil(falloff_effect_src.base_damage * falloff_mult))
-		for i: int in range(falloff_effect_src.status_effects.size()):
-			if falloff_effect_src.status_effects[i] != null and falloff_effect_src.status_effects[i].is_bad_effect:
-				var new_stat_effect: StatusEffect = falloff_effect_src.status_effects[i].duplicate()
-				new_stat_effect.mod_time *= falloff_mult
-				if new_stat_effect is KnockbackEffect:
-					new_stat_effect.knockback_force *= falloff_mult
-
-				falloff_effect_src.status_effects[i] = new_stat_effect
+		falloff_effect_src.base_damage = int(min(falloff_effect_src.base_damage, ceil(falloff_effect_src.base_damage * falloff_mult)))
 
 	if apply_to_good:
-		falloff_effect_src.base_healing = int(ceil(falloff_effect_src.base_healing * falloff_mult))
-		for i: int in range(falloff_effect_src.status_effects.size()):
-			if falloff_effect_src.status_effects[i] != null and not falloff_effect_src.status_effects[i].is_bad_effect:
-				var new_stat_effect: StatusEffect = falloff_effect_src.status_effects[i].duplicate()
-				new_stat_effect.mod_time *= falloff_mult
-
-				falloff_effect_src.status_effects[i] = new_stat_effect
+		falloff_effect_src.base_healing = int(min(falloff_effect_src.base_healing, ceil(falloff_effect_src.base_healing * falloff_mult)))
 
 	return falloff_effect_src

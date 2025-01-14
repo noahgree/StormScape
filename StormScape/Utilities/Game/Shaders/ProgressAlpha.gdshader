@@ -21,6 +21,6 @@ void fragment() {
         COLOR = blended_color;
     } else {
         // Tint the blended color dark
-        COLOR = vec4(blended_color.rgb * 0.35, blended_color.a); // Darken the color
+        COLOR = vec4(blended_color.rgb * 0.25, blended_color.a); // Darken the color
     }
 }

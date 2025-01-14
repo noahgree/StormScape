@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://b536l7eoo4wx0"
-path="res://.godot/imported/reloading_over.png-b6fa5c219af22f3cad8e1206a9d1a716.ctex"
+uid="uid://ftbtsdurncq"
+path="res://.godot/imported/default.png-1f007e621bb26cf1eb8096424105b8b3.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://UI/OverheadUI/Reloading/reloading_over.png"
-dest_files=["res://.godot/imported/reloading_over.png-b6fa5c219af22f3cad8e1206a9d1a716.ctex"]
+source_file="res://UI/Cursors/default.png"
+dest_files=["res://.godot/imported/default.png-1f007e621bb26cf1eb8096424105b8b3.ctex"]
 
 [params]
 

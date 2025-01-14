@@ -33,10 +33,11 @@ animations = [{
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_sjv0y"]
 size = Vector2(10, 10)
 
-[node name="Axe" type="Node2D"]
+[node name="Axe" type="Node2D" node_paths=PackedStringArray("sprites_to_tint")]
 y_sort_enabled = true
 script = ExtResource("1_wke8h")
 ghost_fade_time = 0.2
+sprites_to_tint = [NodePath("ItemSprite")]
 
 [node name="ItemSprite" type="AnimatedSprite2D" parent="."]
 material = SubResource("ShaderMaterial_8aqmb")
