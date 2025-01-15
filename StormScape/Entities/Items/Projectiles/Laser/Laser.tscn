@@ -15,7 +15,7 @@ light_mode = 1
 scale = Vector2(0.6, 0.6)
 script = ExtResource("1_23wck")
 whiz_sound = "PlayerDash"
-glow_strength = 38.0
+glow_strength = 55.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 editor_description = "DO NOT SET EFFECT SOURCE IF BEING USED DIRECTLY WITH A WEAPON. THE WEAPON WILL SET IT FOR YOU."

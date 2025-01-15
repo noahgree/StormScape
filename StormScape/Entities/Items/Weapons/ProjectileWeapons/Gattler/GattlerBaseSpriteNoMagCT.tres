@@ -1,0 +1,8 @@
+[gd_resource type="CanvasTexture" load_steps=3 format=3 uid="uid://d4c1eg61h0vss"]
+
+[ext_resource type="Texture2D" uid="uid://bj5xn1bks3ubw" path="res://Entities/Items/Weapons/ProjectileWeapons/Gattler/gattler_base_sprite_no_mag.png" id="1_qy7qf"]
+[ext_resource type="Texture2D" uid="uid://b75caspgciild" path="res://Entities/Items/Weapons/ProjectileWeapons/Gattler/gattler_base_sprite_no_mag_n.png" id="2_5s8gq"]
+
+[resource]
+diffuse_texture = ExtResource("1_qy7qf")
+normal_texture = ExtResource("2_5s8gq")

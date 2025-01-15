@@ -1,8 +1,9 @@
-[gd_scene load_steps=10 format=3 uid="uid://6kn3nwojv4l1"]
+[gd_scene load_steps=15 format=3 uid="uid://6kn3nwojv4l1"]
 
 [ext_resource type="Script" uid="uid://bl8i118soy6a5" path="res://Utilities/Autoloads/CursorManager.gd" id="1_it73m"]
 [ext_resource type="Shader" uid="uid://bhox1e3shq3iq" path="res://Utilities/Game/Shaders/ProgressAlpha.gdshader" id="2_7re0i"]
 [ext_resource type="Texture2D" uid="uid://ftbtsdurncq" path="res://UI/Cursors/default.png" id="2_g8fuh"]
+[ext_resource type="Texture2D" uid="uid://nh5iuev5n8e8" path="res://UI/Cursors/default_cursor_HIT.png" id="4_43v78"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_43v78"]
 shader = ExtResource("2_7re0i")
@@ -25,6 +26,22 @@ region = Rect2(20, 0, 10, 10)
 atlas = ExtResource("2_g8fuh")
 region = Rect2(30, 0, 10, 10)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_ilk58"]
+atlas = ExtResource("4_43v78")
+region = Rect2(0, 0, 10, 10)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_uncfr"]
+atlas = ExtResource("4_43v78")
+region = Rect2(10, 0, 10, 10)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_sa3bm"]
+atlas = ExtResource("4_43v78")
+region = Rect2(20, 0, 10, 10)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_p8tao"]
+atlas = ExtResource("4_43v78")
+region = Rect2(30, 0, 10, 10)
+
 [sub_resource type="SpriteFrames" id="SpriteFrames_62xth"]
 animations = [{
 "frames": [{
@@ -43,6 +60,23 @@ animations = [{
 "loop": true,
 "name": &"default",
 "speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ilk58")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_uncfr")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_sa3bm")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_p8tao")
+}],
+"loop": true,
+"name": &"hit",
+"speed": 5.0
 }]
 
 [node name="CursorManager" type="CanvasLayer"]
@@ -54,4 +88,5 @@ script = ExtResource("1_it73m")
 [node name="Cursor" type="AnimatedSprite2D" parent="."]
 material = SubResource("ShaderMaterial_43v78")
 sprite_frames = SubResource("SpriteFrames_62xth")
+animation = &"hit"
 autoplay = "default"

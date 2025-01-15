@@ -58,6 +58,7 @@ var source_wpn_stats: ProjWeaponResource ## The projectile weapon resource for t
 var aoe_overlapped_receivers: Dictionary[Area2D, Timer] = {} ## The areas that are currently in an AOE area.
 var is_disabling_monitoring: bool = false ## When true, we are waiting on the deferred call to disable collision monitoring.
 var multishot_id: int = 0 ## The id passed in on creation that relates the sibling projectiles spawned on the same multishot barrage.
+var max_distance_random_offset: float = 0 ## Assigned upon creation to add randomization to how far each shot of a multishot firing can travel.
 #endregion
 
 
@@ -80,6 +81,7 @@ static func create(wpn_stats: ProjWeaponResource, src_entity: PhysicsBody2D, pos
 	proj.s_mods = wpn_stats.s_mods
 	if proj.stats.speed_curve.point_count == 0:
 		push_error("\"" + src_entity.name + "\" has a weapon attempting to fire projectiles, but the projectile resource within the weapon has a blank speed curve.")
+	proj.max_distance_random_offset = randf_range(0, 15)
 
 	var effect_src: EffectSource = wpn_stats.effect_source
 	proj.effect_source = effect_src
@@ -133,7 +135,7 @@ func _ready() -> void:
 	homing_delay_timer.one_shot = true
 	homing_timer.one_shot = true
 	initial_boost_timer.one_shot = true
-	lifetime_timer.timeout.connect(_on_lifetime_timer_timeout)
+	lifetime_timer.timeout.connect(_on_lifetime_timer_timeout_or_reached_max_distance)
 	homing_delay_timer.timeout.connect(_start_homing)
 	homing_timer.timeout.connect(_on_homing_timer_timeout)
 	initial_boost_timer.timeout.connect(func() -> void: current_initial_boost = 1.0)
@@ -203,8 +205,9 @@ func _physics_process(delta: float) -> void:
 	previous_position = global_position
 
 	var max_dist: float = s_mods.get_stat("proj_max_distance")
-	if (global_position - starting_position).length() >= max_dist:
-		queue_free()
+	if (global_position - starting_position).length() >= (max_dist + max_distance_random_offset):
+		if not is_in_aoe_phase:
+			_on_lifetime_timer_timeout_or_reached_max_distance()
 
 	if stats.homing_method == "None":
 		if not is_in_aoe_phase and not is_arcing:
@@ -643,7 +646,8 @@ func _handle_aoe() -> void:
 	await get_tree().create_timer(max(0.05, stats.aoe_effect_dur), false, true, false).timeout
 	queue_free()
 
-## Assigns the collider to a new shape and re-enables it. Takes into account scaling of the projectile itself to preserve aoe radius.
+## Assigns the collider to a new shape and re-enables it. Takes into account scaling of the projectile itself
+## to preserve aoe radius.
 ## This also applies the initial hit of the aoe effect source to entities in range. The handling function won't apply status
 ## effects as a result of this hit.
 func _assign_new_collider_shape_and_aoe_entities(new_shape: Shape2D) -> void:
@@ -653,6 +657,7 @@ func _assign_new_collider_shape_and_aoe_entities(new_shape: Shape2D) -> void:
 	set_deferred("monitoring", true)
 
 	# Handling initial hit of the aoe source. This is like how an explosion hits once but the ground burning will be separate.
+	await get_tree().physics_frame
 	await get_tree().physics_frame
 	for area: Area2D in get_overlapping_areas():
 		if (area.get_parent() == source_entity) and not stats.aoe_effect_source.can_hit_self:
@@ -665,7 +670,7 @@ func _assign_new_collider_shape_and_aoe_entities(new_shape: Shape2D) -> void:
 
 #region Lifetime & Handling
 ## When the lifetime ends, either start an AOE or queue free.
-func _on_lifetime_timer_timeout() -> void:
+func _on_lifetime_timer_timeout_or_reached_max_distance() -> void:
 	var original_radius: float = s_mods.get_original_stat("proj_aoe_radius")
 	if original_radius > 0 and stats.aoe_before_freeing:
 		_handle_aoe()

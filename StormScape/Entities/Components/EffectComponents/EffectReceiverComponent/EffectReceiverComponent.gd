@@ -63,7 +63,7 @@ func _ready() -> void:
 		add_child(hit_flash_timer)
 		hit_flash_timer.one_shot = true
 		hit_flash_timer.wait_time = 0.05
-		hit_flash_timer.timeout.connect(_update_hit_flash)
+		hit_flash_timer.timeout.connect(_update_hit_flash_and_hitmarker)
 		hit_flash_timer.name = "Hit_Flash_Timer"
 
 ## Handles an incoming effect source, passing it to present receivers for further processing before changing
@@ -71,7 +71,7 @@ func _ready() -> void:
 func handle_effect_source(effect_source: EffectSource, source_entity: PhysicsBody2D, process_status_effects: bool = true) -> void:
 	_handle_cam_fx(effect_source)
 	_handle_impact_sound(effect_source)
-	_update_hit_flash(effect_source, true)
+	_update_hit_flash_and_hitmarker(effect_source, source_entity, true)
 
 	if filter_source_types and (effect_source.source_type not in allowed_source_types):
 		return
@@ -237,9 +237,12 @@ func _handle_impact_sound(effect_source: EffectSource) -> void:
 		else:
 			AudioManager.play_sound(effect_source.impact_sound, AudioManager.SoundType.SFX_2D, affected_entity.global_position)
 
-## Updates whether the hit flash is showing or not. Sets its color to the one specified in the effect source.
-func _update_hit_flash(effect_source: EffectSource = null, start: bool = false) -> void:
+## Updates whether the hit flash and hitmarker is showing or not. Sets the flash color to the one specified in the effect source.
+func _update_hit_flash_and_hitmarker(effect_source: EffectSource = null, source_entity: PhysicsBody2D = null, start: bool = false) -> void:
 	if start:
+		if source_entity is Player:
+			CursorManager.change_cursor(null, "hit")
+
 		hit_flash_timer.stop()
 		affected_entity.sprite.material.set_shader_parameter("use_override_color", true)
 		affected_entity.sprite.material.set_shader_parameter("override_color", effect_source.hit_flash_color)

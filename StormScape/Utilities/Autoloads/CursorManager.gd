@@ -5,12 +5,13 @@ extends CanvasLayer
 @onready var default_cursor: SpriteFrames = cursor.sprite_frames ## The default sprite frames used as the cursor when one isn't specified.
 
 var previous_angle: float = 0 ## The angle of the cursor relative to the player as of the last frame. Used for lerping.
+var restore_after_hitmarker_countdown: float = 0 ## Counts down after being changed to the hitmarker cursor before restoring the default.
 
 
 func _ready() -> void:
 	Input.mouse_mode = Input.MOUSE_MODE_HIDDEN
 
-func _process(_delta: float) -> void:
+func _process(delta: float) -> void:
 	var mouse_position: Vector2 = cursor.get_global_mouse_position()
 	var entity_position: Vector2 = GlobalData.player_node.hands.hands_anchor.global_position
 	var to_mouse_vector: Vector2 = mouse_position - entity_position
@@ -26,6 +27,11 @@ func _process(_delta: float) -> void:
 		# Directly set the position when not clamping
 		cursor.global_position = entity_position + to_mouse_vector
 		previous_angle = to_mouse_vector.angle()
+
+	if restore_after_hitmarker_countdown > 0:
+		restore_after_hitmarker_countdown -= delta
+		if restore_after_hitmarker_countdown <= 0:
+			cursor.play(&"default")
 
 ## Should be used everywhere in the game that needs to access the global mouse position.
 ## This is becuase the fake cursor's position can be lerped at times and is all that is visible.
@@ -44,6 +50,8 @@ func change_cursor(sprite_frames: SpriteFrames, animation: StringName = &"defaul
 	if sprite_frames != null:
 		cursor.sprite_frames = sprite_frames
 	if cursor.sprite_frames.has_animation(animation):
+		if animation == "hit":
+			restore_after_hitmarker_countdown = 0.08
 		cursor.play(animation)
 	else:
 		cursor.play(&"default")

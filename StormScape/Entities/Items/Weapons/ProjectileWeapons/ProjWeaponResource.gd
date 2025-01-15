@@ -57,7 +57,7 @@ enum ProjAmmoType { ## The types of projectile ammo.
 @export var recharge_uses_inv: bool = false ## When true, the ammo will recharge by consuming ammo from the inventory. When none is left, the recharges will stop.
 @export_subgroup("Reloading Animations")
 @export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var reload_anim_dur: float = 0 ## The override time for how long the animation should be that plays during a reload (if it exists). Anything greater than 0 activates this override.
-@export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var before_reload_anim_dur: float = 0 ## The override time for how long the animation should be that plays during the delay before a single reload (if it exists). Anything greater than 0 activates this override.
+@export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var before_single_reload_anim_dur: float = 0 ## The override time for how long the animation should be that plays during the delay before a single reload (if it exists). Anything greater than 0 activates this override.
 @export_subgroup("UI")
 @export var hide_ammo_ui: bool = false ## When a player uses this, should the ammo UI be hidden.
 @export var hide_reload_ui: bool = false ## When a player uses this, should the reloading UI be hidden.
@@ -84,20 +84,22 @@ enum ProjAmmoType { ## The types of projectile ammo.
 @export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var overheat_penalty: float = 0 ## When we reach max overheating, how long is the penalty before being able to use the weapon again. Anything above 0 activates this feature.
 @export var overheat_inc_rate: Curve ## X value is overheat amount (0-1), Y value is how much we add to overheat amount per shot.
 @export var overheat_dec_rate: Curve ## X value is overheat amount (0-1), Y value is how much we take away from overheat amount per second.
-@export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var overheat_dec_delay: float = 0.75
+@export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var overheat_dec_delay: float = 0.75 ## The time between the last overheat increase and when it will begin to decrease back down to 0.
 @export var overheated_sound: String = "" ## The sound to play when the weapon reaches max overheat.
 @export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var overheat_anim_dur: float = 0.5 ## How long one loop of the overheat animation should take (if one exists).
 
 @export_group("Burst Logic")
 @export_range(1, 100, 1) var projectiles_per_fire: int = 1 ## How many projectiles are emitted per burst execution.
 @export var use_ammo_per_burst_proj: bool = true ## Whether to consume ammo per projectile emmitted or consume 1 per full burst.
-@export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var burst_bullet_delay: float = 0.1 ## Time between burst shots after execute.
+@export_range(0.03, 1, 0.01, "suffix:seconds", "or_greater", "hide_slider") var burst_bullet_delay: float = 0.05 ## Time between burst shots after execute.
 @export var add_bloom_per_burst_shot: bool = true ## Whether or not each bullet from a burst fire increases bloom individually.
 @export var add_overheat_per_burst_shot: bool = true ## Whether or not each bullet from a burst fire increases overheat individually.
 
 @export_group("Barrage Logic")
 @export_range(1, 50, 1) var barrage_count: int = 1 ## Number of projectiles fired at 'angular-spread' degrees apart for each execute. Only applies when angular spread is greater than 0.
 @export_range(0, 360, 0.1, "suffix:degrees") var angular_spread: float = 25 ## Angular spread of barrage projectiles in degrees.
+@export var do_cluster_barrage: bool = false ## When true, the barrage will spawn like a cluster, with random offsets and delays for each projectile.
+@export_range(0, 1, 0.01, "suffix:seconds", "or_greater", "hide_slider") var barrage_proj_delay: float = 0 ## The amount of time between each projectile from the barrage spawning. When do_cluster_barrage is true, this becomes the max amount of time between each projectile (with randomness introduced). Anything greater than 0 activates this.
 
 @export_group("Hitscan Logic")
 @export var use_hitscan: bool = false ## Whether to use hitscan firing and spawn the hitscan scene instead of the main projectile.

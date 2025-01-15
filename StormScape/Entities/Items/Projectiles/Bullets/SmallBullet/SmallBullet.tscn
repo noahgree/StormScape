@@ -1,12 +1,15 @@
-[gd_scene load_steps=5 format=3 uid="uid://bqkyplubhsx43"]
+[gd_scene load_steps=6 format=3 uid="uid://bqkyplubhsx43"]
 
-[ext_resource type="Script" path="res://Entities/Items/Projectiles/Projectile.gd" id="1_o610v"]
+[ext_resource type="Script" uid="uid://d1uexupra43i8" path="res://Entities/Items/Projectiles/Projectile.gd" id="1_o610v"]
 [ext_resource type="Texture2D" uid="uid://bwuth2fyl1x12" path="res://Entities/Items/Projectiles/Bullets/SmallBullet/bullet_small.png" id="2_ofcgf"]
 [ext_resource type="Texture2D" uid="uid://dcbwxgak6a0r8" path="res://Entities/EntityCore/entity_shadow.png" id="3_e5gu6"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_j5phf"]
 radius = 3.33333
 height = 7.27273
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_mtv1g"]
+light_mode = 1
 
 [node name="SmallBullet" type="Area2D"]
 editor_description = "DO NOT SET EFFECT SOURCE IF BEING USED DIRECTLY WITH A WEAPON. THE WEAPON WILL SET IT FOR YOU."
@@ -20,6 +23,7 @@ shape = SubResource("CapsuleShape2D_j5phf")
 debug_color = Color(0.626, 0.349, 1, 0.196)
 
 [node name="ProjSprite" type="Sprite2D" parent="."]
+material = SubResource("CanvasItemMaterial_mtv1g")
 rotation = 0.785398
 texture = ExtResource("2_ofcgf")
 region_rect = Rect2(2, 5, 12, 5)

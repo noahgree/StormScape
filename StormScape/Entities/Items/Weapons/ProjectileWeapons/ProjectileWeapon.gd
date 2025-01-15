@@ -10,6 +10,7 @@ class_name ProjectileWeapon
 		if proj_origin_node:
 			proj_origin_node.position = proj_origin
 @export var vfx_scene: PackedScene = load("res://Entities/Items/Weapons/WeaponVFX/FiringVFX/Simple/SimpleFiringVFX.tscn")
+@export var overheat_overlays: Array[TextureRect] = []
 @export var particle_emission_extents: Vector2:
 	set(new_value):
 		particle_emission_extents = new_value
@@ -24,11 +25,11 @@ class_name ProjectileWeapon
 @onready var anim_player: AnimationPlayer = $AnimationPlayer ## The animation controller for this projectile weapon.
 @onready var proj_origin_node: Marker2D = $ProjectileOrigin ## The point at which projectiles should spawn from.
 @onready var debug_emission_box: Polygon2D = get_node_or_null("DebugEmissionBox")
-@onready var overheat_overlay: TextureRect = get_node_or_null("ItemSprite/OverheatOverlay")
 @onready var reload_off_hand: EntityHandSprite = get_node_or_null("ReloadOffHand") ## The off hand only shown and animated during reloads.
 @onready var reload_main_hand: EntityHandSprite = get_node_or_null("ReloadMainHand") ## The main hand only shown and animated during reloads.
 
 #region Local Vars
+const MAX_ALLOTTED_CLUSTER_DELAY: float = 0.5 ## The max amount of time between each projectile
 var firing_duration_timer: Timer = Timer.new() ## The timer tracking how long after we press fire before the proj spawns.
 var reload_timer: Timer = Timer.new() ## The timer tracking the delay between reload start and end.
 var single_reload_timer: Timer = Timer.new() ## The timer tracking the delay between single bullet reloads.
@@ -57,7 +58,10 @@ var current_hitscans: Array[Hitscan] = [] ## The currently spawned array of hits
 var mouse_scan_area_targets: Array[Node] = [] ## The array of potential targets found and passed to the proj when using the "Mouse Position" homing method.
 var mouse_area: Area2D ## The area around the mouse that scans for targets when using the "Mouse Position" homing method
 var overhead_ui: PlayerOverheadUI ## The UI showing the overhead stat changes (like reloading) in progress. Only applicable and non-null for players.
-var is_tweening_overheat_overlay: bool = false ## Whether the post-overheat penalty tween is lowering the opacity of the overlay.
+var just_hit_max_overheat: bool = false ## When true, we reached max overheat after the most recent firing and should not overwrite the overheat penalty cooldown with the default firing cooldown.
+var is_tweening_overheat_overlays: bool = false ## Whether the post-overheat penalty tween is lowering the opacity of the overlays.
+var firing_in_progress: bool = false ## When true, we are waiting on burst delays and cluster delays that are still in progress.
+var bursting_in_progress: bool = false ## A second conditional for determining if firing is still ongoing due to bursting potentially taking more time than the barrage/cluster logic.
 #endregion
 
 
@@ -198,11 +202,13 @@ func enter() -> void:
 		if source_entity.inv.auto_decrementer.get_cooldown_source_title(stats.get_cooldown_id()) == "overheat_penalty":
 			overhead_ui.update_visuals_for_max_overheat()
 			overhead_ui.overheat_bar.show()
-			overheat_overlay.self_modulate.a = source_entity.inv.auto_decrementer.get_overheat(str(stats.session_uid))
+			for overlay: TextureRect in overheat_overlays:
+				overlay.self_modulate.a = source_entity.inv.auto_decrementer.get_overheat(str(stats.session_uid))
 			_do_weapon_overheat_visuals(true)
 		elif source_entity.inv.auto_decrementer.get_overheat(str(stats.session_uid)) > 0:
 			overhead_ui.overheat_bar.show()
-			overheat_overlay.self_modulate.a = source_entity.inv.auto_decrementer.get_overheat(str(stats.session_uid)) / 2.0
+			for overlay: TextureRect in overheat_overlays:
+				overlay.self_modulate.a = source_entity.inv.auto_decrementer.get_overheat(str(stats.session_uid)) / 2.0
 
 	_check_if_needs_mouse_area_scanner()
 
@@ -276,49 +282,23 @@ func _process(_delta: float) -> void:
 	if current_overheat > 0:
 		if source_entity.inv.auto_decrementer.get_cooldown_source_title(stats.get_cooldown_id()) != "overheat_penalty":
 			overhead_ui.update_overheat_progress(int(current_overheat * 100.0))
-			if not is_tweening_overheat_overlay:
-				overheat_overlay.self_modulate.a = current_overheat / 2.0
+			if not is_tweening_overheat_overlays:
+				for overlay: TextureRect in overheat_overlays:
+					overlay.self_modulate.a = current_overheat / 2.0
 		else:
 			overhead_ui.update_overheat_progress(100)
 
 func _physics_process(_delta: float) -> void:
 	if mouse_area != null:
 		mouse_area.global_position = CursorManager.get_cursor_mouse_position()
-
-## When the cooldown manager from the hands component fires a signal with the matching item id, process the aftermath.
-func _on_cooldown_timeout(item_id: StringName, cooldown_source_title: String) -> void:
-	if item_id != stats.get_cooldown_id():
-		return
-
-	if cooldown_source_title == "overheat_penalty":
-		overhead_ui.update_visuals_for_max_overheat(true)
-		source_entity.hands.smoke_particles.emitting = false
-
-		var current_overheat: float = source_entity.inv.auto_decrementer.get_overheat(str(stats.session_uid))
-		if current_overheat == 0:
-			overhead_ui.overheat_bar.hide()
-
-		is_tweening_overheat_overlay = true
-		var tween: Tween = create_tween()
-		tween.tween_property(overheat_overlay, "self_modulate:a", current_overheat, 0.15)
-		tween.tween_method(func(new_value: Color) -> void: CursorManager.change_cursor_tint(new_value), CursorManager.get_cursor_tint(), Color.WHITE, 0.15)
-		tween.tween_callback(func() -> void: is_tweening_overheat_overlay = false)
-		if anim_player.current_animation == "overheat":
-			anim_player.stop()
-			anim_player.play("RESET")
-			anim_player.stop()
-
-	if is_holding_hitscan:
-		_fire()
-		_handle_adding_cooldown(stats.s_mods.get_stat("fire_cooldown") + hitscan_delay, cooldown_source_title)
-	else:
-		_clean_up_hitscans()
 #endregion
 
 #region Called From HandsComponent
 ## Called from the hands component when the mouse is clicked.
 func activate() -> void:
-	if not pullout_delay_timer.is_stopped() or (is_reloading and stats.reload_type == "Magazine"):
+	if not pullout_delay_timer.is_stopped() or not firing_duration_timer.is_stopped() or firing_in_progress or bursting_in_progress:
+		return
+	if is_reloading and stats.reload_type == "Magazine":
 		return
 
 	is_reloading_single_and_has_since_released = true
@@ -327,7 +307,10 @@ func activate() -> void:
 
 ## Called from the hands component when the mouse is held down. Includes how long it has been held down so far.
 func hold_activate(_hold_time: float) -> void:
-	if not pullout_delay_timer.is_stopped() or (is_reloading and stats.reload_type == "Magazine") or not firing_duration_timer.is_stopped():
+	if not pullout_delay_timer.is_stopped() or not firing_duration_timer.is_stopped() or firing_in_progress or bursting_in_progress:
+		source_entity.hands.been_holding_time = 0
+		return
+	if is_reloading and stats.reload_type == "Magazine":
 		source_entity.hands.been_holding_time = 0
 		return
 
@@ -345,7 +328,7 @@ func release_hold_activate(hold_time: float) -> void:
 	if stats.firing_mode == "Auto" and stats.allow_hitscan_holding and is_holding_hitscan:
 		is_holding_hitscan = false
 
-	if not pullout_delay_timer.is_stopped() or (is_reloading and stats.reload_type == "Magazine"):
+	if not pullout_delay_timer.is_stopped() or (is_reloading and stats.reload_type == "Magazine") or firing_in_progress or bursting_in_progress:
 		source_entity.hands.been_holding_time = 0
 		return
 
@@ -385,7 +368,6 @@ func _fire() -> void:
 		single_reload_delay_timer.stop()
 		is_reloading = false
 	if "reload" in anim_player.current_animation:
-		anim_player.stop()
 		_do_post_reload_animation_cleanup()
 
 	var warmup_firing_delay: float = _get_warmup_firing_delay()
@@ -393,29 +375,20 @@ func _fire() -> void:
 		_handle_adding_cooldown(warmup_firing_delay, "warmup")
 		while _get_cooldown() > 0: # Signal fires for all ending cooldowns, so we loop until ours has ended
 			await source_entity.inv.auto_decrementer.cooldown_ended
+			if is_reloading: # If we trigger a reload while waiting for this warmup delay it will cause anim problems
+				return
 
 		if hold_just_released:
 			hold_just_released = false
 			return
 
-	if not firing_duration_timer.is_stopped():
-		return
-	else:
-		firing_duration_timer.start(max(0.05, stats.firing_duration))
-		_start_firing_anim()
-		await firing_duration_timer.timeout
+	firing_duration_timer.start(max(0.05, stats.firing_duration))
+	_start_firing_anim()
+	await firing_duration_timer.timeout
 
 	_set_up_hitscan()
-	_handle_warmup_increase()
-	if not is_holding_hitscan:
-		_apply_burst_logic()
-	else:
-		_apply_ammo_consumption(int(stats.s_mods.get_stat("projectiles_per_fire")))
-	_apply_post_firing_effect()
-	_start_post_fire_anim()
-	_start_post_fire_fx()
-	_get_has_needed_ammo_and_reload_if_not()
-	_notify_recharge_of_a_recent_firing()
+	_handle_warmup_increase() # We only do this for regular firing, not charge shots
+	_start_firing_sequence()
 
 	if stats.use_hitscan and stats.allow_hitscan_holding and stats.firing_mode == "Auto" and not is_holding_hitscan:
 		is_holding_hitscan = true
@@ -432,16 +405,7 @@ func _charge_fire(hold_time: float) -> void:
 		await firing_duration_timer.timeout
 
 		_set_up_hitscan()
-		_apply_burst_logic()
-		_apply_post_firing_effect()
-		_start_post_fire_anim()
-		_start_post_fire_fx()
-		_get_has_needed_ammo_and_reload_if_not()
-		_notify_recharge_of_a_recent_firing()
-
-		while _get_cooldown() > 0: # Signal fires for all ending cooldowns, so we loop until ours has ended
-			await source_entity.inv.auto_decrementer.cooldown_ended
-		source_entity.hands.been_holding_time = 0
+		_start_firing_sequence()
 
 ## Set up the delay we will use if we have a non-holding or charged hitscan. This basically increases the shot duration.
 func _set_up_hitscan() -> void:
@@ -466,25 +430,19 @@ func _on_hitscan_hands_freeze_timer_timeout() -> void:
 #endregion
 
 #region Projectile Spawning
-## Applies bursting logic to potentially shoot more than one projectile at a short, set interval.
-func _apply_burst_logic() -> void:
-	if stats.s_mods.get_stat("projectiles_per_fire") > 1:
+## Applies the initial logic that occurs at the start of each firing sequence, whether it be a charge shot or not.
+func _start_firing_sequence() -> void:
+	firing_in_progress = true
+
+	if stats.s_mods.get_stat("projectiles_per_fire") > 1 and not is_holding_hitscan:
 		if not stats.add_bloom_per_burst_shot: _handle_bloom_increase()
-		if not stats.add_overheat_per_burst_shot: _handle_overheat_increase()
-	var shots: int = int(stats.s_mods.get_stat("projectiles_per_fire"))
+	if not stats.add_overheat_per_burst_shot: _handle_overheat_increase()
 
-	var total_cooldown_afterwards: float = stats.s_mods.get_stat("fire_cooldown") + hitscan_delay
-
-	if not stats.use_hitscan:
-		total_cooldown_afterwards += (stats.burst_bullet_delay * (shots - 1))
-
-	if total_cooldown_afterwards > 0:
-		_handle_adding_cooldown(total_cooldown_afterwards)
-
-	_apply_ammo_consumption(shots)
+	_apply_ammo_consumption()
 
 ## Calls to consume ammo based on how many shots we performed.
-func _apply_ammo_consumption(shot_count: int) -> void:
+func _apply_ammo_consumption() -> void:
+	var shot_count: int = int(stats.s_mods.get_stat("projectiles_per_fire"))
 	if stats.dont_consume_ammo:
 		_handle_per_shot_delay_and_bloom(shot_count, (not is_holding_hitscan))
 		return
@@ -499,6 +457,7 @@ func _apply_ammo_consumption(shot_count: int) -> void:
 
 ## Calls to increase the bloom and awaits burst bullet delays if we have them. Can be told not to spawn afterwards as well.
 func _handle_per_shot_delay_and_bloom(shot_count: int, proceed_to_spawn: bool = true) -> void:
+	bursting_in_progress = true
 	for i: int in range(shot_count):
 		if stats.add_bloom_per_burst_shot or (stats.s_mods.get_stat("projectiles_per_fire") == 1):
 			_handle_bloom_increase()
@@ -510,25 +469,43 @@ func _handle_per_shot_delay_and_bloom(shot_count: int, proceed_to_spawn: bool = 
 
 			if i != (shot_count - 1):
 				await get_tree().create_timer(max(0.03, stats.burst_bullet_delay), false, true, false).timeout
+				if is_reloading: # We could potentially start a reload during this delay and need to break out of the burst loop
+					break
+
+	bursting_in_progress = false
+	if not firing_in_progress: # If it is still in progress (meaning we are likely still barraging), we let it handle it after
+		_do_post_fire_cooldown()
+		_start_post_fire_anim()
+		_start_post_fire_fx()
+		_get_has_needed_ammo_and_reload_if_not()
+		_notify_recharge_of_a_recent_firing()
 
 ## Applies barrage logic to potentially spawn multiple projectiles at a specific angle apart.
 func _apply_barrage_logic() -> void:
+	_do_firing_fx() # Do these two methods before potential cluster delays
+	_apply_firing_effect_to_entity()
+
 	var effect_src: EffectSource = stats.effect_source
 
 	var angular_spread_radians: float = deg_to_rad(stats.s_mods.get_stat("angular_spread"))
 	var close_to_360_adjustment: int = 0 if stats.s_mods.get_stat("angular_spread") > 310 else 1
 	var spread_segment_width: float = angular_spread_radians / (stats.s_mods.get_stat("barrage_count") - close_to_360_adjustment)
 	var start_rotation: float = global_rotation - (angular_spread_radians / 2.0)
+
 	var multishot_id: int = UIDHelper.generate_multishot_uid()
 
 	for i: int in range(stats.barrage_count):
 		if not stats.use_hitscan:
 			var rotation_adjustment: float = start_rotation + (i * spread_segment_width)
+			if stats.do_cluster_barrage:
+				rotation_adjustment = start_rotation + randf_range(0, angular_spread_radians)
+
 			var proj: Projectile = Projectile.create(stats, source_entity, proj_origin_node.global_position, global_rotation)
 			proj.rotation = rotation_adjustment if stats.s_mods.get_stat("barrage_count") > 1 else proj.rotation
 			proj.starting_proj_height = -(source_entity.hands.position.y + proj_origin.y + source_entity.hands.main_hand.position.y + source_entity.hands.hands_anchor.position.y) / 2
 			proj.multishot_id = multishot_id
 
+			# Handle the mouse-position homing logic if needed
 			if stats.projectile_logic.homing_method == "Mouse Position":
 				mouse_scan_area_targets.clear()
 				_enable_mouse_area()
@@ -538,18 +515,30 @@ func _apply_barrage_logic() -> void:
 				call_deferred("_disable_mouse_area")
 
 			_spawn_projectile(proj)
+
+			if stats.barrage_proj_delay > 0:
+				await get_tree().create_timer(max(0.02, stats.barrage_proj_delay), false, false, false).timeout
 		else:
 			var hitscan_scene: PackedScene = stats.hitscan_logic.hitscan_scn
+
 			var rotation_adjustment: float = -angular_spread_radians / 2 + (i * spread_segment_width)
+			if stats.do_cluster_barrage:
+				rotation_adjustment = randf() * spread_segment_width
+
 			var hitscan: Hitscan = Hitscan.create(hitscan_scene, effect_src, self, source_entity, proj_origin_node.global_position, rotation_adjustment if stats.s_mods.get_stat("barrage_count") > 1 else 0.0, stats.firing_mode == "Charge")
 			_spawn_hitscan(hitscan)
 
-	_do_firing_fx()
+	firing_in_progress = false
+	if not bursting_in_progress:  # If it is still in progress, we let it handle it after
+		_do_post_fire_cooldown()
+		_start_post_fire_anim()
+		_start_post_fire_fx()
+		_get_has_needed_ammo_and_reload_if_not()
+		_notify_recharge_of_a_recent_firing()
 
 ## Spawns the projectile that has been passed to it. Reloads if we don't have enough for the next activation.
 func _spawn_projectile(proj: Projectile) -> void:
 	proj.rotation += deg_to_rad(_get_bloom())
-
 	GlobalData.world_root.add_child(proj)
 
 ## Spawns the hitscan that has been passed to it. Reloads if we don't have enough for the next activation.
@@ -609,11 +598,57 @@ func _get_bloom() -> float:
 
 ## Adds a cooldown to the auto decrementer for the current cooldown id.
 func _handle_adding_cooldown(duration: float, title: String = "default") -> void:
-	source_entity.inv.auto_decrementer.add_cooldown(stats.get_cooldown_id(), duration, title)
+	if duration > 0:
+		source_entity.inv.auto_decrementer.add_cooldown(stats.get_cooldown_id(), duration, title)
 
 ## Gets a current cooldown level from the auto decrementer based on the cooldown id.
 func _get_cooldown() -> float:
 	return source_entity.inv.auto_decrementer.get_cooldown(stats.get_cooldown_id())
+
+## When the cooldown manager from the hands component fires a signal with the matching item id, process the aftermath.
+func _on_cooldown_timeout(item_id: StringName, cooldown_source_title: String) -> void:
+	if item_id != stats.get_cooldown_id():
+		return
+
+	if stats.firing_mode == "Charge":
+		source_entity.hands.been_holding_time = 0
+
+	if cooldown_source_title == "overheat_penalty": # Handling removing overheat visuals
+		just_hit_max_overheat = false
+		overhead_ui.update_visuals_for_max_overheat(true)
+		source_entity.hands.smoke_particles.emitting = false
+
+		var current_overheat: float = source_entity.inv.auto_decrementer.get_overheat(str(stats.session_uid))
+		if current_overheat == 0:
+			overhead_ui.overheat_bar.hide()
+
+		if not overheat_overlays.is_empty():
+			is_tweening_overheat_overlays = true
+			var tween: Tween = create_tween().parallel()
+			for overlay: TextureRect in overheat_overlays:
+				tween.tween_property(overlay, "self_modulate:a", current_overheat, 0.15)
+				tween.tween_method(func(new_value: Color) -> void: CursorManager.change_cursor_tint(new_value), CursorManager.get_cursor_tint(), Color.WHITE, 0.15)
+				tween.chain().tween_callback(func() -> void: is_tweening_overheat_overlays = false)
+		if anim_player.current_animation == "overheat":
+			anim_player.stop()
+			anim_player.play("RESET")
+			anim_player.stop()
+
+	if is_holding_hitscan:
+		_fire()
+		_handle_adding_cooldown(stats.s_mods.get_stat("fire_cooldown") + hitscan_delay, cooldown_source_title)
+	else:
+		_clean_up_hitscans()
+
+## Starts the cooldown that happens after a firing sequence has ended, given that we aren't holding a hitscan.
+func _do_post_fire_cooldown() -> void:
+	if is_holding_hitscan: # There is different logic for the held hitscans when it comes to cooldown
+		return
+	if just_hit_max_overheat:
+		return
+
+	var total_cooldown_afterwards: float = stats.s_mods.get_stat("fire_cooldown") + hitscan_delay
+	_handle_adding_cooldown(total_cooldown_afterwards)
 
 ## Increases current overheat level via sampling the increase curve using the current overheat.
 func _handle_overheat_increase() -> void:
@@ -634,6 +669,7 @@ func _handle_overheat_increase() -> void:
 
 ## When we reach max overheat, add a cooldown of some kind.
 func _handle_max_overheat_reached() -> void:
+	just_hit_max_overheat = true
 	_handle_adding_cooldown(stats.s_mods.get_stat("overheat_penalty"), "overheat_penalty")
 	if stats.overheated_sound != "": AudioManager.play_sound(stats.overheated_sound, AudioManager.SoundType.SFX_GLOBAL)
 	overhead_ui.update_visuals_for_max_overheat()
@@ -641,7 +677,8 @@ func _handle_max_overheat_reached() -> void:
 
 ## Setup and start the overheating visuals.
 func _do_weapon_overheat_visuals(just_equipped: bool) -> void:
-	overheat_overlay.self_modulate.a = 1.0
+	for overlay: TextureRect in overheat_overlays:
+		overlay.self_modulate.a = 1.0
 
 	CursorManager.change_cursor_tint(Color.ORANGE_RED)
 
@@ -687,7 +724,7 @@ func _do_firing_fx() -> void:
 ## Start the firing animation.
 func _start_firing_anim() -> void:
 	if anim_player.is_playing():
-		push_warning(source_entity.name + " has a " + stats.name + " that has a firing animation lasting longer than the firing duration. This will result in skipped animations.")
+		push_warning(source_entity.name + " has a " + stats.name + " that was still playing the \"" + anim_player.current_animation + "\" animation upon the start of the firing animation. This will result in skipped animations.")
 		return
 
 	if stats.one_frame_per_fire:
@@ -719,10 +756,12 @@ func _start_post_fire_anim() -> void:
 
 	if adjusted_post_fire_anim_delay > 0:
 		await get_tree().create_timer(adjusted_post_fire_anim_delay).timeout
+		if anim_player.is_playing(): # Can happen if we start a reload during this delay
+			return
 
 	anim_player.play("post_fire")
 
-## Starts the post-firing sound if we have one.
+## Starts the post-firing sound and vfx if we have one. Good for things like the cocking of a shotgun barrel after firing.
 func _start_post_fire_fx() -> void:
 	if stats.post_fire_sound == "":
 		return
@@ -734,7 +773,7 @@ func _start_post_fire_fx() -> void:
 	AudioManager.play_sound(stats.post_fire_sound, AudioManager.SoundType.SFX_2D, global_position)
 
 ## Applies a status effect to the source entity after firing.
-func _apply_post_firing_effect() -> void:
+func _apply_firing_effect_to_entity() -> void:
 	if stats.post_firing_effect != null:
 		source_entity.effect_receiver.handle_status_effect(stats.post_firing_effect)
 #endregion
@@ -801,7 +840,6 @@ func _attempt_reload() -> void:
 			_start_reload_anim("before_single_reload")
 		else:
 			_on_single_reload_delay_timer_timeout() # Calling immediately if there is no delay needed
-
 	else:
 		if stats.mag_reload_sound != "": AudioManager.play_sound(stats.mag_reload_sound, AudioManager.SoundType.SFX_GLOBAL)
 		reload_timer.start(stats.s_mods.get_stat("mag_reload_time"))
@@ -820,11 +858,9 @@ func _start_reload_anim(anim_name: String) -> void:
 		anim_player.stop()
 
 	source_entity.hands.off_hand_sprite.self_modulate.a = 0.0
-	if reload_off_hand: reload_off_hand.show()
-	if reload_main_hand: reload_main_hand.show()
 
 	if anim_name == "before_single_reload":
-		var dur: float = single_reload_delay_timer.wait_time if stats.before_reload_anim_dur <= 0 else (min(stats.single_proj_reload_delay, stats.before_reload_anim_dur))
+		var dur: float = single_reload_delay_timer.wait_time if stats.before_single_reload_anim_dur <= 0 else (min(stats.single_proj_reload_delay, stats.before_single_reload_anim_dur))
 		anim_player.speed_scale = 1.0 / (dur - 0.025) # 0.025 is a buffer to prevent overlap
 	elif anim_name in ["single_reload", "final_single_reload"]:
 		var dur: float = stats.s_mods.get_stat("single_proj_reload_time") if stats.reload_anim_dur <= 0 else (min(stats.single_proj_reload_time, stats.reload_anim_dur))
@@ -840,6 +876,7 @@ func _do_post_reload_animation_cleanup() -> void:
 	source_entity.hands.off_hand_sprite.self_modulate.a = 1.0
 	if reload_off_hand: reload_off_hand.hide()
 	if reload_main_hand: reload_main_hand.hide()
+	anim_player.stop()
 	anim_player.play("RESET")
 	anim_player.stop()
 
