@@ -8,11 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://batrfwan8r8ov" path="res://Entities/Items/WeaponMods/WeaponModManager.tscn" id="5_745ap"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_78dqe"]
-resource_local_to_scene = true
 shader = ExtResource("3_1pg7u")
-shader_parameter/tint_color = Color(1, 1, 1, 0)
-shader_parameter/glow_intensity = 1.0
-shader_parameter/final_alpha = 1.0
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_hoksd"]
 atlas = ExtResource("4_1pg7u")

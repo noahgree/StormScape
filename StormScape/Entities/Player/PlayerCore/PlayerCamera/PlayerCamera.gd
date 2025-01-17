@@ -28,9 +28,6 @@ func _physics_process(delta: float) -> void:
 
 	if current_shake_time > 0:
 		current_shake_time = max(0, current_shake_time - delta)
-	if current_freeze_time > 0:
-		current_freeze_time = max(0, current_freeze_time - delta)
-		if freeze_tween: freeze_tween.set_speed_scale(1.0 / Engine.time_scale)
 	if current_zoom_time > 0:
 		current_zoom_time = max(0, current_zoom_time - delta)
 
@@ -86,7 +83,8 @@ func start_freeze(fx_resource: CamFXResource) -> void:
 			freeze_tween.stop()
 			freeze_tween.kill()
 
-		freeze_tween = create_tween().set_trans(fx_resource.freeze_trans_type).set_ease(fx_resource.freeze_ease_type)
+		freeze_tween = create_tween()
+		freeze_tween.set_trans(fx_resource.freeze_trans_type).set_ease(fx_resource.freeze_ease_type).set_ignore_time_scale(true)
 		freeze_tween.tween_property(Engine, "time_scale", 1.0, current_freeze_time)
 
 ## Starts a zoom effect for the player camera.

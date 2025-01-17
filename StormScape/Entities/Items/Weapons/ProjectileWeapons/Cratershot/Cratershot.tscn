@@ -1,7 +1,8 @@
-[gd_scene load_steps=22 format=3 uid="uid://dwyof8hbs8fxr"]
+[gd_scene load_steps=23 format=3 uid="uid://dwyof8hbs8fxr"]
 
 [ext_resource type="Script" uid="uid://ca8xdltgdyjys" path="res://Entities/Items/Weapons/ProjectileWeapons/ProjectileWeapon.gd" id="1_av7ge"]
 [ext_resource type="PackedScene" uid="uid://bdi8o2g5plcnb" path="res://Entities/Items/Weapons/WeaponVFX/FiringVFX/Simple/SimpleFiringVFX.tscn" id="2_jdyr6"]
+[ext_resource type="PackedScene" uid="uid://ciylpe2ihjno1" path="res://Entities/Items/Weapons/WeaponVFX/Casings/Casing.tscn" id="3_6hjrq"]
 [ext_resource type="Shader" uid="uid://cugs1eqtkjsbd" path="res://Utilities/Game/Shaders/TintAndGlow.gdshader" id="3_jdyr6"]
 [ext_resource type="Texture2D" uid="uid://bicdpq4he2mgo" path="res://Entities/Items/Weapons/ProjectileWeapons/Cratershot/CratershotBaseCT.tres" id="4_jdyr6"]
 [ext_resource type="PackedScene" uid="uid://lw5fgm5pgoif" path="res://Entities/EntityCore/EntityHandSprite.tscn" id="5_jdyr6"]
@@ -10,11 +11,7 @@
 [ext_resource type="Texture2D" uid="uid://dbglqgkeedu8h" path="res://Entities/Items/Weapons/ProjectileWeapons/Cratershot/CratershotBaseBarrelCT.tres" id="9_so0ni"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_8unv1"]
-resource_local_to_scene = true
 shader = ExtResource("3_jdyr6")
-shader_parameter/tint_color = Color(1, 1, 1, 0)
-shader_parameter/glow_intensity = 1.0
-shader_parameter/final_alpha = 1.0
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_jdyr6"]
 atlas = ExtResource("4_jdyr6")
@@ -375,7 +372,7 @@ tracks/4/keys = {
 "times": PackedFloat32Array(0, 0.15, 0.5, 0.85),
 "transitions": PackedFloat32Array(1, 1, 1, 1),
 "update": 0,
-"values": [Vector2(-3, -3), Vector2(-3, -3), Vector2(1, 1), Vector2(-3, -3)]
+"values": [Vector2(-2, -5), Vector2(-2, -3), Vector2(1, 1), Vector2(-3, -3)]
 }
 tracks/5/type = "value"
 tracks/5/imported = false
@@ -384,7 +381,7 @@ tracks/5/path = NodePath("Stock:position")
 tracks/5/interp = 1
 tracks/5/loop_wrap = true
 tracks/5/keys = {
-"times": PackedFloat32Array(0, 0.5, 0.75),
+"times": PackedFloat32Array(0, 0.5, 0.675),
 "transitions": PackedFloat32Array(1, 1, 1),
 "update": 1,
 "values": [Vector2(-14, 3), Vector2(-13, 3), Vector2(-14, 3)]
@@ -396,7 +393,7 @@ tracks/6/path = NodePath("Barrel:position")
 tracks/6/interp = 1
 tracks/6/loop_wrap = true
 tracks/6/keys = {
-"times": PackedFloat32Array(0, 0.5, 0.75),
+"times": PackedFloat32Array(0, 0.5, 0.675),
 "transitions": PackedFloat32Array(1, 1, 1),
 "update": 1,
 "values": [Vector2(-1, 3), Vector2(0, 4), Vector2(-1, 3)]
@@ -505,6 +502,20 @@ tracks/1/keys = {
 "update": 0,
 "values": [Vector2(1, 1)]
 }
+tracks/2/type = "method"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath(".")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0.5),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"_eject_casing"
+}]
+}
 
 [sub_resource type="Animation" id="Animation_so0ni"]
 resource_name = "single_reload"
@@ -567,7 +578,7 @@ tracks/4/keys = {
 "times": PackedFloat32Array(0, 0.15, 0.5, 1),
 "transitions": PackedFloat32Array(1, 1, 1, 1),
 "update": 0,
-"values": [Vector2(-3, -3), Vector2(-3, -3), Vector2(1, 1), Vector2(-3, -3)]
+"values": [Vector2(-2, -5), Vector2(-2, -3), Vector2(1, 1), Vector2(-2, -5)]
 }
 tracks/5/type = "value"
 tracks/5/imported = false
@@ -576,7 +587,7 @@ tracks/5/path = NodePath("Barrel:position")
 tracks/5/interp = 1
 tracks/5/loop_wrap = true
 tracks/5/keys = {
-"times": PackedFloat32Array(0, 0.5, 0.75),
+"times": PackedFloat32Array(0, 0.5, 0.675),
 "transitions": PackedFloat32Array(1, 1, 1),
 "update": 1,
 "values": [Vector2(-1, 3), Vector2(0, 4), Vector2(-1, 3)]
@@ -588,7 +599,7 @@ tracks/6/path = NodePath("Stock:position")
 tracks/6/interp = 1
 tracks/6/loop_wrap = true
 tracks/6/keys = {
-"times": PackedFloat32Array(0, 0.5, 0.75),
+"times": PackedFloat32Array(0, 0.5, 0.675),
 "transitions": PackedFloat32Array(1, 1, 1),
 "update": 1,
 "values": [Vector2(-14, 3), Vector2(-13, 3), Vector2(-14, 3)]
@@ -645,23 +656,16 @@ radius = 2.5
 height = 16.0
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_5ddcx"]
-resource_local_to_scene = true
 shader = ExtResource("3_jdyr6")
-shader_parameter/tint_color = Color(1, 1, 1, 0)
-shader_parameter/glow_intensity = 1.0
-shader_parameter/final_alpha = 1.0
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_6hjrq"]
-resource_local_to_scene = true
 shader = ExtResource("3_jdyr6")
-shader_parameter/tint_color = Color(1, 1, 1, 0)
-shader_parameter/glow_intensity = 1.0
-shader_parameter/final_alpha = 1.0
 
 [node name="Cratershot" type="Node2D" node_paths=PackedStringArray("sprites_to_tint")]
 script = ExtResource("1_av7ge")
-proj_origin = Vector2(13, 1)
+proj_origin = Vector2(13, 0)
 vfx_scene = ExtResource("2_jdyr6")
+casing_scene = ExtResource("3_6hjrq")
 sprites_to_tint = [NodePath("ItemSprite"), NodePath("Stock"), NodePath("Barrel")]
 
 [node name="ItemSprite" type="AnimatedSprite2D" parent="."]
@@ -680,7 +684,7 @@ libraries = {
 }
 
 [node name="ProjectileOrigin" type="Marker2D" parent="."]
-position = Vector2(13, 1)
+position = Vector2(13, 0)
 
 [node name="WeaponModManager" parent="." instance=ExtResource("5_kd7vu")]
 print_effect_updates = true
@@ -715,3 +719,6 @@ position = Vector2(6, 3)
 [node name="ReloadMainHand" parent="." instance=ExtResource("5_jdyr6")]
 visible = false
 position = Vector2(-3, 5)
+
+[node name="CasingEjectionPoint" type="Marker2D" parent="."]
+position = Vector2(1, 0)

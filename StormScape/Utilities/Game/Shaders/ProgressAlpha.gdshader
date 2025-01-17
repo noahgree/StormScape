@@ -1,7 +1,7 @@
 shader_type canvas_item;
 
-uniform float progress : hint_range(0, 100);
-uniform vec4 main_color : source_color;
+instance uniform float progress : hint_range(0, 100);
+instance uniform vec4 main_color : source_color;
 
 void fragment() {
     vec2 uv = UV;

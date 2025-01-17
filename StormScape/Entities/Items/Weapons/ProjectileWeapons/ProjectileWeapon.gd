@@ -10,6 +10,7 @@ class_name ProjectileWeapon
 		if proj_origin_node:
 			proj_origin_node.position = proj_origin
 @export var vfx_scene: PackedScene = load("res://Entities/Items/Weapons/WeaponVFX/FiringVFX/Simple/SimpleFiringVFX.tscn")
+@export var casing_scene: PackedScene = load("res://Entities/Items/Weapons/WeaponVFX/Casings/Casing.tscn")
 @export var overheat_overlays: Array[TextureRect] = []
 @export var particle_emission_extents: Vector2:
 	set(new_value):
@@ -24,6 +25,7 @@ class_name ProjectileWeapon
 
 @onready var anim_player: AnimationPlayer = $AnimationPlayer ## The animation controller for this projectile weapon.
 @onready var proj_origin_node: Marker2D = $ProjectileOrigin ## The point at which projectiles should spawn from.
+@onready var casing_ejection_point: Marker2D = get_node_or_null("CasingEjectionPoint") ## The point from which casings should eject if need be.
 @onready var debug_emission_box: Polygon2D = get_node_or_null("DebugEmissionBox")
 @onready var reload_off_hand: EntityHandSprite = get_node_or_null("ReloadOffHand") ## The off hand only shown and animated during reloads.
 @onready var reload_main_hand: EntityHandSprite = get_node_or_null("ReloadMainHand") ## The main hand only shown and animated during reloads.
@@ -165,6 +167,8 @@ func _ready() -> void:
 	single_reload_timer.timeout.connect(_on_single_reload_timer_timeout)
 	single_reload_delay_timer.timeout.connect(_on_single_reload_delay_timer_timeout)
 	hitscan_hands_freeze_timer.timeout.connect(_on_hitscan_hands_freeze_timer_timeout)
+
+	anim_player.animation_finished.connect(_on_any_animation_finished)
 
 func disable() -> void:
 	source_entity.move_fsm.should_rotate = true
@@ -477,7 +481,6 @@ func _handle_per_shot_delay_and_bloom(shot_count: int, proceed_to_spawn: bool = 
 		_do_post_fire_cooldown()
 		_start_post_fire_anim()
 		_start_post_fire_fx()
-		_get_has_needed_ammo_and_reload_if_not()
 		_notify_recharge_of_a_recent_firing()
 
 ## Applies barrage logic to potentially spawn multiple projectiles at a specific angle apart.
@@ -490,11 +493,11 @@ func _apply_barrage_logic() -> void:
 	var angular_spread_radians: float = deg_to_rad(stats.s_mods.get_stat("angular_spread"))
 	var close_to_360_adjustment: int = 0 if stats.s_mods.get_stat("angular_spread") > 310 else 1
 	var spread_segment_width: float = angular_spread_radians / (stats.s_mods.get_stat("barrage_count") - close_to_360_adjustment)
-	var start_rotation: float = global_rotation - (angular_spread_radians / 2.0)
 
 	var multishot_id: int = UIDHelper.generate_multishot_uid()
 
 	for i: int in range(stats.barrage_count):
+		var start_rotation: float = global_rotation - (angular_spread_radians / 2.0)
 		if not stats.use_hitscan:
 			var rotation_adjustment: float = start_rotation + (i * spread_segment_width)
 			if stats.do_cluster_barrage:
@@ -533,7 +536,6 @@ func _apply_barrage_logic() -> void:
 		_do_post_fire_cooldown()
 		_start_post_fire_anim()
 		_start_post_fire_fx()
-		_get_has_needed_ammo_and_reload_if_not()
 		_notify_recharge_of_a_recent_firing()
 
 ## Spawns the projectile that has been passed to it. Reloads if we don't have enough for the next activation.
@@ -721,6 +723,18 @@ func _do_firing_fx() -> void:
 
 		add_child(vfx)
 
+## Spawns a simulated ejected casing to fall to the ground. Requires a Marker2D in the scene called "CasingEjectionPoint".
+## Must be called by the animation player due to varying timing of when it should spawn per weapon.
+func _eject_casing() -> void:
+	if casing_ejection_point:
+		var casing: Node2D = casing_scene.instantiate()
+		casing.global_position = casing_ejection_point.global_position
+		casing.global_rotation = global_rotation
+		GlobalData.world_root.add_child(casing)
+		casing.sprite.texture = stats.casing_texture
+		if stats.casing_tint != Color.WHITE:
+			casing.sprite.modulate = stats.casing_tint
+
 ## Start the firing animation.
 func _start_firing_anim() -> void:
 	if anim_player.is_playing():
@@ -743,6 +757,7 @@ func _start_firing_anim() -> void:
 ## Starts the post-firing animation if we have one.
 func _start_post_fire_anim() -> void:
 	if not anim_player.has_animation("post_fire"):
+		_get_has_needed_ammo_and_reload_if_not()
 		return
 	elif anim_player.is_playing():
 		await anim_player.animation_finished
@@ -776,6 +791,11 @@ func _start_post_fire_fx() -> void:
 func _apply_firing_effect_to_entity() -> void:
 	if stats.post_firing_effect != null:
 		source_entity.effect_receiver.handle_status_effect(stats.post_firing_effect)
+
+## Checks if we need ammo after the post-firing animation has ended.
+func _on_any_animation_finished(anim_name: StringName) -> void:
+	if anim_name == "post_fire":
+		_get_has_needed_ammo_and_reload_if_not()
 #endregion
 
 #region Reloading & Recharging

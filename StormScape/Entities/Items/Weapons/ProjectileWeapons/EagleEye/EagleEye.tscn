@@ -1,18 +1,15 @@
-[gd_scene load_steps=16 format=3 uid="uid://btaigaokvm7qx"]
+[gd_scene load_steps=17 format=3 uid="uid://btaigaokvm7qx"]
 
 [ext_resource type="Script" uid="uid://ca8xdltgdyjys" path="res://Entities/Items/Weapons/ProjectileWeapons/ProjectileWeapon.gd" id="1_37k38"]
 [ext_resource type="PackedScene" uid="uid://bdi8o2g5plcnb" path="res://Entities/Items/Weapons/WeaponVFX/FiringVFX/Simple/SimpleFiringVFX.tscn" id="2_8dt34"]
 [ext_resource type="Shader" uid="uid://cugs1eqtkjsbd" path="res://Utilities/Game/Shaders/TintAndGlow.gdshader" id="3_8dt34"]
+[ext_resource type="PackedScene" uid="uid://ciylpe2ihjno1" path="res://Entities/Items/Weapons/WeaponVFX/Casings/Casing.tscn" id="3_p3stu"]
 [ext_resource type="Texture2D" uid="uid://bfoy8x1f7gqq7" path="res://Entities/Items/Weapons/ProjectileWeapons/EagleEye/EagleEyeBaseCT.tres" id="4_8dt34"]
 [ext_resource type="PackedScene" uid="uid://lw5fgm5pgoif" path="res://Entities/EntityCore/EntityHandSprite.tscn" id="5_8dt34"]
 [ext_resource type="PackedScene" uid="uid://batrfwan8r8ov" path="res://Entities/Items/WeaponMods/WeaponModManager.tscn" id="5_qkcwx"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_ej2m0"]
-resource_local_to_scene = true
 shader = ExtResource("3_8dt34")
-shader_parameter/tint_color = Color(1, 1, 1, 0)
-shader_parameter/glow_intensity = 1.0
-shader_parameter/final_alpha = 1.0
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_p3stu"]
 atlas = ExtResource("4_8dt34")
@@ -183,6 +180,20 @@ tracks/2/keys = {
 "update": 0,
 "values": [0.0, -0.261799, 0.0]
 }
+tracks/3/type = "method"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath(".")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0.2),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"_eject_casing"
+}]
+}
 
 [sub_resource type="Animation" id="Animation_sdde1"]
 resource_name = "single_reload"
@@ -252,6 +263,7 @@ height = 28.0
 script = ExtResource("1_37k38")
 proj_origin = Vector2(16, -2)
 vfx_scene = ExtResource("2_8dt34")
+casing_scene = ExtResource("3_p3stu")
 sprites_to_tint = [NodePath("ItemSprite")]
 
 [node name="ItemSprite" type="AnimatedSprite2D" parent="."]
@@ -282,3 +294,6 @@ collision_mask = 241
 position = Vector2(2, -1)
 rotation = -1.5708
 shape = SubResource("CapsuleShape2D_p16mq")
+
+[node name="CasingEjectionPoint" type="Marker2D" parent="."]
+position = Vector2(-4, -1)

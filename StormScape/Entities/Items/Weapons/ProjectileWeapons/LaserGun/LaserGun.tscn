@@ -10,11 +10,7 @@
 [ext_resource type="Texture2D" uid="uid://bwaiffewkyfle" path="res://Entities/Items/Weapons/ProjectileWeapons/LaserGun/LaserGunBaseGunNoMagCT.tres" id="9_cdpvc"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_1hxt5"]
-resource_local_to_scene = true
 shader = ExtResource("3_w5kxq")
-shader_parameter/tint_color = Color(1, 1, 1, 0)
-shader_parameter/glow_intensity = 1.0
-shader_parameter/final_alpha = 1.0
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_o1grk"]
 atlas = ExtResource("4_w5kxq")
@@ -223,7 +219,7 @@ tracks/14/keys = {
 tracks/15/type = "value"
 tracks/15/imported = false
 tracks/15/enabled = true
-tracks/15/path = NodePath("Mag:material:shader_parameter/final_alpha")
+tracks/15/path = NodePath("Mag:instance_shader_parameters/final_alpha")
 tracks/15/interp = 1
 tracks/15/loop_wrap = true
 tracks/15/keys = {
@@ -231,6 +227,18 @@ tracks/15/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 0,
 "values": [1.0]
+}
+tracks/16/type = "value"
+tracks/16/imported = false
+tracks/16/enabled = true
+tracks/16/path = NodePath("ReloadOffHand:rotation")
+tracks/16/interp = 1
+tracks/16/loop_wrap = true
+tracks/16/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
 }
 
 [sub_resource type="Animation" id="Animation_ea614"]
@@ -319,10 +327,10 @@ tracks/1/path = NodePath("ReloadOffHand:position")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.1, 0.25, 0.3, 0.4, 0.45, 0.525, 0.6, 0.725, 0.775, 0.875, 0.95, 1),
-"transitions": PackedFloat32Array(1, 1, 0.5, 1, 0, 1, 1, 2, 1, 1, 2, 1, 1),
+"times": PackedFloat32Array(0, 0.1, 0.25, 0.3, 0.35, 0.45, 0.525, 0.6, 0.725, 0.775, 0.875, 0.95, 1),
+"transitions": PackedFloat32Array(1, 1, 0.5, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1),
 "update": 0,
-"values": [Vector2(-1, 4), Vector2(-4, 5), Vector2(-4, 12), Vector2(-3, 13), Vector2(-3, 13), Vector2(-1, 12), Vector2(-4, 11), Vector2(-4, 5), Vector2(2, -3), Vector2(2, -2), Vector2(-1, -2), Vector2(2, -2), Vector2(2, -3)]
+"values": [Vector2(-1, 4), Vector2(-4, 5), Vector2(-4, 12), Vector2(-3, 13), Vector2(-3, 13), Vector2(0, 12), Vector2(-4, 11), Vector2(-4, 5), Vector2(2, -3), Vector2(2, -2), Vector2(-1, -2), Vector2(2, -2), Vector2(2, -3)]
 }
 tracks/2/type = "value"
 tracks/2/imported = false
@@ -334,7 +342,7 @@ tracks/2/keys = {
 "times": PackedFloat32Array(0, 0.1, 0.25, 0.3, 0.4, 0.45, 0.525, 0.6, 0.875, 0.925),
 "transitions": PackedFloat32Array(1, 1, 0.5, 1, 1, 1, 1, 0, 0, 1),
 "update": 0,
-"values": [Vector2(-5, 3), Vector2(-5, 3), Vector2(-5, 10), Vector2(-4, 11), Vector2(0, 14), Vector2(-2, 10), Vector2(-5, 9), Vector2(-5, 3), Vector2(-5.5, 3), Vector2(-5, 3)]
+"values": [Vector2(-5, 3), Vector2(-5, 3), Vector2(-5, 10), Vector2(-4, 11), Vector2(3, 15), Vector2(-1, 10), Vector2(-5, 9), Vector2(-5, 3), Vector2(-5.5, 3), Vector2(-5, 3)]
 }
 tracks/3/type = "value"
 tracks/3/imported = false
@@ -435,26 +443,38 @@ tracks/10/keys = {
 tracks/11/type = "value"
 tracks/11/imported = false
 tracks/11/enabled = true
-tracks/11/path = NodePath("Mag:material:shader_parameter/final_alpha")
+tracks/11/path = NodePath("ItemSprite:scale")
 tracks/11/interp = 1
 tracks/11/loop_wrap = true
 tracks/11/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+tracks/12/type = "value"
+tracks/12/imported = false
+tracks/12/enabled = true
+tracks/12/path = NodePath("Mag:instance_shader_parameters/final_alpha")
+tracks/12/interp = 1
+tracks/12/loop_wrap = true
+tracks/12/keys = {
 "times": PackedFloat32Array(0.3, 0.4, 0.45),
 "transitions": PackedFloat32Array(1, 0, 1),
 "update": 0,
 "values": [1.0, 0.0, 1.0]
 }
-tracks/12/type = "value"
-tracks/12/imported = false
-tracks/12/enabled = true
-tracks/12/path = NodePath("ItemSprite:scale")
-tracks/12/interp = 1
-tracks/12/loop_wrap = true
-tracks/12/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
+tracks/13/type = "value"
+tracks/13/imported = false
+tracks/13/enabled = true
+tracks/13/path = NodePath("ReloadOffHand:rotation")
+tracks/13/interp = 1
+tracks/13/loop_wrap = true
+tracks/13/keys = {
+"times": PackedFloat32Array(0, 0.25, 0.325, 0.4, 0.45),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
 "update": 0,
-"values": [Vector2(1, 1)]
+"values": [0.0, 0.0, 0.261799, 0.261799, 0.0]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_7q2gn"]
@@ -469,18 +489,10 @@ radius = 4.0
 height = 16.0
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_w5kxq"]
-resource_local_to_scene = true
 shader = ExtResource("3_w5kxq")
-shader_parameter/tint_color = Color(1, 1, 1, 0)
-shader_parameter/glow_intensity = 1.0
-shader_parameter/final_alpha = 1.0
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_cdpvc"]
-resource_local_to_scene = true
 shader = ExtResource("3_w5kxq")
-shader_parameter/tint_color = Color(1, 1, 1, 0)
-shader_parameter/glow_intensity = 1.0
-shader_parameter/final_alpha = 1.0
 
 [node name="LaserGun" type="Node2D" node_paths=PackedStringArray("sprites_to_tint")]
 script = ExtResource("1_v8yes")
@@ -521,6 +533,7 @@ shape = SubResource("CapsuleShape2D_v5j41")
 visible = false
 show_behind_parent = true
 material = SubResource("ShaderMaterial_w5kxq")
+instance_shader_parameters/final_alpha = 1.0
 position = Vector2(-5, 3)
 texture = ExtResource("7_nv3qp")
 

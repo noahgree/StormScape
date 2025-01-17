@@ -28,7 +28,7 @@ var tint_tween: Tween = null ## The tween animating the tint progress.
 var tint_progress: float = 100.0: ## How much of the tint should be filled upwards. Runs from 0 - 100.
 	set(new_value):
 		tint_progress = new_value
-		back_color.material.set_shader_parameter("progress", new_value)
+		back_color.set_instance_shader_parameter("progress", new_value)
 
 
 ## Setter function for the item represented by this slot. Updates texture and quantity label.
@@ -40,7 +40,7 @@ func _set_item(new_item: InvItemResource) -> void:
 
 		item_texture.texture = item.stats.inv_icon
 
-		back_color.material.set_shader_parameter("main_color", GlobalData.rarity_colors.slot_fill.get(item.stats.rarity))
+		back_color.set_instance_shader_parameter("main_color", GlobalData.rarity_colors.slot_fill.get(item.stats.rarity))
 		back_color.show()
 
 		item_texture.material.set_shader_parameter("width", 0.0)

@@ -11,10 +11,7 @@
 [ext_resource type="Shader" uid="uid://cwbeekjoy0uyh" path="res://Utilities/Game/Shaders/GlintShader.gdshader" id="6_l1uky"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_me41j"]
-resource_local_to_scene = true
 shader = ExtResource("5_xform")
-shader_parameter/progress = 100.0
-shader_parameter/main_color = Color(1.92523e-06, 0.663041, 0.561341, 1)
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_raets"]
 blend_mode = 1
@@ -35,7 +32,6 @@ shader_parameter/pause_duration = 1.0
 shader_parameter/angle = 35.0
 shader_parameter/tint_color = Color(1, 1, 1, 0)
 shader_parameter/glow_intensity = 1.0
-shader_parameter/random_start_offset = 0.0
 
 [sub_resource type="LabelSettings" id="LabelSettings_kd5f7"]
 line_spacing = 0.0
@@ -66,6 +62,8 @@ no_item_slot_texture = ExtResource("4_ylk5m")
 
 [node name="BackColor" type="ColorRect" parent="."]
 material = SubResource("ShaderMaterial_me41j")
+instance_shader_parameters/main_color = Color(0, 0, 0, 0)
+instance_shader_parameters/progress = 100.0
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5

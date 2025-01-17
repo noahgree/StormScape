@@ -282,12 +282,6 @@ debug_print_mod_changes = false
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_w83do"]
 resource_local_to_scene = true
 shader = ExtResource("21_ogvde")
-shader_parameter/outline_color = Color(1, 1, 1, 1)
-shader_parameter/outline_thickness = 0.0
-shader_parameter/tint_color = Color(1, 1, 1, 0)
-shader_parameter/final_alpha = 1.0
-shader_parameter/override_color = Color(1, 1, 1, 0)
-shader_parameter/use_override_color = false
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_qwr4q"]
 radius = 7.0

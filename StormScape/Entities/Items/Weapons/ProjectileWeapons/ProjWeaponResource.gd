@@ -30,13 +30,15 @@ enum ProjAmmoType { ## The types of projectile ammo.
 @export_subgroup("Firing FX")
 @export var firing_cam_fx: CamFXResource ## The resource defining how the camera should react to firing.
 @export var muzzle_flash: Texture2D = null ## The texture to show as the muzzle flash when firing.
+@export var casing_texture: Texture2D = null ## The texture to use as the casing that ejects on firing.
+@export var casing_tint: Color = Color.WHITE ## The tint to apply to the casing texture. White means no tint.
 @export var firing_sound: String = "" ## The sound to play when firing.
 @export var post_fire_sound: String = "" ## The sound to play after firing before the cooldown ends.
 @export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var post_fire_sound_delay: float = 0 ## When greater than 0, the post-firing sound waits this delay after the firing duration ends before playing.
 @export var charging_sound: String = "" ## The sound to play when charging.
 
 @export_group("Effect & Logic Resources")
-@export var projectile_logic: ProjectileResource = ProjectileResource.new() ## The logic passed to the projectile for how to behave.
+@export var projectile_logic: ProjectileResource ## The logic for each spawned projectile determining how it behaves.
 @export var hitscan_logic: HitscanResource ## The resource containing information on how to fire and operate the hitscan.
 @export var effect_source: EffectSource ## The resource that defines what happens to the entity that is hit by this weapon. Includes things like damage and status effects.
 

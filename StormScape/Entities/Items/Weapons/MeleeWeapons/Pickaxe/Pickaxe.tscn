@@ -9,11 +9,7 @@
 [ext_resource type="AnimationLibrary" uid="uid://dk7m82xohebji" path="res://Entities/Items/Weapons/MeleeWeapons/MeleeWeaponAnimLibrary.res" id="7_huo2n"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_k6dlg"]
-resource_local_to_scene = true
 shader = ExtResource("2_avyyt")
-shader_parameter/tint_color = Color(1, 1, 1, 0)
-shader_parameter/glow_intensity = 1.0
-shader_parameter/final_alpha = 1.0
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_m0m3t"]
 atlas = ExtResource("3_avyyt")

@@ -1,5 +1,6 @@
-[gd_resource type="Resource" script_class="ProjWeaponResource" load_steps=21 format=3 uid="uid://dlfmjgnfk6nqj"]
+[gd_resource type="Resource" script_class="ProjWeaponResource" load_steps=22 format=3 uid="uid://dlfmjgnfk6nqj"]
 
+[ext_resource type="Texture2D" uid="uid://bm570hawaupxe" path="res://Entities/Items/Weapons/WeaponVFX/Casings/small_casing.png" id="1_80bso"]
 [ext_resource type="Script" uid="uid://boo31eu083dqd" path="res://Entities/Stats/EffectSystemResources/StatusEffects/StatusEffect.gd" id="1_dlrja"]
 [ext_resource type="Script" uid="uid://dkfssottmsrch" path="res://Entities/Stats/EffectSystemResources/EffectSources/EffectSource.gd" id="1_f7ms2"]
 [ext_resource type="Script" uid="uid://dvasncq3tgljs" path="res://Entities/Items/Weapons/ProjectileWeapons/ProjWeaponResource.gd" id="3_ctqw8"]
@@ -66,7 +67,7 @@ point_count = 2
 
 [sub_resource type="Resource" id="Resource_ysh4t"]
 script = ExtResource("5_u6crx")
-speed = 550
+speed = 500
 speed_curve = SubResource("Curve_pabkw")
 initial_boost_time = 0.0
 initial_boost_mult = 2.0
@@ -78,6 +79,9 @@ effect_falloff_curve = SubResource("Curve_iijqb")
 point_of_max_falloff = 500.0
 bad_effects_falloff = true
 good_effects_falloff = false
+path_type = "Default"
+amplitude = 5.0
+frequency = 2.0
 max_pierce = 0
 max_ricochet = 0
 ricochet_angle_bounce = true
@@ -100,7 +104,7 @@ move_in_rotated_dir = false
 shadow_matches_spin = false
 launch_angle = 0.0
 arc_travel_distance = 125
-arc_speed = 350.0
+arc_speed = 500.0
 max_collision_height = 20
 grounding_free_delay = 0.0
 bounce_count = 0
@@ -141,6 +145,8 @@ post_fire_anim_delay = 0.0
 post_fire_anim_dur = 0.0
 firing_cam_fx = ExtResource("4_6hpwe")
 muzzle_flash = ExtResource("9_xnuh3")
+casing_texture = ExtResource("1_80bso")
+casing_tint = Color(1, 1, 1, 1)
 firing_sound = ""
 post_fire_sound = ""
 post_fire_sound_delay = 0.0

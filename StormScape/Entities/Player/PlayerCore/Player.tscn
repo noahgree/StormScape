@@ -120,14 +120,7 @@ radius = 2.0
 height = 12.0
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_0tj2u"]
-resource_local_to_scene = true
 shader = ExtResource("4_ubhyl")
-shader_parameter/outline_color = Color(1, 1, 1, 1)
-shader_parameter/outline_thickness = 0.0
-shader_parameter/tint_color = Color(1, 1, 1, 0)
-shader_parameter/final_alpha = 1.0
-shader_parameter/override_color = Color(1, 1, 1, 0)
-shader_parameter/use_override_color = false
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_7dc0v"]
 size = Vector2(14, 15)
@@ -1257,6 +1250,11 @@ script = ExtResource("32_ixmb3")
 stats = ExtResource("52_ebist")
 quantity = 1
 
+[sub_resource type="Resource" id="Resource_0ta0y"]
+script = ExtResource("32_ixmb3")
+stats = ExtResource("37_a2tah")
+quantity = 1
+
 [sub_resource type="Resource" id="Resource_vpccy"]
 script = ExtResource("32_ixmb3")
 stats = ExtResource("48_1kvwx")
@@ -1266,11 +1264,6 @@ quantity = 1
 script = ExtResource("32_ixmb3")
 stats = ExtResource("47_devgv")
 quantity = 10
-
-[sub_resource type="Resource" id="Resource_0ta0y"]
-script = ExtResource("32_ixmb3")
-stats = ExtResource("37_a2tah")
-quantity = 1
 
 [sub_resource type="Resource" id="Resource_p5d28"]
 script = ExtResource("32_ixmb3")
@@ -1316,7 +1309,6 @@ shader_parameter/pause_duration = 1.0
 shader_parameter/angle = 35.0
 shader_parameter/tint_color = Color(1, 1, 1, 0)
 shader_parameter/glow_intensity = 1.0
-shader_parameter/random_start_offset = 0.0
 
 [sub_resource type="LabelSettings" id="LabelSettings_5ehfk"]
 line_spacing = 0.0
@@ -1383,8 +1375,6 @@ outline_color = Color(0.209203, 0.113957, 0.0471381, 1)
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_xh2l0"]
 resource_local_to_scene = true
 shader = ExtResource("107_nyy6a")
-shader_parameter/progress = 100.0
-shader_parameter/main_color = Color(1.92523e-06, 0.663041, 0.561341, 1)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_pc124"]
 resource_local_to_scene = true
@@ -1402,7 +1392,6 @@ shader_parameter/pause_duration = 1.0
 shader_parameter/angle = 35.0
 shader_parameter/tint_color = Color(1, 1, 1, 0)
 shader_parameter/glow_intensity = 1.0
-shader_parameter/random_start_offset = 0.0
 
 [node name="Player" type="CharacterBody2D" groups=["has_save_logic"]]
 collision_mask = 213
@@ -1544,7 +1533,7 @@ parameters/run/blendspace2d/blend_position = Vector2(0, 0)
 
 [node name="ItemReceiverComponent" parent="." node_paths=PackedStringArray("inv_populator", "ui") instance=ExtResource("30_qgyag")]
 item_scene = ExtResource("31_8v2rb")
-starting_inv = Array[ExtResource("32_ixmb3")]([SubResource("Resource_pihal"), null, null, null, SubResource("Resource_kx1me"), SubResource("Resource_2ijsm"), null, SubResource("Resource_xlc3k"), SubResource("Resource_n4o3n"), SubResource("Resource_3by25"), SubResource("Resource_oxva3"), SubResource("Resource_t7kvu"), SubResource("Resource_x8o50"), null, SubResource("Resource_apvym"), SubResource("Resource_ur5wt"), null, null, SubResource("Resource_dyejk"), null, null, null, null, null, null, SubResource("Resource_rdrbb"), null, null, SubResource("Resource_sx7hp"), SubResource("Resource_wjnk6"), null, null, SubResource("Resource_vpccy"), SubResource("Resource_hevqc"), SubResource("Resource_0ta0y"), SubResource("Resource_p5d28"), SubResource("Resource_6stk0")])
+starting_inv = Array[ExtResource("32_ixmb3")]([SubResource("Resource_pihal"), null, null, null, SubResource("Resource_kx1me"), SubResource("Resource_2ijsm"), null, SubResource("Resource_xlc3k"), SubResource("Resource_n4o3n"), SubResource("Resource_3by25"), SubResource("Resource_oxva3"), SubResource("Resource_t7kvu"), SubResource("Resource_x8o50"), null, SubResource("Resource_apvym"), SubResource("Resource_ur5wt"), null, null, SubResource("Resource_dyejk"), null, null, null, null, null, null, SubResource("Resource_rdrbb"), null, null, SubResource("Resource_sx7hp"), SubResource("Resource_wjnk6"), null, null, SubResource("Resource_0ta0y"), SubResource("Resource_vpccy"), SubResource("Resource_hevqc"), SubResource("Resource_p5d28"), SubResource("Resource_6stk0")])
 is_player_inv = true
 inv_size = 37
 hotbar_size = 5

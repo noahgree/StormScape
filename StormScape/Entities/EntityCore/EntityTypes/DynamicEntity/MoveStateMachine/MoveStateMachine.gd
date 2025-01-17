@@ -98,7 +98,7 @@ func create_footprint(offsets: Array) -> void:
 		var trans: Transform2D = Transform2D(atan2(anim_vector.y, anim_vector.x), get_parent().global_position + offset)
 		var footprint: SpriteGhost = SpriteGhost.create(trans, Vector2(0.8, 0.8), footstep_texture, 3.0)
 		footprint.z_index = get_parent().sprite.z_index - 1
-		footprint.material.set_shader_parameter("tint_color", Color(0.0, 0.0, 0.0, 0.8))
+		footprint.set_instance_shader_parameter("tint_color", Color(0.0, 0.0, 0.0, 0.8))
 		GlobalData.world_root.add_child(footprint)
 
 ## Requests to transition to the stun state, doing so if possible.

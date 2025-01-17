@@ -1,13 +1,13 @@
 shader_type canvas_item;
 
-uniform vec4 outline_color : source_color = vec4(1.0, 1.0, 1.0, 1.0);
-uniform float outline_thickness = 0.0;
+instance uniform vec4 outline_color : source_color = vec4(1.0, 1.0, 1.0, 1.0);
+instance uniform float outline_thickness = 0.0;
 
-uniform vec4 tint_color : source_color = vec4(1.0, 1.0, 1.0, 0.0);
-uniform float final_alpha = 1.0;
+instance uniform vec4 tint_color : source_color = vec4(1.0, 1.0, 1.0, 0.0);
+instance uniform float final_alpha = 1.0;
 
-uniform vec4 override_color : source_color = vec4(1.0, 1.0, 1.0, 0.0);
-uniform bool use_override_color = false;
+instance uniform vec4 override_color : source_color = vec4(1.0, 1.0, 1.0, 0.0);
+instance uniform bool use_override_color = false;
 
 void fragment() {
     vec4 tex_color = texture(TEXTURE, UV);

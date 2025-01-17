@@ -56,33 +56,36 @@ impact_particle_mult = 1.0
 beam_particle_color = Color(1, 0, 0, 1)
 beam_particle_mult = 1.0
 
-[sub_resource type="Curve" id="Curve_tmkit"]
+[sub_resource type="Curve" id="Curve_8depf"]
 _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
 point_count = 2
 
-[sub_resource type="Curve" id="Curve_oh16h"]
+[sub_resource type="Curve" id="Curve_icge0"]
 _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
 point_count = 2
 
-[sub_resource type="Curve" id="Curve_iyot4"]
+[sub_resource type="Curve" id="Curve_7d5hw"]
 _limits = [0.0, 5.0, 0.0, 1.0]
-_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.0710173, 1.0047), 0.0, 0.0, 0, 0, Vector2(0.347409, 5), 0.0, 0.0, 0, 0, Vector2(1, 5), 0.0, 0.0, 0, 0]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.0537428, 1.0047), 0.0, 0.0, 0, 0, Vector2(0.347409, 5), 0.0, 0.0, 0, 0, Vector2(1, 5), 0.0, 0.0, 0, 0]
 point_count = 4
 
-[sub_resource type="Resource" id="Resource_075k1"]
+[sub_resource type="Resource" id="Resource_6jh23"]
 script = ExtResource("4_5tlmk")
-speed = 375
-speed_curve = SubResource("Curve_oh16h")
+speed = 425
+speed_curve = SubResource("Curve_icge0")
 initial_boost_time = 0.0
 initial_boost_mult = 2.0
 lifetime = 5.0
-max_distance = 350
+max_distance = 450
 override_gun_height = false
 height_override = 6
-effect_falloff_curve = SubResource("Curve_tmkit")
-point_of_max_falloff = 350.0
+effect_falloff_curve = SubResource("Curve_8depf")
+point_of_max_falloff = 450.0
 bad_effects_falloff = true
 good_effects_falloff = true
+path_type = "Default"
+amplitude = 5.0
+frequency = 2.0
 max_pierce = 2
 max_ricochet = 0
 ricochet_angle_bounce = true
@@ -90,7 +93,7 @@ ricochet_walls_only = true
 homing_method = "Boomerang"
 homing_speed_mult = 1.0
 max_turn_rate = 285.0
-turn_rate_curve = SubResource("Curve_iyot4")
+turn_rate_curve = SubResource("Curve_7d5hw")
 homing_fov_angle = 180.0
 homing_max_range = 300
 homing_duration = -1.0
@@ -98,7 +101,7 @@ homing_start_delay = 0.0
 can_change_target = false
 boomerang_home_radius = 10.0
 mouse_target_radius = 50.0
-spin_speed = 800.0
+spin_speed = 1000.0
 spin_both_ways = false
 spin_direction = "Forward"
 do_y_axis_reflection = false
@@ -106,7 +109,7 @@ move_in_rotated_dir = false
 shadow_matches_spin = false
 launch_angle = 0.0
 arc_travel_distance = 125
-arc_speed = 350.0
+arc_speed = 500.0
 max_collision_height = 20
 grounding_free_delay = 0.0
 bounce_count = 0
@@ -145,11 +148,12 @@ override_anim_dur = 0.0
 anim_speed_mult = 1.0
 post_fire_anim_delay = 0.0
 post_fire_anim_dur = 0.0
+casing_tint = Color(1, 1, 1, 1)
 firing_sound = ""
 post_fire_sound = ""
 post_fire_sound_delay = 0.0
 charging_sound = ""
-projectile_logic = SubResource("Resource_075k1")
+projectile_logic = SubResource("Resource_6jh23")
 hitscan_logic = SubResource("Resource_2m5jx")
 effect_source = SubResource("Resource_3tpeu")
 ammo_type = 9

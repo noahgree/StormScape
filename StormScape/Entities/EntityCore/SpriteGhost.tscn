@@ -4,13 +4,9 @@
 [ext_resource type="Script" uid="uid://b7ralej5r1ah8" path="res://Entities/EntityCore/SpriteGhost.gd" id="1_obiud"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_l252u"]
-resource_local_to_scene = true
 shader = ExtResource("1_74nwb")
-shader_parameter/whitener_enabled = false
-shader_parameter/alpha_multiplier = 0.15
-shader_parameter/tint_color = Color(1, 1, 1, 1)
 
-[node name="DashGhost" type="Sprite2D"]
+[node name="SpriteGhost" type="Sprite2D"]
 show_behind_parent = true
 material = SubResource("ShaderMaterial_l252u")
 script = ExtResource("1_obiud")

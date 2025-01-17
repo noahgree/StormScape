@@ -80,7 +80,7 @@ func _ready() -> void:
 		add_to_group("items_on_ground")
 		particles.emitting = false
 		_set_rarity_colors()
-		icon.material.set_shader_parameter("random_start_offset", randf() * 2.0)
+		icon.set_instance_shader_parameter("random_start_offset", randf() * 2.0)
 
 		add_child(lifetime_timer)
 		lifetime_timer.timeout.connect(remove_from_world)

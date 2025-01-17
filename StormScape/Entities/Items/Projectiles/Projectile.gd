@@ -59,6 +59,7 @@ var aoe_overlapped_receivers: Dictionary[Area2D, Timer] = {} ## The areas that a
 var is_disabling_monitoring: bool = false ## When true, we are waiting on the deferred call to disable collision monitoring.
 var multishot_id: int = 0 ## The id passed in on creation that relates the sibling projectiles spawned on the same multishot barrage.
 var max_distance_random_offset: float = 0 ## Assigned upon creation to add randomization to how far each shot of a multishot firing can travel.
+var shot_facing_direction: int = 1 ## When 1, the projectile was spawned on the right half of the unit circle, -1 otherwise.
 #endregion
 
 
@@ -178,11 +179,13 @@ func _set_up_starting_transform_and_spin_logic() -> void:
 		if (angle > (PI / 2) and angle < (3 * PI / 2)):
 			sprite.flip_v = true
 
+	var hands_rot: float = fmod(source_entity.hands.hands_anchor.rotation + TAU, TAU)
+	shot_facing_direction = -1 if hands_rot > PI / 2 and hands_rot < 3 * PI / 2 else 1
+
 	if stats.spin_both_ways:
 		spin_dir = -1 if randf() < 0.5 else 1
 	else:
 		if splits_so_far == 0:
-			var hands_rot: float = fmod(source_entity.hands.hands_anchor.rotation + TAU, TAU)
 			if stats.spin_direction == "Forward":
 				spin_dir = -1 if hands_rot > PI / 2 and hands_rot < 3 * PI / 2 else 1
 			else:
@@ -244,16 +247,31 @@ func _do_projectile_movement(delta: float) -> void:
 	else:
 		rotation += deg_to_rad(stats.spin_speed * spin_dir) * delta
 
-		if stats.move_in_rotated_dir:
+		if stats.move_in_rotated_dir and stats.path_type == "Default":
 			position += transform.x * current_sampled_speed * delta
 		else:
-			position += Vector2(cos(starting_rotation), sin(starting_rotation)).normalized() * current_sampled_speed * delta
+			_do_varied_path_movement(delta)
 
 	var distance_change: float = previous_position.distance_to(global_position)
 	cumulative_distance += distance_change
 	true_current_speed = distance_change / delta
 
 	_update_shadow(global_position, movement_direction)
+
+func _do_varied_path_movement(delta: float) -> void:
+	match stats.path_type:
+		"Default":
+			position += resettable_starting_dir * current_sampled_speed * delta
+		"Sine":
+			var h_offset: Vector2 = resettable_starting_dir * current_sampled_speed * delta
+			var v_offset: Vector2 = Vector2(0, stats.amplitude * sin(2 * PI * stats.frequency * non_sped_up_time_counter - (PI / 2 * shot_facing_direction)))
+			var offset: Vector2 = h_offset + v_offset.rotated(starting_rotation)
+			position += offset
+		"Sawtooth":
+			var h_offset: Vector2 = resettable_starting_dir * current_sampled_speed * delta
+			var v_offset: Vector2 = Vector2(0, stats.amplitude * sign(sin(2 * PI * stats.frequency * non_sped_up_time_counter - PI / 2)))
+			var offset: Vector2 = h_offset + v_offset
+			position += offset
 
 ## Updates the shadow in a realistic manner.
 func _update_shadow(new_position: Vector2, movement_dir: Vector2) -> void:

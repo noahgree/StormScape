@@ -1,5 +1,6 @@
-[gd_resource type="Resource" script_class="ProjWeaponResource" load_steps=22 format=3 uid="uid://duc0xfejpfs1"]
+[gd_resource type="Resource" script_class="ProjWeaponResource" load_steps=23 format=3 uid="uid://duc0xfejpfs1"]
 
+[ext_resource type="Texture2D" uid="uid://bm570hawaupxe" path="res://Entities/Items/Weapons/WeaponVFX/Casings/small_casing.png" id="1_6mhsi"]
 [ext_resource type="Script" uid="uid://boo31eu083dqd" path="res://Entities/Stats/EffectSystemResources/StatusEffects/StatusEffect.gd" id="1_a6eqh"]
 [ext_resource type="Script" uid="uid://dkfssottmsrch" path="res://Entities/Stats/EffectSystemResources/EffectSources/EffectSource.gd" id="1_hh3cs"]
 [ext_resource type="Texture2D" uid="uid://on5kqhtv8tmw" path="res://Entities/Items/Weapons/ProjectileWeapons/EagleEye/eagle_eye_base.png" id="1_jqvl6"]
@@ -79,6 +80,9 @@ effect_falloff_curve = SubResource("Curve_r1td5")
 point_of_max_falloff = 500.0
 bad_effects_falloff = false
 good_effects_falloff = false
+path_type = "Default"
+amplitude = 5.0
+frequency = 2.0
 max_pierce = 0
 max_ricochet = 0
 ricochet_angle_bounce = true
@@ -142,6 +146,8 @@ post_fire_anim_delay = 0.0
 post_fire_anim_dur = 0.0
 firing_cam_fx = ExtResource("5_ihh7l")
 muzzle_flash = ExtResource("9_0nyok")
+casing_texture = ExtResource("1_6mhsi")
+casing_tint = Color(1, 1, 1, 1)
 firing_sound = ""
 post_fire_sound = ""
 post_fire_sound_delay = 0.0

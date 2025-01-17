@@ -19,12 +19,12 @@ var enabled: bool = true: ## When false, any activation or reload actions are bl
 		if not enabled:
 			disable()
 			for sprite_node: Node2D in sprites_to_tint:
-				sprite_node.material.set_shader_parameter("tint_color", Color(1, 0.188, 0.345, 0.45))
-				sprite_node.material.set_shader_parameter("final_alpha", 0.65)
+				sprite_node.set_instance_shader_parameter("tint_color", Color(1, 0.188, 0.345, 0.45))
+				sprite_node.set_instance_shader_parameter("final_alpha", 0.65)
 		else:
 			for sprite_node: Node2D in sprites_to_tint:
-				sprite_node.material.set_shader_parameter("tint_color", Color(1.0, 1.0, 1.0, 0.0))
-				sprite_node.material.set_shader_parameter("final_alpha", 1.0)
+				sprite_node.set_instance_shader_parameter("tint_color", Color(1.0, 1.0, 1.0, 0.0))
+				sprite_node.set_instance_shader_parameter("final_alpha", 1.0)
 			enable()
 
 

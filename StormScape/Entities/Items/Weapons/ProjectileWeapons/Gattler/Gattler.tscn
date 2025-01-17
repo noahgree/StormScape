@@ -1,8 +1,9 @@
-[gd_scene load_steps=26 format=3 uid="uid://c17oqm8amalvy"]
+[gd_scene load_steps=27 format=3 uid="uid://c17oqm8amalvy"]
 
 [ext_resource type="Script" uid="uid://ca8xdltgdyjys" path="res://Entities/Items/Weapons/ProjectileWeapons/ProjectileWeapon.gd" id="1_c0tnr"]
 [ext_resource type="PackedScene" uid="uid://bdi8o2g5plcnb" path="res://Entities/Items/Weapons/WeaponVFX/FiringVFX/Simple/SimpleFiringVFX.tscn" id="2_74nn5"]
 [ext_resource type="Shader" uid="uid://cugs1eqtkjsbd" path="res://Utilities/Game/Shaders/TintAndGlow.gdshader" id="3_c0tnr"]
+[ext_resource type="PackedScene" uid="uid://ciylpe2ihjno1" path="res://Entities/Items/Weapons/WeaponVFX/Casings/Casing.tscn" id="3_ol8xj"]
 [ext_resource type="Texture2D" uid="uid://nmamppdlgu5h" path="res://Entities/Items/Weapons/ProjectileWeapons/Gattler/GattlerBaseCT.tres" id="4_c0tnr"]
 [ext_resource type="PackedScene" uid="uid://lw5fgm5pgoif" path="res://Entities/EntityCore/EntityHandSprite.tscn" id="5_74nn5"]
 [ext_resource type="PackedScene" uid="uid://batrfwan8r8ov" path="res://Entities/Items/WeaponMods/WeaponModManager.tscn" id="5_yhkb2"]
@@ -10,11 +11,7 @@
 [ext_resource type="Texture2D" uid="uid://bpl5dnvhutpm2" path="res://Entities/Items/Weapons/ProjectileWeapons/Gattler/GattlerBaseMagCT.tres" id="8_wwtqj"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_fnsui"]
-resource_local_to_scene = true
 shader = ExtResource("3_c0tnr")
-shader_parameter/tint_color = Color(1, 1, 1, 0)
-shader_parameter/glow_intensity = 1.0
-shader_parameter/final_alpha = 1.0
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ol8xj"]
 atlas = ExtResource("4_c0tnr")
@@ -197,19 +194,19 @@ tracks/10/keys = {
 tracks/11/type = "value"
 tracks/11/imported = false
 tracks/11/enabled = true
-tracks/11/path = NodePath("Mag:material:shader_parameter/final_alpha")
+tracks/11/path = NodePath("OffHandSprite:visible")
 tracks/11/interp = 1
 tracks/11/loop_wrap = true
 tracks/11/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [1.0]
+"update": 1,
+"values": [true]
 }
 tracks/12/type = "value"
 tracks/12/imported = false
 tracks/12/enabled = true
-tracks/12/path = NodePath("OffHandSprite:visible")
+tracks/12/path = NodePath("MainHandSprite:visible")
 tracks/12/interp = 1
 tracks/12/loop_wrap = true
 tracks/12/keys = {
@@ -221,50 +218,50 @@ tracks/12/keys = {
 tracks/13/type = "value"
 tracks/13/imported = false
 tracks/13/enabled = true
-tracks/13/path = NodePath("MainHandSprite:visible")
+tracks/13/path = NodePath("ReloadOffHand:visible")
 tracks/13/interp = 1
 tracks/13/loop_wrap = true
 tracks/13/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [true]
+"values": [false]
 }
 tracks/14/type = "value"
 tracks/14/imported = false
 tracks/14/enabled = true
-tracks/14/path = NodePath("ReloadOffHand:visible")
+tracks/14/path = NodePath("ItemSprite:visible")
 tracks/14/interp = 1
 tracks/14/loop_wrap = true
 tracks/14/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [false]
+"values": [true]
 }
 tracks/15/type = "value"
 tracks/15/imported = false
 tracks/15/enabled = true
-tracks/15/path = NodePath("ItemSprite:visible")
+tracks/15/path = NodePath("ReloadOffHand:position")
 tracks/15/interp = 1
 tracks/15/loop_wrap = true
 tracks/15/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [true]
+"update": 0,
+"values": [Vector2(-17, 0)]
 }
 tracks/16/type = "value"
 tracks/16/imported = false
 tracks/16/enabled = true
-tracks/16/path = NodePath("ReloadOffHand:position")
+tracks/16/path = NodePath("Mag:instance_shader_parameters/final_alpha")
 tracks/16/interp = 1
 tracks/16/loop_wrap = true
 tracks/16/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector2(-17, 0)]
+"values": [1.0]
 }
 
 [sub_resource type="Animation" id="Animation_q35vr"]
@@ -306,6 +303,20 @@ tracks/2/keys = {
 "update": 0,
 "values": [0.0, -0.0261799, 0.0]
 }
+tracks/3/type = "method"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath(".")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0.2),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"_eject_casing"
+}]
+}
 
 [sub_resource type="Animation" id="Animation_egoiu"]
 resource_name = "mag_reload"
@@ -341,10 +352,10 @@ tracks/2/path = NodePath("ReloadMainHand:position")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
-"times": PackedFloat32Array(0.05, 0.15, 0.175, 0.225, 0.25, 0.325, 0.35, 0.425, 0.475, 0.5, 0.6, 0.675, 0.725, 0.75, 0.825, 0.875, 0.9, 1),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 0.5, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"times": PackedFloat32Array(0.05, 0.15, 0.175, 0.225, 0.25, 0.325, 0.35, 0.425, 0.475, 0.6, 0.675, 0.725, 0.75, 0.825, 0.875, 0.9, 1),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 0.5, 1, 1, 1, 1, 1, 1, 1, 1, 1),
 "update": 0,
-"values": [Vector2(-7, -8), Vector2(-11, -2), Vector2(-11, -2), Vector2(-5, -2), Vector2(-5, -2), Vector2(-6, 7), Vector2(-6, 7), Vector2(-6, 11), Vector2(-4, 12), Vector2(-4, 12), Vector2(0, 10), Vector2(-6, 11), Vector2(-6, 7), Vector2(-6, 7), Vector2(-5, -2), Vector2(-11, -2), Vector2(-11, -2), Vector2(-7, -8)]
+"values": [Vector2(-7, -8), Vector2(-11, -2), Vector2(-11, -2), Vector2(-5, -2), Vector2(-5, -2), Vector2(-6, 5), Vector2(-6, 5), Vector2(-6, 8), Vector2(-6, 8), Vector2(-3, 7), Vector2(-6, 8), Vector2(-6, 5), Vector2(-6, 5), Vector2(-5, -2), Vector2(-11, -2), Vector2(-11, -2), Vector2(-7, -8)]
 }
 tracks/3/type = "value"
 tracks/3/imported = false
@@ -380,7 +391,7 @@ tracks/5/keys = {
 "times": PackedFloat32Array(0, 0.225, 0.25, 0.35, 0.425, 0.5, 0.6, 0.675, 0.725, 0.75, 0.875, 0.9),
 "transitions": PackedFloat32Array(0, 0, 1, 1, 0.5, 0, 1, 1, 0, 0, 0, 1),
 "update": 0,
-"values": [Vector2(0, 0), Vector2(1, 0), Vector2(0, 0), Vector2(0, 0), Vector2(0, 4), Vector2(7, 11), Vector2(6, 3), Vector2(0, 4), Vector2(0, -0.5), Vector2(0, 0), Vector2(-1, 0), Vector2(0, 0)]
+"values": [Vector2(0, 0), Vector2(1, 0), Vector2(0, 0), Vector2(0, 0), Vector2(0, 3), Vector2(7, 11), Vector2(3, 2), Vector2(0, 3), Vector2(0, -0.5), Vector2(0, 0), Vector2(-1, 0), Vector2(0, 0)]
 }
 tracks/6/type = "value"
 tracks/6/imported = false
@@ -409,19 +420,19 @@ tracks/7/keys = {
 tracks/8/type = "value"
 tracks/8/imported = false
 tracks/8/enabled = true
-tracks/8/path = NodePath("Mag:material:shader_parameter/final_alpha")
+tracks/8/path = NodePath("MainHandSprite:visible")
 tracks/8/interp = 1
 tracks/8/loop_wrap = true
 tracks/8/keys = {
-"times": PackedFloat32Array(0, 0.425, 0.5, 0.6),
-"transitions": PackedFloat32Array(1, 1, 0, 1),
-"update": 0,
-"values": [1.0, 1.0, 0.0, 1.0]
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
 }
 tracks/9/type = "value"
 tracks/9/imported = false
 tracks/9/enabled = true
-tracks/9/path = NodePath("MainHandSprite:visible")
+tracks/9/path = NodePath("OffHandSprite:visible")
 tracks/9/interp = 1
 tracks/9/loop_wrap = true
 tracks/9/keys = {
@@ -433,62 +444,62 @@ tracks/9/keys = {
 tracks/10/type = "value"
 tracks/10/imported = false
 tracks/10/enabled = true
-tracks/10/path = NodePath("OffHandSprite:visible")
+tracks/10/path = NodePath("ReloadOffHand:visible")
 tracks/10/interp = 1
 tracks/10/loop_wrap = true
 tracks/10/keys = {
 "times": PackedFloat32Array(0, 1),
 "transitions": PackedFloat32Array(1, 1),
 "update": 1,
-"values": [false, true]
+"values": [true, false]
 }
 tracks/11/type = "value"
 tracks/11/imported = false
 tracks/11/enabled = true
-tracks/11/path = NodePath("ReloadOffHand:visible")
+tracks/11/path = NodePath("ItemSprite:visible")
 tracks/11/interp = 1
 tracks/11/loop_wrap = true
 tracks/11/keys = {
 "times": PackedFloat32Array(0, 1),
 "transitions": PackedFloat32Array(1, 1),
 "update": 1,
-"values": [true, false]
+"values": [false, true]
 }
 tracks/12/type = "value"
 tracks/12/imported = false
 tracks/12/enabled = true
-tracks/12/path = NodePath("ItemSprite:visible")
+tracks/12/path = NodePath("ReloadOffHand:position")
 tracks/12/interp = 1
 tracks/12/loop_wrap = true
 tracks/12/keys = {
-"times": PackedFloat32Array(0, 1),
-"transitions": PackedFloat32Array(1, 1),
-"update": 1,
-"values": [false, true]
-}
-tracks/13/type = "value"
-tracks/13/imported = false
-tracks/13/enabled = true
-tracks/13/path = NodePath("ReloadOffHand:position")
-tracks/13/interp = 1
-tracks/13/loop_wrap = true
-tracks/13/keys = {
 "times": PackedFloat32Array(0, 0.225, 0.25, 0.875, 0.9),
 "transitions": PackedFloat32Array(0, 0, 0, 0, 1),
 "update": 0,
 "values": [Vector2(-17, 0), Vector2(-16, 0), Vector2(-17, 0), Vector2(-18, 0), Vector2(-17, 0)]
 }
-tracks/14/type = "value"
-tracks/14/imported = false
-tracks/14/enabled = true
-tracks/14/path = NodePath("ItemSprite:scale")
-tracks/14/interp = 1
-tracks/14/loop_wrap = true
-tracks/14/keys = {
+tracks/13/type = "value"
+tracks/13/imported = false
+tracks/13/enabled = true
+tracks/13/path = NodePath("ItemSprite:scale")
+tracks/13/interp = 1
+tracks/13/loop_wrap = true
+tracks/13/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
 "values": [Vector2(1, 1)]
+}
+tracks/14/type = "value"
+tracks/14/imported = false
+tracks/14/enabled = true
+tracks/14/path = NodePath("Mag:instance_shader_parameters/final_alpha")
+tracks/14/interp = 1
+tracks/14/loop_wrap = true
+tracks/14/keys = {
+"times": PackedFloat32Array(0, 0.425, 0.5, 0.6),
+"transitions": PackedFloat32Array(1, 1, 0, 1),
+"update": 0,
+"values": [1.0, 1.0, 0.0, 1.0]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_fnsui"]
@@ -503,11 +514,7 @@ radius = 4.0
 height = 24.0
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_5ul7m"]
-resource_local_to_scene = true
 shader = ExtResource("3_c0tnr")
-shader_parameter/tint_color = Color(1, 1, 1, 0)
-shader_parameter/glow_intensity = 1.0
-shader_parameter/final_alpha = 1.0
 
 [sub_resource type="Gradient" id="Gradient_ol8xj"]
 colors = PackedColorArray(1, 0.15, 0.219, 0.019, 0.995, 0, 0.145, 0.382)
@@ -517,16 +524,13 @@ gradient = SubResource("Gradient_ol8xj")
 width = 19
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_lc3de"]
-resource_local_to_scene = true
 shader = ExtResource("3_c0tnr")
-shader_parameter/tint_color = Color(1, 1, 1, 0)
-shader_parameter/glow_intensity = 1.0
-shader_parameter/final_alpha = 1.0
 
 [node name="Gattler" type="Node2D" node_paths=PackedStringArray("overheat_overlays", "sprites_to_tint")]
 script = ExtResource("1_c0tnr")
 proj_origin = Vector2(18, -1)
 vfx_scene = ExtResource("2_74nn5")
+casing_scene = ExtResource("3_ol8xj")
 overheat_overlays = [NodePath("ItemSprite/OverheatOverlay"), NodePath("GunNoMag/OverheatOverlay")]
 particle_emission_extents = Vector2(8, 1)
 particle_emission_origin = Vector2(8, -3)
@@ -604,6 +608,7 @@ texture = SubResource("GradientTexture1D_wwtqj")
 visible = false
 show_behind_parent = true
 material = SubResource("ShaderMaterial_lc3de")
+instance_shader_parameters/final_alpha = 1.0
 position = Vector2(-6, 4)
 texture = ExtResource("8_wwtqj")
 
@@ -614,3 +619,6 @@ position = Vector2(-17, 0)
 [node name="ReloadMainHand" parent="." instance=ExtResource("5_74nn5")]
 visible = false
 position = Vector2(-7, -8)
+
+[node name="CasingEjectionPoint" type="Marker2D" parent="."]
+position = Vector2(-10, -2)

@@ -8,11 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://lw5fgm5pgoif" path="res://Entities/EntityCore/EntityHandSprite.tscn" id="7_xc27p"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_qv0hn"]
-resource_local_to_scene = true
 shader = ExtResource("3_qpgmn")
-shader_parameter/tint_color = Color(1, 1, 1, 0)
-shader_parameter/glow_intensity = 1.0
-shader_parameter/final_alpha = 1.0
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_xc27p"]
 atlas = ExtResource("4_qpgmn")

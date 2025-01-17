@@ -1,4 +1,5 @@
 @tool
+@icon("res://Utilities/Debug/EditorIcons/projectile_weapon.png")
 extends ProjectileWeapon
 class_name UniqueProjWeapon
 ## A subclass of projectile weapon that adds extra logic for handling unique projectiles. These cannot hitscan.

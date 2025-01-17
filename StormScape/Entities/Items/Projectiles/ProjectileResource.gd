@@ -18,6 +18,11 @@ class_name ProjectileResource
 @export var bad_effects_falloff: bool = true ## Whether to apply the falloff curve to bad effects.
 @export var good_effects_falloff: bool = false ## Whether to apply the falloff curve to good effects.
 
+@export_group("Curve Movement")
+@export_enum("Default", "Sine", "Sawtooth") var path_type: String = "Default" ## The potential wave-based movement method to use.
+@export var amplitude: float = 5.0 ## The height of the waves.
+@export var frequency: float = 2.0 ## The stretch of the waves.
+
 @export_group("Piercing Logic")
 @export_range(0, 100, 1, "or_greater") var max_pierce: int = 0 ## The max amount of collisions this can take before freeing.
 
@@ -50,7 +55,7 @@ class_name ProjectileResource
 @export_group("Arc Trajectory")
 @export_range(0, 89, 1, "suffix:degrees") var launch_angle: float = 0 ## The initial angle to launch the projectile at. Note that homing projectiles cannot do arcing. Setting this to anything above 0 will enable the arcing logic.
 @export_custom(PROPERTY_HINT_NONE, "suffix:pixels") var arc_travel_distance: int = 125 ## How many pixels the arc shot should travel before landing.
-@export var arc_speed: float = 350 ## How fast the arcing motion happens.
+@export var arc_speed: float = 500 ## How fast the arcing motion happens.
 @export_custom(PROPERTY_HINT_NONE, "suffix:pixels") var max_collision_height: int = 20 ## How many simulated pixels off the ground this can be before it can no longer collide with things.
 @export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var grounding_free_delay: float = 0 ## How much time after we hit the ground do we wait before freeing the projectile. Note that this doesn't apply if we start an AOE after grounding.
 @export_subgroup("Bouncing")

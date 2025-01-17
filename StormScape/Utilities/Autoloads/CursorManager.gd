@@ -59,11 +59,11 @@ func change_cursor(sprite_frames: SpriteFrames, animation: StringName = &"defaul
 
 ## Updates the cursor's tint.
 func change_cursor_tint(tint: Color) -> void:
-	cursor.material.set_shader_parameter("main_color", tint)
+	cursor.set_instance_shader_parameter("main_color", tint)
 
 func get_cursor_tint() -> Color:
-	return cursor.material.get_shader_parameter("main_color")
+	return cursor.get_instance_shader_parameter("main_color")
 
 ## Updates the shader controlling the vertical fill progress.
 func update_vertical_tint_progress(value: float) -> void:
-	cursor.material.set_shader_parameter("progress", clampf(value, 0.0, 100.0))
+	cursor.set_instance_shader_parameter("progress", clampf(value, 0.0, 100.0))

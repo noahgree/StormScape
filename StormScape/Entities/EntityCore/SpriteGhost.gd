@@ -21,7 +21,7 @@ static func create(trans: Transform2D, size: Vector2,
 	return ghost_instance
 
 func make_white() -> void:
-	material.set_shader_parameter("whitener_enabled", true)
+	set_instance_shader_parameter("whitener_enabled", true)
 	is_whitened = true
 
 func _ready() -> void:
@@ -30,9 +30,10 @@ func _ready() -> void:
 ## Creates the tween for handling the fade out, waits for the fade to finish, then queue frees the node.
 func _do_ghosting() -> void:
 	var fade_out_tween: Tween = create_tween()
-	fade_out_tween.tween_property(material, "shader_parameter/alpha_multiplier", 0.0, fade_out_time)
+	set_instance_shader_parameter("alpha_multiplier", 1.0)
+	fade_out_tween.tween_property(self, "instance_shader_parameters/alpha_multiplier", 0.0, fade_out_time)
 	if not is_whitened:
-		material.set_shader_parameter("alpha_multiplier", NON_WHITENED_ALPHA)
+		set_instance_shader_parameter("alpha_multiplier", NON_WHITENED_ALPHA)
 
 	await fade_out_tween.finished
 	queue_free()
