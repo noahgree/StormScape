@@ -34,5 +34,8 @@ class Projectiles:
 	static var show_hitscan_rays: bool = false
 	static var show_aiming_direction: bool = false
 
+class Particles:
+	static var show_status_effect_particle_emission_area: bool = false
+
 class OnScreenDebug:
 	static var frame_rate: bool = true

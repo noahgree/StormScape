@@ -9,8 +9,9 @@ class_name Projectile
 @export var glow_color: Color = Color(1, 1, 1) ## The color of the glow.
 @export var impact_vfx: PackedScene = null ## The VFX to spawn at the site of impact. Could be a decal or something.
 @export var impact_sound: String = "" ## The sound to play at the site of impact.
+@export var random_rot_on_impact: bool = false ## When true, the sprite will get a random rotation on impact to change how the impact animation looks for circular projectiles.
 
-@onready var sprite: Node2D = $ProjSprite ## The sprite for this projectile.
+@onready var sprite: AnimatedSprite2D = $ProjSprite ## The sprite for this projectile.
 @onready var shadow: Sprite2D = $Shadow ## The shadow sprite for this projectile.
 @onready var anim_player: AnimationPlayer = get_node_or_null("AnimationPlayer") ## The anim player for this projectile.
 
@@ -156,6 +157,8 @@ func _ready() -> void:
 	if stats.initial_boost_time > 0:
 		current_initial_boost = stats.initial_boost_mult
 		initial_boost_timer.start(stats.initial_boost_time)
+
+	sprite.frame = randi_range(0, sprite.sprite_frames.get_frame_count(sprite.animation) - 1)
 
 ## Enables the main projectile collider.
 func _enable_collider() -> void:
@@ -776,9 +779,18 @@ func _process_hit(object: Node2D) -> void:
 
 		_kill_projectile_on_hit()
 
-## Stops and frees the projectile on hit when it cannot pierce, ricochet, or AOE anymore. Meant to be overridden by child classes.
+## Stops and frees the projectile on hit when it cannot pierce, ricochet, or AOE anymore.
+## Meant to be overridden by child classes where necessary.
 func _kill_projectile_on_hit() -> void:
-	queue_free()
+	set_physics_process(false)
+
+	if sprite.sprite_frames.has_animation("impact"):
+		if random_rot_on_impact:
+			sprite.rotation_degrees = randi_range(0, 360)
+		sprite.animation_finished.connect(queue_free)
+		sprite.play("impact")
+	else:
+		queue_free()
 
 ## Overrides parent method. When we overlap with an entity who can accept effect sources, pass the effect source to that
 ## entity's handler. Note that the effect source is duplicated on hit so that we can include unique info like move dir.

@@ -83,9 +83,14 @@ func start_freeze(fx_resource: CamFXResource) -> void:
 			freeze_tween.stop()
 			freeze_tween.kill()
 
-		freeze_tween = create_tween()
-		freeze_tween.set_trans(fx_resource.freeze_trans_type).set_ease(fx_resource.freeze_ease_type).set_ignore_time_scale(true)
-		freeze_tween.tween_property(Engine, "time_scale", 1.0, current_freeze_time)
+		freeze_tween = create_tween().set_ignore_time_scale(true)
+
+		if fx_resource.freeze_instant_change:
+			freeze_tween.tween_interval(current_freeze_time)
+			freeze_tween.tween_callback(func() -> void: Engine.time_scale = 1.0)
+		else:
+			freeze_tween.set_trans(fx_resource.freeze_trans_type).set_ease(fx_resource.freeze_ease_type)
+			freeze_tween.tween_property(Engine, "time_scale", 1.0, current_freeze_time)
 
 ## Starts a zoom effect for the player camera.
 func start_zoom(fx_resource: CamFXResource) -> void:

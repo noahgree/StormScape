@@ -1,12 +1,27 @@
-[gd_scene load_steps=5 format=3 uid="uid://vdrq4v5hjc06"]
+[gd_scene load_steps=7 format=3 uid="uid://vdrq4v5hjc06"]
 
-[ext_resource type="Script" path="res://Entities/Items/Projectiles/UniqueProjectile.gd" id="1_ckait"]
-[ext_resource type="Texture2D" uid="uid://c7i0hkkoanp61" path="res://Entities/Items/Weapons/ProjectileWeapons/Boomerang/boomerang_wood.png" id="2_xih7m"]
+[ext_resource type="Script" uid="uid://ckk7xwqujudaq" path="res://Entities/Items/Projectiles/UniqueProjectile.gd" id="1_ckait"]
+[ext_resource type="Texture2D" uid="uid://ln38htpivqou" path="res://Entities/Items/Weapons/ProjectileWeapons/Boomerang/BoomerangWoodCT.tres" id="2_f0kfj"]
 [ext_resource type="Texture2D" uid="uid://dcbwxgak6a0r8" path="res://Entities/EntityCore/entity_shadow.png" id="3_ra4co"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_augvi"]
 radius = 9.23075
 height = 18.4615
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4q1tr"]
+atlas = ExtResource("2_f0kfj")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_6j8yc"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4q1tr")
+}],
+"loop": true,
+"name": &"flying",
+"speed": 5.0
+}]
 
 [node name="BoomerangWoodProj" type="Area2D"]
 editor_description = "DO NOT SET EFFECT SOURCE IF BEING USED DIRECTLY WITH A WEAPON. THE WEAPON WILL SET IT FOR YOU."
@@ -17,9 +32,9 @@ rotation = 1.5708
 shape = SubResource("CapsuleShape2D_augvi")
 debug_color = Color(0.626, 0.349, 1, 0.196)
 
-[node name="ProjSprite" type="Sprite2D" parent="."]
-texture = ExtResource("2_xih7m")
-region_rect = Rect2(2, 5, 12, 5)
+[node name="ProjSprite" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_6j8yc")
+animation = &"flying"
 
 [node name="Shadow" type="Sprite2D" parent="."]
 self_modulate = Color(0.16, 0.16, 0.16, 0.185)

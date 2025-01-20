@@ -11,7 +11,8 @@ class_name StaticEntity
 
 @onready var sprite: Node2D = $EntitySprite ## The visual representation of the entity. Needs to have the EntityEffectShader applied.
 @onready var effect_receiver: EffectReceiverComponent = get_node_or_null("EffectReceiverComponent") ## The component that handles incoming effect sources.
-@onready var effects: StatusEffectManager = get_node_or_null("%StatusEffectManager") ## The node that will cache and manage all status effects for this entity.
+@onready var effects: StatusEffectsComponent = get_node_or_null("%StatusEffectsComponent") ## The node that will cache and manage all status effects for this entity.
+@onready var emission_mgr: ParticleEmissionComponent = $ParticleEmissionComponent ## The component responsible for determining the extents and origins of different particle placements.
 @onready var inv: ItemReceiverComponent = get_node_or_null("ItemReceiverComponent")
 
 
@@ -70,7 +71,7 @@ func _is_instance_on_load_game(data: StaticEntityData) -> void:
 ## Edits editor warnings for easier debugging.
 func _get_configuration_warnings() -> PackedStringArray:
 	if get_node_or_null("%EntitySprite") == null or not %EntitySprite is EntitySprite:
-		return ["This entity must have an EntitySprite typed sprite node."]
+		return ["This entity must have an EntitySprite typed sprite node. Make sure its name is unique with a %."]
 	return []
 
 func _ready() -> void:

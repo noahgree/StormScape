@@ -6,7 +6,7 @@ class_name Slot
 signal is_hovered_over(index: int) ## Emitted when a slot is currently being hovered over.
 signal is_not_hovered_over() ## Emitted when a slot is no longer being hovered over.
 
-@export var drag_preview: PackedScene = load("res://UI/Inventory/InventoryCore/Slot/SlotDragPreview.tscn") ## The control preview for a dragged slot.
+@export var drag_preview: PackedScene = preload("res://UI/Inventory/InventoryCore/Slot/SlotDragPreview.tscn") ## The control preview for a dragged slot.
 @export var default_slot_texture: Texture2D ## The default texture of the slot with an item in it.
 @export var no_item_slot_texture: Texture2D ## The texture of the slot with no item when it is selected or active.
 

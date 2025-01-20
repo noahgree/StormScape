@@ -1,12 +1,12 @@
 [gd_scene load_steps=20 format=3 uid="uid://baxpb3crwepc0"]
 
 [ext_resource type="Script" uid="uid://ca8xdltgdyjys" path="res://Entities/Items/Weapons/ProjectileWeapons/ProjectileWeapon.gd" id="1_v8yes"]
-[ext_resource type="PackedScene" uid="uid://bdi8o2g5plcnb" path="res://Entities/Items/Weapons/WeaponVFX/FiringVFX/Simple/SimpleFiringVFX.tscn" id="2_w5kxq"]
 [ext_resource type="Shader" uid="uid://cugs1eqtkjsbd" path="res://Utilities/Game/Shaders/TintAndGlow.gdshader" id="3_w5kxq"]
 [ext_resource type="PackedScene" uid="uid://batrfwan8r8ov" path="res://Entities/Items/WeaponMods/WeaponModManager.tscn" id="4_eputi"]
 [ext_resource type="Texture2D" uid="uid://d4fispahsus1d" path="res://Entities/Items/Weapons/ProjectileWeapons/LaserGun/LaserGunBaseCT.tres" id="4_w5kxq"]
 [ext_resource type="Texture2D" uid="uid://cw1i138jhqftk" path="res://Entities/Items/Weapons/ProjectileWeapons/LaserGun/LaserGunBaseMagCT.tres" id="7_nv3qp"]
 [ext_resource type="PackedScene" uid="uid://lw5fgm5pgoif" path="res://Entities/EntityCore/EntityHandSprite.tscn" id="7_o1grk"]
+[ext_resource type="PackedScene" uid="uid://cpslc01s4ohj5" path="res://Entities/Items/Weapons/WeaponVFX/FiringVFX/Laser/LaserFiringVFX.tscn" id="8_nv3qp"]
 [ext_resource type="Texture2D" uid="uid://bwaiffewkyfle" path="res://Entities/Items/Weapons/ProjectileWeapons/LaserGun/LaserGunBaseGunNoMagCT.tres" id="9_cdpvc"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_1hxt5"]
@@ -497,10 +497,10 @@ shader = ExtResource("3_w5kxq")
 [node name="LaserGun" type="Node2D" node_paths=PackedStringArray("sprites_to_tint")]
 script = ExtResource("1_v8yes")
 proj_origin = Vector2(8, -3)
-vfx_scene = ExtResource("2_w5kxq")
 sprites_to_tint = [NodePath("ItemSprite"), NodePath("Mag")]
 
 [node name="ItemSprite" type="AnimatedSprite2D" parent="."]
+light_mask = 2
 material = SubResource("ShaderMaterial_1hxt5")
 sprite_frames = SubResource("SpriteFrames_ggr15")
 animation = &"fire"
@@ -532,6 +532,7 @@ shape = SubResource("CapsuleShape2D_v5j41")
 [node name="Mag" type="Sprite2D" parent="."]
 visible = false
 show_behind_parent = true
+light_mask = 2
 material = SubResource("ShaderMaterial_w5kxq")
 instance_shader_parameters/final_alpha = 1.0
 position = Vector2(-5, 3)
@@ -540,6 +541,7 @@ texture = ExtResource("7_nv3qp")
 [node name="GunNoMag" type="Sprite2D" parent="."]
 visible = false
 show_behind_parent = true
+light_mask = 2
 material = SubResource("ShaderMaterial_cdpvc")
 texture = ExtResource("9_cdpvc")
 
@@ -550,3 +552,7 @@ position = Vector2(-1, 4)
 [node name="ReloadMainHand" parent="." instance=ExtResource("7_o1grk")]
 visible = false
 position = Vector2(-5, 1)
+
+[node name="FiringVFX" parent="." instance=ExtResource("8_nv3qp")]
+position = Vector2(8, -3)
+glow_strength = 0.0

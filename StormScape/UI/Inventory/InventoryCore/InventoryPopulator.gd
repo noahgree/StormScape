@@ -2,7 +2,7 @@ extends Control
 class_name InventoryPopulator
 ## Responsible for populating and instantiating slots of children nodes for the connected inventory.
 
-@export var slot_scene: PackedScene = load("res://UI/Inventory/InventoryCore/Slot/Slot.tscn") ## The slot scene to be instantiated as children.
+@export var slot_scene: PackedScene = preload("res://UI/Inventory/InventoryCore/Slot/Slot.tscn") ## The slot scene to be instantiated as children.
 @export var item_details_label: Label ## The label in the inventory that displays the details of a hovered over item.
 @export var main_slot_grid: GridContainer ## The main container for all normal inventory slots.
 @export var hotbar_grid: HBoxContainer ## If player inv, this connects to the container that holds the hotbar slots.

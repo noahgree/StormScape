@@ -1,7 +1,7 @@
 extends ColorRect
 class_name InventoryUI
 
-@export var item_scene: PackedScene = load("res://Entities/Items/ItemCore/Item.tscn") ## The item scene to be instantiated when items are dropped onto the ground.
+@export var item_scene: PackedScene = preload("res://Entities/Items/ItemCore/Item.tscn") ## The item scene to be instantiated when items are dropped onto the ground.
 
 var inventory_to_reflect: Inventory ## The inventory to reflect in this UI.
 

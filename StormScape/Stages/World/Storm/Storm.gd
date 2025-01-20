@@ -19,7 +19,6 @@ var current_radius: float = 0: ## The current radius of the safe zone.
 		collision_shape.shape.radius = new_radius
 var radius_tween: Tween = null ## The tween controlling a radius change.
 var location_tween: Tween = null ## The tween controlling a location change.
-var see_thru_tween: Tween = null ## The tween controlling the player's see thru amount change.
 var storm_colors_tween: Tween = null ## The tween controlling the storm color changes.
 var storm_gradient_end_tween: Tween = null ## The tween controlling the gradient end distance changes.
 var glow_ring_tween: Tween = null ## The tween controlling the glow ring changes.
@@ -29,7 +28,6 @@ var storm_distortion_tween: Tween = null ## The tween controlling the storm dist
 var player_see_thru_distance_tween: Tween = null ## The tween that gradually changes the player's see through distance in a loop.
 var storm_change_delay_timer: Timer = Timer.new() ## The timer controlling the delay between a new transform has activated and it actually starting to move/resize.
 var current_storm_transform_time_timer: Timer = Timer.new() ## The timer controlling the length of the storm change. Chooses the max time between the resize and relocate time values in the resource.
-var see_through_factor: float = 1.0 ## The percentage of transparency the see-thru effect gives the player.
 var see_through_distance: float = 20.0 ## The radius of the see-thru circle for the player.
 var see_through_target_distance: float ## The radius of the see-thru circle for the player.
 var pulse_up: bool = true ## Tracking the changing pulse direction of the player's see thru effect.
@@ -92,6 +90,7 @@ func _ready() -> void:
 	current_storm_transform_time_timer.one_shot = true
 	storm_change_delay_timer.timeout.connect(_on_storm_change_delay_timer_timeout)
 	current_storm_transform_time_timer.timeout.connect(_on_current_storm_transform_time_timer_timeout)
+	DayNightManager.time_tick.connect(_update_see_thru_on_time_change)
 
 	storm_circle.visible = true
 	visible = true
@@ -140,7 +139,6 @@ func enable_storm(from_save: bool = false) -> void:
 	if not from_save:
 		if radius_tween and radius_tween.is_valid(): radius_tween.play()
 		if location_tween and location_tween.is_valid(): location_tween.play()
-		if see_thru_tween and see_thru_tween.is_valid(): see_thru_tween.play()
 		if storm_colors_tween and storm_colors_tween.is_valid(): storm_colors_tween.play()
 		if storm_gradient_end_tween and storm_gradient_end_tween.is_valid(): storm_gradient_end_tween.play()
 		if glow_ring_tween and glow_ring_tween.is_valid(): glow_ring_tween.play()
@@ -186,7 +184,6 @@ func disable_storm(from_save: bool = false) -> void:
 	current_storm_transform_time_timer.paused = true
 	if radius_tween: radius_tween.pause()
 	if location_tween: location_tween.pause()
-	if see_thru_tween: see_thru_tween.pause()
 	if storm_colors_tween: storm_colors_tween.pause()
 	if storm_gradient_end_tween: storm_gradient_end_tween.pause()
 	if glow_ring_tween: glow_ring_tween.pause()
@@ -427,7 +424,6 @@ func _apply_visual_overrides(new_visuals: StormVisuals) -> void:
 	_tween_wind(new_visuals)
 	_tween_rain(new_visuals)
 	_tween_distortion(new_visuals)
-	_tween_player_see_thru(new_visuals)
 	storm_circle.material.set_shader_parameter("pulse_speed", new_visuals.ring_pulse_speed)
 	see_through_pulse_mult = new_visuals.see_through_pulse_mult
 	see_through_distance_mult = new_visuals.see_thru_dist_mult
@@ -554,17 +550,27 @@ func _tween_distortion(new_visuals: StormVisuals) -> void:
 		new_visuals.viusal_change_time / 2.0
 		)
 
-## Tween the player's see through amount.
-func _tween_player_see_thru(new_visuals: StormVisuals) -> void:
-	if see_thru_tween: see_thru_tween.kill()
-	see_thru_tween = create_tween()
+## Updates the player see through distance based on the time of day.
+func _update_see_thru_on_time_change(_day: int, hour: int, minute: int) -> void:
+	var result: float
+	var factor: float
 
-	see_thru_tween.tween_property(
-		storm_circle.material,
-		"shader_parameter/see_through_opacity",
-		new_visuals.see_thru_amount / 100.0,
-		new_visuals.viusal_change_time
-		)
+	if hour >= 5 and hour < 7:
+		# Transition from night to day: 5 AM to 7 AM
+		factor = (float(hour - 5) + float(minute) / 60.0) / 2.0
+		result = lerp(current_visuals.night_see_thru, current_visuals.day_see_thru, factor)
+	elif hour >= 7 and hour < 18:
+		# Daytime: 7 AM to 6 PM
+		result = current_visuals.day_see_thru
+	elif hour >= 18 and hour < 20:
+		# Transition from day to night: 6 PM to 8 PM
+		factor = (float(hour - 18) + float(minute) / 60.0) / 2.0
+		result = lerp(current_visuals.day_see_thru, current_visuals.night_see_thru, factor)
+	else:
+		# Nighttime: 8 PM to 5 AM
+		result = current_visuals.night_see_thru
+
+	storm_circle.material.set_shader_parameter("see_through_opacity", result / 100.0)
 #endregion
 
 #region Current Effect & Cam Shake
@@ -591,7 +597,7 @@ func _swap_effect_applied_to_entities_out_of_safe_area(new_effect: StatusEffect)
 
 ## Removes the effect held in the current effect variable from all affected entities.
 func _remove_current_effect_from_entity(body: DynamicEntity) -> void:
-	var effects_manager: StatusEffectManager = body.effects
+	var effects_manager: StatusEffectsComponent = body.effects
 	if effects_manager != null:
 		effects_manager.request_effect_removal(current_effect.effect_name)
 

@@ -6,6 +6,7 @@ extends CanvasLayer
 
 var previous_angle: float = 0 ## The angle of the cursor relative to the player as of the last frame. Used for lerping.
 var restore_after_hitmarker_countdown: float = 0 ## Counts down after being changed to the hitmarker cursor before restoring the default.
+const MAX_PROXIMITY_TO_CHAR: float = 8.0 ## The closest number of pixels the mouse can be to the origin of the player before being clamped.
 
 
 func _ready() -> void:
@@ -16,11 +17,11 @@ func _process(delta: float) -> void:
 	var entity_position: Vector2 = GlobalData.player_node.hands.hands_anchor.global_position
 	var to_mouse_vector: Vector2 = mouse_position - entity_position
 
-	if to_mouse_vector.length() < 5.0:
+	if to_mouse_vector.length() < MAX_PROXIMITY_TO_CHAR:
 		var target_angle: float = to_mouse_vector.angle()
 		var new_angle: float = lerp_angle(previous_angle, target_angle, 0.15)
 
-		var clamped_position: Vector2 = entity_position + Vector2.RIGHT.rotated(new_angle) * 5.0
+		var clamped_position: Vector2 = entity_position + Vector2.RIGHT.rotated(new_angle) * MAX_PROXIMITY_TO_CHAR
 		cursor.global_position = clamped_position
 		previous_angle = new_angle
 	else:

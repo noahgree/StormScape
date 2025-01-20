@@ -1,5 +1,7 @@
 @tool
 extends Node
+## Helps manage auto assigning export references to nodes added as children of an EffectReceiverComponent.
+
 
 func update_editor_children_exports(node: EffectReceiverComponent, children: Array[Node]) -> void:
 	for child: Node in children:
@@ -35,5 +37,5 @@ func update_editor_parent_export(node: EffectReceiverComponent, parent: Node) ->
 		node.stamina_component = parent.get_node("StaminaComponent")
 	if parent.has_node("LootTableComponent"):
 		node.loot_table_component = parent.get_node("LootTableComponent")
-	if parent.has_node("StatusEffectManager"):
-		parent.get_node("StatusEffectManager").effect_receiver = get_parent()
+	if parent.has_node("StatusEffectsComponent"):
+		parent.get_node("StatusEffectsComponent").effect_receiver = get_parent()

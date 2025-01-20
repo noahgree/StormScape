@@ -2,7 +2,7 @@ extends NinePatchRect
 class_name HotbarUI
 ## The player's hotbar UI controller. Handles logic for the hotbar shown when the inventory is not open.
 
-@export var slot_scene: PackedScene = load("res://UI/Inventory/InventoryCore/Slot/Slot.tscn") ## The slot scene to be instantiated as children.
+@export var slot_scene: PackedScene = preload("res://UI/Inventory/InventoryCore/Slot/Slot.tscn") ## The slot scene to be instantiated as children.
 @export var player_inv: Inventory ## The connected player inventory to reflect as a UI.
 @export var active_slot_info: MarginContainer ## The node that controls displaying the info about the active slot.
 

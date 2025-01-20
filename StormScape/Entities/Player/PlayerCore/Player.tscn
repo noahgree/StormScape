@@ -1,23 +1,24 @@
-[gd_scene load_steps=194 format=3 uid="uid://dba8mrurjlekp"]
+[gd_scene load_steps=195 format=3 uid="uid://dba8mrurjlekp"]
 
 [ext_resource type="Script" uid="uid://c3rpxq8pnbdje" path="res://Entities/Player/PlayerCore/Player.gd" id="1_m33tt"]
 [ext_resource type="Script" uid="uid://c2gdoebfp12dq" path="res://Entities/Stats/StatMod/StatModsCacheResource.gd" id="2_vetip"]
 [ext_resource type="PackedScene" uid="uid://cj2wy5f05cos4" path="res://Entities/EntityCore/EntityShadow.tscn" id="3_05f62"]
 [ext_resource type="PackedScene" uid="uid://cdfdy8m6ki3oq" path="res://Entities/Components/HealthComponent/HealthComponent.tscn" id="3_ojev3"]
-[ext_resource type="PackedScene" uid="uid://dh4ydl7l86ywq" path="res://Entities/EntityCore/EntityAnimSprite.tscn" id="4_fmbcv"]
+[ext_resource type="PackedScene" uid="uid://dh4ydl7l86ywq" path="res://Entities/EntityCore/EntitySprite.tscn" id="4_fmbcv"]
 [ext_resource type="PackedScene" uid="uid://btba0jmsow1mx" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectReceiverComponent.tscn" id="4_hhm8x"]
 [ext_resource type="Shader" uid="uid://cfbagv3hrtar2" path="res://Utilities/Game/Shaders/EntityEffectShader.gdshader" id="4_ubhyl"]
 [ext_resource type="PackedScene" uid="uid://4gl24qwdyti3" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/DmgHandler.tscn" id="5_g3ixu"]
 [ext_resource type="PackedScene" uid="uid://cxpv7l7rcaq1o" path="res://Entities/Components/StaminaComponent/StaminaComponent.tscn" id="5_k4fu6"]
 [ext_resource type="SpriteFrames" uid="uid://cl72xrd8yy3d" path="res://Entities/Player/Sprites/Base/PlayerBaseFrames.tres" id="5_vy6lk"]
 [ext_resource type="PackedScene" uid="uid://ddj5ippwwkvop" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/HealHandler.tscn" id="6_5e1ju"]
-[ext_resource type="PackedScene" uid="uid://co3n6m7efg8pd" path="res://Entities/Components/EffectComponents/StatusEffectManager/StatusEffectManager.tscn" id="6_n0x5k"]
+[ext_resource type="PackedScene" uid="uid://co3n6m7efg8pd" path="res://Entities/Components/EffectComponents/StatusEffectsComponent/StatusEffectsComponent.tscn" id="6_n0x5k"]
 [ext_resource type="Script" uid="uid://c2sjdkql76qca" path="res://Entities/Player/States/MoveStates/Idle/Idle.gd" id="7_15a5x"]
 [ext_resource type="PackedScene" uid="uid://dykiv0tlhwmox" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/KnockbackHandler.tscn" id="7_k0pv8"]
 [ext_resource type="Script" uid="uid://dxekqhvcykqrq" path="res://Entities/Player/States/MoveStates/Run/Run.gd" id="9_0dcld"]
 [ext_resource type="Script" uid="uid://cy73p3okq3cic" path="res://Entities/Player/States/MoveStates/Dash/Dash.gd" id="9_a1qv1"]
 [ext_resource type="Texture2D" uid="uid://cs3clmnktksd6" path="res://Entities/Player/PlayerCore/player_hand.png" id="9_n4o3n"]
 [ext_resource type="PackedScene" uid="uid://cx4b21058vypq" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/StunHandler.tscn" id="9_w4lel"]
+[ext_resource type="PackedScene" uid="uid://bhcqtorpyerc3" path="res://Utilities/Debug/ParticleEmissionComponent.tscn" id="10_6wv7y"]
 [ext_resource type="FontFile" uid="uid://cj0mctn1mh06m" path="res://Assets/Theming/Fonts/FontAssets/Pixel/Kenney Pixel.ttf" id="11_1rxkv"]
 [ext_resource type="PackedScene" uid="uid://tc2awdm3onyi" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/PoisonHandler.tscn" id="11_rtl41"]
 [ext_resource type="PackedScene" uid="uid://e3qv2f7w61vy" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/RegenHandler.tscn" id="12_goxma"]
@@ -35,7 +36,6 @@
 [ext_resource type="Texture2D" uid="uid://crawnbhc5weqf" path="res://Entities/EntityCore/EntityTypes/DynamicEntity/entity_footstep.png" id="22_7y82q"]
 [ext_resource type="PackedScene" uid="uid://biduyqlpqhmrp" path="res://Entities/Player/States/MoveStates/Stunned/StunIndicator.tscn" id="27_fyxoi"]
 [ext_resource type="PackedScene" uid="uid://c4n604w30gx8m" path="res://Entities/Components/ItemComponents/ItemReceiverComponent/ItemReceiverComponent.tscn" id="30_qgyag"]
-[ext_resource type="PackedScene" uid="uid://ccfnvvfj0yyrq" path="res://Entities/Items/ItemCore/Item.tscn" id="31_8v2rb"]
 [ext_resource type="Script" uid="uid://i6jv5dqqpf3n" path="res://UI/Inventory/PlayerInventory/PlayerInvCommunicator.gd" id="31_mjpan"]
 [ext_resource type="Script" uid="uid://dq62ojsc43p8o" path="res://UI/Inventory/PlayerInventory/PlayerInvUI.gd" id="32_3a185"]
 [ext_resource type="Script" uid="uid://dp8osf7r6xkkt" path="res://Entities/Items/ItemCore/InvItemResource.gd" id="32_ixmb3"]
@@ -95,7 +95,7 @@
 [ext_resource type="Resource" uid="uid://ba8pkny735n2r" path="res://Entities/Items/WeaponMods/ExtendedMag/ExtendedMag1.tres" id="64_14ixx"]
 [ext_resource type="Texture2D" uid="uid://7wf7omw2r50u" path="res://UI/OverheadUI/Overheat/overheat_progress.png" id="64_o382h"]
 [ext_resource type="Resource" uid="uid://caxftf2aer6g4" path="res://Entities/Items/WeaponMods/BurningBullets/BurningBullets1.tres" id="65_14ixx"]
-[ext_resource type="Texture2D" uid="uid://dbm40lvpgbd8t" path="res://Entities/Items/ItemCore/Particles/item_rarity_light.png" id="66_461tf"]
+[ext_resource type="Texture2D" uid="uid://dbm40lvpgbd8t" path="res://Utilities/Game/Particles/dense_light.png" id="66_461tf"]
 [ext_resource type="Shader" uid="uid://cwbeekjoy0uyh" path="res://Utilities/Game/Shaders/GlintShader.gdshader" id="67_w57pe"]
 [ext_resource type="Texture2D" uid="uid://dtft3mljs2y5s" path="res://UI/Inventory/InventoryCore/Slot/trash_slot_icon.png" id="69_4ao77"]
 [ext_resource type="PackedScene" uid="uid://cpf3f502274om" path="res://UI/Inventory/PlayerInventory/Crafting/CraftingManager.tscn" id="71_qjjeg"]
@@ -119,6 +119,9 @@ debug_print_mod_changes = true
 radius = 2.0
 height = 12.0
 
+[sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_o382h"]
+polygon = PackedVector2Array(-5, -2.98466, -6, -1.98977, -5, 0, 5, 0, 6, -1.98977, 5, -2.98466)
+
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_0tj2u"]
 shader = ExtResource("4_ubhyl")
 
@@ -133,6 +136,7 @@ shake_trans_type = 2
 shake_ease_type = 0
 freeze_multiplier = 1.0
 freeze_duration = 0.03
+freeze_instant_change = true
 freeze_trans_type = 2
 freeze_ease_type = 0
 zoom_multiplier = 1.0
@@ -176,7 +180,7 @@ tracks/1/keys = {
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("YSorter/HandsComponent/OffHandSprite:_offset")
+tracks/2/path = NodePath("YSorter/HandsComponent/OffHandSprite:offset")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
@@ -248,7 +252,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("YSorter/HandsComponent/OffHandSprite:_offset")
+tracks/1/path = NodePath("YSorter/HandsComponent/OffHandSprite:offset")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -302,7 +306,7 @@ tracks/1/keys = {
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("YSorter/HandsComponent/OffHandSprite:_offset")
+tracks/2/path = NodePath("YSorter/HandsComponent/OffHandSprite:offset")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
@@ -344,7 +348,7 @@ tracks/1/keys = {
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("YSorter/HandsComponent/OffHandSprite:_offset")
+tracks/2/path = NodePath("YSorter/HandsComponent/OffHandSprite:offset")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
@@ -386,7 +390,7 @@ tracks/1/keys = {
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("YSorter/HandsComponent/OffHandSprite:_offset")
+tracks/2/path = NodePath("YSorter/HandsComponent/OffHandSprite:offset")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
@@ -428,7 +432,7 @@ tracks/1/keys = {
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("YSorter/HandsComponent/OffHandSprite:_offset")
+tracks/2/path = NodePath("YSorter/HandsComponent/OffHandSprite:offset")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
@@ -470,7 +474,7 @@ tracks/1/keys = {
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("YSorter/HandsComponent/OffHandSprite:_offset")
+tracks/2/path = NodePath("YSorter/HandsComponent/OffHandSprite:offset")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
@@ -517,7 +521,7 @@ tracks/1/keys = {
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("YSorter/HandsComponent/OffHandSprite:_offset")
+tracks/2/path = NodePath("YSorter/HandsComponent/OffHandSprite:offset")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
@@ -605,7 +609,7 @@ tracks/2/keys = {
 tracks/3/type = "value"
 tracks/3/imported = false
 tracks/3/enabled = true
-tracks/3/path = NodePath("YSorter/HandsComponent/OffHandSprite:_offset")
+tracks/3/path = NodePath("YSorter/HandsComponent/OffHandSprite:offset")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
@@ -681,7 +685,7 @@ tracks/2/keys = {
 tracks/3/type = "value"
 tracks/3/imported = false
 tracks/3/enabled = true
-tracks/3/path = NodePath("YSorter/HandsComponent/OffHandSprite:_offset")
+tracks/3/path = NodePath("YSorter/HandsComponent/OffHandSprite:offset")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
@@ -757,7 +761,7 @@ tracks/2/keys = {
 tracks/3/type = "value"
 tracks/3/imported = false
 tracks/3/enabled = true
-tracks/3/path = NodePath("YSorter/HandsComponent/OffHandSprite:_offset")
+tracks/3/path = NodePath("YSorter/HandsComponent/OffHandSprite:offset")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
@@ -833,7 +837,7 @@ tracks/2/keys = {
 tracks/3/type = "value"
 tracks/3/imported = false
 tracks/3/enabled = true
-tracks/3/path = NodePath("YSorter/HandsComponent/OffHandSprite:_offset")
+tracks/3/path = NodePath("YSorter/HandsComponent/OffHandSprite:offset")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
@@ -909,7 +913,7 @@ tracks/2/keys = {
 tracks/3/type = "value"
 tracks/3/imported = false
 tracks/3/enabled = true
-tracks/3/path = NodePath("YSorter/HandsComponent/OffHandSprite:_offset")
+tracks/3/path = NodePath("YSorter/HandsComponent/OffHandSprite:offset")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
@@ -1061,6 +1065,7 @@ blend_point_5/pos = Vector2(0, -1)
 blend_mode = 1
 
 [sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_xmxd0"]
+graph_offset = Vector2(-225.05, 34.7129)
 nodes/TimeScale/node = SubResource("AnimationNodeTimeScale_dcuk4")
 nodes/TimeScale/position = Vector2(180, 210)
 nodes/blendspace2d/node = SubResource("AnimationNodeBlendSpace2D_s8iwx")
@@ -1132,13 +1137,13 @@ states/Start/position = Vector2(29.5, 114.5)
 states/die/node = SubResource("AnimationNodeAnimation_gqh27")
 states/die/position = Vector2(583, 113.156)
 states/idle/node = SubResource("AnimationNodeBlendTree_xmxd0")
-states/idle/position = Vector2(367.5, 50.5)
+states/idle/position = Vector2(367.25, 50)
 states/run/node = SubResource("AnimationNodeBlendTree_w6nco")
 states/run/position = Vector2(367, 176.5)
 states/spawn/node = SubResource("AnimationNodeAnimation_5b1k5")
 states/spawn/position = Vector2(184.5, 70.5)
 transitions = ["idle", "run", SubResource("AnimationNodeStateMachineTransition_70g00"), "run", "idle", SubResource("AnimationNodeStateMachineTransition_sdv4y"), "Start", "spawn", SubResource("AnimationNodeStateMachineTransition_8h6fx"), "spawn", "idle", SubResource("AnimationNodeStateMachineTransition_x8kh3")]
-graph_offset = Vector2(-48, 10)
+graph_offset = Vector2(-144, -58)
 
 [sub_resource type="Resource" id="Resource_pihal"]
 script = ExtResource("32_ixmb3")
@@ -1394,7 +1399,7 @@ shader_parameter/tint_color = Color(1, 1, 1, 0)
 shader_parameter/glow_intensity = 1.0
 
 [node name="Player" type="CharacterBody2D" groups=["has_save_logic"]]
-collision_mask = 213
+collision_mask = 245
 motion_mode = 1
 script = ExtResource("1_m33tt")
 stats = SubResource("Resource_rwbul")
@@ -1408,6 +1413,10 @@ debug_color = Color(0.635375, 0.527557, 0, 0.180392)
 [node name="AudioListener2D" type="AudioListener2D" parent="."]
 current = true
 
+[node name="LightOccluder2D" type="LightOccluder2D" parent="."]
+scale = Vector2(1, 1.00514)
+occluder = SubResource("OccluderPolygon2D_o382h")
+
 [node name="YSorter" type="Node2D" parent="."]
 y_sort_enabled = true
 
@@ -1420,7 +1429,7 @@ position = Vector2(0, -16)
 sprite_frames = ExtResource("5_vy6lk")
 animation = &"idle"
 
-[node name="StatusEffectManager" parent="YSorter" node_paths=PackedStringArray("effect_receiver", "stats_ui") instance=ExtResource("6_n0x5k")]
+[node name="StatusEffectsComponent" parent="YSorter" node_paths=PackedStringArray("effect_receiver", "stats_ui") instance=ExtResource("6_n0x5k")]
 unique_name_in_owner = true
 effect_receiver = NodePath("../../EffectReceiverComponent")
 stats_ui = NodePath("../../OverlayUI/PlayerStatsOverlay")
@@ -1431,13 +1440,16 @@ unique_name_in_owner = true
 hand_texture = ExtResource("9_n4o3n")
 active_slot_info = NodePath("../../OverlayUI/ActiveSlotInfo")
 
+[node name="ParticleEmissionComponent" parent="." instance=ExtResource("10_6wv7y")]
+
 [node name="HealthComponent" parent="." node_paths=PackedStringArray("stats_ui") instance=ExtResource("3_ojev3")]
 stats_ui = NodePath("../OverlayUI/PlayerStatsOverlay")
 
 [node name="StaminaComponent" parent="." node_paths=PackedStringArray("stats_ui") instance=ExtResource("5_k4fu6")]
 stats_ui = NodePath("../OverlayUI/PlayerStatsOverlay")
 
-[node name="EffectReceiverComponent" parent="." node_paths=PackedStringArray("affected_entity", "health_component", "stamina_component", "dmg_handler", "heal_handler", "storm_syndrome_handler", "knockback_handler", "stun_handler", "poison_handler", "regen_handler", "frostbite_handler", "burning_handler", "time_snare_handler") instance=ExtResource("4_hhm8x")]
+[node name="EffectReceiverComponent" parent="." node_paths=PackedStringArray("affected_entity", "health_component", "stamina_component", "dmg_handler", "heal_handler", "storm_syndrome_handler", "knockback_handler", "stun_handler", "poison_handler", "regen_handler", "frostbite_handler", "burning_handler", "time_snare_handler", "life_steal_handler") instance=ExtResource("4_hhm8x")]
+allowed_source_types = Array[int]([0])
 affected_entity = NodePath("..")
 health_component = NodePath("../HealthComponent")
 stamina_component = NodePath("../StaminaComponent")
@@ -1451,6 +1463,7 @@ regen_handler = NodePath("RegenHandler")
 frostbite_handler = NodePath("FrostbiteHandler")
 burning_handler = NodePath("BurningHandler")
 time_snare_handler = NodePath("TimeSnareHandler")
+life_steal_handler = NodePath("LifeStealHandler")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="EffectReceiverComponent"]
 position = Vector2(0, -7.5)
@@ -1532,7 +1545,6 @@ parameters/run/TimeScale/scale = 1.5
 parameters/run/blendspace2d/blend_position = Vector2(0, 0)
 
 [node name="ItemReceiverComponent" parent="." node_paths=PackedStringArray("inv_populator", "ui") instance=ExtResource("30_qgyag")]
-item_scene = ExtResource("31_8v2rb")
 starting_inv = Array[ExtResource("32_ixmb3")]([SubResource("Resource_pihal"), null, null, null, SubResource("Resource_kx1me"), SubResource("Resource_2ijsm"), null, SubResource("Resource_xlc3k"), SubResource("Resource_n4o3n"), SubResource("Resource_3by25"), SubResource("Resource_oxva3"), SubResource("Resource_t7kvu"), SubResource("Resource_x8o50"), null, SubResource("Resource_apvym"), SubResource("Resource_ur5wt"), null, null, SubResource("Resource_dyejk"), null, null, null, null, null, null, SubResource("Resource_rdrbb"), null, null, SubResource("Resource_sx7hp"), SubResource("Resource_wjnk6"), null, null, SubResource("Resource_0ta0y"), SubResource("Resource_vpccy"), SubResource("Resource_hevqc"), SubResource("Resource_p5d28"), SubResource("Resource_6stk0")])
 is_player_inv = true
 inv_size = 37
@@ -1714,6 +1726,19 @@ focus_mode = 0
 theme_override_fonts/font = ExtResource("11_1rxkv")
 theme_override_font_sizes/font_size = 16
 text = "STORM"
+
+[node name="TestTimeBtn" type="Button" parent="OverlayUI/TestButtons"]
+texture_filter = 1
+layout_mode = 0
+offset_left = 449.0
+offset_top = 69.0
+offset_right = 489.0
+offset_bottom = 89.0
+scale = Vector2(0.7, 0.7)
+focus_mode = 0
+theme_override_fonts/font = ExtResource("11_1rxkv")
+theme_override_font_sizes/font_size = 16
+text = "TIME"
 
 [node name="TestStormBtn2" type="Button" parent="OverlayUI/TestButtons"]
 texture_filter = 1
@@ -2247,7 +2272,6 @@ hotbar_ui = NodePath("../HotbarUISlotMargins/HotbarUI")
 wpn_mod_slots_ui = NodePath("../WpnModSlotMargins/WpnModSlotsUI")
 btn_up_texture = ExtResource("86_ald0t")
 btn_down_texture = ExtResource("84_kbn30")
-item_scene = ExtResource("31_8v2rb")
 
 [node name="MainTextureMargins" type="MarginContainer" parent="OverlayUI/PlayerInvUI"]
 layout_mode = 2
@@ -2268,7 +2292,6 @@ mouse_filter = 0
 theme_override_constants/separation = 8
 alignment = 1
 script = ExtResource("41_nwjbq")
-slot_scene = ExtResource("42_r422n")
 item_details_label = NodePath("InventoryTexture/ItemDetails")
 main_slot_grid = NodePath("InventoryTexture/GridMargins/SlotGrid")
 hotbar_grid = NodePath("../../HotbarSlotMargins/HotbarTexture/HotbarSlotGrid")
@@ -2743,6 +2766,7 @@ size_flags_vertical = 4
 [connection signal="pressed" from="OverlayUI/TestButtons/TestModBtn1" to="OverlayUI/TestButtons" method="_on_test_mod_btn_1_pressed"]
 [connection signal="pressed" from="OverlayUI/TestButtons/TestModBtn2" to="OverlayUI/TestButtons" method="_on_test_mod_btn_2_pressed"]
 [connection signal="pressed" from="OverlayUI/TestButtons/TestStormBtn" to="OverlayUI/TestButtons" method="_on_test_mod_btn_3_pressed"]
+[connection signal="pressed" from="OverlayUI/TestButtons/TestTimeBtn" to="OverlayUI/TestButtons" method="_on_test_time_btn_pressed"]
 [connection signal="pressed" from="OverlayUI/TestButtons/TestStormBtn2" to="OverlayUI/TestButtons" method="_on_test_storm_btn_2_pressed"]
 [connection signal="pressed" from="OverlayUI/TestButtons/TestCombineItems" to="OverlayUI/TestButtons" method="_on_test_combine_items_pressed"]
 [connection signal="pressed" from="OverlayUI/TestButtons/TestCraft" to="OverlayUI/TestButtons" method="_on_test_craft_pressed"]

@@ -1,6 +1,6 @@
 shader_type canvas_item;
+render_mode unshaded;
 
-// Existing shader uniforms
 uniform vec2 circle_center_pixels;
 uniform float radius_pixels;
 uniform vec2 viewport_size;
@@ -86,7 +86,6 @@ void fragment() {
 	float see_through_dist = distance(screen_pos_pixels, see_through_center_pixels);
 	float see_through_factor = smoothstep(see_through_radius, see_through_radius + 25.0, see_through_dist);
 
-    vec2 relative_pos = (screen_pos_pixels - circle_center_pixels) * noise_scale;
     vec2 relative_noise_pos = (screen_pos_pixels - noise_world_position) * noise_scale;
     float time = TIME * noise_speed;
 
@@ -107,7 +106,6 @@ void fragment() {
 
     // Calculate ripple effect
     float ripple_time = TIME * ripple_speed;
-    float ripple = sin(dist * ripple_frequency - ripple_time) * ripple_intensity;
 
     // Apply ripple to the noise UV coordinates
     vec2 ripple_offset = vec2(

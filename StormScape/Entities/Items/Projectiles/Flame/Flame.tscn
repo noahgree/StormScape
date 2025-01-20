@@ -58,6 +58,7 @@ shape = SubResource("CapsuleShape2D_gicwb")
 debug_color = Color(0.626, 0.349, 1, 0.196)
 
 [node name="ProjSprite" type="AnimatedSprite2D" parent="."]
+light_mask = 2
 material = SubResource("CanvasItemMaterial_mbfhr")
 sprite_frames = SubResource("SpriteFrames_wi72s")
 autoplay = "default"

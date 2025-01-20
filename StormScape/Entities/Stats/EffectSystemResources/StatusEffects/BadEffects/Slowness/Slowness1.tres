@@ -9,6 +9,7 @@ stat_id = "max_speed"
 mod_id = "slowness_1"
 operation = "-%"
 value = 20.0
+rounding = "Exact"
 priority = 1
 max_stack_count = 3
 override_all = false

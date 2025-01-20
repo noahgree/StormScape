@@ -1,0 +1,66 @@
+[gd_scene load_steps=7 format=3 uid="uid://cpslc01s4ohj5"]
+
+[ext_resource type="Script" uid="uid://h6ope07tbhww" path="res://Entities/Items/Weapons/WeaponVFX/FiringVFX/WeaponFiringVFX.gd" id="3_r7q4o"]
+[ext_resource type="Texture2D" uid="uid://b41ueq2htaju0" path="res://Utilities/Game/Particles/faint_light.png" id="4_2coyf"]
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_5iem6"]
+light_mode = 1
+
+[sub_resource type="Animation" id="Animation_vfxas"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("PointLight2D:energy")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+
+[sub_resource type="Animation" id="Animation_aeiw5"]
+resource_name = "default"
+step = 0.025
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("PointLight2D:energy")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.45, 1),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [1.5, 1.25, 0.0]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_1qa0i"]
+_data = {
+&"RESET": SubResource("Animation_vfxas"),
+&"default": SubResource("Animation_aeiw5")
+}
+
+[node name="LaserFiringVFX" type="AnimatedSprite2D"]
+material = SubResource("CanvasItemMaterial_5iem6")
+script = ExtResource("3_r7q4o")
+display_time = 0.12
+glow_strength = 25.0
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_1qa0i")
+}
+
+[node name="PointLight2D" type="PointLight2D" parent="."]
+light_mask = 0
+position = Vector2(-12, 0)
+color = Color(0.981683, 0.0803956, 4.79382e-05, 1)
+energy = 0.0
+range_item_cull_mask = 3
+shadow_enabled = true
+texture = ExtResource("4_2coyf")
+texture_scale = 0.72
+height = 16.0

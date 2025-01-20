@@ -3,7 +3,7 @@ extends Area2D
 class_name Item
 ## Base class for all items in the game. Defines logic for interacting with entities that can pick it up.
 
-static var item_scene: PackedScene = load("res://Entities/Items/ItemCore/Item.tscn") ## The item scene to be instantiated when items are dropped onto the ground.
+static var item_scene: PackedScene = preload("res://Entities/Items/ItemCore/Item.tscn") ## The item scene to be instantiated when items are dropped onto the ground.
 
 @export var stats: ItemResource = null: set = _set_item ## The item resource driving the stats and type of item.
 @export var quantity: int = 1 ## The quantity associated with the physical item.

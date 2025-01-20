@@ -1,8 +1,171 @@
-[gd_scene load_steps=3 format=3 uid="uid://bdi8o2g5plcnb"]
+[gd_scene load_steps=16 format=3 uid="uid://wda4fiuxi8kh"]
 
-[ext_resource type="Texture2D" uid="uid://bj4xowuewlfds" path="res://Entities/Items/Weapons/WeaponVFX/FiringVFX/Simple/simple_1.png" id="1_5iem6"]
-[ext_resource type="Script" uid="uid://bpcygysciavk1" path="res://Entities/Items/Weapons/WeaponVFX/FiringVFX/WeaponFiringVFX.gd" id="2_p3q1k"]
+[ext_resource type="Texture2D" uid="uid://bj4xowuewlfds" path="res://Entities/Items/Weapons/WeaponVFX/FiringVFX/Simple/simple1.png" id="1_5iem6"]
+[ext_resource type="Texture2D" uid="uid://x4r8ekls13jt" path="res://Entities/Items/Weapons/WeaponVFX/FiringVFX/Simple/simple2.png" id="2_mcpka"]
+[ext_resource type="Script" uid="uid://h6ope07tbhww" path="res://Entities/Items/Weapons/WeaponVFX/FiringVFX/WeaponFiringVFX.gd" id="2_p3q1k"]
+[ext_resource type="Texture2D" uid="uid://b41ueq2htaju0" path="res://Utilities/Game/Particles/faint_light.png" id="4_mcpka"]
 
-[node name="SimpleFiringVFX" type="Sprite2D"]
-texture = ExtResource("1_5iem6")
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_5iem6"]
+light_mode = 1
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5iem6"]
+atlas = ExtResource("1_5iem6")
+region = Rect2(0, 0, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_p3q1k"]
+atlas = ExtResource("1_5iem6")
+region = Rect2(24, 0, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_mcpka"]
+atlas = ExtResource("1_5iem6")
+region = Rect2(48, 0, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ccyra"]
+atlas = ExtResource("2_mcpka")
+region = Rect2(0, 0, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_aeiw5"]
+atlas = ExtResource("2_mcpka")
+region = Rect2(24, 0, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vfxas"]
+atlas = ExtResource("2_mcpka")
+region = Rect2(48, 0, 24, 24)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_ccyra"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5iem6")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_p3q1k")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_mcpka")
+}],
+"loop": true,
+"name": &"1",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ccyra")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_aeiw5")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vfxas")
+}],
+"loop": true,
+"name": &"2",
+"speed": 5.0
+}]
+
+[sub_resource type="Animation" id="Animation_vfxas"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:animation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [&"default"]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:frame")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("PointLight2D:energy")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+
+[sub_resource type="Animation" id="Animation_aeiw5"]
+resource_name = "default"
+step = 0.025
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:animation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [&"1"]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:frame")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.325, 0.675),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [0, 1, 2]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("PointLight2D:energy")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.45, 1),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [1.0, 1.0, 0.0]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_1qa0i"]
+_data = {
+&"RESET": SubResource("Animation_vfxas"),
+&"default": SubResource("Animation_aeiw5")
+}
+
+[node name="SimpleFiringVFX" type="AnimatedSprite2D"]
+material = SubResource("CanvasItemMaterial_5iem6")
+sprite_frames = SubResource("SpriteFrames_ccyra")
 script = ExtResource("2_p3q1k")
+glow_strength = 25.0
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_1qa0i")
+}
+
+[node name="PointLight2D" type="PointLight2D" parent="."]
+light_mask = 0
+position = Vector2(-12, 0)
+color = Color(1, 0.943096, 0.423707, 1)
+energy = 0.0
+range_item_cull_mask = 3
+shadow_enabled = true
+texture = ExtResource("4_mcpka")
+texture_scale = 0.85
+height = 16.0

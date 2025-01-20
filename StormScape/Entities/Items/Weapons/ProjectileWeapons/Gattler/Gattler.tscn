@@ -1,13 +1,13 @@
 [gd_scene load_steps=27 format=3 uid="uid://c17oqm8amalvy"]
 
 [ext_resource type="Script" uid="uid://ca8xdltgdyjys" path="res://Entities/Items/Weapons/ProjectileWeapons/ProjectileWeapon.gd" id="1_c0tnr"]
-[ext_resource type="PackedScene" uid="uid://bdi8o2g5plcnb" path="res://Entities/Items/Weapons/WeaponVFX/FiringVFX/Simple/SimpleFiringVFX.tscn" id="2_74nn5"]
+[ext_resource type="PackedScene" uid="uid://wda4fiuxi8kh" path="res://Entities/Items/Weapons/WeaponVFX/FiringVFX/Simple/SimpleFiringVFX.tscn" id="2_ol8xj"]
 [ext_resource type="Shader" uid="uid://cugs1eqtkjsbd" path="res://Utilities/Game/Shaders/TintAndGlow.gdshader" id="3_c0tnr"]
-[ext_resource type="PackedScene" uid="uid://ciylpe2ihjno1" path="res://Entities/Items/Weapons/WeaponVFX/Casings/Casing.tscn" id="3_ol8xj"]
 [ext_resource type="Texture2D" uid="uid://nmamppdlgu5h" path="res://Entities/Items/Weapons/ProjectileWeapons/Gattler/GattlerBaseCT.tres" id="4_c0tnr"]
 [ext_resource type="PackedScene" uid="uid://lw5fgm5pgoif" path="res://Entities/EntityCore/EntityHandSprite.tscn" id="5_74nn5"]
 [ext_resource type="PackedScene" uid="uid://batrfwan8r8ov" path="res://Entities/Items/WeaponMods/WeaponModManager.tscn" id="5_yhkb2"]
 [ext_resource type="Texture2D" uid="uid://d4c1eg61h0vss" path="res://Entities/Items/Weapons/ProjectileWeapons/Gattler/GattlerBaseSpriteNoMagCT.tres" id="7_ol8xj"]
+[ext_resource type="PackedScene" uid="uid://cqb0f242y4m2j" path="res://Utilities/Debug/DebugBox.tscn" id="8_egoiu"]
 [ext_resource type="Texture2D" uid="uid://bpl5dnvhutpm2" path="res://Entities/Items/Weapons/ProjectileWeapons/Gattler/GattlerBaseMagCT.tres" id="8_wwtqj"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_fnsui"]
@@ -54,7 +54,7 @@ colors = PackedColorArray(1, 0.15, 0.219, 0.019, 0.995, 0, 0.145, 0.382)
 
 [sub_resource type="GradientTexture1D" id="GradientTexture1D_74nn5"]
 gradient = SubResource("Gradient_c0tnr")
-width = 19
+width = 100
 
 [sub_resource type="Animation" id="Animation_wj1f7"]
 length = 0.001
@@ -301,7 +301,7 @@ tracks/2/keys = {
 "times": PackedFloat32Array(0, 0.2, 1),
 "transitions": PackedFloat32Array(1, 1, 1),
 "update": 0,
-"values": [0.0, -0.0261799, 0.0]
+"values": [0.0, -0.0698132, 0.0]
 }
 tracks/3/type = "method"
 tracks/3/imported = false
@@ -521,7 +521,7 @@ colors = PackedColorArray(1, 0.15, 0.219, 0.019, 0.995, 0, 0.145, 0.382)
 
 [sub_resource type="GradientTexture1D" id="GradientTexture1D_wwtqj"]
 gradient = SubResource("Gradient_ol8xj")
-width = 19
+width = 100
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_lc3de"]
 shader = ExtResource("3_c0tnr")
@@ -529,24 +529,23 @@ shader = ExtResource("3_c0tnr")
 [node name="Gattler" type="Node2D" node_paths=PackedStringArray("overheat_overlays", "sprites_to_tint")]
 script = ExtResource("1_c0tnr")
 proj_origin = Vector2(18, -1)
-vfx_scene = ExtResource("2_74nn5")
-casing_scene = ExtResource("3_ol8xj")
 overheat_overlays = [NodePath("ItemSprite/OverheatOverlay"), NodePath("GunNoMag/OverheatOverlay")]
-particle_emission_extents = Vector2(8, 1)
-particle_emission_origin = Vector2(8, -3)
 sprites_to_tint = [NodePath("ItemSprite"), NodePath("GunNoMag"), NodePath("Mag")]
 
 [node name="ItemSprite" type="AnimatedSprite2D" parent="."]
 clip_children = 2
+light_mask = 2
 material = SubResource("ShaderMaterial_fnsui")
 sprite_frames = SubResource("SpriteFrames_gua5r")
 
 [node name="OverheatOverlay" type="TextureRect" parent="ItemSprite"]
 self_modulate = Color(1, 1, 1, 0)
+light_mask = 2
 offset_left = -1.0
 offset_top = -6.0
 offset_right = 18.0
 offset_bottom = 4.0
+scale = Vector2(0.2, 1)
 texture = SubResource("GradientTexture1D_74nn5")
 
 [node name="RemoteTransformOffHand" type="RemoteTransform2D" parent="ItemSprite"]
@@ -582,31 +581,33 @@ collision_mask = 241
 position = Vector2(6, -1)
 rotation = -1.5708
 shape = SubResource("CapsuleShape2D_c0tnr")
-debug_color = Color(0, 0.6, 0.7, 0.123)
+debug_color = Color(0, 0.6, 0.7, 0.075)
 
-[node name="DebugEmissionBox" type="Polygon2D" parent="."]
-visible = false
-z_index = 5
+[node name="SmokeEmissionBox" parent="." instance=ExtResource("8_egoiu")]
 polygon = PackedVector2Array(0, -4, 16, -4, 16, -2, 0, -2)
 
 [node name="GunNoMag" type="Sprite2D" parent="."]
 visible = false
 show_behind_parent = true
 clip_children = 2
+light_mask = 2
 material = SubResource("ShaderMaterial_5ul7m")
 texture = ExtResource("7_ol8xj")
 
 [node name="OverheatOverlay" type="TextureRect" parent="GunNoMag"]
 self_modulate = Color(1, 1, 1, 0)
+light_mask = 2
 offset_left = -1.0
 offset_top = -6.0
 offset_right = 18.0
 offset_bottom = 4.0
+scale = Vector2(0.2, 1)
 texture = SubResource("GradientTexture1D_wwtqj")
 
 [node name="Mag" type="Sprite2D" parent="."]
 visible = false
 show_behind_parent = true
+light_mask = 2
 material = SubResource("ShaderMaterial_lc3de")
 instance_shader_parameters/final_alpha = 1.0
 position = Vector2(-6, 4)
@@ -622,3 +623,6 @@ position = Vector2(-7, -8)
 
 [node name="CasingEjectionPoint" type="Marker2D" parent="."]
 position = Vector2(-10, -2)
+
+[node name="FiringVFX" parent="." instance=ExtResource("2_ol8xj")]
+position = Vector2(30, -1)

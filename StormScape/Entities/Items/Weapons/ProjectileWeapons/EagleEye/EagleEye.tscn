@@ -1,12 +1,11 @@
-[gd_scene load_steps=17 format=3 uid="uid://btaigaokvm7qx"]
+[gd_scene load_steps=16 format=3 uid="uid://btaigaokvm7qx"]
 
 [ext_resource type="Script" uid="uid://ca8xdltgdyjys" path="res://Entities/Items/Weapons/ProjectileWeapons/ProjectileWeapon.gd" id="1_37k38"]
-[ext_resource type="PackedScene" uid="uid://bdi8o2g5plcnb" path="res://Entities/Items/Weapons/WeaponVFX/FiringVFX/Simple/SimpleFiringVFX.tscn" id="2_8dt34"]
 [ext_resource type="Shader" uid="uid://cugs1eqtkjsbd" path="res://Utilities/Game/Shaders/TintAndGlow.gdshader" id="3_8dt34"]
-[ext_resource type="PackedScene" uid="uid://ciylpe2ihjno1" path="res://Entities/Items/Weapons/WeaponVFX/Casings/Casing.tscn" id="3_p3stu"]
 [ext_resource type="Texture2D" uid="uid://bfoy8x1f7gqq7" path="res://Entities/Items/Weapons/ProjectileWeapons/EagleEye/EagleEyeBaseCT.tres" id="4_8dt34"]
 [ext_resource type="PackedScene" uid="uid://lw5fgm5pgoif" path="res://Entities/EntityCore/EntityHandSprite.tscn" id="5_8dt34"]
 [ext_resource type="PackedScene" uid="uid://batrfwan8r8ov" path="res://Entities/Items/WeaponMods/WeaponModManager.tscn" id="5_qkcwx"]
+[ext_resource type="PackedScene" uid="uid://wda4fiuxi8kh" path="res://Entities/Items/Weapons/WeaponVFX/FiringVFX/Simple/SimpleFiringVFX.tscn" id="6_8dt34"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_ej2m0"]
 shader = ExtResource("3_8dt34")
@@ -262,11 +261,10 @@ height = 28.0
 [node name="EagleEye" type="Node2D" node_paths=PackedStringArray("sprites_to_tint")]
 script = ExtResource("1_37k38")
 proj_origin = Vector2(16, -2)
-vfx_scene = ExtResource("2_8dt34")
-casing_scene = ExtResource("3_p3stu")
 sprites_to_tint = [NodePath("ItemSprite")]
 
 [node name="ItemSprite" type="AnimatedSprite2D" parent="."]
+light_mask = 2
 material = SubResource("ShaderMaterial_ej2m0")
 sprite_frames = SubResource("SpriteFrames_xf3nw")
 
@@ -297,3 +295,6 @@ shape = SubResource("CapsuleShape2D_p16mq")
 
 [node name="CasingEjectionPoint" type="Marker2D" parent="."]
 position = Vector2(-4, -1)
+
+[node name="FiringVFX" parent="." instance=ExtResource("6_8dt34")]
+position = Vector2(28, -2)

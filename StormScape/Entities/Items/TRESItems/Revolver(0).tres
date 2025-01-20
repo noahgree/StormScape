@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="ProjWeaponResource" load_steps=22 format=3 uid="uid://dlfmjgnfk6nqj"]
+[gd_resource type="Resource" script_class="ProjWeaponResource" load_steps=21 format=3 uid="uid://dlfmjgnfk6nqj"]
 
 [ext_resource type="Texture2D" uid="uid://bm570hawaupxe" path="res://Entities/Items/Weapons/WeaponVFX/Casings/small_casing.png" id="1_80bso"]
 [ext_resource type="Script" uid="uid://boo31eu083dqd" path="res://Entities/Stats/EffectSystemResources/StatusEffects/StatusEffect.gd" id="1_dlrja"]
@@ -6,27 +6,26 @@
 [ext_resource type="Script" uid="uid://dvasncq3tgljs" path="res://Entities/Items/Weapons/ProjectileWeapons/ProjWeaponResource.gd" id="3_ctqw8"]
 [ext_resource type="Script" uid="uid://cje5bobi6o8bo" path="res://Entities/Items/Hitscans/HitscanResource.gd" id="3_hy3sc"]
 [ext_resource type="Texture2D" uid="uid://bn15edu8bniii" path="res://Entities/Items/Weapons/ProjectileWeapons/Revolver/RevolverBaseFrameCT.tres" id="4_4xu4l"]
-[ext_resource type="Resource" uid="uid://y5iqfraea8ry" path="res://Entities/Player/PlayerCore/PlayerCamera/CamFXPresets/2.tres" id="4_6hpwe"]
 [ext_resource type="PackedScene" uid="uid://ohg1k8yu1y3r" path="res://Entities/Items/Weapons/ProjectileWeapons/Revolver/Revolver.tscn" id="4_p3ec7"]
 [ext_resource type="Texture2D" uid="uid://c5iikcmayrs4h" path="res://Entities/Items/Weapons/ProjectileWeapons/Revolver/revolver_base_frame.png" id="4_xnuh3"]
+[ext_resource type="Resource" uid="uid://58oau5i62soh" path="res://Entities/Player/PlayerCore/PlayerCamera/CamFXPresets/4.tres" id="5_6hpwe"]
 [ext_resource type="Script" uid="uid://bj3r5oopspj6l" path="res://Entities/Items/Projectiles/ProjectileResource.gd" id="5_u6crx"]
-[ext_resource type="PackedScene" uid="uid://bqkyplubhsx43" path="res://Entities/Items/Projectiles/Bullets/SmallBullet/SmallBullet.tscn" id="6_moxye"]
 [ext_resource type="Script" uid="uid://ct7n8wo1p3b20" path="res://Entities/Items/WeaponMods/WeaponMod.gd" id="6_ur6hj"]
 [ext_resource type="Script" uid="uid://ctxa7i1mbt7ab" path="res://UI/Inventory/PlayerInventory/Crafting/CraftingIngredient.gd" id="8_cxrhl"]
 [ext_resource type="Script" uid="uid://c2gdoebfp12dq" path="res://Entities/Stats/StatMod/StatModsCacheResource.gd" id="8_fox7e"]
-[ext_resource type="Texture2D" uid="uid://bj4xowuewlfds" path="res://Entities/Items/Weapons/WeaponVFX/FiringVFX/Simple/simple_1.png" id="9_xnuh3"]
+[ext_resource type="PackedScene" uid="uid://bvvoum83clkyb" path="res://Entities/Items/Projectiles/Bullets/Large/LargeBullet.tscn" id="11_6hpwe"]
 
 [sub_resource type="Resource" id="Resource_41nj1"]
 script = ExtResource("1_f7ms2")
 source_type = 1
-source_tags = Array[String]([])
+source_tags = Array[String](["chops_wood"])
 scanned_phys_layers = 191
 can_hit_self = true
 bad_effect_affected_teams = 1
 good_effect_affected_teams = 2
 base_damage = 50
 dmg_affected_stats = 2
-crit_chance = 0
+crit_chance = 3
 crit_multiplier = 1.5
 armor_penetration = 0
 base_healing = 0
@@ -134,17 +133,16 @@ debug_print_mod_changes = false
 script = ExtResource("3_ctqw8")
 proj_weapon_type = 0
 firing_mode = "Semi Auto"
-projectile_scn = ExtResource("6_moxye")
-firing_duration = 0.05
-fire_cooldown = 0.07
+projectile_scn = ExtResource("11_6hpwe")
+firing_duration = 0.08
+fire_cooldown = 0.02
 min_charge_time = 1.0
 one_frame_per_fire = true
 override_anim_dur = 0.0
 anim_speed_mult = 1.0
 post_fire_anim_delay = 0.0
 post_fire_anim_dur = 0.0
-firing_cam_fx = ExtResource("4_6hpwe")
-muzzle_flash = ExtResource("9_xnuh3")
+firing_cam_fx = ExtResource("5_6hpwe")
 casing_texture = ExtResource("1_80bso")
 casing_tint = Color(1, 1, 1, 1)
 firing_sound = ""

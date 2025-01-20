@@ -2,9 +2,9 @@
 
 [ext_resource type="Shader" uid="uid://cwbeekjoy0uyh" path="res://Utilities/Game/Shaders/GlintShader.gdshader" id="1_att70"]
 [ext_resource type="Script" uid="uid://ddtv51med3i2r" path="res://Entities/Items/ItemCore/Item.gd" id="1_rwd02"]
-[ext_resource type="Texture2D" uid="uid://ifknxghk7xey" path="res://Entities/Items/ItemCore/Particles/line_group.png" id="3_jg0uy"]
+[ext_resource type="Texture2D" uid="uid://ifknxghk7xey" path="res://Utilities/Game/Particles/line_group.png" id="3_jg0uy"]
 [ext_resource type="Texture2D" uid="uid://b6q76o13tanxi" path="res://Entities/Items/Weapons/MeleeWeapons/Pickaxe/pickaxe_base.png" id="4_1yl86"]
-[ext_resource type="Texture2D" uid="uid://dbm40lvpgbd8t" path="res://Entities/Items/ItemCore/Particles/item_rarity_light.png" id="5_2unly"]
+[ext_resource type="Texture2D" uid="uid://dbm40lvpgbd8t" path="res://Utilities/Game/Particles/dense_light.png" id="5_2unly"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_no3c7"]
 resource_local_to_scene = true
@@ -12,6 +12,7 @@ radius = 4.0
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_njrp7"]
 blend_mode = 1
+light_mode = 1
 
 [sub_resource type="Curve" id="Curve_lulwp"]
 _data = [Vector2(0, 0.51358), 0.0, 0.0, 0, 0, Vector2(1, 0.216845), 0.0, 0.0, 0, 0]
@@ -19,6 +20,7 @@ point_count = 2
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_h672o"]
 blend_mode = 1
+light_mode = 1
 particles_animation = true
 particles_anim_h_frames = 2
 particles_anim_v_frames = 1

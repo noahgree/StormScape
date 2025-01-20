@@ -9,6 +9,7 @@ stat_id = "confusion_amount"
 mod_id = "Confusion"
 operation = "+%"
 value = 40.0
+rounding = "Exact"
 priority = 1
 max_stack_count = 3
 override_all = false

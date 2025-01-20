@@ -18,7 +18,7 @@ var health: int: set = _set_health ## The current health of the entity.
 var shield: int: set = _set_shield ## The current shield of the entity.
 var armor: int = 0: set = _set_armor ## The current armor of the entity. This is the percent of dmg that is blocked.
 var is_dying: bool = false ## Whether the entity is actively dying or not.
-var popups: Dictionary[String, EffectPopup] = {} ## The current effect popup displays that are active and can be added to.
+var current_popup: EffectPopup ## The current effect popup display that is active and can be updated.
 var current_sounds: Dictionary[StringName, Array] = {}
 const MAX_ARMOR: int = 100 ## The maximum amount of armor the entity can have.
 
@@ -185,14 +185,10 @@ func _play_sound(sound_name: String, multishot_id: int) -> void:
 
 #region Popups
 func _create_or_update_popup_for_src_type(src_type: String, was_healing: bool, was_crit: bool, amount: int) -> void:
-	if src_type in popups:
-		popups[src_type].update_popup(amount, was_crit)
+	if current_popup:
+		current_popup.update_popup(amount, src_type, was_crit)
 	else:
 		var new_popup: EffectPopup = EffectPopup.create_popup(src_type, was_healing, was_crit, amount, entity)
-		new_popup.tree_exiting.connect(_on_popup_completed.bind(src_type))
-		popups[src_type] = new_popup
-
-func _on_popup_completed(src_type: String) -> void:
-	if src_type in popups:
-		popups.erase(src_type)
+		new_popup.tree_exiting.connect(func() -> void: new_popup.queue_free())
+		current_popup = new_popup
 #endregion

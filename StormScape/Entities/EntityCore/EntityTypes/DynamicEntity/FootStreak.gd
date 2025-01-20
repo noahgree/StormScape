@@ -1,7 +1,7 @@
 extends Line2D
 class_name FootStreak
 
-static var scene: PackedScene = load("res://Entities/EntityCore/EntityTypes/DynamicEntity/FootStreak.tscn")
+static var scene: PackedScene = preload("res://Entities/EntityCore/EntityTypes/DynamicEntity/FootStreak.tscn")
 
 @onready var particles: CPUParticles2D = $CPUParticles2D
 

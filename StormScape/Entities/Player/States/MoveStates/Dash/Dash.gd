@@ -60,19 +60,27 @@ func _do_character_dash() -> void:
 	dynamic_entity.velocity = movement_vector * dynamic_entity.stats.get_stat("dash_speed")
 	dynamic_entity.move_and_slide()
 
-	# Handle collisions with rigid entities
+	_handle_rigid_entity_collisions()
+
+## Handles moving rigid entities that we collided with in the last frame.
+func _handle_rigid_entity_collisions() -> void:
 	for i: int in dynamic_entity.get_slide_collision_count():
 		var c: KinematicCollision2D = dynamic_entity.get_slide_collision(i)
 		var collider: Object = c.get_collider()
+
 		if collider is RigidEntity:
 			collider.apply_central_impulse(-c.get_normal().normalized() * dynamic_entity.velocity.length() / (5 / (dynamic_entity.stats.get_stat("dash_collision_impulse_factor"))))
-			if not collision_shake_complete:
-				dash_impact_cam_fx.activate_all()
-				if dynamic_entity.effects.check_if_has_effect("KineticImpact"):
-					AudioManager.play_sound("KineticImpactHit", AudioManager.SoundType.SFX_2D, dynamic_entity.global_position)
-				else:
-					AudioManager.play_sound("PlayerDashImpact", AudioManager.SoundType.SFX_2D, dynamic_entity.global_position)
-				collision_shake_complete = true
+		else:
+			return
+
+		if not collision_shake_complete:
+			dash_impact_cam_fx.activate_all()
+			if dynamic_entity.effects.check_if_has_effect("KineticImpact"):
+				AudioManager.play_sound("KineticImpactHit", AudioManager.SoundType.SFX_2D, dynamic_entity.global_position)
+			else:
+				AudioManager.play_sound("PlayerDashImpact", AudioManager.SoundType.SFX_2D, dynamic_entity.global_position)
+
+			collision_shake_complete = true
 
 func _calculate_move_vector() -> Vector2:
 	return (_get_input_vector().rotated(dynamic_entity.stats.get_stat("confusion_amount")))

@@ -1,17 +1,36 @@
-[gd_scene load_steps=5 format=3 uid="uid://b26uwbeam6drq"]
+[gd_scene load_steps=8 format=3 uid="uid://b26uwbeam6drq"]
 
-[ext_resource type="Script" path="res://Entities/Items/Projectiles/Projectile.gd" id="1_3xw38"]
-[ext_resource type="Texture2D" uid="uid://dn0kb7oxrj6qi" path="res://Entities/Items/Weapons/ProjectileWeapons/BottleOFire/fire_bottle_throwable.png" id="2_bg68o"]
+[ext_resource type="Script" uid="uid://d1uexupra43i8" path="res://Entities/Items/Projectiles/Projectile.gd" id="1_3xw38"]
+[ext_resource type="Texture2D" uid="uid://b4bumm88u2qmw" path="res://Entities/Items/Weapons/ProjectileWeapons/BottleOFire/FireBottleThrowableCT.tres" id="2_q4sp5"]
 [ext_resource type="Texture2D" uid="uid://dcbwxgak6a0r8" path="res://Entities/EntityCore/entity_shadow.png" id="3_tedc5"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_tr4aq"]
 radius = 4.0
 height = 15.0849
 
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_q4sp5"]
+light_mode = 1
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7tntk"]
+atlas = ExtResource("2_q4sp5")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_l2rhp"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7tntk")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
 [node name="FireBottle" type="Area2D"]
 editor_description = "DO NOT SET EFFECT SOURCE IF BEING USED DIRECTLY WITH A WEAPON. THE WEAPON WILL SET IT FOR YOU."
 script = ExtResource("1_3xw38")
-glow_strength = 35.0
+glow_strength = 75.0
+glow_color = Color(1, 0.901675, 0.877147, 1)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0, 1.33333)
@@ -19,9 +38,10 @@ rotation = 0.785398
 shape = SubResource("CapsuleShape2D_tr4aq")
 debug_color = Color(0.626, 0.349, 1, 0.196)
 
-[node name="ProjSprite" type="Sprite2D" parent="."]
-texture = ExtResource("2_bg68o")
-region_rect = Rect2(2, 5, 12, 5)
+[node name="ProjSprite" type="AnimatedSprite2D" parent="."]
+light_mask = 2
+material = SubResource("CanvasItemMaterial_q4sp5")
+sprite_frames = SubResource("SpriteFrames_l2rhp")
 
 [node name="Shadow" type="Sprite2D" parent="."]
 self_modulate = Color(0.16, 0.16, 0.16, 0.185)

@@ -9,8 +9,7 @@ class_name ProjectileWeapon
 		proj_origin = new_origin
 		if proj_origin_node:
 			proj_origin_node.position = proj_origin
-@export var vfx_scene: PackedScene = load("res://Entities/Items/Weapons/WeaponVFX/FiringVFX/Simple/SimpleFiringVFX.tscn")
-@export var casing_scene: PackedScene = load("res://Entities/Items/Weapons/WeaponVFX/Casings/Casing.tscn")
+@export var casing_scene: PackedScene = preload("res://Entities/Items/Weapons/WeaponVFX/Casings/Casing.tscn")
 @export var overheat_overlays: Array[TextureRect] = []
 @export var particle_emission_extents: Vector2:
 	set(new_value):
@@ -29,6 +28,7 @@ class_name ProjectileWeapon
 @onready var debug_emission_box: Polygon2D = get_node_or_null("DebugEmissionBox")
 @onready var reload_off_hand: EntityHandSprite = get_node_or_null("ReloadOffHand") ## The off hand only shown and animated during reloads.
 @onready var reload_main_hand: EntityHandSprite = get_node_or_null("ReloadMainHand") ## The main hand only shown and animated during reloads.
+@onready var firing_vfx: WeaponFiringVFX = get_node_or_null("FiringVFX")
 
 #region Local Vars
 const MAX_ALLOTTED_CLUSTER_DELAY: float = 0.5 ## The max amount of time between each projectile
@@ -139,6 +139,7 @@ func _ready() -> void:
 		return
 
 	super._ready()
+
 	if source_entity is Player:
 		overhead_ui = source_entity.overhead_ui
 		source_entity.inv.auto_decrementer.overheat_empty.connect(_on_overheat_emptied)
@@ -169,6 +170,7 @@ func _ready() -> void:
 	hitscan_hands_freeze_timer.timeout.connect(_on_hitscan_hands_freeze_timer_timeout)
 
 	anim_player.animation_finished.connect(_on_any_animation_finished)
+	_setup_firing_vfx()
 
 func disable() -> void:
 	source_entity.move_fsm.should_rotate = true
@@ -520,7 +522,7 @@ func _apply_barrage_logic() -> void:
 			_spawn_projectile(proj)
 
 			if stats.barrage_proj_delay > 0:
-				await get_tree().create_timer(max(0.02, stats.barrage_proj_delay), false, false, false).timeout
+				await get_tree().create_timer(max(0.01, stats.barrage_proj_delay), false, false, false).timeout
 		else:
 			var hitscan_scene: PackedScene = stats.hitscan_logic.hitscan_scn
 
@@ -707,21 +709,28 @@ func _on_overheat_emptied(item_id: StringName) -> void:
 #endregion
 
 #region FX & Animations
+## Sets up the firing vfx's positioning and offset to work with y sorting.
+func _setup_firing_vfx() -> void:
+	if not firing_vfx:
+		return
+
+	firing_vfx.position = proj_origin + Vector2(0, 3)
+	firing_vfx.offset = Vector2(0, -3)
+	if firing_vfx.sprite_frames:
+		firing_vfx.position.x += SpriteHelpers.SpriteDetails.get_frame_rect(firing_vfx, true).x / 2.0
+	else:
+		firing_vfx.position.x += 8
+
 ## Start the sounds and vfx that should play when firing.
 func _do_firing_fx() -> void:
-	if stats.firing_cam_fx: stats.firing_cam_fx.activate_all()
+	if stats.firing_cam_fx:
+		stats.firing_cam_fx.activate_all()
 
-	if stats.firing_sound != "": AudioManager.play_sound(stats.firing_sound, AudioManager.SoundType.SFX_2D, global_position)
+	if stats.firing_sound != "":
+		AudioManager.play_sound(stats.firing_sound, AudioManager.SoundType.SFX_2D, global_position)
 
-	if stats.muzzle_flash != null and vfx_scene != null:
-		var vfx: WeaponFiringVFX = vfx_scene.instantiate()
-		vfx.texture = stats.muzzle_flash
-
-		var vfx_length: float = SpriteHelpers.SpriteDetails.get_frame_rect(vfx).x
-		vfx.position = proj_origin
-		vfx.position.x += (vfx_length / 2)
-
-		add_child(vfx)
+	if firing_vfx:
+		firing_vfx.start()
 
 ## Spawns a simulated ejected casing to fall to the ground. Requires a Marker2D in the scene called "CasingEjectionPoint".
 ## Must be called by the animation player due to varying timing of when it should spawn per weapon.
@@ -746,9 +755,9 @@ func _start_firing_anim() -> void:
 		sprite.frame = ((sprite as AnimatedSprite2D).frame + 1) % (sprite as AnimatedSprite2D).sprite_frames.get_frame_count(sprite.animation)
 
 	if stats.override_anim_dur > 0:
-		anim_player.speed_scale = 1.0 / max(0.03, max(stats.firing_duration - 0.01, stats.override_anim_dur)) # The 0.01 is a buffer since animations aren't as precise in timing
+		anim_player.speed_scale = 1.0 / max(0.03, max(stats.firing_duration - 0.02, stats.override_anim_dur)) # The 0.02 is a buffer since animations aren't as precise in timing
 	else:
-		anim_player.speed_scale = 1.0 / max(0.03, stats.firing_duration - 0.01) # The 0.01 is a buffer since animations aren't as precise in timing
+		anim_player.speed_scale = 1.0 / max(0.03, stats.firing_duration - 0.02) # The 0.02 is a buffer since animations aren't as precise in timing
 
 	anim_player.speed_scale *= stats.anim_speed_mult
 

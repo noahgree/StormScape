@@ -8,16 +8,6 @@
 
 config_version=5
 
-[addons]
-
-resources_spreadsheet_view/array_color_tint=100.0
-resources_spreadsheet_view/color_rows=true
-resources_spreadsheet_view/array_min_width=128.0
-resources_spreadsheet_view/resource_preview_size=32.0
-resources_spreadsheet_view/clip_headers=false
-resources_spreadsheet_view/dupe_arrays=true
-resources_spreadsheet_view/context_menu_on_leftclick=false
-
 [application]
 
 config/name="StormScape"
@@ -39,6 +29,7 @@ AudioManager="*res://Utilities/Autoloads/AudioManager.tscn"
 GlobalData="*res://Utilities/Autoloads/GlobalData.gd"
 SaverLoader="*res://Utilities/Autoloads/SaverLoader.gd"
 CursorManager="*res://Utilities/Autoloads/CursorManager.tscn"
+DayNightManager="*res://Utilities/Autoloads/DayNightManager.tscn"
 
 [debug]
 
@@ -50,8 +41,8 @@ shapes/collision/shape_color=Color(0, 0.6, 0.7, 0.251)
 
 window/size/viewport_width=480
 window/size/viewport_height=270
-window/size/window_width_override=3840
-window/size/window_height_override=2160
+window/size/window_width_override=4800
+window/size/window_height_override=2700
 window/stretch/mode="canvas_items"
 
 [editor]
@@ -171,7 +162,7 @@ reload={
 [layer_names]
 
 2d_render/layer_1="Default"
-2d_render/layer_2="Glow Particles"
+2d_render/layer_2="NoSelfShadowing"
 2d_physics/layer_1="Player"
 2d_physics/layer_2="Player Attacks"
 2d_physics/layer_3="Moving Enemies"

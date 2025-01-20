@@ -12,7 +12,7 @@ class_name EffectReceiverComponent
 @export var absorb_full_hit: bool = false ## When true, any weapon's hitbox that sends an effect to this receiver will be disabled for the remainder of the attack afterwards. Useful for when you want something like a tree to take the full hit and not let an axe keep swinging through to hit enemies behind it.
 @export_group("Source Filtering")
 @export var filter_source_types: bool = false ## When true, only allow matching source types as specified in the below array.
-@export var allowed_source_types: Array[GlobalData.EffectSourceSourceType] = [GlobalData.EffectSourceSourceType.FROM_DEFAULT] ## The list of sources an effect source can come from in order to affect this effect receiver.
+@export var allowed_source_types: Array[GlobalData.EffectSourceSourceType] = [] ## The list of sources an effect source can come from in order to affect this effect receiver.
 @export var filter_source_tags: bool = false ## When true, only allow matching source tags as specified in the below array.
 @export var allowed_source_tags: Array[String] = []
 @export_group("Connected Nodes")
@@ -38,6 +38,7 @@ class_name EffectReceiverComponent
 var most_recent_effect_src: EffectSource = null
 var hit_flash_timer: Timer = Timer.new()
 var current_impact_sounds: Array[int] = []
+var hitflash_tween: Tween
 
 
 ## This works with the tool script defined above to assign export vars automatically in-editor once added to the tree.
@@ -53,7 +54,7 @@ func _notification(what: int) -> void:
 ## affected entity so that the effect sources only see it when they should.
 func _ready() -> void:
 	assert(affected_entity or get_parent() is SubViewport, get_parent().name + " has an effect receiver that is missing a reference to an entity.")
-	if can_receive_status_effects: assert(get_parent() is SubViewport or get_parent().has_node("%StatusEffectManager"), get_parent().name + " has an effect receiver flagged as being able to handle status effects, yet has no StatusEffectManager.")
+	if can_receive_status_effects: assert(get_parent() is SubViewport or get_parent().has_node("%StatusEffectsComponent"), get_parent().name + " has an effect receiver flagged as being able to handle status effects, yet has no StatusEffectsComponent. Make sure it has a unique name.")
 
 	if not Engine.is_editor_hint():
 		collision_layer = affected_entity.collision_layer
@@ -238,18 +239,26 @@ func _handle_impact_sound(effect_source: EffectSource) -> void:
 			AudioManager.play_sound(effect_source.impact_sound, AudioManager.SoundType.SFX_2D, affected_entity.global_position)
 
 ## Updates whether the hit flash and hitmarker is showing or not. Sets the flash color to the one specified in the effect source.
-func _update_hit_flash_and_hitmarker(effect_source: EffectSource = null, source_entity: PhysicsBody2D = null, start: bool = false) -> void:
+func _update_hit_flash_and_hitmarker(effect_source: EffectSource = null,
+									source_entity: PhysicsBody2D = null, start: bool = false) -> void:
+	if hitflash_tween:
+		hitflash_tween.kill()
+
 	if start:
 		if source_entity is Player:
 			CursorManager.change_cursor(null, "hit")
 
 		hit_flash_timer.stop()
-		affected_entity.sprite.material.set_shader_parameter("use_override_color", true)
-		affected_entity.sprite.material.set_shader_parameter("override_color", effect_source.hit_flash_color)
+		affected_entity.sprite.set_instance_shader_parameter("use_override_color", true)
+		affected_entity.sprite.set_instance_shader_parameter("override_color", effect_source.hit_flash_color)
 		hit_flash_timer.start()
 	else:
-		affected_entity.sprite.material.set_shader_parameter("use_override_color", false)
-		affected_entity.sprite.material.set_shader_parameter("override_color", Color(1.0, 1.0, 1.0, 0.0))
+		hitflash_tween = create_tween()
+
+		hitflash_tween.tween_property(affected_entity.sprite, "instance_shader_parameters/override_color", Color.TRANSPARENT, 0.1)
+		hitflash_tween.tween_callback(
+			func() -> void: affected_entity.sprite.set_instance_shader_parameter("use_override_color", false)
+			)
 	pass
 
 ## Starts the player camera fx from the effect source details.

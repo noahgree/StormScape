@@ -11,7 +11,8 @@ class_name DynamicEntity
 
 @onready var sprite: Node2D = %EntitySprite ## The visual representation of the entity. Needs to have the EntityEffectShader applied.
 @onready var effect_receiver: EffectReceiverComponent = get_node_or_null("EffectReceiverComponent") ## The component that handles incoming effect sources.
-@onready var effects: StatusEffectManager = get_node_or_null("%StatusEffectManager") ## The node that will cache and manage all status effects for this entity.
+@onready var effects: StatusEffectsComponent = get_node_or_null("%StatusEffectsComponent") ## The node that will cache and manage all status effects for this entity.
+@onready var emission_mgr: ParticleEmissionComponent = $ParticleEmissionComponent ## The component responsible for determining the extents and origins of different particle placements.
 @onready var move_fsm: MoveStateMachine = $MoveStateMachine ## The FSM controlling the entity's movement.
 @onready var health_component: HealthComponent = $HealthComponent ## The component in charge of entity health and shield.
 @onready var stamina_component: StaminaComponent = get_node_or_null("StaminaComponent") ## The component in charge of entity stamina and hunger.
@@ -115,7 +116,7 @@ func _is_instance_on_load_game(data: DynamicEntityData) -> void:
 ## Edits editor warnings for easier debugging.
 func _get_configuration_warnings() -> PackedStringArray:
 	if get_node_or_null("%EntitySprite") == null or not %EntitySprite is EntitySprite:
-		return ["This entity must have an EntitySprite typed sprite node."]
+		return ["This entity must have an EntitySprite typed sprite node. Make sure its name is unique with a %."]
 	return []
 
 ## Making sure we know we have save logic, even if not set in editor.

@@ -1,13 +1,13 @@
-[gd_scene load_steps=22 format=3 uid="uid://b52c5c7hj2vd"]
+[gd_scene load_steps=26 format=3 uid="uid://b52c5c7hj2vd"]
 
 [ext_resource type="Script" uid="uid://cn2gulskgn7k3" path="res://Entities/EntityCore/EntityTypes/StaticEntity/StaticEntity.gd" id="1_4yxmu"]
 [ext_resource type="Script" uid="uid://c2gdoebfp12dq" path="res://Entities/Stats/StatMod/StatModsCacheResource.gd" id="2_5qk3y"]
-[ext_resource type="PackedScene" uid="uid://dmv4k4j4lg3pw" path="res://Entities/EntityCore/EntityStaticSprite.tscn" id="2_mgp78"]
 [ext_resource type="PackedScene" uid="uid://cj2wy5f05cos4" path="res://Entities/EntityCore/EntityShadow.tscn" id="2_nnf0c"]
 [ext_resource type="Shader" uid="uid://cfbagv3hrtar2" path="res://Utilities/Game/Shaders/EntityEffectShader.gdshader" id="3_epxnw"]
+[ext_resource type="PackedScene" uid="uid://dh4ydl7l86ywq" path="res://Entities/EntityCore/EntitySprite.tscn" id="4_5qk3y"]
 [ext_resource type="Texture2D" uid="uid://b0witw234r46t" path="res://Entities/Environment/dead_tree_1.png" id="4_tx18i"]
 [ext_resource type="PackedScene" uid="uid://btba0jmsow1mx" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectReceiverComponent.tscn" id="6_bxml6"]
-[ext_resource type="PackedScene" uid="uid://co3n6m7efg8pd" path="res://Entities/Components/EffectComponents/StatusEffectManager/StatusEffectManager.tscn" id="7_7lx3c"]
+[ext_resource type="PackedScene" uid="uid://co3n6m7efg8pd" path="res://Entities/Components/EffectComponents/StatusEffectsComponent/StatusEffectsComponent.tscn" id="7_7lx3c"]
 [ext_resource type="PackedScene" uid="uid://c4kt3bx0ot3c7" path="res://Entities/Components/ItemComponents/LootTableComponent/LootTableComponent.tscn" id="7_dpaaj"]
 [ext_resource type="PackedScene" uid="uid://cdfdy8m6ki3oq" path="res://Entities/Components/HealthComponent/HealthComponent.tscn" id="7_umo0g"]
 [ext_resource type="PackedScene" uid="uid://4gl24qwdyti3" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/DmgHandler.tscn" id="8_4pw5b"]
@@ -15,20 +15,33 @@
 [ext_resource type="PackedScene" uid="uid://depnx3pnassrq" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/BurningHandler.tscn" id="9_a51pj"]
 [ext_resource type="Script" uid="uid://cgqfx1ve66f3h" path="res://Entities/Components/ItemComponents/LootTableComponent/LootTable.gd" id="10_lnwim"]
 [ext_resource type="Resource" uid="uid://dbnhbsphiw4oe" path="res://Entities/Items/TRESItems/SpruceLog(0).tres" id="12_8oice"]
+[ext_resource type="PackedScene" uid="uid://bhcqtorpyerc3" path="res://Utilities/Debug/ParticleEmissionComponent.tscn" id="17_2kecs"]
 
 [sub_resource type="Resource" id="Resource_s42vq"]
 script = ExtResource("2_5qk3y")
 debug_print_mod_changes = false
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_w83do"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_s42vq"]
 resource_local_to_scene = true
 shader = ExtResource("3_epxnw")
-shader_parameter/outline_color = Color(1, 1, 1, 1)
-shader_parameter/outline_thickness = 0.0
-shader_parameter/tint_color = Color(1, 1, 1, 0)
-shader_parameter/final_alpha = 1.0
-shader_parameter/override_color = Color(1, 1, 1, 0)
-shader_parameter/use_override_color = false
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2kecs"]
+atlas = ExtResource("4_tx18i")
+region = Rect2(0, 0, 96, 96)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_o33n8"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2kecs")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_2kecs"]
+polygon = PackedVector2Array(-10, -4, -10, 0, 9, 0, 9, -4)
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_l7ldg"]
 radius = 7.0
@@ -58,17 +71,19 @@ stats = SubResource("Resource_s42vq")
 
 [node name="EntityShadow" parent="." instance=ExtResource("2_nnf0c")]
 self_modulate = Color(0, 0, 0, 0.164)
-position = Vector2(-1, 0)
 scale = Vector2(4.69333, 2.75429)
 
-[node name="EntitySprite" parent="." instance=ExtResource("2_mgp78")]
+[node name="EntitySprite" parent="." instance=ExtResource("4_5qk3y")]
 unique_name_in_owner = true
-material = SubResource("ShaderMaterial_w83do")
-position = Vector2(13, -48)
-texture = ExtResource("4_tx18i")
+material = SubResource("ShaderMaterial_s42vq")
+position = Vector2(14, -48)
+sprite_frames = SubResource("SpriteFrames_o33n8")
+
+[node name="LightOccluder2D" type="LightOccluder2D" parent="."]
+occluder = SubResource("OccluderPolygon2D_2kecs")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(-1, -7)
+position = Vector2(0, -7)
 rotation = -1.5708
 shape = SubResource("CapsuleShape2D_l7ldg")
 
@@ -87,7 +102,7 @@ dmg_handler = NodePath("DmgHandler")
 burning_handler = NodePath("BurningHandler")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="EffectReceiverComponent"]
-position = Vector2(-0.499999, -7)
+position = Vector2(0, -7)
 rotation = -1.5708
 shape = SubResource("RectangleShape2D_ij8lb")
 
@@ -101,6 +116,12 @@ loot_table = SubResource("Resource_vx2o2")
 hit_spawn_chance = 15.0
 require_dmg_on_hit = false
 
-[node name="StatusEffectManager" parent="." node_paths=PackedStringArray("effect_receiver") instance=ExtResource("7_7lx3c")]
+[node name="StatusEffectsComponent" parent="." node_paths=PackedStringArray("effect_receiver") instance=ExtResource("7_7lx3c")]
 unique_name_in_owner = true
 effect_receiver = NodePath("../EffectReceiverComponent")
+
+[node name="ParticleEmissionComponent" parent="." instance=ExtResource("17_2kecs")]
+below_extents = Vector2(20, 2)
+below_origin = Vector2(-1, 0)
+above_extents = Vector2(35, 2)
+above_origin = Vector2(6, -92)

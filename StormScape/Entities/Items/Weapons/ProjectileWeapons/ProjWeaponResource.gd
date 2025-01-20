@@ -29,7 +29,6 @@ enum ProjAmmoType { ## The types of projectile ammo.
 @export var charging_stat_effect: StatusEffect = null ## A status effect to apply to the entity while charging. Typically to slow them.
 @export_subgroup("Firing FX")
 @export var firing_cam_fx: CamFXResource ## The resource defining how the camera should react to firing.
-@export var muzzle_flash: Texture2D = null ## The texture to show as the muzzle flash when firing.
 @export var casing_texture: Texture2D = null ## The texture to use as the casing that ejects on firing.
 @export var casing_tint: Color = Color.WHITE ## The tint to apply to the casing texture. White means no tint.
 @export var firing_sound: String = "" ## The sound to play when firing.

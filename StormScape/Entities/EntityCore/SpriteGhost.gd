@@ -2,7 +2,7 @@ extends Sprite2D
 class_name SpriteGhost
 ## A simple sprite2D node to handle fading and queue freeing a ghost instance during something like a dash state.
 
-static var ghost_scene: PackedScene = load("res://Entities/EntityCore/SpriteGhost.tscn")
+static var ghost_scene: PackedScene = preload("res://Entities/EntityCore/SpriteGhost.tscn")
 
 var fade_out_time: float ## How long the sprite takes to fade out after being instanced.
 var is_whitened: bool = false

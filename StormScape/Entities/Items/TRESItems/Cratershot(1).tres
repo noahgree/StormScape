@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="ProjWeaponResource" load_steps=25 format=3 uid="uid://14gw464h13vv"]
+[gd_resource type="Resource" script_class="ProjWeaponResource" load_steps=24 format=3 uid="uid://14gw464h13vv"]
 
 [ext_resource type="Texture2D" uid="uid://bm570hawaupxe" path="res://Entities/Items/Weapons/WeaponVFX/Casings/small_casing.png" id="1_7gqp2"]
 [ext_resource type="Script" uid="uid://boo31eu083dqd" path="res://Entities/Stats/EffectSystemResources/StatusEffects/StatusEffect.gd" id="1_oi18d"]
@@ -13,7 +13,6 @@
 [ext_resource type="Script" uid="uid://ct7n8wo1p3b20" path="res://Entities/Items/WeaponMods/WeaponMod.gd" id="6_ey58o"]
 [ext_resource type="PackedScene" uid="uid://dwyof8hbs8fxr" path="res://Entities/Items/Weapons/ProjectileWeapons/Cratershot/Cratershot.tscn" id="8_af8pb"]
 [ext_resource type="Script" uid="uid://ctxa7i1mbt7ab" path="res://UI/Inventory/PlayerInventory/Crafting/CraftingIngredient.gd" id="8_rff8j"]
-[ext_resource type="Texture2D" uid="uid://bj4xowuewlfds" path="res://Entities/Items/Weapons/WeaponVFX/FiringVFX/Simple/simple_1.png" id="9_je5ma"]
 [ext_resource type="Script" uid="uid://c2gdoebfp12dq" path="res://Entities/Stats/StatMod/StatModsCacheResource.gd" id="9_yxw3n"]
 [ext_resource type="Script" uid="uid://ig4jcnxaphcg" path="res://Entities/Stats/EffectSystemResources/StatusEffects/GoodEffects/SelfKnockback/SelfKnockbackEffect.gd" id="10_c3au3"]
 [ext_resource type="Script" uid="uid://bcjwesiannbd0" path="res://Entities/Stats/StatMod/StatMod.gd" id="11_7gqp2"]
@@ -118,7 +117,7 @@ homing_start_delay = 0.0
 can_change_target = false
 boomerang_home_radius = 5.0
 mouse_target_radius = 50.0
-spin_speed = 1000.0
+spin_speed = 0.0
 spin_both_ways = false
 spin_direction = "Forward"
 do_y_axis_reflection = false
@@ -168,7 +167,6 @@ post_fire_anim_delay = 0.15
 post_fire_anim_dur = 0.22
 post_firing_effect = SubResource("Resource_byj8c")
 firing_cam_fx = ExtResource("4_qi223")
-muzzle_flash = ExtResource("9_je5ma")
 casing_texture = ExtResource("1_7gqp2")
 casing_tint = Color(0.77622, 0, 0.0846659, 1)
 firing_sound = ""
@@ -193,7 +191,6 @@ auto_ammo_delay = 0.5
 recharge_uses_inv = false
 reload_anim_dur = 0.0
 before_single_reload_anim_dur = 0.0
-post_fire_checks_ammo = false
 hide_ammo_ui = false
 hide_reload_ui = false
 mag_reload_sound = ""
@@ -213,9 +210,9 @@ burst_bullet_delay = 0.05
 add_bloom_per_burst_shot = true
 add_overheat_per_burst_shot = true
 barrage_count = 6
-angular_spread = 12.0
+angular_spread = 14.0
 do_cluster_barrage = true
-barrage_proj_delay = 0.02
+barrage_proj_delay = 0.01
 use_hitscan = false
 allow_hitscan_holding = true
 ammo_in_mag = -1

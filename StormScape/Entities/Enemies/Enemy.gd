@@ -1,3 +1,4 @@
+@tool
 extends DynamicEntity
 class_name Enemy
 ## Base class for all enemy types. Anything classified as an "enemy" will have the ability to move if needed.

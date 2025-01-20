@@ -1,11 +1,12 @@
-[gd_scene load_steps=20 format=3 uid="uid://dxv8dhn3gmufw"]
+[gd_scene load_steps=21 format=3 uid="uid://dxv8dhn3gmufw"]
 
 [ext_resource type="Script" uid="uid://ca8xdltgdyjys" path="res://Entities/Items/Weapons/ProjectileWeapons/ProjectileWeapon.gd" id="1_7mk4f"]
-[ext_resource type="PackedScene" uid="uid://bdi8o2g5plcnb" path="res://Entities/Items/Weapons/WeaponVFX/FiringVFX/Simple/SimpleFiringVFX.tscn" id="2_qpgmn"]
 [ext_resource type="PackedScene" uid="uid://batrfwan8r8ov" path="res://Entities/Items/WeaponMods/WeaponModManager.tscn" id="3_7a8dm"]
 [ext_resource type="Shader" uid="uid://cugs1eqtkjsbd" path="res://Utilities/Game/Shaders/TintAndGlow.gdshader" id="3_qpgmn"]
+[ext_resource type="PackedScene" uid="uid://ciylpe2ihjno1" path="res://Entities/Items/Weapons/WeaponVFX/Casings/Casing.tscn" id="3_xc27p"]
 [ext_resource type="Texture2D" uid="uid://t54taecjg640" path="res://Entities/Items/Weapons/ProjectileWeapons/FlameBlower/FlameBlowerBaseCT.tres" id="4_qpgmn"]
 [ext_resource type="PackedScene" uid="uid://lw5fgm5pgoif" path="res://Entities/EntityCore/EntityHandSprite.tscn" id="7_xc27p"]
+[ext_resource type="PackedScene" uid="uid://cqb0f242y4m2j" path="res://Utilities/Debug/DebugBox.tscn" id="8_yltag"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_qv0hn"]
 shader = ExtResource("3_qpgmn")
@@ -173,7 +174,7 @@ radius = 6.0
 [node name="FlameBlower" type="Node2D" node_paths=PackedStringArray("overheat_overlays", "sprites_to_tint")]
 script = ExtResource("1_7mk4f")
 proj_origin = Vector2(19, 3)
-vfx_scene = ExtResource("2_qpgmn")
+casing_scene = ExtResource("3_xc27p")
 overheat_overlays = [NodePath("ItemSprite/OverheatOverlay")]
 particle_emission_extents = Vector2(6, 1)
 particle_emission_origin = Vector2(11, 2)
@@ -181,6 +182,7 @@ sprites_to_tint = [NodePath("ItemSprite")]
 
 [node name="ItemSprite" type="AnimatedSprite2D" parent="."]
 clip_children = 2
+light_mask = 2
 material = SubResource("ShaderMaterial_qv0hn")
 sprite_frames = SubResource("SpriteFrames_8pr6a")
 
@@ -226,7 +228,5 @@ position = Vector2(4, 2)
 rotation = -1.5708
 shape = SubResource("CapsuleShape2D_0s14j")
 
-[node name="DebugEmissionBox" type="Polygon2D" parent="."]
-visible = false
-z_index = 5
+[node name="SmokeEmissionBox" parent="." instance=ExtResource("8_yltag")]
 polygon = PackedVector2Array(5, 1, 17, 1, 17, 3, 5, 3)

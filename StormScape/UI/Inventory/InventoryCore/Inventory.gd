@@ -4,7 +4,7 @@ class_name Inventory
 
 signal slot_updated(index: int, item: InvItemResource)
 
-@export var item_scene: PackedScene = load("res://Entities/Items/ItemCore/Item.tscn") ## The item scene to be used when items are instantiated on the ground.
+@export var item_scene: PackedScene = preload("res://Entities/Items/ItemCore/Item.tscn") ## The item scene to be used when items are instantiated on the ground.
 @export var starting_inv: Array[InvItemResource] ## The inventory that should be loaded when this scene is instantiated.
 @export var is_player_inv: bool = false ## Whether this is the player's inventory or not. Needed for hotbar and trash slot logic.
 @export var inv_size: int = 32 ## The total number of slots in the inventory, including the hotbar slots.

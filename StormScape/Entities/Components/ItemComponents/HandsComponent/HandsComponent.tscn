@@ -44,7 +44,9 @@ position = Vector2(9, 1)
 position = Vector2(-7, 1)
 
 [node name="SmokeParticles" type="CPUParticles2D" parent="HandsAnchor"]
+light_mask = 2
 material = SubResource("CanvasItemMaterial_aqhie")
+emitting = false
 amount = 22
 texture = ExtResource("3_xaok7")
 lifetime = 0.8

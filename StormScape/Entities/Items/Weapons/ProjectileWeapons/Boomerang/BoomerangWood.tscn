@@ -1,8 +1,8 @@
 [gd_scene load_steps=14 format=3 uid="uid://b6v13q8eomso"]
 
 [ext_resource type="Script" uid="uid://b67bgqwsld0w4" path="res://Entities/Items/Weapons/ProjectileWeapons/UniqueProjWeapon.gd" id="1_38q5c"]
-[ext_resource type="PackedScene" uid="uid://bdi8o2g5plcnb" path="res://Entities/Items/Weapons/WeaponVFX/FiringVFX/Simple/SimpleFiringVFX.tscn" id="2_dn0cg"]
 [ext_resource type="Shader" uid="uid://cugs1eqtkjsbd" path="res://Utilities/Game/Shaders/TintAndGlow.gdshader" id="3_dn0cg"]
+[ext_resource type="PackedScene" uid="uid://ciylpe2ihjno1" path="res://Entities/Items/Weapons/WeaponVFX/Casings/Casing.tscn" id="3_kpe1e"]
 [ext_resource type="Texture2D" uid="uid://ln38htpivqou" path="res://Entities/Items/Weapons/ProjectileWeapons/Boomerang/BoomerangWoodCT.tres" id="4_dn0cg"]
 [ext_resource type="PackedScene" uid="uid://lw5fgm5pgoif" path="res://Entities/EntityCore/EntityHandSprite.tscn" id="5_dn0cg"]
 [ext_resource type="PackedScene" uid="uid://batrfwan8r8ov" path="res://Entities/Items/WeaponMods/WeaponModManager.tscn" id="5_emppi"]
@@ -189,10 +189,11 @@ height = 16.9706
 
 [node name="BoomerangWood" type="Node2D" node_paths=PackedStringArray("sprites_to_tint")]
 script = ExtResource("1_38q5c")
-vfx_scene = ExtResource("2_dn0cg")
+casing_scene = ExtResource("3_kpe1e")
 sprites_to_tint = [NodePath("ItemSprite")]
 
 [node name="ItemSprite" type="AnimatedSprite2D" parent="."]
+light_mask = 2
 material = SubResource("ShaderMaterial_78dqe")
 sprite_frames = SubResource("SpriteFrames_4dmjn")
 

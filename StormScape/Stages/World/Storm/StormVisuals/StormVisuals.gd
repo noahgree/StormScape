@@ -5,7 +5,8 @@ class_name StormVisuals
 @export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var viusal_change_time: float = 1.0 ## How long the viusal overrides take to change to new values. [b] Must be shorter than the move & resize times or the blending will interfere with the next phase. [/b]
 
 @export_group("Player See Thru")
-@export_range(0, 100, 0.1, "suffix:%") var see_thru_amount: float = 25.0 ## The multiplier to apply to how well the player can see through the zone's fx.
+@export_range(0, 100, 0.1, "suffix:%") var day_see_thru: float = 25.0 ## The multiplier to apply to how well the player can see through the zone's fx during the daytime.
+@export_range(0, 100, 0.1, "suffix:%") var night_see_thru: float = 45.0 ## The multiplier to apply to how well the player can see through the zone's fx during the nighttime.
 @export var see_through_pulse_mult: float = 1.0 ## How much to pulse the player's see through circle during this phase.
 @export var see_thru_dist_mult: float = 1.0 ## How much to multiply the current see thru distance by during this phase.
 

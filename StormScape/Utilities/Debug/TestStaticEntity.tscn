@@ -1,29 +1,39 @@
-[gd_scene load_steps=12 format=3 uid="uid://bond8rty1ljh"]
+[gd_scene load_steps=15 format=3 uid="uid://bond8rty1ljh"]
 
 [ext_resource type="Script" uid="uid://cn2gulskgn7k3" path="res://Entities/EntityCore/EntityTypes/StaticEntity/StaticEntity.gd" id="1_uvrwn"]
-[ext_resource type="PackedScene" uid="uid://dmv4k4j4lg3pw" path="res://Entities/EntityCore/EntityStaticSprite.tscn" id="2_417jd"]
 [ext_resource type="Script" uid="uid://c2gdoebfp12dq" path="res://Entities/Stats/StatMod/StatModsCacheResource.gd" id="2_kbhyj"]
+[ext_resource type="PackedScene" uid="uid://dh4ydl7l86ywq" path="res://Entities/EntityCore/EntitySprite.tscn" id="3_kbhyj"]
 [ext_resource type="Shader" uid="uid://cfbagv3hrtar2" path="res://Utilities/Game/Shaders/EntityEffectShader.gdshader" id="3_xscca"]
+[ext_resource type="PackedScene" uid="uid://bhcqtorpyerc3" path="res://Utilities/Debug/ParticleEmissionComponent.tscn" id="6_5h6dj"]
 [ext_resource type="Texture2D" uid="uid://2xf1pqc78iin" path="res://Assets/Icon/icon.svg" id="7_7nbuj"]
 [ext_resource type="PackedScene" uid="uid://btba0jmsow1mx" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectReceiverComponent.tscn" id="10_o35vp"]
-[ext_resource type="PackedScene" uid="uid://co3n6m7efg8pd" path="res://Entities/Components/EffectComponents/StatusEffectManager/StatusEffectManager.tscn" id="11_swclu"]
+[ext_resource type="PackedScene" uid="uid://co3n6m7efg8pd" path="res://Entities/Components/EffectComponents/StatusEffectsComponent/StatusEffectsComponent.tscn" id="11_swclu"]
 
 [sub_resource type="Resource" id="Resource_5h6dj"]
 script = ExtResource("2_kbhyj")
 debug_print_mod_changes = false
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_s5j4o"]
-resource_local_to_scene = true
-shader = ExtResource("3_xscca")
-shader_parameter/outline_color = Color(1, 1, 1, 1)
-shader_parameter/outline_thickness = 0.0
-shader_parameter/tint_color = Color(0.60858, 0, 0.0212126, 0.901)
-shader_parameter/final_alpha = 1.0
-shader_parameter/override_color = Color(1, 1, 1, 0)
-shader_parameter/use_override_color = false
-
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ur1i4"]
 size = Vector2(12, 12)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_5h6dj"]
+resource_local_to_scene = true
+shader = ExtResource("3_xscca")
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_c4qls"]
+atlas = ExtResource("7_7nbuj")
+region = Rect2(0, 0, 128, 128)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_rk4ta"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_c4qls")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_opl06"]
 size = Vector2(14, 14)
@@ -34,16 +44,18 @@ script = ExtResource("1_uvrwn")
 team = 2
 stats = SubResource("Resource_5h6dj")
 
-[node name="EntitySprite" parent="." instance=ExtResource("2_417jd")]
-unique_name_in_owner = true
-material = SubResource("ShaderMaterial_s5j4o")
-position = Vector2(0, -7)
-scale = Vector2(0.11, 0.11)
-texture = ExtResource("7_7nbuj")
-
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0, -7)
 shape = SubResource("RectangleShape2D_ur1i4")
+
+[node name="EntitySprite" parent="." instance=ExtResource("3_kbhyj")]
+unique_name_in_owner = true
+material = SubResource("ShaderMaterial_5h6dj")
+position = Vector2(0, -7)
+scale = Vector2(0.11, 0.11)
+sprite_frames = SubResource("SpriteFrames_rk4ta")
+
+[node name="ParticleEmissionComponent" parent="." instance=ExtResource("6_5h6dj")]
 
 [node name="EffectReceiverComponent2" parent="." node_paths=PackedStringArray("affected_entity") instance=ExtResource("10_o35vp")]
 affected_entity = NodePath("..")
@@ -52,6 +64,6 @@ affected_entity = NodePath("..")
 position = Vector2(0, -7)
 shape = SubResource("RectangleShape2D_opl06")
 
-[node name="StatusEffectManager" parent="." node_paths=PackedStringArray("effect_receiver") instance=ExtResource("11_swclu")]
+[node name="StatusEffectsComponent" parent="." node_paths=PackedStringArray("effect_receiver") instance=ExtResource("11_swclu")]
 unique_name_in_owner = true
 effect_receiver = NodePath("../EffectReceiverComponent2")

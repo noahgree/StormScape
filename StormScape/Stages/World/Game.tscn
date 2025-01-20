@@ -1,4 +1,4 @@
-[gd_scene load_steps=91 format=4 uid="uid://bscnr6a23l10m"]
+[gd_scene load_steps=70 format=4 uid="uid://bscnr6a23l10m"]
 
 [ext_resource type="Script" uid="uid://mdtvdhu78iqm" path="res://Utilities/Game/WorldRoot/WorldRoot.gd" id="1_q0i4n"]
 [ext_resource type="Script" uid="uid://dpbgynf55anlv" path="res://Stages/World/BackgroundMusicManager.gd" id="1_q5pr2"]
@@ -17,30 +17,20 @@
 [ext_resource type="Script" uid="uid://boo31eu083dqd" path="res://Entities/Stats/EffectSystemResources/StatusEffects/StatusEffect.gd" id="13_33bgr"]
 [ext_resource type="Resource" uid="uid://dvew5cy3k7s48" path="res://Entities/Stats/EffectSystemResources/StatusEffects/BadEffects/Burning/Burning1.tres" id="16_ky7ks"]
 [ext_resource type="PackedScene" uid="uid://b52c5c7hj2vd" path="res://Utilities/Debug/TestTree1.tscn" id="17_45bjv"]
-[ext_resource type="Script" uid="uid://cn2gulskgn7k3" path="res://Entities/EntityCore/EntityTypes/StaticEntity/StaticEntity.gd" id="18_0310n"]
-[ext_resource type="PackedScene" uid="uid://cj2wy5f05cos4" path="res://Entities/EntityCore/EntityShadow.tscn" id="19_6wu7w"]
-[ext_resource type="PackedScene" uid="uid://dmv4k4j4lg3pw" path="res://Entities/EntityCore/EntityStaticSprite.tscn" id="20_0t2vf"]
-[ext_resource type="Shader" uid="uid://cfbagv3hrtar2" path="res://Utilities/Game/Shaders/EntityEffectShader.gdshader" id="21_ogvde"]
 [ext_resource type="Script" uid="uid://c2f01r3cincl0" path="res://Stages/World/Storm/Storm.gd" id="22_0op7h"]
 [ext_resource type="Script" uid="uid://b8kfccspu3jx8" path="res://Stages/Tilemaps/TileMapDual.gd" id="22_47ykm"]
-[ext_resource type="Texture2D" uid="uid://cojcy3fw1cnir" path="res://Entities/Environment/dead_tree_4.png" id="22_tnqdg"]
 [ext_resource type="Texture2D" uid="uid://6saycs5sisdk" path="res://Stages/Tilemaps/ReplacementTextures/dirt_replacement_RED.png" id="22_tnvqm"]
 [ext_resource type="Shader" uid="uid://cxi5alvvj1rv2" path="res://Utilities/Game/Shaders/StormShader.gdshader" id="23_05otm"]
 [ext_resource type="Resource" uid="uid://cucuggowaf55y" path="res://Entities/Stats/EffectSystemResources/StatusEffects/BadEffects/StormSyndrome/StormSyndrome1.tres" id="23_5x8gm"]
-[ext_resource type="PackedScene" uid="uid://cdfdy8m6ki3oq" path="res://Entities/Components/HealthComponent/HealthComponent.tscn" id="23_mdyae"]
-[ext_resource type="PackedScene" uid="uid://btba0jmsow1mx" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectReceiverComponent.tscn" id="24_xnqq6"]
-[ext_resource type="PackedScene" uid="uid://4gl24qwdyti3" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/DmgHandler.tscn" id="25_b8kol"]
 [ext_resource type="Script" uid="uid://cbiskerf2stk6" path="res://Stages/World/Storm/StormTransform.gd" id="25_dqjbe"]
-[ext_resource type="PackedScene" uid="uid://depnx3pnassrq" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/BurningHandler.tscn" id="26_smatw"]
-[ext_resource type="PackedScene" uid="uid://c4kt3bx0ot3c7" path="res://Entities/Components/ItemComponents/LootTableComponent/LootTableComponent.tscn" id="27_4x873"]
 [ext_resource type="Resource" uid="uid://cx6t5cil24ca3" path="res://Stages/World/Storm/StormVisuals/DefaultStormVisuals.tres" id="27_5uvpk"]
 [ext_resource type="Script" uid="uid://cgese4xtht2od" path="res://Stages/World/Storm/StormVisuals/StormVisuals.gd" id="27_8kcf2"]
-[ext_resource type="Resource" uid="uid://dbnhbsphiw4oe" path="res://Entities/Items/TRESItems/SpruceLog(0).tres" id="27_s2x07"]
-[ext_resource type="Script" uid="uid://1qq7eo7lm8j6" path="res://Entities/Components/ItemComponents/LootTableComponent/LootTableEntry.gd" id="28_1sv3s"]
-[ext_resource type="Script" uid="uid://cgqfx1ve66f3h" path="res://Entities/Components/ItemComponents/LootTableComponent/LootTable.gd" id="30_pkymt"]
-[ext_resource type="Texture2D" uid="uid://dbm40lvpgbd8t" path="res://Entities/Items/ItemCore/Particles/item_rarity_light.png" id="30_s2x07"]
-[ext_resource type="PackedScene" uid="uid://co3n6m7efg8pd" path="res://Entities/Components/EffectComponents/StatusEffectManager/StatusEffectManager.tscn" id="31_cevla"]
+[ext_resource type="Shader" uid="uid://bilestavf27wc" path="res://Utilities/Game/Shaders/ScreenFog.gdshader" id="30_rhtsc"]
+[ext_resource type="PackedScene" uid="uid://bl2igmtwo1a3v" path="res://Entities/Enemies/Zombies/Basic/BasicZombie.tscn" id="31_8lm63"]
+[ext_resource type="Texture2D" uid="uid://cx7u0pbdtc6eb" path="res://Utilities/Game/Particles/grunge_light.png" id="32_s5gqv"]
+[ext_resource type="Texture2D" uid="uid://dsago31sb51b0" path="res://Stages/World/Storm/StormNoise1.tres" id="42_s5gqv"]
 [ext_resource type="Script" uid="uid://bcjwesiannbd0" path="res://Entities/Stats/StatMod/StatMod.gd" id="43_0c5fh"]
+[ext_resource type="Texture2D" uid="uid://d2utxp2le0rkm" path="res://Stages/World/Storm/StormNoise2.tres" id="43_6gn56"]
 
 [sub_resource type="Environment" id="Environment_2wouv"]
 background_mode = 3
@@ -49,7 +39,9 @@ tonemap_white = 0.0
 glow_enabled = true
 glow_normalized = true
 glow_intensity = 1.5
+glow_strength = 0.9
 glow_blend_mode = 1
+glow_hdr_luminance_cap = 10.0
 
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_c3hhi"]
 load_path = "res://.godot/imported/grass_flowers_texture_repeating.png-07cf542e66158273e169aaf39db4289b.ctex"
@@ -142,29 +134,17 @@ physics_layer_1/collision_layer = 128
 physics_layer_1/collision_mask = 0
 sources/1 = SubResource("TileSetAtlasSource_lb4xb")
 
-[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_8lm63"]
-rough = true
-
 [sub_resource type="Resource" id="Resource_a2una"]
 script = ExtResource("8_iotvt")
 debug_print_mod_changes = false
-
-[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_s5gqv"]
-rough = true
 
 [sub_resource type="Resource" id="Resource_6gn56"]
 script = ExtResource("8_iotvt")
 debug_print_mod_changes = false
 
-[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_yw2f7"]
-rough = true
-
 [sub_resource type="Resource" id="Resource_ed1p2"]
 script = ExtResource("8_iotvt")
 debug_print_mod_changes = false
-
-[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_e5rpg"]
-rough = true
 
 [sub_resource type="Resource" id="Resource_27u15"]
 script = ExtResource("8_iotvt")
@@ -275,34 +255,6 @@ debug_print_mod_changes = false
 script = ExtResource("8_iotvt")
 debug_print_mod_changes = false
 
-[sub_resource type="Resource" id="Resource_f5fhq"]
-script = ExtResource("8_iotvt")
-debug_print_mod_changes = false
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_w83do"]
-resource_local_to_scene = true
-shader = ExtResource("21_ogvde")
-
-[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_qwr4q"]
-radius = 7.0
-height = 32.0
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_3vp3c"]
-size = Vector2(14, 28)
-
-[sub_resource type="Resource" id="Resource_m6yab"]
-script = ExtResource("28_1sv3s")
-item = ExtResource("27_s2x07")
-quantity = 1
-weighting = 1.0
-last_used = 0
-spawn_count = 0
-
-[sub_resource type="Resource" id="Resource_vx2o2"]
-script = ExtResource("30_pkymt")
-hit_loot_table = Array[ExtResource("28_1sv3s")]([SubResource("Resource_m6yab")])
-die_loot_table = Array[ExtResource("28_1sv3s")]([])
-
 [sub_resource type="LabelSettings" id="LabelSettings_lfc2v"]
 outline_size = 3
 outline_color = Color(0, 0, 0, 1)
@@ -310,7 +262,8 @@ outline_color = Color(0, 0, 0, 1)
 [sub_resource type="Resource" id="Resource_h8tfd"]
 script = ExtResource("27_8kcf2")
 viusal_change_time = 4.0
-see_thru_amount = 50.0
+day_see_thru = 25.0
+night_see_thru = 45.0
 see_through_pulse_mult = 1.0
 see_thru_dist_mult = 1.0
 storm_gradient_colors = Array[Color]([Color(1.44392e-07, 0.663415, 0.433462, 0.574), Color(0.668381, 0.483265, 0, 0.542), Color(0.558, 0.396, 1, 0.772), Color(0.345, 0.001, 0.829, 0.877)])
@@ -369,7 +322,8 @@ update_entity_glow = true
 [sub_resource type="Resource" id="Resource_l1t3e"]
 script = ExtResource("27_8kcf2")
 viusal_change_time = 3.0
-see_thru_amount = 65.0
+day_see_thru = 25.0
+night_see_thru = 45.0
 see_through_pulse_mult = 1.0
 see_thru_dist_mult = 1.0
 storm_gradient_colors = Array[Color]([Color(0.992306, 3.27289e-06, 0.58646, 0.574), Color(0.949186, 0.142911, 0, 0.542), Color(0.749196, 0.459432, 1.92523e-07, 0.772), Color(0.406298, 0.311656, 0, 0.877)])
@@ -413,7 +367,8 @@ storm_visuals = SubResource("Resource_l1t3e")
 [sub_resource type="Resource" id="Resource_j2wa6"]
 script = ExtResource("27_8kcf2")
 viusal_change_time = 3.0
-see_thru_amount = 100.0
+day_see_thru = 25.0
+night_see_thru = 45.0
 see_through_pulse_mult = 1.0
 see_thru_dist_mult = 1.0
 storm_gradient_colors = Array[Color]([Color(1.29953e-06, 0.514757, 0.375111, 0.804), Color(0.963253, 0, 0.244638, 0.542), Color(0, 0.605301, 0.664768, 0.772), Color(0.345, 0.001, 0.829, 0.877)])
@@ -443,7 +398,7 @@ ring_pulse_speed = 4.0
 script = ExtResource("25_dqjbe")
 new_location = Vector2(-50, 40)
 offset_location = true
-new_radius = 60.0
+new_radius = 150.0
 offset_radius = false
 delay = 5.0
 time_to_move = 10.0
@@ -456,28 +411,11 @@ storm_visuals = SubResource("Resource_j2wa6")
 [sub_resource type="CircleShape2D" id="CircleShape2D_7o6b3"]
 radius = 615.0
 
-[sub_resource type="FastNoiseLite" id="FastNoiseLite_vcm2a"]
-noise_type = 3
-seed = 10
-frequency = 0.0388
-fractal_octaves = 3
-
-[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_j3ovd"]
-seamless = true
-noise = SubResource("FastNoiseLite_vcm2a")
-
-[sub_resource type="FastNoiseLite" id="FastNoiseLite_goubn"]
-frequency = 0.0118
-
-[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_uwlga"]
-seamless = true
-noise = SubResource("FastNoiseLite_goubn")
-
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_b4rbd"]
 shader = ExtResource("23_05otm")
-shader_parameter/circle_center_pixels = Vector2(1300, 800)
-shader_parameter/radius_pixels = 280.0
-shader_parameter/viewport_size = Vector2(2694, 1920)
+shader_parameter/circle_center_pixels = null
+shader_parameter/radius_pixels = null
+shader_parameter/viewport_size = null
 shader_parameter/noise_world_position = null
 shader_parameter/override_all_alpha = 1.0
 shader_parameter/see_through_center_pixels = null
@@ -491,8 +429,8 @@ shader_parameter/bottom_noise_speed = 0.2
 shader_parameter/top_noise_speed = 2.75
 shader_parameter/noise_brightness = 1.25
 shader_parameter/glow_color = Color(0.722, 0.681, 1, 0.743)
-shader_parameter/noise_texture = SubResource("NoiseTexture2D_j3ovd")
-shader_parameter/noise_texture2 = SubResource("NoiseTexture2D_uwlga")
+shader_parameter/noise_texture = ExtResource("42_s5gqv")
+shader_parameter/noise_texture2 = ExtResource("43_6gn56")
 shader_parameter/pulse_speed = 4.0
 shader_parameter/pulse_intensity = 0.18
 shader_parameter/color_cycle_speed = 0.65
@@ -523,6 +461,21 @@ shader_parameter/ripple_intensity = 0.5
 shader_parameter/ripple_frequency = 0.6
 shader_parameter/ripple_speed = 0.5
 
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_yrru3"]
+frequency = 0.0056
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_npyjk"]
+width = 480
+height = 270
+seamless = true
+noise = SubResource("FastNoiseLite_yrru3")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_83k6t"]
+shader = ExtResource("30_rhtsc")
+shader_parameter/noise_texture = SubResource("NoiseTexture2D_npyjk")
+shader_parameter/density = 0.03
+shader_parameter/speed = Vector2(0.006, 0.004)
+
 [node name="Game" type="Node2D"]
 
 [node name="WorldRoot" type="Node2D" parent="." groups=["core"]]
@@ -531,7 +484,6 @@ y_sort_enabled = true
 script = ExtResource("1_q0i4n")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="WorldRoot" groups=["core"]]
-editor_description = "This handles glow and other global effects like saturation and contrast."
 environment = SubResource("Environment_2wouv")
 
 [node name="FloweryGrass" type="TileMapLayer" parent="WorldRoot"]
@@ -557,22 +509,18 @@ y_sort_enabled = true
 
 [node name="TestRigidEntity" parent="WorldRoot/Testing" instance=ExtResource("9_37jga")]
 position = Vector2(127, 27)
-physics_material_override = SubResource("PhysicsMaterial_8lm63")
 stats = SubResource("Resource_a2una")
 
 [node name="TestRigidEntity2" parent="WorldRoot/Testing" instance=ExtResource("9_37jga")]
 position = Vector2(129, 87)
-physics_material_override = SubResource("PhysicsMaterial_s5gqv")
 stats = SubResource("Resource_6gn56")
 
 [node name="TestRigidEntity3" parent="WorldRoot/Testing" instance=ExtResource("9_37jga")]
 position = Vector2(65, 118)
-physics_material_override = SubResource("PhysicsMaterial_yw2f7")
 stats = SubResource("Resource_ed1p2")
 
 [node name="TestRigidEntity4" parent="WorldRoot/Testing" instance=ExtResource("9_37jga")]
 position = Vector2(126, 160)
-physics_material_override = SubResource("PhysicsMaterial_e5rpg")
 stats = SubResource("Resource_27u15")
 
 [node name="TestStaticEntity" parent="WorldRoot/Testing" instance=ExtResource("11_6kn41")]
@@ -644,78 +592,17 @@ stats = SubResource("Resource_jb7gg")
 position = Vector2(-242, 119)
 stats = SubResource("Resource_3156l")
 
-[node name="TestTreeOther1" type="StaticBody2D" parent="WorldRoot/Testing"]
-position = Vector2(-107, 221)
-collision_layer = 16
-script = ExtResource("18_0310n")
-team = 2
-stats = SubResource("Resource_f5fhq")
+[node name="BasicZombie" parent="WorldRoot/Testing" instance=ExtResource("31_8lm63")]
+position = Vector2(73, 60)
 
-[node name="EntityShadow" parent="WorldRoot/Testing/TestTreeOther1" instance=ExtResource("19_6wu7w")]
-self_modulate = Color(0, 0, 0, 0.164)
-position = Vector2(-1, 0)
-scale = Vector2(4.69333, 2.75429)
+[node name="BasicZombie2" parent="WorldRoot/Testing" instance=ExtResource("31_8lm63")]
+position = Vector2(76, 190)
 
-[node name="EntitySprite" parent="WorldRoot/Testing/TestTreeOther1" instance=ExtResource("20_0t2vf")]
-unique_name_in_owner = true
-material = SubResource("ShaderMaterial_w83do")
-position = Vector2(-1, -48)
-texture = ExtResource("22_tnqdg")
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="WorldRoot/Testing/TestTreeOther1"]
-position = Vector2(-5, -7)
-rotation = -1.5708
-shape = SubResource("CapsuleShape2D_qwr4q")
-debug_color = Color(0, 0.6, 0.7, 0.42)
-
-[node name="HealthComponent" parent="WorldRoot/Testing/TestTreeOther1" instance=ExtResource("23_mdyae")]
-_max_shield = 0
-infinte_hp = true
-
-[node name="EffectReceiverComponent" parent="WorldRoot/Testing/TestTreeOther1" node_paths=PackedStringArray("affected_entity", "health_component", "loot_table_component", "dmg_handler", "burning_handler") instance=ExtResource("24_xnqq6")]
-absorb_full_hit = true
-filter_source_types = true
-allowed_source_types = Array[int]([5])
-filter_source_tags = true
-allowed_source_tags = Array[String](["Axe"])
-affected_entity = NodePath("..")
-health_component = NodePath("../HealthComponent")
-loot_table_component = NodePath("../LootTableComponent")
-dmg_handler = NodePath("DmgHandler")
-burning_handler = NodePath("BurningHandler")
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="WorldRoot/Testing/TestTreeOther1/EffectReceiverComponent"]
-position = Vector2(-5, -6.99998)
-rotation = -1.5708
-shape = SubResource("RectangleShape2D_3vp3c")
-debug_color = Color(0, 0.6, 0.7, 0.42)
-
-[node name="DmgHandler" parent="WorldRoot/Testing/TestTreeOther1/EffectReceiverComponent" instance=ExtResource("25_b8kol")]
-can_be_crit = false
-
-[node name="BurningHandler" parent="WorldRoot/Testing/TestTreeOther1/EffectReceiverComponent" instance=ExtResource("26_smatw")]
-
-[node name="LootTableComponent" parent="WorldRoot/Testing/TestTreeOther1" instance=ExtResource("27_4x873")]
-loot_table = SubResource("Resource_vx2o2")
-hit_spawn_chance = 15.0
-require_dmg_on_hit = false
-
-[node name="StatusEffectManager" parent="WorldRoot/Testing/TestTreeOther1" node_paths=PackedStringArray("effect_receiver") instance=ExtResource("31_cevla")]
-unique_name_in_owner = true
-effect_receiver = NodePath("../EffectReceiverComponent")
+[node name="BasicZombie3" parent="WorldRoot/Testing" instance=ExtResource("31_8lm63")]
+position = Vector2(397, 41)
 
 [node name="Player" parent="WorldRoot" instance=ExtResource("4_ptig0")]
 position = Vector2(226, 75)
-collision_mask = 245
-
-[node name="PointLight2D" type="PointLight2D" parent="WorldRoot"]
-position = Vector2(245, 78)
-scale = Vector2(0.144531, 0.140625)
-color = Color(1, 0.684396, 0.33276, 1)
-energy = 1.5
-texture = ExtResource("30_s2x07")
-texture_scale = 1.64
-height = 32.0
 
 [node name="PlayerCamera" type="Camera2D" parent="WorldRoot" node_paths=PackedStringArray("player") groups=["core"]]
 unique_name_in_owner = true
@@ -766,11 +653,54 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
+[node name="ScreenFog" type="Parallax2D" parent="WorldRoot"]
+z_index = 2
+repeat_size = Vector2(480, 270)
+repeat_times = 3
+
+[node name="ColorRect" type="ColorRect" parent="WorldRoot/ScreenFog"]
+material = SubResource("ShaderMaterial_83k6t")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = 480.0
+offset_bottom = 270.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="PointLight2D" type="PointLight2D" parent="WorldRoot"]
+light_mask = 0
+position = Vector2(250, 5)
+color = Color(1, 0.684396, 0.33276, 1)
+range_item_cull_mask = 3
+shadow_color = Color(0, 0, 0, 0.19)
+texture = ExtResource("32_s5gqv")
+texture_scale = 0.5
+height = 32.0
+
+[node name="PointLight2D2" type="PointLight2D" parent="WorldRoot"]
+light_mask = 0
+position = Vector2(126, 199)
+color = Color(1, 0.684396, 0.33276, 1)
+range_item_cull_mask = 3
+shadow_color = Color(0, 0, 0, 0.19)
+texture = ExtResource("32_s5gqv")
+texture_scale = 0.5
+height = 32.0
+
+[node name="PointLight2D3" type="PointLight2D" parent="WorldRoot"]
+light_mask = 0
+position = Vector2(378, 173)
+color = Color(1, 0.684396, 0.33276, 1)
+range_item_cull_mask = 3
+shadow_color = Color(0, 0, 0, 0.19)
+texture = ExtResource("32_s5gqv")
+texture_scale = 0.5
+height = 32.0
+
 [node name="BackgroundMusicManager" type="Node" parent="." groups=["core"]]
 script = ExtResource("1_q5pr2")
-
-[node name="CanvasModulate" type="CanvasModulate" parent="."]
-color = Color(0.572905, 0.688111, 0.782194, 1)
 
 [connection signal="body_entered" from="WorldRoot/Storm/SafeZone" to="WorldRoot/Storm" method="_on_safe_zone_body_entered"]
 [connection signal="body_exited" from="WorldRoot/Storm/SafeZone" to="WorldRoot/Storm" method="_on_safe_zone_body_exited"]

@@ -1,7 +1,7 @@
 [gd_resource type="Resource" script_class="LifeStealEffect" load_steps=3 format=3 uid="uid://opqylasujopp"]
 
-[ext_resource type="Script" path="res://Entities/Stats/EffectSystemResources/StatusEffects/BadEffects/LifeSteal/LifeStealEffect.gd" id="1_b8skv"]
-[ext_resource type="Script" path="res://Entities/Stats/StatMod/StatMod.gd" id="2_pd8bh"]
+[ext_resource type="Script" uid="uid://d4b47pfjuj5om" path="res://Entities/Stats/EffectSystemResources/StatusEffects/BadEffects/LifeSteal/LifeStealEffect.gd" id="1_b8skv"]
+[ext_resource type="Script" uid="uid://bcjwesiannbd0" path="res://Entities/Stats/StatMod/StatMod.gd" id="2_pd8bh"]
 
 [resource]
 script = ExtResource("1_b8skv")

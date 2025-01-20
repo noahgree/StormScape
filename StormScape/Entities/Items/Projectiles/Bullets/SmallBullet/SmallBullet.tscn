@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=3 uid="uid://bqkyplubhsx43"]
+[gd_scene load_steps=14 format=3 uid="uid://bqkyplubhsx43"]
 
 [ext_resource type="Script" uid="uid://d1uexupra43i8" path="res://Entities/Items/Projectiles/Projectile.gd" id="1_o610v"]
 [ext_resource type="Texture2D" uid="uid://bwuth2fyl1x12" path="res://Entities/Items/Projectiles/Bullets/SmallBullet/bullet_small.png" id="2_ofcgf"]
@@ -11,22 +11,85 @@ height = 7.27273
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_mtv1g"]
 light_mode = 1
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_mtv1g"]
+atlas = ExtResource("2_ofcgf")
+region = Rect2(0, 0, 13, 13)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8obu2"]
+atlas = ExtResource("2_ofcgf")
+region = Rect2(13, 0, 13, 13)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rsefi"]
+atlas = ExtResource("2_ofcgf")
+region = Rect2(26, 0, 13, 13)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_cr3di"]
+atlas = ExtResource("2_ofcgf")
+region = Rect2(39, 0, 13, 13)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ymx1k"]
+atlas = ExtResource("2_ofcgf")
+region = Rect2(0, 13, 13, 13)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4squf"]
+atlas = ExtResource("2_ofcgf")
+region = Rect2(13, 13, 13, 13)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qpe6b"]
+atlas = ExtResource("2_ofcgf")
+region = Rect2(26, 13, 13, 13)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_8obu2"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_mtv1g")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_8obu2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_rsefi")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_cr3di")
+}],
+"loop": true,
+"name": &"flying",
+"speed": 30.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ymx1k")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4squf")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_qpe6b")
+}],
+"loop": false,
+"name": &"impact",
+"speed": 32.0
+}]
+
 [node name="SmallBullet" type="Area2D"]
 editor_description = "DO NOT SET EFFECT SOURCE IF BEING USED DIRECTLY WITH A WEAPON. THE WEAPON WILL SET IT FOR YOU."
-scale = Vector2(0.55, 0.55)
 script = ExtResource("1_o610v")
-glow_strength = 35.0
+glow_strength = 42.0
+random_rot_on_impact = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 rotation = 1.5708
 shape = SubResource("CapsuleShape2D_j5phf")
 debug_color = Color(0.626, 0.349, 1, 0.196)
 
-[node name="ProjSprite" type="Sprite2D" parent="."]
+[node name="ProjSprite" type="AnimatedSprite2D" parent="."]
+light_mask = 2
 material = SubResource("CanvasItemMaterial_mtv1g")
-rotation = 0.785398
-texture = ExtResource("2_ofcgf")
-region_rect = Rect2(2, 5, 12, 5)
+sprite_frames = SubResource("SpriteFrames_8obu2")
+animation = &"flying"
+autoplay = "flying"
 
 [node name="Shadow" type="Sprite2D" parent="."]
 self_modulate = Color(0.16, 0.16, 0.16, 0.185)

@@ -1,0 +1,25 @@
+[gd_scene load_steps=3 format=3 uid="uid://bhcqtorpyerc3"]
+
+[ext_resource type="Script" uid="uid://d0uup1yuxf4yc" path="res://Utilities/Debug/ParticleEmissionComponent.gd" id="1_pvsxh"]
+[ext_resource type="PackedScene" uid="uid://cqb0f242y4m2j" path="res://Utilities/Debug/DebugBox.tscn" id="2_u3k0j"]
+
+[node name="ParticleEmissionComponent" type="Node"]
+script = ExtResource("1_pvsxh")
+ejection_extents = Vector2(0, 0)
+ejection_origin = Vector2(0, 0)
+
+[node name="BelowBox" parent="." instance=ExtResource("2_u3k0j")]
+visible = false
+color = Color(1, 0.334227, 0.233862, 1)
+
+[node name="AboveBox" parent="." instance=ExtResource("2_u3k0j")]
+visible = false
+color = Color(0.13977, 0.603098, 1, 1)
+
+[node name="CoverBox" parent="." instance=ExtResource("2_u3k0j")]
+visible = false
+color = Color(8.03783e-06, 0.751357, 0.284823, 1)
+
+[node name="EjectionBox" parent="." instance=ExtResource("2_u3k0j")]
+visible = false
+color = Color(0.982158, 0.661242, 7.70092e-07, 1)

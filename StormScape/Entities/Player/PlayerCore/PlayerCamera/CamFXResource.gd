@@ -10,7 +10,8 @@ class_name CamFXResource
 
 @export_group("Freeze", "freeze")
 @export_range(0, 1, 0.01, "hide_slider") var freeze_multiplier: float = 1.0 ## How strong the camera should freeze. Anything less than 1.0 will activate this.
-@export_range(0.03, 1, 0.001, "hide_slider") var freeze_duration: float = 0.03 ## How long the camera freeze should take to decay.
+@export_range(0.01, 1, 0.001, "hide_slider") var freeze_duration: float = 0.03 ## How long the camera freeze should take to decay.
+@export var freeze_instant_change: bool = true ## When false, the freeze effect will tween back to normal. When true, the freeze effect will instantaneously swap back to normal after the elapsed time.
 @export var freeze_trans_type: Tween.TransitionType = Tween.TransitionType.TRANS_QUINT ## How the effect decay back to normal.
 @export var freeze_ease_type: Tween.EaseType = Tween.EaseType.EASE_IN ## The direction of the effect decay transition.
 

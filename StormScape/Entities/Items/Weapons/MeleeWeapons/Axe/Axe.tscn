@@ -36,6 +36,7 @@ ghost_fade_time = 0.2
 sprites_to_tint = [NodePath("ItemSprite")]
 
 [node name="ItemSprite" type="AnimatedSprite2D" parent="."]
+light_mask = 2
 material = SubResource("ShaderMaterial_8aqmb")
 position = Vector2(-7, 0)
 sprite_frames = SubResource("SpriteFrames_pldj5")

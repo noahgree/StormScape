@@ -1,7 +1,7 @@
 [gd_scene load_steps=30 format=3 uid="uid://28ry06t64e8p"]
 
 [ext_resource type="Script" uid="uid://cw73n1p5yhoxm" path="res://UI/TemporaryElements/EffectPopup.gd" id="1_obmtp"]
-[ext_resource type="Texture2D" uid="uid://cahbh5en1kt0w" path="res://Entities/Items/ItemCore/Particles/rounded_rect_light.png" id="2_3y1nw"]
+[ext_resource type="Texture2D" uid="uid://cahbh5en1kt0w" path="res://Utilities/Game/Particles/rounded_rect_light.png" id="2_3y1nw"]
 [ext_resource type="FontFile" uid="uid://bp2lgrlhj8cet" path="res://Assets/Theming/Fonts/FontAssets/Pixel/C&C Red Alert [INET].ttf" id="4_dsjwj"]
 
 [sub_resource type="Gradient" id="Gradient_kgs4e"]
@@ -38,11 +38,11 @@ colors = PackedColorArray(3.85046e-06, 0.943728, 0.356911, 1, 0.739044, 0.85956,
 [sub_resource type="GradientTexture1D" id="GradientTexture1D_lc6h2"]
 gradient = SubResource("Gradient_u78qr")
 
-[sub_resource type="Gradient" id="Gradient_yni0o"]
-colors = PackedColorArray(0.504314, 0.764044, 3.85046e-07, 1, 1, 0.572318, 0.538002, 1)
+[sub_resource type="Gradient" id="Gradient_6iv0e"]
+colors = PackedColorArray(1, 0.381516, 0.37861, 1, 0.198984, 0.899097, 0, 1)
 
-[sub_resource type="GradientTexture1D" id="GradientTexture1D_2jhej"]
-gradient = SubResource("Gradient_yni0o")
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_g6ann"]
+gradient = SubResource("Gradient_6iv0e")
 
 [sub_resource type="Gradient" id="Gradient_sepbl"]
 offsets = PackedFloat32Array(0.00211864, 1)
@@ -102,7 +102,7 @@ text_colors = Dictionary[String, GradientTexture1D]({
 "Frostbite": SubResource("GradientTexture1D_wo58k"),
 "HealthDamage": SubResource("GradientTexture1D_i2s0b"),
 "HealthHealing": SubResource("GradientTexture1D_lc6h2"),
-"Life Steal": SubResource("GradientTexture1D_2jhej"),
+"Life Steal": SubResource("GradientTexture1D_g6ann"),
 "Poison": SubResource("GradientTexture1D_o6vwp"),
 "Regen": SubResource("GradientTexture1D_wahlm"),
 "ShieldDamage": SubResource("GradientTexture1D_sil7a"),
