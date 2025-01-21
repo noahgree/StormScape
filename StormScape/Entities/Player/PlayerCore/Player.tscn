@@ -1,10 +1,10 @@
-[gd_scene load_steps=195 format=3 uid="uid://dba8mrurjlekp"]
+[gd_scene load_steps=197 format=3 uid="uid://dba8mrurjlekp"]
 
 [ext_resource type="Script" uid="uid://c3rpxq8pnbdje" path="res://Entities/Player/PlayerCore/Player.gd" id="1_m33tt"]
 [ext_resource type="Script" uid="uid://c2gdoebfp12dq" path="res://Entities/Stats/StatMod/StatModsCacheResource.gd" id="2_vetip"]
-[ext_resource type="PackedScene" uid="uid://cj2wy5f05cos4" path="res://Entities/EntityCore/EntityShadow.tscn" id="3_05f62"]
+[ext_resource type="PackedScene" uid="uid://cj2wy5f05cos4" path="res://Entities/EntityCore/Shadow/EntityShadow.tscn" id="3_05f62"]
 [ext_resource type="PackedScene" uid="uid://cdfdy8m6ki3oq" path="res://Entities/Components/HealthComponent/HealthComponent.tscn" id="3_ojev3"]
-[ext_resource type="PackedScene" uid="uid://dh4ydl7l86ywq" path="res://Entities/EntityCore/EntitySprite.tscn" id="4_fmbcv"]
+[ext_resource type="PackedScene" uid="uid://dh4ydl7l86ywq" path="res://Entities/EntityCore/Sprites/EntitySprite.tscn" id="4_fmbcv"]
 [ext_resource type="PackedScene" uid="uid://btba0jmsow1mx" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectReceiverComponent.tscn" id="4_hhm8x"]
 [ext_resource type="Shader" uid="uid://cfbagv3hrtar2" path="res://Utilities/Game/Shaders/EntityEffectShader.gdshader" id="4_ubhyl"]
 [ext_resource type="PackedScene" uid="uid://4gl24qwdyti3" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/DmgHandler.tscn" id="5_g3ixu"]
@@ -12,10 +12,10 @@
 [ext_resource type="SpriteFrames" uid="uid://cl72xrd8yy3d" path="res://Entities/Player/Sprites/Base/PlayerBaseFrames.tres" id="5_vy6lk"]
 [ext_resource type="PackedScene" uid="uid://ddj5ippwwkvop" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/HealHandler.tscn" id="6_5e1ju"]
 [ext_resource type="PackedScene" uid="uid://co3n6m7efg8pd" path="res://Entities/Components/EffectComponents/StatusEffectsComponent/StatusEffectsComponent.tscn" id="6_n0x5k"]
-[ext_resource type="Script" uid="uid://c2sjdkql76qca" path="res://Entities/Player/States/MoveStates/Idle/Idle.gd" id="7_15a5x"]
+[ext_resource type="Script" uid="uid://c2sjdkql76qca" path="res://Entities/EntityCore/States/IdleState.gd" id="7_15a5x"]
 [ext_resource type="PackedScene" uid="uid://dykiv0tlhwmox" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/KnockbackHandler.tscn" id="7_k0pv8"]
-[ext_resource type="Script" uid="uid://dxekqhvcykqrq" path="res://Entities/Player/States/MoveStates/Run/Run.gd" id="9_0dcld"]
-[ext_resource type="Script" uid="uid://cy73p3okq3cic" path="res://Entities/Player/States/MoveStates/Dash/Dash.gd" id="9_a1qv1"]
+[ext_resource type="Script" uid="uid://dxekqhvcykqrq" path="res://Entities/Player/States/RunState.gd" id="9_0dcld"]
+[ext_resource type="Script" uid="uid://cy73p3okq3cic" path="res://Entities/Player/States/DashState.gd" id="9_a1qv1"]
 [ext_resource type="Texture2D" uid="uid://cs3clmnktksd6" path="res://Entities/Player/PlayerCore/player_hand.png" id="9_n4o3n"]
 [ext_resource type="PackedScene" uid="uid://cx4b21058vypq" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/StunHandler.tscn" id="9_w4lel"]
 [ext_resource type="PackedScene" uid="uid://bhcqtorpyerc3" path="res://Utilities/Debug/ParticleEmissionComponent.tscn" id="10_6wv7y"]
@@ -25,16 +25,16 @@
 [ext_resource type="PackedScene" uid="uid://bhg7jmodo3t5t" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/FrostbiteHandler.tscn" id="13_hqb6d"]
 [ext_resource type="PackedScene" uid="uid://d1ml6s716obw0" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/TimeSnareHandler.tscn" id="14_63vgk"]
 [ext_resource type="PackedScene" uid="uid://depnx3pnassrq" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/BurningHandler.tscn" id="14_q2ueb"]
-[ext_resource type="Script" uid="uid://cbyg4eleptthh" path="res://Entities/Player/States/MoveStates/Stunned/Stunned.gd" id="15_eiig3"]
+[ext_resource type="Script" uid="uid://cbyg4eleptthh" path="res://Entities/EntityCore/States/StunnedState.gd" id="15_eiig3"]
 [ext_resource type="PackedScene" uid="uid://cueo26qpyouhj" path="res://Entities/EntityCore/EntityTypes/DynamicEntity/MoveStateMachine/MoveStateMachine.tscn" id="16_xoncr"]
 [ext_resource type="PackedScene" uid="uid://csrq1m4rp52vf" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/StormSyndromeHandler.tscn" id="17_2cms1"]
-[ext_resource type="Script" uid="uid://i7ucoc123rpe" path="res://Entities/Player/States/MoveStates/Spawn/Spawn.gd" id="17_fwsnm"]
+[ext_resource type="Script" uid="uid://i7ucoc123rpe" path="res://Entities/EntityCore/States/SpawnState.gd" id="17_fwsnm"]
 [ext_resource type="Script" uid="uid://clmf6cxgxu6kb" path="res://Utilities/Debug/TestButtons.gd" id="17_vdk5v"]
-[ext_resource type="Script" uid="uid://cbuaklpos5jdp" path="res://Entities/Player/States/MoveStates/Die/Die.gd" id="18_jcofa"]
-[ext_resource type="Script" uid="uid://cf7pyv5l3pefi" path="res://Entities/Player/States/MoveStates/Sneak/Sneak.gd" id="19_alhqe"]
+[ext_resource type="Script" uid="uid://cbuaklpos5jdp" path="res://Entities/EntityCore/States/DieState.gd" id="18_jcofa"]
+[ext_resource type="Script" uid="uid://cf7pyv5l3pefi" path="res://Entities/Player/States/SneakState.gd" id="19_alhqe"]
 [ext_resource type="PackedScene" uid="uid://b4bmp3jehto3g" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/LifeStealHandler.tscn" id="20_f770q"]
 [ext_resource type="Texture2D" uid="uid://crawnbhc5weqf" path="res://Entities/EntityCore/EntityTypes/DynamicEntity/entity_footstep.png" id="22_7y82q"]
-[ext_resource type="PackedScene" uid="uid://biduyqlpqhmrp" path="res://Entities/Player/States/MoveStates/Stunned/StunIndicator.tscn" id="27_fyxoi"]
+[ext_resource type="PackedScene" uid="uid://biduyqlpqhmrp" path="res://Entities/Stats/EffectSystemResources/StatusEffects/BadEffects/Stun/StunIndicator.tscn" id="27_fyxoi"]
 [ext_resource type="PackedScene" uid="uid://c4n604w30gx8m" path="res://Entities/Components/ItemComponents/ItemReceiverComponent/ItemReceiverComponent.tscn" id="30_qgyag"]
 [ext_resource type="Script" uid="uid://i6jv5dqqpf3n" path="res://UI/Inventory/PlayerInventory/PlayerInvCommunicator.gd" id="31_mjpan"]
 [ext_resource type="Script" uid="uid://dq62ojsc43p8o" path="res://UI/Inventory/PlayerInventory/PlayerInvUI.gd" id="32_3a185"]
@@ -87,6 +87,7 @@
 [ext_resource type="Resource" uid="uid://dpmwqsai6gxsr" path="res://Entities/Items/TRESItems/FlameBlower(4).tres" id="52_ebist"]
 [ext_resource type="Resource" uid="uid://1q7rlned2r23" path="res://Entities/Items/TRESItems/Gattler(3).tres" id="53_lo25j"]
 [ext_resource type="Texture2D" uid="uid://lj78cee4aa38" path="res://UI/PlayerStatsOverlay/Assets/Health Change.png" id="53_qsiea"]
+[ext_resource type="Resource" uid="uid://dk3vlbvu2b7eq" path="res://Entities/Items/TRESItems/Sword(4).tres" id="57_6wv7y"]
 [ext_resource type="Script" uid="uid://dih45lqhjg0xx" path="res://UI/OverheadUI/PlayerOverheadUI.gd" id="57_n8srl"]
 [ext_resource type="Script" uid="uid://c0n0ja8tkrnkf" path="res://UI/Inventory/PlayerInventory/HotbarUI.gd" id="58_i567i"]
 [ext_resource type="Texture2D" uid="uid://bq3d1uclexvcm" path="res://UI/OverheadUI/progress_tintable.png" id="61_6wv7y"]
@@ -1255,6 +1256,17 @@ script = ExtResource("32_ixmb3")
 stats = ExtResource("52_ebist")
 quantity = 1
 
+[sub_resource type="Resource" id="Resource_hevqc"]
+script = ExtResource("32_ixmb3")
+stats = ExtResource("47_devgv")
+quantity = 10
+
+[sub_resource type="Resource" id="Resource_0t1mv"]
+script = ExtResource("32_ixmb3")
+stats = ExtResource("57_6wv7y")
+quantity = 1
+metadata/_custom_type_script = ExtResource("32_ixmb3")
+
 [sub_resource type="Resource" id="Resource_0ta0y"]
 script = ExtResource("32_ixmb3")
 stats = ExtResource("37_a2tah")
@@ -1264,11 +1276,6 @@ quantity = 1
 script = ExtResource("32_ixmb3")
 stats = ExtResource("48_1kvwx")
 quantity = 1
-
-[sub_resource type="Resource" id="Resource_hevqc"]
-script = ExtResource("32_ixmb3")
-stats = ExtResource("47_devgv")
-quantity = 10
 
 [sub_resource type="Resource" id="Resource_p5d28"]
 script = ExtResource("32_ixmb3")
@@ -1545,7 +1552,7 @@ parameters/run/TimeScale/scale = 1.5
 parameters/run/blendspace2d/blend_position = Vector2(0, 0)
 
 [node name="ItemReceiverComponent" parent="." node_paths=PackedStringArray("inv_populator", "ui") instance=ExtResource("30_qgyag")]
-starting_inv = Array[ExtResource("32_ixmb3")]([SubResource("Resource_pihal"), null, null, null, SubResource("Resource_kx1me"), SubResource("Resource_2ijsm"), null, SubResource("Resource_xlc3k"), SubResource("Resource_n4o3n"), SubResource("Resource_3by25"), SubResource("Resource_oxva3"), SubResource("Resource_t7kvu"), SubResource("Resource_x8o50"), null, SubResource("Resource_apvym"), SubResource("Resource_ur5wt"), null, null, SubResource("Resource_dyejk"), null, null, null, null, null, null, SubResource("Resource_rdrbb"), null, null, SubResource("Resource_sx7hp"), SubResource("Resource_wjnk6"), null, null, SubResource("Resource_0ta0y"), SubResource("Resource_vpccy"), SubResource("Resource_hevqc"), SubResource("Resource_p5d28"), SubResource("Resource_6stk0")])
+starting_inv = Array[ExtResource("32_ixmb3")]([SubResource("Resource_pihal"), null, null, null, SubResource("Resource_kx1me"), SubResource("Resource_2ijsm"), null, SubResource("Resource_xlc3k"), SubResource("Resource_n4o3n"), SubResource("Resource_3by25"), SubResource("Resource_oxva3"), SubResource("Resource_t7kvu"), SubResource("Resource_x8o50"), null, SubResource("Resource_apvym"), SubResource("Resource_ur5wt"), null, null, SubResource("Resource_dyejk"), null, null, null, null, null, null, SubResource("Resource_rdrbb"), null, null, SubResource("Resource_sx7hp"), SubResource("Resource_wjnk6"), SubResource("Resource_hevqc"), null, SubResource("Resource_0t1mv"), SubResource("Resource_0ta0y"), SubResource("Resource_vpccy"), SubResource("Resource_p5d28"), SubResource("Resource_6stk0")])
 is_player_inv = true
 inv_size = 37
 hotbar_size = 5

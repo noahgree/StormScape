@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://ckk7xwqujudaq" path="res://Entities/Items/Projectiles/UniqueProjectile.gd" id="1_ckait"]
 [ext_resource type="Texture2D" uid="uid://ln38htpivqou" path="res://Entities/Items/Weapons/ProjectileWeapons/Boomerang/BoomerangWoodCT.tres" id="2_f0kfj"]
-[ext_resource type="Texture2D" uid="uid://dcbwxgak6a0r8" path="res://Entities/EntityCore/entity_shadow.png" id="3_ra4co"]
+[ext_resource type="Texture2D" uid="uid://dcbwxgak6a0r8" path="res://Entities/EntityCore/Shadow/entity_shadow.png" id="3_ra4co"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_augvi"]
 radius = 9.23075

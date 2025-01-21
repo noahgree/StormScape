@@ -1,5 +1,6 @@
-extends MoveState
-## Handles when the character is sneaking, passing a stealth factor back up to the parent entity.
+extends State
+class_name SneakState
+## Handles when the dynamic entity is sneaking, passing a stealth factor back up to the parent entity itself.
 
 @export var _max_stealth: int = 100 ## How much closer you can get to an unalereted enemy before alerting them.
 @export var _max_sneak_speed: int = 50 ## How fast you can move while sneaking.
@@ -14,7 +15,7 @@ func enter() -> void:
 	pass
 
 func exit() -> void:
-	dynamic_entity.current_stealth = 0
+	entity.current_stealth = 0
 
 func _ready() -> void:
 	var moddable_stats: Dictionary[StringName, float] = {
@@ -34,35 +35,35 @@ func _do_character_sneak(delta: float) -> void:
 	var knockback: Vector2 = fsm.knockback_vector
 
 	if knockback.length() > 0: # let knockback take control if there is any
-		dynamic_entity.velocity = knockback
+		entity.velocity = knockback
 		transitioned.emit(self, "Run")
 
 	if movement_vector == Vector2.ZERO:
-		if dynamic_entity.velocity.length() > (dynamic_entity.stats.get_stat("friction") * delta): # no input, still slowing
-			dynamic_entity.velocity -= dynamic_entity.velocity.normalized() * (dynamic_entity.stats.get_stat("friction") * delta)
+		if entity.velocity.length() > (entity.stats.get_stat("friction") * delta): # no input, still slowing
+			entity.velocity -= entity.velocity.normalized() * (entity.stats.get_stat("friction") * delta)
 		else: # no input, stopped
 			fsm.knockback_vector = Vector2.ZERO
-			dynamic_entity.velocity = Vector2.ZERO
+			entity.velocity = Vector2.ZERO
 	elif knockback == Vector2.ZERO:
-		fsm.anim_tree.set("parameters/run/TimeScale/scale", DEFAULT_SNEAK_ANIM_TIME_SCALE * (dynamic_entity.stats.get_stat("max_sneak_speed") / dynamic_entity.stats.get_original_stat("max_sneak_speed")))
-		dynamic_entity.velocity += (movement_vector * dynamic_entity.stats.get_stat("sneak_acceleration") * delta)
-		dynamic_entity.velocity = dynamic_entity.velocity.limit_length(dynamic_entity.stats.get_stat("max_sneak_speed"))
+		fsm.anim_tree.set("parameters/run/TimeScale/scale", DEFAULT_SNEAK_ANIM_TIME_SCALE * (entity.stats.get_stat("max_sneak_speed") / entity.stats.get_original_stat("max_sneak_speed")))
+		entity.velocity += (movement_vector * entity.stats.get_stat("sneak_acceleration") * delta)
+		entity.velocity = entity.velocity.limit_length(entity.stats.get_stat("max_sneak_speed"))
 
-	dynamic_entity.move_and_slide()
+	entity.move_and_slide()
 
 	# Handle collisions with rigid entities
-	for i: int in dynamic_entity.get_slide_collision_count():
-		var c: KinematicCollision2D = dynamic_entity.get_slide_collision(i)
+	for i: int in entity.get_slide_collision_count():
+		var c: KinematicCollision2D = entity.get_slide_collision(i)
 		var collider: Object = c.get_collider()
 		if collider is RigidEntity:
-			collider.apply_central_impulse(-c.get_normal().normalized() * dynamic_entity.velocity.length() / (15 / (dynamic_entity.stats.get_stat("sneak_collision_impulse_factor"))))
+			collider.apply_central_impulse(-c.get_normal().normalized() * entity.velocity.length() / (15 / (entity.stats.get_stat("sneak_collision_impulse_factor"))))
 
 func _calculate_move_vector() -> Vector2:
 	return _get_input_vector()
 
 ## Updates the dynamic entity with the amount of stealth we currently have.
 func _send_parent_entity_stealth_value() -> void:
-	dynamic_entity.current_stealth = int(dynamic_entity.stats.get_stat("max_stealth"))
+	entity.current_stealth = int(entity.stats.get_stat("max_stealth"))
 
 ## If the sneak button is still pressed, continue in this state. Otherwise, transition out based on movement vector.
 func _check_if_stopped_sneaking() -> void:

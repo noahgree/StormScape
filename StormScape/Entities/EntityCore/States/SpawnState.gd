@@ -1,5 +1,6 @@
-extends MoveState
-## Handles when the character is actively spawning.
+extends State
+class_name SpawnState
+## Handles when the entity is actively spawning.
 
 
 func enter() -> void:

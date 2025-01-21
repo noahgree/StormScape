@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dcbwxgak6a0r8"
-path="res://.godot/imported/entity_shadow.png-65e115d7bbb0babdd6b3ab7be15cd51a.ctex"
+uid="uid://qqal2orje3v0"
+path="res://.godot/imported/effect_stun.png-4810546fa70525a0b6786d459c2dec7c.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Entities/EntityCore/entity_shadow.png"
-dest_files=["res://.godot/imported/entity_shadow.png-65e115d7bbb0babdd6b3ab7be15cd51a.ctex"]
+source_file="res://Entities/Stats/EffectSystemResources/StatusEffects/BadEffects/Stun/effect_stun.png"
+dest_files=["res://.godot/imported/effect_stun.png-4810546fa70525a0b6786d459c2dec7c.ctex"]
 
 [params]
 

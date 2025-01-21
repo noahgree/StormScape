@@ -8,6 +8,7 @@ class_name DmgHandler
 @export var _dmg_resistance: float = 1.0 ## Multiplier for decreasing ALL incoming damage.
 
 @onready var health_component: HealthComponent = get_parent().health_component ## The health component to be affected by the damage.
+@onready var affected_entity: PhysicsBody2D = get_parent().affected_entity ## The entity affected by this dmg handler.
 
 var dot_timers: Dictionary[String, Array] = {} ## Holds references to all timers currently tracking active DOT. Keys are source type names and values are an array of all matching timers of that type.
 var dot_delay_timers: Dictionary[String, Array] = {} ## Holds references to all timers current tracking delays for active DOT.
@@ -23,12 +24,12 @@ func _on_before_load_game() -> void:
 
 ## Asserts that there is a valid health component on the affected entity before trying to handle damage.
 func _ready() -> void:
-	assert(get_parent().health_component, get_parent().affected_entity.name + " has an effect receiver that is intended to handle damage, but no health component is connected.")
+	assert(get_parent().health_component, affected_entity.name + " has an effect receiver that is intended to handle damage, but no health component is connected.")
 
 	var moddable_stats: Dictionary[StringName, float] = {
 		&"dmg_weakness" : _dmg_weakness, &"dmg_resistance" : _dmg_resistance
 	}
-	get_parent().affected_entity.stats.add_moddable_stats(moddable_stats)
+	affected_entity.stats.add_moddable_stats(moddable_stats)
 
 ## Calculates the final damage to apply after considering whether the crit hit and also how much the armor blocks.
 func _get_dmg_after_crit_then_armor(effect_source: EffectSource, is_crit: bool) -> int:
@@ -84,6 +85,8 @@ func handle_over_time_dmg(dot_resource: DOTResource, source_type: String) -> voi
 			dot_timer.wait_time = max(0.01, dot_resource.time_between_ticks)
 
 		_send_handled_dmg(source_type, dot_resource.dmg_affected_stats, dot_resource.dmg_ticks_array[0], -1, 0.0, false)
+		affected_entity.sprite.start_hitflash(dot_resource.hit_flash_color, false)
+
 		_add_timer_to_cache(source_type, dot_timer, dot_timers)
 		dot_timer.start()
 
@@ -140,12 +143,14 @@ func _on_dot_timer_timeout(dot_timer: Timer, source_type: String) -> void:
 	if dot_resource.run_until_removed:
 		var damage: int = dot_resource.dmg_ticks_array[0]
 		_send_handled_dmg(source_type, dmg_affected_stats, damage, -1, 0.0, false)
+		affected_entity.sprite.start_hitflash(dot_resource.hit_flash_color, false)
 		dot_timer.set_meta("ticks_completed", ticks_completed + 1)
 	else:
 		var max_ticks: int = dot_resource.dmg_ticks_array.size()
 		if ticks_completed < max_ticks:
 			var damage: int = dot_resource.dmg_ticks_array[ticks_completed]
 			_send_handled_dmg(source_type, dmg_affected_stats, damage, -1, 0.0, false)
+			affected_entity.sprite.start_hitflash(dot_resource.hit_flash_color, false)
 			dot_timer.set_meta("ticks_completed", ticks_completed + 1)
 
 			if max_ticks == 1:
@@ -157,8 +162,8 @@ func _on_dot_timer_timeout(dot_timer: Timer, source_type: String) -> void:
 ## allowed to affect.
 func _send_handled_dmg(source_type: String, dmg_affected_stats: GlobalData.DmgAffectedStats,
 						handled_amount: int, multishot_id: int, life_steal_percent: float = 0.0, was_crit: bool = false) -> void:
-	var dmg_weakness: float = get_parent().affected_entity.stats.get_stat("dmg_weakness")
-	var dmg_resistance: float = get_parent().affected_entity.stats.get_stat("dmg_resistance")
+	var dmg_weakness: float = affected_entity.stats.get_stat("dmg_weakness")
+	var dmg_resistance: float = affected_entity.stats.get_stat("dmg_resistance")
 	var positive_dmg: int = max(0, handled_amount * (1 + dmg_weakness - dmg_resistance))
 
 	_pass_damage_to_potential_life_steal_handler(positive_dmg, life_steal_percent)

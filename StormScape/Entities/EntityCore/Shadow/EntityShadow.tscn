@@ -1,0 +1,10 @@
+[gd_scene load_steps=3 format=3 uid="uid://cj2wy5f05cos4"]
+
+[ext_resource type="Texture2D" uid="uid://dcbwxgak6a0r8" path="res://Entities/EntityCore/Shadow/entity_shadow.png" id="1_et525"]
+[ext_resource type="Script" uid="uid://dyuobqm070yml" path="res://Entities/EntityCore/Shadow/EntityShadow.gd" id="2_17vdn"]
+
+[node name="EntityShadow" type="Sprite2D"]
+self_modulate = Color(0, 0, 0, 0.254902)
+z_index = -1
+texture = ExtResource("1_et525")
+script = ExtResource("2_17vdn")

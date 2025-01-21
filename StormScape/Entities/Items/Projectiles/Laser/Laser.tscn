@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://d1uexupra43i8" path="res://Entities/Items/Projectiles/Projectile.gd" id="1_23wck"]
 [ext_resource type="Texture2D" uid="uid://dbkn88m72bsus" path="res://Entities/Items/Projectiles/Laser/laser_default.png" id="2_xaeia"]
-[ext_resource type="Texture2D" uid="uid://dcbwxgak6a0r8" path="res://Entities/EntityCore/entity_shadow.png" id="4_jjt2l"]
+[ext_resource type="Texture2D" uid="uid://dcbwxgak6a0r8" path="res://Entities/EntityCore/Shadow/entity_shadow.png" id="4_jjt2l"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_hgbw0"]
 radius = 3.0

@@ -1,5 +1,6 @@
-extends MoveState
-## Handles when the character is not moving.
+extends State
+class_name IdleState
+## Handles when the dynamic entity is not moving.
 
 var movement_vector: Vector2 = Vector2.ZERO ## The current movement vector for the entity.
 
@@ -24,10 +25,10 @@ func _do_character_idle() -> void:
 		transitioned.emit(self, "Run")
 	else:
 		if knockback.length() > 0:
-			dynamic_entity.velocity = knockback
+			entity.velocity = knockback
 			transitioned.emit(self, "Run")
 		else:
-			dynamic_entity.velocity = Vector2.ZERO
+			entity.velocity = Vector2.ZERO
 
 func _calculate_move_vector() -> Vector2:
 	return _get_input_vector()

@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://lw5fgm5pgoif"]
 
-[ext_resource type="Script" uid="uid://br7vb3lat22hk" path="res://Entities/EntityCore/EntityHandSprite.gd" id="2_vydpp"]
+[ext_resource type="Script" uid="uid://br7vb3lat22hk" path="res://Entities/EntityCore/Sprites/EntityHandSprite.gd" id="2_vydpp"]
 
 [node name="EntityHandSprite" type="Sprite2D"]
 light_mask = 2

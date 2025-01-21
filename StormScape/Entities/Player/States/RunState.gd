@@ -1,5 +1,6 @@
-extends MoveState
-## Handles when the character is moving, including both running and sprinting.
+extends State
+class_name RunState
+## Handles when the dynamic entity is moving, including both running and sprinting.
 
 @export var _max_speed: float = 150 ## The maximum speed the entity can travel once fully accelerated.
 @export var _acceleration: float = 1250 ## The increase in speed per second for the entity.
@@ -23,7 +24,7 @@ func _ready() -> void:
 
 func enter() -> void:
 	fsm.anim_tree["parameters/playback"].travel("run")
-	previous_pos = dynamic_entity.global_position
+	previous_pos = entity.global_position
 
 func exit() -> void:
 	_stop_sprint_sound()
@@ -38,10 +39,10 @@ func state_physics_process(delta: float) -> void:
 ## Besides appropriately applying velocity to the parent entity, this checks and potentially activates sprinting
 ## as well as calculates what vector the animation state machine should receive to play the matching directional anim.
 func _do_character_run(delta: float) -> void:
-	var stats: StatModsCacheResource = dynamic_entity.stats
+	var stats: StatModsCacheResource = entity.stats
 	movement_vector = _calculate_move_vector(stats)
-	actual_movement_speed = (dynamic_entity.global_position - previous_pos).length() / delta
-	previous_pos = dynamic_entity.global_position
+	actual_movement_speed = (entity.global_position - previous_pos).length() / delta
+	previous_pos = entity.global_position
 
 	# Check if we should stop the sprint sound based on movement speed.
 	if ceil(actual_movement_speed) <= floor(stats.get_stat("max_speed")):
@@ -50,29 +51,29 @@ func _do_character_run(delta: float) -> void:
 			is_sprint_audio_playing = false
 			AudioManager.change_sfx_resource_rhythmic_delay("PlayerRunBase", 0.03)
 
-	var curr_velocity: Vector2 = dynamic_entity.velocity
+	var curr_velocity: Vector2 = entity.velocity
 
 	if fsm.knockback_vector.length() > 0:
-		dynamic_entity.velocity = fsm.knockback_vector
+		entity.velocity = fsm.knockback_vector
 
 	if movement_vector == Vector2.ZERO: # We have no input and should slow to a stop
 		if curr_velocity.length() > (stats.get_stat("friction") * delta): # No input, still slowing
 			var slow_rate_vector: Vector2 = curr_velocity.normalized() * (stats.get_stat("friction") * delta)
-			dynamic_entity.velocity -= slow_rate_vector
+			entity.velocity -= slow_rate_vector
 		else: # No input, stopped
 			fsm.knockback_vector = Vector2.ZERO
-			dynamic_entity.velocity = Vector2.ZERO
+			entity.velocity = Vector2.ZERO
 			transitioned.emit(self, "Idle")
 	elif fsm.knockback_vector.length() == 0: # We have input and there is no knockback
 		if Input.is_action_pressed("sprint"):
-			if stamina_component.use_stamina(dynamic_entity.stats.get_stat("sprint_stamina_usage") * delta):
+			if entity.stamina_component.use_stamina(entity.stats.get_stat("sprint_stamina_usage") * delta):
 				_do_sprinting(stats, delta)
 			else:
 				_do_non_sprint_movement(stats, delta)
 		else:
 			_do_non_sprint_movement(stats, delta)
 
-	dynamic_entity.move_and_slide()
+	entity.move_and_slide()
 	_handle_rigid_entity_collisions()
 
 ## Update the entity's velocity and animation speed during the sprint motion based on the current stats.
@@ -89,11 +90,11 @@ func _do_sprinting(stats: StatModsCacheResource, delta: float) -> void:
 
 	# Update entity velocity.
 	var acceleration: float = stats.get_stat("acceleration")
-	dynamic_entity.velocity += (movement_vector * acceleration * sprint_mult * delta)
-	dynamic_entity.velocity = dynamic_entity.velocity.limit_length(max_speed * sprint_mult)
+	entity.velocity += (movement_vector * acceleration * sprint_mult * delta)
+	entity.velocity = entity.velocity.limit_length(max_speed * sprint_mult)
 
 	# Do sprinting sounds if we are moving fast enough.
-	if actual_movement_speed > dynamic_entity.stats.get_stat("max_speed"):
+	if actual_movement_speed > entity.stats.get_stat("max_speed"):
 		_play_sprint_sound()
 		is_sprint_audio_playing = true
 
@@ -101,16 +102,16 @@ func _do_sprinting(stats: StatModsCacheResource, delta: float) -> void:
 func _do_non_sprint_movement(stats: StatModsCacheResource, delta: float) -> void:
 	fsm.anim_tree.set("parameters/run/TimeScale/scale", min(MAX_RUN_ANIM_TIME_SCALE, DEFAULT_RUN_ANIM_TIME_SCALE * (stats.get_stat("max_speed") / stats.get_original_stat("max_speed"))))
 
-	dynamic_entity.velocity += (movement_vector * stats.get_stat("acceleration") * delta)
-	dynamic_entity.velocity = dynamic_entity.velocity.limit_length(stats.get_stat("max_speed"))
+	entity.velocity += (movement_vector * stats.get_stat("acceleration") * delta)
+	entity.velocity = entity.velocity.limit_length(stats.get_stat("max_speed"))
 
 ## Handles moving rigid entities that we collided with in the last frame.
 func _handle_rigid_entity_collisions() -> void:
-	for i: int in dynamic_entity.get_slide_collision_count():
-		var c: KinematicCollision2D = dynamic_entity.get_slide_collision(i)
+	for i: int in entity.get_slide_collision_count():
+		var c: KinematicCollision2D = entity.get_slide_collision(i)
 		var collider: Object = c.get_collider()
 		if collider is RigidEntity:
-			collider.apply_central_impulse(-c.get_normal().normalized() * dynamic_entity.velocity.length() / (10 / (dynamic_entity.stats.get_stat("run_collision_impulse_factor"))))
+			collider.apply_central_impulse(-c.get_normal().normalized() * entity.velocity.length() / (10 / (entity.stats.get_stat("run_collision_impulse_factor"))))
 
 ## Gets the movement vector depending on external factors like confusion.
 func _calculate_move_vector(stats: StatModsCacheResource) -> Vector2:
@@ -123,7 +124,7 @@ func _calculate_move_vector(stats: StatModsCacheResource) -> Vector2:
 ## If the use_stamina request is successful, we enter the dash state having already decremented the stamina amount.
 func _check_for_dash_request() -> void:
 	if _is_dash_requested() and fsm.dash_cooldown_timer.is_stopped() and movement_vector != Vector2.ZERO:
-		if stamina_component.use_stamina(dynamic_entity.stats.get_stat("dash_stamina_usage")):
+		if entity.stamina_component.use_stamina(entity.stats.get_stat("dash_stamina_usage")):
 			transitioned.emit(self, "Dash")
 
 ## Checks if we meet the input (or otherwise) conditions to start sneaking. If so, transition to sneak.
@@ -135,7 +136,7 @@ func _animate() -> void:
 	fsm.anim_tree.set("parameters/run/blendspace2d/blend_position", fsm.anim_vector)
 
 func _play_run_sound() -> void:
-	AudioManager.play_sound("PlayerRunBase", AudioManager.SoundType.SFX_2D, dynamic_entity.global_position)
+	AudioManager.play_sound("PlayerRunBase", AudioManager.SoundType.SFX_2D, entity.global_position)
 
 func _play_sprint_sound() -> void:
 	if not is_sprint_audio_playing:

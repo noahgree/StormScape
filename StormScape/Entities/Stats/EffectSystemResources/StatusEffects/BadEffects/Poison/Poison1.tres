@@ -12,6 +12,7 @@ delay_time = 0.0
 dmg_affected_stats = 0
 run_until_removed = false
 time_between_ticks = 1.0
+hit_flash_color = Color(0.496794, 0.730917, 7.70092e-07, 0.6)
 
 [sub_resource type="Resource" id="Resource_ceyil"]
 script = ExtResource("2_epos6")
@@ -61,4 +62,4 @@ audio_to_play = ""
 only_cue_on_player_hit = false
 spawn_particles = true
 particle_hander_req = "Poison"
-update_entity_glow = true
+make_entity_glow = true

@@ -18,4 +18,4 @@ audio_to_play = ""
 only_cue_on_player_hit = false
 spawn_particles = false
 particle_hander_req = ""
-update_entity_glow = false
+make_entity_glow = true

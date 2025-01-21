@@ -1,5 +1,6 @@
-extends MoveState
-## Handles when the character is actively dying.
+extends State
+class_name DieState
+## Handles when the entity is actively dying.
 
 
 func enter() -> void:

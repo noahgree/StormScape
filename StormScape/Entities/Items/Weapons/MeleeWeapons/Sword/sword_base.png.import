@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://qqal2orje3v0"
-path="res://.godot/imported/effect_stun.png-fb8b92dc6c8985267897317c8001dc40.ctex"
+uid="uid://ddoscvdndtvko"
+path="res://.godot/imported/sword_base.png-0576c3736213003b36e53cfbaddb6e13.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Entities/Player/States/MoveStates/Stunned/effect_stun.png"
-dest_files=["res://.godot/imported/effect_stun.png-fb8b92dc6c8985267897317c8001dc40.ctex"]
+source_file="res://Entities/Items/Weapons/MeleeWeapons/Sword/sword_base.png"
+dest_files=["res://.godot/imported/sword_base.png-0576c3736213003b36e53cfbaddb6e13.ctex"]
 
 [params]
 

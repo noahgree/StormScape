@@ -6,13 +6,15 @@ class_name StateMachine
 ## No nodes except for this FSM node and its children should *EVER* know what state is active.
 
 @export var initial_state: State ## What state the state machine should start off in.
+@export var print_state_changes: bool = false ## When true and the DebugFlag flag is also true, this state machine will print when its state gets changed.
 
 
 var current_state: State: ## The current state the state machine is in.
 	set(new_state):
 		current_state = new_state
-		if DebugFlags.PrintFlags.state_machine_swaps:
-			print_rich("DEBUG: " + get_parent().name + " entered [color=pink]" + current_state.name.to_lower() + "[/color]")
+
+		if DebugFlags.PrintFlags.state_machine_swaps and print_state_changes:
+			print_rich("[i]" + get_parent().name + " [/i]entered [color=pink][b]" + current_state.name.to_lower() + "[/b][/color]")
 var states: Dictionary[String, State] = {} ## A dict of all current children states of the state machine node.
 
 ## Caches the child states and sets them up.

@@ -2,7 +2,7 @@ extends Sprite2D
 class_name SpriteGhost
 ## A simple sprite2D node to handle fading and queue freeing a ghost instance during something like a dash state.
 
-static var ghost_scene: PackedScene = preload("res://Entities/EntityCore/SpriteGhost.tscn")
+static var ghost_scene: PackedScene = preload("res://Entities/EntityCore/Ghosting/SpriteGhost.tscn")
 
 var fade_out_time: float ## How long the sprite takes to fade out after being instanced.
 var is_whitened: bool = false
@@ -30,7 +30,7 @@ func _ready() -> void:
 ## Creates the tween for handling the fade out, waits for the fade to finish, then queue frees the node.
 func _do_ghosting() -> void:
 	var fade_out_tween: Tween = create_tween()
-	set_instance_shader_parameter("alpha_multiplier", 1.0)
+	set_instance_shader_parameter("alpha_multiplier", 0.15)
 	fade_out_tween.tween_property(self, "instance_shader_parameters/alpha_multiplier", 0.0, fade_out_time)
 	if not is_whitened:
 		set_instance_shader_parameter("alpha_multiplier", NON_WHITENED_ALPHA)

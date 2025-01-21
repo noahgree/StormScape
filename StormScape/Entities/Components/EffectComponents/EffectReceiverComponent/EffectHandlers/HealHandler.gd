@@ -4,6 +4,7 @@ class_name HealHandler
 ## A handler for using the data provided in the effect source to apply healing in different ways.
 
 @onready var health_component: HealthComponent = get_parent().health_component ## The health component to be affected by the healing.
+@onready var affected_entity: PhysicsBody2D = get_parent().affected_entity ## The entity affected by this heal handler.
 
 var hot_timers: Dictionary[String, Array] = {} ## Holds references to all timers currently tracking active HOT.
 var hot_delay_timers: Dictionary[String, Array] = {} ## Holds references to all timers current tracking delays for active HOT.
@@ -19,7 +20,7 @@ func _on_before_load_game() -> void:
 
 ## Asserts that there is a valid health component on the affected entity before trying to handle healing.
 func _ready() -> void:
-	assert(get_parent().health_component, get_parent().affected_entity.name + " has an effect receiver that is intended to handle healing, but no health component is connected.")
+	assert(get_parent().health_component, affected_entity.name + " has an effect receiver that is intended to handle healing, but no health component is connected.")
 
 ## Handles applying instant, one-shot healing to the affected entity.
 func handle_instant_heal(effect_source: EffectSource, heal_affected_stats: GlobalData.HealAffectedStats) -> void:
@@ -63,6 +64,8 @@ func handle_over_time_heal(hot_resource: HOTResource, source_type: String) -> vo
 			hot_timer.wait_time = max(0.01, hot_resource.time_between_ticks)
 
 		_send_handled_healing(source_type, hot_resource.heal_affected_stats, hot_resource.heal_ticks_array[0], -1)
+		affected_entity.sprite.start_hitflash(hot_resource.hit_flash_color, true)
+
 		_add_timer_to_cache(source_type, hot_timer, hot_timers)
 		hot_timer.start()
 
@@ -119,12 +122,14 @@ func _on_hot_timer_timeout(hot_timer: Timer, source_type: String) -> void:
 	if hot_resource.run_until_removed:
 		var healing: int = hot_resource.heal_ticks_array[0]
 		_send_handled_healing(source_type, heal_affected_stats, healing, -1)
+		affected_entity.sprite.start_hitflash(hot_resource.hit_flash_color, true)
 		hot_timer.set_meta("ticks_completed", ticks_completed + 1)
 	else:
 		var max_ticks: int = hot_resource.heal_ticks_array.size()
 		if ticks_completed < max_ticks:
 			var healing: int = hot_resource.heal_ticks_array[ticks_completed]
 			_send_handled_healing(source_type, heal_affected_stats, healing, -1)
+			affected_entity.sprite.start_hitflash(hot_resource.hit_flash_color, true)
 			hot_timer.set_meta("ticks_completed", ticks_completed + 1)
 
 			if max_ticks == 1:

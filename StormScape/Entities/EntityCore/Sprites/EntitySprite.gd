@@ -38,6 +38,8 @@ var floor_light_tween: Tween = null ## The tween controlling the floor light's s
 var overlay_color_tween: Tween = null ## The tween controlling the overlay color.
 var current_floor_light_names: Array[String] = [] ## The queue for the next colors to show when the previous ones finish.
 var current_sprite_glow_names: Array[String] = [] ## The queue for the next colors to show when the previous ones finish.
+var hitflash_tween: Tween ## The tween that animates the hitflash effect.
+const HITFLASH_DURATION: float = 0.05 ## The duration of the hitflash effect.
 
 
 #region Saving & Loading
@@ -129,3 +131,22 @@ func update_overlay_color(effect_name: String, kill: bool = false) -> void:
 
 		overlay.texture.gradient.set_color(0, new_color)
 		overlay_color_tween.tween_property(overlay, "self_modulate:a", 1.0, change_time_start)
+
+## Starts a hitflash effect based on the color defined in the effect source that caused it. Optionally tweens it in for gentler things
+## like healing.
+func start_hitflash(flash_color: Color = Color(1, 1, 1, 0.6), tween_in: bool = false) -> void:
+	if hitflash_tween:
+		hitflash_tween.kill()
+	hitflash_tween = create_tween()
+
+	set_instance_shader_parameter("use_override_color", true)
+
+	if tween_in:
+		hitflash_tween.tween_property(self, "instance_shader_parameters/override_color", flash_color, 0.1)
+		hitflash_tween.tween_interval(HITFLASH_DURATION)
+	else:
+		set_instance_shader_parameter("override_color", flash_color)
+		hitflash_tween.tween_interval(HITFLASH_DURATION)
+
+	hitflash_tween.tween_property(self, "instance_shader_parameters/override_color", Color.TRANSPARENT, 0.1)
+	hitflash_tween.tween_callback(func() -> void: set_instance_shader_parameter("use_override_color", false))

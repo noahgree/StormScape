@@ -5,7 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://batrfwan8r8ov" path="res://Entities/Items/WeaponMods/WeaponModManager.tscn" id="4_eputi"]
 [ext_resource type="Texture2D" uid="uid://d4fispahsus1d" path="res://Entities/Items/Weapons/ProjectileWeapons/LaserGun/LaserGunBaseCT.tres" id="4_w5kxq"]
 [ext_resource type="Texture2D" uid="uid://cw1i138jhqftk" path="res://Entities/Items/Weapons/ProjectileWeapons/LaserGun/LaserGunBaseMagCT.tres" id="7_nv3qp"]
-[ext_resource type="PackedScene" uid="uid://lw5fgm5pgoif" path="res://Entities/EntityCore/EntityHandSprite.tscn" id="7_o1grk"]
+[ext_resource type="PackedScene" uid="uid://lw5fgm5pgoif" path="res://Entities/EntityCore/Sprites/EntityHandSprite.tscn" id="7_o1grk"]
 [ext_resource type="PackedScene" uid="uid://cpslc01s4ohj5" path="res://Entities/Items/Weapons/WeaponVFX/FiringVFX/Laser/LaserFiringVFX.tscn" id="8_nv3qp"]
 [ext_resource type="Texture2D" uid="uid://bwaiffewkyfle" path="res://Entities/Items/Weapons/ProjectileWeapons/LaserGun/LaserGunBaseGunNoMagCT.tres" id="9_cdpvc"]
 

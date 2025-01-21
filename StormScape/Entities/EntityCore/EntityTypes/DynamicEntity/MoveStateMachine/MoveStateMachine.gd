@@ -34,11 +34,10 @@ func _ready() -> void:
 	rotation_lerping_factor = DEFAULT_ROTATION_LERPING_FACTOR
 
 	for child: Node in get_children():
-		if child is MoveState:
+		if child is State:
 			states[child.name.to_lower()] = child
 			child.transitioned.connect(_on_child_transition)
-			child.dynamic_entity = entity
-			child.stamina_component = entity.get_node("StaminaComponent")
+			child.entity = entity
 
 	if initial_state:
 		initial_state.enter()
@@ -54,7 +53,7 @@ func _ready() -> void:
 ## Advances animation tree manually so that it respects time snares. Overrides parent state machine class.
 func state_machine_physics_process(delta: float) -> void:
 	if should_rotate:
-		update_anim_vector()
+		_update_anim_vector()
 
 	if knockback_vector.length() > 100:
 		update_knockback_streak()
@@ -67,7 +66,7 @@ func state_machine_physics_process(delta: float) -> void:
 		anim_tree.advance(delta)
 
 ## Updates the current animation vector by lerping the current mouse direction.
-func update_anim_vector() -> void:
+func _update_anim_vector() -> void:
 	var entity_loc_with_sprite_offset: Vector2 = entity.sprite.position / 2.0 + entity.global_position
 	curr_mouse_direction = get_lerped_mouse_direction_to_pos(curr_mouse_direction, entity_loc_with_sprite_offset)
 	anim_vector = curr_mouse_direction

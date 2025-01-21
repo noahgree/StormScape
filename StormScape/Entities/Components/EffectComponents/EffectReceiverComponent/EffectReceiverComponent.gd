@@ -12,33 +12,32 @@ class_name EffectReceiverComponent
 @export var absorb_full_hit: bool = false ## When true, any weapon's hitbox that sends an effect to this receiver will be disabled for the remainder of the attack afterwards. Useful for when you want something like a tree to take the full hit and not let an axe keep swinging through to hit enemies behind it.
 @export_group("Source Filtering")
 @export var filter_source_types: bool = false ## When true, only allow matching source types as specified in the below array.
-@export var allowed_source_types: Array[GlobalData.EffectSourceSourceType] = [] ## The list of sources an effect source can come from in order to affect this effect receiver.
+@export var allowed_source_types: Array[GlobalData.EffectSourceSourceType] = [] ## The list of sources an effect source can come from in order to affect this effect receiver (only when filter_source_types is true).
 @export var filter_source_tags: bool = false ## When true, only allow matching source tags as specified in the below array.
-@export var allowed_source_tags: Array[String] = []
+@export var allowed_source_tags: Array[String] = [] ## Effect sources must have a tag that matches something in this array in order to be handled when the filter_source_tags is set to true.
 @export_group("Connected Nodes")
 @export var affected_entity: PhysicsBody2D  ## The connected entity to be affected by the effects be received.
-@export var health_component: HealthComponent
-@export var stamina_component: StaminaComponent
-@export var loot_table_component: LootTableComponent
+@export var health_component: HealthComponent ## The health component of the affected entity.
+@export var stamina_component: StaminaComponent ## The stamina component of the affected entity.
+@export var loot_table_component: LootTableComponent ## The loot table component of the affected entity.
 @export_subgroup("Handlers")
-@export var dmg_handler: DmgHandler
-@export var heal_handler: HealHandler
-@export var storm_syndrome_handler: StormSyndromeHandler
-@export var knockback_handler: KnockbackHandler
-@export var stun_handler: StunHandler
-@export var poison_handler: PoisonHandler
-@export var regen_handler: RegenHandler
-@export var frostbite_handler: FrostbiteHandler
-@export var burning_handler: BurningHandler
-@export var time_snare_handler: TimeSnareHandler
-@export var life_steal_handler: LifeStealHandler
+@export var dmg_handler: DmgHandler ## The dmg handler of the affected entity.
+@export var heal_handler: HealHandler ## The heal handler of the affected entity.
+@export var storm_syndrome_handler: StormSyndromeHandler ## The storm syndrome of the affected entity.
+@export var knockback_handler: KnockbackHandler ## The knockback of the affected entity.
+@export var stun_handler: StunHandler ## The stun handler of the affected entity.
+@export var poison_handler: PoisonHandler ## The poison handler of the affected entity.
+@export var regen_handler: RegenHandler ## The regen handler of the affected entity.
+@export var frostbite_handler: FrostbiteHandler ## The frostbite handler of the affected entity.
+@export var burning_handler: BurningHandler ## The burning handler of the affected entity.
+@export var time_snare_handler: TimeSnareHandler ## The time snare handler of the affected entity.
+@export var life_steal_handler: LifeStealHandler ## The life steal handler of the affected entity.
 
-@onready var tool_script: Node = $EffectReceiverToolScript
+@onready var tool_script: Node = $EffectReceiverToolScript ## The tool script node that helps auto-assign export nodes relative to this receiver.
 
-var most_recent_effect_src: EffectSource = null
-var hit_flash_timer: Timer = Timer.new()
-var current_impact_sounds: Array[int] = []
-var hitflash_tween: Tween
+var most_recent_effect_src: EffectSource = null ## The most recent effect source to be successfully handled by this receiver.
+var current_impact_sounds: Array[int] = [] ## The current impact sounds being played and held onto by this effect receiver.
+var most_recent_multishot_id: int = 0 ## The most recent multishot id to be received. Prevents multishots from stacking status effects.
 
 
 ## This works with the tool script defined above to assign export vars automatically in-editor once added to the tree.
@@ -61,18 +60,15 @@ func _ready() -> void:
 		collision_mask = 0
 		monitoring = false
 
-		add_child(hit_flash_timer)
-		hit_flash_timer.one_shot = true
-		hit_flash_timer.wait_time = 0.05
-		hit_flash_timer.timeout.connect(_update_hit_flash_and_hitmarker)
-		hit_flash_timer.name = "Hit_Flash_Timer"
-
 ## Handles an incoming effect source, passing it to present receivers for further processing before changing
 ## entity stats.
 func handle_effect_source(effect_source: EffectSource, source_entity: PhysicsBody2D, process_status_effects: bool = true) -> void:
 	_handle_cam_fx(effect_source)
 	_handle_impact_sound(effect_source)
-	_update_hit_flash_and_hitmarker(effect_source, source_entity, true)
+	affected_entity.sprite.start_hitflash(effect_source.hit_flash_color, false)
+
+	if source_entity is Player:
+		CursorManager.change_cursor(null, "hit")
 
 	if filter_source_types and (effect_source.source_type not in allowed_source_types):
 		return
@@ -106,20 +102,22 @@ func handle_effect_source(effect_source: EffectSource, source_entity: PhysicsBod
 		loot_table_component.handle_effect_source(effect_source)
 
 	if effect_source.base_healing > 0 and heal_handler != null:
-		if effect_source.base_healing > 0:
-			if _check_same_team(source_entity) and _check_if_good_effects_apply_to_allies(effect_source):
-				heal_handler.handle_instant_heal(effect_source, effect_source.heal_affected_stats)
-			elif not _check_same_team(source_entity) and _check_if_good_effects_apply_to_enemies(effect_source):
-				heal_handler.handle_instant_heal(effect_source, effect_source.heal_affected_stats)
+		if _check_same_team(source_entity) and _check_if_good_effects_apply_to_allies(effect_source):
+			heal_handler.handle_instant_heal(effect_source, effect_source.heal_affected_stats)
+		elif not _check_same_team(source_entity) and _check_if_good_effects_apply_to_enemies(effect_source):
+			heal_handler.handle_instant_heal(effect_source, effect_source.heal_affected_stats)
 
 	if process_status_effects:
 		if can_receive_status_effects:
-			if knockback_handler:
-				knockback_handler.contact_position = effect_source.contact_position
-				knockback_handler.effect_movement_direction = effect_source.movement_direction
-				knockback_handler.is_source_moving_type = (effect_source.source_type == GlobalData.EffectSourceSourceType.FROM_PROJECTILE)
+			if (effect_source.multishot_id == -1) or (effect_source.multishot_id != most_recent_multishot_id):
+				most_recent_multishot_id = effect_source.multishot_id
 
-			_check_status_effect_team_logic(effect_source, source_entity)
+				if knockback_handler:
+					knockback_handler.contact_position = effect_source.contact_position
+					knockback_handler.effect_movement_direction = effect_source.movement_direction
+					knockback_handler.is_source_moving_type = (effect_source.source_type == GlobalData.EffectSourceSourceType.FROM_PROJECTILE)
+
+				_check_status_effect_team_logic(effect_source, source_entity)
 
 ## Checks if each status effect in the array applies to this entity via team logic, then passes it to be unpacked.
 func _check_status_effect_team_logic(effect_source: EffectSource, source_entity: PhysicsBody2D) -> void:
@@ -237,29 +235,6 @@ func _handle_impact_sound(effect_source: EffectSource) -> void:
 					player.set_meta("finish_callables", finish_callables)
 		else:
 			AudioManager.play_sound(effect_source.impact_sound, AudioManager.SoundType.SFX_2D, affected_entity.global_position)
-
-## Updates whether the hit flash and hitmarker is showing or not. Sets the flash color to the one specified in the effect source.
-func _update_hit_flash_and_hitmarker(effect_source: EffectSource = null,
-									source_entity: PhysicsBody2D = null, start: bool = false) -> void:
-	if hitflash_tween:
-		hitflash_tween.kill()
-
-	if start:
-		if source_entity is Player:
-			CursorManager.change_cursor(null, "hit")
-
-		hit_flash_timer.stop()
-		affected_entity.sprite.set_instance_shader_parameter("use_override_color", true)
-		affected_entity.sprite.set_instance_shader_parameter("override_color", effect_source.hit_flash_color)
-		hit_flash_timer.start()
-	else:
-		hitflash_tween = create_tween()
-
-		hitflash_tween.tween_property(affected_entity.sprite, "instance_shader_parameters/override_color", Color.TRANSPARENT, 0.1)
-		hitflash_tween.tween_callback(
-			func() -> void: affected_entity.sprite.set_instance_shader_parameter("use_override_color", false)
-			)
-	pass
 
 ## Starts the player camera fx from the effect source details.
 func _handle_cam_fx(effect_source: EffectSource) -> void:

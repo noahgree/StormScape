@@ -110,7 +110,7 @@ func _start_effect_fx(status_effect: StatusEffect) -> void:
 	if not spawn_particles:
 		return
 
-	if status_effect.update_entity_glow and handler_check:
+	if status_effect.make_entity_glow and handler_check:
 		affected_entity.sprite.update_floor_light(effect_name, false)
 		affected_entity.sprite.update_overlay_color(effect_name, false)
 
@@ -186,7 +186,7 @@ func _stop_effect_fx(status_effect: StatusEffect) -> void:
 	var particle_node: CPUParticles2D = get_node_or_null((effect_name + "Particles").replace(" ", ""))
 	if particle_node != null: particle_node.emitting = false
 
-	if status_effect.update_entity_glow:
+	if status_effect.make_entity_glow:
 		affected_entity.sprite.update_floor_light(effect_name, true)
 		affected_entity.sprite.update_overlay_color(effect_name, true)
 

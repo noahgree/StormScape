@@ -317,7 +317,7 @@ audio_to_play = ""
 only_cue_on_player_hit = false
 spawn_particles = true
 particle_hander_req = ""
-update_entity_glow = true
+make_entity_glow = true
 
 [sub_resource type="Resource" id="Resource_l1t3e"]
 script = ExtResource("27_8kcf2")
