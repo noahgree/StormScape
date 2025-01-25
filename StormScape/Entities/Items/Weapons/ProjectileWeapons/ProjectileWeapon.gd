@@ -32,11 +32,11 @@ class_name ProjectileWeapon
 
 #region Local Vars
 const MAX_ALLOTTED_CLUSTER_DELAY: float = 0.5 ## The max amount of time between each projectile
-var firing_duration_timer: Timer = Timer.new() ## The timer tracking how long after we press fire before the proj spawns.
-var reload_timer: Timer = Timer.new() ## The timer tracking the delay between reload start and end.
-var single_reload_timer: Timer = Timer.new() ## The timer tracking the delay between single bullet reloads.
-var single_reload_delay_timer: Timer = Timer.new() ## The timer tracking the delay before starting the first single reload.
-var hitscan_hands_freeze_timer: Timer = Timer.new() ## The timer that tracks the brief moment after a semi-auto hitscan shot that we shouldn't be rotating.
+var firing_duration_timer: Timer = TimerHelpers.create_one_shot_timer(self) ## The timer tracking how long after we press fire before the proj spawns.
+var reload_timer: Timer = TimerHelpers.create_one_shot_timer(self, -1, _on_reload_timer_timeout) ## The timer tracking the delay between reload start and end.
+var single_reload_timer: Timer = TimerHelpers.create_one_shot_timer(self, -1, _on_single_reload_timer_timeout) ## The timer tracking the delay between single bullet reloads.
+var single_reload_delay_timer: Timer = TimerHelpers.create_one_shot_timer(self, -1, _on_single_reload_delay_timer_timeout) ## The timer tracking the delay before starting the first single reload.
+var hitscan_hands_freeze_timer: Timer = TimerHelpers.create_one_shot_timer(self, -1, _on_hitscan_hands_freeze_timer_timeout) ## The timer that tracks the brief moment after a semi-auto hitscan shot that we shouldn't be rotating.
 var hold_just_released: bool = false ## Whether the mouse hold was just released.
 var is_reloading: bool = false: ## Whether some reload method is currently in progress.
 	set(new_value):
@@ -154,26 +154,11 @@ func _ready() -> void:
 	source_entity.inv.auto_decrementer.cooldown_ended.connect(_on_cooldown_timeout)
 	source_entity.inv.auto_decrementer.recharge_completed.connect(_on_ammo_recharge_completed)
 
-	add_child(firing_duration_timer)
-	add_child(reload_timer)
-	add_child(single_reload_timer)
-	add_child(hitscan_hands_freeze_timer)
-	add_child(single_reload_delay_timer)
-	firing_duration_timer.one_shot = true
-	reload_timer.one_shot = true
-	single_reload_timer.one_shot = true
-	single_reload_delay_timer.one_shot = true
-	hitscan_hands_freeze_timer.one_shot = true
-	reload_timer.timeout.connect(_on_reload_timer_timeout)
-	single_reload_timer.timeout.connect(_on_single_reload_timer_timeout)
-	single_reload_delay_timer.timeout.connect(_on_single_reload_delay_timer_timeout)
-	hitscan_hands_freeze_timer.timeout.connect(_on_hitscan_hands_freeze_timer_timeout)
-
 	anim_player.animation_finished.connect(_on_any_animation_finished)
 	_setup_firing_vfx()
 
 func disable() -> void:
-	source_entity.move_fsm.should_rotate = true
+	source_entity.facing_component.should_rotate = true
 	source_entity.hands.equipped_item_should_follow_mouse = true
 	is_holding_hitscan = false
 	is_reloading_single_and_has_since_released = true
@@ -225,8 +210,10 @@ func enter() -> void:
 
 func exit() -> void:
 	set_process(false)
+
 	super.exit()
-	source_entity.move_fsm.should_rotate = true
+
+	source_entity.facing_component.should_rotate = true
 	source_entity.hands.equipped_item_should_follow_mouse = true
 	_do_post_reload_animation_cleanup()
 	_clean_up_hitscans()

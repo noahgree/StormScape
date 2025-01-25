@@ -2,11 +2,9 @@ extends State
 class_name IdleState
 ## Handles when the dynamic entity is not moving.
 
-var movement_vector: Vector2 = Vector2.ZERO ## The current movement vector for the entity.
-
 
 func enter() -> void:
-	fsm.anim_tree["parameters/playback"].travel("idle")
+	entity.facing_component.travel_anim_tree("idle")
 
 func exit() -> void:
 	pass
@@ -14,29 +12,13 @@ func exit() -> void:
 ## If any input vector besides Vector2.ZERO is detected, we transition to the run state
 func state_physics_process(_delta: float) -> void:
 	_animate()
-	_do_character_idle()
-	_check_for_sneak_request()
+	_do_entity_idle()
 
-func _do_character_idle() -> void:
-	movement_vector = _calculate_move_vector()
-	var knockback: Vector2 = fsm.knockback_vector
-
-	if movement_vector != Vector2.ZERO:
-		transitioned.emit(self, "Run")
+func _do_entity_idle() -> void:
+	if controller.get_movement_vector() != Vector2.ZERO:
+		controller.notify_started_moving()
 	else:
-		if knockback.length() > 0:
-			entity.velocity = knockback
-			transitioned.emit(self, "Run")
-		else:
-			entity.velocity = Vector2.ZERO
-
-func _calculate_move_vector() -> Vector2:
-	return _get_input_vector()
-
-## Checks if we meet the input (or otherwise) conditions to start sneaking. If so, transition to sneak.
-func _check_for_sneak_request() -> void:
-	if _is_sneak_requested() and fsm.knockback_vector == Vector2.ZERO:
-		transitioned.emit(self, "Sneak")
+		entity.velocity = Vector2.ZERO
 
 func _animate() -> void:
-	fsm.anim_tree.set("parameters/idle/blendspace2d/blend_position", fsm.anim_vector)
+	entity.facing_component.update_blend_position("idle")

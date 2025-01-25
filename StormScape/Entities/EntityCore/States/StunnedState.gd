@@ -4,14 +4,11 @@ class_name StunnedState
 
 @export var indicator_scene: PackedScene ## The instance that will be spawned above the character to indicate stun.
 
-@onready var stunned_timer: Timer = $StunnedTimer ## The timer that tracks how much longer the stun has remaining.
-
 var stun_indicator: AnimatedSprite2D ## The animated sprite showing the stun indicator over the entity.
 
 
 func enter() -> void:
-	fsm.anim_tree["parameters/playback"].travel("idle")
-	stunned_timer.start()
+	entity.facing_component.travel_anim_tree("idle")
 	_animate()
 	_create_stun_indicator()
 
@@ -20,13 +17,14 @@ func enter() -> void:
 
 func exit() -> void:
 	if stun_indicator: stun_indicator.queue_free()
+	controller.stunned_timer.stop()
 
 func state_physics_process(delta: float) -> void:
 	_do_character_stun(delta)
 	if stun_indicator: _update_stun_indicator_pos()
 
 func _do_character_stun(delta: float) -> void:
-	var knockback: Vector2 = fsm.knockback_vector
+	var knockback: Vector2 = controller.knockback_vector
 	if knockback.length() > 0:
 		entity.velocity = knockback
 
@@ -37,7 +35,7 @@ func _do_character_stun(delta: float) -> void:
 	entity.move_and_slide()
 
 func _animate() -> void:
-	fsm.anim_tree.set("parameters/idle/blendspace2d/blend_position", fsm.anim_vector)
+	entity.facing_component.update_blend_position("idle")
 
 ## Creates the stun indicator scene above the entity and adds it as a child.
 func _create_stun_indicator() -> void:
@@ -49,7 +47,3 @@ func _update_stun_indicator_pos() -> void:
 	var sprite_texture: Texture2D = SpriteHelpers.SpriteDetails.get_frame_texture(entity.sprite)
 	var sprite_offset: Vector2 = entity.sprite.position - Vector2(0, sprite_texture.get_size().y / 2)
 	stun_indicator.global_position = entity.position + sprite_offset
-
-## When the stun time has ended, transition out of this state and back to Idle.
-func _on_stunned_timer_timeout() -> void:
-	transitioned.emit(self, "Idle")

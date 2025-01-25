@@ -2,49 +2,36 @@ extends State
 class_name DashState
 ## Handles when the dynamic entity is dashing.
 
-@export var _dash_speed: float = 1000 ## How fast the dash moves the character.
-@export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var _dash_duration: float = 0.08 ## The dash duration.
-@export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var _dash_cooldown: float = 1.0 ## The dash cooldown.
-@export var _dash_collision_impulse_factor: float = 1.0 ## A multiplier that controls how much impulse gets applied to rigid entites when colliding with them during a dash.
 @export var ghost_count: int = 8 ## How many ghosts to make during the dash.
 @export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var ghost_fade_time: float = 0.1 ## How long ghosts take to fade.
 @export var dash_impact_cam_fx: CamFXResource
 
-@onready var dash_timer: Timer = $DashTimer ## Timer to enforce how long the dash lasts for.
-
-var movement_vector: Vector2 = Vector2.ZERO ## The current movement vector for the entity.
 var ghosts_spawned: int = 0 ## The number of ghosts spawned so far in this dash.
 var time_since_ghost: float = 0.0 ## The number of seconds since the last ghost spawn.
 var collision_shake_complete: bool = false ## Whether the character hit a collider and had shake applied (if player) during the current dash state
 
 
-func _ready() -> void:
-	var moddable_stats: Dictionary[StringName, float] = {
-		&"dash_speed" : _dash_speed, &"dash_duration" : _dash_duration,
-		&"dash_cooldown" : _dash_cooldown, &"dash_collision_impulse_factor" : _dash_collision_impulse_factor
-	}
-	get_parent().entity.stats.add_moddable_stats(moddable_stats)
-
 func enter() -> void:
-	fsm.anim_tree["parameters/playback"].travel("run")
-	fsm.knockback_vector = Vector2.ZERO
-	fsm.can_receive_effects = false
+	entity.facing_component.travel_anim_tree("run")
+
+	controller.knockback_vector = Vector2.ZERO
+	controller.can_receive_effects = false
 	collision_shake_complete = false
+
 	_play_dash_sound()
 
 	ghosts_spawned = 0
-	dash_timer.start(entity.stats.get_stat("dash_duration"))
-	fsm.dash_cooldown_timer.start(entity.stats.get_stat("dash_duration") + entity.stats.get_stat("dash_cooldown"))
-	movement_vector = _calculate_move_vector()
-	fsm.anim_vector = get_parent().curr_mouse_direction
+	controller.dash_timer.start(entity.stats.get_stat("dash_duration"))
+	controller.dash_cooldown_timer.start(entity.stats.get_stat("dash_duration") + entity.stats.get_stat("dash_cooldown"))
+	entity.facing_component.anim_vector = controller.last_anim_vector
 
 	_create_ghost()
 
 func exit() -> void:
-	fsm.can_receive_effects = true
-	dash_timer.stop()
+	controller.can_receive_effects = true
+	controller.dash_timer.stop()
 	entity.velocity = Vector2.ZERO
-	fsm.knockback_vector = Vector2.ZERO
+	controller.knockback_vector = Vector2.ZERO
 	_stop_dash_sound()
 
 ## Ticks the time since last ghost spawn.
@@ -58,7 +45,7 @@ func state_physics_process(_delta: float)  -> void:
 
 ## Overrides the dynamic entity's velocity to be a simple dash in the direction currently faced.
 func _do_character_dash() -> void:
-	entity.velocity = movement_vector * entity.stats.get_stat("dash_speed")
+	entity.velocity = controller.get_movement_vector() * entity.stats.get_stat("dash_speed")
 	entity.move_and_slide()
 
 	_handle_rigid_entity_collisions()
@@ -83,11 +70,8 @@ func _handle_rigid_entity_collisions() -> void:
 
 			collision_shake_complete = true
 
-func _calculate_move_vector() -> Vector2:
-	return (_get_input_vector().rotated(entity.stats.get_stat("confusion_amount")))
-
 func _animate() -> void:
-	fsm.anim_tree.set("parameters/run/blendspace2d/blend_position", fsm.anim_vector)
+	entity.facing_component.update_blend_position("run")
 
 ## Checks if we have spent enough time since the last ghost and if we haven't spawned enough yet, then spawns one.
 func _update_ghost_spawns() -> void:
@@ -111,13 +95,3 @@ func _play_dash_sound() -> void:
 
 func _stop_dash_sound() -> void:
 	AudioManager.fade_out_sound_by_name("PlayerDash", 0.1, 1, true)
-
-## If there is a non-zero movement vector, go to the run state, otherwise go to the idle state.
-func _travel_to_next_state() -> void:
-	if movement_vector != Vector2.ZERO:
-		transitioned.emit(self, "Run")
-	else:
-		transitioned.emit(self, "Idle")
-
-func _on_dash_timer_timeout() -> void:
-	_travel_to_next_state()

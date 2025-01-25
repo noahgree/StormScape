@@ -1,7 +1,0 @@
-[gd_scene load_steps=2 format=3 uid="uid://cueo26qpyouhj"]
-
-[ext_resource type="Script" path="res://Entities/EntityCore/EntityTypes/DynamicEntity/MoveStateMachine/MoveStateMachine.gd" id="1_xbd8s"]
-
-[node name="MoveStateMachine" type="Node" groups=["has_save_logic"]]
-script = ExtResource("1_xbd8s")
-debug_print_changes = true

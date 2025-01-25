@@ -94,7 +94,7 @@ func enter() -> void:
 
 func exit() -> void:
 	super.exit()
-	source_entity.move_fsm.should_rotate = true
+	source_entity.facing_component.should_rotate = true
 
 ## Overrides the parent method to specify what to do on use while equipped.
 func activate() -> void:
@@ -137,7 +137,7 @@ func _swing() -> void:
 		var cooldown_time: float = stats.cooldown + stats.s_mods.get_stat("use_speed")
 		source_entity.inv.auto_decrementer.add_cooldown(stats.get_cooldown_id(), cooldown_time)
 		is_swinging = true
-		source_entity.move_fsm.should_rotate = false
+		source_entity.facing_component.should_rotate = false
 
 		_apply_start_use_effect(false)
 
@@ -163,7 +163,7 @@ func _charge_swing(hold_time: float) -> void:
 		var cooldown_time: float = stats.s_mods.get_stat("charge_use_cooldown") + stats.s_mods.get_stat("charge_use_speed")
 		source_entity.inv.auto_decrementer.add_cooldown(stats.get_cooldown_id(), cooldown_time)
 		is_swinging = true
-		source_entity.move_fsm.should_rotate = false
+		source_entity.facing_component.should_rotate = false
 		source_entity.hands.snap_y_scale()
 
 		_apply_start_use_effect(true)
@@ -208,7 +208,7 @@ func _apply_post_use_effect(was_charge_fire: bool = false) -> void:
 ## When the swing animation ends, mark that we are no longer swinging and let the entity rotate again.
 func _on_use_animation_ended(was_charge_use: bool = false) -> void:
 	is_swinging = false
-	source_entity.move_fsm.should_rotate = true
+	source_entity.facing_component.should_rotate = true
 
 	_apply_post_use_effect(was_charge_use)
 

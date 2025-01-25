@@ -17,7 +17,7 @@ static var item_scene: PackedScene = preload("res://Entities/Items/ItemCore/Item
 
 var can_be_auto_picked_up: bool = false ## Whether the item can currently be auto picked up by walking over it.
 var can_be_picked_up_at_all: bool = true ## When true, the item is in a state where it cannot be picked up by any means.
-var lifetime_timer: Timer = Timer.new() ## The timer tracking how long the item has left to exist on the ground.
+var lifetime_timer: Timer = TimerHelpers.create_one_shot_timer(self, 300, remove_from_world) ## The timer tracking how long the item has left to exist on the ground.
 
 
 func _set_item(item_stats: ItemResource) -> void:
@@ -82,10 +82,7 @@ func _ready() -> void:
 		_set_rarity_colors()
 		icon.set_instance_shader_parameter("random_start_offset", randf() * 2.0)
 
-		add_child(lifetime_timer)
-		lifetime_timer.timeout.connect(remove_from_world)
-		lifetime_timer.one_shot = true
-		lifetime_timer.start(300)
+		lifetime_timer.start()
 
 	if not can_be_auto_picked_up:
 		await get_tree().create_timer(1.0, false, false, false).timeout

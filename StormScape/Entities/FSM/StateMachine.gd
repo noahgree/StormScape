@@ -8,6 +8,7 @@ class_name StateMachine
 @export var initial_state: State ## What state the state machine should start off in.
 @export var print_state_changes: bool = false ## When true and the DebugFlag flag is also true, this state machine will print when its state gets changed.
 
+@onready var controller: Controller = $Controller
 
 var current_state: State: ## The current state the state machine is in.
 	set(new_state):
@@ -15,42 +16,33 @@ var current_state: State: ## The current state the state machine is in.
 
 		if DebugFlags.PrintFlags.state_machine_swaps and print_state_changes:
 			print_rich("[i]" + get_parent().name + " [/i]entered [color=pink][b]" + current_state.name.to_lower() + "[/b][/color]")
-var states: Dictionary[String, State] = {} ## A dict of all current children states of the state machine node.
+var states: Dictionary[StringName, State] = {} ## A dict of all current children states of the state machine node.
+
 
 ## Caches the child states and sets them up.
 func _ready() -> void:
-	var parent: Node = get_parent()
+	if not get_parent().is_node_ready():
+		await get_parent().ready
 
 	for child: Node in get_children():
 		if child is State:
-			states[child.name.to_lower()] = child
-			child.Transitioned.connect(_on_child_transition)
-			child.dynamic_entity = parent
+			states[StringName(child.name.to_lower())] = child
+			child.fsm = self
+			child.entity = owner
 
 	if initial_state:
 		initial_state.enter()
 		current_state = initial_state
 
-func state_machine_process(delta: float) -> void:
-	if current_state:
-		current_state.state_process(delta)
+## Checks for the existence of the new state and then switches to it.
+func change_state(new_state_name: String) -> void:
+	var new_state: State = states.get(StringName(new_state_name.to_lower()))
 
-func state_machine_physics_process(delta: float) -> void:
-	if current_state:
-		current_state.state_physics_process(delta)
-
-func state_machine_handle_input(event: InputEvent) -> void:
-	if current_state:
-		current_state.state_handle_input(event)
-
-func _on_child_transition(requesting_state: State, new_state_name: String) -> void:
-	if requesting_state != current_state:
-		return
-
-	var new_state: State = states.get(new_state_name.to_lower())
 	if new_state:
 		if current_state:
 			current_state.exit()
 
 			new_state.enter()
 			current_state = new_state
+	else:
+		push_error(owner.name + " tried to switch to a non-existent state within their FSM.")

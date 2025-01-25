@@ -28,17 +28,13 @@ func handle_instant_heal(effect_source: EffectSource, heal_affected_stats: Globa
 
 ## Handles applying damage that is inflicted over time, whether with a delay, with burst intervals, or with both.
 func handle_over_time_heal(hot_resource: HOTResource, source_type: String) -> void:
-	var hot_timer: Timer = Timer.new()
+	var hot_timer: Timer = TimerHelpers.create_repeating_timer(self)
 	hot_timer.set_meta("hot_resource", hot_resource)
-	hot_timer.one_shot = false
 	hot_timer.timeout.connect(_on_hot_timer_timeout.bind(hot_timer, source_type))
 	hot_timer.name = source_type + "_timer"
-	add_child(hot_timer)
 
 	if hot_resource.delay_time > 0: # We have a delay before the healing starts
-		var delay_timer: Timer = Timer.new()
-		delay_timer.one_shot = true
-		delay_timer.wait_time = hot_resource.delay_time
+		var delay_timer: Timer = TimerHelpers.create_one_shot_timer(self, hot_resource.delay_time)
 
 		hot_timer.set_meta("ticks_completed", 0)
 
@@ -52,7 +48,7 @@ func handle_over_time_heal(hot_resource: HOTResource, source_type: String) -> vo
 		delay_timer.timeout.connect(delay_timer.queue_free)
 		delay_timer.name = source_type + "_delayTimer"
 		add_child(delay_timer)
-		delay_timer.start()
+
 		_add_timer_to_cache(source_type, hot_timer, hot_timers)
 		_add_timer_to_cache(source_type, delay_timer, hot_delay_timers)
 	else: # There is no delay needed

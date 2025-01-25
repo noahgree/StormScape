@@ -82,7 +82,7 @@ func handle_effect_source(effect_source: EffectSource, source_entity: PhysicsBod
 
 	most_recent_effect_src = effect_source
 
-	if source_entity.team == GlobalData.Teams.PASSIVE or ((affected_entity is DynamicEntity) and not affected_entity.move_fsm.can_receive_effects):
+	if source_entity.team == GlobalData.Teams.PASSIVE or ((affected_entity is DynamicEntity) and not affected_entity.fsm.controller.can_receive_effects):
 		if loot_table_component: loot_table_component.handle_effect_source(effect_source)
 		return
 

@@ -75,7 +75,7 @@ func handle_self_knockback(knockback_effect: SelfKnockbackEffect) -> void:
 	var effect_dir: Vector2
 
 	if knockback_effect.direction_method == "Direction Faced":
-		effect_dir = -effect_receiver.affected_entity.move_fsm.anim_vector.normalized()
+		effect_dir = -effect_receiver.affected_entity.fsm.controller.anim_vector.normalized()
 	else:
 		var hands_rotation: float = effect_receiver.affected_entity.hands.hands_anchor.global_rotation
 		effect_dir = -Vector2(cos(hands_rotation), sin(hands_rotation)).normalized()

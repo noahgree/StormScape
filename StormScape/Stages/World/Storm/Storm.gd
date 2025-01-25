@@ -26,8 +26,8 @@ var storm_wind_tween: Tween = null ## The tween controlling the wind brightness 
 var storm_rain_tween: Tween = null ## The tween controlling the rain changes.
 var storm_distortion_tween: Tween = null ## The tween controlling the storm distortion changes.
 var player_see_thru_distance_tween: Tween = null ## The tween that gradually changes the player's see through distance in a loop.
-var storm_change_delay_timer: Timer = Timer.new() ## The timer controlling the delay between a new transform has activated and it actually starting to move/resize.
-var current_storm_transform_time_timer: Timer = Timer.new() ## The timer controlling the length of the storm change. Chooses the max time between the resize and relocate time values in the resource.
+var storm_change_delay_timer: Timer = TimerHelpers.create_one_shot_timer(self, -1, _on_storm_change_delay_timer_timeout) ## The timer controlling the delay between a new transform has activated and it actually starting to move/resize.
+var current_storm_transform_time_timer: Timer = TimerHelpers.create_one_shot_timer(self, -1, _on_current_storm_transform_time_timer_timeout) ## The timer controlling the length of the storm change. Chooses the max time between the resize and relocate time values in the resource.
 var see_through_distance: float = 20.0 ## The radius of the see-thru circle for the player.
 var see_through_target_distance: float ## The radius of the see-thru circle for the player.
 var pulse_up: bool = true ## Tracking the changing pulse direction of the player's see thru effect.
@@ -84,12 +84,6 @@ func _is_instance_on_load_game(data: StormData) -> void:
 #region Storm Core
 ## Setting up timers and checking if we should auto start the first transform in the queue.
 func _ready() -> void:
-	add_child(storm_change_delay_timer)
-	add_child(current_storm_transform_time_timer)
-	storm_change_delay_timer.one_shot = true
-	current_storm_transform_time_timer.one_shot = true
-	storm_change_delay_timer.timeout.connect(_on_storm_change_delay_timer_timeout)
-	current_storm_transform_time_timer.timeout.connect(_on_current_storm_transform_time_timer_timeout)
 	DayNightManager.time_tick.connect(_update_see_thru_on_time_change)
 
 	storm_circle.visible = true

@@ -76,9 +76,7 @@ func _handle_status_effect_mods(status_effect: StatusEffect) -> void:
 func _add_status_effect(status_effect: StatusEffect) -> void:
 	current_effects[status_effect.effect_name] = status_effect
 
-	var mod_timer: Timer = Timer.new()
-	mod_timer.wait_time = max(0.01, status_effect.mod_time)
-	mod_timer.one_shot = true
+	var mod_timer: Timer = TimerHelpers.create_one_shot_timer(self, max(0.01, status_effect.mod_time))
 
 	if not status_effect.apply_until_removed:
 		var removing_callable: Callable = Callable(self, "_remove_status_effect").bind(status_effect)
@@ -88,7 +86,6 @@ func _add_status_effect(status_effect: StatusEffect) -> void:
 		mod_timer.timeout.connect(func() -> void: mod_timer.start(status_effect.mod_time))
 
 	mod_timer.name = str(status_effect.effect_name) + str(status_effect.effect_lvl) + "_timer"
-	add_child(mod_timer)
 	mod_timer.start()
 
 	effect_timers[status_effect.effect_name] = mod_timer

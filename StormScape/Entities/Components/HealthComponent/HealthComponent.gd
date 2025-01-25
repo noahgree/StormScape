@@ -186,7 +186,7 @@ func _play_sound(sound_name: String, multishot_id: int) -> void:
 #region Popups
 func _create_or_update_popup_for_src_type(src_type: String, was_healing: bool, was_crit: bool, amount: int) -> void:
 	if current_popup:
-		current_popup.update_popup(amount, src_type, was_crit)
+		current_popup.update_popup(amount, src_type, was_crit, was_healing)
 	else:
 		var new_popup: EffectPopup = EffectPopup.create_popup(src_type, was_healing, was_crit, amount, entity)
 		new_popup.tree_exiting.connect(func() -> void: new_popup.queue_free())

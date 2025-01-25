@@ -1,4 +1,4 @@
-[gd_scene load_steps=123 format=3 uid="uid://bl2igmtwo1a3v"]
+[gd_scene load_steps=125 format=3 uid="uid://bl2igmtwo1a3v"]
 
 [ext_resource type="Script" uid="uid://db4npghrxc6u" path="res://Entities/Enemies/Zombies/Basic/BasicZombie.gd" id="1_8bt15"]
 [ext_resource type="PackedScene" uid="uid://cj2wy5f05cos4" path="res://Entities/EntityCore/Shadow/EntityShadow.tscn" id="1_ko3ep"]
@@ -26,8 +26,10 @@
 [ext_resource type="Script" uid="uid://1qq7eo7lm8j6" path="res://Entities/Components/ItemComponents/LootTableComponent/LootTableEntry.gd" id="19_8bt15"]
 [ext_resource type="Resource" uid="uid://c5jim46mul7ex" path="res://Entities/Items/TRESItems/IonCharge(0).tres" id="20_lm42a"]
 [ext_resource type="Script" uid="uid://cgqfx1ve66f3h" path="res://Entities/Components/ItemComponents/LootTableComponent/LootTable.gd" id="21_epk84"]
-[ext_resource type="PackedScene" uid="uid://cueo26qpyouhj" path="res://Entities/EntityCore/EntityTypes/DynamicEntity/MoveStateMachine/MoveStateMachine.tscn" id="24_csnjs"]
 [ext_resource type="Texture2D" uid="uid://crawnbhc5weqf" path="res://Entities/EntityCore/EntityTypes/DynamicEntity/entity_footstep.png" id="25_kc883"]
+[ext_resource type="Script" uid="uid://c28itqxmeqbq0" path="res://Entities/FSM/StateMachine.gd" id="27_5gwv1"]
+[ext_resource type="PackedScene" uid="uid://jpq0ij8wwlhy" path="res://Entities/EntityCore/FacingComponent.tscn" id="27_pfgxp"]
+[ext_resource type="Script" uid="uid://tqfni6tloktu" path="res://Entities/FSM/DynamicController.gd" id="28_vjlik"]
 [ext_resource type="Script" uid="uid://i7ucoc123rpe" path="res://Entities/EntityCore/States/SpawnState.gd" id="29_vjlik"]
 [ext_resource type="Script" uid="uid://cbyg4eleptthh" path="res://Entities/EntityCore/States/StunnedState.gd" id="30_5gwv1"]
 [ext_resource type="Script" uid="uid://c2sjdkql76qca" path="res://Entities/EntityCore/States/IdleState.gd" id="30_vjlik"]
@@ -45,7 +47,7 @@ height = 24.0
 [sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_6bt22"]
 polygon = PackedVector2Array(-5, -2.98466, -6, -1.98977, -5, 0, 5, 0, 6, -1.98977, 5, -2.98466)
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_vjlik"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_pfgxp"]
 resource_local_to_scene = true
 shader = ExtResource("3_3cie3")
 
@@ -459,7 +461,7 @@ tracks/0/keys = {
 tracks/1/type = "method"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("MoveStateMachine/Die")
+tracks/1/path = NodePath("StateMachine/Die")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -754,7 +756,7 @@ tracks/2/keys = {
 tracks/3/type = "method"
 tracks/3/imported = false
 tracks/3/enabled = true
-tracks/3/path = NodePath("MoveStateMachine/Spawn")
+tracks/3/path = NodePath("StateMachine/Spawn")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
@@ -920,7 +922,7 @@ occluder = SubResource("OccluderPolygon2D_6bt22")
 
 [node name="EntitySprite" parent="YSorter" instance=ExtResource("2_8a5el")]
 unique_name_in_owner = true
-material = SubResource("ShaderMaterial_vjlik")
+material = SubResource("ShaderMaterial_pfgxp")
 position = Vector2(0, -16)
 sprite_frames = SubResource("SpriteFrames_gi80f")
 animation = &"idle"
@@ -997,21 +999,26 @@ parameters/run/TimeScale/scale = 1.0
 loot_table = SubResource("Resource_csnjs")
 hit_spawn_chance = 0.0
 
-[node name="MoveStateMachine" parent="." node_paths=PackedStringArray("entity", "anim_tree", "initial_state") instance=ExtResource("24_csnjs")]
-entity = NodePath("..")
-anim_tree = NodePath("../AnimationTree")
-footstep_texture = ExtResource("25_kc883")
+[node name="FacingComponent" parent="." instance=ExtResource("27_pfgxp")]
+
+[node name="StateMachine" type="Node" parent="." node_paths=PackedStringArray("initial_state")]
+script = ExtResource("27_5gwv1")
 initial_state = NodePath("Spawn")
 print_state_changes = true
 
-[node name="Spawn" type="Node" parent="MoveStateMachine"]
+[node name="Controller" type="Node" parent="StateMachine" node_paths=PackedStringArray("entity")]
+script = ExtResource("28_vjlik")
+entity = NodePath("../..")
+footstep_texture = ExtResource("25_kc883")
+
+[node name="Spawn" type="Node" parent="StateMachine"]
 script = ExtResource("29_vjlik")
 
-[node name="Idle" type="Node" parent="MoveStateMachine"]
+[node name="Idle" type="Node" parent="StateMachine"]
 script = ExtResource("30_vjlik")
 
-[node name="Stunned" type="Node" parent="MoveStateMachine"]
+[node name="Stunned" type="Node" parent="StateMachine"]
 script = ExtResource("30_5gwv1")
 
-[node name="Die" type="Node" parent="MoveStateMachine"]
+[node name="Die" type="Node" parent="StateMachine"]
 script = ExtResource("32_kuvhw")

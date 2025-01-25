@@ -10,10 +10,12 @@ class_name DynamicEntity
 @export var stats: StatModsCacheResource = StatModsCacheResource.new() ## The resource that will cache and work with all stat mods for this entity.
 
 @onready var sprite: Node2D = %EntitySprite ## The visual representation of the entity. Needs to have the EntityEffectShader applied.
+@onready var anim_tree: AnimationTree = $AnimationTree ## The animation tree controlling this entity's animation states.
 @onready var effect_receiver: EffectReceiverComponent = get_node_or_null("EffectReceiverComponent") ## The component that handles incoming effect sources.
 @onready var effects: StatusEffectsComponent = get_node_or_null("%StatusEffectsComponent") ## The node that will cache and manage all status effects for this entity.
 @onready var emission_mgr: ParticleEmissionComponent = $ParticleEmissionComponent ## The component responsible for determining the extents and origins of different particle placements.
-@onready var move_fsm: MoveStateMachine = $MoveStateMachine ## The FSM controlling the entity's movement.
+@onready var fsm: StateMachine = $StateMachine ## The FSM controlling the entity.
+@onready var facing_component: FacingComponent = $FacingComponent ## The component in charge of choosing the entity animation directions.
 @onready var health_component: HealthComponent = $HealthComponent ## The component in charge of entity health and shield.
 @onready var stamina_component: StaminaComponent = get_node_or_null("StaminaComponent") ## The component in charge of entity stamina and hunger.
 @onready var inv: ItemReceiverComponent = get_node_or_null("ItemReceiverComponent") ## The inventory component for the entity.
@@ -45,8 +47,8 @@ func _on_save_game(save_data: Array[SaveData]) -> void:
 	data.shield = health_component.shield
 	data.armor = health_component.armor
 
-	data.anim_vector = move_fsm.anim_vector
-	data.knockback_vector = move_fsm.knockback_vector
+	data.anim_vector = fsm.anim_vector
+	data.knockback_vector = fsm.knockback_vector
 
 	if stamina_component != null:
 		data.stamina = stamina_component.stamina
@@ -88,11 +90,11 @@ func _is_instance_on_load_game(data: DynamicEntityData) -> void:
 	health_component.shield = data.shield
 	health_component.armor = data.armor
 
-	move_fsm.anim_vector = data.anim_vector
-	move_fsm.knockback_vector = data.knockback_vector
-	move_fsm.verify_anim_vector()
-	if velocity.length() > 0 and move_fsm.has_node("Run"):
-		move_fsm._on_child_transition(move_fsm.current_state, "Run")
+	fsm.anim_vector = data.anim_vector ## FIXME!!!
+	fsm.knockback_vector = data.knockback_vector
+	fsm.verify_anim_vector()
+	if velocity.length() > 0 and fsm.has_node("Run"):
+		fsm._on_child_transition(fsm.current_state, "Run")
 
 	if stamina_component != null:
 		stamina_component.stamina = data.stamina
@@ -124,7 +126,7 @@ func _ready() -> void:
 	if Engine.is_editor_hint():
 		return
 
-	assert(has_node("MoveStateMachine"), name + " is a DynamicEntity but does not have a MoveStateMachine.")
+	assert(has_node("StateMachine"), name + " is a DynamicEntity but does not have a StateMachine.")
 	assert(has_node("HealthComponent"), name + " is a DynamicEntity but does not have a HealthComponent.")
 
 	add_to_group("has_save_logic")
@@ -137,7 +139,7 @@ func _process(delta: float) -> void:
 	if Engine.is_editor_hint():
 		return
 
-	move_fsm.state_machine_process(delta)
+	fsm.controller.controller_process(delta)
 
 func _physics_process(delta: float) -> void:
 	if Engine.is_editor_hint():
@@ -147,23 +149,23 @@ func _physics_process(delta: float) -> void:
 		time_snare_counter += delta * snare_factor
 		while time_snare_counter > delta:
 			time_snare_counter -= delta
-			move_fsm.state_machine_physics_process(delta)
+			fsm.controller.controller_physics_process(delta)
 	else:
-		move_fsm.state_machine_physics_process(delta)
+		fsm.controller.controller_physics_process(delta)
 
 func _unhandled_input(event: InputEvent) -> void:
 	if Engine.is_editor_hint():
 		return
 
-	move_fsm.state_machine_handle_input(event)
+	fsm.controller.controller_handle_input(event)
 
 ## Sends a request to the move fsm for entering the stun state using a given duration.
 func request_stun(duration: float) -> void:
-	move_fsm.request_stun(duration)
+	fsm.controller.notify_requested_stun(duration)
 
 ## Requests changing the knockback vector using the incoming knockback.
 func request_knockback(knockback: Vector2) -> void:
-	move_fsm.request_knockback(knockback)
+	fsm.controller.notify_requested_knockback(knockback)
 
 ## Requests to start a time snare effect on the entity.
 func request_time_snare(factor: float, snare_time: float) -> void:
@@ -172,18 +174,14 @@ func request_time_snare(factor: float, snare_time: float) -> void:
 		snare_timer.wait_time = max(0.001, snare_time)
 		snare_timer.start()
 	else:
-		snare_timer = Timer.new()
-		snare_timer.one_shot = true
-		snare_timer.autostart = true
-		snare_timer.wait_time = max(0.001, snare_time)
-		snare_timer.timeout.connect(func() -> void:
+		var timeout_callable: Callable = Callable(func() -> void:
 			snare_factor = 0
-			snare_timer.queue_free()
-			)
-		add_child(snare_timer)
+			snare_timer.queue_free())
+		snare_timer = TimerHelpers.create_one_shot_timer(self, max(0.001, snare_time), timeout_callable)
+		snare_timer.start()
 
 	snare_factor = factor
 
 ## Requests performing whatever dying logic is given in the move fsm.
 func die() -> void:
-	move_fsm.die()
+	fsm.controller.die()

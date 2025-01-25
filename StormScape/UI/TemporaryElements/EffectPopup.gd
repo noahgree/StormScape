@@ -6,56 +6,55 @@ static var popup_scene: PackedScene = preload("res://UI/TemporaryElements/Effect
 
 @export var text_colors: Dictionary[String, GradientTexture1D] ## The strings that have associated colors to change the text color to.
 
-@onready var number_label: Label = $CenterContainer/NumberLabel
-@onready var number_outline: Label = $CenterContainer/NumberOutline
-@onready var glow: TextureRect = $CenterContainer/Glow
-@onready var gradient_tex: TextureRect = $CenterContainer/NumberLabel/GradientTex
+@onready var number_label: Label = $CenterContainer/NumberLabel ## The popup's numbers.
+@onready var number_outline: Label = $CenterContainer/NumberOutline ## The outline of the popup's numbers.
+@onready var glow: TextureRect = $CenterContainer/Glow ## The glow behind the popup's numbers.
+@onready var gradient_tex: TextureRect = $CenterContainer/NumberLabel/GradientTex ## The texture overlay that changes the numbers' colors.
+@onready var starting_scale: Vector2 = scale ## The scale of the popup when first created.
 
-var starting_scale: Vector2
-var source_type: String
-var is_healing: bool
-var is_crit: bool
-var value: int = 0
-var parent_node: PhysicsBody2D
-var tween: Tween
+var value: int = 0 ## The current value of the popup.
+var parent_node: PhysicsBody2D ## The parent of the popup node.
+var tween: Tween ## The tween animating the motion and scale of the popup.
+var was_healing_before: bool = false ## Whether or not we were healing the last time the popup was updated.
 
-
+## Creates and adds an effect popup to the entity that requested it.
 static func create_popup(src_type: String, was_healing: bool,
 						was_crit: bool, popup_value: int, node: PhysicsBody2D) -> EffectPopup:
 	var popup: EffectPopup = popup_scene.instantiate()
 
-	popup.source_type = src_type
-	popup.is_healing = was_healing
-	popup.is_crit = was_crit
-	popup.value = popup_value
 	popup.parent_node = node
-
 	popup.global_position = node.global_position - Vector2(0, SpriteHelpers.SpriteDetails.get_frame_rect(node.sprite).y)
+
 	GlobalData.world_root.add_child(popup)
+	popup.update_popup(popup_value, src_type, was_crit, was_healing)
+
 	return popup
 
-func _ready() -> void:
-	starting_scale = scale
-	update_popup(0, source_type, is_crit)
+## Updates or sets up the popup displaying an effect's values above the entity's head.
+func update_popup(new_value: int, src_type: String, is_crit: bool, is_healing: bool) -> void:
+	if (was_healing_before and not is_healing) or (not was_healing_before and is_healing):
+		value = new_value
+	else:
+		value += new_value
+	was_healing_before = is_healing
 
-func update_popup(new_value: int, src_type: String, was_crit: bool) -> void:
-	value += new_value
 	number_label.text = str(value)
 	global_position = parent_node.global_position - Vector2(0, SpriteHelpers.SpriteDetails.get_frame_rect(parent_node.sprite).y)
 
-	gradient_tex.texture = text_colors.get(src_type if not was_crit else "CritDamage", GradientTexture1D.new())
+	gradient_tex.texture = text_colors.get(src_type if not is_crit else "CritDamage", GradientTexture1D.new())
 
 	if is_healing:
 		glow.modulate = Color(0, 0.859, 0.18, 0.9)
 		number_label.text = "+" + number_label.text
 	else:
 		glow.modulate = Color(1.25, 0.2, 0.3, 1.0)
+		number_label.text = number_label.text
 
 	modulate.a = 1.0
 	skew = -deg_to_rad(15)
 	number_outline.text = number_label.text
 
-	if was_crit:
+	if is_crit:
 		scale = starting_scale * 1.15
 	else:
 		scale = starting_scale

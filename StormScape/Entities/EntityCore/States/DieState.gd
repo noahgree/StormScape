@@ -4,8 +4,8 @@ class_name DieState
 
 
 func enter() -> void:
-	fsm.can_receive_effects = false
-	fsm.anim_tree["parameters/playback"].travel("die")
+	controller.can_receive_effects = false
+	entity.facing_component.travel_anim_tree("die")
 
 func exit() -> void:
 	pass

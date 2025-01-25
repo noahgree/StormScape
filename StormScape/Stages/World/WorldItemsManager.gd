@@ -4,7 +4,7 @@ class_name WorldItemsManager
 
 const GRID_SIZE: float = 30.0 ## The size of the grid partitions in pixels.
 var grid: Dictionary[Vector2i, Array] = {} ## The grid containing all floor item locations & node references.
-var combination_attempt_timer: Timer = Timer.new() ## The timer that delays attempts to combine near floor items.
+var combination_attempt_timer: Timer = TimerHelpers.create_one_shot_timer(self, randf_range(5.0, 15.0), _on_combination_attempt_timer_timeout) ## The timer that delays attempts to combine near floor items.
 
 
 #region Saving & Loading
@@ -20,10 +20,6 @@ func _on_before_load_game() -> void:
 #endregion
 
 func _ready() -> void:
-	add_child(combination_attempt_timer)
-	combination_attempt_timer.one_shot = true
-	combination_attempt_timer.wait_time = randf_range(5.0, 15.0)
-	combination_attempt_timer.timeout.connect(_on_combination_attempt_timer_timeout)
 	combination_attempt_timer.start()
 
 ## When the timer ends, start attempting to combine nearby items on the ground. This also cleans up empty grid locations from our

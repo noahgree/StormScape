@@ -49,17 +49,13 @@ func handle_instant_damage(effect_source: EffectSource, life_steal_percent: floa
 
 ## Handles applying damage that is inflicted over time, whether with a delay, with burst intervals, or with both.
 func handle_over_time_dmg(dot_resource: DOTResource, source_type: String) -> void:
-	var dot_timer: Timer = Timer.new()
+	var dot_timer: Timer = TimerHelpers.create_repeating_timer(self)
 	dot_timer.set_meta("dot_resource", dot_resource)
-	dot_timer.one_shot = false
 	dot_timer.timeout.connect(_on_dot_timer_timeout.bind(dot_timer, source_type))
 	dot_timer.name = source_type + "_timer" + str(randf())
-	add_child(dot_timer)
 
 	if dot_resource.delay_time > 0: # We have a delay before the damage starts
-		var delay_timer: Timer = Timer.new()
-		delay_timer.one_shot = true
-		delay_timer.wait_time = dot_resource.delay_time
+		var delay_timer: Timer = TimerHelpers.create_one_shot_timer(self, dot_resource.delay_time)
 
 		dot_timer.set_meta("ticks_completed", 0)
 
@@ -72,8 +68,8 @@ func handle_over_time_dmg(dot_resource: DOTResource, source_type: String) -> voi
 		delay_timer.timeout.connect(dot_timer.start)
 		delay_timer.timeout.connect(delay_timer.queue_free)
 		delay_timer.name = source_type + "_delayTimer" + str(randf())
-		add_child(delay_timer)
 		delay_timer.start()
+
 		_add_timer_to_cache(source_type, dot_timer, dot_timers)
 		_add_timer_to_cache(source_type, delay_timer, dot_delay_timers)
 	else: # There is no delay needed

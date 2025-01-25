@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://jpq0ij8wwlhy"]
+
+[ext_resource type="Script" uid="uid://c6anrcqjr6o4a" path="res://Entities/EntityCore/FacingComponent.gd" id="1_ifh02"]
+
+[node name="FacingComponent" type="Node"]
+script = ExtResource("1_ifh02")

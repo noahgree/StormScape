@@ -20,11 +20,11 @@ const FOV_RAYCAST_COUNT: int = 36
 var stats: ProjectileResource ## The logic for how to operate this projectile.
 var s_mods: StatModsCacheResource ## The cache containing the current numerical values for firing metrics.
 var starting_proj_height: int ## The starting height the projectile is at when calculating the fake z axis.
-var lifetime_timer: Timer = Timer.new() ## The timer tracking how long the projectile has left to exist.
-var aoe_delay_timer: Timer = Timer.new() ## The timer tracking how long after starting an AOE do we wait before enabling damage again.
-var homing_timer: Timer = Timer.new() ## Timer to control homing duration.
-var homing_delay_timer: Timer = Timer.new() ## Timer for homing start delay.
-var initial_boost_timer: Timer = Timer.new() ## The timer that tracks how long we have left in an initial boost.
+var lifetime_timer: Timer = TimerHelpers.create_one_shot_timer(self, -1, _on_lifetime_timer_timeout_or_reached_max_distance) ## The timer tracking how long the projectile has left to exist.
+var aoe_delay_timer: Timer = TimerHelpers.create_one_shot_timer(self) ## The timer tracking how long after starting an AOE do we wait before enabling damage again.
+var homing_timer: Timer = TimerHelpers.create_one_shot_timer(self, -1, _on_homing_timer_timeout) ## Timer to control homing duration.
+var homing_delay_timer: Timer = TimerHelpers.create_one_shot_timer(self, -1, _start_homing) ## Timer for homing start delay.
+var initial_boost_timer: Timer = TimerHelpers.create_one_shot_timer(self, -1, func() -> void: current_initial_boost = 1.0) ## The timer that tracks how long we have left in an initial boost.
 var current_sampled_speed: float = 0 ## The current speed pulled from the speed curve.
 var true_current_speed: float = 0 ## The real current speed calculated from change in position over time.
 var current_initial_boost: float = 1.0 ## If we need to boost at the start, this tracks the current boost.
@@ -127,20 +127,6 @@ func _ready() -> void:
 	previous_position = global_position
 	sprite.self_modulate = glow_color * (1.0 + (glow_strength / 100.0))
 
-	add_child(lifetime_timer)
-	add_child(aoe_delay_timer)
-	add_child(homing_timer)
-	add_child(homing_delay_timer)
-	add_child(initial_boost_timer)
-	lifetime_timer.one_shot = true
-	aoe_delay_timer.one_shot = true
-	homing_delay_timer.one_shot = true
-	homing_timer.one_shot = true
-	initial_boost_timer.one_shot = true
-	lifetime_timer.timeout.connect(_on_lifetime_timer_timeout_or_reached_max_distance)
-	homing_delay_timer.timeout.connect(_start_homing)
-	homing_timer.timeout.connect(_on_homing_timer_timeout)
-	initial_boost_timer.timeout.connect(func() -> void: current_initial_boost = 1.0)
 	lifetime_timer.start(stats.lifetime)
 
 	_set_up_potential_homing_delay()

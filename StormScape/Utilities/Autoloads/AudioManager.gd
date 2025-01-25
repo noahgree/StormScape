@@ -29,12 +29,8 @@ func _ready() -> void:
 	_cache_audio_resources(music_resources_folder, music_cache)
 	_cache_audio_resources(sfx_resources_folder, sfx_cache)
 
-	var pool_trim_timer: Timer = Timer.new()
-	pool_trim_timer.wait_time = 15.0
-	pool_trim_timer.autostart = true
-	pool_trim_timer.timeout.connect(_trim_pools)
+	var pool_trim_timer: Timer = TimerHelpers.create_repeating_autostart_timer(self, 15.0, _trim_pools)
 	pool_trim_timer.name = "PoolingTrimDaemon"
-	add_child(pool_trim_timer)
 
 ## Stores a key-value pair in the appropriate cache dict using the name specified in the sound resource as the key.
 ## Given a key, the cache created by this method will return a file path to the specified audio name.

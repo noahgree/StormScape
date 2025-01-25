@@ -5,7 +5,7 @@ class_name Weapon
 
 @onready var weapon_mod_manager: WeaponModManager = $WeaponModManager ## The node managing weapon mods.
 
-var pullout_delay_timer: Timer = Timer.new() ## The timer managing the delay after a weapon is equipped before it can be used.
+var pullout_delay_timer: Timer = TimerHelpers.create_one_shot_timer(self) ## The timer managing the delay after a weapon is equipped before it can be used.
 
 
 #region Saving & Loading
@@ -34,7 +34,5 @@ func _ready() -> void:
 	assert(has_node("WeaponModManager"), name + " does not have a weapon mod manager node attached.")
 	super._ready()
 
-	add_child(pullout_delay_timer)
-	pullout_delay_timer.one_shot = true
 	if stats.pullout_delay > 0:
 		pullout_delay_timer.start(stats.pullout_delay)

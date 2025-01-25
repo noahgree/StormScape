@@ -6,7 +6,7 @@ static var scene: PackedScene = preload("res://Entities/EntityCore/EntityTypes/D
 @onready var particles: CPUParticles2D = $CPUParticles2D
 
 const MAX_TRAIL_LENGTH: float = 50.0
-var lifetime_timer: Timer = Timer.new()
+var lifetime_timer: Timer = TimerHelpers.create_one_shot_timer(self, 0.5, _on_lifetime_timer_timeout)
 var is_fading: bool = false
 
 
@@ -15,10 +15,6 @@ static func create() -> FootStreak:
 	return streak
 
 func _ready() -> void:
-	add_child(lifetime_timer)
-	lifetime_timer.one_shot = true
-	lifetime_timer.timeout.connect(_on_lifetime_timer_timeout)
-	lifetime_timer.wait_time = 0.5
 	lifetime_timer.start()
 
 func update_trail_position(pos: Vector2, particle_rot: float) -> void:

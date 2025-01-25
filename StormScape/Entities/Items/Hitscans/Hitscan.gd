@@ -13,8 +13,8 @@ var stats: HitscanResource ## The stats driving this hitscan.
 var s_mods: StatModsCacheResource ## The stat mods resource used to retrieve modified, updated stats for calculations and logic.
 var source_item: ProjectileWeapon ## The weapon that produced this hitscan.
 var rotation_offset: float ## The offset to rotate the hitscan by, determined by the source weapon.
-var lifetime_timer: Timer = Timer.new() ## The timer tracking lifetime left before freeing.
-var effect_tick_timer: Timer = Timer.new() ## The timer delaying the intervals of applying the effect source.
+var lifetime_timer: Timer = TimerHelpers.create_one_shot_timer(self, -1, queue_free) ## The timer tracking lifetime left before freeing.
+var effect_tick_timer: Timer = TimerHelpers.create_one_shot_timer(self) ## The timer delaying the intervals of applying the effect source.
 var debug_rays: Array[Dictionary] = [] ## The debug arrays collected during each hit.
 var end_point: Vector2 ## The end point of the hitscan ray and visuals. Updated by the ray scan.
 var is_hitting_something: bool = false: ## Whether at any point along the hitscan we are hitting something.
@@ -62,14 +62,10 @@ func _draw() -> void:
 			draw_circle(to_pos, 2, color)
 
 func _ready() -> void:
-	add_child(lifetime_timer)
-	add_child(effect_tick_timer)
-	lifetime_timer.one_shot = true
-	effect_tick_timer.one_shot = true
-	lifetime_timer.timeout.connect(queue_free)
 	if not holding_allowed or is_charge_fire:
 		var dur_stat: float = s_mods.get_stat("hitscan_duration")
 		lifetime_timer.start(max(0.05, dur_stat))
+
 	start_particles.emitting = true
 
 	_set_up_visual_fx()

@@ -4,14 +4,14 @@ class_name SpawnState
 
 
 func enter() -> void:
-	fsm.can_receive_effects = false
-	fsm.anim_tree["parameters/playback"].travel("spawn")
+	controller.can_receive_effects = false
+	entity.facing_component.travel_anim_tree("spawn")
 
 func exit() -> void:
-	fsm.can_receive_effects = true
+	controller.can_receive_effects = true
 
 func _on_spawn_anim_ended() -> void:
 	call_deferred("_transition_out_of_spawn")
 
 func _transition_out_of_spawn() -> void:
-	transitioned.emit(self, "Idle")
+	controller.notify_stopped_moving()

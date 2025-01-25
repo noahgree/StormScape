@@ -111,7 +111,7 @@ func on_equipped_item_change(inv_item_slot: Slot) -> void:
 		set_physics_process(false)
 		main_hand_sprite.visible = false
 		off_hand_sprite.visible = false
-		entity.move_fsm.rotation_lerping_factor = entity.move_fsm.DEFAULT_ROTATION_LERPING_FACTOR
+		entity.facing_component.rotation_lerping_factor = entity.facing_component.DEFAULT_ROTATION_LERPING_FACTOR
 		CursorManager.reset()
 		return
 
@@ -120,7 +120,7 @@ func on_equipped_item_change(inv_item_slot: Slot) -> void:
 	_update_anchor_scale("x", 1)
 	_update_anchor_scale("y", 1)
 	main_hand.rotation = 0
-	entity.move_fsm.rotation_lerping_factor = equipped_item.stats.rotation_lerping
+	entity.facing_component.rotation_lerping_factor = equipped_item.stats.rotation_lerping
 	scale_is_lerping = false
 	been_holding_time = 0
 
@@ -204,7 +204,7 @@ func _manage_proj_weapon_hands(anim_vector: Vector2) -> void:
 
 		var direction_vector: Vector2 = Vector2.RIGHT.rotated(hands_anchor.global_rotation)
 
-		var lerped_direction_angle: float = entity.move_fsm.get_lerped_mouse_direction_to_pos(direction_vector, sprite_pos_with_offsets).angle()
+		var lerped_direction_angle: float = entity.get_lerped_mouse_direction_to_pos(direction_vector, sprite_pos_with_offsets).angle()
 		hands_anchor.global_rotation = lerped_direction_angle
 
 		debug_origin_of_projectile_vector = sprite_pos_with_offsets
@@ -236,7 +236,7 @@ func _do_melee_weapon_hand_placement(anim_vector: Vector2) -> void:
 		var target_position: Vector2 = hands_anchor.global_position - Vector2(0, hands_anchor.global_rotation - swing_angle_offset + sprite_visual_rotation_offset)
 		var direction_vector: Vector2 = Vector2.RIGHT.rotated(hands_anchor.global_rotation)
 
-		var lerped_direction_angle: float = entity.move_fsm.get_lerped_mouse_direction_to_pos(direction_vector, target_position).angle()
+		var lerped_direction_angle: float = entity.get_lerped_mouse_direction_to_pos(direction_vector, target_position).angle()
 
 		hands_anchor.global_rotation = lerped_direction_angle
 
@@ -302,4 +302,4 @@ func _update_anchor_scale(coord: String, new_value: float) -> void:
 			hands_anchor.scale.x = new_value
 
 func _get_anim_vector() -> Vector2:
-	return entity.move_fsm.anim_vector
+	return entity.facing_component.anim_vector

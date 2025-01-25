@@ -1,4 +1,4 @@
-[gd_scene load_steps=197 format=3 uid="uid://dba8mrurjlekp"]
+[gd_scene load_steps=199 format=3 uid="uid://dba8mrurjlekp"]
 
 [ext_resource type="Script" uid="uid://c3rpxq8pnbdje" path="res://Entities/Player/PlayerCore/Player.gd" id="1_m33tt"]
 [ext_resource type="Script" uid="uid://c2gdoebfp12dq" path="res://Entities/Stats/StatMod/StatModsCacheResource.gd" id="2_vetip"]
@@ -26,15 +26,17 @@
 [ext_resource type="PackedScene" uid="uid://d1ml6s716obw0" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/TimeSnareHandler.tscn" id="14_63vgk"]
 [ext_resource type="PackedScene" uid="uid://depnx3pnassrq" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/BurningHandler.tscn" id="14_q2ueb"]
 [ext_resource type="Script" uid="uid://cbyg4eleptthh" path="res://Entities/EntityCore/States/StunnedState.gd" id="15_eiig3"]
-[ext_resource type="PackedScene" uid="uid://cueo26qpyouhj" path="res://Entities/EntityCore/EntityTypes/DynamicEntity/MoveStateMachine/MoveStateMachine.tscn" id="16_xoncr"]
 [ext_resource type="PackedScene" uid="uid://csrq1m4rp52vf" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/StormSyndromeHandler.tscn" id="17_2cms1"]
 [ext_resource type="Script" uid="uid://i7ucoc123rpe" path="res://Entities/EntityCore/States/SpawnState.gd" id="17_fwsnm"]
 [ext_resource type="Script" uid="uid://clmf6cxgxu6kb" path="res://Utilities/Debug/TestButtons.gd" id="17_vdk5v"]
 [ext_resource type="Script" uid="uid://cbuaklpos5jdp" path="res://Entities/EntityCore/States/DieState.gd" id="18_jcofa"]
 [ext_resource type="Script" uid="uid://cf7pyv5l3pefi" path="res://Entities/Player/States/SneakState.gd" id="19_alhqe"]
 [ext_resource type="PackedScene" uid="uid://b4bmp3jehto3g" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/LifeStealHandler.tscn" id="20_f770q"]
-[ext_resource type="Texture2D" uid="uid://crawnbhc5weqf" path="res://Entities/EntityCore/EntityTypes/DynamicEntity/entity_footstep.png" id="22_7y82q"]
+[ext_resource type="PackedScene" uid="uid://jpq0ij8wwlhy" path="res://Entities/EntityCore/FacingComponent.tscn" id="25_0t1mv"]
+[ext_resource type="Script" uid="uid://c28itqxmeqbq0" path="res://Entities/FSM/StateMachine.gd" id="25_6wv7y"]
+[ext_resource type="Texture2D" uid="uid://crawnbhc5weqf" path="res://Entities/EntityCore/EntityTypes/DynamicEntity/entity_footstep.png" id="27_0t1mv"]
 [ext_resource type="PackedScene" uid="uid://biduyqlpqhmrp" path="res://Entities/Stats/EffectSystemResources/StatusEffects/BadEffects/Stun/StunIndicator.tscn" id="27_fyxoi"]
+[ext_resource type="Script" uid="uid://evdilpt7dh6f" path="res://Entities/Player/PlayerCore/PlayerController.gd" id="27_n4o3n"]
 [ext_resource type="PackedScene" uid="uid://c4n604w30gx8m" path="res://Entities/Components/ItemComponents/ItemReceiverComponent/ItemReceiverComponent.tscn" id="30_qgyag"]
 [ext_resource type="Script" uid="uid://i6jv5dqqpf3n" path="res://UI/Inventory/PlayerInventory/PlayerInvCommunicator.gd" id="31_mjpan"]
 [ext_resource type="Script" uid="uid://dq62ojsc43p8o" path="res://UI/Inventory/PlayerInventory/PlayerInvUI.gd" id="32_3a185"]
@@ -221,7 +223,7 @@ tracks/0/keys = {
 tracks/1/type = "method"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("MoveStateMachine/Die")
+tracks/1/path = NodePath("StateMachine/Die")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -505,7 +507,7 @@ tracks/0/keys = {
 tracks/1/type = "method"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("MoveStateMachine/Run")
+tracks/1/path = NodePath("StateMachine/Run")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -531,13 +533,25 @@ tracks/2/keys = {
 "update": 1,
 "values": [Vector2(0, 0), Vector2(0, -3), Vector2(0, -2), Vector2(0, -1), Vector2(0, -3), Vector2(0, -2)]
 }
-tracks/3/type = "method"
+tracks/3/type = "value"
 tracks/3/imported = false
 tracks/3/enabled = true
-tracks/3/path = NodePath("MoveStateMachine")
+tracks/3/path = NodePath("YSorter/EntitySprite:animation")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [&"run"]
+}
+tracks/4/type = "method"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("StateMachine/Controller")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
 "times": PackedFloat32Array(0, 0.3),
 "transitions": PackedFloat32Array(1, 1),
 "values": [{
@@ -547,18 +561,6 @@ tracks/3/keys = {
 "args": [[Vector2(4, 0)]],
 "method": &"create_footprint"
 }]
-}
-tracks/4/type = "value"
-tracks/4/imported = false
-tracks/4/enabled = true
-tracks/4/path = NodePath("YSorter/EntitySprite:animation")
-tracks/4/interp = 1
-tracks/4/loop_wrap = true
-tracks/4/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [&"run"]
 }
 
 [sub_resource type="Animation" id="Animation_60xdl"]
@@ -593,7 +595,7 @@ tracks/1/keys = {
 tracks/2/type = "method"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("MoveStateMachine/Run")
+tracks/2/path = NodePath("StateMachine/Run")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
@@ -622,7 +624,7 @@ tracks/3/keys = {
 tracks/4/type = "method"
 tracks/4/imported = false
 tracks/4/enabled = true
-tracks/4/path = NodePath("MoveStateMachine")
+tracks/4/path = NodePath("StateMachine/Controller")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/keys = {
@@ -669,7 +671,7 @@ tracks/1/keys = {
 tracks/2/type = "method"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("MoveStateMachine/Run")
+tracks/2/path = NodePath("StateMachine/Run")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
@@ -698,7 +700,7 @@ tracks/3/keys = {
 tracks/4/type = "method"
 tracks/4/imported = false
 tracks/4/enabled = true
-tracks/4/path = NodePath("MoveStateMachine")
+tracks/4/path = NodePath("StateMachine/Controller")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/keys = {
@@ -745,7 +747,7 @@ tracks/1/keys = {
 tracks/2/type = "method"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("MoveStateMachine/Run")
+tracks/2/path = NodePath("StateMachine/Run")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
@@ -774,17 +776,17 @@ tracks/3/keys = {
 tracks/4/type = "method"
 tracks/4/imported = false
 tracks/4/enabled = true
-tracks/4/path = NodePath("MoveStateMachine")
+tracks/4/path = NodePath("StateMachine/Controller")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/keys = {
 "times": PackedFloat32Array(0, 0.3),
 "transitions": PackedFloat32Array(1, 1),
 "values": [{
-"args": [[Vector2(-4, 0)]],
+"args": [[Vector2(4, 0)]],
 "method": &"create_footprint"
 }, {
-"args": [[Vector2(4, 0)]],
+"args": [[Vector2(-4, 0)]],
 "method": &"create_footprint"
 }]
 }
@@ -821,7 +823,7 @@ tracks/1/keys = {
 tracks/2/type = "method"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("MoveStateMachine/Run")
+tracks/2/path = NodePath("StateMachine/Run")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
@@ -850,17 +852,17 @@ tracks/3/keys = {
 tracks/4/type = "method"
 tracks/4/imported = false
 tracks/4/enabled = true
-tracks/4/path = NodePath("MoveStateMachine")
+tracks/4/path = NodePath("StateMachine/Controller")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/keys = {
 "times": PackedFloat32Array(0, 0.3),
 "transitions": PackedFloat32Array(1, 1),
 "values": [{
-"args": [[Vector2(-4, 0)]],
+"args": [[Vector2(4, 0)]],
 "method": &"create_footprint"
 }, {
-"args": [[Vector2(4, 0)]],
+"args": [[Vector2(-4, 0)]],
 "method": &"create_footprint"
 }]
 }
@@ -897,7 +899,7 @@ tracks/1/keys = {
 tracks/2/type = "method"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("MoveStateMachine/Run")
+tracks/2/path = NodePath("StateMachine/Run")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
@@ -926,7 +928,7 @@ tracks/3/keys = {
 tracks/4/type = "method"
 tracks/4/imported = false
 tracks/4/enabled = true
-tracks/4/path = NodePath("MoveStateMachine")
+tracks/4/path = NodePath("StateMachine/Controller")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/keys = {
@@ -984,7 +986,7 @@ tracks/2/keys = {
 tracks/3/type = "method"
 tracks/3/imported = false
 tracks/3/enabled = true
-tracks/3/path = NodePath("MoveStateMachine/Spawn")
+tracks/3/path = NodePath("StateMachine/Spawn")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
@@ -1142,7 +1144,7 @@ states/idle/position = Vector2(367.25, 50)
 states/run/node = SubResource("AnimationNodeBlendTree_w6nco")
 states/run/position = Vector2(367, 176.5)
 states/spawn/node = SubResource("AnimationNodeAnimation_5b1k5")
-states/spawn/position = Vector2(184.5, 70.5)
+states/spawn/position = Vector2(184.5, 70)
 transitions = ["idle", "run", SubResource("AnimationNodeStateMachineTransition_70g00"), "run", "idle", SubResource("AnimationNodeStateMachineTransition_sdv4y"), "Start", "spawn", SubResource("AnimationNodeStateMachineTransition_8h6fx"), "spawn", "idle", SubResource("AnimationNodeStateMachineTransition_x8kh3")]
 graph_offset = Vector2(-144, -58)
 
@@ -1499,43 +1501,40 @@ debug_color = Color(1, 0.294, 0.588, 0.06)
 
 [node name="LifeStealHandler" parent="EffectReceiverComponent" instance=ExtResource("20_f770q")]
 
-[node name="MoveStateMachine" parent="." node_paths=PackedStringArray("entity", "anim_tree", "initial_state") instance=ExtResource("16_xoncr")]
-entity = NodePath("..")
-anim_tree = NodePath("../AnimationTree")
-footstep_texture = ExtResource("22_7y82q")
-initial_state = NodePath("Spawn")
+[node name="FacingComponent" parent="." instance=ExtResource("25_0t1mv")]
 
-[node name="Spawn" type="Node" parent="MoveStateMachine"]
+[node name="StateMachine" type="Node" parent="." node_paths=PackedStringArray("initial_state") groups=["has_save_logic"]]
+script = ExtResource("25_6wv7y")
+initial_state = NodePath("Spawn")
+print_state_changes = true
+
+[node name="Controller" type="Node" parent="StateMachine" node_paths=PackedStringArray("entity")]
+script = ExtResource("27_n4o3n")
+entity = NodePath("../..")
+footstep_texture = ExtResource("27_0t1mv")
+
+[node name="Spawn" type="Node" parent="StateMachine"]
 script = ExtResource("17_fwsnm")
 
-[node name="Die" type="Node" parent="MoveStateMachine"]
+[node name="Die" type="Node" parent="StateMachine"]
 script = ExtResource("18_jcofa")
 
-[node name="Idle" type="Node" parent="MoveStateMachine"]
+[node name="Idle" type="Node" parent="StateMachine"]
 script = ExtResource("7_15a5x")
 
-[node name="Run" type="Node" parent="MoveStateMachine"]
+[node name="Run" type="Node" parent="StateMachine"]
 script = ExtResource("9_0dcld")
 
-[node name="Sneak" type="Node" parent="MoveStateMachine"]
+[node name="Sneak" type="Node" parent="StateMachine"]
 script = ExtResource("19_alhqe")
 
-[node name="Dash" type="Node" parent="MoveStateMachine"]
+[node name="Dash" type="Node" parent="StateMachine"]
 script = ExtResource("9_a1qv1")
 dash_impact_cam_fx = SubResource("Resource_6wv7y")
 
-[node name="DashTimer" type="Timer" parent="MoveStateMachine/Dash"]
-one_shot = true
-
-[node name="DashCooldownTimer" type="Timer" parent="MoveStateMachine/Dash"]
-one_shot = true
-
-[node name="Stunned" type="Node" parent="MoveStateMachine"]
+[node name="Stunned" type="Node" parent="StateMachine"]
 script = ExtResource("15_eiig3")
 indicator_scene = ExtResource("27_fyxoi")
-
-[node name="StunnedTimer" type="Timer" parent="MoveStateMachine/Stunned"]
-one_shot = true
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
@@ -2763,8 +2762,6 @@ size_flags_vertical = 4
 layout_mode = 2
 size_flags_vertical = 4
 
-[connection signal="timeout" from="MoveStateMachine/Dash/DashTimer" to="MoveStateMachine/Dash" method="_on_dash_timer_timeout"]
-[connection signal="timeout" from="MoveStateMachine/Stunned/StunnedTimer" to="MoveStateMachine/Stunned" method="_on_stunned_timer_timeout"]
 [connection signal="pressed" from="OverlayUI/TestButtons/TestHurtBtn" to="OverlayUI/TestButtons" method="_on_test_hurt_btn_pressed"]
 [connection signal="pressed" from="OverlayUI/TestButtons/TestHealBtn" to="OverlayUI/TestButtons" method="_on_test_heal_btn_pressed"]
 [connection signal="pressed" from="OverlayUI/TestButtons/TestMusicBtn" to="OverlayUI/TestButtons" method="_on_test_music_btn_pressed"]
