@@ -30,7 +30,7 @@ height = 19.9999
 [sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_2kecs"]
 polygon = PackedVector2Array(-10, -4, -10, 0, 9, 0, 9, -4)
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_7biur"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_o33n8"]
 resource_local_to_scene = true
 shader = ExtResource("3_epxnw")
 
@@ -70,6 +70,7 @@ collision_layer = 16
 script = ExtResource("1_4yxmu")
 team = 2
 stats = SubResource("Resource_s42vq")
+is_object = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0, -7)
@@ -87,7 +88,7 @@ scale = Vector2(4.69333, 2.75429)
 
 [node name="EntitySprite" parent="." instance=ExtResource("4_5qk3y")]
 unique_name_in_owner = true
-material = SubResource("ShaderMaterial_7biur")
+material = SubResource("ShaderMaterial_o33n8")
 position = Vector2(14, -48)
 sprite_frames = SubResource("SpriteFrames_o33n8")
 

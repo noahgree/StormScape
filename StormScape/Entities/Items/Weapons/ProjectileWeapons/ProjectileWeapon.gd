@@ -184,7 +184,7 @@ func enter() -> void:
 	_update_ammo_ui()
 
 	# Checking to see if we are out of ammo and should reload upon equipping
-	if stats.ammo_type != ProjWeaponResource.ProjAmmoType.SELF and stats.ammo_type != ProjWeaponResource.ProjAmmoType.STAMINA:
+	if stats.ammo_type not in [ProjWeaponResource.ProjAmmoType.SELF, ProjWeaponResource.ProjAmmoType.STAMINA]:
 		if stats.ammo_in_mag < stats.s_mods.get_stat("mag_size"):
 			_request_ammo_recharge()
 
@@ -400,7 +400,8 @@ func _charge_fire(hold_time: float) -> void:
 		_set_up_hitscan()
 		_start_firing_sequence()
 
-## Set up the delay we will use if we have a non-holding or charged hitscan. This basically increases the shot duration.
+## Set up the delay we will use if we have a non-holding or charged hitscan. This basically
+## increases the shot duration.
 func _set_up_hitscan() -> void:
 	if not stats.use_hitscan:
 		hitscan_delay = 0
@@ -416,8 +417,10 @@ func _clean_up_hitscans() -> void:
 		if is_instance_valid(hitscan):
 			hitscan.queue_free()
 	current_hitscans.clear()
+	firing_in_progress = false
 
-## When the timer that runs when we shouldn't follow the mouse (because of an active hitscan) ends, allow mouse following again.
+## When the timer that runs when we shouldn't follow the mouse (because of an active hitscan) ends,
+## allow mouse following again.
 func _on_hitscan_hands_freeze_timer_timeout() -> void:
 	source_entity.hands.should_rotate = true
 #endregion
@@ -448,7 +451,8 @@ func _apply_ammo_consumption() -> void:
 
 	_handle_per_shot_delay_and_bloom(shot_count, (not is_holding_hitscan))
 
-## Calls to increase the bloom and awaits burst bullet delays if we have them. Can be told not to spawn afterwards as well.
+## Calls to increase the bloom and awaits burst bullet delays if we have them. Can be told not to
+## spawn afterwards as well.
 func _handle_per_shot_delay_and_bloom(shot_count: int, proceed_to_spawn: bool = true) -> void:
 	bursting_in_progress = true
 	for i: int in range(shot_count):

@@ -1,7 +1,10 @@
-[gd_scene load_steps=10 format=3 uid="uid://c3e5wour08d6u"]
+[gd_scene load_steps=11 format=3 uid="uid://c3e5wour08d6u"]
 
-[ext_resource type="Script" path="res://Entities/Items/Hitscans/Hitscan.gd" id="1_i0es2"]
+[ext_resource type="Script" uid="uid://c0mnwhot5u41x" path="res://Entities/Items/Hitscans/Hitscan.gd" id="1_i0es2"]
 [ext_resource type="Texture2D" uid="uid://ide5dl6vilq8" path="res://Entities/Items/Hitscans/glow_circle.png" id="3_aayxu"]
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_6r32f"]
+light_mode = 1
 
 [sub_resource type="Curve" id="Curve_rgawo"]
 _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
@@ -9,6 +12,7 @@ point_count = 2
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_3k8uu"]
 blend_mode = 1
+light_mode = 1
 
 [sub_resource type="Curve" id="Curve_xxm3k"]
 _data = [Vector2(0, 0.685395), 0.0, 0.0, 0, 0, Vector2(0.498322, 0.505095), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
@@ -20,16 +24,19 @@ colors = PackedColorArray(0.999998, 0.522116, 0.490212, 1, 0.999995, 0.510296, 0
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_vu5c3"]
 blend_mode = 1
+light_mode = 1
 
 [sub_resource type="Curve" id="Curve_77e5t"]
-min_value = -1.0
+_limits = [-1.0, 1.0, 0.0, 1.0]
 _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, -0.758845), 0.0, 0.0, 0, 0]
 point_count = 2
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_su2lh"]
 blend_mode = 1
+light_mode = 1
 
 [node name="LaserBeam" type="Line2D"]
+material = SubResource("CanvasItemMaterial_6r32f")
 points = PackedVector2Array(0, 0)
 width = 1.5
 width_curve = SubResource("Curve_rgawo")
@@ -42,9 +49,9 @@ metadata/_edit_vertical_guides_ = [-81.0]
 [node name="StartParticles" type="CPUParticles2D" parent="."]
 material = SubResource("CanvasItemMaterial_3k8uu")
 emitting = false
+texture = ExtResource("3_aayxu")
 lifetime = 0.3
 preprocess = 0.05
-texture = ExtResource("3_aayxu")
 spread = 20.0
 gravity = Vector2(0, 0)
 initial_velocity_min = 120.0
@@ -59,9 +66,9 @@ hue_variation_max = 0.03
 
 [node name="ImpactParticles" type="CPUParticles2D" parent="."]
 material = SubResource("CanvasItemMaterial_vu5c3")
+texture = ExtResource("3_aayxu")
 lifetime = 0.3
 preprocess = 0.05
-texture = ExtResource("3_aayxu")
 spread = 20.0
 gravity = Vector2(0, 0)
 initial_velocity_min = 250.0
@@ -79,9 +86,9 @@ hue_variation_curve = SubResource("Curve_77e5t")
 material = SubResource("CanvasItemMaterial_su2lh")
 emitting = false
 amount = 20
+texture = ExtResource("3_aayxu")
 lifetime = 0.2
 preprocess = 0.05
-texture = ExtResource("3_aayxu")
 emission_shape = 3
 emission_rect_extents = Vector2(1, 1)
 spread = 10.0

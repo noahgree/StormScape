@@ -8,6 +8,7 @@ class_name StaticEntity
 
 @export var team: GlobalData.Teams = GlobalData.Teams.PLAYER ## What the effects received by this entity should consider as this entity's team.
 @export var stats: StatModsCacheResource = StatModsCacheResource.new() ## The resource that will cache and work with all stat mods for this entity.
+@export var is_object: bool = false ## When true, this entity's collision logic will follow that of a world object, regardless of team.
 
 @onready var sprite: Node2D = $EntitySprite ## The visual representation of the entity. Needs to have the EntityEffectShader applied.
 @onready var anim_tree: AnimationTree = $AnimationTree ## The animation tree controlling this entity's animation states.
@@ -85,7 +86,14 @@ func _ready() -> void:
 	assert(has_node("DetectionComponent"), name + " is a StaticEntity but does not have a DetectionComponent.")
 
 	add_to_group("has_save_logic")
-	if team == GlobalData.Teams.PLAYER:
+	if is_object:
+		collision_layer = 0b100000
+		match team:
+			GlobalData.Teams.PLAYER:
+				add_to_group("player_entities")
+			GlobalData.Teams.ENEMY:
+				add_to_group("enemy_entities")
+	elif team == GlobalData.Teams.PLAYER:
 		collision_layer = 0b10
 		add_to_group("player_entities")
 	elif team == GlobalData.Teams.ENEMY:

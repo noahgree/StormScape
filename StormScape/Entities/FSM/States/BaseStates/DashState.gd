@@ -9,16 +9,22 @@ class_name DashState
 var ghosts_spawned: int = 0 ## The number of ghosts spawned so far in this dash.
 var time_since_ghost: float = 0.0 ## The number of seconds since the last ghost spawn.
 var collision_shake_complete: bool = false ## Whether the character hit a collider and had shake applied (if player) during the current dash state
+var initial_collision_mask: int = 0
 
 
 func enter() -> void:
+	if entity is Player:
+		initial_collision_mask = entity.collision_mask
+		var bitmask: int = ~((1 << 2) | (1 << 3) | (1 << 4))
+		entity.collision_mask &= bitmask
+
 	entity.facing_component.travel_anim_tree("run")
 
 	controller.knockback_vector = Vector2.ZERO
 	controller.can_receive_effects = false
 	collision_shake_complete = false
 
-	_play_dash_sound()
+	if entity is Player: _play_dash_sound()
 
 	ghosts_spawned = 0
 	controller.dash_timer.start(entity.stats.get_stat("dash_duration"))
@@ -28,11 +34,14 @@ func enter() -> void:
 	_create_ghost()
 
 func exit() -> void:
+	if entity is Player:
+		entity.collision_mask = initial_collision_mask
+
 	controller.can_receive_effects = true
 	controller.dash_timer.stop()
 	entity.velocity = Vector2.ZERO
 	controller.knockback_vector = Vector2.ZERO
-	_stop_dash_sound()
+	if entity is Player: _stop_dash_sound()
 
 ## Ticks the time since last ghost spawn.
 func state_process(delta: float) -> void:
@@ -48,9 +57,9 @@ func _do_character_dash() -> void:
 	entity.velocity = controller.get_movement_vector() * entity.stats.get_stat("dash_speed")
 	entity.move_and_slide()
 
-	_handle_rigid_entity_collisions()
+	if entity is Player: _handle_rigid_entity_collisions()
 
-## Handles moving rigid entities that we collided with in the last frame.
+## Handles moving rigid entities that we collided with in the last frame. Only happens for players.
 func _handle_rigid_entity_collisions() -> void:
 	for i: int in entity.get_slide_collision_count():
 		var c: KinematicCollision2D = entity.get_slide_collision(i)
@@ -73,13 +82,15 @@ func _handle_rigid_entity_collisions() -> void:
 func _animate() -> void:
 	entity.facing_component.update_blend_position("run")
 
-## Checks if we have spent enough time since the last ghost and if we haven't spawned enough yet, then spawns one.
+## Checks if we have spent enough time since the last ghost and if we haven't spawned enough yet,
+## then spawns one.
 func _update_ghost_spawns() -> void:
 	if (ghosts_spawned < ghost_count) and (time_since_ghost >= (entity.stats.get_stat("dash_duration") / ghost_count)):
 		_create_ghost()
 		time_since_ghost = 0.0
 
-## Grabs the current animation frame texture and creates a ghost from it, adding it at the proper offset as a child.
+## Grabs the current animation frame texture and creates a ghost from it, adding it at the
+## proper offset as a child.
 func _create_ghost() -> void:
 	var sprite_texture: Texture2D = SpriteHelpers.SpriteDetails.get_frame_texture(entity.sprite)
 
@@ -90,8 +101,10 @@ func _create_ghost() -> void:
 	add_child(ghost_instance)
 	ghosts_spawned += 1
 
+## Plays the dash sound, only for players.
 func _play_dash_sound() -> void:
 	AudioManager.play_sound("PlayerDash", AudioManager.SoundType.SFX_GLOBAL)
 
+## Stops the dash sound, only for players.
 func _stop_dash_sound() -> void:
 	AudioManager.fade_out_sound_by_name("PlayerDash", 0.1, 1, true)

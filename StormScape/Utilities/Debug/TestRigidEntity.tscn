@@ -105,6 +105,7 @@ linear_damp = 4.5
 script = ExtResource("1_6tnit")
 team = 2
 stats = SubResource("Resource_8lyar")
+is_object = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0, -10)

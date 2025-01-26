@@ -60,6 +60,9 @@ func _ready() -> void:
 	if Engine.is_editor_hint():
 		return
 
+	if not affected_entity.is_node_ready():
+		await affected_entity.ready
+
 	collision_layer = affected_entity.collision_layer
 	collision_mask = 0
 	monitoring = false

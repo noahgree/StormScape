@@ -39,3 +39,6 @@ class Particles:
 
 class OnScreenDebug:
 	static var frame_rate: bool = true
+
+class Entity:
+	static var show_facing_dir: bool = false

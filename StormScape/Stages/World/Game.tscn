@@ -480,7 +480,7 @@ noise = SubResource("FastNoiseLite_yrru3")
 shader = ExtResource("30_rhtsc")
 shader_parameter/noise_texture = SubResource("NoiseTexture2D_npyjk")
 shader_parameter/density = 0.03
-shader_parameter/speed = Vector2(0.006, 0.004)
+shader_parameter/speed = Vector2(0.01, 0.008)
 
 [node name="Game" type="Node2D"]
 
@@ -606,6 +606,36 @@ position = Vector2(76, 190)
 
 [node name="BasicZombie3" parent="WorldRoot/Testing" instance=ExtResource("31_8lm63")]
 position = Vector2(397, 41)
+
+[node name="BasicZombie4" parent="WorldRoot/Testing" instance=ExtResource("31_8lm63")]
+position = Vector2(398, 126)
+
+[node name="BasicZombie5" parent="WorldRoot/Testing" instance=ExtResource("31_8lm63")]
+position = Vector2(295, 168)
+
+[node name="BasicZombie6" parent="WorldRoot/Testing" instance=ExtResource("31_8lm63")]
+position = Vector2(372, 179)
+
+[node name="BasicZombie7" parent="WorldRoot/Testing" instance=ExtResource("31_8lm63")]
+position = Vector2(377, 80)
+
+[node name="BasicZombie8" parent="WorldRoot/Testing" instance=ExtResource("31_8lm63")]
+position = Vector2(336, 14)
+
+[node name="BasicZombie9" parent="WorldRoot/Testing" instance=ExtResource("31_8lm63")]
+position = Vector2(346, 46)
+
+[node name="BasicZombie10" parent="WorldRoot/Testing" instance=ExtResource("31_8lm63")]
+position = Vector2(429, 72)
+
+[node name="BasicZombie11" parent="WorldRoot/Testing" instance=ExtResource("31_8lm63")]
+position = Vector2(433, 113)
+
+[node name="BasicZombie12" parent="WorldRoot/Testing" instance=ExtResource("31_8lm63")]
+position = Vector2(476, 101)
+
+[node name="BasicZombie13" parent="WorldRoot/Testing" instance=ExtResource("31_8lm63")]
+position = Vector2(463, 53)
 
 [node name="Player" parent="WorldRoot" instance=ExtResource("4_ptig0")]
 position = Vector2(226, 75)

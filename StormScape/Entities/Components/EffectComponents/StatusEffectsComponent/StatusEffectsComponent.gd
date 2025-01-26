@@ -86,7 +86,10 @@ func _add_status_effect(status_effect: StatusEffect) -> void:
 		mod_timer.timeout.connect(func() -> void: mod_timer.start(status_effect.mod_time))
 
 	mod_timer.name = str(status_effect.effect_name) + str(status_effect.effect_lvl) + "_timer"
-	mod_timer.start()
+	if mod_timer.is_inside_tree():
+		mod_timer.start()
+	else:
+		print(affected_entity.name, status_effect)
 
 	effect_timers[status_effect.effect_name] = mod_timer
 

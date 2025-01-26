@@ -14,4 +14,5 @@ func _on_die_anim_ended() -> void:
 	call_deferred("_transition_out_of_die")
 
 func _transition_out_of_die() -> void:
-	pass
+	if entity is not Player:
+		entity.queue_free()

@@ -2,7 +2,7 @@ extends State
 class_name SneakState
 ## Handles when the dynamic entity is sneaking, passing a stealth factor back up to the parent entity itself.
 
-const DEFAULT_SNEAK_ANIM_TIME_SCALE: float = 0.65 ## How fast the sneak anim should play before stat mods.
+@export var DEFAULT_SNEAK_ANIM_TIME_SCALE: float = 0.65 ## How fast the sneak anim should play before stat mods.
 
 
 func enter() -> void:
@@ -32,9 +32,9 @@ func _do_character_sneak(delta: float) -> void:
 		entity.velocity = entity.velocity.limit_length(entity.stats.get_stat("max_sneak_speed"))
 
 	entity.move_and_slide()
-	_handle_rigid_entity_collisions()
+	if entity is Player: _handle_rigid_entity_collisions()
 
-## Handles moving rigid entities that we collided with in the last frame.
+## Handles moving rigid entities that we collided with in the last frame. Only for players.
 func _handle_rigid_entity_collisions() -> void:
 	for i: int in entity.get_slide_collision_count():
 		var c: KinematicCollision2D = entity.get_slide_collision(i)

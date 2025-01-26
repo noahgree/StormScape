@@ -2,11 +2,13 @@ extends State
 class_name RunState
 ## Handles when the dynamic entity is moving, including both running and sprinting.
 
+@export_subgroup("Animation Constants")
+@export var DEFAULT_RUN_ANIM_TIME_SCALE: float = 1.5 ## How fast the run anim should play before stat mods.
+@export var MAX_RUN_ANIM_TIME_SCALE: float = 4.0 ## How fast the run anim can play at most.
+
 var is_sprint_audio_playing: bool = false ## Whether the character's sprint is producing sprint audio.
-var previous_pos: Vector2 ## The previous position of the entity as of the last frame.
+var previous_pos: Vector2 ## The previous position of the entity as of the last frame. Used for speed calculations to determine if sprint audio should play for the player.
 var actual_movement_speed: float = 0 ## The movement speed determined by change in distance over time.
-const DEFAULT_RUN_ANIM_TIME_SCALE: float = 1.5 ## How fast the run anim should play before stat mods.
-const MAX_RUN_ANIM_TIME_SCALE: float = 4.0 ## How fast the run anim can play at most.
 
 
 func enter() -> void:
@@ -22,7 +24,8 @@ func state_physics_process(delta: float) -> void:
 	_animate()
 
 ## Besides appropriately applying velocity to the parent entity, this checks and potentially activates sprinting
-## as well as calculates what vector the animation state machine should receive to play the matching directional anim.
+## as well as calculates what vector the animation state machine should receive to play
+## the matching directional anim.
 func _do_entity_run(delta: float) -> void:
 	var stats: StatModsCacheResource = entity.stats
 	actual_movement_speed = (entity.global_position - previous_pos).length() / delta
@@ -35,7 +38,6 @@ func _do_entity_run(delta: float) -> void:
 			is_sprint_audio_playing = false
 			AudioManager.change_sfx_resource_rhythmic_delay("PlayerRunBase", 0.03)
 
-
 	if controller.knockback_vector.length() > 0:
 		entity.velocity = controller.knockback_vector
 
@@ -46,10 +48,9 @@ func _do_entity_run(delta: float) -> void:
 		else: # No input, stopped
 			controller.knockback_vector = Vector2.ZERO
 			entity.velocity = Vector2.ZERO
-
 			controller.notify_stopped_moving()
 	elif controller.knockback_vector.length() == 0: # We have input and there is no knockback
-		if Input.is_action_pressed("sprint"):
+		if controller.get_should_sprint():
 			if entity.stamina_component.use_stamina(entity.stats.get_stat("sprint_stamina_usage") * delta):
 				_do_entity_sprint(stats, delta)
 			else:

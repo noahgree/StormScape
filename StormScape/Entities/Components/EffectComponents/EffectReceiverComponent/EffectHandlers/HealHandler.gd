@@ -47,7 +47,7 @@ func handle_over_time_heal(hot_resource: HOTResource, source_type: String) -> vo
 		delay_timer.timeout.connect(hot_timer.start)
 		delay_timer.timeout.connect(delay_timer.queue_free)
 		delay_timer.name = source_type + "_delayTimer"
-		add_child(delay_timer)
+		delay_timer.start()
 
 		_add_timer_to_cache(source_type, hot_timer, hot_timers)
 		_add_timer_to_cache(source_type, delay_timer, hot_delay_timers)

@@ -43,4 +43,4 @@ func change_state(new_state_name: String) -> void:
 			new_state.enter()
 			current_state = new_state
 	else:
-		push_error(owner.name + " tried to switch to a non-existent state within their FSM.")
+		push_error(owner.name + " tried to switch to a non-existent state (" + new_state_name + ") within their FSM.")

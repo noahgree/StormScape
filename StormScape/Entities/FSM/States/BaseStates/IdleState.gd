@@ -15,7 +15,7 @@ func state_physics_process(_delta: float) -> void:
 	_do_entity_idle()
 
 func _do_entity_idle() -> void:
-	if controller.get_movement_vector() != Vector2.ZERO:
+	if (entity is Player) and (controller.get_movement_vector() != Vector2.ZERO):
 		controller.notify_started_moving()
 	else:
 		entity.velocity = Vector2.ZERO

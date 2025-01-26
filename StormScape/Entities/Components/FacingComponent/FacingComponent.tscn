@@ -2,5 +2,5 @@
 
 [ext_resource type="Script" uid="uid://c6anrcqjr6o4a" path="res://Entities/Components/FacingComponent/FacingComponent.gd" id="1_ifh02"]
 
-[node name="FacingComponent" type="Node"]
+[node name="FacingComponent" type="Node2D"]
 script = ExtResource("1_ifh02")

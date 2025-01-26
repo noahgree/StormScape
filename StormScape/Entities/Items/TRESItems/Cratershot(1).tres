@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="ProjWeaponResource" load_steps=24 format=3 uid="uid://14gw464h13vv"]
+[gd_resource type="Resource" script_class="ProjWeaponResource" load_steps=26 format=3 uid="uid://14gw464h13vv"]
 
 [ext_resource type="Texture2D" uid="uid://bm570hawaupxe" path="res://Entities/Items/Weapons/WeaponVFX/Casings/small_casing.png" id="1_7gqp2"]
 [ext_resource type="Script" uid="uid://boo31eu083dqd" path="res://Entities/Stats/EffectSystemResources/StatusEffects/StatusEffect.gd" id="1_oi18d"]
@@ -11,6 +11,7 @@
 [ext_resource type="PackedScene" uid="uid://bqkyplubhsx43" path="res://Entities/Items/Projectiles/Bullets/SmallBullet/SmallBullet.tscn" id="5_ilshb"]
 [ext_resource type="Texture2D" uid="uid://b2bgxo22c1tup" path="res://Entities/Items/Weapons/ProjectileWeapons/Cratershot/cratershot_base.png" id="6_2s01n"]
 [ext_resource type="Script" uid="uid://ct7n8wo1p3b20" path="res://Entities/Items/WeaponMods/WeaponMod.gd" id="6_ey58o"]
+[ext_resource type="PackedScene" uid="uid://c3e5wour08d6u" path="res://Entities/Items/Hitscans/LaserBeam.tscn" id="7_7gqp2"]
 [ext_resource type="PackedScene" uid="uid://dwyof8hbs8fxr" path="res://Entities/Items/Weapons/ProjectileWeapons/Cratershot/Cratershot.tscn" id="8_af8pb"]
 [ext_resource type="Script" uid="uid://ctxa7i1mbt7ab" path="res://UI/Inventory/PlayerInventory/Crafting/CraftingIngredient.gd" id="8_rff8j"]
 [ext_resource type="Script" uid="uid://c2gdoebfp12dq" path="res://Entities/Stats/StatMod/StatModsCacheResource.gd" id="9_yxw3n"]
@@ -25,7 +26,7 @@ scanned_phys_layers = 191
 can_hit_self = true
 bad_effect_affected_teams = 1
 good_effect_affected_teams = 2
-base_damage = 30
+base_damage = 25
 dmg_affected_stats = 2
 crit_chance = 0
 crit_multiplier = 1.5
@@ -39,12 +40,18 @@ contact_position = Vector2(0, 0)
 movement_direction = Vector2(0, 0)
 multishot_id = -1
 
+[sub_resource type="Curve" id="Curve_byj8c"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
 [sub_resource type="Resource" id="Resource_pf8sh"]
 script = ExtResource("3_nvevl")
+hitscan_scn = ExtResource("7_7gqp2")
 hitscan_duration = 0.0
-hitscan_effect_interval = -1.0
-hitscan_pierce_count = 0
+hitscan_effect_interval = 0.1
+hitscan_pierce_count = 10
 hitscan_max_distance = 350
+hitscan_effect_falloff = SubResource("Curve_byj8c")
 bad_effects_falloff = true
 good_effects_falloff = false
 override_vfx_defaults = false
@@ -158,7 +165,7 @@ proj_weapon_type = 1
 firing_mode = "Semi Auto"
 projectile_scn = ExtResource("5_ilshb")
 firing_duration = 0.09
-fire_cooldown = 0.65
+fire_cooldown = 0.45
 min_charge_time = 1.0
 one_frame_per_fire = false
 override_anim_dur = 0.0
@@ -180,8 +187,8 @@ ammo_type = 5
 mag_size = 8
 reload_type = "Single"
 mag_reload_time = 1.0
-single_proj_reload_time = 0.35
-single_proj_reload_delay = 1.0
+single_proj_reload_time = 0.25
+single_proj_reload_delay = 0.65
 single_reload_quantity = 1
 stamina_use_per_proj = 0.5
 dont_consume_ammo = false

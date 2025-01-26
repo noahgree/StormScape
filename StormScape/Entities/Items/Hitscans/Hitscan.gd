@@ -28,7 +28,8 @@ var is_charge_fire: bool = false ## Whether this hitscan was the result of a cha
 
 ## Creates a hitscan scene, assigns its passed in parameters, then returns it.
 static func create(hitscan_scene: PackedScene, effect_src: EffectSource, source_wpn: ProjectileWeapon,
-					src_entity: PhysicsBody2D, pos: Vector2, rot_offset: float, was_charged: bool = false) -> Hitscan:
+					src_entity: PhysicsBody2D, pos: Vector2, rot_offset: float,
+					was_charged: bool = false) -> Hitscan:
 	var hitscan: Hitscan = hitscan_scene.instantiate()
 	hitscan.global_position = pos
 	hitscan.rotation_offset = rot_offset
@@ -158,23 +159,24 @@ func _find_target_receivers() -> void:
 			impact_particles.position = to_local(collision_point)
 			impact_particles.global_rotation = result.normal.angle()
 
-			if obj and _is_valid_receiver(obj):
+			if obj and obj is EffectReceiverComponent:
 				candidates.append(obj)
 				contact_positions.append(collision_point)
 
 				from_pos = collision_point
 
 				exclusion_list.append(obj.get_rid())
-				for child: Node in obj.get_children():
-					if child is Area2D:
-						exclusion_list.append(child.get_rid())
+				exclusion_list.append(obj.get_parent().get_rid())
 
 				remaining_pierces -= 1
 
 				debug_ray_info["hit"] = true
 				debug_ray_info["hit_position"] = result.position
 			else:
-				remaining_pierces = -1
+				if obj:
+					exclusion_list.append(obj.get_rid())
+					if obj is not DynamicEntity and obj is not RigidEntity and obj is not StaticEntity:
+						remaining_pierces = -1
 				debug_ray_info["to"] = collision_point
 		else:
 			is_hitting_something = false
@@ -187,9 +189,8 @@ func _find_target_receivers() -> void:
 		for i: int in range(candidates.size()):
 			var receiver_index: int = _select_closest_receiver(candidates)
 			var receiver: Node = candidates[receiver_index]
-			var effect_receiver: EffectReceiverComponent = receiver.get_node_or_null("EffectReceiverComponent")
-			if effect_receiver != null:
-				_start_being_handled(effect_receiver, contact_positions[receiver_index])
+			if receiver != null:
+				_start_being_handled(receiver, contact_positions[receiver_index])
 
 				candidates.remove_at(receiver_index)
 				contact_positions.remove_at(receiver_index)
@@ -204,13 +205,6 @@ func _find_target_receivers() -> void:
 					effect_tick_timer.start(effect_time)
 
 	_update_impact_particles(pierce_list)
-
-## Checks if a receiver of the ray is something we are even allowed to target.
-func _is_valid_receiver(obj: Node) -> bool:
-	if obj is DynamicEntity or obj is RigidEntity or obj is StaticEntity:
-		if obj.team != source_entity.team and obj.team != GlobalData.Teams.PASSIVE:
-			return true
-	return false
 
 ## Give the possible targets, this selects the closest one using a faster 'distance squared' method.
 func _select_closest_receiver(targets: Array[Node]) -> int:
@@ -247,8 +241,9 @@ func _update_impact_particles(pierce_list: Dictionary) -> void:
 			impacted_nodes[node].queue_free()
 			impacted_nodes.erase(node)
 
-## Overrides parent method. When we overlap with an entity who can accept effect sources, pass the effect source to that
-## entity's handler. Note that the effect source is duplicated on hit so that we can include unique info like move dir.
+## Overrides parent method. When we overlap with an entity who can accept effect sources,
+## pass the effect source to that entity's handler. Note that the effect source is duplicated
+## on hit so that we can include unique info like move dir.
 func _start_being_handled(handling_area: EffectReceiverComponent, contact_point: Vector2) -> void:
 	effect_source = effect_source.duplicate()
 	var modified_effect_src: EffectSource = _get_effect_source_adjusted_for_falloff(effect_source, contact_point)

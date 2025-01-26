@@ -1,4 +1,4 @@
-[gd_scene load_steps=126 format=3 uid="uid://bl2igmtwo1a3v"]
+[gd_scene load_steps=127 format=3 uid="uid://bl2igmtwo1a3v"]
 
 [ext_resource type="Script" uid="uid://db4npghrxc6u" path="res://Entities/Enemies/Zombies/Basic/BasicZombie.gd" id="1_8bt15"]
 [ext_resource type="PackedScene" uid="uid://cj2wy5f05cos4" path="res://Entities/EntityCore/Shadow/EntityShadow.tscn" id="1_ko3ep"]
@@ -28,13 +28,14 @@
 [ext_resource type="Resource" uid="uid://c5jim46mul7ex" path="res://Entities/Items/TRESItems/IonCharge(0).tres" id="20_lm42a"]
 [ext_resource type="Script" uid="uid://cgqfx1ve66f3h" path="res://Entities/Components/ItemComponents/LootTableComponent/LootTable.gd" id="21_epk84"]
 [ext_resource type="Texture2D" uid="uid://crawnbhc5weqf" path="res://Entities/EntityCore/EntityTypes/DynamicEntity/entity_footstep.png" id="25_kc883"]
-[ext_resource type="Script" uid="uid://c28itqxmeqbq0" path="res://Entities/FSM/StateMachine.gd" id="27_5gwv1"]
+[ext_resource type="Script" uid="uid://c28itqxmeqbq0" path="res://Entities/FSM/FSMCore/StateMachine.gd" id="27_5gwv1"]
 [ext_resource type="PackedScene" uid="uid://jpq0ij8wwlhy" path="res://Entities/Components/FacingComponent/FacingComponent.tscn" id="27_pfgxp"]
-[ext_resource type="Script" uid="uid://tqfni6tloktu" path="res://Entities/FSM/DynamicController.gd" id="28_vjlik"]
-[ext_resource type="Script" uid="uid://i7ucoc123rpe" path="res://Entities/EntityCore/States/SpawnState.gd" id="29_vjlik"]
-[ext_resource type="Script" uid="uid://cbyg4eleptthh" path="res://Entities/EntityCore/States/StunnedState.gd" id="30_5gwv1"]
-[ext_resource type="Script" uid="uid://c2sjdkql76qca" path="res://Entities/EntityCore/States/IdleState.gd" id="30_vjlik"]
-[ext_resource type="Script" uid="uid://cbuaklpos5jdp" path="res://Entities/EntityCore/States/DieState.gd" id="32_kuvhw"]
+[ext_resource type="Script" uid="uid://i7ucoc123rpe" path="res://Entities/FSM/States/BaseStates/SpawnState.gd" id="29_vjlik"]
+[ext_resource type="Script" uid="uid://cbyg4eleptthh" path="res://Entities/FSM/States/BaseStates/StunnedState.gd" id="30_5gwv1"]
+[ext_resource type="Script" uid="uid://dmww6wp6kw08q" path="res://Entities/FSM/FSMCore/DynamicAIController.gd" id="30_tsyff"]
+[ext_resource type="Script" uid="uid://c2sjdkql76qca" path="res://Entities/FSM/States/BaseStates/IdleState.gd" id="30_vjlik"]
+[ext_resource type="Script" uid="uid://cbuaklpos5jdp" path="res://Entities/FSM/States/BaseStates/DieState.gd" id="32_kuvhw"]
+[ext_resource type="Script" uid="uid://q3yeopc5wdlo" path="res://Entities/FSM/States/EnemyStates/ChaseState.gd" id="34_dcca3"]
 
 [sub_resource type="Resource" id="Resource_epk84"]
 script = ExtResource("2_lm42a")
@@ -48,7 +49,7 @@ height = 24.0
 [sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_6bt22"]
 polygon = PackedVector2Array(-5, -2.98466, -6, -1.98977, -5, 0, 5, 0, 6, -1.98977, 5, -2.98466)
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_tsyff"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_dcca3"]
 resource_local_to_scene = true
 shader = ExtResource("3_3cie3")
 
@@ -787,6 +788,8 @@ _data = {
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_eigs2"]
 animation = &"die"
 
+[sub_resource type="AnimationNodeTimeScale" id="AnimationNodeTimeScale_mbh3n"]
+
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_6bt22"]
 animation = &"idle_down"
 
@@ -810,19 +813,19 @@ blend_point_3/node = SubResource("AnimationNodeAnimation_vjlik")
 blend_point_3/pos = Vector2(1, 1)
 blend_mode = 1
 
-[sub_resource type="AnimationNodeTimeScale" id="AnimationNodeTimeScale_mbh3n"]
-
 [sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_eigs2"]
 graph_offset = Vector2(-518, -60)
-nodes/BlendSpace2D/node = SubResource("AnimationNodeBlendSpace2D_eigs2")
-nodes/BlendSpace2D/position = Vector2(-290, 80)
 nodes/TimeScale/node = SubResource("AnimationNodeTimeScale_mbh3n")
 nodes/TimeScale/position = Vector2(-90, 50)
+nodes/blendspace2d/node = SubResource("AnimationNodeBlendSpace2D_eigs2")
+nodes/blendspace2d/position = Vector2(-290, 80)
 nodes/output/position = Vector2(90, 50)
-node_connections = [&"TimeScale", 0, &"BlendSpace2D", &"output", 0, &"TimeScale"]
+node_connections = [&"TimeScale", 0, &"blendspace2d", &"output", 0, &"TimeScale"]
+
+[sub_resource type="AnimationNodeTimeScale" id="AnimationNodeTimeScale_3l4yw"]
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_kuvhw"]
-animation = &"idle_down"
+animation = &"run_down"
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_pfgxp"]
 animation = &"run_down"
@@ -844,19 +847,18 @@ blend_point_1/pos = Vector2(0, 1)
 blend_point_2/node = SubResource("AnimationNodeAnimation_tsyff")
 blend_point_2/pos = Vector2(0, -1)
 blend_point_3/node = SubResource("AnimationNodeAnimation_dcca3")
-blend_point_3/pos = Vector2(-1, 1)
+blend_point_3/pos = Vector2(-1, 0)
 blend_point_4/node = SubResource("AnimationNodeAnimation_hj6es")
-blend_point_4/pos = Vector2(1, 1)
-
-[sub_resource type="AnimationNodeTimeScale" id="AnimationNodeTimeScale_3l4yw"]
+blend_point_4/pos = Vector2(1, 0)
+blend_mode = 1
 
 [sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_mbh3n"]
-graph_offset = Vector2(-442.218, -81.1316)
-nodes/BlendSpace2D/node = SubResource("AnimationNodeBlendSpace2D_mbh3n")
-nodes/BlendSpace2D/position = Vector2(-240, 100)
+graph_offset = Vector2(-339.84, 83.52)
 nodes/TimeScale/node = SubResource("AnimationNodeTimeScale_3l4yw")
 nodes/TimeScale/position = Vector2(30, 110)
-node_connections = [&"TimeScale", 0, &"BlendSpace2D", &"output", 0, &"TimeScale"]
+nodes/blendspace2d/node = SubResource("AnimationNodeBlendSpace2D_mbh3n")
+nodes/blendspace2d/position = Vector2(-240, 100)
+node_connections = [&"TimeScale", 0, &"blendspace2d", &"output", 0, &"TimeScale"]
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_lm42a"]
 animation = &"spawn"
@@ -883,7 +885,7 @@ states/run/position = Vector2(476, 148.75)
 states/spawn/node = SubResource("AnimationNodeAnimation_lm42a")
 states/spawn/position = Vector2(310, 50.5)
 transitions = ["Start", "spawn", SubResource("AnimationNodeStateMachineTransition_epk84"), "spawn", "idle", SubResource("AnimationNodeStateMachineTransition_3l4yw"), "idle", "run", SubResource("AnimationNodeStateMachineTransition_u70e3"), "run", "idle", SubResource("AnimationNodeStateMachineTransition_2qho1")]
-graph_offset = Vector2(40, -112)
+graph_offset = Vector2(-37.58, -52.9375)
 
 [sub_resource type="Resource" id="Resource_coxcp"]
 script = ExtResource("19_8bt15")
@@ -901,8 +903,8 @@ die_loot_table = Array[ExtResource("19_8bt15")]([SubResource("Resource_coxcp")])
 metadata/_custom_type_script = ExtResource("21_epk84")
 
 [node name="BasicZombie" type="CharacterBody2D" groups=["has_save_logic"]]
-collision_layer = 4
-collision_mask = 245
+collision_layer = 0
+collision_mask = 0
 motion_mode = 1
 script = ExtResource("1_8bt15")
 team = 2
@@ -914,7 +916,13 @@ shape = SubResource("CapsuleShape2D_2h2fy")
 debug_color = Color(0.66339, 0.512878, 0, 0.251)
 
 [node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
-debug_enabled = true
+avoidance_enabled = true
+radius = 500.0
+max_neighbors = 8
+debug_use_custom = true
+debug_path_custom_color = Color(1, 0.523276, 0.90389, 1)
+debug_path_custom_point_size = 2.0
+debug_path_custom_line_width = 0.5
 
 [node name="DetectionComponent" parent="." instance=ExtResource("3_tsyff")]
 
@@ -928,7 +936,7 @@ occluder = SubResource("OccluderPolygon2D_6bt22")
 
 [node name="EntitySprite" parent="YSorter" instance=ExtResource("2_8a5el")]
 unique_name_in_owner = true
-material = SubResource("ShaderMaterial_tsyff")
+material = SubResource("ShaderMaterial_dcca3")
 position = Vector2(0, -16)
 sprite_frames = SubResource("SpriteFrames_gi80f")
 animation = &"idle"
@@ -996,10 +1004,10 @@ libraries = {
 callback_mode_process = 2
 tree_root = SubResource("AnimationNodeStateMachine_eigs2")
 anim_player = NodePath("../AnimationPlayer")
-parameters/idle/BlendSpace2D/blend_position = Vector2(0, 0)
 parameters/idle/TimeScale/scale = 1.0
-parameters/run/BlendSpace2D/blend_position = Vector2(0, 0)
+parameters/idle/blendspace2d/blend_position = Vector2(0, 0)
 parameters/run/TimeScale/scale = 1.0
+parameters/run/blendspace2d/blend_position = Vector2(0, 0)
 
 [node name="LootTableComponent" parent="." instance=ExtResource("18_2qho1")]
 loot_table = SubResource("Resource_csnjs")
@@ -1013,15 +1021,21 @@ initial_state = NodePath("Spawn")
 print_state_changes = true
 
 [node name="Controller" type="Node" parent="StateMachine" node_paths=PackedStringArray("entity")]
-script = ExtResource("28_vjlik")
+script = ExtResource("30_tsyff")
 entity = NodePath("../..")
 footstep_texture = ExtResource("25_kc883")
+_max_speed = 120.0
+_acceleration = 1000.0
+_friction = 1300.0
 
 [node name="Spawn" type="Node" parent="StateMachine"]
 script = ExtResource("29_vjlik")
 
 [node name="Idle" type="Node" parent="StateMachine"]
 script = ExtResource("30_vjlik")
+
+[node name="Chase" type="Node" parent="StateMachine"]
+script = ExtResource("34_dcca3")
 
 [node name="Stunned" type="Node" parent="StateMachine"]
 script = ExtResource("30_5gwv1")

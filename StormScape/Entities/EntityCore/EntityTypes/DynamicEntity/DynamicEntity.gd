@@ -92,8 +92,6 @@ func _is_instance_on_load_game(data: DynamicEntityData) -> void:
 	facing_component.facing_dir = data.facing_dir
 	fsm.controller.knockback_vector = data.knockback_vector
 	fsm.controller.update_animation()
-	if velocity.length() > 0 and fsm.has_node("Run"):
-		fsm._on_child_transition(fsm.current_state, "Run")
 
 	if stamina_component != null:
 		stamina_component.stamina = data.stamina
@@ -130,10 +128,19 @@ func _ready() -> void:
 	assert(has_node("DetectionComponent"), name + " is a DynamicEntity but does not have a DetectionComponent.")
 
 	add_to_group("has_save_logic")
-	if team == GlobalData.Teams.PLAYER:
+	if self is Player:
+		collision_layer = 0b1
+		add_to_group("player_entities")
+	elif team == GlobalData.Teams.PLAYER:
+		collision_layer = 0b10
 		add_to_group("player_entities")
 	elif team == GlobalData.Teams.ENEMY:
 		add_to_group("enemy_entities")
+		collision_layer = 0b100
+	elif team == GlobalData.Teams.PASSIVE:
+		collision_layer = 0b1000
+
+	collision_mask = 0b1101111
 
 func _process(delta: float) -> void:
 	if Engine.is_editor_hint():

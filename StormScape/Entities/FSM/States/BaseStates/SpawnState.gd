@@ -14,4 +14,4 @@ func _on_spawn_anim_ended() -> void:
 	call_deferred("_transition_out_of_spawn")
 
 func _transition_out_of_spawn() -> void:
-	controller.notify_stopped_moving()
+	controller.notify_spawn_ended()

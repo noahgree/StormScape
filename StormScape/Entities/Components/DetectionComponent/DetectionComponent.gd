@@ -9,6 +9,8 @@ class_name DetectionComponent
 ## to scale up and down. Note that the effect receiver of the entity detecting this component is what
 ## determines the collision shape for what interacts with this zone.
 
+signal enemies_in_range_changed(enemies_in_range: Array[PhysicsBody2D]) ## Emitted when the enemies in range array is altered.
+
 @export_custom(PROPERTY_HINT_NONE, "suffix:pixels") var radius: float = 150: ## The detection radius.
 	set(new_value):
 		radius = new_value
@@ -59,6 +61,7 @@ func _on_area_exited(area: Area2D) -> void:
 func enemy_entered(body: PhysicsBody2D) -> void:
 	enemies_in_range.append(body)
 	body.tree_exiting.connect(_remove_from_enemies_in_range.bind(body))
+	enemies_in_range_changed.emit(enemies_in_range)
 
 func enemy_exited(body: PhysicsBody2D) -> void:
 	_remove_from_enemies_in_range(body)
@@ -66,3 +69,4 @@ func enemy_exited(body: PhysicsBody2D) -> void:
 
 func _remove_from_enemies_in_range(body: PhysicsBody2D) -> void:
 	enemies_in_range.erase(body)
+	enemies_in_range_changed.emit(enemies_in_range)
