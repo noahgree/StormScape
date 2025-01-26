@@ -1,4 +1,4 @@
-[gd_scene load_steps=70 format=4 uid="uid://bscnr6a23l10m"]
+[gd_scene load_steps=71 format=4 uid="uid://bscnr6a23l10m"]
 
 [ext_resource type="Script" uid="uid://mdtvdhu78iqm" path="res://Utilities/Game/WorldRoot/WorldRoot.gd" id="1_q0i4n"]
 [ext_resource type="Script" uid="uid://dpbgynf55anlv" path="res://Stages/World/BackgroundMusicManager.gd" id="1_q5pr2"]
@@ -52,6 +52,12 @@ shader = ExtResource("2_dbic0")
 shader_parameter/overlay_tex = SubResource("CompressedTexture2D_c3hhi")
 shader_parameter/scale = 0.0078125
 
+[sub_resource type="NavigationPolygon" id="NavigationPolygon_rhtsc"]
+vertices = PackedVector2Array(8, 8, -8, 8, -8, -8, 8, -8)
+polygons = Array[PackedInt32Array]([PackedInt32Array(0, 1, 2, 3)])
+outlines = Array[PackedVector2Array]([PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)])
+agent_radius = 0.0
+
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_4rxbk"]
 texture = ExtResource("22_tnvqm")
 0:0/0 = 0
@@ -70,6 +76,7 @@ texture = ExtResource("22_tnvqm")
 1:1/0 = 0
 1:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -2.21875, -8, -8, -2.9375, -8)
 2:1/0 = 0
+2:1/0/navigation_layer_0/polygon = SubResource("NavigationPolygon_rhtsc")
 3:1/0 = 0
 3:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(8, 2.21875, 8, 8, 2.9375, 8)
 0:2/0 = 0
@@ -98,8 +105,7 @@ texture = ExtResource("22_tnvqm")
 [sub_resource type="TileSet" id="TileSet_hhfml"]
 physics_layer_0/collision_layer = 0
 physics_layer_0/collision_mask = 0
-physics_layer_1/collision_layer = 128
-physics_layer_1/collision_mask = 0
+navigation_layer_0/layers = 1
 sources/0 = SubResource("TileSetAtlasSource_4rxbk")
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_tu3l8"]
@@ -158,7 +164,7 @@ debug_print_mod_changes = false
 script = ExtResource("12_jvc44")
 source_type = 0
 source_tags = Array[String]([])
-scanned_phys_layers = 191
+scanned_phys_layers = 111
 can_hit_self = false
 bad_effect_affected_teams = 3
 good_effect_affected_teams = 3
@@ -187,7 +193,7 @@ debug_print_mod_changes = false
 script = ExtResource("12_jvc44")
 source_type = 6
 source_tags = Array[String]([])
-scanned_phys_layers = 191
+scanned_phys_layers = 111
 can_hit_self = false
 bad_effect_affected_teams = 3
 good_effect_affected_teams = 3
@@ -213,7 +219,7 @@ debug_print_mod_changes = false
 script = ExtResource("12_jvc44")
 source_type = 0
 source_tags = Array[String]([])
-scanned_phys_layers = 191
+scanned_phys_layers = 111
 can_hit_self = false
 bad_effect_affected_teams = 3
 good_effect_affected_teams = 3

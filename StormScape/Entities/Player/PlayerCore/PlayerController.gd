@@ -1,12 +1,13 @@
 extends DynamicController
 class_name PlayerController
+## The FSM controller specific to the player.
 
 
 #region Inputs
 func controller_handle_input(event: InputEvent) -> void:
 	super.controller_handle_input(event)
 
-	if  event.is_action_pressed("dash"):
+	if event.is_action_pressed("dash"):
 		notify_requested_dash()
 	elif event.is_action_pressed("sneak"):
 		notify_requested_sneak()
@@ -29,8 +30,10 @@ func controller_process(delta: float) -> void:
 	super.controller_process(delta)
 
 	var entity_pos_with_sprite_offset: Vector2 = (entity.sprite.position / 2.0) + entity.global_position
-	last_anim_vector = entity.get_lerped_mouse_direction_to_pos(last_anim_vector, entity_pos_with_sprite_offset)
-	entity.facing_component.update_anim_vector(last_anim_vector)
+	last_facing_dir = LerpHelpers.lerp_direction(
+		last_facing_dir, CursorManager.get_cursor_mouse_position(), entity_pos_with_sprite_offset, entity.facing_component.rotation_lerping_factor
+		)
+	entity.facing_component.update_facing_dir(last_facing_dir)
 #endregion
 
 #region States

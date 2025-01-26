@@ -1,12 +1,12 @@
 extends Node
 class_name Controller
-## This is a base class for what should be implemented on a per-entity basis. This receives signals from states in a FSM
-## and decides what state to transition to.
+## This is a base class for what should be implemented on a per-entity basis. This receives
+## signals from states in a FSM and decides what state to transition to.
 
-@onready var fsm: StateMachine = get_parent()
+@onready var fsm: StateMachine = get_parent() ## The FSM that this controller works with.
 
 var can_receive_effects: bool = true ## Whether the entity is in a state that can receive effects.
-var last_anim_vector: Vector2 = Vector2.ZERO ## The anim_vector updated during the last frame. Used to make lerping work.
+var last_facing_dir: Vector2 = Vector2.ZERO ## The facing_dir updated during the last frame. Used to make lerping work.
 
 
 #region Inputs
@@ -28,7 +28,7 @@ func controller_physics_process(delta: float) -> void:
 #endregion
 
 ## Assists in turning the character to the right direction upon game loads.
-func verify_anim_vector() -> void:
+func update_animation() -> void:
 	if fsm.current_state and fsm.current_state.has_method("_animate"):
 		fsm.current_state._animate()
 

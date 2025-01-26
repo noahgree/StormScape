@@ -19,7 +19,8 @@ var shield: int: set = _set_shield ## The current shield of the entity.
 var armor: int = 0: set = _set_armor ## The current armor of the entity. This is the percent of dmg that is blocked.
 var is_dying: bool = false ## Whether the entity is actively dying or not.
 var current_popup: EffectPopup ## The current effect popup display that is active and can be updated.
-var current_sounds: Dictionary[StringName, Array] = {}
+var current_sounds: Dictionary[StringName, Array] = {} ## The current sounds being played by this component.
+var just_loaded: bool = false ## When true, we shouldn't emit initial values.
 const MAX_ARMOR: int = 100 ## The maximum amount of armor the entity can have.
 
 
@@ -34,9 +35,14 @@ func _ready() -> void:
 ## Called from a deferred method caller in order to let any associated ui ready up first.
 ## Then it emits the initially loaded values.
 func _emit_initial_values() -> void:
-	@warning_ignore("narrowing_conversion") health = entity.stats.get_stat("max_health")
-	@warning_ignore("narrowing_conversion") shield = entity.stats.get_stat("max_shield")
-	armor = base_armor
+	if just_loaded:
+		_set_health(health)
+		_set_shield(shield)
+		_set_armor(armor)
+	else:
+		@warning_ignore("narrowing_conversion") health = entity.stats.get_stat("max_health")
+		@warning_ignore("narrowing_conversion") shield = entity.stats.get_stat("max_shield")
+		armor = base_armor
 #endregion
 
 #region Utils: Taking Damage

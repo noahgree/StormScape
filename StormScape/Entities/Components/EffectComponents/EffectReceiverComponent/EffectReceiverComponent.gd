@@ -4,6 +4,8 @@ extends Area2D
 class_name EffectReceiverComponent
 ## A general effect source receiver that passes the appropriate parts of the effect to handlers, but only if
 ## they exist as children. This node must have an attached collision shape to define where effects are received.
+## This node's collision also determines what part of this entity must enter the DetectionComponent
+## of another entity before we know about that entity's presence.
 ##
 ## Add specific effect handlers as children of this node to be able to receive those effects on the entity.
 ## For all intensive purposes, this is acting as a hurtbox component via its receiver area.
@@ -55,14 +57,17 @@ func _ready() -> void:
 	assert(affected_entity or get_parent() is SubViewport, get_parent().name + " has an effect receiver that is missing a reference to an entity.")
 	if can_receive_status_effects: assert(get_parent() is SubViewport or get_parent().has_node("%StatusEffectsComponent"), get_parent().name + " has an effect receiver flagged as being able to handle status effects, yet has no StatusEffectsComponent. Make sure it has a unique name.")
 
-	if not Engine.is_editor_hint():
-		collision_layer = affected_entity.collision_layer
-		collision_mask = 0
-		monitoring = false
+	if Engine.is_editor_hint():
+		return
+
+	collision_layer = affected_entity.collision_layer
+	collision_mask = 0
+	monitoring = false
 
 ## Handles an incoming effect source, passing it to present receivers for further processing before changing
 ## entity stats.
-func handle_effect_source(effect_source: EffectSource, source_entity: PhysicsBody2D, process_status_effects: bool = true) -> void:
+func handle_effect_source(effect_source: EffectSource, source_entity:
+							PhysicsBody2D, process_status_effects: bool = true) -> void:
 	_handle_cam_fx(effect_source)
 	_handle_impact_sound(effect_source)
 	affected_entity.sprite.start_hitflash(effect_source.hit_flash_color, false)
@@ -202,7 +207,8 @@ func _check_if_good_effects_apply_to_allies(effect_source: EffectSource) -> bool
 func _check_if_good_effects_apply_to_enemies(effect_source: EffectSource) -> bool:
 	return effect_source.good_effect_affected_teams & GlobalData.GoodEffectAffectedTeams.ENEMIES != 0
 
-## Compares the flagged affected entities in the status effect to the type of entity this node is a child of to see if it applies.
+## Compares the flagged affected entities in the status effect to the type of entity
+## this node is a child of to see if it applies.
 func _check_if_applicable_entity_type_for_status_effect(status_effect: StatusEffect) -> bool:
 	var class_int: int = 0
 	if affected_entity is DynamicEntity:

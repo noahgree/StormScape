@@ -13,7 +13,6 @@ class_name StateMachine
 var current_state: State: ## The current state the state machine is in.
 	set(new_state):
 		current_state = new_state
-
 		if DebugFlags.PrintFlags.state_machine_swaps and print_state_changes:
 			print_rich("[i]" + get_parent().name + " [/i]entered [color=pink][b]" + current_state.name.to_lower() + "[/b][/color]")
 var states: Dictionary[StringName, State] = {} ## A dict of all current children states of the state machine node.
@@ -37,7 +36,6 @@ func _ready() -> void:
 ## Checks for the existence of the new state and then switches to it.
 func change_state(new_state_name: String) -> void:
 	var new_state: State = states.get(StringName(new_state_name.to_lower()))
-
 	if new_state:
 		if current_state:
 			current_state.exit()

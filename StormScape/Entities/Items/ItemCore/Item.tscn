@@ -204,7 +204,7 @@ _data = {
 
 [node name="Item" type="Area2D" groups=["has_save_logic"]]
 collision_layer = 0
-collision_mask = 256
+collision_mask = 128
 monitorable = false
 script = ExtResource("1_rwd02")
 

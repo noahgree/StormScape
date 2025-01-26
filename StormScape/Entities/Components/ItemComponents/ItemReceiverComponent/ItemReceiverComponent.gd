@@ -9,8 +9,7 @@ class_name ItemReceiverComponent
 	set(new_range):
 		pickup_range = new_range
 		$CollisionShape2D.shape.radius = pickup_range
-
-@onready var player_communicator: Node = get_node_or_null("PlayerInvCommunicator")
+@export var item_interact_hud: ItemInteractionHUD ## The player's item interaction hud to connect to.
 
 var items_in_range: Array[Item] = [] ## The items in range of being picked up.
 
@@ -30,21 +29,37 @@ func _on_load_game() -> void:
 	fill_inventory(inv_to_load_from_save)
 #endregion
 
+func _ready() -> void:
+	super._ready()
+
+	collision_layer = 0b10000000
+
 func add_to_in_range_queue(item: Item) -> void:
 	items_in_range.append(item)
-	_update_player_communicator()
+	_update_player_item_interact_hud()
 
 func remove_from_in_range_queue(item: Item) -> void:
 	var index: int = items_in_range.find(item)
 	if index != -1: items_in_range.remove_at(index)
-	_update_player_communicator()
+	_update_player_item_interact_hud()
 
-func _update_player_communicator() -> void:
-	if player_communicator:
-		if items_in_range.is_empty():
-			player_communicator._hide_player_interact_hud()
-		else:
-			player_communicator._show_player_interact_hud(items_in_range)
+## When used on a player, this method notifies the connected HUD of item pickup item changes.
+func _update_player_item_interact_hud() -> void:
+	if not item_interact_hud:
+		return
+
+	if items_in_range.is_empty():
+		_hide_player_interact_hud()
+	else:
+		_show_player_interact_hud()
+
+## Shows the interact hud for the most recent item in range.
+func _show_player_interact_hud() -> void:
+	if not items_in_range.is_empty(): item_interact_hud.show_hud(items_in_range[items_in_range.size() - 1])
+
+## Hides the player interact hud.
+func _hide_player_interact_hud() -> void:
+	item_interact_hud.hide_hud()
 
 func _unhandled_key_input(_event: InputEvent) -> void:
 	if Input.is_action_just_pressed("interact"):

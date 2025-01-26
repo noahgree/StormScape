@@ -1,0 +1,20 @@
+[gd_scene load_steps=3 format=3 uid="uid://di7vcyrki71nm"]
+
+[ext_resource type="Script" uid="uid://bkysy8mlfbes0" path="res://Entities/Components/DetectionComponent/DetectionComponent.gd" id="1_sujsh"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_hxjay"]
+radius = 150.0
+
+[node name="DetectionComponent" type="Area2D"]
+collision_layer = 0
+collision_mask = 0
+monitorable = false
+script = ExtResource("1_sujsh")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+visible = false
+shape = SubResource("CircleShape2D_hxjay")
+debug_color = Color(0.550551, 0.56372, 0, 0.155)
+
+[connection signal="area_entered" from="." to="." method="_on_area_entered"]
+[connection signal="area_exited" from="." to="." method="_on_area_exited"]

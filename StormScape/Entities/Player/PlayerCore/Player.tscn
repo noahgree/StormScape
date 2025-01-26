@@ -32,13 +32,12 @@
 [ext_resource type="Script" uid="uid://cbuaklpos5jdp" path="res://Entities/EntityCore/States/DieState.gd" id="18_jcofa"]
 [ext_resource type="Script" uid="uid://cf7pyv5l3pefi" path="res://Entities/Player/States/SneakState.gd" id="19_alhqe"]
 [ext_resource type="PackedScene" uid="uid://b4bmp3jehto3g" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/LifeStealHandler.tscn" id="20_f770q"]
-[ext_resource type="PackedScene" uid="uid://jpq0ij8wwlhy" path="res://Entities/EntityCore/FacingComponent.tscn" id="25_0t1mv"]
+[ext_resource type="PackedScene" uid="uid://jpq0ij8wwlhy" path="res://Entities/Components/FacingComponent/FacingComponent.tscn" id="25_0t1mv"]
 [ext_resource type="Script" uid="uid://c28itqxmeqbq0" path="res://Entities/FSM/StateMachine.gd" id="25_6wv7y"]
 [ext_resource type="Texture2D" uid="uid://crawnbhc5weqf" path="res://Entities/EntityCore/EntityTypes/DynamicEntity/entity_footstep.png" id="27_0t1mv"]
 [ext_resource type="PackedScene" uid="uid://biduyqlpqhmrp" path="res://Entities/Stats/EffectSystemResources/StatusEffects/BadEffects/Stun/StunIndicator.tscn" id="27_fyxoi"]
 [ext_resource type="Script" uid="uid://evdilpt7dh6f" path="res://Entities/Player/PlayerCore/PlayerController.gd" id="27_n4o3n"]
 [ext_resource type="PackedScene" uid="uid://c4n604w30gx8m" path="res://Entities/Components/ItemComponents/ItemReceiverComponent/ItemReceiverComponent.tscn" id="30_qgyag"]
-[ext_resource type="Script" uid="uid://i6jv5dqqpf3n" path="res://UI/Inventory/PlayerInventory/PlayerInvCommunicator.gd" id="31_mjpan"]
 [ext_resource type="Script" uid="uid://dq62ojsc43p8o" path="res://UI/Inventory/PlayerInventory/PlayerInvUI.gd" id="32_3a185"]
 [ext_resource type="Script" uid="uid://dp8osf7r6xkkt" path="res://Entities/Items/ItemCore/InvItemResource.gd" id="32_ixmb3"]
 [ext_resource type="Script" uid="uid://dvirx67s12tmd" path="res://Entities/Player/PlayerCore/PlayerCamera/CamFXResource.gd" id="32_o382h"]
@@ -113,6 +112,7 @@
 [ext_resource type="FontVariation" uid="uid://blgkcg6c83yln" path="res://Assets/Theming/Fonts/GameFontResources/ui_pixel_font.tres" id="91_55d85"]
 [ext_resource type="Script" uid="uid://dbc2ecb1mkugh" path="res://UI/PlayerStatsOverlay/ActiveSlotInfo.gd" id="91_qr476"]
 [ext_resource type="Shader" uid="uid://bhox1e3shq3iq" path="res://Utilities/Game/Shaders/ProgressAlpha.gdshader" id="107_nyy6a"]
+[ext_resource type="PackedScene" uid="uid://di7vcyrki71nm" path="res://Entities/Components/DetectionComponent/DetectionComponent.tscn" id="114_hxjay"]
 
 [sub_resource type="Resource" id="Resource_rwbul"]
 script = ExtResource("2_vetip")
@@ -1419,6 +1419,8 @@ rotation = 1.5708
 shape = SubResource("CapsuleShape2D_3f130")
 debug_color = Color(0.635375, 0.527557, 0, 0.180392)
 
+[node name="DetectionComponent" parent="." instance=ExtResource("114_hxjay")]
+
 [node name="AudioListener2D" type="AudioListener2D" parent="."]
 current = true
 
@@ -1506,7 +1508,6 @@ debug_color = Color(1, 0.294, 0.588, 0.06)
 [node name="StateMachine" type="Node" parent="." node_paths=PackedStringArray("initial_state") groups=["has_save_logic"]]
 script = ExtResource("25_6wv7y")
 initial_state = NodePath("Spawn")
-print_state_changes = true
 
 [node name="Controller" type="Node" parent="StateMachine" node_paths=PackedStringArray("entity")]
 script = ExtResource("27_n4o3n")
@@ -1550,17 +1551,14 @@ parameters/idle/blendspace2d/blend_position = Vector2(0, 0)
 parameters/run/TimeScale/scale = 1.5
 parameters/run/blendspace2d/blend_position = Vector2(0, 0)
 
-[node name="ItemReceiverComponent" parent="." node_paths=PackedStringArray("inv_populator", "ui") instance=ExtResource("30_qgyag")]
+[node name="ItemReceiverComponent" parent="." node_paths=PackedStringArray("item_interact_hud", "inv_populator", "ui") instance=ExtResource("30_qgyag")]
+item_interact_hud = NodePath("../OverlayUI/ItemInteractionHUD")
 starting_inv = Array[ExtResource("32_ixmb3")]([SubResource("Resource_pihal"), null, null, null, SubResource("Resource_kx1me"), SubResource("Resource_2ijsm"), null, SubResource("Resource_xlc3k"), SubResource("Resource_n4o3n"), SubResource("Resource_3by25"), SubResource("Resource_oxva3"), SubResource("Resource_t7kvu"), SubResource("Resource_x8o50"), null, SubResource("Resource_apvym"), SubResource("Resource_ur5wt"), null, null, SubResource("Resource_dyejk"), null, null, null, null, null, null, SubResource("Resource_rdrbb"), null, null, SubResource("Resource_sx7hp"), SubResource("Resource_wjnk6"), SubResource("Resource_hevqc"), null, SubResource("Resource_0t1mv"), SubResource("Resource_0ta0y"), SubResource("Resource_vpccy"), SubResource("Resource_p5d28"), SubResource("Resource_6stk0")])
 is_player_inv = true
 inv_size = 37
 hotbar_size = 5
 inv_populator = NodePath("../OverlayUI/PlayerInvUI/MainTextureMargins/InvPopulator")
 ui = NodePath("../OverlayUI/PlayerInvUI")
-
-[node name="PlayerInvCommunicator" type="Node" parent="ItemReceiverComponent" node_paths=PackedStringArray("item_interact_hud")]
-script = ExtResource("31_mjpan")
-item_interact_hud = NodePath("../../OverlayUI/ItemInteractionHUD")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="ItemReceiverComponent"]
 position = Vector2(0, -5)

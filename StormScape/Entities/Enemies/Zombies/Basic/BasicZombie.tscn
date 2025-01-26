@@ -1,4 +1,4 @@
-[gd_scene load_steps=125 format=3 uid="uid://bl2igmtwo1a3v"]
+[gd_scene load_steps=126 format=3 uid="uid://bl2igmtwo1a3v"]
 
 [ext_resource type="Script" uid="uid://db4npghrxc6u" path="res://Entities/Enemies/Zombies/Basic/BasicZombie.gd" id="1_8bt15"]
 [ext_resource type="PackedScene" uid="uid://cj2wy5f05cos4" path="res://Entities/EntityCore/Shadow/EntityShadow.tscn" id="1_ko3ep"]
@@ -6,6 +6,7 @@
 [ext_resource type="Script" uid="uid://c2gdoebfp12dq" path="res://Entities/Stats/StatMod/StatModsCacheResource.gd" id="2_lm42a"]
 [ext_resource type="Shader" uid="uid://cfbagv3hrtar2" path="res://Utilities/Game/Shaders/EntityEffectShader.gdshader" id="3_3cie3"]
 [ext_resource type="PackedScene" uid="uid://bhcqtorpyerc3" path="res://Utilities/Debug/ParticleEmissionComponent.tscn" id="3_6bt22"]
+[ext_resource type="PackedScene" uid="uid://di7vcyrki71nm" path="res://Entities/Components/DetectionComponent/DetectionComponent.tscn" id="3_tsyff"]
 [ext_resource type="Texture2D" uid="uid://yypje8l5ouqy" path="res://Entities/Enemies/Zombies/Basic/BasicZombieBaseFramesCT.tres" id="4_8a5el"]
 [ext_resource type="PackedScene" uid="uid://co3n6m7efg8pd" path="res://Entities/Components/EffectComponents/StatusEffectsComponent/StatusEffectsComponent.tscn" id="5_g4fx3"]
 [ext_resource type="PackedScene" uid="uid://b7gdy01q8wsjx" path="res://Entities/Components/ItemComponents/HandsComponent/HandsComponent.tscn" id="6_j2ytj"]
@@ -28,7 +29,7 @@
 [ext_resource type="Script" uid="uid://cgqfx1ve66f3h" path="res://Entities/Components/ItemComponents/LootTableComponent/LootTable.gd" id="21_epk84"]
 [ext_resource type="Texture2D" uid="uid://crawnbhc5weqf" path="res://Entities/EntityCore/EntityTypes/DynamicEntity/entity_footstep.png" id="25_kc883"]
 [ext_resource type="Script" uid="uid://c28itqxmeqbq0" path="res://Entities/FSM/StateMachine.gd" id="27_5gwv1"]
-[ext_resource type="PackedScene" uid="uid://jpq0ij8wwlhy" path="res://Entities/EntityCore/FacingComponent.tscn" id="27_pfgxp"]
+[ext_resource type="PackedScene" uid="uid://jpq0ij8wwlhy" path="res://Entities/Components/FacingComponent/FacingComponent.tscn" id="27_pfgxp"]
 [ext_resource type="Script" uid="uid://tqfni6tloktu" path="res://Entities/FSM/DynamicController.gd" id="28_vjlik"]
 [ext_resource type="Script" uid="uid://i7ucoc123rpe" path="res://Entities/EntityCore/States/SpawnState.gd" id="29_vjlik"]
 [ext_resource type="Script" uid="uid://cbyg4eleptthh" path="res://Entities/EntityCore/States/StunnedState.gd" id="30_5gwv1"]
@@ -47,7 +48,7 @@ height = 24.0
 [sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_6bt22"]
 polygon = PackedVector2Array(-5, -2.98466, -6, -1.98977, -5, 0, 5, 0, 6, -1.98977, 5, -2.98466)
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_pfgxp"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_tsyff"]
 resource_local_to_scene = true
 shader = ExtResource("3_3cie3")
 
@@ -912,6 +913,11 @@ rotation = -1.5708
 shape = SubResource("CapsuleShape2D_2h2fy")
 debug_color = Color(0.66339, 0.512878, 0, 0.251)
 
+[node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
+debug_enabled = true
+
+[node name="DetectionComponent" parent="." instance=ExtResource("3_tsyff")]
+
 [node name="LightOccluder2D" type="LightOccluder2D" parent="."]
 scale = Vector2(1, 1.00514)
 occluder = SubResource("OccluderPolygon2D_6bt22")
@@ -922,7 +928,7 @@ occluder = SubResource("OccluderPolygon2D_6bt22")
 
 [node name="EntitySprite" parent="YSorter" instance=ExtResource("2_8a5el")]
 unique_name_in_owner = true
-material = SubResource("ShaderMaterial_pfgxp")
+material = SubResource("ShaderMaterial_tsyff")
 position = Vector2(0, -16)
 sprite_frames = SubResource("SpriteFrames_gi80f")
 animation = &"idle"

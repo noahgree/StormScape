@@ -9,6 +9,9 @@ class_name RigidEntityData
 # Stats
 @export var stat_mods: Dictionary[StringName, Dictionary]
 
+# Movement
+@export var facing_dir: Vector2
+
 # HealthComponent
 @export var health: int
 @export var shield: int

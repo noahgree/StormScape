@@ -1,23 +1,26 @@
 extends Controller
 class_name DynamicController
+## FSM Controller designed to work with dynamic entities.
 
 @export var entity: DynamicEntity ## The entity that this FSM moves.
 @export var footstep_texture: Texture2D ## The footstep texture used to leave a trail behind.
 @export var footstreak_offsets: Array[Vector2] = [Vector2(-4, 0), Vector2(4, 0)] ## The offsets to draw the footstreaks at when hit by knockback.
-@export_group("Dynamic Base Stats")
-@export_subgroup("Run & Sprint")
+
+@export_group("Run & Sprint")
 @export var _max_speed: float = 150 ## The maximum speed the entity can travel once fully accelerated.
 @export var _acceleration: float = 1250 ## The increase in speed per second for the entity.
 @export var _friction: float = 1550 ## The decrease in speed per second for the entity.
 @export var _sprint_multiplier: float = 1.5 ## How much faster the max_speed should be when sprinting.
 @export var _run_collision_impulse_factor: float = 1.0 ## A multiplier that controls how much impulse gets applied to rigid entites when colliding with them during the run state.
 @export_custom(PROPERTY_HINT_NONE, "suffix:per second") var _sprint_stamina_usage: float = 15.0 ## The amount of stamina used per second when the entity is sprinting.
-@export_subgroup("Sneak")
-@export var _max_stealth: int = 100 ## How much closer you can get to an unalereted enemy before alerting them.
+
+@export_group("Sneak")
+@export var _max_stealth: int = 50 ## The percent to shrink the detection radius by when sneaking.
 @export var _max_sneak_speed: int = 50 ## How fast you can move while sneaking.
 @export var _sneak_acceleration: float = 500 ## The increase in speed per second for the entity while sneaking.
 @export var _sneak_collision_impulse_factor: float = 1.0 ## A multiplier that controls how much impulse gets applied to rigid entites when colliding with them during the run state.
-@export_subgroup("Dash")
+
+@export_group("Dash")
 @export var _dash_speed: float = 1000 ## How fast the dash moves the character.
 @export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var _dash_duration: float = 0.08 ## The dash duration.
 @export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var _dash_cooldown: float = 1.0 ## The dash cooldown.
@@ -38,13 +41,22 @@ func _ready() -> void:
 	assert(fsm.has_node("Stunned"), "Dynamic entities must have a Stunned state in the FSM. Add one to " + owner.name + ".")
 
 	var moddable_stats: Dictionary[StringName, float] = {
-		&"max_speed" : _max_speed, &"acceleration" : _acceleration, &"sprint_stamina_usage" : _sprint_stamina_usage,
-		&"sprint_multiplier" : _sprint_multiplier, &"run_collision_impulse_factor" : _run_collision_impulse_factor,
-		&"friction" : _friction, &"confusion_amount" : 0.0,
-		&"max_stealth" : _max_stealth, &"max_sneak_speed" : _max_sneak_speed,
-		&"sneak_acceleration" : _sneak_acceleration, &"sneak_collision_impulse_factor" : _sneak_collision_impulse_factor,
-		&"dash_speed" : _dash_speed, &"dash_duration" : _dash_duration, &"dash_stamina_usage" : _dash_stamina_usage,
-		&"dash_cooldown" : _dash_cooldown, &"dash_collision_impulse_factor" : _dash_collision_impulse_factor
+		&"max_speed" : _max_speed,
+		&"acceleration" : _acceleration,
+		&"sprint_stamina_usage" : _sprint_stamina_usage,
+		&"sprint_multiplier" : _sprint_multiplier,
+		&"run_collision_impulse_factor" : _run_collision_impulse_factor,
+		&"friction" : _friction,
+		&"confusion_amount" : 0.0,
+		&"max_stealth" : _max_stealth,
+		&"max_sneak_speed" : _max_sneak_speed,
+		&"sneak_acceleration" : _sneak_acceleration,
+		&"sneak_collision_impulse_factor" : _sneak_collision_impulse_factor,
+		&"dash_speed" : _dash_speed,
+		&"dash_duration" : _dash_duration,
+		&"dash_stamina_usage" : _dash_stamina_usage,
+		&"dash_cooldown" : _dash_cooldown,
+		&"dash_collision_impulse_factor" : _dash_collision_impulse_factor
 	}
 	entity.stats.add_moddable_stats(moddable_stats)
 
@@ -80,10 +92,10 @@ func controller_physics_process(delta: float) -> void:
 
 #region Footprints & Streaks
 func create_footprint(offsets: Array) -> void:
-	var anim_vector: Vector2 = entity.facing_component.anim_vector
+	var facing_dir: Vector2 = entity.facing_component.facing_dir
 
 	for offset: Vector2 in offsets:
-		var trans: Transform2D = Transform2D(atan2(anim_vector.y, anim_vector.x), entity.global_position + offset)
+		var trans: Transform2D = Transform2D(atan2(facing_dir.y, facing_dir.x), entity.global_position + offset)
 		var footprint: SpriteGhost = SpriteGhost.create(trans, Vector2(0.8, 0.8), footstep_texture, 3.0)
 
 		footprint.z_index = 0
@@ -93,12 +105,12 @@ func create_footprint(offsets: Array) -> void:
 
 ## Updates the knockback streak points array that determines how the streak line is drawn.
 func update_knockback_streak() -> void:
-	var anim_vector: Vector2 = entity.facing_component.anim_vector
+	var facing_dir: Vector2 = entity.facing_component.facing_dir
 
 	for i: int in range(footstreak_offsets.size()):
 		if (knockback_streak_nodes.size() >= (i + 1)) and is_instance_valid(knockback_streak_nodes[i]) and knockback_streak_nodes[i] != null:
 			knockback_streak_nodes[i].update_trail_position(
-				entity.global_position + footstreak_offsets[i], atan2(anim_vector.y, anim_vector.x)
+				entity.global_position + footstreak_offsets[i], atan2(facing_dir.y, facing_dir.x)
 				)
 		else:
 			knockback_streak_nodes.clear()
@@ -127,9 +139,11 @@ func notify_requested_knockback(knockback: Vector2) -> void:
 
 					GlobalData.world_root.add_child(streak)
 
+## When the stun timer ends, notify that we can return to Idle if needed.
 func _on_stun_timer_timeout() -> void:
 	notify_stopped_moving()
 
+## When the dash timer ends, notify that we can return to Idle if needed.
 func _on_dash_timer_timeout() -> void:
 	notify_stopped_moving()
 

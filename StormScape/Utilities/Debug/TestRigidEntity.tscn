@@ -1,7 +1,8 @@
-[gd_scene load_steps=36 format=3 uid="uid://xsq1q0fffsin"]
+[gd_scene load_steps=38 format=3 uid="uid://xsq1q0fffsin"]
 
 [ext_resource type="Script" uid="uid://nup3um166s32" path="res://Entities/EntityCore/EntityTypes/RigidEntity/RigidEntity.gd" id="1_6tnit"]
 [ext_resource type="Script" uid="uid://c2gdoebfp12dq" path="res://Entities/Stats/StatMod/StatModsCacheResource.gd" id="2_ps53t"]
+[ext_resource type="PackedScene" uid="uid://di7vcyrki71nm" path="res://Entities/Components/DetectionComponent/DetectionComponent.tscn" id="3_fg1br"]
 [ext_resource type="PackedScene" uid="uid://dh4ydl7l86ywq" path="res://Entities/EntityCore/Sprites/EntitySprite.tscn" id="3_nv7a0"]
 [ext_resource type="Shader" uid="uid://cfbagv3hrtar2" path="res://Utilities/Game/Shaders/EntityEffectShader.gdshader" id="4_l6rwf"]
 [ext_resource type="Texture2D" uid="uid://2xf1pqc78iin" path="res://Assets/Icon/icon.svg" id="5_h2o7w"]
@@ -23,6 +24,7 @@
 [ext_resource type="Script" uid="uid://cgqfx1ve66f3h" path="res://Entities/Components/ItemComponents/LootTableComponent/LootTable.gd" id="18_w6kaj"]
 [ext_resource type="Resource" uid="uid://cx1ydw2jde1y8" path="res://Entities/Items/TRESItems/Apple(0).tres" id="19_6vm5h"]
 [ext_resource type="Resource" uid="uid://3avt5jvd3dye" path="res://Entities/Items/TRESItems/BottleOFire(3).tres" id="20_uc3ly"]
+[ext_resource type="PackedScene" uid="uid://jpq0ij8wwlhy" path="res://Entities/Components/FacingComponent/FacingComponent.tscn" id="24_i2rwd"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_ljryo"]
 rough = true
@@ -31,7 +33,9 @@ rough = true
 script = ExtResource("2_ps53t")
 debug_print_mod_changes = false
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_ljryo"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_sbju2"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_fg1br"]
 resource_local_to_scene = true
 shader = ExtResource("4_l6rwf")
 
@@ -49,8 +53,6 @@ animations = [{
 "name": &"default",
 "speed": 5.0
 }]
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_sbju2"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_wpovd"]
 size = Vector2(18, 18)
@@ -104,17 +106,19 @@ script = ExtResource("1_6tnit")
 team = 2
 stats = SubResource("Resource_8lyar")
 
-[node name="EntitySprite" parent="." instance=ExtResource("3_nv7a0")]
-unique_name_in_owner = true
-material = SubResource("ShaderMaterial_ljryo")
-position = Vector2(0, -10)
-scale = Vector2(0.156, 0.156)
-sprite_frames = SubResource("SpriteFrames_fg1br")
-
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0, -10)
 shape = SubResource("RectangleShape2D_sbju2")
 debug_color = Color(1.44392e-06, 0.568839, 0.851513, 0.42)
+
+[node name="DetectionComponent" parent="." instance=ExtResource("3_fg1br")]
+
+[node name="EntitySprite" parent="." instance=ExtResource("3_nv7a0")]
+unique_name_in_owner = true
+material = SubResource("ShaderMaterial_fg1br")
+position = Vector2(0, -10)
+scale = Vector2(0.156, 0.156)
+sprite_frames = SubResource("SpriteFrames_fg1br")
 
 [node name="ParticleEmissionComponent" parent="." instance=ExtResource("6_ljryo")]
 
@@ -159,3 +163,10 @@ print_effect_updates = true
 [node name="LootTableComponent" parent="." instance=ExtResource("15_1vdsh")]
 loot_table = SubResource("Resource_tcueq")
 hit_spawn_chance = 0.0
+
+[node name="FacingComponent" parent="." instance=ExtResource("24_i2rwd")]
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+
+[node name="AnimationTree" type="AnimationTree" parent="."]
+anim_player = NodePath("../AnimationPlayer")

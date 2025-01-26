@@ -23,7 +23,7 @@ func enter() -> void:
 	ghosts_spawned = 0
 	controller.dash_timer.start(entity.stats.get_stat("dash_duration"))
 	controller.dash_cooldown_timer.start(entity.stats.get_stat("dash_duration") + entity.stats.get_stat("dash_cooldown"))
-	entity.facing_component.anim_vector = controller.last_anim_vector
+	entity.facing_component.facing_dir = controller.last_facing_dir
 
 	_create_ghost()
 

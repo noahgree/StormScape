@@ -21,12 +21,13 @@ class_name HandsComponent
 var equipped_item: EquippableItem = null ## The currently equipped equippable item that the entity is holding.
 var current_x_direction: int = 1 ## A pos or neg toggle for which direction the anim vector has us facing. Used to flip the x-scale.
 var scale_is_lerping: bool = false ## Whether or not the scale is currently lerping between being negative or positive.
-var is_mouse_button_held: bool = false ## If we are currently considering the trigger button to be held down.
+var is_trigger_held: bool = false ## If we are currently considering the trigger button to be held down.
 var been_holding_time: float = 0 ## How long we have considered the trigger button to have been held down so far.
-var equipped_item_should_follow_mouse: bool = true ## If the equipped item should rotate with the character and the mouse or not.
+var should_rotate: bool = true ## If the equipped item should rotate with the character.
 var starting_hands_component_height: float ## The height relative to the bottom of the entity sprite that this component operates at.
 var starting_off_hand_sprite_height: float ## The height relative to the hands component scene that the off hand sprite node starts at (and is usually animated from).
 var debug_origin_of_projectile_vector: Vector2 ## Used for debug drawing the origin of the projectile aiming vector.
+var aim_target_pos: Vector2 = Vector2.ZERO ## The target position of what the hands component should be aiming at when holding something that requires aiming.
 
 
 #region Save & Load
@@ -50,35 +51,58 @@ func _ready() -> void:
 	main_hand_sprite.visible = false
 	off_hand_sprite.visible = false
 	drawn_off_hand.visible = false
+
 	SignalBus.focused_ui_opened.connect(func() -> void:
-		is_mouse_button_held = false
+		is_trigger_held = false
 		been_holding_time = 0
 		)
+
 	starting_hands_component_height = position.y
 	starting_off_hand_sprite_height = off_hand_sprite.position.y
 
-func _unhandled_input(event: InputEvent) -> void:
+#region Inputs
+func handle_trigger_pressed() -> void:
+	if equipped_item != null and equipped_item.enabled and not scale_is_lerping:
+		equipped_item.activate()
+	is_trigger_held = true
+
+func handle_trigger_released() -> void:
 	if equipped_item != null:
-		if Input.is_action_pressed("reload") and equipped_item is ProjectileWeapon: # We can reload even when activation is disabled
-			equipped_item.reload()
+		equipped_item.release_hold_activate(been_holding_time)
+	is_trigger_held = false
+	been_holding_time = 0
 
-		if not equipped_item.enabled:
-			if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
-				is_mouse_button_held = event.pressed
-			return
+func handle_reload() -> void:
+	if equipped_item != null and equipped_item is ProjectileWeapon:
+		equipped_item.reload()
 
-		if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
-			if not scale_is_lerping:
-				if event.is_pressed():
-					equipped_item.activate()
-			is_mouse_button_held = event.pressed
+func handle_aim(new_target_pos: Vector2) -> void:
+	aim_target_pos = new_target_pos
+
+## Handles player input responses.
+func _unhandled_input(event: InputEvent) -> void:
+	if not entity is Player:
+		return
+
+	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
+		if event.is_pressed():
+			handle_trigger_pressed()
+		else:
+			handle_trigger_released()
+
+	if Input.is_action_pressed("reload"):
+		handle_reload()
+#endregion
 
 func _process(delta: float) -> void:
+	if entity is Player:
+		handle_aim(CursorManager.get_cursor_mouse_position())
+
 	if equipped_item != null:
 		if not equipped_item.enabled:
 			return
 
-		if is_mouse_button_held:
+		if is_trigger_held:
 			been_holding_time += delta
 			if not scale_is_lerping:
 				equipped_item.hold_activate(been_holding_time)
@@ -89,14 +113,15 @@ func _process(delta: float) -> void:
 
 ## Removes the currently equipped item after letting it clean itself up.
 func unequip_current_item() -> void:
-	active_slot_info.update_mag_ammo(-1)
-	active_slot_info.update_inv_ammo(-1)
-	active_slot_info.update_item_name("")
+	if active_slot_info:
+		active_slot_info.update_mag_ammo(-1)
+		active_slot_info.update_inv_ammo(-1)
+		active_slot_info.update_item_name("")
 
 	if entity is Player: entity.overhead_ui.reset_all()
 
 	if equipped_item != null:
-		is_mouse_button_held = false
+		is_trigger_held = false
 		been_holding_time = 0
 		drawn_off_hand.visible = false
 		equipped_item.exit()
@@ -134,20 +159,20 @@ func on_equipped_item_change(inv_item_slot: Slot) -> void:
 			main_hand.rotation += deg_to_rad(equipped_item.stats.holding_degrees)
 			snap_y_scale()
 			_prep_for_pullout_anim()
-			_manage_proj_weapon_hands(_get_anim_vector())
+			_manage_proj_weapon_hands(_get_facing_dir())
 		elif equipped_item is MeleeWeapon:
 			main_hand.position = main_hand_with_melee_weapon_pos + equipped_item.stats.holding_offset
 			main_hand.rotation += deg_to_rad(equipped_item.stats.holding_degrees)
 			snap_y_scale()
 			_prep_for_pullout_anim()
-			_manage_melee_weapon_hands(_get_anim_vector())
+			_manage_melee_weapon_hands(_get_facing_dir())
 	elif equipped_item.stats.item_type == GlobalData.ItemType.CONSUMABLE or equipped_item.stats.item_type == GlobalData.ItemType.WORLD_RESOURCE:
 		hands_anchor.global_rotation = 0
 		main_hand.position = main_hand_with_held_item_pos + equipped_item.stats.holding_offset
 		main_hand.rotation += deg_to_rad(equipped_item.stats.holding_degrees)
 		main_hand_sprite.position = main_hand_with_held_item_pos + equipped_item.stats.main_hand_offset
 		main_hand_sprite.visible = true
-		_manage_normal_hands(_get_anim_vector())
+		_manage_normal_hands(_get_facing_dir())
 
 	equipped_item.ammo_ui = active_slot_info
 
@@ -160,16 +185,16 @@ func on_equipped_item_change(inv_item_slot: Slot) -> void:
 	equipped_item.enter()
 	set_physics_process(true)
 
-## Based on the current anim vector, we artificially move the rotation of the hands over before the items to simulate
-## a pullout animation.
+## Based on the current anim vector, we artificially move the rotation of the hands over before
+## the items to simulate a pullout animation.
 func _prep_for_pullout_anim() -> void:
-	if _get_anim_vector().x > 0:
-		if _get_anim_vector().y > 0:
+	if _get_facing_dir().x > 0:
+		if _get_facing_dir().y > 0:
 			hands_anchor.global_rotation = PI/4
 		else:
 			hands_anchor.global_rotation = -PI/4
 	else:
-		if _get_anim_vector().y > 0:
+		if _get_facing_dir().y > 0:
 			hands_anchor.global_rotation = PI/2
 		else:
 			hands_anchor.global_rotation = -PI/2
@@ -181,48 +206,54 @@ func _physics_process(_delta: float) -> void:
 
 	if equipped_item.stats.item_type == GlobalData.ItemType.WEAPON:
 		if equipped_item is ProjectileWeapon:
-			_manage_proj_weapon_hands(_get_anim_vector())
+			_manage_proj_weapon_hands(_get_facing_dir())
 		elif equipped_item is MeleeWeapon:
-			_manage_melee_weapon_hands(_get_anim_vector())
-	elif equipped_item.stats.item_type == GlobalData.ItemType.CONSUMABLE or equipped_item.stats.item_type == GlobalData.ItemType.WORLD_RESOURCE:
-		_manage_normal_hands(_get_anim_vector())
+			if not equipped_item.is_node_ready():
+				_manage_melee_weapon_hands(_get_facing_dir())
+			elif not equipped_item.anim_player.is_playing():
+				_manage_melee_weapon_hands(_get_facing_dir())
+	elif equipped_item.stats.item_type in [GlobalData.ItemType.CONSUMABLE, GlobalData.ItemType.WORLD_RESOURCE]:
+		_manage_normal_hands(_get_facing_dir())
 
-func _manage_proj_weapon_hands(anim_vector: Vector2) -> void:
-	_change_y_sort(anim_vector)
-	_handle_y_scale_lerping(anim_vector)
+## Manages the placement of the hands when holding a projectile weapon.
+func _manage_proj_weapon_hands(facing_dir: Vector2) -> void:
+	_change_y_sort(facing_dir)
+	_handle_y_scale_lerping(facing_dir)
 
-	if anim_vector.x < -0.12:
+	if facing_dir.x < -0.12:
 		_change_off_hand_sprite_visibility(false)
-	elif anim_vector.x > 0.12:
+	elif facing_dir.x > 0.12:
 		_change_off_hand_sprite_visibility(true)
 
-	if equipped_item_should_follow_mouse:
-		var y_offset: float = equipped_item.proj_origin.y + equipped_item.stats.holding_offset.y
-		y_offset *= -1 if hands_anchor.scale.y < 0 else 1
-		var rotated_offset: Vector2 = Vector2(0, y_offset).rotated(hands_anchor.global_rotation)
-		var sprite_pos_with_offsets: Vector2 = hands_anchor.global_position + rotated_offset
+	if not should_rotate:
+		return
 
-		var direction_vector: Vector2 = Vector2.RIGHT.rotated(hands_anchor.global_rotation)
+	var y_offset: float = equipped_item.proj_origin.y + equipped_item.stats.holding_offset.y
+	y_offset *= -1 if hands_anchor.scale.y < 0 else 1
 
-		var lerped_direction_angle: float = entity.get_lerped_mouse_direction_to_pos(direction_vector, sprite_pos_with_offsets).angle()
-		hands_anchor.global_rotation = lerped_direction_angle
+	var rotated_offset: Vector2 = Vector2(0, y_offset).rotated(hands_anchor.global_rotation)
+	var sprite_pos_with_offsets: Vector2 = hands_anchor.global_position + rotated_offset
 
-		debug_origin_of_projectile_vector = sprite_pos_with_offsets
-		queue_redraw()
+	var curr_direction: Vector2 = Vector2.RIGHT.rotated(hands_anchor.global_rotation)
 
-func _manage_melee_weapon_hands(anim_vector: Vector2) -> void:
-	if not equipped_item.is_node_ready():
-		_do_melee_weapon_hand_placement(anim_vector)
-	elif not equipped_item.anim_player.is_playing():
-		_do_melee_weapon_hand_placement(anim_vector)
+	var lerped_direction_angle: float = LerpHelpers.lerp_direction(
+		curr_direction, aim_target_pos, sprite_pos_with_offsets,
+		entity.facing_component.rotation_lerping_factor
+		).angle()
+	hands_anchor.global_rotation = lerped_direction_angle
 
-func _do_melee_weapon_hand_placement(anim_vector: Vector2) -> void:
-	_change_y_sort(anim_vector)
-	_handle_y_scale_lerping(anim_vector)
+	# Debug drawing
+	debug_origin_of_projectile_vector = sprite_pos_with_offsets
+	queue_redraw()
 
-	if anim_vector.x < -0.12:
+## Manages the placement of the hands when holding a melee weapon.
+func _manage_melee_weapon_hands(facing_dir: Vector2) -> void:
+	_change_y_sort(facing_dir)
+	_handle_y_scale_lerping(facing_dir)
+
+	if facing_dir.x < -0.12:
 		_change_off_hand_sprite_visibility(false)
-	elif anim_vector.x > 0.12:
+	elif facing_dir.x > 0.12:
 		_change_off_hand_sprite_visibility(true)
 
 	if hands_anchor.scale.y < 0.95 and hands_anchor.scale.y > -0.95:
@@ -230,20 +261,28 @@ func _do_melee_weapon_hand_placement(anim_vector: Vector2) -> void:
 	else:
 		scale_is_lerping = false
 
-	if equipped_item_should_follow_mouse:
-		var swing_angle_offset: float = hands_anchor.scale.y * deg_to_rad(equipped_item.stats.swing_angle / 2.0)
-		var sprite_visual_rotation_offset: float = hands_anchor.scale.y * deg_to_rad(equipped_item.sprite_visual_rotation)
-		var target_position: Vector2 = hands_anchor.global_position - Vector2(0, hands_anchor.global_rotation - swing_angle_offset + sprite_visual_rotation_offset)
-		var direction_vector: Vector2 = Vector2.RIGHT.rotated(hands_anchor.global_rotation)
+	if not should_rotate:
+		return
 
-		var lerped_direction_angle: float = entity.get_lerped_mouse_direction_to_pos(direction_vector, target_position).angle()
+	var swing_angle_offset: float = hands_anchor.scale.y * deg_to_rad(equipped_item.stats.swing_angle / 2.0)
+	var sprite_visual_rot_offset: float = hands_anchor.scale.y * deg_to_rad(equipped_item.sprite_visual_rotation)
 
-		hands_anchor.global_rotation = lerped_direction_angle
+	var origin_of_rotation: Vector2 = hands_anchor.global_position - Vector2(0, hands_anchor.global_rotation - swing_angle_offset + sprite_visual_rot_offset)
 
-func _manage_normal_hands(anim_vector: Vector2) -> void:
-	_change_y_sort(anim_vector)
+	var curr_direction: Vector2 = Vector2.RIGHT.rotated(hands_anchor.global_rotation)
 
-	if anim_vector.y < 0:
+	var lerped_direction_angle: float = LerpHelpers.lerp_direction(
+		curr_direction, aim_target_pos, origin_of_rotation,
+		entity.facing_component.rotation_lerping_factor
+		).angle()
+
+	hands_anchor.global_rotation = lerped_direction_angle
+
+## This manages how the hands operate when not holding a melee or projectile weapon.
+func _manage_normal_hands(facing_dir: Vector2) -> void:
+	_change_y_sort(facing_dir)
+
+	if facing_dir.y < 0:
 		_update_anchor_scale("x", -1)
 		_change_off_hand_sprite_visibility(false)
 	else:
@@ -264,13 +303,14 @@ func _check_for_drawing_off_hand() -> void:
 		drawn_off_hand.position = Vector2(off_hand_sprite.position.x, starting_off_hand_sprite_height) + equipped_item.stats.draw_off_hand_offset + equipped_item.stats.holding_offset
 		drawn_off_hand.visible = true
 
-func _change_y_sort(anim_vector: Vector2) -> void:
-	if anim_vector.y < 0: # Facing up
+func _change_y_sort(facing_dir: Vector2) -> void:
+	if facing_dir.y < 0: # Facing up
 		position = entity.sprite.position - Vector2(0, 1)
 		hands_anchor.position.y = starting_hands_component_height - position.y
 		off_hand_sprite.position.y = starting_off_hand_sprite_height + starting_hands_component_height - position.y
 	else:
-		if entity.effects != null: # Needed to place held items over the status effect particles on the entity when facing down
+		if entity.effects != null:
+			# Needed to place held items over the status effect particles on the entity when facing down
 			position = entity.effects.position + Vector2(0, 1)
 			hands_anchor.position.y = starting_hands_component_height - position.y
 			off_hand_sprite.position.y = starting_off_hand_sprite_height + starting_hands_component_height - position.y
@@ -279,27 +319,27 @@ func _change_y_sort(anim_vector: Vector2) -> void:
 			hands_anchor.position.y = 0
 			off_hand_sprite.position.y = starting_off_hand_sprite_height
 
-func _handle_y_scale_lerping(anim_vector: Vector2) -> void:
-	if anim_vector.x > 0.12:
+func _handle_y_scale_lerping(facing_dir: Vector2) -> void:
+	if facing_dir.x > 0.12:
 		current_x_direction = 1
-	elif anim_vector.x < -0.12:
+	elif facing_dir.x < -0.12:
 		current_x_direction = -1
 
 	_update_anchor_scale("y", lerp(hands_anchor.scale.y, -1.0 if current_x_direction == -1 else 1.0, 0.24))
 
 func snap_y_scale() -> void:
-	if _get_anim_vector().x > 0.12:
+	if _get_facing_dir().x > 0.12:
 		current_x_direction = 1
-	elif _get_anim_vector().x < -0.12:
+	elif _get_facing_dir().x < -0.12:
 		current_x_direction = -1
 	_update_anchor_scale("y", -1.0 if current_x_direction == -1 else 1.0)
 
 func _update_anchor_scale(coord: String, new_value: float) -> void:
-	if equipped_item_should_follow_mouse:
+	if should_rotate:
 		if coord == "y":
 			hands_anchor.scale.y = new_value
 		else:
 			hands_anchor.scale.x = new_value
 
-func _get_anim_vector() -> Vector2:
-	return entity.facing_component.anim_vector
+func _get_facing_dir() -> Vector2:
+	return entity.facing_component.facing_dir

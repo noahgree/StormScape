@@ -78,6 +78,8 @@ func _ready() -> void:
 
 	if not Engine.is_editor_hint():
 		add_to_group("items_on_ground")
+		collision_mask = 0b10000000
+
 		particles.emitting = false
 		_set_rarity_colors()
 		icon.set_instance_shader_parameter("random_start_offset", randf() * 2.0)

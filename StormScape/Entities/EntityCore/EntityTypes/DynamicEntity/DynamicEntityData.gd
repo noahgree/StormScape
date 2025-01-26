@@ -13,7 +13,7 @@ class_name DynamicEntityData
 @export var velocity: Vector2
 @export var snare_factor: float
 @export var snare_time_left: float
-@export var anim_vector: Vector2
+@export var facing_dir: Vector2
 @export var knockback_vector: Vector2
 
 # HealthComponent

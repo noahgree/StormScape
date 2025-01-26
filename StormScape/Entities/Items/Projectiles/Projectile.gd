@@ -770,6 +770,9 @@ func _process_hit(object: Node2D) -> void:
 func _kill_projectile_on_hit() -> void:
 	set_physics_process(false)
 
+	if sprite.animation == "impact" and sprite.is_playing(): # To handle when it hits more than one thing
+		return
+
 	if sprite.sprite_frames.has_animation("impact"):
 		if random_rot_on_impact:
 			sprite.rotation_degrees = randi_range(0, 360)

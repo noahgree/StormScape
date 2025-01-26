@@ -9,7 +9,7 @@ class_name EffectSource
 @export_group("General")
 @export var source_type: GlobalData.EffectSourceSourceType ## A tag used to determine the source of the effect source. See GlobalData class for details on the tags.
 @export var source_tags: Array[String] = [] ## Additional information to pass to whatever receieves this effect source to make sure it should apply.
-@export_flags_2d_physics var scanned_phys_layers: int = 0b10111111 ## The collision mask that this source scans in order to apply affects to.
+@export_flags_2d_physics var scanned_phys_layers: int = 0b1101111 ## The collision mask that this source scans in order to apply affects to.
 @export_subgroup("Team Logic")
 @export var can_hit_self: bool = true ## Whether or not this effect source can be applied to what created it.
 @export_flags("Enemies", "Allies") var bad_effect_affected_teams: int = GlobalData.BadEffectAffectedTeams.ENEMIES ## Which entity teams in relation to who produced this source are affected by this damage.

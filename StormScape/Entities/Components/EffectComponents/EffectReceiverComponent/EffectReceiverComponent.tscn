@@ -4,6 +4,8 @@
 [ext_resource type="Script" uid="uid://c13j8rj1l3wou" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectReceiverTool.gd" id="2_nlfld"]
 
 [node name="EffectReceiverComponent" type="Area2D"]
+collision_layer = 0
+collision_mask = 0
 monitoring = false
 script = ExtResource("1_x67rl")
 

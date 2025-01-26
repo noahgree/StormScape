@@ -159,7 +159,7 @@ func _ready() -> void:
 
 func disable() -> void:
 	source_entity.facing_component.should_rotate = true
-	source_entity.hands.equipped_item_should_follow_mouse = true
+	source_entity.hands.should_rotate = true
 	is_holding_hitscan = false
 	is_reloading_single_and_has_since_released = true
 
@@ -214,7 +214,7 @@ func exit() -> void:
 	super.exit()
 
 	source_entity.facing_component.should_rotate = true
-	source_entity.hands.equipped_item_should_follow_mouse = true
+	source_entity.hands.should_rotate = true
 	_do_post_reload_animation_cleanup()
 	_clean_up_hitscans()
 	if mouse_area: mouse_area.queue_free()
@@ -419,7 +419,7 @@ func _clean_up_hitscans() -> void:
 
 ## When the timer that runs when we shouldn't follow the mouse (because of an active hitscan) ends, allow mouse following again.
 func _on_hitscan_hands_freeze_timer_timeout() -> void:
-	source_entity.hands.equipped_item_should_follow_mouse = true
+	source_entity.hands.should_rotate = true
 #endregion
 
 #region Projectile Spawning
@@ -539,7 +539,7 @@ func _spawn_hitscan(hitscan: Hitscan) -> void:
 	current_hitscans.append(hitscan)
 
 	if stats.firing_mode == "Semi Auto" or (stats.firing_mode == "Auto" and stats.s_mods.get_stat("hitscan_duration") < 0.65):
-		source_entity.hands.equipped_item_should_follow_mouse = false
+		source_entity.hands.should_rotate = false
 		hitscan_hands_freeze_timer.start(0.065)
 #endregion
 

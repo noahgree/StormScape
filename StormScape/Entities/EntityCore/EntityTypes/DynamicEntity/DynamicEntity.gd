@@ -16,15 +16,15 @@ class_name DynamicEntity
 @onready var emission_mgr: ParticleEmissionComponent = $ParticleEmissionComponent ## The component responsible for determining the extents and origins of different particle placements.
 @onready var fsm: StateMachine = $StateMachine ## The FSM controlling the entity.
 @onready var facing_component: FacingComponent = $FacingComponent ## The component in charge of choosing the entity animation directions.
+@onready var detection_component: DetectionComponent = $DetectionComponent ## The component that defines the radius around this entity that an enemy must enter for that enemy to be alerted.
 @onready var health_component: HealthComponent = $HealthComponent ## The component in charge of entity health and shield.
 @onready var stamina_component: StaminaComponent = get_node_or_null("StaminaComponent") ## The component in charge of entity stamina and hunger.
-@onready var inv: ItemReceiverComponent = get_node_or_null("ItemReceiverComponent") ## The inventory component for the entity.
+@onready var inv: ItemReceiverComponent = get_node_or_null("ItemReceiverComponent") ## The inventory for the entity.
 @onready var hands: HandsComponent = get_node_or_null("%HandsComponent") ## The hands item component for the entity.
 
 var time_snare_counter: float = 0 ## The ticker that slows down delta when under a time snare.
 var snare_factor: float = 0 ## Multiplier for delta time during time snares.
 var snare_timer: Timer ## A reference to a timer that might currently be tracking a time snare instance.
-var current_stealth: int = 0 ## The extra amount of closeness this entity can achieve to an enemy before being detected.
 
 
 #region Save & Load
@@ -38,17 +38,14 @@ func _on_save_game(save_data: Array[SaveData]) -> void:
 
 	data.stat_mods = stats.stat_mods
 
-	if sprite is AnimatedSprite2D:
-		data.sprite_frames_path = sprite.sprite_frames.resource_path
-	else:
-		data.sprite_texture_path = sprite.texture.resource_path
+	data.sprite_frames_path = sprite.sprite_frames.resource_path
 
 	data.health = health_component.health
 	data.shield = health_component.shield
 	data.armor = health_component.armor
 
-	data.anim_vector = fsm.anim_vector
-	data.knockback_vector = fsm.knockback_vector
+	data.facing_dir = facing_component.facing_dir
+	data.knockback_vector = fsm.controller.knockback_vector
 
 	if stamina_component != null:
 		data.stamina = stamina_component.stamina
@@ -71,6 +68,10 @@ func _on_save_game(save_data: Array[SaveData]) -> void:
 
 	save_data.append(data)
 
+func _on_before_load_game() -> void:
+	if not self is Player:
+		queue_free()
+
 func _is_instance_on_load_game(data: DynamicEntityData) -> void:
 	global_position = data.position
 	velocity = data.velocity
@@ -81,18 +82,16 @@ func _is_instance_on_load_game(data: DynamicEntityData) -> void:
 	stats.stat_mods = data.stat_mods
 	stats.reinit_on_load()
 
-	if sprite is AnimatedSprite2D:
-		sprite.sprite_frames = load(data.sprite_frames_path)
-	else:
-		sprite.texture = load(data.texture_path)
+	sprite.sprite_frames = load(data.sprite_frames_path)
 
+	health_component.just_loaded = true
 	health_component.health = data.health
 	health_component.shield = data.shield
 	health_component.armor = data.armor
 
-	fsm.anim_vector = data.anim_vector ## FIXME!!!
-	fsm.knockback_vector = data.knockback_vector
-	fsm.verify_anim_vector()
+	facing_component.facing_dir = data.facing_dir
+	fsm.controller.knockback_vector = data.knockback_vector
+	fsm.controller.update_animation()
 	if velocity.length() > 0 and fsm.has_node("Run"):
 		fsm._on_child_transition(fsm.current_state, "Run")
 
@@ -128,6 +127,7 @@ func _ready() -> void:
 
 	assert(has_node("StateMachine"), name + " is a DynamicEntity but does not have a StateMachine.")
 	assert(has_node("HealthComponent"), name + " is a DynamicEntity but does not have a HealthComponent.")
+	assert(has_node("DetectionComponent"), name + " is a DynamicEntity but does not have a DetectionComponent.")
 
 	add_to_group("has_save_logic")
 	if team == GlobalData.Teams.PLAYER:
@@ -176,7 +176,8 @@ func request_time_snare(factor: float, snare_time: float) -> void:
 	else:
 		var timeout_callable: Callable = Callable(func() -> void:
 			snare_factor = 0
-			snare_timer.queue_free())
+			snare_timer.queue_free()
+			)
 		snare_timer = TimerHelpers.create_one_shot_timer(self, max(0.001, snare_time), timeout_callable)
 		snare_timer.start()
 

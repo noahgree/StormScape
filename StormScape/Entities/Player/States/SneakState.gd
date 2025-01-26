@@ -9,7 +9,7 @@ func enter() -> void:
 	pass
 
 func exit() -> void:
-	entity.current_stealth = 0
+	entity.detection_component.update_stealth(0)
 
 func state_physics_process(delta: float) -> void:
 	_do_character_sneak(delta)
@@ -44,7 +44,7 @@ func _handle_rigid_entity_collisions() -> void:
 
 ## Updates the dynamic entity with the amount of stealth we currently have.
 func _send_parent_entity_stealth_value() -> void:
-	entity.current_stealth = int(entity.stats.get_stat("max_stealth"))
+	entity.detection_component.update_stealth(int(entity.stats.get_stat("max_stealth")))
 
 ## If the sneak button is still pressed, continue in this state. Otherwise, transition out based on movement vector.
 func _check_if_stopped_sneaking() -> void:

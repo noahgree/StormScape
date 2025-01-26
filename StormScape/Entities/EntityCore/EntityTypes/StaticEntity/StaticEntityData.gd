@@ -9,6 +9,9 @@ class_name StaticEntityData
 # Stats
 @export var stat_mods: Dictionary[StringName, Dictionary]
 
+# Rotation
+@export var facing_dir: Vector2
+
 # HealthComponent
 @export var health: int
 @export var shield: int
