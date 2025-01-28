@@ -1,4 +1,4 @@
-extends Node
+extends Node2D
 class_name Controller
 ## This is a base class for what should be implemented on a per-entity basis. This receives
 ## signals from states in a FSM and decides what state to transition to.

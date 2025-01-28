@@ -66,7 +66,7 @@ point_count = 2
 
 [sub_resource type="Resource" id="Resource_ysh4t"]
 script = ExtResource("5_u6crx")
-speed = 500
+speed = 15
 speed_curve = SubResource("Curve_pabkw")
 initial_boost_time = 0.0
 initial_boost_mult = 2.0

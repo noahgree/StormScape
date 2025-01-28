@@ -42,3 +42,5 @@ class OnScreenDebug:
 
 class Entity:
 	static var show_facing_dir: bool = false
+	static var show_movement_vector: bool = true
+	static var show_collision_avoidance_rays: bool = false

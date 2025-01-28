@@ -2,7 +2,7 @@ extends State
 class_name StunnedState
 ## Handles when the entity is stunned. This is a required state for all dynamic entities.
 
-@export var indicator_scene: PackedScene ## The instance that will be spawned above the character to indicate stun.
+@export var indicator_scene: PackedScene = preload("res://Entities/Stats/EffectSystemResources/StatusEffects/BadEffects/Stun/StunIndicator.tscn") ## The instance that will be spawned above the character to indicate stun.
 
 var stun_indicator: AnimatedSprite2D ## The animated sprite showing the stun indicator over the entity.
 

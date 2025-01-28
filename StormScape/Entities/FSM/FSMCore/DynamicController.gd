@@ -155,6 +155,7 @@ func notify_requested_stun(duration: float) -> void:
 		"Run", "Idle", "Stunned", "Sneak":
 			stunned_timer.wait_time = duration
 			fsm.change_state("Stunned")
+			stunned_timer.start()
 
 func notify_requested_dash() -> void:
 	match fsm.current_state.name:

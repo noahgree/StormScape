@@ -1020,11 +1020,11 @@ script = ExtResource("27_5gwv1")
 initial_state = NodePath("Spawn")
 print_state_changes = true
 
-[node name="Controller" type="Node" parent="StateMachine" node_paths=PackedStringArray("entity")]
+[node name="Controller" type="Node2D" parent="StateMachine" node_paths=PackedStringArray("entity")]
 script = ExtResource("30_tsyff")
 entity = NodePath("../..")
 footstep_texture = ExtResource("25_kc883")
-_max_speed = 120.0
+_max_speed = 60.0
 _acceleration = 1000.0
 _friction = 1300.0
 

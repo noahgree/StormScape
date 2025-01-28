@@ -1,6 +1,9 @@
-[gd_scene load_steps=11 format=3 uid="uid://biduyqlpqhmrp"]
+[gd_scene load_steps=12 format=3 uid="uid://biduyqlpqhmrp"]
 
 [ext_resource type="Texture2D" uid="uid://qqal2orje3v0" path="res://Entities/Stats/EffectSystemResources/StatusEffects/BadEffects/Stun/effect_stun.png" id="1_5ddm1"]
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_fkfg5"]
+light_mode = 1
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_bjkj1"]
 atlas = ExtResource("1_5ddm1")
@@ -68,6 +71,7 @@ animations = [{
 
 [node name="StunIndicator" type="AnimatedSprite2D"]
 self_modulate = Color(1.5, 1.5, 1.5, 1)
+material = SubResource("CanvasItemMaterial_fkfg5")
 position = Vector2(0, -8)
 sprite_frames = SubResource("SpriteFrames_5ms8p")
 animation = &"stun"

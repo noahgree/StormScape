@@ -1,4 +1,4 @@
-[gd_scene load_steps=199 format=3 uid="uid://dba8mrurjlekp"]
+[gd_scene load_steps=198 format=3 uid="uid://dba8mrurjlekp"]
 
 [ext_resource type="Script" uid="uid://c3rpxq8pnbdje" path="res://Entities/Player/PlayerCore/Player.gd" id="1_m33tt"]
 [ext_resource type="Script" uid="uid://c2gdoebfp12dq" path="res://Entities/Stats/StatMod/StatModsCacheResource.gd" id="2_vetip"]
@@ -35,7 +35,6 @@
 [ext_resource type="PackedScene" uid="uid://jpq0ij8wwlhy" path="res://Entities/Components/FacingComponent/FacingComponent.tscn" id="25_0t1mv"]
 [ext_resource type="Script" uid="uid://c28itqxmeqbq0" path="res://Entities/FSM/FSMCore/StateMachine.gd" id="25_6wv7y"]
 [ext_resource type="Texture2D" uid="uid://crawnbhc5weqf" path="res://Entities/EntityCore/EntityTypes/DynamicEntity/entity_footstep.png" id="27_0t1mv"]
-[ext_resource type="PackedScene" uid="uid://biduyqlpqhmrp" path="res://Entities/Stats/EffectSystemResources/StatusEffects/BadEffects/Stun/StunIndicator.tscn" id="27_fyxoi"]
 [ext_resource type="Script" uid="uid://evdilpt7dh6f" path="res://Entities/Player/PlayerCore/PlayerController.gd" id="27_n4o3n"]
 [ext_resource type="PackedScene" uid="uid://c4n604w30gx8m" path="res://Entities/Components/ItemComponents/ItemReceiverComponent/ItemReceiverComponent.tscn" id="30_qgyag"]
 [ext_resource type="Script" uid="uid://dq62ojsc43p8o" path="res://UI/Inventory/PlayerInventory/PlayerInvUI.gd" id="32_3a185"]
@@ -1511,7 +1510,7 @@ debug_color = Color(1, 0.294, 0.588, 0.06)
 script = ExtResource("25_6wv7y")
 initial_state = NodePath("Spawn")
 
-[node name="Controller" type="Node" parent="StateMachine" node_paths=PackedStringArray("entity")]
+[node name="Controller" type="Node2D" parent="StateMachine" node_paths=PackedStringArray("entity")]
 script = ExtResource("27_n4o3n")
 entity = NodePath("../..")
 footstep_texture = ExtResource("27_0t1mv")
@@ -1537,7 +1536,6 @@ dash_impact_cam_fx = SubResource("Resource_6wv7y")
 
 [node name="Stunned" type="Node" parent="StateMachine"]
 script = ExtResource("15_eiig3")
-indicator_scene = ExtResource("27_fyxoi")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {

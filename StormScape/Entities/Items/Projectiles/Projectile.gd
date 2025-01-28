@@ -58,6 +58,7 @@ var debug_recent_hit_location: Vector2 ## The location of the most recent point 
 var source_wpn_stats: ProjWeaponResource ## The projectile weapon resource for the weapon that fired this projectile.
 var aoe_overlapped_receivers: Dictionary[Area2D, Timer] = {} ## The areas that are currently in an AOE area.
 var is_disabling_monitoring: bool = false ## When true, we are waiting on the deferred call to disable collision monitoring.
+var about_to_free: bool = false ## This is true once we have started the impact animation and should no longer be able to hit new entities.
 var multishot_id: int = 0 ## The id passed in on creation that relates the sibling projectiles spawned on the same multishot barrage.
 var max_distance_random_offset: float = 0 ## Assigned upon creation to add randomization to how far each shot of a multishot firing can travel.
 var shot_facing_direction: int = 1 ## When 1, the projectile was spawned on the right half of the unit circle, -1 otherwise.
@@ -770,8 +771,9 @@ func _process_hit(object: Node2D) -> void:
 func _kill_projectile_on_hit() -> void:
 	set_physics_process(false)
 
-	if sprite.animation == "impact" and sprite.is_playing(): # To handle when it hits more than one thing
+	if about_to_free: # To handle when it hits more than one thing
 		return
+	about_to_free = true
 
 	if sprite.sprite_frames.has_animation("impact"):
 		if random_rot_on_impact:
@@ -781,9 +783,13 @@ func _kill_projectile_on_hit() -> void:
 	else:
 		queue_free()
 
-## Overrides parent method. When we overlap with an entity who can accept effect sources, pass the effect source to that
-## entity's handler. Note that the effect source is duplicated on hit so that we can include unique info like move dir.
+## Overrides parent method. When we overlap with an entity who can accept effect sources, pass the
+## effect source to that entity's handler. Note that the effect source is duplicated on hit so that
+## we can include unique info like move dir.
 func _start_being_handled(handling_area: EffectReceiverComponent) -> void:
+	if about_to_free:
+		return
+
 	if not is_in_aoe_phase:
 		effect_source = effect_source.duplicate()
 		effect_source.multishot_id = multishot_id
