@@ -20,7 +20,7 @@ func _get_configuration_warnings() -> PackedStringArray:
 	var warnings: PackedStringArray = []
 	for sprite_node: Node2D in sprites_to_tint:
 		if not sprite_node.material is ShaderMaterial:
-			warnings.append("Weapon sprites must have the \"TintAndGlow\" shader applied. Also ensure the shader is set to \"Local to Scene\".")
+			warnings.append("Weapon sprites must have the \"TintAndGlow\" shader applied.")
 			break
 	if not has_node("WeaponModManager"):
 		warnings.append("This node must have a WeaponModManager attached.")

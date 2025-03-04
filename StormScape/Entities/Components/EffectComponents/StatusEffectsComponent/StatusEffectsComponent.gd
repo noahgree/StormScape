@@ -1,4 +1,4 @@
-@icon("res://Utilities/Debug/EditorIcons/status_effect_manager.svg")
+@icon("res://Utilities/Debug/EditorIcons/status_effect_component.svg")
 extends Node2D
 class_name StatusEffectsComponent
 ## The component that holds the stats and logic for how the entity should receive effects.
@@ -120,10 +120,10 @@ func _start_effect_fx(status_effect: StatusEffect) -> void:
 	if emission_shape == CPUParticles2D.EmissionShape.EMISSION_SHAPE_SPHERE_SURFACE:
 		particle_node.emission_sphere_radius = emission_mgr.get_extents(ParticleEmissionComponent.Boxes.COVER).x
 		particle_node.position = emission_mgr.get_origin(ParticleEmissionComponent.Boxes.COVER)
-	elif emission_shape == CPUParticles2D.EmissionShape.EMISSION_SHAPE_RECTANGLE and effect_name not in ["Burning", "Frostbite"]:
+	elif emission_shape == CPUParticles2D.EmissionShape.EMISSION_SHAPE_RECTANGLE and effect_name not in ["Burning", "Frostbite", "Slowness"]:
 		particle_node.emission_rect_extents = emission_mgr.get_extents(ParticleEmissionComponent.Boxes.COVER)
 		particle_node.position = emission_mgr.get_origin(ParticleEmissionComponent.Boxes.COVER)
-	elif effect_name == "Burning": # Because it needs to be at the floor only
+	elif effect_name in ["Burning", "Slowness"]: # Because it needs to be at the floor only
 		particle_node.emission_rect_extents = emission_mgr.get_extents(ParticleEmissionComponent.Boxes.BELOW)
 		particle_node.position = emission_mgr.get_origin(ParticleEmissionComponent.Boxes.BELOW)
 	elif effect_name == "Frostbite": # Because it needs to be above it only

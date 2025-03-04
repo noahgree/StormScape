@@ -1,0 +1,8 @@
+[gd_resource type="CanvasTexture" load_steps=3 format=3 uid="uid://ca47l1joaccam"]
+
+[ext_resource type="Texture2D" uid="uid://d1qkmn3sqanje" path="res://Entities/Items/Weapons/ProjectileWeapons/RifleX/rifle_x_base_sprite_no_mag.png" id="1_exhfp"]
+[ext_resource type="Texture2D" uid="uid://boajw6ppxl3fc" path="res://Entities/Items/Weapons/ProjectileWeapons/RifleX/rifle_x_base_sprite_no_mag_n.png" id="2_dffhp"]
+
+[resource]
+diffuse_texture = ExtResource("1_exhfp")
+normal_texture = ExtResource("2_dffhp")

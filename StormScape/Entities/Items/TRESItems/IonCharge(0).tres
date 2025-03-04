@@ -37,4 +37,4 @@ cooldowns_per_suid = true
 shown_cooldown_fills = Array[String]([])
 show_cursor_cooldown = false
 session_uid = 0
-metadata/_custom_type_script = ExtResource("3_h00y8")
+metadata/_custom_type_script = "uid://bpc1cwr4a6lgo"

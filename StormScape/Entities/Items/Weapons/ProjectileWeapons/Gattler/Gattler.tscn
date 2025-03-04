@@ -530,6 +530,8 @@ shader = ExtResource("3_c0tnr")
 script = ExtResource("1_c0tnr")
 proj_origin = Vector2(18, -1)
 overheat_overlays = [NodePath("ItemSprite/OverheatOverlay"), NodePath("GunNoMag/OverheatOverlay")]
+particle_emission_extents = Vector2(9, 1)
+particle_emission_origin = Vector2(8, -2)
 sprites_to_tint = [NodePath("ItemSprite"), NodePath("GunNoMag"), NodePath("Mag")]
 
 [node name="ItemSprite" type="AnimatedSprite2D" parent="."]
@@ -583,8 +585,8 @@ rotation = -1.5708
 shape = SubResource("CapsuleShape2D_c0tnr")
 debug_color = Color(0, 0.6, 0.7, 0.075)
 
-[node name="SmokeEmissionBox" parent="." instance=ExtResource("8_egoiu")]
-polygon = PackedVector2Array(0, -4, 16, -4, 16, -2, 0, -2)
+[node name="DebugEmissionBox" parent="." instance=ExtResource("8_egoiu")]
+polygon = PackedVector2Array(-1, -3, 17, -3, 17, -1, -1, -1)
 
 [node name="GunNoMag" type="Sprite2D" parent="."]
 visible = false

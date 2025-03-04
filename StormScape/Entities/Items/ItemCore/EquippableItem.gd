@@ -75,11 +75,13 @@ func enable() -> void:
 func activate() -> void:
 	pass
 
-## Intended to be overridden by child classes in order to specify what to do when this item is used after a hold click.
+## Intended to be overridden by child classes in order to specify what to do when this item
+## is used after a hold click.
 func hold_activate(_hold_time: float) -> void:
 	pass
 
-## Intended to be overridden by child classes in order to specify what to do when this item is used after a released hold click.
+## Intended to be overridden by child classes in order to specify what to do when this
+## item is used after a released hold click.
 func release_hold_activate(_hold_time: float) -> void:
 	pass
 
@@ -87,7 +89,7 @@ func release_hold_activate(_hold_time: float) -> void:
 func enter() -> void:
 	pass
 
-## Intended to be overridden by child classes in order to specify what to do when this item is unequipped. Should call super.exit()
-## first, though.
+## Intended to be overridden by child classes in order to specify what to do when this item
+## is unequipped. Should call super.exit() first, though.
 func exit() -> void:
 	set_process(false)

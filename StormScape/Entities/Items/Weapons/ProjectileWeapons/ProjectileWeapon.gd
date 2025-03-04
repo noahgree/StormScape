@@ -250,7 +250,6 @@ func _enable_mouse_area() -> void:
 func _disable_mouse_area() -> void:
 	if mouse_area: mouse_area.get_child(0).disabled = true
 
-## Every frame we decrease the warmup and the bloom levels based on their decrease curves.
 func _process(_delta: float) -> void:
 	if Engine.is_editor_hint() or not overhead_ui:
 		return
@@ -258,10 +257,12 @@ func _process(_delta: float) -> void:
 	if is_reloading and not stats.hide_reload_ui:
 		var reload_progress: int = int((1 - (reload_timer.time_left / reload_timer.wait_time)) * 100)
 		if not single_reload_delay_timer.is_stopped():
-			if not stats.show_cursor_cooldown: CursorManager.update_vertical_tint_progress(0.0)
+			if not stats.show_cursor_cooldown:
+				CursorManager.update_vertical_tint_progress(0.0)
 			overhead_ui.update_reload_progress(0)
 		else:
-			if not stats.show_cursor_cooldown: CursorManager.update_vertical_tint_progress(reload_progress)
+			if not stats.show_cursor_cooldown:
+				CursorManager.update_vertical_tint_progress(reload_progress)
 			overhead_ui.update_reload_progress(reload_progress)
 	if stats.show_cursor_cooldown:
 		var cooldown_remaining: float = source_entity.inv.auto_decrementer.get_cooldown(stats.get_cooldown_id())
@@ -291,7 +292,7 @@ func _physics_process(_delta: float) -> void:
 func activate() -> void:
 	if not pullout_delay_timer.is_stopped() or not firing_duration_timer.is_stopped() or firing_in_progress or bursting_in_progress:
 		return
-	if is_reloading and stats.reload_type == "Magazine":
+	if is_reloading and stats.reload_type == "Magazine" or is_reloading and stats.must_reload_fully:
 		return
 
 	is_reloading_single_and_has_since_released = true
@@ -303,7 +304,7 @@ func hold_activate(_hold_time: float) -> void:
 	if not pullout_delay_timer.is_stopped() or not firing_duration_timer.is_stopped() or firing_in_progress or bursting_in_progress:
 		source_entity.hands.been_holding_time = 0
 		return
-	if is_reloading and stats.reload_type == "Magazine":
+	if is_reloading and stats.reload_type == "Magazine" or is_reloading and stats.must_reload_fully:
 		source_entity.hands.been_holding_time = 0
 		return
 
@@ -321,7 +322,7 @@ func release_hold_activate(hold_time: float) -> void:
 	if stats.firing_mode == "Auto" and stats.allow_hitscan_holding and is_holding_hitscan:
 		is_holding_hitscan = false
 
-	if not pullout_delay_timer.is_stopped() or (is_reloading and stats.reload_type == "Magazine") or firing_in_progress or bursting_in_progress:
+	if not pullout_delay_timer.is_stopped() or (is_reloading and stats.reload_type == "Magazine") or (is_reloading and stats.must_reload_fully) or firing_in_progress or bursting_in_progress:
 		source_entity.hands.been_holding_time = 0
 		return
 
@@ -883,16 +884,20 @@ func _start_reload_anim(anim_name: String) -> void:
 		var dur: float = single_reload_delay_timer.wait_time if stats.before_single_reload_anim_dur <= 0 else (min(stats.single_proj_reload_delay, stats.before_single_reload_anim_dur))
 		anim_player.speed_scale = 1.0 / (dur - 0.025) # 0.025 is a buffer to prevent overlap
 	elif anim_name in ["single_reload", "final_single_reload"]:
-		var dur: float = stats.s_mods.get_stat("single_proj_reload_time") if stats.reload_anim_dur <= 0 else (min(stats.single_proj_reload_time, stats.reload_anim_dur))
+		var single_proj_reload_time: float = stats.s_mods.get_stat("single_proj_reload_time")
+		var dur: float = single_proj_reload_time if stats.reload_anim_dur <= 0 else (min(single_proj_reload_time, stats.reload_anim_dur))
 		anim_player.speed_scale = 1.0 / (dur - 0.025)
 	elif anim_name == "mag_reload":
-		var dur: float = reload_timer.wait_time if stats.reload_anim_dur <= 0 else (min(stats.mag_reload_time, stats.reload_anim_dur))
+		var mag_reload_time: float = stats.s_mods.get_stat("mag_reload_time")
+		var dur: float = reload_timer.wait_time if stats.reload_anim_dur <= 0 else (min(mag_reload_time, stats.reload_anim_dur))
 		anim_player.speed_scale = 1.0 / (dur - 0.025)
 
 	anim_player.play(anim_name)
 
-## Reshows the hand component's off hand and hides the local reload hand. Then it plays the RESET animation for one frame.
+## Reshows the hand component's off hand and hides the local reload hand.
+## Then it plays the RESET animation for one frame.
 func _do_post_reload_animation_cleanup() -> void:
+	overhead_ui.update_reload_progress(0)
 	source_entity.hands.off_hand_sprite.self_modulate.a = 1.0
 	if reload_off_hand: reload_off_hand.hide()
 	if reload_main_hand: reload_main_hand.hide()

@@ -49,6 +49,7 @@ enum ProjAmmoType { ## The types of projectile ammo.
 @export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var single_proj_reload_time: float = 0.25 ## How long it takes to reload a single projectile if the reload type is set to "single".
 @export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var single_proj_reload_delay: float = 0.5 ## An additional delay that occurs before the first single proj is reloaded after triggering a reload.
 @export var single_reload_quantity: int = 1 ## How much to add to the mag when the single proj timer elapses each time.
+@export var must_reload_fully: bool = false ## When true, if the reload method is "Single", the reload cannot be stopped while in progress and must load all single projectiles in before being able to fire again.
 @export var stamina_use_per_proj: float = 0.5 ## How much stamina is needed per projectile when stamina is the ammo type.
 @export var dont_consume_ammo: bool = false ## When true, this acts like infinite ammo where the weapon doesn't decrement the ammo in mag upon firing.
 @export_subgroup("Recharging")

@@ -1,0 +1,8 @@
+[gd_resource type="CanvasTexture" load_steps=3 format=3 uid="uid://c3gb0bgta8kq1"]
+
+[ext_resource type="Texture2D" uid="uid://dapnruiu1rl6i" path="res://Entities/Items/Weapons/ProjectileWeapons/Twin/twin_base_stock.png" id="1_6kvye"]
+[ext_resource type="Texture2D" uid="uid://dddidqil3dbje" path="res://Entities/Items/Weapons/ProjectileWeapons/Twin/twin_base_stock_n.png" id="2_340ud"]
+
+[resource]
+diffuse_texture = ExtResource("1_6kvye")
+normal_texture = ExtResource("2_340ud")

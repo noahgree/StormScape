@@ -1,0 +1,8 @@
+[gd_resource type="CanvasTexture" load_steps=3 format=3 uid="uid://c2ul6ws6q5hxx"]
+
+[ext_resource type="Texture2D" uid="uid://pux37a64t5xg" path="res://Entities/Items/Weapons/ProjectileWeapons/Musket/musket_base.png" id="1_nfjh0"]
+[ext_resource type="Texture2D" uid="uid://yk0w604xag6e" path="res://Entities/Items/Weapons/ProjectileWeapons/Musket/musket_base_n.png" id="2_w5dju"]
+
+[resource]
+diffuse_texture = ExtResource("1_nfjh0")
+normal_texture = ExtResource("2_w5dju")

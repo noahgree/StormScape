@@ -420,13 +420,13 @@ radius = 615.0
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_b4rbd"]
 shader = ExtResource("23_05otm")
-shader_parameter/circle_center_pixels = null
-shader_parameter/radius_pixels = null
-shader_parameter/viewport_size = null
-shader_parameter/noise_world_position = null
+shader_parameter/circle_center_pixels = Vector2(0, 0)
+shader_parameter/radius_pixels = 0.0
+shader_parameter/viewport_size = Vector2(0, 0)
+shader_parameter/noise_world_position = Vector2(0, 0)
 shader_parameter/override_all_alpha = 1.0
-shader_parameter/see_through_center_pixels = null
-shader_parameter/see_through_radius = null
+shader_parameter/see_through_center_pixels = Vector2(0, 0)
+shader_parameter/see_through_radius = 0.0
 shader_parameter/see_through_opacity = 0.5
 shader_parameter/ring_thickness = 2.3
 shader_parameter/glow_intensity = 4.0

@@ -1,4 +1,4 @@
-[gd_scene load_steps=198 format=3 uid="uid://dba8mrurjlekp"]
+[gd_scene load_steps=209 format=3 uid="uid://dba8mrurjlekp"]
 
 [ext_resource type="Script" uid="uid://c3rpxq8pnbdje" path="res://Entities/Player/PlayerCore/Player.gd" id="1_m33tt"]
 [ext_resource type="Script" uid="uid://c2gdoebfp12dq" path="res://Entities/Stats/StatMod/StatModsCacheResource.gd" id="2_vetip"]
@@ -90,16 +90,21 @@
 [ext_resource type="Resource" uid="uid://dk3vlbvu2b7eq" path="res://Entities/Items/TRESItems/Sword(4).tres" id="57_6wv7y"]
 [ext_resource type="Script" uid="uid://dih45lqhjg0xx" path="res://UI/OverheadUI/PlayerOverheadUI.gd" id="57_n8srl"]
 [ext_resource type="Script" uid="uid://c0n0ja8tkrnkf" path="res://UI/Inventory/PlayerInventory/HotbarUI.gd" id="58_i567i"]
+[ext_resource type="Resource" uid="uid://dy8rwyeyusim7" path="res://Entities/Items/TRESItems/Twin(2).tres" id="60_0t1mv"]
 [ext_resource type="Texture2D" uid="uid://bq3d1uclexvcm" path="res://UI/OverheadUI/progress_tintable.png" id="61_6wv7y"]
+[ext_resource type="Resource" uid="uid://fmf7upx7tsln" path="res://Entities/Items/TRESItems/RifleX(3).tres" id="62_0313k"]
 [ext_resource type="Texture2D" uid="uid://barp24qvngy0m" path="res://UI/OverheadUI/Overheat/overheat_back.png" id="63_3uq13"]
 [ext_resource type="Script" uid="uid://ct7n8wo1p3b20" path="res://Entities/Items/WeaponMods/WeaponMod.gd" id="63_qvtc6"]
 [ext_resource type="Resource" uid="uid://ba8pkny735n2r" path="res://Entities/Items/WeaponMods/ExtendedMag/ExtendedMag1.tres" id="64_14ixx"]
+[ext_resource type="Resource" uid="uid://bnc4tbhdxpauy" path="res://Entities/Items/TRESItems/Musket(0).tres" id="64_hxjay"]
 [ext_resource type="Texture2D" uid="uid://7wf7omw2r50u" path="res://UI/OverheadUI/Overheat/overheat_progress.png" id="64_o382h"]
 [ext_resource type="Resource" uid="uid://caxftf2aer6g4" path="res://Entities/Items/WeaponMods/BurningBullets/BurningBullets1.tres" id="65_14ixx"]
 [ext_resource type="Texture2D" uid="uid://dbm40lvpgbd8t" path="res://Utilities/Game/Particles/dense_light.png" id="66_461tf"]
 [ext_resource type="Shader" uid="uid://cwbeekjoy0uyh" path="res://Utilities/Game/Shaders/GlintShader.gdshader" id="67_w57pe"]
 [ext_resource type="Texture2D" uid="uid://dtft3mljs2y5s" path="res://UI/Inventory/InventoryCore/Slot/trash_slot_icon.png" id="69_4ao77"]
 [ext_resource type="PackedScene" uid="uid://cpf3f502274om" path="res://UI/Inventory/PlayerInventory/Crafting/CraftingManager.tscn" id="71_qjjeg"]
+[ext_resource type="Script" uid="uid://boo31eu083dqd" path="res://Entities/Stats/EffectSystemResources/StatusEffects/StatusEffect.gd" id="74_g5u5n"]
+[ext_resource type="Script" uid="uid://bcjwesiannbd0" path="res://Entities/Stats/StatMod/StatMod.gd" id="75_0313k"]
 [ext_resource type="Texture2D" uid="uid://6p684ba74frr" path="res://UI/TemporaryElements/Prompt Icons/E_prompt.png" id="75_j0f4f"]
 [ext_resource type="Texture2D" uid="uid://bqxdg28d1twy1" path="res://UI/Inventory/InventoryCore/inv_background_thin.png" id="78_at8wu"]
 [ext_resource type="Texture2D" uid="uid://lqg70q4wj55g" path="res://UI/Inventory/InventoryCore/inv_background.png" id="78_jlc36"]
@@ -1241,6 +1246,22 @@ script = ExtResource("32_ixmb3")
 stats = ExtResource("45_xur7q")
 quantity = 1
 
+[sub_resource type="Resource" id="Resource_vpccy"]
+script = ExtResource("32_ixmb3")
+stats = ExtResource("48_1kvwx")
+quantity = 1
+
+[sub_resource type="Resource" id="Resource_p5d28"]
+script = ExtResource("32_ixmb3")
+stats = ExtResource("46_xbbnp")
+quantity = 1
+
+[sub_resource type="Resource" id="Resource_0t1mv"]
+script = ExtResource("32_ixmb3")
+stats = ExtResource("57_6wv7y")
+quantity = 1
+metadata/_custom_type_script = ExtResource("32_ixmb3")
+
 [sub_resource type="Resource" id="Resource_rdrbb"]
 script = ExtResource("32_ixmb3")
 stats = ExtResource("53_lo25j")
@@ -1262,26 +1283,28 @@ script = ExtResource("32_ixmb3")
 stats = ExtResource("47_devgv")
 quantity = 10
 
-[sub_resource type="Resource" id="Resource_0t1mv"]
+[sub_resource type="Resource" id="Resource_bvo3j"]
 script = ExtResource("32_ixmb3")
-stats = ExtResource("57_6wv7y")
+stats = ExtResource("62_0313k")
 quantity = 1
-metadata/_custom_type_script = ExtResource("32_ixmb3")
+metadata/_custom_type_script = "uid://dp8osf7r6xkkt"
+
+[sub_resource type="Resource" id="Resource_hxjay"]
+script = ExtResource("32_ixmb3")
+stats = ExtResource("60_0t1mv")
+quantity = 1
+metadata/_custom_type_script = "uid://dp8osf7r6xkkt"
 
 [sub_resource type="Resource" id="Resource_0ta0y"]
 script = ExtResource("32_ixmb3")
 stats = ExtResource("37_a2tah")
 quantity = 1
 
-[sub_resource type="Resource" id="Resource_vpccy"]
+[sub_resource type="Resource" id="Resource_gdihr"]
 script = ExtResource("32_ixmb3")
-stats = ExtResource("48_1kvwx")
+stats = ExtResource("64_hxjay")
 quantity = 1
-
-[sub_resource type="Resource" id="Resource_p5d28"]
-script = ExtResource("32_ixmb3")
-stats = ExtResource("46_xbbnp")
-quantity = 1
+metadata/_custom_type_script = "uid://dp8osf7r6xkkt"
 
 [sub_resource type="Resource" id="Resource_6stk0"]
 script = ExtResource("32_ixmb3")
@@ -1296,6 +1319,43 @@ light_mode = 1
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_n4o3n"]
 light_mode = 1
+
+[sub_resource type="Resource" id="Resource_thmqm"]
+script = ExtResource("75_0313k")
+stat_id = &"single_proj_reload_time"
+mod_id = &"rapid_fire_1"
+operation = "/"
+value = 3.0
+rounding = "Exact"
+priority = 1
+max_stack_count = 1
+override_all = false
+metadata/_custom_type_script = "uid://bcjwesiannbd0"
+
+[sub_resource type="Resource" id="Resource_g5u5n"]
+script = ExtResource("75_0313k")
+stat_id = &"fire_cooldown"
+mod_id = &"rapid_fire_1"
+operation = "/"
+value = 3.0
+rounding = "Exact"
+priority = 1
+max_stack_count = 1
+override_all = false
+metadata/_custom_type_script = "uid://bcjwesiannbd0"
+
+[sub_resource type="Resource" id="Resource_r5dvw"]
+script = ExtResource("63_qvtc6")
+mod_name = &"Rapid Fire"
+mod_lvl = 1
+allowed_proj_wpns = Array[int]([0, 1, 2, 3, 4, 5, 6, 7, 8, 9])
+allowed_melee_wpns = Array[int]([])
+wpn_stat_mods = Array[ExtResource("75_0313k")]([SubResource("Resource_thmqm"), SubResource("Resource_g5u5n")])
+status_effects = Array[ExtResource("74_g5u5n")]([])
+charge_status_effects = Array[ExtResource("74_g5u5n")]([])
+equipping_audio = ""
+removal_audio = ""
+metadata/_custom_type_script = "uid://ct7n8wo1p3b20"
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_0q2s6"]
 shader = ExtResource("44_vk3bi")
@@ -1553,7 +1613,7 @@ parameters/run/blendspace2d/blend_position = Vector2(0, 0)
 
 [node name="ItemReceiverComponent" parent="." node_paths=PackedStringArray("item_interact_hud", "inv_populator", "ui") instance=ExtResource("30_qgyag")]
 item_interact_hud = NodePath("../OverlayUI/ItemInteractionHUD")
-starting_inv = Array[ExtResource("32_ixmb3")]([SubResource("Resource_pihal"), null, null, null, SubResource("Resource_kx1me"), SubResource("Resource_2ijsm"), null, SubResource("Resource_xlc3k"), SubResource("Resource_n4o3n"), SubResource("Resource_3by25"), SubResource("Resource_oxva3"), SubResource("Resource_t7kvu"), SubResource("Resource_x8o50"), null, SubResource("Resource_apvym"), SubResource("Resource_ur5wt"), null, null, SubResource("Resource_dyejk"), null, null, null, null, null, null, SubResource("Resource_rdrbb"), null, null, SubResource("Resource_sx7hp"), SubResource("Resource_wjnk6"), SubResource("Resource_hevqc"), null, SubResource("Resource_0t1mv"), SubResource("Resource_0ta0y"), SubResource("Resource_vpccy"), SubResource("Resource_p5d28"), SubResource("Resource_6stk0")])
+starting_inv = Array[ExtResource("32_ixmb3")]([SubResource("Resource_pihal"), null, null, null, SubResource("Resource_kx1me"), SubResource("Resource_2ijsm"), null, SubResource("Resource_xlc3k"), SubResource("Resource_n4o3n"), SubResource("Resource_3by25"), SubResource("Resource_oxva3"), SubResource("Resource_t7kvu"), SubResource("Resource_x8o50"), null, SubResource("Resource_apvym"), SubResource("Resource_ur5wt"), null, null, SubResource("Resource_dyejk"), null, null, SubResource("Resource_vpccy"), null, null, SubResource("Resource_p5d28"), null, SubResource("Resource_0t1mv"), SubResource("Resource_rdrbb"), null, SubResource("Resource_sx7hp"), SubResource("Resource_wjnk6"), SubResource("Resource_hevqc"), SubResource("Resource_bvo3j"), SubResource("Resource_hxjay"), SubResource("Resource_0ta0y"), SubResource("Resource_gdihr"), SubResource("Resource_6stk0")])
 is_player_inv = true
 inv_size = 37
 hotbar_size = 5
@@ -1628,7 +1688,7 @@ offset_bottom = 40.0
 mouse_filter = 1
 script = ExtResource("17_vdk5v")
 health_component = NodePath("../../HealthComponent")
-mods = Array[ExtResource("63_qvtc6")]([ExtResource("64_14ixx"), ExtResource("65_14ixx")])
+mods = Array[ExtResource("63_qvtc6")]([ExtResource("65_14ixx"), ExtResource("64_14ixx"), SubResource("Resource_r5dvw")])
 
 [node name="TestHurtBtn" type="Button" parent="OverlayUI/TestButtons"]
 layout_mode = 0

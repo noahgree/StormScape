@@ -5,7 +5,7 @@ class_name MeleeWeapon
 ## The base class for all melee weapons. Melee weapons are based on swings and have all needed behavior logic defined here.
 
 @export var sprite_visual_rotation: float = 45 ## How rotated the drawn sprite is by default when imported. Straight up would be 0º, angling top-right would be 45º, etc.
-@export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var ghost_fade_time: float = 0.25 ## How long ghosts take to fade.
+@export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var ghost_fade_time: float = 0.2 ## How long ghosts take to fade.
 
 @onready var anim_player: AnimationPlayer = $AnimationPlayer ## The animation controller for this melee weapon.
 @onready var hitbox_component: HitboxComponent = %HitboxComponent ## The hitbox responsible for applying the melee hit.
@@ -184,14 +184,18 @@ func _spawn_ghost() -> void:
 	var current_frame: int = sprite.frame
 	var sprite_texture: Texture2D = sprite.sprite_frames.get_frame_texture(current_anim, current_frame)
 
-	var adjusted_transform: Transform2D = sprite.transform
-	var rotated_offset: Vector2 = sprite.offset.rotated(sprite.rotation)
-	adjusted_transform.origin += rotated_offset
+	var adjusted_transform: Transform2D = sprite.global_transform
 
 	var ghost_instance: SpriteGhost = SpriteGhost.create(adjusted_transform, sprite.scale, sprite_texture, ghost_fade_time)
 	ghost_instance.flip_h = sprite.flip_h
+
+	if source_entity.hands.current_x_direction != 1:
+		ghost_instance.scale = Vector2(1, -1)
+
+	ghost_instance.offset = sprite.offset
+	ghost_instance.z_index -= 1
 	ghost_instance.make_white()
-	add_child(ghost_instance)
+	GlobalData.world_root.add_child(ghost_instance)
 
 ## Applies a status effect to the source entity at the start of use.
 func _apply_start_use_effect(was_charge_fire: bool = false) -> void:

@@ -226,6 +226,7 @@ mag_reload_time = 1.65
 single_proj_reload_time = 0.5
 single_proj_reload_delay = 0.5
 single_reload_quantity = 1
+must_reload_fully = false
 stamina_use_per_proj = 0.5
 dont_consume_ammo = false
 auto_ammo_interval = 0.0

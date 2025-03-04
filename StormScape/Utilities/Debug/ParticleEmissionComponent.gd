@@ -97,15 +97,15 @@ func get_extents(box: Boxes) -> Vector2:
 	match box:
 		Boxes.BELOW:
 			if below_extents == Vector2.ZERO:
-				return Vector2(sprite_rect.x / 2.25, 1)
+				return Vector2(sprite_rect.x / 3.2, 1)
 			return below_extents
 		Boxes.ABOVE:
 			if above_extents == Vector2.ZERO:
-				return Vector2(sprite_rect.x / 2.25, 3)
+				return Vector2(sprite_rect.x / 3.2, 3)
 			return above_extents
 		Boxes.COVER:
 			if cover_extents == Vector2.ZERO:
-				return Vector2(sprite_rect.x / 2.25, sprite_rect.y / 2.25)
+				return Vector2(sprite_rect.x / 3.2, sprite_rect.y / 3.2)
 			return cover_origin
 		_:
 			return Vector2.ZERO

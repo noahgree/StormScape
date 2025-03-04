@@ -45,7 +45,8 @@ func reset() -> void:
 	update_vertical_tint_progress(100.0)
 
 ## Changes the cursor animation. If null is passed in instead of a sprite frames resource, the old cursor will remain.
-func change_cursor(sprite_frames: SpriteFrames, animation: StringName = &"default", tint: Color = Color.WHITE) -> void:
+func change_cursor(sprite_frames: SpriteFrames, animation: StringName = &"default",
+					tint: Color = Color.WHITE) -> void:
 	update_vertical_tint_progress(100.0)
 
 	if sprite_frames != null:

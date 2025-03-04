@@ -13,7 +13,7 @@
 [ext_resource type="Script" uid="uid://ct7n8wo1p3b20" path="res://Entities/Items/WeaponMods/WeaponMod.gd" id="6_ur6hj"]
 [ext_resource type="Script" uid="uid://ctxa7i1mbt7ab" path="res://UI/Inventory/PlayerInventory/Crafting/CraftingIngredient.gd" id="8_cxrhl"]
 [ext_resource type="Script" uid="uid://c2gdoebfp12dq" path="res://Entities/Stats/StatMod/StatModsCacheResource.gd" id="8_fox7e"]
-[ext_resource type="PackedScene" uid="uid://bvvoum83clkyb" path="res://Entities/Items/Projectiles/Bullets/Large/LargeBullet.tscn" id="11_6hpwe"]
+[ext_resource type="PackedScene" uid="uid://bqkyplubhsx43" path="res://Entities/Items/Projectiles/Bullets/SmallBullet/SmallBullet.tscn" id="11_6hpwe"]
 
 [sub_resource type="Resource" id="Resource_41nj1"]
 script = ExtResource("1_f7ms2")
@@ -66,7 +66,7 @@ point_count = 2
 
 [sub_resource type="Resource" id="Resource_ysh4t"]
 script = ExtResource("5_u6crx")
-speed = 15
+speed = 550
 speed_curve = SubResource("Curve_pabkw")
 initial_boost_time = 0.0
 initial_boost_mult = 2.0
@@ -159,6 +159,7 @@ mag_reload_time = 1.0
 single_proj_reload_time = 0.2
 single_proj_reload_delay = 0.45
 single_reload_quantity = 1
+must_reload_fully = false
 stamina_use_per_proj = 0.5
 dont_consume_ammo = false
 auto_ammo_interval = 0.0
