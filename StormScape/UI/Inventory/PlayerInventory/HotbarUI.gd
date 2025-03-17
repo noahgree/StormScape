@@ -20,6 +20,7 @@ func _ready() -> void:
 
 	if not GlobalData.player_node: await SignalBus.player_ready
 	GlobalData.player_node.stamina_component.max_stamina_changed.connect(_update_inv_ammo_ui)
+	SignalBus.focused_ui_closed.connect(_update_inv_ammo_ui)
 
 ## Sets up the hotbar slots by clearing out any existing slot children and readding them with their needed params.
 func _setup_slots() -> void:

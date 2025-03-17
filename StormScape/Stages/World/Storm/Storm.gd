@@ -1,6 +1,7 @@
 extends Node2D
 class_name Storm
-## The base class for the moving storm's functionalities. Controls the shader parameters and effect application logic.
+## The base class for the moving storm's functionalities. Controls the shader parameters and effect
+## application logic.
 
 @export var auto_start: bool = true ## Whether to immediately use the first transform in the queue at game load.
 @export var transform_queue: Array[StormTransform] = [] ## The queue of upcoming transforms to apply to the zone.
@@ -284,16 +285,18 @@ func update_player_see_through_distance(change_amount: float) -> void:
 #endregion
 
 #region Handling Transforms
-## Adds a new transform resource to the end of the queue, and if it is the only one in the queue, it starts the transform immediately.
+## Adds a new transform resource to the end of the queue, and if it is the only one in the queue,
+## it starts the transform immediately.
 func add_storm_transform_to_queue(new_transform: StormTransform) -> void:
 	transform_queue.append(new_transform.duplicate())
 	if transform_queue.size() == 1:
 		_process_next_transform_in_queue()
 
-## Pops the current zone transform off the queue. If it was successful, it calls to process the next transform in the
-## queue, regardless of whether the queue is now empty. If it was unsuccessful, it reverts fx and the entity effect to the
-## default zone. This should really only be called at the end of the last phase by the timer's timeout or when we force advance
-## the zone from an external request.
+## Pops the current zone transform off the queue. If it was successful, it calls to process
+## the next transform in the queue, regardless of whether the queue is now empty.
+## If it was unsuccessful, it reverts fx and the entity effect to the default zone.
+## This should really only be called at the end of the last phase by the timer's timeout or when we
+## force advance the zone from an external request.
 func _pop_current_transform_and_check_for_next_phase() -> void:
 	if not transform_queue.is_empty():
 		if not just_replaced_queue:
@@ -305,8 +308,8 @@ func _pop_current_transform_and_check_for_next_phase() -> void:
 	else:
 		_revert_to_default_zone()
 
-## If the queue is empty, revert everything to default. Otherwise, get the details of the next transform and start a potential
-## delay.
+## If the queue is empty, revert everything to default. Otherwise, get the details of the next
+## transform and start a potential delay.
 func _process_next_transform_in_queue() -> void:
 	_kill_current_motion_tweens_and_timers()
 
@@ -329,8 +332,8 @@ func _kill_current_motion_tweens_and_timers() -> void:
 	if radius_tween: radius_tween.kill()
 	if location_tween: location_tween.kill()
 
-## Kills the current storm sequence and checks if we need to delay before starting the next one. Starts the next zone if we
-## don't have a delay, otherwise starts the delay timer.
+## Kills the current storm sequence and checks if we need to delay before starting the next one.
+## Starts the next zone if we don't have a delay, otherwise starts the delay timer.
 func _check_for_transform_delay(new_transform: StormTransform) -> void:
 	if DebugFlags.PrintFlags.storm_phases:
 		var dur: float = max(new_transform.time_to_resize, new_transform.time_to_move)
@@ -390,7 +393,8 @@ func _tween_to_new_zone_position_and_radius(new_transform: StormTransform) -> vo
 
 	location_tween.tween_property(self, "global_position", new_location, new_transform.time_to_move)
 
-## When the current transform ends and that transform had auto advance turned on, tell the popping method to check for next phase.
+## When the current transform ends and that transform had auto advance turned on, tell the popping
+## method to check for next phase.
 func _on_current_storm_transform_time_timer_timeout() -> void:
 	if DebugFlags.PrintFlags.storm_phases:
 		print_rich("[color=pink]*******[/color][color=gray] [i]End of[/i] Storm Phase [/color][b]" + str(zone_count) + "[/b] [color=pink]*******[/color]")
@@ -400,8 +404,8 @@ func _on_current_storm_transform_time_timer_timeout() -> void:
 #endregion
 
 #region Visual Changes
-## Applies all new visual overrides in the new storm visuals resource. If we are already using default visuals and another
-## request comes in to transition to them, ignore it.
+## Applies all new visual overrides in the new storm visuals resource. If we are already using
+## default visuals and another request comes in to transition to them, ignore it.
 func _apply_visual_overrides(new_visuals: StormVisuals) -> void:
 	current_visuals = new_visuals
 	if (new_visuals == default_storm_visuals) and using_default_visuals:
@@ -586,7 +590,8 @@ func _on_safe_zone_body_exited(body: Node2D) -> void:
 		body.add_to_group("entities_out_of_safe_area")
 
 ## Removes the current effect from entities out of the safe area and applies the new one.
-## The new one will be the default effect if we have no upcoming zone, otherwise it will be the effect for the new transform.
+## The new one will be the default effect if we have no upcoming zone, otherwise it will be the effect
+## for the new transform.
 func _swap_effect_applied_to_entities_out_of_safe_area(new_effect: StatusEffect) -> void:
 	for entity: Node in get_tree().get_nodes_in_group("entities_out_of_safe_area"):
 		_remove_current_effect_from_entity(entity)

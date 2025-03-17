@@ -1,12 +1,17 @@
 extends Control
 class_name InventoryPopulator
 ## Responsible for populating and instantiating slots of children nodes for the connected inventory.
+##
+## Slot indices for an example inventory of size 37 (including hotbar, excluding trash slot) are structured like so:
+## 0 -> (36 - hotbar size): Main Slots ||| (36 - hotbar size) -> 36: Hotbar Slots
+## 37: Trash Slot ||| 38 -> (37 + crafting slot count): Crafting Slots
 
 @export var slot_scene: PackedScene = preload("res://UI/Inventory/InventoryCore/Slot/Slot.tscn") ## The slot scene to be instantiated as children.
 @export var item_details_label: Label ## The label in the inventory that displays the details of a hovered over item.
 @export var main_slot_grid: GridContainer ## The main container for all normal inventory slots.
 @export var hotbar_grid: HBoxContainer ## If player inv, this connects to the container that holds the hotbar slots.
 @export var trash_slot: Slot ## If player inv, this connects to the trash slot.
+@export var crafting_manager: CraftingManager ## If player inv, this connects to the crafting manager.
 
 var synced_inv: Inventory ## The synced inventory that this populator populates based on.
 var slots: Array[Slot] = [] ## The array of slots that this populator fills.
@@ -20,14 +25,16 @@ func _ready() -> void:
 	if hotbar_grid:
 		for child: Slot in hotbar_grid.get_children():
 			child.queue_free()
-	if trash_slot:
+	if trash_slot != null:
 		trash_slot.is_trash_slot = true
 		trash_slot.name = "Trash_Slot"
 		trash_slot.is_hovered_over.connect(_on_slot_hovered)
 		trash_slot.is_not_hovered_over.connect(_on_slot_not_hovered)
+
 	_change_slot_count_for_new_inv()
 
-## Recreates the slot children and updates the slots array based on a passed in inventory. Sets needed slot variables.
+## Recreates the slot children and updates the slots array based on a passed in inventory.
+## Sets needed slot variables.
 func _change_slot_count_for_new_inv(inv: Inventory = null) -> void:
 	for slot: Slot in slots:
 		slot.queue_free()
@@ -64,6 +71,22 @@ func _change_slot_count_for_new_inv(inv: Inventory = null) -> void:
 
 	if inv and inv.is_player_inv:
 		slots.append(trash_slot)
+
+		if crafting_manager != null:
+			if not crafting_manager.is_node_ready():
+				await crafting_manager.ready
+
+			var i: int = 0
+			for input_slot: CraftingSlot in crafting_manager.get_node("%InputSlots").get_children():
+				input_slot.name = "Input_Slot_" + str(i)
+				input_slot.synced_inv = inv
+				input_slot.index = inv.inv_size + 1 + i # The 1 is for the trash slot
+				input_slot.item_changed.connect(crafting_manager.update_crafting_result)
+				crafting_manager.input_slots.append(input_slot)
+				i += 1
+			crafting_manager.output_slot.name = "Output_Slot"
+			crafting_manager.output_slot.synced_inv = inv
+			crafting_manager.output_slot.index = inv.inv_size + 1 + i
 
 ## Called externally to connect this populator to its synced inventory.
 func connect_inventory(inv: Inventory) -> void:

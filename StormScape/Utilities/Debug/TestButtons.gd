@@ -53,9 +53,9 @@ func _on_test_storm_btn_2_pressed() -> void:
 func _on_test_combine_items_pressed() -> void:
 	GlobalData.world_root.get_node("WorldItemsManager")._on_combination_attempt_timer_timeout()
 
-func _on_test_craft_pressed() -> void:
-	var result: bool = GlobalData.player_node.get_node("OverlayUI/CraftingManager").is_recipe_craftable(GlobalData.player_node.hands.equipped_item.stats.recipe)
-	print(result)
+#func _on_test_craft_pressed() -> void:
+	#var result: bool = GlobalData.player_node.get_node("%CraftingManager").is_recipe_craftable(GlobalData.player_node.hands.equipped_item.stats.recipe)
+	#print(result)
 
 func _on_test_time_btn_pressed() -> void:
 	if DayNightManager.current_hour > 7 and DayNightManager.current_hour < 18:

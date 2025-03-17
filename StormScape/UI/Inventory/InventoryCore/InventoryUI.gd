@@ -18,36 +18,49 @@ func connect_inventory(inv: Inventory) -> void:
 func _can_drop_data(_at_position: Vector2, data: Variant) -> bool:
 	if data and ("item" in data) and (data.item != null):
 		return true
-	else: return false
+	else:
+		return false
 
-## Runs the logic for what to do when we can drop an item slot's data at the current moment. Creates physical items on the ground.
+## Runs the logic for what to do when we can drop an item slot's data at the current moment.
+## Creates physical items on the ground.
 func _drop_data(_at_position: Vector2, data: Variant) -> void:
 	var ground_item_res: ItemResource = data.item.stats
 	var ground_item_quantity: int = 1
 	if ground_item_res and data:
 		if data.dragging_only_one:
 			ground_item_quantity = 1
-			if inventory_to_reflect.inv[data.index].quantity - 1 <= 0:
-				inventory_to_reflect.inv[data.index] = null
-			else:
-				inventory_to_reflect.inv[data.index].quantity -= 1
+			if data.index < inventory_to_reflect.inv.size():
+				if inventory_to_reflect.inv[data.index].quantity - 1 <= 0:
+					inventory_to_reflect.inv[data.index] = null
+				else:
+					inventory_to_reflect.inv[data.index].quantity -= 1
 
-			data.item = inventory_to_reflect.inv[data.index]
+				data.item = inventory_to_reflect.inv[data.index]
+			else:
+				if data.item.quantity - 1 <= 0:
+					data.item = null
+				else:
+					data.item.quantity -= 1
 		elif data.dragging_half_stack:
 			var half_quantity: int = int(floor(data.item.quantity / 2.0))
 			var remainder: int = data.item.quantity - half_quantity
 			ground_item_quantity = half_quantity
 
-			inventory_to_reflect.inv[data.index].quantity = remainder
-			data.item = inventory_to_reflect.inv[data.index]
+			if data.index < inventory_to_reflect.inv.size():
+				inventory_to_reflect.inv[data.index].quantity = remainder
+				data.item = inventory_to_reflect.inv[data.index]
+			else:
+				data.item.quantity = remainder
 		else:
 			ground_item_quantity = data.item.quantity
 			data.item = null
-			inventory_to_reflect.inv[data.index] = null
+			if data.index < inventory_to_reflect.inv.size():
+				inventory_to_reflect.inv[data.index] = null
 
 		Item.spawn_on_ground(ground_item_res, ground_item_quantity, GlobalData.player_node.global_position, 15, true)
 
-	inventory_to_reflect.slot_updated.emit(data.index, data.item)
+	if data.index < inventory_to_reflect.inv.size():
+		inventory_to_reflect.slot_updated.emit(data.index, data.item)
 
 	data._on_mouse_exited()
 

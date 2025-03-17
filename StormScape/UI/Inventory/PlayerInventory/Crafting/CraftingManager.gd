@@ -1,14 +1,21 @@
-extends Node
+extends VBoxContainer
 class_name CraftingManager
+## Manages crafting actions like checking and caching recipes.
 
-@export_dir var tres_folder: String
-@export var selected_items: Array[InvItemResource] = []
+@export_dir var tres_folder: String ## The folder path to all the TRES items.
 
-var cached_recipes: Dictionary[StringName, Array] = {}
+@onready var output_slot: CraftingSlot = %OutputSlot ## The slot where the result will appear in.
+
+var cached_recipes: Dictionary[StringName, ItemResource] = {} ## All items keyed by their unique recipe id.
+var item_to_recipes: Dictionary[StringName, Array] = {} ## Maps items to the list of recipes that include them.
+var tag_to_recipes: Dictionary[StringName, Array] = {} ## Maps tags to the list of recipes that include them.
+var input_slots: Array[CraftingSlot] = [] ## The slots that are used as inputs to craft.
 
 
 func _ready() -> void:
 	_cache_recipes()
+
+	output_slot.output_drag_started.connect(_on_output_drag_started)
 
 func _cache_recipes() -> void:
 	var dir: DirAccess = DirAccess.open(tres_folder)
@@ -22,10 +29,22 @@ func _cache_recipes() -> void:
 	while file_name != "":
 		if file_name.ends_with(".tres"):
 			var file_path: String = tres_folder + "/" + file_name
-			var item: ItemResource = load(file_path)
-			item.session_uid = 0 # This triggers the setter function inside the item resource to make sure its given an suid
-			var recipe: Array[CraftingIngredient] = item.recipe
-			cached_recipes[item.get_recipe_id()] = recipe
+			var item_resource: ItemResource = load(file_path)
+			item_resource.session_uid = 0 # Triggers the setter func in the resource to make sure it's given an suid
+			cached_recipes[item_resource.get_recipe_id()] = item_resource
+
+			for ingredient: CraftingIngredient in item_resource.recipe:
+				if ingredient.type == "Item":
+					var ingredient_recipe_id: StringName = ingredient.item.get_recipe_id()
+					if ingredient_recipe_id not in item_to_recipes:
+						item_to_recipes[ingredient_recipe_id] = []
+					item_to_recipes[ingredient_recipe_id].append(item_resource.get_recipe_id())
+				elif ingredient.type == "Tags":
+					for tag: StringName in ingredient.tags:
+						if tag not in tag_to_recipes:
+							tag_to_recipes[tag] = []
+						tag_to_recipes[tag].append(item_resource.get_recipe_id())
+
 		file_name = dir.get_next()
 	dir.list_dir_end()
 
@@ -33,8 +52,13 @@ func _preprocess_selected_items() -> Dictionary[StringName, Dictionary]:
 	var item_quantities: Dictionary[StringName, Array] = {}
 	var tag_quantities: Dictionary[StringName, Array] = {}
 
-	for inv_item: InvItemResource in selected_items:
+	for slot: CraftingSlot in input_slots:
+		if slot.item == null:
+			continue
+
+		var inv_item: InvItemResource = slot.item
 		var item_id: StringName = inv_item.stats.get_recipe_id()
+
 		if item_id in item_quantities:
 			item_quantities[item_id].append([inv_item.quantity, inv_item.stats.rarity])
 		else:
@@ -48,16 +72,17 @@ func _preprocess_selected_items() -> Dictionary[StringName, Dictionary]:
 
 	return {&"items": item_quantities, &"tags": tag_quantities}
 
-func is_recipe_craftable(recipe: Array[CraftingIngredient]) -> bool:
+func _is_item_craftable(item: ItemResource) -> bool:
+	var recipe: Array[CraftingIngredient] = item.recipe
 	var quantities: Dictionary[StringName, Dictionary] = _preprocess_selected_items()
 	var item_quantities: Dictionary[StringName, Array] = quantities.items
 	var tag_quantities: Dictionary[StringName, Array] = quantities.tags
 
 	for ingredient: CraftingIngredient in recipe:
 		var total_quantity: int = 0
-		var str_ingredient: StringName = ingredient.item.get_recipe_id()
 
 		if ingredient.type == "Item":
+			var str_ingredient: StringName = ingredient.item.get_recipe_id()
 			if str_ingredient in item_quantities:
 				for entry: Array in item_quantities[str_ingredient]:
 					if _check_rarity_condition(ingredient.rarity_match, ingredient.item.rarity, entry[1]):
@@ -66,15 +91,15 @@ func is_recipe_craftable(recipe: Array[CraftingIngredient]) -> bool:
 			for tag: StringName in ingredient.tags:
 				if tag in tag_quantities:
 					for entry: Array in tag_quantities[tag]:
-						if _check_rarity_condition(ingredient.rarity_match, ingredient.item.rarity, entry[1]):
-							total_quantity += entry[0]
+						total_quantity += entry[0]
 
 		if total_quantity < ingredient.quantity:
 			return false
 
 	return true
 
-func _check_rarity_condition(rarity_cond: String, req_rarity: GlobalData.ItemRarity, item_rarity: GlobalData.ItemRarity) -> bool:
+func _check_rarity_condition(rarity_cond: String, req_rarity: GlobalData.ItemRarity,
+							item_rarity: GlobalData.ItemRarity) -> bool:
 	match rarity_cond:
 		"No":
 			return true
@@ -83,3 +108,76 @@ func _check_rarity_condition(rarity_cond: String, req_rarity: GlobalData.ItemRar
 		"GEQ":
 			return item_rarity >= req_rarity
 	return false
+
+## Use the inverted lookups to get candidate recipes from the current items in the input.
+func _get_candidate_recipes() -> Array:
+	var quantities: Dictionary[StringName, Dictionary] = _preprocess_selected_items()
+	var candidates: Dictionary[StringName, bool] = {}
+
+	for item_id: StringName in quantities[&"items"].keys():
+		if item_to_recipes.has(item_id):
+			for recipe_id: StringName in item_to_recipes[item_id]:
+				candidates[recipe_id] = true
+
+	for tag: StringName in quantities[&"tags"].keys():
+		if tag_to_recipes.has(tag):
+			for recipe_id: StringName in tag_to_recipes[tag]:
+				candidates[recipe_id] = true
+
+	return candidates.keys()
+
+## Use candidate recipes for efficiency to only test the recipes that are even potentially craftable.
+func update_crafting_result() -> void:
+	var candidates: Array[StringName] = _get_candidate_recipes()
+	for recipe_id: StringName in candidates:
+		var item_resource: ItemResource = cached_recipes[recipe_id]
+		if _is_item_craftable(item_resource):
+			output_slot.item = InvItemResource.new(item_resource, item_resource.output_quantity)
+			output_slot.just_crafted = true
+			return
+
+	output_slot.item = null
+
+func consume_recipe(recipe: Array[CraftingIngredient]) -> void:
+	var initial_quantities: Array[int] = []
+	for slot: CraftingSlot in input_slots:
+		if slot.item != null:
+			initial_quantities.append(slot.item.quantity)
+		else:
+			initial_quantities.append(-1)
+
+	for ingredient: CraftingIngredient in recipe:
+		var needed: int = ingredient.quantity
+
+		for slot: CraftingSlot in input_slots:
+			if slot.item == null:
+				continue
+
+			if ingredient.type == "Item":
+				if slot.item.stats.get_recipe_id() == ingredient.item.get_recipe_id():
+					if _check_rarity_condition(ingredient.rarity_match, ingredient.item.rarity, slot.item.stats.rarity):
+						var available: int = slot.item.quantity
+						var remove_amount: int = min(available, needed)
+						slot.item = InvItemResource.new(slot.item.stats, available - remove_amount)
+						needed -= remove_amount
+			elif ingredient.type == "Tags":
+				for tag: StringName in ingredient.tags:
+					if tag in slot.item.stats.tags:
+						var available: int = slot.item.quantity
+						var remove_amount: int = min(available, needed)
+						slot.item = InvItemResource.new(slot.item.stats, available - remove_amount)
+						needed -= remove_amount
+						break
+
+		if needed > 0:
+			for i: int in range(input_slots.size()):
+				if input_slots[i].item != null:
+					input_slots[i].item.quantity = initial_quantities[i]
+		else:
+			for slot: CraftingSlot in input_slots:
+				if slot.item != null:
+					if slot.item.quantity <= 0:
+						slot.item = null
+
+func _on_output_drag_started() -> void:
+	consume_recipe(output_slot.item.stats.recipe)
