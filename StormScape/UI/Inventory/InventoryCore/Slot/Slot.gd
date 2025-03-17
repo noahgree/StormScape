@@ -9,6 +9,7 @@ signal is_not_hovered_over ## Emitted when a slot is no longer being hovered ove
 @export var drag_preview: PackedScene = preload("res://UI/Inventory/InventoryCore/Slot/SlotDragPreview.tscn") ## The control preview for a dragged slot.
 @export var default_slot_texture: Texture2D ## The default texture of the slot with an item in it.
 @export var no_item_slot_texture: Texture2D ## The texture of the slot with no item when it is selected or active.
+@export var backing_texture: Texture2D ## The texture of the slot that appears behind everything else.
 
 @onready var texture_margins: MarginContainer = $TextureMargins ## The item texture margins node for this slot.
 @onready var back_color: ColorRect = $BackColor ## The color behind the item.
@@ -16,6 +17,7 @@ signal is_not_hovered_over ## Emitted when a slot is no longer being hovered ove
 @onready var quantity: Label = $QuantityMargins/Quantity ## The quantity label for this slot.
 @onready var rarity_glow: TextureRect = $RarityGlow ## The glow behind the weapon in the slot.
 @onready var selected_texture: TextureRect = $SelectedTexture ## The texture that appears when this slot is selected or active.
+@onready var backing_texture_rect: TextureRect = $BackingTexture ## The texture rect that appears behind everything as an icon.
 
 var index: int ## The index that this slot represents inside the inventory.
 var synced_inv: Inventory ## The synced inventory that this slot is a part of.
@@ -81,6 +83,7 @@ func _set_item(new_item: InvItemResource) -> void:
 func _ready() -> void:
 	mouse_entered.connect(func() -> void: is_hovered_over.emit(index))
 	mouse_exited.connect(func() -> void: is_not_hovered_over.emit())
+	backing_texture_rect.texture = backing_texture
 	rarity_glow.hide()
 	selected_texture.hide()
 	item_texture.material.set_shader_parameter("highlight_strength", 0.0)
@@ -115,7 +118,6 @@ func _get_drag_data(at_position: Vector2) -> Variant:
 		quantity.text = ""
 		item_texture.modulate.a = 0.65
 		set_drag_preview(_make_drag_preview(at_position))
-		_on_just_started_drag()
 		return self
 	else:
 		return null
@@ -149,10 +151,6 @@ func _make_drag_preview(at_position: Vector2) -> Control:
 		c.add_child(preview_scene)
 	return c
 
-## Used with child slot types to do certain things when drags are started.
-func _on_just_started_drag() -> void:
-	pass
-
 #region RightClick Drags
 ## When a right click drag is released, interpret it as a left click drag.
 ## Allows right drags to work with Godot's drag system.
@@ -183,7 +181,6 @@ func _gui_input(event: InputEvent) -> void:
 				modulate = Color(0.65, 0.65, 0.65, 1)
 
 				force_drag(self, _make_drag_preview(get_local_mouse_position()))
-				_on_just_started_drag()
 		elif event.button_index == MOUSE_BUTTON_LEFT and event.double_click:
 			if item != null:
 				_fill_slot_to_stack_size()

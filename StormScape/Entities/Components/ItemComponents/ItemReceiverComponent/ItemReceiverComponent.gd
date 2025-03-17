@@ -31,7 +31,6 @@ func _on_load_game() -> void:
 
 func _ready() -> void:
 	super._ready()
-
 	collision_layer = 0b10000000
 
 func add_to_in_range_queue(item: Item) -> void:
@@ -40,7 +39,8 @@ func add_to_in_range_queue(item: Item) -> void:
 
 func remove_from_in_range_queue(item: Item) -> void:
 	var index: int = items_in_range.find(item)
-	if index != -1: items_in_range.remove_at(index)
+	if index != -1:
+		items_in_range.remove_at(index)
 	_update_player_item_interact_hud()
 
 ## When used on a player, this method notifies the connected HUD of item pickup item changes.
@@ -55,7 +55,8 @@ func _update_player_item_interact_hud() -> void:
 
 ## Shows the interact hud for the most recent item in range.
 func _show_player_interact_hud() -> void:
-	if not items_in_range.is_empty(): item_interact_hud.show_hud(items_in_range[items_in_range.size() - 1])
+	if not items_in_range.is_empty():
+		item_interact_hud.show_hud(items_in_range[items_in_range.size() - 1])
 
 ## Hides the player interact hud.
 func _hide_player_interact_hud() -> void:

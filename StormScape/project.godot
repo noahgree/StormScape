@@ -14,8 +14,9 @@ config/name="StormScape"
 config/version="0.1"
 run/main_scene="res://Stages/World/Game.tscn"
 config/features=PackedStringArray("4.4", "Forward Plus")
+run/max_fps=120
 boot_splash/bg_color=Color(0.104389, 0.121748, 0.27417, 1)
-config/icon="res://Assets/Icon/icon.svg"
+config/macos_native_icon="uid://2xf1pqc78iin"
 
 [audio]
 

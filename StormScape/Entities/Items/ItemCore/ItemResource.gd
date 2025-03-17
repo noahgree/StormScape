@@ -25,7 +25,7 @@ class_name ItemResource
 @export_group("Crafting")
 @export var recipe: Array[CraftingIngredient] = [] ## The items & quantities required to craft an instance of this item.
 @export var output_quantity: int = 1 ## The number of resulting instances of this item that spawn when crafted.
-@export var recipe_unlocked: bool = false ## A flag to determine whether or not this item can be crafted.
+@export var recipe_unlocked: bool = true ## A flag to determine whether or not this item can be crafted. True by default.
 
 @export_category("Equippable Item")
 @export var item_scene: PackedScene = null ## The equippable representation of this item. If left null, this item cannot be equipped.
@@ -64,7 +64,7 @@ func _to_string() -> String:
 
 ## Returns the unique identifier used to distinguish the recipe of this item.
 func get_recipe_id() -> StringName:
-	return StringName(id + "(" + str(rarity) + ")")
+	return StringName(id)
 
 ## Returns the cooldown id based on how cooldowns are determined for this item.
 func get_cooldown_id() -> StringName:

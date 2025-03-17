@@ -1,4 +1,4 @@
-[gd_scene load_steps=212 format=3 uid="uid://dba8mrurjlekp"]
+[gd_scene load_steps=207 format=3 uid="uid://dba8mrurjlekp"]
 
 [ext_resource type="Script" uid="uid://c3rpxq8pnbdje" path="res://Entities/Player/PlayerCore/Player.gd" id="1_m33tt"]
 [ext_resource type="Script" uid="uid://c2gdoebfp12dq" path="res://Entities/Stats/StatMod/StatModsCacheResource.gd" id="2_vetip"]
@@ -50,15 +50,11 @@
 [ext_resource type="Texture2D" uid="uid://k0o25ihgea1n" path="res://UI/PlayerStatsOverlay/Assets/Hunger Progress Under.png" id="37_32xjt"]
 [ext_resource type="Resource" uid="uid://ciel2rrqq4dvv" path="res://Entities/Items/TRESItems/LaserGun(2).tres" id="37_a2tah"]
 [ext_resource type="Texture2D" uid="uid://bdgevpcheclv5" path="res://UI/PlayerStatsOverlay/Assets/Hunger Progress Bar.png" id="38_ht2cb"]
-[ext_resource type="Script" uid="uid://bpc1cwr4a6lgo" path="res://Entities/Items/Ammo/ProjAmmoResource.gd" id="39_7aiab"]
 [ext_resource type="PackedScene" uid="uid://b7gdy01q8wsjx" path="res://Entities/Components/ItemComponents/HandsComponent/HandsComponent.tscn" id="39_ngono"]
 [ext_resource type="Shader" uid="uid://c0de04pgeen76" path="res://Utilities/Game/Shaders/BlurBehind.gdshader" id="39_r4tgk"]
 [ext_resource type="Texture2D" uid="uid://xnppg0u7t7w4" path="res://UI/PlayerStatsOverlay/Assets/Stamina Recharge Under.png" id="39_ryeha"]
-[ext_resource type="Script" uid="uid://ctxa7i1mbt7ab" path="res://UI/Inventory/PlayerInventory/Crafting/CraftingIngredient.gd" id="40_3yx82"]
 [ext_resource type="Resource" uid="uid://c5jim46mul7ex" path="res://Entities/Items/TRESItems/IonCharge(0).tres" id="40_6wv7y"]
 [ext_resource type="Resource" uid="uid://bcvljie626314" path="res://Entities/Items/TRESItems/HeavyAmmo(0).tres" id="40_7ipu6"]
-[ext_resource type="Texture2D" uid="uid://bo4vy1r7cbpx8" path="res://Entities/Items/Ammo/Light/light_ammo.png" id="40_ftusj"]
-[ext_resource type="Texture2D" uid="uid://cknw64vph4b0s" path="res://Entities/Items/Ammo/Light/light_ammo_thumb.png" id="40_hgjjf"]
 [ext_resource type="Resource" uid="uid://bdjhfsluk53lc" path="res://Entities/Items/TRESItems/MediumAmmo(0).tres" id="40_r220t"]
 [ext_resource type="Texture2D" uid="uid://gfbxblly7q78" path="res://UI/PlayerStatsOverlay/Assets/Stamina Recharge Bar.png" id="40_suqvl"]
 [ext_resource type="Script" uid="uid://co5w78bykccb6" path="res://UI/Inventory/InventoryCore/InventoryPopulator.gd" id="41_nwjbq"]
@@ -84,7 +80,7 @@
 [ext_resource type="Texture2D" uid="uid://dcsw75wiocvy0" path="res://UI/PlayerStatsOverlay/Assets/Shield Change.png" id="50_86ubk"]
 [ext_resource type="Texture2D" uid="uid://b2v0527iatsjd" path="res://UI/PlayerStatsOverlay/Assets/Health.png" id="51_6cphe"]
 [ext_resource type="Texture2D" uid="uid://dhvpkl1svbcys" path="res://UI/PlayerStatsOverlay/Assets/Health Under.png" id="52_dhyl8"]
-[ext_resource type="Resource" uid="uid://dpmwqsai6gxsr" path="res://Entities/Items/TRESItems/FlameBlower(4).tres" id="52_ebist"]
+[ext_resource type="Resource" uid="uid://dpmwqsai6gxsr" path="res://Entities/Items/TRESItems/FlameBlower(5).tres" id="52_ebist"]
 [ext_resource type="Resource" uid="uid://1q7rlned2r23" path="res://Entities/Items/TRESItems/Gattler(3).tres" id="53_lo25j"]
 [ext_resource type="Texture2D" uid="uid://lj78cee4aa38" path="res://UI/PlayerStatsOverlay/Assets/Health Change.png" id="53_qsiea"]
 [ext_resource type="Resource" uid="uid://dk3vlbvu2b7eq" path="res://Entities/Items/TRESItems/Sword(4).tres" id="57_6wv7y"]
@@ -114,10 +110,12 @@
 [ext_resource type="Texture2D" uid="uid://de31272sm433q" path="res://UI/Inventory/InventoryCore/button_9_patch.png" id="86_ald0t"]
 [ext_resource type="FontVariation" uid="uid://blgkcg6c83yln" path="res://Assets/Theming/Fonts/GameFontResources/ui_pixel_font.tres" id="91_55d85"]
 [ext_resource type="Script" uid="uid://dbc2ecb1mkugh" path="res://UI/PlayerStatsOverlay/ActiveSlotInfo.gd" id="91_qr476"]
-[ext_resource type="Shader" uid="uid://bhox1e3shq3iq" path="res://Utilities/Game/Shaders/ProgressAlpha.gdshader" id="107_nyy6a"]
 [ext_resource type="PackedScene" uid="uid://di7vcyrki71nm" path="res://Entities/Components/DetectionComponent/DetectionComponent.tscn" id="114_hxjay"]
+[ext_resource type="Texture2D" uid="uid://cp7uxam0b4khc" path="res://UI/Inventory/InventoryCore/Slot/craft_input_slot_icon.png" id="118_bvo3j"]
 [ext_resource type="Script" uid="uid://cvuh82pqmf5ja" path="res://UI/Inventory/InventoryCore/Slot/CraftingSlot.gd" id="118_r5dvw"]
 [ext_resource type="Script" uid="uid://djsaegsb00xsu" path="res://UI/Inventory/PlayerInventory/Crafting/CraftingManager.gd" id="118_thmqm"]
+[ext_resource type="Texture2D" uid="uid://0qokvcd3ucop" path="res://UI/Inventory/InventoryCore/arrow_icon.png" id="119_bvo3j"]
+[ext_resource type="Texture2D" uid="uid://bd1seekh41q00" path="res://UI/Inventory/InventoryCore/Slot/craft_output_slot_icon.png" id="119_gb65f"]
 
 [sub_resource type="Resource" id="Resource_rwbul"]
 script = ExtResource("2_vetip")
@@ -1195,44 +1193,6 @@ script = ExtResource("32_ixmb3")
 stats = ExtResource("40_r220t")
 quantity = 900
 
-[sub_resource type="Resource" id="Resource_mp6mc"]
-script = ExtResource("39_7aiab")
-ammo_type = 2
-id = "light_ammo"
-name = "Light Ammo"
-tags = Array[StringName]([])
-item_type = 2
-rarity = 5
-stack_size = 64
-auto_pickup = true
-pickup_radius = 4
-info = "Ammo used in light weapons like pistols."
-ground_icon = ExtResource("40_hgjjf")
-in_hand_icon = ExtResource("40_hgjjf")
-inv_icon = ExtResource("40_ftusj")
-inv_icon_offset = Vector2(0, 0)
-inv_icon_scale = Vector2(1, 1)
-inv_icon_rotation = 0.0
-recipe = Array[ExtResource("40_3yx82")]([])
-output_quantity = 1
-recipe_unlocked = false
-rotation_lerping = 0.1
-holding_offset = Vector2(0, 0)
-holding_degrees = 0.0
-is_gripped_by_one_hand = true
-draw_off_hand = false
-draw_off_hand_offset = Vector2(0, 0)
-main_hand_offset = Vector2(0, 0)
-cooldowns_per_suid = true
-shown_cooldown_fills = Array[String]([])
-show_cursor_cooldown = false
-session_uid = 0
-
-[sub_resource type="Resource" id="Resource_t7kvu"]
-script = ExtResource("32_ixmb3")
-stats = SubResource("Resource_mp6mc")
-quantity = 1
-
 [sub_resource type="Resource" id="Resource_x8o50"]
 script = ExtResource("32_ixmb3")
 stats = ExtResource("44_q38m2")
@@ -1447,41 +1407,24 @@ outline_size = 2
 outline_color = Color(0.209203, 0.113957, 0.0471381, 1)
 
 [sub_resource type="LabelSettings" id="LabelSettings_83b3b"]
-font_size = 6
+font_size = 8
 font_color = Color(0.913725, 0.768627, 0.741176, 1)
-outline_size = 2
 outline_color = Color(0.209203, 0.113957, 0.0471381, 1)
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_xh2l0"]
-resource_local_to_scene = true
-shader = ExtResource("107_nyy6a")
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_pc124"]
-resource_local_to_scene = true
-shader = ExtResource("67_w57pe")
-shader_parameter/outline_color = Color(1, 1, 1, 0.3)
-shader_parameter/width = 0.5
-shader_parameter/pattern = 2
-shader_parameter/inside = false
-shader_parameter/add_margins = true
-shader_parameter/size_effect = 0.4
-shader_parameter/speed = 0.9
-shader_parameter/highlight_strength = 0.0
-shader_parameter/color_mode_toggle = true
-shader_parameter/pause_duration = 1.0
-shader_parameter/angle = 35.0
-shader_parameter/tint_color = Color(1, 1, 1, 0)
-shader_parameter/glow_intensity = 1.0
 
 [sub_resource type="LabelSettings" id="LabelSettings_0313k"]
 line_spacing = 0.0
 font = ExtResource("85_7xlwj")
-font_size = 13
+font_size = 14
 font_color = Color(0.914356, 0.769229, 0.740833, 1)
 outline_size = 3
 outline_color = Color(0.209203, 0.113957, 0.0471381, 1)
 shadow_size = 0
 shadow_offset = Vector2(0, 0)
+
+[sub_resource type="LabelSettings" id="LabelSettings_thmqm"]
+font_size = 10
+font_color = Color(0.913725, 0.768627, 0.741176, 1)
+outline_color = Color(0.209203, 0.113957, 0.0471381, 1)
 
 [node name="Player" type="CharacterBody2D" groups=["has_save_logic"]]
 collision_layer = 0
@@ -1630,7 +1573,7 @@ parameters/run/blendspace2d/blend_position = Vector2(0, 0)
 
 [node name="ItemReceiverComponent" parent="." node_paths=PackedStringArray("item_interact_hud", "inv_populator", "ui") instance=ExtResource("30_qgyag")]
 item_interact_hud = NodePath("../OverlayUI/ItemInteractionHUD")
-starting_inv = Array[ExtResource("32_ixmb3")]([SubResource("Resource_pihal"), null, null, null, SubResource("Resource_kx1me"), SubResource("Resource_2ijsm"), SubResource("Resource_gb65f"), SubResource("Resource_xlc3k"), SubResource("Resource_n4o3n"), SubResource("Resource_3by25"), SubResource("Resource_oxva3"), SubResource("Resource_t7kvu"), SubResource("Resource_x8o50"), null, SubResource("Resource_apvym"), SubResource("Resource_ur5wt"), null, null, SubResource("Resource_dyejk"), null, null, SubResource("Resource_vpccy"), null, null, SubResource("Resource_p5d28"), null, SubResource("Resource_0t1mv"), SubResource("Resource_rdrbb"), null, SubResource("Resource_sx7hp"), SubResource("Resource_wjnk6"), SubResource("Resource_hevqc"), SubResource("Resource_bvo3j"), SubResource("Resource_hxjay"), SubResource("Resource_0ta0y"), SubResource("Resource_gdihr"), SubResource("Resource_6stk0")])
+starting_inv = Array[ExtResource("32_ixmb3")]([SubResource("Resource_pihal"), null, null, null, SubResource("Resource_kx1me"), SubResource("Resource_2ijsm"), SubResource("Resource_gb65f"), SubResource("Resource_xlc3k"), SubResource("Resource_n4o3n"), SubResource("Resource_3by25"), SubResource("Resource_oxva3"), null, SubResource("Resource_x8o50"), null, SubResource("Resource_apvym"), SubResource("Resource_ur5wt"), null, null, SubResource("Resource_dyejk"), null, null, SubResource("Resource_vpccy"), null, null, SubResource("Resource_p5d28"), null, SubResource("Resource_0t1mv"), SubResource("Resource_rdrbb"), null, SubResource("Resource_sx7hp"), SubResource("Resource_wjnk6"), SubResource("Resource_hevqc"), SubResource("Resource_bvo3j"), SubResource("Resource_hxjay"), SubResource("Resource_0ta0y"), SubResource("Resource_gdihr"), SubResource("Resource_6stk0")])
 is_player_inv = true
 inv_size = 37
 hotbar_size = 5
@@ -2049,10 +1992,10 @@ grow_horizontal = 0
 grow_vertical = 2
 texture = ExtResource("78_at8wu")
 region_rect = Rect2(0, 0, 20, 20)
-patch_margin_left = 2
-patch_margin_top = 2
-patch_margin_right = 2
-patch_margin_bottom = 2
+patch_margin_left = 3
+patch_margin_top = 1
+patch_margin_right = 3
+patch_margin_bottom = 1
 axis_stretch_vertical = 2
 script = ExtResource("35_45ikj")
 metadata/_edit_group_ = true
@@ -2426,8 +2369,8 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = 46.0
-offset_top = -42.5
+offset_left = 62.0
+offset_top = -44.5
 offset_right = 88.0
 offset_bottom = -34.5
 grow_horizontal = 2
@@ -2451,12 +2394,18 @@ metadata/_edit_lock_ = true
 
 [node name="Label" type="Label" parent="OverlayUI/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/SortByName"]
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -8.0
+offset_top = -3.5
+offset_right = 8.0
+offset_bottom = 3.5
 grow_horizontal = 2
 grow_vertical = 2
-text = "SORT BY NAME"
+text = "NAME"
 label_settings = SubResource("LabelSettings_83b3b")
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -2470,9 +2419,9 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = 2.0
-offset_top = -42.5
-offset_right = 44.0
+offset_left = 33.0
+offset_top = -44.5
+offset_right = 59.0
 offset_bottom = -34.5
 grow_horizontal = 2
 grow_vertical = 2
@@ -2495,12 +2444,18 @@ metadata/_edit_lock_ = true
 
 [node name="Label" type="Label" parent="OverlayUI/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/SortByType"]
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -7.5
+offset_top = -3.5
+offset_right = 7.5
+offset_bottom = 3.5
 grow_horizontal = 2
 grow_vertical = 2
-text = "SORT BY TYPE"
+text = "TYPE"
 label_settings = SubResource("LabelSettings_83b3b")
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -2514,8 +2469,9 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -42.0
-offset_top = -42.5
+offset_left = 4.0
+offset_top = -44.5
+offset_right = 30.0
 offset_bottom = -34.5
 grow_horizontal = 2
 grow_vertical = 2
@@ -2538,12 +2494,18 @@ metadata/_edit_lock_ = true
 
 [node name="Label" type="Label" parent="OverlayUI/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/SortByRarity"]
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -10.0
+offset_top = -3.5
+offset_right = 10.0
+offset_bottom = 3.5
 grow_horizontal = 2
 grow_vertical = 2
-text = "SORT BY RARITY"
+text = "RARITY"
 label_settings = SubResource("LabelSettings_83b3b")
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -2558,8 +2520,8 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -88.0
-offset_top = -42.5
-offset_right = -52.0
+offset_top = -44.5
+offset_right = -48.0
 offset_bottom = -34.5
 grow_horizontal = 2
 grow_vertical = 2
@@ -2587,7 +2549,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-text = "STACK ITEMS"
+text = "AUTOSTACK"
 label_settings = SubResource("LabelSettings_83b3b")
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -2750,23 +2712,7 @@ grow_horizontal = 2
 grow_vertical = 2
 size_flags_vertical = 4
 region_rect = Rect2(0, 0, 20, 20)
-
-[node name="BackColor" parent="OverlayUI/PlayerInvUI/TrashSlotPanel/TrashSlot" index="0"]
-material = SubResource("ShaderMaterial_xh2l0")
-
-[node name="ItemTexture" parent="OverlayUI/PlayerInvUI/TrashSlotPanel/TrashSlot/TextureMargins" index="0"]
-material = SubResource("ShaderMaterial_pc124")
-
-[node name="TrashTexture" type="TextureRect" parent="OverlayUI/PlayerInvUI/TrashSlotPanel/TrashSlot"]
-unique_name_in_owner = true
-self_modulate = Color(0, 0, 0, 0.23)
-layout_mode = 2
-offset_left = 3.0
-offset_top = 3.0
-offset_right = 19.0
-offset_bottom = 19.0
-texture = ExtResource("69_4ao77")
-stretch_mode = 3
+backing_texture = ExtResource("69_4ao77")
 
 [node name="HotbarSlotMargins" type="MarginContainer" parent="OverlayUI/PlayerInvUI"]
 layout_mode = 1
@@ -2867,9 +2813,9 @@ anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
 offset_left = -38.0
-offset_top = 3.0
+offset_top = 4.0
 offset_right = 39.0
-offset_bottom = 23.0
+offset_bottom = 24.0
 grow_horizontal = 2
 text = "CRAFT"
 label_settings = SubResource("LabelSettings_0313k")
@@ -2913,16 +2859,20 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 theme_override_constants/margin_left = 0
-theme_override_constants/margin_top = 17
+theme_override_constants/margin_top = 16
 theme_override_constants/margin_right = 0
 theme_override_constants/margin_bottom = 0
 metadata/_edit_lock_ = true
 
 [node name="VBoxContainer" type="VBoxContainer" parent="OverlayUI/PlayerInvUI/CraftingManager/InventoryTexture/GridMargins"]
 layout_mode = 2
-theme_override_constants/separation = 20
+theme_override_constants/separation = 4
 
-[node name="InputSlots" type="GridContainer" parent="OverlayUI/PlayerInvUI/CraftingManager/InventoryTexture/GridMargins/VBoxContainer"]
+[node name="SlotsVBox" type="VBoxContainer" parent="OverlayUI/PlayerInvUI/CraftingManager/InventoryTexture/GridMargins/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 1
+
+[node name="InputSlots" type="GridContainer" parent="OverlayUI/PlayerInvUI/CraftingManager/InventoryTexture/GridMargins/VBoxContainer/SlotsVBox"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
@@ -2930,36 +2880,88 @@ size_flags_vertical = 4
 theme_override_constants/h_separation = 0
 theme_override_constants/v_separation = 0
 
-[node name="Slot1" parent="OverlayUI/PlayerInvUI/CraftingManager/InventoryTexture/GridMargins/VBoxContainer/InputSlots" instance=ExtResource("42_r422n")]
+[node name="Slot1" parent="OverlayUI/PlayerInvUI/CraftingManager/InventoryTexture/GridMargins/VBoxContainer/SlotsVBox/InputSlots" instance=ExtResource("42_r422n")]
 layout_mode = 2
 script = ExtResource("118_r5dvw")
 is_output_slot = false
+backing_texture = ExtResource("118_bvo3j")
 
-[node name="Slot2" parent="OverlayUI/PlayerInvUI/CraftingManager/InventoryTexture/GridMargins/VBoxContainer/InputSlots" instance=ExtResource("42_r422n")]
+[node name="Slot2" parent="OverlayUI/PlayerInvUI/CraftingManager/InventoryTexture/GridMargins/VBoxContainer/SlotsVBox/InputSlots" instance=ExtResource("42_r422n")]
 layout_mode = 2
 script = ExtResource("118_r5dvw")
 is_output_slot = false
+backing_texture = ExtResource("118_bvo3j")
 
-[node name="Slot3" parent="OverlayUI/PlayerInvUI/CraftingManager/InventoryTexture/GridMargins/VBoxContainer/InputSlots" instance=ExtResource("42_r422n")]
+[node name="Slot3" parent="OverlayUI/PlayerInvUI/CraftingManager/InventoryTexture/GridMargins/VBoxContainer/SlotsVBox/InputSlots" instance=ExtResource("42_r422n")]
 layout_mode = 2
 script = ExtResource("118_r5dvw")
 is_output_slot = false
+backing_texture = ExtResource("118_bvo3j")
 
-[node name="Slot4" parent="OverlayUI/PlayerInvUI/CraftingManager/InventoryTexture/GridMargins/VBoxContainer/InputSlots" instance=ExtResource("42_r422n")]
+[node name="Slot4" parent="OverlayUI/PlayerInvUI/CraftingManager/InventoryTexture/GridMargins/VBoxContainer/SlotsVBox/InputSlots" instance=ExtResource("42_r422n")]
 layout_mode = 2
 script = ExtResource("118_r5dvw")
 is_output_slot = false
+backing_texture = ExtResource("118_bvo3j")
 
-[node name="Slot5" parent="OverlayUI/PlayerInvUI/CraftingManager/InventoryTexture/GridMargins/VBoxContainer/InputSlots" instance=ExtResource("42_r422n")]
+[node name="DownArrow" type="TextureRect" parent="OverlayUI/PlayerInvUI/CraftingManager/InventoryTexture/GridMargins/VBoxContainer/SlotsVBox"]
+modulate = Color(0.182454, 0.0491669, 0, 0.3)
 layout_mode = 2
-script = ExtResource("118_r5dvw")
-is_output_slot = false
+texture = ExtResource("119_bvo3j")
+stretch_mode = 3
 
-[node name="OutputSlot" parent="OverlayUI/PlayerInvUI/CraftingManager/InventoryTexture/GridMargins/VBoxContainer" instance=ExtResource("42_r422n")]
+[node name="OutputSlot" parent="OverlayUI/PlayerInvUI/CraftingManager/InventoryTexture/GridMargins/VBoxContainer/SlotsVBox" instance=ExtResource("42_r422n")]
 unique_name_in_owner = true
 layout_mode = 2
 script = ExtResource("118_r5dvw")
 is_output_slot = true
+backing_texture = ExtResource("119_gb65f")
+
+[node name="MouseBlockGlass" type="ColorRect" parent="OverlayUI/PlayerInvUI/CraftingManager/InventoryTexture/GridMargins/VBoxContainer/SlotsVBox/OutputSlot"]
+self_modulate = Color(0.245, 0.245, 0.245, 0.524)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Craft" type="NinePatchRect" parent="OverlayUI/PlayerInvUI/CraftingManager/InventoryTexture/GridMargins/VBoxContainer"]
+unique_name_in_owner = true
+modulate = Color(1, 1, 1, 0)
+custom_minimum_size = Vector2(30, 12)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture = ExtResource("86_ald0t")
+patch_margin_left = 2
+patch_margin_top = 2
+patch_margin_right = 2
+patch_margin_bottom = 2
+
+[node name="CraftBtn" type="Button" parent="OverlayUI/PlayerInvUI/CraftingManager/InventoryTexture/GridMargins/VBoxContainer/Craft"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+focus_mode = 0
+flat = true
+metadata/_edit_lock_ = true
+
+[node name="Label" type="Label" parent="OverlayUI/PlayerInvUI/CraftingManager/InventoryTexture/GridMargins/VBoxContainer/Craft"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "CLAIM"
+label_settings = SubResource("LabelSettings_thmqm")
+horizontal_alignment = 1
+vertical_alignment = 1
+metadata/_edit_lock_ = true
 
 [connection signal="pressed" from="OverlayUI/TestButtons/TestHurtBtn" to="OverlayUI/TestButtons" method="_on_test_hurt_btn_pressed"]
 [connection signal="pressed" from="OverlayUI/TestButtons/TestHealBtn" to="OverlayUI/TestButtons" method="_on_test_heal_btn_pressed"]
@@ -2993,5 +2995,6 @@ is_output_slot = true
 [connection signal="button_down" from="OverlayUI/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/AutoStack/AutoStackBtn" to="OverlayUI/PlayerInvUI" method="_on_auto_stack_btn_button_down"]
 [connection signal="button_up" from="OverlayUI/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/AutoStack/AutoStackBtn" to="OverlayUI/PlayerInvUI" method="_on_auto_stack_btn_button_up"]
 [connection signal="pressed" from="OverlayUI/PlayerInvUI/MainTextureMargins/InvPopulator/InventoryTexture/AutoStack/AutoStackBtn" to="OverlayUI/PlayerInvUI" method="_on_auto_stack_btn_pressed"]
-
-[editable path="OverlayUI/PlayerInvUI/TrashSlotPanel/TrashSlot"]
+[connection signal="button_down" from="OverlayUI/PlayerInvUI/CraftingManager/InventoryTexture/GridMargins/VBoxContainer/Craft/CraftBtn" to="OverlayUI/PlayerInvUI" method="_on_craft_btn_button_down"]
+[connection signal="button_up" from="OverlayUI/PlayerInvUI/CraftingManager/InventoryTexture/GridMargins/VBoxContainer/Craft/CraftBtn" to="OverlayUI/PlayerInvUI" method="_on_craft_btn_button_up"]
+[connection signal="pressed" from="OverlayUI/PlayerInvUI/CraftingManager/InventoryTexture/GridMargins/VBoxContainer/Craft/CraftBtn" to="OverlayUI/PlayerInvUI" method="_on_craft_btn_pressed"]

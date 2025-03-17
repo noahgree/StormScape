@@ -16,7 +16,7 @@ static var item_scene: PackedScene = preload("res://Entities/Items/ItemCore/Item
 @onready var anim_player: AnimationPlayer = $AnimationPlayer ## The animation player controlling the hover, spawn, and remove anims.
 
 var can_be_auto_picked_up: bool = false ## Whether the item can currently be auto picked up by walking over it.
-var can_be_picked_up_at_all: bool = true ## When true, the item is in a state where it cannot be picked up by any means.
+var can_be_picked_up_at_all: bool = true ## When false, the item is in a state where it cannot be picked up by any means.
 var lifetime_timer: Timer = TimerHelpers.create_one_shot_timer(self, 300, remove_from_world) ## The timer tracking how long the item has left to exist on the ground.
 
 
@@ -31,20 +31,27 @@ func _set_item(item_stats: ItemResource) -> void:
 			ground_glow.scale.y = 0.05 * (icon.texture.get_height() / 32.0)
 			ground_glow.position.y = ceil(icon.texture.get_height() / 2.0) + ceil(7.0 / 2.0) - 2 + icon.position.y
 
-## Spawns an item with the passed in details on the ground. Keep suid means we should duplicate the item's stats and pass the
-## old session uid along to it.
+## Spawns an item with the passed in details on the ground. Keep suid means we should duplicate
+## the item's stats and pass the old session uid along to it. Can also choose to let items spawn with higher than stack quantities.
 static func spawn_on_ground(item_stats: ItemResource, quant: int, location: Vector2,
-							location_range: float, keep_suid: bool = true) -> void:
+							location_range: float, keep_suid: bool = true, respect_max_stack: bool = false) -> void:
 	var quantity_count: int = quant
 	while quantity_count > 0:
 		var item_to_spawn: Item = item_scene.instantiate()
 		item_to_spawn.stats = item_stats.duplicate_with_suid() if keep_suid else item_stats.duplicate()
 
-		var quant_to_use: int = min(quantity_count, item_stats.stack_size)
-		item_to_spawn.quantity = quant_to_use
-		quantity_count -= quant_to_use
+		if respect_max_stack:
+			var quant_to_use: int = min(quantity_count, item_stats.stack_size)
+			item_to_spawn.quantity = quant_to_use
+			quantity_count -= quant_to_use
+		else:
+			item_to_spawn.quantity = quantity_count
+			quantity_count = 0
 
-		@warning_ignore("narrowing_conversion") item_to_spawn.global_position = location + Vector2(randi_range((-location_range - 6) / 2.0, (location_range - 6) / 2.0) + 6, randi_range(0, (location_range - 6)) + 6)
+		if location_range != -1:
+			@warning_ignore("narrowing_conversion") item_to_spawn.global_position = location + Vector2(randi_range((-location_range - 6) / 2.0, (location_range - 6) / 2.0) + 6, randi_range(0, (location_range - 6)) + 6)
+		else:
+			item_to_spawn.global_position = location
 
 		var spawn_callable: Callable = GlobalData.world_root.get_node("WorldItemsManager").add_item.bind(item_to_spawn)
 		spawn_callable.call_deferred()
@@ -96,11 +103,13 @@ func _set_rarity_colors() -> void:
 	ground_glow.self_modulate = GlobalData.rarity_colors.ground_glow.get(stats.rarity)
 	icon.material.set_shader_parameter("outline_color", GlobalData.rarity_colors.outline_color.get(stats.rarity))
 	icon.material.set_shader_parameter("tint_color", GlobalData.rarity_colors.tint_color.get(stats.rarity))
+
 	var gradient_texture: GradientTexture1D = GradientTexture1D.new()
 	gradient_texture.gradient = Gradient.new()
 	gradient_texture.gradient.add_point(0, GlobalData.rarity_colors.glint_color.get(stats.rarity))
 	icon.material.set_shader_parameter("color_gradient", gradient_texture)
-	if stats.rarity == GlobalData.ItemRarity.EPIC or stats.rarity == GlobalData.ItemRarity.LEGENDARY or stats.rarity == GlobalData.ItemRarity.SINGULAR:
+
+	if stats.rarity in [GlobalData.ItemRarity.EPIC, GlobalData.ItemRarity.LEGENDARY, GlobalData.ItemRarity.SINGULAR]:
 		particles.color = GlobalData.rarity_colors.ground_glow.get(stats.rarity)
 		particles.emitting = true
 	if stats.rarity == GlobalData.ItemRarity.SINGULAR:
@@ -109,7 +118,7 @@ func _set_rarity_colors() -> void:
 ## When the spawn animation finishes, start hovering and emitting particles if needed.
 func _on_spawn_anim_completed() -> void:
 	anim_player.play("hover")
-	if stats.rarity == GlobalData.ItemRarity.LEGENDARY or stats.rarity == GlobalData.ItemRarity.SINGULAR:
+	if stats.rarity in [GlobalData.ItemRarity.LEGENDARY, GlobalData.ItemRarity.SINGULAR]:
 		line_particles.color = GlobalData.rarity_colors.tint_color.get(stats.rarity)
 		line_particles.emitting = true
 
@@ -146,3 +155,8 @@ func _on_area_exited(area: Area2D) -> void:
 		if not (area as ItemReceiverComponent).items_in_range.is_empty():
 			(area as ItemReceiverComponent).items_in_range[area.items_in_range.size() - 1].icon.material.set_shader_parameter("outline_color", Color.WHITE)
 			(area as ItemReceiverComponent).items_in_range[area.items_in_range.size() - 1].icon.material.set_shader_parameter("width", 0.82)
+
+func respawn_item_after_quantity_change() -> void:
+	can_be_picked_up_at_all = false
+	Item.spawn_on_ground(stats, quantity, global_position, -1, true, false)
+	queue_free()

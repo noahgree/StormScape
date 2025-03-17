@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="ProjWeaponResource" load_steps=24 format=3 uid="uid://4nvp28pvjtk3"]
+[gd_resource type="Resource" script_class="ProjWeaponResource" load_steps=21 format=3 uid="uid://4nvp28pvjtk3"]
 
 [ext_resource type="Script" uid="uid://boo31eu083dqd" path="res://Entities/Stats/EffectSystemResources/StatusEffects/StatusEffect.gd" id="1_71p75"]
 [ext_resource type="Texture2D" uid="uid://c7i0hkkoanp61" path="res://Entities/Items/Weapons/ProjectileWeapons/Boomerang/boomerang_wood.png" id="1_83uvj"]
@@ -13,7 +13,6 @@
 [ext_resource type="Script" uid="uid://ct7n8wo1p3b20" path="res://Entities/Items/WeaponMods/WeaponMod.gd" id="6_rpj3x"]
 [ext_resource type="PackedScene" uid="uid://b6v13q8eomso" path="res://Entities/Items/Weapons/ProjectileWeapons/Boomerang/BoomerangWood.tscn" id="7_f3xvq"]
 [ext_resource type="Script" uid="uid://ctxa7i1mbt7ab" path="res://UI/Inventory/PlayerInventory/Crafting/CraftingIngredient.gd" id="8_280ga"]
-[ext_resource type="Resource" uid="uid://m8eslst1uuxh" path="res://Entities/Items/TRESItems/LightAmmo(0).tres" id="12_icge0"]
 
 [sub_resource type="Resource" id="Resource_3tpeu"]
 script = ExtResource("1_rpmcv")
@@ -132,23 +131,6 @@ aoe_effect_interval = 1.0
 aoe_effects_delay = 0.5
 aoe_sound = ""
 
-[sub_resource type="Resource" id="Resource_7d5hw"]
-script = ExtResource("8_280ga")
-type = "Item"
-item = ExtResource("12_icge0")
-quantity = 2
-tags = Array[StringName]([])
-rarity_match = "No"
-metadata/_custom_type_script = "uid://ctxa7i1mbt7ab"
-
-[sub_resource type="Resource" id="Resource_2ie8t"]
-script = ExtResource("8_280ga")
-type = "Tags"
-quantity = 1
-tags = Array[StringName]([&"tool"])
-rarity_match = "No"
-metadata/_custom_type_script = "uid://ctxa7i1mbt7ab"
-
 [sub_resource type="Resource" id="Resource_5tusj"]
 script = ExtResource("6_10jum")
 debug_print_mod_changes = false
@@ -238,7 +220,7 @@ inv_icon = ExtResource("1_83uvj")
 inv_icon_offset = Vector2(0, 0)
 inv_icon_scale = Vector2(1, 1)
 inv_icon_rotation = 0.0
-recipe = Array[ExtResource("8_280ga")]([SubResource("Resource_7d5hw"), SubResource("Resource_2ie8t")])
+recipe = Array[ExtResource("8_280ga")]([])
 output_quantity = 1
 recipe_unlocked = true
 item_scene = ExtResource("7_f3xvq")

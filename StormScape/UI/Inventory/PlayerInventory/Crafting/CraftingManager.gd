@@ -10,13 +10,15 @@ var cached_recipes: Dictionary[StringName, ItemResource] = {} ## All items keyed
 var item_to_recipes: Dictionary[StringName, Array] = {} ## Maps items to the list of recipes that include them.
 var tag_to_recipes: Dictionary[StringName, Array] = {} ## Maps tags to the list of recipes that include them.
 var input_slots: Array[CraftingSlot] = [] ## The slots that are used as inputs to craft.
+var is_crafting: bool = false ## When true, we shouldn't update the output slot since a craft is in progress.
 
 
 func _ready() -> void:
 	_cache_recipes()
+	output_slot.output_changed.connect(_on_output_slot_output_changed)
+	SignalBus.focused_ui_closed.connect(_on_focused_ui_closed)
 
-	output_slot.output_drag_started.connect(_on_output_drag_started)
-
+## This caches the items by their recipe ID at the start of the game.
 func _cache_recipes() -> void:
 	var dir: DirAccess = DirAccess.open(tres_folder)
 	if dir == null:
@@ -48,6 +50,14 @@ func _cache_recipes() -> void:
 		file_name = dir.get_next()
 	dir.list_dir_end()
 
+## Shows or hides the main craft button depending on whether a valid output is present.
+func _on_output_slot_output_changed(is_craftable: bool) -> void:
+	if is_craftable:
+		get_node("%Craft").modulate.a = 1.0
+	else:
+		get_node("%Craft").modulate.a = 0.0
+
+## This processes the items in the input slots so that they can be worked with faster by the other crafting functions.
 func _preprocess_selected_items() -> Dictionary[StringName, Dictionary]:
 	var item_quantities: Dictionary[StringName, Array] = {}
 	var tag_quantities: Dictionary[StringName, Array] = {}
@@ -72,6 +82,7 @@ func _preprocess_selected_items() -> Dictionary[StringName, Dictionary]:
 
 	return {&"items": item_quantities, &"tags": tag_quantities}
 
+## This checks to see if a passed-in item is craftable based on what we have in our input slots.
 func _is_item_craftable(item: ItemResource) -> bool:
 	var recipe: Array[CraftingIngredient] = item.recipe
 	var quantities: Dictionary[StringName, Dictionary] = _preprocess_selected_items()
@@ -96,8 +107,12 @@ func _is_item_craftable(item: ItemResource) -> bool:
 		if total_quantity < ingredient.quantity:
 			return false
 
+	if not _verify_exact_match(recipe):
+		return false
+
 	return true
 
+## This verifies that rarities match for ingredients if they are required to do so.
 func _check_rarity_condition(rarity_cond: String, req_rarity: GlobalData.ItemRarity,
 							item_rarity: GlobalData.ItemRarity) -> bool:
 	match rarity_cond:
@@ -108,6 +123,28 @@ func _check_rarity_condition(rarity_cond: String, req_rarity: GlobalData.ItemRar
 		"GEQ":
 			return item_rarity >= req_rarity
 	return false
+
+## This verifies that each slot contains something that contributes to the recipe.
+func _verify_exact_match(recipe: Array[CraftingIngredient]) -> bool:
+	for slot: CraftingSlot in input_slots:
+		if slot.item != null:
+			var allowed: bool = false
+			for ingredient: CraftingIngredient in recipe:
+				if ingredient.type == "Item":
+					if slot.item.stats.get_recipe_id() == ingredient.item.get_recipe_id():
+						allowed = true
+						break
+				elif ingredient.type == "Tags":
+					for tag: StringName in ingredient.tags:
+						if tag in slot.item.stats.tags:
+							allowed = true
+							break
+					if allowed:
+						break
+
+			if not allowed:
+				return false
+	return true
 
 ## Use the inverted lookups to get candidate recipes from the current items in the input.
 func _get_candidate_recipes() -> Array:
@@ -128,17 +165,20 @@ func _get_candidate_recipes() -> Array:
 
 ## Use candidate recipes for efficiency to only test the recipes that are even potentially craftable.
 func update_crafting_result() -> void:
+	if is_crafting:
+		return
+
 	var candidates: Array[StringName] = _get_candidate_recipes()
 	for recipe_id: StringName in candidates:
 		var item_resource: ItemResource = cached_recipes[recipe_id]
 		if _is_item_craftable(item_resource):
 			output_slot.item = InvItemResource.new(item_resource, item_resource.output_quantity)
-			output_slot.just_crafted = true
 			return
 
 	output_slot.item = null
 
-func consume_recipe(recipe: Array[CraftingIngredient]) -> void:
+## This consumes the ingredients in the recipe once the item is claimed. If it fails, it restores all quantities and returns false.
+func _consume_recipe(recipe: Array[CraftingIngredient]) -> bool:
 	var initial_quantities: Array[int] = []
 	for slot: CraftingSlot in input_slots:
 		if slot.item != null:
@@ -173,11 +213,27 @@ func consume_recipe(recipe: Array[CraftingIngredient]) -> void:
 			for i: int in range(input_slots.size()):
 				if input_slots[i].item != null:
 					input_slots[i].item.quantity = initial_quantities[i]
+			return false
 		else:
 			for slot: CraftingSlot in input_slots:
 				if slot.item != null:
 					if slot.item.quantity <= 0:
 						slot.item = null
 
-func _on_output_drag_started() -> void:
-	consume_recipe(output_slot.item.stats.recipe)
+	return true
+
+## This attempts to craft what is shown in the output slot by consuming the ingredients and granting the output item.
+func attempt_craft() -> void:
+	is_crafting = true
+
+	if _consume_recipe(output_slot.item.stats.recipe):
+		GlobalData.player_node.inv.add_item_from_inv_item_resource(output_slot.item, false)
+
+	is_crafting = false
+	update_crafting_result()
+
+func _on_focused_ui_closed() -> void:
+	for slot: CraftingSlot in input_slots:
+		if slot.item != null:
+			GlobalData.player_node.inv.add_item_from_inv_item_resource(slot.item, false)
+			slot.item = null

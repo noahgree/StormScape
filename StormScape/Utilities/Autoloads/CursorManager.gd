@@ -17,7 +17,7 @@ func _process(delta: float) -> void:
 	var entity_position: Vector2 = GlobalData.player_node.hands.hands_anchor.global_position
 	var to_mouse_vector: Vector2 = mouse_position - entity_position
 
-	if to_mouse_vector.length() < MAX_PROXIMITY_TO_CHAR:
+	if (to_mouse_vector.length() < MAX_PROXIMITY_TO_CHAR) and not GlobalData.focused_ui_is_open:
 		var target_angle: float = to_mouse_vector.angle()
 		var new_angle: float = lerp_angle(previous_angle, target_angle, 0.15)
 

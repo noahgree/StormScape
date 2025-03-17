@@ -10,6 +10,7 @@ class_name PlayerInvUI
 @onready var sort_by_type: NinePatchRect = %SortByType
 @onready var sort_by_rarity: NinePatchRect = %SortByRarity
 @onready var auto_stack: NinePatchRect = %AutoStack
+@onready var craft: NinePatchRect = %Craft
 
 var is_open: bool = false:
 	set(new_value):
@@ -76,3 +77,11 @@ func _on_auto_stack_btn_button_down() -> void:
 	auto_stack.texture = btn_down_texture
 func _on_auto_stack_btn_button_up() -> void:
 	auto_stack.texture = btn_up_texture
+
+## Attempts to craft whatever is shown in the output slot of the crafting UI.
+func _on_craft_btn_pressed() -> void:
+	get_node("%CraftingManager").attempt_craft()
+func _on_craft_btn_button_down() -> void:
+	craft.texture = btn_down_texture
+func _on_craft_btn_button_up() -> void:
+	craft.texture = btn_up_texture

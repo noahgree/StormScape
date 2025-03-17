@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="ProjWeaponResource" load_steps=38 format=3 uid="uid://ciel2rrqq4dvv"]
+[gd_resource type="Resource" script_class="ProjWeaponResource" load_steps=34 format=3 uid="uid://ciel2rrqq4dvv"]
 
 [ext_resource type="Script" uid="uid://boo31eu083dqd" path="res://Entities/Stats/EffectSystemResources/StatusEffects/StatusEffect.gd" id="2_gdqw7"]
 [ext_resource type="Script" uid="uid://ct7n8wo1p3b20" path="res://Entities/Items/WeaponMods/WeaponMod.gd" id="2_si0as"]
@@ -15,8 +15,6 @@
 [ext_resource type="Script" uid="uid://bj3r5oopspj6l" path="res://Entities/Items/Projectiles/ProjectileResource.gd" id="6_ll0mi"]
 [ext_resource type="PackedScene" uid="uid://baxpb3crwepc0" path="res://Entities/Items/Weapons/ProjectileWeapons/LaserGun/LaserGun.tscn" id="11_ykm1j"]
 [ext_resource type="Script" uid="uid://ctxa7i1mbt7ab" path="res://UI/Inventory/PlayerInventory/Crafting/CraftingIngredient.gd" id="14_c7ib1"]
-[ext_resource type="Resource" uid="uid://m8eslst1uuxh" path="res://Entities/Items/TRESItems/LightAmmo(0).tres" id="15_l541q"]
-[ext_resource type="Resource" uid="uid://cx1ydw2jde1y8" path="res://Entities/Items/TRESItems/Apple(0).tres" id="16_t22lp"]
 [ext_resource type="Script" uid="uid://c2gdoebfp12dq" path="res://Entities/Stats/StatMod/StatModsCacheResource.gd" id="17_ayb4m"]
 [ext_resource type="Script" uid="uid://dvasncq3tgljs" path="res://Entities/Items/Weapons/ProjectileWeapons/ProjWeaponResource.gd" id="18_1rmpi"]
 
@@ -165,22 +163,6 @@ aoe_effect_interval = 1.0
 aoe_effects_delay = 0.5
 aoe_sound = ""
 
-[sub_resource type="Resource" id="Resource_ct7xl"]
-script = ExtResource("14_c7ib1")
-type = "Item"
-item = ExtResource("15_l541q")
-quantity = 3
-tags = Array[StringName]([])
-rarity_match = "No"
-
-[sub_resource type="Resource" id="Resource_0uuw3"]
-script = ExtResource("14_c7ib1")
-type = "Item"
-item = ExtResource("16_t22lp")
-quantity = 2
-tags = Array[StringName]([])
-rarity_match = "No"
-
 [sub_resource type="Resource" id="Resource_wi7kk"]
 script = ExtResource("17_ayb4m")
 debug_print_mod_changes = true
@@ -289,9 +271,9 @@ inv_icon = ExtResource("4_v1b1g")
 inv_icon_offset = Vector2(1, 0)
 inv_icon_scale = Vector2(0.86, 0.86)
 inv_icon_rotation = -38.0
-recipe = Array[ExtResource("14_c7ib1")]([SubResource("Resource_ct7xl"), SubResource("Resource_0uuw3")])
+recipe = Array[ExtResource("14_c7ib1")]([])
 output_quantity = 1
-recipe_unlocked = false
+recipe_unlocked = true
 item_scene = ExtResource("11_ykm1j")
 rotation_lerping = 0.15
 holding_offset = Vector2(0, 0)

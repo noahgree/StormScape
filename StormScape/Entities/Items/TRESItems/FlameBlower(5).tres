@@ -1,22 +1,22 @@
 [gd_resource type="Resource" script_class="ProjWeaponResource" load_steps=28 format=3 uid="uid://dpmwqsai6gxsr"]
 
-[ext_resource type="PackedScene" uid="uid://dxv8dhn3gmufw" path="res://Entities/Items/Weapons/ProjectileWeapons/FlameBlower/FlameBlower.tscn" id="1_2lqvl"]
-[ext_resource type="Script" uid="uid://dkfssottmsrch" path="res://Entities/Stats/EffectSystemResources/EffectSources/EffectSource.gd" id="1_qrb8v"]
-[ext_resource type="Script" uid="uid://boo31eu083dqd" path="res://Entities/Stats/EffectSystemResources/StatusEffects/StatusEffect.gd" id="1_sti8o"]
-[ext_resource type="Script" uid="uid://dvasncq3tgljs" path="res://Entities/Items/Weapons/ProjectileWeapons/ProjWeaponResource.gd" id="3_58le7"]
-[ext_resource type="PackedScene" uid="uid://dynh8j4rfi62r" path="res://Entities/Items/Projectiles/Flame/Flame.tscn" id="5_4ypmg"]
-[ext_resource type="Script" uid="uid://cje5bobi6o8bo" path="res://Entities/Items/Hitscans/HitscanResource.gd" id="5_i2wga"]
-[ext_resource type="Texture2D" uid="uid://bhse86b50y7vx" path="res://Entities/Items/Weapons/ProjectileWeapons/FlameBlower/FlameBlowerBaseFrameCT.tres" id="5_iem60"]
-[ext_resource type="Resource" uid="uid://cl4lqk1b8bquo" path="res://Entities/Player/PlayerCore/PlayerCamera/CamFXPresets/0.tres" id="5_uwbst"]
-[ext_resource type="Script" uid="uid://c2gdoebfp12dq" path="res://Entities/Stats/StatMod/StatModsCacheResource.gd" id="6_13gru"]
-[ext_resource type="Script" uid="uid://ct7n8wo1p3b20" path="res://Entities/Items/WeaponMods/WeaponMod.gd" id="6_31ep3"]
-[ext_resource type="Resource" uid="uid://c8reitxej77jy" path="res://Entities/Stats/EffectSystemResources/StatusEffects/BadEffects/Burning/Burning1FlameBlower.tres" id="6_l8ogr"]
-[ext_resource type="Texture2D" uid="uid://dwtjxkvqe21h4" path="res://Entities/Items/Weapons/ProjectileWeapons/FlameBlower/flame_blower_base_frame.png" id="7_dkcnt"]
-[ext_resource type="Script" uid="uid://bj3r5oopspj6l" path="res://Entities/Items/Projectiles/ProjectileResource.gd" id="7_hqj7u"]
-[ext_resource type="Script" uid="uid://ctxa7i1mbt7ab" path="res://UI/Inventory/PlayerInventory/Crafting/CraftingIngredient.gd" id="9_h3bvq"]
+[ext_resource type="Script" uid="uid://ct7n8wo1p3b20" path="res://Entities/Items/WeaponMods/WeaponMod.gd" id="1_5cw7p"]
+[ext_resource type="Script" uid="uid://dkfssottmsrch" path="res://Entities/Stats/EffectSystemResources/EffectSources/EffectSource.gd" id="2_hrsx2"]
+[ext_resource type="Script" uid="uid://boo31eu083dqd" path="res://Entities/Stats/EffectSystemResources/StatusEffects/StatusEffect.gd" id="3_frpgg"]
+[ext_resource type="Resource" uid="uid://c8reitxej77jy" path="res://Entities/Stats/EffectSystemResources/StatusEffects/BadEffects/Burning/Burning1FlameBlower.tres" id="4_qt8af"]
+[ext_resource type="Resource" uid="uid://cl4lqk1b8bquo" path="res://Entities/Player/PlayerCore/PlayerCamera/CamFXPresets/0.tres" id="5_ifwgd"]
+[ext_resource type="Texture2D" uid="uid://bhse86b50y7vx" path="res://Entities/Items/Weapons/ProjectileWeapons/FlameBlower/FlameBlowerBaseFrameCT.tres" id="6_1teer"]
+[ext_resource type="Script" uid="uid://cje5bobi6o8bo" path="res://Entities/Items/Hitscans/HitscanResource.gd" id="7_8pg8v"]
+[ext_resource type="Texture2D" uid="uid://dwtjxkvqe21h4" path="res://Entities/Items/Weapons/ProjectileWeapons/FlameBlower/flame_blower_base_frame.png" id="8_l60l2"]
+[ext_resource type="PackedScene" uid="uid://dxv8dhn3gmufw" path="res://Entities/Items/Weapons/ProjectileWeapons/FlameBlower/FlameBlower.tscn" id="9_oeawo"]
+[ext_resource type="Script" uid="uid://bj3r5oopspj6l" path="res://Entities/Items/Projectiles/ProjectileResource.gd" id="10_j0n2n"]
+[ext_resource type="PackedScene" uid="uid://dynh8j4rfi62r" path="res://Entities/Items/Projectiles/Flame/Flame.tscn" id="11_k0chh"]
+[ext_resource type="Script" uid="uid://ctxa7i1mbt7ab" path="res://UI/Inventory/PlayerInventory/Crafting/CraftingIngredient.gd" id="12_l504l"]
+[ext_resource type="Script" uid="uid://c2gdoebfp12dq" path="res://Entities/Stats/StatMod/StatModsCacheResource.gd" id="13_dbx0m"]
+[ext_resource type="Script" uid="uid://dvasncq3tgljs" path="res://Entities/Items/Weapons/ProjectileWeapons/ProjWeaponResource.gd" id="14_1nf74"]
 
 [sub_resource type="Resource" id="Resource_xjta8"]
-script = ExtResource("1_qrb8v")
+script = ExtResource("2_hrsx2")
 source_type = 1
 source_tags = Array[String]([])
 scanned_phys_layers = 191
@@ -32,13 +32,13 @@ base_healing = 0
 heal_affected_stats = 2
 impact_sound = ""
 hit_flash_color = Color(1, 1, 1, 0.6)
-status_effects = Array[ExtResource("1_sti8o")]([ExtResource("6_l8ogr")])
+status_effects = Array[ExtResource("3_frpgg")]([ExtResource("4_qt8af")])
 contact_position = Vector2(0, 0)
 movement_direction = Vector2(0, 0)
 multishot_id = -1
 
 [sub_resource type="Resource" id="Resource_awnew"]
-script = ExtResource("5_i2wga")
+script = ExtResource("7_8pg8v")
 hitscan_duration = 0.0
 hitscan_effect_interval = -1.0
 hitscan_pierce_count = 0
@@ -83,7 +83,7 @@ _data = [Vector2(0, 1), 0.0, 0.0, 0, 0]
 point_count = 1
 
 [sub_resource type="Resource" id="Resource_fa03q"]
-script = ExtResource("7_hqj7u")
+script = ExtResource("10_j0n2n")
 speed = 200
 speed_curve = SubResource("Curve_wsuli")
 initial_boost_time = 0.0
@@ -146,7 +146,7 @@ aoe_effects_delay = 0.5
 aoe_sound = ""
 
 [sub_resource type="Resource" id="Resource_7cfgi"]
-script = ExtResource("6_13gru")
+script = ExtResource("13_dbx0m")
 debug_print_mod_changes = false
 
 [sub_resource type="Curve" id="Curve_lm546"]
@@ -162,10 +162,10 @@ _data = [Vector2(0, 0.08), 0.0, 0.0, 0, 0, Vector2(1, 0.13), 0.0, 0.0, 0, 0]
 point_count = 2
 
 [resource]
-script = ExtResource("3_58le7")
+script = ExtResource("14_1nf74")
 proj_weapon_type = 9
 firing_mode = "Auto"
-projectile_scn = ExtResource("5_4ypmg")
+projectile_scn = ExtResource("11_k0chh")
 firing_duration = 0.03
 fire_cooldown = 0.03
 min_charge_time = 1.0
@@ -174,7 +174,7 @@ override_anim_dur = 0.0
 anim_speed_mult = 1.0
 post_fire_anim_delay = 0.0
 post_fire_anim_dur = 0.0
-firing_cam_fx = ExtResource("5_uwbst")
+firing_cam_fx = ExtResource("5_ifwgd")
 casing_tint = Color(1, 1, 1, 1)
 firing_sound = ""
 post_fire_sound = ""
@@ -234,28 +234,28 @@ pullout_delay = 0.25
 blocked_mods = Array[String]([])
 cache_is_setup = false
 weapon_mods_need_to_be_readded_after_save = false
-current_mods = Dictionary[StringName, ExtResource("6_31ep3")]({})
-original_status_effects = Array[ExtResource("1_sti8o")]([])
-original_charge_status_effects = Array[ExtResource("1_sti8o")]([])
+current_mods = Dictionary[StringName, ExtResource("1_5cw7p")]({})
+original_status_effects = Array[ExtResource("3_frpgg")]([])
+original_charge_status_effects = Array[ExtResource("3_frpgg")]([])
 id = "flame_blower"
 name = "Flame Blower"
 tags = Array[StringName]([])
 item_type = 1
-rarity = 4
+rarity = 5
 stack_size = 1
 auto_pickup = false
 pickup_radius = 6
 info = "Not quite a flame thrower..."
-ground_icon = ExtResource("5_iem60")
-in_hand_icon = ExtResource("5_iem60")
-inv_icon = ExtResource("7_dkcnt")
+ground_icon = ExtResource("6_1teer")
+in_hand_icon = ExtResource("6_1teer")
+inv_icon = ExtResource("8_l60l2")
 inv_icon_offset = Vector2(-0.5, -0.5)
 inv_icon_scale = Vector2(1.32, 1.32)
 inv_icon_rotation = -45.0
-recipe = Array[ExtResource("9_h3bvq")]([])
+recipe = Array[ExtResource("12_l504l")]([])
 output_quantity = 1
-recipe_unlocked = false
-item_scene = ExtResource("1_2lqvl")
+recipe_unlocked = true
+item_scene = ExtResource("9_oeawo")
 rotation_lerping = 0.055
 holding_offset = Vector2(3, -1)
 holding_degrees = 0.0
