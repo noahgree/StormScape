@@ -1,6 +1,5 @@
-[gd_resource type="Resource" script_class="ProjWeaponResource" load_steps=28 format=3 uid="uid://dpmwqsai6gxsr"]
+[gd_resource type="Resource" script_class="ProjWeaponResource" load_steps=27 format=3 uid="uid://dpmwqsai6gxsr"]
 
-[ext_resource type="Script" uid="uid://ct7n8wo1p3b20" path="res://Entities/Items/WeaponMods/WeaponMod.gd" id="1_5cw7p"]
 [ext_resource type="Script" uid="uid://dkfssottmsrch" path="res://Entities/Stats/EffectSystemResources/EffectSources/EffectSource.gd" id="2_hrsx2"]
 [ext_resource type="Script" uid="uid://boo31eu083dqd" path="res://Entities/Stats/EffectSystemResources/StatusEffects/StatusEffect.gd" id="3_frpgg"]
 [ext_resource type="Resource" uid="uid://c8reitxej77jy" path="res://Entities/Stats/EffectSystemResources/StatusEffects/BadEffects/Burning/Burning1FlameBlower.tres" id="4_qt8af"]
@@ -231,10 +230,17 @@ allow_hitscan_holding = true
 ammo_in_mag = -1
 s_mods = SubResource("Resource_7cfgi")
 pullout_delay = 0.25
-blocked_mods = Array[String]([])
+blocked_mods = Array[StringName]([&"extended_mag"])
+block_all_mods = false
 cache_is_setup = false
 weapon_mods_need_to_be_readded_after_save = false
-current_mods = Dictionary[StringName, ExtResource("1_5cw7p")]({})
+current_mods = Array[Dictionary]([{
+&"1": null
+}, {
+&"2": null
+}, {
+&"3": null
+}])
 original_status_effects = Array[ExtResource("3_frpgg")]([])
 original_charge_status_effects = Array[ExtResource("3_frpgg")]([])
 id = "flame_blower"

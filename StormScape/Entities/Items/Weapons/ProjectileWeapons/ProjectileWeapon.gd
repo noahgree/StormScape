@@ -88,51 +88,55 @@ func _set_stats(new_stats: ItemResource) -> void:
 		stats.s_mods = stats.s_mods.duplicate()
 		stats.effect_source = stats.effect_source.duplicate()
 		stats.original_status_effects = stats.effect_source.status_effects.duplicate()
-		_setup_mod_cache()
+		ProjectileWeapon.setup_mod_cache(stats)
 
 ## Sets up the base values for the stat mod cache so that weapon mods can be added and managed properly.
-func _setup_mod_cache() -> void:
+static func setup_mod_cache(stats_resource: ProjWeaponResource) -> void:
 	var normal_moddable_stats: Dictionary[StringName, float] = {
-		&"fire_cooldown" : stats.fire_cooldown,
-		&"min_charge_time" : stats.min_charge_time,
-		&"mag_size" : stats.mag_size,
-		&"mag_reload_time" : stats.mag_reload_time,
-		&"single_proj_reload_time" : stats.single_proj_reload_time,
-		&"single_reload_quantity" : stats.single_reload_quantity,
-		&"auto_ammo_interval" : stats.auto_ammo_interval,
-		&"auto_ammo_count" : stats.auto_ammo_count,
-		&"pullout_delay" : stats.pullout_delay,
-		&"max_bloom" : stats.max_bloom,
+		&"fire_cooldown" : stats_resource.fire_cooldown,
+		&"min_charge_time" : stats_resource.min_charge_time,
+		&"mag_size" : stats_resource.mag_size,
+		&"mag_reload_time" : stats_resource.mag_reload_time,
+		&"single_proj_reload_time" : stats_resource.single_proj_reload_time,
+		&"single_reload_quantity" : stats_resource.single_reload_quantity,
+		&"auto_ammo_interval" : stats_resource.auto_ammo_interval,
+		&"auto_ammo_count" : stats_resource.auto_ammo_count,
+		&"pullout_delay" : stats_resource.pullout_delay,
+		&"max_bloom" : stats_resource.max_bloom,
 		&"bloom_increase_rate_multiplier" : 1.0,
 		&"bloom_decrease_rate_multiplier" : 1.0,
-		&"initial_fire_rate_delay" : stats.initial_fire_rate_delay,
+		&"initial_fire_rate_delay" : stats_resource.initial_fire_rate_delay,
 		&"warmup_increase_rate_multiplier" : 1.0,
-		&"overheat_penalty" : stats.overheat_penalty,
+		&"overheat_penalty" : stats_resource.overheat_penalty,
 		&"overheat_increase_rate_multiplier" : 1.0,
-		&"projectiles_per_fire" : stats.projectiles_per_fire,
-		&"barrage_count" : stats.barrage_count,
-		&"angular_spread" : stats.angular_spread,
-		&"base_damage" : stats.effect_source.base_damage,
-		&"base_healing" : stats.effect_source.base_healing,
-		&"crit_chance" : stats.effect_source.crit_chance,
-		&"armor_penetration" : stats.effect_source.armor_penetration,
-		&"proj_speed" : stats.projectile_logic.speed,
-		&"proj_max_distance" : stats.projectile_logic.max_distance,
-		&"proj_max_pierce" : stats.projectile_logic.max_pierce,
-		&"proj_max_ricochet" : stats.projectile_logic.max_ricochet,
-		&"proj_max_turn_rate" : stats.projectile_logic.max_turn_rate,
-		&"proj_homing_duration" : stats.projectile_logic.homing_duration,
-		&"proj_arc_travel_distance" : stats.projectile_logic.arc_travel_distance,
-		&"proj_bounce_count" : stats.projectile_logic.bounce_count,
-		&"proj_aoe_radius" : stats.projectile_logic.aoe_radius,
-		&"hitscan_duration" : stats.hitscan_logic.hitscan_duration,
-		&"hitscan_effect_interval" : stats.hitscan_logic.hitscan_effect_interval,
-		&"hitscan_pierce_count" : stats.hitscan_logic.hitscan_pierce_count,
-		&"hitscan_max_distance" : stats.hitscan_logic.hitscan_max_distance
+		&"projectiles_per_fire" : stats_resource.projectiles_per_fire,
+		&"barrage_count" : stats_resource.barrage_count,
+		&"angular_spread" : stats_resource.angular_spread,
+		&"base_damage" : stats_resource.effect_source.base_damage,
+		&"base_healing" : stats_resource.effect_source.base_healing,
+		&"crit_chance" : stats_resource.effect_source.crit_chance,
+		&"armor_penetration" : stats_resource.effect_source.armor_penetration,
+		&"proj_speed" : stats_resource.projectile_logic.speed,
+		&"proj_max_distance" : stats_resource.projectile_logic.max_distance,
+		&"proj_max_pierce" : stats_resource.projectile_logic.max_pierce,
+		&"proj_max_ricochet" : stats_resource.projectile_logic.max_ricochet,
+		&"proj_max_turn_rate" : stats_resource.projectile_logic.max_turn_rate,
+		&"proj_homing_duration" : stats_resource.projectile_logic.homing_duration,
+		&"proj_arc_travel_distance" : stats_resource.projectile_logic.arc_travel_distance,
+		&"proj_bounce_count" : stats_resource.projectile_logic.bounce_count,
+		&"proj_aoe_radius" : stats_resource.projectile_logic.aoe_radius,
+		&"hitscan_duration" : stats_resource.hitscan_logic.hitscan_duration,
+		&"hitscan_effect_interval" : stats_resource.hitscan_logic.hitscan_effect_interval,
+		&"hitscan_pierce_count" : stats_resource.hitscan_logic.hitscan_pierce_count,
+		&"hitscan_max_distance" : stats_resource.hitscan_logic.hitscan_max_distance
 	}
 
-	stats.s_mods.add_moddable_stats(normal_moddable_stats)
-	stats.cache_is_setup = true
+	stats_resource.s_mods.add_moddable_stats(normal_moddable_stats)
+
+	if (stats_resource.ammo_in_mag == -1) and (stats_resource.ammo_type != ProjWeaponResource.ProjAmmoType.STAMINA):
+		stats_resource.ammo_in_mag = int(stats_resource.s_mods.get_stat("mag_size"))
+
+	stats_resource.cache_is_setup = true
 
 func _ready() -> void:
 	if Engine.is_editor_hint():
@@ -174,13 +178,9 @@ func enable() -> void:
 
 func enter() -> void:
 	if stats.s_mods.base_values.is_empty():
-		_setup_mod_cache()
+		ProjectileWeapon.setup_mod_cache(stats)
 
-	# The first time a weapon resource is loaded it has a default ammo_in_mag value of -1, this takes care of setting it to mag_size
-	if (stats.ammo_in_mag == -1) and (stats.ammo_type != ProjWeaponResource.ProjAmmoType.STAMINA):
-		stats.ammo_in_mag = stats.s_mods.get_stat("mag_size")
-	else:
-		_get_has_needed_ammo_and_reload_if_not()
+	_get_has_needed_ammo_and_reload_if_not()
 	_update_ammo_ui()
 
 	# Checking to see if we are out of ammo and should reload upon equipping
@@ -204,8 +204,7 @@ func enter() -> void:
 	_check_if_needs_mouse_area_scanner()
 
 	if stats.weapon_mods_need_to_be_readded_after_save:
-		for weapon_mod: WeaponMod in stats.current_mods.values():
-			weapon_mod_manager.handle_weapon_mod(weapon_mod)
+		source_entity.hands.weapon_mod_manager.add_all_mods_to_weapon(stats)
 		stats.weapon_mods_need_to_be_readded_after_save = false
 
 func exit() -> void:

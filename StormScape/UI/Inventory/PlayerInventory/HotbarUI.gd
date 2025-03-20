@@ -2,13 +2,13 @@ extends NinePatchRect
 class_name HotbarUI
 ## The player's hotbar UI controller. Handles logic for the hotbar shown when the inventory is not open.
 
-@export var slot_scene: PackedScene = preload("res://UI/Inventory/InventoryCore/Slot/Slot.tscn") ## The slot scene to be instantiated as children.
+@export var slot_scene: PackedScene = preload("res://UI/Inventory/InventoryCore/Slot/SlotCore/Slot.tscn") ## The slot scene to be instantiated as children.
 @export var player_inv: Inventory ## The connected player inventory to reflect as a UI.
 @export var active_slot_info: MarginContainer ## The node that controls displaying the info about the active slot.
 
 @onready var hotbar: HBoxContainer = %HotbarUISlotGrid ## The container that holds the hotbar slots.
-@onready var scroll_debounce_timer: Timer = $ScrollDebounceTimer ## A timer used in debug that restricts scrolling speed of the slots.
 
+var scroll_debounce_timer: Timer = TimerHelpers.create_one_shot_timer(self, 0.1) ## A timer used in debug that restricts scrolling speed of the slots.
 var hotbar_slots: Array[Slot] = [] ## Local representation of the hotbar slots, updated when changed externally.
 var active_slot: Slot ## The slot that is currently selected in the hotbar and potentially contains an equipped item.
 
@@ -30,7 +30,8 @@ func _setup_slots() -> void:
 
 	for i: int in range(player_inv.hotbar_size):
 		var slot: Slot = slot_scene.instantiate()
-		slot.is_hotbar_ui_preview_slot = true
+		slot.name = "Hotbar_HUD_Slot_" + str(i)
+		slot.is_hud_ui_preview_slot = true
 		slot.synced_inv = player_inv
 		slot.index = (player_inv.inv_size - player_inv.hotbar_size) + i
 		hotbar_slots.append(slot)
@@ -59,8 +60,9 @@ func _on_slot_updated(index: int, item: InvItemResource) -> void:
 	_default_ammo_update_method() # Called after the hotbar item is updated above to reflect the new item
 	update_hotbar_tint_progresses()
 
-## Updates the hands component with the new active slot and associated item if any. Then updates the UI for the new item
-## name. This must happen here since the signal's order isn't guaranteed, and we need the active slot to update first.
+## Updates the hands component with the new active slot and associated item if any. Then updates the
+## UI for the new item name. This must happen here since the signal's order isn't guaranteed,
+## and we need the active slot to update first.
 func _update_hands_about_new_active_item() -> void:
 	GlobalData.player_node.hands.on_equipped_item_change(active_slot)
 
@@ -132,7 +134,8 @@ func _change_active_slot_by_count(index_count: int) -> void:
 	_update_inv_ammo_ui()
 	_default_ammo_update_method()
 
-## Changes the active slot relative to the full size of the inventory. Used at game load when restoring the active slot.
+## Changes the active slot relative to the full size of the inventory.
+## Used at game load when restoring the active slot.
 func _change_active_slot_to_index_relative_to_full_inventory_size(new_index: int) -> void:
 	await get_tree().process_frame # Need to wait for the slots to be updated with the items before signaling the hands component
 	_remove_selected_slot_fx()
@@ -156,8 +159,8 @@ func _apply_selected_slot_fx() -> void:
 	active_slot.scale = Vector2(1.15, 1.15)
 	active_slot.z_index = 1
 
-## When the visibility of the hotbar changes, make sure to reapply the texture and scaling fx to the active slot if it is visible
-## again.
+## When the visibility of the hotbar changes, make sure to reapply the texture and scaling fx to the
+## active slot if it is visible again.
 func _on_visibility_changed() -> void:
 	if visible and is_node_ready():
 		await get_tree().process_frame

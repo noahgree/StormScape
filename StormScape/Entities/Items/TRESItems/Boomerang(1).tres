@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="ProjWeaponResource" load_steps=21 format=3 uid="uid://4nvp28pvjtk3"]
+[gd_resource type="Resource" script_class="ProjWeaponResource" load_steps=20 format=3 uid="uid://4nvp28pvjtk3"]
 
 [ext_resource type="Script" uid="uid://boo31eu083dqd" path="res://Entities/Stats/EffectSystemResources/StatusEffects/StatusEffect.gd" id="1_71p75"]
 [ext_resource type="Texture2D" uid="uid://c7i0hkkoanp61" path="res://Entities/Items/Weapons/ProjectileWeapons/Boomerang/boomerang_wood.png" id="1_83uvj"]
@@ -10,7 +10,6 @@
 [ext_resource type="Texture2D" uid="uid://ln38htpivqou" path="res://Entities/Items/Weapons/ProjectileWeapons/Boomerang/BoomerangWoodCT.tres" id="4_w0uge"]
 [ext_resource type="PackedScene" uid="uid://vdrq4v5hjc06" path="res://Entities/Items/Projectiles/Boomerangs/BoomerangWoodProj.tscn" id="5_ixbes"]
 [ext_resource type="Script" uid="uid://c2gdoebfp12dq" path="res://Entities/Stats/StatMod/StatModsCacheResource.gd" id="6_10jum"]
-[ext_resource type="Script" uid="uid://ct7n8wo1p3b20" path="res://Entities/Items/WeaponMods/WeaponMod.gd" id="6_rpj3x"]
 [ext_resource type="PackedScene" uid="uid://b6v13q8eomso" path="res://Entities/Items/Weapons/ProjectileWeapons/Boomerang/BoomerangWood.tscn" id="7_f3xvq"]
 [ext_resource type="Script" uid="uid://ctxa7i1mbt7ab" path="res://UI/Inventory/PlayerInventory/Crafting/CraftingIngredient.gd" id="8_280ga"]
 
@@ -199,10 +198,17 @@ allow_hitscan_holding = true
 ammo_in_mag = -1
 s_mods = SubResource("Resource_5tusj")
 pullout_delay = 0.3
-blocked_mods = Array[String]([])
+blocked_mods = Array[StringName]([])
+block_all_mods = false
 cache_is_setup = false
 weapon_mods_need_to_be_readded_after_save = false
-current_mods = Dictionary[StringName, ExtResource("6_rpj3x")]({})
+current_mods = Array[Dictionary]([{
+&"1": null
+}, {
+&"2": null
+}, {
+&"3": null
+}])
 original_status_effects = Array[ExtResource("1_71p75")]([])
 original_charge_status_effects = Array[ExtResource("1_71p75")]([])
 id = "boomerang"

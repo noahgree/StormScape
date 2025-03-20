@@ -1,11 +1,9 @@
-[gd_scene load_steps=14 format=3 uid="uid://dq57qggohi76w"]
+[gd_scene load_steps=12 format=3 uid="uid://dq57qggohi76w"]
 
-[ext_resource type="Script" uid="uid://b67bgqwsld0w4" path="res://Entities/Items/Weapons/ProjectileWeapons/UniqueProjWeapon.gd" id="1_rl00v"]
-[ext_resource type="PackedScene" uid="uid://ciylpe2ihjno1" path="res://Entities/Items/Weapons/WeaponVFX/Casings/Casing.tscn" id="3_hoksd"]
+[ext_resource type="Script" uid="uid://ca8xdltgdyjys" path="res://Entities/Items/Weapons/ProjectileWeapons/ProjectileWeapon.gd" id="1_8b1is"]
 [ext_resource type="Texture2D" uid="uid://cqsoww8i0aya3" path="res://Entities/Items/Weapons/ProjectileWeapons/Boomerang/BoomerangSteelCT.tres" id="4_1pg7u"]
 [ext_resource type="Shader" uid="uid://0iw7utoi4lxy" path="res://Utilities/Game/Shaders/TintAndGlowUnshaded.gdshader" id="4_hoksd"]
 [ext_resource type="PackedScene" uid="uid://lw5fgm5pgoif" path="res://Entities/EntityCore/Sprites/EntityHandSprite.tscn" id="5_1pg7u"]
-[ext_resource type="PackedScene" uid="uid://batrfwan8r8ov" path="res://Entities/Items/WeaponMods/WeaponModManager.tscn" id="5_745ap"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_78dqe"]
 shader = ExtResource("4_hoksd")
@@ -188,8 +186,7 @@ radius = 4.24264
 height = 18.3848
 
 [node name="BoomerangSteel" type="Node2D" node_paths=PackedStringArray("sprites_to_tint")]
-script = ExtResource("1_rl00v")
-casing_scene = ExtResource("3_hoksd")
+script = ExtResource("1_8b1is")
 sprites_to_tint = [NodePath("ItemSprite")]
 
 [node name="ItemSprite" type="AnimatedSprite2D" parent="."]
@@ -207,8 +204,6 @@ libraries = {
 
 [node name="MainHandSprite" parent="." instance=ExtResource("5_1pg7u")]
 position = Vector2(-5, 5)
-
-[node name="WeaponModManager" parent="." instance=ExtResource("5_745ap")]
 
 [node name="ClippingDetector" type="Area2D" parent="."]
 collision_layer = 0

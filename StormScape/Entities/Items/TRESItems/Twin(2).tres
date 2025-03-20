@@ -1,7 +1,6 @@
-[gd_resource type="Resource" script_class="ProjWeaponResource" load_steps=32 format=3 uid="uid://dy8rwyeyusim7"]
+[gd_resource type="Resource" script_class="ProjWeaponResource" load_steps=31 format=3 uid="uid://dy8rwyeyusim7"]
 
 [ext_resource type="Texture2D" uid="uid://bm570hawaupxe" path="res://Entities/Items/Weapons/WeaponVFX/Casings/small_casing.png" id="1_iu0as"]
-[ext_resource type="Script" uid="uid://ct7n8wo1p3b20" path="res://Entities/Items/WeaponMods/WeaponMod.gd" id="2_m86me"]
 [ext_resource type="Script" uid="uid://dkfssottmsrch" path="res://Entities/Stats/EffectSystemResources/EffectSources/EffectSource.gd" id="3_vp4wp"]
 [ext_resource type="Script" uid="uid://boo31eu083dqd" path="res://Entities/Stats/EffectSystemResources/StatusEffects/StatusEffect.gd" id="4_prcay"]
 [ext_resource type="Resource" uid="uid://cev0y0oe3igus" path="res://Entities/Player/PlayerCore/PlayerCamera/CamFXPresets/6.tres" id="5_lo1fw"]
@@ -248,10 +247,17 @@ allow_hitscan_holding = true
 ammo_in_mag = -1
 s_mods = SubResource("Resource_gimit")
 pullout_delay = 0.3
-blocked_mods = Array[String]([])
+blocked_mods = Array[StringName]([])
+block_all_mods = false
 cache_is_setup = false
 weapon_mods_need_to_be_readded_after_save = false
-current_mods = Dictionary[StringName, ExtResource("2_m86me")]({})
+current_mods = Array[Dictionary]([{
+&"1": null
+}, {
+&"2": null
+}, {
+&"3": null
+}])
 original_status_effects = Array[ExtResource("4_prcay")]([])
 original_charge_status_effects = Array[ExtResource("4_prcay")]([])
 id = "twin"

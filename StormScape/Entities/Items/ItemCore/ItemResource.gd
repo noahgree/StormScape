@@ -77,7 +77,8 @@ func get_cooldown_id() -> StringName:
 func is_same_as(other_item: ItemResource) -> bool:
 	return (str(self) == str(other_item))
 
-## Custom duplication method that passes the old session_uid as a negative in order to trick the setter function to keeping it.
+## Custom duplication method that passes the old session_uid as a negative in order to trick the setter
+## function to keeping it.
 func duplicate_with_suid(duplicate_subresources: bool = false) -> ItemResource:
 	var duplicated: ItemResource = self.duplicate(duplicate_subresources)
 	duplicated.session_uid = -session_uid

@@ -26,36 +26,36 @@ func _set_stats(new_stats: ItemResource) -> void:
 		stats.charge_effect_source = stats.charge_effect_source.duplicate()
 		stats.original_status_effects = stats.effect_source.status_effects.duplicate()
 		stats.original_charge_status_effects = stats.charge_effect_source.status_effects.duplicate()
-		_setup_mod_cache()
+		MeleeWeapon.setup_mod_cache(stats)
 
 ## Sets up the base values for the stat mod cache so that weapon mods can be added and managed properly.
-func _setup_mod_cache() -> void:
+static func setup_mod_cache(stats_resource: MeleeWeaponResource) -> void:
 	var normal_moddable_stats: Dictionary[StringName, float] = {
-		&"stamina_cost" : stats.stamina_cost,
-		&"cooldown" : stats.cooldown,
-		&"use_speed" : stats.use_speed,
-		&"swing_angle" : stats.swing_angle,
-		&"base_damage" : stats.effect_source.base_damage,
-		&"base_healing" : stats.effect_source.base_healing,
-		&"crit_chance" : stats.effect_source.crit_chance,
-		&"armor_penetration" : stats.effect_source.armor_penetration,
-		&"pullout_delay" : stats.pullout_delay
+		&"stamina_cost" : stats_resource.stamina_cost,
+		&"cooldown" : stats_resource.cooldown,
+		&"use_speed" : stats_resource.use_speed,
+		&"swing_angle" : stats_resource.swing_angle,
+		&"base_damage" : stats_resource.effect_source.base_damage,
+		&"base_healing" : stats_resource.effect_source.base_healing,
+		&"crit_chance" : stats_resource.effect_source.crit_chance,
+		&"armor_penetration" : stats_resource.effect_source.armor_penetration,
+		&"pullout_delay" : stats_resource.pullout_delay
 	}
 	var charge_moddable_stats: Dictionary[StringName, float] = {
-		&"min_charge_time" : stats.min_charge_time,
-		&"charge_stamina_cost" : stats.charge_stamina_cost,
-		&"charge_use_cooldown" : stats.charge_use_cooldown,
-		&"charge_use_speed" : stats.charge_use_speed,
-		&"charge_swing_angle" : stats.charge_swing_angle,
-		&"charge_base_damage" : stats.charge_effect_source.base_damage,
-		&"charge_base_healing" : stats.charge_effect_source.base_healing,
-		&"charge_crit_chance" : stats.charge_effect_source.crit_chance,
-		&"charge_armor_penetration" : stats.charge_effect_source.armor_penetration
+		&"min_charge_time" : stats_resource.min_charge_time,
+		&"charge_stamina_cost" : stats_resource.charge_stamina_cost,
+		&"charge_use_cooldown" : stats_resource.charge_use_cooldown,
+		&"charge_use_speed" : stats_resource.charge_use_speed,
+		&"charge_swing_angle" : stats_resource.charge_swing_angle,
+		&"charge_base_damage" : stats_resource.charge_effect_source.base_damage,
+		&"charge_base_healing" : stats_resource.charge_effect_source.base_healing,
+		&"charge_crit_chance" : stats_resource.charge_effect_source.crit_chance,
+		&"charge_armor_penetration" : stats_resource.charge_effect_source.armor_penetration
 	}
 
-	stats.s_mods.add_moddable_stats(normal_moddable_stats)
-	stats.s_mods.add_moddable_stats(charge_moddable_stats)
-	stats.cache_is_setup = true
+	stats_resource.s_mods.add_moddable_stats(normal_moddable_stats)
+	stats_resource.s_mods.add_moddable_stats(charge_moddable_stats)
+	stats_resource.cache_is_setup = true
 
 func _ready() -> void:
 	if Engine.is_editor_hint():
@@ -85,11 +85,10 @@ func _disable_collider() -> void:
 
 func enter() -> void:
 	if stats.s_mods.base_values.is_empty():
-		_setup_mod_cache()
+		MeleeWeapon.setup_mod_cache(stats)
 
 	if stats.weapon_mods_need_to_be_readded_after_save:
-		for weapon_mod: WeaponMod in stats.current_mods.values():
-			weapon_mod_manager.handle_weapon_mod(weapon_mod)
+		source_entity.hands.weapon_mod_manager.add_all_mods_to_weapon(stats)
 		stats.weapon_mods_need_to_be_readded_after_save = false
 
 func exit() -> void:

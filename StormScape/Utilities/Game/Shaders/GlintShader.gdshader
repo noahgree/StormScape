@@ -52,7 +52,7 @@ bool hasContraryNeighbour(vec2 uv, vec2 texture_pixel_size, sampler2D texture) {
 void fragment() {
     vec2 uv = UV;
     vec4 base_color = texture(TEXTURE, uv);
-    
+
     // Margin adjustments
     if (add_margins) {
         vec2 texture_pixel_size = vec2(1.0) / (vec2(1.0) / TEXTURE_PIXEL_SIZE + vec2(width * 2.0));
@@ -63,19 +63,19 @@ void fragment() {
             base_color = texture(TEXTURE, uv);
         }
     }
-    
+
     // Preserve the sampled color (used for alpha & outline detection)
     vec4 sampled_color = base_color;
-    
+
     // Compute the tinted (original) pixel color WITHOUT glow
     vec3 tinted_pixel = mix(sampled_color.rgb, tint_color.rgb, tint_color.a);
     // Compute the glowing version for non-outline pixels
     vec3 glowing_pixel = tinted_pixel * glow_intensity;
     vec4 non_outline_color = vec4(glowing_pixel, sampled_color.a);
-    
+
     // Determine if the outline should be applied
     bool is_outline = (sampled_color.a > 0.0) == inside && hasContraryNeighbour(uv, TEXTURE_PIXEL_SIZE, TEXTURE);
-    
+
     vec4 final_color;
     if (is_outline) {
         // For the outline, use the tinted (original) pixel without glow
@@ -84,7 +84,7 @@ void fragment() {
         // For non-outline pixels, use the glowing version
         final_color = non_outline_color;
     }
-    
+
     // Apply glint effect only on non-outline pixels
     if (!is_outline) {
         float time = TIME * abs(speed);
@@ -97,7 +97,7 @@ void fragment() {
         if (speed < 0.0) {
             progress = 1.0 - progress;
         }
-        
+
         float rad_angle = radians(angle);
         vec2 direction = vec2(cos(rad_angle), sin(rad_angle));
         float position_value = dot(UV, direction) / sqrt(2.0);
@@ -110,12 +110,9 @@ void fragment() {
         vec4 new_color = texture(color_gradient, color_position);
         new_color = mix(non_outline_color, new_color, texture(vertical_gradient, vec2(progress)));
         vec4 effect_color = mix(non_outline_color, new_color, effect_distance * highlight_strength);
-        
+
         final_color.rgb = mix(final_color.rgb, effect_color.rgb, effect_distance * highlight_strength);
     }
-    
-    // Notice: the glow_intensity has already been applied to non-outline (original) pixels,
-    // while the outline pixels remain based on tinted_pixel.
-    
+
     COLOR = final_color;
 }

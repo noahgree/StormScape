@@ -1,10 +1,9 @@
-[gd_resource type="Resource" script_class="MeleeWeaponResource" load_steps=18 format=3 uid="uid://bper7kxtsf7f1"]
+[gd_resource type="Resource" script_class="MeleeWeaponResource" load_steps=17 format=3 uid="uid://bper7kxtsf7f1"]
 
 [ext_resource type="Script" uid="uid://djlk3y511igng" path="res://Entities/Items/Weapons/MeleeWeapons/MeleeWeaponResource.gd" id="1_0xu6s"]
 [ext_resource type="Script" uid="uid://dkfssottmsrch" path="res://Entities/Stats/EffectSystemResources/EffectSources/EffectSource.gd" id="1_x4rfe"]
 [ext_resource type="PackedScene" uid="uid://bgj0b83wrmlon" path="res://Entities/Items/Weapons/MeleeWeapons/Axe/Axe.tscn" id="2_50myi"]
 [ext_resource type="Script" uid="uid://boo31eu083dqd" path="res://Entities/Stats/EffectSystemResources/StatusEffects/StatusEffect.gd" id="2_kry0o"]
-[ext_resource type="Script" uid="uid://ct7n8wo1p3b20" path="res://Entities/Items/WeaponMods/WeaponMod.gd" id="3_klx1g"]
 [ext_resource type="Texture2D" uid="uid://brmpeymhp2hix" path="res://Entities/Items/Weapons/MeleeWeapons/Axe/AxeBaseCT.tres" id="4_c7rci"]
 [ext_resource type="Resource" uid="uid://dctg7ykgjoe8u" path="res://Entities/Player/PlayerCore/PlayerCamera/CamFXPresets/3.tres" id="5_svoaa"]
 [ext_resource type="Script" uid="uid://ig4jcnxaphcg" path="res://Entities/Stats/EffectSystemResources/StatusEffects/GoodEffects/SelfKnockback/SelfKnockbackEffect.gd" id="5_wehu8"]
@@ -106,10 +105,17 @@ post_chg_use_effect = SubResource("Resource_05bou")
 charge_use_sound = ""
 s_mods = SubResource("Resource_ieaky")
 pullout_delay = 0.0
-blocked_mods = Array[String]([])
+blocked_mods = Array[StringName]([])
+block_all_mods = false
 cache_is_setup = false
 weapon_mods_need_to_be_readded_after_save = false
-current_mods = Dictionary[StringName, ExtResource("3_klx1g")]({})
+current_mods = Array[Dictionary]([{
+&"1": null
+}, {
+&"2": null
+}, {
+&"3": null
+}])
 original_status_effects = Array[ExtResource("2_kry0o")]([])
 original_charge_status_effects = Array[ExtResource("2_kry0o")]([])
 id = "axe"

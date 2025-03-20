@@ -1,0 +1,35 @@
+@tool
+extends Slot
+class_name ModSlot
+## A child class of Slot that changes the conditions for which data can be dropped.
+
+var is_hidden: bool = true: ## When true, the slot cannot de dropped onto as it is hidden and disabled.
+	set(new_value):
+		is_hidden = new_value
+var mod_slot_index: int ## The index within the grid of mod slots.
+var item_viewer_slot: Slot ## A reference to the item viewer slot that determines which mods should display.
+
+
+func _ready() -> void:
+	super._ready()
+	if not Engine.is_editor_hint(): # So they don't keep hiding in the editor
+		is_hidden = true
+
+## Determines if the slot we are hovering over during a drag can accept drag data on mouse release.
+func _can_drop_data(_at_position: Vector2, data: Variant) -> bool:
+	if data.item == null or not synced_inv or data.index == index or not data.item.stats is WeaponMod or is_hidden:
+		return false
+	if not WeaponModManager.check_mod_compatibility(item_viewer_slot.item.stats, data.item.stats):
+		return false
+	return true
+
+## An override for _drop_data, though it still calls the super function.
+func _drop_data(at_position: Vector2, data: Variant) -> void:
+	super._drop_data(at_position, data)
+
+	if item != null:
+		if item.quantity > 1:
+			var extra_items: InvItemResource = InvItemResource.new(item.stats, item.quantity - 1)
+			synced_inv.add_item_from_inv_item_resource(extra_items, false)
+			item.quantity = 1
+			_set_item(item)

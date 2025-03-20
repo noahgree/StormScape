@@ -1,11 +1,10 @@
-[gd_scene load_steps=12 format=3 uid="uid://b0wwbgbbfkso4"]
+[gd_scene load_steps=11 format=3 uid="uid://b0wwbgbbfkso4"]
 
 [ext_resource type="Script" uid="uid://ut1n80th00qw" path="res://Entities/Items/Weapons/MeleeWeapons/MeleeWeapon.gd" id="1_rnhoy"]
 [ext_resource type="Shader" uid="uid://cugs1eqtkjsbd" path="res://Utilities/Game/Shaders/TintAndGlow.gdshader" id="2_avyyt"]
 [ext_resource type="Texture2D" uid="uid://byxhss0dhepgs" path="res://Entities/Items/Weapons/MeleeWeapons/Pickaxe/PickaxeBaseCT.tres" id="3_avyyt"]
 [ext_resource type="PackedScene" uid="uid://b7ckcb2xdimpo" path="res://Entities/Components/HitboxComponent/HitboxComponent.tscn" id="4_047ac"]
 [ext_resource type="PackedScene" uid="uid://lw5fgm5pgoif" path="res://Entities/EntityCore/Sprites/EntityHandSprite.tscn" id="5_avyyt"]
-[ext_resource type="PackedScene" uid="uid://batrfwan8r8ov" path="res://Entities/Items/WeaponMods/WeaponModManager.tscn" id="7_fdu24"]
 [ext_resource type="AnimationLibrary" uid="uid://dk7m82xohebji" path="res://Entities/Items/Weapons/MeleeWeapons/MeleeWeaponAnimLibrary.res" id="7_huo2n"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_k6dlg"]
@@ -29,11 +28,9 @@ animations = [{
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_sjv0y"]
 size = Vector2(18.3848, 9)
 
-[node name="Pickaxe" type="Node2D" node_paths=PackedStringArray("sprites_to_tint")]
+[node name="Pickaxe" type="Node2D"]
 script = ExtResource("1_rnhoy")
 sprite_visual_rotation = 0.0
-ghost_fade_time = 0.2
-sprites_to_tint = [NodePath("ItemSprite")]
 
 [node name="ItemSprite" type="AnimatedSprite2D" parent="."]
 light_mask = 2
@@ -60,6 +57,3 @@ position = Vector2(8, 4)
 libraries = {
 &"MeleeWeaponAnimLibrary": ExtResource("7_huo2n")
 }
-
-[node name="WeaponModManager" parent="." instance=ExtResource("7_fdu24")]
-print_effect_updates = true

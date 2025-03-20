@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="ProjWeaponResource" load_steps=25 format=3 uid="uid://3avt5jvd3dye"]
+[gd_resource type="Resource" script_class="ProjWeaponResource" load_steps=24 format=3 uid="uid://3avt5jvd3dye"]
 
 [ext_resource type="Script" uid="uid://boo31eu083dqd" path="res://Entities/Stats/EffectSystemResources/StatusEffects/StatusEffect.gd" id="1_fshhe"]
 [ext_resource type="Script" uid="uid://cje5bobi6o8bo" path="res://Entities/Items/Hitscans/HitscanResource.gd" id="1_kxj7m"]
@@ -8,7 +8,6 @@
 [ext_resource type="PackedScene" uid="uid://c7gjhm55x8ymc" path="res://Entities/Items/Weapons/ProjectileWeapons/BottleOFire/BottleOFire.tscn" id="3_yykgi"]
 [ext_resource type="Texture2D" uid="uid://btbju7m01l8x2" path="res://Entities/Items/Weapons/ProjectileWeapons/BottleOFire/BottleOFireBaseCT.tres" id="4_l2ckt"]
 [ext_resource type="Script" uid="uid://dkfssottmsrch" path="res://Entities/Stats/EffectSystemResources/EffectSources/EffectSource.gd" id="5_jastm"]
-[ext_resource type="Script" uid="uid://ct7n8wo1p3b20" path="res://Entities/Items/WeaponMods/WeaponMod.gd" id="6_5xrva"]
 [ext_resource type="Texture2D" uid="uid://cpo3fkry82ihj" path="res://Entities/Items/Weapons/ProjectileWeapons/BottleOFire/bottle_o_fire_base.png" id="6_14vfc"]
 [ext_resource type="Texture2D" uid="uid://b4bumm88u2qmw" path="res://Entities/Items/Weapons/ProjectileWeapons/BottleOFire/FireBottleThrowableCT.tres" id="6_m6fyr"]
 [ext_resource type="PackedScene" uid="uid://b26uwbeam6drq" path="res://Entities/Items/Projectiles/FireBottle/FireBottle.tscn" id="7_0ultu"]
@@ -228,10 +227,17 @@ allow_hitscan_holding = true
 ammo_in_mag = -1
 s_mods = SubResource("Resource_xpvhm")
 pullout_delay = 0.25
-blocked_mods = Array[String]([])
+blocked_mods = Array[StringName]([])
+block_all_mods = false
 cache_is_setup = false
 weapon_mods_need_to_be_readded_after_save = false
-current_mods = Dictionary[StringName, ExtResource("6_5xrva")]({})
+current_mods = Array[Dictionary]([{
+&"1": null
+}, {
+&"2": null
+}, {
+&"3": null
+}])
 original_status_effects = Array[ExtResource("1_fshhe")]([])
 original_charge_status_effects = Array[ExtResource("1_fshhe")]([])
 id = "bottle_o_fire"

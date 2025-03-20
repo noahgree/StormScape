@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="ProjWeaponResource" load_steps=21 format=3 uid="uid://kmidnuyti5xi"]
+[gd_resource type="Resource" script_class="ProjWeaponResource" load_steps=20 format=3 uid="uid://kmidnuyti5xi"]
 
 [ext_resource type="Script" uid="uid://dkfssottmsrch" path="res://Entities/Stats/EffectSystemResources/EffectSources/EffectSource.gd" id="1_pnsqi"]
 [ext_resource type="Script" uid="uid://boo31eu083dqd" path="res://Entities/Stats/EffectSystemResources/StatusEffects/StatusEffect.gd" id="2_8ufau"]
@@ -8,7 +8,6 @@
 [ext_resource type="Texture2D" uid="uid://cqsoww8i0aya3" path="res://Entities/Items/Weapons/ProjectileWeapons/Boomerang/BoomerangSteelCT.tres" id="4_gupq0"]
 [ext_resource type="PackedScene" uid="uid://dna63yojpqy2n" path="res://Entities/Items/Projectiles/Boomerangs/BoomerangSteelProj.tscn" id="5_23285"]
 [ext_resource type="Texture2D" uid="uid://1cupq4qi2cjx" path="res://Entities/Items/Weapons/ProjectileWeapons/Boomerang/boomerang_steel.png" id="6_2lgcn"]
-[ext_resource type="Script" uid="uid://ct7n8wo1p3b20" path="res://Entities/Items/WeaponMods/WeaponMod.gd" id="6_gcm3h"]
 [ext_resource type="PackedScene" uid="uid://dq57qggohi76w" path="res://Entities/Items/Weapons/ProjectileWeapons/Boomerang/BoomerangSteel.tscn" id="7_fxomq"]
 [ext_resource type="Script" uid="uid://ctxa7i1mbt7ab" path="res://UI/Inventory/PlayerInventory/Crafting/CraftingIngredient.gd" id="8_6ornw"]
 [ext_resource type="Script" uid="uid://c2gdoebfp12dq" path="res://Entities/Stats/StatMod/StatModsCacheResource.gd" id="9_o1ahq"]
@@ -199,10 +198,17 @@ allow_hitscan_holding = true
 ammo_in_mag = -1
 s_mods = SubResource("Resource_la75y")
 pullout_delay = 0.3
-blocked_mods = Array[String]([])
+blocked_mods = Array[StringName]([])
+block_all_mods = false
 cache_is_setup = false
 weapon_mods_need_to_be_readded_after_save = false
-current_mods = Dictionary[StringName, ExtResource("6_gcm3h")]({})
+current_mods = Array[Dictionary]([{
+&"1": null
+}, {
+&"2": null
+}, {
+&"3": null
+}])
 original_status_effects = Array[ExtResource("2_8ufau")]([])
 original_charge_status_effects = Array[ExtResource("2_8ufau")]([])
 id = "boomerang"
@@ -222,7 +228,7 @@ inv_icon_scale = Vector2(1, 1)
 inv_icon_rotation = 0.0
 recipe = Array[ExtResource("8_6ornw")]([])
 output_quantity = 1
-recipe_unlocked = false
+recipe_unlocked = true
 item_scene = ExtResource("7_fxomq")
 rotation_lerping = 0.08
 holding_offset = Vector2(0, -6)

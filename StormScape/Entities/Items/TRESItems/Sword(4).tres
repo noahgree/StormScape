@@ -1,7 +1,6 @@
-[gd_resource type="Resource" script_class="MeleeWeaponResource" load_steps=14 format=3 uid="uid://dk3vlbvu2b7eq"]
+[gd_resource type="Resource" script_class="MeleeWeaponResource" load_steps=13 format=3 uid="uid://dk3vlbvu2b7eq"]
 
 [ext_resource type="Resource" uid="uid://cvqddapopo145" path="res://Entities/Player/PlayerCore/PlayerCamera/CamFXPresets/5.tres" id="1_gypsi"]
-[ext_resource type="Script" uid="uid://ct7n8wo1p3b20" path="res://Entities/Items/WeaponMods/WeaponMod.gd" id="1_ltgx7"]
 [ext_resource type="Resource" uid="uid://y5iqfraea8ry" path="res://Entities/Player/PlayerCore/PlayerCamera/CamFXPresets/2.tres" id="2_emnl3"]
 [ext_resource type="Script" uid="uid://djlk3y511igng" path="res://Entities/Items/Weapons/MeleeWeapons/MeleeWeaponResource.gd" id="2_k1y1s"]
 [ext_resource type="Script" uid="uid://boo31eu083dqd" path="res://Entities/Stats/EffectSystemResources/StatusEffects/StatusEffect.gd" id="3_8m4wh"]
@@ -84,10 +83,17 @@ charge_stamina_cost = 25
 charge_use_sound = ""
 s_mods = SubResource("Resource_vevwc")
 pullout_delay = 0.25
-blocked_mods = Array[String]([])
+blocked_mods = Array[StringName]([])
+block_all_mods = false
 cache_is_setup = false
 weapon_mods_need_to_be_readded_after_save = false
-current_mods = Dictionary[StringName, ExtResource("1_ltgx7")]({})
+current_mods = Array[Dictionary]([{
+&"1": null
+}, {
+&"2": null
+}, {
+&"3": null
+}])
 original_status_effects = Array[ExtResource("3_8m4wh")]([])
 original_charge_status_effects = Array[ExtResource("3_8m4wh")]([])
 id = "sword"
@@ -120,4 +126,4 @@ cooldowns_per_suid = true
 shown_cooldown_fills = Array[String](["default"])
 show_cursor_cooldown = true
 session_uid = 0
-metadata/_custom_type_script = ExtResource("2_k1y1s")
+metadata/_custom_type_script = "uid://djlk3y511igng"

@@ -25,15 +25,25 @@ func _on_test_mod_btn_1_pressed() -> void:
 	#var mod2 = StatMod.new("stamina_use_per_hunger_deduction", "mod2", "=", 2, 2, true, 5, true)
 	#var arr: Array[StatMod] = [mod, mod2]
 	#get_parent().get_parent().stats.add_mods(arr, stats_ui)
+	var i: int = 0
 	for mod: WeaponMod in mods:
-		GlobalData.player_node.hands.equipped_item.weapon_mod_manager.handle_weapon_mod(mod)
+		if GlobalData.player_node.hands.equipped_item:
+			GlobalData.player_node.hands.weapon_mod_manager.handle_weapon_mod(
+				GlobalData.player_node.hands.equipped_item.stats, mod, i
+				)
+		i += 1
 
 func _on_test_mod_btn_2_pressed() -> void:
 	#var stats_ui: Control = get_parent().get_node("PlayerStatsOverlay")
 	#get_parent().get_parent().stats.remove_mod("stamina_use_per_hunger_deduction", "mod2", stats_ui, 1)
 	#get_parent().get_parent().stats.remove_mod("stamina_use_per_hunger_deduction", "mod1", stats_ui, 1)
+	var i: int = 0
 	for mod: WeaponMod in mods:
-		GlobalData.player_node.hands.equipped_item.weapon_mod_manager.request_mod_removal(mod.mod_name)
+		if GlobalData.player_node.hands.equipped_item:
+			GlobalData.player_node.hands.weapon_mod_manager.remove_weapon_mod(
+				GlobalData.player_node.hands.equipped_item.stats, mod, i
+				)
+		i += 1
 
 func _on_test_mod_btn_3_pressed() -> void:
 	if GlobalData.storm.is_enabled:

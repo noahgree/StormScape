@@ -1,0 +1,173 @@
+[gd_scene load_steps=13 format=3 uid="uid://m4ur3n2hwsp8"]
+
+[ext_resource type="Texture2D" uid="uid://ces4hq54n2lxc" path="res://UI/Inventory/InventoryCore/Slot/Wood/normal_slot_wood.png" id="1_tu6a1"]
+[ext_resource type="Script" uid="uid://bh1a5w0hw0r0s" path="res://UI/Inventory/InventoryCore/Slot/SlotCore/Slot.gd" id="2_ywtjc"]
+[ext_resource type="FontVariation" uid="uid://blgkcg6c83yln" path="res://Assets/Theming/Fonts/GameFontResources/ui_pixel_font.tres" id="3_dimqv"]
+[ext_resource type="Texture2D" uid="uid://bopljhr43p6fx" path="res://UI/Inventory/InventoryCore/Slot/Wood/clear_slot_selected_wood.png" id="4_jiyo0"]
+[ext_resource type="Texture2D" uid="uid://3ygb1pbykma1" path="res://UI/Inventory/InventoryCore/Slot/Wood/no_item_slot_wood.png" id="4_ylk5m"]
+[ext_resource type="Texture2D" uid="uid://dbm40lvpgbd8t" path="res://Utilities/Game/Particles/dense_light.png" id="5_dhreg"]
+[ext_resource type="Shader" uid="uid://bhox1e3shq3iq" path="res://Utilities/Game/Shaders/ProgressAlpha.gdshader" id="5_xform"]
+[ext_resource type="Shader" uid="uid://cwbeekjoy0uyh" path="res://Utilities/Game/Shaders/GlintShader.gdshader" id="6_l1uky"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_me41j"]
+shader = ExtResource("5_xform")
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_raets"]
+blend_mode = 1
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_h48ps"]
+resource_local_to_scene = true
+shader = ExtResource("6_l1uky")
+shader_parameter/outline_color = Color(1, 1, 1, 0.3)
+shader_parameter/width = 0.5
+shader_parameter/pattern = 2
+shader_parameter/inside = false
+shader_parameter/add_margins = true
+shader_parameter/size_effect = 0.4
+shader_parameter/speed = 0.9
+shader_parameter/highlight_strength = 0.0
+shader_parameter/color_mode_toggle = true
+shader_parameter/pause_duration = 1.0
+shader_parameter/angle = 35.0
+shader_parameter/tint_color = Color(1, 1, 1, 0)
+shader_parameter/glow_intensity = 1.0
+
+[sub_resource type="LabelSettings" id="LabelSettings_kd5f7"]
+line_spacing = 0.0
+font = ExtResource("3_dimqv")
+font_size = 12
+outline_size = 3
+outline_color = Color(0, 0, 0, 1)
+shadow_size = 0
+shadow_offset = Vector2(0, 0)
+
+[node name="Slot" type="NinePatchRect"]
+clip_contents = true
+custom_minimum_size = Vector2(22, 22)
+offset_right = 22.0
+offset_bottom = 22.0
+pivot_offset = Vector2(11, 11)
+size_flags_horizontal = 4
+size_flags_vertical = 4
+mouse_filter = 1
+texture = ExtResource("1_tu6a1")
+patch_margin_left = 1
+patch_margin_top = 1
+patch_margin_right = 1
+patch_margin_bottom = 1
+axis_stretch_vertical = 1
+script = ExtResource("2_ywtjc")
+default_slot_texture = ExtResource("1_tu6a1")
+no_item_slot_texture = ExtResource("4_ylk5m")
+
+[node name="BackColorMargin" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 1
+theme_override_constants/margin_top = 1
+theme_override_constants/margin_right = 1
+theme_override_constants/margin_bottom = 1
+
+[node name="BackColor" type="ColorRect" parent="BackColorMargin"]
+material = SubResource("ShaderMaterial_me41j")
+instance_shader_parameters/main_color = Color(0, 0, 0, 0)
+instance_shader_parameters/progress = 100.0
+layout_mode = 2
+
+[node name="RarityGlowMargin" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = -1
+theme_override_constants/margin_top = -1
+theme_override_constants/margin_right = -1
+theme_override_constants/margin_bottom = -1
+
+[node name="RarityGlow" type="TextureRect" parent="RarityGlowMargin"]
+visible = false
+self_modulate = Color(0.992144, 0.796898, 0.818481, 1)
+material = SubResource("CanvasItemMaterial_raets")
+layout_mode = 2
+texture = ExtResource("5_dhreg")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="TextureMargins" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(11, 11)
+theme_override_constants/margin_left = 3
+theme_override_constants/margin_top = 3
+theme_override_constants/margin_right = 3
+theme_override_constants/margin_bottom = 3
+
+[node name="ItemTexture" type="TextureRect" parent="TextureMargins"]
+material = SubResource("ShaderMaterial_h48ps")
+custom_minimum_size = Vector2(16, 16)
+layout_mode = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="QuantityMargins" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = 7.0
+offset_bottom = 7.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.75, 0.75)
+theme_override_constants/margin_right = 3
+theme_override_constants/margin_bottom = 2
+
+[node name="Quantity" type="Label" parent="QuantityMargins"]
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 8
+label_settings = SubResource("LabelSettings_kd5f7")
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="SelectedTexture" type="TextureRect" parent="."]
+visible = false
+custom_minimum_size = Vector2(22, 22)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("4_jiyo0")
+
+[node name="BackingTextureMargin" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 2
+theme_override_constants/margin_top = 2
+theme_override_constants/margin_right = 2
+theme_override_constants/margin_bottom = 2
+
+[node name="BackingTexture" type="TextureRect" parent="BackingTextureMargin"]
+self_modulate = Color(0, 0, 0, 0.23)
+layout_mode = 2
+stretch_mode = 5
+
+[connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="." to="." method="_on_mouse_exited"]
+[connection signal="visibility_changed" from="." to="." method="_on_visibility_changed"]

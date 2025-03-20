@@ -1,11 +1,10 @@
-[gd_scene load_steps=27 format=3 uid="uid://c17oqm8amalvy"]
+[gd_scene load_steps=26 format=3 uid="uid://c17oqm8amalvy"]
 
 [ext_resource type="Script" uid="uid://ca8xdltgdyjys" path="res://Entities/Items/Weapons/ProjectileWeapons/ProjectileWeapon.gd" id="1_c0tnr"]
 [ext_resource type="PackedScene" uid="uid://wda4fiuxi8kh" path="res://Entities/Items/Weapons/WeaponVFX/FiringVFX/Simple/SimpleFiringVFX.tscn" id="2_ol8xj"]
 [ext_resource type="Shader" uid="uid://cugs1eqtkjsbd" path="res://Utilities/Game/Shaders/TintAndGlow.gdshader" id="3_c0tnr"]
 [ext_resource type="Texture2D" uid="uid://nmamppdlgu5h" path="res://Entities/Items/Weapons/ProjectileWeapons/Gattler/GattlerBaseCT.tres" id="4_c0tnr"]
 [ext_resource type="PackedScene" uid="uid://lw5fgm5pgoif" path="res://Entities/EntityCore/Sprites/EntityHandSprite.tscn" id="5_74nn5"]
-[ext_resource type="PackedScene" uid="uid://batrfwan8r8ov" path="res://Entities/Items/WeaponMods/WeaponModManager.tscn" id="5_yhkb2"]
 [ext_resource type="Texture2D" uid="uid://d4c1eg61h0vss" path="res://Entities/Items/Weapons/ProjectileWeapons/Gattler/GattlerBaseSpriteNoMagCT.tres" id="7_ol8xj"]
 [ext_resource type="PackedScene" uid="uid://cqb0f242y4m2j" path="res://Utilities/Debug/DebugBox.tscn" id="8_egoiu"]
 [ext_resource type="Texture2D" uid="uid://bpl5dnvhutpm2" path="res://Entities/Items/Weapons/ProjectileWeapons/Gattler/GattlerBaseMagCT.tres" id="8_wwtqj"]
@@ -526,13 +525,11 @@ width = 100
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_lc3de"]
 shader = ExtResource("3_c0tnr")
 
-[node name="Gattler" type="Node2D" node_paths=PackedStringArray("overheat_overlays", "sprites_to_tint")]
+[node name="Gattler" type="Node2D"]
 script = ExtResource("1_c0tnr")
 proj_origin = Vector2(18, -1)
-overheat_overlays = [NodePath("ItemSprite/OverheatOverlay"), NodePath("GunNoMag/OverheatOverlay")]
 particle_emission_extents = Vector2(9, 1)
 particle_emission_origin = Vector2(8, -2)
-sprites_to_tint = [NodePath("ItemSprite"), NodePath("GunNoMag"), NodePath("Mag")]
 
 [node name="ItemSprite" type="AnimatedSprite2D" parent="."]
 clip_children = 2
@@ -571,9 +568,6 @@ position = Vector2(-17, 0)
 
 [node name="MainHandSprite" parent="." instance=ExtResource("5_74nn5")]
 position = Vector2(-7, -8)
-
-[node name="WeaponModManager" parent="." instance=ExtResource("5_yhkb2")]
-print_effect_updates = true
 
 [node name="ClippingDetector" type="Area2D" parent="."]
 collision_layer = 0

@@ -1,6 +1,5 @@
-[gd_resource type="Resource" script_class="ProjWeaponResource" load_steps=31 format=3 uid="uid://1q7rlned2r23"]
+[gd_resource type="Resource" script_class="ProjWeaponResource" load_steps=30 format=3 uid="uid://1q7rlned2r23"]
 
-[ext_resource type="Script" uid="uid://ct7n8wo1p3b20" path="res://Entities/Items/WeaponMods/WeaponMod.gd" id="1_3n4ne"]
 [ext_resource type="Script" uid="uid://dkfssottmsrch" path="res://Entities/Stats/EffectSystemResources/EffectSources/EffectSource.gd" id="1_lbh37"]
 [ext_resource type="Texture2D" uid="uid://bm570hawaupxe" path="res://Entities/Items/Weapons/WeaponVFX/Casings/small_casing.png" id="1_pxe5r"]
 [ext_resource type="SpriteFrames" uid="uid://cyfl1jof4do4a" path="res://Entities/Items/Weapons/ProjectileWeapons/Gattler/GattlerCursors.tres" id="2_huwqf"]
@@ -249,10 +248,17 @@ allow_hitscan_holding = true
 ammo_in_mag = -1
 s_mods = SubResource("Resource_fe8se")
 pullout_delay = 0.5
-blocked_mods = Array[String]([])
+blocked_mods = Array[StringName]([])
+block_all_mods = false
 cache_is_setup = false
 weapon_mods_need_to_be_readded_after_save = false
-current_mods = Dictionary[StringName, ExtResource("1_3n4ne")]({})
+current_mods = Array[Dictionary]([{
+&"1": null
+}, {
+&"2": null
+}, {
+&"3": null
+}])
 original_status_effects = Array[ExtResource("3_gsntq")]([])
 original_charge_status_effects = Array[ExtResource("3_gsntq")]([])
 id = "gattler"
@@ -273,7 +279,7 @@ inv_icon_rotation = -41.0
 cursors = ExtResource("2_huwqf")
 recipe = Array[ExtResource("4_64txm")]([])
 output_quantity = 1
-recipe_unlocked = false
+recipe_unlocked = true
 item_scene = ExtResource("6_huwqf")
 rotation_lerping = 0.07
 holding_offset = Vector2(3, 3)
@@ -286,4 +292,4 @@ cooldowns_per_suid = true
 shown_cooldown_fills = Array[String](["overheat_penalty"])
 show_cursor_cooldown = false
 session_uid = 0
-metadata/_custom_type_script = ExtResource("2_mpv0r")
+metadata/_custom_type_script = "uid://dvasncq3tgljs"

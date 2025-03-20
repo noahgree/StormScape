@@ -1,9 +1,8 @@
-[gd_scene load_steps=20 format=3 uid="uid://ohg1k8yu1y3r"]
+[gd_scene load_steps=19 format=3 uid="uid://ohg1k8yu1y3r"]
 
 [ext_resource type="Script" uid="uid://ca8xdltgdyjys" path="res://Entities/Items/Weapons/ProjectileWeapons/ProjectileWeapon.gd" id="1_ek4d5"]
 [ext_resource type="PackedScene" uid="uid://wda4fiuxi8kh" path="res://Entities/Items/Weapons/WeaponVFX/FiringVFX/Simple/SimpleFiringVFX.tscn" id="2_qcgld"]
 [ext_resource type="Shader" uid="uid://cugs1eqtkjsbd" path="res://Utilities/Game/Shaders/TintAndGlow.gdshader" id="3_1bvjq"]
-[ext_resource type="PackedScene" uid="uid://batrfwan8r8ov" path="res://Entities/Items/WeaponMods/WeaponModManager.tscn" id="3_q5a14"]
 [ext_resource type="Texture2D" uid="uid://bii14bglra82s" path="res://Entities/Items/Weapons/ProjectileWeapons/Revolver/RevolverBaseCT.tres" id="4_1bvjq"]
 [ext_resource type="PackedScene" uid="uid://lw5fgm5pgoif" path="res://Entities/EntityCore/Sprites/EntityHandSprite.tscn" id="5_1bvjq"]
 [ext_resource type="Texture2D" uid="uid://cs3clmnktksd6" path="res://Entities/Player/PlayerCore/player_hand.png" id="7_qcgld"]
@@ -410,10 +409,9 @@ _data = {
 radius = 3.0
 height = 18.0
 
-[node name="Revolver" type="Node2D" node_paths=PackedStringArray("sprites_to_tint")]
+[node name="Revolver" type="Node2D"]
 script = ExtResource("1_ek4d5")
 proj_origin = Vector2(10, -4)
-sprites_to_tint = [NodePath("ItemSprite")]
 
 [node name="ItemSprite" type="AnimatedSprite2D" parent="."]
 light_mask = 2
@@ -431,9 +429,6 @@ libraries = {
 
 [node name="ProjectileOrigin" type="Marker2D" parent="."]
 position = Vector2(10, -4)
-
-[node name="WeaponModManager" parent="." instance=ExtResource("3_q5a14")]
-print_effect_updates = true
 
 [node name="ClippingDetector" type="Area2D" parent="."]
 collision_layer = 0

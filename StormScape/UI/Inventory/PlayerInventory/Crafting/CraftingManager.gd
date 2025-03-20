@@ -5,6 +5,9 @@ class_name CraftingManager
 @export_dir var tres_folder: String ## The folder path to all the TRES items.
 
 @onready var output_slot: CraftingSlot = %OutputSlot ## The slot where the result will appear in.
+@onready var input_slots_container: GridContainer = %InputSlots ## The container holding the input slots as children.
+@onready var crafting_down_arrow: TextureRect = %CraftingDownArrow ## The arrow symbol.
+@onready var craft_button: NinePatchRect = %Craft ## The nine patch background for the craft button.
 
 var cached_recipes: Dictionary[StringName, ItemResource] = {} ## All items keyed by their unique recipe id.
 var item_to_recipes: Dictionary[StringName, Array] = {} ## Maps items to the list of recipes that include them.
@@ -15,8 +18,12 @@ var is_crafting: bool = false ## When true, we shouldn't update the output slot 
 
 func _ready() -> void:
 	_cache_recipes()
+
+	_on_output_slot_output_changed(false)
 	output_slot.output_changed.connect(_on_output_slot_output_changed)
 	SignalBus.focused_ui_closed.connect(_on_focused_ui_closed)
+
+	call_deferred("_setup_slots")
 
 ## This caches the items by their recipe ID at the start of the game.
 func _cache_recipes() -> void:
@@ -53,11 +60,33 @@ func _cache_recipes() -> void:
 ## Shows or hides the main craft button depending on whether a valid output is present.
 func _on_output_slot_output_changed(is_craftable: bool) -> void:
 	if is_craftable:
-		get_node("%Craft").modulate.a = 1.0
+		craft_button.modulate = Color.WHITE
+		craft_button.modulate.a = 1.0
+		craft_button.get_node("CraftBtn").disabled = false
+		crafting_down_arrow.modulate.a = 0.65
 	else:
-		get_node("%Craft").modulate.a = 0.0
+		craft_button.modulate = Color.LIGHT_GRAY
+		craft_button.modulate.a = 0.5
+		craft_button.get_node("CraftBtn").disabled = true
+		crafting_down_arrow.modulate.a = 0.2
 
-## This processes the items in the input slots so that they can be worked with faster by the other crafting functions.
+## Sets up the input and output slots with their needed data.
+func _setup_slots() -> void:
+	var inv: Inventory = GlobalData.player_node.inv
+	var i: int = 0
+	for input_slot: CraftingSlot in input_slots_container.get_children():
+		input_slot.name = "Input_Slot_" + str(i)
+		input_slot.synced_inv = inv
+		input_slot.index = inv.inv_size + 1 + i # The 1 is for the trash slot
+		input_slot.item_changed.connect(_update_crafting_result)
+		input_slots.append(input_slot)
+		i += 1
+	output_slot.name = "Output_Slot"
+	output_slot.synced_inv = inv
+	output_slot.index = inv.inv_size + 1 + i
+
+## This processes the items in the input slots so that they can be worked with faster by
+## the other crafting functions.
 func _preprocess_selected_items() -> Dictionary[StringName, Dictionary]:
 	var item_quantities: Dictionary[StringName, Array] = {}
 	var tag_quantities: Dictionary[StringName, Array] = {}
@@ -164,7 +193,7 @@ func _get_candidate_recipes() -> Array:
 	return candidates.keys()
 
 ## Use candidate recipes for efficiency to only test the recipes that are even potentially craftable.
-func update_crafting_result() -> void:
+func _update_crafting_result(_slot: CraftingSlot, _old_item: InvItemResource, _new_item: InvItemResource) -> void:
 	if is_crafting:
 		return
 
@@ -177,7 +206,8 @@ func update_crafting_result() -> void:
 
 	output_slot.item = null
 
-## This consumes the ingredients in the recipe once the item is claimed. If it fails, it restores all quantities and returns false.
+## This consumes the ingredients in the recipe once the item is claimed.
+## If it fails, it restores all quantities and returns false.
 func _consume_recipe(recipe: Array[CraftingIngredient]) -> bool:
 	var initial_quantities: Array[int] = []
 	for slot: CraftingSlot in input_slots:
@@ -222,7 +252,8 @@ func _consume_recipe(recipe: Array[CraftingIngredient]) -> bool:
 
 	return true
 
-## This attempts to craft what is shown in the output slot by consuming the ingredients and granting the output item.
+## This attempts to craft what is shown in the output slot by consuming the ingredients and
+## granting the output item.
 func attempt_craft() -> void:
 	is_crafting = true
 
@@ -230,8 +261,10 @@ func attempt_craft() -> void:
 		GlobalData.player_node.inv.add_item_from_inv_item_resource(output_slot.item, false)
 
 	is_crafting = false
-	update_crafting_result()
+	_update_crafting_result(null, null, null)
 
+## When the focused UI is closed, we should empty out the crafting input slots and drop them on the
+## ground if the inventory is now full.
 func _on_focused_ui_closed() -> void:
 	for slot: CraftingSlot in input_slots:
 		if slot.item != null:

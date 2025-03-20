@@ -1,9 +1,7 @@
-[gd_scene load_steps=21 format=3 uid="uid://dxv8dhn3gmufw"]
+[gd_scene load_steps=19 format=3 uid="uid://dxv8dhn3gmufw"]
 
 [ext_resource type="Script" uid="uid://ca8xdltgdyjys" path="res://Entities/Items/Weapons/ProjectileWeapons/ProjectileWeapon.gd" id="1_7mk4f"]
-[ext_resource type="PackedScene" uid="uid://batrfwan8r8ov" path="res://Entities/Items/WeaponMods/WeaponModManager.tscn" id="3_7a8dm"]
 [ext_resource type="Shader" uid="uid://cugs1eqtkjsbd" path="res://Utilities/Game/Shaders/TintAndGlow.gdshader" id="3_qpgmn"]
-[ext_resource type="PackedScene" uid="uid://ciylpe2ihjno1" path="res://Entities/Items/Weapons/WeaponVFX/Casings/Casing.tscn" id="3_xc27p"]
 [ext_resource type="Texture2D" uid="uid://t54taecjg640" path="res://Entities/Items/Weapons/ProjectileWeapons/FlameBlower/FlameBlowerBaseCT.tres" id="4_qpgmn"]
 [ext_resource type="PackedScene" uid="uid://lw5fgm5pgoif" path="res://Entities/EntityCore/Sprites/EntityHandSprite.tscn" id="7_xc27p"]
 [ext_resource type="PackedScene" uid="uid://cqb0f242y4m2j" path="res://Utilities/Debug/DebugBox.tscn" id="8_yltag"]
@@ -171,14 +169,11 @@ _data = {
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_0s14j"]
 radius = 6.0
 
-[node name="FlameBlower" type="Node2D" node_paths=PackedStringArray("overheat_overlays", "sprites_to_tint")]
+[node name="FlameBlower" type="Node2D"]
 script = ExtResource("1_7mk4f")
 proj_origin = Vector2(19, 3)
-casing_scene = ExtResource("3_xc27p")
-overheat_overlays = [NodePath("ItemSprite/OverheatOverlay")]
 particle_emission_extents = Vector2(6, 1)
 particle_emission_origin = Vector2(11, 2)
-sprites_to_tint = [NodePath("ItemSprite")]
 
 [node name="ItemSprite" type="AnimatedSprite2D" parent="."]
 clip_children = 2
@@ -215,8 +210,6 @@ position = Vector2(1, 7)
 
 [node name="MainHandSprite" parent="." instance=ExtResource("7_xc27p")]
 position = Vector2(-16, 3)
-
-[node name="WeaponModManager" parent="." instance=ExtResource("3_7a8dm")]
 
 [node name="ClippingDetector" type="Area2D" parent="."]
 visible = false

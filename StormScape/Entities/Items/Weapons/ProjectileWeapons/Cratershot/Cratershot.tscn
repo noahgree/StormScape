@@ -1,10 +1,9 @@
-[gd_scene load_steps=22 format=3 uid="uid://dwyof8hbs8fxr"]
+[gd_scene load_steps=21 format=3 uid="uid://dwyof8hbs8fxr"]
 
 [ext_resource type="Script" uid="uid://ca8xdltgdyjys" path="res://Entities/Items/Weapons/ProjectileWeapons/ProjectileWeapon.gd" id="1_av7ge"]
 [ext_resource type="Shader" uid="uid://cugs1eqtkjsbd" path="res://Utilities/Game/Shaders/TintAndGlow.gdshader" id="3_jdyr6"]
 [ext_resource type="Texture2D" uid="uid://bicdpq4he2mgo" path="res://Entities/Items/Weapons/ProjectileWeapons/Cratershot/CratershotBaseCT.tres" id="4_jdyr6"]
 [ext_resource type="PackedScene" uid="uid://lw5fgm5pgoif" path="res://Entities/EntityCore/Sprites/EntityHandSprite.tscn" id="5_jdyr6"]
-[ext_resource type="PackedScene" uid="uid://batrfwan8r8ov" path="res://Entities/Items/WeaponMods/WeaponModManager.tscn" id="5_kd7vu"]
 [ext_resource type="PackedScene" uid="uid://wda4fiuxi8kh" path="res://Entities/Items/Weapons/WeaponVFX/FiringVFX/Simple/SimpleFiringVFX.tscn" id="8_5ddcx"]
 [ext_resource type="Texture2D" uid="uid://bmxv14dddeyq8" path="res://Entities/Items/Weapons/ProjectileWeapons/Cratershot/CratershotBaseStockCT.tres" id="8_6hjrq"]
 [ext_resource type="Texture2D" uid="uid://dbglqgkeedu8h" path="res://Entities/Items/Weapons/ProjectileWeapons/Cratershot/CratershotBaseBarrelCT.tres" id="9_so0ni"]
@@ -660,10 +659,9 @@ shader = ExtResource("3_jdyr6")
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_6hjrq"]
 shader = ExtResource("3_jdyr6")
 
-[node name="Cratershot" type="Node2D" node_paths=PackedStringArray("sprites_to_tint")]
+[node name="Cratershot" type="Node2D"]
 script = ExtResource("1_av7ge")
 proj_origin = Vector2(13, 0)
-sprites_to_tint = [NodePath("ItemSprite"), NodePath("Stock"), NodePath("Barrel")]
 
 [node name="ItemSprite" type="AnimatedSprite2D" parent="."]
 light_mask = 2
@@ -683,9 +681,6 @@ libraries = {
 
 [node name="ProjectileOrigin" type="Marker2D" parent="."]
 position = Vector2(13, 0)
-
-[node name="WeaponModManager" parent="." instance=ExtResource("5_kd7vu")]
-print_effect_updates = true
 
 [node name="ClippingDetector" type="Area2D" parent="."]
 collision_layer = 0

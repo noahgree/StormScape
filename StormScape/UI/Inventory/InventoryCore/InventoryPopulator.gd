@@ -1,17 +1,19 @@
-extends Control
+extends NinePatchRect
 class_name InventoryPopulator
 ## Responsible for populating and instantiating slots of children nodes for the connected inventory.
 ##
 ## Slot indices for an example inventory of size 37 (including hotbar, excluding trash slot) are structured like so:
 ## 0 -> (36 - hotbar size): Main Slots ||| (36 - hotbar size) -> 36: Hotbar Slots
-## 37: Trash Slot ||| 38 -> (37 + crafting slot count): Crafting Slots
+## 37: Trash Slot ||| 38 -> (37 + crafting slot count "C"): Crafting Slots
+## (37 + C) -> (37 + C + Mod Slot Count): Mod Slots
 
-@export var slot_scene: PackedScene = preload("res://UI/Inventory/InventoryCore/Slot/Slot.tscn") ## The slot scene to be instantiated as children.
-@export var item_details_label: Label ## The label in the inventory that displays the details of a hovered over item.
+@export var slot_scene: PackedScene = preload("res://UI/Inventory/InventoryCore/Slot/SlotCore/Slot.tscn") ## The slot scene to be instantiated as children.
 @export var main_slot_grid: GridContainer ## The main container for all normal inventory slots.
 @export var hotbar_grid: HBoxContainer ## If player inv, this connects to the container that holds the hotbar slots.
 @export var trash_slot: Slot ## If player inv, this connects to the trash slot.
 @export var crafting_manager: CraftingManager ## If player inv, this connects to the crafting manager.
+@export var weapon_mod_hud: WeaponModsHUD ## If player inv, this connects to the weapon mods HUD.
+@export var item_viewer: ItemViewer ## If player inv, this connects to the item viewer in the inventory.
 
 var synced_inv: Inventory ## The synced inventory that this populator populates based on.
 var slots: Array[Slot] = [] ## The array of slots that this populator fills.
@@ -38,7 +40,7 @@ func _ready() -> void:
 func _change_slot_count_for_new_inv(inv: Inventory = null) -> void:
 	for slot: Slot in slots:
 		slot.queue_free()
-	slots = []
+	slots.clear()
 
 	var main_count: int = DEFAULT_SLOT_COUNT
 	var hotbar_count: int = 0
@@ -49,6 +51,7 @@ func _change_slot_count_for_new_inv(inv: Inventory = null) -> void:
 		trash_slot.index = inv.inv_size
 		trash_slot.synced_inv = inv
 
+	# Main Inventory Slots
 	for i: int in range(main_count):
 		var slot: Slot = slot_scene.instantiate()
 		main_slot_grid.add_child(slot)
@@ -59,6 +62,7 @@ func _change_slot_count_for_new_inv(inv: Inventory = null) -> void:
 		if inv: slot.synced_inv = inv
 		slots.append(slot)
 
+	# Hotbar Slots
 	for i: int in range(hotbar_count):
 		var slot: Slot = slot_scene.instantiate()
 		hotbar_grid.add_child(slot)
@@ -69,24 +73,9 @@ func _change_slot_count_for_new_inv(inv: Inventory = null) -> void:
 		if inv: slot.synced_inv = inv
 		slots.append(slot)
 
+	# Trash Slot
 	if inv and inv.is_player_inv:
 		slots.append(trash_slot)
-
-		if crafting_manager != null:
-			if not crafting_manager.is_node_ready():
-				await crafting_manager.ready
-
-			var i: int = 0
-			for input_slot: CraftingSlot in crafting_manager.get_node("%InputSlots").get_children():
-				input_slot.name = "Input_Slot_" + str(i)
-				input_slot.synced_inv = inv
-				input_slot.index = inv.inv_size + 1 + i # The 1 is for the trash slot
-				input_slot.item_changed.connect(crafting_manager.update_crafting_result)
-				crafting_manager.input_slots.append(input_slot)
-				i += 1
-			crafting_manager.output_slot.name = "Output_Slot"
-			crafting_manager.output_slot.synced_inv = inv
-			crafting_manager.output_slot.index = inv.inv_size + 1 + i
 
 ## Called externally to connect this populator to its synced inventory.
 func connect_inventory(inv: Inventory) -> void:
@@ -109,13 +98,12 @@ func _on_slot_updated(index: int, item: InvItemResource) -> void:
 	slots[index].item = item
 
 ## When a slot is hovered, update the item details label if that slot's item is not null.
-func _on_slot_hovered(index: int) -> void:
-	if item_details_label and slots[index].item != null:
-		item_details_label.text = slots[index].item.stats.info
+func _on_slot_hovered(_index: int) -> void:
+	pass
 
 ## When the mouse stops hovering over an item, clear the details label.
 func _on_slot_not_hovered() -> void:
-	if item_details_label: item_details_label.text = ""
+	pass
 
 ## Custom printing method to show the items inside the slots populated by this node.
 func print_slots(include_null_spots: bool = false) -> void:

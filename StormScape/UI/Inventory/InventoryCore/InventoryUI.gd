@@ -1,5 +1,6 @@
 extends ColorRect
 class_name InventoryUI
+## The base class for all inventory UIs. Handles drag and dropping into margin space for dropping onto the ground.
 
 @export var item_scene: PackedScene = preload("res://Entities/Items/ItemCore/Item.tscn") ## The item scene to be instantiated when items are dropped onto the ground.
 
@@ -16,7 +17,7 @@ func connect_inventory(inv: Inventory) -> void:
 
 ## Determines if this control node can have item slot data dropped into it.
 func _can_drop_data(_at_position: Vector2, data: Variant) -> bool:
-	if data and ("item" in data) and (data.item != null):
+	if (data != null) and ("item" in data) and (data.item != null):
 		return true
 	else:
 		return false

@@ -1,9 +1,8 @@
-[gd_resource type="Resource" script_class="MeleeWeaponResource" load_steps=15 format=3 uid="uid://bh18kqp2up3oe"]
+[gd_resource type="Resource" script_class="MeleeWeaponResource" load_steps=14 format=3 uid="uid://bh18kqp2up3oe"]
 
 [ext_resource type="Resource" uid="uid://dctg7ykgjoe8u" path="res://Entities/Player/PlayerCore/PlayerCamera/CamFXPresets/3.tres" id="1_77plg"]
 [ext_resource type="Script" uid="uid://dkfssottmsrch" path="res://Entities/Stats/EffectSystemResources/EffectSources/EffectSource.gd" id="1_urffy"]
 [ext_resource type="Script" uid="uid://boo31eu083dqd" path="res://Entities/Stats/EffectSystemResources/StatusEffects/StatusEffect.gd" id="2_ypwee"]
-[ext_resource type="Script" uid="uid://ct7n8wo1p3b20" path="res://Entities/Items/WeaponMods/WeaponMod.gd" id="3_e3dpw"]
 [ext_resource type="Texture2D" uid="uid://byxhss0dhepgs" path="res://Entities/Items/Weapons/MeleeWeapons/Pickaxe/PickaxeBaseCT.tres" id="4_3csw6"]
 [ext_resource type="PackedScene" uid="uid://b0wwbgbbfkso4" path="res://Entities/Items/Weapons/MeleeWeapons/Pickaxe/Pickaxe.tscn" id="4_6vlkm"]
 [ext_resource type="Script" uid="uid://c2gdoebfp12dq" path="res://Entities/Stats/StatMod/StatModsCacheResource.gd" id="5_3g32j"]
@@ -84,10 +83,17 @@ charge_stamina_cost = 25
 charge_use_sound = ""
 s_mods = SubResource("Resource_wwtqn")
 pullout_delay = 0.0
-blocked_mods = Array[String]([])
+blocked_mods = Array[StringName]([])
+block_all_mods = false
 cache_is_setup = false
 weapon_mods_need_to_be_readded_after_save = false
-current_mods = Dictionary[StringName, ExtResource("3_e3dpw")]({})
+current_mods = Array[Dictionary]([{
+&"1": null
+}, {
+&"2": null
+}, {
+&"3": null
+}])
 original_status_effects = Array[ExtResource("2_ypwee")]([])
 original_charge_status_effects = Array[ExtResource("2_ypwee")]([])
 id = "pickaxe"
@@ -107,7 +113,7 @@ inv_icon_scale = Vector2(1, 1)
 inv_icon_rotation = 0.0
 recipe = Array[ExtResource("5_x5580")]([])
 output_quantity = 1
-recipe_unlocked = false
+recipe_unlocked = true
 item_scene = ExtResource("4_6vlkm")
 rotation_lerping = 0.1
 holding_offset = Vector2(0, 0)

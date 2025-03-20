@@ -1,0 +1,84 @@
+[gd_scene load_steps=5 format=3 uid="uid://bacsel0a5l2iu"]
+
+[ext_resource type="FontVariation" uid="uid://blgkcg6c83yln" path="res://Assets/Theming/Fonts/GameFontResources/ui_pixel_font.tres" id="1_35dku"]
+[ext_resource type="Shader" uid="uid://cwbeekjoy0uyh" path="res://Utilities/Game/Shaders/GlintShader.gdshader" id="1_75hkq"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_73rrd"]
+resource_local_to_scene = true
+shader = ExtResource("1_75hkq")
+shader_parameter/outline_color = Color(1, 1, 1, 0.3)
+shader_parameter/width = 0.5
+shader_parameter/pattern = 2
+shader_parameter/inside = false
+shader_parameter/add_margins = true
+shader_parameter/size_effect = 0.4
+shader_parameter/speed = 0.9
+shader_parameter/highlight_strength = 5.96048e-08
+shader_parameter/color_mode_toggle = true
+shader_parameter/pause_duration = 1.0
+shader_parameter/angle = 35.0
+shader_parameter/tint_color = Color(1, 1, 1, 0)
+shader_parameter/glow_intensity = 1.0
+
+[sub_resource type="LabelSettings" id="LabelSettings_c1tbv"]
+line_spacing = 0.0
+font = ExtResource("1_35dku")
+font_size = 12
+outline_size = 3
+outline_color = Color(0, 0, 0, 1)
+shadow_size = 0
+shadow_offset = Vector2(0, 0)
+
+[node name="SlotDragPreview" type="Control"]
+custom_minimum_size = Vector2(22, 22)
+layout_mode = 3
+anchors_preset = 0
+offset_right = 22.0
+offset_bottom = 22.0
+pivot_offset = Vector2(11, 11)
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="TextureMargins" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(11, 11)
+mouse_filter = 2
+theme_override_constants/margin_left = 3
+theme_override_constants/margin_top = 3
+theme_override_constants/margin_right = 3
+theme_override_constants/margin_bottom = 3
+
+[node name="ItemTexture" type="TextureRect" parent="TextureMargins"]
+material = SubResource("ShaderMaterial_73rrd")
+custom_minimum_size = Vector2(16, 16)
+layout_mode = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="QuantityMargins" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = 7.0
+offset_bottom = 7.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.75, 0.75)
+mouse_filter = 2
+theme_override_constants/margin_right = 3
+theme_override_constants/margin_bottom = 2
+
+[node name="Quantity" type="Label" parent="QuantityMargins"]
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 8
+text = "64"
+label_settings = SubResource("LabelSettings_c1tbv")
+horizontal_alignment = 2
+vertical_alignment = 1

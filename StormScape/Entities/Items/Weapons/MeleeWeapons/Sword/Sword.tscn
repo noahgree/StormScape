@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://dqsa4rcdahhwv"]
+[gd_scene load_steps=11 format=3 uid="uid://dqsa4rcdahhwv"]
 
 [ext_resource type="Script" uid="uid://ut1n80th00qw" path="res://Entities/Items/Weapons/MeleeWeapons/MeleeWeapon.gd" id="1_lbp1q"]
 [ext_resource type="Shader" uid="uid://0iw7utoi4lxy" path="res://Utilities/Game/Shaders/TintAndGlowUnshaded.gdshader" id="2_7nljy"]
@@ -6,7 +6,6 @@
 [ext_resource type="Texture2D" uid="uid://b3wtl45dungco" path="res://Entities/Items/Weapons/MeleeWeapons/Sword/SwordBaseCT.tres" id="3_6vtii"]
 [ext_resource type="PackedScene" uid="uid://lw5fgm5pgoif" path="res://Entities/EntityCore/Sprites/EntityHandSprite.tscn" id="4_rbgd3"]
 [ext_resource type="AnimationLibrary" uid="uid://dk7m82xohebji" path="res://Entities/Items/Weapons/MeleeWeapons/MeleeWeaponAnimLibrary.res" id="6_drw00"]
-[ext_resource type="PackedScene" uid="uid://batrfwan8r8ov" path="res://Entities/Items/WeaponMods/WeaponModManager.tscn" id="7_7nljy"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_rbgd3"]
 shader = ExtResource("2_7nljy")
@@ -30,10 +29,9 @@ animations = [{
 radius = 2.82843
 height = 22.6274
 
-[node name="Sword" type="Node2D" node_paths=PackedStringArray("sprites_to_tint")]
+[node name="Sword" type="Node2D"]
 position = Vector2(8, -8)
 script = ExtResource("1_lbp1q")
-sprites_to_tint = [NodePath("ItemSprite")]
 
 [node name="ItemSprite" type="AnimatedSprite2D" parent="."]
 material = SubResource("ShaderMaterial_rbgd3")
@@ -61,5 +59,3 @@ position = Vector2(7, -7)
 libraries = {
 &"MeleeWeaponAnimLibrary": ExtResource("6_drw00")
 }
-
-[node name="WeaponModManager" parent="." instance=ExtResource("7_7nljy")]
