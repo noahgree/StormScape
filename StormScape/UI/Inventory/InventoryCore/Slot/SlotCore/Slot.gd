@@ -307,7 +307,7 @@ func _combine_what_fits_and_leave_remainder(data: Variant) -> void:
 
 	_emit_changes_for_potential_listening_hotbar(data)
 
-## Swaps slot data's.
+## Swaps the items in the slots.
 func _swap_item_stacks(data: Variant) -> void:
 	var temp_item: InvItemResource = item
 	item = InvItemResource.new(data.item.stats, data.item.quantity)
@@ -340,6 +340,7 @@ func _add_one_item_into_slot_with_space(data: Variant, total_quantity: int) -> v
 	_set_item(item)
 	_check_if_inv_slot_is_now_empty_after_dragging_only_one(data)
 
+## Drops the single item into the new slot and finds an available spot for the items that used to be in that spot.
 func _replace_with_one_item_and_find_available_slot_for_previous_stuff(data: Variant) -> void:
 	var temp_item: InvItemResource = item
 	item = InvItemResource.new(data.item.stats, 1)
@@ -349,7 +350,7 @@ func _replace_with_one_item_and_find_available_slot_for_previous_stuff(data: Var
 	_check_if_inv_slot_is_now_empty_after_dragging_only_one(data)
 
 	if not is_trash_slot:
-		synced_inv.add_item_from_inv_item_resource(temp_item, false)
+		synced_inv.insert_from_inv_item(temp_item, false, false)
 
 	_emit_changes_for_potential_listening_hotbar(data)
 
@@ -392,6 +393,7 @@ func _move_all_of_the_half_stack_into_a_slot(data: Variant, source_remainder: in
 func _move_part_of_half_stack_into_slot_and_leave_remainder(data: Variant) -> void:
 	_combine_what_fits_and_leave_remainder(data)
 
+## Drops the half stack into the new slot and finds an available spot for the items that used to be in that spot.
 func _replace_with_half_stack_and_find_available_slot_for_previous_stuff(data: Variant, source_remainder: int,
 																			total_quantity: int) -> void:
 	var temp_item: InvItemResource = item
@@ -400,7 +402,7 @@ func _replace_with_half_stack_and_find_available_slot_for_previous_stuff(data: V
 		synced_inv.inv[index] = item
 
 	if not is_trash_slot:
-		synced_inv.add_item_from_inv_item_resource(temp_item, false)
+		synced_inv.insert_from_inv_item(temp_item, false, false)
 
 	if data.index < synced_inv.inv.size():
 		synced_inv.inv[data.index] = InvItemResource.new(data.item.stats, source_remainder)

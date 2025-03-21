@@ -1,6 +1,7 @@
 extends VBoxContainer
 class_name CraftingManager
-## Manages crafting actions like checking and caching recipes.
+## Manages crafting actions like checking and caching recipes, consuming ingredients, and
+## granting successful crafts.
 
 @export_dir var tres_folder: String ## The folder path to all the TRES items.
 
@@ -258,7 +259,7 @@ func attempt_craft() -> void:
 	is_crafting = true
 
 	if _consume_recipe(output_slot.item.stats.recipe):
-		GlobalData.player_node.inv.add_item_from_inv_item_resource(output_slot.item, false)
+		GlobalData.player_node.inv.insert_from_inv_item(output_slot.item, false, false)
 
 	is_crafting = false
 	_update_crafting_result(null, null, null)
@@ -268,5 +269,5 @@ func attempt_craft() -> void:
 func _on_focused_ui_closed() -> void:
 	for slot: CraftingSlot in input_slots:
 		if slot.item != null:
-			GlobalData.player_node.inv.add_item_from_inv_item_resource(slot.item, false)
+			GlobalData.player_node.inv.insert_from_inv_item(slot.item, false, false)
 			slot.item = null

@@ -27,3 +27,7 @@ class_name StatusEffect
 ## Overrides the default to_string to print a more readable output when included in a print() call.
 func _to_string() -> String:
 	return (effect_name + str(effect_lvl))
+
+## Returns a pretty string representation of this status effect.
+func get_pretty_string() -> String:
+	return (effect_name.capitalize() + " " + str(effect_lvl))

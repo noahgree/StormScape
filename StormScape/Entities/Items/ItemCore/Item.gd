@@ -32,7 +32,8 @@ func _set_item(item_stats: ItemResource) -> void:
 			ground_glow.position.y = ceil(icon.texture.get_height() / 2.0) + ceil(7.0 / 2.0) - 2 + icon.position.y
 
 ## Spawns an item with the passed in details on the ground. Keep suid means we should duplicate
-## the item's stats and pass the old session uid along to it. Can also choose to let items spawn with higher than stack quantities.
+## the item's stats and pass the old session uid along to it. Can also choose to let items spawn with
+## higher than stack quantities.
 static func spawn_on_ground(item_stats: ItemResource, quant: int, location: Vector2,
 							location_range: float, keep_suid: bool = true, respect_max_stack: bool = false) -> void:
 	var quantity_count: int = quant
@@ -126,6 +127,7 @@ func _on_spawn_anim_completed() -> void:
 func remove_from_world() -> void:
 	anim_player.play("remove")
 
+## When the animation of the item being removed from the world is done, we queue free the item.
 func _on_remove_anim_completed() -> void:
 	queue_free()
 
@@ -134,7 +136,7 @@ func _on_area_entered(area: Area2D) -> void:
 
 	if area is ItemReceiverComponent and area.get_parent() is Player:
 		if stats.auto_pickup and can_be_auto_picked_up:
-			(area as ItemReceiverComponent).pickup_item(self)
+			(area as ItemReceiverComponent).add_item_from_world(self)
 		else:
 			(area as ItemReceiverComponent).add_to_in_range_queue(self)
 
@@ -156,6 +158,8 @@ func _on_area_exited(area: Area2D) -> void:
 			(area as ItemReceiverComponent).items_in_range[area.items_in_range.size() - 1].icon.material.set_shader_parameter("outline_color", Color.WHITE)
 			(area as ItemReceiverComponent).items_in_range[area.items_in_range.size() - 1].icon.material.set_shader_parameter("width", 0.82)
 
+## After the quantity of the in-game item changes, we respawn it in the same spot with its updated quantity.
+## This helps retrigger the pickup HUD with the new quantity.
 func respawn_item_after_quantity_change() -> void:
 	can_be_picked_up_at_all = false
 	Item.spawn_on_ground(stats, quantity, global_position, -1, true, false)

@@ -137,6 +137,10 @@ func get_original_stat(stat_id: StringName) -> float:
 	assert(value != null, stat_id + " was null when trying to be retrieved from a stat mods cache.")
 	return value
 
+## Returns true or false depending on whether the cache contains a stat at all.
+func has_stat(stat_id: StringName) -> bool:
+	return base_values.has(stat_id)
+
 ## Gets the StatMod for the stat_id based on the mod_id. Pushes an error if it can't be found.
 func _get_mod(stat_id: StringName, mod_id: StringName) -> StatMod:
 	if stat_id in stat_mods and mod_id in stat_mods[stat_id]:

@@ -33,10 +33,12 @@ func _ready() -> void:
 	super._ready()
 	collision_layer = 0b10000000
 
+## Adds an item to the in range queue.
 func add_to_in_range_queue(item: Item) -> void:
 	items_in_range.append(item)
 	_update_player_item_interact_hud()
 
+## Removes an item from the in range queue.
 func remove_from_in_range_queue(item: Item) -> void:
 	var index: int = items_in_range.find(item)
 	if index != -1:
@@ -66,10 +68,9 @@ func _unhandled_key_input(_event: InputEvent) -> void:
 	if Input.is_action_just_pressed("interact"):
 		_pickup_item_from_queue()
 
+## Attempts to pick up the first item in the items in range queue. The method it calls will drop what doesn't
+## fit back on the ground with the appropriate updated quantity.
 func _pickup_item_from_queue() -> void:
 	if not items_in_range.is_empty():
 		if items_in_range[items_in_range.size() - 1].can_be_picked_up_at_all:
 			add_item_from_world(items_in_range.pop_back())
-
-func pickup_item(item: Item) -> void:
-	add_item_from_world(item)

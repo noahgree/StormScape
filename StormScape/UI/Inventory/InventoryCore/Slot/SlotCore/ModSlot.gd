@@ -21,6 +21,10 @@ func _can_drop_data(_at_position: Vector2, data: Variant) -> bool:
 		return false
 	if not WeaponModManager.check_mod_compatibility(item_viewer_slot.item.stats, data.item.stats):
 		return false
+	if item_viewer_slot.item.stats.has_mod(data.item.stats.id):
+		if data is not ModSlot:
+			return false
+
 	return true
 
 ## An override for _drop_data, though it still calls the super function.
@@ -30,6 +34,6 @@ func _drop_data(at_position: Vector2, data: Variant) -> void:
 	if item != null:
 		if item.quantity > 1:
 			var extra_items: InvItemResource = InvItemResource.new(item.stats, item.quantity - 1)
-			synced_inv.add_item_from_inv_item_resource(extra_items, false)
+			synced_inv.insert_from_inv_item(extra_items, false, false)
 			item.quantity = 1
 			_set_item(item)

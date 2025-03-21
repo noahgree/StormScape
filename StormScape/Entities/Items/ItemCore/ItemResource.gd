@@ -60,7 +60,7 @@ class_name ItemResource
 
 ## The custom string representation of this item resource.
 func _to_string() -> String:
-	return str(GlobalData.ItemType.keys()[item_type]) + ": " + str(GlobalData.ItemRarity.keys()[rarity]) + "_" + name
+	return str(GlobalData.ItemType.keys()[item_type]) + ": " + get_rarity_string() + "_" + name
 
 ## Returns the unique identifier used to distinguish the recipe of this item.
 func get_recipe_id() -> StringName:
@@ -72,6 +72,14 @@ func get_cooldown_id() -> StringName:
 		return StringName(id)
 	else:
 		return StringName(str(session_uid))
+
+## Returns the string title of the rarity rather than just the enum integer value.
+func get_rarity_string() -> String:
+	return str(GlobalData.ItemRarity.keys()[rarity])
+
+## Returns the string title of the item type rather than just the enum integer value.
+func get_item_type_string() -> String:
+	return str(GlobalData.ItemType.keys()[item_type])
 
 ## Whether the item is the same as another item when called externally to compare.
 func is_same_as(other_item: ItemResource) -> bool:

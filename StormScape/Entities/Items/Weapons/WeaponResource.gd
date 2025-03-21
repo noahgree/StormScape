@@ -21,3 +21,11 @@ class_name WeaponResource
 ## Overrides base method to also compare weapon mods.
 func is_same_as(other_item: ItemResource) -> bool:
 	return (str(self) == str(other_item)) and (self.current_mods == other_item.current_mods)
+
+## Checks to see if the weapon has the passed in mod already, regardless of level.
+func has_mod(mod_id: StringName) -> bool:
+	for weapon_mod_entry: Dictionary in current_mods:
+		if weapon_mod_entry.values()[0] != null:
+			if weapon_mod_entry.keys()[0] == mod_id:
+				return true
+	return false
