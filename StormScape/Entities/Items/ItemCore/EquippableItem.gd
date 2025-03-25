@@ -45,7 +45,6 @@ func _set_stats(new_stats: ItemResource) -> void:
 	source_slot.item.stats = stats
 
 func _ready() -> void:
-	add_to_group("has_save_logic")
 	_set_stats(stats)
 
 	if clipping_detector != null:

@@ -43,7 +43,8 @@ func fill_inventory(inv_to_fill_from: Array[InvItemResource]) -> void:
 		if inv_to_fill_from[i] == null:
 			inv[i] = null
 		else:
-			var inv_item: InvItemResource = inv_to_fill_from[i].duplicate()
+			var copy: InvItemResource = inv_to_fill_from[i].duplicate()
+			var inv_item: InvItemResource = InvItemResource.new(copy.stats, inv_to_fill_from[i].quantity) # Need to use new() so that it initializes
 
 			if inv_item.quantity > inv_item.stats.stack_size:
 				Item.spawn_on_ground(inv_item.stats, inv_item.quantity - inv_item.stats.stack_size, global_position, 14.0, true)
@@ -279,13 +280,25 @@ func get_more_ammo(max_amount_needed: int, take_from_inventory: bool,
 ## Custom method for printing the rich details of all inventory array spots.
 func print_inv(include_null_spots: bool = false) -> void:
 	var to_print: String = "[b]-----------------------------------------------------------------------------------------------------------------------------------[/b]\n"
+
 	for i: int in range(inv_size):
 		if inv[i] == null and not include_null_spots:
 			continue
-		to_print = to_print + str(inv[i]) + str(inv[i].stats.get_cooldown_id())
-		if (i + 1) % 5 == 0 and i != inv_size - 1: to_print += "\n"
-		elif i != inv_size - 1: to_print += "  |  "
-	if to_print.ends_with("\n"): to_print = to_print.substr(0, to_print.length() - 1)
-	elif to_print.ends_with("|  "): to_print = to_print.substr(0, to_print.length() - 3)
+
+		if inv[i] != null:
+			to_print = to_print + str(inv[i])
+		else:
+			to_print = to_print + "NULL"
+
+		if (i + 1) % 5 == 0 and i != inv_size - 1:
+			to_print += "\n"
+		elif i != inv_size - 1:
+			to_print += "  |  "
+
+	if to_print.ends_with("\n"):
+		to_print = to_print.substr(0, to_print.length() - 1)
+	elif to_print.ends_with("|  "):
+		to_print = to_print.substr(0, to_print.length() - 3)
+
 	print_rich(to_print + "\n[b]-----------------------------------------------------------------------------------------------------------------------------------[/b]")
 #endregion

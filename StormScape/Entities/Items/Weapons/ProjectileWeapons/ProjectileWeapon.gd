@@ -73,25 +73,19 @@ func _debug_update_particle_emission_box() -> void:
 		return
 	var top_left: Vector2 = particle_emission_origin - particle_emission_extents
 	var bottom_right: Vector2 = particle_emission_origin + particle_emission_extents
-	var points: Array[Vector2] = [top_left, Vector2(bottom_right.x, top_left.y), bottom_right, Vector2(top_left.x, bottom_right.y)]
+	var points: Array[Vector2] = [
+		top_left, Vector2(bottom_right.x, top_left.y), bottom_right, Vector2(top_left.x, bottom_right.y)
+		]
 	debug_emission_box.polygon = points
 #endregion
 
 #region Core
-## Sets the new stats by duplicating the old ones (to ensure unique resource instance) and sets up the cache if we haven't already.
-func _set_stats(new_stats: ItemResource) -> void:
-	super._set_stats(new_stats)
-
-	# Duplicates the cache & effect sources to be unique and then calls for the cache to get loaded.
-	# stats.cache_is_setup gets set to true the first time the cache is setup on first load. From there on it is saved as true even during in-game save and loads.
-	if not stats.cache_is_setup:
-		stats.s_mods = stats.s_mods.duplicate()
-		stats.effect_source = stats.effect_source.duplicate()
-		stats.original_status_effects = stats.effect_source.status_effects.duplicate()
-		ProjectileWeapon.setup_mod_cache(stats)
-
 ## Sets up the base values for the stat mod cache so that weapon mods can be added and managed properly.
-static func setup_mod_cache(stats_resource: ProjWeaponResource) -> void:
+static func initialize_stats_resource(stats_resource: ProjWeaponResource) -> void:
+	stats_resource.s_mods = stats_resource.s_mods.duplicate()
+	stats_resource.effect_source = stats_resource.effect_source.duplicate()
+	stats_resource.original_status_effects = stats_resource.effect_source.status_effects.duplicate()
+
 	var normal_moddable_stats: Dictionary[StringName, float] = {
 		&"fire_cooldown" : stats_resource.fire_cooldown,
 		&"min_charge_time" : stats_resource.min_charge_time,
@@ -136,7 +130,9 @@ static func setup_mod_cache(stats_resource: ProjWeaponResource) -> void:
 	if (stats_resource.ammo_in_mag == -1) and (stats_resource.ammo_type != ProjWeaponResource.ProjAmmoType.STAMINA):
 		stats_resource.ammo_in_mag = int(stats_resource.s_mods.get_stat("mag_size"))
 
-	stats_resource.cache_is_setup = true
+	if stats_resource.weapon_mods_need_to_be_readded_after_save:
+		WeaponModManager.reset_original_arrays_after_save(stats_resource, null)
+		stats_resource.weapon_mods_need_to_be_readded_after_save = false
 
 func _ready() -> void:
 	if Engine.is_editor_hint():
@@ -177,8 +173,8 @@ func enable() -> void:
 			_do_weapon_overheat_visuals(true)
 
 func enter() -> void:
-	if stats.s_mods.base_values.is_empty():
-		ProjectileWeapon.setup_mod_cache(stats)
+	if stats.s_mods.get_stat("pullout_delay") > 0:
+		pullout_delay_timer.start(stats.s_mods.get_stat("pullout_delay"))
 
 	_get_has_needed_ammo_and_reload_if_not()
 	_update_ammo_ui()
@@ -202,10 +198,6 @@ func enter() -> void:
 				overlay.self_modulate.a = source_entity.inv.auto_decrementer.get_overheat(str(stats.session_uid)) / 2.0
 
 	_check_if_needs_mouse_area_scanner()
-
-	if stats.weapon_mods_need_to_be_readded_after_save:
-		source_entity.hands.weapon_mod_manager.add_all_mods_to_weapon(stats)
-		stats.weapon_mods_need_to_be_readded_after_save = false
 
 func exit() -> void:
 	set_process(false)

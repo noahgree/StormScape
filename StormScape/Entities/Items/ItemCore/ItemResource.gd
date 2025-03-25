@@ -11,6 +11,7 @@ class_name ItemResource
 @export var auto_pickup: bool = false ## Whether this item should automatically be picked up when run over.
 @export_custom(PROPERTY_HINT_NONE, "suffix:px") var pickup_radius: int = 4 ## The radius at which the item can be detected for pickup.
 @export_multiline var info: String ## The multiline information about this item.
+@export var extra_details: Array[ItemDetail] = [] ## Additional information to populate into the details panel of the item viewer in the inventory.
 
 @export_group("Visuals")
 @export var ground_icon: Texture2D ## The on-ground representation of the item.
@@ -47,9 +48,9 @@ class_name ItemResource
 
 # Unique Properties #
 @export_storage var session_uid: int: ## The unique id for this resource instance that is relevant only for the current game load.
-	## Sets the session uid based on the new value. If it is negative, it means we want to keep the old suid and can simply
-	## absolute value it and decrement the UIDHelper's var since it will have already triggered the increment once before on the
-	## duplication call. Otherwise, we generate a new one.
+	## Sets the session uid based on the new value. If it is negative, it means we want to keep the old
+	## suid and can simply absolute value it and decrement the UIDHelper's var since it will have
+	## already triggered the increment once before on the duplication call. Otherwise, we generate a new one.
 	set(new_value):
 		if new_value >= 0:
 			session_uid = UIDHelper.generate_session_uid()
@@ -61,10 +62,6 @@ class_name ItemResource
 ## The custom string representation of this item resource.
 func _to_string() -> String:
 	return str(GlobalData.ItemType.keys()[item_type]) + ": " + get_rarity_string() + "_" + name
-
-## Returns the unique identifier used to distinguish the recipe of this item.
-func get_recipe_id() -> StringName:
-	return StringName(id)
 
 ## Returns the cooldown id based on how cooldowns are determined for this item.
 func get_cooldown_id() -> StringName:
@@ -88,6 +85,8 @@ func is_same_as(other_item: ItemResource) -> bool:
 ## Custom duplication method that passes the old session_uid as a negative in order to trick the setter
 ## function to keeping it.
 func duplicate_with_suid(duplicate_subresources: bool = false) -> ItemResource:
+	# This will generate a new incremented session UID from the static var holding the counter
 	var duplicated: ItemResource = self.duplicate(duplicate_subresources)
+	# But this makes that obsolete by just setting it to the negative of what it used to be so that it can stay as its original (the setter sees a negative and makes it positive without generating a UID again)
 	duplicated.session_uid = -session_uid
 	return duplicated

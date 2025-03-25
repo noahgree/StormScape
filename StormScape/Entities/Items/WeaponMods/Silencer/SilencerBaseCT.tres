@@ -1,0 +1,8 @@
+[gd_resource type="CanvasTexture" load_steps=3 format=3 uid="uid://dirmnn1h3qulh"]
+
+[ext_resource type="Texture2D" uid="uid://hn7gkf7dcvfn" path="res://Entities/Items/WeaponMods/Silencer/silencer_base.png" id="1_4ht1r"]
+[ext_resource type="Texture2D" uid="uid://pv407o2fkc01" path="res://Entities/Items/WeaponMods/Silencer/silencer_base_n.png" id="2_6vwqu"]
+
+[resource]
+diffuse_texture = ExtResource("1_4ht1r")
+normal_texture = ExtResource("2_6vwqu")

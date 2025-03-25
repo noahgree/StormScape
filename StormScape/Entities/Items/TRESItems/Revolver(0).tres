@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="ProjWeaponResource" load_steps=20 format=3 uid="uid://dlfmjgnfk6nqj"]
+[gd_resource type="Resource" script_class="ProjWeaponResource" load_steps=21 format=3 uid="uid://dlfmjgnfk6nqj"]
 
 [ext_resource type="Texture2D" uid="uid://bm570hawaupxe" path="res://Entities/Items/Weapons/WeaponVFX/Casings/small_casing.png" id="1_80bso"]
 [ext_resource type="Script" uid="uid://boo31eu083dqd" path="res://Entities/Stats/EffectSystemResources/StatusEffects/StatusEffect.gd" id="1_dlrja"]
@@ -6,6 +6,7 @@
 [ext_resource type="Script" uid="uid://dvasncq3tgljs" path="res://Entities/Items/Weapons/ProjectileWeapons/ProjWeaponResource.gd" id="3_ctqw8"]
 [ext_resource type="Script" uid="uid://cje5bobi6o8bo" path="res://Entities/Items/Hitscans/HitscanResource.gd" id="3_hy3sc"]
 [ext_resource type="Texture2D" uid="uid://bn15edu8bniii" path="res://Entities/Items/Weapons/ProjectileWeapons/Revolver/RevolverBaseFrameCT.tres" id="4_4xu4l"]
+[ext_resource type="Script" uid="uid://cowjdnic7xmkp" path="res://UI/Inventory/PlayerInventory/ItemDetail.gd" id="4_6hpwe"]
 [ext_resource type="PackedScene" uid="uid://ohg1k8yu1y3r" path="res://Entities/Items/Weapons/ProjectileWeapons/Revolver/Revolver.tscn" id="4_p3ec7"]
 [ext_resource type="Texture2D" uid="uid://c5iikcmayrs4h" path="res://Entities/Items/Weapons/ProjectileWeapons/Revolver/revolver_base_frame.png" id="4_xnuh3"]
 [ext_resource type="Resource" uid="uid://58oau5i62soh" path="res://Entities/Player/PlayerCore/PlayerCamera/CamFXPresets/4.tres" id="5_6hpwe"]
@@ -194,9 +195,8 @@ allow_hitscan_holding = true
 ammo_in_mag = -1
 s_mods = SubResource("Resource_7cjse")
 pullout_delay = 0.3
+max_mods = 3
 blocked_mods = Array[StringName]([])
-block_all_mods = false
-cache_is_setup = false
 weapon_mods_need_to_be_readded_after_save = false
 current_mods = Array[Dictionary]([{
 &"1": null
@@ -204,6 +204,12 @@ current_mods = Array[Dictionary]([{
 &"2": null
 }, {
 &"3": null
+}, {
+&"4": null
+}, {
+&"5": null
+}, {
+&"6": null
 }])
 original_status_effects = Array[ExtResource("1_dlrja")]([])
 original_charge_status_effects = Array[ExtResource("1_dlrja")]([])
@@ -216,6 +222,7 @@ stack_size = 1
 auto_pickup = false
 pickup_radius = 5
 info = "A simple revolver. Good in short to medium range at dealing accurate damage."
+extra_details = Array[ExtResource("4_6hpwe")]([])
 ground_icon = ExtResource("4_4xu4l")
 in_hand_icon = ExtResource("4_4xu4l")
 inv_icon = ExtResource("4_xnuh3")

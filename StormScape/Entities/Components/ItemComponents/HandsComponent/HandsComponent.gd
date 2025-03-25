@@ -16,7 +16,6 @@ class_name HandsComponent
 @onready var off_hand_sprite: Sprite2D = $OffHandSprite ## The off hand sprite that is drawn when holding a one handed weapon.
 @onready var drawn_off_hand: Sprite2D = $HandsAnchor/DrawnOffHand ## The extra off hand sprite that is drawn on top of a weapon that needs it. See the equippability details inside the item resources for more info.
 @onready var smoke_particles: CPUParticles2D = $HandsAnchor/SmokeParticles ## The smoke particles used when an item has overheated.
-@onready var weapon_mod_manager: WeaponModManager = $WeaponModManager ## The component that handles weapon mods for any item, whether equipped or not.
 @onready var entity: PhysicsBody2D = get_parent().get_parent() ## The entity using this hands component.
 
 var equipped_item: EquippableItem = null ## The currently equipped equippable item that the entity is holding.
@@ -108,7 +107,7 @@ func _process(delta: float) -> void:
 			if not scale_is_lerping:
 				equipped_item.hold_activate(been_holding_time)
 			return
-		else:
+		elif Input.is_action_just_released("primary"):
 			equipped_item.release_hold_activate(been_holding_time)
 		been_holding_time = 0
 

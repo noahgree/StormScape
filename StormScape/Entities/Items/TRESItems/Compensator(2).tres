@@ -1,0 +1,75 @@
+[gd_resource type="Resource" script_class="WeaponMod" load_steps=9 format=3 uid="uid://cfaje12siuo0b"]
+
+[ext_resource type="Script" uid="uid://boo31eu083dqd" path="res://Entities/Stats/EffectSystemResources/StatusEffects/StatusEffect.gd" id="1_i6gif"]
+[ext_resource type="Script" uid="uid://ctxa7i1mbt7ab" path="res://UI/Inventory/PlayerInventory/Crafting/CraftingIngredient.gd" id="2_vnayl"]
+[ext_resource type="Texture2D" uid="uid://b2y1dxk81lvcv" path="res://Entities/Items/WeaponMods/Compensator/CompensatorBaseCT.tres" id="2_xjtij"]
+[ext_resource type="Script" uid="uid://cowjdnic7xmkp" path="res://UI/Inventory/PlayerInventory/ItemDetail.gd" id="2_yomsf"]
+[ext_resource type="Script" uid="uid://ct7n8wo1p3b20" path="res://Entities/Items/WeaponMods/WeaponMod.gd" id="3_xjtij"]
+[ext_resource type="Script" uid="uid://bcjwesiannbd0" path="res://Entities/Stats/StatMod/StatMod.gd" id="4_yomsf"]
+
+[sub_resource type="Resource" id="Resource_xjtij"]
+script = ExtResource("2_yomsf")
+title = "BLOOM RATE"
+stat_array = Array[String](["bloom_increase_rate_multiplier"])
+up_is_good = false
+suffix = "x"
+metadata/_custom_type_script = "uid://cowjdnic7xmkp"
+
+[sub_resource type="Resource" id="Resource_yomsf"]
+script = ExtResource("4_yomsf")
+stat_id = &"bloom_increase_rate_multiplier"
+mod_id = &"compensator"
+operation = "-%"
+value = 18.0
+rounding = "Exact"
+priority = 1
+max_stack_count = 1
+override_all = false
+metadata/_custom_type_script = "uid://bcjwesiannbd0"
+
+[resource]
+script = ExtResource("3_xjtij")
+allowed_proj_wpns = Array[int]([0, 1, 2, 3, 4, 5, 6, 7, 8, 9])
+allowed_melee_wpns = Array[int]([])
+blocked_mutuals = Array[StringName]([])
+blocked_wpn_stats = Dictionary[StringName, float]({
+&"max_bloom": 0.0
+})
+req_all_blocked_stats = false
+wpn_stat_mods = Array[ExtResource("4_yomsf")]([SubResource("Resource_yomsf")])
+status_effects = Array[ExtResource("1_i6gif")]([])
+charge_status_effects = Array[ExtResource("1_i6gif")]([])
+applied_details = Array[ExtResource("2_yomsf")]([SubResource("Resource_xjtij")])
+equipping_audio = ""
+removal_audio = ""
+id = "compensator"
+name = "Compensator"
+tags = Array[StringName]([])
+item_type = 6
+rarity = 2
+stack_size = 1
+auto_pickup = false
+pickup_radius = 4
+info = "Decreases the rate at which the weapon accumulates bloom."
+extra_details = Array[ExtResource("2_yomsf")]([])
+ground_icon = ExtResource("2_xjtij")
+in_hand_icon = ExtResource("2_xjtij")
+inv_icon = ExtResource("2_xjtij")
+inv_icon_offset = Vector2(0, 0)
+inv_icon_scale = Vector2(1, 1)
+inv_icon_rotation = 0.0
+recipe = Array[ExtResource("2_vnayl")]([])
+output_quantity = 1
+recipe_unlocked = true
+rotation_lerping = 0.1
+holding_offset = Vector2(0, 0)
+holding_degrees = 0.0
+is_gripped_by_one_hand = true
+draw_off_hand = false
+draw_off_hand_offset = Vector2(0, 0)
+main_hand_offset = Vector2(0, 0)
+cooldowns_per_suid = true
+shown_cooldown_fills = Array[String]([])
+show_cursor_cooldown = false
+session_uid = 0
+metadata/_custom_type_script = "uid://ct7n8wo1p3b20"

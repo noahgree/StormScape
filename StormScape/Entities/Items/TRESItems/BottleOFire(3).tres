@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="ProjWeaponResource" load_steps=24 format=3 uid="uid://3avt5jvd3dye"]
+[gd_resource type="Resource" script_class="ProjWeaponResource" load_steps=25 format=3 uid="uid://3avt5jvd3dye"]
 
 [ext_resource type="Script" uid="uid://boo31eu083dqd" path="res://Entities/Stats/EffectSystemResources/StatusEffects/StatusEffect.gd" id="1_fshhe"]
 [ext_resource type="Script" uid="uid://cje5bobi6o8bo" path="res://Entities/Items/Hitscans/HitscanResource.gd" id="1_kxj7m"]
@@ -7,6 +7,7 @@
 [ext_resource type="Script" uid="uid://dvasncq3tgljs" path="res://Entities/Items/Weapons/ProjectileWeapons/ProjWeaponResource.gd" id="3_ru3fl"]
 [ext_resource type="PackedScene" uid="uid://c7gjhm55x8ymc" path="res://Entities/Items/Weapons/ProjectileWeapons/BottleOFire/BottleOFire.tscn" id="3_yykgi"]
 [ext_resource type="Texture2D" uid="uid://btbju7m01l8x2" path="res://Entities/Items/Weapons/ProjectileWeapons/BottleOFire/BottleOFireBaseCT.tres" id="4_l2ckt"]
+[ext_resource type="Script" uid="uid://cowjdnic7xmkp" path="res://UI/Inventory/PlayerInventory/ItemDetail.gd" id="4_m6fyr"]
 [ext_resource type="Script" uid="uid://dkfssottmsrch" path="res://Entities/Stats/EffectSystemResources/EffectSources/EffectSource.gd" id="5_jastm"]
 [ext_resource type="Texture2D" uid="uid://cpo3fkry82ihj" path="res://Entities/Items/Weapons/ProjectileWeapons/BottleOFire/bottle_o_fire_base.png" id="6_14vfc"]
 [ext_resource type="Texture2D" uid="uid://b4bumm88u2qmw" path="res://Entities/Items/Weapons/ProjectileWeapons/BottleOFire/FireBottleThrowableCT.tres" id="6_m6fyr"]
@@ -227,9 +228,8 @@ allow_hitscan_holding = true
 ammo_in_mag = -1
 s_mods = SubResource("Resource_xpvhm")
 pullout_delay = 0.25
+max_mods = 3
 blocked_mods = Array[StringName]([])
-block_all_mods = false
-cache_is_setup = false
 weapon_mods_need_to_be_readded_after_save = false
 current_mods = Array[Dictionary]([{
 &"1": null
@@ -237,6 +237,12 @@ current_mods = Array[Dictionary]([{
 &"2": null
 }, {
 &"3": null
+}, {
+&"4": null
+}, {
+&"5": null
+}, {
+&"6": null
 }])
 original_status_effects = Array[ExtResource("1_fshhe")]([])
 original_charge_status_effects = Array[ExtResource("1_fshhe")]([])
@@ -249,6 +255,7 @@ stack_size = 10
 auto_pickup = false
 pickup_radius = 5
 info = "A cocktail of fuel, rigged to explode on impact."
+extra_details = Array[ExtResource("4_m6fyr")]([])
 ground_icon = ExtResource("4_l2ckt")
 in_hand_icon = ExtResource("6_m6fyr")
 inv_icon = ExtResource("6_14vfc")

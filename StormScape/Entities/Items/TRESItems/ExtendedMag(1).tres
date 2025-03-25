@@ -1,0 +1,66 @@
+[gd_resource type="Resource" script_class="ExtendedMagMod" load_steps=8 format=3 uid="uid://bta1hncad1hd2"]
+
+[ext_resource type="Script" uid="uid://boo31eu083dqd" path="res://Entities/Stats/EffectSystemResources/StatusEffects/StatusEffect.gd" id="1_yiwfh"]
+[ext_resource type="Script" uid="uid://cowjdnic7xmkp" path="res://UI/Inventory/PlayerInventory/ItemDetail.gd" id="2_c6dh0"]
+[ext_resource type="Texture2D" uid="uid://bh30rapahajlk" path="res://Entities/Items/WeaponMods/ExtendedMag/ExtendedMagBaseCT.tres" id="3_yiwfh"]
+[ext_resource type="Script" uid="uid://ctxa7i1mbt7ab" path="res://UI/Inventory/PlayerInventory/Crafting/CraftingIngredient.gd" id="4_wkl4a"]
+[ext_resource type="Script" uid="uid://w5ys6kqn83qm" path="res://Entities/Items/WeaponMods/ExtendedMag/ExtendedMagMod.gd" id="5_8pa7i"]
+[ext_resource type="Script" uid="uid://bcjwesiannbd0" path="res://Entities/Stats/StatMod/StatMod.gd" id="6_pmpis"]
+
+[sub_resource type="Resource" id="Resource_yiwfh"]
+script = ExtResource("6_pmpis")
+stat_id = &"mag_size"
+mod_id = &"extended_mag"
+operation = "+%"
+value = 15.0
+rounding = "Round Up"
+priority = 1
+max_stack_count = 1
+override_all = false
+metadata/_custom_type_script = "uid://bcjwesiannbd0"
+
+[resource]
+script = ExtResource("5_8pa7i")
+allowed_proj_wpns = Array[int]([0, 1, 2, 3, 4, 5, 6, 7, 8, 9])
+allowed_melee_wpns = Array[int]([])
+blocked_mutuals = Array[StringName]([])
+blocked_wpn_stats = Dictionary[StringName, float]({
+&"mag_size": 0.0
+})
+req_all_blocked_stats = false
+wpn_stat_mods = Array[ExtResource("6_pmpis")]([SubResource("Resource_yiwfh")])
+status_effects = Array[ExtResource("1_yiwfh")]([])
+charge_status_effects = Array[ExtResource("1_yiwfh")]([])
+equipping_audio = ""
+removal_audio = ""
+id = "extended_mag"
+name = "Extended Mag"
+tags = Array[StringName]([])
+item_type = 6
+rarity = 1
+stack_size = 3
+auto_pickup = false
+pickup_radius = 4
+info = "Increases magazine size."
+extra_details = Array[ExtResource("2_c6dh0")]([])
+ground_icon = ExtResource("3_yiwfh")
+in_hand_icon = ExtResource("3_yiwfh")
+inv_icon = ExtResource("3_yiwfh")
+inv_icon_offset = Vector2(0, 0)
+inv_icon_scale = Vector2(1, 1)
+inv_icon_rotation = 0.0
+recipe = Array[ExtResource("4_wkl4a")]([])
+output_quantity = 1
+recipe_unlocked = true
+rotation_lerping = 0.1
+holding_offset = Vector2(0, 0)
+holding_degrees = 0.0
+is_gripped_by_one_hand = true
+draw_off_hand = false
+draw_off_hand_offset = Vector2(0, 0)
+main_hand_offset = Vector2(0, 0)
+cooldowns_per_suid = true
+shown_cooldown_fills = Array[String]([])
+show_cursor_cooldown = false
+session_uid = 0
+metadata/_custom_type_script = "uid://w5ys6kqn83qm"

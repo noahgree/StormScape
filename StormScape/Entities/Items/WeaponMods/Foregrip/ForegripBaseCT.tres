@@ -1,0 +1,8 @@
+[gd_resource type="CanvasTexture" load_steps=3 format=3 uid="uid://oxy626mdjjor"]
+
+[ext_resource type="Texture2D" uid="uid://bkkp2kn2ximns" path="res://Entities/Items/WeaponMods/Foregrip/foregrip_base.png" id="1_odsp2"]
+[ext_resource type="Texture2D" uid="uid://bl7dnq6pgkoth" path="res://Entities/Items/WeaponMods/Foregrip/foregrip_base_n.png" id="2_ayrci"]
+
+[resource]
+diffuse_texture = ExtResource("1_odsp2")
+normal_texture = ExtResource("2_ayrci")

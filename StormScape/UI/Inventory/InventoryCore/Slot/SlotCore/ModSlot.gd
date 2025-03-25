@@ -6,6 +6,7 @@ class_name ModSlot
 var is_hidden: bool = true: ## When true, the slot cannot de dropped onto as it is hidden and disabled.
 	set(new_value):
 		is_hidden = new_value
+		visible = not is_hidden
 var mod_slot_index: int ## The index within the grid of mod slots.
 var item_viewer_slot: Slot ## A reference to the item viewer slot that determines which mods should display.
 
@@ -36,4 +37,6 @@ func _drop_data(at_position: Vector2, data: Variant) -> void:
 			var extra_items: InvItemResource = InvItemResource.new(item.stats, item.quantity - 1)
 			synced_inv.insert_from_inv_item(extra_items, false, false)
 			item.quantity = 1
+			pause_changed_signals = true
 			_set_item(item)
+			pause_changed_signals = false

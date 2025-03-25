@@ -42,7 +42,7 @@ enum ProjAmmoType { ## The types of projectile ammo.
 @export var effect_source: EffectSource ## The resource that defines what happens to the entity that is hit by this weapon. Includes things like damage and status effects.
 
 @export_group("Ammo & Reloading")
-@export var ammo_type: ProjAmmoType = ProjAmmoType.LIGHT ## The kind of ammo to consume on use.
+@export var ammo_type: ProjWeaponResource.ProjAmmoType = ProjAmmoType.NONE ## The kind of ammo to consume on use. Leave empty to consider the ammo type to be "None" (or "Self" when the toggle is checked below as well).
 @export var mag_size: int = 30  ## Number of normal attack executions that can happen before a reload is needed.
 @export_enum("Magazine", "Single") var reload_type: String = "Magazine" ## Whether to reload over time or all at once at the end.
 @export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var mag_reload_time: float = 1.0 ## How long it takes to reload an entire mag.
@@ -114,3 +114,8 @@ enum ProjAmmoType { ## The types of projectile ammo.
 		ammo_in_mag = new_ammo_amount
 		if DebugFlags.PrintFlags.ammo_updates and self.name != "":
 			print_rich("(" + str(self) + ") [b]AMMO[/b]: [color=cyan]" + str(ammo_in_mag) + "[/color]")
+
+
+static func get_ammo_item_id_by_enum_value(enum_value: ProjAmmoType) -> StringName:
+	var main_string: String = ProjAmmoType.keys()[enum_value]
+	return StringName(main_string.to_lower() + "_" + "ammo")

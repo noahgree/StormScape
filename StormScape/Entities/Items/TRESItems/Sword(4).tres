@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="MeleeWeaponResource" load_steps=13 format=3 uid="uid://dk3vlbvu2b7eq"]
+[gd_resource type="Resource" script_class="MeleeWeaponResource" load_steps=14 format=3 uid="uid://dk3vlbvu2b7eq"]
 
 [ext_resource type="Resource" uid="uid://cvqddapopo145" path="res://Entities/Player/PlayerCore/PlayerCamera/CamFXPresets/5.tres" id="1_gypsi"]
 [ext_resource type="Resource" uid="uid://y5iqfraea8ry" path="res://Entities/Player/PlayerCore/PlayerCamera/CamFXPresets/2.tres" id="2_emnl3"]
@@ -6,6 +6,7 @@
 [ext_resource type="Script" uid="uid://boo31eu083dqd" path="res://Entities/Stats/EffectSystemResources/StatusEffects/StatusEffect.gd" id="3_8m4wh"]
 [ext_resource type="Script" uid="uid://dkfssottmsrch" path="res://Entities/Stats/EffectSystemResources/EffectSources/EffectSource.gd" id="3_67eer"]
 [ext_resource type="Script" uid="uid://ctxa7i1mbt7ab" path="res://UI/Inventory/PlayerInventory/Crafting/CraftingIngredient.gd" id="4_267mj"]
+[ext_resource type="Script" uid="uid://cowjdnic7xmkp" path="res://UI/Inventory/PlayerInventory/ItemDetail.gd" id="5_3cchv"]
 [ext_resource type="Texture2D" uid="uid://b3wtl45dungco" path="res://Entities/Items/Weapons/MeleeWeapons/Sword/SwordBaseCT.tres" id="5_67eer"]
 [ext_resource type="PackedScene" uid="uid://dqsa4rcdahhwv" path="res://Entities/Items/Weapons/MeleeWeapons/Sword/Sword.tscn" id="5_gypsi"]
 [ext_resource type="Script" uid="uid://c2gdoebfp12dq" path="res://Entities/Stats/StatMod/StatModsCacheResource.gd" id="8_3cchv"]
@@ -83,9 +84,8 @@ charge_stamina_cost = 25
 charge_use_sound = ""
 s_mods = SubResource("Resource_vevwc")
 pullout_delay = 0.25
+max_mods = 3
 blocked_mods = Array[StringName]([])
-block_all_mods = false
-cache_is_setup = false
 weapon_mods_need_to_be_readded_after_save = false
 current_mods = Array[Dictionary]([{
 &"1": null
@@ -93,6 +93,12 @@ current_mods = Array[Dictionary]([{
 &"2": null
 }, {
 &"3": null
+}, {
+&"4": null
+}, {
+&"5": null
+}, {
+&"6": null
 }])
 original_status_effects = Array[ExtResource("3_8m4wh")]([])
 original_charge_status_effects = Array[ExtResource("3_8m4wh")]([])
@@ -105,6 +111,7 @@ stack_size = 1
 auto_pickup = false
 pickup_radius = 6
 info = "You swing this right around."
+extra_details = Array[ExtResource("5_3cchv")]([])
 ground_icon = ExtResource("5_67eer")
 in_hand_icon = ExtResource("5_67eer")
 inv_icon = ExtResource("5_67eer")

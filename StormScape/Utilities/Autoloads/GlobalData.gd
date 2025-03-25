@@ -99,3 +99,5 @@ const rarity_colors: Dictionary[String, Dictionary] = {
 		ItemRarity.SINGULAR : Color(0.805, 0.266, 0.443, 0.75)
 	}
 }
+
+var invis_char: String = "[color=#93665800][char=21A5][/color]"

@@ -10,4 +10,4 @@ class_name CraftingIngredient
 
 
 func _to_string() -> String:
-	return type.to_upper() + ": (" + str(quantity) + ") " + (str(item.get_recipe_id()) if type == "Item" else str(tags)) + "[" + rarity_match + "]"
+	return type.to_upper() + ": (" + str(quantity) + ") " + (str(item.id) if type == "Item" else str(tags)) + "[" + rarity_match + "]"

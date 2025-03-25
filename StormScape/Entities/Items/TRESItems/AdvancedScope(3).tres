@@ -1,0 +1,80 @@
+[gd_resource type="Resource" script_class="WeaponMod" load_steps=9 format=3 uid="uid://bx2nl7cqe7odq"]
+
+[ext_resource type="Script" uid="uid://cowjdnic7xmkp" path="res://UI/Inventory/PlayerInventory/ItemDetail.gd" id="1_01uku"]
+[ext_resource type="Script" uid="uid://boo31eu083dqd" path="res://Entities/Stats/EffectSystemResources/StatusEffects/StatusEffect.gd" id="1_57sy7"]
+[ext_resource type="Texture2D" uid="uid://cqxcmyspr6jno" path="res://Entities/Items/WeaponMods/Scopes/AdvancedScope/AdvancedScopeBaseCT.tres" id="2_01uku"]
+[ext_resource type="Script" uid="uid://ctxa7i1mbt7ab" path="res://UI/Inventory/PlayerInventory/Crafting/CraftingIngredient.gd" id="3_tcq2h"]
+[ext_resource type="Script" uid="uid://ct7n8wo1p3b20" path="res://Entities/Items/WeaponMods/WeaponMod.gd" id="4_tmboo"]
+[ext_resource type="Script" uid="uid://bcjwesiannbd0" path="res://Entities/Stats/StatMod/StatMod.gd" id="5_ovewf"]
+
+[sub_resource type="Resource" id="Resource_xvtpy"]
+script = ExtResource("5_ovewf")
+stat_id = &"max_bloom"
+mod_id = &"advanced_scope"
+operation = "-%"
+value = 35.0
+rounding = "Exact"
+priority = 1
+max_stack_count = 1
+override_all = false
+metadata/_custom_type_script = "uid://bcjwesiannbd0"
+
+[sub_resource type="Resource" id="Resource_57sy7"]
+script = ExtResource("5_ovewf")
+stat_id = &"angular_spread"
+mod_id = &"advanced_scope"
+operation = "-%"
+value = 30.0
+rounding = "Exact"
+priority = 1
+max_stack_count = 1
+override_all = false
+metadata/_custom_type_script = "uid://bcjwesiannbd0"
+
+[resource]
+script = ExtResource("4_tmboo")
+allowed_proj_wpns = Array[int]([0, 1, 2, 3, 4, 5, 6, 7, 8, 9])
+allowed_melee_wpns = Array[int]([])
+blocked_mutuals = Array[StringName]([&"simple_scope"])
+blocked_wpn_stats = Dictionary[StringName, float]({
+&"barrage_count": 1.0,
+&"max_bloom": 0.0
+})
+req_all_blocked_stats = true
+wpn_stat_mods = Array[ExtResource("5_ovewf")]([SubResource("Resource_xvtpy"), SubResource("Resource_57sy7")])
+status_effects = Array[ExtResource("1_57sy7")]([])
+charge_status_effects = Array[ExtResource("1_57sy7")]([])
+applied_details = Array[ExtResource("1_01uku")]([])
+equipping_audio = ""
+removal_audio = ""
+id = "advanced_scope"
+name = "Advanced Scope"
+tags = Array[StringName]([])
+item_type = 6
+rarity = 3
+stack_size = 1
+auto_pickup = false
+pickup_radius = 4
+info = "Heavily decreases the maximum amount of spread applied to projectiles."
+extra_details = Array[ExtResource("1_01uku")]([])
+ground_icon = ExtResource("2_01uku")
+in_hand_icon = ExtResource("2_01uku")
+inv_icon = ExtResource("2_01uku")
+inv_icon_offset = Vector2(0, 0)
+inv_icon_scale = Vector2(1, 1)
+inv_icon_rotation = 0.0
+recipe = Array[ExtResource("3_tcq2h")]([])
+output_quantity = 1
+recipe_unlocked = true
+rotation_lerping = 0.1
+holding_offset = Vector2(0, 0)
+holding_degrees = 0.0
+is_gripped_by_one_hand = true
+draw_off_hand = false
+draw_off_hand_offset = Vector2(0, 0)
+main_hand_offset = Vector2(0, 0)
+cooldowns_per_suid = true
+shown_cooldown_fills = Array[String]([])
+show_cursor_cooldown = false
+session_uid = 0
+metadata/_custom_type_script = "uid://ct7n8wo1p3b20"

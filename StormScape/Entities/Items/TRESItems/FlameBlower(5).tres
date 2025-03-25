@@ -1,7 +1,8 @@
-[gd_resource type="Resource" script_class="ProjWeaponResource" load_steps=27 format=3 uid="uid://dpmwqsai6gxsr"]
+[gd_resource type="Resource" script_class="ProjWeaponResource" load_steps=28 format=3 uid="uid://dpmwqsai6gxsr"]
 
 [ext_resource type="Script" uid="uid://dkfssottmsrch" path="res://Entities/Stats/EffectSystemResources/EffectSources/EffectSource.gd" id="2_hrsx2"]
 [ext_resource type="Script" uid="uid://boo31eu083dqd" path="res://Entities/Stats/EffectSystemResources/StatusEffects/StatusEffect.gd" id="3_frpgg"]
+[ext_resource type="Script" uid="uid://cowjdnic7xmkp" path="res://UI/Inventory/PlayerInventory/ItemDetail.gd" id="4_5cw7p"]
 [ext_resource type="Resource" uid="uid://c8reitxej77jy" path="res://Entities/Stats/EffectSystemResources/StatusEffects/BadEffects/Burning/Burning1FlameBlower.tres" id="4_qt8af"]
 [ext_resource type="Resource" uid="uid://cl4lqk1b8bquo" path="res://Entities/Player/PlayerCore/PlayerCamera/CamFXPresets/0.tres" id="5_ifwgd"]
 [ext_resource type="Texture2D" uid="uid://bhse86b50y7vx" path="res://Entities/Items/Weapons/ProjectileWeapons/FlameBlower/FlameBlowerBaseFrameCT.tres" id="6_1teer"]
@@ -146,7 +147,7 @@ aoe_sound = ""
 
 [sub_resource type="Resource" id="Resource_7cfgi"]
 script = ExtResource("13_dbx0m")
-debug_print_mod_changes = false
+debug_print_mod_changes = true
 
 [sub_resource type="Curve" id="Curve_lm546"]
 _data = [Vector2(0, 0.296909), 0.0, -0.222926, 0, 0, Vector2(1, 0.180069), 0.0, 0.0, 0, 0]
@@ -230,9 +231,8 @@ allow_hitscan_holding = true
 ammo_in_mag = -1
 s_mods = SubResource("Resource_7cfgi")
 pullout_delay = 0.25
+max_mods = 3
 blocked_mods = Array[StringName]([&"extended_mag"])
-block_all_mods = false
-cache_is_setup = false
 weapon_mods_need_to_be_readded_after_save = false
 current_mods = Array[Dictionary]([{
 &"1": null
@@ -240,6 +240,12 @@ current_mods = Array[Dictionary]([{
 &"2": null
 }, {
 &"3": null
+}, {
+&"4": null
+}, {
+&"5": null
+}, {
+&"6": null
 }])
 original_status_effects = Array[ExtResource("3_frpgg")]([])
 original_charge_status_effects = Array[ExtResource("3_frpgg")]([])
@@ -251,7 +257,8 @@ rarity = 5
 stack_size = 1
 auto_pickup = false
 pickup_radius = 6
-info = "Not quite a flame thrower..."
+info = "Like a leaf blower. But with flames. "
+extra_details = Array[ExtResource("4_5cw7p")]([])
 ground_icon = ExtResource("6_1teer")
 in_hand_icon = ExtResource("6_1teer")
 inv_icon = ExtResource("8_l60l2")

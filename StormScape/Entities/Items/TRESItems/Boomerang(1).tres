@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="ProjWeaponResource" load_steps=20 format=3 uid="uid://4nvp28pvjtk3"]
+[gd_resource type="Resource" script_class="ProjWeaponResource" load_steps=21 format=3 uid="uid://4nvp28pvjtk3"]
 
 [ext_resource type="Script" uid="uid://boo31eu083dqd" path="res://Entities/Stats/EffectSystemResources/StatusEffects/StatusEffect.gd" id="1_71p75"]
 [ext_resource type="Texture2D" uid="uid://c7i0hkkoanp61" path="res://Entities/Items/Weapons/ProjectileWeapons/Boomerang/boomerang_wood.png" id="1_83uvj"]
@@ -7,11 +7,12 @@
 [ext_resource type="Script" uid="uid://dvasncq3tgljs" path="res://Entities/Items/Weapons/ProjectileWeapons/ProjWeaponResource.gd" id="3_qvjon"]
 [ext_resource type="Script" uid="uid://cje5bobi6o8bo" path="res://Entities/Items/Hitscans/HitscanResource.gd" id="3_sx4mp"]
 [ext_resource type="Script" uid="uid://bj3r5oopspj6l" path="res://Entities/Items/Projectiles/ProjectileResource.gd" id="4_5tlmk"]
+[ext_resource type="Script" uid="uid://cowjdnic7xmkp" path="res://UI/Inventory/PlayerInventory/ItemDetail.gd" id="4_8depf"]
 [ext_resource type="Texture2D" uid="uid://ln38htpivqou" path="res://Entities/Items/Weapons/ProjectileWeapons/Boomerang/BoomerangWoodCT.tres" id="4_w0uge"]
 [ext_resource type="PackedScene" uid="uid://vdrq4v5hjc06" path="res://Entities/Items/Projectiles/Boomerangs/BoomerangWoodProj.tscn" id="5_ixbes"]
 [ext_resource type="Script" uid="uid://c2gdoebfp12dq" path="res://Entities/Stats/StatMod/StatModsCacheResource.gd" id="6_10jum"]
 [ext_resource type="PackedScene" uid="uid://b6v13q8eomso" path="res://Entities/Items/Weapons/ProjectileWeapons/Boomerang/BoomerangWood.tscn" id="7_f3xvq"]
-[ext_resource type="Script" uid="uid://ctxa7i1mbt7ab" path="res://UI/Inventory/PlayerInventory/Crafting/CraftingIngredient.gd" id="8_280ga"]
+[ext_resource type="Script" uid="uid://ctxa7i1mbt7ab" path="res://UI/Inventory/PlayerInventory/Crafting/CraftingIngredient.gd" id="11_icge0"]
 
 [sub_resource type="Resource" id="Resource_3tpeu"]
 script = ExtResource("1_rpmcv")
@@ -198,9 +199,8 @@ allow_hitscan_holding = true
 ammo_in_mag = -1
 s_mods = SubResource("Resource_5tusj")
 pullout_delay = 0.3
+max_mods = 3
 blocked_mods = Array[StringName]([])
-block_all_mods = false
-cache_is_setup = false
 weapon_mods_need_to_be_readded_after_save = false
 current_mods = Array[Dictionary]([{
 &"1": null
@@ -208,6 +208,12 @@ current_mods = Array[Dictionary]([{
 &"2": null
 }, {
 &"3": null
+}, {
+&"4": null
+}, {
+&"5": null
+}, {
+&"6": null
 }])
 original_status_effects = Array[ExtResource("1_71p75")]([])
 original_charge_status_effects = Array[ExtResource("1_71p75")]([])
@@ -220,13 +226,14 @@ stack_size = 1
 auto_pickup = false
 pickup_radius = 5
 info = "A throwable projectile that always finds its way home."
+extra_details = Array[ExtResource("4_8depf")]([])
 ground_icon = ExtResource("4_w0uge")
 in_hand_icon = ExtResource("4_w0uge")
 inv_icon = ExtResource("1_83uvj")
 inv_icon_offset = Vector2(0, 0)
 inv_icon_scale = Vector2(1, 1)
 inv_icon_rotation = 0.0
-recipe = Array[ExtResource("8_280ga")]([])
+recipe = Array[ExtResource("11_icge0")]([])
 output_quantity = 1
 recipe_unlocked = true
 item_scene = ExtResource("7_f3xvq")

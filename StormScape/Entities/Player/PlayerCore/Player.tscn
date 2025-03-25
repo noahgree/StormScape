@@ -1,4 +1,4 @@
-[gd_scene load_steps=209 format=3 uid="uid://dba8mrurjlekp"]
+[gd_scene load_steps=214 format=3 uid="uid://dba8mrurjlekp"]
 
 [ext_resource type="Script" uid="uid://c3rpxq8pnbdje" path="res://Entities/Player/PlayerCore/Player.gd" id="1_m33tt"]
 [ext_resource type="Script" uid="uid://c2gdoebfp12dq" path="res://Entities/Stats/StatMod/StatModsCacheResource.gd" id="2_vetip"]
@@ -43,7 +43,7 @@
 [ext_resource type="Resource" uid="uid://bh18kqp2up3oe" path="res://Entities/Items/TRESItems/Pickaxe(3).tres" id="34_i8j5r"]
 [ext_resource type="Script" uid="uid://ccdihncnoj7dh" path="res://UI/Inventory/PlayerInventory/ItemInteractionHUD.gd" id="35_45ikj"]
 [ext_resource type="Resource" uid="uid://bper7kxtsf7f1" path="res://Entities/Items/TRESItems/Axe(1).tres" id="35_g2eu7"]
-[ext_resource type="Resource" uid="uid://m8eslst1uuxh" path="res://Entities/Items/TRESItems/LightAmmo(0).tres" id="35_qbswt"]
+[ext_resource type="Resource" uid="uid://m8eslst1uuxh" path="res://Entities/Items/TRESItems/Light(0).tres" id="35_qbswt"]
 [ext_resource type="Script" uid="uid://di5hu6fk5mbfe" path="res://UI/PlayerStatsOverlay/PlayerStatsOverlay.gd" id="35_yln51"]
 [ext_resource type="Texture2D" uid="uid://dwo0fuwylfxeq" path="res://UI/PlayerStatsOverlay/Assets/Stats Panel Bckgrd.png" id="36_vdy3t"]
 [ext_resource type="Texture2D" uid="uid://k0o25ihgea1n" path="res://UI/PlayerStatsOverlay/Assets/Hunger Progress Under.png" id="37_32xjt"]
@@ -53,15 +53,17 @@
 [ext_resource type="Shader" uid="uid://c0de04pgeen76" path="res://Utilities/Game/Shaders/BlurBehind.gdshader" id="39_r4tgk"]
 [ext_resource type="Texture2D" uid="uid://xnppg0u7t7w4" path="res://UI/PlayerStatsOverlay/Assets/Stamina Recharge Under.png" id="39_ryeha"]
 [ext_resource type="Resource" uid="uid://c5jim46mul7ex" path="res://Entities/Items/TRESItems/IonCharge(0).tres" id="40_6wv7y"]
-[ext_resource type="Resource" uid="uid://bcvljie626314" path="res://Entities/Items/TRESItems/HeavyAmmo(0).tres" id="40_7ipu6"]
-[ext_resource type="Resource" uid="uid://bdjhfsluk53lc" path="res://Entities/Items/TRESItems/MediumAmmo(0).tres" id="40_r220t"]
+[ext_resource type="Resource" uid="uid://bcvljie626314" path="res://Entities/Items/TRESItems/Heavy(0).tres" id="40_7ipu6"]
+[ext_resource type="Resource" uid="uid://bdjhfsluk53lc" path="res://Entities/Items/TRESItems/Medium(0).tres" id="40_r220t"]
 [ext_resource type="Texture2D" uid="uid://gfbxblly7q78" path="res://UI/PlayerStatsOverlay/Assets/Stamina Recharge Bar.png" id="40_suqvl"]
+[ext_resource type="Resource" uid="uid://bx2nl7cqe7odq" path="res://Entities/Items/TRESItems/AdvancedScope(3).tres" id="41_bvo3j"]
 [ext_resource type="Script" uid="uid://co5w78bykccb6" path="res://UI/Inventory/InventoryCore/InventoryPopulator.gd" id="41_nwjbq"]
 [ext_resource type="Texture2D" uid="uid://br8kgmxe41gh0" path="res://UI/PlayerStatsOverlay/Assets/Hunger Bar.png" id="41_wehgh"]
 [ext_resource type="Texture2D" uid="uid://cjjobaebw8uwu" path="res://UI/PlayerStatsOverlay/Assets/Hunger Under.png" id="42_im6xp"]
 [ext_resource type="PackedScene" uid="uid://m4ur3n2hwsp8" path="res://UI/Inventory/InventoryCore/Slot/SlotCore/Slot.tscn" id="42_r422n"]
+[ext_resource type="Resource" uid="uid://bsq8lhqy8j1i7" path="res://Entities/Items/TRESItems/SimpleScope(1).tres" id="43_gb65f"]
 [ext_resource type="Texture2D" uid="uid://c5mo0gxdddlte" path="res://UI/PlayerStatsOverlay/Assets/Hunger Change.png" id="43_k8324"]
-[ext_resource type="Resource" uid="uid://cpxev3kvt74vw" path="res://Entities/Items/TRESItems/ShellAmmo(0).tres" id="44_q38m2"]
+[ext_resource type="Resource" uid="uid://cpxev3kvt74vw" path="res://Entities/Items/TRESItems/Shell(0).tres" id="44_q38m2"]
 [ext_resource type="Shader" uid="uid://c7jh4yrgpc0u" path="res://Utilities/Game/Shaders/StaminaBarTipGlow.gdshader" id="44_vk3bi"]
 [ext_resource type="Texture2D" uid="uid://l7chqvbfg16y" path="res://UI/PlayerStatsOverlay/Assets/Stamina Bar.png" id="45_3j47m"]
 [ext_resource type="Resource" uid="uid://kmidnuyti5xi" path="res://Entities/Items/TRESItems/Boomerang(2).tres" id="45_xur7q"]
@@ -78,9 +80,11 @@
 [ext_resource type="Texture2D" uid="uid://csmk61f3sxw44" path="res://UI/PlayerStatsOverlay/Assets/Shield Under.png" id="49_ynd7x"]
 [ext_resource type="Texture2D" uid="uid://dcsw75wiocvy0" path="res://UI/PlayerStatsOverlay/Assets/Shield Change.png" id="50_86ubk"]
 [ext_resource type="Resource" uid="uid://8uj8fwadqlk0" path="res://Entities/Items/TRESItems/Stick(0).tres" id="50_0313k"]
+[ext_resource type="Resource" uid="uid://cfaje12siuo0b" path="res://Entities/Items/TRESItems/Compensator(2).tres" id="50_eufsu"]
 [ext_resource type="Texture2D" uid="uid://b2v0527iatsjd" path="res://UI/PlayerStatsOverlay/Assets/Health.png" id="51_6cphe"]
 [ext_resource type="Texture2D" uid="uid://dhvpkl1svbcys" path="res://UI/PlayerStatsOverlay/Assets/Health Under.png" id="52_dhyl8"]
 [ext_resource type="Resource" uid="uid://dpmwqsai6gxsr" path="res://Entities/Items/TRESItems/FlameBlower(5).tres" id="52_ebist"]
+[ext_resource type="Resource" uid="uid://b8gvf7ta6a2rj" path="res://Entities/Items/TRESItems/Foregrip(1).tres" id="52_eufsu"]
 [ext_resource type="Resource" uid="uid://1q7rlned2r23" path="res://Entities/Items/TRESItems/Gattler(3).tres" id="53_lo25j"]
 [ext_resource type="Texture2D" uid="uid://lj78cee4aa38" path="res://UI/PlayerStatsOverlay/Assets/Health Change.png" id="53_qsiea"]
 [ext_resource type="Resource" uid="uid://dk3vlbvu2b7eq" path="res://Entities/Items/TRESItems/Sword(4).tres" id="57_6wv7y"]
@@ -93,7 +97,7 @@
 [ext_resource type="Script" uid="uid://ct7n8wo1p3b20" path="res://Entities/Items/WeaponMods/WeaponMod.gd" id="63_qvtc6"]
 [ext_resource type="Resource" uid="uid://bnc4tbhdxpauy" path="res://Entities/Items/TRESItems/Musket(0).tres" id="64_hxjay"]
 [ext_resource type="Texture2D" uid="uid://7wf7omw2r50u" path="res://UI/OverheadUI/Overheat/overheat_progress.png" id="64_o382h"]
-[ext_resource type="Resource" uid="uid://caxftf2aer6g4" path="res://Entities/Items/TRESItems/BurningBullets(2).tres" id="65_14ixx"]
+[ext_resource type="Resource" uid="uid://caxftf2aer6g4" path="res://Entities/Items/TRESItems/Igniter(4).tres" id="65_14ixx"]
 [ext_resource type="Texture2D" uid="uid://dbm40lvpgbd8t" path="res://Utilities/Game/Particles/dense_light.png" id="66_461tf"]
 [ext_resource type="Shader" uid="uid://cwbeekjoy0uyh" path="res://Utilities/Game/Shaders/GlintShader.gdshader" id="67_w57pe"]
 [ext_resource type="Texture2D" uid="uid://dtft3mljs2y5s" path="res://UI/Inventory/InventoryCore/Slot/Universal/trash_slot_icon.png" id="69_4ao77"]
@@ -104,7 +108,6 @@
 [ext_resource type="FontFile" uid="uid://bp2lgrlhj8cet" path="res://Assets/Theming/Fonts/FontAssets/Pixel/C&C Red Alert [INET].ttf" id="85_7xlwj"]
 [ext_resource type="FontVariation" uid="uid://blgkcg6c83yln" path="res://Assets/Theming/Fonts/GameFontResources/ui_pixel_font.tres" id="91_55d85"]
 [ext_resource type="Script" uid="uid://dbc2ecb1mkugh" path="res://UI/PlayerStatsOverlay/ActiveSlotInfo.gd" id="91_qr476"]
-[ext_resource type="Script" uid="uid://r0j8jlj5c8ji" path="res://UI/Inventory/PlayerInventory/WeaponModsHUD.gd" id="102_gdihr"]
 [ext_resource type="Texture2D" uid="uid://dg4k8vt7nqpl6" path="res://UI/Inventory/InventoryCore/Button/button_raised_wood.png" id="106_0313k"]
 [ext_resource type="Texture2D" uid="uid://2fldkutlispo" path="res://UI/Inventory/InventoryCore/Button/button_pressed_wood.png" id="107_thmqm"]
 [ext_resource type="Texture2D" uid="uid://dj16xk01w22w1" path="res://UI/Inventory/InventoryCore/Background/Wood/inv_background_thin_no_stripes_wood.png" id="109_0313k"]
@@ -114,15 +117,14 @@
 [ext_resource type="PackedScene" uid="uid://di7vcyrki71nm" path="res://Entities/Components/DetectionComponent/DetectionComponent.tscn" id="114_hxjay"]
 [ext_resource type="Texture2D" uid="uid://c7rjucvq351g3" path="res://UI/Inventory/InventoryCore/Slot/Wood/translucent_slot_wood.png" id="116_0313k"]
 [ext_resource type="Script" uid="uid://g7648i4hb0q8" path="res://UI/Inventory/PlayerInventory/ItemViewer.gd" id="116_g5u5n"]
-[ext_resource type="Texture2D" uid="uid://b6oke8chd1otq" path="res://UI/Inventory/InventoryCore/Slot/Universal/item_viewer_slot_icon.png" id="117_r5dvw"]
 [ext_resource type="Texture2D" uid="uid://bhwg6ynp1bscr" path="res://UI/Inventory/InventoryCore/Slot/Universal/mod_slot_icon.png" id="118_r5dvw"]
 [ext_resource type="Script" uid="uid://djsaegsb00xsu" path="res://UI/Inventory/PlayerInventory/Crafting/CraftingManager.gd" id="118_thmqm"]
 [ext_resource type="Texture2D" uid="uid://0qokvcd3ucop" path="res://UI/Inventory/InventoryCore/Background/Universal/arrow_icon.png" id="119_bvo3j"]
 [ext_resource type="Texture2D" uid="uid://bd1seekh41q00" path="res://UI/Inventory/InventoryCore/Slot/Universal/craft_output_slot_icon.png" id="119_gb65f"]
+[ext_resource type="Texture2D" uid="uid://ces4hq54n2lxc" path="res://UI/Inventory/InventoryCore/Slot/Wood/normal_slot_wood.png" id="123_da65a"]
 
 [sub_resource type="Resource" id="Resource_rwbul"]
 script = ExtResource("2_vetip")
-debug_print_mod_changes = true
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_3f130"]
 radius = 2.0
@@ -1159,10 +1161,22 @@ script = ExtResource("32_ixmb3")
 stats = ExtResource("33_0qw5e")
 quantity = 5
 
+[sub_resource type="Resource" id="Resource_da65a"]
+script = ExtResource("32_ixmb3")
+stats = ExtResource("41_bvo3j")
+quantity = 1
+metadata/_custom_type_script = "uid://dp8osf7r6xkkt"
+
 [sub_resource type="Resource" id="Resource_0313k"]
 script = ExtResource("32_ixmb3")
 stats = ExtResource("75_r5dvw")
 quantity = 3
+metadata/_custom_type_script = "uid://dp8osf7r6xkkt"
+
+[sub_resource type="Resource" id="Resource_6f5us"]
+script = ExtResource("32_ixmb3")
+stats = ExtResource("43_gb65f")
+quantity = 1
 metadata/_custom_type_script = "uid://dp8osf7r6xkkt"
 
 [sub_resource type="Resource" id="Resource_kx1me"]
@@ -1202,10 +1216,22 @@ script = ExtResource("32_ixmb3")
 stats = ExtResource("40_r220t")
 quantity = 900
 
+[sub_resource type="Resource" id="Resource_5qckj"]
+script = ExtResource("32_ixmb3")
+stats = ExtResource("50_eufsu")
+quantity = 1
+metadata/_custom_type_script = "uid://dp8osf7r6xkkt"
+
 [sub_resource type="Resource" id="Resource_x8o50"]
 script = ExtResource("32_ixmb3")
 stats = ExtResource("44_q38m2")
 quantity = 500
+
+[sub_resource type="Resource" id="Resource_s4yud"]
+script = ExtResource("32_ixmb3")
+stats = ExtResource("52_eufsu")
+quantity = 1
+metadata/_custom_type_script = "uid://dp8osf7r6xkkt"
 
 [sub_resource type="Resource" id="Resource_apvym"]
 script = ExtResource("32_ixmb3")
@@ -1382,25 +1408,13 @@ outline_color = Color(0.209203, 0.113957, 0.0471381, 1)
 shadow_color = Color(0, 0, 0, 0.3)
 shadow_offset = Vector2(0.5, 0.5)
 
-[sub_resource type="LabelSettings" id="LabelSettings_g5u5n"]
-font = ExtResource("85_7xlwj")
-font_size = 9
-font_color = Color(0.913725, 0.768627, 0.741176, 1)
-shadow_color = Color(0, 0, 0, 0.3)
-shadow_offset = Vector2(0.5, 0.5)
-
-[sub_resource type="LabelSettings" id="LabelSettings_bvo3j"]
-font = ExtResource("85_7xlwj")
-font_size = 5
-font_color = Color(0.881793, 0.69302, 0.657759, 1)
-shadow_color = Color(0, 0, 0, 0.3)
-shadow_offset = Vector2(0.2, 0.2)
-
 [sub_resource type="LabelSettings" id="LabelSettings_r5dvw"]
 line_spacing = -1.0
-font = ExtResource("85_7xlwj")
 font_size = 6
 font_color = Color(0.913725, 0.768627, 0.741176, 1)
+outline_size = 2
+outline_color = Color(0, 0, 0, 0.329412)
+shadow_size = 0
 shadow_color = Color(0, 0, 0, 0.3)
 shadow_offset = Vector2(0.25, 0.25)
 
@@ -1551,7 +1565,7 @@ parameters/run/blendspace2d/blend_position = Vector2(0, 0)
 
 [node name="ItemReceiverComponent" parent="." node_paths=PackedStringArray("item_interact_hud", "inv_populator", "ui") instance=ExtResource("30_qgyag")]
 item_interact_hud = NodePath("../OverlayUI/ItemInteractionHUD")
-starting_inv = Array[ExtResource("32_ixmb3")]([SubResource("Resource_pihal"), null, SubResource("Resource_0313k"), null, SubResource("Resource_kx1me"), SubResource("Resource_2ijsm"), SubResource("Resource_gb65f"), SubResource("Resource_xlc3k"), SubResource("Resource_n4o3n"), SubResource("Resource_3by25"), SubResource("Resource_oxva3"), null, SubResource("Resource_x8o50"), null, SubResource("Resource_apvym"), SubResource("Resource_ur5wt"), SubResource("Resource_eufsu"), null, SubResource("Resource_dyejk"), null, null, SubResource("Resource_vpccy"), null, null, SubResource("Resource_p5d28"), null, SubResource("Resource_0t1mv"), SubResource("Resource_rdrbb"), null, SubResource("Resource_sx7hp"), SubResource("Resource_wjnk6"), SubResource("Resource_hevqc"), SubResource("Resource_bvo3j"), SubResource("Resource_hxjay"), SubResource("Resource_0ta0y"), SubResource("Resource_gdihr"), SubResource("Resource_6stk0")])
+starting_inv = Array[ExtResource("32_ixmb3")]([SubResource("Resource_pihal"), SubResource("Resource_da65a"), SubResource("Resource_0313k"), SubResource("Resource_6f5us"), SubResource("Resource_kx1me"), SubResource("Resource_2ijsm"), SubResource("Resource_gb65f"), SubResource("Resource_xlc3k"), SubResource("Resource_n4o3n"), SubResource("Resource_3by25"), SubResource("Resource_oxva3"), SubResource("Resource_5qckj"), SubResource("Resource_x8o50"), SubResource("Resource_s4yud"), SubResource("Resource_apvym"), SubResource("Resource_ur5wt"), SubResource("Resource_eufsu"), null, SubResource("Resource_dyejk"), null, null, SubResource("Resource_vpccy"), null, null, SubResource("Resource_p5d28"), null, SubResource("Resource_0t1mv"), SubResource("Resource_rdrbb"), null, SubResource("Resource_sx7hp"), SubResource("Resource_wjnk6"), SubResource("Resource_hevqc"), SubResource("Resource_bvo3j"), SubResource("Resource_hxjay"), SubResource("Resource_0ta0y"), SubResource("Resource_gdihr"), SubResource("Resource_6stk0")])
 is_player_inv = true
 inv_size = 37
 hotbar_size = 5
@@ -2103,58 +2117,6 @@ metadata/_edit_lock_ = true
 layout_mode = 2
 metadata/_edit_lock_ = true
 
-[node name="WeaponModsHUDMargins" type="MarginContainer" parent="OverlayUI"]
-offset_left = 453.0
-offset_top = 182.0
-offset_right = 481.0
-offset_bottom = 254.0
-scale = Vector2(0.8, 0.8)
-theme_override_constants/margin_left = 0
-theme_override_constants/margin_top = 0
-theme_override_constants/margin_right = 0
-theme_override_constants/margin_bottom = 0
-
-[node name="WeaponModsHUD" type="NinePatchRect" parent="OverlayUI/WeaponModsHUDMargins" groups=["has_save_logic"]]
-unique_name_in_owner = true
-layout_mode = 2
-texture = ExtResource("78_at8wu")
-region_rect = Rect2(0, 0, 20, 20)
-patch_margin_left = 3
-patch_margin_top = 3
-patch_margin_right = 3
-patch_margin_bottom = 3
-axis_stretch_vertical = 1
-script = ExtResource("102_gdihr")
-
-[node name="WeaponModsHUDStack" type="VBoxContainer" parent="OverlayUI/WeaponModsHUDMargins/WeaponModsHUD"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_constants/separation = 0
-alignment = 1
-metadata/_edit_lock_ = true
-
-[node name="Slot1" parent="OverlayUI/WeaponModsHUDMargins/WeaponModsHUD/WeaponModsHUDStack" instance=ExtResource("42_r422n")]
-z_index = -5
-layout_mode = 2
-script = ExtResource("114_gdihr")
-metadata/_edit_lock_ = true
-
-[node name="Slot2" parent="OverlayUI/WeaponModsHUDMargins/WeaponModsHUD/WeaponModsHUDStack" instance=ExtResource("42_r422n")]
-z_index = -5
-layout_mode = 2
-script = ExtResource("114_gdihr")
-metadata/_edit_lock_ = true
-
-[node name="Slot3" parent="OverlayUI/WeaponModsHUDMargins/WeaponModsHUD/WeaponModsHUDStack" instance=ExtResource("42_r422n")]
-z_index = -5
-layout_mode = 2
-script = ExtResource("114_gdihr")
-metadata/_edit_lock_ = true
-
 [node name="ActiveSlotInfo" type="MarginContainer" parent="OverlayUI"]
 anchors_preset = 3
 anchor_left = 1.0
@@ -2211,7 +2173,7 @@ horizontal_alignment = 2
 vertical_alignment = 2
 uppercase = true
 
-[node name="PlayerInvUI" type="ColorRect" parent="OverlayUI" node_paths=PackedStringArray("hotbar_ui", "wpn_mod_slots_ui")]
+[node name="PlayerInvUI" type="ColorRect" parent="OverlayUI" node_paths=PackedStringArray("hotbar_ui")]
 process_mode = 3
 material = SubResource("ShaderMaterial_2q23q")
 use_parent_material = true
@@ -2223,7 +2185,6 @@ grow_vertical = 2
 color = Color(0.109341, 0.109341, 0.109341, 0.976471)
 script = ExtResource("32_3a185")
 hotbar_ui = NodePath("../HotbarUISlotMargins/HotbarUI")
-wpn_mod_slots_ui = NodePath("../WeaponModsHUDMargins/WeaponModsHUD")
 btn_up_texture = ExtResource("106_0313k")
 btn_down_texture = ExtResource("107_thmqm")
 
@@ -2239,7 +2200,7 @@ theme_override_constants/margin_top = 55
 theme_override_constants/margin_right = 144
 theme_override_constants/margin_bottom = 69
 
-[node name="InvPopulator" type="NinePatchRect" parent="OverlayUI/PlayerInvUI/MainTextureMargins" node_paths=PackedStringArray("main_slot_grid", "hotbar_grid", "trash_slot", "crafting_manager", "weapon_mod_hud", "item_viewer")]
+[node name="InvPopulator" type="NinePatchRect" parent="OverlayUI/PlayerInvUI/MainTextureMargins" node_paths=PackedStringArray("main_slot_grid", "hotbar_grid", "trash_slot", "crafting_manager", "item_viewer")]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 3
@@ -2255,7 +2216,6 @@ main_slot_grid = NodePath("GridMargins/NinePatchRect/SlotGrid")
 hotbar_grid = NodePath("../../HotbarSlotMargins/HotbarTexture/HotbarSlotGrid")
 trash_slot = NodePath("../../TrashSlotPanel/TrashSlot")
 crafting_manager = NodePath("../../CraftingManager")
-weapon_mod_hud = NodePath("../../../WeaponModsHUDMargins/WeaponModsHUD")
 item_viewer = NodePath("../../ItemDetailsPanel/BackgroundMargin/InnerMargin/ItemViewerVBox")
 
 [node name="GridMargins" type="MarginContainer" parent="OverlayUI/PlayerInvUI/MainTextureMargins/InvPopulator"]
@@ -2691,6 +2651,7 @@ tres_folder = "res://Entities/Items/TRESItems"
 [node name="InventoryTexture" type="NinePatchRect" parent="OverlayUI/PlayerInvUI/CraftingManager"]
 layout_mode = 2
 size_flags_vertical = 3
+mouse_filter = 0
 texture = ExtResource("78_jlc36")
 patch_margin_left = 4
 patch_margin_top = 4
@@ -2818,6 +2779,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 1
 
 [node name="CraftButtonMargin" type="MarginContainer" parent="OverlayUI/PlayerInvUI/CraftingManager/InventoryTexture/GridMargins/SlotsVBox/NinePatchRect2/VBoxContainer"]
 layout_mode = 2
@@ -2873,6 +2835,7 @@ layout_mode = 2
 [node name="InventoryTexture" type="NinePatchRect" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/BackgroundMargin"]
 layout_mode = 2
 size_flags_vertical = 3
+mouse_filter = 0
 texture = ExtResource("78_jlc36")
 patch_margin_left = 4
 patch_margin_top = 4
@@ -2890,19 +2853,20 @@ theme_override_constants/margin_top = 5
 theme_override_constants/margin_right = 9
 theme_override_constants/margin_bottom = 8
 
-[node name="ItemViewerVBox" type="VBoxContainer" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/BackgroundMargin/InnerMargin"]
+[node name="ItemViewerVBox" type="VBoxContainer" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/BackgroundMargin/InnerMargin" node_paths=PackedStringArray("ammo_viewer_margin")]
 unique_name_in_owner = true
 layout_mode = 2
 mouse_filter = 0
 theme_override_constants/separation = 4
 script = ExtResource("116_g5u5n")
+ammo_viewer_margin = NodePath("../../../../AmmoViewerMargin")
 
-[node name="BackgroundMargin" type="MarginContainer" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/BackgroundMargin/InnerMargin/ItemViewerVBox"]
+[node name="ItemBackgroundMargin" type="MarginContainer" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/BackgroundMargin/InnerMargin/ItemViewerVBox"]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 
-[node name="ItemBackground" type="NinePatchRect" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/BackgroundMargin/InnerMargin/ItemViewerVBox/BackgroundMargin"]
+[node name="ItemBackground" type="NinePatchRect" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/BackgroundMargin/InnerMargin/ItemViewerVBox/ItemBackgroundMargin"]
 custom_minimum_size = Vector2(42, 42)
 layout_mode = 2
 size_flags_horizontal = 4
@@ -2913,13 +2877,13 @@ patch_margin_right = 4
 patch_margin_bottom = 4
 axis_stretch_vertical = 1
 
-[node name="ItemViewerSlot" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/BackgroundMargin/InnerMargin/ItemViewerVBox/BackgroundMargin" instance=ExtResource("42_r422n")]
+[node name="ItemViewerSlot" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/BackgroundMargin/InnerMargin/ItemViewerVBox/ItemBackgroundMargin" instance=ExtResource("42_r422n")]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(36, 36)
 layout_mode = 2
-backing_texture = ExtResource("117_r5dvw")
 
 [node name="ElementsMargin" type="MarginContainer" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/BackgroundMargin/InnerMargin/ItemViewerVBox"]
+unique_name_in_owner = true
 layout_mode = 2
 
 [node name="ElementsBkrgdMargin" type="MarginContainer" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/BackgroundMargin/InnerMargin/ItemViewerVBox/ElementsMargin"]
@@ -2945,36 +2909,46 @@ theme_override_constants/separation = 3
 [node name="ItemNameMargin" type="MarginContainer" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/BackgroundMargin/InnerMargin/ItemViewerVBox/ElementsMargin/ElementsVBox"]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_constants/margin_top = -1
-theme_override_constants/margin_bottom = -2
+theme_override_constants/margin_top = -3
+theme_override_constants/margin_bottom = -1
 
-[node name="ItemNameLabel" type="Label" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/BackgroundMargin/InnerMargin/ItemViewerVBox/ElementsMargin/ElementsVBox/ItemNameMargin"]
+[node name="ItemNameLabel" type="RichTextLabel" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/BackgroundMargin/InnerMargin/ItemViewerVBox/ElementsMargin/ElementsVBox/ItemNameMargin"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(72, 0)
 layout_mode = 2
-size_flags_horizontal = 4
-text = "Item Name"
-label_settings = SubResource("LabelSettings_g5u5n")
+theme_override_colors/default_color = Color(0.913725, 0.768627, 0.741176, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 0.564706)
+theme_override_constants/outline_size = 2
+theme_override_fonts/normal_font = ExtResource("85_7xlwj")
+theme_override_font_sizes/normal_font_size = 9
+bbcode_enabled = true
+text = "(COMMON)"
+fit_content = true
+scroll_active = false
+tab_size = 0
 horizontal_alignment = 1
 vertical_alignment = 1
-clip_text = true
-text_overrun_behavior = 3
 
 [node name="ItemRarityMargin" type="MarginContainer" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/BackgroundMargin/InnerMargin/ItemViewerVBox/ElementsMargin/ElementsVBox"]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_constants/margin_top = -2
-theme_override_constants/margin_bottom = -2
+theme_override_constants/margin_top = -4
+theme_override_constants/margin_bottom = -1
 
-[node name="ItemRarityLabel" type="Label" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/BackgroundMargin/InnerMargin/ItemViewerVBox/ElementsMargin/ElementsVBox/ItemRarityMargin"]
+[node name="ItemRarityLabel" type="RichTextLabel" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/BackgroundMargin/InnerMargin/ItemViewerVBox/ElementsMargin/ElementsVBox/ItemRarityMargin"]
 unique_name_in_owner = true
 layout_mode = 2
+theme_override_colors/default_color = Color(0.913725, 0.768627, 0.741176, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 0.329412)
+theme_override_constants/outline_size = 2
+theme_override_fonts/normal_font = ExtResource("85_7xlwj")
+theme_override_font_sizes/normal_font_size = 5
+bbcode_enabled = true
 text = "(COMMON)"
-label_settings = SubResource("LabelSettings_bvo3j")
+fit_content = true
+scroll_active = false
+tab_size = 0
 horizontal_alignment = 1
 vertical_alignment = 1
-clip_text = true
-text_overrun_behavior = 3
 
 [node name="InfoMargin" type="MarginContainer" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/BackgroundMargin/InnerMargin/ItemViewerVBox/ElementsMargin/ElementsVBox"]
 unique_name_in_owner = true
@@ -3004,6 +2978,7 @@ custom_minimum_size = Vector2(66, 7)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 3
+theme_override_fonts/font = ExtResource("85_7xlwj")
 text = "Info will go here. "
 label_settings = SubResource("LabelSettings_r5dvw")
 horizontal_alignment = 1
@@ -3025,26 +3000,20 @@ patch_margin_right = 1
 patch_margin_bottom = 1
 axis_stretch_vertical = 2
 
-[node name="DetailLabelsMargin" type="MarginContainer" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/BackgroundMargin/InnerMargin/ItemViewerVBox/ElementsMargin/ElementsVBox/DetailsMargin"]
+[node name="DetailsLabelMargin" type="MarginContainer" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/BackgroundMargin/InnerMargin/ItemViewerVBox/ElementsMargin/ElementsVBox/DetailsMargin"]
 layout_mode = 2
 theme_override_constants/margin_left = 3
 theme_override_constants/margin_top = 1
 theme_override_constants/margin_right = 3
-theme_override_constants/margin_bottom = 1
+theme_override_constants/margin_bottom = 2
 
-[node name="DetailsStack" type="VBoxContainer" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/BackgroundMargin/InnerMargin/ItemViewerVBox/ElementsMargin/ElementsVBox/DetailsMargin/DetailLabelsMargin"]
+[node name="DetailsLabel" type="RichTextLabel" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/BackgroundMargin/InnerMargin/ItemViewerVBox/ElementsMargin/ElementsVBox/DetailsMargin/DetailsLabelMargin"]
 unique_name_in_owner = true
-layout_mode = 2
-theme_override_constants/separation = -2
-alignment = 1
-
-[node name="DetailLabel1" type="RichTextLabel" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/BackgroundMargin/InnerMargin/ItemViewerVBox/ElementsMargin/ElementsVBox/DetailsMargin/DetailLabelsMargin/DetailsStack"]
 clip_contents = false
 custom_minimum_size = Vector2(66, 8)
 layout_mode = 2
 theme_override_colors/default_color = Color(0.913725, 0.768627, 0.741176, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 0.2)
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.2)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 0.329412)
 theme_override_constants/table_v_separation = 0
 theme_override_constants/table_h_separation = 0
 theme_override_constants/text_highlight_v_padding = 0
@@ -3053,246 +3022,15 @@ theme_override_constants/outline_size = 2
 theme_override_constants/shadow_offset_y = 0
 theme_override_constants/shadow_offset_x = 0
 theme_override_constants/shadow_outline_size = 0
-theme_override_constants/line_separation = -2
-theme_override_fonts/normal_font = ExtResource("85_7xlwj")
-theme_override_fonts/mono_font = ExtResource("85_7xlwj")
-theme_override_fonts/italics_font = ExtResource("85_7xlwj")
-theme_override_fonts/bold_italics_font = ExtResource("85_7xlwj")
-theme_override_fonts/bold_font = ExtResource("85_7xlwj")
-theme_override_font_sizes/bold_italics_font_size = 6
-theme_override_font_sizes/italics_font_size = 6
-theme_override_font_sizes/mono_font_size = 6
+theme_override_constants/line_separation = 0
 theme_override_font_sizes/normal_font_size = 6
-theme_override_font_sizes/bold_font_size = 6
 bbcode_enabled = true
 text = "Details will go here"
 fit_content = true
 scroll_active = false
-vertical_alignment = 2
-
-[node name="DetailLabel2" type="RichTextLabel" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/BackgroundMargin/InnerMargin/ItemViewerVBox/ElementsMargin/ElementsVBox/DetailsMargin/DetailLabelsMargin/DetailsStack"]
-clip_contents = false
-custom_minimum_size = Vector2(66, 8)
-layout_mode = 2
-theme_override_colors/default_color = Color(0.913725, 0.768627, 0.741176, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 0.2)
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.2)
-theme_override_constants/table_v_separation = 0
-theme_override_constants/table_h_separation = 0
-theme_override_constants/text_highlight_v_padding = 0
-theme_override_constants/text_highlight_h_padding = 0
-theme_override_constants/outline_size = 2
-theme_override_constants/shadow_offset_y = 0
-theme_override_constants/shadow_offset_x = 0
-theme_override_constants/shadow_outline_size = 0
-theme_override_constants/line_separation = -2
-theme_override_fonts/normal_font = ExtResource("85_7xlwj")
-theme_override_fonts/mono_font = ExtResource("85_7xlwj")
-theme_override_fonts/italics_font = ExtResource("85_7xlwj")
-theme_override_fonts/bold_italics_font = ExtResource("85_7xlwj")
-theme_override_fonts/bold_font = ExtResource("85_7xlwj")
-theme_override_font_sizes/bold_italics_font_size = 6
-theme_override_font_sizes/italics_font_size = 6
-theme_override_font_sizes/mono_font_size = 6
-theme_override_font_sizes/normal_font_size = 6
-theme_override_font_sizes/bold_font_size = 6
-bbcode_enabled = true
-text = "Details will go here"
-fit_content = true
-scroll_active = false
-vertical_alignment = 2
-
-[node name="DetailLabel3" type="RichTextLabel" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/BackgroundMargin/InnerMargin/ItemViewerVBox/ElementsMargin/ElementsVBox/DetailsMargin/DetailLabelsMargin/DetailsStack"]
-clip_contents = false
-custom_minimum_size = Vector2(66, 8)
-layout_mode = 2
-theme_override_colors/default_color = Color(0.913725, 0.768627, 0.741176, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 0.2)
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.2)
-theme_override_constants/table_v_separation = 0
-theme_override_constants/table_h_separation = 0
-theme_override_constants/text_highlight_v_padding = 0
-theme_override_constants/text_highlight_h_padding = 0
-theme_override_constants/outline_size = 2
-theme_override_constants/shadow_offset_y = 0
-theme_override_constants/shadow_offset_x = 0
-theme_override_constants/shadow_outline_size = 0
-theme_override_constants/line_separation = -2
-theme_override_fonts/normal_font = ExtResource("85_7xlwj")
-theme_override_fonts/mono_font = ExtResource("85_7xlwj")
-theme_override_fonts/italics_font = ExtResource("85_7xlwj")
-theme_override_fonts/bold_italics_font = ExtResource("85_7xlwj")
-theme_override_fonts/bold_font = ExtResource("85_7xlwj")
-theme_override_font_sizes/bold_italics_font_size = 6
-theme_override_font_sizes/italics_font_size = 6
-theme_override_font_sizes/mono_font_size = 6
-theme_override_font_sizes/normal_font_size = 6
-theme_override_font_sizes/bold_font_size = 6
-bbcode_enabled = true
-text = "Details will go here"
-fit_content = true
-scroll_active = false
-vertical_alignment = 2
-
-[node name="DetailLabel4" type="RichTextLabel" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/BackgroundMargin/InnerMargin/ItemViewerVBox/ElementsMargin/ElementsVBox/DetailsMargin/DetailLabelsMargin/DetailsStack"]
-clip_contents = false
-custom_minimum_size = Vector2(66, 8)
-layout_mode = 2
-theme_override_colors/default_color = Color(0.913725, 0.768627, 0.741176, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 0.2)
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.2)
-theme_override_constants/table_v_separation = 0
-theme_override_constants/table_h_separation = 0
-theme_override_constants/text_highlight_v_padding = 0
-theme_override_constants/text_highlight_h_padding = 0
-theme_override_constants/outline_size = 2
-theme_override_constants/shadow_offset_y = 0
-theme_override_constants/shadow_offset_x = 0
-theme_override_constants/shadow_outline_size = 0
-theme_override_constants/line_separation = -2
-theme_override_fonts/normal_font = ExtResource("85_7xlwj")
-theme_override_fonts/mono_font = ExtResource("85_7xlwj")
-theme_override_fonts/italics_font = ExtResource("85_7xlwj")
-theme_override_fonts/bold_italics_font = ExtResource("85_7xlwj")
-theme_override_fonts/bold_font = ExtResource("85_7xlwj")
-theme_override_font_sizes/bold_italics_font_size = 6
-theme_override_font_sizes/italics_font_size = 6
-theme_override_font_sizes/mono_font_size = 6
-theme_override_font_sizes/normal_font_size = 6
-theme_override_font_sizes/bold_font_size = 6
-bbcode_enabled = true
-text = "Details will go here"
-fit_content = true
-scroll_active = false
-vertical_alignment = 2
-
-[node name="DetailLabel5" type="RichTextLabel" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/BackgroundMargin/InnerMargin/ItemViewerVBox/ElementsMargin/ElementsVBox/DetailsMargin/DetailLabelsMargin/DetailsStack"]
-clip_contents = false
-custom_minimum_size = Vector2(66, 8)
-layout_mode = 2
-theme_override_colors/default_color = Color(0.913725, 0.768627, 0.741176, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 0.2)
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.2)
-theme_override_constants/table_v_separation = 0
-theme_override_constants/table_h_separation = 0
-theme_override_constants/text_highlight_v_padding = 0
-theme_override_constants/text_highlight_h_padding = 0
-theme_override_constants/outline_size = 2
-theme_override_constants/shadow_offset_y = 0
-theme_override_constants/shadow_offset_x = 0
-theme_override_constants/shadow_outline_size = 0
-theme_override_constants/line_separation = -2
-theme_override_fonts/normal_font = ExtResource("85_7xlwj")
-theme_override_fonts/mono_font = ExtResource("85_7xlwj")
-theme_override_fonts/italics_font = ExtResource("85_7xlwj")
-theme_override_fonts/bold_italics_font = ExtResource("85_7xlwj")
-theme_override_fonts/bold_font = ExtResource("85_7xlwj")
-theme_override_font_sizes/bold_italics_font_size = 6
-theme_override_font_sizes/italics_font_size = 6
-theme_override_font_sizes/mono_font_size = 6
-theme_override_font_sizes/normal_font_size = 6
-theme_override_font_sizes/bold_font_size = 6
-bbcode_enabled = true
-text = "Details will go here"
-fit_content = true
-scroll_active = false
-vertical_alignment = 2
-
-[node name="DetailLabel6" type="RichTextLabel" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/BackgroundMargin/InnerMargin/ItemViewerVBox/ElementsMargin/ElementsVBox/DetailsMargin/DetailLabelsMargin/DetailsStack"]
-clip_contents = false
-custom_minimum_size = Vector2(66, 8)
-layout_mode = 2
-theme_override_colors/default_color = Color(0.913725, 0.768627, 0.741176, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 0.2)
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.2)
-theme_override_constants/table_v_separation = 0
-theme_override_constants/table_h_separation = 0
-theme_override_constants/text_highlight_v_padding = 0
-theme_override_constants/text_highlight_h_padding = 0
-theme_override_constants/outline_size = 2
-theme_override_constants/shadow_offset_y = 0
-theme_override_constants/shadow_offset_x = 0
-theme_override_constants/shadow_outline_size = 0
-theme_override_constants/line_separation = -2
-theme_override_fonts/normal_font = ExtResource("85_7xlwj")
-theme_override_fonts/mono_font = ExtResource("85_7xlwj")
-theme_override_fonts/italics_font = ExtResource("85_7xlwj")
-theme_override_fonts/bold_italics_font = ExtResource("85_7xlwj")
-theme_override_fonts/bold_font = ExtResource("85_7xlwj")
-theme_override_font_sizes/bold_italics_font_size = 6
-theme_override_font_sizes/italics_font_size = 6
-theme_override_font_sizes/mono_font_size = 6
-theme_override_font_sizes/normal_font_size = 6
-theme_override_font_sizes/bold_font_size = 6
-bbcode_enabled = true
-text = "Details will go here"
-fit_content = true
-scroll_active = false
-vertical_alignment = 2
-
-[node name="DetailLabel7" type="RichTextLabel" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/BackgroundMargin/InnerMargin/ItemViewerVBox/ElementsMargin/ElementsVBox/DetailsMargin/DetailLabelsMargin/DetailsStack"]
-clip_contents = false
-custom_minimum_size = Vector2(66, 8)
-layout_mode = 2
-theme_override_colors/default_color = Color(0.913725, 0.768627, 0.741176, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 0.2)
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.2)
-theme_override_constants/table_v_separation = 0
-theme_override_constants/table_h_separation = 0
-theme_override_constants/text_highlight_v_padding = 0
-theme_override_constants/text_highlight_h_padding = 0
-theme_override_constants/outline_size = 2
-theme_override_constants/shadow_offset_y = 0
-theme_override_constants/shadow_offset_x = 0
-theme_override_constants/shadow_outline_size = 0
-theme_override_constants/line_separation = -2
-theme_override_fonts/normal_font = ExtResource("85_7xlwj")
-theme_override_fonts/mono_font = ExtResource("85_7xlwj")
-theme_override_fonts/italics_font = ExtResource("85_7xlwj")
-theme_override_fonts/bold_italics_font = ExtResource("85_7xlwj")
-theme_override_fonts/bold_font = ExtResource("85_7xlwj")
-theme_override_font_sizes/bold_italics_font_size = 6
-theme_override_font_sizes/italics_font_size = 6
-theme_override_font_sizes/mono_font_size = 6
-theme_override_font_sizes/normal_font_size = 6
-theme_override_font_sizes/bold_font_size = 6
-bbcode_enabled = true
-text = "Details will go here"
-fit_content = true
-scroll_active = false
-vertical_alignment = 2
-
-[node name="DetailLabel8" type="RichTextLabel" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/BackgroundMargin/InnerMargin/ItemViewerVBox/ElementsMargin/ElementsVBox/DetailsMargin/DetailLabelsMargin/DetailsStack"]
-clip_contents = false
-custom_minimum_size = Vector2(66, 8)
-layout_mode = 2
-theme_override_colors/default_color = Color(0.913725, 0.768627, 0.741176, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 0.2)
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.2)
-theme_override_constants/table_v_separation = 0
-theme_override_constants/table_h_separation = 0
-theme_override_constants/text_highlight_v_padding = 0
-theme_override_constants/text_highlight_h_padding = 0
-theme_override_constants/outline_size = 2
-theme_override_constants/shadow_offset_y = 0
-theme_override_constants/shadow_offset_x = 0
-theme_override_constants/shadow_outline_size = 0
-theme_override_constants/line_separation = -2
-theme_override_fonts/normal_font = ExtResource("85_7xlwj")
-theme_override_fonts/mono_font = ExtResource("85_7xlwj")
-theme_override_fonts/italics_font = ExtResource("85_7xlwj")
-theme_override_fonts/bold_italics_font = ExtResource("85_7xlwj")
-theme_override_fonts/bold_font = ExtResource("85_7xlwj")
-theme_override_font_sizes/bold_italics_font_size = 6
-theme_override_font_sizes/italics_font_size = 6
-theme_override_font_sizes/mono_font_size = 6
-theme_override_font_sizes/normal_font_size = 6
-theme_override_font_sizes/bold_font_size = 6
-bbcode_enabled = true
-text = "Details will go here"
-fit_content = true
-scroll_active = false
-vertical_alignment = 2
+tab_size = 0
+vertical_alignment = 1
+visible_characters_behavior = 2
 
 [node name="ModSlotsMargin" type="MarginContainer" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/BackgroundMargin/InnerMargin/ItemViewerVBox/ElementsMargin/ElementsVBox"]
 unique_name_in_owner = true
@@ -3323,6 +3061,57 @@ backing_texture = ExtResource("118_r5dvw")
 layout_mode = 2
 script = ExtResource("114_gdihr")
 backing_texture = ExtResource("118_r5dvw")
+
+[node name="Slot4" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/BackgroundMargin/InnerMargin/ItemViewerVBox/ElementsMargin/ElementsVBox/ModSlotsMargin/ModSlotsCenter/ModSlots" instance=ExtResource("42_r422n")]
+layout_mode = 2
+script = ExtResource("114_gdihr")
+backing_texture = ExtResource("118_r5dvw")
+
+[node name="Slot5" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/BackgroundMargin/InnerMargin/ItemViewerVBox/ElementsMargin/ElementsVBox/ModSlotsMargin/ModSlotsCenter/ModSlots" instance=ExtResource("42_r422n")]
+layout_mode = 2
+script = ExtResource("114_gdihr")
+backing_texture = ExtResource("118_r5dvw")
+
+[node name="Slot6" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/BackgroundMargin/InnerMargin/ItemViewerVBox/ElementsMargin/ElementsVBox/ModSlotsMargin/ModSlotsCenter/ModSlots" instance=ExtResource("42_r422n")]
+layout_mode = 2
+script = ExtResource("114_gdihr")
+backing_texture = ExtResource("118_r5dvw")
+
+[node name="AmmoViewerMargin" type="MarginContainer" parent="OverlayUI/PlayerInvUI"]
+layout_mode = 0
+offset_left = 61.0
+offset_top = 63.0
+offset_right = 73.0
+offset_bottom = 75.0
+size_flags_horizontal = 4
+size_flags_vertical = 4
+mouse_filter = 0
+
+[node name="AmmoIconBackground" type="NinePatchRect" parent="OverlayUI/PlayerInvUI/AmmoViewerMargin"]
+layout_mode = 2
+texture = ExtResource("123_da65a")
+patch_margin_left = 4
+patch_margin_top = 4
+patch_margin_right = 4
+patch_margin_bottom = 4
+axis_stretch_vertical = 1
+
+[node name="AmmoIconMargin" type="MarginContainer" parent="OverlayUI/PlayerInvUI/AmmoViewerMargin"]
+layout_mode = 2
+theme_override_constants/margin_left = 2
+theme_override_constants/margin_top = 2
+theme_override_constants/margin_right = 2
+theme_override_constants/margin_bottom = 2
+
+[node name="AmmoIcon" type="TextureRect" parent="OverlayUI/PlayerInvUI/AmmoViewerMargin/AmmoIconMargin"]
+unique_name_in_owner = true
+layout_mode = 2
+expand_mode = 3
+stretch_mode = 5
+
+[node name="AmmoGlass" type="ColorRect" parent="OverlayUI/PlayerInvUI/AmmoViewerMargin"]
+self_modulate = Color(0, 0, 0, 0.4)
+layout_mode = 2
 
 [connection signal="pressed" from="OverlayUI/TestButtons/TestHurtBtn" to="OverlayUI/TestButtons" method="_on_test_hurt_btn_pressed"]
 [connection signal="pressed" from="OverlayUI/TestButtons/TestHealBtn" to="OverlayUI/TestButtons" method="_on_test_heal_btn_pressed"]

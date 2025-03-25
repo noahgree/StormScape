@@ -71,8 +71,8 @@ func _update_hands_about_new_active_item() -> void:
 	else:
 		active_slot_info.update_item_name("Empty")
 
-## This will update the mag ammo display with the item quantity by default if no ammo method is defined in the equippable
-## item subclass.
+## This will update the mag ammo display with the item quantity by default if no ammo method is
+## defined in the equippable item subclass.
 func _default_ammo_update_method() -> void:
 	if active_slot.item != null:
 		var equipped_item: EquippableItem = GlobalData.player_node.hands.equipped_item
@@ -86,7 +86,9 @@ func _default_ammo_update_method() -> void:
 func update_hotbar_tint_progresses() -> void:
 	for slot: Slot in hotbar_slots:
 		if slot.item != null:
-			slot.update_tint_progress(GlobalData.player_node.inv.auto_decrementer.get_cooldown(slot.item.stats.get_cooldown_id()))
+			slot.update_tint_progress(
+				GlobalData.player_node.inv.auto_decrementer.get_cooldown(slot.item.stats.get_cooldown_id())
+				)
 		else:
 			slot.update_tint_progress(0)
 
@@ -112,7 +114,8 @@ func _update_inv_ammo_ui() -> void:
 
 ## Handles input mainly relating to changing the active slot.
 func _input(_event: InputEvent) -> void:
-	if DebugFlags.HotbarFlags.use_scroll_debounce and not scroll_debounce_timer.is_stopped(): return
+	if DebugFlags.HotbarFlags.use_scroll_debounce and not scroll_debounce_timer.is_stopped():
+		return
 
 	if Input.is_action_just_released("scroll_up", false):
 		_change_active_slot_by_count(1)

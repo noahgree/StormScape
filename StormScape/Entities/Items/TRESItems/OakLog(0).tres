@@ -1,6 +1,7 @@
-[gd_resource type="Resource" script_class="WorldResourceResource" load_steps=6 format=3 uid="uid://bs4rqdt46yav7"]
+[gd_resource type="Resource" script_class="WorldResourceResource" load_steps=7 format=3 uid="uid://bs4rqdt46yav7"]
 
 [ext_resource type="Texture2D" uid="uid://dwu1ysi53om1u" path="res://Entities/Items/WorldResources/OakLog/OakLogCT.tres" id="1_m3y15"]
+[ext_resource type="Script" uid="uid://cowjdnic7xmkp" path="res://UI/Inventory/PlayerInventory/ItemDetail.gd" id="1_tox3f"]
 [ext_resource type="Script" uid="uid://crlmvnjkf7c3g" path="res://Entities/Items/WorldResources/WorldResourceResource.gd" id="1_xl3qb"]
 [ext_resource type="Script" uid="uid://ctxa7i1mbt7ab" path="res://UI/Inventory/PlayerInventory/Crafting/CraftingIngredient.gd" id="2_7glxp"]
 [ext_resource type="Texture2D" uid="uid://bptqv05di5d2o" path="res://Entities/Items/WorldResources/OakLog/oak_log.png" id="2_tox3f"]
@@ -17,6 +18,7 @@ stack_size = 64
 auto_pickup = true
 pickup_radius = 4
 info = "Logs from an oak tree. Useful in crafting."
+extra_details = Array[ExtResource("1_tox3f")]([])
 ground_icon = ExtResource("1_m3y15")
 in_hand_icon = ExtResource("1_m3y15")
 inv_icon = ExtResource("2_tox3f")

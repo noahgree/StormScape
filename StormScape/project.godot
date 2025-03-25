@@ -77,6 +77,7 @@ has_save_logic="A collection of all nodes in the game that must be saved and sub
 
 theme/custom="res://Assets/Theming/DefaultTheme.tres"
 theme/custom_font="res://Assets/Theming/Fonts/GameFontResources/ui_pixel_font.tres"
+theme/default_font_subpixel_positioning=0
 
 [input]
 

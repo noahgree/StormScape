@@ -1,8 +1,9 @@
-[gd_resource type="Resource" script_class="ProjWeaponResource" load_steps=35 format=3 uid="uid://bnc4tbhdxpauy"]
+[gd_resource type="Resource" script_class="ProjWeaponResource" load_steps=36 format=3 uid="uid://bnc4tbhdxpauy"]
 
 [ext_resource type="Texture2D" uid="uid://bm570hawaupxe" path="res://Entities/Items/Weapons/WeaponVFX/Casings/small_casing.png" id="1_hjiec"]
 [ext_resource type="SpriteFrames" uid="uid://85w3h1wajacl" path="res://Entities/Items/Weapons/ProjectileWeapons/EagleEye/EagleEyeCursors.tres" id="3_6grxy"]
 [ext_resource type="Script" uid="uid://dkfssottmsrch" path="res://Entities/Stats/EffectSystemResources/EffectSources/EffectSource.gd" id="4_78vf2"]
+[ext_resource type="Script" uid="uid://cowjdnic7xmkp" path="res://UI/Inventory/PlayerInventory/ItemDetail.gd" id="5_hjiec"]
 [ext_resource type="Script" uid="uid://boo31eu083dqd" path="res://Entities/Stats/EffectSystemResources/StatusEffects/StatusEffect.gd" id="5_ks1up"]
 [ext_resource type="Resource" uid="uid://58oau5i62soh" path="res://Entities/Player/PlayerCore/PlayerCamera/CamFXPresets/4.tres" id="6_iahun"]
 [ext_resource type="Texture2D" uid="uid://c2ul6ws6q5hxx" path="res://Entities/Items/Weapons/ProjectileWeapons/Musket/MusketBaseCT.tres" id="7_hjiec"]
@@ -258,9 +259,8 @@ allow_hitscan_holding = true
 ammo_in_mag = -1
 s_mods = SubResource("Resource_x70ma")
 pullout_delay = 0.5
+max_mods = 3
 blocked_mods = Array[StringName]([])
-block_all_mods = false
-cache_is_setup = false
 weapon_mods_need_to_be_readded_after_save = false
 current_mods = Array[Dictionary]([{
 &"1": null
@@ -268,6 +268,12 @@ current_mods = Array[Dictionary]([{
 &"2": null
 }, {
 &"3": null
+}, {
+&"4": null
+}, {
+&"5": null
+}, {
+&"6": null
 }])
 original_status_effects = Array[ExtResource("5_ks1up")]([])
 original_charge_status_effects = Array[ExtResource("5_ks1up")]([])
@@ -280,6 +286,7 @@ stack_size = 1
 auto_pickup = false
 pickup_radius = 7
 info = "A basic starter's weapon for medium to long range combat."
+extra_details = Array[ExtResource("5_hjiec")]([])
 ground_icon = ExtResource("7_hjiec")
 in_hand_icon = ExtResource("7_hjiec")
 inv_icon = ExtResource("7_hjiec")

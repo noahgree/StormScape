@@ -1,0 +1,8 @@
+[gd_resource type="CanvasTexture" load_steps=3 format=3 uid="uid://bh30rapahajlk"]
+
+[ext_resource type="Texture2D" uid="uid://7pf2l5kd6b7b" path="res://Entities/Items/WeaponMods/ExtendedMag/extended_mag_base.png" id="1_g7oxl"]
+[ext_resource type="Texture2D" uid="uid://dtct1i1bam105" path="res://Entities/Items/WeaponMods/ExtendedMag/extended_mag_base_n.png" id="2_vmuns"]
+
+[resource]
+diffuse_texture = ExtResource("1_g7oxl")
+normal_texture = ExtResource("2_vmuns")

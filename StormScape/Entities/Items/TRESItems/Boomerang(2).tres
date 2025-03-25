@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="ProjWeaponResource" load_steps=20 format=3 uid="uid://kmidnuyti5xi"]
+[gd_resource type="Resource" script_class="ProjWeaponResource" load_steps=21 format=3 uid="uid://kmidnuyti5xi"]
 
 [ext_resource type="Script" uid="uid://dkfssottmsrch" path="res://Entities/Stats/EffectSystemResources/EffectSources/EffectSource.gd" id="1_pnsqi"]
 [ext_resource type="Script" uid="uid://boo31eu083dqd" path="res://Entities/Stats/EffectSystemResources/StatusEffects/StatusEffect.gd" id="2_8ufau"]
@@ -6,6 +6,7 @@
 [ext_resource type="Script" uid="uid://cje5bobi6o8bo" path="res://Entities/Items/Hitscans/HitscanResource.gd" id="3_46awu"]
 [ext_resource type="Script" uid="uid://bj3r5oopspj6l" path="res://Entities/Items/Projectiles/ProjectileResource.gd" id="4_7qce5"]
 [ext_resource type="Texture2D" uid="uid://cqsoww8i0aya3" path="res://Entities/Items/Weapons/ProjectileWeapons/Boomerang/BoomerangSteelCT.tres" id="4_gupq0"]
+[ext_resource type="Script" uid="uid://cowjdnic7xmkp" path="res://UI/Inventory/PlayerInventory/ItemDetail.gd" id="4_o0qyt"]
 [ext_resource type="PackedScene" uid="uid://dna63yojpqy2n" path="res://Entities/Items/Projectiles/Boomerangs/BoomerangSteelProj.tscn" id="5_23285"]
 [ext_resource type="Texture2D" uid="uid://1cupq4qi2cjx" path="res://Entities/Items/Weapons/ProjectileWeapons/Boomerang/boomerang_steel.png" id="6_2lgcn"]
 [ext_resource type="PackedScene" uid="uid://dq57qggohi76w" path="res://Entities/Items/Weapons/ProjectileWeapons/Boomerang/BoomerangSteel.tscn" id="7_fxomq"]
@@ -198,9 +199,8 @@ allow_hitscan_holding = true
 ammo_in_mag = -1
 s_mods = SubResource("Resource_la75y")
 pullout_delay = 0.3
+max_mods = 3
 blocked_mods = Array[StringName]([])
-block_all_mods = false
-cache_is_setup = false
 weapon_mods_need_to_be_readded_after_save = false
 current_mods = Array[Dictionary]([{
 &"1": null
@@ -208,6 +208,12 @@ current_mods = Array[Dictionary]([{
 &"2": null
 }, {
 &"3": null
+}, {
+&"4": null
+}, {
+&"5": null
+}, {
+&"6": null
 }])
 original_status_effects = Array[ExtResource("2_8ufau")]([])
 original_charge_status_effects = Array[ExtResource("2_8ufau")]([])
@@ -220,6 +226,7 @@ stack_size = 1
 auto_pickup = false
 pickup_radius = 5
 info = "A throwable projectile that always finds its way home."
+extra_details = Array[ExtResource("4_o0qyt")]([])
 ground_icon = ExtResource("4_gupq0")
 in_hand_icon = ExtResource("4_gupq0")
 inv_icon = ExtResource("6_2lgcn")

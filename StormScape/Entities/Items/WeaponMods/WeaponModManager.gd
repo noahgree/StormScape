@@ -1,12 +1,5 @@
-extends Node
 class_name WeaponModManager
-## The manager attached to each weapon that controls all weapon mod logic.
-
-@export_subgroup("Debug")
-@export var print_effect_updates: bool = false ## Whether to print when this weapon has mods added and removed. Printing the individual stat changes is decided by the cache resource itself. This only toggles the adding & removing of mod names as well as status effect changes.
-
-var source_entity: PhysicsBody2D
-const MAX_WEAPON_MODS: int = 3 ## The max amount of mods any weapon can have.
+## A collection of static functions that handle adding, removing, and restoring weapon mods on a weapon.
 
 
 ## Checks if the mod can be attached to the weapon.
@@ -17,31 +10,42 @@ static func check_mod_compatibility(weapon_stats: WeaponResource, weapon_mod: We
 		return false
 	elif weapon_stats is ProjWeaponResource and weapon_stats.proj_weapon_type not in weapon_mod.allowed_proj_wpns:
 		return false
+	for blocked_mutual: StringName in weapon_mod.blocked_mutuals:
+		if weapon_stats.has_mod(blocked_mutual):
+			return false
+
+	var found_blocked_stat: bool = false
+	for blocked_stat: StringName in weapon_mod.blocked_wpn_stats:
+		if weapon_stats.get_nested_stat(blocked_stat, false) == weapon_mod.blocked_wpn_stats[blocked_stat]:
+			found_blocked_stat = true
+		else:
+			if weapon_mod.req_all_blocked_stats:
+				return true
+	if found_blocked_stat:
+		return false
 	return true
 
-func _ready() -> void:
-	if not get_parent().is_node_ready():
-		await get_parent().ready
-
-	source_entity = get_parent().entity
-
 ## Handles an incoming added weapon mod. Removes it first if it already exists and then just re-adds it.
-func handle_weapon_mod(weapon_stats: WeaponResource, weapon_mod: WeaponMod, index: int) -> void:
-	if not WeaponModManager.check_mod_compatibility(weapon_stats, weapon_mod):
+static func handle_weapon_mod(weapon_stats: WeaponResource, weapon_mod: WeaponMod, index: int,
+						source_entity: PhysicsBody2D) -> void:
+	if not check_mod_compatibility(weapon_stats, weapon_mod):
 		return
 
 	var i: int = 0
 	for weapon_mod_entry: Dictionary in weapon_stats.current_mods:
-		if weapon_mod.id == weapon_mod_entry.keys()[0]:
-			if weapon_mod_entry.values()[0] != null:
-				remove_weapon_mod(weapon_stats, weapon_mod_entry.values()[0], i)
+		if (weapon_mod.id == weapon_mod_entry.keys()[0]) and (weapon_mod_entry.values()[0] != null):
+			remove_weapon_mod(weapon_stats, weapon_mod_entry.values()[0], i, source_entity)
+		elif i == index and weapon_mod_entry.values()[0] != null:
+			push_warning("\"" + weapon_mod_entry.keys()[0] + "\" was already in mod slot " + str(i) + " and will now be removed to make room for \"" + weapon_mod.id + "\"")
+			remove_weapon_mod(weapon_stats, weapon_mod_entry.values()[0], i, source_entity)
 		i += 1
 
-	_add_weapon_mod(weapon_stats, weapon_mod, index)
+	_add_weapon_mod(weapon_stats, weapon_mod, index, source_entity)
 
 ## Adds a weapon mod to the dictionary and then calls the on_added method inside the mod itself.
-func _add_weapon_mod(weapon_stats: WeaponResource, weapon_mod: WeaponMod, index: int) -> void:
-	if DebugFlags.PrintFlags.weapon_mod_changes and print_effect_updates:
+static func _add_weapon_mod(weapon_stats: WeaponResource, weapon_mod: WeaponMod, index: int,
+					source_entity: PhysicsBody2D) -> void:
+	if DebugFlags.PrintFlags.weapon_mod_changes:
 		print_rich("-------[color=green]Adding[/color][b] " + str(weapon_mod.name) + " (" + str(weapon_mod.rarity) + ")[/b]-------")
 
 	weapon_stats.current_mods[index] = { weapon_mod.id : weapon_mod }
@@ -54,19 +58,18 @@ func _add_weapon_mod(weapon_stats: WeaponResource, weapon_mod: WeaponMod, index:
 	if weapon_stats is MeleeWeaponResource:
 		_update_effect_source_status_effects(weapon_stats, true, weapon_mod.charge_status_effects)
 
-	if DebugFlags.PrintFlags.weapon_mod_changes and print_effect_updates:
+	if DebugFlags.PrintFlags.weapon_mod_changes:
 		_debug_print_status_effect_lists(weapon_stats)
 
-	weapon_mod.on_added(weapon_stats, source_entity)
+	weapon_mod.on_added(weapon_stats, source_entity.hands.equipped_item if source_entity != null else null)
 
 	if weapon_mod.equipping_audio != "":
 		AudioManager.play_sound(weapon_mod.equipping_audio, AudioManager.SoundType.SFX_GLOBAL)
 
-	_update_mod_hud()
-
 ## Removes the weapon mod from the dictionary after calling the on_removal method inside the mod itself.
-func remove_weapon_mod(weapon_stats: WeaponResource, weapon_mod: WeaponMod, index: int) -> void:
-	if DebugFlags.PrintFlags.weapon_mod_changes and print_effect_updates and (weapon_mod.id in weapon_stats.current_mods):
+static func remove_weapon_mod(weapon_stats: WeaponResource, weapon_mod: WeaponMod, index: int,
+						source_entity: PhysicsBody2D) -> void:
+	if DebugFlags.PrintFlags.weapon_mod_changes and weapon_stats.has_mod(weapon_mod.id):
 		print_rich("-------[color=red]Removed[/color][b] " + str(weapon_mod.name) + " (" + str(weapon_mod.rarity) + ")[/b]-------")
 
 	for mod_resource: StatMod in weapon_mod.wpn_stat_mods:
@@ -79,34 +82,32 @@ func remove_weapon_mod(weapon_stats: WeaponResource, weapon_mod: WeaponMod, inde
 	if weapon_stats is MeleeWeaponResource:
 		_remove_mod_status_effects_from_effect_source(weapon_stats, true)
 
-	if DebugFlags.PrintFlags.weapon_mod_changes and print_effect_updates:
+	if DebugFlags.PrintFlags.weapon_mod_changes:
 		_debug_print_status_effect_lists(weapon_stats)
 
-	weapon_mod.on_removal(weapon_stats, source_entity)
+	weapon_mod.on_removal(weapon_stats, source_entity.hands.equipped_item if source_entity != null else null)
 
 	if weapon_mod.removal_audio != "":
 		AudioManager.play_sound(weapon_mod.removal_audio, AudioManager.SoundType.SFX_GLOBAL)
 
-	_update_mod_hud()
-
 ## Adds all mods in the current_mods array to a weapon's stats. Useful for restoring after a save and load.
-func add_all_mods_to_weapon(weapon_stats: WeaponResource) -> void:
+static func re_add_all_mods_to_weapon(weapon_stats: WeaponResource, source_entity: PhysicsBody2D) -> void:
 	var i: int = 0
 	for weapon_mod_entry: Dictionary in weapon_stats.current_mods:
 		if weapon_mod_entry.values()[0] != null:
-			handle_weapon_mod(weapon_stats, weapon_mod_entry.values()[0], i)
+			handle_weapon_mod(weapon_stats, weapon_mod_entry.values()[0], i, source_entity)
 		i += 1
 
 ## Removes all mods from a passed in weapon_stats resource.
-func remove_all_mods_from_weapon(weapon_stats: WeaponResource) -> void:
+static func remove_all_mods_from_weapon(weapon_stats: WeaponResource, source_entity: PhysicsBody2D) -> void:
 	var i: int = 0
 	for weapon_mod_entry: Dictionary in weapon_stats.current_mods:
 		if weapon_mod_entry.values()[0] != null:
-			remove_weapon_mod(weapon_stats, weapon_mod_entry.values()[0], i)
+			remove_weapon_mod(weapon_stats, weapon_mod_entry.values()[0], i, source_entity)
 		i += 1
 
 ## When mods are added or removed that affect the effect source stats, we use this to recalculate them.
-func _update_effect_source_stats(weapon_stats: WeaponResource, stat_id: StringName) -> void:
+static func _update_effect_source_stats(weapon_stats: WeaponResource, stat_id: StringName) -> void:
 	match stat_id:
 		&"base_damage":
 			weapon_stats.effect_source.base_damage = weapon_stats.s_mods.get_stat("base_damage")
@@ -130,7 +131,7 @@ func _update_effect_source_stats(weapon_stats: WeaponResource, stat_id: StringNa
 
 ## Updates the effect source status effect lists based on an incoming stat mod.
 ## Handles duplicates by keeping the highest level.
-func _update_effect_source_status_effects(weapon_stats: WeaponResource, for_charged: bool,
+static func _update_effect_source_status_effects(weapon_stats: WeaponResource, for_charged: bool,
 											new_effects: Array[StatusEffect]) -> void:
 	var effect_source: EffectSource = weapon_stats.effect_source if not for_charged else weapon_stats.charge_effect_source
 
@@ -143,7 +144,7 @@ func _update_effect_source_status_effects(weapon_stats: WeaponResource, for_char
 			effect_source.status_effects.append(new_effect)
 
 ## Updates the status effect lists after removing a mod (by not using the old mod's status effects anymore).
-func _remove_mod_status_effects_from_effect_source(weapon_stats: WeaponResource, for_charged: bool) -> void:
+static func _remove_mod_status_effects_from_effect_source(weapon_stats: WeaponResource, for_charged: bool) -> void:
 	var effect_source: EffectSource = weapon_stats.effect_source if not for_charged else weapon_stats.charge_effect_source
 	var orig_array: Array[StatusEffect] = weapon_stats.original_status_effects if not for_charged else weapon_stats.original_charge_status_effects
 
@@ -154,17 +155,25 @@ func _remove_mod_status_effects_from_effect_source(weapon_stats: WeaponResource,
 		if mod != null:
 			_update_effect_source_status_effects(weapon_stats, for_charged, mod.status_effects if not for_charged else mod.charge_status_effects)
 
-func _update_mod_hud() -> void:
-	if not source_entity is Player:
-		return
+## Resets the original (non-modded) status effects for the weapon after a save so that they correctly reflect
+## the effects not provided by mods. This then removes and then readds all the weapon mods from the save.
+static func reset_original_arrays_after_save(weapon_stats: WeaponResource, source_entity: PhysicsBody2D) -> void:
+	var mods_copy: Array[Dictionary] = weapon_stats.current_mods.duplicate()
 
-	#var mod_hud: NinePatchRect = weapon.source_entity.get_node("%WeaponModsHUD")
-	#for i: int in range(WeaponModManager.MAX_WEAPON_MODS):
-		#if weapon.stats.current_mods.size() >= i:
-			#mod_hud.update_hud_slot(i, )
+	weapon_stats.original_status_effects = []
+	if weapon_stats is MeleeWeaponResource:
+		weapon_stats.original_charge_status_effects = []
+	remove_all_mods_from_weapon(weapon_stats, source_entity)
+
+	weapon_stats.original_status_effects = weapon_stats.effect_source.status_effects
+	if weapon_stats is MeleeWeaponResource:
+		weapon_stats.original_charge_status_effects = weapon_stats.charge_effect_source.status_effects
+
+	weapon_stats.current_mods = mods_copy
+	re_add_all_mods_to_weapon(weapon_stats, source_entity)
 
 ## Formats the updated lists of status effects and prints them out.
-func _debug_print_status_effect_lists(weapon_stats: WeaponResource) -> void:
+static func _debug_print_status_effect_lists(weapon_stats: WeaponResource) -> void:
 	var is_normal_base: bool = true if weapon_stats.effect_source.status_effects == weapon_stats.original_status_effects else false
 	print_rich("[color=cyan]Normal Effects[/color]" + ("[color=gray][i](base)[/i][/color]" if is_normal_base else "") + ": [b]"+ str(weapon_stats.effect_source.status_effects) + "[/b]")
 	if weapon_stats is MeleeWeaponResource:

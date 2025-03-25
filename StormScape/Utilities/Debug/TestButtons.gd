@@ -20,28 +20,20 @@ func _on_test_music_btn_pressed() -> void:
 		#AudioManager.stop_audio_player(audio_player)
 
 func _on_test_mod_btn_1_pressed() -> void:
-	#var stats_ui: Control = get_parent().get_node("PlayerStatsOverlay")
-	#var mod = StatMod.new("stamina_use_per_hunger_deduction", "mod1", "-%", 10, 1, true, 2, false)
-	#var mod2 = StatMod.new("stamina_use_per_hunger_deduction", "mod2", "=", 2, 2, true, 5, true)
-	#var arr: Array[StatMod] = [mod, mod2]
-	#get_parent().get_parent().stats.add_mods(arr, stats_ui)
 	var i: int = 0
 	for mod: WeaponMod in mods:
 		if GlobalData.player_node.hands.equipped_item:
-			GlobalData.player_node.hands.weapon_mod_manager.handle_weapon_mod(
-				GlobalData.player_node.hands.equipped_item.stats, mod, i
+			WeaponModManager.handle_weapon_mod(
+				GlobalData.player_node.hands.equipped_item.stats, mod, i, GlobalData.player_node
 				)
 		i += 1
 
 func _on_test_mod_btn_2_pressed() -> void:
-	#var stats_ui: Control = get_parent().get_node("PlayerStatsOverlay")
-	#get_parent().get_parent().stats.remove_mod("stamina_use_per_hunger_deduction", "mod2", stats_ui, 1)
-	#get_parent().get_parent().stats.remove_mod("stamina_use_per_hunger_deduction", "mod1", stats_ui, 1)
 	var i: int = 0
 	for mod: WeaponMod in mods:
 		if GlobalData.player_node.hands.equipped_item:
-			GlobalData.player_node.hands.weapon_mod_manager.remove_weapon_mod(
-				GlobalData.player_node.hands.equipped_item.stats, mod, i
+			WeaponModManager.remove_weapon_mod(
+				GlobalData.player_node.hands.equipped_item.stats, mod, i, GlobalData.player_node
 				)
 		i += 1
 
@@ -62,10 +54,6 @@ func _on_test_storm_btn_2_pressed() -> void:
 
 func _on_test_combine_items_pressed() -> void:
 	GlobalData.world_root.get_node("WorldItemsManager")._on_combination_attempt_timer_timeout()
-
-#func _on_test_craft_pressed() -> void:
-	#var result: bool = GlobalData.player_node.get_node("%CraftingManager").is_recipe_craftable(GlobalData.player_node.hands.equipped_item.stats.recipe)
-	#print(result)
 
 func _on_test_time_btn_pressed() -> void:
 	if DayNightManager.current_hour > 7 and DayNightManager.current_hour < 18:

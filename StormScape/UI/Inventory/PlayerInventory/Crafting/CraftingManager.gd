@@ -2,6 +2,10 @@ extends VBoxContainer
 class_name CraftingManager
 ## Manages crafting actions like checking and caching recipes, consuming ingredients, and
 ## granting successful crafts.
+##
+## This also contains all the cached item resources that can be accessed by the item ID.
+
+static var cached_items: Dictionary[StringName, ItemResource] = {} ## All items keyed by their unique item id.
 
 @export_dir var tres_folder: String ## The folder path to all the TRES items.
 
@@ -10,12 +14,18 @@ class_name CraftingManager
 @onready var crafting_down_arrow: TextureRect = %CraftingDownArrow ## The arrow symbol.
 @onready var craft_button: NinePatchRect = %Craft ## The nine patch background for the craft button.
 
-var cached_recipes: Dictionary[StringName, ItemResource] = {} ## All items keyed by their unique recipe id.
 var item_to_recipes: Dictionary[StringName, Array] = {} ## Maps items to the list of recipes that include them.
 var tag_to_recipes: Dictionary[StringName, Array] = {} ## Maps tags to the list of recipes that include them.
 var input_slots: Array[CraftingSlot] = [] ## The slots that are used as inputs to craft.
 var is_crafting: bool = false ## When true, we shouldn't update the output slot since a craft is in progress.
 
+
+## Gets and returns an item resource by its id.
+static func get_item_by_id(item_id: StringName) -> ItemResource:
+	var item_resource: ItemResource = CraftingManager.cached_items.get(item_id, null)
+	if item_resource == null:
+		push_error("The CraftingManager did not have \"" + item_id + "\" in its cache.")
+	return item_resource
 
 func _ready() -> void:
 	_cache_recipes()
@@ -30,7 +40,7 @@ func _ready() -> void:
 func _cache_recipes() -> void:
 	var dir: DirAccess = DirAccess.open(tres_folder)
 	if dir == null:
-		push_error("Crafting Manager couldn't open the tres folder to cache the item recipes.")
+		push_error("CraftingManager couldn't open the tres folder to cache the item recipes.")
 		return
 
 	dir.list_dir_begin()
@@ -41,19 +51,19 @@ func _cache_recipes() -> void:
 			var file_path: String = tres_folder + "/" + file_name
 			var item_resource: ItemResource = load(file_path)
 			item_resource.session_uid = 0 # Triggers the setter func in the resource to make sure it's given an suid
-			cached_recipes[item_resource.get_recipe_id()] = item_resource
+			CraftingManager.cached_items[item_resource.id] = item_resource
 
 			for ingredient: CraftingIngredient in item_resource.recipe:
 				if ingredient.type == "Item":
-					var ingredient_recipe_id: StringName = ingredient.item.get_recipe_id()
+					var ingredient_recipe_id: StringName = ingredient.item.id
 					if ingredient_recipe_id not in item_to_recipes:
 						item_to_recipes[ingredient_recipe_id] = []
-					item_to_recipes[ingredient_recipe_id].append(item_resource.get_recipe_id())
+					item_to_recipes[ingredient_recipe_id].append(item_resource.id)
 				elif ingredient.type == "Tags":
 					for tag: StringName in ingredient.tags:
 						if tag not in tag_to_recipes:
 							tag_to_recipes[tag] = []
-						tag_to_recipes[tag].append(item_resource.get_recipe_id())
+						tag_to_recipes[tag].append(item_resource.id)
 
 		file_name = dir.get_next()
 	dir.list_dir_end()
@@ -97,7 +107,7 @@ func _preprocess_selected_items() -> Dictionary[StringName, Dictionary]:
 			continue
 
 		var inv_item: InvItemResource = slot.item
-		var item_id: StringName = inv_item.stats.get_recipe_id()
+		var item_id: StringName = inv_item.stats.id
 
 		if item_id in item_quantities:
 			item_quantities[item_id].append([inv_item.quantity, inv_item.stats.rarity])
@@ -123,7 +133,7 @@ func _is_item_craftable(item: ItemResource) -> bool:
 		var total_quantity: int = 0
 
 		if ingredient.type == "Item":
-			var str_ingredient: StringName = ingredient.item.get_recipe_id()
+			var str_ingredient: StringName = ingredient.item.id
 			if str_ingredient in item_quantities:
 				for entry: Array in item_quantities[str_ingredient]:
 					if _check_rarity_condition(ingredient.rarity_match, ingredient.item.rarity, entry[1]):
@@ -161,7 +171,7 @@ func _verify_exact_match(recipe: Array[CraftingIngredient]) -> bool:
 			var allowed: bool = false
 			for ingredient: CraftingIngredient in recipe:
 				if ingredient.type == "Item":
-					if slot.item.stats.get_recipe_id() == ingredient.item.get_recipe_id():
+					if slot.item.stats.id == ingredient.item.id:
 						allowed = true
 						break
 				elif ingredient.type == "Tags":
@@ -200,7 +210,7 @@ func _update_crafting_result(_slot: CraftingSlot, _old_item: InvItemResource, _n
 
 	var candidates: Array[StringName] = _get_candidate_recipes()
 	for recipe_id: StringName in candidates:
-		var item_resource: ItemResource = cached_recipes[recipe_id]
+		var item_resource: ItemResource = CraftingManager.cached_items[recipe_id]
 		if _is_item_craftable(item_resource):
 			output_slot.item = InvItemResource.new(item_resource, item_resource.output_quantity)
 			return
@@ -225,7 +235,7 @@ func _consume_recipe(recipe: Array[CraftingIngredient]) -> bool:
 				continue
 
 			if ingredient.type == "Item":
-				if slot.item.stats.get_recipe_id() == ingredient.item.get_recipe_id():
+				if slot.item.stats.id == ingredient.item.id:
 					if _check_rarity_condition(ingredient.rarity_match, ingredient.item.rarity, slot.item.stats.rarity):
 						var available: int = slot.item.quantity
 						var remove_amount: int = min(available, needed)

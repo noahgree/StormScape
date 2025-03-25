@@ -1,0 +1,8 @@
+[gd_resource type="CanvasTexture" load_steps=3 format=3 uid="uid://cyb6hr0nf70e5"]
+
+[ext_resource type="Texture2D" uid="uid://bi4vuwg8pdwgu" path="res://Entities/Items/WeaponMods/Scopes/SimpleScope/simple_scope_base.png" id="1_ltew7"]
+[ext_resource type="Texture2D" uid="uid://chnw6km56j2w6" path="res://Entities/Items/WeaponMods/Scopes/SimpleScope/simple_scope_base_n.png" id="2_8jspp"]
+
+[resource]
+diffuse_texture = ExtResource("1_ltew7")
+normal_texture = ExtResource("2_8jspp")

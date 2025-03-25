@@ -1,8 +1,9 @@
-[gd_resource type="Resource" script_class="ProjWeaponResource" load_steps=37 format=3 uid="uid://fmf7upx7tsln"]
+[gd_resource type="Resource" script_class="ProjWeaponResource" load_steps=38 format=3 uid="uid://fmf7upx7tsln"]
 
 [ext_resource type="Texture2D" uid="uid://bm570hawaupxe" path="res://Entities/Items/Weapons/WeaponVFX/Casings/small_casing.png" id="1_mc2hw"]
 [ext_resource type="Script" uid="uid://dkfssottmsrch" path="res://Entities/Stats/EffectSystemResources/EffectSources/EffectSource.gd" id="2_gwjg5"]
 [ext_resource type="Script" uid="uid://boo31eu083dqd" path="res://Entities/Stats/EffectSystemResources/StatusEffects/StatusEffect.gd" id="3_mc2hw"]
+[ext_resource type="Script" uid="uid://cowjdnic7xmkp" path="res://UI/Inventory/PlayerInventory/ItemDetail.gd" id="4_7wkqs"]
 [ext_resource type="Resource" uid="uid://b5dad578bsduf" path="res://Entities/Player/PlayerCore/PlayerCamera/CamFXPresets/3(NoFreeze).tres" id="5_8bwt5"]
 [ext_resource type="Texture2D" uid="uid://bvbokmfcccs5v" path="res://Entities/Items/Weapons/ProjectileWeapons/RifleX/RifleXBaseCT.tres" id="9_gwjg5"]
 [ext_resource type="Script" uid="uid://cje5bobi6o8bo" path="res://Entities/Items/Hitscans/HitscanResource.gd" id="10_1dkua"]
@@ -16,8 +17,8 @@
 [ext_resource type="Script" uid="uid://dvasncq3tgljs" path="res://Entities/Items/Weapons/ProjectileWeapons/ProjWeaponResource.gd" id="19_5jt0x"]
 
 [sub_resource type="Curve" id="Curve_kfl3v"]
-_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.0405904, 0.156844), 0.0, 0.0, 0, 0, Vector2(0.750923, 0.345338), 0.0, 0.0, 0, 0, Vector2(1, 1), 2.89929, 0.0, 0, 0]
-point_count = 4
+_data = [Vector2(0, 0.22981), 0.0, 0.0, 0, 0, Vector2(0.745387, 0.402089), 0.0, 0.0, 0, 0, Vector2(1, 1), 2.89929, 0.0, 0, 0]
+point_count = 3
 
 [sub_resource type="Curve" id="Curve_uquue"]
 _data = [Vector2(0, 0.204046), 0.0, 0.0, 0, 0, Vector2(0.822446, 0.437008), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
@@ -25,7 +26,7 @@ point_count = 3
 
 [sub_resource type="Curve" id="Curve_mls34"]
 _limits = [0.0, 0.1, 0.0, 1.0]
-_data = [Vector2(0, 0.0154818), 0.0, 0.0609458, 0, 0, Vector2(1, 0.0464921), 0.0, 0.0, 0, 0]
+_data = [Vector2(0, 0.0225756), 0.0, 0.0609458, 0, 0, Vector2(1, 0.0505457), 0.0, 0.0, 0, 0]
 point_count = 2
 
 [sub_resource type="Resource" id="Resource_55n34"]
@@ -257,7 +258,7 @@ max_bloom = 8.0
 bloom_curve = SubResource("Curve_kfl3v")
 bloom_increase_rate = SubResource("Curve_mls34")
 bloom_decrease_rate = SubResource("Curve_uquue")
-bloom_decrease_delay = 1.0
+bloom_decrease_delay = 0.7
 initial_fire_rate_delay = 0.0
 warmup_decrease_delay = 0.75
 overheat_penalty = 0.0
@@ -278,9 +279,8 @@ allow_hitscan_holding = true
 ammo_in_mag = -1
 s_mods = SubResource("Resource_mx2m7")
 pullout_delay = 0.25
+max_mods = 3
 blocked_mods = Array[StringName]([])
-block_all_mods = false
-cache_is_setup = false
 weapon_mods_need_to_be_readded_after_save = false
 current_mods = Array[Dictionary]([{
 &"1": null
@@ -288,6 +288,12 @@ current_mods = Array[Dictionary]([{
 &"2": null
 }, {
 &"3": null
+}, {
+&"4": null
+}, {
+&"5": null
+}, {
+&"6": null
 }])
 original_status_effects = Array[ExtResource("3_mc2hw")]([])
 original_charge_status_effects = Array[ExtResource("3_mc2hw")]([])
@@ -300,6 +306,7 @@ stack_size = 1
 auto_pickup = false
 pickup_radius = 4
 info = "The industry standard for rifling away your enemies."
+extra_details = Array[ExtResource("4_7wkqs")]([])
 ground_icon = ExtResource("9_gwjg5")
 in_hand_icon = ExtResource("9_gwjg5")
 inv_icon = ExtResource("9_gwjg5")

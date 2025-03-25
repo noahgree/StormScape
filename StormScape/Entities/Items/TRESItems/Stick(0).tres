@@ -1,5 +1,6 @@
-[gd_resource type="Resource" script_class="WorldResourceResource" load_steps=6 format=3 uid="uid://8uj8fwadqlk0"]
+[gd_resource type="Resource" script_class="WorldResourceResource" load_steps=7 format=3 uid="uid://8uj8fwadqlk0"]
 
+[ext_resource type="Script" uid="uid://cowjdnic7xmkp" path="res://UI/Inventory/PlayerInventory/ItemDetail.gd" id="1_cgtgx"]
 [ext_resource type="Texture2D" uid="uid://dhr6ujbdy31nl" path="res://Entities/Items/WorldResources/Stick/StickCT.tres" id="1_svgfi"]
 [ext_resource type="PackedScene" uid="uid://bhmmr2f1hs8mk" path="res://Entities/Items/WorldResources/WorldResource.tscn" id="3_kf8ve"]
 [ext_resource type="Script" uid="uid://crlmvnjkf7c3g" path="res://Entities/Items/WorldResources/WorldResourceResource.gd" id="4_xv5sp"]
@@ -24,6 +25,7 @@ stack_size = 64
 auto_pickup = true
 pickup_radius = 4
 info = "A simple crafting ingredient for many tools."
+extra_details = Array[ExtResource("1_cgtgx")]([])
 ground_icon = ExtResource("1_svgfi")
 in_hand_icon = ExtResource("1_svgfi")
 inv_icon = ExtResource("1_svgfi")

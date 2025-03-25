@@ -4,7 +4,4 @@
 
 [resource]
 base_font = ExtResource("1_qk56b")
-opentype_features = {
-1936928824: 1
-}
 spacing_bottom = -1

@@ -12,7 +12,6 @@ class_name InventoryPopulator
 @export var hotbar_grid: HBoxContainer ## If player inv, this connects to the container that holds the hotbar slots.
 @export var trash_slot: Slot ## If player inv, this connects to the trash slot.
 @export var crafting_manager: CraftingManager ## If player inv, this connects to the crafting manager.
-@export var weapon_mod_hud: WeaponModsHUD ## If player inv, this connects to the weapon mods HUD.
 @export var item_viewer: ItemViewer ## If player inv, this connects to the item viewer in the inventory.
 
 var synced_inv: Inventory ## The synced inventory that this populator populates based on.
@@ -30,8 +29,6 @@ func _ready() -> void:
 	if trash_slot != null:
 		trash_slot.is_trash_slot = true
 		trash_slot.name = "Trash_Slot"
-		trash_slot.is_hovered_over.connect(_on_slot_hovered)
-		trash_slot.is_not_hovered_over.connect(_on_slot_not_hovered)
 
 	_change_slot_count_for_new_inv()
 
@@ -56,8 +53,6 @@ func _change_slot_count_for_new_inv(inv: Inventory = null) -> void:
 		var slot: Slot = slot_scene.instantiate()
 		main_slot_grid.add_child(slot)
 		slot.name = "Slot_" + str(i)
-		slot.is_hovered_over.connect(_on_slot_hovered)
-		slot.is_not_hovered_over.connect(_on_slot_not_hovered)
 		slot.index = i
 		if inv: slot.synced_inv = inv
 		slots.append(slot)
@@ -67,8 +62,6 @@ func _change_slot_count_for_new_inv(inv: Inventory = null) -> void:
 		var slot: Slot = slot_scene.instantiate()
 		hotbar_grid.add_child(slot)
 		slot.name = "HotSlot_" + str(i)
-		slot.is_hovered_over.connect(_on_slot_hovered)
-		slot.is_not_hovered_over.connect(_on_slot_not_hovered)
 		slot.index = main_count + i
 		if inv: slot.synced_inv = inv
 		slots.append(slot)
@@ -96,14 +89,6 @@ func _set_synced_ui() -> void:
 ## When a slot gets updated in the inventory, this is received via signal in order to update a slot visual here.
 func _on_slot_updated(index: int, item: InvItemResource) -> void:
 	slots[index].item = item
-
-## When a slot is hovered, update the item details label if that slot's item is not null.
-func _on_slot_hovered(_index: int) -> void:
-	pass
-
-## When the mouse stops hovering over an item, clear the details label.
-func _on_slot_not_hovered() -> void:
-	pass
 
 ## Custom printing method to show the items inside the slots populated by this node.
 func print_slots(include_null_spots: bool = false) -> void:

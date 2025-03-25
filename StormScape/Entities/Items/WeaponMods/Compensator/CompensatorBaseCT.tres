@@ -1,0 +1,8 @@
+[gd_resource type="CanvasTexture" load_steps=3 format=3 uid="uid://b2y1dxk81lvcv"]
+
+[ext_resource type="Texture2D" uid="uid://buma3njpwuflh" path="res://Entities/Items/WeaponMods/Compensator/compensator_base.png" id="1_gj5eb"]
+[ext_resource type="Texture2D" uid="uid://bwx68xy4dv13s" path="res://Entities/Items/WeaponMods/Compensator/compensator_base_n.png" id="2_e628e"]
+
+[resource]
+diffuse_texture = ExtResource("1_gj5eb")
+normal_texture = ExtResource("2_e628e")

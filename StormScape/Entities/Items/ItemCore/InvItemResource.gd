@@ -8,15 +8,15 @@ class_name InvItemResource
 
 ## Used when calling InvItemResource.new() to be able to pass in stats and a quantity.
 func _init(item_stats: ItemResource = null, item_quantity: int = 1) -> void:
-	self.stats = item_stats
+	self.stats = item_stats.duplicate_with_suid() if item_stats != null else item_stats
 	self.quantity = item_quantity
 
 	if stats is ProjWeaponResource:
 		if stats.s_mods.base_values.is_empty(): # Otherwise it undoes any changes to values made my mods
-			ProjectileWeapon.setup_mod_cache(stats)
+			ProjectileWeapon.initialize_stats_resource(stats)
 	elif stats is MeleeWeaponResource:
 		if stats.s_mods.base_values.is_empty():
-			MeleeWeapon.setup_mod_cache(stats)
+			MeleeWeapon.initialize_stats_resource(stats)
 
 ## Custom print logic for determining more about the item that just a randomly assigned ID.
 func _to_string() -> String:

@@ -23,3 +23,15 @@ func _can_drop_data(_at_position: Vector2, data: Variant) -> bool:
 		if item != null and not (item.stats.is_same_as(data.item.stats) and item.quantity < item.stats.stack_size):
 			return false
 	return true
+
+func _get_drag_data(at_position: Vector2) -> Variant:
+	if is_output_slot:
+		return
+
+	return super._get_drag_data(at_position)
+
+func _gui_input(event: InputEvent) -> void:
+	if is_output_slot:
+		return
+
+	super._gui_input(event)

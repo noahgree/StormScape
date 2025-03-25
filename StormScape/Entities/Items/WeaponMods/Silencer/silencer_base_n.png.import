@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dmeygsqe36hkb"
-path="res://.godot/imported/acog_base.png-f1e6903ebb071fc446ad1ef614b99eb7.ctex"
+uid="uid://pv407o2fkc01"
+path="res://.godot/imported/silencer_base_n.png-4ea3e8766ffabe9b3fa6d1453bf762db.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Entities/Items/WeaponMods/Scopes/ACOG/acog_base.png"
-dest_files=["res://.godot/imported/acog_base.png-f1e6903ebb071fc446ad1ef614b99eb7.ctex"]
+source_file="res://Entities/Items/WeaponMods/Silencer/silencer_base_n.png"
+dest_files=["res://.godot/imported/silencer_base_n.png-4ea3e8766ffabe9b3fa6d1453bf762db.ctex"]
 
 [params]
 

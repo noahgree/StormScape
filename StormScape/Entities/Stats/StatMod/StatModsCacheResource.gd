@@ -2,33 +2,29 @@ extends Resource
 class_name StatModsCacheResource
 ## A resource that caches and works with stat mods applied to the entity on which it is defined.
 
-@export_group("Debug", "debug_")
-@export var debug_print_mod_changes: bool = false ## Prints out stat mod recalculations in the editor if checked.
-
 var stat_mods: Dictionary[StringName, Dictionary] = {} ## The cache of mod resources currently applied to the entity's stats.
 var cached_stats: Dictionary[StringName, float] = {} ## The up-to-date and calculated stats to be used by anything that depend on them.
 var base_values: Dictionary[StringName, float] = {} ## The unchanging base values of each moddable stat, usually set by copying the exported values from the component into a dictionary that is passed into the setup function below.
+var is_loading: bool = false ## Blocks print spam of changes during loads.
 
 
 ## Clears out the cached stats and recalculates everything based on base values.
 func reinit_on_load() -> void:
-	var temp_debug_print_changes: bool = debug_print_mod_changes
-	debug_print_mod_changes = false
+	is_loading = true
 	cached_stats = {}
 	for stat_id: String in base_values:
 		_recalculate_stat(stat_id, base_values.get(stat_id))
-	debug_print_mod_changes = temp_debug_print_changes
+	is_loading = false
 
 ## Sets up the base values dict and calculates initial values based on any already present mods.
 func add_moddable_stats(base_valued_stats: Dictionary[StringName, float], stats_ui: Control = null) -> void:
-	var temp_debug_print_changes: bool = debug_print_mod_changes
-	debug_print_mod_changes = false
+	is_loading = true
 	for stat_id: StringName in base_valued_stats.keys():
 		var base_value: float = base_valued_stats[stat_id]
 		stat_mods[stat_id] = {}
 		base_values[stat_id] = base_value
 		_recalculate_stat(stat_id, base_value, stats_ui)
-	debug_print_mod_changes = temp_debug_print_changes
+	is_loading = false
 
 ## Recalculates a cached stat. Usually called once something has changed like from an update or removal.
 func _recalculate_stat(stat_id: StringName, base_value: float, stats_ui: Control = null) -> void:
@@ -45,8 +41,8 @@ func _recalculate_stat(stat_id: StringName, base_value: float, stats_ui: Control
 	cached_stats[stat_id] = max(0, result)
 	_update_ui_for_stat(stat_id, result, stats_ui)
 
-	if DebugFlags.PrintFlags.stat_mod_changes_during_game and debug_print_mod_changes:
-		var change_text: String = str(float(cached_stats[stat_id]) / float(base_values[stat_id]))
+	if DebugFlags.PrintFlags.stat_mod_changes_during_game and not is_loading:
+		var change_text: String = str(snappedf(float(cached_stats[stat_id]) / float(base_values[stat_id]), 0.001))
 		var base_text: String = "[color=gray][i](base)[/i][/color]" if cached_stats[stat_id] == base_values[stat_id] else "[color=pink][i](" + change_text + "%)[/i][/color]"
 		print_rich("[color=cyan]" + stat_id + base_text + "[/color]: [b]" + str(cached_stats[stat_id]) + "[/b]")
 

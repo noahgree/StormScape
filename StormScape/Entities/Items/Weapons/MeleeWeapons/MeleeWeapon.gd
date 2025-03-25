@@ -11,25 +11,16 @@ class_name MeleeWeapon
 @onready var hitbox_component: HitboxComponent = %HitboxComponent ## The hitbox responsible for applying the melee hit.
 
 var is_swinging: bool = false ## Whether we are currently swinging the weapon in some fashion.
-var is_holding: bool = false ## Whether we are holding down the trigger so as to potentially charge up a charge swing.
-const HOLDING_THRESHOLD: float = 0.1 ## How long a hold press must be to start tracking a potential charge up.
 
-
-func _set_stats(new_stats: ItemResource) -> void:
-	super._set_stats(new_stats)
-
-	# Duplicates the cache & effect sources to be unique and then calls for the cache to get loaded.
-	# stats.cache_is_setup gets set to true the first time the cache is setup on first load. From there on it is saved as true even during in-game save and loads.
-	if not stats.cache_is_setup:
-		stats.s_mods = stats.s_mods.duplicate()
-		stats.effect_source = stats.effect_source.duplicate()
-		stats.charge_effect_source = stats.charge_effect_source.duplicate()
-		stats.original_status_effects = stats.effect_source.status_effects.duplicate()
-		stats.original_charge_status_effects = stats.charge_effect_source.status_effects.duplicate()
-		MeleeWeapon.setup_mod_cache(stats)
 
 ## Sets up the base values for the stat mod cache so that weapon mods can be added and managed properly.
-static func setup_mod_cache(stats_resource: MeleeWeaponResource) -> void:
+static func initialize_stats_resource(stats_resource: MeleeWeaponResource) -> void:
+	stats_resource.s_mods = stats_resource.s_mods.duplicate()
+	stats_resource.effect_source = stats_resource.effect_source.duplicate()
+	stats_resource.charge_effect_source = stats_resource.charge_effect_source.duplicate()
+	stats_resource.original_status_effects = stats_resource.effect_source.status_effects.duplicate()
+	stats_resource.original_charge_status_effects = stats_resource.charge_effect_source.status_effects.duplicate()
+
 	var normal_moddable_stats: Dictionary[StringName, float] = {
 		&"stamina_cost" : stats_resource.stamina_cost,
 		&"cooldown" : stats_resource.cooldown,
@@ -55,7 +46,10 @@ static func setup_mod_cache(stats_resource: MeleeWeaponResource) -> void:
 
 	stats_resource.s_mods.add_moddable_stats(normal_moddable_stats)
 	stats_resource.s_mods.add_moddable_stats(charge_moddable_stats)
-	stats_resource.cache_is_setup = true
+
+	if stats_resource.weapon_mods_need_to_be_readded_after_save:
+		WeaponModManager.reset_original_arrays_after_save(stats_resource, null)
+		stats_resource.weapon_mods_need_to_be_readded_after_save = false
 
 func _ready() -> void:
 	if Engine.is_editor_hint():
@@ -84,28 +78,12 @@ func _disable_collider() -> void:
 	hitbox_component.collider.disabled = true
 
 func enter() -> void:
-	if stats.s_mods.base_values.is_empty():
-		MeleeWeapon.setup_mod_cache(stats)
-
-	if stats.weapon_mods_need_to_be_readded_after_save:
-		source_entity.hands.weapon_mod_manager.add_all_mods_to_weapon(stats)
-		stats.weapon_mods_need_to_be_readded_after_save = false
+	if stats.s_mods.get_stat("pullout_delay") > 0:
+		pullout_delay_timer.start(stats.s_mods.get_stat("pullout_delay"))
 
 func exit() -> void:
 	super.exit()
 	source_entity.facing_component.should_rotate = true
-
-## Overrides the parent method to specify what to do on use while equipped.
-func activate() -> void:
-	if is_swinging:
-		return
-
-	is_holding = false
-	await get_tree().create_timer(HOLDING_THRESHOLD, false, false, false).timeout
-	if not is_holding or not stats.can_do_charge_use:
-		if pullout_delay_timer.is_stopped() and source_entity.inv.auto_decrementer.get_cooldown(stats.get_cooldown_id()) == 0:
-			if not source_entity.hands.scale_is_lerping:
-				_swing()
 
 ## Overrides the parent method to specify what to do on holding use while equipped.
 func hold_activate(hold_time: float) -> void:
@@ -113,10 +91,9 @@ func hold_activate(hold_time: float) -> void:
 		source_entity.hands.been_holding_time = 0
 		return
 
-	if hold_time >= HOLDING_THRESHOLD:
-		is_holding = true
-		if stats.auto_do_charge_use and stats.can_do_charge_use:
-			_charge_swing(hold_time)
+	if stats.auto_do_charge_use and stats.can_do_charge_use:
+		if (hold_time >= stats.s_mods.get_stat("min_charge_time")):
+			_charge_swing()
 
 ## Overrides the parent method to specify what to do on release of a holding use while equipped.
 func release_hold_activate(hold_time: float) -> void:
@@ -124,8 +101,10 @@ func release_hold_activate(hold_time: float) -> void:
 		source_entity.hands.been_holding_time = 0
 		return
 
-	if hold_time >= HOLDING_THRESHOLD and not stats.auto_do_charge_use and stats.can_do_charge_use:
-		_charge_swing(hold_time)
+	if stats.can_do_charge_use and (hold_time >= stats.s_mods.get_stat("min_charge_time")):
+		_charge_swing()
+	else:
+		_swing()
 
 ## Begins the logic for doing a normal weapon swing.
 func _swing() -> void:
@@ -151,10 +130,7 @@ func _swing() -> void:
 			AudioManager.play_sound(stats.use_sound, AudioManager.SoundType.SFX_2D, source_entity.global_position)
 
 ## Begins the logic for doing a charged swing.
-func _charge_swing(hold_time: float) -> void:
-	if not (hold_time >= stats.s_mods.get_stat("min_charge_time")):
-		return
-
+func _charge_swing() -> void:
 	hitbox_component.effect_source = stats.charge_effect_source
 	hitbox_component.collision_mask = hitbox_component.effect_source.scanned_phys_layers
 

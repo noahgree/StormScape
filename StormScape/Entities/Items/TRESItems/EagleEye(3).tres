@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="ProjWeaponResource" load_steps=23 format=3 uid="uid://duc0xfejpfs1"]
+[gd_resource type="Resource" script_class="ProjWeaponResource" load_steps=24 format=3 uid="uid://duc0xfejpfs1"]
 
 [ext_resource type="Texture2D" uid="uid://bm570hawaupxe" path="res://Entities/Items/Weapons/WeaponVFX/Casings/small_casing.png" id="1_6mhsi"]
 [ext_resource type="Script" uid="uid://boo31eu083dqd" path="res://Entities/Stats/EffectSystemResources/StatusEffects/StatusEffect.gd" id="1_a6eqh"]
@@ -10,11 +10,12 @@
 [ext_resource type="PackedScene" uid="uid://btaigaokvm7qx" path="res://Entities/Items/Weapons/ProjectileWeapons/EagleEye/EagleEye.tscn" id="3_uuh4c"]
 [ext_resource type="Texture2D" uid="uid://bfoy8x1f7gqq7" path="res://Entities/Items/Weapons/ProjectileWeapons/EagleEye/EagleEyeBaseCT.tres" id="4_ghyeh"]
 [ext_resource type="Script" uid="uid://bj3r5oopspj6l" path="res://Entities/Items/Projectiles/ProjectileResource.gd" id="4_w4cid"]
+[ext_resource type="Script" uid="uid://cowjdnic7xmkp" path="res://UI/Inventory/PlayerInventory/ItemDetail.gd" id="5_6mhsi"]
 [ext_resource type="PackedScene" uid="uid://bqkyplubhsx43" path="res://Entities/Items/Projectiles/Bullets/SmallBullet/SmallBullet.tscn" id="5_58e3c"]
 [ext_resource type="Resource" uid="uid://cev0y0oe3igus" path="res://Entities/Player/PlayerCore/PlayerCamera/CamFXPresets/6.tres" id="5_ihh7l"]
 [ext_resource type="PackedScene" uid="uid://c3e5wour08d6u" path="res://Entities/Items/Hitscans/LaserBeam.tscn" id="8_6mhsi"]
-[ext_resource type="Script" uid="uid://ctxa7i1mbt7ab" path="res://UI/Inventory/PlayerInventory/Crafting/CraftingIngredient.gd" id="8_377c5"]
 [ext_resource type="Script" uid="uid://c2gdoebfp12dq" path="res://Entities/Stats/StatMod/StatModsCacheResource.gd" id="10_v3ja1"]
+[ext_resource type="Script" uid="uid://ctxa7i1mbt7ab" path="res://UI/Inventory/PlayerInventory/Crafting/CraftingIngredient.gd" id="14_7bpvq"]
 
 [sub_resource type="Resource" id="Resource_3mxcx"]
 script = ExtResource("1_hh3cs")
@@ -202,9 +203,8 @@ allow_hitscan_holding = true
 ammo_in_mag = -1
 s_mods = SubResource("Resource_pm717")
 pullout_delay = 0.5
+max_mods = 3
 blocked_mods = Array[StringName]([])
-block_all_mods = false
-cache_is_setup = false
 weapon_mods_need_to_be_readded_after_save = false
 current_mods = Array[Dictionary]([{
 &"1": null
@@ -212,6 +212,12 @@ current_mods = Array[Dictionary]([{
 &"2": null
 }, {
 &"3": null
+}, {
+&"4": null
+}, {
+&"5": null
+}, {
+&"6": null
 }])
 original_status_effects = Array[ExtResource("1_a6eqh")]([])
 original_charge_status_effects = Array[ExtResource("1_a6eqh")]([])
@@ -224,6 +230,7 @@ stack_size = 1
 auto_pickup = false
 pickup_radius = 7
 info = "A precision weapon meant for long range. Some may call it a sniper."
+extra_details = Array[ExtResource("5_6mhsi")]([])
 ground_icon = ExtResource("4_ghyeh")
 in_hand_icon = ExtResource("4_ghyeh")
 inv_icon = ExtResource("1_jqvl6")
@@ -231,7 +238,7 @@ inv_icon_offset = Vector2(0, 0)
 inv_icon_scale = Vector2(1.3, 1.3)
 inv_icon_rotation = -38.0
 cursors = ExtResource("2_efc0d")
-recipe = Array[ExtResource("8_377c5")]([])
+recipe = Array[ExtResource("14_7bpvq")]([])
 output_quantity = 1
 recipe_unlocked = true
 item_scene = ExtResource("3_uuh4c")

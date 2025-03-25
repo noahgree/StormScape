@@ -8,3 +8,5 @@ extends Node
 @warning_ignore("unused_signal") signal player_ready(player: Player)
 @warning_ignore("unused_signal") signal focused_ui_opened
 @warning_ignore("unused_signal") signal focused_ui_closed
+@warning_ignore("unused_signal") signal slot_hovered(slot: Slot)
+@warning_ignore("unused_signal") signal slot_not_hovered

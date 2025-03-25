@@ -1,54 +1,19 @@
-[gd_resource type="Resource" script_class="ExtendedMagMod" load_steps=10 format=3 uid="uid://cwgqj8klx4b3x"]
+[gd_resource type="Resource" script_class="ExtendedMagMod" load_steps=8 format=3 uid="uid://cwgqj8klx4b3x"]
 
 [ext_resource type="Script" uid="uid://boo31eu083dqd" path="res://Entities/Stats/EffectSystemResources/StatusEffects/StatusEffect.gd" id="1_rbtdq"]
+[ext_resource type="Script" uid="uid://cowjdnic7xmkp" path="res://UI/Inventory/PlayerInventory/ItemDetail.gd" id="2_686hq"]
 [ext_resource type="Script" uid="uid://ctxa7i1mbt7ab" path="res://UI/Inventory/PlayerInventory/Crafting/CraftingIngredient.gd" id="2_bikxy"]
-[ext_resource type="Texture2D" uid="uid://buma3njpwuflh" path="res://Entities/Items/WeaponMods/Compensator/compensator_base.png" id="2_ng1g2"]
+[ext_resource type="Texture2D" uid="uid://bh30rapahajlk" path="res://Entities/Items/WeaponMods/ExtendedMag/ExtendedMagBaseCT.tres" id="3_686hq"]
 [ext_resource type="Script" uid="uid://w5ys6kqn83qm" path="res://Entities/Items/WeaponMods/ExtendedMag/ExtendedMagMod.gd" id="3_ng1g2"]
 [ext_resource type="Script" uid="uid://bcjwesiannbd0" path="res://Entities/Stats/StatMod/StatMod.gd" id="4_xtfwk"]
 
 [sub_resource type="Resource" id="Resource_xtfwk"]
 script = ExtResource("4_xtfwk")
 stat_id = &"mag_size"
-mod_id = &"extended_mag_1"
+mod_id = &"extended_mag"
 operation = "+%"
 value = 10.0
 rounding = "Round Up"
-priority = 1
-max_stack_count = 1
-override_all = false
-metadata/_custom_type_script = "uid://bcjwesiannbd0"
-
-[sub_resource type="Resource" id="Resource_thcw3"]
-script = ExtResource("4_xtfwk")
-stat_id = &"base_damage"
-mod_id = &"test_mod_1"
-operation = "+%"
-value = 50.0
-rounding = "Round Closest"
-priority = 1
-max_stack_count = 1
-override_all = false
-metadata/_custom_type_script = "uid://bcjwesiannbd0"
-
-[sub_resource type="Resource" id="Resource_686hq"]
-script = ExtResource("4_xtfwk")
-stat_id = &"fire_cooldown"
-mod_id = &"test_mod_2"
-operation = "-%"
-value = 50.0
-rounding = "Round Closest"
-priority = 1
-max_stack_count = 1
-override_all = false
-metadata/_custom_type_script = "uid://bcjwesiannbd0"
-
-[sub_resource type="Resource" id="Resource_j31jk"]
-script = ExtResource("4_xtfwk")
-stat_id = &"mag_reload_time"
-mod_id = &"test_mod_3"
-operation = "+%"
-value = 25.0
-rounding = "Round Closest"
 priority = 1
 max_stack_count = 1
 override_all = false
@@ -58,10 +23,15 @@ metadata/_custom_type_script = "uid://bcjwesiannbd0"
 script = ExtResource("3_ng1g2")
 allowed_proj_wpns = Array[int]([0, 1, 2, 3, 4, 5, 6, 7, 8, 9])
 allowed_melee_wpns = Array[int]([])
-icon = ExtResource("2_ng1g2")
-wpn_stat_mods = Array[ExtResource("4_xtfwk")]([SubResource("Resource_xtfwk"), SubResource("Resource_thcw3"), SubResource("Resource_686hq"), SubResource("Resource_j31jk")])
+blocked_mutuals = Array[StringName]([])
+blocked_wpn_stats = Dictionary[StringName, float]({
+&"mag_size": 0.0
+})
+req_all_blocked_stats = false
+wpn_stat_mods = Array[ExtResource("4_xtfwk")]([SubResource("Resource_xtfwk")])
 status_effects = Array[ExtResource("1_rbtdq")]([])
 charge_status_effects = Array[ExtResource("1_rbtdq")]([])
+applied_details = Array[ExtResource("2_686hq")]([])
 equipping_audio = ""
 removal_audio = ""
 id = "extended_mag"
@@ -72,10 +42,11 @@ rarity = 0
 stack_size = 3
 auto_pickup = false
 pickup_radius = 4
-info = "Attaches to certain projectile weapons to give them more shots before needing a reload."
-ground_icon = ExtResource("2_ng1g2")
-in_hand_icon = ExtResource("2_ng1g2")
-inv_icon = ExtResource("2_ng1g2")
+info = "Increases magazine size."
+extra_details = Array[ExtResource("2_686hq")]([])
+ground_icon = ExtResource("3_686hq")
+in_hand_icon = ExtResource("3_686hq")
+inv_icon = ExtResource("3_686hq")
 inv_icon_offset = Vector2(0, 0)
 inv_icon_scale = Vector2(1, 1)
 inv_icon_rotation = 0.0

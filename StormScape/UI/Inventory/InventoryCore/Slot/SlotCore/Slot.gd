@@ -4,8 +4,6 @@ class_name Slot
 ## The item and quantity representation inside all inventories. Handles drag and drop logic as well as stacking.
 
 signal item_changed(slot: Slot, old_item: InvItemResource, new_item: InvItemResource)
-signal is_hovered_over(index: int) ## Emitted when a slot is currently being hovered over.
-signal is_not_hovered_over ## Emitted when a slot is no longer being hovered over.
 
 static var hovered_slot_size: float = 22.0 ## The size of the hovered over slot used to conditionally center the drag preview when scaling is messed up. 22 comes from the normally-sized inventory slots.
 
@@ -34,6 +32,7 @@ var tint_progress: float = 100.0: ## How much of the tint should be filled upwar
 	set(new_value):
 		tint_progress = new_value
 		back_color.set_instance_shader_parameter("progress", new_value)
+var pause_changed_signals: bool = false ## When true, the item_changed signal will not be emitted by the setter.
 
 
 ## Setter function for the item represented by this slot. Updates texture and quantity label.
@@ -82,12 +81,11 @@ func _set_item(new_item: InvItemResource) -> void:
 		texture_margins.position = Vector2.ZERO
 		texture_margins.scale = Vector2.ONE
 
-	item_changed.emit(self, old_item, item)
+	if not pause_changed_signals:
+		item_changed.emit(self, old_item, item)
 
 ## Connects relevant mouse entered and exited functions.
 func _ready() -> void:
-	mouse_entered.connect(func() -> void: is_hovered_over.emit(index))
-	mouse_exited.connect(func() -> void: is_not_hovered_over.emit())
 	backing_texture_rect.texture = backing_texture
 	rarity_glow.hide()
 	selected_texture.hide()
@@ -255,8 +253,8 @@ func _drop_data(_at_position: Vector2, data: Variant) -> void:
 				var source_remainder: int = data.item.quantity - total_quantity
 				_replace_with_half_stack_and_find_available_slot_for_previous_stuff(data, source_remainder, total_quantity)
 
-	is_hovered_over.emit(index)
-	_on_mouse_exited()
+	await get_tree().process_frame
+	_on_mouse_entered()
 
 #region Dropping Full Stacks
 ## Moves all items from drag into a different empty slot.
@@ -437,9 +435,11 @@ func _on_mouse_entered() -> void:
 				item_texture.modulate.a = 0.5
 
 				item_texture.material.set_shader_parameter("width", 0)
+	SignalBus.slot_hovered.emit(self)
 
 ## When mouse exits, if we are dragging, remove effects on this slot.
 func _on_mouse_exited() -> void:
+	SignalBus.slot_not_hovered.emit()
 	var drag_data: Variant
 	if get_viewport().gui_is_dragging():
 		drag_data = get_viewport().gui_get_drag_data()
