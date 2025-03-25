@@ -35,9 +35,9 @@ class_name CamFXResource
 
 ## Easy method for activating all events.
 func activate_all() -> void:
-	GlobalData.player_camera.start_shake(self)
-	GlobalData.player_camera.start_freeze(self)
-	GlobalData.player_camera.start_zoom(self)
+	Globals.player_camera.start_shake(self)
+	Globals.player_camera.start_freeze(self)
+	Globals.player_camera.start_zoom(self)
 
 ## Applies the falloffs where needed and activates all the effects.
 func apply_falloffs_and_activate_all(is_player: bool, dist_to_player: float = 0) -> void:

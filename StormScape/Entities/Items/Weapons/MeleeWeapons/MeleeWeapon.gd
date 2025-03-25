@@ -4,13 +4,15 @@ extends Weapon
 class_name MeleeWeapon
 ## The base class for all melee weapons. Melee weapons are based on swings and have all needed behavior logic defined here.
 
+enum RECENT_SWING_TYPE { NORMAL, CHARGED }
+
 @export var sprite_visual_rotation: float = 45 ## How rotated the drawn sprite is by default when imported. Straight up would be 0º, angling top-right would be 45º, etc.
-@export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var ghost_fade_time: float = 0.2 ## How long ghosts take to fade.
 
 @onready var anim_player: AnimationPlayer = $AnimationPlayer ## The animation controller for this melee weapon.
 @onready var hitbox_component: HitboxComponent = %HitboxComponent ## The hitbox responsible for applying the melee hit.
 
 var is_swinging: bool = false ## Whether we are currently swinging the weapon in some fashion.
+var recent_swing_type: RECENT_SWING_TYPE = RECENT_SWING_TYPE.NORMAL ## The most recent type of usage.
 
 
 ## Sets up the base values for the stat mod cache so that weapon mods can be added and managed properly.
@@ -30,7 +32,8 @@ static func initialize_stats_resource(stats_resource: MeleeWeaponResource) -> vo
 		&"base_healing" : stats_resource.effect_source.base_healing,
 		&"crit_chance" : stats_resource.effect_source.crit_chance,
 		&"armor_penetration" : stats_resource.effect_source.armor_penetration,
-		&"pullout_delay" : stats_resource.pullout_delay
+		&"pullout_delay" : stats_resource.pullout_delay,
+		&"rotation_lerping" : stats_resource.rotation_lerping
 	}
 	var charge_moddable_stats: Dictionary[StringName, float] = {
 		&"min_charge_time" : stats_resource.min_charge_time,
@@ -78,6 +81,8 @@ func _disable_collider() -> void:
 	hitbox_component.collider.disabled = true
 
 func enter() -> void:
+	anim_player.play("MeleeWeaponAnimLibrary/RESET")
+
 	if stats.s_mods.get_stat("pullout_delay") > 0:
 		pullout_delay_timer.start(stats.s_mods.get_stat("pullout_delay"))
 
@@ -109,6 +114,8 @@ func release_hold_activate(hold_time: float) -> void:
 ## Begins the logic for doing a normal weapon swing.
 func _swing() -> void:
 	if source_entity.stamina_component.use_stamina(stats.s_mods.get_stat("stamina_cost")):
+		recent_swing_type = RECENT_SWING_TYPE.NORMAL
+
 		hitbox_component.effect_source = stats.effect_source
 		hitbox_component.collision_mask = hitbox_component.effect_source.scanned_phys_layers
 
@@ -135,6 +142,8 @@ func _charge_swing() -> void:
 	hitbox_component.collision_mask = hitbox_component.effect_source.scanned_phys_layers
 
 	if source_entity.stamina_component.use_stamina(stats.s_mods.get_stat("charge_stamina_cost")):
+		recent_swing_type = RECENT_SWING_TYPE.CHARGED
+
 		var cooldown_time: float = stats.s_mods.get_stat("charge_use_cooldown") + stats.s_mods.get_stat("charge_use_speed")
 		source_entity.inv.auto_decrementer.add_cooldown(stats.get_cooldown_id(), cooldown_time)
 		is_swinging = true
@@ -160,8 +169,9 @@ func _spawn_ghost() -> void:
 	var sprite_texture: Texture2D = sprite.sprite_frames.get_frame_texture(current_anim, current_frame)
 
 	var adjusted_transform: Transform2D = sprite.global_transform
+	var fade_time: float = stats.ghost_fade_time if recent_swing_type != RECENT_SWING_TYPE.CHARGED else stats.charge_ghost_fade_time
 
-	var ghost_instance: SpriteGhost = SpriteGhost.create(adjusted_transform, sprite.scale, sprite_texture, ghost_fade_time)
+	var ghost_instance: SpriteGhost = SpriteGhost.create(adjusted_transform, sprite.scale, sprite_texture, fade_time)
 	ghost_instance.flip_h = sprite.flip_h
 
 	if source_entity.hands.current_x_direction != 1:
@@ -170,7 +180,7 @@ func _spawn_ghost() -> void:
 	ghost_instance.offset = sprite.offset
 	ghost_instance.z_index -= 1
 	ghost_instance.make_white()
-	GlobalData.world_root.add_child(ghost_instance)
+	Globals.world_root.add_child(ghost_instance)
 
 ## Applies a status effect to the source entity at the start of use.
 func _apply_start_use_effect(was_charge_fire: bool = false) -> void:

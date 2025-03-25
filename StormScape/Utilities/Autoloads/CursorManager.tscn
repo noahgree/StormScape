@@ -7,8 +7,6 @@
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_43v78"]
 shader = ExtResource("2_7re0i")
-shader_parameter/progress = 100.0
-shader_parameter/main_color = Color(1, 1, 1, 1)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_7re0i"]
 atlas = ExtResource("2_g8fuh")

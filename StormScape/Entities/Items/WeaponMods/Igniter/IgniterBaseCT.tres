@@ -1,0 +1,8 @@
+[gd_resource type="CanvasTexture" load_steps=3 format=3 uid="uid://uw5lhqydwiy3"]
+
+[ext_resource type="Texture2D" uid="uid://6wl2mxfabcs2" path="res://Entities/Items/WeaponMods/Igniter/igniter_base.png" id="1_cdm7f"]
+[ext_resource type="Texture2D" uid="uid://cc2hm1q04fu8e" path="res://Entities/Items/WeaponMods/Igniter/igniter_base_n.png" id="2_7m6qc"]
+
+[resource]
+diffuse_texture = ExtResource("1_cdm7f")
+normal_texture = ExtResource("2_7m6qc")

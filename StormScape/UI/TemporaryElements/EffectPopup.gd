@@ -25,7 +25,7 @@ static func create_popup(src_type: String, was_healing: bool,
 	popup.parent_node = node
 	popup.global_position = node.global_position - Vector2(0, SpriteHelpers.SpriteDetails.get_frame_rect(node.sprite).y)
 
-	GlobalData.world_root.add_child(popup)
+	Globals.world_root.add_child(popup)
 	popup.update_popup(popup_value, src_type, was_crit, was_healing)
 
 	return popup

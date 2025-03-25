@@ -41,11 +41,11 @@ func _set_item(new_item: InvItemResource) -> void:
 	item = new_item
 
 	if item and item.quantity > 0:
-		update_tint_progress(GlobalData.player_node.inv.auto_decrementer.get_cooldown(item.stats.get_cooldown_id()))
+		update_tint_progress(Globals.player_node.inv.auto_decrementer.get_cooldown(item.stats.get_cooldown_id()))
 
 		item_texture.texture = item.stats.inv_icon
 
-		back_color.set_instance_shader_parameter("main_color", GlobalData.rarity_colors.slot_fill.get(item.stats.rarity))
+		back_color.set_instance_shader_parameter("main_color", Globals.rarity_colors.slot_fill.get(item.stats.rarity))
 		back_color.show()
 
 		item_texture.material.set_shader_parameter("width", 0.0)
@@ -54,13 +54,13 @@ func _set_item(new_item: InvItemResource) -> void:
 		texture_margins.position = item.stats.inv_icon_offset * (item_texture.size / item_texture.custom_minimum_size)
 		texture_margins.scale = item.stats.inv_icon_scale
 
-		rarity_glow.self_modulate = GlobalData.rarity_colors.slot_glow.get(item.stats.rarity)
+		rarity_glow.self_modulate = Globals.rarity_colors.slot_glow.get(item.stats.rarity)
 		rarity_glow.show()
 
-		if item.stats.rarity in [GlobalData.ItemRarity.EPIC, GlobalData.ItemRarity.LEGENDARY, GlobalData.ItemRarity.SINGULAR]:
+		if item.stats.rarity in [Globals.ItemRarity.EPIC, Globals.ItemRarity.LEGENDARY, Globals.ItemRarity.SINGULAR]:
 			var gradient_texture: GradientTexture1D = GradientTexture1D.new()
 			gradient_texture.gradient = Gradient.new()
-			gradient_texture.gradient.add_point(0, GlobalData.rarity_colors.glint_color.get(item.stats.rarity))
+			gradient_texture.gradient.add_point(0, Globals.rarity_colors.glint_color.get(item.stats.rarity))
 			item_texture.material.set_shader_parameter("color_gradient", gradient_texture)
 			item_texture.material.set_shader_parameter("highlight_strength", 0.4)
 		else:
@@ -96,18 +96,18 @@ func _ready() -> void:
 ## with the current item.
 func _on_visibility_changed() -> void:
 	await get_tree().process_frame
-	update_tint_progress(GlobalData.player_node.inv.auto_decrementer.get_cooldown(item.stats.get_cooldown_id()) if item != null else 0.0)
+	update_tint_progress(Globals.player_node.inv.auto_decrementer.get_cooldown(item.stats.get_cooldown_id()) if item != null else 0.0)
 
 ## Updates the upwards fill tinting that represents an item on cooldown.
 func update_tint_progress(duration: float) -> void:
 	if duration > 0:
-		var cooldown_source: String = GlobalData.player_node.inv.auto_decrementer.get_cooldown_source_title(item.stats.get_cooldown_id())
+		var cooldown_source: String = Globals.player_node.inv.auto_decrementer.get_cooldown_source_title(item.stats.get_cooldown_id())
 		if cooldown_source not in item.stats.shown_cooldown_fills:
 			return
 
 		if tint_tween: tint_tween.kill()
-		tint_progress = (1 - (duration / GlobalData.player_node.inv.auto_decrementer.get_original_cooldown(item.stats.get_cooldown_id()))) * 100
-		if not GlobalData.focused_ui_is_open:
+		tint_progress = (1 - (duration / Globals.player_node.inv.auto_decrementer.get_original_cooldown(item.stats.get_cooldown_id()))) * 100
+		if not Globals.focused_ui_is_open:
 			tint_tween = create_tween()
 			tint_tween.tween_property(self, "tint_progress", 100.0, duration)
 	else:
@@ -144,7 +144,7 @@ func _make_drag_preview(at_position: Vector2) -> Control:
 
 		preview_texture.material.set_shader_parameter("width", outline_width)
 		preview_texture.material.set_shader_parameter("highlight_strength", 0.0)
-		preview_texture.material.set_shader_parameter("outline_color", GlobalData.rarity_colors.outline_color.get(item.stats.rarity))
+		preview_texture.material.set_shader_parameter("outline_color", Globals.rarity_colors.outline_color.get(item.stats.rarity))
 
 		if dragging_only_one:
 			preview_scene.get_node("QuantityMargins/Quantity").text = ""

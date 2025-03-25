@@ -43,7 +43,7 @@ func _on_body_entered(body: Node2D) -> void:
 func _start_being_handled(handling_area: EffectReceiverComponent) -> void:
 	effect_source = effect_source.duplicate()
 
-	if effect_source.source_type == GlobalData.EffectSourceSourceType.FROM_PROJECTILE:
+	if effect_source.source_type == Globals.EffectSourceSourceType.FROM_PROJECTILE:
 		effect_source.movement_direction = movement_direction
 	if not use_self_position:
 		effect_source.contact_position = get_parent().global_position

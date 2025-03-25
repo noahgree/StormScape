@@ -96,6 +96,7 @@ static func initialize_stats_resource(stats_resource: ProjWeaponResource) -> voi
 		&"auto_ammo_interval" : stats_resource.auto_ammo_interval,
 		&"auto_ammo_count" : stats_resource.auto_ammo_count,
 		&"pullout_delay" : stats_resource.pullout_delay,
+		&"rotation_lerping" : stats_resource.rotation_lerping,
 		&"max_bloom" : stats_resource.max_bloom,
 		&"bloom_increase_rate_multiplier" : 1.0,
 		&"bloom_decrease_rate_multiplier" : 1.0,
@@ -233,7 +234,7 @@ func _check_if_needs_mouse_area_scanner() -> void:
 		collision_shape.disabled = true
 		mouse_area.add_child(collision_shape)
 		mouse_area.global_position = CursorManager.get_cursor_mouse_position()
-		GlobalData.world_root.add_child(mouse_area)
+		Globals.world_root.add_child(mouse_area)
 
 func _enable_mouse_area() -> void:
 	if mouse_area: mouse_area.get_child(0).disabled = false
@@ -526,12 +527,12 @@ func _apply_barrage_logic() -> void:
 ## Spawns the projectile that has been passed to it. Reloads if we don't have enough for the next activation.
 func _spawn_projectile(proj: Projectile) -> void:
 	proj.rotation += deg_to_rad(_get_bloom())
-	GlobalData.world_root.add_child(proj)
+	Globals.world_root.add_child(proj)
 
 ## Spawns the hitscan that has been passed to it. Reloads if we don't have enough for the next activation.
 func _spawn_hitscan(hitscan: Hitscan) -> void:
 	hitscan.rotation_offset += deg_to_rad(_get_bloom())
-	GlobalData.world_root.add_child(hitscan)
+	Globals.world_root.add_child(hitscan)
 	current_hitscans.append(hitscan)
 
 	if stats.firing_mode == "Semi Auto" or (stats.firing_mode == "Auto" and stats.s_mods.get_stat("hitscan_duration") < 0.65):
@@ -689,6 +690,8 @@ func _on_overheat_emptied(item_id: StringName) -> void:
 
 	if source_entity.inv.auto_decrementer.get_cooldown_source_title(stats.get_cooldown_id()) != "overheat_penalty":
 		overhead_ui.overheat_bar.hide()
+
+	CursorManager.change_cursor_tint(Color.WHITE)
 #endregion
 
 #region FX & Animations
@@ -722,7 +725,7 @@ func _eject_casing() -> void:
 		var casing: Node2D = casing_scene.instantiate()
 		casing.global_position = casing_ejection_point.global_position
 		casing.global_rotation = global_rotation
-		GlobalData.world_root.add_child(casing)
+		Globals.world_root.add_child(casing)
 		casing.sprite.texture = stats.casing_texture
 		if stats.casing_tint != Color.WHITE:
 			casing.sprite.modulate = stats.casing_tint
@@ -730,8 +733,9 @@ func _eject_casing() -> void:
 ## Start the firing animation.
 func _start_firing_anim() -> void:
 	if anim_player.is_playing():
-		push_warning(source_entity.name + " has a " + stats.name + " that was still playing the \"" + anim_player.current_animation + "\" animation upon the start of the firing animation. This will result in skipped animations.")
-		return
+		push_warning(source_entity.name + " has a " + stats.name + " that was still playing the \"" + anim_player.current_animation + "\" animation upon the start of the firing animation. This will result in jarring transitions between animations.")
+		anim_player.stop()
+		anim_player.play("RESET")
 
 	if stats.one_frame_per_fire:
 		# If using one frame per fire, we know it is an animated sprite
@@ -768,7 +772,8 @@ func _start_post_fire_anim() -> void:
 
 	anim_player.play("post_fire")
 
-## Starts the post-firing sound and vfx if we have one. Good for things like the cocking of a shotgun barrel after firing.
+## Starts the post-firing sound and vfx if we have one. Good for things like the cocking of a shotgun
+## barrel after firing.
 func _start_post_fire_fx() -> void:
 	if stats.post_fire_sound == "":
 		return

@@ -14,7 +14,7 @@ class_name EffectReceiverComponent
 @export var absorb_full_hit: bool = false ## When true, any weapon's hitbox that sends an effect to this receiver will be disabled for the remainder of the attack afterwards. Useful for when you want something like a tree to take the full hit and not let an axe keep swinging through to hit enemies behind it.
 @export_group("Source Filtering")
 @export var filter_source_types: bool = false ## When true, only allow matching source types as specified in the below array.
-@export var allowed_source_types: Array[GlobalData.EffectSourceSourceType] = [] ## The list of sources an effect source can come from in order to affect this effect receiver (only when filter_source_types is true).
+@export var allowed_source_types: Array[Globals.EffectSourceSourceType] = [] ## The list of sources an effect source can come from in order to affect this effect receiver (only when filter_source_types is true).
 @export var filter_source_tags: bool = false ## When true, only allow matching source tags as specified in the below array.
 @export var allowed_source_tags: Array[String] = [] ## Effect sources must have a tag that matches something in this array in order to be handled when the filter_source_tags is set to true.
 @export_group("Connected Nodes")
@@ -90,7 +90,7 @@ func handle_effect_source(effect_source: EffectSource, source_entity:
 
 	most_recent_effect_src = effect_source
 
-	if source_entity.team == GlobalData.Teams.PASSIVE or ((affected_entity is DynamicEntity) and not affected_entity.fsm.controller.can_receive_effects):
+	if source_entity.team == Globals.Teams.PASSIVE or ((affected_entity is DynamicEntity) and not affected_entity.fsm.controller.can_receive_effects):
 		if loot_table_component: loot_table_component.handle_effect_source(effect_source)
 		return
 
@@ -123,7 +123,7 @@ func handle_effect_source(effect_source: EffectSource, source_entity:
 				if knockback_handler:
 					knockback_handler.contact_position = effect_source.contact_position
 					knockback_handler.effect_movement_direction = effect_source.movement_direction
-					knockback_handler.is_source_moving_type = (effect_source.source_type == GlobalData.EffectSourceSourceType.FROM_PROJECTILE)
+					knockback_handler.is_source_moving_type = (effect_source.source_type == Globals.EffectSourceSourceType.FROM_PROJECTILE)
 
 				_check_status_effect_team_logic(effect_source, source_entity)
 
@@ -196,19 +196,19 @@ func _check_same_team(source_entity: PhysicsBody2D) -> bool:
 
 ## Checks if the effect source should do bad effects to allies.
 func _check_if_bad_effects_apply_to_allies(effect_source: EffectSource) -> bool:
-	return effect_source.bad_effect_affected_teams & GlobalData.BadEffectAffectedTeams.ALLIES != 0
+	return effect_source.bad_effect_affected_teams & Globals.BadEffectAffectedTeams.ALLIES != 0
 
 ## Checks if the effect source should do bad effects to enemies.
 func _check_if_bad_effects_apply_to_enemies(effect_source: EffectSource) -> bool:
-	return effect_source.bad_effect_affected_teams & GlobalData.BadEffectAffectedTeams.ENEMIES != 0
+	return effect_source.bad_effect_affected_teams & Globals.BadEffectAffectedTeams.ENEMIES != 0
 
 ## Checks if the effect source should do good effects to allies.
 func _check_if_good_effects_apply_to_allies(effect_source: EffectSource) -> bool:
-	return effect_source.good_effect_affected_teams & GlobalData.GoodEffectAffectedTeams.ALLIES != 0
+	return effect_source.good_effect_affected_teams & Globals.GoodEffectAffectedTeams.ALLIES != 0
 
 ## Checks if the effect source should do good effects to enemies.
 func _check_if_good_effects_apply_to_enemies(effect_source: EffectSource) -> bool:
-	return effect_source.good_effect_affected_teams & GlobalData.GoodEffectAffectedTeams.ENEMIES != 0
+	return effect_source.good_effect_affected_teams & Globals.GoodEffectAffectedTeams.ENEMIES != 0
 
 ## Compares the flagged affected entities in the status effect to the type of entity
 ## this node is a child of to see if it applies.
@@ -231,7 +231,7 @@ func _handle_impact_sound(effect_source: EffectSource) -> void:
 		var multishot_id: int = effect_source.multishot_id
 		if multishot_id != -1:
 			if multishot_id not in current_impact_sounds:
-				var player: Variant = AudioManager.play_and_get_sound(effect_source.impact_sound, AudioManager.SoundType.SFX_2D, GlobalData.world_root, 0, affected_entity.global_position)
+				var player: Variant = AudioManager.play_and_get_sound(effect_source.impact_sound, AudioManager.SoundType.SFX_2D, Globals.world_root, 0, affected_entity.global_position)
 				if player:
 					current_impact_sounds.append(multishot_id)
 
@@ -251,7 +251,7 @@ func _handle_cam_fx(effect_source: EffectSource) -> void:
 		return
 
 	var is_player: bool = (affected_entity is Player)
-	var dist_to_player: float = max(0, effect_source.contact_position.distance_to(GlobalData.player_node.global_position) - 16) # Buffer for player's arm distance
+	var dist_to_player: float = max(0, effect_source.contact_position.distance_to(Globals.player_node.global_position) - 16) # Buffer for player's arm distance
 
 	effect_source.impact_cam_fx.apply_falloffs_and_activate_all(is_player, dist_to_player)
 

@@ -28,7 +28,7 @@ func add_cooldown(item_id: StringName, duration: float, title: String = "default
 	cooldowns[item_id] = [duration, duration, title]
 
 	if owning_entity_is_player:
-		GlobalData.player_node.hotbar_ui.update_hotbar_tint_progresses()
+		Globals.player_node.hotbar_ui.update_hotbar_tint_progresses()
 
 ## Called every frame to update each cooldown value.
 func _update_cooldowns(delta: float) -> void:

@@ -5,8 +5,8 @@ class_name ItemResource
 @export var id: String ## The unique identifier for the item.
 @export var name: String ## The item's string name.
 @export var tags: Array[StringName] = [] ## The set of tags that are checked against when this item is potentially used for crafting.
-@export var item_type: GlobalData.ItemType = GlobalData.ItemType.CONSUMABLE ## The type that this item is.
-@export var rarity: GlobalData.ItemRarity = GlobalData.ItemRarity.COMMON ## The rarity of this item.
+@export var item_type: Globals.ItemType = Globals.ItemType.CONSUMABLE ## The type that this item is.
+@export var rarity: Globals.ItemRarity = Globals.ItemRarity.COMMON ## The rarity of this item.
 @export var stack_size: int = 1 ## The max amount that can stack in one inventory slot.
 @export var auto_pickup: bool = false ## Whether this item should automatically be picked up when run over.
 @export_custom(PROPERTY_HINT_NONE, "suffix:px") var pickup_radius: int = 4 ## The radius at which the item can be detected for pickup.
@@ -61,7 +61,7 @@ class_name ItemResource
 
 ## The custom string representation of this item resource.
 func _to_string() -> String:
-	return str(GlobalData.ItemType.keys()[item_type]) + ": " + get_rarity_string() + "_" + name
+	return str(Globals.ItemType.keys()[item_type]) + ": " + get_rarity_string() + "_" + name
 
 ## Returns the cooldown id based on how cooldowns are determined for this item.
 func get_cooldown_id() -> StringName:
@@ -72,11 +72,11 @@ func get_cooldown_id() -> StringName:
 
 ## Returns the string title of the rarity rather than just the enum integer value.
 func get_rarity_string() -> String:
-	return str(GlobalData.ItemRarity.keys()[rarity])
+	return str(Globals.ItemRarity.keys()[rarity])
 
 ## Returns the string title of the item type rather than just the enum integer value.
-func get_item_type_string() -> String:
-	return str(GlobalData.ItemType.keys()[item_type])
+func get_item_type_string(_exact_weapon_type: bool = false) -> String:
+	return str(Globals.ItemType.keys()[item_type]).capitalize()
 
 ## Whether the item is the same as another item when called externally to compare.
 func is_same_as(other_item: ItemResource) -> bool:

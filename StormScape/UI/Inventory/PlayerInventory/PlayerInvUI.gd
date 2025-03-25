@@ -15,7 +15,7 @@ var is_open: bool = false:
 	set(new_value):
 		is_open = new_value
 		visible = new_value
-		GlobalData.focused_ui_is_open = new_value
+		Globals.focused_ui_is_open = new_value
 		hotbar_ui.visible = !new_value
 		get_tree().paused = new_value
 		if new_value:
@@ -46,7 +46,7 @@ func _on_blank_space_input_event(_event: InputEvent) -> void:
 
 ## Activates sorting this inventory by name.
 func _on_sort_by_name_btn_pressed() -> void:
-	GlobalData.player_node.get_node("ItemReceiverComponent").activate_sort_by_name()
+	Globals.player_node.get_node("ItemReceiverComponent").activate_sort_by_name()
 func _on_sort_by_name_btn_button_down() -> void:
 	sort_by_name.texture = btn_down_texture
 func _on_sort_by_name_btn_button_up() -> void:
@@ -54,7 +54,7 @@ func _on_sort_by_name_btn_button_up() -> void:
 
 ## Activates sorting this inventory by rarity.
 func _on_sort_by_rarity_btn_pressed() -> void:
-	GlobalData.player_node.get_node("ItemReceiverComponent").activate_sort_by_rarity()
+	Globals.player_node.get_node("ItemReceiverComponent").activate_sort_by_rarity()
 func _on_sort_by_rarity_btn_button_down() -> void:
 	sort_by_rarity.texture = btn_down_texture
 func _on_sort_by_rarity_btn_button_up() -> void:
@@ -62,7 +62,7 @@ func _on_sort_by_rarity_btn_button_up() -> void:
 
 ## Activates sorting this inventory by count.
 func _on_sort_by_type_btn_pressed() -> void:
-	GlobalData.player_node.get_node("ItemReceiverComponent").activate_sort_by_type()
+	Globals.player_node.get_node("ItemReceiverComponent").activate_sort_by_type()
 func _on_sort_by_type_btn_button_down() -> void:
 	sort_by_type.texture = btn_down_texture
 func _on_sort_by_type_btn_button_up() -> void:
@@ -70,7 +70,7 @@ func _on_sort_by_type_btn_button_up() -> void:
 
 ## Activates auto-stacking this inventory.
 func _on_auto_stack_btn_pressed() -> void:
-	GlobalData.player_node.get_node("ItemReceiverComponent").activate_auto_stack()
+	Globals.player_node.get_node("ItemReceiverComponent").activate_auto_stack()
 func _on_auto_stack_btn_button_down() -> void:
 	auto_stack.texture = btn_down_texture
 func _on_auto_stack_btn_button_up() -> void:

@@ -1,4 +1,4 @@
-[gd_scene load_steps=214 format=3 uid="uid://dba8mrurjlekp"]
+[gd_scene load_steps=213 format=3 uid="uid://dba8mrurjlekp"]
 
 [ext_resource type="Script" uid="uid://c3rpxq8pnbdje" path="res://Entities/Player/PlayerCore/Player.gd" id="1_m33tt"]
 [ext_resource type="Script" uid="uid://c2gdoebfp12dq" path="res://Entities/Stats/StatMod/StatModsCacheResource.gd" id="2_vetip"]
@@ -94,13 +94,13 @@
 [ext_resource type="Texture2D" uid="uid://bq3d1uclexvcm" path="res://UI/OverheadUI/progress_tintable.png" id="61_6wv7y"]
 [ext_resource type="Resource" uid="uid://fmf7upx7tsln" path="res://Entities/Items/TRESItems/RifleX(3).tres" id="62_0313k"]
 [ext_resource type="Texture2D" uid="uid://barp24qvngy0m" path="res://UI/OverheadUI/Overheat/overheat_back.png" id="63_3uq13"]
-[ext_resource type="Script" uid="uid://ct7n8wo1p3b20" path="res://Entities/Items/WeaponMods/WeaponMod.gd" id="63_qvtc6"]
 [ext_resource type="Resource" uid="uid://bnc4tbhdxpauy" path="res://Entities/Items/TRESItems/Musket(0).tres" id="64_hxjay"]
 [ext_resource type="Texture2D" uid="uid://7wf7omw2r50u" path="res://UI/OverheadUI/Overheat/overheat_progress.png" id="64_o382h"]
 [ext_resource type="Resource" uid="uid://caxftf2aer6g4" path="res://Entities/Items/TRESItems/Igniter(4).tres" id="65_14ixx"]
 [ext_resource type="Texture2D" uid="uid://dbm40lvpgbd8t" path="res://Utilities/Game/Particles/dense_light.png" id="66_461tf"]
 [ext_resource type="Shader" uid="uid://cwbeekjoy0uyh" path="res://Utilities/Game/Shaders/GlintShader.gdshader" id="67_w57pe"]
 [ext_resource type="Texture2D" uid="uid://dtft3mljs2y5s" path="res://UI/Inventory/InventoryCore/Slot/Universal/trash_slot_icon.png" id="69_4ao77"]
+[ext_resource type="Script" uid="uid://ct7n8wo1p3b20" path="res://Entities/Items/WeaponMods/WeaponMod.gd" id="74_bvo3j"]
 [ext_resource type="Texture2D" uid="uid://6p684ba74frr" path="res://UI/TemporaryElements/Prompt Icons/E_prompt.png" id="75_j0f4f"]
 [ext_resource type="Resource" uid="uid://cwgqj8klx4b3x" path="res://Entities/Items/TRESItems/ExtendedMag(0).tres" id="75_r5dvw"]
 [ext_resource type="Texture2D" uid="uid://bqxdg28d1twy1" path="res://UI/Inventory/InventoryCore/Background/Wood/inv_background_thin_wood.png" id="78_at8wu"]
@@ -112,15 +112,14 @@
 [ext_resource type="Texture2D" uid="uid://2fldkutlispo" path="res://UI/Inventory/InventoryCore/Button/button_pressed_wood.png" id="107_thmqm"]
 [ext_resource type="Texture2D" uid="uid://dj16xk01w22w1" path="res://UI/Inventory/InventoryCore/Background/Wood/inv_background_thin_no_stripes_wood.png" id="109_0313k"]
 [ext_resource type="Script" uid="uid://cvuh82pqmf5ja" path="res://UI/Inventory/InventoryCore/Slot/SlotCore/CraftingSlot.gd" id="111_hxjay"]
-[ext_resource type="Texture2D" uid="uid://cp7uxam0b4khc" path="res://UI/Inventory/InventoryCore/Slot/Universal/craft_input_slot_icon.png" id="112_g5u5n"]
 [ext_resource type="Script" uid="uid://cy756xiw3ikj7" path="res://UI/Inventory/InventoryCore/Slot/SlotCore/ModSlot.gd" id="114_gdihr"]
 [ext_resource type="PackedScene" uid="uid://di7vcyrki71nm" path="res://Entities/Components/DetectionComponent/DetectionComponent.tscn" id="114_hxjay"]
 [ext_resource type="Texture2D" uid="uid://c7rjucvq351g3" path="res://UI/Inventory/InventoryCore/Slot/Wood/translucent_slot_wood.png" id="116_0313k"]
 [ext_resource type="Script" uid="uid://g7648i4hb0q8" path="res://UI/Inventory/PlayerInventory/ItemViewer.gd" id="116_g5u5n"]
+[ext_resource type="Texture2D" uid="uid://b6oke8chd1otq" path="res://UI/Inventory/InventoryCore/Slot/Universal/item_viewer_slot_icon.png" id="117_gb65f"]
 [ext_resource type="Texture2D" uid="uid://bhwg6ynp1bscr" path="res://UI/Inventory/InventoryCore/Slot/Universal/mod_slot_icon.png" id="118_r5dvw"]
 [ext_resource type="Script" uid="uid://djsaegsb00xsu" path="res://UI/Inventory/PlayerInventory/Crafting/CraftingManager.gd" id="118_thmqm"]
 [ext_resource type="Texture2D" uid="uid://0qokvcd3ucop" path="res://UI/Inventory/InventoryCore/Background/Universal/arrow_icon.png" id="119_bvo3j"]
-[ext_resource type="Texture2D" uid="uid://bd1seekh41q00" path="res://UI/Inventory/InventoryCore/Slot/Universal/craft_output_slot_icon.png" id="119_gb65f"]
 [ext_resource type="Texture2D" uid="uid://ces4hq54n2lxc" path="res://UI/Inventory/InventoryCore/Slot/Wood/normal_slot_wood.png" id="123_da65a"]
 
 [sub_resource type="Resource" id="Resource_rwbul"]
@@ -1640,7 +1639,7 @@ offset_bottom = 40.0
 mouse_filter = 1
 script = ExtResource("17_vdk5v")
 health_component = NodePath("../../HealthComponent")
-mods = Array[ExtResource("63_qvtc6")]([ExtResource("65_14ixx"), ExtResource("75_r5dvw")])
+mods = Array[ExtResource("74_bvo3j")]([ExtResource("65_14ixx"), ExtResource("75_r5dvw")])
 
 [node name="TestHurtBtn" type="Button" parent="OverlayUI/TestButtons"]
 layout_mode = 0
@@ -2715,25 +2714,21 @@ theme_override_constants/v_separation = 0
 layout_mode = 2
 script = ExtResource("111_hxjay")
 is_output_slot = false
-backing_texture = ExtResource("112_g5u5n")
 
 [node name="Slot2" parent="OverlayUI/PlayerInvUI/CraftingManager/InventoryTexture/GridMargins/SlotsVBox/NinePatchRect/InputSlots" instance=ExtResource("42_r422n")]
 layout_mode = 2
 script = ExtResource("111_hxjay")
 is_output_slot = false
-backing_texture = ExtResource("112_g5u5n")
 
 [node name="Slot3" parent="OverlayUI/PlayerInvUI/CraftingManager/InventoryTexture/GridMargins/SlotsVBox/NinePatchRect/InputSlots" instance=ExtResource("42_r422n")]
 layout_mode = 2
 script = ExtResource("111_hxjay")
 is_output_slot = false
-backing_texture = ExtResource("112_g5u5n")
 
 [node name="Slot4" parent="OverlayUI/PlayerInvUI/CraftingManager/InventoryTexture/GridMargins/SlotsVBox/NinePatchRect/InputSlots" instance=ExtResource("42_r422n")]
 layout_mode = 2
 script = ExtResource("111_hxjay")
 is_output_slot = false
-backing_texture = ExtResource("112_g5u5n")
 
 [node name="CraftingDownArrow" type="TextureRect" parent="OverlayUI/PlayerInvUI/CraftingManager/InventoryTexture/GridMargins/SlotsVBox"]
 unique_name_in_owner = true
@@ -2769,7 +2764,6 @@ unique_name_in_owner = true
 layout_mode = 2
 script = ExtResource("111_hxjay")
 is_output_slot = true
-backing_texture = ExtResource("119_gb65f")
 
 [node name="MouseBlockGlass" type="ColorRect" parent="OverlayUI/PlayerInvUI/CraftingManager/InventoryTexture/GridMargins/SlotsVBox/NinePatchRect2/VBoxContainer/OutputSlot"]
 self_modulate = Color(0.245, 0.245, 0.245, 0.4)
@@ -2822,12 +2816,14 @@ horizontal_alignment = 1
 vertical_alignment = 1
 metadata/_edit_lock_ = true
 
-[node name="ItemDetailsPanel" type="VBoxContainer" parent="OverlayUI/PlayerInvUI"]
+[node name="ItemDetailsPanel" type="VBoxContainer" parent="OverlayUI/PlayerInvUI" node_paths=PackedStringArray("ammo_viewer_margin")]
 layout_mode = 0
 offset_left = 50.0
 offset_top = 55.0
 offset_right = 140.0
 offset_bottom = 185.0
+script = ExtResource("116_g5u5n")
+ammo_viewer_margin = NodePath("../AmmoViewerMargin")
 
 [node name="BackgroundMargin" type="MarginContainer" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel"]
 layout_mode = 2
@@ -2853,13 +2849,10 @@ theme_override_constants/margin_top = 5
 theme_override_constants/margin_right = 9
 theme_override_constants/margin_bottom = 8
 
-[node name="ItemViewerVBox" type="VBoxContainer" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/BackgroundMargin/InnerMargin" node_paths=PackedStringArray("ammo_viewer_margin")]
-unique_name_in_owner = true
+[node name="ItemViewerVBox" type="VBoxContainer" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/BackgroundMargin/InnerMargin"]
 layout_mode = 2
 mouse_filter = 0
 theme_override_constants/separation = 4
-script = ExtResource("116_g5u5n")
-ammo_viewer_margin = NodePath("../../../../AmmoViewerMargin")
 
 [node name="ItemBackgroundMargin" type="MarginContainer" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/BackgroundMargin/InnerMargin/ItemViewerVBox"]
 layout_mode = 2
@@ -2881,6 +2874,7 @@ axis_stretch_vertical = 1
 unique_name_in_owner = true
 custom_minimum_size = Vector2(36, 36)
 layout_mode = 2
+backing_texture = ExtResource("117_gb65f")
 
 [node name="ElementsMargin" type="MarginContainer" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/BackgroundMargin/InnerMargin/ItemViewerVBox"]
 unique_name_in_owner = true
@@ -3001,6 +2995,7 @@ patch_margin_bottom = 1
 axis_stretch_vertical = 2
 
 [node name="DetailsLabelMargin" type="MarginContainer" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/BackgroundMargin/InnerMargin/ItemViewerVBox/ElementsMargin/ElementsVBox/DetailsMargin"]
+unique_name_in_owner = true
 layout_mode = 2
 theme_override_constants/margin_left = 3
 theme_override_constants/margin_top = 1
@@ -3025,7 +3020,8 @@ theme_override_constants/shadow_outline_size = 0
 theme_override_constants/line_separation = 0
 theme_override_font_sizes/normal_font_size = 6
 bbcode_enabled = true
-text = "Details will go here"
+text = "Ranged Compatibles: 
+sdsds"
 fit_content = true
 scroll_active = false
 tab_size = 0

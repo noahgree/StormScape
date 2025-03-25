@@ -14,10 +14,10 @@ func _ready() -> void:
 
 func _process(delta: float) -> void:
 	var mouse_position: Vector2 = cursor.get_global_mouse_position()
-	var entity_position: Vector2 = GlobalData.player_node.hands.hands_anchor.global_position
+	var entity_position: Vector2 = Globals.player_node.hands.hands_anchor.global_position
 	var to_mouse_vector: Vector2 = mouse_position - entity_position
 
-	if (to_mouse_vector.length() < MAX_PROXIMITY_TO_CHAR) and not GlobalData.focused_ui_is_open:
+	if (to_mouse_vector.length() < MAX_PROXIMITY_TO_CHAR) and not Globals.focused_ui_is_open:
 		var target_angle: float = to_mouse_vector.angle()
 		var new_angle: float = lerp_angle(previous_angle, target_angle, 0.15)
 
@@ -44,20 +44,21 @@ func reset() -> void:
 	change_cursor(default_cursor)
 	update_vertical_tint_progress(100.0)
 
-## Changes the cursor animation. If null is passed in instead of a sprite frames resource, the old cursor will remain.
+## Changes the cursor animation. If null is passed in instead of a sprite frames resource,
+## the old cursor will remain.
 func change_cursor(sprite_frames: SpriteFrames, animation: StringName = &"default",
 					tint: Color = Color.WHITE) -> void:
 	update_vertical_tint_progress(100.0)
 
 	if sprite_frames != null:
 		cursor.sprite_frames = sprite_frames
+		change_cursor_tint(tint)
 	if cursor.sprite_frames.has_animation(animation):
 		if animation == "hit":
 			restore_after_hitmarker_countdown = 0.08
 		cursor.play(animation)
 	else:
 		cursor.play(&"default")
-	change_cursor_tint(tint)
 
 ## Updates the cursor's tint.
 func change_cursor_tint(tint: Color) -> void:

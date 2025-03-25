@@ -93,7 +93,7 @@ func insert_from_inv_item(original_item: InvItemResource, delete_extra: bool = t
 			remaining = _fill_hotbar(original_item)
 
 	if not delete_extra and remaining != 0:
-		Item.spawn_on_ground(original_item.stats, original_item.quantity, GlobalData.player_node.global_position, 8, false)
+		Item.spawn_on_ground(original_item.stats, original_item.quantity, Globals.player_node.global_position, 8, false)
 
 ## Attempts to fill the hotbar with the item passed in. Can either be an Item or an InvItemResource.
 ## Returns any leftover quantity that did not fit.

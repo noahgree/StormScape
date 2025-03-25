@@ -25,10 +25,20 @@ static func check_mod_compatibility(weapon_stats: WeaponResource, weapon_mod: We
 		return false
 	return true
 
+## Returns how many mods the weapon can have on it.
+static func get_max_mod_slots(weapon_stats: WeaponResource) -> int:
+	if weapon_stats.max_mods_override != -1:
+		return weapon_stats.max_mods_override
+	else:
+		return int(weapon_stats.rarity + 1)
+
 ## Handles an incoming added weapon mod. Removes it first if it already exists and then just re-adds it.
 static func handle_weapon_mod(weapon_stats: WeaponResource, weapon_mod: WeaponMod, index: int,
 						source_entity: PhysicsBody2D) -> void:
 	if not check_mod_compatibility(weapon_stats, weapon_mod):
+		return
+	if index > WeaponModManager.get_max_mod_slots(weapon_stats) - 1:
+		push_error("\"" + weapon_stats.name + "\" tried to add the mod \"" + weapon_mod.name + "\" to slot " + str(index + 1) + " / 6, but that slot is not unlocked for that weapon.")
 		return
 
 	var i: int = 0

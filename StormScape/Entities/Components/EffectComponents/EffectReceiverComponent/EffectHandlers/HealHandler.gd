@@ -23,7 +23,7 @@ func _ready() -> void:
 	assert(get_parent().health_component, affected_entity.name + " has an effect receiver that is intended to handle healing, but no health component is connected.")
 
 ## Handles applying instant, one-shot healing to the affected entity.
-func handle_instant_heal(effect_source: EffectSource, heal_affected_stats: GlobalData.HealAffectedStats) -> void:
+func handle_instant_heal(effect_source: EffectSource, heal_affected_stats: Globals.HealAffectedStats) -> void:
 	_send_handled_healing("BasicHealing", heal_affected_stats, effect_source.base_healing, effect_source.multishot_id)
 
 ## Handles applying damage that is inflicted over time, whether with a delay, with burst intervals, or with both.
@@ -113,7 +113,7 @@ func _delete_timers_from_caches(source_type: String, specific_timer: Timer = nul
 func _on_hot_timer_timeout(hot_timer: Timer, source_type: String) -> void:
 	var hot_resource: HOTResource = hot_timer.get_meta("hot_resource")
 	var ticks_completed: int = hot_timer.get_meta("ticks_completed")
-	var heal_affected_stats: GlobalData.HealAffectedStats = hot_resource.heal_affected_stats
+	var heal_affected_stats: Globals.HealAffectedStats = hot_resource.heal_affected_stats
 
 	if hot_resource.run_until_removed:
 		var healing: int = hot_resource.heal_ticks_array[0]
@@ -135,16 +135,16 @@ func _on_hot_timer_timeout(hot_timer: Timer, source_type: String) -> void:
 
 ## Sends the affected entity's health component the final healing values based on what stats the heal was
 ## allowed to affect.
-func _send_handled_healing(source_type: String, heal_affected_stats: GlobalData.HealAffectedStats,
+func _send_handled_healing(source_type: String, heal_affected_stats: Globals.HealAffectedStats,
 							handled_amount: int, multishot_id: int) -> void:
 	var positive_healing: int = max(0, handled_amount)
 	match heal_affected_stats:
-		GlobalData.HealAffectedStats.HEALTH_ONLY:
+		Globals.HealAffectedStats.HEALTH_ONLY:
 			health_component.heal_health(positive_healing, source_type, multishot_id)
-		GlobalData.HealAffectedStats.SHIELD_ONLY:
+		Globals.HealAffectedStats.SHIELD_ONLY:
 			health_component.heal_shield(positive_healing, source_type, multishot_id)
-		GlobalData.HealAffectedStats.HEALTH_THEN_SHIELD:
+		Globals.HealAffectedStats.HEALTH_THEN_SHIELD:
 			health_component.heal_health_then_shield(positive_healing, source_type, multishot_id)
-		GlobalData.HealAffectedStats.SIMULTANEOUS:
+		Globals.HealAffectedStats.SIMULTANEOUS:
 			health_component.heal_health(positive_healing, source_type, multishot_id)
 			health_component.heal_shield(positive_healing, source_type, multishot_id)

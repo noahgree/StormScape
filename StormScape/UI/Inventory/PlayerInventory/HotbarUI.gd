@@ -18,8 +18,8 @@ func _ready() -> void:
 	player_inv.slot_updated.connect(_on_slot_updated)
 	_setup_slots()
 
-	if not GlobalData.player_node: await SignalBus.player_ready
-	GlobalData.player_node.stamina_component.max_stamina_changed.connect(_update_inv_ammo_ui)
+	if not Globals.player_node: await SignalBus.player_ready
+	Globals.player_node.stamina_component.max_stamina_changed.connect(_update_inv_ammo_ui)
 	SignalBus.focused_ui_closed.connect(_update_inv_ammo_ui)
 
 ## Sets up the hotbar slots by clearing out any existing slot children and readding them with their needed params.
@@ -64,7 +64,7 @@ func _on_slot_updated(index: int, item: InvItemResource) -> void:
 ## UI for the new item name. This must happen here since the signal's order isn't guaranteed,
 ## and we need the active slot to update first.
 func _update_hands_about_new_active_item() -> void:
-	GlobalData.player_node.hands.on_equipped_item_change(active_slot)
+	Globals.player_node.hands.on_equipped_item_change(active_slot)
 
 	if active_slot.item != null:
 		active_slot_info.update_item_name(active_slot.item.stats.name)
@@ -75,7 +75,7 @@ func _update_hands_about_new_active_item() -> void:
 ## defined in the equippable item subclass.
 func _default_ammo_update_method() -> void:
 	if active_slot.item != null:
-		var equipped_item: EquippableItem = GlobalData.player_node.hands.equipped_item
+		var equipped_item: EquippableItem = Globals.player_node.hands.equipped_item
 		if not equipped_item:
 			return
 
@@ -87,7 +87,7 @@ func update_hotbar_tint_progresses() -> void:
 	for slot: Slot in hotbar_slots:
 		if slot.item != null:
 			slot.update_tint_progress(
-				GlobalData.player_node.inv.auto_decrementer.get_cooldown(slot.item.stats.get_cooldown_id())
+				Globals.player_node.inv.auto_decrementer.get_cooldown(slot.item.stats.get_cooldown_id())
 				)
 		else:
 			slot.update_tint_progress(0)
@@ -106,9 +106,9 @@ func _update_inv_ammo_ui() -> void:
 					if item != null and (item.stats is ProjAmmoResource) and (item.stats.ammo_type == active_slot.item.stats.ammo_type):
 						count += item.quantity
 			elif stats.ammo_type == ProjWeaponResource.ProjAmmoType.STAMINA:
-				count = int(floor(GlobalData.player_node.stats.get_stat("max_stamina")))
+				count = int(floor(Globals.player_node.stats.get_stat("max_stamina")))
 		elif stats is MeleeWeaponResource:
-			count = int(floor(GlobalData.player_node.stats.get_stat("max_stamina")))
+			count = int(floor(Globals.player_node.stats.get_stat("max_stamina")))
 
 	active_slot_info.update_inv_ammo(count)
 

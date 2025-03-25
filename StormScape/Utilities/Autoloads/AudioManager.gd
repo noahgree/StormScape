@@ -244,7 +244,7 @@ func _create_stream_resource_from_audio_resource(audio_resource: AudioResource) 
 
 ## Checks if a 2d sound is close enough to the player to start playing in an effort to save off screen resources.
 func _is_close_enough_to_play_2d(audio_resource: AudioResource, location: Vector2) -> bool:
-	var distance_to_player: float = GlobalData.player_node.global_position.distance_to(location)
+	var distance_to_player: float = Globals.player_node.global_position.distance_to(location)
 	if distance_to_player > (audio_resource.max_distance + DISTANCE_FROM_PLAYER_BUFFER):
 		return false
 	else:

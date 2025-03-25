@@ -246,7 +246,7 @@ func _set_shader_transform_params() -> void:
 	storm_circle.material.set_shader_parameter("radius_pixels", radius_pixels)
 
 	# Calculating and assigning the var that controls the see-thru distance for the player
-	var player_pos: Vector2 = GlobalData.player_node.global_position + (GlobalData.player_node.sprite.position / 2.0)
+	var player_pos: Vector2 = Globals.player_node.global_position + (Globals.player_node.sprite.position / 2.0)
 	var see_through_point: Vector2 = _get_screen_point_from_world_coord(player_pos)
 	var see_through_point_world: Vector2 = global_position + Vector2(see_through_distance, 0).rotated(global_rotation)
 	var screen_edge_see_through: Vector2 = _get_screen_point_from_world_coord(see_through_point_world)
@@ -256,7 +256,7 @@ func _set_shader_transform_params() -> void:
 
 ## Converts the world coordinate to a screen position based on camera position, rotation, and zoom.
 func _get_screen_point_from_world_coord(world_point: Vector2) -> Vector2:
-	var camera: Camera2D = GlobalData.player_camera
+	var camera: Camera2D = Globals.player_camera
 	var viewport_size: Vector2 = get_viewport().get_visible_rect().size
 	var relative_position: Vector2 = world_point - camera.global_position - camera.offset
 	var rotated_position: Vector2 = relative_position.rotated(-camera.rotation)

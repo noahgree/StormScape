@@ -8,13 +8,13 @@ class_name LootTableComponent
 @export_range(0, 100, 0.1, "suffix:%") var die_spawn_chance: float = 100.0
 @export var remove_when_dropped: bool = false
 @export var require_dmg_on_hit: bool = true ## When true, this will not trigger the "Hit" loot table when receiving a hit unless that hit dealt damage.
-@export var rarity_scaling_factors: Dictionary[GlobalData.ItemRarity, float] = {
-		GlobalData.ItemRarity.COMMON: 0.5,
-		GlobalData.ItemRarity.UNCOMMON: 0.4,
-		GlobalData.ItemRarity.RARE: 0.3,
-		GlobalData.ItemRarity.EPIC: 0.1,
-		GlobalData.ItemRarity.LEGENDARY: 0.05,
-		GlobalData.ItemRarity.SINGULAR: 0.005
+@export var rarity_scaling_factors: Dictionary[Globals.ItemRarity, float] = {
+		Globals.ItemRarity.COMMON: 0.5,
+		Globals.ItemRarity.UNCOMMON: 0.4,
+		Globals.ItemRarity.RARE: 0.3,
+		Globals.ItemRarity.EPIC: 0.1,
+		Globals.ItemRarity.LEGENDARY: 0.05,
+		Globals.ItemRarity.SINGULAR: 0.005
 	}
 
 @onready var effect_receiver: EffectReceiverComponent = get_parent().effect_receiver

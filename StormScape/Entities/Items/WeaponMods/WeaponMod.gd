@@ -4,8 +4,8 @@ class_name WeaponMod
 ## Class for all weapon mods in the game.
 
 @export_group("Whitelist")
-@export var allowed_proj_wpns: Array[ProjWeaponResource.ProjWeaponType] = GlobalData.all_proj_weapons ## The allowed types of projectile weapons that can have this mod attached. Has all types allowed by default.
-@export var allowed_melee_wpns: Array[MeleeWeaponResource.MeleeWeaponType] = GlobalData.all_melee_wpns ## The allowed types of melee weapons that can have this mod attached. Has all types allowed by default.
+@export var allowed_proj_wpns: Array[ProjWeaponResource.ProjWeaponType] = Globals.all_proj_weapons ## The allowed types of projectile weapons that can have this mod attached. Has all types allowed by default.
+@export var allowed_melee_wpns: Array[MeleeWeaponResource.MeleeWeaponType] = Globals.all_melee_wpns ## The allowed types of melee weapons that can have this mod attached. Has all types allowed by default.
 
 @export_group("Blacklist")
 @export var blocked_mutuals: Array[StringName] = [] ## The mods that cannot be placed on the same weapon as this mod. In other words, only one of the mods in this list and this mod itself can be on a weapon at a time.

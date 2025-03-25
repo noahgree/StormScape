@@ -32,9 +32,9 @@ func load_game() -> void:
 		print_rich("-------------------------------------[color=yellow][b]LOADING![/b][/color]-------------------------------------")
 	for item: SaveData in saved_game.save_data:
 		if (item is DynamicEntityData and item.is_player):
-			GlobalData.player_node._is_instance_on_load_game(item)
+			Globals.player_node._is_instance_on_load_game(item)
 		elif (item is StormData):
-			GlobalData.storm._is_instance_on_load_game(item)
+			Globals.storm._is_instance_on_load_game(item)
 		else:
 			if item.scene_path != "":
 				var scene: PackedScene = load(item.scene_path) as PackedScene

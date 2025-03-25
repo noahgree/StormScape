@@ -135,7 +135,6 @@ aoe_sound = ""
 
 [sub_resource type="Resource" id="Resource_pm717"]
 script = ExtResource("10_v3ja1")
-debug_print_mod_changes = false
 
 [resource]
 script = ExtResource("3_3lc2b")
@@ -201,10 +200,10 @@ barrage_proj_delay = 0.0
 use_hitscan = false
 allow_hitscan_holding = true
 ammo_in_mag = -1
-s_mods = SubResource("Resource_pm717")
 pullout_delay = 0.5
-max_mods = 3
+max_mods_override = -1
 blocked_mods = Array[StringName]([])
+s_mods = SubResource("Resource_pm717")
 weapon_mods_need_to_be_readded_after_save = false
 current_mods = Array[Dictionary]([{
 &"1": null

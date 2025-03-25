@@ -21,7 +21,7 @@ metadata/_custom_type_script = "uid://bcjwesiannbd0"
 
 [resource]
 script = ExtResource("3_ng1g2")
-allowed_proj_wpns = Array[int]([0, 1, 2, 3, 4, 5, 6, 7, 8, 9])
+allowed_proj_wpns = Array[int]([0, 1, 2, 3, 4, 5, 6, 7, 9])
 allowed_melee_wpns = Array[int]([])
 blocked_mutuals = Array[StringName]([])
 blocked_wpn_stats = Dictionary[StringName, float]({

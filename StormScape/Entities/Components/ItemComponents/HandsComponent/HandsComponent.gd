@@ -67,7 +67,7 @@ func handle_trigger_pressed() -> void:
 	is_trigger_held = true
 
 func handle_trigger_released() -> void:
-	if equipped_item != null:
+	if equipped_item != null and equipped_item.enabled and not scale_is_lerping:
 		equipped_item.release_hold_activate(been_holding_time)
 	is_trigger_held = false
 	been_holding_time = 0
@@ -95,6 +95,9 @@ func _unhandled_input(event: InputEvent) -> void:
 #endregion
 
 func _process(delta: float) -> void:
+	if Globals.focused_ui_is_open:
+		return
+
 	if entity is Player:
 		handle_aim(CursorManager.get_cursor_mouse_position())
 
@@ -108,7 +111,9 @@ func _process(delta: float) -> void:
 				equipped_item.hold_activate(been_holding_time)
 			return
 		elif Input.is_action_just_released("primary"):
-			equipped_item.release_hold_activate(been_holding_time)
+			if not scale_is_lerping:
+				equipped_item.release_hold_activate(been_holding_time)
+
 		been_holding_time = 0
 
 ## Removes the currently equipped item after letting it clean itself up.
@@ -145,14 +150,14 @@ func on_equipped_item_change(inv_item_slot: Slot) -> void:
 	_update_anchor_scale("x", 1)
 	_update_anchor_scale("y", 1)
 	main_hand.rotation = 0
-	entity.facing_component.rotation_lerping_factor = equipped_item.stats.rotation_lerping
+	entity.facing_component.rotation_lerping_factor = equipped_item.stats.s_mods.get_stat("rotation_lerping")
 	scale_is_lerping = false
 	been_holding_time = 0
 
 	_change_off_hand_sprite_visibility(true)
 	_check_for_drawing_off_hand()
 
-	if equipped_item.stats.item_type == GlobalData.ItemType.WEAPON:
+	if equipped_item.stats.item_type == Globals.ItemType.WEAPON:
 		main_hand_sprite.visible = false
 		if equipped_item is ProjectileWeapon:
 			main_hand.position = main_hand_with_proj_weapon_pos + equipped_item.stats.holding_offset
@@ -166,7 +171,7 @@ func on_equipped_item_change(inv_item_slot: Slot) -> void:
 			snap_y_scale()
 			_prep_for_pullout_anim()
 			_manage_melee_weapon_hands(_get_facing_dir())
-	elif equipped_item.stats.item_type in [GlobalData.ItemType.CONSUMABLE, GlobalData.ItemType.WORLD_RESOURCE]:
+	elif equipped_item.stats.item_type in [Globals.ItemType.CONSUMABLE, Globals.ItemType.WORLD_RESOURCE]:
 		hands_anchor.global_rotation = 0
 		main_hand.position = main_hand_with_held_item_pos + equipped_item.stats.holding_offset
 		main_hand.rotation += deg_to_rad(equipped_item.stats.holding_degrees)
@@ -188,6 +193,9 @@ func on_equipped_item_change(inv_item_slot: Slot) -> void:
 ## Based on the current anim vector, we artificially move the rotation of the hands over before
 ## the items to simulate a pullout animation.
 func _prep_for_pullout_anim() -> void:
+	if equipped_item.stats is WeaponResource and equipped_item.stats.s_mods.get_stat("pullout_delay") == 0:
+		return
+
 	if _get_facing_dir().x > 0:
 		if _get_facing_dir().y > 0:
 			hands_anchor.global_rotation = PI/4
@@ -204,7 +212,7 @@ func _physics_process(_delta: float) -> void:
 		set_physics_process(false)
 		return
 
-	if equipped_item.stats.item_type == GlobalData.ItemType.WEAPON:
+	if equipped_item.stats.item_type == Globals.ItemType.WEAPON:
 		if equipped_item is ProjectileWeapon:
 			_manage_proj_weapon_hands(_get_facing_dir())
 		elif equipped_item is MeleeWeapon:
@@ -212,7 +220,7 @@ func _physics_process(_delta: float) -> void:
 				_manage_melee_weapon_hands(_get_facing_dir())
 			elif not equipped_item.anim_player.is_playing():
 				_manage_melee_weapon_hands(_get_facing_dir())
-	elif equipped_item.stats.item_type in [GlobalData.ItemType.CONSUMABLE, GlobalData.ItemType.WORLD_RESOURCE]:
+	elif equipped_item.stats.item_type in [Globals.ItemType.CONSUMABLE, Globals.ItemType.WORLD_RESOURCE]:
 		_manage_normal_hands(_get_facing_dir())
 
 ## Manages the placement of the hands when holding a projectile weapon.

@@ -98,7 +98,7 @@ func create_footprint(offsets: Array) -> void:
 		footprint.z_index = 0
 		footprint.set_instance_shader_parameter("tint_color", Color(0.0, 0.0, 0.0, 0.8))
 
-		GlobalData.world_root.add_child(footprint)
+		Globals.world_root.add_child(footprint)
 
 ## Updates the knockback streak points array that determines how the streak line is drawn.
 func update_knockback_streak() -> void:
@@ -120,7 +120,7 @@ func reset_and_create_knockback_streak() -> void:
 			var streak: FootStreak = FootStreak.create()
 			knockback_streak_nodes.append(streak)
 
-			GlobalData.world_root.add_child(streak)
+			Globals.world_root.add_child(streak)
 #endregion
 
 #region States

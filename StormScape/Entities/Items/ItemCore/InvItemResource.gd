@@ -8,7 +8,7 @@ class_name InvItemResource
 
 ## Used when calling InvItemResource.new() to be able to pass in stats and a quantity.
 func _init(item_stats: ItemResource = null, item_quantity: int = 1) -> void:
-	self.stats = item_stats.duplicate_with_suid() if item_stats != null else item_stats
+	self.stats = item_stats.duplicate_with_suid() if item_stats != null else item_stats # Otherwise we won't have uniqueness until the stats are part of a physical equipped item and set then
 	self.quantity = item_quantity
 
 	if stats is ProjWeaponResource:
@@ -20,4 +20,4 @@ func _init(item_stats: ItemResource = null, item_quantity: int = 1) -> void:
 
 ## Custom print logic for determining more about the item that just a randomly assigned ID.
 func _to_string() -> String:
-	return "(" + str(quantity) + ") " + str(GlobalData.ItemRarity.keys()[stats.rarity]) + "_" + stats.name
+	return "(" + str(quantity) + ") " + str(Globals.ItemRarity.keys()[stats.rarity]) + "_" + stats.name

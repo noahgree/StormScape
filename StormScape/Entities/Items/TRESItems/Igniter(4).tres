@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://cowjdnic7xmkp" path="res://UI/Inventory/PlayerInventory/ItemDetail.gd" id="1_61rvc"]
 [ext_resource type="Script" uid="uid://boo31eu083dqd" path="res://Entities/Stats/EffectSystemResources/StatusEffects/StatusEffect.gd" id="2_6c076"]
 [ext_resource type="Resource" uid="uid://dvew5cy3k7s48" path="res://Entities/Stats/EffectSystemResources/StatusEffects/BadEffects/Burning/Burning1.tres" id="3_68ut8"]
-[ext_resource type="Texture2D" uid="uid://buma3njpwuflh" path="res://Entities/Items/WeaponMods/Compensator/compensator_base.png" id="4_x76qu"]
+[ext_resource type="Texture2D" uid="uid://uw5lhqydwiy3" path="res://Entities/Items/WeaponMods/Igniter/IgniterBaseCT.tres" id="4_61rvc"]
 [ext_resource type="Script" uid="uid://ctxa7i1mbt7ab" path="res://UI/Inventory/PlayerInventory/Crafting/CraftingIngredient.gd" id="5_gnequ"]
 [ext_resource type="Script" uid="uid://ct7n8wo1p3b20" path="res://Entities/Items/WeaponMods/WeaponMod.gd" id="6_kyyv3"]
 [ext_resource type="Script" uid="uid://bcjwesiannbd0" path="res://Entities/Stats/StatMod/StatMod.gd" id="7_agevf"]
@@ -65,11 +65,11 @@ rarity = 4
 stack_size = 1
 auto_pickup = false
 pickup_radius = 4
-info = "Gives the weapon a flaming touch at the cost of some usage speed."
+info = "Applies a flaming touch at the cost of some usage speed."
 extra_details = Array[ExtResource("1_61rvc")]([])
-ground_icon = ExtResource("4_x76qu")
-in_hand_icon = ExtResource("4_x76qu")
-inv_icon = ExtResource("4_x76qu")
+ground_icon = ExtResource("4_61rvc")
+in_hand_icon = ExtResource("4_61rvc")
+inv_icon = ExtResource("4_61rvc")
 inv_icon_offset = Vector2(0, 0)
 inv_icon_scale = Vector2(1, 1)
 inv_icon_rotation = 0.0

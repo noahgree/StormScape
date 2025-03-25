@@ -83,7 +83,7 @@ func _on_output_slot_output_changed(is_craftable: bool) -> void:
 
 ## Sets up the input and output slots with their needed data.
 func _setup_slots() -> void:
-	var inv: Inventory = GlobalData.player_node.inv
+	var inv: Inventory = Globals.player_node.inv
 	var i: int = 0
 	for input_slot: CraftingSlot in input_slots_container.get_children():
 		input_slot.name = "Input_Slot_" + str(i)
@@ -153,8 +153,8 @@ func _is_item_craftable(item: ItemResource) -> bool:
 	return true
 
 ## This verifies that rarities match for ingredients if they are required to do so.
-func _check_rarity_condition(rarity_cond: String, req_rarity: GlobalData.ItemRarity,
-							item_rarity: GlobalData.ItemRarity) -> bool:
+func _check_rarity_condition(rarity_cond: String, req_rarity: Globals.ItemRarity,
+							item_rarity: Globals.ItemRarity) -> bool:
 	match rarity_cond:
 		"No":
 			return true
@@ -269,7 +269,7 @@ func attempt_craft() -> void:
 	is_crafting = true
 
 	if _consume_recipe(output_slot.item.stats.recipe):
-		GlobalData.player_node.inv.insert_from_inv_item(output_slot.item, false, false)
+		Globals.player_node.inv.insert_from_inv_item(output_slot.item, false, false)
 
 	is_crafting = false
 	_update_crafting_result(null, null, null)
@@ -279,5 +279,5 @@ func attempt_craft() -> void:
 func _on_focused_ui_closed() -> void:
 	for slot: CraftingSlot in input_slots:
 		if slot.item != null:
-			GlobalData.player_node.inv.insert_from_inv_item(slot.item, false, false)
+			Globals.player_node.inv.insert_from_inv_item(slot.item, false, false)
 			slot.item = null

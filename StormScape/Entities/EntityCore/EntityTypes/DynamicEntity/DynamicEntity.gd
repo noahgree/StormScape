@@ -6,7 +6,7 @@ class_name DynamicEntity
 ## This should be used by things like players, enemies, moving environmental entities, etc.
 ## This should not be used by things like weapons or trees.
 
-@export var team: GlobalData.Teams = GlobalData.Teams.PLAYER ## What the effects received by this entity should consider as this entity's team.
+@export var team: Globals.Teams = Globals.Teams.PLAYER ## What the effects received by this entity should consider as this entity's team.
 @export var stats: StatModsCacheResource = StatModsCacheResource.new() ## The resource that will cache and work with all stat mods for this entity.
 
 @onready var sprite: Node2D = %EntitySprite ## The visual representation of the entity. Needs to have the EntityEffectShader applied.
@@ -77,7 +77,7 @@ func _is_instance_on_load_game(data: DynamicEntityData) -> void:
 	velocity = data.velocity
 
 	if not data.is_player:
-		GlobalData.world_root.add_child(self)
+		Globals.world_root.add_child(self)
 
 	stats.stat_mods = data.stat_mods
 	stats.reinit_on_load()
@@ -131,13 +131,13 @@ func _ready() -> void:
 	if self is Player:
 		collision_layer = 0b1
 		add_to_group("player_entities")
-	elif team == GlobalData.Teams.PLAYER:
+	elif team == Globals.Teams.PLAYER:
 		collision_layer = 0b10
 		add_to_group("player_entities")
-	elif team == GlobalData.Teams.ENEMY:
+	elif team == Globals.Teams.ENEMY:
 		add_to_group("enemy_entities")
 		collision_layer = 0b100
-	elif team == GlobalData.Teams.PASSIVE:
+	elif team == Globals.Teams.PASSIVE:
 		collision_layer = 0b1000
 
 	collision_mask = 0b1101111

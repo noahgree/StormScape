@@ -827,5 +827,5 @@ position = Vector2(-7, 3)
 position = Vector2(3, 0)
 
 [node name="FiringVFX" parent="." instance=ExtResource("8_b0fyp")]
-position = Vector2(27, -1)
+position = Vector2(26.5, -1)
 sprite_frames = SubResource("SpriteFrames_f47sd")

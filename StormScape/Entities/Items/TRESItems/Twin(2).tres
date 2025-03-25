@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="ProjWeaponResource" load_steps=32 format=3 uid="uid://dy8rwyeyusim7"]
+[gd_resource type="Resource" script_class="ProjWeaponResource" load_steps=33 format=3 uid="uid://dy8rwyeyusim7"]
 
 [ext_resource type="Texture2D" uid="uid://bm570hawaupxe" path="res://Entities/Items/Weapons/WeaponVFX/Casings/small_casing.png" id="1_iu0as"]
 [ext_resource type="Script" uid="uid://dkfssottmsrch" path="res://Entities/Stats/EffectSystemResources/EffectSources/EffectSource.gd" id="3_vp4wp"]
@@ -37,6 +37,17 @@ status_effects = Array[ExtResource("4_prcay")]([])
 contact_position = Vector2(0, 0)
 movement_direction = Vector2(0, 0)
 multishot_id = -1
+
+[sub_resource type="Resource" id="Resource_lo1fw"]
+script = ExtResource("4_lo1fw")
+title = "SPREAD"
+stat_array = Array[String](["angular_spread"])
+up_is_good = false
+suffix = "[char=00B0]"
+multiplier = 1.0
+addition = 0.0
+fraction_of_orig = false
+metadata/_custom_type_script = "uid://cowjdnic7xmkp"
 
 [sub_resource type="Curve" id="Curve_vp4wp"]
 _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
@@ -245,10 +256,10 @@ barrage_proj_delay = 0.01
 use_hitscan = false
 allow_hitscan_holding = true
 ammo_in_mag = -1
-s_mods = SubResource("Resource_gimit")
 pullout_delay = 0.3
-max_mods = 3
+max_mods_override = -1
 blocked_mods = Array[StringName]([])
+s_mods = SubResource("Resource_gimit")
 weapon_mods_need_to_be_readded_after_save = false
 current_mods = Array[Dictionary]([{
 &"1": null
@@ -274,7 +285,7 @@ stack_size = 1
 auto_pickup = false
 pickup_radius = 4
 info = "A powerful but short-ranged weapon. Shoots a barrage of bullets."
-extra_details = Array[ExtResource("4_lo1fw")]([])
+extra_details = Array[ExtResource("4_lo1fw")]([SubResource("Resource_lo1fw")])
 ground_icon = ExtResource("6_lo1fw")
 in_hand_icon = ExtResource("6_lo1fw")
 inv_icon = ExtResource("6_lo1fw")

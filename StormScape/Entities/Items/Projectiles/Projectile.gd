@@ -382,7 +382,7 @@ func _find_target_in_fov() -> void:
 ## Checks if the homing target is something we are even allowed to target.
 func _is_valid_homing_target(obj: Node) -> bool:
 	if obj is DynamicEntity or obj is RigidEntity or obj is StaticEntity:
-		if obj.team != source_entity.team and obj.team != GlobalData.Teams.PASSIVE:
+		if obj.team != source_entity.team and obj.team != Globals.Teams.PASSIVE:
 			return true
 	return false
 
@@ -400,7 +400,7 @@ func _select_closest_homing_target(targets: Array[Node], to_position: Vector2) -
 ## Gets all the options in the appropriate scene tree group. Used for the "closest" homing method.
 func _find_closest_target() -> void:
 	var candidates: Array[Node] = []
-	var group_name: String = "enemy_entities" if source_entity.team == GlobalData.Teams.PLAYER else "player_entities"
+	var group_name: String = "enemy_entities" if source_entity.team == Globals.Teams.PLAYER else "player_entities"
 	var max_range_squared: float = stats.homing_max_range * stats.homing_max_range
 
 	for entity: Node in get_tree().get_nodes_in_group(group_name):
@@ -835,8 +835,8 @@ func _get_effect_source_adjusted_for_falloff(effect_src: EffectSource, handling_
 ## Checks to see if the speed is fast enough and we aren't headed straight for our target then plays the whiz sound once.
 func _check_for_whiz_sound() -> void:
 	if true_current_speed > 150:
-		if not played_whiz_sound and GlobalData.player_node != null:
-			var player: Player = GlobalData.player_node
+		if not played_whiz_sound and Globals.player_node != null:
+			var player: Player = Globals.player_node
 			if (player.global_position - global_position).dot(movement_direction) > 20:
 				if global_position.distance_squared_to(player.global_position) < pow(whiz_sound_distance, 2):
 					if whiz_sound != "":

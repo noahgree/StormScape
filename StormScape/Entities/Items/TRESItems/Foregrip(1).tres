@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="WeaponMod" load_steps=9 format=3 uid="uid://b8gvf7ta6a2rj"]
+[gd_resource type="Resource" script_class="WeaponMod" load_steps=11 format=3 uid="uid://b8gvf7ta6a2rj"]
 
 [ext_resource type="Script" uid="uid://boo31eu083dqd" path="res://Entities/Stats/EffectSystemResources/StatusEffects/StatusEffect.gd" id="1_8xytx"]
 [ext_resource type="Script" uid="uid://cowjdnic7xmkp" path="res://UI/Inventory/PlayerInventory/ItemDetail.gd" id="2_ed86i"]
@@ -12,15 +12,41 @@ script = ExtResource("2_ed86i")
 title = "PULLOUT DELAY"
 stat_array = Array[String](["pullout_delay"])
 up_is_good = false
-suffix = "s"
+suffix = "%"
+multiplier = 100.0
+addition = 0.0
+fraction_of_orig = true
+metadata/_custom_type_script = "uid://cowjdnic7xmkp"
+
+[sub_resource type="Resource" id="Resource_uwrdt"]
+script = ExtResource("2_ed86i")
+title = "AIMING SPEED"
+stat_array = Array[String](["rotation_lerping"])
+up_is_good = true
+suffix = "%"
+multiplier = 100.0
+addition = 0.0
+fraction_of_orig = true
 metadata/_custom_type_script = "uid://cowjdnic7xmkp"
 
 [sub_resource type="Resource" id="Resource_8xytx"]
 script = ExtResource("5_w7u81")
 stat_id = &"pullout_delay"
 mod_id = &"foregrip"
-operation = "="
-value = 0.0
+operation = "-%"
+value = 20.0
+rounding = "Exact"
+priority = 1
+max_stack_count = 1
+override_all = false
+metadata/_custom_type_script = "uid://bcjwesiannbd0"
+
+[sub_resource type="Resource" id="Resource_y0kyh"]
+script = ExtResource("5_w7u81")
+stat_id = &"rotation_lerping"
+mod_id = &"foregrip"
+operation = "+%"
+value = 33.0
 rounding = "Exact"
 priority = 1
 max_stack_count = 1
@@ -34,10 +60,10 @@ allowed_melee_wpns = Array[int]([])
 blocked_mutuals = Array[StringName]([])
 blocked_wpn_stats = Dictionary[StringName, float]({})
 req_all_blocked_stats = false
-wpn_stat_mods = Array[ExtResource("5_w7u81")]([SubResource("Resource_8xytx")])
+wpn_stat_mods = Array[ExtResource("5_w7u81")]([SubResource("Resource_8xytx"), SubResource("Resource_y0kyh")])
 status_effects = Array[ExtResource("1_8xytx")]([])
 charge_status_effects = Array[ExtResource("1_8xytx")]([])
-applied_details = Array[ExtResource("2_ed86i")]([SubResource("Resource_ed86i")])
+applied_details = Array[ExtResource("2_ed86i")]([SubResource("Resource_ed86i"), SubResource("Resource_uwrdt")])
 equipping_audio = ""
 removal_audio = ""
 id = "foregrip"
@@ -48,7 +74,7 @@ rarity = 1
 stack_size = 3
 auto_pickup = false
 pickup_radius = 4
-info = "Removes pullout delay."
+info = "Reduces pullout delay and aiming lag."
 extra_details = Array[ExtResource("2_ed86i")]([])
 ground_icon = ExtResource("3_ed86i")
 in_hand_icon = ExtResource("3_ed86i")

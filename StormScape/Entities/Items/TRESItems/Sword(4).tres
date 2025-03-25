@@ -61,7 +61,6 @@ metadata/_custom_type_script = ExtResource("3_67eer")
 
 [sub_resource type="Resource" id="Resource_vevwc"]
 script = ExtResource("8_3cchv")
-debug_print_mod_changes = false
 metadata/_custom_type_script = ExtResource("8_3cchv")
 
 [resource]
@@ -82,10 +81,10 @@ charge_use_speed = 0.75
 charge_swing_angle = 720
 charge_stamina_cost = 25
 charge_use_sound = ""
-s_mods = SubResource("Resource_vevwc")
 pullout_delay = 0.25
-max_mods = 3
+max_mods_override = -1
 blocked_mods = Array[StringName]([])
+s_mods = SubResource("Resource_vevwc")
 weapon_mods_need_to_be_readded_after_save = false
 current_mods = Array[Dictionary]([{
 &"1": null

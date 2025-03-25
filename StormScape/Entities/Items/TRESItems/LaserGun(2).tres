@@ -165,7 +165,6 @@ aoe_sound = ""
 
 [sub_resource type="Resource" id="Resource_wi7kk"]
 script = ExtResource("17_ayb4m")
-debug_print_mod_changes = true
 
 [sub_resource type="Curve" id="Curve_21u6p"]
 _data = [Vector2(0, 0.0632948), 0.0, 0.0, 0, 0, Vector2(1, 0.0743148), 0.0, 0.0, 0, 0]
@@ -248,10 +247,10 @@ barrage_proj_delay = 0.0
 use_hitscan = false
 allow_hitscan_holding = true
 ammo_in_mag = -1
-s_mods = SubResource("Resource_wi7kk")
 pullout_delay = 0.25
-max_mods = 4
+max_mods_override = -1
 blocked_mods = Array[StringName]([])
+s_mods = SubResource("Resource_wi7kk")
 weapon_mods_need_to_be_readded_after_save = false
 current_mods = Array[Dictionary]([{
 &"1": null

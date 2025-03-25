@@ -54,7 +54,7 @@ static func spawn_on_ground(item_stats: ItemResource, quant: int, location: Vect
 		else:
 			item_to_spawn.global_position = location
 
-		var spawn_callable: Callable = GlobalData.world_root.get_node("WorldItemsManager").add_item.bind(item_to_spawn)
+		var spawn_callable: Callable = Globals.world_root.get_node("WorldItemsManager").add_item.bind(item_to_spawn)
 		spawn_callable.call_deferred()
 
 #region Save & Load
@@ -75,7 +75,7 @@ func _is_instance_on_load_game(item_data: ItemData) -> void:
 	stats = item_data.stats
 	quantity = item_data.quantity
 
-	GlobalData.world_root.get_node("WorldItemsManager").add_item(self)
+	Globals.world_root.get_node("WorldItemsManager").add_item(self)
 
 func _on_load_game() -> void:
 	pass
@@ -98,29 +98,29 @@ func _ready() -> void:
 		await get_tree().create_timer(1.0, false, false, false).timeout
 		can_be_auto_picked_up = true
 
-## Sets the rarity FX using the colors associated with that rarity, given by the dictionary in the GlobalData.
+## Sets the rarity FX using the colors associated with that rarity, given by the dictionary in the Globals.
 func _set_rarity_colors() -> void:
 	icon.material.set_shader_parameter("width", 0.5)
-	ground_glow.self_modulate = GlobalData.rarity_colors.ground_glow.get(stats.rarity)
-	icon.material.set_shader_parameter("outline_color", GlobalData.rarity_colors.outline_color.get(stats.rarity))
-	icon.material.set_shader_parameter("tint_color", GlobalData.rarity_colors.tint_color.get(stats.rarity))
+	ground_glow.self_modulate = Globals.rarity_colors.ground_glow.get(stats.rarity)
+	icon.material.set_shader_parameter("outline_color", Globals.rarity_colors.outline_color.get(stats.rarity))
+	icon.material.set_shader_parameter("tint_color", Globals.rarity_colors.tint_color.get(stats.rarity))
 
 	var gradient_texture: GradientTexture1D = GradientTexture1D.new()
 	gradient_texture.gradient = Gradient.new()
-	gradient_texture.gradient.add_point(0, GlobalData.rarity_colors.glint_color.get(stats.rarity))
+	gradient_texture.gradient.add_point(0, Globals.rarity_colors.glint_color.get(stats.rarity))
 	icon.material.set_shader_parameter("color_gradient", gradient_texture)
 
-	if stats.rarity in [GlobalData.ItemRarity.EPIC, GlobalData.ItemRarity.LEGENDARY, GlobalData.ItemRarity.SINGULAR]:
-		particles.color = GlobalData.rarity_colors.ground_glow.get(stats.rarity)
+	if stats.rarity in [Globals.ItemRarity.EPIC, Globals.ItemRarity.LEGENDARY, Globals.ItemRarity.SINGULAR]:
+		particles.color = Globals.rarity_colors.ground_glow.get(stats.rarity)
 		particles.emitting = true
-	if stats.rarity == GlobalData.ItemRarity.SINGULAR:
+	if stats.rarity == Globals.ItemRarity.SINGULAR:
 		particles.amount *= 3
 
 ## When the spawn animation finishes, start hovering and emitting particles if needed.
 func _on_spawn_anim_completed() -> void:
 	anim_player.play("hover")
-	if stats.rarity in [GlobalData.ItemRarity.LEGENDARY, GlobalData.ItemRarity.SINGULAR]:
-		line_particles.color = GlobalData.rarity_colors.tint_color.get(stats.rarity)
+	if stats.rarity in [Globals.ItemRarity.LEGENDARY, Globals.ItemRarity.SINGULAR]:
+		line_particles.color = Globals.rarity_colors.tint_color.get(stats.rarity)
 		line_particles.emitting = true
 
 ## Removes the item from the world
@@ -142,7 +142,7 @@ func _on_area_entered(area: Area2D) -> void:
 
 		if not area.items_in_range.is_empty():
 			for item: Item in (area as ItemReceiverComponent).items_in_range:
-				item.icon.material.set_shader_parameter("outline_color", GlobalData.rarity_colors.outline_color.get(item.stats.rarity))
+				item.icon.material.set_shader_parameter("outline_color", Globals.rarity_colors.outline_color.get(item.stats.rarity))
 				item.icon.material.set_shader_parameter("width", 0.5)
 
 			(area as ItemReceiverComponent).items_in_range[area.items_in_range.size() - 1].icon.material.set_shader_parameter("outline_color", Color.WHITE)
@@ -152,7 +152,7 @@ func _on_area_exited(area: Area2D) -> void:
 	if area is ItemReceiverComponent and area.get_parent() is Player:
 		(area as ItemReceiverComponent).remove_from_in_range_queue(self)
 
-		icon.material.set_shader_parameter("outline_color", GlobalData.rarity_colors.outline_color.get(stats.rarity))
+		icon.material.set_shader_parameter("outline_color", Globals.rarity_colors.outline_color.get(stats.rarity))
 		icon.material.set_shader_parameter("width", 0.5)
 		if not (area as ItemReceiverComponent).items_in_range.is_empty():
 			(area as ItemReceiverComponent).items_in_range[area.items_in_range.size() - 1].icon.material.set_shader_parameter("outline_color", Color.WHITE)

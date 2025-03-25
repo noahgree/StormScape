@@ -7,19 +7,19 @@ class_name EffectSource
 ## should be handled by the producer of this effect source. This is purely data.
 
 @export_group("General")
-@export var source_type: GlobalData.EffectSourceSourceType ## A tag used to determine the source of the effect source. See GlobalData class for details on the tags.
+@export var source_type: Globals.EffectSourceSourceType ## A tag used to determine the source of the effect source. See Globals class for details on the tags.
 @export var source_tags: Array[String] = [] ## Additional information to pass to whatever receieves this effect source to make sure it should apply.
 @export_flags_2d_physics var scanned_phys_layers: int = 0b1101111 ## The collision mask that this source scans in order to apply affects to.
 @export_subgroup("Team Logic")
 @export var can_hit_self: bool = true ## Whether or not this effect source can be applied to what created it.
-@export_flags("Enemies", "Allies") var bad_effect_affected_teams: int = GlobalData.BadEffectAffectedTeams.ENEMIES ## Which entity teams in relation to who produced this source are affected by this damage.
-@export_flags("Enemies", "Allies") var good_effect_affected_teams: int = GlobalData.GoodEffectAffectedTeams.ALLIES ## Which entity teams in relation to who produced this source are affected by this healing.
+@export_flags("Enemies", "Allies") var bad_effect_affected_teams: int = Globals.BadEffectAffectedTeams.ENEMIES ## Which entity teams in relation to who produced this source are affected by this damage.
+@export_flags("Enemies", "Allies") var good_effect_affected_teams: int = Globals.GoodEffectAffectedTeams.ALLIES ## Which entity teams in relation to who produced this source are affected by this healing.
 
 @export_group("Base Damage")
 @export var base_damage: int: ## The base numerical amount of damage associated with this effect source.
 	set(new_value):
 		base_damage = max(0, new_value)
-@export var dmg_affected_stats: GlobalData.DmgAffectedStats = GlobalData.DmgAffectedStats.SHIELD_THEN_HEALTH ## Which entity stats are affected by this damage source.
+@export var dmg_affected_stats: Globals.DmgAffectedStats = Globals.DmgAffectedStats.SHIELD_THEN_HEALTH ## Which entity stats are affected by this damage source.
 @export_range(0, 100, 1, "suffix:%") var crit_chance: int = 0 ## The chance the application of damage will be a critial hit.
 @export var crit_multiplier: float = 1.5 ## How much stronger critical hits are than normal hits.
 @export_range(0, 100, 1, "suffix:%") var armor_penetration: int = 0 ## The percent of armor ignored.
@@ -28,7 +28,7 @@ class_name EffectSource
 @export var base_healing: int: ## The base numerical amount of health associated with this effect source.
 	set(new_value):
 		base_healing = max(0, new_value)
-@export var heal_affected_stats: GlobalData.HealAffectedStats = GlobalData.HealAffectedStats.HEALTH_THEN_SHIELD ## Which entity stats are affected by this healing source.
+@export var heal_affected_stats: Globals.HealAffectedStats = Globals.HealAffectedStats.HEALTH_THEN_SHIELD ## Which entity stats are affected by this healing source.
 
 @export_group("Impact FX")
 @export var impact_cam_fx: CamFXResource ## The resource defining how the camera should react to firing.

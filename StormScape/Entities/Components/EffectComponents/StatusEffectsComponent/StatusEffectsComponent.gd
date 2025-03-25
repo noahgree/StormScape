@@ -217,5 +217,5 @@ func remove_all_good_status_effects(effect_to_keep: String = "") -> void:
 	for status_effect: String in current_effects.keys():
 		if effect_to_keep != "" and effect_to_keep == status_effect:
 			continue
-		elif status_effect in GlobalData.GOOD_STATUS_EFFECTS:
+		elif status_effect in Globals.GOOD_STATUS_EFFECTS:
 			request_effect_removal(status_effect)

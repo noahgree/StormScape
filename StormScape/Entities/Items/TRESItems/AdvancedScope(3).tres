@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="WeaponMod" load_steps=9 format=3 uid="uid://bx2nl7cqe7odq"]
+[gd_resource type="Resource" script_class="WeaponMod" load_steps=10 format=3 uid="uid://bx2nl7cqe7odq"]
 
 [ext_resource type="Script" uid="uid://cowjdnic7xmkp" path="res://UI/Inventory/PlayerInventory/ItemDetail.gd" id="1_01uku"]
 [ext_resource type="Script" uid="uid://boo31eu083dqd" path="res://Entities/Stats/EffectSystemResources/StatusEffects/StatusEffect.gd" id="1_57sy7"]
@@ -31,9 +31,21 @@ max_stack_count = 1
 override_all = false
 metadata/_custom_type_script = "uid://bcjwesiannbd0"
 
+[sub_resource type="Resource" id="Resource_01uku"]
+script = ExtResource("5_ovewf")
+stat_id = &"fire_cooldown"
+mod_id = &"advanced_scope"
+operation = "+%"
+value = 8.0
+rounding = "Exact"
+priority = 1
+max_stack_count = 1
+override_all = false
+metadata/_custom_type_script = "uid://bcjwesiannbd0"
+
 [resource]
 script = ExtResource("4_tmboo")
-allowed_proj_wpns = Array[int]([0, 1, 2, 3, 4, 5, 6, 7, 8, 9])
+allowed_proj_wpns = Array[int]([0, 1, 2, 3, 4, 5, 6, 7, 9])
 allowed_melee_wpns = Array[int]([])
 blocked_mutuals = Array[StringName]([&"simple_scope"])
 blocked_wpn_stats = Dictionary[StringName, float]({
@@ -41,7 +53,7 @@ blocked_wpn_stats = Dictionary[StringName, float]({
 &"max_bloom": 0.0
 })
 req_all_blocked_stats = true
-wpn_stat_mods = Array[ExtResource("5_ovewf")]([SubResource("Resource_xvtpy"), SubResource("Resource_57sy7")])
+wpn_stat_mods = Array[ExtResource("5_ovewf")]([SubResource("Resource_xvtpy"), SubResource("Resource_57sy7"), SubResource("Resource_01uku")])
 status_effects = Array[ExtResource("1_57sy7")]([])
 charge_status_effects = Array[ExtResource("1_57sy7")]([])
 applied_details = Array[ExtResource("1_01uku")]([])
@@ -55,7 +67,7 @@ rarity = 3
 stack_size = 1
 auto_pickup = false
 pickup_radius = 4
-info = "Heavily decreases the maximum amount of spread applied to projectiles."
+info = "Heavily decreases maximum spread applied to projectiles at the cost of fire rate."
 extra_details = Array[ExtResource("1_01uku")]([])
 ground_icon = ExtResource("2_01uku")
 in_hand_icon = ExtResource("2_01uku")

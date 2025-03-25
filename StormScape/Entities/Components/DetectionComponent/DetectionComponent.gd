@@ -37,9 +37,9 @@ func _ready() -> void:
 	entity = get_parent()
 
 	collision_layer = 0
-	if entity.team == GlobalData.Teams.PLAYER:
+	if entity.team == Globals.Teams.PLAYER:
 		collision_mask = 0b100 # Enemy mask
-	elif entity.team == GlobalData.Teams.ENEMY:
+	elif entity.team == Globals.Teams.ENEMY:
 		collision_mask = 0b11 # Player & Player Ally mask
 
 ## Called to update the detection radius based on the new stealth.

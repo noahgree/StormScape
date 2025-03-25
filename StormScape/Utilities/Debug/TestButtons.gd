@@ -12,7 +12,7 @@ func _on_test_heal_btn_pressed() -> void:
 	health_component.heal_health_then_shield(15, "BasicHealing", -1)
 
 func _on_test_music_btn_pressed() -> void:
-	var audio_player: Variant = AudioManager.play_and_get_sound("MysteryTheme1", AudioManager.SoundType.MUSIC_GLOBAL, GlobalData.player_node, 0)
+	var audio_player: Variant = AudioManager.play_and_get_sound("MysteryTheme1", AudioManager.SoundType.MUSIC_GLOBAL, Globals.player_node, 0)
 	if audio_player:
 		(audio_player as AudioStreamPlayer).process_mode = Node.PROCESS_MODE_ALWAYS
 		await get_tree().create_timer(2.5).timeout
@@ -22,26 +22,26 @@ func _on_test_music_btn_pressed() -> void:
 func _on_test_mod_btn_1_pressed() -> void:
 	var i: int = 0
 	for mod: WeaponMod in mods:
-		if GlobalData.player_node.hands.equipped_item:
+		if Globals.player_node.hands.equipped_item:
 			WeaponModManager.handle_weapon_mod(
-				GlobalData.player_node.hands.equipped_item.stats, mod, i, GlobalData.player_node
+				Globals.player_node.hands.equipped_item.stats, mod, i, Globals.player_node
 				)
 		i += 1
 
 func _on_test_mod_btn_2_pressed() -> void:
 	var i: int = 0
 	for mod: WeaponMod in mods:
-		if GlobalData.player_node.hands.equipped_item:
+		if Globals.player_node.hands.equipped_item:
 			WeaponModManager.remove_weapon_mod(
-				GlobalData.player_node.hands.equipped_item.stats, mod, i, GlobalData.player_node
+				Globals.player_node.hands.equipped_item.stats, mod, i, Globals.player_node
 				)
 		i += 1
 
 func _on_test_mod_btn_3_pressed() -> void:
-	if GlobalData.storm.is_enabled:
-		GlobalData.storm.disable_storm()
+	if Globals.storm.is_enabled:
+		Globals.storm.disable_storm()
 	else:
-		GlobalData.storm.enable_storm()
+		Globals.storm.enable_storm()
 
 func _on_test_save_btn_pressed() -> void:
 	SaverLoader.save_game()
@@ -50,10 +50,10 @@ func _on_test_load_btn_pressed() -> void:
 	SaverLoader.load_game()
 
 func _on_test_storm_btn_2_pressed() -> void:
-	GlobalData.storm.force_start_next_phase()
+	Globals.storm.force_start_next_phase()
 
 func _on_test_combine_items_pressed() -> void:
-	GlobalData.world_root.get_node("WorldItemsManager")._on_combination_attempt_timer_timeout()
+	Globals.world_root.get_node("WorldItemsManager")._on_combination_attempt_timer_timeout()
 
 func _on_test_time_btn_pressed() -> void:
 	if DayNightManager.current_hour > 7 and DayNightManager.current_hour < 18:

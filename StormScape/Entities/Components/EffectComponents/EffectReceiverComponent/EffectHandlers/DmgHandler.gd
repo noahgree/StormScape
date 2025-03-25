@@ -134,7 +134,7 @@ func _delete_timers_from_caches(source_type: String, specific_timer: Timer = nul
 func _on_dot_timer_timeout(dot_timer: Timer, source_type: String) -> void:
 	var dot_resource: DOTResource = dot_timer.get_meta("dot_resource")
 	var ticks_completed: int = dot_timer.get_meta("ticks_completed")
-	var dmg_affected_stats: GlobalData.DmgAffectedStats = dot_resource.dmg_affected_stats
+	var dmg_affected_stats: Globals.DmgAffectedStats = dot_resource.dmg_affected_stats
 
 	if dot_resource.run_until_removed:
 		var damage: int = dot_resource.dmg_ticks_array[0]
@@ -156,7 +156,7 @@ func _on_dot_timer_timeout(dot_timer: Timer, source_type: String) -> void:
 
 ## Sends the affected entity's health component the final damage values based on what stats the damage was
 ## allowed to affect.
-func _send_handled_dmg(source_type: String, dmg_affected_stats: GlobalData.DmgAffectedStats,
+func _send_handled_dmg(source_type: String, dmg_affected_stats: Globals.DmgAffectedStats,
 						handled_amount: int, multishot_id: int, life_steal_percent: float = 0.0, was_crit: bool = false) -> void:
 	var dmg_weakness: float = affected_entity.stats.get_stat("dmg_weakness")
 	var dmg_resistance: float = affected_entity.stats.get_stat("dmg_resistance")
@@ -165,13 +165,13 @@ func _send_handled_dmg(source_type: String, dmg_affected_stats: GlobalData.DmgAf
 	_pass_damage_to_potential_life_steal_handler(positive_dmg, life_steal_percent)
 
 	match dmg_affected_stats:
-		GlobalData.DmgAffectedStats.HEALTH_ONLY:
+		Globals.DmgAffectedStats.HEALTH_ONLY:
 			health_component.damage_health(positive_dmg, source_type, was_crit, multishot_id)
-		GlobalData.DmgAffectedStats.SHIELD_ONLY:
+		Globals.DmgAffectedStats.SHIELD_ONLY:
 			health_component.damage_shield(positive_dmg, source_type, was_crit, multishot_id)
-		GlobalData.DmgAffectedStats.SHIELD_THEN_HEALTH:
+		Globals.DmgAffectedStats.SHIELD_THEN_HEALTH:
 			health_component.damage_shield_then_health(positive_dmg, source_type, was_crit, multishot_id)
-		GlobalData.DmgAffectedStats.SIMULTANEOUS:
+		Globals.DmgAffectedStats.SIMULTANEOUS:
 			health_component.damage_shield(positive_dmg, source_type, was_crit, multishot_id)
 			health_component.damage_health(positive_dmg, source_type, was_crit, multishot_id)
 

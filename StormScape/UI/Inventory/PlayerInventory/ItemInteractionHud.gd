@@ -32,10 +32,10 @@ func _update_glint(stats: ItemResource) -> void:
 	var outline_width: float = (0.5 * (max(item_texture.texture.get_width(), item_texture.texture.get_height()) / 16.0))
 	item_texture.material.set_shader_parameter("width", outline_width)
 
-	item_texture.material.set_shader_parameter("outline_color", GlobalData.rarity_colors.outline_color.get(stats.rarity))
+	item_texture.material.set_shader_parameter("outline_color", Globals.rarity_colors.outline_color.get(stats.rarity))
 	var gradient_texture: GradientTexture1D = GradientTexture1D.new()
 	gradient_texture.gradient = Gradient.new()
-	gradient_texture.gradient.add_point(0, GlobalData.rarity_colors.glint_color.get(stats.rarity))
+	gradient_texture.gradient.add_point(0, Globals.rarity_colors.glint_color.get(stats.rarity))
 	item_texture.material.set_shader_parameter("color_gradient", gradient_texture)
 
-	item_glow.self_modulate = GlobalData.rarity_colors.slot_glow.get(stats.rarity)
+	item_glow.self_modulate = Globals.rarity_colors.slot_glow.get(stats.rarity)

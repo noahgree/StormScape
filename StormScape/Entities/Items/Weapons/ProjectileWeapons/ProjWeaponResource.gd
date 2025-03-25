@@ -4,7 +4,7 @@ class_name ProjWeaponResource
 ## The resource that defines all stats for a projectile weapon. Passing this around essentially passes the weapon around.
 
 enum ProjWeaponType { ## The kinds of projectile weapons.
-	PISTOL, SHOTGUN, SMG, SNIPER, RIFLE, EXPLOSIVE, PRIMITIVE, MAGICAL, THROWABLE, SPECIAL
+	PISTOL, SHOTGUN, SUBMACHINE, SNIPER, RIFLE, EXPLOSIVE, PRIMITIVE_WEAPON, MAGIC, THROWABLE, SPECIAL_WEAPON
 }
 enum ProjAmmoType { ## The types of projectile ammo.
 	NONE, SELF, LIGHT, MEDIUM, HEAVY, SHELL, ROCKET, MAGIC, ION_CHARGE, STAMINA, CHARGES
@@ -119,3 +119,9 @@ enum ProjAmmoType { ## The types of projectile ammo.
 static func get_ammo_item_id_by_enum_value(enum_value: ProjAmmoType) -> StringName:
 	var main_string: String = ProjAmmoType.keys()[enum_value]
 	return StringName(main_string.to_lower() + "_" + "ammo")
+
+## An override to return the string title of the item type rather than just the enum integer value.
+func get_item_type_string(exact_weapon_type: bool = false) -> String:
+	if exact_weapon_type:
+		return str(ProjWeaponType.keys()[proj_weapon_type]).capitalize()
+	return str(Globals.ItemType.keys()[item_type]).capitalize()

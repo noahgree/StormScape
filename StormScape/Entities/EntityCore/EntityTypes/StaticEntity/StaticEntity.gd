@@ -6,7 +6,7 @@ class_name StaticEntity
 ## This would be used for things like trees or blocks or buildings that need collision and also potential health.
 ## This should not be used for moving environmental entities like players and also not for inventory entities like weapons.
 
-@export var team: GlobalData.Teams = GlobalData.Teams.PLAYER ## What the effects received by this entity should consider as this entity's team.
+@export var team: Globals.Teams = Globals.Teams.PLAYER ## What the effects received by this entity should consider as this entity's team.
 @export var stats: StatModsCacheResource = StatModsCacheResource.new() ## The resource that will cache and work with all stat mods for this entity.
 @export var is_object: bool = false ## When true, this entity's collision logic will follow that of a world object, regardless of team.
 
@@ -52,7 +52,7 @@ func _on_before_load_game() -> void:
 func _is_instance_on_load_game(data: StaticEntityData) -> void:
 	global_position = data.position
 
-	GlobalData.world_root.add_child(self)
+	Globals.world_root.add_child(self)
 
 	stats.stat_mods = data.stat_mods
 	stats.reinit_on_load()
@@ -89,17 +89,17 @@ func _ready() -> void:
 	if is_object:
 		collision_layer = 0b100000
 		match team:
-			GlobalData.Teams.PLAYER:
+			Globals.Teams.PLAYER:
 				add_to_group("player_entities")
-			GlobalData.Teams.ENEMY:
+			Globals.Teams.ENEMY:
 				add_to_group("enemy_entities")
-	elif team == GlobalData.Teams.PLAYER:
+	elif team == Globals.Teams.PLAYER:
 		collision_layer = 0b10
 		add_to_group("player_entities")
-	elif team == GlobalData.Teams.ENEMY:
+	elif team == Globals.Teams.ENEMY:
 		add_to_group("enemy_entities")
 		collision_layer = 0b100
-	elif team == GlobalData.Teams.PASSIVE:
+	elif team == Globals.Teams.PASSIVE:
 		collision_layer = 0b1000
 
 	collision_mask = 0b1101111
