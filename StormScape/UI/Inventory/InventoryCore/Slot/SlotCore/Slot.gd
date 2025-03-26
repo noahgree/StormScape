@@ -1,4 +1,3 @@
-@tool
 extends NinePatchRect
 class_name Slot
 ## The item and quantity representation inside all inventories. Handles drag and drop logic as well as stacking.

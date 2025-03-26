@@ -3,7 +3,8 @@ class_name TimerHelpers
 
 
 ## Creates and returns a one shot timer with its timeout callable already connected if specified.
-static func create_one_shot_timer(parent: Node, wait_time: float = -1, timeout_callable: Callable = Callable()) -> Timer:
+static func create_one_shot_timer(parent: Node, wait_time: float = -1,
+									timeout_callable: Callable = Callable()) -> Timer:
 	var timer: Timer = Timer.new()
 
 	if wait_time != -1:
@@ -16,7 +17,8 @@ static func create_one_shot_timer(parent: Node, wait_time: float = -1, timeout_c
 
 	return timer
 
-## Creates and returns a repeating and autostarting timer with its timeout callable already connected if specified.
+## Creates and returns a repeating and autostarting timer with its timeout callable already connected if
+## specified.
 static func create_repeating_autostart_timer(parent: Node, wait_time: float,
 											timeout_callable: Callable = Callable()) -> Timer:
 	var timer: Timer = Timer.new()
@@ -30,8 +32,10 @@ static func create_repeating_autostart_timer(parent: Node, wait_time: float,
 
 	return timer
 
-## Creates and returns a repeating and non-autostarting timer with its timeout callable already connected if specified.
-static func create_repeating_timer(parent: Node, wait_time: float = -1, timeout_callable: Callable = Callable()) -> Timer:
+## Creates and returns a repeating and non-autostarting timer with its timeout callable already
+## connected if specified.
+static func create_repeating_timer(parent: Node, wait_time: float = -1,
+									timeout_callable: Callable = Callable()) -> Timer:
 	var timer: Timer = Timer.new()
 
 	if wait_time != -1:

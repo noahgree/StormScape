@@ -59,6 +59,7 @@ func _ready() -> void:
 		return
 
 	super._ready()
+
 	call_deferred("_disable_collider")
 	_update_ammo_ui()
 	source_entity.stamina_component.stamina_changed.connect(_update_ammo_ui)

@@ -98,7 +98,8 @@ func _add_status_effect(status_effect: StatusEffect) -> void:
 	for mod_resource: StatMod in status_effect.stat_mods:
 		affected_entity.stats.add_mods([mod_resource] as Array[StatMod], stats_ui)
 
-## Starts the status effects' associated visual FX like particles. Checks if the receiver has the matching handler node first.
+## Starts the status effects' associated visual FX like particles. Checks if the receiver has the
+## matching handler node first.
 func _start_effect_fx(status_effect: StatusEffect) -> void:
 	var effect_name: String = status_effect.particle_hander_req if status_effect.particle_hander_req != "" else status_effect.effect_name
 	var particle_node: CPUParticles2D = get_node_or_null((effect_name + "Particles").replace(" ", ""))

@@ -84,15 +84,17 @@ func _on_load_game() -> void:
 func _ready() -> void:
 	_set_item(stats)
 
-	if not Engine.is_editor_hint():
-		add_to_group("items_on_ground")
-		collision_mask = 0b10000000
+	if Engine.is_editor_hint():
+		return
 
-		particles.emitting = false
-		_set_rarity_colors()
-		icon.set_instance_shader_parameter("random_start_offset", randf() * 2.0)
+	add_to_group("items_on_ground")
+	collision_mask = 0b10000000
 
-		lifetime_timer.start()
+	particles.emitting = false
+	_set_rarity_colors()
+	icon.set_instance_shader_parameter("random_start_offset", randf() * 2.0)
+
+	lifetime_timer.start()
 
 	if not can_be_auto_picked_up:
 		await get_tree().create_timer(1.0, false, false, false).timeout

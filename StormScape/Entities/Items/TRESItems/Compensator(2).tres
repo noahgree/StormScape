@@ -13,6 +13,9 @@ title = "BLOOM RATE"
 stat_array = Array[String](["bloom_increase_rate_multiplier"])
 up_is_good = false
 suffix = "x"
+multiplier = 1.0
+addition = 0.0
+fraction_of_orig = false
 metadata/_custom_type_script = "uid://cowjdnic7xmkp"
 
 [sub_resource type="Resource" id="Resource_yomsf"]

@@ -1,7 +1,8 @@
 @tool
 extends Polygon2D
 class_name DebugBox
-## A helper scene and script that can be synced to another tool script to update its visible boundaries for debugging purposes.
+## A helper scene and script that can be synced to another tool script to update its visible boundaries
+## for debugging purposes.
 ##
 ## Great for visualizing particle emission areas.
 

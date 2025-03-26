@@ -1,4 +1,3 @@
-@tool
 extends Slot
 class_name ModSlot
 ## A child class of Slot that changes the conditions for which data can be dropped.
