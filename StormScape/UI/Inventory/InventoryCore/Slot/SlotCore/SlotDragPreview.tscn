@@ -1,7 +1,7 @@
 [gd_scene load_steps=5 format=3 uid="uid://bacsel0a5l2iu"]
 
-[ext_resource type="FontVariation" uid="uid://blgkcg6c83yln" path="res://Assets/Theming/Fonts/GameFontResources/ui_pixel_font.tres" id="1_35dku"]
 [ext_resource type="Shader" uid="uid://cwbeekjoy0uyh" path="res://Utilities/Game/Shaders/GlintShader.gdshader" id="1_75hkq"]
+[ext_resource type="FontFile" uid="uid://bp2lgrlhj8cet" path="res://Assets/Theming/Fonts/Pixel/C&C Red Alert [INET].ttf" id="2_62fgu"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_73rrd"]
 resource_local_to_scene = true
@@ -22,7 +22,7 @@ shader_parameter/glow_intensity = 1.0
 
 [sub_resource type="LabelSettings" id="LabelSettings_c1tbv"]
 line_spacing = 0.0
-font = ExtResource("1_35dku")
+font = ExtResource("2_62fgu")
 font_size = 12
 outline_size = 3
 outline_color = Color(0, 0, 0, 1)

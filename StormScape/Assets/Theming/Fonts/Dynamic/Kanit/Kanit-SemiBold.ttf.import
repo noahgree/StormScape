@@ -2,13 +2,13 @@
 
 importer="font_data_dynamic"
 type="FontFile"
-uid="uid://bp2lgrlhj8cet"
-path="res://.godot/imported/C&C Red Alert [INET].ttf-374522d1014fd09c9d15dbe1472a02ee.fontdata"
+uid="uid://bcuuqced4bhyl"
+path="res://.godot/imported/Kanit-SemiBold.ttf-323a88cb54ed37801cd3eeb436761901.fontdata"
 
 [deps]
 
-source_file="res://Assets/Theming/Fonts/FontAssets/Pixel/C&C Red Alert [INET].ttf"
-dest_files=["res://.godot/imported/C&C Red Alert [INET].ttf-374522d1014fd09c9d15dbe1472a02ee.fontdata"]
+source_file="res://Assets/Theming/Fonts/Dynamic/Kanit/Kanit-SemiBold.ttf"
+dest_files=["res://.godot/imported/Kanit-SemiBold.ttf-323a88cb54ed37801cd3eeb436761901.fontdata"]
 
 [params]
 
@@ -22,7 +22,7 @@ msdf_size=48
 allow_system_fallback=true
 force_autohinter=false
 hinting=1
-subpixel_positioning=0
+subpixel_positioning=1
 keep_rounding_remainders=true
 oversampling=0.0
 Fallbacks=null
@@ -34,7 +34,7 @@ preload=[{
 "glyphs": [],
 "name": "New Configuration",
 "size": Vector2i(16, 0),
-&"variation_embolden": 0.0
+"variation_embolden": 0.0
 }]
 language_support={}
 script_support={}

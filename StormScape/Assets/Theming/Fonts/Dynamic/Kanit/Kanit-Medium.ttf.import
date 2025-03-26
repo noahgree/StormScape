@@ -2,13 +2,13 @@
 
 importer="font_data_dynamic"
 type="FontFile"
-uid="uid://cj0mctn1mh06m"
-path="res://.godot/imported/Kenney Pixel.ttf-a41fe5975b492cfec0c2214a3be361a1.fontdata"
+uid="uid://jlx837tb2vwb"
+path="res://.godot/imported/Kanit-Medium.ttf-8c1dde7f6bc4ab6759d287dacb30d28b.fontdata"
 
 [deps]
 
-source_file="res://Assets/Theming/Fonts/FontAssets/Pixel/Kenney Pixel.ttf"
-dest_files=["res://.godot/imported/Kenney Pixel.ttf-a41fe5975b492cfec0c2214a3be361a1.fontdata"]
+source_file="res://Assets/Theming/Fonts/Dynamic/Kanit/Kanit-Medium.ttf"
+dest_files=["res://.godot/imported/Kanit-Medium.ttf-8c1dde7f6bc4ab6759d287dacb30d28b.fontdata"]
 
 [params]
 
@@ -29,13 +29,7 @@ Fallbacks=null
 fallbacks=[]
 Compress=null
 compress=true
-preload=[{
-"chars": [],
-"glyphs": [],
-"name": "New Configuration",
-"size": Vector2i(16, 0),
-"variation_embolden": 0.0
-}]
+preload=[]
 language_support={}
 script_support={}
 opentype_features={}

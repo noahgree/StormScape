@@ -2,13 +2,13 @@
 
 importer="font_data_dynamic"
 type="FontFile"
-uid="uid://bavuqicy3ftof"
-path="res://.godot/imported/Kanit-BlackItalic.ttf-27952224af95689d9c363c39b9f982ee.fontdata"
+uid="uid://c01prexwq3ky3"
+path="res://.godot/imported/Kanit-Italic.ttf-ce3b5ac174ddeb0c0ae6c1b393817092.fontdata"
 
 [deps]
 
-source_file="res://Assets/Theming/Fonts/FontAssets/Dynamic/Kanit/Kanit-BlackItalic.ttf"
-dest_files=["res://.godot/imported/Kanit-BlackItalic.ttf-27952224af95689d9c363c39b9f982ee.fontdata"]
+source_file="res://Assets/Theming/Fonts/Dynamic/Kanit/Kanit-Italic.ttf"
+dest_files=["res://.godot/imported/Kanit-Italic.ttf-ce3b5ac174ddeb0c0ae6c1b393817092.fontdata"]
 
 [params]
 

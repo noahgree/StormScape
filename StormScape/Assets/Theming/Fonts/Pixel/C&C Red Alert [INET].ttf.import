@@ -2,13 +2,13 @@
 
 importer="font_data_dynamic"
 type="FontFile"
-uid="uid://cavhyyf8gcmhq"
-path="res://.godot/imported/Kanit-SemiBoldItalic.ttf-1d6224de00b1a57bd5855abacb7eb65a.fontdata"
+uid="uid://bp2lgrlhj8cet"
+path="res://.godot/imported/C&C Red Alert [INET].ttf-114d2e51a64e44bffe663217bdec4ecc.fontdata"
 
 [deps]
 
-source_file="res://Assets/Theming/Fonts/FontAssets/Dynamic/Kanit/Kanit-SemiBoldItalic.ttf"
-dest_files=["res://.godot/imported/Kanit-SemiBoldItalic.ttf-1d6224de00b1a57bd5855abacb7eb65a.fontdata"]
+source_file="res://Assets/Theming/Fonts/Pixel/C&C Red Alert [INET].ttf"
+dest_files=["res://.godot/imported/C&C Red Alert [INET].ttf-114d2e51a64e44bffe663217bdec4ecc.fontdata"]
 
 [params]
 
@@ -22,14 +22,20 @@ msdf_size=48
 allow_system_fallback=true
 force_autohinter=false
 hinting=1
-subpixel_positioning=1
+subpixel_positioning=0
 keep_rounding_remainders=true
 oversampling=0.0
 Fallbacks=null
 fallbacks=[]
 Compress=null
 compress=true
-preload=[]
+preload=[{
+"chars": [],
+"glyphs": [],
+"name": "New Configuration",
+"size": Vector2i(16, 0),
+&"variation_embolden": 0.0
+}]
 language_support={}
 script_support={}
 opentype_features={}

@@ -3,12 +3,12 @@
 importer="font_data_dynamic"
 type="FontFile"
 uid="uid://caly2yt3tbese"
-path="res://.godot/imported/Kanit-BoldItalic.ttf-6c4436248aa4aef5a907576436a2024f.fontdata"
+path="res://.godot/imported/Kanit-BoldItalic.ttf-55d394b46d9ed713c135941bfd3488f8.fontdata"
 
 [deps]
 
-source_file="res://Assets/Theming/Fonts/FontAssets/Dynamic/Kanit/Kanit-BoldItalic.ttf"
-dest_files=["res://.godot/imported/Kanit-BoldItalic.ttf-6c4436248aa4aef5a907576436a2024f.fontdata"]
+source_file="res://Assets/Theming/Fonts/Dynamic/Kanit/Kanit-BoldItalic.ttf"
+dest_files=["res://.godot/imported/Kanit-BoldItalic.ttf-55d394b46d9ed713c135941bfd3488f8.fontdata"]
 
 [params]
 

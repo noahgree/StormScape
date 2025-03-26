@@ -2,13 +2,13 @@
 
 importer="font_data_dynamic"
 type="FontFile"
-uid="uid://dma06k60l3e5x"
-path="res://.godot/imported/Kanit-Thin.ttf-261a420c18b776463f0edc94ec781b87.fontdata"
+uid="uid://kovan7w58wof"
+path="res://.godot/imported/Kanit-Black.ttf-6583b34e698781fed87509b0735ff8a1.fontdata"
 
 [deps]
 
-source_file="res://Assets/Theming/Fonts/FontAssets/Dynamic/Kanit/Kanit-Thin.ttf"
-dest_files=["res://.godot/imported/Kanit-Thin.ttf-261a420c18b776463f0edc94ec781b87.fontdata"]
+source_file="res://Assets/Theming/Fonts/Dynamic/Kanit/Kanit-Black.ttf"
+dest_files=["res://.godot/imported/Kanit-Black.ttf-6583b34e698781fed87509b0735ff8a1.fontdata"]
 
 [params]
 

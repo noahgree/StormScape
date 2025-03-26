@@ -2,13 +2,13 @@
 
 importer="font_data_dynamic"
 type="FontFile"
-uid="uid://d21nrt2aigbjy"
-path="res://.godot/imported/Kanit-ExtraBold.ttf-481eefb55a0b589433f1e7f1ae457700.fontdata"
+uid="uid://cavhyyf8gcmhq"
+path="res://.godot/imported/Kanit-SemiBoldItalic.ttf-d5b6502b40d697bca8c359465a18e9e6.fontdata"
 
 [deps]
 
-source_file="res://Assets/Theming/Fonts/FontAssets/Dynamic/Kanit/Kanit-ExtraBold.ttf"
-dest_files=["res://.godot/imported/Kanit-ExtraBold.ttf-481eefb55a0b589433f1e7f1ae457700.fontdata"]
+source_file="res://Assets/Theming/Fonts/Dynamic/Kanit/Kanit-SemiBoldItalic.ttf"
+dest_files=["res://.godot/imported/Kanit-SemiBoldItalic.ttf-d5b6502b40d697bca8c359465a18e9e6.fontdata"]
 
 [params]
 

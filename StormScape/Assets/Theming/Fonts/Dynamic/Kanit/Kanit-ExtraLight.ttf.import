@@ -2,13 +2,13 @@
 
 importer="font_data_dynamic"
 type="FontFile"
-uid="uid://0nnfuilh0l7c"
-path="res://.godot/imported/Kanit-ExtraLightItalic.ttf-fd9d80558e2a734ef2f5c79724bc4a4a.fontdata"
+uid="uid://c3p3prvcrbk6d"
+path="res://.godot/imported/Kanit-ExtraLight.ttf-d4cb96dc0039bf73cb3600e2d90995d1.fontdata"
 
 [deps]
 
-source_file="res://Assets/Theming/Fonts/FontAssets/Dynamic/Kanit/Kanit-ExtraLightItalic.ttf"
-dest_files=["res://.godot/imported/Kanit-ExtraLightItalic.ttf-fd9d80558e2a734ef2f5c79724bc4a4a.fontdata"]
+source_file="res://Assets/Theming/Fonts/Dynamic/Kanit/Kanit-ExtraLight.ttf"
+dest_files=["res://.godot/imported/Kanit-ExtraLight.ttf-d4cb96dc0039bf73cb3600e2d90995d1.fontdata"]
 
 [params]
 

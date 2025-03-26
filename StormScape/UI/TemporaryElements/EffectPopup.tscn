@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://cw73n1p5yhoxm" path="res://UI/TemporaryElements/EffectPopup.gd" id="1_obmtp"]
 [ext_resource type="Texture2D" uid="uid://cahbh5en1kt0w" path="res://Utilities/Game/Particles/rounded_rect_light.png" id="2_3y1nw"]
-[ext_resource type="FontFile" uid="uid://bp2lgrlhj8cet" path="res://Assets/Theming/Fonts/FontAssets/Pixel/C&C Red Alert [INET].ttf" id="4_dsjwj"]
+[ext_resource type="FontFile" uid="uid://bp2lgrlhj8cet" path="res://Assets/Theming/Fonts/Pixel/C&C Red Alert [INET].ttf" id="4_dsjwj"]
 
 [sub_resource type="Gradient" id="Gradient_kgs4e"]
 offsets = PackedFloat32Array(0.00211864, 1)

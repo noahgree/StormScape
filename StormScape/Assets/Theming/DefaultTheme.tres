@@ -1,8 +1,9 @@
 [gd_resource type="Theme" load_steps=2 format=3 uid="uid://dc4prjnav82u"]
 
-[ext_resource type="FontVariation" uid="uid://blgkcg6c83yln" path="res://Assets/Theming/Fonts/GameFontResources/ui_pixel_font.tres" id="1_27yu0"]
+[ext_resource type="FontFile" uid="uid://bp2lgrlhj8cet" path="res://Assets/Theming/Fonts/Pixel/C&C Red Alert [INET].ttf" id="1_ujmc0"]
 
 [resource]
+default_font = ExtResource("1_ujmc0")
 Label/colors/font_color = Color(0.4, 0.223529, 0.192157, 1)
 Label/colors/font_shadow_color = Color(0, 0, 0, 0.454902)
 Label/constants/line_spacing = 0
@@ -12,6 +13,6 @@ Label/constants/shadow_offset_y = 0
 Label/constants/shadow_outline_size = 0
 TooltipLabel/colors/font_color = Color(0.875, 0.875, 0.875, 1)
 TooltipLabel/font_sizes/font_size = 16
-TooltipLabel/fonts/font = ExtResource("1_27yu0")
+TooltipLabel/fonts/font = ExtResource("1_ujmc0")
 TooltipPanel/font_sizes/title_font_size = 16
-TooltipPanel/fonts/title_font = ExtResource("1_27yu0")
+TooltipPanel/fonts/title_font = ExtResource("1_ujmc0")

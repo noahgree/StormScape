@@ -2,13 +2,13 @@
 
 importer="font_data_dynamic"
 type="FontFile"
-uid="uid://c3p3prvcrbk6d"
-path="res://.godot/imported/Kanit-ExtraLight.ttf-4fd027be42c421a5c3abbd6b381acbb5.fontdata"
+uid="uid://bpld83nxsonow"
+path="res://.godot/imported/Kanit-Regular.ttf-2a47e5f0db6dbfc48b6ac04f821a0226.fontdata"
 
 [deps]
 
-source_file="res://Assets/Theming/Fonts/FontAssets/Dynamic/Kanit/Kanit-ExtraLight.ttf"
-dest_files=["res://.godot/imported/Kanit-ExtraLight.ttf-4fd027be42c421a5c3abbd6b381acbb5.fontdata"]
+source_file="res://Assets/Theming/Fonts/Dynamic/Kanit/Kanit-Regular.ttf"
+dest_files=["res://.godot/imported/Kanit-Regular.ttf-2a47e5f0db6dbfc48b6ac04f821a0226.fontdata"]
 
 [params]
 
@@ -29,7 +29,12 @@ Fallbacks=null
 fallbacks=[]
 Compress=null
 compress=true
-preload=[]
+preload=[{
+"chars": [],
+"glyphs": [],
+"name": "Default",
+"size": Vector2i(100, 0)
+}]
 language_support={}
 script_support={}
 opentype_features={}

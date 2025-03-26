@@ -2,13 +2,13 @@
 
 importer="font_data_dynamic"
 type="FontFile"
-uid="uid://cgpppaefc8ies"
-path="res://.godot/imported/Kanit-LightItalic.ttf-708f7134d26daef9b85675de673cf744.fontdata"
+uid="uid://cj0mctn1mh06m"
+path="res://.godot/imported/Kenney Pixel.ttf-0c07d72ef3bba3e6fec89e0eb806076d.fontdata"
 
 [deps]
 
-source_file="res://Assets/Theming/Fonts/FontAssets/Dynamic/Kanit/Kanit-LightItalic.ttf"
-dest_files=["res://.godot/imported/Kanit-LightItalic.ttf-708f7134d26daef9b85675de673cf744.fontdata"]
+source_file="res://Assets/Theming/Fonts/Pixel/Kenney Pixel.ttf"
+dest_files=["res://.godot/imported/Kenney Pixel.ttf-0c07d72ef3bba3e6fec89e0eb806076d.fontdata"]
 
 [params]
 
@@ -29,7 +29,13 @@ Fallbacks=null
 fallbacks=[]
 Compress=null
 compress=true
-preload=[]
+preload=[{
+"chars": [],
+"glyphs": [],
+"name": "New Configuration",
+"size": Vector2i(16, 0),
+"variation_embolden": 0.0
+}]
 language_support={}
 script_support={}
 opentype_features={}

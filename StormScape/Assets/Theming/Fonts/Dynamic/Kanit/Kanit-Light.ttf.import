@@ -2,13 +2,13 @@
 
 importer="font_data_dynamic"
 type="FontFile"
-uid="uid://bcuuqced4bhyl"
-path="res://.godot/imported/Kanit-SemiBold.ttf-a7afc497626d35150c48565d0b762932.fontdata"
+uid="uid://cdax3x6h3lrri"
+path="res://.godot/imported/Kanit-Light.ttf-f79fe6a3995c7b6f2629185d1a35bcdf.fontdata"
 
 [deps]
 
-source_file="res://Assets/Theming/Fonts/FontAssets/Dynamic/Kanit/Kanit-SemiBold.ttf"
-dest_files=["res://.godot/imported/Kanit-SemiBold.ttf-a7afc497626d35150c48565d0b762932.fontdata"]
+source_file="res://Assets/Theming/Fonts/Dynamic/Kanit/Kanit-Light.ttf"
+dest_files=["res://.godot/imported/Kanit-Light.ttf-f79fe6a3995c7b6f2629185d1a35bcdf.fontdata"]
 
 [params]
 
@@ -29,13 +29,7 @@ Fallbacks=null
 fallbacks=[]
 Compress=null
 compress=true
-preload=[{
-"chars": [],
-"glyphs": [],
-"name": "New Configuration",
-"size": Vector2i(16, 0),
-"variation_embolden": 0.0
-}]
+preload=[]
 language_support={}
 script_support={}
 opentype_features={}

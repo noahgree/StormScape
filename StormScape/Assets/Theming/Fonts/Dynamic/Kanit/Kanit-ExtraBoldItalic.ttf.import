@@ -2,13 +2,13 @@
 
 importer="font_data_dynamic"
 type="FontFile"
-uid="uid://bcawhdgbk6ech"
-path="res://.godot/imported/C&C Red Alert [LAN].ttf-9048df8cf0412dc76d135b1111193312.fontdata"
+uid="uid://cimje2ojoo8jc"
+path="res://.godot/imported/Kanit-ExtraBoldItalic.ttf-3460a7651cbda649d7c5f965009cb4dd.fontdata"
 
 [deps]
 
-source_file="res://Assets/Theming/Fonts/FontAssets/Pixel/C&C Red Alert [LAN].ttf"
-dest_files=["res://.godot/imported/C&C Red Alert [LAN].ttf-9048df8cf0412dc76d135b1111193312.fontdata"]
+source_file="res://Assets/Theming/Fonts/Dynamic/Kanit/Kanit-ExtraBoldItalic.ttf"
+dest_files=["res://.godot/imported/Kanit-ExtraBoldItalic.ttf-3460a7651cbda649d7c5f965009cb4dd.fontdata"]
 
 [params]
 
