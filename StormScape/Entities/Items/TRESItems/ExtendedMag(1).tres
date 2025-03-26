@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="ExtendedMagMod" load_steps=8 format=3 uid="uid://bta1hncad1hd2"]
+[gd_resource type="Resource" script_class="ExtendedMagMod" load_steps=9 format=3 uid="uid://bta1hncad1hd2"]
 
 [ext_resource type="Script" uid="uid://boo31eu083dqd" path="res://Entities/Stats/EffectSystemResources/StatusEffects/StatusEffect.gd" id="1_yiwfh"]
 [ext_resource type="Script" uid="uid://cowjdnic7xmkp" path="res://UI/Inventory/PlayerInventory/ItemDetail.gd" id="2_c6dh0"]
@@ -19,6 +19,18 @@ max_stack_count = 1
 override_all = false
 metadata/_custom_type_script = "uid://bcjwesiannbd0"
 
+[sub_resource type="Resource" id="Resource_c6dh0"]
+script = ExtResource("6_pmpis")
+stat_id = &"mag_reload_time"
+mod_id = &"extended_mag"
+operation = "+%"
+value = 7.0
+rounding = "Exact"
+priority = 1
+max_stack_count = 1
+override_all = false
+metadata/_custom_type_script = "uid://bcjwesiannbd0"
+
 [resource]
 script = ExtResource("5_8pa7i")
 allowed_proj_wpns = Array[int]([0, 1, 2, 3, 4, 5, 6, 7, 9])
@@ -28,7 +40,7 @@ blocked_wpn_stats = Dictionary[StringName, float]({
 &"mag_size": 0.0
 })
 req_all_blocked_stats = false
-wpn_stat_mods = Array[ExtResource("6_pmpis")]([SubResource("Resource_yiwfh")])
+wpn_stat_mods = Array[ExtResource("6_pmpis")]([SubResource("Resource_yiwfh"), SubResource("Resource_c6dh0")])
 status_effects = Array[ExtResource("1_yiwfh")]([])
 charge_status_effects = Array[ExtResource("1_yiwfh")]([])
 applied_details = Array[ExtResource("2_c6dh0")]([])
@@ -42,7 +54,7 @@ rarity = 1
 stack_size = 3
 auto_pickup = false
 pickup_radius = 4
-info = "Increases magazine size."
+info = "Increases magazine size at the cost of reload time."
 extra_details = Array[ExtResource("2_c6dh0")]([])
 ground_icon = ExtResource("3_yiwfh")
 in_hand_icon = ExtResource("3_yiwfh")

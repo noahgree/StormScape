@@ -42,7 +42,7 @@ var is_reloading: bool = false: ## Whether some reload method is currently in pr
 	set(new_value):
 		is_reloading = new_value
 		if is_reloading:
-			if overhead_ui:
+			if overhead_ui and not stats.hide_reload_ui:
 				overhead_ui.reload_bar.show()
 		else:
 			_do_post_reload_animation_cleanup()
@@ -718,12 +718,16 @@ func _do_firing_fx() -> void:
 	if firing_vfx:
 		firing_vfx.start()
 
-## Spawns a simulated ejected casing to fall to the ground. Requires a Marker2D in the scene called "CasingEjectionPoint".
+## Spawns a simulated ejected casing to fall to the ground. Requires a Marker2D in the scene
+## called "CasingEjectionPoint".
 ## Must be called by the animation player due to varying timing of when it should spawn per weapon.
 func _eject_casing() -> void:
-	if casing_ejection_point:
+	if not casing_ejection_point:
+		return
+
+	for i: int in range((stats.s_mods.get_stat("mag_size") - stats.ammo_in_mag) if stats.id == "twin" else 1):
 		var casing: Node2D = casing_scene.instantiate()
-		casing.global_position = casing_ejection_point.global_position
+		casing.global_position = casing_ejection_point.global_position + Vector2(randf_range(-1, 1), randf_range(-1, 1))
 		casing.global_rotation = global_rotation
 		Globals.world_root.add_child(casing)
 		casing.sprite.texture = stats.casing_texture
@@ -763,7 +767,7 @@ func _start_post_fire_anim() -> void:
 	var anim_duration: float = stats.post_fire_anim_dur if stats.post_fire_anim_dur > 0 else available_time
 
 	anim_duration = min(anim_duration, available_time)
-	anim_player.speed_scale = 1.0 / (anim_duration - 0.01) # The 0.01 is a buffer since animations aren't as precise in timing
+	anim_player.speed_scale = 1.0 / (anim_duration - 0.02) # The 0.02 is a buffer since animations aren't as precise in timing
 
 	if adjusted_post_fire_anim_delay > 0:
 		await get_tree().create_timer(adjusted_post_fire_anim_delay).timeout

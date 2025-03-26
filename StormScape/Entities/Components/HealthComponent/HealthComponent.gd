@@ -90,7 +90,8 @@ func _check_for_death() -> void:
 	if health <= 0 and not is_dying:
 		is_dying = true
 		var loot_table: LootTableComponent = entity.get_node_or_null("LootTableComponent")
-		if loot_table != null: loot_table.handle_death()
+		if loot_table != null:
+			loot_table.handle_death()
 
 		if entity.has_method("die"):
 			entity.die()

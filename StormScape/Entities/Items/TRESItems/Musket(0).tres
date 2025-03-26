@@ -1,7 +1,6 @@
-[gd_resource type="Resource" script_class="ProjWeaponResource" load_steps=36 format=3 uid="uid://bnc4tbhdxpauy"]
+[gd_resource type="Resource" script_class="ProjWeaponResource" load_steps=39 format=3 uid="uid://bnc4tbhdxpauy"]
 
 [ext_resource type="Texture2D" uid="uid://bm570hawaupxe" path="res://Entities/Items/Weapons/WeaponVFX/Casings/small_casing.png" id="1_hjiec"]
-[ext_resource type="SpriteFrames" uid="uid://85w3h1wajacl" path="res://Entities/Items/Weapons/ProjectileWeapons/EagleEye/EagleEyeCursors.tres" id="3_6grxy"]
 [ext_resource type="Script" uid="uid://dkfssottmsrch" path="res://Entities/Stats/EffectSystemResources/EffectSources/EffectSource.gd" id="4_78vf2"]
 [ext_resource type="Script" uid="uid://cowjdnic7xmkp" path="res://UI/Inventory/PlayerInventory/ItemDetail.gd" id="5_hjiec"]
 [ext_resource type="Script" uid="uid://boo31eu083dqd" path="res://Entities/Stats/EffectSystemResources/StatusEffects/StatusEffect.gd" id="5_ks1up"]
@@ -14,6 +13,8 @@
 [ext_resource type="Script" uid="uid://bj3r5oopspj6l" path="res://Entities/Items/Projectiles/ProjectileResource.gd" id="12_ma2xb"]
 [ext_resource type="PackedScene" uid="uid://bqkyplubhsx43" path="res://Entities/Items/Projectiles/Bullets/SmallBullet/SmallBullet.tscn" id="13_jo86x"]
 [ext_resource type="Script" uid="uid://ctxa7i1mbt7ab" path="res://UI/Inventory/PlayerInventory/Crafting/CraftingIngredient.gd" id="14_cya72"]
+[ext_resource type="Resource" uid="uid://8uj8fwadqlk0" path="res://Entities/Items/TRESItems/Stick(0).tres" id="14_iahun"]
+[ext_resource type="Resource" uid="uid://cfaje12siuo0b" path="res://Entities/Items/TRESItems/Compensator(2).tres" id="15_6grxy"]
 [ext_resource type="Script" uid="uid://c2gdoebfp12dq" path="res://Entities/Stats/StatMod/StatModsCacheResource.gd" id="15_c2f42"]
 [ext_resource type="Script" uid="uid://dvasncq3tgljs" path="res://Entities/Items/Weapons/ProjectileWeapons/ProjWeaponResource.gd" id="16_58fh8"]
 
@@ -186,6 +187,24 @@ aoe_effect_interval = 1.0
 aoe_effects_delay = 0.5
 aoe_sound = ""
 
+[sub_resource type="Resource" id="Resource_ks1up"]
+script = ExtResource("14_cya72")
+type = "Item"
+item = ExtResource("14_iahun")
+quantity = 1
+tags = Array[StringName]([])
+rarity_match = "No"
+metadata/_custom_type_script = "uid://ctxa7i1mbt7ab"
+
+[sub_resource type="Resource" id="Resource_3832c"]
+script = ExtResource("14_cya72")
+type = "Item"
+item = ExtResource("15_6grxy")
+quantity = 1
+tags = Array[StringName]([])
+rarity_match = "No"
+metadata/_custom_type_script = "uid://ctxa7i1mbt7ab"
+
 [sub_resource type="Resource" id="Resource_x70ma"]
 script = ExtResource("15_c2f42")
 
@@ -246,7 +265,7 @@ overheated_sound = ""
 overheat_anim_dur = 0.5
 projectiles_per_fire = 1
 use_ammo_per_burst_proj = true
-burst_bullet_delay = 0.1
+burst_bullet_delay = 0.05
 add_bloom_per_burst_shot = true
 add_overheat_per_burst_shot = true
 barrage_count = 1
@@ -292,10 +311,9 @@ inv_icon = ExtResource("7_hjiec")
 inv_icon_offset = Vector2(0, 0)
 inv_icon_scale = Vector2(1.3, 1.3)
 inv_icon_rotation = -38.0
-cursors = ExtResource("3_6grxy")
-recipe = Array[ExtResource("14_cya72")]([])
+recipe = Array[ExtResource("14_cya72")]([SubResource("Resource_ks1up"), SubResource("Resource_3832c")])
 output_quantity = 1
-recipe_unlocked = false
+recipe_unlocked = true
 item_scene = ExtResource("11_hjiec")
 rotation_lerping = 0.1
 holding_offset = Vector2(0, -3)

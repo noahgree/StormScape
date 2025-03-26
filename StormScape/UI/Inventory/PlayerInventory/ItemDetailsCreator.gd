@@ -71,7 +71,7 @@ func _get_extra_details(stats: ItemResource, extra_details_array: Array[ItemDeta
 ## Gets the damage details.
 func _get_damage(stats: ItemResource) -> String:
 	var string: String = "DMG:" + Globals.invis_char
-	var proj_count: int = stats.barrage_count if stats is ProjWeaponResource else 1.0
+	var proj_count: int = stats.barrage_count * stats.projectiles_per_fire if stats is ProjWeaponResource else 1.0
 	var dmg: String = _get_sum(stats, ["base_damage"], true, "", proj_count)
 	var crit_mult: String = str(stats.effect_source.crit_multiplier) + "x"
 

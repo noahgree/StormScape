@@ -91,7 +91,8 @@ func handle_effect_source(effect_source: EffectSource, source_entity:
 	most_recent_effect_src = effect_source
 
 	if source_entity.team == Globals.Teams.PASSIVE or ((affected_entity is DynamicEntity) and not affected_entity.fsm.controller.can_receive_effects):
-		if loot_table_component: loot_table_component.handle_effect_source(effect_source)
+		if loot_table_component:
+			loot_table_component.handle_effect_source(effect_source)
 		return
 
 	if effect_source.impact_vfx != null:
@@ -102,10 +103,12 @@ func handle_effect_source(effect_source: EffectSource, source_entity:
 	if effect_source.base_damage > 0 and dmg_handler != null:
 		if _check_same_team(source_entity) and _check_if_bad_effects_apply_to_allies(effect_source):
 			dmg_handler.handle_instant_damage(effect_source, _get_life_steal(effect_source, source_entity))
-			if loot_table_component: loot_table_component.handle_effect_source(effect_source)
+			if loot_table_component:
+				loot_table_component.handle_effect_source(effect_source)
 		elif not _check_same_team(source_entity) and _check_if_bad_effects_apply_to_enemies(effect_source):
 			dmg_handler.handle_instant_damage(effect_source, _get_life_steal(effect_source, source_entity))
-			if loot_table_component: loot_table_component.handle_effect_source(effect_source)
+			if loot_table_component:
+				loot_table_component.handle_effect_source(effect_source)
 	elif loot_table_component and not loot_table_component.require_dmg_on_hit:
 		loot_table_component.handle_effect_source(effect_source)
 

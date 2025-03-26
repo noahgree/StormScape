@@ -10,6 +10,7 @@ shake_trans_type = 8
 shake_ease_type = 1
 freeze_multiplier = 0.0
 freeze_duration = 0.075
+freeze_instant_change = true
 freeze_trans_type = 2
 freeze_ease_type = 0
 zoom_multiplier = 1.012

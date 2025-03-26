@@ -150,7 +150,7 @@ func on_equipped_item_change(inv_item_slot: Slot) -> void:
 	_update_anchor_scale("x", 1)
 	_update_anchor_scale("y", 1)
 	main_hand.rotation = 0
-	entity.facing_component.rotation_lerping_factor = equipped_item.stats.s_mods.get_stat("rotation_lerping")
+	entity.facing_component.rotation_lerping_factor = equipped_item.stats.s_mods.get_stat("rotation_lerping") if equipped_item is Weapon else equipped_item.stats.rotation_lerping
 	scale_is_lerping = false
 	been_holding_time = 0
 
@@ -197,15 +197,9 @@ func _prep_for_pullout_anim() -> void:
 		return
 
 	if _get_facing_dir().x > 0:
-		if _get_facing_dir().y > 0:
-			hands_anchor.global_rotation = PI/4
-		else:
-			hands_anchor.global_rotation = -PI/4
+		hands_anchor.global_rotation += PI/5
 	else:
-		if _get_facing_dir().y > 0:
-			hands_anchor.global_rotation = PI/2
-		else:
-			hands_anchor.global_rotation = -PI/2
+		hands_anchor.global_rotation -= PI/5
 
 func _physics_process(_delta: float) -> void:
 	if equipped_item == null:

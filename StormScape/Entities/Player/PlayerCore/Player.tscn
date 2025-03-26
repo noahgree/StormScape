@@ -1,4 +1,4 @@
-[gd_scene load_steps=213 format=3 uid="uid://dba8mrurjlekp"]
+[gd_scene load_steps=217 format=3 uid="uid://dba8mrurjlekp"]
 
 [ext_resource type="Script" uid="uid://c3rpxq8pnbdje" path="res://Entities/Player/PlayerCore/Player.gd" id="1_m33tt"]
 [ext_resource type="Script" uid="uid://c2gdoebfp12dq" path="res://Entities/Stats/StatMod/StatModsCacheResource.gd" id="2_vetip"]
@@ -87,6 +87,7 @@
 [ext_resource type="Resource" uid="uid://b8gvf7ta6a2rj" path="res://Entities/Items/TRESItems/Foregrip(1).tres" id="52_eufsu"]
 [ext_resource type="Resource" uid="uid://1q7rlned2r23" path="res://Entities/Items/TRESItems/Gattler(3).tres" id="53_lo25j"]
 [ext_resource type="Texture2D" uid="uid://lj78cee4aa38" path="res://UI/PlayerStatsOverlay/Assets/Health Change.png" id="53_qsiea"]
+[ext_resource type="Resource" uid="uid://bta1hncad1hd2" path="res://Entities/Items/TRESItems/ExtendedMag(1).tres" id="56_da65a"]
 [ext_resource type="Resource" uid="uid://dk3vlbvu2b7eq" path="res://Entities/Items/TRESItems/Sword(4).tres" id="57_6wv7y"]
 [ext_resource type="Script" uid="uid://dih45lqhjg0xx" path="res://UI/OverheadUI/PlayerOverheadUI.gd" id="57_n8srl"]
 [ext_resource type="Script" uid="uid://c0n0ja8tkrnkf" path="res://UI/Inventory/PlayerInventory/HotbarUI.gd" id="58_i567i"]
@@ -94,6 +95,7 @@
 [ext_resource type="Texture2D" uid="uid://bq3d1uclexvcm" path="res://UI/OverheadUI/progress_tintable.png" id="61_6wv7y"]
 [ext_resource type="Resource" uid="uid://fmf7upx7tsln" path="res://Entities/Items/TRESItems/RifleX(3).tres" id="62_0313k"]
 [ext_resource type="Texture2D" uid="uid://barp24qvngy0m" path="res://UI/OverheadUI/Overheat/overheat_back.png" id="63_3uq13"]
+[ext_resource type="Resource" uid="uid://c05ujhrdtx4r5" path="res://Entities/Items/TRESItems/Blunderbuss(2).tres" id="64_eufsu"]
 [ext_resource type="Resource" uid="uid://bnc4tbhdxpauy" path="res://Entities/Items/TRESItems/Musket(0).tres" id="64_hxjay"]
 [ext_resource type="Texture2D" uid="uid://7wf7omw2r50u" path="res://UI/OverheadUI/Overheat/overheat_progress.png" id="64_o382h"]
 [ext_resource type="Resource" uid="uid://caxftf2aer6g4" path="res://Entities/Items/TRESItems/Igniter(4).tres" id="65_14ixx"]
@@ -1248,6 +1250,12 @@ stats = ExtResource("50_0313k")
 quantity = 8
 metadata/_custom_type_script = "uid://dp8osf7r6xkkt"
 
+[sub_resource type="Resource" id="Resource_ou5t4"]
+script = ExtResource("32_ixmb3")
+stats = ExtResource("56_da65a")
+quantity = 1
+metadata/_custom_type_script = "uid://dp8osf7r6xkkt"
+
 [sub_resource type="Resource" id="Resource_dyejk"]
 script = ExtResource("32_ixmb3")
 stats = ExtResource("45_xur7q")
@@ -1275,6 +1283,11 @@ stats = ExtResource("53_lo25j")
 quantity = 1
 metadata/_custom_type_script = ExtResource("32_ixmb3")
 
+[sub_resource type="Resource" id="Resource_0ta0y"]
+script = ExtResource("32_ixmb3")
+stats = ExtResource("37_a2tah")
+quantity = 1
+
 [sub_resource type="Resource" id="Resource_sx7hp"]
 script = ExtResource("32_ixmb3")
 stats = ExtResource("49_gbpko")
@@ -1290,6 +1303,12 @@ script = ExtResource("32_ixmb3")
 stats = ExtResource("47_devgv")
 quantity = 10
 
+[sub_resource type="Resource" id="Resource_w0i1c"]
+script = ExtResource("32_ixmb3")
+stats = ExtResource("64_eufsu")
+quantity = 1
+metadata/_custom_type_script = "uid://dp8osf7r6xkkt"
+
 [sub_resource type="Resource" id="Resource_bvo3j"]
 script = ExtResource("32_ixmb3")
 stats = ExtResource("62_0313k")
@@ -1301,11 +1320,6 @@ script = ExtResource("32_ixmb3")
 stats = ExtResource("60_0t1mv")
 quantity = 1
 metadata/_custom_type_script = "uid://dp8osf7r6xkkt"
-
-[sub_resource type="Resource" id="Resource_0ta0y"]
-script = ExtResource("32_ixmb3")
-stats = ExtResource("37_a2tah")
-quantity = 1
 
 [sub_resource type="Resource" id="Resource_gdihr"]
 script = ExtResource("32_ixmb3")
@@ -1564,7 +1578,7 @@ parameters/run/blendspace2d/blend_position = Vector2(0, 0)
 
 [node name="ItemReceiverComponent" parent="." node_paths=PackedStringArray("item_interact_hud", "inv_populator", "ui") instance=ExtResource("30_qgyag")]
 item_interact_hud = NodePath("../OverlayUI/ItemInteractionHUD")
-starting_inv = Array[ExtResource("32_ixmb3")]([SubResource("Resource_pihal"), SubResource("Resource_da65a"), SubResource("Resource_0313k"), SubResource("Resource_6f5us"), SubResource("Resource_kx1me"), SubResource("Resource_2ijsm"), SubResource("Resource_gb65f"), SubResource("Resource_xlc3k"), SubResource("Resource_n4o3n"), SubResource("Resource_3by25"), SubResource("Resource_oxva3"), SubResource("Resource_5qckj"), SubResource("Resource_x8o50"), SubResource("Resource_s4yud"), SubResource("Resource_apvym"), SubResource("Resource_ur5wt"), SubResource("Resource_eufsu"), null, SubResource("Resource_dyejk"), null, null, SubResource("Resource_vpccy"), null, null, SubResource("Resource_p5d28"), null, SubResource("Resource_0t1mv"), SubResource("Resource_rdrbb"), null, SubResource("Resource_sx7hp"), SubResource("Resource_wjnk6"), SubResource("Resource_hevqc"), SubResource("Resource_bvo3j"), SubResource("Resource_hxjay"), SubResource("Resource_0ta0y"), SubResource("Resource_gdihr"), SubResource("Resource_6stk0")])
+starting_inv = Array[ExtResource("32_ixmb3")]([SubResource("Resource_pihal"), SubResource("Resource_da65a"), SubResource("Resource_0313k"), SubResource("Resource_6f5us"), SubResource("Resource_kx1me"), SubResource("Resource_2ijsm"), SubResource("Resource_gb65f"), SubResource("Resource_xlc3k"), SubResource("Resource_n4o3n"), SubResource("Resource_3by25"), SubResource("Resource_oxva3"), SubResource("Resource_5qckj"), SubResource("Resource_x8o50"), SubResource("Resource_s4yud"), SubResource("Resource_apvym"), SubResource("Resource_ur5wt"), SubResource("Resource_eufsu"), SubResource("Resource_ou5t4"), SubResource("Resource_dyejk"), null, null, SubResource("Resource_vpccy"), null, null, SubResource("Resource_p5d28"), null, SubResource("Resource_0t1mv"), SubResource("Resource_rdrbb"), SubResource("Resource_0ta0y"), SubResource("Resource_sx7hp"), SubResource("Resource_wjnk6"), SubResource("Resource_hevqc"), SubResource("Resource_w0i1c"), SubResource("Resource_bvo3j"), SubResource("Resource_hxjay"), SubResource("Resource_gdihr"), SubResource("Resource_6stk0")])
 is_player_inv = true
 inv_size = 37
 hotbar_size = 5

@@ -1,4 +1,4 @@
-[gd_scene load_steps=38 format=3 uid="uid://xsq1q0fffsin"]
+[gd_scene load_steps=42 format=3 uid="uid://xsq1q0fffsin"]
 
 [ext_resource type="Script" uid="uid://nup3um166s32" path="res://Entities/EntityCore/EntityTypes/RigidEntity/RigidEntity.gd" id="1_6tnit"]
 [ext_resource type="Script" uid="uid://c2gdoebfp12dq" path="res://Entities/Stats/StatMod/StatModsCacheResource.gd" id="2_ps53t"]
@@ -19,23 +19,24 @@
 [ext_resource type="PackedScene" uid="uid://co3n6m7efg8pd" path="res://Entities/Components/EffectComponents/StatusEffectsComponent/StatusEffectsComponent.tscn" id="14_20kf8"]
 [ext_resource type="PackedScene" uid="uid://c4kt3bx0ot3c7" path="res://Entities/Components/ItemComponents/LootTableComponent/LootTableComponent.tscn" id="15_1vdsh"]
 [ext_resource type="Script" uid="uid://1qq7eo7lm8j6" path="res://Entities/Components/ItemComponents/LootTableComponent/LootTableEntry.gd" id="16_fkdnf"]
-[ext_resource type="Resource" uid="uid://ciel2rrqq4dvv" path="res://Entities/Items/TRESItems/LaserGun(2).tres" id="17_h3nqy"]
-[ext_resource type="Resource" uid="uid://bh18kqp2up3oe" path="res://Entities/Items/TRESItems/Pickaxe(3).tres" id="18_j4lx6"]
 [ext_resource type="Script" uid="uid://cgqfx1ve66f3h" path="res://Entities/Components/ItemComponents/LootTableComponent/LootTable.gd" id="18_w6kaj"]
-[ext_resource type="Resource" uid="uid://cx1ydw2jde1y8" path="res://Entities/Items/TRESItems/Apple(0).tres" id="19_6vm5h"]
-[ext_resource type="Resource" uid="uid://3avt5jvd3dye" path="res://Entities/Items/TRESItems/BottleOFire(3).tres" id="20_uc3ly"]
+[ext_resource type="Resource" uid="uid://cpxev3kvt74vw" path="res://Entities/Items/TRESItems/Shell(0).tres" id="20_mnmab"]
+[ext_resource type="Resource" uid="uid://m8eslst1uuxh" path="res://Entities/Items/TRESItems/Light(0).tres" id="21_iirwy"]
+[ext_resource type="Resource" uid="uid://bcvljie626314" path="res://Entities/Items/TRESItems/Heavy(0).tres" id="22_2xjsy"]
+[ext_resource type="Resource" uid="uid://c5jim46mul7ex" path="res://Entities/Items/TRESItems/IonCharge(0).tres" id="23_mdi77"]
+[ext_resource type="Resource" uid="uid://bdjhfsluk53lc" path="res://Entities/Items/TRESItems/Medium(0).tres" id="24_ccp8j"]
 [ext_resource type="PackedScene" uid="uid://jpq0ij8wwlhy" path="res://Entities/Components/FacingComponent/FacingComponent.tscn" id="24_i2rwd"]
+[ext_resource type="Resource" uid="uid://caxftf2aer6g4" path="res://Entities/Items/TRESItems/Igniter(4).tres" id="25_iirwy"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_ljryo"]
 rough = true
 
 [sub_resource type="Resource" id="Resource_8lyar"]
 script = ExtResource("2_ps53t")
-debug_print_mod_changes = false
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_sbju2"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_fg1br"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_arbka"]
 resource_local_to_scene = true
 shader = ExtResource("4_l6rwf")
 
@@ -59,40 +60,61 @@ size = Vector2(18, 18)
 
 [sub_resource type="Resource" id="Resource_l1o4x"]
 script = ExtResource("16_fkdnf")
-item = ExtResource("17_h3nqy")
-quantity = 1
+item = ExtResource("20_mnmab")
+quantity = 5
+weighting = 2.0
+last_used = 0
+spawn_count = 0
+
+[sub_resource type="Resource" id="Resource_3nojt"]
+script = ExtResource("16_fkdnf")
+item = ExtResource("21_iirwy")
+quantity = 10
+weighting = 3.0
+last_used = 0
+spawn_count = 0
+metadata/_custom_type_script = "uid://1qq7eo7lm8j6"
+
+[sub_resource type="Resource" id="Resource_ssl24"]
+script = ExtResource("16_fkdnf")
+item = ExtResource("22_2xjsy")
+quantity = 5
 weighting = 1.0
 last_used = 0
 spawn_count = 0
+metadata/_custom_type_script = "uid://1qq7eo7lm8j6"
 
-[sub_resource type="Resource" id="Resource_tbuv6"]
+[sub_resource type="Resource" id="Resource_wbmts"]
 script = ExtResource("16_fkdnf")
-item = ExtResource("18_j4lx6")
-quantity = 1
+item = ExtResource("23_mdi77")
+quantity = 5
 weighting = 1.0
 last_used = 0
 spawn_count = 0
+metadata/_custom_type_script = "uid://1qq7eo7lm8j6"
 
-[sub_resource type="Resource" id="Resource_q3pta"]
+[sub_resource type="Resource" id="Resource_mou4w"]
 script = ExtResource("16_fkdnf")
-item = ExtResource("19_6vm5h")
-quantity = 3
-weighting = 20.0
+item = ExtResource("24_ccp8j")
+quantity = 10
+weighting = 3.0
 last_used = 0
 spawn_count = 0
+metadata/_custom_type_script = "uid://1qq7eo7lm8j6"
 
-[sub_resource type="Resource" id="Resource_dqa6c"]
+[sub_resource type="Resource" id="Resource_2xjsy"]
 script = ExtResource("16_fkdnf")
-item = ExtResource("20_uc3ly")
-quantity = 2
-weighting = 20.0
+item = ExtResource("25_iirwy")
+quantity = 1
+weighting = 0.1
 last_used = 0
 spawn_count = 0
+metadata/_custom_type_script = "uid://1qq7eo7lm8j6"
 
 [sub_resource type="Resource" id="Resource_tcueq"]
 script = ExtResource("18_w6kaj")
-hit_loot_table = Array[ExtResource("16_fkdnf")]([SubResource("Resource_tbuv6"), SubResource("Resource_q3pta"), SubResource("Resource_dqa6c")])
-die_loot_table = Array[ExtResource("16_fkdnf")]([SubResource("Resource_l1o4x")])
+hit_loot_table = Array[ExtResource("16_fkdnf")]([])
+die_loot_table = Array[ExtResource("16_fkdnf")]([SubResource("Resource_l1o4x"), SubResource("Resource_3nojt"), SubResource("Resource_ssl24"), SubResource("Resource_wbmts"), SubResource("Resource_mou4w"), SubResource("Resource_2xjsy")])
 
 [node name="TestRigidEntity" type="RigidBody2D"]
 collision_layer = 32
@@ -116,7 +138,7 @@ debug_color = Color(1.44392e-06, 0.568839, 0.851513, 0.42)
 
 [node name="EntitySprite" parent="." instance=ExtResource("3_nv7a0")]
 unique_name_in_owner = true
-material = SubResource("ShaderMaterial_fg1br")
+material = SubResource("ShaderMaterial_arbka")
 position = Vector2(0, -10)
 scale = Vector2(0.156, 0.156)
 sprite_frames = SubResource("SpriteFrames_fg1br")

@@ -8,6 +8,7 @@ class_name LootTableComponent
 @export_range(0, 100, 0.1, "suffix:%") var die_spawn_chance: float = 100.0
 @export var remove_when_dropped: bool = false
 @export var require_dmg_on_hit: bool = true ## When true, this will not trigger the "Hit" loot table when receiving a hit unless that hit dealt damage.
+@export_range(0, 100, 1) var hit_chance_scale: int = 1 ## When above 0, the drop chance will scale up over time based on how long it has been since the last drop, all multiplied by this scaling factor. This prevents the off-chance of there being a long drought of no drops. 0 < x < 1 lowers the scaling factor. 1 < x <= 100 increases it.
 @export var rarity_scaling_factors: Dictionary[Globals.ItemRarity, float] = {
 		Globals.ItemRarity.COMMON: 0.5,
 		Globals.ItemRarity.UNCOMMON: 0.4,
@@ -33,8 +34,8 @@ func _ready() -> void:
 		die_loot_table_total_weight += loot_table.die_loot_table[i].weighting
 
 func handle_effect_source(_effect_source: EffectSource) -> void:
-	if is_dying: return
-
+	if is_dying:
+		return
 	if not _roll_to_check_if_should_drop(true):
 		return
 
@@ -59,7 +60,7 @@ func _roll_to_check_if_should_drop(was_hit: bool) -> bool:
 	var spawn_chance: float = (hit_spawn_chance if was_hit else die_spawn_chance) / 100.0
 	var should_spawn: bool = false
 	var random_num: float = randf()
-	var increase_factor: float = (times_since_drop * 0.10 * spawn_chance)
+	var increase_factor: float = (times_since_drop * 0.10 * float(hit_chance_scale)) * spawn_chance
 	if random_num <= (spawn_chance + increase_factor):
 		should_spawn = true
 		times_since_drop = 0

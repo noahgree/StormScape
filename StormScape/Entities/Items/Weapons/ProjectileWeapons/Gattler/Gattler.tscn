@@ -471,10 +471,10 @@ tracks/12/path = NodePath("ReloadOffHand:position")
 tracks/12/interp = 1
 tracks/12/loop_wrap = true
 tracks/12/keys = {
-"times": PackedFloat32Array(0, 0.225, 0.25, 0.875, 0.9),
-"transitions": PackedFloat32Array(0, 0, 0, 0, 1),
-"update": 0,
-"values": [Vector2(-17, 0), Vector2(-16, 0), Vector2(-17, 0), Vector2(-18, 0), Vector2(-17, 0)]
+"times": PackedFloat32Array(0, 0.225, 0.25, 0.35, 0.375, 0.725, 0.75, 0.875, 0.9),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [Vector2(-17, 0), Vector2(-16, 0), Vector2(-17, 0), Vector2(-17, 0.5), Vector2(-17, 0), Vector2(-17, -0.5), Vector2(-17, 0), Vector2(-18, 0), Vector2(-17, 0)]
 }
 tracks/13/type = "value"
 tracks/13/imported = false

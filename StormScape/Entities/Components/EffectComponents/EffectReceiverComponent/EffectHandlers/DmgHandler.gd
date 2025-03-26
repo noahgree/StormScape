@@ -157,7 +157,8 @@ func _on_dot_timer_timeout(dot_timer: Timer, source_type: String) -> void:
 ## Sends the affected entity's health component the final damage values based on what stats the damage was
 ## allowed to affect.
 func _send_handled_dmg(source_type: String, dmg_affected_stats: Globals.DmgAffectedStats,
-						handled_amount: int, multishot_id: int, life_steal_percent: float = 0.0, was_crit: bool = false) -> void:
+						handled_amount: int, multishot_id: int, life_steal_percent: float = 0.0,
+						was_crit: bool = false) -> void:
 	var dmg_weakness: float = affected_entity.stats.get_stat("dmg_weakness")
 	var dmg_resistance: float = affected_entity.stats.get_stat("dmg_resistance")
 	var positive_dmg: int = max(0, handled_amount * (1 + dmg_weakness - dmg_resistance))

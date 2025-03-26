@@ -1,0 +1,8 @@
+[gd_resource type="CanvasTexture" load_steps=3 format=3 uid="uid://bmg1c4tf2t0wl"]
+
+[ext_resource type="Texture2D" uid="uid://f4ll0gviw6ka" path="res://Entities/Items/Weapons/ProjectileWeapons/Blunderbuss/blunderbuss_base_frame.png" id="1_y568d"]
+[ext_resource type="Texture2D" uid="uid://8wl8lq8t7bva" path="res://Entities/Items/Weapons/ProjectileWeapons/Blunderbuss/blunderbuss_base_frame_n.png" id="2_pdcjk"]
+
+[resource]
+diffuse_texture = ExtResource("1_y568d")
+normal_texture = ExtResource("2_pdcjk")

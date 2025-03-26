@@ -9,7 +9,7 @@
 [ext_resource type="Script" uid="uid://cowjdnic7xmkp" path="res://UI/Inventory/PlayerInventory/ItemDetail.gd" id="4_6hpwe"]
 [ext_resource type="PackedScene" uid="uid://ohg1k8yu1y3r" path="res://Entities/Items/Weapons/ProjectileWeapons/Revolver/Revolver.tscn" id="4_p3ec7"]
 [ext_resource type="Texture2D" uid="uid://c5iikcmayrs4h" path="res://Entities/Items/Weapons/ProjectileWeapons/Revolver/revolver_base_frame.png" id="4_xnuh3"]
-[ext_resource type="Resource" uid="uid://58oau5i62soh" path="res://Entities/Player/PlayerCore/PlayerCamera/CamFXPresets/4.tres" id="5_6hpwe"]
+[ext_resource type="Resource" uid="uid://o8dc73c74md6" path="res://Entities/Player/PlayerCore/PlayerCamera/CamFXPresets/4(NoFreeze).tres" id="5_6hpwe"]
 [ext_resource type="Script" uid="uid://bj3r5oopspj6l" path="res://Entities/Items/Projectiles/ProjectileResource.gd" id="5_u6crx"]
 [ext_resource type="Script" uid="uid://ctxa7i1mbt7ab" path="res://UI/Inventory/PlayerInventory/Crafting/CraftingIngredient.gd" id="8_cxrhl"]
 [ext_resource type="Script" uid="uid://c2gdoebfp12dq" path="res://Entities/Stats/StatMod/StatModsCacheResource.gd" id="8_fox7e"]
@@ -155,8 +155,8 @@ ammo_type = 3
 mag_size = 6
 reload_type = "Single"
 mag_reload_time = 1.0
-single_proj_reload_time = 0.2
-single_proj_reload_delay = 0.45
+single_proj_reload_time = 0.21
+single_proj_reload_delay = 0.55
 single_reload_quantity = 1
 must_reload_fully = false
 stamina_use_per_proj = 0.5

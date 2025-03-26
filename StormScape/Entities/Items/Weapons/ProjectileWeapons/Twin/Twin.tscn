@@ -1,4 +1,4 @@
-[gd_scene load_steps=30 format=3 uid="uid://cclotxo1c628r"]
+[gd_scene load_steps=29 format=3 uid="uid://cclotxo1c628r"]
 
 [ext_resource type="Script" uid="uid://ca8xdltgdyjys" path="res://Entities/Items/Weapons/ProjectileWeapons/ProjectileWeapon.gd" id="1_rrlj6"]
 [ext_resource type="Shader" uid="uid://cugs1eqtkjsbd" path="res://Utilities/Game/Shaders/TintAndGlow.gdshader" id="2_e2ush"]
@@ -305,12 +305,9 @@ tracks/9/path = NodePath(".")
 tracks/9/interp = 1
 tracks/9/loop_wrap = true
 tracks/9/keys = {
-"times": PackedFloat32Array(0.5, 0.6),
-"transitions": PackedFloat32Array(1, 1),
+"times": PackedFloat32Array(0.5),
+"transitions": PackedFloat32Array(1),
 "values": [{
-"args": [],
-"method": &"_eject_casing"
-}, {
 "args": [],
 "method": &"_eject_casing"
 }]
@@ -528,22 +525,6 @@ tracks/2/keys = {
 "values": [0.0, -0.218166, 0.0]
 }
 
-[sub_resource type="Animation" id="Animation_5s4um"]
-resource_name = "post_fire"
-step = 0.05
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("ItemSprite:scale")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector2(1, 1)]
-}
-
 [sub_resource type="Animation" id="Animation_so0ni"]
 resource_name = "single_reload"
 step = 0.05
@@ -698,7 +679,6 @@ _data = {
 &"before_single_reload": SubResource("Animation_7h51o"),
 &"final_single_reload": SubResource("Animation_6hjrq"),
 &"fire": SubResource("Animation_oaoxh"),
-&"post_fire": SubResource("Animation_5s4um"),
 &"single_reload": SubResource("Animation_so0ni")
 }
 
