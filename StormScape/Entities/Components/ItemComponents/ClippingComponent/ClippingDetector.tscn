@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://bl0lw3ov85t2w"]
+
+[node name="ClippingDetector" type="Area2D"]
+collision_layer = 0
+collision_mask = 256
+monitorable = false

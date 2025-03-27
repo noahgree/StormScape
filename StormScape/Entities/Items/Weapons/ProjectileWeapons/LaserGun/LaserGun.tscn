@@ -1,10 +1,11 @@
-[gd_scene load_steps=19 format=3 uid="uid://baxpb3crwepc0"]
+[gd_scene load_steps=20 format=3 uid="uid://baxpb3crwepc0"]
 
 [ext_resource type="Script" uid="uid://ca8xdltgdyjys" path="res://Entities/Items/Weapons/ProjectileWeapons/ProjectileWeapon.gd" id="1_v8yes"]
 [ext_resource type="Shader" uid="uid://cugs1eqtkjsbd" path="res://Utilities/Game/Shaders/TintAndGlow.gdshader" id="3_w5kxq"]
 [ext_resource type="Texture2D" uid="uid://d4fispahsus1d" path="res://Entities/Items/Weapons/ProjectileWeapons/LaserGun/LaserGunBaseCT.tres" id="4_w5kxq"]
 [ext_resource type="Texture2D" uid="uid://cw1i138jhqftk" path="res://Entities/Items/Weapons/ProjectileWeapons/LaserGun/LaserGunBaseMagCT.tres" id="7_nv3qp"]
 [ext_resource type="PackedScene" uid="uid://lw5fgm5pgoif" path="res://Entities/EntityCore/Sprites/EntityHandSprite.tscn" id="7_o1grk"]
+[ext_resource type="PackedScene" uid="uid://bl0lw3ov85t2w" path="res://Entities/Components/ItemComponents/ClippingComponent/ClippingDetector.tscn" id="8_cdpvc"]
 [ext_resource type="PackedScene" uid="uid://cpslc01s4ohj5" path="res://Entities/Items/Weapons/WeaponVFX/FiringVFX/Laser/LaserFiringVFX.tscn" id="8_nv3qp"]
 [ext_resource type="Texture2D" uid="uid://bwaiffewkyfle" path="res://Entities/Items/Weapons/ProjectileWeapons/LaserGun/LaserGunBaseGunNoMagCT.tres" id="9_cdpvc"]
 
@@ -507,19 +508,20 @@ _data = {
 &"mag_reload": SubResource("Animation_w5kxq")
 }
 
-[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_v5j41"]
-radius = 4.0
-height = 16.0
-
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_w5kxq"]
 shader = ExtResource("3_w5kxq")
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_cdpvc"]
 shader = ExtResource("3_w5kxq")
 
-[node name="LaserGun" type="Node2D"]
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_v5j41"]
+radius = 4.0
+height = 16.0
+
+[node name="LaserGun" type="Node2D" node_paths=PackedStringArray("sprites_to_tint")]
 script = ExtResource("1_v8yes")
 proj_origin = Vector2(8, -3)
+sprites_to_tint = [NodePath("ItemSprite"), NodePath("Mag"), NodePath("GunNoMag")]
 
 [node name="ItemSprite" type="AnimatedSprite2D" parent="."]
 light_mask = 2
@@ -538,15 +540,6 @@ speed_scale = 6.0
 
 [node name="ProjectileOrigin" type="Marker2D" parent="."]
 position = Vector2(8, -3)
-
-[node name="ClippingDetector" type="Area2D" parent="."]
-collision_layer = 0
-collision_mask = 241
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="ClippingDetector"]
-position = Vector2(0, -2)
-rotation = -1.5708
-shape = SubResource("CapsuleShape2D_v5j41")
 
 [node name="Mag" type="Sprite2D" parent="."]
 visible = false
@@ -575,3 +568,10 @@ position = Vector2(-5, 1)
 [node name="FiringVFX" parent="." instance=ExtResource("8_nv3qp")]
 position = Vector2(8, -3)
 glow_strength = 0.0
+
+[node name="ClippingDetector" parent="." instance=ExtResource("8_cdpvc")]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ClippingDetector"]
+position = Vector2(0, -2)
+rotation = -1.5708
+shape = SubResource("CapsuleShape2D_v5j41")

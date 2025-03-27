@@ -1,4 +1,4 @@
-[gd_scene load_steps=26 format=3 uid="uid://c17oqm8amalvy"]
+[gd_scene load_steps=27 format=3 uid="uid://c17oqm8amalvy"]
 
 [ext_resource type="Script" uid="uid://ca8xdltgdyjys" path="res://Entities/Items/Weapons/ProjectileWeapons/ProjectileWeapon.gd" id="1_c0tnr"]
 [ext_resource type="PackedScene" uid="uid://wda4fiuxi8kh" path="res://Entities/Items/Weapons/WeaponVFX/FiringVFX/Simple/SimpleFiringVFX.tscn" id="2_ol8xj"]
@@ -8,6 +8,7 @@
 [ext_resource type="Texture2D" uid="uid://d4c1eg61h0vss" path="res://Entities/Items/Weapons/ProjectileWeapons/Gattler/GattlerBaseSpriteNoMagCT.tres" id="7_ol8xj"]
 [ext_resource type="PackedScene" uid="uid://cqb0f242y4m2j" path="res://Utilities/Debug/DebugBox.tscn" id="8_egoiu"]
 [ext_resource type="Texture2D" uid="uid://bpl5dnvhutpm2" path="res://Entities/Items/Weapons/ProjectileWeapons/Gattler/GattlerBaseMagCT.tres" id="8_wwtqj"]
+[ext_resource type="PackedScene" uid="uid://bl0lw3ov85t2w" path="res://Entities/Components/ItemComponents/ClippingComponent/ClippingDetector.tscn" id="9_ol8xj"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_fnsui"]
 shader = ExtResource("3_c0tnr")
@@ -508,10 +509,6 @@ _data = {
 &"mag_reload": SubResource("Animation_egoiu")
 }
 
-[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_c0tnr"]
-radius = 4.0
-height = 24.0
-
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_5ul7m"]
 shader = ExtResource("3_c0tnr")
 
@@ -525,11 +522,16 @@ width = 100
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_lc3de"]
 shader = ExtResource("3_c0tnr")
 
-[node name="Gattler" type="Node2D"]
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_c0tnr"]
+radius = 4.0
+height = 24.0
+
+[node name="Gattler" type="Node2D" node_paths=PackedStringArray("sprites_to_tint")]
 script = ExtResource("1_c0tnr")
 proj_origin = Vector2(18, -1)
 particle_emission_extents = Vector2(9, 1)
 particle_emission_origin = Vector2(8, -2)
+sprites_to_tint = [NodePath("ItemSprite"), NodePath("GunNoMag"), NodePath("Mag")]
 
 [node name="ItemSprite" type="AnimatedSprite2D" parent="."]
 clip_children = 2
@@ -568,16 +570,6 @@ position = Vector2(-17, 0)
 
 [node name="MainHandSprite" parent="." instance=ExtResource("5_74nn5")]
 position = Vector2(-7, -8)
-
-[node name="ClippingDetector" type="Area2D" parent="."]
-collision_layer = 0
-collision_mask = 241
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="ClippingDetector"]
-position = Vector2(6, -1)
-rotation = -1.5708
-shape = SubResource("CapsuleShape2D_c0tnr")
-debug_color = Color(0, 0.6, 0.7, 0.075)
 
 [node name="DebugEmissionBox" parent="." instance=ExtResource("8_egoiu")]
 polygon = PackedVector2Array(-1, -3, 17, -3, 17, -1, -1, -1)
@@ -622,3 +614,11 @@ position = Vector2(-10, -2)
 
 [node name="FiringVFX" parent="." instance=ExtResource("2_ol8xj")]
 position = Vector2(30, -1)
+
+[node name="ClippingDetector" parent="." instance=ExtResource("9_ol8xj")]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ClippingDetector"]
+position = Vector2(6, -1)
+rotation = -1.5708
+shape = SubResource("CapsuleShape2D_c0tnr")
+debug_color = Color(0, 0.6, 0.7, 0.075)

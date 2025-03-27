@@ -1,4 +1,4 @@
-[gd_scene load_steps=27 format=3 uid="uid://3d4ghsubde4w"]
+[gd_scene load_steps=28 format=3 uid="uid://3d4ghsubde4w"]
 
 [ext_resource type="Script" uid="uid://ca8xdltgdyjys" path="res://Entities/Items/Weapons/ProjectileWeapons/ProjectileWeapon.gd" id="1_s8t10"]
 [ext_resource type="Shader" uid="uid://cugs1eqtkjsbd" path="res://Utilities/Game/Shaders/TintAndGlow.gdshader" id="2_be6ii"]
@@ -9,6 +9,7 @@
 [ext_resource type="PackedScene" uid="uid://wda4fiuxi8kh" path="res://Entities/Items/Weapons/WeaponVFX/FiringVFX/Simple/SimpleFiringVFX.tscn" id="8_uhlvh"]
 [ext_resource type="Texture2D" uid="uid://bj4xowuewlfds" path="res://Entities/Items/Weapons/WeaponVFX/FiringVFX/Simple/simple1.png" id="9_1b6to"]
 [ext_resource type="Texture2D" uid="uid://x4r8ekls13jt" path="res://Entities/Items/Weapons/WeaponVFX/FiringVFX/Simple/simple2.png" id="10_38fii"]
+[ext_resource type="PackedScene" uid="uid://bl0lw3ov85t2w" path="res://Entities/Components/ItemComponents/ClippingComponent/ClippingDetector.tscn" id="10_uhlvh"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_1hxt5"]
 shader = ExtResource("2_be6ii")
@@ -540,10 +541,6 @@ _data = {
 &"mag_reload": SubResource("Animation_w5kxq")
 }
 
-[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_a54jg"]
-radius = 3.0
-height = 20.0
-
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_42yur"]
 shader = ExtResource("2_be6ii")
 
@@ -605,9 +602,14 @@ animations = [{
 "speed": 5.0
 }]
 
-[node name="RifleX" type="Node2D"]
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_a54jg"]
+radius = 3.0
+height = 12.0
+
+[node name="RifleX" type="Node2D" node_paths=PackedStringArray("sprites_to_tint")]
 script = ExtResource("1_s8t10")
 proj_origin = Vector2(16, -3.5)
+sprites_to_tint = [NodePath("ItemSprite"), NodePath("Mag"), NodePath("GunNoMag")]
 
 [node name="ItemSprite" type="AnimatedSprite2D" parent="."]
 light_mask = 2
@@ -629,15 +631,6 @@ speed_scale = 0.5
 
 [node name="ProjectileOrigin" type="Marker2D" parent="."]
 position = Vector2(16, -3.5)
-
-[node name="ClippingDetector" type="Area2D" parent="."]
-collision_layer = 0
-collision_mask = 241
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="ClippingDetector"]
-position = Vector2(6, -3)
-rotation = -1.5708
-shape = SubResource("CapsuleShape2D_a54jg")
 
 [node name="Mag" type="Sprite2D" parent="."]
 visible = false
@@ -669,3 +662,10 @@ position = Vector2(-2, -3)
 [node name="FiringVFX" parent="." instance=ExtResource("8_uhlvh")]
 position = Vector2(28, -3.5)
 sprite_frames = SubResource("SpriteFrames_a54jg")
+
+[node name="ClippingDetector" parent="." instance=ExtResource("10_uhlvh")]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ClippingDetector"]
+position = Vector2(10, -3)
+rotation = -1.5708
+shape = SubResource("CapsuleShape2D_a54jg")

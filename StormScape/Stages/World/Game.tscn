@@ -1,4 +1,4 @@
-[gd_scene load_steps=71 format=4 uid="uid://bscnr6a23l10m"]
+[gd_scene load_steps=72 format=4 uid="uid://bscnr6a23l10m"]
 
 [ext_resource type="Script" uid="uid://mdtvdhu78iqm" path="res://Utilities/Game/WorldRoot/WorldRoot.gd" id="1_q0i4n"]
 [ext_resource type="Script" uid="uid://dpbgynf55anlv" path="res://Stages/World/BackgroundMusicManager.gd" id="1_q5pr2"]
@@ -27,6 +27,7 @@
 [ext_resource type="Script" uid="uid://cgese4xtht2od" path="res://Stages/World/Storm/StormVisuals/StormVisuals.gd" id="27_8kcf2"]
 [ext_resource type="Shader" uid="uid://bilestavf27wc" path="res://Utilities/Game/Shaders/ScreenFog.gdshader" id="30_rhtsc"]
 [ext_resource type="Texture2D" uid="uid://daa6casude472" path="res://Utilities/Game/Particles/light_ray.png" id="31_melxk"]
+[ext_resource type="PackedScene" uid="uid://jdi552emuah8" path="res://Utilities/Debug/TestRock1.tscn" id="32_melxk"]
 [ext_resource type="Texture2D" uid="uid://cx7u0pbdtc6eb" path="res://Utilities/Game/Particles/grunge_light.png" id="32_s5gqv"]
 [ext_resource type="Texture2D" uid="uid://dsago31sb51b0" path="res://Stages/World/Storm/StormNoise1.tres" id="42_s5gqv"]
 [ext_resource type="Script" uid="uid://bcjwesiannbd0" path="res://Entities/Stats/StatMod/StatMod.gd" id="43_0c5fh"]
@@ -585,6 +586,18 @@ stats = SubResource("Resource_jb7gg")
 [node name="TestTree6" parent="WorldRoot/Testing" instance=ExtResource("17_45bjv")]
 position = Vector2(-242, 119)
 stats = SubResource("Resource_3156l")
+
+[node name="TestRock1" parent="WorldRoot/Testing" instance=ExtResource("32_melxk")]
+position = Vector2(363, 71)
+
+[node name="TestRock2" parent="WorldRoot/Testing" instance=ExtResource("32_melxk")]
+position = Vector2(420, 43)
+
+[node name="TestRock3" parent="WorldRoot/Testing" instance=ExtResource("32_melxk")]
+position = Vector2(443, 79)
+
+[node name="TestRock4" parent="WorldRoot/Testing" instance=ExtResource("32_melxk")]
+position = Vector2(423, 116)
 
 [node name="Player" parent="WorldRoot" instance=ExtResource("4_ptig0")]
 position = Vector2(226, 75)

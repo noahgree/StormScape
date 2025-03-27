@@ -1,8 +1,9 @@
-[gd_scene load_steps=12 format=3 uid="uid://c7gjhm55x8ymc"]
+[gd_scene load_steps=13 format=3 uid="uid://c7gjhm55x8ymc"]
 
 [ext_resource type="Script" uid="uid://ca8xdltgdyjys" path="res://Entities/Items/Weapons/ProjectileWeapons/ProjectileWeapon.gd" id="1_sguuu"]
 [ext_resource type="Shader" uid="uid://cugs1eqtkjsbd" path="res://Utilities/Game/Shaders/TintAndGlow.gdshader" id="3_riusn"]
 [ext_resource type="Texture2D" uid="uid://b4bumm88u2qmw" path="res://Entities/Items/Weapons/ProjectileWeapons/BottleOFire/FireBottleThrowableCT.tres" id="4_hbtxu"]
+[ext_resource type="PackedScene" uid="uid://bl0lw3ov85t2w" path="res://Entities/Components/ItemComponents/ClippingComponent/ClippingDetector.tscn" id="5_fgpay"]
 [ext_resource type="PackedScene" uid="uid://lw5fgm5pgoif" path="res://Entities/EntityCore/Sprites/EntityHandSprite.tscn" id="5_hbtxu"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_t0vfb"]
@@ -137,8 +138,9 @@ _data = {
 radius = 2.82843
 height = 14.0
 
-[node name="BottleOFire" type="Node2D"]
+[node name="BottleOFire" type="Node2D" node_paths=PackedStringArray("sprites_to_tint")]
 script = ExtResource("1_sguuu")
+sprites_to_tint = [NodePath("ItemSprite")]
 
 [node name="ItemSprite" type="AnimatedSprite2D" parent="."]
 light_mask = 2
@@ -155,9 +157,7 @@ libraries = {
 [node name="MainHandSprite" parent="." instance=ExtResource("5_hbtxu")]
 position = Vector2(-4, 5)
 
-[node name="ClippingDetector" type="Area2D" parent="."]
-collision_layer = 0
-collision_mask = 241
+[node name="ClippingDetector" parent="." instance=ExtResource("5_fgpay")]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="ClippingDetector"]
 position = Vector2(1, 0)

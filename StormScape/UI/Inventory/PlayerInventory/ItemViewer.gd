@@ -6,6 +6,7 @@ class_name ItemViewer
 ## Every item is viewable, but only weapons with moddability have mod spots displayed.
 
 @export var ammo_viewer_margin: MarginContainer ## The slot that shows the ammo type of the main viewed item.
+@export var stamina_ammo_icon: Texture2D ## The icon used for stamina when displaying ammo type of viewed weapon.
 
 @onready var item_viewer_slot: Slot = %ItemViewerSlot ## The slot that holds the item under review.
 @onready var mod_slots_container: GridContainer = %ModSlots ## The container whose children are mod slots.
@@ -164,13 +165,13 @@ func _update_ammo_viewer_slot(new_item: ItemResource) -> void:
 		if new_item.ammo_type not in [ProjWeaponResource.ProjAmmoType.NONE, ProjWeaponResource.ProjAmmoType.SELF, ProjWeaponResource.ProjAmmoType.CHARGES]:
 			ammo_viewer_margin.visible = true
 			if new_item.ammo_type == ProjWeaponResource.ProjAmmoType.STAMINA:
-				pass # SHOW STAMINA ICON
+				ammo_viewer_margin.get_node("%AmmoIcon").texture = stamina_ammo_icon
 			else:
 				var ammo_item: ProjAmmoResource = CraftingManager.get_item_by_id(ProjWeaponResource.get_ammo_item_id_by_enum_value(new_item.ammo_type))
 				ammo_viewer_margin.get_node("%AmmoIcon").texture = ammo_item.inv_icon
 	else:
 		ammo_viewer_margin.visible = true
-		pass # SHOW STAMINA ICON
+		ammo_viewer_margin.get_node("%AmmoIcon").texture = stamina_ammo_icon
 
 ## Changes the visibility of the mod slots depending on whether we have a moddable weapon under review.
 func _change_mod_slot_visibilities(shown: bool, stats: WeaponResource = null) -> void:

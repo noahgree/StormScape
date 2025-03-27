@@ -11,6 +11,6 @@ func _get_configuration_warnings() -> PackedStringArray:
 	var warnings: PackedStringArray = []
 	for sprite_node: Node2D in sprites_to_tint:
 		if not sprite_node.material is ShaderMaterial:
-			warnings.append("Weapon sprites must have the \"TintAndGlow\" shader applied.")
+			warnings.append("Weapon sprites in the \"sprites_to_tint\" must have the \"TintAndGlow\" shader applied.")
 			break
 	return warnings

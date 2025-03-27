@@ -1,0 +1,8 @@
+[gd_resource type="CanvasTexture" load_steps=3 format=3 uid="uid://c7aiduird3lcp"]
+
+[ext_resource type="Texture2D" uid="uid://b56urk8looch5" path="res://Entities/Items/Weapons/ProjectileWeapons/Flintlock/flintlock_base_frame.png" id="1_d728c"]
+[ext_resource type="Texture2D" uid="uid://cq5djb1n53ltv" path="res://Entities/Items/Weapons/ProjectileWeapons/Flintlock/flintlock_base_frame_n.png" id="2_r5lq4"]
+
+[resource]
+diffuse_texture = ExtResource("1_d728c")
+normal_texture = ExtResource("2_r5lq4")

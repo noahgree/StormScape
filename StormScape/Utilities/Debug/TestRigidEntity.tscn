@@ -1,4 +1,4 @@
-[gd_scene load_steps=42 format=3 uid="uid://xsq1q0fffsin"]
+[gd_scene load_steps=43 format=3 uid="uid://xsq1q0fffsin"]
 
 [ext_resource type="Script" uid="uid://nup3um166s32" path="res://Entities/EntityCore/EntityTypes/RigidEntity/RigidEntity.gd" id="1_6tnit"]
 [ext_resource type="Script" uid="uid://c2gdoebfp12dq" path="res://Entities/Stats/StatMod/StatModsCacheResource.gd" id="2_ps53t"]
@@ -27,6 +27,7 @@
 [ext_resource type="Resource" uid="uid://bdjhfsluk53lc" path="res://Entities/Items/TRESItems/Medium(0).tres" id="24_ccp8j"]
 [ext_resource type="PackedScene" uid="uid://jpq0ij8wwlhy" path="res://Entities/Components/FacingComponent/FacingComponent.tscn" id="24_i2rwd"]
 [ext_resource type="Resource" uid="uid://caxftf2aer6g4" path="res://Entities/Items/TRESItems/Igniter(4).tres" id="25_iirwy"]
+[ext_resource type="PackedScene" uid="uid://2yy4xfm5g74l" path="res://Entities/Components/ItemComponents/ClippingComponent/ClippingArea.tscn" id="28_2xjsy"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_ljryo"]
 rough = true
@@ -36,7 +37,7 @@ script = ExtResource("2_ps53t")
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_sbju2"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_arbka"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_mdi77"]
 resource_local_to_scene = true
 shader = ExtResource("4_l6rwf")
 
@@ -138,7 +139,7 @@ debug_color = Color(1.44392e-06, 0.568839, 0.851513, 0.42)
 
 [node name="EntitySprite" parent="." instance=ExtResource("3_nv7a0")]
 unique_name_in_owner = true
-material = SubResource("ShaderMaterial_arbka")
+material = SubResource("ShaderMaterial_mdi77")
 position = Vector2(0, -10)
 scale = Vector2(0.156, 0.156)
 sprite_frames = SubResource("SpriteFrames_fg1br")
@@ -193,3 +194,10 @@ hit_spawn_chance = 0.0
 
 [node name="AnimationTree" type="AnimationTree" parent="."]
 anim_player = NodePath("../AnimationPlayer")
+
+[node name="ClippingArea" parent="." instance=ExtResource("28_2xjsy")]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ClippingArea"]
+position = Vector2(0, -10)
+shape = SubResource("RectangleShape2D_wpovd")
+debug_color = Color(1, 0.013803, 0.00528418, 0.42)

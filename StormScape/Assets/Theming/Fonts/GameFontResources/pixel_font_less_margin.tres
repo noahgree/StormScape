@@ -1,0 +1,7 @@
+[gd_resource type="FontVariation" load_steps=2 format=3 uid="uid://by478cplv5w4n"]
+
+[ext_resource type="FontFile" uid="uid://bp2lgrlhj8cet" path="res://Assets/Theming/Fonts/Pixel/C&C Red Alert [INET].ttf" id="1_pohc2"]
+
+[resource]
+base_font = ExtResource("1_pohc2")
+spacing_bottom = -1

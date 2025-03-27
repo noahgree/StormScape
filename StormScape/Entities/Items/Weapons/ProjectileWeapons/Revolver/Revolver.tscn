@@ -5,7 +5,7 @@
 [ext_resource type="Shader" uid="uid://cugs1eqtkjsbd" path="res://Utilities/Game/Shaders/TintAndGlow.gdshader" id="3_1bvjq"]
 [ext_resource type="Texture2D" uid="uid://bii14bglra82s" path="res://Entities/Items/Weapons/ProjectileWeapons/Revolver/RevolverBaseCT.tres" id="4_1bvjq"]
 [ext_resource type="PackedScene" uid="uid://lw5fgm5pgoif" path="res://Entities/EntityCore/Sprites/EntityHandSprite.tscn" id="5_1bvjq"]
-[ext_resource type="Texture2D" uid="uid://cs3clmnktksd6" path="res://Entities/Player/PlayerCore/player_hand.png" id="7_qcgld"]
+[ext_resource type="PackedScene" uid="uid://bl0lw3ov85t2w" path="res://Entities/Components/ItemComponents/ClippingComponent/ClippingDetector.tscn" id="6_1bvjq"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_i1ire"]
 shader = ExtResource("3_1bvjq")
@@ -409,9 +409,10 @@ _data = {
 radius = 3.0
 height = 18.0
 
-[node name="Revolver" type="Node2D"]
+[node name="Revolver" type="Node2D" node_paths=PackedStringArray("sprites_to_tint")]
 script = ExtResource("1_ek4d5")
 proj_origin = Vector2(10, -4)
+sprites_to_tint = [NodePath("ItemSprite")]
 
 [node name="ItemSprite" type="AnimatedSprite2D" parent="."]
 light_mask = 2
@@ -430,22 +431,19 @@ libraries = {
 [node name="ProjectileOrigin" type="Marker2D" parent="."]
 position = Vector2(10, -4)
 
-[node name="ClippingDetector" type="Area2D" parent="."]
-collision_layer = 0
-collision_mask = 241
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="ClippingDetector"]
-position = Vector2(1, -3)
-rotation = -1.5708
-shape = SubResource("CapsuleShape2D_d15iv")
-
 [node name="ReloadOffHand" parent="." instance=ExtResource("5_1bvjq")]
 visible = false
 position = Vector2(4, 0)
-texture = ExtResource("7_qcgld")
 
 [node name="CasingEjectionPoint" type="Marker2D" parent="."]
 position = Vector2(-3, -3)
 
 [node name="FiringVFX" parent="." instance=ExtResource("2_qcgld")]
 position = Vector2(22, -4)
+
+[node name="ClippingDetector" parent="." instance=ExtResource("6_1bvjq")]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ClippingDetector"]
+position = Vector2(1, -3)
+rotation = -1.5708
+shape = SubResource("CapsuleShape2D_d15iv")

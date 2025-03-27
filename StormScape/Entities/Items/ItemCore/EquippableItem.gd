@@ -48,18 +48,18 @@ func _ready() -> void:
 	_set_stats(stats)
 
 	if clipping_detector != null:
-		clipping_detector.body_entered.connect(_on_item_starts_to_clip)
-		clipping_detector.body_exited.connect(_on_item_leaves_clipping_body)
+		clipping_detector.area_entered.connect(_on_item_enters_clipping_area)
+		clipping_detector.area_exited.connect(_on_item_leaves_clipping_area)
 
 ## Disables the item when it starts to clip. Only applies to items with clipping detectors.
-func _on_item_starts_to_clip(body: Node2D) -> void:
-	if body != source_entity:
+func _on_item_enters_clipping_area(area: Area2D) -> void:
+	if area.owner != source_entity:
 		enabled = false
 
 ## Enables the item when it stops clipping. Only applies to items with clipping detectors.
-func _on_item_leaves_clipping_body(body: Node2D) -> void:
+func _on_item_leaves_clipping_area(area: Area2D) -> void:
 	var overlaps: Array[Node2D] = clipping_detector.get_overlapping_bodies()
-	if (overlaps.is_empty() and body != source_entity) or (overlaps.size() == 1 and overlaps[0] == source_entity):
+	if (overlaps.is_empty() and area.owner != source_entity) or (overlaps.size() == 1 and overlaps[0].owner == source_entity):
 		enabled = true
 
 ## Intended to be overridden by child classes in order to specify what to do when this item is disabled.

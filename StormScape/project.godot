@@ -177,6 +177,7 @@ debug_stop={
 2d_physics/layer_6="OBJECTS"
 2d_physics/layer_7="TERRAIN"
 2d_physics/layer_8="PICKUPS"
+2d_physics/layer_9="WEAPON_BLOCK"
 
 [rendering]
 

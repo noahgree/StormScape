@@ -14,7 +14,7 @@
 [ext_resource type="PackedScene" uid="uid://c17oqm8amalvy" path="res://Entities/Items/Weapons/ProjectileWeapons/Gattler/Gattler.tscn" id="6_huwqf"]
 [ext_resource type="Script" uid="uid://bj3r5oopspj6l" path="res://Entities/Items/Projectiles/ProjectileResource.gd" id="8_evybt"]
 [ext_resource type="Script" uid="uid://c2gdoebfp12dq" path="res://Entities/Stats/StatMod/StatModsCacheResource.gd" id="11_ojoph"]
-[ext_resource type="PackedScene" uid="uid://bvvoum83clkyb" path="res://Entities/Items/Projectiles/Bullets/Large/LargeBullet.tscn" id="13_evybt"]
+[ext_resource type="PackedScene" uid="uid://bqkyplubhsx43" path="res://Entities/Items/Projectiles/Bullets/SmallBullet/SmallBullet.tscn" id="12_evybt"]
 
 [sub_resource type="Curve" id="Curve_upocd"]
 _data = [Vector2(0, 0.00289726), 0.0, 0.0, 0, 0, Vector2(0.149254, 0), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
@@ -178,7 +178,7 @@ point_count = 2
 script = ExtResource("2_mpv0r")
 proj_weapon_type = 9
 firing_mode = "Auto"
-projectile_scn = ExtResource("13_evybt")
+projectile_scn = ExtResource("12_evybt")
 firing_duration = 0.06
 fire_cooldown = 0.04
 min_charge_time = 1.0

@@ -1,4 +1,4 @@
-[gd_scene load_steps=28 format=3 uid="uid://b52c5c7hj2vd"]
+[gd_scene load_steps=30 format=3 uid="uid://b52c5c7hj2vd"]
 
 [ext_resource type="Script" uid="uid://cn2gulskgn7k3" path="res://Entities/EntityCore/EntityTypes/StaticEntity/StaticEntity.gd" id="1_4yxmu"]
 [ext_resource type="Script" uid="uid://c2gdoebfp12dq" path="res://Entities/Stats/StatMod/StatModsCacheResource.gd" id="2_5qk3y"]
@@ -18,10 +18,10 @@
 [ext_resource type="Resource" uid="uid://dbnhbsphiw4oe" path="res://Entities/Items/TRESItems/SpruceLog(0).tres" id="12_8oice"]
 [ext_resource type="PackedScene" uid="uid://jpq0ij8wwlhy" path="res://Entities/Components/FacingComponent/FacingComponent.tscn" id="12_o33n8"]
 [ext_resource type="PackedScene" uid="uid://bhcqtorpyerc3" path="res://Utilities/Debug/ParticleEmissionComponent.tscn" id="17_2kecs"]
+[ext_resource type="PackedScene" uid="uid://2yy4xfm5g74l" path="res://Entities/Components/ItemComponents/ClippingComponent/ClippingArea.tscn" id="19_7biur"]
 
 [sub_resource type="Resource" id="Resource_s42vq"]
 script = ExtResource("2_5qk3y")
-debug_print_mod_changes = false
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_l7ldg"]
 radius = 7.0
@@ -65,8 +65,12 @@ script = ExtResource("10_lnwim")
 hit_loot_table = Array[ExtResource("8_v4qb0")]([SubResource("Resource_m6yab")])
 die_loot_table = Array[ExtResource("8_v4qb0")]([])
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_r6tnu"]
+size = Vector2(14, 19)
+
 [node name="TestTree1" type="StaticBody2D"]
-collision_layer = 16
+collision_layer = 0
+collision_mask = 0
 script = ExtResource("1_4yxmu")
 team = 2
 stats = SubResource("Resource_s42vq")
@@ -137,3 +141,11 @@ above_origin = Vector2(6, -92)
 
 [node name="AnimationTree" type="AnimationTree" parent="."]
 anim_player = NodePath("../AnimationPlayer")
+
+[node name="ClippingArea" parent="." instance=ExtResource("19_7biur")]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ClippingArea"]
+position = Vector2(0, -7)
+rotation = -1.5708
+shape = SubResource("RectangleShape2D_r6tnu")
+debug_color = Color(0.978426, 0, 0.39628, 0.251)

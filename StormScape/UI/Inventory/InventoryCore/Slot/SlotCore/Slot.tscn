@@ -7,7 +7,7 @@
 [ext_resource type="Texture2D" uid="uid://dbm40lvpgbd8t" path="res://Utilities/Game/Particles/dense_light.png" id="5_dhreg"]
 [ext_resource type="Shader" uid="uid://bhox1e3shq3iq" path="res://Utilities/Game/Shaders/ProgressAlpha.gdshader" id="5_xform"]
 [ext_resource type="Shader" uid="uid://cwbeekjoy0uyh" path="res://Utilities/Game/Shaders/GlintShader.gdshader" id="6_l1uky"]
-[ext_resource type="FontFile" uid="uid://bp2lgrlhj8cet" path="res://Assets/Theming/Fonts/Pixel/C&C Red Alert [INET].ttf" id="7_ros2i"]
+[ext_resource type="FontVariation" uid="uid://by478cplv5w4n" path="res://Assets/Theming/Fonts/GameFontResources/pixel_font_less_margin.tres" id="7_ros2i"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_me41j"]
 shader = ExtResource("5_xform")

@@ -1,10 +1,11 @@
-[gd_scene load_steps=15 format=3 uid="uid://btaigaokvm7qx"]
+[gd_scene load_steps=16 format=3 uid="uid://btaigaokvm7qx"]
 
 [ext_resource type="Script" uid="uid://ca8xdltgdyjys" path="res://Entities/Items/Weapons/ProjectileWeapons/ProjectileWeapon.gd" id="1_37k38"]
 [ext_resource type="Shader" uid="uid://cugs1eqtkjsbd" path="res://Utilities/Game/Shaders/TintAndGlow.gdshader" id="3_8dt34"]
 [ext_resource type="Texture2D" uid="uid://bfoy8x1f7gqq7" path="res://Entities/Items/Weapons/ProjectileWeapons/EagleEye/EagleEyeBaseCT.tres" id="4_8dt34"]
 [ext_resource type="PackedScene" uid="uid://lw5fgm5pgoif" path="res://Entities/EntityCore/Sprites/EntityHandSprite.tscn" id="5_8dt34"]
 [ext_resource type="PackedScene" uid="uid://wda4fiuxi8kh" path="res://Entities/Items/Weapons/WeaponVFX/FiringVFX/Simple/SimpleFiringVFX.tscn" id="6_8dt34"]
+[ext_resource type="PackedScene" uid="uid://bl0lw3ov85t2w" path="res://Entities/Components/ItemComponents/ClippingComponent/ClippingDetector.tscn" id="6_p3stu"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_ej2m0"]
 shader = ExtResource("3_8dt34")
@@ -254,12 +255,13 @@ _data = {
 }
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_p16mq"]
-radius = 3.0
-height = 28.0
+radius = 2.0
+height = 16.0
 
-[node name="EagleEye" type="Node2D"]
+[node name="EagleEye" type="Node2D" node_paths=PackedStringArray("sprites_to_tint")]
 script = ExtResource("1_37k38")
 proj_origin = Vector2(16, -2)
+sprites_to_tint = [NodePath("ItemSprite")]
 
 [node name="ItemSprite" type="AnimatedSprite2D" parent="."]
 light_mask = 2
@@ -280,17 +282,15 @@ libraries = {
 [node name="ProjectileOrigin" type="Marker2D" parent="."]
 position = Vector2(16, -2)
 
-[node name="ClippingDetector" type="Area2D" parent="."]
-collision_layer = 0
-collision_mask = 241
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="ClippingDetector"]
-position = Vector2(2, -1)
-rotation = -1.5708
-shape = SubResource("CapsuleShape2D_p16mq")
-
 [node name="CasingEjectionPoint" type="Marker2D" parent="."]
 position = Vector2(-4, -1)
 
 [node name="FiringVFX" parent="." instance=ExtResource("6_8dt34")]
 position = Vector2(28, -2)
+
+[node name="ClippingDetector" parent="." instance=ExtResource("6_p3stu")]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ClippingDetector"]
+position = Vector2(8, -2)
+rotation = -1.5708
+shape = SubResource("CapsuleShape2D_p16mq")

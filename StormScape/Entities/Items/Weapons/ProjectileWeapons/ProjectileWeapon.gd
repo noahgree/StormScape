@@ -774,6 +774,7 @@ func _start_post_fire_anim() -> void:
 		if anim_player.is_playing(): # Can happen if we start a reload during this delay
 			return
 
+	source_entity.hands.off_hand_sprite.self_modulate.a = 0.0
 	anim_player.play("post_fire")
 
 ## Starts the post-firing sound and vfx if we have one. Good for things like the cocking of a shotgun
@@ -796,6 +797,9 @@ func _apply_firing_effect_to_entity() -> void:
 ## Checks if we need ammo after the post-firing animation has ended.
 func _on_any_animation_finished(anim_name: StringName) -> void:
 	if anim_name == "post_fire":
+		await get_tree().process_frame
+		if not is_reloading:
+			source_entity.hands.off_hand_sprite.self_modulate.a = 1.0
 		_get_has_needed_ammo_and_reload_if_not()
 #endregion
 
@@ -878,8 +882,6 @@ func _start_reload_anim(anim_name: String) -> void:
 		anim_player.play("RESET")
 		anim_player.stop()
 
-	source_entity.hands.off_hand_sprite.self_modulate.a = 0.0
-
 	if anim_name == "before_single_reload":
 		var dur: float = single_reload_delay_timer.wait_time if stats.before_single_reload_anim_dur <= 0 else (min(stats.single_proj_reload_delay, stats.before_single_reload_anim_dur))
 		anim_player.speed_scale = 1.0 / (dur - 0.025) # 0.025 is a buffer to prevent overlap
@@ -892,6 +894,7 @@ func _start_reload_anim(anim_name: String) -> void:
 		var dur: float = reload_timer.wait_time if stats.reload_anim_dur <= 0 else (min(mag_reload_time, stats.reload_anim_dur))
 		anim_player.speed_scale = 1.0 / (dur - 0.025)
 
+	source_entity.hands.off_hand_sprite.self_modulate.a = 0.0
 	anim_player.play(anim_name)
 
 ## Reshows the hand component's off hand and hides the local reload hand.

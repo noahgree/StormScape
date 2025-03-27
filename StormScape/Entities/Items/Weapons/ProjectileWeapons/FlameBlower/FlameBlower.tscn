@@ -1,8 +1,9 @@
-[gd_scene load_steps=19 format=3 uid="uid://dxv8dhn3gmufw"]
+[gd_scene load_steps=20 format=3 uid="uid://dxv8dhn3gmufw"]
 
 [ext_resource type="Script" uid="uid://ca8xdltgdyjys" path="res://Entities/Items/Weapons/ProjectileWeapons/ProjectileWeapon.gd" id="1_7mk4f"]
 [ext_resource type="Shader" uid="uid://cugs1eqtkjsbd" path="res://Utilities/Game/Shaders/TintAndGlow.gdshader" id="3_qpgmn"]
 [ext_resource type="Texture2D" uid="uid://t54taecjg640" path="res://Entities/Items/Weapons/ProjectileWeapons/FlameBlower/FlameBlowerBaseCT.tres" id="4_qpgmn"]
+[ext_resource type="PackedScene" uid="uid://bl0lw3ov85t2w" path="res://Entities/Components/ItemComponents/ClippingComponent/ClippingDetector.tscn" id="6_qpgmn"]
 [ext_resource type="PackedScene" uid="uid://lw5fgm5pgoif" path="res://Entities/EntityCore/Sprites/EntityHandSprite.tscn" id="7_xc27p"]
 [ext_resource type="PackedScene" uid="uid://cqb0f242y4m2j" path="res://Utilities/Debug/DebugBox.tscn" id="8_yltag"]
 
@@ -169,11 +170,12 @@ _data = {
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_0s14j"]
 radius = 6.0
 
-[node name="FlameBlower" type="Node2D"]
+[node name="FlameBlower" type="Node2D" node_paths=PackedStringArray("sprites_to_tint")]
 script = ExtResource("1_7mk4f")
 proj_origin = Vector2(19, 3)
 particle_emission_extents = Vector2(6, 1)
 particle_emission_origin = Vector2(11, 2)
+sprites_to_tint = [NodePath("ItemSprite")]
 
 [node name="ItemSprite" type="AnimatedSprite2D" parent="."]
 clip_children = 2
@@ -211,15 +213,12 @@ position = Vector2(1, 7)
 [node name="MainHandSprite" parent="." instance=ExtResource("7_xc27p")]
 position = Vector2(-16, 3)
 
-[node name="ClippingDetector" type="Area2D" parent="."]
-visible = false
-collision_layer = 0
-collision_mask = 241
+[node name="SmokeEmissionBox" parent="." instance=ExtResource("8_yltag")]
+polygon = PackedVector2Array(5, 1, 17, 1, 17, 3, 5, 3)
+
+[node name="ClippingDetector" parent="." instance=ExtResource("6_qpgmn")]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="ClippingDetector"]
 position = Vector2(4, 2)
 rotation = -1.5708
 shape = SubResource("CapsuleShape2D_0s14j")
-
-[node name="SmokeEmissionBox" parent="." instance=ExtResource("8_yltag")]
-polygon = PackedVector2Array(5, 1, 17, 1, 17, 3, 5, 3)

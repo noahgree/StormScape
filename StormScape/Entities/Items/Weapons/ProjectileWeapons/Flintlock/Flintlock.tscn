@@ -1,33 +1,33 @@
-[gd_scene load_steps=22 format=3 uid="uid://yaawws6setsr"]
+[gd_scene load_steps=22 format=3 uid="uid://ciyhsebv1hjye"]
 
-[ext_resource type="Script" uid="uid://ca8xdltgdyjys" path="res://Entities/Items/Weapons/ProjectileWeapons/ProjectileWeapon.gd" id="1_v5qva"]
-[ext_resource type="Shader" uid="uid://cugs1eqtkjsbd" path="res://Utilities/Game/Shaders/TintAndGlow.gdshader" id="2_xvb8j"]
-[ext_resource type="Texture2D" uid="uid://c2rgjjxrhv4st" path="res://Entities/Items/Weapons/ProjectileWeapons/Blunderbuss/BlunderbussBaseCT.tres" id="3_a1doo"]
-[ext_resource type="PackedScene" uid="uid://lw5fgm5pgoif" path="res://Entities/EntityCore/Sprites/EntityHandSprite.tscn" id="4_kv7d6"]
-[ext_resource type="PackedScene" uid="uid://wda4fiuxi8kh" path="res://Entities/Items/Weapons/WeaponVFX/FiringVFX/Simple/SimpleFiringVFX.tscn" id="5_3i7k4"]
-[ext_resource type="Texture2D" uid="uid://cs3clmnktksd6" path="res://Entities/Player/PlayerCore/player_hand.png" id="5_a1doo"]
-[ext_resource type="PackedScene" uid="uid://bl0lw3ov85t2w" path="res://Entities/Components/ItemComponents/ClippingComponent/ClippingDetector.tscn" id="6_ja5kv"]
-[ext_resource type="Texture2D" uid="uid://c5emnjlsu2awd" path="res://Entities/Items/Weapons/ProjectileWeapons/Blunderbuss/blunderbuss_reload_stick.png" id="7_a1doo"]
+[ext_resource type="Script" uid="uid://ca8xdltgdyjys" path="res://Entities/Items/Weapons/ProjectileWeapons/ProjectileWeapon.gd" id="1_q5mir"]
+[ext_resource type="Shader" uid="uid://cugs1eqtkjsbd" path="res://Utilities/Game/Shaders/TintAndGlow.gdshader" id="2_u874v"]
+[ext_resource type="Texture2D" uid="uid://bbdipwnbjrss3" path="res://Entities/Items/Weapons/ProjectileWeapons/Flintlock/FlintlockBaseCT.tres" id="3_lnu1l"]
+[ext_resource type="PackedScene" uid="uid://lw5fgm5pgoif" path="res://Entities/EntityCore/Sprites/EntityHandSprite.tscn" id="4_2376o"]
+[ext_resource type="Texture2D" uid="uid://cs3clmnktksd6" path="res://Entities/Player/PlayerCore/player_hand.png" id="5_1kx8x"]
+[ext_resource type="Texture2D" uid="uid://bdxalvh14nhlj" path="res://Entities/Items/Weapons/ProjectileWeapons/Flintlock/flintlock_reload_stick.png" id="5_lnu1l"]
+[ext_resource type="PackedScene" uid="uid://wda4fiuxi8kh" path="res://Entities/Items/Weapons/WeaponVFX/FiringVFX/Simple/SimpleFiringVFX.tscn" id="6_8vf3s"]
+[ext_resource type="PackedScene" uid="uid://bl0lw3ov85t2w" path="res://Entities/Components/ItemComponents/ClippingComponent/ClippingDetector.tscn" id="6_xw4ke"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_ej2m0"]
-shader = ExtResource("2_xvb8j")
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_lnu1l"]
+shader = ExtResource("2_u874v")
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_ja5kv"]
-atlas = ExtResource("3_a1doo")
-region = Rect2(0, 0, 24, 13)
+[sub_resource type="AtlasTexture" id="AtlasTexture_1kx8x"]
+atlas = ExtResource("3_lnu1l")
+region = Rect2(0, 0, 20, 15)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_vsd0h"]
-atlas = ExtResource("3_a1doo")
-region = Rect2(24, 0, 24, 13)
+[sub_resource type="AtlasTexture" id="AtlasTexture_xw4ke"]
+atlas = ExtResource("3_lnu1l")
+region = Rect2(20, 0, 20, 15)
 
-[sub_resource type="SpriteFrames" id="SpriteFrames_a1doo"]
+[sub_resource type="SpriteFrames" id="SpriteFrames_lnu1l"]
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_ja5kv")
+"texture": SubResource("AtlasTexture_1kx8x")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_vsd0h")
+"texture": SubResource("AtlasTexture_xw4ke")
 }],
 "loop": true,
 "name": &"default",
@@ -75,130 +75,106 @@ tracks/2/keys = {
 tracks/3/type = "value"
 tracks/3/imported = false
 tracks/3/enabled = true
-tracks/3/path = NodePath("ItemSprite/OffHandSprite:visible")
+tracks/3/path = NodePath("ReloadOffHand:visible")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [true]
+"values": [false]
 }
 tracks/4/type = "value"
 tracks/4/imported = false
 tracks/4/enabled = true
-tracks/4/path = NodePath("ReloadOffHand:visible")
+tracks/4/path = NodePath("ReloadOffHand:rotation")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [false]
+"update": 0,
+"values": [0.0]
 }
 tracks/5/type = "value"
 tracks/5/imported = false
 tracks/5/enabled = true
-tracks/5/path = NodePath("ReloadOffHand:rotation")
+tracks/5/path = NodePath("ReloadOffHand/ReloadStick:visible")
 tracks/5/interp = 1
 tracks/5/loop_wrap = true
 tracks/5/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [0.0]
+"update": 1,
+"values": [false]
 }
 tracks/6/type = "value"
 tracks/6/imported = false
 tracks/6/enabled = true
-tracks/6/path = NodePath("ReloadOffHand/ReloadStick:visible")
+tracks/6/path = NodePath("ReloadOffHand:position")
 tracks/6/interp = 1
 tracks/6/loop_wrap = true
 tracks/6/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [false]
+"update": 0,
+"values": [Vector2(4, 5)]
 }
 tracks/7/type = "value"
 tracks/7/imported = false
 tracks/7/enabled = true
-tracks/7/path = NodePath("ReloadOffHand:position")
+tracks/7/path = NodePath("ReloadOffHand/ReloadStick:position")
 tracks/7/interp = 1
 tracks/7/loop_wrap = true
 tracks/7/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector2(4, 5)]
+"values": [Vector2(8, 6)]
 }
 tracks/8/type = "value"
 tracks/8/imported = false
 tracks/8/enabled = true
-tracks/8/path = NodePath("ReloadOffHand/ReloadStick:position")
+tracks/8/path = NodePath("ReloadOffHand/ReloadStick:rotation")
 tracks/8/interp = 1
 tracks/8/loop_wrap = true
 tracks/8/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector2(8, 6)]
+"values": [0.0]
 }
 tracks/9/type = "value"
 tracks/9/imported = false
 tracks/9/enabled = true
-tracks/9/path = NodePath("ReloadOffHand/ReloadStick:rotation")
+tracks/9/path = NodePath("ReloadOffHand:show_behind_parent")
 tracks/9/interp = 1
 tracks/9/loop_wrap = true
 tracks/9/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [0.0]
+"update": 1,
+"values": [false]
 }
 tracks/10/type = "value"
 tracks/10/imported = false
 tracks/10/enabled = true
-tracks/10/path = NodePath("ReloadOffHand:show_behind_parent")
+tracks/10/path = NodePath("ItemSprite:frame")
 tracks/10/interp = 1
 tracks/10/loop_wrap = true
 tracks/10/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [false]
+"values": [0]
 }
 tracks/11/type = "value"
 tracks/11/imported = false
 tracks/11/enabled = true
-tracks/11/path = NodePath("ItemSprite/OffHandSprite:position")
+tracks/11/path = NodePath("ReloadOffHand/ReloadStick:instance_shader_parameters/final_alpha")
 tracks/11/interp = 1
 tracks/11/loop_wrap = true
 tracks/11/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector2(4, 5)]
-}
-tracks/12/type = "value"
-tracks/12/imported = false
-tracks/12/enabled = true
-tracks/12/path = NodePath("ItemSprite:frame")
-tracks/12/interp = 1
-tracks/12/loop_wrap = true
-tracks/12/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [0]
-}
-tracks/13/type = "value"
-tracks/13/imported = false
-tracks/13/enabled = true
-tracks/13/path = NodePath("ReloadOffHand/ReloadStick:instance_shader_parameters/final_alpha")
-tracks/13/interp = 1
-tracks/13/loop_wrap = true
-tracks/13/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
@@ -215,10 +191,10 @@ tracks/0/path = NodePath("ItemSprite:position")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.2, 0.275, 0.5, 0.525, 0.575),
+"times": PackedFloat32Array(0, 0.2, 0.275, 0.475, 0.5, 0.575),
 "transitions": PackedFloat32Array(1, 1, 1, 0, 0, 1),
 "update": 0,
-"values": [Vector2(0, 0), Vector2(-10, 2), Vector2(-10, 2), Vector2(-10, 2), Vector2(-10.5, 2.5), Vector2(-10, 2)]
+"values": [Vector2(0, 0), Vector2(-13, 0), Vector2(-13, 0), Vector2(-13, 0), Vector2(-13.5, 0.5), Vector2(-13, 0)]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
@@ -247,118 +223,94 @@ tracks/2/keys = {
 tracks/3/type = "value"
 tracks/3/imported = false
 tracks/3/enabled = true
-tracks/3/path = NodePath("ItemSprite/OffHandSprite:visible")
+tracks/3/path = NodePath("ReloadOffHand:visible")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
+"times": PackedFloat32Array(0, 0.275),
+"transitions": PackedFloat32Array(1, 1),
 "update": 1,
-"values": [false]
+"values": [false, true]
 }
 tracks/4/type = "value"
 tracks/4/imported = false
 tracks/4/enabled = true
-tracks/4/path = NodePath("ReloadOffHand:visible")
+tracks/4/path = NodePath("ReloadOffHand:rotation")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [true]
+"times": PackedFloat32Array(0.275, 0.4, 0.5, 0.55, 0.65, 0.75, 0.8),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [-0.767945, 0.0, -0.349066, -0.349066, -0.349066, 0.0, 0.0]
 }
 tracks/5/type = "value"
 tracks/5/imported = false
 tracks/5/enabled = true
-tracks/5/path = NodePath("ReloadOffHand:rotation")
+tracks/5/path = NodePath("ReloadOffHand/ReloadStick:visible")
 tracks/5/interp = 1
 tracks/5/loop_wrap = true
 tracks/5/keys = {
-"times": PackedFloat32Array(0, 0.2, 0.275, 0.425, 0.525, 0.55, 0.65, 0.75, 0.8),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1),
-"update": 0,
-"values": [0.0, -0.767945, -0.767945, 0.0, -0.349066, -0.349066, -0.349066, 0.0, 0.0]
-}
-tracks/6/type = "value"
-tracks/6/imported = false
-tracks/6/enabled = true
-tracks/6/path = NodePath("ReloadOffHand/ReloadStick:visible")
-tracks/6/interp = 1
-tracks/6/loop_wrap = true
-tracks/6/keys = {
 "times": PackedFloat32Array(0, 0.75),
 "transitions": PackedFloat32Array(1, 1),
 "update": 1,
 "values": [false, true]
 }
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("ReloadOffHand:position")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0.275, 0.4, 0.5, 0.55, 0.65, 0.75, 0.8, 0.95, 1),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, -1.5, 1, 1),
+"update": 0,
+"values": [Vector2(-1, -2), Vector2(1, -11), Vector2(-5, -8), Vector2(-2, -9), Vector2(3.57628e-07, -4), Vector2(-1, -4), Vector2(4.76837e-07, -7), Vector2(-5.96046e-08, -12), Vector2(-1, -14)]
+}
 tracks/7/type = "value"
 tracks/7/imported = false
 tracks/7/enabled = true
-tracks/7/path = NodePath("ReloadOffHand:position")
+tracks/7/path = NodePath("ReloadOffHand/ReloadStick:position")
 tracks/7/interp = 1
 tracks/7/loop_wrap = true
 tracks/7/keys = {
-"times": PackedFloat32Array(0, 0.1, 0.2, 0.275, 0.425, 0.525, 0.55, 0.65, 0.7, 0.75, 0.8, 0.95, 1),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, -1.5, 1, 1),
+"times": PackedFloat32Array(0.75, 0.825),
+"transitions": PackedFloat32Array(1, 1),
 "update": 0,
-"values": [Vector2(4, 5), Vector2(0.581769, 4.13749), Vector2(-3.64935, 2.81807), Vector2(-3.64935, 2.81807), Vector2(4, -9), Vector2(0, -8), Vector2(0, -8), Vector2(2, -9), Vector2(2, -9), Vector2(5, -7), Vector2(7, -6), Vector2(7, -12), Vector2(5, -13)]
+"values": [Vector2(0, 2), Vector2(0, 0)]
 }
 tracks/8/type = "value"
 tracks/8/imported = false
 tracks/8/enabled = true
-tracks/8/path = NodePath("ReloadOffHand/ReloadStick:position")
+tracks/8/path = NodePath("ReloadOffHand/ReloadStick:rotation")
 tracks/8/interp = 1
 tracks/8/loop_wrap = true
 tracks/8/keys = {
 "times": PackedFloat32Array(0.75, 0.825),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
-"values": [Vector2(0, 3), Vector2(0, 0)]
+"values": [2.69304, 2.34398]
 }
 tracks/9/type = "value"
 tracks/9/imported = false
 tracks/9/enabled = true
-tracks/9/path = NodePath("ReloadOffHand/ReloadStick:rotation")
+tracks/9/path = NodePath("ReloadOffHand:show_behind_parent")
 tracks/9/interp = 1
 tracks/9/loop_wrap = true
 tracks/9/keys = {
-"times": PackedFloat32Array(0.75, 0.825),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [2.69304, 2.34398]
-}
-tracks/10/type = "value"
-tracks/10/imported = false
-tracks/10/enabled = true
-tracks/10/path = NodePath("ReloadOffHand:show_behind_parent")
-tracks/10/interp = 1
-tracks/10/loop_wrap = true
-tracks/10/keys = {
 "times": PackedFloat32Array(0, 0.8),
 "transitions": PackedFloat32Array(1, 1),
 "update": 1,
 "values": [false, true]
 }
-tracks/11/type = "value"
-tracks/11/imported = false
-tracks/11/enabled = true
-tracks/11/path = NodePath("ItemSprite/OffHandSprite:position")
-tracks/11/interp = 1
-tracks/11/loop_wrap = true
-tracks/11/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector2(4, 5)]
-}
-tracks/12/type = "value"
-tracks/12/imported = false
-tracks/12/enabled = true
-tracks/12/path = NodePath("ReloadOffHand/ReloadStick:instance_shader_parameters/final_alpha")
-tracks/12/interp = 1
-tracks/12/loop_wrap = true
-tracks/12/keys = {
+tracks/10/type = "value"
+tracks/10/imported = false
+tracks/10/enabled = true
+tracks/10/path = NodePath("ReloadOffHand/ReloadStick:instance_shader_parameters/final_alpha")
+tracks/10/interp = 1
+tracks/10/loop_wrap = true
+tracks/10/keys = {
 "times": PackedFloat32Array(0, 0.75, 0.825),
 "transitions": PackedFloat32Array(1, 1, 1),
 "update": 0,
@@ -378,7 +330,7 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0, 0.125, 0.15, 0.2, 0.375, 0.4, 0.45, 0.875, 1),
 "transitions": PackedFloat32Array(1, 0, 0, 1, 0, 0, 1, 1, 1),
 "update": 0,
-"values": [Vector2(-10, 2), Vector2(-10, 2), Vector2(-11, 3), Vector2(-10, 2), Vector2(-10, 2), Vector2(-11, 3), Vector2(-10, 2), Vector2(-10, 2), Vector2(0, 0)]
+"values": [Vector2(-13, 0), Vector2(-13, 0), Vector2(-14, 1), Vector2(-13, 0), Vector2(-13, 0), Vector2(-14, 1), Vector2(-13, 0), Vector2(-13, 0), Vector2(0, 0)]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
@@ -399,10 +351,10 @@ tracks/2/path = NodePath("ReloadOffHand:position")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
-"times": PackedFloat32Array(0, 0.0499999, 0.15, 0.25, 0.3, 0.4, 0.5, 0.55, 0.675, 0.85),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 2, 1),
+"times": PackedFloat32Array(0, 0.0499999, 0.15, 0.25, 0.3, 0.4, 0.5, 0.55, 0.675, 0.7, 0.775),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1),
 "update": 0,
-"values": [Vector2(5, -13), Vector2(5, -13), Vector2(1, -9), Vector2(3.4, -11.4), Vector2(3.4, -11.4), Vector2(1, -9), Vector2(5, -13), Vector2(5, -13), Vector2(6, -13), Vector2(-3.64935, 2.81807)]
+"values": [Vector2(-1, -14), Vector2(-1, -14), Vector2(-5, -10), Vector2(-3, -12), Vector2(-3, -12), Vector2(-5, -10), Vector2(-3, -12), Vector2(-3, -12), Vector2(2, -7), Vector2(2, -7), Vector2(1, -4)]
 }
 tracks/3/type = "value"
 tracks/3/imported = false
@@ -423,7 +375,7 @@ tracks/4/path = NodePath("ReloadOffHand:visible")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/keys = {
-"times": PackedFloat32Array(0, 0.85),
+"times": PackedFloat32Array(0, 0.775),
 "transitions": PackedFloat32Array(1, 1),
 "update": 1,
 "values": [true, false]
@@ -479,46 +431,22 @@ tracks/8/keys = {
 tracks/9/type = "value"
 tracks/9/imported = false
 tracks/9/enabled = true
-tracks/9/path = NodePath("ItemSprite/OffHandSprite:visible")
+tracks/9/path = NodePath("ItemSprite:frame")
 tracks/9/interp = 1
 tracks/9/loop_wrap = true
 tracks/9/keys = {
-"times": PackedFloat32Array(0, 0.85),
-"transitions": PackedFloat32Array(1, 1),
-"update": 1,
-"values": [false, true]
-}
-tracks/10/type = "value"
-tracks/10/imported = false
-tracks/10/enabled = true
-tracks/10/path = NodePath("ItemSprite/OffHandSprite:position")
-tracks/10/interp = 1
-tracks/10/loop_wrap = true
-tracks/10/keys = {
-"times": PackedFloat32Array(0.85),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector2(4, 5)]
-}
-tracks/11/type = "value"
-tracks/11/imported = false
-tracks/11/enabled = true
-tracks/11/path = NodePath("ItemSprite:frame")
-tracks/11/interp = 1
-tracks/11/loop_wrap = true
-tracks/11/keys = {
 "times": PackedFloat32Array(1),
 "transitions": PackedFloat32Array(1),
 "update": 1,
 "values": [0]
 }
-tracks/12/type = "value"
-tracks/12/imported = false
-tracks/12/enabled = true
-tracks/12/path = NodePath("ReloadOffHand/ReloadStick:instance_shader_parameters/final_alpha")
-tracks/12/interp = 1
-tracks/12/loop_wrap = true
-tracks/12/keys = {
+tracks/10/type = "value"
+tracks/10/imported = false
+tracks/10/enabled = true
+tracks/10/path = NodePath("ReloadOffHand/ReloadStick:instance_shader_parameters/final_alpha")
+tracks/10/interp = 1
+tracks/10/loop_wrap = true
+tracks/10/keys = {
 "times": PackedFloat32Array(0, 0.6, 0.775),
 "transitions": PackedFloat32Array(1, 1, 1),
 "update": 0,
@@ -601,7 +529,7 @@ tracks/0/path = NodePath("ItemSprite:frame")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0.7),
+"times": PackedFloat32Array(0.325),
 "transitions": PackedFloat32Array(1),
 "update": 1,
 "values": [0]
@@ -609,14 +537,26 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("ItemSprite/OffHandSprite:position")
+tracks/1/path = NodePath("ReloadOffHand:visible")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.35, 0.4, 0.5, 0.7, 1),
-"transitions": PackedFloat32Array(1, 1, 3.24901, 1, 1, 1),
+"times": PackedFloat32Array(0.2, 0.725),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("ReloadOffHand:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0.2, 0.375, 0.725),
+"transitions": PackedFloat32Array(4.92458, 1, 1),
 "update": 0,
-"values": [Vector2(4, 5), Vector2(-4, -6), Vector2(-4, -6), Vector2(-6, -4), Vector2(-6, -4), Vector2(4, 5)]
+"values": [Vector2(-3, -7), Vector2(-7, -4), Vector2(-7, -4)]
 }
 
 [sub_resource type="Animation" id="Animation_vsd0h"]
@@ -629,10 +569,10 @@ tracks/0/path = NodePath("ItemSprite:position")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.125, 0.15, 0.2, 0.375, 0.4, 0.45, 0.7, 0.725, 0.775),
+"times": PackedFloat32Array(0, 0.125, 0.15, 0.2, 0.375, 0.4, 0.45, 0.75, 0.775, 0.825),
 "transitions": PackedFloat32Array(1, 0, 0, 1, 0, 0, 1, 0, 0, 1),
 "update": 0,
-"values": [Vector2(-10, 2), Vector2(-10, 2), Vector2(-11, 3), Vector2(-10, 2), Vector2(-10, 2), Vector2(-11, 3), Vector2(-10, 2), Vector2(-10, 2), Vector2(-10.5, 2.5), Vector2(-10, 2)]
+"values": [Vector2(-13, 0), Vector2(-13, 0), Vector2(-14, 1), Vector2(-13, 0), Vector2(-13, 0), Vector2(-14, 1), Vector2(-13, 0), Vector2(-13, 0), Vector2(-13.5, 0.5), Vector2(-13, 0)]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
@@ -653,10 +593,10 @@ tracks/2/path = NodePath("ReloadOffHand:position")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
-"times": PackedFloat32Array(0, 0.0499999, 0.15, 0.25, 0.3, 0.4, 0.475, 0.5, 0.575, 0.65, 0.725, 0.75, 0.875, 1),
+"times": PackedFloat32Array(0, 0.0499999, 0.15, 0.25, 0.3, 0.4, 0.475, 0.5, 0.575, 0.65, 0.775, 0.825, 0.9, 1),
 "transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
 "update": 0,
-"values": [Vector2(5, -13), Vector2(5, -13), Vector2(1, -9), Vector2(3.4, -11.4), Vector2(3.4, -11.4), Vector2(1, -9), Vector2(5, -13), Vector2(5, -13), Vector2(6, -13), Vector2(6, -13), Vector2(0, -8), Vector2(0, -8), Vector2(2, -9), Vector2(5, -13)]
+"values": [Vector2(-1, -14), Vector2(-1, -14), Vector2(-5, -10), Vector2(-3, -12), Vector2(-3, -12), Vector2(-5, -10), Vector2(-3, -12), Vector2(-3, -12), Vector2(1, -9), Vector2(1, -11), Vector2(-5, -8), Vector2(-2, -9), Vector2(-1, -4), Vector2(-1, -14)]
 }
 tracks/3/type = "value"
 tracks/3/imported = false
@@ -665,7 +605,7 @@ tracks/3/path = NodePath("ReloadOffHand:rotation")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
-"times": PackedFloat32Array(0, 0.5, 0.575, 0.65, 0.725, 0.75, 0.875, 1),
+"times": PackedFloat32Array(0, 0.5, 0.575, 0.65, 0.775, 0.825, 0.9, 1),
 "transitions": PackedFloat32Array(1, 2, 1, 1, 1, 1, 1, 1),
 "update": 0,
 "values": [0.0, 0.0, -0.523599, -0.523599, -0.349066, -0.349066, -0.349066, 0.0]
@@ -713,7 +653,7 @@ tracks/7/path = NodePath("ReloadOffHand/ReloadStick:visible")
 tracks/7/interp = 1
 tracks/7/loop_wrap = true
 tracks/7/keys = {
-"times": PackedFloat32Array(0, 0.65, 0.925),
+"times": PackedFloat32Array(0, 0.65, 0.9),
 "transitions": PackedFloat32Array(1, 1, 1),
 "update": 1,
 "values": [true, false, true]
@@ -733,41 +673,17 @@ tracks/8/keys = {
 tracks/9/type = "value"
 tracks/9/imported = false
 tracks/9/enabled = true
-tracks/9/path = NodePath("ItemSprite/OffHandSprite:visible")
+tracks/9/path = NodePath("ReloadOffHand/ReloadStick:instance_shader_parameters/final_alpha")
 tracks/9/interp = 1
 tracks/9/loop_wrap = true
 tracks/9/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [false]
-}
-tracks/10/type = "value"
-tracks/10/imported = false
-tracks/10/enabled = true
-tracks/10/path = NodePath("ItemSprite/OffHandSprite:position")
-tracks/10/interp = 1
-tracks/10/loop_wrap = true
-tracks/10/keys = {
-"times": PackedFloat32Array(),
-"transitions": PackedFloat32Array(),
-"update": 0,
-"values": []
-}
-tracks/11/type = "value"
-tracks/11/imported = false
-tracks/11/enabled = true
-tracks/11/path = NodePath("ReloadOffHand/ReloadStick:instance_shader_parameters/final_alpha")
-tracks/11/interp = 1
-tracks/11/loop_wrap = true
-tracks/11/keys = {
-"times": PackedFloat32Array(0, 0.525, 0.65, 0.925, 1),
+"times": PackedFloat32Array(0, 0.525, 0.65, 0.9, 1),
 "transitions": PackedFloat32Array(1, 1, 1, 1, 1),
 "update": 0,
 "values": [1.0, 1.0, 0.0, 0.0, 1.0]
 }
 
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_ja5kv"]
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_lnu1l"]
 _data = {
 &"RESET": SubResource("Animation_8dt34"),
 &"before_single_reload": SubResource("Animation_ja5kv"),
@@ -777,29 +693,26 @@ _data = {
 &"single_reload": SubResource("Animation_vsd0h")
 }
 
-[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_vsd0h"]
-radius = 5.0
-height = 14.0
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_0l645"]
+radius = 3.0
+height = 8.0
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_8n87i"]
-shader = ExtResource("2_xvb8j")
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_1kx8x"]
+shader = ExtResource("2_u874v")
 
-[node name="Blunderbuss" type="Node2D" node_paths=PackedStringArray("sprites_to_tint")]
-script = ExtResource("1_v5qva")
+[node name="Flintlock" type="Node2D" node_paths=PackedStringArray("sprites_to_tint")]
+script = ExtResource("1_q5mir")
 proj_origin = Vector2(12, -1)
 sprites_to_tint = [NodePath("ItemSprite"), NodePath("ReloadOffHand/ReloadStick")]
 
 [node name="ItemSprite" type="AnimatedSprite2D" parent="."]
 light_mask = 2
-material = SubResource("ShaderMaterial_ej2m0")
-sprite_frames = SubResource("SpriteFrames_a1doo")
+material = SubResource("ShaderMaterial_lnu1l")
+sprite_frames = SubResource("SpriteFrames_lnu1l")
 
-[node name="OffHandSprite" parent="ItemSprite" instance=ExtResource("4_kv7d6")]
-position = Vector2(4, 5)
-texture = ExtResource("5_a1doo")
-
-[node name="MainHandSprite" parent="ItemSprite" instance=ExtResource("4_kv7d6")]
-position = Vector2(-7, 3)
+[node name="MainHandSprite" parent="ItemSprite" instance=ExtResource("4_2376o")]
+position = Vector2(-8, 4)
+texture = ExtResource("5_1kx8x")
 
 [node name="RemoteTransForHandPosInAnims" type="RemoteTransform2D" parent="ItemSprite"]
 position = Vector2(4, 5)
@@ -810,34 +723,35 @@ update_scale = false
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
-&"": SubResource("AnimationLibrary_ja5kv")
+&"": SubResource("AnimationLibrary_lnu1l")
 }
 
 [node name="ProjectileOrigin" type="Marker2D" parent="."]
-position = Vector2(12, -1)
+position = Vector2(10, -1.5)
 
-[node name="ClippingDetector" parent="." instance=ExtResource("6_ja5kv")]
+[node name="ClippingDetector" parent="." instance=ExtResource("6_xw4ke")]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="ClippingDetector"]
-position = Vector2(5, -1)
+position = Vector2(6, -1)
 rotation = -1.5708
-shape = SubResource("CapsuleShape2D_vsd0h")
+shape = SubResource("CapsuleShape2D_0l645")
 
 [node name="CasingEjectionPoint" type="Marker2D" parent="."]
-position = Vector2(1, -1)
+position = Vector2(-1, 0)
 
-[node name="ReloadOffHand" parent="." instance=ExtResource("4_kv7d6")]
+[node name="ReloadOffHand" parent="." instance=ExtResource("4_2376o")]
 visible = false
 position = Vector2(4, 5)
+texture = ExtResource("5_1kx8x")
 
 [node name="ReloadStick" type="Sprite2D" parent="ReloadOffHand"]
 visible = false
 show_behind_parent = true
-material = SubResource("ShaderMaterial_8n87i")
+material = SubResource("ShaderMaterial_1kx8x")
 instance_shader_parameters/final_alpha = 0.0
 position = Vector2(8, 6)
-texture = ExtResource("7_a1doo")
+texture = ExtResource("5_lnu1l")
 offset = Vector2(4.01709, 0.0200464)
 
-[node name="FiringVFX" parent="." instance=ExtResource("5_3i7k4")]
-position = Vector2(24, -1)
+[node name="FiringVFX" parent="." instance=ExtResource("6_8vf3s")]
+position = Vector2(22, -1.5)
