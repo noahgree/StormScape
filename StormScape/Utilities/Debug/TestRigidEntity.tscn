@@ -1,7 +1,6 @@
-[gd_scene load_steps=43 format=3 uid="uid://xsq1q0fffsin"]
+[gd_scene load_steps=41 format=3 uid="uid://xsq1q0fffsin"]
 
 [ext_resource type="Script" uid="uid://nup3um166s32" path="res://Entities/EntityCore/EntityTypes/RigidEntity/RigidEntity.gd" id="1_6tnit"]
-[ext_resource type="Script" uid="uid://c2gdoebfp12dq" path="res://Entities/Stats/StatMod/StatModsCacheResource.gd" id="2_ps53t"]
 [ext_resource type="PackedScene" uid="uid://di7vcyrki71nm" path="res://Entities/Components/DetectionComponent/DetectionComponent.tscn" id="3_fg1br"]
 [ext_resource type="PackedScene" uid="uid://dh4ydl7l86ywq" path="res://Entities/EntityCore/Sprites/EntitySprite.tscn" id="3_nv7a0"]
 [ext_resource type="Shader" uid="uid://cfbagv3hrtar2" path="res://Utilities/Game/Shaders/EntityEffectShader.gdshader" id="4_l6rwf"]
@@ -32,12 +31,9 @@
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_ljryo"]
 rough = true
 
-[sub_resource type="Resource" id="Resource_8lyar"]
-script = ExtResource("2_ps53t")
-
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_sbju2"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_mdi77"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_iirwy"]
 resource_local_to_scene = true
 shader = ExtResource("4_l6rwf")
 
@@ -127,7 +123,6 @@ lock_rotation = true
 linear_damp = 4.5
 script = ExtResource("1_6tnit")
 team = 2
-stats = SubResource("Resource_8lyar")
 is_object = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
@@ -139,10 +134,12 @@ debug_color = Color(1.44392e-06, 0.568839, 0.851513, 0.42)
 
 [node name="EntitySprite" parent="." instance=ExtResource("3_nv7a0")]
 unique_name_in_owner = true
-material = SubResource("ShaderMaterial_mdi77")
-position = Vector2(0, -10)
+material = SubResource("ShaderMaterial_iirwy")
+instance_shader_parameters/crack_color = Color(0.541809, 0.000266163, 0.558727, 1)
+position = Vector2(-10, -2)
 scale = Vector2(0.156, 0.156)
 sprite_frames = SubResource("SpriteFrames_fg1br")
+offset = Vector2(64.1026, -51.2821)
 
 [node name="ParticleEmissionComponent" parent="." instance=ExtResource("6_ljryo")]
 

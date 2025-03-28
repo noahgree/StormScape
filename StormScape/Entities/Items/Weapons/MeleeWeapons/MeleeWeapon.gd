@@ -32,6 +32,7 @@ static func initialize_stats_resource(stats_resource: MeleeWeaponResource) -> vo
 		&"base_healing" : stats_resource.effect_source.base_healing,
 		&"crit_chance" : stats_resource.effect_source.crit_chance,
 		&"armor_penetration" : stats_resource.effect_source.armor_penetration,
+		&"object_damage_mult" : stats_resource.effect_source.object_damage_mult,
 		&"pullout_delay" : stats_resource.pullout_delay,
 		&"rotation_lerping" : stats_resource.rotation_lerping
 	}
@@ -44,7 +45,8 @@ static func initialize_stats_resource(stats_resource: MeleeWeaponResource) -> vo
 		&"charge_base_damage" : stats_resource.charge_effect_source.base_damage,
 		&"charge_base_healing" : stats_resource.charge_effect_source.base_healing,
 		&"charge_crit_chance" : stats_resource.charge_effect_source.crit_chance,
-		&"charge_armor_penetration" : stats_resource.charge_effect_source.armor_penetration
+		&"charge_armor_penetration" : stats_resource.charge_effect_source.armor_penetration,
+		&"charge_object_damage_mult" : stats_resource.charge_effect_source.object_damage_mult
 	}
 
 	stats_resource.s_mods.add_moddable_stats(normal_moddable_stats)
@@ -62,7 +64,7 @@ func _ready() -> void:
 
 	call_deferred("_disable_collider")
 	_update_ammo_ui()
-	source_entity.stamina_component.stamina_changed.connect(_update_ammo_ui)
+	source_entity.stamina_component.stamina_changed.connect(func(_new_stamina: float) -> void: _update_ammo_ui())
 
 	hitbox_component.source_entity = source_entity
 
@@ -202,6 +204,7 @@ func _on_use_animation_ended(was_charge_use: bool = false) -> void:
 
 	_apply_post_use_effect(was_charge_use)
 
-## If a connected ammo UI exists (i.e. for a player), update it with the new ammo available. Typically just reflects the sprint.
+## If a connected ammo UI exists (i.e. for a player), update it with the new ammo available.
+## Typically just reflects the sprint.
 func _update_ammo_ui() -> void:
 	if ammo_ui != null: ammo_ui.update_mag_ammo(source_entity.stamina_component.stamina)

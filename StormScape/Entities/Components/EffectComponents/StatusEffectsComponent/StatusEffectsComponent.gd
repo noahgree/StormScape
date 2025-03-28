@@ -6,7 +6,6 @@ class_name StatusEffectsComponent
 ## This handles things like fire & poison damage not taking into account armor, etc.
 
 @export var effect_receiver: EffectReceiverComponent ## The effect receiver that sends status effects to this manager to be cached and handled.
-@export var stats_ui: Control ## The UI to update upon receiving effects that may update it.
 @export_subgroup("Debug")
 @export var print_effect_updates: bool = false ## Whether to print when this entity has status effects added and removed.
 
@@ -88,15 +87,13 @@ func _add_status_effect(status_effect: StatusEffect) -> void:
 	mod_timer.name = str(status_effect.effect_name) + str(status_effect.effect_lvl) + "_timer"
 	if mod_timer.is_inside_tree():
 		mod_timer.start()
-	else:
-		print(affected_entity.name, status_effect)
 
 	effect_timers[status_effect.effect_name] = mod_timer
 
 	_start_effect_fx(status_effect)
 
 	for mod_resource: StatMod in status_effect.stat_mods:
-		affected_entity.stats.add_mods([mod_resource] as Array[StatMod], stats_ui)
+		affected_entity.stats.add_mods([mod_resource] as Array[StatMod])
 
 ## Starts the status effects' associated visual FX like particles. Checks if the receiver has the
 ## matching handler node first.
@@ -164,7 +161,7 @@ func _remove_status_effect(status_effect: StatusEffect) -> void:
 			print_rich("-------[color=red]Removed[/color][b] " + str(status_effect.effect_name) + " " + str(status_effect.effect_lvl) + "[/b]-------")
 
 	for mod_resource: StatMod in status_effect.stat_mods:
-		affected_entity.stats.remove_mod(mod_resource.stat_id, mod_resource.mod_id, stats_ui)
+		affected_entity.stats.remove_mod(mod_resource.stat_id, mod_resource.mod_id)
 
 	if status_effect.effect_name in current_effects:
 		current_effects.erase(status_effect.effect_name)

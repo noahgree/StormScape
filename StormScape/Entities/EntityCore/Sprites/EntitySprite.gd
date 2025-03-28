@@ -4,7 +4,24 @@ class_name EntitySprite
 ## The main sprite node that is attached to any game entity.
 
 @export var disable_floor_light: bool = false ## When true, the light that shines at the base of the sprite in response to status effects will be disabled.
-@export var floor_colors: Dictionary[StringName, Color] = { ## The status effect names that have associated colors to change the floor light to.
+@export var cracks_with_damage: bool = true ## When true, the shader will simulate cracking based on the percentage of health left (note that shield changing does nothing, this only updates with health changes). This only applies to non-dynamic entities.
+
+## The min values to interpolate to for the cracking shader when health is at its highest (but not completely full).
+## The crack_scale will adjust for sprite size automatically upon game start.
+@export var min_crack_stats: Dictionary[StringName, float] = {
+	&"crack_intensity" : 0.685,
+	&"crack_profile" : 1.228,
+	&"crack_scale" : 2.72,
+}
+## The max values to interpolate to for the cracking shader when health is at its lowest.
+## The crack_scale will adjust for sprite size automatically upon game start.
+@export var max_crack_stats: Dictionary[StringName, float] = {
+	&"crack_intensity" : 1.0,
+	&"crack_profile" : 2.11,
+	&"crack_scale" : 3.838,
+}
+
+@export_storage var floor_colors: Dictionary[StringName, Color] = { ## The status effect names that have associated colors to change the floor light to.
 	&"Frostbite" : Color(0.435, 0.826, 1),
 	&"Burning" : Color(1, 0.582, 0.484),
 	&"Poison" : Color(0, 0.933, 0.469),
@@ -17,7 +34,7 @@ class_name EntitySprite
 	&"Stun" : Color(1, 0.909, 0.544),
 	&"TimeSnare": Color(1, 0.4, 0.463)
 }
-@export var overlay_colors: Dictionary[StringName, Color] = { ## The status effect names that have associated colors to change the overlay to.
+@export_storage var overlay_colors: Dictionary[StringName, Color] = { ## The status effect names that have associated colors to change the overlay to.
 	&"Frostbite" : Color(0.435, 0.826, 1),
 	&"Burning" : Color(1, 0.582, 0.484),
 	&"Poison" : Color(0, 0.933, 0.469),
@@ -34,6 +51,7 @@ class_name EntitySprite
 @onready var floor_light: PointLight2D = $FloorLight ## The light with the effect color that is shining up on the entity.
 @onready var overlay: TextureRect = $Overlay ## The color overlay that shows when a status effect triggers it.
 
+var entity: PhysicsBody2D ## The entity this sprite is attached to.
 var floor_light_tween: Tween = null ## The tween controlling the floor light's self-modulate.
 var overlay_color_tween: Tween = null ## The tween controlling the overlay color.
 var current_floor_light_names: Array[String] = [] ## The queue for the next colors to show when the previous ones finish.
@@ -59,6 +77,7 @@ func _ready() -> void:
 		floor_light.queue_free()
 
 	call_deferred("_setup_overlay_size", sprite_size)
+	call_deferred("_setup_cracks_with_damage", sprite_size)
 
 ## Sets up the floor light size to be proportional to the sprite boundaries.
 func _setup_floor_light_size(sprite_size: Vector2) -> void:
@@ -71,6 +90,22 @@ func _setup_floor_light_size(sprite_size: Vector2) -> void:
 func _setup_overlay_size(sprite_size: Vector2) -> void:
 	overlay.size = sprite_size * 2
 	overlay.position = Vector2(overlay.size.y * -0.5, overlay.size.x * 0.5)
+
+## Sets up the potential for showing cracks with damage.
+func _setup_cracks_with_damage(sprite_size: Vector2) -> void:
+	if not cracks_with_damage or entity is DynamicEntity:
+		return
+
+	var health_component: HealthComponent = entity.health_component
+	health_component.health_changed.connect(_update_cracking)
+	health_component.max_health_changed.connect(_on_max_health_of_entity_changed)
+
+	set_instance_shader_parameter("crack_pixelate", sprite_size)
+	var scale_scaler: float = maxf(sprite_size.x, sprite_size.y) / 30.0
+	min_crack_stats["crack_scale"] = min_crack_stats["crack_scale"] * scale_scaler
+	max_crack_stats["crack_scale"] = max_crack_stats["crack_scale"] * scale_scaler
+
+	_update_cracking(health_component.health)
 
 ## Updates the floor light using tweening.
 func update_floor_light(effect_name: String, kill: bool = false) -> void:
@@ -132,8 +167,8 @@ func update_overlay_color(effect_name: String, kill: bool = false) -> void:
 		overlay.texture.gradient.set_color(0, new_color)
 		overlay_color_tween.tween_property(overlay, "self_modulate:a", 1.0, change_time_start)
 
-## Starts a hitflash effect based on the color defined in the effect source that caused it. Optionally tweens it in for gentler things
-## like healing.
+## Starts a hitflash effect based on the color defined in the effect source that caused it.
+## Optionally tweens it in for gentler things like healing.
 func start_hitflash(flash_color: Color = Color(1, 1, 1, 0.6), tween_in: bool = false) -> void:
 	if hitflash_tween:
 		hitflash_tween.kill()
@@ -150,3 +185,31 @@ func start_hitflash(flash_color: Color = Color(1, 1, 1, 0.6), tween_in: bool = f
 
 	hitflash_tween.tween_property(self, "instance_shader_parameters/override_color", Color.TRANSPARENT, 0.1)
 	hitflash_tween.tween_callback(func() -> void: set_instance_shader_parameter("use_override_color", false))
+
+## Updates the level of cracking shown by the shader. Uses the new current health as a percentage of the max
+## health to determine how cracked it should be between the min and max cracking dictionaries.
+func _update_cracking(new_health: int) -> void:
+	if new_health == 0:
+		return
+	var max_health: int = int(entity.stats.get_stat("max_health"))
+	var percent_health: float = float(new_health) / float(max_health)
+	var crack_depth: float = 0.0
+
+	if percent_health < 0.33:
+		crack_depth = 1.15
+	else:
+		crack_depth = 0.4
+	set_instance_shader_parameter("crack_depth", crack_depth)
+
+	for value_name: StringName in min_crack_stats:
+		var min_value: float = min_crack_stats[value_name]
+		var max_value: float = max_crack_stats[value_name]
+		var interpolated_value: float = max_value - ((max_value - min_value) * percent_health)
+		if value_name == "crack_intensity" and percent_health >= 1.0:
+			set_instance_shader_parameter("crack_intensity", 0.0)
+		else:
+			set_instance_shader_parameter(value_name, interpolated_value)
+
+## Potentially updates the cracking when the max health changes since it would be at a different level of damage.
+func _on_max_health_of_entity_changed(_new_max_health: int) -> void:
+	_update_cracking(entity.health_component.health)

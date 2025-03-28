@@ -38,6 +38,7 @@ can_hit_self = false
 bad_effect_affected_teams = 1
 good_effect_affected_teams = 2
 base_damage = 24
+object_damage_mult = 1.0
 dmg_affected_stats = 2
 crit_chance = 5
 crit_multiplier = 1.25

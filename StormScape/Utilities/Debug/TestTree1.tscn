@@ -1,12 +1,11 @@
-[gd_scene load_steps=30 format=3 uid="uid://b52c5c7hj2vd"]
+[gd_scene load_steps=28 format=3 uid="uid://b52c5c7hj2vd"]
 
 [ext_resource type="Script" uid="uid://cn2gulskgn7k3" path="res://Entities/EntityCore/EntityTypes/StaticEntity/StaticEntity.gd" id="1_4yxmu"]
-[ext_resource type="Script" uid="uid://c2gdoebfp12dq" path="res://Entities/Stats/StatMod/StatModsCacheResource.gd" id="2_5qk3y"]
 [ext_resource type="PackedScene" uid="uid://cj2wy5f05cos4" path="res://Entities/EntityCore/Shadow/EntityShadow.tscn" id="2_nnf0c"]
 [ext_resource type="PackedScene" uid="uid://di7vcyrki71nm" path="res://Entities/Components/DetectionComponent/DetectionComponent.tscn" id="3_2kecs"]
 [ext_resource type="Shader" uid="uid://cfbagv3hrtar2" path="res://Utilities/Game/Shaders/EntityEffectShader.gdshader" id="3_epxnw"]
 [ext_resource type="PackedScene" uid="uid://dh4ydl7l86ywq" path="res://Entities/EntityCore/Sprites/EntitySprite.tscn" id="4_5qk3y"]
-[ext_resource type="Texture2D" uid="uid://b0witw234r46t" path="res://Entities/Environment/dead_tree_1.png" id="4_tx18i"]
+[ext_resource type="Texture2D" uid="uid://b0witw234r46t" path="res://Entities/Environment/Trees/dead_tree_1.png" id="4_tx18i"]
 [ext_resource type="PackedScene" uid="uid://btba0jmsow1mx" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectReceiverComponent.tscn" id="6_bxml6"]
 [ext_resource type="PackedScene" uid="uid://co3n6m7efg8pd" path="res://Entities/Components/EffectComponents/StatusEffectsComponent/StatusEffectsComponent.tscn" id="7_7lx3c"]
 [ext_resource type="PackedScene" uid="uid://c4kt3bx0ot3c7" path="res://Entities/Components/ItemComponents/LootTableComponent/LootTableComponent.tscn" id="7_dpaaj"]
@@ -19,9 +18,6 @@
 [ext_resource type="PackedScene" uid="uid://jpq0ij8wwlhy" path="res://Entities/Components/FacingComponent/FacingComponent.tscn" id="12_o33n8"]
 [ext_resource type="PackedScene" uid="uid://bhcqtorpyerc3" path="res://Utilities/Debug/ParticleEmissionComponent.tscn" id="17_2kecs"]
 [ext_resource type="PackedScene" uid="uid://2yy4xfm5g74l" path="res://Entities/Components/ItemComponents/ClippingComponent/ClippingArea.tscn" id="19_7biur"]
-
-[sub_resource type="Resource" id="Resource_s42vq"]
-script = ExtResource("2_5qk3y")
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_l7ldg"]
 radius = 7.0
@@ -72,8 +68,7 @@ size = Vector2(14, 19)
 collision_layer = 0
 collision_mask = 0
 script = ExtResource("1_4yxmu")
-team = 2
-stats = SubResource("Resource_s42vq")
+team = 4
 is_object = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
@@ -93,12 +88,17 @@ scale = Vector2(4.69333, 2.75429)
 [node name="EntitySprite" parent="." instance=ExtResource("4_5qk3y")]
 unique_name_in_owner = true
 material = SubResource("ShaderMaterial_o33n8")
-position = Vector2(14, -48)
+instance_shader_parameters/crack_color = Color(0.0792545, 0.0300264, 0.00946152, 0.88)
+instance_shader_parameters/crack_intensity = 1.0
+instance_shader_parameters/crack_pixelate = Vector2(96, 96)
+instance_shader_parameters/crack_scale = 12.282
+position = Vector2(37, 2)
 sprite_frames = SubResource("SpriteFrames_o33n8")
+offset = Vector2(-23, -50)
 
 [node name="HealthComponent" parent="." instance=ExtResource("7_umo0g")]
+_max_health = 1000
 _max_shield = 0
-infinte_hp = true
 
 [node name="EffectReceiverComponent" parent="." node_paths=PackedStringArray("affected_entity", "health_component", "loot_table_component", "dmg_handler", "burning_handler") instance=ExtResource("6_bxml6")]
 absorb_full_hit = true

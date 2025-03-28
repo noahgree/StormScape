@@ -7,9 +7,8 @@ class_name DynamicEntity
 ## This should not be used by things like weapons or trees.
 
 @export var team: Globals.Teams = Globals.Teams.PLAYER ## What the effects received by this entity should consider as this entity's team.
-@export var stats: StatModsCacheResource = StatModsCacheResource.new() ## The resource that will cache and work with all stat mods for this entity.
 
-@onready var sprite: Node2D = %EntitySprite ## The visual representation of the entity. Needs to have the EntityEffectShader applied.
+@onready var sprite: EntitySprite = %EntitySprite ## The visual representation of the entity. Needs to have the EntityEffectShader applied.
 @onready var anim_tree: AnimationTree = $AnimationTree ## The animation tree controlling this entity's animation states.
 @onready var effect_receiver: EffectReceiverComponent = get_node_or_null("EffectReceiverComponent") ## The component that handles incoming effect sources.
 @onready var effects: StatusEffectsComponent = get_node_or_null("%StatusEffectsComponent") ## The node that will cache and manage all status effects for this entity.
@@ -22,6 +21,7 @@ class_name DynamicEntity
 @onready var inv: ItemReceiverComponent = get_node_or_null("ItemReceiverComponent") ## The inventory for the entity.
 @onready var hands: HandsComponent = get_node_or_null("%HandsComponent") ## The hands item component for the entity.
 
+var stats: StatModsCacheResource = StatModsCacheResource.new() ## The resource that will cache and work with all stat mods for this entity.
 var time_snare_counter: float = 0 ## The ticker that slows down delta when under a time snare.
 var snare_factor: float = 0 ## Multiplier for delta time during time snares.
 var snare_timer: Timer ## A reference to a timer that might currently be tracking a time snare instance.
@@ -128,6 +128,7 @@ func _ready() -> void:
 	assert(has_node("DetectionComponent"), name + " is a DynamicEntity but does not have a DetectionComponent.")
 
 	add_to_group("has_save_logic")
+
 	if self is Player:
 		collision_layer = 0b1
 		add_to_group("player_entities")
@@ -141,6 +142,9 @@ func _ready() -> void:
 		collision_layer = 0b1000
 
 	collision_mask = 0b1101111
+
+	stats.affected_entity = self
+	sprite.entity = self
 
 func _process(delta: float) -> void:
 	if Engine.is_editor_hint():

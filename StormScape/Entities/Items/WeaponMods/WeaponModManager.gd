@@ -61,7 +61,7 @@ static func _add_weapon_mod(weapon_stats: WeaponResource, weapon_mod: WeaponMod,
 	weapon_stats.current_mods[index] = { weapon_mod.id : weapon_mod }
 
 	for mod_resource: StatMod in weapon_mod.wpn_stat_mods:
-		weapon_stats.s_mods.add_mods([mod_resource] as Array[StatMod], null)
+		weapon_stats.s_mods.add_mods([mod_resource] as Array[StatMod])
 		_update_effect_source_stats(weapon_stats, mod_resource.stat_id)
 
 	_update_effect_source_status_effects(weapon_stats, false, weapon_mod.status_effects)
@@ -83,7 +83,7 @@ static func remove_weapon_mod(weapon_stats: WeaponResource, weapon_mod: WeaponMo
 		print_rich("-------[color=red]Removed[/color][b] " + str(weapon_mod.name) + " (" + str(weapon_mod.rarity) + ")[/b]-------")
 
 	for mod_resource: StatMod in weapon_mod.wpn_stat_mods:
-		weapon_stats.s_mods.remove_mod(mod_resource.stat_id, mod_resource.mod_id, null)
+		weapon_stats.s_mods.remove_mod(mod_resource.stat_id, mod_resource.mod_id)
 		_update_effect_source_stats(weapon_stats, mod_resource.stat_id)
 
 	weapon_stats.current_mods[index] = { "EmptySlot" : null }
@@ -127,6 +127,8 @@ static func _update_effect_source_stats(weapon_stats: WeaponResource, stat_id: S
 			weapon_stats.effect_source.crit_chance = weapon_stats.s_mods.get_stat("crit_chance")
 		&"armor_penetration":
 			weapon_stats.effect_source.armor_penetration = weapon_stats.s_mods.get_stat("armor_penetration")
+		&"object_damage_mult":
+			weapon_stats.effect_source.object_damage_mult = weapon_stats.s_mods.get_stat("object_damage_mult")
 
 	if weapon_stats is MeleeWeaponResource: # Projectile weapons don't have separate charge stats since they can only be one firing type
 		match(stat_id):
@@ -138,6 +140,8 @@ static func _update_effect_source_stats(weapon_stats: WeaponResource, stat_id: S
 				weapon_stats.charge_effect_source.crit_chance = weapon_stats.s_mods.get_stat("charge_crit_chance")
 			&"charge_armor_penetration":
 				weapon_stats.charge_effect_source.armor_penetration = weapon_stats.s_mods.get_stat("charge_armor_penetration")
+			&"charge_object_damage_mult":
+				weapon_stats.charge_effect_source.object_damage_mult = weapon_stats.s_mods.get_stat("charge_object_damage_mult")
 
 ## Updates the effect source status effect lists based on an incoming stat mod.
 ## Handles duplicates by keeping the highest level.

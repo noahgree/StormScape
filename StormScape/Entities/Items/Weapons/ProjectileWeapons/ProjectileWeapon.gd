@@ -111,6 +111,7 @@ static func initialize_stats_resource(stats_resource: ProjWeaponResource) -> voi
 		&"base_healing" : stats_resource.effect_source.base_healing,
 		&"crit_chance" : stats_resource.effect_source.crit_chance,
 		&"armor_penetration" : stats_resource.effect_source.armor_penetration,
+		&"object_damage_mult" : stats_resource.effect_source.object_damage_mult,
 		&"proj_speed" : stats_resource.projectile_logic.speed,
 		&"proj_max_distance" : stats_resource.projectile_logic.max_distance,
 		&"proj_max_pierce" : stats_resource.projectile_logic.max_pierce,
@@ -147,7 +148,9 @@ func _ready() -> void:
 
 	if stats.ammo_type == ProjWeaponResource.ProjAmmoType.STAMINA:
 		if source_entity is DynamicEntity and not stats.hide_ammo_ui:
-			source_entity.stamina_component.stamina_changed.connect(_update_ammo_ui)
+			source_entity.stamina_component.stamina_changed.connect(
+				func(_new_stamina: float) -> void: _update_ammo_ui()
+				)
 
 	if reload_off_hand: reload_off_hand.hide()
 	if reload_main_hand: reload_main_hand.hide()
@@ -746,13 +749,14 @@ func _start_firing_anim() -> void:
 		sprite.frame = ((sprite as AnimatedSprite2D).frame + 1) % (sprite as AnimatedSprite2D).sprite_frames.get_frame_count(sprite.animation)
 
 	if stats.override_anim_dur > 0:
-		anim_player.speed_scale = 1.0 / max(0.03, max(stats.firing_duration - 0.02, stats.override_anim_dur)) # The 0.02 is a buffer since animations aren't as precise in timing
+		anim_player.speed_scale = 1.0 / max(0.03, max(stats.firing_duration - 0.025, stats.override_anim_dur)) # The 0.025 is a buffer since animations aren't as precise in timing
 	else:
-		anim_player.speed_scale = 1.0 / max(0.03, stats.firing_duration - 0.02) # The 0.02 is a buffer since animations aren't as precise in timing
+		anim_player.speed_scale = 1.0 / max(0.03, stats.firing_duration - 0.025) # The 0.025 is a buffer since animations aren't as precise in timing
 
 	anim_player.speed_scale *= stats.anim_speed_mult
 
-	if anim_player.has_animation("fire"): anim_player.play("fire")
+	if anim_player.has_animation("fire"):
+		anim_player.play("fire")
 
 ## Starts the post-firing animation if we have one.
 func _start_post_fire_anim() -> void:

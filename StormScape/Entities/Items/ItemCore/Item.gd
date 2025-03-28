@@ -50,7 +50,7 @@ static func spawn_on_ground(item_stats: ItemResource, quant: int, location: Vect
 			quantity_count = 0
 
 		if location_range != -1:
-			@warning_ignore("narrowing_conversion") item_to_spawn.global_position = location + Vector2(randi_range((-location_range - 6) / 2.0, (location_range - 6) / 2.0) + 6, randi_range(0, (location_range - 6)) + 6)
+			item_to_spawn.global_position = location + Vector2(randf_range((-location_range - 6) / 2.0, (location_range - 6) / 2.0) + 6, randf_range(0, (location_range - 6)) + 6)
 		else:
 			item_to_spawn.global_position = location
 

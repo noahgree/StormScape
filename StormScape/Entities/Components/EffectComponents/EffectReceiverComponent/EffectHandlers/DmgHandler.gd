@@ -45,7 +45,12 @@ func _get_dmg_after_crit_then_armor(effect_source: EffectSource, is_crit: bool) 
 func handle_instant_damage(effect_source: EffectSource, life_steal_percent: float = 0.0) -> void:
 	var is_crit: bool = (randf_range(0, 100) <= effect_source.crit_chance) and can_be_crit
 	var dmg_after_crit_then_armor: int = _get_dmg_after_crit_then_armor(effect_source, is_crit)
-	_send_handled_dmg("BasicDamage", effect_source.dmg_affected_stats, dmg_after_crit_then_armor, effect_source.multishot_id, life_steal_percent, is_crit)
+
+	var object_dmg_mult: float = 1.0
+	if (affected_entity is RigidEntity or affected_entity is StaticEntity) and affected_entity.is_object:
+		object_dmg_mult = effect_source.object_damage_mult
+
+	_send_handled_dmg("BasicDamage", effect_source.dmg_affected_stats, int(dmg_after_crit_then_armor * object_dmg_mult), effect_source.multishot_id, life_steal_percent, is_crit)
 
 ## Handles applying damage that is inflicted over time, whether with a delay, with burst intervals, or with both.
 func handle_over_time_dmg(dot_resource: DOTResource, source_type: String) -> void:

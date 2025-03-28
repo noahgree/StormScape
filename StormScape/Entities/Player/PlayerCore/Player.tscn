@@ -1,7 +1,6 @@
 [gd_scene load_steps=221 format=3 uid="uid://dba8mrurjlekp"]
 
 [ext_resource type="Script" uid="uid://c3rpxq8pnbdje" path="res://Entities/Player/PlayerCore/Player.gd" id="1_m33tt"]
-[ext_resource type="Script" uid="uid://c2gdoebfp12dq" path="res://Entities/Stats/StatMod/StatModsCacheResource.gd" id="2_vetip"]
 [ext_resource type="PackedScene" uid="uid://cj2wy5f05cos4" path="res://Entities/EntityCore/Shadow/EntityShadow.tscn" id="3_05f62"]
 [ext_resource type="PackedScene" uid="uid://cdfdy8m6ki3oq" path="res://Entities/Components/HealthComponent/HealthComponent.tscn" id="3_ojev3"]
 [ext_resource type="PackedScene" uid="uid://dh4ydl7l86ywq" path="res://Entities/EntityCore/Sprites/EntitySprite.tscn" id="4_fmbcv"]
@@ -108,6 +107,7 @@
 [ext_resource type="Resource" uid="uid://cwgqj8klx4b3x" path="res://Entities/Items/TRESItems/ExtendedMag(0).tres" id="75_r5dvw"]
 [ext_resource type="Texture2D" uid="uid://bqxdg28d1twy1" path="res://UI/Inventory/InventoryCore/Background/Wood/inv_background_thin_wood.png" id="78_at8wu"]
 [ext_resource type="Texture2D" uid="uid://lqg70q4wj55g" path="res://UI/Inventory/InventoryCore/Background/Wood/inv_background_wood.png" id="78_jlc36"]
+[ext_resource type="Script" uid="uid://bcjwesiannbd0" path="res://Entities/Stats/StatMod/StatMod.gd" id="79_5qckj"]
 [ext_resource type="FontFile" uid="uid://bp2lgrlhj8cet" path="res://Assets/Theming/Fonts/Pixel/C&C Red Alert [INET].ttf" id="85_7xlwj"]
 [ext_resource type="Script" uid="uid://dbc2ecb1mkugh" path="res://UI/PlayerStatsOverlay/ActiveSlotInfo.gd" id="91_qr476"]
 [ext_resource type="Texture2D" uid="uid://dg4k8vt7nqpl6" path="res://UI/Inventory/InventoryCore/Button/button_raised_wood.png" id="106_0313k"]
@@ -124,9 +124,6 @@
 [ext_resource type="Texture2D" uid="uid://bcw0dq5ww2bs1" path="res://Entities/Items/Ammo/Stamina/stamina.png" id="119_6f5us"]
 [ext_resource type="Texture2D" uid="uid://0qokvcd3ucop" path="res://UI/Inventory/InventoryCore/Background/Universal/arrow_icon.png" id="119_bvo3j"]
 [ext_resource type="Texture2D" uid="uid://ces4hq54n2lxc" path="res://UI/Inventory/InventoryCore/Slot/Wood/normal_slot_wood.png" id="123_da65a"]
-
-[sub_resource type="Resource" id="Resource_rwbul"]
-script = ExtResource("2_vetip")
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_3f130"]
 radius = 2.0
@@ -1348,6 +1345,18 @@ light_mode = 1
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_n4o3n"]
 light_mode = 1
 
+[sub_resource type="Resource" id="Resource_f5l7i"]
+script = ExtResource("79_5qckj")
+stat_id = &"max_health"
+mod_id = &"test_mod_1"
+operation = "+%"
+value = 40.0
+rounding = "Round Closest"
+priority = 1
+max_stack_count = 1
+override_all = false
+metadata/_custom_type_script = "uid://bcjwesiannbd0"
+
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_0q2s6"]
 shader = ExtResource("44_vk3bi")
 shader_parameter/progress = 0.0
@@ -1450,7 +1459,6 @@ collision_layer = 0
 collision_mask = 0
 motion_mode = 1
 script = ExtResource("1_m33tt")
-stats = SubResource("Resource_rwbul")
 
 [node name="Collision" type="CollisionShape2D" parent="."]
 position = Vector2(0, -2)
@@ -1480,10 +1488,9 @@ position = Vector2(0, -16)
 sprite_frames = ExtResource("5_vy6lk")
 animation = &"idle"
 
-[node name="StatusEffectsComponent" parent="YSorter" node_paths=PackedStringArray("effect_receiver", "stats_ui") instance=ExtResource("6_n0x5k")]
+[node name="StatusEffectsComponent" parent="YSorter" node_paths=PackedStringArray("effect_receiver") instance=ExtResource("6_n0x5k")]
 unique_name_in_owner = true
 effect_receiver = NodePath("../../EffectReceiverComponent")
-stats_ui = NodePath("../../OverlayUI/PlayerStatsOverlay")
 print_effect_updates = true
 
 [node name="HandsComponent" parent="YSorter" node_paths=PackedStringArray("active_slot_info") instance=ExtResource("39_ngono")]
@@ -1493,11 +1500,9 @@ active_slot_info = NodePath("../../OverlayUI/ActiveSlotInfo")
 
 [node name="ParticleEmissionComponent" parent="." instance=ExtResource("10_6wv7y")]
 
-[node name="HealthComponent" parent="." node_paths=PackedStringArray("stats_ui") instance=ExtResource("3_ojev3")]
-stats_ui = NodePath("../OverlayUI/PlayerStatsOverlay")
+[node name="HealthComponent" parent="." instance=ExtResource("3_ojev3")]
 
-[node name="StaminaComponent" parent="." node_paths=PackedStringArray("stats_ui") instance=ExtResource("5_k4fu6")]
-stats_ui = NodePath("../OverlayUI/PlayerStatsOverlay")
+[node name="StaminaComponent" parent="." instance=ExtResource("5_k4fu6")]
 
 [node name="EffectReceiverComponent" parent="." node_paths=PackedStringArray("affected_entity", "health_component", "stamina_component", "dmg_handler", "heal_handler", "storm_syndrome_handler", "knockback_handler", "stun_handler", "poison_handler", "regen_handler", "frostbite_handler", "burning_handler", "time_snare_handler", "life_steal_handler") instance=ExtResource("4_hhm8x")]
 allowed_source_types = Array[int]([0])
@@ -1668,6 +1673,7 @@ mouse_filter = 1
 script = ExtResource("17_vdk5v")
 health_component = NodePath("../../HealthComponent")
 mods = Array[ExtResource("74_bvo3j")]([ExtResource("65_14ixx"), ExtResource("75_r5dvw")])
+player_mods = Array[ExtResource("79_5qckj")]([SubResource("Resource_f5l7i")])
 
 [node name="TestHurtBtn" type="Button" parent="OverlayUI/TestButtons"]
 layout_mode = 0
@@ -1752,6 +1758,30 @@ focus_mode = 0
 theme_override_font_sizes/font_size = 12
 text = "MOD 2"
 
+[node name="TestModBtn3" type="Button" parent="OverlayUI/TestButtons"]
+texture_filter = 1
+layout_mode = 0
+offset_left = 291.0
+offset_top = 238.0
+offset_right = 328.0
+offset_bottom = 258.0
+scale = Vector2(0.7, 0.7)
+focus_mode = 0
+theme_override_font_sizes/font_size = 12
+text = "MOD 3"
+
+[node name="TestModBtn4" type="Button" parent="OverlayUI/TestButtons"]
+texture_filter = 1
+layout_mode = 0
+offset_left = 291.0
+offset_top = 253.0
+offset_right = 328.0
+offset_bottom = 273.0
+scale = Vector2(0.7, 0.7)
+focus_mode = 0
+theme_override_font_sizes/font_size = 12
+text = "MOD 4"
+
 [node name="TestStormBtn" type="Button" parent="OverlayUI/TestButtons"]
 texture_filter = 1
 layout_mode = 0
@@ -1800,7 +1830,8 @@ focus_mode = 0
 theme_override_font_sizes/font_size = 12
 text = "COMBINE ITEMS"
 
-[node name="PlayerStatsOverlay" type="Control" parent="OverlayUI" node_paths=PackedStringArray("player")]
+[node name="PlayerStatsOverlay" type="Control" parent="OverlayUI" node_paths=PackedStringArray("health_component", "stamina_component")]
+unique_name_in_owner = true
 texture_filter = 2
 layout_mode = 3
 anchors_preset = 0
@@ -1811,7 +1842,8 @@ offset_bottom = 240.0
 scale = Vector2(0.7, 0.7)
 mouse_filter = 2
 script = ExtResource("35_yln51")
-player = NodePath("../..")
+health_component = NodePath("../../HealthComponent")
+stamina_component = NodePath("../../StaminaComponent")
 
 [node name="PanelContainer" type="PanelContainer" parent="OverlayUI/PlayerStatsOverlay"]
 self_modulate = Color(1, 1, 1, 0)
@@ -1949,31 +1981,6 @@ value = 100.0
 texture_under = ExtResource("52_dhyl8")
 texture_progress = ExtResource("53_qsiea")
 texture_progress_offset = Vector2(16, 17)
-
-[node name="HealthChangedTimer" type="Timer" parent="OverlayUI/PlayerStatsOverlay"]
-unique_name_in_owner = true
-wait_time = 0.5
-one_shot = true
-
-[node name="ShieldChangedTimer" type="Timer" parent="OverlayUI/PlayerStatsOverlay"]
-unique_name_in_owner = true
-wait_time = 0.5
-one_shot = true
-
-[node name="HungerChangedTimer" type="Timer" parent="OverlayUI/PlayerStatsOverlay"]
-unique_name_in_owner = true
-wait_time = 0.5
-one_shot = true
-
-[node name="StaminaChangedTimer" type="Timer" parent="OverlayUI/PlayerStatsOverlay"]
-unique_name_in_owner = true
-wait_time = 0.5
-one_shot = true
-
-[node name="StaminaRechargeTimer" type="Timer" parent="OverlayUI/PlayerStatsOverlay"]
-unique_name_in_owner = true
-wait_time = 0.3
-one_shot = true
 
 [node name="ItemInteractionHUD" type="NinePatchRect" parent="OverlayUI"]
 anchors_preset = 6
@@ -3167,17 +3174,12 @@ layout_mode = 2
 [connection signal="pressed" from="OverlayUI/TestButtons/TestLoadBtn" to="OverlayUI/TestButtons" method="_on_test_load_btn_pressed"]
 [connection signal="pressed" from="OverlayUI/TestButtons/TestModBtn1" to="OverlayUI/TestButtons" method="_on_test_mod_btn_1_pressed"]
 [connection signal="pressed" from="OverlayUI/TestButtons/TestModBtn2" to="OverlayUI/TestButtons" method="_on_test_mod_btn_2_pressed"]
-[connection signal="pressed" from="OverlayUI/TestButtons/TestStormBtn" to="OverlayUI/TestButtons" method="_on_test_mod_btn_3_pressed"]
+[connection signal="pressed" from="OverlayUI/TestButtons/TestModBtn3" to="OverlayUI/TestButtons" method="_on_test_mod_btn_3_pressed"]
+[connection signal="pressed" from="OverlayUI/TestButtons/TestModBtn4" to="OverlayUI/TestButtons" method="_on_test_mod_btn_4_pressed"]
+[connection signal="pressed" from="OverlayUI/TestButtons/TestStormBtn" to="OverlayUI/TestButtons" method="_on_test_storm_pressed"]
 [connection signal="pressed" from="OverlayUI/TestButtons/TestTimeBtn" to="OverlayUI/TestButtons" method="_on_test_time_btn_pressed"]
 [connection signal="pressed" from="OverlayUI/TestButtons/TestStormBtn2" to="OverlayUI/TestButtons" method="_on_test_storm_btn_2_pressed"]
 [connection signal="pressed" from="OverlayUI/TestButtons/TestCombineItems" to="OverlayUI/TestButtons" method="_on_test_combine_items_pressed"]
-[connection signal="tree_entered" from="OverlayUI/PlayerStatsOverlay" to="OverlayUI/PlayerStatsOverlay" method="_on_tree_entered"]
-[connection signal="tree_exiting" from="OverlayUI/PlayerStatsOverlay" to="OverlayUI/PlayerStatsOverlay" method="_on_tree_exiting"]
-[connection signal="timeout" from="OverlayUI/PlayerStatsOverlay/HealthChangedTimer" to="OverlayUI/PlayerStatsOverlay" method="_on_health_changed_timer_timeout"]
-[connection signal="timeout" from="OverlayUI/PlayerStatsOverlay/ShieldChangedTimer" to="OverlayUI/PlayerStatsOverlay" method="_on_shield_changed_timer_timeout"]
-[connection signal="timeout" from="OverlayUI/PlayerStatsOverlay/HungerChangedTimer" to="OverlayUI/PlayerStatsOverlay" method="_on_hunger_changed_timer_timeout"]
-[connection signal="timeout" from="OverlayUI/PlayerStatsOverlay/StaminaChangedTimer" to="OverlayUI/PlayerStatsOverlay" method="_on_stamina_changed_timer_timeout"]
-[connection signal="timeout" from="OverlayUI/PlayerStatsOverlay/StaminaRechargeTimer" to="OverlayUI/PlayerStatsOverlay" method="_on_stamina_recharge_timer_timeout"]
 [connection signal="visibility_changed" from="OverlayUI/HotbarUISlotMargins/HotbarUI" to="OverlayUI/HotbarUISlotMargins/HotbarUI" method="_on_visibility_changed"]
 [connection signal="button_down" from="OverlayUI/PlayerInvUI/MainTextureMargins/InvPopulator/SortByName/SortByNameBtn" to="OverlayUI/PlayerInvUI" method="_on_sort_by_name_btn_button_down"]
 [connection signal="button_up" from="OverlayUI/PlayerInvUI/MainTextureMargins/InvPopulator/SortByName/SortByNameBtn" to="OverlayUI/PlayerInvUI" method="_on_sort_by_name_btn_button_up"]

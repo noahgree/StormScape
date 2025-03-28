@@ -2,10 +2,12 @@ extends Resource
 class_name StatModsCacheResource
 ## A resource that caches and works with stat mods applied to the entity on which it is defined.
 
+var affected_entity: PhysicsBody2D = null ## The entity that this cache resource works for. If working with a weapon, this will be null.
 var stat_mods: Dictionary[StringName, Dictionary] = {} ## The cache of mod resources currently applied to the entity's stats.
 var cached_stats: Dictionary[StringName, float] = {} ## The up-to-date and calculated stats to be used by anything that depend on them.
 var base_values: Dictionary[StringName, float] = {} ## The unchanging base values of each moddable stat, usually set by copying the exported values from the component into a dictionary that is passed into the setup function below.
 var is_loading: bool = false ## Blocks print spam of changes during loads.
+var associated_callables: Dictionary[StringName, Callable] = {} ## This maps stats to a callable that should be called when they are changed.
 
 
 ## Clears out the cached stats and recalculates everything based on base values.
@@ -17,17 +19,34 @@ func reinit_on_load() -> void:
 	is_loading = false
 
 ## Sets up the base values dict and calculates initial values based on any already present mods.
-func add_moddable_stats(base_valued_stats: Dictionary[StringName, float], stats_ui: Control = null) -> void:
+func add_moddable_stats(base_valued_stats: Dictionary[StringName, float]) -> void:
 	is_loading = true
 	for stat_id: StringName in base_valued_stats.keys():
 		var base_value: float = base_valued_stats[stat_id]
 		stat_mods[stat_id] = {}
 		base_values[stat_id] = base_value
-		_recalculate_stat(stat_id, base_value, stats_ui)
+		_recalculate_stat(stat_id, base_value)
+	is_loading = false
+
+## Sets up the base values dict and calculates initial values based on any already present mods.
+## Also includes associated callables as the second element in an array attached to each stat StringName.
+## This is the callable that gets called when that stat is changed.
+func add_moddable_stats_with_associated_callables(base_valued_stats: Dictionary[StringName, Array]) -> void:
+	is_loading = true
+	for stat_id: StringName in base_valued_stats.keys():
+		var array: Array = base_valued_stats[stat_id]
+		var base_value: float = array[0]
+		stat_mods[stat_id] = {}
+		base_values[stat_id] = base_value
+		_recalculate_stat(stat_id, base_value)
+
+		var associated_callable: Callable = array[1]
+		associated_callables[stat_id] = associated_callable
+
 	is_loading = false
 
 ## Recalculates a cached stat. Usually called once something has changed like from an update or removal.
-func _recalculate_stat(stat_id: StringName, base_value: float, stats_ui: Control = null) -> void:
+func _recalculate_stat(stat_id: StringName, base_value: float) -> void:
 	var mods: Array = stat_mods[stat_id].values()
 	mods.sort_custom(_compare_by_priority)
 
@@ -39,7 +58,7 @@ func _recalculate_stat(stat_id: StringName, base_value: float, stats_ui: Control
 		result = mod.apply(base_value, result)
 
 	cached_stats[stat_id] = max(0, result)
-	_update_ui_for_stat(stat_id, result, stats_ui)
+	_update_ui_for_stat(stat_id, result)
 
 	if DebugFlags.PrintFlags.stat_mod_changes_during_game and not is_loading:
 		var change_text: String = str(snappedf(float(cached_stats[stat_id]) / float(base_values[stat_id]), 0.001))
@@ -47,11 +66,17 @@ func _recalculate_stat(stat_id: StringName, base_value: float, stats_ui: Control
 		print_rich("[color=cyan]" + stat_id + base_text + "[/color]: [b]" + str(cached_stats[stat_id]) + "[/b]")
 
 ## Updates an optionally connected UI when a watched stat changes.
-func _update_ui_for_stat(stat_id: StringName, new_value: float, stats_ui: Node) -> void:
-	if stats_ui:
-		var method_name: String = "on_" + stat_id + "_changed"
-		if stats_ui.has_method(method_name):
-			stats_ui.call_deferred("call", method_name, new_value)
+func _update_ui_for_stat(stat_id: StringName, new_value: float) -> void:
+	if affected_entity == null:
+		return
+
+	var callable: Variant = associated_callables.get(stat_id, null)
+	if callable == null: # Usually means the stat was added normally and does not have an associated callable
+		return
+	if not callable.is_valid():
+		push_warning("StatModsCacheResource tried to call the callable \"" + callable.get_method() + "\" on the node \"" + affected_entity.name + "\" and failed. Make sure the source of the moddable stat \"" + stat_id + "\" is passing the correct callable and is still valid." )
+	else:
+		callable.call_deferred(new_value)
 
 ## Compares stats to be applied in a certain order based on priority. Useful for if you want a stat
 ## to multiply the base value before another stat tries to add a constant to it.
@@ -72,7 +97,7 @@ func update_mod_by_id(stat_id: StringName, mod_id: StringName, new_value: float)
 		_recalculate_stat(stat_id, base_values[stat_id])
 
 ## Adds mods to a stat. Handles logic for stacking if the mod can stack.
-func add_mods(mod_array: Array[StatMod], stats_ui: Control = null) -> void:
+func add_mods(mod_array: Array[StatMod]) -> void:
 	for mod: StatMod in mod_array:
 		if mod.stat_id in stat_mods:
 			var existing_mod: StatMod = stat_mods[mod.stat_id].get(mod.mod_id, null)
@@ -86,12 +111,12 @@ func add_mods(mod_array: Array[StatMod], stats_ui: Control = null) -> void:
 				mod.before_stack_value = mod.value
 				stat_mods[mod.stat_id][mod.mod_id] = mod
 
-			_recalculate_stat(mod.stat_id, base_values[mod.stat_id], stats_ui)
+			_recalculate_stat(mod.stat_id, base_values[mod.stat_id])
 		else:
 			_push_mod_not_found_warning(mod.stat_id, mod.mod_id)
 
 ## Removes a mod from a stat. If it has been stacked, it removes the number of instances specified by the count.
-func remove_mod(stat_id: StringName, mod_id: StringName, stats_ui: Control = null, count: int = 0) -> void:
+func remove_mod(stat_id: StringName, mod_id: StringName, count: int = 0) -> void:
 	var existing_mod: StatMod = _get_mod(stat_id, mod_id)
 	if existing_mod:
 		if count == 0:
@@ -103,7 +128,7 @@ func remove_mod(stat_id: StringName, mod_id: StringName, stats_ui: Control = nul
 			if existing_mod.stack_count <= 0:
 				stat_mods[stat_id].erase(mod_id)
 
-		_recalculate_stat(stat_id, base_values[stat_id], stats_ui)
+		_recalculate_stat(stat_id, base_values[stat_id])
 
 ## Recalculates the cached stat value based on the updated stack count of that mod on that stat.
 func _recalculate_mod_value_with_new_stack_count(mod: StatMod) -> void:
@@ -113,13 +138,13 @@ func _recalculate_mod_value_with_new_stack_count(mod: StatMod) -> void:
 		mod.value = mod.before_stack_value * mod.stack_count
 
 ## Undoes any stacking applied to a mod, setting it back to as if there was only one instance active.
-func undo_mod_stacking(stat_id: StringName, mod_id: StringName, stats_ui: Control = null) -> void:
+func undo_mod_stacking(stat_id: StringName, mod_id: StringName) -> void:
 	var existing_mod: StatMod = _get_mod(stat_id, mod_id)
 	if existing_mod:
 		existing_mod.stack_count = 1
 		existing_mod.value = existing_mod.before_stack_value
 
-		_recalculate_stat(stat_id, base_values[stat_id], stats_ui)
+		_recalculate_stat(stat_id, base_values[stat_id])
 
 ## Gets the current cached value of a stat.
 func get_stat(stat_id: StringName) -> float:

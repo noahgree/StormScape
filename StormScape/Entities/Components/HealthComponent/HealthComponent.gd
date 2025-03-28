@@ -6,13 +6,18 @@ class_name HealthComponent
 ## Has functions for handling taking damage and healing.
 ## This class should always remain agnostic about the entity and the entity's UI it updates.
 
-@export var stats_ui: Control
+signal health_changed(new_health: int)
+signal max_health_changed(new_max_health: int)
+signal shield_changed(new_shield: int)
+signal max_shield_changed(new_max_shield: int)
+signal armor_changed(new_armor: int)
+
 @export var _max_health: int = 100 ## The maximum amount of health the entity can have.
 @export var _max_shield: int = 100 ## The maximum amount of shield the entity can have.
 @export_range(0, 100, 1) var base_armor: int = 0 ## The initial percentage of damage deflected.
 @export var infinte_hp: bool = false ## When true, the entity cannot run out of health or shield.
 
-@onready var entity: PhysicsBody2D = get_parent()
+@onready var entity: PhysicsBody2D = get_parent() ## The entity this health component operates on.
 
 var health: int: set = _set_health ## The current health of the entity.
 var shield: int: set = _set_shield ## The current shield of the entity.
@@ -26,10 +31,10 @@ const MAX_ARMOR: int = 100 ## The maximum amount of armor the entity can have.
 
 #region Setup
 func _ready() -> void:
-	var moddable_stats: Dictionary[StringName, float] = {
-		&"max_health" : _max_health, &"max_shield" : _max_shield
+	var moddable_stats: Dictionary[StringName, Array] = {
+		&"max_health" : [_max_health, on_max_health_changed], &"max_shield" : [_max_shield, on_max_shield_changed]
 	}
-	entity.stats.add_moddable_stats(moddable_stats)
+	entity.stats.add_moddable_stats_with_associated_callables(moddable_stats)
 	call_deferred("_emit_initial_values")
 
 ## Called from a deferred method caller in order to let any associated ui ready up first.
@@ -40,13 +45,14 @@ func _emit_initial_values() -> void:
 		_set_shield(shield)
 		_set_armor(armor)
 	else:
-		@warning_ignore("narrowing_conversion") health = entity.stats.get_stat("max_health")
-		@warning_ignore("narrowing_conversion") shield = entity.stats.get_stat("max_shield")
+		health = int(entity.stats.get_stat("max_health"))
+		shield = int(entity.stats.get_stat("max_shield"))
 		armor = base_armor
 #endregion
 
 #region Utils: Taking Damage
-## Takes damage to both health and shield, starting with available shield then applying any remaining amount to health.
+## Takes damage to both health and shield, starting with available shield then applying any remaining
+## amount to health.
 func damage_shield_then_health(amount: int, source_type: String, was_crit: bool, multishot_id: int) -> void:
 	if amount > 0 and not is_dying:
 		if shield > 0:
@@ -61,10 +67,10 @@ func damage_shield_then_health(amount: int, source_type: String, was_crit: bool,
 		return
 
 	var spillover_damage: int = max(0, amount - shield)
-	@warning_ignore("narrowing_conversion") shield = max(0, shield - amount)
+	shield = int(max(0, shield - amount))
 
 	if spillover_damage > 0:
-		@warning_ignore("narrowing_conversion") health = max(0, health - spillover_damage)
+		health = int(max(0, health - spillover_damage))
 	_check_for_death()
 
 ## Decrements only the health value by the passed in amount.
@@ -101,7 +107,7 @@ func _check_for_death() -> void:
 
 #region Changing Armor
 ## Called externally to update the current armor value.
-func set_armor(new_armor: int) -> void:
+func update_armor(new_armor: int) -> void:
 	armor = new_armor
 #endregion
 
@@ -117,10 +123,10 @@ func heal_health_then_shield(amount: int, source_type: String, _multishot_id: in
 			_create_or_update_popup_for_src_type(src_type, true, false, amount)
 
 		var spillover_health: int = max(0, (amount + health) - entity.stats.get_stat("max_health"))
-		@warning_ignore("narrowing_conversion") health = clampi(health + amount, 0, entity.stats.get_stat("max_health"))
+		health = clampi(health + amount, 0, int(entity.stats.get_stat("max_health")))
 
 		if spillover_health > 0:
-			@warning_ignore("narrowing_conversion") shield = clampi(shield + spillover_health, 0, entity.stats.get_stat("max_shield"))
+			shield = clampi(shield + spillover_health, 0, int(entity.stats.get_stat("max_shield")))
 
 ## Heals only health.
 func heal_health(amount: int, source_type: String, _multishot_id: int) -> void:
@@ -140,27 +146,28 @@ func heal_shield(amount: int, source_type: String, _multishot_id: int) -> void:
 #region Setters & On-Change Funcs
 ## Setter for the current health. Clamps the new value to the allowed range and updates any connected UI.
 func _set_health(new_value: int) -> void:
-	@warning_ignore("narrowing_conversion") health = clampi(new_value, 0, entity.stats.get_stat("max_health"))
-	if stats_ui and stats_ui.has_method("on_health_changed"):
-		stats_ui.on_health_changed(health)
+	health = clampi(new_value, 0, int(entity.stats.get_stat("max_health")))
+	health_changed.emit(health)
 
 ## Setter for the current shield. Clamps the new value to the allowed range and updates any connected UI.
 func _set_shield(new_value: int) -> void:
-	@warning_ignore("narrowing_conversion") shield = clampi(new_value, 0, entity.stats.get_stat("max_shield"))
-	if stats_ui and stats_ui.has_method("on_shield_changed"):
-		stats_ui.on_shield_changed(shield)
+	shield = clampi(new_value, 0, int(entity.stats.get_stat("max_shield")))
+	shield_changed.emit(shield)
 
 ## Setter for the current armor. Clamps the new value to the allowed range.
 func _set_armor(new_value: int) -> void:
 	armor = clampi(new_value, 0, MAX_ARMOR)
+	armor_changed.emit(armor)
 
-## When max health changes, we need to limit the current health value.
+## When max health changes, we need to limit the current health value. Usually called by stat mod caches.
 func on_max_health_changed(new_max_health: int) -> void:
 	health = min(health, new_max_health)
+	max_health_changed.emit(new_max_health)
 
-## When max shield changes, we need to limit the current shield value.
+## When max shield changes, we need to limit the current shield value. Usually called by stat mod caches.
 func on_max_shield_changed(new_max_shield: int) -> void:
 	shield = min(shield, new_max_shield)
+	max_shield_changed.emit(new_max_shield)
 
 ## Handles playing sounds for this class and respects the fact that multishots should all share a sound.
 func _play_sound(sound_name: String, multishot_id: int) -> void:

@@ -19,6 +19,7 @@ class_name EffectSource
 @export var base_damage: int: ## The base numerical amount of damage associated with this effect source.
 	set(new_value):
 		base_damage = max(0, new_value)
+@export var object_damage_mult: float = 1.0 ## A multiplier for doing more damage to Static & Rigid entities marked as objects.
 @export var dmg_affected_stats: Globals.DmgAffectedStats = Globals.DmgAffectedStats.SHIELD_THEN_HEALTH ## Which entity stats are affected by this damage source.
 @export_range(0, 100, 1, "suffix:%") var crit_chance: int = 0 ## The chance the application of damage will be a critial hit.
 @export var crit_multiplier: float = 1.5 ## How much stronger critical hits are than normal hits.

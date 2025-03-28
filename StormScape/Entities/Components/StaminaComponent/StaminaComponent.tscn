@@ -1,13 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://cxpv7l7rcaq1o"]
 
-[ext_resource type="Script" path="res://Entities/Components/StaminaComponent/StaminaComponent.gd" id="1_1us2t"]
+[ext_resource type="Script" uid="uid://bhx5brmcghik8" path="res://Entities/Components/StaminaComponent/StaminaComponent.gd" id="1_1us2t"]
 
 [node name="StaminaComponent" type="Node" groups=["has_save_logic"]]
 script = ExtResource("1_1us2t")
-
-[node name="StaminaWaitTimer" type="Timer" parent="."]
-unique_name_in_owner = true
-wait_time = 5.0
-one_shot = true
-
-[connection signal="timeout" from="StaminaWaitTimer" to="." method="_on_stamina_wait_timer_timeout"]
