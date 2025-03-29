@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://csmk61f3sxw44"
-path="res://.godot/imported/Shield Under.png-0e752cf4cef43992d9d0aa66afd37c29.ctex"
+uid="uid://5avvx8ycv3w1"
+path="res://.godot/imported/dark_wood_no_stripes.png-37a8b99aff30719c68f57d8deac29b80.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://UI/PlayerStatsOverlay/Assets/Shield Under.png"
-dest_files=["res://.godot/imported/Shield Under.png-0e752cf4cef43992d9d0aa66afd37c29.ctex"]
+source_file="res://UI/Inventory/InventoryCore/Slot/Wood/dark_wood_no_stripes.png"
+dest_files=["res://.godot/imported/dark_wood_no_stripes.png-37a8b99aff30719c68f57d8deac29b80.ctex"]
 
 [params]
 

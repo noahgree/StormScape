@@ -6,7 +6,7 @@
 [node name="DayNightManager" type="Node"]
 script = ExtResource("1_ool0t")
 color_gradient = ExtResource("2_i82t2")
-current_hour = 20
+current_hour = 7
 
 [node name="CanvasModulate" type="CanvasModulate" parent="."]
 color = Color(0.263639, 0.246502, 0.472484, 1)

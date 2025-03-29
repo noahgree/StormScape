@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://l7chqvbfg16y"
-path="res://.godot/imported/Stamina Bar.png-999bf80bf5f1e37c2c9755db7bd7856c.ctex"
+uid="uid://comcgk0iu7yb8"
+path="res://.godot/imported/shield_icon.png-a34ef612a580472e4f8ac0c90e296428.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://UI/PlayerStatsOverlay/Assets/Stamina Bar.png"
-dest_files=["res://.godot/imported/Stamina Bar.png-999bf80bf5f1e37c2c9755db7bd7856c.ctex"]
+source_file="res://UI/PlayerStatsHUD/Icons/shield_icon.png"
+dest_files=["res://.godot/imported/shield_icon.png-a34ef612a580472e4f8ac0c90e296428.ctex"]
 
 [params]
 

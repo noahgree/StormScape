@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://1m3lv40blexn"
-path="res://.godot/imported/Stamina Under.png-b342c2751e96d040e4ee90698373e910.ctex"
+uid="uid://dil8w58e3xdt5"
+path="res://.godot/imported/hunger_icon.png-5feefea05cd2a5abf82e265e7988ae94.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://UI/PlayerStatsOverlay/Assets/Stamina Under.png"
-dest_files=["res://.godot/imported/Stamina Under.png-b342c2751e96d040e4ee90698373e910.ctex"]
+source_file="res://UI/PlayerStatsHUD/Icons/hunger_icon.png"
+dest_files=["res://.godot/imported/hunger_icon.png-5feefea05cd2a5abf82e265e7988ae94.ctex"]
 
 [params]
 

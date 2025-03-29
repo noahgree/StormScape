@@ -11,7 +11,7 @@ class_name EntitySprite
 @export var min_crack_stats: Dictionary[StringName, float] = {
 	&"crack_intensity" : 0.685,
 	&"crack_profile" : 1.228,
-	&"crack_scale" : 2.72,
+	&"crack_scale" : 3.838,
 }
 ## The max values to interpolate to for the cracking shader when health is at its lowest.
 ## The crack_scale will adjust for sprite size automatically upon game start.

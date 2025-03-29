@@ -158,7 +158,7 @@ void fragment() {
             effectiveUV.x = floor(UV.x * crack_pixelate.x) / crack_pixelate.x;
         if (crack_pixelate.y > 0.0)
             effectiveUV.y = floor(UV.y * crack_pixelate.y) / crack_pixelate.y;
-        
+
         vec4 crack_effect = generate_cracks(effectiveUV);
         float mask = clamp(crack_effect.a * crack_intensity, 0.0, 1.0);
 
@@ -168,7 +168,7 @@ void fragment() {
         if (use_override_color && override_color.a > 0.0) {
             effective_crack = mix(effective_crack, override_color.rgb, override_color.a * 0.5);
         }
-        
+
         // Blend the underlying color with a darker version based on the effective crack color.
         COLOR.rgb = mix(COLOR.rgb, mix(COLOR.rgb, effective_crack, crack_darkness), mask);
     }

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c5mo0gxdddlte"
-path="res://.godot/imported/Hunger Change.png-c5f4e64d4bdf4c52fe7b3ae759da0195.ctex"
+uid="uid://wsv6cyckepdw"
+path="res://.godot/imported/inv_background_medium_wood.png-20cd1303c59df0ff86fe89c56a0547bd.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://UI/PlayerStatsOverlay/Assets/Hunger Change.png"
-dest_files=["res://.godot/imported/Hunger Change.png-c5f4e64d4bdf4c52fe7b3ae759da0195.ctex"]
+source_file="res://UI/Inventory/InventoryCore/Background/Wood/inv_background_medium_wood.png"
+dest_files=["res://.godot/imported/inv_background_medium_wood.png-20cd1303c59df0ff86fe89c56a0547bd.ctex"]
 
 [params]
 

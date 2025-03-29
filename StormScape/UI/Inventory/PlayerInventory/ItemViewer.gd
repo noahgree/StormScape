@@ -1,5 +1,5 @@
 extends VBoxContainer
-class_name ItemViewer
+class_name ItemDetailsPanel
 ## This is responsible for handling the item details inside the player's inventory.
 ##
 ## You can drag and drop an item into the main slot to edit its mods and view more information about it.
@@ -67,16 +67,16 @@ func _setup_slots() -> void:
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_DRAG_END and item_viewer_slot.item == null:
 		visible = false
+	if what == NOTIFICATION_DRAG_BEGIN and _is_dragging_slot():
+		if not pinned:
+			_show_and_update_item_title("Drop Here to Pin")
 
 ## When the slot is hovered over, potentially start a delay for showing stats of the underneath item.
 ## If something is instead pinned, return and do nothing.
 func _on_slot_hovered(slot: Slot) -> void:
 	if pinned:
 		return
-	elif _is_dragging_slot():
-		_show_and_update_item_title("Drop Here to Pin")
-		return
-	else:
+	elif not _is_dragging_slot():
 		item_hover_delay_timer.set_meta("slot", slot)
 		item_hover_delay_timer.start()
 
@@ -84,14 +84,10 @@ func _on_slot_hovered(slot: Slot) -> void:
 ## something is currently pinned.
 func _on_slot_not_hovered() -> void:
 	item_hover_delay_timer.stop()
-	if pinned:
-		return
-	elif _is_dragging_slot():
-		_show_and_update_item_title("Drop Here to Pin")
-
-	is_updating_via_hover = true
-	item_viewer_slot.item = null
-	is_updating_via_hover = false
+	if not pinned:
+		is_updating_via_hover = true
+		item_viewer_slot.item = null
+		is_updating_via_hover = false
 
 ## When the focused UI is closed, we should empty out the crafting input slots and drop them on the
 ## ground if the inventory is now full.

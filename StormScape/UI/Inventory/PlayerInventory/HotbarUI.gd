@@ -1,10 +1,10 @@
-extends NinePatchRect
+extends MarginContainer
 class_name HotbarUI
 ## The player's hotbar UI controller. Handles logic for the hotbar shown when the inventory is not open.
 
 @export var slot_scene: PackedScene = preload("res://UI/Inventory/InventoryCore/Slot/SlotCore/Slot.tscn") ## The slot scene to be instantiated as children.
 @export var player_inv: Inventory ## The connected player inventory to reflect as a UI.
-@export var active_slot_info: MarginContainer ## The node that controls displaying the info about the active slot.
+@export var active_slot_info: Control ## The node that controls displaying the info about the active slot.
 
 @onready var hotbar: HBoxContainer = %HotbarUISlotGrid ## The container that holds the hotbar slots.
 
@@ -21,6 +21,8 @@ func _ready() -> void:
 	if not Globals.player_node: await SignalBus.player_ready
 	Globals.player_node.stamina_component.max_stamina_changed.connect(_update_inv_ammo_ui)
 	SignalBus.focused_ui_closed.connect(_update_inv_ammo_ui)
+	SignalBus.focused_ui_opened.connect(hide)
+	SignalBus.focused_ui_closed.connect(show)
 
 ## Sets up the hotbar slots by clearing out any existing slot children and readding them with their needed params.
 func _setup_slots() -> void:

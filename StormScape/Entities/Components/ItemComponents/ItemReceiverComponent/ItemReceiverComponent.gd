@@ -65,7 +65,7 @@ func _hide_player_interact_hud() -> void:
 	item_interact_hud.hide_hud()
 
 func _unhandled_key_input(_event: InputEvent) -> void:
-	if Input.is_action_just_pressed("interact"):
+	if Input.is_action_just_pressed("interact") and not Globals.focused_ui_is_open:
 		_pickup_item_from_queue()
 
 ## Attempts to pick up the first item in the items in range queue. The method it calls will drop what doesn't

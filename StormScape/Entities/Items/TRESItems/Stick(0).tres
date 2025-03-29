@@ -1,9 +1,10 @@
-[gd_resource type="Resource" script_class="WorldResourceResource" load_steps=7 format=3 uid="uid://8uj8fwadqlk0"]
+[gd_resource type="Resource" script_class="WorldResourceResource" load_steps=9 format=3 uid="uid://8uj8fwadqlk0"]
 
 [ext_resource type="Script" uid="uid://cowjdnic7xmkp" path="res://UI/Inventory/PlayerInventory/ItemDetail.gd" id="1_cgtgx"]
 [ext_resource type="Texture2D" uid="uid://dhr6ujbdy31nl" path="res://Entities/Items/WorldResources/Stick/StickCT.tres" id="1_svgfi"]
 [ext_resource type="PackedScene" uid="uid://bhmmr2f1hs8mk" path="res://Entities/Items/WorldResources/WorldResource.tscn" id="3_kf8ve"]
 [ext_resource type="Script" uid="uid://crlmvnjkf7c3g" path="res://Entities/Items/WorldResources/WorldResourceResource.gd" id="4_xv5sp"]
+[ext_resource type="Resource" uid="uid://cwgqj8klx4b3x" path="res://Entities/Items/TRESItems/ExtendedMag(0).tres" id="5_0kbu8"]
 [ext_resource type="Script" uid="uid://ctxa7i1mbt7ab" path="res://UI/Inventory/PlayerInventory/Crafting/CraftingIngredient.gd" id="5_npuiu"]
 
 [sub_resource type="Resource" id="Resource_svgfi"]
@@ -12,6 +13,15 @@ type = "Tags"
 quantity = 1
 tags = Array[StringName]([&"log"])
 rarity_match = "No"
+metadata/_custom_type_script = "uid://ctxa7i1mbt7ab"
+
+[sub_resource type="Resource" id="Resource_kf8ve"]
+script = ExtResource("5_npuiu")
+type = "Item"
+item = ExtResource("5_0kbu8")
+quantity = 3
+tags = Array[StringName]([])
+rarity_match = "GEQ"
 metadata/_custom_type_script = "uid://ctxa7i1mbt7ab"
 
 [resource]
@@ -32,7 +42,7 @@ inv_icon = ExtResource("1_svgfi")
 inv_icon_offset = Vector2(0, 0)
 inv_icon_scale = Vector2(1, 1)
 inv_icon_rotation = 0.0
-recipe = Array[ExtResource("5_npuiu")]([SubResource("Resource_svgfi")])
+recipe = Array[ExtResource("5_npuiu")]([SubResource("Resource_svgfi"), SubResource("Resource_kf8ve")])
 output_quantity = 4
 recipe_unlocked = true
 item_scene = ExtResource("3_kf8ve")

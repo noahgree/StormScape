@@ -25,7 +25,7 @@ func _can_drop_data(_at_position: Vector2, data: Variant) -> bool:
 
 func _get_drag_data(at_position: Vector2) -> Variant:
 	if is_output_slot:
-		return
+		return null
 
 	return super._get_drag_data(at_position)
 

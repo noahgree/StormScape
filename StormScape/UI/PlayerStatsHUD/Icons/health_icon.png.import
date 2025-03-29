@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://gfbxblly7q78"
-path="res://.godot/imported/Stamina Recharge Bar.png-86bfc3f55548e62f6050800f880da216.ctex"
+uid="uid://c7elu72hhoy5l"
+path="res://.godot/imported/health_icon.png-9ea1c495bfc34f5609b35651a46e2055.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://UI/PlayerStatsOverlay/Assets/Stamina Recharge Bar.png"
-dest_files=["res://.godot/imported/Stamina Recharge Bar.png-86bfc3f55548e62f6050800f880da216.ctex"]
+source_file="res://UI/PlayerStatsHUD/Icons/health_icon.png"
+dest_files=["res://.godot/imported/health_icon.png-9ea1c495bfc34f5609b35651a46e2055.ctex"]
 
 [params]
 

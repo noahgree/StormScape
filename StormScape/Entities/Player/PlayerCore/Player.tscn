@@ -1,4 +1,4 @@
-[gd_scene load_steps=221 format=3 uid="uid://dba8mrurjlekp"]
+[gd_scene load_steps=211 format=3 uid="uid://dba8mrurjlekp"]
 
 [ext_resource type="Script" uid="uid://c3rpxq8pnbdje" path="res://Entities/Player/PlayerCore/Player.gd" id="1_m33tt"]
 [ext_resource type="PackedScene" uid="uid://cj2wy5f05cos4" path="res://Entities/EntityCore/Shadow/EntityShadow.tscn" id="3_05f62"]
@@ -43,49 +43,31 @@
 [ext_resource type="Script" uid="uid://ccdihncnoj7dh" path="res://UI/Inventory/PlayerInventory/ItemInteractionHUD.gd" id="35_45ikj"]
 [ext_resource type="Resource" uid="uid://bper7kxtsf7f1" path="res://Entities/Items/TRESItems/Axe(1).tres" id="35_g2eu7"]
 [ext_resource type="Resource" uid="uid://m8eslst1uuxh" path="res://Entities/Items/TRESItems/Light(0).tres" id="35_qbswt"]
-[ext_resource type="Script" uid="uid://di5hu6fk5mbfe" path="res://UI/PlayerStatsOverlay/PlayerStatsOverlay.gd" id="35_yln51"]
-[ext_resource type="Texture2D" uid="uid://dwo0fuwylfxeq" path="res://UI/PlayerStatsOverlay/Assets/Stats Panel Bckgrd.png" id="36_vdy3t"]
-[ext_resource type="Texture2D" uid="uid://k0o25ihgea1n" path="res://UI/PlayerStatsOverlay/Assets/Hunger Progress Under.png" id="37_32xjt"]
+[ext_resource type="Script" uid="uid://di5hu6fk5mbfe" path="res://UI/PlayerStatsHUD/PlayerStatsHUD.gd" id="35_yln51"]
 [ext_resource type="Resource" uid="uid://ciel2rrqq4dvv" path="res://Entities/Items/TRESItems/LaserGun(2).tres" id="37_a2tah"]
-[ext_resource type="Texture2D" uid="uid://bdgevpcheclv5" path="res://UI/PlayerStatsOverlay/Assets/Hunger Progress Bar.png" id="38_ht2cb"]
 [ext_resource type="PackedScene" uid="uid://b7gdy01q8wsjx" path="res://Entities/Components/ItemComponents/HandsComponent/HandsComponent.tscn" id="39_ngono"]
 [ext_resource type="Shader" uid="uid://c0de04pgeen76" path="res://Utilities/Game/Shaders/BlurBehind.gdshader" id="39_r4tgk"]
-[ext_resource type="Texture2D" uid="uid://xnppg0u7t7w4" path="res://UI/PlayerStatsOverlay/Assets/Stamina Recharge Under.png" id="39_ryeha"]
 [ext_resource type="Resource" uid="uid://c5jim46mul7ex" path="res://Entities/Items/TRESItems/IonCharge(0).tres" id="40_6wv7y"]
 [ext_resource type="Resource" uid="uid://bcvljie626314" path="res://Entities/Items/TRESItems/Heavy(0).tres" id="40_7ipu6"]
 [ext_resource type="Resource" uid="uid://bdjhfsluk53lc" path="res://Entities/Items/TRESItems/Medium(0).tres" id="40_r220t"]
-[ext_resource type="Texture2D" uid="uid://gfbxblly7q78" path="res://UI/PlayerStatsOverlay/Assets/Stamina Recharge Bar.png" id="40_suqvl"]
 [ext_resource type="Resource" uid="uid://bx2nl7cqe7odq" path="res://Entities/Items/TRESItems/AdvancedScope(3).tres" id="41_bvo3j"]
 [ext_resource type="Script" uid="uid://co5w78bykccb6" path="res://UI/Inventory/InventoryCore/InventoryPopulator.gd" id="41_nwjbq"]
-[ext_resource type="Texture2D" uid="uid://br8kgmxe41gh0" path="res://UI/PlayerStatsOverlay/Assets/Hunger Bar.png" id="41_wehgh"]
-[ext_resource type="Texture2D" uid="uid://cjjobaebw8uwu" path="res://UI/PlayerStatsOverlay/Assets/Hunger Under.png" id="42_im6xp"]
 [ext_resource type="PackedScene" uid="uid://m4ur3n2hwsp8" path="res://UI/Inventory/InventoryCore/Slot/SlotCore/Slot.tscn" id="42_r422n"]
 [ext_resource type="Resource" uid="uid://bsq8lhqy8j1i7" path="res://Entities/Items/TRESItems/SimpleScope(1).tres" id="43_gb65f"]
-[ext_resource type="Texture2D" uid="uid://c5mo0gxdddlte" path="res://UI/PlayerStatsOverlay/Assets/Hunger Change.png" id="43_k8324"]
 [ext_resource type="Resource" uid="uid://cpxev3kvt74vw" path="res://Entities/Items/TRESItems/Shell(0).tres" id="44_q38m2"]
-[ext_resource type="Shader" uid="uid://c7jh4yrgpc0u" path="res://Utilities/Game/Shaders/StaminaBarTipGlow.gdshader" id="44_vk3bi"]
-[ext_resource type="Texture2D" uid="uid://l7chqvbfg16y" path="res://UI/PlayerStatsOverlay/Assets/Stamina Bar.png" id="45_3j47m"]
 [ext_resource type="Resource" uid="uid://kmidnuyti5xi" path="res://Entities/Items/TRESItems/Boomerang(2).tres" id="45_xur7q"]
-[ext_resource type="Texture2D" uid="uid://1m3lv40blexn" path="res://UI/PlayerStatsOverlay/Assets/Stamina Under.png" id="46_l08yu"]
 [ext_resource type="Resource" uid="uid://dlfmjgnfk6nqj" path="res://Entities/Items/TRESItems/Revolver(0).tres" id="46_xbbnp"]
-[ext_resource type="Texture2D" uid="uid://dlx621mbgic4b" path="res://UI/PlayerStatsOverlay/Assets/Stamina Change.png" id="47_2ra1b"]
 [ext_resource type="Resource" uid="uid://bs4rqdt46yav7" path="res://Entities/Items/TRESItems/OakLog(0).tres" id="47_3uq13"]
 [ext_resource type="Resource" uid="uid://duc0xfejpfs1" path="res://Entities/Items/TRESItems/EagleEye(3).tres" id="47_a0x8j"]
 [ext_resource type="Resource" uid="uid://3avt5jvd3dye" path="res://Entities/Items/TRESItems/BottleOFire(3).tres" id="47_devgv"]
 [ext_resource type="Resource" uid="uid://14gw464h13vv" path="res://Entities/Items/TRESItems/Cratershot(1).tres" id="48_1kvwx"]
 [ext_resource type="Resource" uid="uid://dbnhbsphiw4oe" path="res://Entities/Items/TRESItems/SpruceLog(0).tres" id="48_3uq13"]
-[ext_resource type="Texture2D" uid="uid://ba6aut5vjc3g" path="res://UI/PlayerStatsOverlay/Assets/Shield.png" id="48_d5w3g"]
 [ext_resource type="Resource" uid="uid://4nvp28pvjtk3" path="res://Entities/Items/TRESItems/Boomerang(1).tres" id="49_gbpko"]
-[ext_resource type="Texture2D" uid="uid://csmk61f3sxw44" path="res://UI/PlayerStatsOverlay/Assets/Shield Under.png" id="49_ynd7x"]
-[ext_resource type="Texture2D" uid="uid://dcsw75wiocvy0" path="res://UI/PlayerStatsOverlay/Assets/Shield Change.png" id="50_86ubk"]
 [ext_resource type="Resource" uid="uid://8uj8fwadqlk0" path="res://Entities/Items/TRESItems/Stick(0).tres" id="50_0313k"]
 [ext_resource type="Resource" uid="uid://cfaje12siuo0b" path="res://Entities/Items/TRESItems/Compensator(2).tres" id="50_eufsu"]
-[ext_resource type="Texture2D" uid="uid://b2v0527iatsjd" path="res://UI/PlayerStatsOverlay/Assets/Health.png" id="51_6cphe"]
-[ext_resource type="Texture2D" uid="uid://dhvpkl1svbcys" path="res://UI/PlayerStatsOverlay/Assets/Health Under.png" id="52_dhyl8"]
 [ext_resource type="Resource" uid="uid://dpmwqsai6gxsr" path="res://Entities/Items/TRESItems/FlameBlower(5).tres" id="52_ebist"]
 [ext_resource type="Resource" uid="uid://b8gvf7ta6a2rj" path="res://Entities/Items/TRESItems/Foregrip(1).tres" id="52_eufsu"]
 [ext_resource type="Resource" uid="uid://1q7rlned2r23" path="res://Entities/Items/TRESItems/Gattler(3).tres" id="53_lo25j"]
-[ext_resource type="Texture2D" uid="uid://lj78cee4aa38" path="res://UI/PlayerStatsOverlay/Assets/Health Change.png" id="53_qsiea"]
 [ext_resource type="Resource" uid="uid://bta1hncad1hd2" path="res://Entities/Items/TRESItems/ExtendedMag(1).tres" id="56_da65a"]
 [ext_resource type="Resource" uid="uid://dk3vlbvu2b7eq" path="res://Entities/Items/TRESItems/Sword(4).tres" id="57_6wv7y"]
 [ext_resource type="Script" uid="uid://dih45lqhjg0xx" path="res://UI/OverheadUI/PlayerOverheadUI.gd" id="57_n8srl"]
@@ -109,11 +91,21 @@
 [ext_resource type="Texture2D" uid="uid://lqg70q4wj55g" path="res://UI/Inventory/InventoryCore/Background/Wood/inv_background_wood.png" id="78_jlc36"]
 [ext_resource type="Script" uid="uid://bcjwesiannbd0" path="res://Entities/Stats/StatMod/StatMod.gd" id="79_5qckj"]
 [ext_resource type="FontFile" uid="uid://bp2lgrlhj8cet" path="res://Assets/Theming/Fonts/Pixel/C&C Red Alert [INET].ttf" id="85_7xlwj"]
-[ext_resource type="Script" uid="uid://dbc2ecb1mkugh" path="res://UI/PlayerStatsOverlay/ActiveSlotInfo.gd" id="91_qr476"]
+[ext_resource type="FontVariation" uid="uid://by478cplv5w4n" path="res://Assets/Theming/Fonts/GameFontResources/pixel_font_less_margin.tres" id="90_hxjay"]
+[ext_resource type="Script" uid="uid://dbc2ecb1mkugh" path="res://UI/PlayerStatsHUD/ActiveSlotInfo.gd" id="91_qr476"]
+[ext_resource type="Texture2D" uid="uid://wsv6cyckepdw" path="res://UI/Inventory/InventoryCore/Background/Wood/inv_background_medium_wood.png" id="98_s4yud"]
+[ext_resource type="Texture2D" uid="uid://dlecwbci6aggo" path="res://UI/PlayerStatsHUD/ProgressBars/progress_white.png" id="100_5qckj"]
+[ext_resource type="Texture2D" uid="uid://cp7uxam0b4khc" path="res://UI/Inventory/InventoryCore/Slot/Universal/craft_input_slot_icon.png" id="101_g5u5n"]
+[ext_resource type="Texture2D" uid="uid://bd1seekh41q00" path="res://UI/Inventory/InventoryCore/Slot/Universal/craft_output_slot_icon.png" id="102_gdihr"]
 [ext_resource type="Texture2D" uid="uid://dg4k8vt7nqpl6" path="res://UI/Inventory/InventoryCore/Button/button_raised_wood.png" id="106_0313k"]
 [ext_resource type="Texture2D" uid="uid://2fldkutlispo" path="res://UI/Inventory/InventoryCore/Button/button_pressed_wood.png" id="107_thmqm"]
+[ext_resource type="Texture2D" uid="uid://5avvx8ycv3w1" path="res://UI/Inventory/InventoryCore/Slot/Wood/dark_wood_no_stripes.png" id="108_3uq13"]
+[ext_resource type="Texture2D" uid="uid://ce173dp6evl1s" path="res://UI/PlayerStatsHUD/Icons/stamina_icon.png" id="108_n4o3n"]
 [ext_resource type="Texture2D" uid="uid://dj16xk01w22w1" path="res://UI/Inventory/InventoryCore/Background/Wood/inv_background_thin_no_stripes_wood.png" id="109_0313k"]
+[ext_resource type="Texture2D" uid="uid://comcgk0iu7yb8" path="res://UI/PlayerStatsHUD/Icons/shield_icon.png" id="110_6wv7y"]
+[ext_resource type="Texture2D" uid="uid://dil8w58e3xdt5" path="res://UI/PlayerStatsHUD/Icons/hunger_icon.png" id="111_0t1mv"]
 [ext_resource type="Script" uid="uid://cvuh82pqmf5ja" path="res://UI/Inventory/InventoryCore/Slot/SlotCore/CraftingSlot.gd" id="111_hxjay"]
+[ext_resource type="Texture2D" uid="uid://c7elu72hhoy5l" path="res://UI/PlayerStatsHUD/Icons/health_icon.png" id="111_n4o3n"]
 [ext_resource type="Script" uid="uid://cy756xiw3ikj7" path="res://UI/Inventory/InventoryCore/Slot/SlotCore/ModSlot.gd" id="114_gdihr"]
 [ext_resource type="PackedScene" uid="uid://di7vcyrki71nm" path="res://Entities/Components/DetectionComponent/DetectionComponent.tscn" id="114_hxjay"]
 [ext_resource type="Texture2D" uid="uid://c7rjucvq351g3" path="res://UI/Inventory/InventoryCore/Slot/Wood/translucent_slot_wood.png" id="116_0313k"]
@@ -1357,12 +1349,6 @@ max_stack_count = 1
 override_all = false
 metadata/_custom_type_script = "uid://bcjwesiannbd0"
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_0q2s6"]
-shader = ExtResource("44_vk3bi")
-shader_parameter/progress = 0.0
-shader_parameter/tip_size = 0.15
-shader_parameter/opacity = 0.385
-
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_8e40b"]
 blend_mode = 1
 
@@ -1391,38 +1377,39 @@ outline_size = 2
 outline_color = Color(0, 0, 0, 1)
 shadow_size = 0
 
-[sub_resource type="FontVariation" id="FontVariation_eufsu"]
-spacing_bottom = -1
-
 [sub_resource type="LabelSettings" id="LabelSettings_32mf4"]
 line_spacing = 0.0
-font = SubResource("FontVariation_eufsu")
+font = ExtResource("90_hxjay")
 font_size = 12
+font_color = Color(0.913725, 0.768627, 0.741176, 1)
 outline_size = 2
-outline_color = Color(0, 0, 0, 1)
-shadow_color = Color(0, 0, 0, 0.497)
+outline_color = Color(0, 0, 0, 0.564706)
+shadow_size = 0
+shadow_color = Color(0, 0, 0, 0.564706)
 shadow_offset = Vector2(0.75, 0.75)
 
 [sub_resource type="LabelSettings" id="LabelSettings_rybwt"]
 line_spacing = 0.0
-font = SubResource("FontVariation_eufsu")
+font = ExtResource("90_hxjay")
 font_size = 8
+font_color = Color(0.913725, 0.768627, 0.741176, 1)
 outline_size = 2
-outline_color = Color(0, 0, 0, 1)
+outline_color = Color(0, 0, 0, 0.564706)
 shadow_size = 0
 
 [sub_resource type="LabelSettings" id="LabelSettings_ye7qx"]
 line_spacing = 0.0
-font = SubResource("FontVariation_eufsu")
+font = ExtResource("90_hxjay")
 font_size = 8
+font_color = Color(0.913725, 0.768627, 0.741176, 1)
 outline_size = 2
-outline_color = Color(0, 0, 0, 1)
+outline_color = Color(0, 0, 0, 0.564706)
 shadow_size = 0
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_2q23q"]
 shader = ExtResource("39_r4tgk")
-shader_parameter/lod = 3.771
-shader_parameter/darken_factor = 0.454
+shader_parameter/blur_radius = 10.0
+shader_parameter/darken_factor = 0.45
 
 [sub_resource type="LabelSettings" id="LabelSettings_83b3b"]
 line_spacing = -1.0
@@ -1665,6 +1652,7 @@ tint_progress = Color(0.483324, 0.860906, 0.955996, 1)
 [node name="OverlayUI" type="CanvasLayer" parent="."]
 
 [node name="TestButtons" type="Control" parent="OverlayUI" node_paths=PackedStringArray("health_component")]
+visible = false
 layout_mode = 3
 anchors_preset = 0
 offset_right = 40.0
@@ -1830,157 +1818,330 @@ focus_mode = 0
 theme_override_font_sizes/font_size = 12
 text = "COMBINE ITEMS"
 
-[node name="PlayerStatsOverlay" type="Control" parent="OverlayUI" node_paths=PackedStringArray("health_component", "stamina_component")]
+[node name="PlayerStatsHUD" type="Control" parent="OverlayUI" node_paths=PackedStringArray("health_component", "stamina_component")]
 unique_name_in_owner = true
-texture_filter = 2
 layout_mode = 3
 anchors_preset = 0
-offset_left = 4.0
-offset_top = 240.0
-offset_right = 4.0
-offset_bottom = 240.0
-scale = Vector2(0.7, 0.7)
-mouse_filter = 2
+offset_right = 40.0
+offset_bottom = 40.0
+mouse_filter = 1
 script = ExtResource("35_yln51")
 health_component = NodePath("../../HealthComponent")
 stamina_component = NodePath("../../StaminaComponent")
 
-[node name="PanelContainer" type="PanelContainer" parent="OverlayUI/PlayerStatsOverlay"]
-self_modulate = Color(1, 1, 1, 0)
+[node name="StaminaHungerStatsHUD" type="NinePatchRect" parent="OverlayUI/PlayerStatsHUD"]
 layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
-scale = Vector2(0.08, 0.08)
+offset_left = 4.0
+offset_top = 231.0
+offset_right = 92.0
+offset_bottom = 242.0
+texture = ExtResource("98_s4yud")
+patch_margin_left = 3
+patch_margin_top = 3
+patch_margin_right = 3
+patch_margin_bottom = 3
+axis_stretch_vertical = 1
 
-[node name="StatsBackground" type="TextureRect" parent="OverlayUI/PlayerStatsOverlay/PanelContainer"]
-layout_mode = 2
-texture = ExtResource("36_vdy3t")
+[node name="StaminaHungerMargins" type="MarginContainer" parent="OverlayUI/PlayerStatsHUD/StaminaHungerStatsHUD"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 2
+theme_override_constants/margin_top = 2
+theme_override_constants/margin_right = 4
+theme_override_constants/margin_bottom = 2
 
-[node name="MarginContainer" type="MarginContainer" parent="OverlayUI/PlayerStatsOverlay/PanelContainer"]
+[node name="StaminaAndHungerHBox" type="HBoxContainer" parent="OverlayUI/PlayerStatsHUD/StaminaHungerStatsHUD/StaminaHungerMargins"]
 layout_mode = 2
-size_flags_horizontal = 0
-size_flags_vertical = 4
-theme_override_constants/margin_left = 59
+size_flags_vertical = 3
+size_flags_stretch_ratio = 0.5
+theme_override_constants/separation = 1
+
+[node name="StaminaHBox" type="HBoxContainer" parent="OverlayUI/PlayerStatsHUD/StaminaHungerStatsHUD/StaminaHungerMargins/StaminaAndHungerHBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 0
+
+[node name="StaminaIconMargins" type="MarginContainer" parent="OverlayUI/PlayerStatsHUD/StaminaHungerStatsHUD/StaminaHungerMargins/StaminaAndHungerHBox/StaminaHBox"]
+layout_mode = 2
+theme_override_constants/margin_left = 1
+theme_override_constants/margin_top = 1
+theme_override_constants/margin_right = 1
+theme_override_constants/margin_bottom = 1
+
+[node name="StaminaIcon" type="TextureRect" parent="OverlayUI/PlayerStatsHUD/StaminaHungerStatsHUD/StaminaHungerMargins/StaminaAndHungerHBox/StaminaHBox/StaminaIconMargins"]
+modulate = Color(0.305882, 0.196078, 0.168627, 1)
+layout_mode = 2
+texture = ExtResource("108_n4o3n")
+expand_mode = 3
+stretch_mode = 5
+
+[node name="MarginContainer" type="MarginContainer" parent="OverlayUI/PlayerStatsHUD/StaminaHungerStatsHUD/StaminaHungerMargins/StaminaAndHungerHBox/StaminaHBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/margin_top = 1
+theme_override_constants/margin_bottom = 1
+
+[node name="StaminaNinePatch" type="NinePatchRect" parent="OverlayUI/PlayerStatsHUD/StaminaHungerStatsHUD/StaminaHungerMargins/StaminaAndHungerHBox/StaminaHBox/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+texture = ExtResource("108_3uq13")
+patch_margin_left = 2
+patch_margin_top = 2
+patch_margin_right = 2
+patch_margin_bottom = 2
+axis_stretch_vertical = 1
+
+[node name="StaminaBarMargins" type="MarginContainer" parent="OverlayUI/PlayerStatsHUD/StaminaHungerStatsHUD/StaminaHungerMargins/StaminaAndHungerHBox/StaminaHBox/MarginContainer/StaminaNinePatch"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 1
+theme_override_constants/margin_top = 1
+theme_override_constants/margin_right = 1
+theme_override_constants/margin_bottom = 1
+
+[node name="StaminaChangeBar" type="TextureProgressBar" parent="OverlayUI/PlayerStatsHUD/StaminaHungerStatsHUD/StaminaHungerMargins/StaminaAndHungerHBox/StaminaHBox/MarginContainer/StaminaNinePatch/StaminaBarMargins"]
+unique_name_in_owner = true
+layout_mode = 2
+value = 100.0
+nine_patch_stretch = true
+texture_progress = ExtResource("100_5qckj")
+tint_progress = Color(0.664538, 0.856362, 1, 1)
+
+[node name="StaminaBar" type="TextureProgressBar" parent="OverlayUI/PlayerStatsHUD/StaminaHungerStatsHUD/StaminaHungerMargins/StaminaAndHungerHBox/StaminaHBox/MarginContainer/StaminaNinePatch/StaminaBarMargins"]
+unique_name_in_owner = true
+layout_mode = 2
+value = 50.0
+nine_patch_stretch = true
+texture_progress = ExtResource("100_5qckj")
+tint_progress = Color(5.77569e-07, 0.665665, 0.985388, 1)
+
+[node name="HungerHBox" type="HBoxContainer" parent="OverlayUI/PlayerStatsHUD/StaminaHungerStatsHUD/StaminaHungerMargins/StaminaAndHungerHBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 0
+
+[node name="HungerIconMargins" type="MarginContainer" parent="OverlayUI/PlayerStatsHUD/StaminaHungerStatsHUD/StaminaHungerMargins/StaminaAndHungerHBox/HungerHBox"]
+layout_mode = 2
+theme_override_constants/margin_left = 2
+theme_override_constants/margin_top = 1
+theme_override_constants/margin_right = 1
+theme_override_constants/margin_bottom = 1
+
+[node name="HungerIcon" type="TextureRect" parent="OverlayUI/PlayerStatsHUD/StaminaHungerStatsHUD/StaminaHungerMargins/StaminaAndHungerHBox/HungerHBox/HungerIconMargins"]
+modulate = Color(0.305882, 0.196078, 0.168627, 1)
+layout_mode = 2
+texture = ExtResource("111_0t1mv")
+expand_mode = 3
+stretch_mode = 5
+
+[node name="MarginContainer" type="MarginContainer" parent="OverlayUI/PlayerStatsHUD/StaminaHungerStatsHUD/StaminaHungerMargins/StaminaAndHungerHBox/HungerHBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/margin_top = 1
+theme_override_constants/margin_bottom = 1
+
+[node name="HungerNinePatch" type="NinePatchRect" parent="OverlayUI/PlayerStatsHUD/StaminaHungerStatsHUD/StaminaHungerMargins/StaminaAndHungerHBox/HungerHBox/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+texture = ExtResource("108_3uq13")
+patch_margin_left = 2
+patch_margin_top = 2
+patch_margin_right = 2
+patch_margin_bottom = 2
+axis_stretch_vertical = 1
+
+[node name="HungerBarMargins" type="MarginContainer" parent="OverlayUI/PlayerStatsHUD/StaminaHungerStatsHUD/StaminaHungerMargins/StaminaAndHungerHBox/HungerHBox/MarginContainer/HungerNinePatch"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 1
+theme_override_constants/margin_top = 1
+theme_override_constants/margin_right = 1
+theme_override_constants/margin_bottom = 1
+
+[node name="HungerChangeBar" type="TextureProgressBar" parent="OverlayUI/PlayerStatsHUD/StaminaHungerStatsHUD/StaminaHungerMargins/StaminaAndHungerHBox/HungerHBox/MarginContainer/HungerNinePatch/HungerBarMargins"]
+unique_name_in_owner = true
+layout_mode = 2
+value = 100.0
+nine_patch_stretch = true
+texture_progress = ExtResource("100_5qckj")
+tint_progress = Color(1, 0.7759, 0.683053, 1)
+
+[node name="HungerBar" type="TextureProgressBar" parent="OverlayUI/PlayerStatsHUD/StaminaHungerStatsHUD/StaminaHungerMargins/StaminaAndHungerHBox/HungerHBox/MarginContainer/HungerNinePatch/HungerBarMargins"]
+unique_name_in_owner = true
+layout_mode = 2
+value = 50.0
+nine_patch_stretch = true
+texture_progress = ExtResource("100_5qckj")
+tint_progress = Color(1, 0.400106, 0.262861, 1)
+
+[node name="HealthShieldStatsHUD" type="NinePatchRect" parent="OverlayUI/PlayerStatsHUD"]
+layout_mode = 0
+offset_left = 4.0
+offset_top = 244.0
+offset_right = 92.0
+offset_bottom = 266.0
+texture = ExtResource("98_s4yud")
+patch_margin_left = 3
+patch_margin_top = 3
+patch_margin_right = 3
+patch_margin_bottom = 3
+axis_stretch_vertical = 1
+
+[node name="HealthShieldMargins" type="MarginContainer" parent="OverlayUI/PlayerStatsHUD/HealthShieldStatsHUD"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 3
 theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 4
+theme_override_constants/margin_bottom = 4
 
-[node name="HungerProgressBar" type="TextureProgressBar" parent="OverlayUI/PlayerStatsOverlay/PanelContainer/MarginContainer"]
-unique_name_in_owner = true
+[node name="HealthShieldVBox" type="VBoxContainer" parent="OverlayUI/PlayerStatsHUD/HealthShieldStatsHUD/HealthShieldMargins"]
 layout_mode = 2
-size_flags_vertical = 4
-value = 35.0
-fill_mode = 4
-radial_initial_angle = 201.0
-radial_fill_degrees = 157.0
-texture_under = ExtResource("37_32xjt")
-texture_progress = ExtResource("38_ht2cb")
+theme_override_constants/separation = 2
 
-[node name="StaminaRechargeBar" type="TextureProgressBar" parent="OverlayUI/PlayerStatsOverlay/PanelContainer/MarginContainer"]
-unique_name_in_owner = true
+[node name="ShieldHBox" type="HBoxContainer" parent="OverlayUI/PlayerStatsHUD/HealthShieldStatsHUD/HealthShieldMargins/HealthShieldVBox"]
 layout_mode = 2
-size_flags_vertical = 4
-value = 35.0
-fill_mode = 5
-radial_initial_angle = 159.0
-radial_fill_degrees = 157.0
-texture_under = ExtResource("39_ryeha")
-texture_progress = ExtResource("40_suqvl")
+size_flags_vertical = 3
+theme_override_constants/separation = 0
 
-[node name="HungerBar" type="TextureProgressBar" parent="OverlayUI/PlayerStatsOverlay/PanelContainer/MarginContainer"]
-unique_name_in_owner = true
-self_modulate = Color(1.39, 1.39, 1.39, 1)
+[node name="ShieldIconMargins" type="MarginContainer" parent="OverlayUI/PlayerStatsHUD/HealthShieldStatsHUD/HealthShieldMargins/HealthShieldVBox/ShieldHBox"]
 layout_mode = 2
-size_flags_vertical = 4
-value = 50.0
-fill_mode = 4
-radial_initial_angle = 201.0
-radial_fill_degrees = 157.0
-texture_progress = ExtResource("41_wehgh")
+theme_override_constants/margin_left = 1
+theme_override_constants/margin_top = 0
+theme_override_constants/margin_right = 2
+theme_override_constants/margin_bottom = 0
 
-[node name="HungerChange" type="TextureProgressBar" parent="OverlayUI/PlayerStatsOverlay/PanelContainer/MarginContainer/HungerBar"]
-unique_name_in_owner = true
-show_behind_parent = true
+[node name="ShieldIcon" type="TextureRect" parent="OverlayUI/PlayerStatsHUD/HealthShieldStatsHUD/HealthShieldMargins/HealthShieldVBox/ShieldHBox/ShieldIconMargins"]
+modulate = Color(0.305882, 0.196078, 0.168627, 1)
 layout_mode = 2
-offset_right = 355.0
-offset_bottom = 356.0
-size_flags_vertical = 4
-value = 65.0
-fill_mode = 4
-radial_initial_angle = 201.0
-radial_fill_degrees = 157.0
-texture_under = ExtResource("42_im6xp")
-texture_progress = ExtResource("43_k8324")
+texture = ExtResource("110_6wv7y")
+expand_mode = 3
+stretch_mode = 5
 
-[node name="StaminaBar" type="TextureProgressBar" parent="OverlayUI/PlayerStatsOverlay/PanelContainer/MarginContainer"]
-unique_name_in_owner = true
-material = SubResource("ShaderMaterial_0q2s6")
+[node name="MarginContainer" type="MarginContainer" parent="OverlayUI/PlayerStatsHUD/HealthShieldStatsHUD/HealthShieldMargins/HealthShieldVBox/ShieldHBox"]
 layout_mode = 2
-size_flags_vertical = 4
-value = 50.0
-fill_mode = 5
-radial_initial_angle = 159.0
-radial_fill_degrees = 157.0
-texture_progress = ExtResource("45_3j47m")
+size_flags_horizontal = 3
+theme_override_constants/margin_top = 0
+theme_override_constants/margin_bottom = 0
 
-[node name="StaminaChange" type="TextureProgressBar" parent="OverlayUI/PlayerStatsOverlay/PanelContainer/MarginContainer/StaminaBar"]
-unique_name_in_owner = true
-show_behind_parent = true
+[node name="ShieldNinePatch" type="NinePatchRect" parent="OverlayUI/PlayerStatsHUD/HealthShieldStatsHUD/HealthShieldMargins/HealthShieldVBox/ShieldHBox/MarginContainer"]
 layout_mode = 2
-offset_right = 355.0
-offset_bottom = 356.0
-size_flags_vertical = 4
-value = 65.0
-fill_mode = 5
-radial_initial_angle = 159.0
-radial_fill_degrees = 157.0
-texture_under = ExtResource("46_l08yu")
-texture_progress = ExtResource("47_2ra1b")
+size_flags_horizontal = 3
+size_flags_vertical = 3
+texture = ExtResource("108_3uq13")
+patch_margin_left = 2
+patch_margin_top = 2
+patch_margin_right = 2
+patch_margin_bottom = 2
+axis_stretch_vertical = 1
 
-[node name="VBoxContainer" type="VBoxContainer" parent="OverlayUI/PlayerStatsOverlay/PanelContainer"]
-custom_minimum_size = Vector2(1495, 0)
-layout_mode = 2
-size_flags_horizontal = 10
-size_flags_vertical = 4
-theme_override_constants/separation = 38
+[node name="ShieldBarMargins" type="MarginContainer" parent="OverlayUI/PlayerStatsHUD/HealthShieldStatsHUD/HealthShieldMargins/HealthShieldVBox/ShieldHBox/MarginContainer/ShieldNinePatch"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 1
+theme_override_constants/margin_top = 1
+theme_override_constants/margin_right = 1
+theme_override_constants/margin_bottom = 1
 
-[node name="ShieldBar" type="TextureProgressBar" parent="OverlayUI/PlayerStatsOverlay/PanelContainer/VBoxContainer"]
+[node name="ShieldChangeBar" type="TextureProgressBar" parent="OverlayUI/PlayerStatsHUD/HealthShieldStatsHUD/HealthShieldMargins/HealthShieldVBox/ShieldHBox/MarginContainer/ShieldNinePatch/ShieldBarMargins"]
 unique_name_in_owner = true
-self_modulate = Color(1.7, 1.7, 1.7, 1)
-custom_minimum_size = Vector2(1439, 154)
-layout_mode = 2
-value = 75.0
-texture_progress = ExtResource("48_d5w3g")
-texture_progress_offset = Vector2(16, 16)
-
-[node name="ShieldChange" type="TextureProgressBar" parent="OverlayUI/PlayerStatsOverlay/PanelContainer/VBoxContainer/ShieldBar"]
-unique_name_in_owner = true
-show_behind_parent = true
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
-value = 80.0
-texture_under = ExtResource("49_ynd7x")
-texture_progress = ExtResource("50_86ubk")
-texture_progress_offset = Vector2(16, 16)
-
-[node name="HealthBar" type="TextureProgressBar" parent="OverlayUI/PlayerStatsOverlay/PanelContainer/VBoxContainer"]
-unique_name_in_owner = true
-self_modulate = Color(1.55, 1.55, 1.55, 1)
-custom_minimum_size = Vector2(1441, 156)
 layout_mode = 2
 value = 100.0
-texture_progress = ExtResource("51_6cphe")
-texture_progress_offset = Vector2(16, 17)
+nine_patch_stretch = true
+texture_progress = ExtResource("100_5qckj")
+tint_progress = Color(0.962407, 0.773919, 1, 1)
 
-[node name="HealthChange" type="TextureProgressBar" parent="OverlayUI/PlayerStatsOverlay/PanelContainer/VBoxContainer/HealthBar"]
+[node name="ShieldBar" type="TextureProgressBar" parent="OverlayUI/PlayerStatsHUD/HealthShieldStatsHUD/HealthShieldMargins/HealthShieldVBox/ShieldHBox/MarginContainer/ShieldNinePatch/ShieldBarMargins"]
 unique_name_in_owner = true
-show_behind_parent = true
-layout_mode = 0
-offset_right = 1441.0
-offset_bottom = 156.0
+layout_mode = 2
+value = 50.0
+nine_patch_stretch = true
+texture_progress = ExtResource("100_5qckj")
+tint_progress = Color(0.884365, 0.27424, 1, 1)
+
+[node name="HealthHBox" type="HBoxContainer" parent="OverlayUI/PlayerStatsHUD/HealthShieldStatsHUD/HealthShieldMargins/HealthShieldVBox"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 0
+
+[node name="HealthIconMargins" type="MarginContainer" parent="OverlayUI/PlayerStatsHUD/HealthShieldStatsHUD/HealthShieldMargins/HealthShieldVBox/HealthHBox"]
+layout_mode = 2
+theme_override_constants/margin_left = 1
+theme_override_constants/margin_top = 0
+theme_override_constants/margin_right = 2
+theme_override_constants/margin_bottom = 0
+
+[node name="HealthIcon" type="TextureRect" parent="OverlayUI/PlayerStatsHUD/HealthShieldStatsHUD/HealthShieldMargins/HealthShieldVBox/HealthHBox/HealthIconMargins"]
+modulate = Color(0.305882, 0.196078, 0.168627, 1)
+layout_mode = 2
+texture = ExtResource("111_n4o3n")
+expand_mode = 3
+stretch_mode = 5
+
+[node name="MarginContainer" type="MarginContainer" parent="OverlayUI/PlayerStatsHUD/HealthShieldStatsHUD/HealthShieldMargins/HealthShieldVBox/HealthHBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="HealthNinePatch" type="NinePatchRect" parent="OverlayUI/PlayerStatsHUD/HealthShieldStatsHUD/HealthShieldMargins/HealthShieldVBox/HealthHBox/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+texture = ExtResource("108_3uq13")
+patch_margin_left = 2
+patch_margin_top = 2
+patch_margin_right = 2
+patch_margin_bottom = 2
+axis_stretch_vertical = 1
+
+[node name="HealthBarMargins" type="MarginContainer" parent="OverlayUI/PlayerStatsHUD/HealthShieldStatsHUD/HealthShieldMargins/HealthShieldVBox/HealthHBox/MarginContainer/HealthNinePatch"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 1
+theme_override_constants/margin_top = 1
+theme_override_constants/margin_right = 1
+theme_override_constants/margin_bottom = 1
+
+[node name="HealthChangeBar" type="TextureProgressBar" parent="OverlayUI/PlayerStatsHUD/HealthShieldStatsHUD/HealthShieldMargins/HealthShieldVBox/HealthHBox/MarginContainer/HealthNinePatch/HealthBarMargins"]
+unique_name_in_owner = true
+layout_mode = 2
 value = 100.0
-texture_under = ExtResource("52_dhyl8")
-texture_progress = ExtResource("53_qsiea")
-texture_progress_offset = Vector2(16, 17)
+nine_patch_stretch = true
+texture_progress = ExtResource("100_5qckj")
+tint_progress = Color(0.345664, 1, 0.627265, 1)
+
+[node name="HealthBar" type="TextureProgressBar" parent="OverlayUI/PlayerStatsHUD/HealthShieldStatsHUD/HealthShieldMargins/HealthShieldVBox/HealthHBox/MarginContainer/HealthNinePatch/HealthBarMargins"]
+unique_name_in_owner = true
+layout_mode = 2
+value = 50.0
+nine_patch_stretch = true
+texture_progress = ExtResource("100_5qckj")
+tint_progress = Color(0, 0.723, 0.405, 1)
 
 [node name="ItemInteractionHUD" type="NinePatchRect" parent="OverlayUI"]
 anchors_preset = 6
@@ -2002,7 +2163,6 @@ patch_margin_right = 3
 patch_margin_bottom = 1
 axis_stretch_vertical = 2
 script = ExtResource("35_45ikj")
-metadata/_edit_group_ = true
 
 [node name="ItemGlow" type="TextureRect" parent="OverlayUI/ItemInteractionHUD"]
 self_modulate = Color(0, 0.369, 1.05, 1)
@@ -2081,39 +2241,34 @@ label_settings = SubResource("LabelSettings_5ehfk")
 horizontal_alignment = 2
 vertical_alignment = 1
 
-[node name="HotbarUISlotMargins" type="MarginContainer" parent="OverlayUI"]
+[node name="HotbarUI" type="MarginContainer" parent="OverlayUI" node_paths=PackedStringArray("player_inv", "active_slot_info") groups=["has_save_logic"]]
+unique_name_in_owner = true
 anchors_preset = 3
 anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -98.0
-offset_top = -28.0
-offset_right = 20.0
-offset_bottom = 2.0
+offset_left = -122.0
+offset_top = -34.0
+offset_right = -4.0
+offset_bottom = -4.0
 grow_horizontal = 0
 grow_vertical = 0
-scale = Vector2(0.8, 0.8)
-theme_override_constants/margin_left = 0
-theme_override_constants/margin_top = 0
-theme_override_constants/margin_right = 0
-theme_override_constants/margin_bottom = 0
+script = ExtResource("58_i567i")
+player_inv = NodePath("../../ItemReceiverComponent")
+active_slot_info = NodePath("../ActiveSlotInfo")
 
-[node name="HotbarUI" type="NinePatchRect" parent="OverlayUI/HotbarUISlotMargins" node_paths=PackedStringArray("player_inv", "active_slot_info") groups=["has_save_logic"]]
-unique_name_in_owner = true
+[node name="HotbarNinePatch" type="NinePatchRect" parent="OverlayUI/HotbarUI"]
 layout_mode = 2
-texture = ExtResource("78_jlc36")
+texture = ExtResource("98_s4yud")
 region_rect = Rect2(0, 0, 20, 20)
 patch_margin_left = 3
 patch_margin_top = 3
 patch_margin_right = 3
 patch_margin_bottom = 3
 axis_stretch_vertical = 1
-script = ExtResource("58_i567i")
-player_inv = NodePath("../../../ItemReceiverComponent")
-active_slot_info = NodePath("../../ActiveSlotInfo")
 
-[node name="HotbarUISlotGrid" type="HBoxContainer" parent="OverlayUI/HotbarUISlotMargins/HotbarUI"]
+[node name="HotbarUISlotGrid" type="HBoxContainer" parent="OverlayUI/HotbarUI/HotbarNinePatch"]
 unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 8
@@ -2131,23 +2286,23 @@ theme_override_constants/separation = 0
 alignment = 1
 metadata/_edit_lock_ = true
 
-[node name="Slot1" parent="OverlayUI/HotbarUISlotMargins/HotbarUI/HotbarUISlotGrid" instance=ExtResource("42_r422n")]
+[node name="Slot1" parent="OverlayUI/HotbarUI/HotbarNinePatch/HotbarUISlotGrid" instance=ExtResource("42_r422n")]
 layout_mode = 2
 metadata/_edit_lock_ = true
 
-[node name="Slot2" parent="OverlayUI/HotbarUISlotMargins/HotbarUI/HotbarUISlotGrid" instance=ExtResource("42_r422n")]
+[node name="Slot2" parent="OverlayUI/HotbarUI/HotbarNinePatch/HotbarUISlotGrid" instance=ExtResource("42_r422n")]
 layout_mode = 2
 metadata/_edit_lock_ = true
 
-[node name="Slot3" parent="OverlayUI/HotbarUISlotMargins/HotbarUI/HotbarUISlotGrid" instance=ExtResource("42_r422n")]
+[node name="Slot3" parent="OverlayUI/HotbarUI/HotbarNinePatch/HotbarUISlotGrid" instance=ExtResource("42_r422n")]
 layout_mode = 2
 metadata/_edit_lock_ = true
 
-[node name="Slot4" parent="OverlayUI/HotbarUISlotMargins/HotbarUI/HotbarUISlotGrid" instance=ExtResource("42_r422n")]
+[node name="Slot4" parent="OverlayUI/HotbarUI/HotbarNinePatch/HotbarUISlotGrid" instance=ExtResource("42_r422n")]
 layout_mode = 2
 metadata/_edit_lock_ = true
 
-[node name="Slot5" parent="OverlayUI/HotbarUISlotMargins/HotbarUI/HotbarUISlotGrid" instance=ExtResource("42_r422n")]
+[node name="Slot5" parent="OverlayUI/HotbarUI/HotbarNinePatch/HotbarUISlotGrid" instance=ExtResource("42_r422n")]
 layout_mode = 2
 metadata/_edit_lock_ = true
 
@@ -2157,59 +2312,94 @@ anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -132.0
-offset_top = -23.0
-offset_right = -100.0
-offset_bottom = -5.0
+offset_left = -134.0
+offset_top = -14.0
+offset_right = -124.0
+offset_bottom = -4.0
 grow_horizontal = 0
 grow_vertical = 0
-size_flags_horizontal = 10
+pivot_offset = Vector2(10, 10)
+size_flags_horizontal = 8
 size_flags_vertical = 8
 script = ExtResource("91_qr476")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="OverlayUI/ActiveSlotInfo"]
+[node name="OuterBorderBackground" type="NinePatchRect" parent="OverlayUI/ActiveSlotInfo"]
 layout_mode = 2
-size_flags_horizontal = 8
+texture = ExtResource("98_s4yud")
+patch_margin_left = 3
+patch_margin_top = 3
+patch_margin_right = 3
+patch_margin_bottom = 3
+
+[node name="InnerBorderMargins" type="MarginContainer" parent="OverlayUI/ActiveSlotInfo"]
+layout_mode = 2
+theme_override_constants/margin_left = 3
+theme_override_constants/margin_top = 3
+theme_override_constants/margin_right = 3
+theme_override_constants/margin_bottom = 3
+
+[node name="InnerBorderBackground" type="NinePatchRect" parent="OverlayUI/ActiveSlotInfo/InnerBorderMargins"]
+layout_mode = 2
+texture = ExtResource("116_0313k")
+patch_margin_left = 2
+patch_margin_top = 2
+patch_margin_right = 2
+patch_margin_bottom = 2
+
+[node name="ActiveSlotInfoMargins" type="MarginContainer" parent="OverlayUI/ActiveSlotInfo/InnerBorderMargins"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/margin_left = 3
+theme_override_constants/margin_top = 0
+theme_override_constants/margin_right = 2
+theme_override_constants/margin_bottom = 2
+
+[node name="ActiveSlotInfoVBox" type="VBoxContainer" parent="OverlayUI/ActiveSlotInfo/InnerBorderMargins/ActiveSlotInfoMargins"]
+layout_mode = 2
 theme_override_constants/separation = 0
 alignment = 2
 
-[node name="AmmoInfo" type="HBoxContainer" parent="OverlayUI/ActiveSlotInfo/VBoxContainer"]
+[node name="AmmoInfoHBox" type="HBoxContainer" parent="OverlayUI/ActiveSlotInfo/InnerBorderMargins/ActiveSlotInfoMargins/ActiveSlotInfoVBox"]
+unique_name_in_owner = true
 layout_mode = 2
-size_flags_horizontal = 8
-size_flags_vertical = 8
-theme_override_constants/separation = 2
+theme_override_constants/separation = 3
+alignment = 2
 
-[node name="MagAmmo" type="Label" parent="OverlayUI/ActiveSlotInfo/VBoxContainer/AmmoInfo"]
+[node name="MagAmmo" type="Label" parent="OverlayUI/ActiveSlotInfo/InnerBorderMargins/ActiveSlotInfoMargins/ActiveSlotInfoVBox/AmmoInfoHBox"]
+unique_name_in_owner = true
 layout_mode = 2
+size_flags_horizontal = 0
 size_flags_vertical = 8
-text = "64"
+text = "1"
 label_settings = SubResource("LabelSettings_32mf4")
 horizontal_alignment = 2
 vertical_alignment = 2
 uppercase = true
 
-[node name="InvAmmo" type="Label" parent="OverlayUI/ActiveSlotInfo/VBoxContainer/AmmoInfo"]
+[node name="InvAmmo" type="Label" parent="OverlayUI/ActiveSlotInfo/InnerBorderMargins/ActiveSlotInfoMargins/ActiveSlotInfoVBox/AmmoInfoHBox"]
+unique_name_in_owner = true
 layout_mode = 2
+size_flags_horizontal = 8
 size_flags_vertical = 8
-text = "/ 128"
+text = "/ 64"
 label_settings = SubResource("LabelSettings_rybwt")
 horizontal_alignment = 2
 vertical_alignment = 2
 uppercase = true
 
-[node name="ItemName" type="Label" parent="OverlayUI/ActiveSlotInfo/VBoxContainer"]
+[node name="ItemName" type="Label" parent="OverlayUI/ActiveSlotInfo/InnerBorderMargins/ActiveSlotInfoMargins/ActiveSlotInfoVBox"]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 8
 size_flags_vertical = 8
-text = "Laser Gun"
+text = "Item"
 label_settings = SubResource("LabelSettings_ye7qx")
 horizontal_alignment = 2
 vertical_alignment = 2
 uppercase = true
 
-[node name="PlayerInvUI" type="ColorRect" parent="OverlayUI" node_paths=PackedStringArray("hotbar_ui")]
+[node name="PlayerInvUI" type="ColorRect" parent="OverlayUI"]
 process_mode = 3
-visible = false
 material = SubResource("ShaderMaterial_2q23q")
 use_parent_material = true
 anchors_preset = 15
@@ -2219,7 +2409,6 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.109341, 0.109341, 0.109341, 0.976471)
 script = ExtResource("32_3a185")
-hotbar_ui = NodePath("../HotbarUISlotMargins/HotbarUI")
 btn_up_texture = ExtResource("106_0313k")
 btn_down_texture = ExtResource("107_thmqm")
 
@@ -2251,7 +2440,7 @@ main_slot_grid = NodePath("GridMargins/NinePatchRect/SlotGrid")
 hotbar_grid = NodePath("../../HotbarSlotMargins/HotbarTexture/HotbarSlotGrid")
 trash_slot = NodePath("../../TrashSlotPanel/TrashSlot")
 crafting_manager = NodePath("../../CraftingManager")
-item_viewer = NodePath("../../ItemDetailsPanel/BackgroundMargin/InnerMargin/ItemViewerVBox")
+item_viewer = NodePath("../../ItemDetailsPanel")
 
 [node name="GridMargins" type="MarginContainer" parent="OverlayUI/PlayerInvUI/MainTextureMargins/InvPopulator"]
 editor_description = "THIS GRIDMARGIN MOUSE FILTER MUST STAY AS IGNORE TO MAKE SORT BUTTONS WORK!"
@@ -2433,6 +2622,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 theme_override_constants/margin_left = 1
 theme_override_constants/margin_top = 1
 
@@ -2482,6 +2672,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 theme_override_constants/margin_top = 1
 
 [node name="Label" type="Label" parent="OverlayUI/PlayerInvUI/MainTextureMargins/InvPopulator/SortByType/MarginContainer"]
@@ -2530,6 +2721,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 theme_override_constants/margin_top = 1
 
 [node name="Label" type="Label" parent="OverlayUI/PlayerInvUI/MainTextureMargins/InvPopulator/SortByRarity/MarginContainer"]
@@ -2578,6 +2770,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 theme_override_constants/margin_left = 1
 theme_override_constants/margin_top = 1
 
@@ -2766,21 +2959,25 @@ theme_override_constants/v_separation = 0
 layout_mode = 2
 script = ExtResource("111_hxjay")
 is_output_slot = false
+backing_texture = ExtResource("101_g5u5n")
 
 [node name="Slot2" parent="OverlayUI/PlayerInvUI/CraftingManager/InventoryTexture/GridMargins/SlotsVBox/NinePatchRect/InputSlots" instance=ExtResource("42_r422n")]
 layout_mode = 2
 script = ExtResource("111_hxjay")
 is_output_slot = false
+backing_texture = ExtResource("101_g5u5n")
 
 [node name="Slot3" parent="OverlayUI/PlayerInvUI/CraftingManager/InventoryTexture/GridMargins/SlotsVBox/NinePatchRect/InputSlots" instance=ExtResource("42_r422n")]
 layout_mode = 2
 script = ExtResource("111_hxjay")
 is_output_slot = false
+backing_texture = ExtResource("101_g5u5n")
 
 [node name="Slot4" parent="OverlayUI/PlayerInvUI/CraftingManager/InventoryTexture/GridMargins/SlotsVBox/NinePatchRect/InputSlots" instance=ExtResource("42_r422n")]
 layout_mode = 2
 script = ExtResource("111_hxjay")
 is_output_slot = false
+backing_texture = ExtResource("101_g5u5n")
 
 [node name="CraftingDownArrow" type="TextureRect" parent="OverlayUI/PlayerInvUI/CraftingManager/InventoryTexture/GridMargins/SlotsVBox"]
 unique_name_in_owner = true
@@ -2816,6 +3013,7 @@ unique_name_in_owner = true
 layout_mode = 2
 script = ExtResource("111_hxjay")
 is_output_slot = true
+backing_texture = ExtResource("102_gdihr")
 
 [node name="MouseBlockGlass" type="ColorRect" parent="OverlayUI/PlayerInvUI/CraftingManager/InventoryTexture/GridMargins/SlotsVBox/NinePatchRect2/VBoxContainer/OutputSlot"]
 self_modulate = Color(0.245, 0.245, 0.245, 0.4)
@@ -2862,6 +3060,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 theme_override_constants/margin_top = 1
 
 [node name="Label" type="Label" parent="OverlayUI/PlayerInvUI/CraftingManager/InventoryTexture/GridMargins/SlotsVBox/NinePatchRect2/VBoxContainer/CraftButtonMargin/Craft/MarginContainer"]
@@ -2873,6 +3072,7 @@ vertical_alignment = 1
 metadata/_edit_lock_ = true
 
 [node name="ItemDetailsPanel" type="VBoxContainer" parent="OverlayUI/PlayerInvUI" node_paths=PackedStringArray("ammo_viewer_margin")]
+unique_name_in_owner = true
 layout_mode = 0
 offset_left = 50.0
 offset_top = 55.0
@@ -3180,7 +3380,8 @@ layout_mode = 2
 [connection signal="pressed" from="OverlayUI/TestButtons/TestTimeBtn" to="OverlayUI/TestButtons" method="_on_test_time_btn_pressed"]
 [connection signal="pressed" from="OverlayUI/TestButtons/TestStormBtn2" to="OverlayUI/TestButtons" method="_on_test_storm_btn_2_pressed"]
 [connection signal="pressed" from="OverlayUI/TestButtons/TestCombineItems" to="OverlayUI/TestButtons" method="_on_test_combine_items_pressed"]
-[connection signal="visibility_changed" from="OverlayUI/HotbarUISlotMargins/HotbarUI" to="OverlayUI/HotbarUISlotMargins/HotbarUI" method="_on_visibility_changed"]
+[connection signal="visibility_changed" from="OverlayUI/HotbarUI" to="OverlayUI/HotbarUI" method="_on_visibility_changed"]
+[connection signal="visibility_changed" from="OverlayUI/HotbarUI/HotbarNinePatch" to="OverlayUI/HotbarUI/HotbarNinePatch" method="_on_visibility_changed"]
 [connection signal="button_down" from="OverlayUI/PlayerInvUI/MainTextureMargins/InvPopulator/SortByName/SortByNameBtn" to="OverlayUI/PlayerInvUI" method="_on_sort_by_name_btn_button_down"]
 [connection signal="button_up" from="OverlayUI/PlayerInvUI/MainTextureMargins/InvPopulator/SortByName/SortByNameBtn" to="OverlayUI/PlayerInvUI" method="_on_sort_by_name_btn_button_up"]
 [connection signal="pressed" from="OverlayUI/PlayerInvUI/MainTextureMargins/InvPopulator/SortByName/SortByNameBtn" to="OverlayUI/PlayerInvUI" method="_on_sort_by_name_btn_pressed"]

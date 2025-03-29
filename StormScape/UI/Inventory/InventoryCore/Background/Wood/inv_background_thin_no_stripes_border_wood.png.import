@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cjjobaebw8uwu"
-path="res://.godot/imported/Hunger Under.png-ed6a9499d5a5ffb95b958af3458e09b0.ctex"
+uid="uid://bp28vb2uupbk5"
+path="res://.godot/imported/inv_background_thin_no_stripes_border_wood.png-80f46fec51171e0450a5d5876da7a098.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://UI/PlayerStatsOverlay/Assets/Hunger Under.png"
-dest_files=["res://.godot/imported/Hunger Under.png-ed6a9499d5a5ffb95b958af3458e09b0.ctex"]
+source_file="res://UI/Inventory/InventoryCore/Background/Wood/inv_background_thin_no_stripes_border_wood.png"
+dest_files=["res://.godot/imported/inv_background_thin_no_stripes_border_wood.png-80f46fec51171e0450a5d5876da7a098.ctex"]
 
 [params]
 

@@ -32,53 +32,31 @@ var tint_progress: float = 100.0: ## How much of the tint should be filled upwar
 		tint_progress = new_value
 		back_color.set_instance_shader_parameter("progress", new_value)
 var pause_changed_signals: bool = false ## When true, the item_changed signal will not be emitted by the setter.
+var preview_items: Array[Dictionary] = []: ## When this isn't null, this items will display as a cycling preview and nothing will be able to be dragged out of this slot.
+	set(new_preview_items):
+		preview_items = new_preview_items
+		if not preview_items.is_empty():
+			_update_visuals(preview_items[0])
+			preview_cycle_timer.start()
+		else:
+			preview_cycle_timer.stop()
+			_update_visuals({ item : -1 })
+var preview_cycle_timer: Timer = TimerHelpers.create_repeating_timer(self, 2.25, _on_preview_cycle_timer_timeout)
 
 
 ## Setter function for the item represented by this slot. Updates texture and quantity label.
 func _set_item(new_item: InvItemResource) -> void:
+	if not preview_items.is_empty():
+		if new_item != null:
+			preview_items = []
+
+	_update_visuals({ new_item : -1 })
+
 	var old_item: InvItemResource = item
 	item = new_item
 
-	if item and item.quantity > 0:
-		update_tint_progress(Globals.player_node.inv.auto_decrementer.get_cooldown(item.stats.get_cooldown_id()))
-
-		item_texture.texture = item.stats.inv_icon
-
-		back_color.set_instance_shader_parameter("main_color", Globals.rarity_colors.slot_fill.get(item.stats.rarity))
-		back_color.show()
-
-		item_texture.material.set_shader_parameter("width", 0.0)
-
-		texture_margins.rotation_degrees = item.stats.inv_icon_rotation
-		texture_margins.position = item.stats.inv_icon_offset * (item_texture.size / item_texture.custom_minimum_size)
-		texture_margins.scale = item.stats.inv_icon_scale
-
-		rarity_glow.self_modulate = Globals.rarity_colors.slot_glow.get(item.stats.rarity)
-		rarity_glow.show()
-
-		if item.stats.rarity in [Globals.ItemRarity.EPIC, Globals.ItemRarity.LEGENDARY, Globals.ItemRarity.SINGULAR]:
-			var gradient_texture: GradientTexture1D = GradientTexture1D.new()
-			gradient_texture.gradient = Gradient.new()
-			gradient_texture.gradient.add_point(0, Globals.rarity_colors.glint_color.get(item.stats.rarity))
-			item_texture.material.set_shader_parameter("color_gradient", gradient_texture)
-			item_texture.material.set_shader_parameter("highlight_strength", 0.4)
-		else:
-			item_texture.material.set_shader_parameter("highlight_strength", 0.0)
-
-		if item.quantity > 1:
-			quantity.text = str(item.quantity)
-		else:
-			quantity.text = ""
-	else:
-		update_tint_progress(0)
+	if item != null and item.quantity <= 0:
 		item = null
-		item_texture.texture = null
-		quantity.text = ""
-		rarity_glow.hide()
-		back_color.hide()
-		texture_margins.rotation = 0
-		texture_margins.position = Vector2.ZERO
-		texture_margins.scale = Vector2.ONE
 
 	if not pause_changed_signals:
 		item_changed.emit(self, old_item, item)
@@ -90,6 +68,77 @@ func _ready() -> void:
 	selected_texture.hide()
 	item_texture.material.set_shader_parameter("highlight_strength", 0.0)
 	texture_margins.pivot_offset = texture_margins.size / 2
+
+## Updates the slot visuals according to the new item.
+func _update_visuals(new_item_dict: Dictionary) -> void:
+	var new_item: InvItemResource = new_item_dict.keys()[0]
+	if new_item and new_item.quantity > 0:
+		var new_item_rarity: int = new_item_dict.values()[0] if new_item_dict.values()[0] != -1 else new_item.stats.rarity
+
+		update_tint_progress(Globals.player_node.inv.auto_decrementer.get_cooldown(new_item.stats.get_cooldown_id()))
+
+		item_texture.texture = new_item.stats.inv_icon
+
+		texture_margins.rotation_degrees = new_item.stats.inv_icon_rotation
+		texture_margins.position = new_item.stats.inv_icon_offset * (item_texture.size / item_texture.custom_minimum_size)
+		texture_margins.scale = new_item.stats.inv_icon_scale
+
+		rarity_glow.self_modulate = Globals.rarity_colors.slot_glow.get(new_item_rarity)
+		rarity_glow.show()
+
+		back_color.set_instance_shader_parameter("main_color", Globals.rarity_colors.slot_fill.get(new_item_rarity))
+
+		if new_item_rarity in [Globals.ItemRarity.EPIC, Globals.ItemRarity.LEGENDARY, Globals.ItemRarity.SINGULAR]:
+			var gradient_texture: GradientTexture1D = GradientTexture1D.new()
+			gradient_texture.gradient = Gradient.new()
+			gradient_texture.gradient.add_point(0, Globals.rarity_colors.glint_color.get(new_item_rarity))
+			item_texture.material.set_shader_parameter("color_gradient", gradient_texture)
+			item_texture.material.set_shader_parameter("highlight_strength", 0.4)
+		else:
+			item_texture.material.set_shader_parameter("highlight_strength", 0.0)
+
+		quantity.self_modulate.a = 1.0
+		if new_item.quantity > 1:
+			quantity.text = str(new_item.quantity)
+		else:
+			quantity.text = ""
+
+		if not preview_items.is_empty():
+			var outline_width: float = (0.5 * (max(item_texture.texture.get_width() / new_item.stats.inv_icon_scale.x, item_texture.texture.get_height() / new_item.stats.inv_icon_scale.y) / item_texture.custom_minimum_size.x))
+			if new_item_dict.values()[0] != 0:
+				item_texture.material.set_shader_parameter("width", outline_width)
+				item_texture.material.set_shader_parameter("outline_color", Globals.rarity_colors.outline_color.get(new_item_dict.values()[0]))
+			else:
+				item_texture.material.set_shader_parameter("width", 0.0)
+
+			back_color.hide()
+			quantity.self_modulate.a = 0.72
+			item_texture.set_instance_shader_parameter("final_alpha", 0.88)
+		else:
+			item_texture.material.set_shader_parameter("width", 0.0)
+			back_color.show()
+			quantity.self_modulate.a = 1.0
+			item_texture.set_instance_shader_parameter("final_alpha", 1.0)
+	else:
+		update_tint_progress(0)
+		item_texture.texture = null
+		quantity.text = ""
+		quantity.self_modulate.a = 1.0
+		rarity_glow.hide()
+		back_color.hide()
+		texture_margins.rotation = 0
+		texture_margins.position = Vector2.ZERO
+		texture_margins.scale = Vector2.ONE
+		item_texture.set_instance_shader_parameter("final_alpha", 1.0)
+
+func _on_preview_cycle_timer_timeout() -> void:
+	if preview_items.is_empty():
+		preview_cycle_timer.stop()
+		return
+
+	var first_in_queue: Dictionary = preview_items.pop_front()
+	preview_items.append(first_in_queue)
+	_update_visuals(preview_items[0])
 
 ## When this is shown or hidden and different slots are displayed, update the local tint progress
 ## with the current item.
@@ -114,11 +163,18 @@ func update_tint_progress(duration: float) -> void:
 
 ## Gets a reference to the data from the slot where the drag originated.
 func _get_drag_data(at_position: Vector2) -> Variant:
+	if not preview_items.is_empty(): # Don't allow drags out of this slot if it is showing a preview item
+		return null
+
 	dragging_half_stack = false
 	dragging_only_one = false
 	if item != null and not is_hud_ui_preview_slot:
 		modulate = Color(0.65, 0.65, 0.65, 1)
-		quantity.text = ""
+		var slash_index: int = quantity.text.rfind("/")
+		if slash_index != -1:
+			quantity.text = "0/" + quantity.text.substr(slash_index + 1, quantity.text.length())
+		else:
+			quantity.text = ""
 		item_texture.modulate.a = 0.65
 		set_drag_preview(_make_drag_preview(at_position))
 		return self
@@ -177,15 +233,25 @@ func _gui_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_RIGHT:
 			if item != null:
+				var slash_index: int = quantity.text.rfind("/")
 				if Input.is_action_pressed("sprint") and item.quantity > 1:
 					dragging_half_stack = true
-					quantity.text = str(item.quantity - int(floor(item.quantity / 2.0)))
+					if slash_index != -1:
+						quantity.text = str(item.quantity - int(floor(item.quantity / 2.0))) + "/" + quantity.text.substr(slash_index + 1, quantity.text.length())
+					else:
+						quantity.text = str(item.quantity - int(floor(item.quantity / 2.0)))
 				else:
 					if item.quantity - 1 > 0:
 						dragging_only_one = true
-						quantity.text = str(item.quantity - 1)
+						if slash_index != -1:
+							quantity.text = str(item.quantity - 1) + "/" + quantity.text.substr(slash_index + 1, quantity.text.length())
+						else:
+							quantity.text = str(item.quantity - 1)
 					else:
-						quantity.text = ""
+						if slash_index != -1:
+							quantity.text = "0/" + quantity.text.substr(slash_index + 1, quantity.text.length())
+						else:
+							quantity.text = ""
 						item_texture.modulate.a = 0.65
 				modulate = Color(0.65, 0.65, 0.65, 1)
 
@@ -419,38 +485,54 @@ func _emit_changes_for_potential_listening_hotbar(data: Variant) -> void:
 	if index >= (synced_inv.inv_size - synced_inv.hotbar_size) and (index < synced_inv.inv.size()):
 		synced_inv.slot_updated.emit(index, item)
 
-## When mouse enters, if we can drop, display an effect on this slot.
+## When mouse enters, if we can drop, display an effect on this slot. Also stop previews temporarily if they are
+## in progress.
 func _on_mouse_entered() -> void:
 	Slot.hovered_slot_size = size.x
+
 	if get_viewport().gui_is_dragging():
+		if not preview_items.is_empty():
+			preview_cycle_timer.stop()
+			quantity.self_modulate.a = 0.0
+			rarity_glow.hide()
+
 		var drag_data: Variant = get_viewport().gui_get_drag_data()
 		if _can_drop_data(get_local_mouse_position(), drag_data):
 			modulate = Color(1.2, 1.2, 1.2, 1.0)
+
 			if item == null:
 				item_texture.texture = drag_data.item_texture.texture
 				texture_margins.rotation_degrees = drag_data.item.stats.inv_icon_rotation
 				texture_margins.position = drag_data.item.stats.inv_icon_offset * (item_texture.size / item_texture.custom_minimum_size)
 				texture_margins.scale = drag_data.item.stats.inv_icon_scale
-				item_texture.modulate.a = 0.5
+				item_texture.set_instance_shader_parameter("final_alpha", 0.75)
 
 				item_texture.material.set_shader_parameter("width", 0)
+
 	SignalBus.slot_hovered.emit(self)
 
-## When mouse exits, if we are dragging, remove effects on this slot.
+## When mouse exits, if we are dragging, remove effects on this slot. If we have queued previews, resume them.
 func _on_mouse_exited() -> void:
 	SignalBus.slot_not_hovered.emit()
+
 	var drag_data: Variant
 	if get_viewport().gui_is_dragging():
 		drag_data = get_viewport().gui_get_drag_data()
-		if drag_data.index == index:
+		if drag_data is Slot and drag_data.index == index:
 			return
+
 	modulate = Color(1, 1, 1, 1)
+
 	if item == null and drag_data:
 		item_texture.texture = null
 		texture_margins.rotation = 0
 		texture_margins.position = Vector2.ZERO
 		texture_margins.scale = Vector2.ONE
-		item_texture.modulate.a = 1.0
+		item_texture.set_instance_shader_parameter("final_alpha", 1.0)
+
+	if not preview_items.is_empty():
+		_update_visuals(preview_items[0])
+		preview_cycle_timer.start()
 
 ## When the system is notifed of a drag being over, call the method that resets slot highlight and
 ## drag preview effects.
@@ -464,12 +546,17 @@ func _reset_post_drag_mods() -> void:
 	dragging_half_stack = false
 	modulate = Color(1, 1, 1, 1)
 	if item == null:
-		item_texture.texture = null
-		texture_margins.rotation = 0
-		texture_margins.position = Vector2.ZERO
-		texture_margins.scale = Vector2.ONE
-	elif item.quantity > 1:
-		quantity.text = str(item.quantity)
+		if preview_items.is_empty():
+			item_texture.texture = null
+			texture_margins.rotation = 0
+			texture_margins.position = Vector2.ZERO
+			texture_margins.scale = Vector2.ONE
+	else:
+		var slash_index: int = quantity.text.rfind("/")
+		if slash_index != -1 and item.quantity > 0:
+			quantity.text = str(item.quantity) + "/" + quantity.text.substr(slash_index + 1, quantity.text.length())
+		elif item.quantity > 1:
+			quantity.text = str(item.quantity)
 	item_texture.modulate.a = 1.0
 
 ## Custom string representation of the item in this slot.

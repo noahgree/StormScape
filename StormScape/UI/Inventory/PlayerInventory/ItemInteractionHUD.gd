@@ -11,6 +11,8 @@ class_name ItemInteractionHUD
 ## Hides visibility at start.
 func _ready() -> void:
 	visible = false
+	SignalBus.focused_ui_opened.connect(func() -> void: modulate.a = 0.0)
+	SignalBus.focused_ui_closed.connect(func() -> void: modulate.a = 1.0)
 
 ## Shows the HUD after populating the appropriate item texture.
 func show_hud(item: Item) -> void:

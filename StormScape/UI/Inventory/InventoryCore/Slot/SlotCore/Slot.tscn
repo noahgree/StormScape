@@ -132,6 +132,7 @@ theme_override_constants/margin_bottom = 3
 
 [node name="ItemTexture" type="TextureRect" parent="TextureMargins"]
 material = SubResource("ShaderMaterial_h48ps")
+instance_shader_parameters/final_alpha = 1.0
 custom_minimum_size = Vector2(16, 16)
 layout_mode = 2
 expand_mode = 1

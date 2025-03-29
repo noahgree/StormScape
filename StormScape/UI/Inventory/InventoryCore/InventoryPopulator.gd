@@ -12,7 +12,7 @@ class_name InventoryPopulator
 @export var hotbar_grid: HBoxContainer ## If player inv, this connects to the container that holds the hotbar slots.
 @export var trash_slot: Slot ## If player inv, this connects to the trash slot.
 @export var crafting_manager: CraftingManager ## If player inv, this connects to the crafting manager.
-@export var item_viewer: ItemViewer ## If player inv, this connects to the item viewer in the inventory.
+@export var item_viewer: ItemDetailsPanel ## If player inv, this connects to the item viewer in the inventory.
 
 var synced_inv: Inventory ## The synced inventory that this populator populates based on.
 var slots: Array[Slot] = [] ## The array of slots that this populator fills.
