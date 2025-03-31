@@ -111,7 +111,7 @@ func _setup_item_viewer_signals() -> void:
 
 ## This processes the items in the input slots so that they can be worked with faster by
 ## the other crafting functions.
-func _preprocess_selected_items() -> Dictionary[StringName, Dictionary]:
+func _preprocess_input_items() -> Dictionary[StringName, Dictionary]:
 	var item_quantities: Dictionary[StringName, Array] = {}
 	var tag_quantities: Dictionary[StringName, Array] = {}
 
@@ -138,7 +138,7 @@ func _preprocess_selected_items() -> Dictionary[StringName, Dictionary]:
 ## This checks to see if a passed-in item is craftable based on what we have in our input slots.
 func _is_item_craftable(item: ItemResource) -> bool:
 	var recipe: Array[CraftingIngredient] = item.recipe
-	var quantities: Dictionary[StringName, Dictionary] = _preprocess_selected_items()
+	var quantities: Dictionary[StringName, Dictionary] = _preprocess_input_items()
 	var item_quantities: Dictionary[StringName, Array] = quantities.items
 	var tag_quantities: Dictionary[StringName, Array] = quantities.tags
 
@@ -199,7 +199,7 @@ func _verify_exact_match(recipe: Array[CraftingIngredient]) -> bool:
 
 ## Use the inverted lookups to get candidate recipes from the current items in the input.
 func _get_candidate_recipes() -> Array:
-	var quantities: Dictionary[StringName, Dictionary] = _preprocess_selected_items()
+	var quantities: Dictionary[StringName, Dictionary] = _preprocess_input_items()
 	var candidates: Dictionary[StringName, bool] = {}
 
 	for item_id: StringName in quantities[&"items"].keys():
@@ -320,46 +320,98 @@ func _get_preview_array(item: InvItemResource) -> Array[Array]:
 
 	return preview_array
 
-## Checks if the items that are present in the input slots match up exactly with any existing preview items.
-## If they all do, this returns true, indicating there was nothing wrong with the validation. If something is
-## a mismatch, it returns false.
-func _check_that_items_match_previews() -> bool:
-	if item_details_panel.item_viewer_slot.item != null:
-		var preview_array: Array[Array] = _get_preview_array(item_details_panel.item_viewer_slot.item)
-		var quant_strings: Dictionary[int, String] = {}
-		var need_to_clear: bool = false
-		var i: int = 0
-		for input_slot: CraftingSlot in input_slots:
-			if input_slot.item != null:
-				var items_match_preview: bool = false
-				var preview_items: Variant = ArrayHelpers.get_or_default(preview_array, i, null)
-				if preview_items != null:
-					for item_dict: Dictionary in preview_items:
-						if input_slot.item.stats.id == item_dict.keys()[0].stats.id:
-							if input_slot.item.stats.rarity >= item_dict.values()[0]:
-								quant_strings[i] = (str(input_slot.item.quantity) + "/" + str(item_dict.keys()[0].quantity))
+## Updates the UI on the input slots based on the preview assignment.
+## For each ingredient from the recipe (in order), its assigned slot will either show the preview items
+## (if empty), or update its quantity text (if filled).
+func _update_preview_ui() -> void:
+	var viewed_item: InvItemResource = item_details_panel.item_viewer_slot.item
+	if viewed_item == null:
+		_clear_crafting_previews()
+		return
 
-								items_match_preview = true
-								break
-						else:
-							quant_strings[i] = ("0/" + str(item_dict.keys()[0].quantity))
+	var assignment: Dictionary[int, int] = _get_preview_assignment(viewed_item)
+	if assignment.is_empty():
+		_remove_altered_quantity_texts()
+		return
 
-				if not items_match_preview:
-					need_to_clear = true
+	var preview_array: Array = _get_preview_array(viewed_item)
+
+	for ingredient_index: int in range(preview_array.size()):
+		var slot_idx: int = assignment.get(ingredient_index, -1)
+		if slot_idx == -1:
+			continue
+
+		var candidates: Array[Dictionary] = preview_array[ingredient_index]
+		var slot: CraftingSlot = input_slots[slot_idx]
+
+		if slot.item: # If the slot already has an item, update its quantity text
+			for candidate_dict: Dictionary[int, int] in candidates:
+				var candidate_item: InvItemResource = candidate_dict.keys()[0]
+				var min_rarity: int = candidate_dict.values()[0]
+				if slot.item.stats.id == candidate_item.stats.id and slot.item.stats.rarity >= min_rarity:
+					var required_qty: int = candidate_item.quantity
+					slot.quantity.text = str(slot.item.quantity) + "/" + str(required_qty)
+					slot.quantity.self_modulate.a = 1.0
 					break
+		else: # Empty slot, assign the candidate previews
+			slot.preview_items = candidates
+			if not candidates.is_empty():
+				var candidate_item: InvItemResource = candidates[0].keys()[0]
+				slot.quantity.text = "0/" + str(candidate_item.quantity)
+				slot.quantity.self_modulate.a = 0.7
 
-			i += 1
+## Determines an assignment between the recipe’s ingredients (the preview array) and the input slots.
+## Returns a Dictionary mapping recipe ingredient index → input slot index.
+## If any filled slot holds an item that is not needed (i.e. unassignable), the function returns an empty dict.
+func _get_preview_assignment(viewed_item: InvItemResource) -> Dictionary[int, int]:
+	var preview_array: Array = _get_preview_array(viewed_item)
+	var assignment: Dictionary[int, int] = {} # Mapping: recipe ingredient index → slot index
+	var used_slots: Array = []
 
-		if not need_to_clear:
-			for j: int in range(input_slots.size()):
-				if quant_strings.has(j):
-					input_slots[j].quantity.text = quant_strings[j]
-					var slash_index: int = quant_strings[j].rfind("/")
-					if not int(quant_strings[j].substr(0, slash_index)) >= int(quant_strings[j].substr(slash_index + 1, quant_strings[j].length())):
-						input_slots[j].quantity.self_modulate.a = 0.72
-			return true
+	# Pass 1: assign slots that already have an item matching one of the ingredient candidates
+	for ingredient_index: int in range(preview_array.size()):
+		var candidates: Array[Dictionary] = preview_array[ingredient_index]
+		for slot_index: int in range(input_slots.size()):
+			if slot_index in used_slots:
+				continue
 
-	return false
+			var slot: CraftingSlot = input_slots[slot_index]
+			if slot.item != null:
+				for candidate_dict: Dictionary[int, int] in candidates:
+					var candidate_item: InvItemResource = candidate_dict.keys()[0]
+					var min_rarity: int = candidate_dict.values()[0]
+					if slot.item.stats.id == candidate_item.stats.id and slot.item.stats.rarity >= min_rarity:
+						assignment[ingredient_index] = slot_index
+						used_slots.append(slot_index)
+						break
+				if assignment.has(ingredient_index):
+					break
+	# Pass 2: for unassigned ingredients, assign the first available (empty) slot
+	for ingredient_index: int in range(preview_array.size()):
+		if not assignment.has(ingredient_index):
+			for slot_index: int in range(input_slots.size()):
+				if slot_index in used_slots:
+					continue
+				if input_slots[slot_index].item == null:
+					assignment[ingredient_index] = slot_index
+					used_slots.append(slot_index)
+					break
+			# If no empty slot is found, assignment is incomplete
+			if not assignment.has(ingredient_index):
+				return {}
+
+	# Final pass: if any input slot is filled but was not assigned to any ingredient, the recipe is invalid
+	for slot_index: int in range(input_slots.size()):
+		if input_slots[slot_index].item:
+			var found: bool = false
+			for ingredient_index: int in assignment:
+				if assignment[ingredient_index] == slot_index:
+					found = true
+					break
+			if not found:
+				return {}
+
+	return assignment
 
 ## Clears all the previews from all input slots.
 func _clear_crafting_previews() -> void:
@@ -377,23 +429,17 @@ func _remove_altered_quantity_texts() -> void:
 			if index != -1:
 				slot.quantity.text = slot.quantity.text.substr(0, index)
 
-## This checks if there are any mismatches in the input slots, and if not, it sets the preview items for all
-## slots with no item.
+## Updated populate previews function to use our new preview assignment & UI update functions.
 func _populate_previews(item: InvItemResource) -> void:
 	_clear_crafting_previews()
-	if not _check_that_items_match_previews() and item_details_panel.item_viewer_slot.item != null:
+	var viewed_item: InvItemResource = item_details_panel.item_viewer_slot.item
+	if viewed_item == null:
 		_remove_altered_quantity_texts()
 		return
-	if item == null or not item.stats.recipe_unlocked:
+	if not viewed_item.stats.recipe_unlocked:
 		_remove_altered_quantity_texts()
 		return
-
-	var preview_array: Array[Array] = _get_preview_array(item)
-	var i: int = 0
-	for array: Array in preview_array:
-		if input_slots[i].item == null:
-			input_slots[i].preview_items = array
-		i += 1
+	_update_preview_ui()
 
 ## When the focused UI is closed, we should empty out the crafting input slots and drop them on the
 ## ground if the inventory is now full.

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bd1seekh41q00"
-path="res://.godot/imported/craft_output_slot_icon.png-91550fdea69b477208475e0dfdbc191d.ctex"
+uid="uid://cn54g3yxn4t4e"
+path="res://.godot/imported/output_slot_icon_left.png-deada359bede96d4f378239edc58716d.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://UI/Inventory/InventoryCore/Slot/Universal/craft_output_slot_icon.png"
-dest_files=["res://.godot/imported/craft_output_slot_icon.png-91550fdea69b477208475e0dfdbc191d.ctex"]
+source_file="res://UI/Inventory/InventoryCore/Slot/Universal/output_slot_icon_left.png"
+dest_files=["res://.godot/imported/output_slot_icon_left.png-deada359bede96d4f378239edc58716d.ctex"]
 
 [params]
 

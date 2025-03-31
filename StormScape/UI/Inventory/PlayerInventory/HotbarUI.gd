@@ -192,7 +192,7 @@ func _remove_selected_slot_fx() -> void:
 ## Adds the scaling and texture changes to a new active slot.
 func _apply_selected_slot_fx() -> void:
 	active_slot.selected_texture.show()
-	active_slot.texture = active_slot.no_item_slot_texture
+	active_slot.texture = null if active_slot.item != null else active_slot.no_item_slot_texture
 	active_slot.scale = Vector2(1.15, 1.15)
 	active_slot.z_index = 1
 

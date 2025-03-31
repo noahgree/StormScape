@@ -96,13 +96,13 @@
 [ext_resource type="Texture2D" uid="uid://wsv6cyckepdw" path="res://UI/Inventory/InventoryCore/Background/Wood/inv_background_medium_wood.png" id="98_s4yud"]
 [ext_resource type="Texture2D" uid="uid://dlecwbci6aggo" path="res://UI/PlayerStatsHUD/ProgressBars/progress_white.png" id="100_5qckj"]
 [ext_resource type="Texture2D" uid="uid://cp7uxam0b4khc" path="res://UI/Inventory/InventoryCore/Slot/Universal/craft_input_slot_icon.png" id="101_g5u5n"]
-[ext_resource type="Texture2D" uid="uid://bd1seekh41q00" path="res://UI/Inventory/InventoryCore/Slot/Universal/craft_output_slot_icon.png" id="102_gdihr"]
 [ext_resource type="Texture2D" uid="uid://dg4k8vt7nqpl6" path="res://UI/Inventory/InventoryCore/Button/button_raised_wood.png" id="106_0313k"]
 [ext_resource type="Texture2D" uid="uid://2fldkutlispo" path="res://UI/Inventory/InventoryCore/Button/button_pressed_wood.png" id="107_thmqm"]
 [ext_resource type="Texture2D" uid="uid://5avvx8ycv3w1" path="res://UI/Inventory/InventoryCore/Slot/Wood/dark_wood_no_stripes.png" id="108_3uq13"]
 [ext_resource type="Texture2D" uid="uid://ce173dp6evl1s" path="res://UI/PlayerStatsHUD/Icons/stamina_icon.png" id="108_n4o3n"]
 [ext_resource type="Texture2D" uid="uid://dj16xk01w22w1" path="res://UI/Inventory/InventoryCore/Background/Wood/inv_background_thin_no_stripes_wood.png" id="109_0313k"]
 [ext_resource type="Texture2D" uid="uid://comcgk0iu7yb8" path="res://UI/PlayerStatsHUD/Icons/shield_icon.png" id="110_6wv7y"]
+[ext_resource type="Texture2D" uid="uid://cn54g3yxn4t4e" path="res://UI/Inventory/InventoryCore/Slot/Universal/output_slot_icon_left.png" id="110_g5u5n"]
 [ext_resource type="Texture2D" uid="uid://dil8w58e3xdt5" path="res://UI/PlayerStatsHUD/Icons/hunger_icon.png" id="111_0t1mv"]
 [ext_resource type="Script" uid="uid://cvuh82pqmf5ja" path="res://UI/Inventory/InventoryCore/Slot/SlotCore/CraftingSlot.gd" id="111_hxjay"]
 [ext_resource type="Texture2D" uid="uid://c7elu72hhoy5l" path="res://UI/PlayerStatsHUD/Icons/health_icon.png" id="111_n4o3n"]
@@ -3013,7 +3013,7 @@ unique_name_in_owner = true
 layout_mode = 2
 script = ExtResource("111_hxjay")
 is_output_slot = true
-backing_texture = ExtResource("102_gdihr")
+backing_texture = ExtResource("110_g5u5n")
 
 [node name="MouseBlockGlass" type="ColorRect" parent="OverlayUI/PlayerInvUI/CraftingManager/InventoryTexture/GridMargins/SlotsVBox/NinePatchRect2/VBoxContainer/OutputSlot"]
 self_modulate = Color(0.245, 0.245, 0.245, 0.4)

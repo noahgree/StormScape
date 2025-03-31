@@ -98,10 +98,6 @@ func _update_visuals(new_item_dict: Dictionary) -> void:
 			item_texture.material.set_shader_parameter("highlight_strength", 0.0)
 
 		quantity.self_modulate.a = 1.0
-		if new_item.quantity > 1:
-			quantity.text = str(new_item.quantity)
-		else:
-			quantity.text = ""
 
 		if not preview_items.is_empty():
 			var outline_width: float = (0.5 * (max(item_texture.texture.get_width() / new_item.stats.inv_icon_scale.x, item_texture.texture.get_height() / new_item.stats.inv_icon_scale.y) / item_texture.custom_minimum_size.x))
@@ -115,6 +111,11 @@ func _update_visuals(new_item_dict: Dictionary) -> void:
 			quantity.self_modulate.a = 0.72
 			item_texture.set_instance_shader_parameter("final_alpha", 0.88)
 		else:
+			if new_item.quantity > 1:
+				quantity.text = str(new_item.quantity)
+			else:
+				quantity.text = ""
+
 			item_texture.material.set_shader_parameter("width", 0.0)
 			back_color.show()
 			quantity.self_modulate.a = 1.0
