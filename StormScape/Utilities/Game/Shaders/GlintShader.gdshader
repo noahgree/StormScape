@@ -114,7 +114,7 @@ void fragment() {
 
         final_color.rgb = mix(final_color.rgb, effect_color.rgb, effect_distance * highlight_strength);
     }
-	
+
 	if (final_color.a > 0.0) {
 		final_color.a = final_alpha;
 	}

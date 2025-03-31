@@ -170,9 +170,10 @@ _data = {
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_0s14j"]
 radius = 6.0
 
-[node name="FlameBlower" type="Node2D" node_paths=PackedStringArray("sprites_to_tint")]
+[node name="FlameBlower" type="Node2D" node_paths=PackedStringArray("overheat_overlays", "sprites_to_tint")]
 script = ExtResource("1_7mk4f")
 proj_origin = Vector2(19, 3)
+overheat_overlays = [NodePath("ItemSprite/OverheatOverlay")]
 particle_emission_extents = Vector2(6, 1)
 particle_emission_origin = Vector2(11, 2)
 sprites_to_tint = [NodePath("ItemSprite")]

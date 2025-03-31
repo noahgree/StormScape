@@ -50,10 +50,10 @@ func _set_item(new_item: InvItemResource) -> void:
 		if new_item != null:
 			preview_items = []
 
-	_update_visuals({ new_item : -1 })
-
 	var old_item: InvItemResource = item
 	item = new_item
+
+	_update_visuals({ new_item : -1 })
 
 	if item != null and item.quantity <= 0:
 		item = null

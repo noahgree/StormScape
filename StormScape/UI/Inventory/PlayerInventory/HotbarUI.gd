@@ -115,7 +115,10 @@ func _update_inv_ammo_ui() -> void:
 	active_slot_info.update_inv_ammo(count)
 
 ## Handles input mainly relating to changing the active slot.
-func _input(_event: InputEvent) -> void:
+func _unhandled_input(event: InputEvent) -> void:
+	if Globals.focused_ui_is_open:
+		return
+
 	if DebugFlags.HotbarFlags.use_scroll_debounce and not scroll_debounce_timer.is_stopped():
 		return
 
@@ -125,26 +128,55 @@ func _input(_event: InputEvent) -> void:
 	elif Input.is_action_just_released("scroll_down", false):
 		_change_active_slot_by_count(-1)
 		scroll_debounce_timer.start()
+	elif event is InputEventKey and event.is_pressed() and not event.is_echo():
+		match event.keycode:
+			KEY_1:
+				_change_active_slot_to_hotbar_index(0)
+			KEY_2:
+				_change_active_slot_to_hotbar_index(1)
+			KEY_3:
+				_change_active_slot_to_hotbar_index(2)
+			KEY_4:
+				_change_active_slot_to_hotbar_index(3)
+			KEY_5:
+				_change_active_slot_to_hotbar_index(4)
 
 ## Changes the active hotbar slot by the passed in count. Handles wrapping values to the number of slots.
 func _change_active_slot_by_count(index_count: int) -> void:
-	_remove_selected_slot_fx()
 	var non_hotbar_size: int = player_inv.inv_size - player_inv.hotbar_size
 	var new_index: int = ((active_slot.index - non_hotbar_size) + index_count) % hotbar_slots.size()
 	if new_index < 0:
 		new_index += hotbar_slots.size()
+	if new_index == hotbar_slots.find(active_slot):
+		return
+
+	_remove_selected_slot_fx()
 	active_slot = hotbar_slots[new_index]
-	_apply_selected_slot_fx()
-	_update_hands_about_new_active_item()
-	_update_inv_ammo_ui()
-	_default_ammo_update_method()
+	_setup_after_active_slot_change()
+
+## Changes the active slot to the exact index within the hotbar that is passed in. If you want the leftmost
+## hotbar slot, pass in 0, and so on.rd
+func _change_active_slot_to_hotbar_index(new_index: int) -> void:
+	if new_index == hotbar_slots.find(active_slot):
+		return
+	new_index = min(new_index, player_inv.hotbar_size)
+
+	_remove_selected_slot_fx()
+	active_slot = hotbar_slots[new_index]
+	_setup_after_active_slot_change()
 
 ## Changes the active slot relative to the full size of the inventory.
 ## Used at game load when restoring the active slot.
 func _change_active_slot_to_index_relative_to_full_inventory_size(new_index: int) -> void:
 	await get_tree().process_frame # Need to wait for the slots to be updated with the items before signaling the hands component
+
 	_remove_selected_slot_fx()
 	active_slot = hotbar_slots[new_index - (player_inv.inv_size - player_inv.hotbar_size)]
+	_setup_after_active_slot_change()
+
+## Performs the needed work after the active slot has changed, such as applying the slot FX and updating the
+## hands component.
+func _setup_after_active_slot_change() -> void:
 	_apply_selected_slot_fx()
 	_update_hands_about_new_active_item()
 	_update_inv_ammo_ui()

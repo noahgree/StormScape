@@ -297,34 +297,6 @@ func _on_viewed_item_changed(_slot: Slot, _old_item: InvItemResource, new_item: 
 	await get_tree().process_frame
 	_populate_previews(new_item)
 
-## This checks if there are any mismatches in the input slots, and if not, it sets the preview items for all
-## slots with no item.
-func _populate_previews(item: InvItemResource) -> void:
-	if _clear_preview_items_from_slots_unless_they_match_previewed_recipe_exactly() and item_details_panel.item_viewer_slot.item != null:
-		_remove_altered_quantity_texts()
-		return
-	if item == null:
-		_remove_altered_quantity_texts()
-		return
-	if not item.stats.recipe_unlocked:
-		_remove_altered_quantity_texts()
-		return
-
-	var preview_array: Array[Array] = _get_preview_array(item)
-	var i: int = 0
-	for array: Array in preview_array:
-		if input_slots[i].item == null:
-			input_slots[i].preview_items = array
-		i += 1
-
-func _remove_altered_quantity_texts() -> void:
-	for slot: CraftingSlot in input_slots:
-		if slot.item != null:
-			slot.quantity.self_modulate.a = 1.0
-			var index: int = slot.quantity.text.rfind("/")
-			if index != -1:
-				slot.quantity.text = slot.quantity.text.substr(0, index)
-
 ## This gets the array of compatible items for each crafting ingredient in a recipe. Each ingredient can have
 ## more than one matching item if it is a "tag" ingredient. This is an array of arrays of Dictionaries, where
 ## the keys are the InvItemResources and the values are the minimum rarities. -1 min rarity means no min rarity.
@@ -349,9 +321,9 @@ func _get_preview_array(item: InvItemResource) -> Array[Array]:
 	return preview_array
 
 ## Checks if the items that are present in the input slots match up exactly with any existing preview items.
-## If they all do, this returns false, indicating there was nothing wrong with the validation and nothing
-## was cleared. If something is a mismatch, it returns true.
-func _clear_preview_items_from_slots_unless_they_match_previewed_recipe_exactly() -> bool:
+## If they all do, this returns true, indicating there was nothing wrong with the validation. If something is
+## a mismatch, it returns false.
+func _check_that_items_match_previews() -> bool:
 	if item_details_panel.item_viewer_slot.item != null:
 		var preview_array: Array[Array] = _get_preview_array(item_details_panel.item_viewer_slot.item)
 		var quant_strings: Dictionary[int, String] = {}
@@ -369,6 +341,8 @@ func _clear_preview_items_from_slots_unless_they_match_previewed_recipe_exactly(
 
 								items_match_preview = true
 								break
+						else:
+							quant_strings[i] = ("0/" + str(item_dict.keys()[0].quantity))
 
 				if not items_match_preview:
 					need_to_clear = true
@@ -383,15 +357,43 @@ func _clear_preview_items_from_slots_unless_they_match_previewed_recipe_exactly(
 					var slash_index: int = quant_strings[j].rfind("/")
 					if not int(quant_strings[j].substr(0, slash_index)) >= int(quant_strings[j].substr(slash_index + 1, quant_strings[j].length())):
 						input_slots[j].quantity.self_modulate.a = 0.72
-			return false
+			return true
 
+	return false
+
+## Clears all the previews from all input slots.
+func _clear_crafting_previews() -> void:
 	for slot: CraftingSlot in input_slots:
-		if not slot.preview_items.is_empty():
-			slot.preview_items = []
+		slot.preview_items = []
 		if slot.item == null:
 			slot.quantity.text = ""
 
-	return true
+## Removes the altered quantity text provided by the crafting previews from all input slots.
+func _remove_altered_quantity_texts() -> void:
+	for slot: CraftingSlot in input_slots:
+		if slot.item != null:
+			slot.quantity.self_modulate.a = 1.0
+			var index: int = slot.quantity.text.rfind("/")
+			if index != -1:
+				slot.quantity.text = slot.quantity.text.substr(0, index)
+
+## This checks if there are any mismatches in the input slots, and if not, it sets the preview items for all
+## slots with no item.
+func _populate_previews(item: InvItemResource) -> void:
+	_clear_crafting_previews()
+	if not _check_that_items_match_previews() and item_details_panel.item_viewer_slot.item != null:
+		_remove_altered_quantity_texts()
+		return
+	if item == null or not item.stats.recipe_unlocked:
+		_remove_altered_quantity_texts()
+		return
+
+	var preview_array: Array[Array] = _get_preview_array(item)
+	var i: int = 0
+	for array: Array in preview_array:
+		if input_slots[i].item == null:
+			input_slots[i].preview_items = array
+		i += 1
 
 ## When the focused UI is closed, we should empty out the crafting input slots and drop them on the
 ## ground if the inventory is now full.

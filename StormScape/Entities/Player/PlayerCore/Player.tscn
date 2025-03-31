@@ -1401,9 +1401,9 @@ shadow_size = 0
 line_spacing = 0.0
 font = ExtResource("90_hxjay")
 font_size = 8
-font_color = Color(0.913725, 0.768627, 0.741176, 1)
+font_color = Color(0.914, 0.769, 0.741, 0.7)
 outline_size = 2
-outline_color = Color(0, 0, 0, 0.564706)
+outline_color = Color(0, 0, 0, 0.35)
 shadow_size = 0
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_2q23q"]
@@ -2133,7 +2133,7 @@ layout_mode = 2
 value = 100.0
 nine_patch_stretch = true
 texture_progress = ExtResource("100_5qckj")
-tint_progress = Color(0.345664, 1, 0.627265, 1)
+tint_progress = Color(0.990264, 0.524333, 0.569, 1)
 
 [node name="HealthBar" type="TextureProgressBar" parent="OverlayUI/PlayerStatsHUD/HealthShieldStatsHUD/HealthShieldMargins/HealthShieldVBox/HealthHBox/MarginContainer/HealthNinePatch/HealthBarMargins"]
 unique_name_in_owner = true
@@ -2340,7 +2340,7 @@ theme_override_constants/margin_bottom = 3
 
 [node name="InnerBorderBackground" type="NinePatchRect" parent="OverlayUI/ActiveSlotInfo/InnerBorderMargins"]
 layout_mode = 2
-texture = ExtResource("116_0313k")
+texture = ExtResource("123_da65a")
 patch_margin_left = 2
 patch_margin_top = 2
 patch_margin_right = 2
