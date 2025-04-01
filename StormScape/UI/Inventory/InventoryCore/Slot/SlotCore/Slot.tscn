@@ -37,15 +37,15 @@ line_spacing = 0.0
 font = ExtResource("7_ros2i")
 font_size = 8
 outline_size = 2
-outline_color = Color(0, 0, 0, 1)
+outline_color = Color(0.219608, 0.137255, 0.113725, 1)
 shadow_size = 0
 shadow_offset = Vector2(0, 0)
 
 [node name="Slot" type="NinePatchRect"]
 clip_contents = true
 custom_minimum_size = Vector2(22, 22)
-offset_right = 22.0
-offset_bottom = 22.0
+offset_right = 14.0
+offset_bottom = 14.0
 pivot_offset = Vector2(11, 11)
 size_flags_horizontal = 4
 size_flags_vertical = 4
@@ -79,6 +79,7 @@ instance_shader_parameters/progress = 100.0
 layout_mode = 2
 
 [node name="RarityGlowMargin" type="MarginContainer" parent="."]
+clip_contents = true
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -92,7 +93,6 @@ theme_override_constants/margin_bottom = -1
 
 [node name="RarityGlow" type="TextureRect" parent="RarityGlowMargin"]
 visible = false
-self_modulate = Color(0.992144, 0.796898, 0.818481, 1)
 material = SubResource("CanvasItemMaterial_raets")
 layout_mode = 2
 texture = ExtResource("5_dhreg")
@@ -133,7 +133,6 @@ theme_override_constants/margin_bottom = 3
 [node name="ItemTexture" type="TextureRect" parent="TextureMargins"]
 material = SubResource("ShaderMaterial_h48ps")
 instance_shader_parameters/final_alpha = 1.0
-custom_minimum_size = Vector2(16, 16)
 layout_mode = 2
 expand_mode = 1
 stretch_mode = 5
@@ -166,7 +165,3 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("4_jiyo0")
-
-[connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]
-[connection signal="mouse_exited" from="." to="." method="_on_mouse_exited"]
-[connection signal="visibility_changed" from="." to="." method="_on_visibility_changed"]

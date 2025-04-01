@@ -10,6 +10,7 @@ static var hovered_slot_size: float = 22.0 ## The size of the hovered over slot 
 @export var default_slot_texture: Texture2D ## The default texture of the slot with an item in it.
 @export var no_item_slot_texture: Texture2D ## The texture of the slot with no item when it is selected or active.
 @export var backing_texture: Texture2D ## The texture of the slot that appears behind everything else.
+@export var preview_only: bool = false ## When true, this slot will not react to drags or hovers.
 
 @onready var texture_margins: MarginContainer = $TextureMargins ## The item texture margins node for this slot.
 @onready var back_color: ColorRect = $BackColorMargin/BackColor ## The color behind the item.
@@ -69,6 +70,15 @@ func _ready() -> void:
 	item_texture.material.set_shader_parameter("highlight_strength", 0.0)
 	texture_margins.pivot_offset = texture_margins.size / 2
 
+	var margins: int = texture_margins.get_theme_constant("margin_bottom") * 2
+	item_texture.size = texture_margins.size - Vector2(margins, margins) # Using the texture margins minus its margin amount to get the item texture size since it doesn't update immediately at game start
+	item_texture.pivot_offset = item_texture.size / 2
+
+	if not preview_only:
+		mouse_entered.connect(_on_mouse_entered)
+		mouse_exited.connect(_on_mouse_exited)
+		visibility_changed.connect(_on_visibility_changed)
+
 ## Updates the slot visuals according to the new item.
 func _update_visuals(new_item_dict: Dictionary) -> void:
 	var new_item: InvItemResource = new_item_dict.keys()[0]
@@ -80,8 +90,8 @@ func _update_visuals(new_item_dict: Dictionary) -> void:
 		item_texture.texture = new_item.stats.inv_icon
 
 		texture_margins.rotation_degrees = new_item.stats.inv_icon_rotation
-		texture_margins.position = new_item.stats.inv_icon_offset * (item_texture.size / item_texture.custom_minimum_size)
 		texture_margins.scale = new_item.stats.inv_icon_scale
+		texture_margins.position = new_item.stats.inv_icon_offset * (item_texture.size / 16.0)
 
 		rarity_glow.self_modulate = Globals.rarity_colors.slot_glow.get(new_item_rarity)
 		rarity_glow.show()
@@ -100,7 +110,7 @@ func _update_visuals(new_item_dict: Dictionary) -> void:
 		quantity.self_modulate.a = 1.0
 
 		if not preview_items.is_empty():
-			var outline_width: float = (0.5 * (max(item_texture.texture.get_width() / new_item.stats.inv_icon_scale.x, item_texture.texture.get_height() / new_item.stats.inv_icon_scale.y) / item_texture.custom_minimum_size.x))
+			var outline_width: float = (0.5 * (max(item_texture.texture.get_width() / new_item.stats.inv_icon_scale.x, item_texture.texture.get_height() / new_item.stats.inv_icon_scale.y) / 16.0))
 			if new_item_dict.values()[0] != 0:
 				item_texture.material.set_shader_parameter("width", outline_width)
 				item_texture.material.set_shader_parameter("outline_color", Globals.rarity_colors.outline_color.get(new_item_dict.values()[0]))
@@ -193,10 +203,10 @@ func _make_drag_preview(at_position: Vector2) -> Control:
 		preview_texture.texture = item.stats.inv_icon
 
 		preview_tex_margins.rotation_degrees = item.stats.inv_icon_rotation
-		preview_tex_margins.position = item.stats.inv_icon_offset
+		preview_tex_margins.position = item.stats.inv_icon_offset * (item_texture.size / 16.0)
 		preview_tex_margins.scale = item.stats.inv_icon_scale
 
-		var outline_width: float = (0.5 * (max(item_texture.texture.get_width() / item.stats.inv_icon_scale.x, item_texture.texture.get_height() / item.stats.inv_icon_scale.y) / item_texture.custom_minimum_size.x))
+		var outline_width: float = (0.5 * (max(item_texture.texture.get_width() / item.stats.inv_icon_scale.x, item_texture.texture.get_height() / item.stats.inv_icon_scale.y) / 16.0))
 
 		preview_texture.material.set_shader_parameter("width", outline_width)
 		preview_texture.material.set_shader_parameter("highlight_strength", 0.0)
@@ -504,7 +514,7 @@ func _on_mouse_entered() -> void:
 			if item == null:
 				item_texture.texture = drag_data.item_texture.texture
 				texture_margins.rotation_degrees = drag_data.item.stats.inv_icon_rotation
-				texture_margins.position = drag_data.item.stats.inv_icon_offset * (item_texture.size / item_texture.custom_minimum_size)
+				texture_margins.position = drag_data.item.stats.inv_icon_offset * (item_texture.size / 16.0)
 				texture_margins.scale = drag_data.item.stats.inv_icon_scale
 				item_texture.set_instance_shader_parameter("final_alpha", 0.75)
 

@@ -41,7 +41,7 @@ func handle_effect_source(_effect_source: EffectSource) -> void:
 
 	if loot_table.hit_loot_table != null and not loot_table.hit_loot_table.is_empty():
 		var entry: LootTableEntry = _get_random_loot_entry(true)
-		Item.spawn_on_ground(entry.item, entry.quantity, get_parent().global_position, 15.0, false)
+		Item.spawn_on_ground(entry.item, entry.quantity, get_parent().global_position, 15.0, false, false, false)
 
 func handle_death() -> void:
 	is_dying = true
@@ -54,7 +54,7 @@ func handle_death() -> void:
 
 	if loot_table.die_loot_table != null and not loot_table.die_loot_table.is_empty():
 		var entry: LootTableEntry = _get_random_loot_entry(false)
-		Item.spawn_on_ground(entry.item, entry.quantity, get_parent().global_position, 15.0, false)
+		Item.spawn_on_ground(entry.item, entry.quantity, get_parent().global_position, 15.0, false, false, false)
 
 func _roll_to_check_if_should_drop(was_hit: bool) -> bool:
 	var spawn_chance: float = (hit_spawn_chance if was_hit else die_spawn_chance) / 100.0

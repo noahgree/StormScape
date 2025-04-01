@@ -88,5 +88,4 @@ func _combine_items(item_1: Item, item_2: Item) -> void:
 	tween.parallel().tween_property(item_2.icon, "scale", Vector2(0.5, 0.5), 0.15)
 	tween.chain().tween_callback(item_2.queue_free)
 
-	item_1.lifetime_timer.stop()
-	item_1.lifetime_timer.start()
+	item_1.restart_lifetime_timer_and_cancel_any_blink_sequence()

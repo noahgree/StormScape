@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://6p684ba74frr"
-path="res://.godot/imported/E_prompt.png-673180decf7e643108933e2f2a589cc2.ctex"
+uid="uid://cd22xh5jduxd6"
+path="res://.godot/imported/e_prompt.png-cbd554af3dce4e70ac29994f3dc95314.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://UI/TemporaryElements/Prompt Icons/E_prompt.png"
-dest_files=["res://.godot/imported/E_prompt.png-673180decf7e643108933e2f2a589cc2.ctex"]
+source_file="res://UI/TemporaryElements/InteractionIcons/e_prompt.png"
+dest_files=["res://.godot/imported/e_prompt.png-cbd554af3dce4e70ac29994f3dc95314.ctex"]
 
 [params]
 

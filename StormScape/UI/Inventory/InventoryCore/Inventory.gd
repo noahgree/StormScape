@@ -47,7 +47,7 @@ func fill_inventory(inv_to_fill_from: Array[InvItemResource]) -> void:
 			var inv_item: InvItemResource = InvItemResource.new(copy.stats, inv_to_fill_from[i].quantity) # Need to use new() so that it initializes
 
 			if inv_item.quantity > inv_item.stats.stack_size:
-				Item.spawn_on_ground(inv_item.stats, inv_item.quantity - inv_item.stats.stack_size, global_position, 14.0, true)
+				Item.spawn_on_ground(inv_item.stats, inv_item.quantity - inv_item.stats.stack_size, global_position, 14.0, true, false, true)
 				inv_item.quantity = inv_item.stats.stack_size
 
 			inv[i] = inv_item
@@ -93,7 +93,7 @@ func insert_from_inv_item(original_item: InvItemResource, delete_extra: bool = t
 			remaining = _fill_hotbar(original_item)
 
 	if not delete_extra and remaining != 0:
-		Item.spawn_on_ground(original_item.stats, original_item.quantity, Globals.player_node.global_position, 8, false)
+		Item.spawn_on_ground(original_item.stats, original_item.quantity, Globals.player_node.global_position, 8, false, false, true)
 
 ## Attempts to fill the hotbar with the item passed in. Can either be an Item or an InvItemResource.
 ## Returns any leftover quantity that did not fit.

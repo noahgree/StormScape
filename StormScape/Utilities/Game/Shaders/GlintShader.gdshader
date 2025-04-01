@@ -19,6 +19,7 @@ uniform float angle = 35.0;
 uniform vec4 tint_color: source_color = vec4(1.0, 1.0, 1.0, 0.0);
 uniform float glow_intensity : hint_range(0.0, 4.0) = 1.0;
 
+instance uniform vec4 override_color: source_color = vec4(1.0, 1.0, 1.0, 0.0);
 instance uniform float random_start_offset = 0.0;
 instance uniform float final_alpha = 1.0;
 
@@ -117,6 +118,10 @@ void fragment() {
 
 	if (final_color.a > 0.0) {
 		final_color.a = final_alpha;
+	}
+
+	if (sampled_color.a > 0.0 && override_color.a > 0.0) {
+    	final_color.rgb = mix(final_color.rgb, override_color.rgb, override_color.a);
 	}
 
     COLOR = final_color;

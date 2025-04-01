@@ -15,9 +15,16 @@ static var item_scene: PackedScene = preload("res://Entities/Items/ItemCore/Item
 @onready var line_particles: CPUParticles2D = $LineParticles ## The line particles that spawn on the highest rarity items.
 @onready var anim_player: AnimationPlayer = $AnimationPlayer ## The animation player controlling the hover, spawn, and remove anims.
 
+const ITEM_LIFETIME: int = 300 ## How long should the item live for in seconds.
+const BLINK_DURATION: int = 25 ## How long at the end of the item's lifetime should the blink sequence last.
+const MAX_BLINK_INTERVAL: float = 0.6 ## The max tween duration for the blinking.
+const MIN_BLINK_INTERVAL: float = 0.085 ## The min tween duration for the blinking.
 var can_be_auto_picked_up: bool = false ## Whether the item can currently be auto picked up by walking over it.
 var can_be_picked_up_at_all: bool = true ## When false, the item is in a state where it cannot be picked up by any means.
-var lifetime_timer: Timer = TimerHelpers.create_one_shot_timer(self, 300, remove_from_world) ## The timer tracking how long the item has left to exist on the ground.
+var lifetime_timer: Timer = TimerHelpers.create_one_shot_timer(self, ITEM_LIFETIME - BLINK_DURATION, _start_blink_sequence) ## The timer tracking how long the item has left to be on the ground before blinking starts.
+var blink_tween: Tween
+var final_seconds_timer: Timer = TimerHelpers.create_one_shot_timer(self, BLINK_DURATION, remove_from_world)
+var is_tweening_up: bool = true
 
 
 func _set_item(item_stats: ItemResource) -> void:
@@ -35,7 +42,8 @@ func _set_item(item_stats: ItemResource) -> void:
 ## the item's stats and pass the old session uid along to it. Can also choose to let items spawn with
 ## higher than stack quantities.
 static func spawn_on_ground(item_stats: ItemResource, quant: int, location: Vector2,
-							location_range: float, keep_suid: bool = true, respect_max_stack: bool = false) -> void:
+							location_range: float, keep_suid: bool = true, respect_max_stack: bool = false,
+							auto_pickup_delay: bool = true) -> void:
 	var quantity_count: int = quant
 	while quantity_count > 0:
 		var item_to_spawn: Item = item_scene.instantiate()
@@ -53,6 +61,9 @@ static func spawn_on_ground(item_stats: ItemResource, quant: int, location: Vect
 			item_to_spawn.global_position = location + Vector2(randf_range((-location_range - 6) / 2.0, (location_range - 6) / 2.0) + 6, randf_range(0, (location_range - 6)) + 6)
 		else:
 			item_to_spawn.global_position = location
+
+		if not auto_pickup_delay:
+			item_to_spawn.can_be_auto_picked_up = true
 
 		var spawn_callable: Callable = Globals.world_root.get_node("WorldItemsManager").add_item.bind(item_to_spawn)
 		spawn_callable.call_deferred()
@@ -125,6 +136,35 @@ func _on_spawn_anim_completed() -> void:
 		line_particles.color = Globals.rarity_colors.tint_color.get(stats.rarity)
 		line_particles.emitting = true
 
+## Starts the blinking out sequence that eventually removes the item from the world when it ends.
+func _start_blink_sequence() -> void:
+	final_seconds_timer.start()
+	_do_blink()
+
+## Called each time the blink happens to tween the shader property.
+func _do_blink() -> void:
+	if not final_seconds_timer.is_stopped():
+		var progress: float = 1.0 - (final_seconds_timer.time_left / BLINK_DURATION)
+		var curr_blink_dur: float = lerp(MAX_BLINK_INTERVAL, MIN_BLINK_INTERVAL, progress)
+		var target_value: float = 0.25 if is_tweening_up else 0.0
+		is_tweening_up = not is_tweening_up
+
+		if blink_tween:
+			blink_tween.kill()
+
+		blink_tween = create_tween()
+		blink_tween.tween_property(icon, "instance_shader_parameters/override_color:a", target_value, curr_blink_dur)
+		blink_tween.tween_callback(_do_blink)
+
+## Ends any lifetime timers and blink sequences and starts the lifetime timer over again.
+func restart_lifetime_timer_and_cancel_any_blink_sequence() -> void:
+	final_seconds_timer.stop()
+	lifetime_timer.stop()
+	if blink_tween:
+		blink_tween.kill()
+	icon.set_instance_shader_parameter("override_color", Color.TRANSPARENT)
+	lifetime_timer.start()
+
 ## Removes the item from the world
 func remove_from_world() -> void:
 	anim_player.play("remove")
@@ -164,5 +204,5 @@ func _on_area_exited(area: Area2D) -> void:
 ## This helps retrigger the pickup HUD with the new quantity.
 func respawn_item_after_quantity_change() -> void:
 	can_be_picked_up_at_all = false
-	Item.spawn_on_ground(stats, quantity, global_position, -1, true, false)
+	Item.spawn_on_ground(stats, quantity, global_position, -1, true, false, true)
 	queue_free()

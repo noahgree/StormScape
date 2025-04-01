@@ -88,7 +88,7 @@ const rarity_colors: Dictionary[String, Dictionary] = {
 		ItemRarity.RARE : Color(0, 0.95, 1.55),
 		ItemRarity.EPIC : Color(0.9195, 0.7125, 1.5),
 		ItemRarity.LEGENDARY : Color(1.389, 0.9075, 0),
-		ItemRarity.SINGULAR : Color(1.31, 0.997, 1.018)
+		ItemRarity.SINGULAR : Color(1.42, 0.65, 0.65)
 	},
 	"slot_fill" : {
 		ItemRarity.COMMON : Color(0.517, 0.525, 0.533, 0.75),
