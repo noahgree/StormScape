@@ -3,8 +3,8 @@ extends Node
 class_name KnockbackHandler
 ## A handler for using the data provided in the effect source to apply knockback in different ways.
 
-@export var _knockback_boost: float = 1.0 ## A multiplier for knockback on an entity.
-@export var _knockback_resistance: float = 1.0 ## A multiplier for redudcing knockback on an entity.
+@export_range(0, 100, 1.0, "hide_slider", "suffix:%") var _knockback_weakness: float = 0.0 ## A multiplier for knockback on an entity.
+@export_range(0, 100, 1.0, "hide_slider", "suffix:%") var _knockback_resistance: float = 0.0 ## A multiplier for redudcing knockback on an entity.
 @export_subgroup("Other")
 @export_range(0.0, 0.5, 0.01) var entity_dir_influence: float = 0.25 ## How strong of an influence the entity's movement direction should have on the knockback vector.
 
@@ -18,7 +18,7 @@ var is_source_moving_type: bool = false ## Set by the status effect component fo
 ## Sets up moddable stats.
 func _ready() -> void:
 	var moddable_stats: Dictionary[StringName, float] = {
-		&"knockback_boost" : _knockback_boost, &"knockback_resistance" : _knockback_resistance
+		&"knockback_weakness" : _knockback_weakness, &"knockback_resistance" : _knockback_resistance
 	}
 	get_parent().affected_entity.stats.add_moddable_stats(moddable_stats)
 
@@ -86,9 +86,13 @@ func handle_self_knockback(knockback_effect: SelfKnockbackEffect) -> void:
 func _send_handled_knockback(knockback_dir: Vector2, force: int) -> void:
 	if knockback_dir == Vector2.ZERO:
 		return
-	var knockback_boost: float = effect_receiver.affected_entity.stats.get_stat("knockback_boost")
+	var knockback_weakness: float = effect_receiver.affected_entity.stats.get_stat("knockback_weakness")
 	var knockback_resistance: float = effect_receiver.affected_entity.stats.get_stat("knockback_resistance")
-	var handled_knockback: Vector2 = knockback_dir * force * max(0, (1 + knockback_boost - knockback_resistance))
+
+	var multiplier: float = 1.0 + (knockback_weakness / 100.0) - (knockback_resistance / 100.0)
+	multiplier = clamp(multiplier, 0.0, 2.0)
+
+	var handled_knockback: Vector2 = knockback_dir * force * multiplier
 
 	if effect_receiver.affected_entity is DynamicEntity:
 		if effect_receiver.affected_entity.has_method("request_knockback"):

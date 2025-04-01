@@ -8,6 +8,7 @@ class PrintFlags:
 	static var stat_mod_changes_on_load: bool = false
 	static var current_effect_changes: bool = false
 	static var weapon_mod_changes: bool = true
+	static var wearable_changes: bool = true
 	static var saver_loader_status_changes: bool = true
 	static var ammo_updates: bool = false
 	static var sounds_starting: bool = false

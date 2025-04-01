@@ -25,9 +25,9 @@ class_name WeaponMod
 
 
 ## Intended to be overridden. This is called immediately after this mod is added.
-func on_added(_weapon_stats: WeaponResource, _weapon: Weapon) -> void:
+func on_added(_weapon_stats: WeaponResource, _equipped_item: EquippableItem) -> void:
 	pass
 
 ## Intended to be overridden. This is called immediately after this mod is removed.
-func on_removal(_weapon_stats: WeaponResource, _weapon: Weapon) -> void:
+func on_removal(_weapon_stats: WeaponResource, _equipped_item: EquippableItem) -> void:
 	pass

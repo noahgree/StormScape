@@ -46,9 +46,9 @@ func _ready() -> void:
 func handle_status_effect(status_effect: StatusEffect) -> void:
 	if DebugFlags.PrintFlags.current_effect_changes and print_effect_updates:
 		if status_effect is StormSyndromeEffect:
-			print_rich("-------[color=green]Adding[/color][b] [color=pink]" + str(status_effect.effect_name) + " " + str(status_effect.effect_lvl) + "[/color][/b]-------")
+			print_rich("-------[color=green]Adding[/color][b] [color=pink]" + str(status_effect.effect_name) + " " + str(status_effect.effect_lvl) + "[/color][/b][color=gray] to " + affected_entity.name + "-------")
 		else:
-			print_rich("-------[color=green]Adding[/color][b] " + str(status_effect.effect_name) + " " + str(status_effect.effect_lvl) + "[/b]-------")
+			print_rich("-------[color=green]Adding[/color][b] " + str(status_effect.effect_name) + " " + str(status_effect.effect_lvl) + "[/b][color=gray] to " + affected_entity.name + "-------")
 
 	_handle_status_effect_mods(status_effect)
 
@@ -156,9 +156,9 @@ func _restart_effect_duration(effect_name: String) -> void:
 func _remove_status_effect(status_effect: StatusEffect) -> void:
 	if DebugFlags.PrintFlags.current_effect_changes and print_effect_updates:
 		if status_effect is StormSyndromeEffect:
-			print_rich("-------[color=red]Removed[/color][b] [color=pink]" + str(status_effect.effect_name) + " " + str(status_effect.effect_lvl) + "[/color][/b]-------")
+			print_rich("-------[color=red]Removed[/color][b] [color=pink]" + str(status_effect.effect_name) + " " + str(status_effect.effect_lvl) + "[/color][/b][color=gray] from " + affected_entity.name + "-------")
 		else:
-			print_rich("-------[color=red]Removed[/color][b] " + str(status_effect.effect_name) + " " + str(status_effect.effect_lvl) + "[/b]-------")
+			print_rich("-------[color=red]Removed[/color][b] " + str(status_effect.effect_name) + " " + str(status_effect.effect_lvl) + "[/b][color=gray] from " + affected_entity.name + "-------")
 
 	for mod_resource: StatMod in status_effect.stat_mods:
 		affected_entity.stats.remove_mod(mod_resource.stat_id, mod_resource.mod_id)

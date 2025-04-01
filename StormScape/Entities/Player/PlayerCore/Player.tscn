@@ -1,4 +1,4 @@
-[gd_scene load_steps=206 format=3 uid="uid://dba8mrurjlekp"]
+[gd_scene load_steps=207 format=3 uid="uid://dba8mrurjlekp"]
 
 [ext_resource type="Script" uid="uid://c3rpxq8pnbdje" path="res://Entities/Player/PlayerCore/Player.gd" id="1_m33tt"]
 [ext_resource type="PackedScene" uid="uid://cj2wy5f05cos4" path="res://Entities/EntityCore/Shadow/EntityShadow.tscn" id="3_05f62"]
@@ -70,6 +70,7 @@
 [ext_resource type="Resource" uid="uid://1q7rlned2r23" path="res://Entities/Items/TRESItems/Gattler(3).tres" id="53_lo25j"]
 [ext_resource type="Resource" uid="uid://bta1hncad1hd2" path="res://Entities/Items/TRESItems/ExtendedMag(1).tres" id="56_da65a"]
 [ext_resource type="Resource" uid="uid://dk3vlbvu2b7eq" path="res://Entities/Items/TRESItems/Sword(4).tres" id="57_6wv7y"]
+[ext_resource type="Resource" uid="uid://m8ws6ct8yu3b" path="res://Entities/Items/TRESItems/FireCharm(5).tres" id="57_gdihr"]
 [ext_resource type="Script" uid="uid://dih45lqhjg0xx" path="res://UI/OverheadUI/PlayerOverheadUI.gd" id="57_n8srl"]
 [ext_resource type="Script" uid="uid://c0n0ja8tkrnkf" path="res://UI/Inventory/PlayerInventory/HotbarUI.gd" id="58_i567i"]
 [ext_resource type="Resource" uid="uid://dy8rwyeyusim7" path="res://Entities/Items/TRESItems/Twin(2).tres" id="60_0t1mv"]
@@ -85,7 +86,7 @@
 [ext_resource type="Script" uid="uid://ct7n8wo1p3b20" path="res://Entities/Items/WeaponMods/WeaponMod.gd" id="74_bvo3j"]
 [ext_resource type="Resource" uid="uid://cwgqj8klx4b3x" path="res://Entities/Items/TRESItems/ExtendedMag(0).tres" id="75_r5dvw"]
 [ext_resource type="Texture2D" uid="uid://lqg70q4wj55g" path="res://UI/Inventory/InventoryCore/Background/Wood/inv_background_wood.png" id="78_jlc36"]
-[ext_resource type="Script" uid="uid://bcjwesiannbd0" path="res://Entities/Stats/StatMod/StatMod.gd" id="79_5qckj"]
+[ext_resource type="Script" uid="uid://317ipeo41y3c" path="res://Entities/Items/Wearables/Wearable.gd" id="79_gdihr"]
 [ext_resource type="FontFile" uid="uid://bp2lgrlhj8cet" path="res://Assets/Theming/Fonts/Pixel/C&C Red Alert [INET].ttf" id="85_7xlwj"]
 [ext_resource type="Texture2D" uid="uid://cd22xh5jduxd6" path="res://UI/TemporaryElements/InteractionIcons/e_prompt.png" id="89_0313k"]
 [ext_resource type="FontVariation" uid="uid://by478cplv5w4n" path="res://Assets/Theming/Fonts/GameFontResources/pixel_font_less_margin.tres" id="90_hxjay"]
@@ -1248,6 +1249,12 @@ script = ExtResource("32_ixmb3")
 stats = ExtResource("45_xur7q")
 quantity = 1
 
+[sub_resource type="Resource" id="Resource_g5u5n"]
+script = ExtResource("32_ixmb3")
+stats = ExtResource("57_gdihr")
+quantity = 1
+metadata/_custom_type_script = "uid://dp8osf7r6xkkt"
+
 [sub_resource type="Resource" id="Resource_vpccy"]
 script = ExtResource("32_ixmb3")
 stats = ExtResource("48_1kvwx")
@@ -1333,18 +1340,6 @@ light_mode = 1
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_n4o3n"]
 light_mode = 1
-
-[sub_resource type="Resource" id="Resource_f5l7i"]
-script = ExtResource("79_5qckj")
-stat_id = &"max_health"
-mod_id = &"test_mod_1"
-operation = "+%"
-value = 40.0
-rounding = "Round Closest"
-priority = 1
-max_stack_count = 1
-override_all = false
-metadata/_custom_type_script = "uid://bcjwesiannbd0"
 
 [sub_resource type="LabelSettings" id="LabelSettings_hxjay"]
 line_spacing = 0.0
@@ -1562,7 +1557,7 @@ parameters/run/blendspace2d/blend_position = Vector2(0, 0)
 
 [node name="ItemReceiverComponent" parent="." node_paths=PackedStringArray("item_interact_hud", "inv_populator", "ui") instance=ExtResource("30_qgyag")]
 item_interact_hud = NodePath("../OverlayUI/ItemInteractionHUD")
-starting_inv = Array[ExtResource("32_ixmb3")]([SubResource("Resource_pihal"), SubResource("Resource_da65a"), SubResource("Resource_0313k"), SubResource("Resource_6f5us"), SubResource("Resource_kx1me"), SubResource("Resource_2ijsm"), SubResource("Resource_gb65f"), SubResource("Resource_xlc3k"), SubResource("Resource_n4o3n"), SubResource("Resource_3by25"), SubResource("Resource_oxva3"), SubResource("Resource_5qckj"), SubResource("Resource_x8o50"), SubResource("Resource_s4yud"), SubResource("Resource_apvym"), SubResource("Resource_ur5wt"), SubResource("Resource_eufsu"), SubResource("Resource_ou5t4"), SubResource("Resource_dyejk"), null, null, SubResource("Resource_vpccy"), null, SubResource("Resource_gdihr"), null, SubResource("Resource_p5d28"), SubResource("Resource_0t1mv"), SubResource("Resource_rdrbb"), SubResource("Resource_0ta0y"), SubResource("Resource_sx7hp"), SubResource("Resource_wjnk6"), SubResource("Resource_hevqc"), SubResource("Resource_ar238"), SubResource("Resource_w0i1c"), SubResource("Resource_bvo3j"), SubResource("Resource_hxjay"), SubResource("Resource_6stk0")])
+starting_inv = Array[ExtResource("32_ixmb3")]([SubResource("Resource_pihal"), SubResource("Resource_da65a"), SubResource("Resource_0313k"), SubResource("Resource_6f5us"), SubResource("Resource_kx1me"), SubResource("Resource_2ijsm"), SubResource("Resource_gb65f"), SubResource("Resource_xlc3k"), SubResource("Resource_n4o3n"), SubResource("Resource_3by25"), SubResource("Resource_oxva3"), SubResource("Resource_5qckj"), SubResource("Resource_x8o50"), SubResource("Resource_s4yud"), SubResource("Resource_apvym"), SubResource("Resource_ur5wt"), SubResource("Resource_eufsu"), SubResource("Resource_ou5t4"), SubResource("Resource_dyejk"), SubResource("Resource_g5u5n"), null, SubResource("Resource_vpccy"), null, SubResource("Resource_gdihr"), null, SubResource("Resource_p5d28"), SubResource("Resource_0t1mv"), SubResource("Resource_rdrbb"), SubResource("Resource_0ta0y"), SubResource("Resource_sx7hp"), SubResource("Resource_wjnk6"), SubResource("Resource_hevqc"), SubResource("Resource_ar238"), SubResource("Resource_w0i1c"), SubResource("Resource_bvo3j"), SubResource("Resource_hxjay"), SubResource("Resource_6stk0")])
 is_player_inv = true
 inv_size = 37
 hotbar_size = 5
@@ -1630,7 +1625,6 @@ tint_progress = Color(0.483324, 0.860906, 0.955996, 1)
 [node name="OverlayUI" type="CanvasLayer" parent="."]
 
 [node name="TestButtons" type="Control" parent="OverlayUI" node_paths=PackedStringArray("health_component")]
-visible = false
 layout_mode = 3
 anchors_preset = 0
 offset_right = 40.0
@@ -1639,13 +1633,13 @@ mouse_filter = 1
 script = ExtResource("17_vdk5v")
 health_component = NodePath("../../HealthComponent")
 mods = Array[ExtResource("74_bvo3j")]([ExtResource("65_14ixx"), ExtResource("75_r5dvw")])
-player_mods = Array[ExtResource("79_5qckj")]([SubResource("Resource_f5l7i")])
+wearables = Array[ExtResource("79_gdihr")]([ExtResource("57_gdihr")])
 
 [node name="TestHurtBtn" type="Button" parent="OverlayUI/TestButtons"]
 layout_mode = 0
-offset_left = 114.0
-offset_top = 253.0
-offset_right = 145.0
+offset_left = 94.0
+offset_top = 252.0
+offset_right = 125.0
 offset_bottom = 272.0
 scale = Vector2(0.7, 0.7)
 focus_mode = 0
@@ -1655,9 +1649,9 @@ text = "HURT"
 [node name="TestHealBtn" type="Button" parent="OverlayUI/TestButtons"]
 texture_filter = 1
 layout_mode = 0
-offset_left = 114.0
-offset_top = 238.0
-offset_right = 143.0
+offset_left = 94.0
+offset_top = 237.0
+offset_right = 123.0
 offset_bottom = 257.0
 scale = Vector2(0.7, 0.7)
 focus_mode = 0
@@ -1667,9 +1661,9 @@ text = "HEAL"
 [node name="TestMusicBtn" type="Button" parent="OverlayUI/TestButtons"]
 texture_filter = 1
 layout_mode = 0
-offset_left = 162.0
-offset_top = 253.0
-offset_right = 222.0
+offset_left = 142.0
+offset_top = 252.0
+offset_right = 202.0
 offset_bottom = 272.0
 scale = Vector2(0.7, 0.7)
 focus_mode = 0
@@ -1679,9 +1673,9 @@ text = "TEST MUSIC"
 [node name="TestSaveBtn" type="Button" parent="OverlayUI/TestButtons"]
 texture_filter = 1
 layout_mode = 0
-offset_left = 138.0
-offset_top = 238.0
-offset_right = 168.0
+offset_left = 118.0
+offset_top = 237.0
+offset_right = 148.0
 offset_bottom = 257.0
 scale = Vector2(0.7, 0.7)
 focus_mode = 0
@@ -1691,9 +1685,9 @@ text = "SAVE"
 [node name="TestLoadBtn" type="Button" parent="OverlayUI/TestButtons"]
 texture_filter = 1
 layout_mode = 0
-offset_left = 138.0
-offset_top = 253.0
-offset_right = 168.0
+offset_left = 118.0
+offset_top = 252.0
+offset_right = 148.0
 offset_bottom = 272.0
 scale = Vector2(0.7, 0.7)
 focus_mode = 0
@@ -1703,9 +1697,9 @@ text = "LOAD"
 [node name="TestModBtn1" type="Button" parent="OverlayUI/TestButtons"]
 texture_filter = 1
 layout_mode = 0
-offset_left = 262.0
-offset_top = 238.0
-offset_right = 297.0
+offset_left = 242.0
+offset_top = 237.0
+offset_right = 277.0
 offset_bottom = 257.0
 scale = Vector2(0.7, 0.7)
 focus_mode = 0
@@ -1715,9 +1709,9 @@ text = "MOD 1"
 [node name="TestModBtn2" type="Button" parent="OverlayUI/TestButtons"]
 texture_filter = 1
 layout_mode = 0
-offset_left = 262.0
-offset_top = 253.0
-offset_right = 299.0
+offset_left = 242.0
+offset_top = 252.0
+offset_right = 279.0
 offset_bottom = 272.0
 scale = Vector2(0.7, 0.7)
 focus_mode = 0
@@ -1727,10 +1721,10 @@ text = "MOD 2"
 [node name="TestModBtn3" type="Button" parent="OverlayUI/TestButtons"]
 texture_filter = 1
 layout_mode = 0
-offset_left = 291.0
-offset_top = 238.0
-offset_right = 328.0
-offset_bottom = 258.0
+offset_left = 271.0
+offset_top = 237.0
+offset_right = 308.0
+offset_bottom = 257.0
 scale = Vector2(0.7, 0.7)
 focus_mode = 0
 theme_override_font_sizes/font_size = 12
@@ -1739,10 +1733,10 @@ text = "MOD 3"
 [node name="TestModBtn4" type="Button" parent="OverlayUI/TestButtons"]
 texture_filter = 1
 layout_mode = 0
-offset_left = 291.0
-offset_top = 253.0
-offset_right = 328.0
-offset_bottom = 273.0
+offset_left = 271.0
+offset_top = 252.0
+offset_right = 308.0
+offset_bottom = 272.0
 scale = Vector2(0.7, 0.7)
 focus_mode = 0
 theme_override_font_sizes/font_size = 12
@@ -1751,9 +1745,9 @@ text = "MOD 4"
 [node name="TestStormBtn" type="Button" parent="OverlayUI/TestButtons"]
 texture_filter = 1
 layout_mode = 0
-offset_left = 207.0
-offset_top = 238.0
-offset_right = 245.0
+offset_left = 187.0
+offset_top = 237.0
+offset_right = 225.0
 offset_bottom = 257.0
 scale = Vector2(0.7, 0.7)
 focus_mode = 0
@@ -1763,9 +1757,9 @@ text = "STORM"
 [node name="TestTimeBtn" type="Button" parent="OverlayUI/TestButtons"]
 texture_filter = 1
 layout_mode = 0
-offset_left = 239.0
-offset_top = 238.0
-offset_right = 267.0
+offset_left = 219.0
+offset_top = 237.0
+offset_right = 247.0
 offset_bottom = 257.0
 scale = Vector2(0.7, 0.7)
 focus_mode = 0
@@ -1775,9 +1769,9 @@ text = "TIME"
 [node name="TestStormBtn2" type="Button" parent="OverlayUI/TestButtons"]
 texture_filter = 1
 layout_mode = 0
-offset_left = 162.0
-offset_top = 238.0
-offset_right = 223.0
+offset_left = 142.0
+offset_top = 237.0
+offset_right = 203.0
 offset_bottom = 257.0
 scale = Vector2(0.7, 0.7)
 focus_mode = 0
@@ -1787,9 +1781,9 @@ text = "NEXT PHASE"
 [node name="TestCombineItems" type="Button" parent="OverlayUI/TestButtons"]
 texture_filter = 1
 layout_mode = 0
-offset_left = 207.0
-offset_top = 253.0
-offset_right = 281.0
+offset_left = 187.0
+offset_top = 252.0
+offset_right = 261.0
 offset_bottom = 272.0
 scale = Vector2(0.7, 0.7)
 focus_mode = 0
@@ -2136,13 +2130,13 @@ grow_vertical = 2
 texture = ExtResource("98_s4yud")
 region_rect = Rect2(0, 0, 20, 20)
 patch_margin_left = 3
-patch_margin_top = 1
+patch_margin_top = 3
 patch_margin_right = 3
-patch_margin_bottom = 1
+patch_margin_bottom = 3
 axis_stretch_vertical = 2
 script = ExtResource("35_45ikj")
 
-[node name="MarginContainer" type="MarginContainer" parent="OverlayUI/ItemInteractionHUD"]
+[node name="OuterMargins" type="MarginContainer" parent="OverlayUI/ItemInteractionHUD"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -2154,7 +2148,7 @@ theme_override_constants/margin_top = 3
 theme_override_constants/margin_right = 3
 theme_override_constants/margin_bottom = 3
 
-[node name="NinePatchRect" type="NinePatchRect" parent="OverlayUI/ItemInteractionHUD/MarginContainer"]
+[node name="InnerBackground" type="NinePatchRect" parent="OverlayUI/ItemInteractionHUD/OuterMargins"]
 layout_mode = 2
 texture = ExtResource("123_da65a")
 patch_margin_left = 2
@@ -2162,25 +2156,25 @@ patch_margin_top = 2
 patch_margin_right = 2
 patch_margin_bottom = 2
 
-[node name="InnerMargins" type="MarginContainer" parent="OverlayUI/ItemInteractionHUD/MarginContainer"]
+[node name="InnerMargins" type="MarginContainer" parent="OverlayUI/ItemInteractionHUD/OuterMargins"]
 layout_mode = 2
 theme_override_constants/margin_left = 3
 theme_override_constants/margin_top = 0
 theme_override_constants/margin_right = 0
 theme_override_constants/margin_bottom = 0
 
-[node name="ElementHBox" type="HBoxContainer" parent="OverlayUI/ItemInteractionHUD/MarginContainer/InnerMargins"]
+[node name="ElementHBox" type="HBoxContainer" parent="OverlayUI/ItemInteractionHUD/OuterMargins/InnerMargins"]
 layout_mode = 2
 theme_override_constants/separation = 1
 alignment = 1
 
-[node name="InteractIndicator" type="TextureRect" parent="OverlayUI/ItemInteractionHUD/MarginContainer/InnerMargins/ElementHBox"]
+[node name="InteractIndicator" type="TextureRect" parent="OverlayUI/ItemInteractionHUD/OuterMargins/InnerMargins/ElementHBox"]
 self_modulate = Color(0.963, 0.899, 0.886, 0.7)
 layout_mode = 2
 texture = ExtResource("89_0313k")
 stretch_mode = 5
 
-[node name="ElementMargins" type="MarginContainer" parent="OverlayUI/ItemInteractionHUD/MarginContainer/InnerMargins/ElementHBox"]
+[node name="ElementMargins" type="MarginContainer" parent="OverlayUI/ItemInteractionHUD/OuterMargins/InnerMargins/ElementHBox"]
 layout_mode = 2
 size_flags_horizontal = 8
 theme_override_constants/margin_left = 0
@@ -2188,7 +2182,7 @@ theme_override_constants/margin_top = 0
 theme_override_constants/margin_right = 0
 theme_override_constants/margin_bottom = 0
 
-[node name="PickupPreviewSlot" parent="OverlayUI/ItemInteractionHUD/MarginContainer/InnerMargins/ElementHBox/ElementMargins" instance=ExtResource("42_r422n")]
+[node name="PickupPreviewSlot" parent="OverlayUI/ItemInteractionHUD/OuterMargins/InnerMargins/ElementHBox/ElementMargins" instance=ExtResource("42_r422n")]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(15, 15)
 layout_mode = 2
@@ -2196,7 +2190,7 @@ texture = null
 default_slot_texture = null
 preview_only = true
 
-[node name="QuantityMargins" type="MarginContainer" parent="OverlayUI/ItemInteractionHUD/MarginContainer/InnerMargins/ElementHBox/ElementMargins"]
+[node name="QuantityMargins" type="MarginContainer" parent="OverlayUI/ItemInteractionHUD/OuterMargins/InnerMargins/ElementHBox/ElementMargins"]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_constants/margin_left = 0
@@ -2204,7 +2198,7 @@ theme_override_constants/margin_top = 0
 theme_override_constants/margin_right = 1
 theme_override_constants/margin_bottom = 3
 
-[node name="ItemPickupQuantity" type="Label" parent="OverlayUI/ItemInteractionHUD/MarginContainer/InnerMargins/ElementHBox/ElementMargins/QuantityMargins"]
+[node name="ItemPickupQuantity" type="Label" parent="OverlayUI/ItemInteractionHUD/OuterMargins/InnerMargins/ElementHBox/ElementMargins/QuantityMargins"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 8

@@ -3,7 +3,7 @@ extends Node
 class_name TimeSnareHandler
 ## A handler for using the data provided in the effect source to apply time snare in different ways.
 
-@export var _time_snare_immunity: float = 0 ## If aything besides 0, the time snare effect is nullified.
+@export_range(0, 1, 1, "hide_slider", "suffix:(1 = on | 0 = off)") var _time_snare_immunity: float = 0 ## If aything besides 0, the time snare effect is nullified.
 
 @onready var effect_receiver: EffectReceiverComponent = get_parent() ## The receiver that passes the effect to this handler node.
 

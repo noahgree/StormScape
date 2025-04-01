@@ -111,7 +111,7 @@ func on_max_stamina_changed(new_max_stamina: float) -> void:
 	if stamina < new_max_stamina and stamina_wait_timer.is_stopped():
 		stamina_wait_timer.stop()
 		stamina_wait_timer.start(get_parent().stats.get_stat("stamina_recharge_delay"))
-	max_stamina_changed.emit()
+	max_stamina_changed.emit(new_max_stamina)
 
 ## We need to make sure the curret hunger bars get limited to the new max value. Usually called by stat mod caches.
 func on_max_hunger_bars_changed(new_max_hunger_bars: int) -> void:

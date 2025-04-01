@@ -27,7 +27,7 @@ func parse_item(stats: ItemResource) -> Array[String]:
 			strings.append(_get_charge_status_effects(stats))
 		Globals.ItemType.AMMO:
 			pass
-		Globals.ItemType.CLOTHING:
+		Globals.ItemType.WEARABLE:
 			pass
 		Globals.ItemType.WORLD_RESOURCE:
 			pass

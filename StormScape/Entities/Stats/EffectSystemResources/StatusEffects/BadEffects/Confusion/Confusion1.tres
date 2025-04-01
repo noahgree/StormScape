@@ -29,5 +29,5 @@ audio_to_play = ""
 only_cue_on_player_hit = false
 spawn_particles = true
 particle_hander_req = "Confusion"
-update_entity_glow = true
-metadata/_custom_type_script = ExtResource("1_7xxcl")
+make_entity_glow = true
+metadata/_custom_type_script = "uid://dowo7vjco2b7c"

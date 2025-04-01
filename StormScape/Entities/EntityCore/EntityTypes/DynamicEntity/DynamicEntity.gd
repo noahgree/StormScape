@@ -22,6 +22,7 @@ class_name DynamicEntity
 @onready var hands: HandsComponent = get_node_or_null("%HandsComponent") ## The hands item component for the entity.
 
 var stats: StatModsCacheResource = StatModsCacheResource.new() ## The resource that will cache and work with all stat mods for this entity.
+var wearables: Array[Dictionary] = [{ &"1" : null }, { &"2" : null }, { &"3" : null }, { &"4" : null }, { &"5" : null }] ## The equipped wearables on this entity.
 var time_snare_counter: float = 0 ## The ticker that slows down delta when under a time snare.
 var snare_factor: float = 0 ## Multiplier for delta time during time snares.
 var snare_timer: Timer ## A reference to a timer that might currently be tracking a time snare instance.

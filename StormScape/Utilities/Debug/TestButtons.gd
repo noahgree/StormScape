@@ -3,7 +3,7 @@ extends Control
 
 @export var health_component: HealthComponent
 @export var mods: Array[WeaponMod]
-@export var player_mods: Array[StatMod]
+@export var wearables: Array[Wearable]
 
 
 func _on_test_hurt_btn_pressed() -> void:
@@ -39,11 +39,16 @@ func _on_test_mod_btn_2_pressed() -> void:
 		i += 1
 
 func _on_test_mod_btn_3_pressed() -> void:
-	Globals.player_node.stats.add_mods(player_mods)
+	var i: int = 0
+	for wearable: Wearable in wearables:
+		WearableManager.handle_wearable(Globals.player_node, wearable, i)
+		i += 1
 
 func _on_test_mod_btn_4_pressed() -> void:
-	for mod: StatMod in player_mods:
-		Globals.player_node.stats.remove_mod(mod.stat_id, mod.mod_id)
+	var i: int = 0
+	for wearable: Wearable in wearables:
+		WearableManager.remove_wearable(Globals.player_node, wearable, i)
+		i += 1
 
 func _on_test_storm_pressed() -> void:
 	if Globals.storm.is_enabled:

@@ -1,0 +1,14 @@
+@icon("res://Utilities/Debug/EditorIcons/wearable.svg")
+extends ItemResource
+class_name Wearable
+## The class for all wearable gear and items that provide status effects or stat modifications to the wearer.
+
+
+@export var stat_mods: Array[StatMod] ## The stat modifiers applied by this wearable. Do not have duplicates in this array.
+
+@export_group("Blacklist")
+@export var blocked_mutuals: Array[StringName] = [] ## The wearables that cannot be on at the same time as this. In other words, only one of the wearables in this list and this wearable itself can be on an entity at a time.
+
+@export_group("FX")
+@export var equipping_audio: String = "" ## The audio resource to play as a sound effect when equipping this wearable.
+@export var removal_audio: String = "" ## The audio resource to play as a sound effect when unequipping this wearable.

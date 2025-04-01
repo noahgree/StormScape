@@ -86,7 +86,8 @@ func _on_slot_not_hovered() -> void:
 	item_hover_delay_timer.stop()
 	if not pinned:
 		is_updating_via_hover = true
-		item_viewer_slot.item = null
+		if item_viewer_slot.item != null: # Don't want to trigger a clearing of crafting previews otherwise
+			item_viewer_slot.item = null
 		is_updating_via_hover = false
 
 ## When the focused UI is closed, we should empty out the crafting input slots and drop them on the

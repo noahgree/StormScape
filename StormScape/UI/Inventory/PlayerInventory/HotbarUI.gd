@@ -19,7 +19,7 @@ func _ready() -> void:
 	_setup_slots()
 
 	if not Globals.player_node: await SignalBus.player_ready
-	Globals.player_node.stamina_component.max_stamina_changed.connect(_update_inv_ammo_ui)
+	Globals.player_node.stamina_component.max_stamina_changed.connect(func(_new_max_stamina: float) -> void: _update_inv_ammo_ui())
 	SignalBus.focused_ui_closed.connect(_update_inv_ammo_ui)
 	SignalBus.focused_ui_opened.connect(hide)
 	SignalBus.focused_ui_closed.connect(show)

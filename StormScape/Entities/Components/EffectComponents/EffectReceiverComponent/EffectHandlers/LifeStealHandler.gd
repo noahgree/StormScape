@@ -11,7 +11,8 @@ var source_entity: PhysicsBody2D = null ## The source entity of the most recent 
 func _ready() -> void:
 	assert(get_parent().has_node("DmgHandler"), get_parent().get_parent().name + " has a LifeStealHandler but no DmgHandler.")
 
-## Handles a life steal interaction, passing the specified percentage of damage dealt back to the source entity as heals.
+## Handles a life steal interaction, passing the specified percentage of damage dealt back to the source
+## entity as heals.
 func handle_life_steal(dmg_amount: int, percent_to_steal: float) -> void:
 	if source_entity != null:
 		var src_health_component: HealthComponent = source_entity.get_node("HealthComponent")
