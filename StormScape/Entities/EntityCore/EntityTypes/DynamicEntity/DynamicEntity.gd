@@ -38,6 +38,7 @@ func _on_save_game(save_data: Array[SaveData]) -> void:
 	data.velocity = velocity
 
 	data.stat_mods = stats.stat_mods
+	data.wearables = wearables
 
 	data.sprite_frames_path = sprite.sprite_frames.resource_path
 
@@ -72,6 +73,8 @@ func _on_save_game(save_data: Array[SaveData]) -> void:
 func _on_before_load_game() -> void:
 	if not self is Player:
 		queue_free()
+	else:
+		WearablesManager.removal_all_wearables(self)
 
 func _is_instance_on_load_game(data: DynamicEntityData) -> void:
 	global_position = data.position
@@ -81,6 +84,7 @@ func _is_instance_on_load_game(data: DynamicEntityData) -> void:
 		Globals.world_root.add_child(self)
 
 	stats.stat_mods = data.stat_mods
+	wearables = data.wearables
 	stats.reinit_on_load()
 
 	sprite.sprite_frames = load(data.sprite_frames_path)
@@ -110,7 +114,8 @@ func _is_instance_on_load_game(data: DynamicEntityData) -> void:
 	if data.snare_time_left > 0: request_time_snare(data.snare_factor, data.snare_time_left)
 
 	if data.is_player:
-		%HotbarUI._change_active_slot_to_index_relative_to_full_inventory_size(data.active_slot_index)
+		%HotbarUI.change_active_slot_to_index_relative_to_full_inventory_size(data.active_slot_index)
+		WearablesManager.re_add_all_wearables(self)
 #endregion
 
 ## Edits editor warnings for easier debugging.

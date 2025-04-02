@@ -33,6 +33,7 @@ func _on_save_game(save_data: Array[SaveData]) -> void:
 	data.position = global_position
 
 	data.stat_mods = stats.stat_mods
+	data.wearables = wearables
 
 	data.sprite_frames_path = sprite.sprite_frames.resource_path
 
@@ -57,6 +58,7 @@ func _is_instance_on_load_game(data: StaticEntityData) -> void:
 	Globals.world_root.add_child(self)
 
 	stats.stat_mods = data.stat_mods
+	wearables = data.wearables
 	stats.reinit_on_load()
 
 	sprite.sprite_frames = load(data.sprite_frames_path)

@@ -167,7 +167,7 @@ func _change_active_slot_to_hotbar_index(new_index: int) -> void:
 
 ## Changes the active slot relative to the full size of the inventory.
 ## Used at game load when restoring the active slot.
-func _change_active_slot_to_index_relative_to_full_inventory_size(new_index: int) -> void:
+func change_active_slot_to_index_relative_to_full_inventory_size(new_index: int) -> void:
 	await get_tree().process_frame # Need to wait for the slots to be updated with the items before signaling the hands component
 
 	_remove_selected_slot_fx()

@@ -112,7 +112,7 @@ theme_override_constants/margin_right = 2
 theme_override_constants/margin_bottom = 2
 
 [node name="BackingTexture" type="TextureRect" parent="BackingTextureMargin"]
-self_modulate = Color(0, 0, 0, 0.235)
+self_modulate = Color(0, 0, 0, 0.18)
 layout_mode = 2
 expand_mode = 3
 stretch_mode = 5

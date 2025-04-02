@@ -106,12 +106,12 @@ func _on_mod_slot_changed(slot: ModSlot, old_item: InvItemResource, new_item: In
 
 	if item_viewer_slot.item.stats is WeaponResource:
 		if old_item != null:
-			WeaponModManager.remove_weapon_mod(item_viewer_slot.item.stats, old_item.stats, slot.mod_slot_index, Globals.player_node)
+			WeaponModsManager.remove_weapon_mod(item_viewer_slot.item.stats, old_item.stats, slot.mod_slot_index, Globals.player_node)
 			_assign_details(item_viewer_slot.item.stats)
 
 		if new_item != null:
 			await get_tree().process_frame # Let the drag and drop finish and the removal happen before re-adding
-			WeaponModManager.handle_weapon_mod(item_viewer_slot.item.stats, new_item.stats, slot.mod_slot_index, Globals.player_node)
+			WeaponModsManager.handle_weapon_mod(item_viewer_slot.item.stats, new_item.stats, slot.mod_slot_index, Globals.player_node)
 			_assign_details(item_viewer_slot.item.stats)
 
 ## When the item under review changes, we need to conditionally enable the mod slots and update the stats view.
@@ -121,9 +121,11 @@ func _on_item_viewer_slot_changed(_slot: Slot, _old_item: InvItemResource, new_i
 	ammo_viewer_margin.visible = false
 
 	if new_item == null:
-		_change_mod_slot_visibilities(false)
 		if not _is_dragging_slot():
 			visible = false
+		else:
+			_show_and_update_item_title("Drop Here to Pin")
+		_change_mod_slot_visibilities(false)
 		item_rarity_margin.visible = false
 		info_margin.visible = false
 		details_margin.visible = false
@@ -178,10 +180,10 @@ func _change_mod_slot_visibilities(shown: bool, stats: WeaponResource = null) ->
 		mod_slots_margin.visible = shown
 
 		if shown:
-			if slot.mod_slot_index + 1 > WeaponModManager.get_max_mod_slots(stats):
+			if slot.mod_slot_index + 1 > WeaponModsManager.get_max_mod_slots(stats):
 				slot.is_hidden = true
 
-## Show the panel and update the new title.
+## Show and update the new title.
 func _show_and_update_item_title(title: String) -> void:
 	visible = true
 	item_name_label.text = Globals.invis_char + title + Globals.invis_char

@@ -6,7 +6,6 @@ signal item_changed(slot: Slot, old_item: InvItemResource, new_item: InvItemReso
 
 static var hovered_slot_size: float = 22.0 ## The size of the hovered over slot used to conditionally center the drag preview when scaling is messed up. 22 comes from the normally-sized inventory slots.
 
-@export var drag_preview: PackedScene = preload("res://UI/Inventory/InventoryCore/Slot/SlotCore/SlotDragPreview.tscn") ## The control preview for a dragged slot.
 @export var default_slot_texture: Texture2D ## The default texture of the slot with an item in it.
 @export var no_item_slot_texture: Texture2D ## The texture of the slot with no item when it is selected or active.
 @export var backing_texture: Texture2D ## The texture of the slot that appears behind everything else.
@@ -22,6 +21,7 @@ static var hovered_slot_size: float = 22.0 ## The size of the hovered over slot 
 
 var index: int ## The index that this slot represents inside the inventory.
 var synced_inv: Inventory ## The synced inventory that this slot is a part of.
+var drag_preview: PackedScene = preload("res://UI/Inventory/InventoryCore/Slot/SlotCore/SlotDragPreview.tscn") ## The control preview for a dragged slot.
 var dragging_only_one: bool = false ## Whether this slot is carrying only a quantity of 1 when in drag data.
 var dragging_half_stack: bool = false ## Whether this slot is carrying only half of its quantity when in drag data.
 var item: InvItemResource: set = _set_item ## The current inventory item represented in this slot.
@@ -64,11 +64,18 @@ func _set_item(new_item: InvItemResource) -> void:
 
 ## Connects relevant mouse entered and exited functions.
 func _ready() -> void:
-	backing_texture_rect.texture = backing_texture
+	if backing_texture != null:
+		backing_texture_rect.texture = backing_texture
 	rarity_glow.hide()
 	selected_texture.hide()
 	item_texture.material.set_shader_parameter("highlight_strength", 0.0)
 	texture_margins.pivot_offset = texture_margins.size / 2
+
+	var margin_size: int = (ceili(int(3 * (texture_margins.size.x / 22.0))))
+	texture_margins.add_theme_constant_override("margin_bottom", margin_size)
+	texture_margins.add_theme_constant_override("margin_top", margin_size)
+	texture_margins.add_theme_constant_override("margin_left", margin_size)
+	texture_margins.add_theme_constant_override("margin_right", margin_size)
 
 	var margins: int = texture_margins.get_theme_constant("margin_bottom") * 2
 	item_texture.size = texture_margins.size - Vector2(margins, margins) # Using the texture margins minus its margin amount to get the item texture size since it doesn't update immediately at game start
@@ -276,9 +283,10 @@ func _gui_input(event: InputEvent) -> void:
 func _can_drop_data(_at_position: Vector2, data: Variant) -> bool:
 	if data.item == null or not synced_inv or data.index == index or is_hud_ui_preview_slot:
 		return false
-	if data is ModSlot:
+	elif data is WearableSlot or data is ModSlot:
 		if item != null and not (item.stats.is_same_as(data.item.stats) and item.quantity < item.stats.stack_size):
-			return false
+			if not is_trash_slot:
+				return false
 	return true
 
 ## Drops item slot drag data into the hovered slot, updating the current and source

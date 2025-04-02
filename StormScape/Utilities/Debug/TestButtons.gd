@@ -24,7 +24,7 @@ func _on_test_mod_btn_1_pressed() -> void:
 	var i: int = 0
 	for mod: WeaponMod in mods:
 		if Globals.player_node.hands.equipped_item:
-			WeaponModManager.handle_weapon_mod(
+			WeaponModsManager.handle_weapon_mod(
 				Globals.player_node.hands.equipped_item.stats, mod, i, Globals.player_node
 				)
 		i += 1
@@ -33,7 +33,7 @@ func _on_test_mod_btn_2_pressed() -> void:
 	var i: int = 0
 	for mod: WeaponMod in mods:
 		if Globals.player_node.hands.equipped_item:
-			WeaponModManager.remove_weapon_mod(
+			WeaponModsManager.remove_weapon_mod(
 				Globals.player_node.hands.equipped_item.stats, mod, i, Globals.player_node
 				)
 		i += 1
@@ -41,13 +41,13 @@ func _on_test_mod_btn_2_pressed() -> void:
 func _on_test_mod_btn_3_pressed() -> void:
 	var i: int = 0
 	for wearable: Wearable in wearables:
-		WearableManager.handle_wearable(Globals.player_node, wearable, i)
+		WearablesManager.handle_wearable(Globals.player_node, wearable, i)
 		i += 1
 
 func _on_test_mod_btn_4_pressed() -> void:
 	var i: int = 0
 	for wearable: Wearable in wearables:
-		WearableManager.remove_wearable(Globals.player_node, wearable, i)
+		WearablesManager.remove_wearable(Globals.player_node, wearable, i)
 		i += 1
 
 func _on_test_storm_pressed() -> void:

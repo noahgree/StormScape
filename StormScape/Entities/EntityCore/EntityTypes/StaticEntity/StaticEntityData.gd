@@ -8,6 +8,7 @@ class_name StaticEntityData
 
 # Stats
 @export var stat_mods: Dictionary[StringName, Dictionary]
+@export var wearables: Array[Dictionary]
 
 # Rotation
 @export var facing_dir: Vector2

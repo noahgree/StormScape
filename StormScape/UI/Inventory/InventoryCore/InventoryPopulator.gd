@@ -3,9 +3,13 @@ class_name InventoryPopulator
 ## Responsible for populating and instantiating slots of children nodes for the connected inventory.
 ##
 ## Slot indices for an example inventory of size 37 (including hotbar, excluding trash slot) are structured like so:
-## 0 -> (36 - hotbar size): Main Slots ||| (36 - hotbar size) -> 36: Hotbar Slots
-## 37: Trash Slot ||| 38 -> (37 + crafting slot count "C"): Crafting Slots
-## (37 + C) -> (37 + C + Mod Slot Count): Mod Slots
+## 0 -> (36 - hotbar size): Main Slots
+## (36 - hotbar size) -> 36: Hotbar Slots
+## 37: Trash Slot
+## 38 -> 41: Crafting Slots
+## 42 -> 47: Mod Slots
+## 48: Item Viewer Slot
+## 49 -> 52: Wearables Slots
 
 @export var slot_scene: PackedScene = preload("res://UI/Inventory/InventoryCore/Slot/SlotCore/Slot.tscn") ## The slot scene to be instantiated as children.
 @export var main_slot_grid: GridContainer ## The main container for all normal inventory slots.
@@ -16,16 +20,19 @@ class_name InventoryPopulator
 
 var synced_inv: Inventory ## The synced inventory that this populator populates based on.
 var slots: Array[Slot] = [] ## The array of slots that this populator fills.
+var hotbar_backing_texture: Texture2D ## Saves a copy of the backing texture for the hotbar slots before deleting and readding them.
 const DEFAULT_SLOT_COUNT: int = 32 ## The default amount of slots an inventory should have.
+const WEARABLES_SLOTS: int = 5 ## Manually set based on how many of those slots exist in the player inv.
 
 
 ## Clears all children slots and sets up trash slot if needed. Changes slot count to default amount.
 func _ready() -> void:
-	for child: Slot in main_slot_grid.get_children():
-		child.queue_free()
+	for slot: Slot in main_slot_grid.get_children():
+		slot.queue_free()
 	if hotbar_grid:
-		for child: Slot in hotbar_grid.get_children():
-			child.queue_free()
+		for slot: Slot in hotbar_grid.get_children():
+			hotbar_backing_texture = slot.backing_texture
+			slot.queue_free()
 	if trash_slot != null:
 		trash_slot.is_trash_slot = true
 		trash_slot.name = "Trash_Slot"
@@ -65,6 +72,8 @@ func _change_slot_count_for_new_inv(inv: Inventory = null) -> void:
 		slot.index = main_count + i
 		if inv: slot.synced_inv = inv
 		slots.append(slot)
+		if hotbar_backing_texture != null:
+			slot.backing_texture_rect.texture = hotbar_backing_texture
 
 	# Trash Slot
 	if inv and inv.is_player_inv:

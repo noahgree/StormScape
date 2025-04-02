@@ -1,4 +1,4 @@
-class_name WeaponModManager
+class_name WeaponModsManager
 ## A collection of static functions that handle adding, removing, and restoring weapon mods on a weapon.
 
 
@@ -37,7 +37,7 @@ static func handle_weapon_mod(weapon_stats: WeaponResource, weapon_mod: WeaponMo
 						source_entity: PhysicsBody2D) -> void:
 	if not check_mod_compatibility(weapon_stats, weapon_mod):
 		return
-	if index > WeaponModManager.get_max_mod_slots(weapon_stats) - 1:
+	if index > WeaponModsManager.get_max_mod_slots(weapon_stats) - 1:
 		push_error("\"" + weapon_stats.name + "\" tried to add the mod \"" + weapon_mod.name + "\" to slot " + str(index + 1) + " / 6, but that slot is not unlocked for that weapon.")
 		return
 
@@ -56,7 +56,7 @@ static func handle_weapon_mod(weapon_stats: WeaponResource, weapon_mod: WeaponMo
 static func _add_weapon_mod(weapon_stats: WeaponResource, weapon_mod: WeaponMod, index: int,
 					source_entity: PhysicsBody2D) -> void:
 	if DebugFlags.PrintFlags.weapon_mod_changes:
-		print_rich("-------[color=green]Adding[/color][b] " + weapon_mod.name + " (" + str(weapon_mod.rarity) + ")[/b] [color=gray]to " + weapon_stats.name + "-------")
+		print_rich("-------[color=green]Adding[/color][b] " + weapon_mod.name + " (" + str(weapon_mod.rarity) + ")[/b] [color=gray]to " + weapon_stats.name + " (slot " + str(index) + ")" + "-------")
 
 	weapon_stats.current_mods[index] = { weapon_mod.id : weapon_mod }
 
@@ -79,8 +79,8 @@ static func _add_weapon_mod(weapon_stats: WeaponResource, weapon_mod: WeaponMod,
 ## Removes the weapon mod from the dictionary after calling the on_removal method inside the mod itself.
 static func remove_weapon_mod(weapon_stats: WeaponResource, weapon_mod: WeaponMod, index: int,
 						source_entity: PhysicsBody2D) -> void:
-	if DebugFlags.PrintFlags.weapon_mod_changes and weapon_stats.has_mod(weapon_mod.id):
-		print_rich("-------[color=red]Removed[/color][b] " + str(weapon_mod.name) + " (" + str(weapon_mod.rarity) + ")[/b] [color=gray]from " + weapon_stats.name + "-------")
+	if DebugFlags.PrintFlags.weapon_mod_changes and weapon_stats.has_mod(weapon_mod.id, index):
+		print_rich("-------[color=red]Removed[/color][b] " + str(weapon_mod.name) + " (" + str(weapon_mod.rarity) + ")[/b] [color=gray]from " + weapon_stats.name + " (slot " + str(index) + ")" + "-------")
 
 	for mod_resource: StatMod in weapon_mod.wpn_stat_mods:
 		weapon_stats.s_mods.remove_mod(mod_resource.stat_id, mod_resource.mod_id)

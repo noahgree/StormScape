@@ -22,11 +22,19 @@ func is_same_as(other_item: ItemResource) -> bool:
 	return (str(self) == str(other_item)) and (self.current_mods == other_item.current_mods)
 
 ## Checks to see if the weapon has the passed in mod already, regardless of level.
-func has_mod(mod_id: StringName) -> bool:
+func has_mod(mod_id: StringName, index: int = -1) -> bool:
+	var i: int = 0
 	for weapon_mod_entry: Dictionary in current_mods:
 		if weapon_mod_entry.values()[0] != null:
 			if weapon_mod_entry.keys()[0] == mod_id:
+				if index != -1:
+					if i == index:
+						return true
+					else:
+						i += 1
+						continue
 				return true
+		i += 1
 	return false
 
 ## Finds the place a stat is stored at within the resource and returns it. Can optionally get the unmodified stat

@@ -8,6 +8,7 @@ class_name RigidEntityData
 
 # Stats
 @export var stat_mods: Dictionary[StringName, Dictionary]
+@export var wearables: Array[Dictionary]
 
 # Movement
 @export var facing_dir: Vector2

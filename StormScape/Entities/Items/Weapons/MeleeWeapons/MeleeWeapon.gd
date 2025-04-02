@@ -53,7 +53,7 @@ static func initialize_stats_resource(stats_resource: MeleeWeaponResource) -> vo
 	stats_resource.s_mods.add_moddable_stats(charge_moddable_stats)
 
 	if stats_resource.weapon_mods_need_to_be_readded_after_save:
-		WeaponModManager.reset_original_arrays_after_save(stats_resource, null)
+		WeaponModsManager.reset_original_arrays_after_save(stats_resource, null)
 		stats_resource.weapon_mods_need_to_be_readded_after_save = false
 
 func _ready() -> void:

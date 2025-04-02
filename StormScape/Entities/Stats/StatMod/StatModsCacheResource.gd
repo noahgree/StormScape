@@ -101,13 +101,14 @@ func add_mods(mod_array: Array[StatMod]) -> void:
 	for mod: StatMod in mod_array:
 		if mod.stat_id in stat_mods:
 			var existing_mod: StatMod = stat_mods[mod.stat_id].get(mod.mod_id, null)
-			if existing_mod and existing_mod.stack_count > 1:
+			if existing_mod and existing_mod.max_stack_count > 1:
 				if existing_mod.stack_count < existing_mod.max_stack_count:
 					existing_mod.stack_count += 1
 					_recalculate_mod_value_with_new_stack_count(existing_mod)
 				else:
 					continue
 			else:
+				mod.stack_count = 1
 				mod.before_stack_value = mod.value
 				stat_mods[mod.stat_id][mod.mod_id] = mod
 
@@ -116,17 +117,19 @@ func add_mods(mod_array: Array[StatMod]) -> void:
 			_push_mod_not_found_warning(mod.stat_id, mod.mod_id)
 
 ## Removes a mod from a stat. If it has been stacked, it removes the number of instances specified by the count.
-func remove_mod(stat_id: StringName, mod_id: StringName, count: int = 0) -> void:
+## A count of "-1" removes all of them.
+func remove_mod(stat_id: StringName, mod_id: StringName, count: int = 1) -> void:
 	var existing_mod: StatMod = _get_mod(stat_id, mod_id)
 	if existing_mod:
-		if count == 0:
+		if count == -1:
 			stat_mods[stat_id].erase(mod_id)
-		elif existing_mod.stack_count > 1:
+		else:
 			existing_mod.stack_count = max(0, existing_mod.stack_count - count)
-			_recalculate_mod_value_with_new_stack_count(existing_mod)
 
 			if existing_mod.stack_count <= 0:
 				stat_mods[stat_id].erase(mod_id)
+			else: # Otherwise it will multiply by 0 and set the mod's value to 0
+				_recalculate_mod_value_with_new_stack_count(existing_mod)
 
 		_recalculate_stat(stat_id, base_values[stat_id])
 

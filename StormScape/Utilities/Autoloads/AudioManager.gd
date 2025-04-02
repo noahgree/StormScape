@@ -7,7 +7,7 @@ extends Node2D
 @export_dir var sfx_resources_folder: String ## The folder holding all .tres sfx files.
 enum SoundCategory { MUSIC, SFX } ## A specifier for determining music vs sfx.
 enum SoundSpace { GLOBAL, SPATIAL } ## A specifier for determining global vs spatial (2d) audio.
-enum SoundType { MUSIC_GLOBAL, MUSIC_2D, SFX_GLOBAL, SFX_2D } ## Combines the two settings into one for simplicity.
+enum SoundType { MUSIC_GLOBAL, MUSIC_2D, SFX_GLOBAL, SFX_2D } ## Combines the two settings into sone for simplicity.
 
 const DISTANCE_FROM_PLAYER_BUFFER: int = 100 ## How far beyond max_distance the player can from the sound origin for a 2d sound to still get created.
 const MAX_SPATIAL_POOL_SIZE: int = 12 ## How many 2d audio player nodes can be waiting around in the pool.
@@ -20,7 +20,7 @@ var global_pool: Array[AudioStreamPlayer] ## The global audio players current wa
 
 #region Setup & Cache
 func _ready() -> void:
-	if OS.get_unique_id() == "W1RHWL2KQ6": # needed to make audio work on Noah's computer, only affects him.
+	if OS.get_unique_id() == "W1RHWL2KQ6": # Needed to make audio work on Noah's computer, only affects him.
 		var devices: PackedStringArray = AudioServer.get_output_device_list()
 		var macbook_device_index: int = devices.find("Macbook")
 		var macbook_device: String = devices[macbook_device_index]

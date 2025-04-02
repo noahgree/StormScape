@@ -133,7 +133,7 @@ static func initialize_stats_resource(stats_resource: ProjWeaponResource) -> voi
 		stats_resource.ammo_in_mag = int(stats_resource.s_mods.get_stat("mag_size"))
 
 	if stats_resource.weapon_mods_need_to_be_readded_after_save:
-		WeaponModManager.reset_original_arrays_after_save(stats_resource, null)
+		WeaponModsManager.reset_original_arrays_after_save(stats_resource, null)
 		stats_resource.weapon_mods_need_to_be_readded_after_save = false
 
 func _ready() -> void:
@@ -888,15 +888,15 @@ func _start_reload_anim(anim_name: String) -> void:
 
 	if anim_name == "before_single_reload":
 		var dur: float = single_reload_delay_timer.wait_time if stats.before_single_reload_anim_dur <= 0 else (min(stats.single_proj_reload_delay, stats.before_single_reload_anim_dur))
-		anim_player.speed_scale = 1.0 / (dur - 0.025) # 0.025 is a buffer to prevent overlap
+		anim_player.speed_scale = 1.0 / (dur - 0.03) # 0.03 is a buffer to prevent overlap. Anim player breaks if this buffer is less than 0.03 for some reason.
 	elif anim_name in ["single_reload", "final_single_reload"]:
 		var single_proj_reload_time: float = stats.s_mods.get_stat("single_proj_reload_time")
 		var dur: float = single_proj_reload_time if stats.reload_anim_dur <= 0 else (min(single_proj_reload_time, stats.reload_anim_dur))
-		anim_player.speed_scale = 1.0 / (dur - 0.025)
+		anim_player.speed_scale = 1.0 / (dur - 0.03)
 	elif anim_name == "mag_reload":
 		var mag_reload_time: float = stats.s_mods.get_stat("mag_reload_time")
 		var dur: float = reload_timer.wait_time if stats.reload_anim_dur <= 0 else (min(mag_reload_time, stats.reload_anim_dur))
-		anim_player.speed_scale = 1.0 / (dur - 0.025)
+		anim_player.speed_scale = 1.0 / (dur - 0.03)
 
 	source_entity.hands.off_hand_sprite.self_modulate.a = 0.0
 	anim_player.play(anim_name)
@@ -934,12 +934,13 @@ func _on_reload_timer_timeout() -> void:
 ## When the start of a single reload process delay ends, begin the actual reloading timer based on ammo needed.
 func _on_single_reload_delay_timer_timeout() -> void:
 	var ammo_needed: int = stats.s_mods.get_stat("mag_size") - stats.ammo_in_mag
-	var single_reload_time: float = stats.s_mods.get_stat("single_proj_reload_time")
+	var single_proj_reload_time: float = stats.s_mods.get_stat("single_proj_reload_time")
+	var dur: float = single_proj_reload_time if stats.reload_anim_dur <= 0 else (min(single_proj_reload_time, stats.reload_anim_dur))
 	var reloads_needed: int = int(ceil(float(ammo_needed) / stats.s_mods.get_stat("single_reload_quantity")))
 
-	reload_timer.start(single_reload_time * reloads_needed)
+	reload_timer.start(dur * reloads_needed)
 	single_reload_timer.set_meta("reloads_left", reloads_needed)
-	single_reload_timer.start(single_reload_time)
+	single_reload_timer.start(dur)
 	_start_reload_anim("final_single_reload" if reloads_needed == 1 else "single_reload")
 
 ## When the single projectile reload timer ends, try and grab a bullet and see if we need to start it up again.
@@ -956,7 +957,9 @@ func _on_single_reload_timer_timeout() -> void:
 
 		if reloads_left > 1 and (stats.ammo_in_mag != mag_size):
 			single_reload_timer.set_meta("reloads_left", reloads_left - 1)
-			single_reload_timer.start(stats.s_mods.get_stat("single_proj_reload_time"))
+			var single_proj_reload_time: float = stats.s_mods.get_stat("single_proj_reload_time")
+			var dur: float = single_proj_reload_time if stats.reload_anim_dur <= 0 else (min(single_proj_reload_time, stats.reload_anim_dur))
+			single_reload_timer.start(dur)
 			_start_reload_anim("final_single_reload" if reloads_left == 2 else "single_reload")
 			return
 
@@ -967,8 +970,8 @@ func _notify_recharge_of_a_recent_firing() -> void:
 	if stats.s_mods.get_stat("auto_ammo_interval") > 0:
 		source_entity.inv.auto_decrementer.update_recharge_delay(str(stats.session_uid), stats.auto_ammo_delay)
 
-## This is called (usually after firing) to request a new ammo recharge instance. It is also called when first entering if we
-## aren't at max ammo already.
+## This is called (usually after firing) to request a new ammo recharge instance. It is also called
+## when first entering if we aren't at max ammo already.
 func _request_ammo_recharge() -> void:
 	if stats.s_mods.get_stat("auto_ammo_interval") > 0:
 		source_entity.inv.auto_decrementer.request_recharge(StringName(str(stats.session_uid)), stats)

@@ -8,6 +8,7 @@ class_name DynamicEntityData
 
 # Stats
 @export var stat_mods: Dictionary[StringName, Dictionary]
+@export var wearables: Array[Dictionary]
 
 # Movement
 @export var velocity: Vector2

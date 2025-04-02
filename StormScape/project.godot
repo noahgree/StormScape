@@ -20,7 +20,7 @@ config/macos_native_icon="uid://2xf1pqc78iin"
 
 [audio]
 
-buses/default_bus_layout="res://Utilities/Game/Audio/default_bus_layout.tres"
+buses/default_bus_layout="uid://rtoqyra5i4ve"
 
 [autoload]
 
@@ -179,4 +179,5 @@ debug_stop={
 
 textures/canvas_textures/default_texture_filter=0
 textures/canvas_textures/default_texture_repeat=1
+textures/vram_compression/import_etc2_astc=true
 viewport/hdr_2d=true
