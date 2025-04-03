@@ -1,3 +1,4 @@
+@icon("res://Utilities/Debug/EditorIcons/active_slot_info.svg")
 extends Control
 ## Updates the info for the player's UI that shows the active slot item and any extra necessary info.
 

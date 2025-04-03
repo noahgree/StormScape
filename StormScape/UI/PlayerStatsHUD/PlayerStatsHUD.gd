@@ -1,3 +1,4 @@
+@icon("res://Utilities/Debug/EditorIcons/stats_hud.svg")
 extends Control
 class_name PlayerStatsHUD
 ## Updates and displays the player's health, shield, stamina, and hunger.

@@ -13,7 +13,7 @@ var updating_from_within: bool = false ## When true, the wearables are already g
 #region Saving & Loading
 func _on_before_load_game() -> void:
 	for slot: WearableSlot in wearables_slots:
-		slot.item = null
+		slot.set_item(null)
 
 func _on_load_game() -> void:
 	updating_from_within = true

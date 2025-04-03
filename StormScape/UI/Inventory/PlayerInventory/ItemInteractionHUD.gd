@@ -1,3 +1,4 @@
+@icon("res://Utilities/Debug/EditorIcons/interact_hud.svg")
 extends NinePatchRect
 class_name ItemInteractionHUD
 ## The HUD that shows a prompt for when the player can pick up an item.

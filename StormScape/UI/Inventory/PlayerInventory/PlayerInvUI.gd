@@ -1,3 +1,4 @@
+@icon("res://Utilities/Debug/EditorIcons/inventory_ui.svg")
 extends InventoryUI
 class_name PlayerInvUI
 ## An child class of the inventory UI that adds functions specific to the player inventory.

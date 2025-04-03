@@ -1,3 +1,4 @@
+@icon("res://Utilities/Debug/EditorIcons/slot.svg")
 extends Slot
 class_name CraftingSlot
 ## A child class of Slot that changes the conditions for which data can be dropped.
@@ -7,8 +8,8 @@ signal output_changed(is_craftable: bool)
 @export var is_output_slot: bool = false ## Whether or not this crafting slot is an output slot.
 
 
-func _set_item(new_item: InvItemResource) -> void:
-	super._set_item(new_item)
+func set_item(new_item: InvItemResource) -> void:
+	super.set_item(new_item)
 
 	if is_output_slot:
 		output_changed.emit(new_item != null)

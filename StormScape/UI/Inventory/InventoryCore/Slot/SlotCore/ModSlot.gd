@@ -1,3 +1,4 @@
+@icon("res://Utilities/Debug/EditorIcons/slot.svg")
 extends Slot
 class_name ModSlot
 ## A child class of Slot that changes the conditions for which data can be dropped.
@@ -37,5 +38,5 @@ func _drop_data(at_position: Vector2, data: Variant) -> void:
 			synced_inv.insert_from_inv_item(extra_items, false, false)
 			item.quantity = 1
 			pause_changed_signals = true
-			_set_item(item)
+			set_item(item)
 			pause_changed_signals = false

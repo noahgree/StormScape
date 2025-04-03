@@ -1,3 +1,4 @@
+@icon("res://Utilities/Debug/EditorIcons/hotbar_hud.svg")
 extends MarginContainer
 class_name HotbarUI
 ## The player's hotbar UI controller. Handles logic for the hotbar shown when the inventory is not open.

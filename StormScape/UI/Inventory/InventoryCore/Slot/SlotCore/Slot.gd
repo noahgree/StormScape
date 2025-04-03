@@ -1,8 +1,9 @@
+@icon("res://Utilities/Debug/EditorIcons/slot.svg")
 extends NinePatchRect
 class_name Slot
 ## The item and quantity representation inside all inventories. Handles drag and drop logic as well as stacking.
 
-signal item_changed(slot: Slot, old_item: InvItemResource, new_item: InvItemResource)
+signal item_changed(slot: Slot, old_item: InvItemResource, new_item: InvItemResource) ## Emitted when the item in the slot is changed or set.
 
 static var hovered_slot_size: float = 22.0 ## The size of the hovered over slot used to conditionally center the drag preview when scaling is messed up. 22 comes from the normally-sized inventory slots.
 
@@ -18,8 +19,8 @@ static var hovered_slot_size: float = 22.0 ## The size of the hovered over slot 
 @onready var rarity_glow: TextureRect = $RarityGlowMargin/RarityGlow ## The glow behind the weapon in the slot.
 @onready var selected_texture: TextureRect = $SelectedTexture ## The texture that appears when this slot is selected or active.
 @onready var backing_texture_rect: TextureRect = $BackingTextureMargin/BackingTexture ## The texture rect that appears behind everything as an icon.
-@onready var corner_info_icons_margin: MarginContainer = $CornerInfoIconsMargin
-@onready var corner_info_icons_grid: HBoxContainer = %CornerInfoIconsHBox
+@onready var corner_info_icons_margin: MarginContainer = $CornerInfoIconsMargin ## The margins for the corner info.
+@onready var corner_info_icons_grid: HBoxContainer = %CornerInfoIconsHBox ## The grid holding the corner info icons.
 @onready var modded_icon: TextureRect = %ModdedIcon ## The icon that shows up on a weapon if it is modded.
 
 var index: int ## The index that this slot represents inside the inventory.
@@ -27,7 +28,7 @@ var synced_inv: Inventory ## The synced inventory that this slot is a part of.
 var drag_preview: PackedScene = preload("res://UI/Inventory/InventoryCore/Slot/SlotCore/SlotDragPreview.tscn") ## The control preview for a dragged slot.
 var dragging_only_one: bool = false ## Whether this slot is carrying only a quantity of 1 when in drag data.
 var dragging_half_stack: bool = false ## Whether this slot is carrying only half of its quantity when in drag data.
-var item: InvItemResource: set = _set_item ## The current inventory item represented in this slot.
+var item: InvItemResource: set = set_item ## The current inventory item represented in this slot.
 var is_hud_ui_preview_slot: bool = false ## Whether this slot is an inventory hotbar preview slot for the player's screen.
 var is_trash_slot: bool = false ## The slot, that if present, is used to discard items. It will have the highest index.
 var is_hotbar_slot: bool = false ## When true, this slot is being used as a hotbar slot.
@@ -51,7 +52,7 @@ var mirrored_hud_slot: Slot ## When not null, any item changes to this slot will
 
 
 ## Setter function for the item represented by this slot. Updates texture and quantity label.
-func _set_item(new_item: InvItemResource) -> void:
+func set_item(new_item: InvItemResource) -> void:
 	if not preview_items.is_empty():
 		if new_item != null:
 			preview_items = []
@@ -68,7 +69,10 @@ func _set_item(new_item: InvItemResource) -> void:
 		item_changed.emit(self, old_item, item)
 
 	if mirrored_hud_slot:
-		mirrored_hud_slot.item = new_item
+		mirrored_hud_slot.set_item(new_item)
+
+	if index < synced_inv.total_inv_size:
+		synced_inv.inv[index] = new_item
 
 ## Connects relevant mouse entered and exited functions.
 func _ready() -> void:
@@ -104,6 +108,7 @@ func _ready() -> void:
 
 	_reset_corner_icons()
 
+#region Visuals
 ## Updates the slot visuals according to the new item.
 func _update_visuals(new_item_dict: Dictionary) -> void:
 	var new_item: InvItemResource = new_item_dict.keys()[0]
@@ -171,6 +176,7 @@ func _update_visuals(new_item_dict: Dictionary) -> void:
 		texture_margins.scale = Vector2.ONE
 		item_texture.set_instance_shader_parameter("final_alpha", 1.0)
 
+## When the preview cycle delay timer ends, show the next preview item if there are any.
 func _on_preview_cycle_timer_timeout() -> void:
 	if preview_items.is_empty():
 		preview_cycle_timer.stop()
@@ -217,6 +223,27 @@ func update_tint_progress(duration: float) -> void:
 	else:
 		tint_progress = 100.0
 
+## Resets slot highlights and drag preview effects.
+func _reset_post_drag_mods() -> void:
+	dragging_only_one = false
+	dragging_half_stack = false
+	modulate = Color(1, 1, 1, 1)
+	if item == null:
+		if preview_items.is_empty():
+			item_texture.texture = null
+			texture_margins.rotation = 0
+			texture_margins.position = Vector2.ZERO
+			texture_margins.scale = Vector2.ONE
+	else:
+		var slash_index: int = quantity.text.rfind("/")
+		if slash_index != -1 and item.quantity > 0:
+			quantity.text = str(item.quantity) + "/" + quantity.text.substr(slash_index + 1, quantity.text.length())
+		elif item.quantity > 1:
+			quantity.text = str(item.quantity)
+	item_texture.modulate.a = 1.0
+#endregion
+
+#region Regular Drags
 ## Gets a reference to the data from the slot where the drag originated.
 func _get_drag_data(at_position: Vector2) -> Variant:
 	if not preview_items.is_empty(): # Don't allow drags out of this slot if it is showing a preview item
@@ -271,6 +298,7 @@ func _make_drag_preview(at_position: Vector2) -> Control:
 
 		c.add_child(preview_scene)
 	return c
+#endregion
 
 #region RightClick Drags
 ## When a right click drag is released, interpret it as a left click drag.
@@ -381,84 +409,60 @@ func _drop_data(_at_position: Vector2, data: Variant) -> void:
 #region Dropping Full Stacks
 ## Moves all items from drag into a different empty slot.
 func _move_items_to_other_empty_slot(data: Variant) -> void:
-	item = InvItemResource.new(data.item.stats, data.item.quantity)
-	if index < synced_inv.total_inv_size:
-		synced_inv.inv[index] = item
-
-	if data.index < synced_inv.total_inv_size:
-		synced_inv.inv[data.index] = null
-	data.item = null
+	set_item(InvItemResource.new(data.item.stats, data.item.quantity))
+	data.set_item(null)
 
 ## Combines the drag data items into a slot with items of the same kind. This means that when
 ## combined they still fit stack size.
 func _combine_all_items_into_slot_with_space(data: Variant, total_quantity: int) -> void:
 	item.quantity = total_quantity
-	_set_item(item)
-
-	if data.index < synced_inv.total_inv_size:
-		synced_inv.inv[data.index] = null
-	data.item = null
+	set_item(item)
+	data.set_item(null)
 
 ## Combines items of same kind from drag data into an already occupied slot. Passes what doesn't
 ## fit to the next iteration.
 func _combine_what_fits_and_leave_remainder(data: Variant) -> void:
 	var amount_that_fits: int = item.stats.stack_size - item.quantity
 	item.quantity = item.stats.stack_size
-	_set_item(item)
+	set_item(item)
 
 	if is_trash_slot:
 		if not data.dragging_half_stack:
-			if data.index < synced_inv.total_inv_size:
-				synced_inv.inv[data.index] = null
-			data.item = null
+			data.set_item(null)
 		else:
-			data.item = InvItemResource.new(data.item.stats, data.item.quantity - int(floor(data.item.quantity / 2.0)))
-			if data.index < synced_inv.total_inv_size:
-				synced_inv.inv[data.index] = InvItemResource.new(data.item.stats, data.item.quantity)
+			var new_item: InvItemResource = InvItemResource.new(data.item.stats, data.item.quantity - int(floor(data.item.quantity / 2.0)))
+			data.set_item(new_item)
 	else:
-		data.item = InvItemResource.new(data.item.stats, data.item.quantity - amount_that_fits)
-		if data.index < synced_inv.total_inv_size:
-			synced_inv.inv[data.index] = InvItemResource.new(data.item.stats, data.item.quantity)
-			data.item = synced_inv.inv[data.index]
+		var new_item: InvItemResource = InvItemResource.new(data.item.stats, data.item.quantity - amount_that_fits)
+		data.set_item(new_item)
 
 ## Swaps the items in the slots.
 func _swap_item_stacks(data: Variant) -> void:
 	var temp_item: InvItemResource = item
-	item = InvItemResource.new(data.item.stats, data.item.quantity)
-	if index < synced_inv.total_inv_size:
-		synced_inv.inv[index] = item
+	set_item(InvItemResource.new(data.item.stats, data.item.quantity))
 
 	if is_trash_slot:
-		if data.index < synced_inv.total_inv_size:
-			synced_inv.inv[data.index] = null
-		data.item = null
+		data.set_item(null)
 	else:
-		if data.index < synced_inv.total_inv_size:
-			synced_inv.inv[data.index] = temp_item
-		data.item = temp_item
+		data.set_item(temp_item)
 #endregion
 
 #region Dropping Only One
 ## Moves a quantity of 1 from an item slot to an empty slot.
 func _move_one_item_to_empty_slot(data: Variant) -> void:
-	item = InvItemResource.new(data.item.stats, 1)
-	if index < synced_inv.total_inv_size:
-		synced_inv.inv[index] = item
+	set_item(InvItemResource.new(data.item.stats, 1))
 	_check_if_inv_slot_is_now_empty_after_dragging_only_one(data)
 
 ## Moves a quantity of 1 from the drag data into a slot of the same kind with space.
 func _add_one_item_into_slot_with_space(data: Variant, total_quantity: int) -> void:
 	item.quantity = total_quantity
-	_set_item(item)
+	set_item(item)
 	_check_if_inv_slot_is_now_empty_after_dragging_only_one(data)
 
 ## Drops the single item into the new slot and finds an available spot for the items that used to be in that spot.
 func _replace_with_one_item_and_find_available_slot_for_previous_stuff(data: Variant) -> void:
 	var temp_item: InvItemResource = item
-	item = InvItemResource.new(data.item.stats, 1)
-	if index < synced_inv.total_inv_size:
-		synced_inv.inv[index] = item
-
+	set_item(InvItemResource.new(data.item.stats, 1))
 	_check_if_inv_slot_is_now_empty_after_dragging_only_one(data)
 
 	if not is_trash_slot:
@@ -467,32 +471,17 @@ func _replace_with_one_item_and_find_available_slot_for_previous_stuff(data: Var
 ## After moving a quantity of 1 in any way, checks that the source did not only have 1 to
 ## begin with and would then need to be cleared out.
 func _check_if_inv_slot_is_now_empty_after_dragging_only_one(data: Variant) -> void:
-	if data.index < synced_inv.total_inv_size:
-		if synced_inv.inv[data.index].quantity - 1 <= 0:
-			synced_inv.inv[data.index] = null
-		else:
-			synced_inv.inv[data.index].quantity -= 1
-
-		data.item = synced_inv.inv[data.index]
+	if data.item.quantity < 2:
+		data.set_item(null)
 	else:
-		if data.item.quantity - 1 <= 0:
-			data.item = null
-		else:
-			data.item = InvItemResource.new(data.item.stats, data.item.quantity - 1)
+		data.set_item(InvItemResource.new(data.item.stats, data.item.quantity - 1))
 #endregion
 
 #region Dropping Half Stacks
 ## Moves all of the half quantity represented by the drag data into a slot with space, empty or not.
 func _move_all_of_the_half_stack_into_a_slot(data: Variant, source_remainder: int, total_quantity: int) -> void:
-	item = InvItemResource.new(data.item.stats, total_quantity)
-	if index < synced_inv.total_inv_size:
-		synced_inv.inv[index] = item
-
-	if data.index < synced_inv.total_inv_size:
-		synced_inv.inv[data.index] = InvItemResource.new(data.item.stats, source_remainder)
-		data.item = synced_inv.inv[data.index]
-	else:
-		data.item = InvItemResource.new(data.item.stats, source_remainder)
+	set_item(InvItemResource.new(data.item.stats, total_quantity))
+	data.set_item(InvItemResource.new(data.item.stats, source_remainder))
 
 ## Moves what fits from the half quantity represented by the drag data into a slot that can take some of it.
 ## Leaves what doesn't fit.
@@ -503,18 +492,72 @@ func _move_part_of_half_stack_into_slot_and_leave_remainder(data: Variant) -> vo
 func _replace_with_half_stack_and_find_available_slot_for_previous_stuff(data: Variant, source_remainder: int,
 																			total_quantity: int) -> void:
 	var temp_item: InvItemResource = item
-	item = InvItemResource.new(data.item.stats, total_quantity)
-	if index < synced_inv.total_inv_size:
-		synced_inv.inv[index] = item
+	set_item(InvItemResource.new(data.item.stats, total_quantity))
 
 	if not is_trash_slot:
 		synced_inv.insert_from_inv_item(temp_item, false, false)
 
-	if data.index < synced_inv.total_inv_size:
-		synced_inv.inv[data.index] = InvItemResource.new(data.item.stats, source_remainder)
-		data.item = synced_inv.inv[data.index]
-	else:
-		data.item = InvItemResource.new(data.item.stats, source_remainder)
+	data.set_item(InvItemResource.new(data.item.stats, source_remainder))
+#endregion
+
+#region Double Clicks
+## When an item is double clicked in the inventory, attempt to garner a full stack by iterating
+## over all other slots.
+## Pulls from slots not at stack size first, then goes back and gets from stack size if needed.
+func _fill_slot_to_stack_size() -> void:
+	if item == null:
+		return
+
+	var full_stack_size: int = item.stats.stack_size
+	var needed_quantity: int = full_stack_size - item.quantity
+	if needed_quantity <= 0:
+		return
+
+	# First pass: pull items from slots that are not full
+	for i: int in range(synced_inv.main_inv_size):
+		if i == index:
+			continue
+
+		var donor: InvItemResource = synced_inv.inv[i]
+		if donor != null and donor.stats.is_same_as(item.stats) and donor.quantity < donor.stats.stack_size:
+			var transfer_amount: int = min(needed_quantity, donor.quantity)
+			item.quantity += transfer_amount
+			donor.quantity -= transfer_amount
+			needed_quantity -= transfer_amount
+
+			# If the donor slot has been completely emptied, update it to null
+			if donor.quantity <= 0:
+				donor = null
+
+			synced_inv.inv[i] = donor
+			synced_inv.inv_data_updated.emit(i, donor)
+
+			if needed_quantity <= 0:
+				break
+
+	# Second pass: if more items are needed, pull from all matching slots (even from full stacks)
+	if needed_quantity > 0:
+		for i: int in range(synced_inv.main_inv_size):
+			if i == index:
+				continue
+
+			var donor: InvItemResource = synced_inv.inv[i]
+			if donor != null and donor.stats.is_same_as(item.stats):
+				var transfer_amount: int = min(needed_quantity, donor.quantity)
+				item.quantity += transfer_amount
+				donor.quantity -= transfer_amount
+				needed_quantity -= transfer_amount
+
+				if donor.quantity <= 0:
+					donor = null
+
+				synced_inv.inv[i] = donor
+				synced_inv.inv_data_updated.emit(i, donor)
+
+				if needed_quantity <= 0:
+					break
+
+	set_item(item)
 #endregion
 
 #region Utils
@@ -572,77 +615,6 @@ func _on_mouse_exited() -> void:
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_DRAG_END:
 		_reset_post_drag_mods()
-
-## Resets slot highlights and drag preview effects.
-func _reset_post_drag_mods() -> void:
-	dragging_only_one = false
-	dragging_half_stack = false
-	modulate = Color(1, 1, 1, 1)
-	if item == null:
-		if preview_items.is_empty():
-			item_texture.texture = null
-			texture_margins.rotation = 0
-			texture_margins.position = Vector2.ZERO
-			texture_margins.scale = Vector2.ONE
-	else:
-		var slash_index: int = quantity.text.rfind("/")
-		if slash_index != -1 and item.quantity > 0:
-			quantity.text = str(item.quantity) + "/" + quantity.text.substr(slash_index + 1, quantity.text.length())
-		elif item.quantity > 1:
-			quantity.text = str(item.quantity)
-	item_texture.modulate.a = 1.0
-
-## When an item is double clicked in the inventory, attempt to garner a full stack by iterating
-## over all other slots.
-## Pulls from slots not at stack size first, then goes back and gets from stack size if needed.
-func _fill_slot_to_stack_size() -> void:
-	var needed_quantity: int = item.stats.stack_size - item.quantity
-	if needed_quantity <= 0:
-		return
-
-	# First pass: Pull from non-full slots
-	for i: int in range(synced_inv.main_inv_size):
-		if i == index:
-			continue
-
-		var other_item: InvItemResource = synced_inv.inv[i]
-		if other_item != null and other_item.stats.is_same_as(item.stats) and other_item.quantity < other_item.stats.stack_size:
-			var transfer_quantity: int = min(needed_quantity, other_item.quantity)
-			item.quantity += transfer_quantity
-			other_item.quantity -= transfer_quantity
-			needed_quantity -= transfer_quantity
-
-		if other_item:
-			synced_inv.inv[i] = other_item
-
-		synced_inv.slot_updated.emit(i, synced_inv.inv[i])
-
-		if needed_quantity <= 0:
-			break
-
-	# Second pass: Pull from full slots if needed
-	if needed_quantity > 0:
-		for i: int in range(synced_inv.main_inv_size):
-			if i == index:
-				continue
-
-			var other_item: InvItemResource = synced_inv.inv[i]
-			if other_item != null and other_item.stats.is_same_as(item.stats):
-				var transfer_quantity: int = min(needed_quantity, other_item.quantity)
-				item.quantity += transfer_quantity
-				other_item.quantity -= transfer_quantity
-				needed_quantity -= transfer_quantity
-
-				if other_item:
-					synced_inv.inv[i] = other_item
-
-				synced_inv.slot_updated.emit(i, synced_inv.inv[i])
-
-				if needed_quantity <= 0:
-					break
-
-	_set_item(item)
-	synced_inv.slot_updated.emit(index, item)
 
 ## Custom string representation of the item in this slot.
 func _to_string() -> String:

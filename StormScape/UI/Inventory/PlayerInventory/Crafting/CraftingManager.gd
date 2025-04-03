@@ -234,10 +234,10 @@ func _update_crafting_result() -> void:
 	for recipe_id: StringName in candidates:
 		var item_resource: ItemResource = CraftingManager.cached_items[recipe_id]
 		if _is_item_craftable(item_resource):
-			output_slot.item = InvItemResource.new(item_resource, item_resource.output_quantity)
+			output_slot.set_item(InvItemResource.new(item_resource, item_resource.output_quantity))
 			return
 
-	output_slot.item = null
+	output_slot.set_item(null)
 
 ## This consumes the ingredients in the recipe once the item is claimed.
 ## If it fails, it restores all quantities and returns false.
@@ -261,14 +261,14 @@ func _consume_recipe(recipe: Array[CraftingIngredient]) -> bool:
 					if _check_rarity_condition(ingredient.rarity_match, ingredient.item.rarity, slot.item.stats.rarity):
 						var available: int = slot.item.quantity
 						var remove_amount: int = min(available, needed)
-						slot.item = InvItemResource.new(slot.item.stats, available - remove_amount)
+						slot.set_item(InvItemResource.new(slot.item.stats, available - remove_amount))
 						needed -= remove_amount
 			elif ingredient.type == "Tags":
 				for tag: StringName in ingredient.tags:
 					if tag in slot.item.stats.tags:
 						var available: int = slot.item.quantity
 						var remove_amount: int = min(available, needed)
-						slot.item = InvItemResource.new(slot.item.stats, available - remove_amount)
+						slot.set_item(InvItemResource.new(slot.item.stats, available - remove_amount))
 						needed -= remove_amount
 						break
 
@@ -281,7 +281,7 @@ func _consume_recipe(recipe: Array[CraftingIngredient]) -> bool:
 			for slot: CraftingSlot in input_slots:
 				if slot.item != null:
 					if slot.item.quantity <= 0:
-						slot.item = null
+						slot.set_item(null)
 	return true
 
 ## This attempts to craft what is shown in the output slot by consuming the ingredients and
@@ -451,4 +451,4 @@ func _on_focused_ui_closed() -> void:
 	for slot: CraftingSlot in input_slots:
 		if slot.item != null:
 			Globals.player_node.inv.insert_from_inv_item(slot.item, false, false)
-			slot.item = null
+			slot.set_item(null)

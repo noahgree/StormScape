@@ -1,3 +1,4 @@
+@icon("res://Utilities/Debug/EditorIcons/inventory_ui.svg")
 extends ColorRect
 class_name InventoryUI
 ## The base class for all inventory UIs. Handles drag and dropping into margin space for dropping onto the ground.
@@ -13,7 +14,7 @@ var index_counter: int = 0 ## Counts up everytime a slot is assigned an index.
 func _ready() -> void:
 	visible = false
 	gui_input.connect(_on_blank_space_input_event)
-	synced_inv.slot_updated.connect(_on_slot_updated)
+	synced_inv.inv_data_updated.connect(_on_inv_data_updated)
 
 	_setup_main_slot_grid()
 
@@ -41,12 +42,12 @@ func _setup_main_slot_grid() -> void:
 func _fill_slots_with_initial_items() -> void:
 	var i: int = 0
 	for slot: Slot in slots:
-		slot.item = synced_inv.inv[i]
+		slot.set_item(synced_inv.inv[i])
 		i += 1
 
-## When a slot gets updated in the inventory, this is received via signal in order to update a slot visual here.
-func _on_slot_updated(index: int, item: InvItemResource) -> void:
-	slots[index].item = item
+## When an index gets updated in the inventory, this is received via signal in order to update a slot here.
+func _on_inv_data_updated(index: int, item: InvItemResource) -> void:
+	slots[index].set_item(item)
 
 ## Determines if this control node can have item slot data dropped into it.
 func _can_drop_data(_at_position: Vector2, data: Variant) -> bool:
@@ -63,38 +64,23 @@ func _drop_data(_at_position: Vector2, data: Variant) -> void:
 	if ground_item_res and data:
 		if data.dragging_only_one:
 			ground_item_quantity = 1
-			if data.index < synced_inv.inv.size():
-				if synced_inv.inv[data.index].quantity - 1 <= 0:
-					synced_inv.inv[data.index] = null
-				else:
-					synced_inv.inv[data.index].quantity -= 1
-
-				data.item = synced_inv.inv[data.index]
+			if data.item.quantity < 2:
+				data.set_item(null)
 			else:
-				if data.item.quantity - 1 <= 0:
-					data.item = null
-				else:
-					data.item.quantity -= 1
+				data.item.quantity -= 1
+				data.set_item(data.item)
 		elif data.dragging_half_stack:
 			var half_quantity: int = int(floor(data.item.quantity / 2.0))
 			var remainder: int = data.item.quantity - half_quantity
 			ground_item_quantity = half_quantity
 
-			if data.index < synced_inv.inv.size():
-				synced_inv.inv[data.index].quantity = remainder
-				data.item = synced_inv.inv[data.index]
-			else:
-				data.item.quantity = remainder
+			data.item.quantity = remainder
+			data.set_item(data.item)
 		else:
 			ground_item_quantity = data.item.quantity
-			data.item = null
-			if data.index < synced_inv.inv.size():
-				synced_inv.inv[data.index] = null
+			data.set_item(null)
 
 		Item.spawn_on_ground(ground_item_res, ground_item_quantity, Globals.player_node.global_position, 15, true, false, true)
-
-	#if data.index < synced_inv.inv.size():
-		#synced_inv.slot_updated.emit(data.index, data.item)
 
 	data._on_mouse_exited()
 

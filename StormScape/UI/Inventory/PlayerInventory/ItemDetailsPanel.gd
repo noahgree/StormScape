@@ -115,7 +115,7 @@ func _on_slot_not_hovered() -> void:
 	if not pinned:
 		is_updating_via_hover = true
 		if item_viewer_slot.item != null: # Don't want to trigger a clearing of crafting previews otherwise
-			item_viewer_slot.item = null
+			item_viewer_slot.set_item(null)
 		is_updating_via_hover = false
 
 ## When the focused UI is closed, we should empty out the crafting input slots and drop them on the
@@ -123,7 +123,7 @@ func _on_slot_not_hovered() -> void:
 func _on_focused_ui_closed() -> void:
 	if item_viewer_slot.item != null:
 		Globals.player_node.inv.insert_from_inv_item(item_viewer_slot.item, false, true)
-		item_viewer_slot.item = null
+		item_viewer_slot.set_item(null)
 	item_hover_delay_timer.stop()
 
 ## When the item inside a mod slot changes and the item under review isn't actively changing, we should modify
@@ -210,7 +210,7 @@ func _update_ammo_viewer_slot(new_item: ItemResource) -> void:
 ## Changes the visibility of the mod slots depending on whether we have a moddable weapon under review.
 func _change_mod_slot_visibilities(shown: bool, stats: WeaponResource = null) -> void:
 	for slot: ModSlot in mod_slots:
-		slot.item = null
+		slot.set_item(null)
 		slot.is_hidden = not shown
 		mod_slots_margin.visible = shown
 
@@ -281,5 +281,5 @@ func _on_hover_delay_ended() -> void:
 	if slot.item != null:
 		is_updating_via_hover = true
 		var temp_item: InvItemResource = InvItemResource.new(slot.item.stats, 1)
-		item_viewer_slot.item = temp_item
+		item_viewer_slot.set_item(temp_item)
 		is_updating_via_hover = false
