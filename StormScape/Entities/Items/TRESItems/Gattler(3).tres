@@ -10,7 +10,7 @@
 [ext_resource type="Texture2D" uid="uid://dmuwcjpos2kl8" path="res://Entities/Items/Weapons/ProjectileWeapons/Gattler/gattler_base_frame.png" id="4_g5312"]
 [ext_resource type="Script" uid="uid://cje5bobi6o8bo" path="res://Entities/Items/Hitscans/HitscanResource.gd" id="5_ajwg5"]
 [ext_resource type="Resource" uid="uid://jdmp0abbwxm5" path="res://Entities/Player/PlayerCore/PlayerCamera/CamFXPresets/1.tres" id="5_evybt"]
-[ext_resource type="Script" uid="uid://cowjdnic7xmkp" path="res://UI/Inventory/PlayerInventory/ItemDetail.gd" id="5_pxe5r"]
+[ext_resource type="Script" uid="uid://cowjdnic7xmkp" path="res://UI/Inventory/PlayerInventory/StatDetail.gd" id="5_pxe5r"]
 [ext_resource type="PackedScene" uid="uid://c17oqm8amalvy" path="res://Entities/Items/Weapons/ProjectileWeapons/Gattler/Gattler.tscn" id="6_huwqf"]
 [ext_resource type="Script" uid="uid://bj3r5oopspj6l" path="res://Entities/Items/Projectiles/ProjectileResource.gd" id="8_evybt"]
 [ext_resource type="Script" uid="uid://c2gdoebfp12dq" path="res://Entities/Stats/StatMod/StatModsCacheResource.gd" id="11_ojoph"]

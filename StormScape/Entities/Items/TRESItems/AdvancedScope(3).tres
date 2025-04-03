@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="WeaponMod" load_steps=10 format=3 uid="uid://bx2nl7cqe7odq"]
 
-[ext_resource type="Script" uid="uid://cowjdnic7xmkp" path="res://UI/Inventory/PlayerInventory/ItemDetail.gd" id="1_01uku"]
+[ext_resource type="Script" uid="uid://cowjdnic7xmkp" path="res://UI/Inventory/PlayerInventory/StatDetail.gd" id="1_01uku"]
 [ext_resource type="Script" uid="uid://boo31eu083dqd" path="res://Entities/Stats/EffectSystemResources/StatusEffects/StatusEffect.gd" id="1_57sy7"]
 [ext_resource type="Texture2D" uid="uid://cqxcmyspr6jno" path="res://Entities/Items/WeaponMods/Scopes/AdvancedScope/AdvancedScopeBaseCT.tres" id="2_01uku"]
 [ext_resource type="Script" uid="uid://ctxa7i1mbt7ab" path="res://UI/Inventory/PlayerInventory/Crafting/CraftingIngredient.gd" id="3_tcq2h"]

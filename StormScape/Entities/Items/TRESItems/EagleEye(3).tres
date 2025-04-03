@@ -10,7 +10,7 @@
 [ext_resource type="PackedScene" uid="uid://btaigaokvm7qx" path="res://Entities/Items/Weapons/ProjectileWeapons/EagleEye/EagleEye.tscn" id="3_uuh4c"]
 [ext_resource type="Texture2D" uid="uid://bfoy8x1f7gqq7" path="res://Entities/Items/Weapons/ProjectileWeapons/EagleEye/EagleEyeBaseCT.tres" id="4_ghyeh"]
 [ext_resource type="Script" uid="uid://bj3r5oopspj6l" path="res://Entities/Items/Projectiles/ProjectileResource.gd" id="4_w4cid"]
-[ext_resource type="Script" uid="uid://cowjdnic7xmkp" path="res://UI/Inventory/PlayerInventory/ItemDetail.gd" id="5_6mhsi"]
+[ext_resource type="Script" uid="uid://cowjdnic7xmkp" path="res://UI/Inventory/PlayerInventory/StatDetail.gd" id="5_6mhsi"]
 [ext_resource type="PackedScene" uid="uid://bqkyplubhsx43" path="res://Entities/Items/Projectiles/Bullets/SmallBullet/SmallBullet.tscn" id="5_58e3c"]
 [ext_resource type="Resource" uid="uid://cev0y0oe3igus" path="res://Entities/Player/PlayerCore/PlayerCamera/CamFXPresets/6.tres" id="5_ihh7l"]
 [ext_resource type="PackedScene" uid="uid://c3e5wour08d6u" path="res://Entities/Items/Hitscans/LaserBeam.tscn" id="8_6mhsi"]

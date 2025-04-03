@@ -1,0 +1,8 @@
+[gd_resource type="CanvasTexture" load_steps=3 format=3 uid="uid://iqydrmrk3xs0"]
+
+[ext_resource type="Texture2D" uid="uid://by2hnrxd1ke1n" path="res://Entities/Items/Wearables/FrostCharm/frost_charm.png" id="1_lpw5v"]
+[ext_resource type="Texture2D" uid="uid://cguyf1x64es41" path="res://Entities/Items/Wearables/FrostCharm/frost_charm_n.png" id="2_1a6lq"]
+
+[resource]
+diffuse_texture = ExtResource("1_lpw5v")
+normal_texture = ExtResource("2_1a6lq")

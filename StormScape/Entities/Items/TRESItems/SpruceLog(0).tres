@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="WorldResourceResource" load_steps=7 format=3 uid="uid://dbnhbsphiw4oe"]
 
-[ext_resource type="Script" uid="uid://cowjdnic7xmkp" path="res://UI/Inventory/PlayerInventory/ItemDetail.gd" id="1_hnhwf"]
+[ext_resource type="Script" uid="uid://cowjdnic7xmkp" path="res://UI/Inventory/PlayerInventory/StatDetail.gd" id="1_hnhwf"]
 [ext_resource type="Texture2D" uid="uid://cvuqjp8xvpr3i" path="res://Entities/Items/WorldResources/SpruceLog/SpruceLogCT.tres" id="1_hnjw2"]
 [ext_resource type="PackedScene" uid="uid://bhmmr2f1hs8mk" path="res://Entities/Items/WorldResources/WorldResource.tscn" id="2_a84rt"]
 [ext_resource type="Texture2D" uid="uid://1q78rueqnvgr" path="res://Entities/Items/WorldResources/SpruceLog/spruce_log.png" id="2_hnhwf"]

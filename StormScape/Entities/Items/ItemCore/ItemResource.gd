@@ -11,7 +11,7 @@ class_name ItemResource
 @export var auto_pickup: bool = false ## Whether this item should automatically be picked up when run over.
 @export_custom(PROPERTY_HINT_NONE, "suffix:px") var pickup_radius: int = 4 ## The radius at which the item can be detected for pickup.
 @export_multiline var info: String ## The multiline information about this item.
-@export var extra_details: Array[ItemDetail] = [] ## Additional information to populate into the details panel of the item viewer in the inventory.
+@export var extra_details: Array[StatDetail] = [] ## Additional information to populate into the details panel of the item viewer in the inventory.
 
 @export_group("Visuals")
 @export var ground_icon: Texture2D ## The on-ground representation of the item.

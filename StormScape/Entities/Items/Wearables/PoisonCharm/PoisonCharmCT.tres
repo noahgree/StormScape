@@ -1,0 +1,8 @@
+[gd_resource type="CanvasTexture" load_steps=3 format=3 uid="uid://cn5hqfioewj4j"]
+
+[ext_resource type="Texture2D" uid="uid://y72i6bjmhfno" path="res://Entities/Items/Wearables/PoisonCharm/poison_charm.png" id="1_xdm2p"]
+[ext_resource type="Texture2D" uid="uid://dibda7g60u81s" path="res://Entities/Items/Wearables/PoisonCharm/poison_charm_n.png" id="2_k4f3o"]
+
+[resource]
+diffuse_texture = ExtResource("1_xdm2p")
+normal_texture = ExtResource("2_k4f3o")

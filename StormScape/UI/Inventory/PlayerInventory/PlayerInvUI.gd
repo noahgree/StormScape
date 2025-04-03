@@ -1,16 +1,25 @@
 extends InventoryUI
 class_name PlayerInvUI
+## An child class of the inventory UI that adds functions specific to the player inventory.
 
-@export var btn_up_texture: Texture2D
-@export var btn_down_texture: Texture2D
+@export_group("Connections")
+@export var hotbar_grid: HBoxContainer ## The container that holds the hotbar slots.
+@export var trash_slot: Slot ## The trash slot.
+@export var item_details_panel: ItemDetailsPanel ## The item viewer in the inventory.
+@export var crafting_manager: CraftingManager ## The crafting manager panel.
+@export var ammo_viewer_margin: MarginContainer ## The ammo viewer margin that sits inside the item details panel.
 
-@onready var sort_by_name: NinePatchRect = %SortByName
-@onready var sort_by_type: NinePatchRect = %SortByType
-@onready var sort_by_rarity: NinePatchRect = %SortByRarity
-@onready var auto_stack: NinePatchRect = %AutoStack
-@onready var craft: NinePatchRect = %Craft
+@export_group("Textures")
+@export var btn_up_texture: Texture2D ## The texture for buttons when not pressed.
+@export var btn_down_texture: Texture2D ## The texture for buttons when pressed.
 
-var is_open: bool = false:
+@onready var sort_by_name: NinePatchRect = %SortByName ## The sort by name button.
+@onready var sort_by_type: NinePatchRect = %SortByType ## The sort by type button.
+@onready var sort_by_rarity: NinePatchRect = %SortByRarity ## The sort by rarity button.
+@onready var auto_stack: NinePatchRect = %AutoStack ## The autostacking button.
+@onready var craft: NinePatchRect = %Craft ## The craft button.
+
+var is_open: bool = false: ## True when the inventory is open and showing.
 	set(new_value):
 		is_open = new_value
 		visible = new_value
@@ -21,6 +30,26 @@ var is_open: bool = false:
 		else:
 			SignalBus.focused_ui_closed.emit()
 
+
+func _ready() -> void:
+	super._ready()
+
+	_setup_hotbar_slots()
+	_setup_trash_slot()
+
+func _setup_hotbar_slots() -> void:
+	for slot: Slot in hotbar_grid.get_children():
+		slot.name = "HotSlot_" + str(index_counter)
+		slot.index = assign_next_slot_index(true)
+		slot.synced_inv = synced_inv
+		slots.append(slot)
+
+func _setup_trash_slot() -> void:
+	trash_slot.name = "Trash_Slot"
+	trash_slot.index = assign_next_slot_index(true)
+	trash_slot.synced_inv = synced_inv
+	trash_slot.is_trash_slot = true
+	slots.append(trash_slot)
 
 ## Checks when we open and close the player inventory based on certain key inputs.
 func _unhandled_key_input(_event: InputEvent) -> void:

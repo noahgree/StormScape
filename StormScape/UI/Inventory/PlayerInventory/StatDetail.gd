@@ -1,5 +1,5 @@
 extends Resource
-class_name ItemDetail
+class_name StatDetail
 ## This is used to define extra details that should populate the item details panel of the item viewer in the
 ## player inventory.
 

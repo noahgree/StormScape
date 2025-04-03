@@ -16,47 +16,49 @@ var active_slot: Slot ## The slot that is currently selected in the hotbar and p
 ## Connects the hotbar slots to the signal needed to keep them up to date.
 func _ready() -> void:
 	player_inv.slot_updated.connect(_on_slot_updated)
+
 	_setup_slots()
 
-	if not Globals.player_node: await SignalBus.player_ready
+	if not Globals.player_node:
+		await SignalBus.player_ready
+
 	Globals.player_node.stamina_component.max_stamina_changed.connect(func(_new_max_stamina: float) -> void: _update_inv_ammo_ui())
+
 	SignalBus.focused_ui_closed.connect(_update_inv_ammo_ui)
 	SignalBus.focused_ui_opened.connect(hide)
 	SignalBus.focused_ui_closed.connect(show)
 
 ## Sets up the hotbar slots by clearing out any existing slot children and readding them with their needed params.
 func _setup_slots() -> void:
-	hotbar_slots.clear()
-	for child: Slot in hotbar.get_children():
-		child.queue_free()
-
-	for i: int in range(player_inv.hotbar_size):
-		var slot: Slot = slot_scene.instantiate()
+	var i: int = 0
+	for slot: Slot in hotbar.get_children():
 		slot.name = "Hotbar_HUD_Slot_" + str(i)
 		slot.is_hud_ui_preview_slot = true
 		slot.synced_inv = player_inv
-		slot.index = (player_inv.inv_size - player_inv.hotbar_size) + i
+		slot.index = player_inv.main_inv_size + i
 		hotbar_slots.append(slot)
-		hotbar.add_child(slot)
+		i += 1
 
 	active_slot = hotbar_slots[0]
+
 	await get_tree().process_frame
 	_apply_selected_slot_fx()
 
 ## When receiving the signal that a slot has changed, update the visuals.
 func _on_slot_updated(index: int, item: InvItemResource) -> void:
-	var hotbar_starting_index: int = player_inv.inv_size - player_inv.hotbar_size
-	var hotbar_index: int = index - hotbar_starting_index
+	var hotbar_starting_index: int = player_inv.main_inv_size
 
-	if (index >= hotbar_starting_index) and (index < player_inv.inv_size):
+	if (index >= hotbar_starting_index) and (index < (hotbar_starting_index + player_inv.hotbar_size)):
+		var index_within_hotbar: int = index - hotbar_starting_index
+
 		if index == active_slot.index:
 			if (active_slot.item != null and item != null) and item.stats.is_same_as(active_slot.item.stats):
-				hotbar_slots[hotbar_index].item = item
+				hotbar_slots[index_within_hotbar].item = item
 			else:
-				hotbar_slots[hotbar_index].item = item
+				hotbar_slots[index_within_hotbar].item = item
 				_update_hands_about_new_active_item()
 		else:
-			hotbar_slots[hotbar_index].item = item
+			hotbar_slots[index_within_hotbar].item = item
 
 	_update_inv_ammo_ui()
 	_default_ammo_update_method() # Called after the hotbar item is updated above to reflect the new item
@@ -103,7 +105,7 @@ func _update_inv_ammo_ui() -> void:
 		if stats is ProjWeaponResource and not stats.hide_ammo_ui:
 			if stats.ammo_type not in [ProjWeaponResource.ProjAmmoType.NONE, ProjWeaponResource.ProjAmmoType.STAMINA, ProjWeaponResource.ProjAmmoType.SELF, ProjWeaponResource.ProjAmmoType.CHARGES]:
 				count = 0
-				for i: int in range(player_inv.inv_size):
+				for i: int in range(player_inv.main_inv_size + player_inv.hotbar_size):
 					var item: InvItemResource = player_inv.inv[i]
 					if item != null and (item.stats is ProjAmmoResource) and (item.stats.ammo_type == active_slot.item.stats.ammo_type):
 						count += item.quantity
@@ -143,7 +145,7 @@ func _unhandled_input(event: InputEvent) -> void:
 
 ## Changes the active hotbar slot by the passed in count. Handles wrapping values to the number of slots.
 func _change_active_slot_by_count(index_count: int) -> void:
-	var non_hotbar_size: int = player_inv.inv_size - player_inv.hotbar_size
+	var non_hotbar_size: int = player_inv.main_inv_size
 	var new_index: int = ((active_slot.index - non_hotbar_size) + index_count) % hotbar_slots.size()
 	if new_index < 0:
 		new_index += hotbar_slots.size()
@@ -171,7 +173,7 @@ func change_active_slot_to_index_relative_to_full_inventory_size(new_index: int)
 	await get_tree().process_frame # Need to wait for the slots to be updated with the items before signaling the hands component
 
 	_remove_selected_slot_fx()
-	active_slot = hotbar_slots[new_index - (player_inv.inv_size - player_inv.hotbar_size)]
+	active_slot = hotbar_slots[new_index - (player_inv.main_inv_size)]
 	_setup_after_active_slot_change()
 
 ## Performs the needed work after the active slot has changed, such as applying the slot FX and updating the

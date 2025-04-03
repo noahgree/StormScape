@@ -1,37 +1,44 @@
+@tool
 extends Area2D
 class_name Inventory
-## The main superclass for any inventory controller.
+## The main inventory controller for all inventory data.
 
-signal slot_updated(index: int, item: InvItemResource) ## Emitted anytime the item in a slot is re-set.
+signal slot_updated(index: int, item: InvItemResource) ## Emitted anytime the item in a slot is set.
 
-@export var item_scene: PackedScene = preload("res://Entities/Items/ItemCore/Item.tscn") ## The item scene to be used when items are instantiated on the ground.
-@export var starting_inv: Array[InvItemResource] ## The inventory that should be loaded when this scene is instantiated.
 @export var is_player_inv: bool = false ## Whether this is the player's inventory or not. Needed for hotbar and trash slot logic.
-@export var inv_size: int = 32 ## The total number of slots in the inventory, including the hotbar slots.
-@export var hotbar_size: int = 0 ## The number of slots out of the inv_size that are in the hotbar. Only affects the player inv.
-@export var inv_populator: InventoryPopulator ## The control node that is responsible for populating its connected slots.
-@export var ui: InventoryUI ## The parent control node that contains all inventory UI nodes as children.
+@export var main_inv_size: int = 32 ## The total number of slots in the inventory, not including the hotbar slots or the trash slot if it exists. Must match main slot grid count on any connected UI.
+@export var hotbar_size: int = 0: ## The number of slots in the hotbar. Only changeable if this is the player inv.
+	set(new_value):
+		if is_player_inv:
+			hotbar_size = new_value
+		else:
+			hotbar_size = 0
+@export var starting_inv: Array[InvItemResource] ## The inventory that should be loaded when this scene is instantiated.
 
 @onready var auto_decrementer: AutoDecrementer = AutoDecrementer.new() ## The script controlling the cooldowns, warmups, overheats, and recharges for this entity's inventory items.
 
 var inv: Array[InvItemResource] = [] ## The current inventory. Main source of truth.
 var inv_to_load_from_save: Array[InvItemResource] = [] ## Gets loaded when a game is loaded so that it can be iterated into the main inv array.
+var total_inv_size: int ## Number of all slots, including main slots, hotbar slots, and the potential trash slot.s
 
 
-## Sets up the connected UI and populator after resizing the inv array appropriately.
 func _ready() -> void:
-	if not is_player_inv:
-		hotbar_size = 0
-	inv.resize(inv_size if not is_player_inv else inv_size + 1) # For trash slot
-	inv_populator.connect_inventory(self)
-	ui.connect_inventory(self)
-	call_deferred("fill_inventory", starting_inv)
+	if Engine.is_editor_hint():
+		return
+
+	total_inv_size = main_inv_size + hotbar_size + (1 if is_player_inv else 0)
+	inv.resize(total_inv_size)
 
 	if is_player_inv:
 		auto_decrementer.owning_entity_is_player = true
 	auto_decrementer.inv = self
 
+	call_deferred("fill_inventory", starting_inv)
+
 func _process(delta: float) -> void:
+	if Engine.is_editor_hint():
+		return
+
 	auto_decrementer.process(delta)
 
 ## Fills the main inventory from an array of inventory items. If an item exceeds stack size, the
@@ -39,7 +46,7 @@ func _process(delta: float) -> void:
 ## This method respects null spots in the list.
 func fill_inventory(inv_to_fill_from: Array[InvItemResource]) -> void:
 	inv.fill(null)
-	for i: int in range(min(inv_size if not is_player_inv else inv_size + 1, inv_to_fill_from.size())):
+	for i: int in range(min(total_inv_size, inv_to_fill_from.size())):
 		if inv_to_fill_from[i] == null:
 			inv[i] = null
 		else:
@@ -59,7 +66,7 @@ func fill_inventory(inv_to_fill_from: Array[InvItemResource]) -> void:
 ## and anything that does not fit will be ignored.
 func fill_inventory_with_checks(inv_to_fill_from: Array[InvItemResource]) -> void:
 	inv.fill(null)
-	for i: int in range(min(inv_size if not is_player_inv else inv_size + 1, inv_to_fill_from.size())):
+	for i: int in range(min(total_inv_size, inv_to_fill_from.size())):
 		if inv_to_fill_from[i] != null:
 			insert_from_inv_item(inv_to_fill_from[i], true, false)
 
@@ -98,12 +105,12 @@ func insert_from_inv_item(original_item: InvItemResource, delete_extra: bool = t
 ## Attempts to fill the hotbar with the item passed in. Can either be an Item or an InvItemResource.
 ## Returns any leftover quantity that did not fit.
 func _fill_hotbar(original_item: Variant) -> int:
-	return _do_add_item_checks(original_item, inv_size - hotbar_size, inv_size)
+	return _do_add_item_checks(original_item, main_inv_size, main_inv_size + hotbar_size)
 
 ## Attempts to fill the main inventory with the item passed in. Can either be an Item or an InvItemResource.
 ## Returns any leftover quantity that did not fit.
 func _fill_main_inventory(original_item: Variant) -> int:
-	return _do_add_item_checks(original_item, 0, inv_size - hotbar_size)
+	return _do_add_item_checks(original_item, 0, main_inv_size)
 
 ## Wrapper function to let child functions check whether to add quantity to an item slot.
 ## Checks between the indices give by the start index and the stop index.
@@ -171,21 +178,19 @@ func remove_item(index: int, amount: int) -> void:
 
 ## This updates all connected slots in order to reflect the UI properly.
 func _update_all_connected_slots() -> void:
-	for i: int in range(inv_size):
+	for i: int in range(total_inv_size):
 		slot_updated.emit(i, inv[i])
-	if is_player_inv:
-		slot_updated.emit(inv_size, inv[inv_size]) # For trash slot
 
 #region Sorting
 ## This auto stacks and compacts items into their stack sizes.
 func activate_auto_stack() -> void:
-	for i: int in range(inv_size - hotbar_size):
+	for i: int in range(main_inv_size):
 		if inv[i] == null:
 			continue
-		for j: int in range(i + 1, inv_size - hotbar_size):
+		for j: int in range(i + 1, main_inv_size):
 			if inv[j] == null:
 				continue
-			if inv[i].stats.is_same_as(inv[j].stats):
+			elif inv[i].stats.is_same_as(inv[j].stats):
 				var total_quantity: int = inv[i].quantity + inv[j].quantity
 				if total_quantity <= inv[i].stats.stack_size:
 					inv[i].quantity = total_quantity
@@ -198,25 +203,25 @@ func activate_auto_stack() -> void:
 
 ## Called in order to start sorting by rarity of items in the inventory. Does not sort hotbar if present.
 func activate_sort_by_rarity() -> void:
-	var arr: Array[InvItemResource] = inv.slice(0, inv_size - hotbar_size)
+	var arr: Array[InvItemResource] = inv.slice(0, main_inv_size)
 	arr.sort_custom(_rarity_sort_logic)
-	for i: int in range(inv_size - hotbar_size):
+	for i: int in range(main_inv_size):
 		inv[i] = arr[i]
 	_update_all_connected_slots()
 
 ## Called in order to start sorting by type of items in the inventory. Does not sort hotbar if present.
 func activate_sort_by_type() -> void:
-	var arr: Array[InvItemResource] = inv.slice(0, inv_size - hotbar_size)
+	var arr: Array[InvItemResource] = inv.slice(0, main_inv_size)
 	arr.sort_custom(_type_sort_logic)
-	for i: int in range(inv_size - hotbar_size):
+	for i: int in range(main_inv_size):
 		inv[i] = arr[i]
 	_update_all_connected_slots()
 
 ## Called in order to start sorting by name of items in the inventory. Does not sort hotbar if present.
 func activate_sort_by_name() -> void:
-	var arr: Array[InvItemResource] = inv.slice(0, inv_size - hotbar_size)
+	var arr: Array[InvItemResource] = inv.slice(0, main_inv_size)
 	arr.sort_custom(_name_sort_logic)
-	for i: int in range(inv_size - hotbar_size):
+	for i: int in range(main_inv_size):
 		inv[i] = arr[i]
 	_update_all_connected_slots()
 
@@ -228,6 +233,8 @@ func _rarity_sort_logic(a: InvItemResource, b: InvItemResource) -> bool:
 
 	if a.stats.rarity != b.stats.rarity:
 		return a.stats.rarity > b.stats.rarity
+	elif a.stats.item_type != b.stats.item_type:
+		return a.stats.item_type > b.stats.item_type
 	else:
 		return a.stats.name < b.stats.name
 
@@ -239,8 +246,12 @@ func _type_sort_logic(a: InvItemResource, b: InvItemResource) -> bool:
 
 	if a.stats.item_type != b.stats.item_type:
 		return a.stats.item_type > b.stats.item_type
-	else:
+	elif a.stats.rarity != b.stats.rarity:
+		return a.stats.rarity > b.stats.rarity
+	elif a.stats.name != b.stats.name:
 		return a.stats.name < b.stats.name
+	else:
+		return a.quantity > b.quantity
 
 ## Implements the comparison logic for sorting by name.
 func _name_sort_logic(a: InvItemResource, b: InvItemResource) -> bool:
@@ -250,8 +261,10 @@ func _name_sort_logic(a: InvItemResource, b: InvItemResource) -> bool:
 
 	if a.stats.name != b.stats.name:
 		return a.stats.name < b.stats.name
+	elif a.stats.rarity != b.stats.rarity:
+		return a.stats.rarity > b.stats.rarity
 	else:
-		return a.quantity < b.quantity
+		return a.quantity > b.quantity
 #endregion
 
 #region Projectile Weapon Helpers
@@ -260,7 +273,7 @@ func get_more_ammo(max_amount_needed: int, take_from_inventory: bool,
 					ammo_type: ProjWeaponResource.ProjAmmoType) -> int:
 	var ammount_collected: int = 0
 
-	for i: int in range(inv_size):
+	for i: int in range(main_inv_size + hotbar_size): # Does not include potential trash slot
 		var item: InvItemResource = inv[i]
 		if item != null and (item.stats is ProjAmmoResource) and (item.stats.ammo_type == ammo_type):
 			var amount_in_slot: int = item.quantity
@@ -281,7 +294,7 @@ func get_more_ammo(max_amount_needed: int, take_from_inventory: bool,
 func print_inv(include_null_spots: bool = false) -> void:
 	var to_print: String = "[b]-----------------------------------------------------------------------------------------------------------------------------------[/b]\n"
 
-	for i: int in range(inv_size):
+	for i: int in range(total_inv_size):
 		if inv[i] == null and not include_null_spots:
 			continue
 
@@ -290,9 +303,9 @@ func print_inv(include_null_spots: bool = false) -> void:
 		else:
 			to_print = to_print + "NULL"
 
-		if (i + 1) % 5 == 0 and i != inv_size - 1:
+		if (i + 1) % 5 == 0 and i != total_inv_size - 1:
 			to_print += "\n"
-		elif i != inv_size - 1:
+		elif i != total_inv_size - 1:
 			to_print += "  |  "
 
 	if to_print.ends_with("\n"):

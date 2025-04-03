@@ -1,10 +1,21 @@
-[gd_resource type="Resource" script_class="Wearable" load_steps=7 format=3 uid="uid://m8ws6ct8yu3b"]
+[gd_resource type="Resource" script_class="Wearable" load_steps=8 format=3 uid="uid://m8ws6ct8yu3b"]
 
-[ext_resource type="Script" uid="uid://cowjdnic7xmkp" path="res://UI/Inventory/PlayerInventory/ItemDetail.gd" id="1_h8w46"]
-[ext_resource type="Texture2D" uid="uid://dirmnn1h3qulh" path="res://Entities/Items/WeaponMods/Silencer/SilencerBaseCT.tres" id="2_fs5wj"]
+[ext_resource type="Script" uid="uid://cowjdnic7xmkp" path="res://UI/Inventory/PlayerInventory/StatDetail.gd" id="1_h8w46"]
+[ext_resource type="Texture2D" uid="uid://15nygvib408h" path="res://Entities/Items/Wearables/FireCharm/FireCharmCT.tres" id="2_smn1j"]
 [ext_resource type="Script" uid="uid://ctxa7i1mbt7ab" path="res://UI/Inventory/PlayerInventory/Crafting/CraftingIngredient.gd" id="3_07ugu"]
 [ext_resource type="Script" uid="uid://317ipeo41y3c" path="res://Entities/Items/Wearables/Wearable.gd" id="4_hmjeo"]
 [ext_resource type="Script" uid="uid://bcjwesiannbd0" path="res://Entities/Stats/StatMod/StatMod.gd" id="5_3ihvo"]
+
+[sub_resource type="Resource" id="Resource_smn1j"]
+script = ExtResource("1_h8w46")
+title = "BURNING IMMUNITY"
+stat_array = Array[String]([])
+up_is_good = true
+suffix = ""
+multiplier = 1.0
+addition = 0.0
+fraction_of_orig = false
+metadata/_custom_type_script = "uid://cowjdnic7xmkp"
 
 [sub_resource type="Resource" id="Resource_jup86"]
 script = ExtResource("5_3ihvo")
@@ -21,6 +32,7 @@ metadata/_custom_type_script = "uid://bcjwesiannbd0"
 [resource]
 script = ExtResource("4_hmjeo")
 stat_mods = Array[ExtResource("5_3ihvo")]([SubResource("Resource_jup86")])
+applied_details = Array[ExtResource("1_h8w46")]([SubResource("Resource_smn1j")])
 blocked_mutuals = Array[StringName]([])
 equipping_audio = ""
 removal_audio = ""
@@ -34,9 +46,9 @@ auto_pickup = false
 pickup_radius = 4
 info = "Grants immunity to damage from being on fire when worn."
 extra_details = Array[ExtResource("1_h8w46")]([])
-ground_icon = ExtResource("2_fs5wj")
-in_hand_icon = ExtResource("2_fs5wj")
-inv_icon = ExtResource("2_fs5wj")
+ground_icon = ExtResource("2_smn1j")
+in_hand_icon = ExtResource("2_smn1j")
+inv_icon = ExtResource("2_smn1j")
 inv_icon_offset = Vector2(0, 0)
 inv_icon_scale = Vector2(1, 1)
 inv_icon_rotation = 0.0

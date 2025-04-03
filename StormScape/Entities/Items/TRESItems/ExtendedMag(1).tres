@@ -1,7 +1,7 @@
 [gd_resource type="Resource" script_class="ExtendedMagMod" load_steps=9 format=3 uid="uid://bta1hncad1hd2"]
 
 [ext_resource type="Script" uid="uid://boo31eu083dqd" path="res://Entities/Stats/EffectSystemResources/StatusEffects/StatusEffect.gd" id="1_yiwfh"]
-[ext_resource type="Script" uid="uid://cowjdnic7xmkp" path="res://UI/Inventory/PlayerInventory/ItemDetail.gd" id="2_c6dh0"]
+[ext_resource type="Script" uid="uid://cowjdnic7xmkp" path="res://UI/Inventory/PlayerInventory/StatDetail.gd" id="2_c6dh0"]
 [ext_resource type="Texture2D" uid="uid://bh30rapahajlk" path="res://Entities/Items/WeaponMods/ExtendedMag/ExtendedMagBaseCT.tres" id="3_yiwfh"]
 [ext_resource type="Script" uid="uid://ctxa7i1mbt7ab" path="res://UI/Inventory/PlayerInventory/Crafting/CraftingIngredient.gd" id="4_wkl4a"]
 [ext_resource type="Script" uid="uid://w5ys6kqn83qm" path="res://Entities/Items/WeaponMods/ExtendedMag/ExtendedMagMod.gd" id="5_8pa7i"]

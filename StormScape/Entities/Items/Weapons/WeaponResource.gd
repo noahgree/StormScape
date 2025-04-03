@@ -37,6 +37,13 @@ func has_mod(mod_id: StringName, index: int = -1) -> bool:
 		i += 1
 	return false
 
+## Returns true if this weapon resource has any mods at all.
+func has_any_mods() -> bool:
+	for weapon_mod_entry: Dictionary in current_mods:
+		if weapon_mod_entry.values()[0] != null:
+			return true
+	return false
+
 ## Finds the place a stat is stored at within the resource and returns it. Can optionally get the unmodified stat
 ## if it exists in the stat mods cache.
 func get_nested_stat(stat: StringName, get_original: bool = false) -> float:

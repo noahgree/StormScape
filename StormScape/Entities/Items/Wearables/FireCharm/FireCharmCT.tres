@@ -1,0 +1,8 @@
+[gd_resource type="CanvasTexture" load_steps=3 format=3 uid="uid://15nygvib408h"]
+
+[ext_resource type="Texture2D" uid="uid://c3l7yp3a5x81a" path="res://Entities/Items/Wearables/FireCharm/fire_charm.png" id="1_eo6pf"]
+[ext_resource type="Texture2D" uid="uid://be1k1kd5d6jay" path="res://Entities/Items/Wearables/FireCharm/fire_charm_n.png" id="2_xi2be"]
+
+[resource]
+diffuse_texture = ExtResource("1_eo6pf")
+normal_texture = ExtResource("2_xi2be")

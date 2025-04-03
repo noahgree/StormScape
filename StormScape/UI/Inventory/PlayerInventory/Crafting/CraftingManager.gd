@@ -8,6 +8,7 @@ class_name CraftingManager
 static var cached_items: Dictionary[StringName, ItemResource] = {} ## All items keyed by their unique item id.
 
 @export_dir var tres_folder: String ## The folder path to all the TRES items.
+@export var inventory_ui: PlayerInvUI ## The main controller for all inventory sub-UIs.
 
 @onready var output_slot: CraftingSlot = %OutputSlot ## The slot where the result will appear in.
 @onready var input_slots_container: GridContainer = %InputSlots ## The container holding the input slots as children.
@@ -36,8 +37,9 @@ func _ready() -> void:
 	output_slot.output_changed.connect(_on_output_slot_output_changed)
 	SignalBus.focused_ui_closed.connect(_on_focused_ui_closed)
 
-	call_deferred("_setup_slots")
-	call_deferred("_setup_item_viewer_signals")
+	_setup_crafting_input_slots()
+	_setup_crafting_output_slot()
+	_setup_item_viewer_signals()
 
 ## This caches the items by their recipe ID at the start of the game.
 func _cache_recipes() -> void:
@@ -76,6 +78,28 @@ func _cache_recipes() -> void:
 		file_name = dir.get_next()
 	dir.list_dir_end()
 
+## Sets up the input slots with their needed data.
+func _setup_crafting_input_slots() -> void:
+	for input_slot: CraftingSlot in input_slots_container.get_children():
+		input_slot.name = "Input_Slot_" + str(inventory_ui.index_counter)
+		input_slot.synced_inv = inventory_ui.synced_inv
+		input_slot.index = inventory_ui.assign_next_slot_index()
+		input_slot.item_changed.connect(_on_input_item_changed)
+		input_slots.append(input_slot)
+
+## Sets up the crafting output slot with its needed data.
+func _setup_crafting_output_slot() -> void:
+	output_slot.name = "Output_Slot"
+	output_slot.synced_inv = inventory_ui.synced_inv
+	output_slot.index = inventory_ui.assign_next_slot_index()
+
+## Sets up the item viewer node reference and the signals needed to respond to changes.
+func _setup_item_viewer_signals() -> void:
+	item_details_panel = (get_parent() as PlayerInvUI).item_details_panel
+	if not item_details_panel.is_node_ready():
+		await item_details_panel.ready
+	item_details_panel.item_viewer_slot.item_changed.connect(_on_viewed_item_changed)
+
 ## Shows or hides the main craft button depending on whether a valid output is present.
 func _on_output_slot_output_changed(is_craftable: bool) -> void:
 	if is_craftable:
@@ -88,26 +112,6 @@ func _on_output_slot_output_changed(is_craftable: bool) -> void:
 		craft_button.modulate.a = 0.5
 		craft_button.get_node("CraftBtn").disabled = true
 		crafting_down_arrow.modulate.a = 0.2
-
-## Sets up the input and output slots with their needed data.
-func _setup_slots() -> void:
-	var inv: Inventory = Globals.player_node.inv
-	var i: int = 0
-	for input_slot: CraftingSlot in input_slots_container.get_children():
-		input_slot.name = "Input_Slot_" + str(i)
-		input_slot.synced_inv = inv
-		input_slot.index = inv.inv_size + 1 + i # The 1 is for the trash slot
-		input_slot.item_changed.connect(_on_input_item_changed)
-		input_slots.append(input_slot)
-		i += 1
-	output_slot.name = "Output_Slot"
-	output_slot.synced_inv = inv
-	output_slot.index = inv.inv_size + 1 + i
-
-## Sets up the item viewer node reference and the signals needed to respond to changes.
-func _setup_item_viewer_signals() -> void:
-	item_details_panel = get_parent().get_node("%ItemDetailsPanel")
-	item_details_panel.item_viewer_slot.item_changed.connect(_on_viewed_item_changed)
 
 ## This processes the items in the input slots so that they can be worked with faster by
 ## the other crafting functions.

@@ -1,3 +1,4 @@
+@tool
 @icon("res://Utilities/Debug/EditorIcons/item_receiver_component.svg")
 extends Inventory
 class_name ItemReceiverComponent
@@ -30,6 +31,9 @@ func _on_load_game() -> void:
 #endregion
 
 func _ready() -> void:
+	if Engine.is_editor_hint():
+		return
+
 	super._ready()
 	collision_layer = 0b10000000
 
@@ -65,6 +69,9 @@ func _hide_player_interact_hud() -> void:
 	item_interact_hud.hide_hud()
 
 func _unhandled_key_input(_event: InputEvent) -> void:
+	if Engine.is_editor_hint():
+		return
+
 	if Input.is_action_just_pressed("interact") and not Globals.focused_ui_is_open:
 		_pickup_item_from_queue()
 

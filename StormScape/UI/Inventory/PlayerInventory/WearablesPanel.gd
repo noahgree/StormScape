@@ -2,8 +2,9 @@ extends VBoxContainer
 class_name WearablesPanel
 ## Controls populating and syncing the wearable slots in the player inventory.
 
+@export var inventory_ui: PlayerInvUI ## The main controller for all inventory sub-UIs.
 @onready var wearables_grid: GridContainer = %WearablesGrid ## The grid container for all wearables slots.
-@onready var player_icon: TextureRect = %PlayerIcon ## The texture displaying the player's look.
+@onready var item_details_panel: ItemDetailsPanel = get_parent().get_node("%ItemDetailsPanel")
 
 var wearables_slots: Array[WearableSlot] = [] ## The slots that display the active wearables.
 var updating_from_within: bool = false ## When true, the wearables are already getting added by the load or another internal script function, so we shouldn't trigger the _on_slot_changed function as well.
@@ -25,19 +26,19 @@ func _on_load_game() -> void:
 #endregion
 
 func _ready() -> void:
-	call_deferred("_setup_slots")
 	SignalBus.focused_ui_opened.connect(_on_focused_ui_opened)
+
+	_setup_slots()
 
 ## Sets up the wearables slots their needed data.
 func _setup_slots() -> void:
-	var inv: Inventory = Globals.player_node.inv
-	var i: int = 1 # 1 since we are using the actual index of the item viewer slot to start with
+	var i: int = 0
 	for slot: WearableSlot in wearables_grid.get_children():
-		slot.name = "Wearable_Slot_" + str(i - 1)
-		slot.wearable_slot_index = (i - 1)
-		slot.synced_inv = inv
+		slot.name = "Wearable_Slot_" + str(i)
+		slot.wearable_slot_index = i
+		slot.synced_inv = inventory_ui.synced_inv
 		slot.item_changed.connect(_on_wearable_slot_changed)
-		slot.index = Globals.player_node.get_node("%ItemDetailsPanel").item_viewer_slot.index + i
+		slot.index = inventory_ui.assign_next_slot_index()
 		wearables_slots.append(slot)
 		i += 1
 
@@ -70,3 +71,11 @@ func _verify_latest_wearables() -> void:
 				wearables_slots[i].item = InvItemResource.new(wearable_dict.values()[0], 1)
 			updating_from_within = false
 		i += 1
+
+## When the mouse enters the player icon margin, try and show the player stats.
+func _on_player_icon_trigger_margin_mouse_entered() -> void:
+	item_details_panel.show_player_stats()
+
+## When the mouse leaves the player icon margin, try and hide the player stats if they are already showing.
+func _on_player_icon_trigger_margin_mouse_exited() -> void:
+	item_details_panel.hide_player_stats()

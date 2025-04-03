@@ -36,9 +36,25 @@ func parse_item(stats: ItemResource) -> Array[String]:
 		Globals.ItemType.WEAPON_MOD:
 			strings.append_array(_get_allowed_weapons_for_mod(stats))
 
-	strings.append_array(_get_extra_details(stats, stats.extra_details, false))
+	strings.append_array(_get_extra_details(stats, stats.extra_details, false, false))
 	if stats is WeaponResource:
 		strings.append_array(_get_weapon_mod_extra_details(stats))
+
+	strings = strings.filter(func(string: String) -> bool: return string != "")
+	return strings
+
+## Parses the information to populate in the player stats viewer.
+func parse_player() -> Array[String]:
+	var strings: Array[String] = []
+	strings.append("HEALTH:" + Globals.invis_char + _get_player_sum(["max_health"], true))
+	strings.append("SHIELD:" + Globals.invis_char + _get_player_sum(["max_shield"], true))
+	strings.append("STAMINA:" + Globals.invis_char + _get_player_sum(["max_stamina"], true))
+	strings.append("HUNGER BARS:" + Globals.invis_char + _get_player_sum(["max_hunger_bars"], true))
+
+	for wearable_dict: Dictionary in Globals.player_node.wearables:
+		var wearable: Wearable = wearable_dict.values()[0]
+		if wearable != null:
+			strings.append_array(_get_extra_details(wearable, wearable.applied_details, true, true))
 
 	strings = strings.filter(func(string: String) -> bool: return string != "")
 	return strings
@@ -48,17 +64,21 @@ func _get_weapon_mod_extra_details(stats: WeaponResource) -> Array[String]:
 	var strings: Array[String] = []
 	for weapon_mod_entry: Dictionary in stats.current_mods:
 		if weapon_mod_entry.values()[0] != null:
-			strings.append_array(_get_extra_details(stats, weapon_mod_entry.values()[0].applied_details, true))
+			strings.append_array(_get_extra_details(stats, weapon_mod_entry.values()[0].applied_details, true, false))
 
 	return strings
 
-## Returns an array of additional detail strings from given ItemDetail resources.
-func _get_extra_details(stats: ItemResource, extra_details_array: Array[ItemDetail],
-							highlight_when_title_only: bool) -> Array[String]:
+## Returns an array of additional detail strings from given StatDetail resources.
+func _get_extra_details(stats: ItemResource, extra_details_array: Array[StatDetail],
+							highlight_when_title_only: bool, for_entity_stats: bool = false) -> Array[String]:
 	var strings: Array[String] = []
-	for detail: ItemDetail in extra_details_array:
+	for detail: StatDetail in extra_details_array:
 		if not detail.stat_array.is_empty():
-			var detail_sum: String = _get_sum(stats, detail.stat_array, detail.up_is_good, detail.suffix, detail.multiplier, detail.addition, detail.fraction_of_orig)
+			var detail_sum: String
+			if not for_entity_stats:
+				detail_sum = _get_item_sums(stats, detail.stat_array, detail.up_is_good, detail.suffix, detail.multiplier, detail.addition, detail.fraction_of_orig)
+			else:
+				detail_sum = _get_player_sum(detail.stat_array, detail.up_is_good, detail.suffix, detail.multiplier, detail.addition, detail.fraction_of_orig)
 			strings.append(detail.title + ":" + Globals.invis_char + detail_sum)
 		else:
 			if highlight_when_title_only:
@@ -72,7 +92,7 @@ func _get_extra_details(stats: ItemResource, extra_details_array: Array[ItemDeta
 func _get_damage(stats: ItemResource) -> String:
 	var string: String = "DMG:" + Globals.invis_char
 	var proj_count: int = stats.barrage_count * stats.projectiles_per_fire if stats is ProjWeaponResource else 1.0
-	var dmg: String = _get_sum(stats, ["base_damage"], true, "", proj_count)
+	var dmg: String = _get_item_sums(stats, ["base_damage"], true, "", proj_count)
 	var crit_mult: String = str(stats.effect_source.crit_multiplier) + "x"
 
 	string += dmg
@@ -89,7 +109,7 @@ func _get_charge_damage(stats: ItemResource) -> String:
 		return ""
 
 	var string: String = "CHRG DMG:" + Globals.invis_char
-	var dmg: String = _get_sum(stats, ["charge_base_damage"], true)
+	var dmg: String = _get_item_sums(stats, ["charge_base_damage"], true)
 	var crit_mult: String = str(stats.charge_effect_source.crit_multiplier) + "x"
 
 	string += dmg
@@ -103,7 +123,7 @@ func _get_healing(stats: ItemResource) -> String:
 	if stats.effect_source.base_healing == 0:
 		return ""
 
-	return "HEAL:" + Globals.invis_char + _get_sum(stats, ["base_healing"], true)
+	return "HEAL:" + Globals.invis_char + _get_item_sums(stats, ["base_healing"], true)
 
 ## Gets the charge healing details for melee weapons.
 func _get_charge_healing(stats: ItemResource) -> String:
@@ -114,7 +134,7 @@ func _get_charge_healing(stats: ItemResource) -> String:
 	elif stats.charge_effect_source.base_healing == 0:
 		return ""
 
-	return "CHRG HEAL:" + Globals.invis_char + _get_sum(stats, ["charge_base_healing"], true)
+	return "CHRG HEAL:" + Globals.invis_char + _get_item_sums(stats, ["charge_base_healing"], true)
 
 ## Gets the attack speed details.
 func _get_attack_speed(stats: ItemResource) -> String:
@@ -123,16 +143,16 @@ func _get_attack_speed(stats: ItemResource) -> String:
 	if stats is ProjWeaponResource:
 		var sum: String
 		if stats.firing_mode != "Charge":
-			sum = _get_sum(stats, ["firing_duration", "fire_cooldown"], false, "s")
+			sum = _get_item_sums(stats, ["firing_duration", "fire_cooldown"], false, "s")
 		else:
-			sum = _get_sum(stats, ["firing_duration", "fire_cooldown", "min_charge_time"], false, "s")
+			sum = _get_item_sums(stats, ["firing_duration", "fire_cooldown", "min_charge_time"], false, "s")
 
 		string += StringHelpers.remove_trailing_zero(sum)
 	else:
-		string += _get_sum(stats, ["use_speed", "cooldown"], false, "s").replace(".0", "")
+		string += _get_item_sums(stats, ["use_speed", "cooldown"], false, "s")
 
 		if stats.can_do_charge_use:
-			var chg_sum: String = _get_sum(stats, ["min_charge_time", "charge_use_speed", "charge_use_cooldown"], false, "s")
+			var chg_sum: String = _get_item_sums(stats, ["min_charge_time", "charge_use_speed", "charge_use_cooldown"], false, "s")
 			string += " (" + chg_sum + " chrg)"
 	return string
 
@@ -142,10 +162,10 @@ func _get_ammo_and_reload(stats: ItemResource) -> String:
 
 	if stats is MeleeWeaponResource:
 		string = "STAMINA USE:" + Globals.invis_char
-		string += _get_sum(stats, ["stamina_cost"], false)
+		string += _get_item_sums(stats, ["stamina_cost"], false)
 
 		if stats.can_do_charge_use:
-			var chg_stamina: String = _get_sum(stats, ["charge_stamina_cost"], false)
+			var chg_stamina: String = _get_item_sums(stats, ["charge_stamina_cost"], false)
 			string += " (" + chg_stamina + " chrg)"
 
 		return string
@@ -153,19 +173,19 @@ func _get_ammo_and_reload(stats: ItemResource) -> String:
 	if stats.dont_consume_ammo:
 		return ""
 
-	var ammo: String = StringHelpers.remove_trailing_zero(_get_sum(stats, ["mag_size"], true))
+	var ammo: String = _get_item_sums(stats, ["mag_size"], true)
 	var reload: String
 
 	if stats.reload_type == "Single":
 		var mult: float = ceilf(stats.s_mods.get_stat("mag_size") / stats.s_mods.get_stat("single_reload_quantity"))
-		reload = _get_sum(stats, ["single_proj_reload_time", "single_proj_reload_delay"], false, "s", mult)
+		reload = _get_item_sums(stats, ["single_proj_reload_time", "single_proj_reload_delay"], false, "s", mult)
 	else:
-		reload = _get_sum(stats, ["mag_reload_time"], false, "s")
+		reload = _get_item_sums(stats, ["mag_reload_time"], false, "s")
 
 	if stats.mag_size == -1 and stats.ammo_type != ProjWeaponResource.ProjAmmoType.STAMINA:
 		return "RELOAD:" + Globals.invis_char + reload
 	elif stats.ammo_type == ProjWeaponResource.ProjAmmoType.STAMINA:
-		return "STAMINA USE:" + Globals.invis_char + _get_sum(stats, ["stamina_use_per_proj"], false)
+		return "STAMINA USE:" + Globals.invis_char + _get_item_sums(stats, ["stamina_use_per_proj"], false)
 
 	return string + ammo + " (" + reload + " [char=21BA])"
 
@@ -174,7 +194,7 @@ func _get_bloom(stats: ItemResource) -> String:
 	if stats is MeleeWeaponResource or stats.max_bloom == 0:
 		return ""
 
-	return "MAX BLOOM:" + Globals.invis_char + _get_sum(stats, ["max_bloom"], false, "[char=00B0]")
+	return "MAX BLOOM:" + Globals.invis_char + _get_item_sums(stats, ["max_bloom"], false, "[char=00B0]")
 
 ## Gets the status effects from the normal effect source.
 func _get_status_effects(stats: ItemResource) -> String:
@@ -213,6 +233,7 @@ func _get_charge_status_effects(stats: ItemResource) -> String:
 
 	return string
 
+## Gets the list of allowed proj and melee weapon types for a mod.
 func _get_allowed_weapons_for_mod(stats: WeaponMod) -> Array[String]:
 	var ranged_string: String = "RANGED COMPATIBILES:" + Globals.invis_char + "\n"
 	var melee_string: String = "MELEE COMPATIBILES:" + Globals.invis_char + "\n"
@@ -231,10 +252,8 @@ func _get_allowed_weapons_for_mod(stats: WeaponMod) -> Array[String]:
 
 	return [ranged_string, melee_string]
 
-## Gets a sum of an array of stat ids and compares it to the original sum. Mods that lower or raise sums will
-## result in an arrow at the end in the direction of change, colored based on whether higher is better or not.
-func _get_sum(stats: ItemResource, list: Array[String], up_is_good: bool, suffix: String = "",
-				mult: float = 1.0, addition: float = 0.0, fraction_of_original: bool = false) -> String:
+## Gets the sum (index 0) and original sum (index 1) for a list of stats inside an item.
+func _get_item_stat_sums(stats: ItemResource, list: Array[String]) -> Array[float]:
 	var sum: float = 0
 	var original_sum: float = 0
 
@@ -242,6 +261,44 @@ func _get_sum(stats: ItemResource, list: Array[String], up_is_good: bool, suffix
 		sum += stats.get_nested_stat(stat, false)
 		original_sum += stats.get_nested_stat(stat, true)
 
+	return [sum, original_sum]
+
+## Gets the sum (index 0) and original sum (index 1) for a list of stats on the player.
+func _get_players_stat_sums(list: Array[String]) -> Array[float]:
+	var sum: float = 0
+	var original_sum: float = 0
+
+	for stat: String in list:
+		sum += Globals.player_node.stats.get_stat(stat)
+		original_sum += Globals.player_node.stats.get_original_stat(stat)
+
+	return [sum, original_sum]
+
+## Gets a sum of an array of stat ids and compares it to the original sum. Mods that lower or raise sums will
+## result in an arrow at the end in the direction of change, colored based on whether higher is better or not.
+func _get_item_sums(stats: ItemResource, list: Array[String], up_is_good: bool, suffix: String = "",
+				mult: float = 1.0, addition: float = 0.0, fraction_of_original: bool = false) -> String:
+	var sums: Array[float] = _get_item_stat_sums(stats, list)
+	var sum: float = sums[0]
+	var original_sum: float = sums[1]
+
+	return _get_formatted_sum_result(sum, original_sum, up_is_good, suffix, mult, addition, fraction_of_original)
+
+## Gets a sum of an array of stat ids and compares it to the original sum. Stat changers (like wearables
+## and status effects) that lower or raise sums will result in an arrow at the end in the direction
+## of change, colored based on whether higher is better or not.
+func _get_player_sum(list: Array[String], up_is_good: bool, suffix: String = "",
+				mult: float = 1.0, addition: float = 0.0, fraction_of_original: bool = false) -> String:
+	var sums: Array[float] = _get_players_stat_sums(list)
+	var sum: float = sums[0]
+	var original_sum: float = sums[1]
+
+	return _get_formatted_sum_result(sum, original_sum, up_is_good, suffix, mult, addition, fraction_of_original)
+
+## Formats the sum result string based on several parameters.
+func _get_formatted_sum_result(sum: float, original_sum: float, up_is_good: bool, suffix: String = "",
+								mult: float = 1.0, addition: float = 0.0,
+								fraction_of_original: bool = false) -> String:
 	var arrow: String = ""
 	if (sum > original_sum) and up_is_good:
 		arrow = up_green

@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="ProjAmmoResource" load_steps=6 format=3 uid="uid://bdjhfsluk53lc"]
 
-[ext_resource type="Script" uid="uid://cowjdnic7xmkp" path="res://UI/Inventory/PlayerInventory/ItemDetail.gd" id="1_mb6oa"]
+[ext_resource type="Script" uid="uid://cowjdnic7xmkp" path="res://UI/Inventory/PlayerInventory/StatDetail.gd" id="1_mb6oa"]
 [ext_resource type="Texture2D" uid="uid://dm4207hijonur" path="res://Entities/Items/Ammo/Medium/MediumAmmoThumbCT.tres" id="1_xy8oh"]
 [ext_resource type="Texture2D" uid="uid://bj8cxp5cf4lw0" path="res://Entities/Items/Ammo/Medium/medium_ammo.png" id="2_6f2gy"]
 [ext_resource type="Script" uid="uid://ctxa7i1mbt7ab" path="res://UI/Inventory/PlayerInventory/Crafting/CraftingIngredient.gd" id="3_yijnj"]

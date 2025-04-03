@@ -6,7 +6,7 @@
 [ext_resource type="Script" uid="uid://cje5bobi6o8bo" path="res://Entities/Items/Hitscans/HitscanResource.gd" id="3_46awu"]
 [ext_resource type="Script" uid="uid://bj3r5oopspj6l" path="res://Entities/Items/Projectiles/ProjectileResource.gd" id="4_7qce5"]
 [ext_resource type="Texture2D" uid="uid://cqsoww8i0aya3" path="res://Entities/Items/Weapons/ProjectileWeapons/Boomerang/BoomerangSteelCT.tres" id="4_gupq0"]
-[ext_resource type="Script" uid="uid://cowjdnic7xmkp" path="res://UI/Inventory/PlayerInventory/ItemDetail.gd" id="4_o0qyt"]
+[ext_resource type="Script" uid="uid://cowjdnic7xmkp" path="res://UI/Inventory/PlayerInventory/StatDetail.gd" id="4_o0qyt"]
 [ext_resource type="PackedScene" uid="uid://dna63yojpqy2n" path="res://Entities/Items/Projectiles/Boomerangs/BoomerangSteelProj.tscn" id="5_23285"]
 [ext_resource type="Texture2D" uid="uid://1cupq4qi2cjx" path="res://Entities/Items/Weapons/ProjectileWeapons/Boomerang/boomerang_steel.png" id="6_2lgcn"]
 [ext_resource type="PackedScene" uid="uid://dq57qggohi76w" path="res://Entities/Items/Weapons/ProjectileWeapons/Boomerang/BoomerangSteel.tscn" id="7_fxomq"]

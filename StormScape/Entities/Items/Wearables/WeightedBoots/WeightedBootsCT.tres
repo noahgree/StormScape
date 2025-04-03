@@ -1,0 +1,8 @@
+[gd_resource type="CanvasTexture" load_steps=3 format=3 uid="uid://dhaxi1e4w3258"]
+
+[ext_resource type="Texture2D" uid="uid://c4x35fn6tj1ca" path="res://Entities/Items/Wearables/WeightedBoots/weighted_boots.png" id="1_0pi4m"]
+[ext_resource type="Texture2D" uid="uid://cdqbc0krwi88j" path="res://Entities/Items/Wearables/WeightedBoots/weighted_boots_n.png" id="2_nc8lq"]
+
+[resource]
+diffuse_texture = ExtResource("1_0pi4m")
+normal_texture = ExtResource("2_nc8lq")
