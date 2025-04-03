@@ -36,7 +36,7 @@ var tint_progress: float = 100.0: ## How much of the tint should be filled upwar
 	set(new_value):
 		tint_progress = new_value
 		back_color.set_instance_shader_parameter("progress", new_value)
-var pause_changed_signals: bool = false ## When true, the item_changed signal will not be emitted by the setter.
+var pause_changed_signals: bool = false ## When true, the item_changed signal will not be emitted by the setter. Useful for when the slot itself is making changes like when the slot quantity limit is only 1 and we have to send extra quantities back out.
 var preview_items: Array[Dictionary] = []: ## When this isn't null, this items will display as a cycling preview and nothing will be able to be dragged out of this slot.
 	set(new_preview_items):
 		preview_items = new_preview_items
@@ -47,6 +47,7 @@ var preview_items: Array[Dictionary] = []: ## When this isn't null, this items w
 			preview_cycle_timer.stop()
 			_update_visuals({ item : -1 })
 var preview_cycle_timer: Timer = TimerHelpers.create_repeating_timer(self, 2.25, _on_preview_cycle_timer_timeout)
+var mirrored_hud_slot: Slot ## When not null, any item changes to this slot will also send changes to this HUD slot. Useful for the hotbar where there are two sets of distinct slots that need to stay connected. This doesn't mirror preview arrays.
 
 
 ## Setter function for the item represented by this slot. Updates texture and quantity label.
@@ -65,6 +66,9 @@ func _set_item(new_item: InvItemResource) -> void:
 
 	if not pause_changed_signals:
 		item_changed.emit(self, old_item, item)
+
+	if mirrored_hud_slot:
+		mirrored_hud_slot.item = new_item
 
 ## Connects relevant mouse entered and exited functions.
 func _ready() -> void:
@@ -200,7 +204,7 @@ func _on_visibility_changed() -> void:
 
 ## Updates the upwards fill tinting that represents an item on cooldown.
 func update_tint_progress(duration: float) -> void:
-	if duration > 0:
+	if duration > 0 and item != null:
 		var cooldown_source: String = Globals.player_node.inv.auto_decrementer.get_cooldown_source_title(item.stats.get_cooldown_id())
 		if cooldown_source not in item.stats.shown_cooldown_fills:
 			return
@@ -385,8 +389,6 @@ func _move_items_to_other_empty_slot(data: Variant) -> void:
 		synced_inv.inv[data.index] = null
 	data.item = null
 
-	_emit_changes_for_potential_listening_hotbar(data)
-
 ## Combines the drag data items into a slot with items of the same kind. This means that when
 ## combined they still fit stack size.
 func _combine_all_items_into_slot_with_space(data: Variant, total_quantity: int) -> void:
@@ -396,8 +398,6 @@ func _combine_all_items_into_slot_with_space(data: Variant, total_quantity: int)
 	if data.index < synced_inv.total_inv_size:
 		synced_inv.inv[data.index] = null
 	data.item = null
-
-	_emit_changes_for_potential_listening_hotbar(data)
 
 ## Combines items of same kind from drag data into an already occupied slot. Passes what doesn't
 ## fit to the next iteration.
@@ -421,8 +421,6 @@ func _combine_what_fits_and_leave_remainder(data: Variant) -> void:
 			synced_inv.inv[data.index] = InvItemResource.new(data.item.stats, data.item.quantity)
 			data.item = synced_inv.inv[data.index]
 
-	_emit_changes_for_potential_listening_hotbar(data)
-
 ## Swaps the items in the slots.
 func _swap_item_stacks(data: Variant) -> void:
 	var temp_item: InvItemResource = item
@@ -438,8 +436,6 @@ func _swap_item_stacks(data: Variant) -> void:
 		if data.index < synced_inv.total_inv_size:
 			synced_inv.inv[data.index] = temp_item
 		data.item = temp_item
-
-	_emit_changes_for_potential_listening_hotbar(data)
 #endregion
 
 #region Dropping Only One
@@ -468,8 +464,6 @@ func _replace_with_one_item_and_find_available_slot_for_previous_stuff(data: Var
 	if not is_trash_slot:
 		synced_inv.insert_from_inv_item(temp_item, false, false)
 
-	_emit_changes_for_potential_listening_hotbar(data)
-
 ## After moving a quantity of 1 in any way, checks that the source did not only have 1 to
 ## begin with and would then need to be cleared out.
 func _check_if_inv_slot_is_now_empty_after_dragging_only_one(data: Variant) -> void:
@@ -485,8 +479,6 @@ func _check_if_inv_slot_is_now_empty_after_dragging_only_one(data: Variant) -> v
 			data.item = null
 		else:
 			data.item = InvItemResource.new(data.item.stats, data.item.quantity - 1)
-
-	_emit_changes_for_potential_listening_hotbar(data)
 #endregion
 
 #region Dropping Half Stacks
@@ -501,8 +493,6 @@ func _move_all_of_the_half_stack_into_a_slot(data: Variant, source_remainder: in
 		data.item = synced_inv.inv[data.index]
 	else:
 		data.item = InvItemResource.new(data.item.stats, source_remainder)
-
-	_emit_changes_for_potential_listening_hotbar(data)
 
 ## Moves what fits from the half quantity represented by the drag data into a slot that can take some of it.
 ## Leaves what doesn't fit.
@@ -525,19 +515,9 @@ func _replace_with_half_stack_and_find_available_slot_for_previous_stuff(data: V
 		data.item = synced_inv.inv[data.index]
 	else:
 		data.item = InvItemResource.new(data.item.stats, source_remainder)
-
-	_emit_changes_for_potential_listening_hotbar(data)
 #endregion
 
 #region Utils
-## Emits signals for all slots of high enough index when changed to let any connected hotbar
-## know to change it's data and UI.
-func _emit_changes_for_potential_listening_hotbar(data: Variant) -> void:
-	if (data.index >= synced_inv.main_inv_size) and (data.index < synced_inv.total_inv_size):
-		synced_inv.slot_updated.emit(data.index, data.item)
-	if (index >= synced_inv.main_inv_size) and (index < synced_inv.total_inv_size):
-		synced_inv.slot_updated.emit(index, item)
-
 ## When mouse enters, if we can drop, display an effect on this slot. Also stop previews temporarily if they are
 ## in progress.
 func _on_mouse_entered() -> void:

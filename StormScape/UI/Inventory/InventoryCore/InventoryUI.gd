@@ -2,8 +2,6 @@ extends ColorRect
 class_name InventoryUI
 ## The base class for all inventory UIs. Handles drag and dropping into margin space for dropping onto the ground.
 
-static var slot_scene: PackedScene = preload("res://UI/Inventory/InventoryCore/Slot/SlotCore/Slot.tscn") ## The slot scene to be instantiated as children.
-
 @export var synced_inv: Inventory ## The inventory to connect to and reflect.
 @export var main_slot_grid: GridContainer ## The main container for all normal inventory slots.
 
@@ -95,8 +93,8 @@ func _drop_data(_at_position: Vector2, data: Variant) -> void:
 
 		Item.spawn_on_ground(ground_item_res, ground_item_quantity, Globals.player_node.global_position, 15, true, false, true)
 
-	if data.index < synced_inv.inv.size():
-		synced_inv.slot_updated.emit(data.index, data.item)
+	#if data.index < synced_inv.inv.size():
+		#synced_inv.slot_updated.emit(data.index, data.item)
 
 	data._on_mouse_exited()
 

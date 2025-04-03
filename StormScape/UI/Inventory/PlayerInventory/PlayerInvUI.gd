@@ -4,6 +4,7 @@ class_name PlayerInvUI
 
 @export_group("Connections")
 @export var hotbar_grid: HBoxContainer ## The container that holds the hotbar slots.
+@export var hotbar_hud_grid: HBoxContainer ## The container that holds the HUD-only hotbar slots.
 @export var trash_slot: Slot ## The trash slot.
 @export var item_details_panel: ItemDetailsPanel ## The item viewer in the inventory.
 @export var crafting_manager: CraftingManager ## The crafting manager panel.
@@ -38,11 +39,14 @@ func _ready() -> void:
 	_setup_trash_slot()
 
 func _setup_hotbar_slots() -> void:
+	var i: int = 0
 	for slot: Slot in hotbar_grid.get_children():
 		slot.name = "HotSlot_" + str(index_counter)
 		slot.index = assign_next_slot_index(true)
 		slot.synced_inv = synced_inv
+		slot.mirrored_hud_slot = hotbar_hud_grid.get_child(i)
 		slots.append(slot)
+		i += 1
 
 func _setup_trash_slot() -> void:
 	trash_slot.name = "Trash_Slot"

@@ -2260,7 +2260,7 @@ patch_margin_right = 3
 patch_margin_bottom = 3
 axis_stretch_vertical = 1
 
-[node name="HotbarUISlotGrid" type="HBoxContainer" parent="OverlayUI/HotbarUI/HotbarNinePatch"]
+[node name="HotbarHUDGrid" type="HBoxContainer" parent="OverlayUI/HotbarUI/HotbarNinePatch"]
 unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 8
@@ -2278,23 +2278,23 @@ theme_override_constants/separation = 0
 alignment = 1
 metadata/_edit_lock_ = true
 
-[node name="Slot1" parent="OverlayUI/HotbarUI/HotbarNinePatch/HotbarUISlotGrid" instance=ExtResource("42_r422n")]
+[node name="Slot1" parent="OverlayUI/HotbarUI/HotbarNinePatch/HotbarHUDGrid" instance=ExtResource("42_r422n")]
 layout_mode = 2
 metadata/_edit_lock_ = true
 
-[node name="Slot2" parent="OverlayUI/HotbarUI/HotbarNinePatch/HotbarUISlotGrid" instance=ExtResource("42_r422n")]
+[node name="Slot2" parent="OverlayUI/HotbarUI/HotbarNinePatch/HotbarHUDGrid" instance=ExtResource("42_r422n")]
 layout_mode = 2
 metadata/_edit_lock_ = true
 
-[node name="Slot3" parent="OverlayUI/HotbarUI/HotbarNinePatch/HotbarUISlotGrid" instance=ExtResource("42_r422n")]
+[node name="Slot3" parent="OverlayUI/HotbarUI/HotbarNinePatch/HotbarHUDGrid" instance=ExtResource("42_r422n")]
 layout_mode = 2
 metadata/_edit_lock_ = true
 
-[node name="Slot4" parent="OverlayUI/HotbarUI/HotbarNinePatch/HotbarUISlotGrid" instance=ExtResource("42_r422n")]
+[node name="Slot4" parent="OverlayUI/HotbarUI/HotbarNinePatch/HotbarHUDGrid" instance=ExtResource("42_r422n")]
 layout_mode = 2
 metadata/_edit_lock_ = true
 
-[node name="Slot5" parent="OverlayUI/HotbarUI/HotbarNinePatch/HotbarUISlotGrid" instance=ExtResource("42_r422n")]
+[node name="Slot5" parent="OverlayUI/HotbarUI/HotbarNinePatch/HotbarHUDGrid" instance=ExtResource("42_r422n")]
 layout_mode = 2
 metadata/_edit_lock_ = true
 
@@ -2390,7 +2390,7 @@ horizontal_alignment = 2
 vertical_alignment = 2
 uppercase = true
 
-[node name="PlayerInvUI" type="ColorRect" parent="OverlayUI" node_paths=PackedStringArray("hotbar_grid", "trash_slot", "item_details_panel", "crafting_manager", "ammo_viewer_margin", "synced_inv", "main_slot_grid")]
+[node name="PlayerInvUI" type="ColorRect" parent="OverlayUI" node_paths=PackedStringArray("hotbar_grid", "hotbar_hud_grid", "trash_slot", "item_details_panel", "crafting_manager", "ammo_viewer_margin", "synced_inv", "main_slot_grid")]
 process_mode = 3
 material = SubResource("ShaderMaterial_2q23q")
 use_parent_material = true
@@ -2402,6 +2402,7 @@ grow_vertical = 2
 color = Color(0.109341, 0.109341, 0.109341, 0.976471)
 script = ExtResource("32_3a185")
 hotbar_grid = NodePath("HotbarSlotMargins/HotbarTexture/HotbarGrid")
+hotbar_hud_grid = NodePath("../HotbarUI/HotbarNinePatch/HotbarHUDGrid")
 trash_slot = NodePath("TrashSlotPanel/TrashSlot")
 item_details_panel = NodePath("ItemDetailsPanel")
 crafting_manager = NodePath("CraftingManager")
