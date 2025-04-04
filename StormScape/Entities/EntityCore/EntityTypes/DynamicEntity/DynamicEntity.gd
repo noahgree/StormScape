@@ -7,6 +7,7 @@ class_name DynamicEntity
 ## This should not be used by things like weapons or trees.
 
 @export var team: Globals.Teams = Globals.Teams.PLAYER ## What the effects received by this entity should consider as this entity's team.
+@export var inv: InventoryResource ## The inventory data resource for this entity.
 
 @onready var sprite: EntitySprite = %EntitySprite ## The visual representation of the entity. Needs to have the EntityEffectShader applied.
 @onready var anim_tree: AnimationTree = $AnimationTree ## The animation tree controlling this entity's animation states.
@@ -18,7 +19,7 @@ class_name DynamicEntity
 @onready var detection_component: DetectionComponent = $DetectionComponent ## The component that defines the radius around this entity that an enemy must enter for that enemy to be alerted.
 @onready var health_component: HealthComponent = $HealthComponent ## The component in charge of entity health and shield.
 @onready var stamina_component: StaminaComponent = get_node_or_null("StaminaComponent") ## The component in charge of entity stamina and hunger.
-@onready var inv: ItemReceiverComponent = get_node_or_null("ItemReceiverComponent") ## The inventory for the entity.
+@onready var item_receiver: ItemReceiverComponent = get_node_or_null("ItemReceiverComponent") ## The item receiver for this entity.
 @onready var hands: HandsComponent = get_node_or_null("%HandsComponent") ## The hands item component for the entity.
 
 var stats: StatModsCacheResource = StatModsCacheResource.new() ## The resource that will cache and work with all stat mods for this entity.
@@ -57,8 +58,12 @@ func _on_save_game(save_data: Array[SaveData]) -> void:
 		data.can_use_hunger_bars = stamina_component.can_use_hunger_bars
 
 	if inv != null:
+		for item: InvItemResource in inv.inv:
+			if item != null and item.stats is WeaponResource:
+				item.stats.weapon_mods_need_to_be_readded_after_save = true
 		data.inv = inv.inv
-		data.pickup_range = inv.pickup_range
+	if item_receiver != null:
+		data.pickup_range = item_receiver.pickup_range
 
 	data.snare_factor = snare_factor
 	if snare_timer != null: data.snare_time_left = snare_timer.time_left
@@ -106,8 +111,9 @@ func _is_instance_on_load_game(data: DynamicEntityData) -> void:
 		stamina_component.can_use_hunger_bars = data.can_use_hunger_bars
 
 	if inv != null:
-		inv.inv_to_load_from_save = data.inv
-		inv.pickup_range = data.pickup_range
+		inv.call_deferred("fill_inventory", data.inv)
+	if item_receiver != null:
+		item_receiver.pickup_range = data.pickup_range
 
 	snare_factor = 0
 	if snare_timer != null: snare_timer.queue_free()
@@ -151,12 +157,16 @@ func _ready() -> void:
 
 	stats.affected_entity = self
 	sprite.entity = self
+	if inv:
+		inv.initialize_inventory(self)
 
 func _process(delta: float) -> void:
 	if Engine.is_editor_hint():
 		return
 
 	fsm.controller.controller_process(delta)
+	if inv:
+		inv.auto_decrementer.process(delta)
 
 func _physics_process(delta: float) -> void:
 	if Engine.is_editor_hint():

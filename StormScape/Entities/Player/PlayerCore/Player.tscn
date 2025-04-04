@@ -1,35 +1,60 @@
-[gd_scene load_steps=220 format=3 uid="uid://dba8mrurjlekp"]
+[gd_scene load_steps=202 format=3 uid="uid://dba8mrurjlekp"]
 
 [ext_resource type="Script" uid="uid://c3rpxq8pnbdje" path="res://Entities/Player/PlayerCore/Player.gd" id="1_m33tt"]
+[ext_resource type="Script" uid="uid://dwmur0cosbbwh" path="res://UI/Inventory/InventoryCore/InventoryResource.gd" id="2_l1kq4"]
 [ext_resource type="PackedScene" uid="uid://cj2wy5f05cos4" path="res://Entities/EntityCore/Shadow/EntityShadow.tscn" id="3_05f62"]
 [ext_resource type="PackedScene" uid="uid://cdfdy8m6ki3oq" path="res://Entities/Components/HealthComponent/HealthComponent.tscn" id="3_ojev3"]
 [ext_resource type="PackedScene" uid="uid://dh4ydl7l86ywq" path="res://Entities/EntityCore/Sprites/EntitySprite.tscn" id="4_fmbcv"]
+[ext_resource type="Resource" uid="uid://1q7rlned2r23" path="res://Entities/Items/TRESItems/Gattler(3).tres" id="4_g5u5n"]
+[ext_resource type="Resource" uid="uid://b8gvf7ta6a2rj" path="res://Entities/Items/TRESItems/Foregrip(1).tres" id="4_gevai"]
 [ext_resource type="PackedScene" uid="uid://btba0jmsow1mx" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectReceiverComponent.tscn" id="4_hhm8x"]
+[ext_resource type="Resource" uid="uid://bcvljie626314" path="res://Entities/Items/TRESItems/Heavy(0).tres" id="4_lo25j"]
 [ext_resource type="Shader" uid="uid://cfbagv3hrtar2" path="res://Utilities/Game/Shaders/EntityEffectShader.gdshader" id="4_ubhyl"]
 [ext_resource type="PackedScene" uid="uid://4gl24qwdyti3" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/DmgHandler.tscn" id="5_g3ixu"]
 [ext_resource type="PackedScene" uid="uid://cxpv7l7rcaq1o" path="res://Entities/Components/StaminaComponent/StaminaComponent.tscn" id="5_k4fu6"]
+[ext_resource type="Resource" uid="uid://bta1hncad1hd2" path="res://Entities/Items/TRESItems/ExtendedMag(1).tres" id="5_oe7wn"]
+[ext_resource type="Resource" uid="uid://cpxev3kvt74vw" path="res://Entities/Items/TRESItems/Shell(0).tres" id="5_rdrbb"]
 [ext_resource type="SpriteFrames" uid="uid://cl72xrd8yy3d" path="res://Entities/Player/Sprites/Base/PlayerBaseFrames.tres" id="5_vy6lk"]
+[ext_resource type="Resource" uid="uid://bdjhfsluk53lc" path="res://Entities/Items/TRESItems/Medium(0).tres" id="6_3uq13"]
 [ext_resource type="PackedScene" uid="uid://ddj5ippwwkvop" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/HealHandler.tscn" id="6_5e1ju"]
+[ext_resource type="Resource" uid="uid://8uj8fwadqlk0" path="res://Entities/Items/TRESItems/Stick(0).tres" id="6_hxjay"]
 [ext_resource type="PackedScene" uid="uid://co3n6m7efg8pd" path="res://Entities/Components/EffectComponents/StatusEffectsComponent/StatusEffectsComponent.tscn" id="6_n0x5k"]
+[ext_resource type="Resource" uid="uid://m8eslst1uuxh" path="res://Entities/Items/TRESItems/Light(0).tres" id="6_qvtc6"]
+[ext_resource type="Resource" uid="uid://bx2nl7cqe7odq" path="res://Entities/Items/TRESItems/AdvancedScope(3).tres" id="7_14ixx"]
 [ext_resource type="Script" uid="uid://c2sjdkql76qca" path="res://Entities/FSM/States/BaseStates/IdleState.gd" id="7_15a5x"]
 [ext_resource type="PackedScene" uid="uid://dykiv0tlhwmox" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/KnockbackHandler.tscn" id="7_k0pv8"]
+[ext_resource type="Resource" uid="uid://c5jim46mul7ex" path="res://Entities/Items/TRESItems/IonCharge(0).tres" id="7_o382h"]
+[ext_resource type="Resource" uid="uid://3avt5jvd3dye" path="res://Entities/Items/TRESItems/BottleOFire(3).tres" id="8_lo25j"]
+[ext_resource type="Resource" uid="uid://caw1yglbt2nf6" path="res://Entities/Items/TRESItems/FrostCharm(5).tres" id="8_o382h"]
 [ext_resource type="Script" uid="uid://dxekqhvcykqrq" path="res://Entities/FSM/States/PlayerStates/RunState.gd" id="9_0dcld"]
 [ext_resource type="Script" uid="uid://cy73p3okq3cic" path="res://Entities/FSM/States/BaseStates/DashState.gd" id="9_a1qv1"]
 [ext_resource type="Texture2D" uid="uid://cs3clmnktksd6" path="res://Entities/Player/PlayerCore/player_hand.png" id="9_n4o3n"]
+[ext_resource type="Resource" uid="uid://dpmwqsai6gxsr" path="res://Entities/Items/TRESItems/FlameBlower(5).tres" id="9_rdrbb"]
 [ext_resource type="PackedScene" uid="uid://cx4b21058vypq" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/StunHandler.tscn" id="9_w4lel"]
+[ext_resource type="Resource" uid="uid://bs4rqdt46yav7" path="res://Entities/Items/TRESItems/OakLog(0).tres" id="10_0t1mv"]
+[ext_resource type="Resource" uid="uid://14gw464h13vv" path="res://Entities/Items/TRESItems/Cratershot(1).tres" id="10_3uq13"]
 [ext_resource type="PackedScene" uid="uid://bhcqtorpyerc3" path="res://Utilities/Debug/ParticleEmissionComponent.tscn" id="10_6wv7y"]
+[ext_resource type="Resource" uid="uid://nbgi8l36xcgl" path="res://Entities/Items/TRESItems/WeightedBoots(3).tres" id="10_n4o3n"]
+[ext_resource type="Resource" uid="uid://dy8rwyeyusim7" path="res://Entities/Items/TRESItems/Twin(2).tres" id="11_0t1mv"]
+[ext_resource type="Resource" uid="uid://dbnhbsphiw4oe" path="res://Entities/Items/TRESItems/SpruceLog(0).tres" id="11_hxjay"]
+[ext_resource type="Resource" uid="uid://c05ujhrdtx4r5" path="res://Entities/Items/TRESItems/Blunderbuss(2).tres" id="11_o382h"]
 [ext_resource type="PackedScene" uid="uid://tc2awdm3onyi" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/PoisonHandler.tscn" id="11_rtl41"]
+[ext_resource type="Resource" uid="uid://duc0xfejpfs1" path="res://Entities/Items/TRESItems/EagleEye(3).tres" id="12_6wv7y"]
 [ext_resource type="PackedScene" uid="uid://e3qv2f7w61vy" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/RegenHandler.tscn" id="12_goxma"]
 [ext_resource type="PackedScene" uid="uid://bhg7jmodo3t5t" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/FrostbiteHandler.tscn" id="13_hqb6d"]
+[ext_resource type="Resource" uid="uid://fmf7upx7tsln" path="res://Entities/Items/TRESItems/RifleX(3).tres" id="13_n4o3n"]
+[ext_resource type="Resource" uid="uid://bper7kxtsf7f1" path="res://Entities/Items/TRESItems/Axe(1).tres" id="14_0t1mv"]
 [ext_resource type="PackedScene" uid="uid://d1ml6s716obw0" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/TimeSnareHandler.tscn" id="14_63vgk"]
 [ext_resource type="PackedScene" uid="uid://depnx3pnassrq" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/BurningHandler.tscn" id="14_q2ueb"]
 [ext_resource type="Script" uid="uid://cbyg4eleptthh" path="res://Entities/FSM/States/BaseStates/StunnedState.gd" id="15_eiig3"]
+[ext_resource type="Resource" uid="uid://cx1ydw2jde1y8" path="res://Entities/Items/TRESItems/Apple(0).tres" id="15_hxjay"]
 [ext_resource type="PackedScene" uid="uid://csrq1m4rp52vf" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/StormSyndromeHandler.tscn" id="17_2cms1"]
 [ext_resource type="Script" uid="uid://i7ucoc123rpe" path="res://Entities/FSM/States/BaseStates/SpawnState.gd" id="17_fwsnm"]
 [ext_resource type="Script" uid="uid://clmf6cxgxu6kb" path="res://Utilities/Debug/TestButtons.gd" id="17_vdk5v"]
 [ext_resource type="Script" uid="uid://cbuaklpos5jdp" path="res://Entities/FSM/States/BaseStates/DieState.gd" id="18_jcofa"]
 [ext_resource type="Script" uid="uid://cf7pyv5l3pefi" path="res://Entities/FSM/States/BaseStates/SneakState.gd" id="19_alhqe"]
 [ext_resource type="PackedScene" uid="uid://b4bmp3jehto3g" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/LifeStealHandler.tscn" id="20_f770q"]
+[ext_resource type="Resource" uid="uid://bh18kqp2up3oe" path="res://Entities/Items/TRESItems/Pickaxe(3).tres" id="23_gdihr"]
 [ext_resource type="PackedScene" uid="uid://jpq0ij8wwlhy" path="res://Entities/Components/FacingComponent/FacingComponent.tscn" id="25_0t1mv"]
 [ext_resource type="Script" uid="uid://c28itqxmeqbq0" path="res://Entities/FSM/FSMCore/StateMachine.gd" id="25_6wv7y"]
 [ext_resource type="Texture2D" uid="uid://crawnbhc5weqf" path="res://Entities/EntityCore/EntityTypes/DynamicEntity/entity_footstep.png" id="27_0t1mv"]
@@ -38,52 +63,18 @@
 [ext_resource type="Script" uid="uid://dq62ojsc43p8o" path="res://UI/Inventory/PlayerInventory/PlayerInvUI.gd" id="32_3a185"]
 [ext_resource type="Script" uid="uid://dp8osf7r6xkkt" path="res://Entities/Items/ItemCore/InvItemResource.gd" id="32_ixmb3"]
 [ext_resource type="Script" uid="uid://dvirx67s12tmd" path="res://Entities/Player/PlayerCore/PlayerCamera/CamFXResource.gd" id="32_o382h"]
-[ext_resource type="Resource" uid="uid://cx1ydw2jde1y8" path="res://Entities/Items/TRESItems/Apple(0).tres" id="33_0qw5e"]
-[ext_resource type="Resource" uid="uid://bh18kqp2up3oe" path="res://Entities/Items/TRESItems/Pickaxe(3).tres" id="34_i8j5r"]
 [ext_resource type="Script" uid="uid://ccdihncnoj7dh" path="res://UI/Inventory/PlayerInventory/ItemInteractionHUD.gd" id="35_45ikj"]
-[ext_resource type="Resource" uid="uid://bper7kxtsf7f1" path="res://Entities/Items/TRESItems/Axe(1).tres" id="35_g2eu7"]
-[ext_resource type="Resource" uid="uid://m8eslst1uuxh" path="res://Entities/Items/TRESItems/Light(0).tres" id="35_qbswt"]
 [ext_resource type="Script" uid="uid://di5hu6fk5mbfe" path="res://UI/PlayerStatsHUD/PlayerStatsHUD.gd" id="35_yln51"]
-[ext_resource type="Resource" uid="uid://ciel2rrqq4dvv" path="res://Entities/Items/TRESItems/LaserGun(2).tres" id="37_a2tah"]
 [ext_resource type="PackedScene" uid="uid://b7gdy01q8wsjx" path="res://Entities/Components/ItemComponents/HandsComponent/HandsComponent.tscn" id="39_ngono"]
 [ext_resource type="Shader" uid="uid://c0de04pgeen76" path="res://Utilities/Game/Shaders/BlurBehind.gdshader" id="39_r4tgk"]
-[ext_resource type="Resource" uid="uid://c5jim46mul7ex" path="res://Entities/Items/TRESItems/IonCharge(0).tres" id="40_6wv7y"]
-[ext_resource type="Resource" uid="uid://bcvljie626314" path="res://Entities/Items/TRESItems/Heavy(0).tres" id="40_7ipu6"]
-[ext_resource type="Resource" uid="uid://bdjhfsluk53lc" path="res://Entities/Items/TRESItems/Medium(0).tres" id="40_r220t"]
-[ext_resource type="Resource" uid="uid://bx2nl7cqe7odq" path="res://Entities/Items/TRESItems/AdvancedScope(3).tres" id="41_bvo3j"]
 [ext_resource type="PackedScene" uid="uid://m4ur3n2hwsp8" path="res://UI/Inventory/InventoryCore/Slot/SlotCore/Slot.tscn" id="42_r422n"]
-[ext_resource type="Resource" uid="uid://bsq8lhqy8j1i7" path="res://Entities/Items/TRESItems/SimpleScope(1).tres" id="43_gb65f"]
-[ext_resource type="Resource" uid="uid://cpxev3kvt74vw" path="res://Entities/Items/TRESItems/Shell(0).tres" id="44_q38m2"]
-[ext_resource type="Resource" uid="uid://kmidnuyti5xi" path="res://Entities/Items/TRESItems/Boomerang(2).tres" id="45_xur7q"]
-[ext_resource type="Resource" uid="uid://dlfmjgnfk6nqj" path="res://Entities/Items/TRESItems/Revolver(0).tres" id="46_xbbnp"]
-[ext_resource type="Resource" uid="uid://bs4rqdt46yav7" path="res://Entities/Items/TRESItems/OakLog(0).tres" id="47_3uq13"]
-[ext_resource type="Resource" uid="uid://duc0xfejpfs1" path="res://Entities/Items/TRESItems/EagleEye(3).tres" id="47_a0x8j"]
-[ext_resource type="Resource" uid="uid://3avt5jvd3dye" path="res://Entities/Items/TRESItems/BottleOFire(3).tres" id="47_devgv"]
-[ext_resource type="Resource" uid="uid://14gw464h13vv" path="res://Entities/Items/TRESItems/Cratershot(1).tres" id="48_1kvwx"]
-[ext_resource type="Resource" uid="uid://dbnhbsphiw4oe" path="res://Entities/Items/TRESItems/SpruceLog(0).tres" id="48_3uq13"]
-[ext_resource type="Resource" uid="uid://4nvp28pvjtk3" path="res://Entities/Items/TRESItems/Boomerang(1).tres" id="49_gbpko"]
-[ext_resource type="Resource" uid="uid://8uj8fwadqlk0" path="res://Entities/Items/TRESItems/Stick(0).tres" id="50_0313k"]
-[ext_resource type="Resource" uid="uid://cfaje12siuo0b" path="res://Entities/Items/TRESItems/Compensator(2).tres" id="50_eufsu"]
-[ext_resource type="Resource" uid="uid://dpmwqsai6gxsr" path="res://Entities/Items/TRESItems/FlameBlower(5).tres" id="52_ebist"]
-[ext_resource type="Resource" uid="uid://b8gvf7ta6a2rj" path="res://Entities/Items/TRESItems/Foregrip(1).tres" id="52_eufsu"]
-[ext_resource type="Resource" uid="uid://1q7rlned2r23" path="res://Entities/Items/TRESItems/Gattler(3).tres" id="53_lo25j"]
-[ext_resource type="Resource" uid="uid://bta1hncad1hd2" path="res://Entities/Items/TRESItems/ExtendedMag(1).tres" id="56_da65a"]
-[ext_resource type="Resource" uid="uid://dk3vlbvu2b7eq" path="res://Entities/Items/TRESItems/Sword(4).tres" id="57_6wv7y"]
 [ext_resource type="Resource" uid="uid://m8ws6ct8yu3b" path="res://Entities/Items/TRESItems/FireCharm(5).tres" id="57_gdihr"]
 [ext_resource type="Script" uid="uid://dih45lqhjg0xx" path="res://UI/OverheadUI/PlayerOverheadUI.gd" id="57_n8srl"]
-[ext_resource type="Resource" uid="uid://nbgi8l36xcgl" path="res://Entities/Items/TRESItems/WeightedBoots(3).tres" id="58_6f5us"]
 [ext_resource type="Script" uid="uid://c0n0ja8tkrnkf" path="res://UI/Inventory/PlayerInventory/HotbarUI.gd" id="58_i567i"]
-[ext_resource type="Resource" uid="uid://caw1yglbt2nf6" path="res://Entities/Items/TRESItems/FrostCharm(5).tres" id="59_eufsu"]
-[ext_resource type="Resource" uid="uid://dy8rwyeyusim7" path="res://Entities/Items/TRESItems/Twin(2).tres" id="60_0t1mv"]
 [ext_resource type="Texture2D" uid="uid://bq3d1uclexvcm" path="res://UI/OverheadUI/progress_tintable.png" id="61_6wv7y"]
-[ext_resource type="Resource" uid="uid://dw5jtfoba6mwy" path="res://Entities/Items/TRESItems/PoisonCharm(5).tres" id="61_da65a"]
-[ext_resource type="Resource" uid="uid://fmf7upx7tsln" path="res://Entities/Items/TRESItems/RifleX(3).tres" id="62_0313k"]
 [ext_resource type="Texture2D" uid="uid://barp24qvngy0m" path="res://UI/OverheadUI/Overheat/overheat_back.png" id="63_3uq13"]
-[ext_resource type="Resource" uid="uid://c05ujhrdtx4r5" path="res://Entities/Items/TRESItems/Blunderbuss(2).tres" id="64_eufsu"]
-[ext_resource type="Resource" uid="uid://bnc4tbhdxpauy" path="res://Entities/Items/TRESItems/Musket(0).tres" id="64_hxjay"]
 [ext_resource type="Texture2D" uid="uid://7wf7omw2r50u" path="res://UI/OverheadUI/Overheat/overheat_progress.png" id="64_o382h"]
 [ext_resource type="Resource" uid="uid://caxftf2aer6g4" path="res://Entities/Items/TRESItems/Igniter(4).tres" id="65_14ixx"]
-[ext_resource type="Resource" uid="uid://dh8kily8s3nxw" path="res://Entities/Items/TRESItems/Flintlock(1).tres" id="67_da65a"]
 [ext_resource type="Texture2D" uid="uid://dtft3mljs2y5s" path="res://UI/Inventory/InventoryCore/Slot/Universal/trash_slot_icon.png" id="69_4ao77"]
 [ext_resource type="Script" uid="uid://ct7n8wo1p3b20" path="res://Entities/Items/WeaponMods/WeaponMod.gd" id="74_bvo3j"]
 [ext_resource type="Resource" uid="uid://cwgqj8klx4b3x" path="res://Entities/Items/TRESItems/ExtendedMag(0).tres" id="75_r5dvw"]
@@ -107,6 +98,7 @@
 [ext_resource type="Texture2D" uid="uid://comcgk0iu7yb8" path="res://UI/PlayerStatsHUD/Icons/shield_icon.png" id="110_6wv7y"]
 [ext_resource type="Texture2D" uid="uid://cn54g3yxn4t4e" path="res://UI/Inventory/InventoryCore/Slot/Universal/output_slot_icon_left.png" id="110_g5u5n"]
 [ext_resource type="Texture2D" uid="uid://dil8w58e3xdt5" path="res://UI/PlayerStatsHUD/Icons/hunger_icon.png" id="111_0t1mv"]
+[ext_resource type="Script" uid="uid://dt68k0tnwjvdl" path="res://UI/Inventory/InventoryCore/InventoryUI.gd" id="111_6wv7y"]
 [ext_resource type="Script" uid="uid://cvuh82pqmf5ja" path="res://UI/Inventory/InventoryCore/Slot/SlotCore/CraftingSlot.gd" id="111_hxjay"]
 [ext_resource type="Texture2D" uid="uid://c7elu72hhoy5l" path="res://UI/PlayerStatsHUD/Icons/health_icon.png" id="111_n4o3n"]
 [ext_resource type="Texture2D" uid="uid://dq4bom0xaskme" path="res://UI/Inventory/InventoryCore/Slot/Wood/light_border_filled_wood_slot.png" id="113_5qckj"]
@@ -124,6 +116,163 @@
 [ext_resource type="Texture2D" uid="uid://bcw0dq5ww2bs1" path="res://Entities/Items/Ammo/Stamina/stamina.png" id="119_6f5us"]
 [ext_resource type="Texture2D" uid="uid://0qokvcd3ucop" path="res://UI/Inventory/InventoryCore/Background/Universal/arrow_icon.png" id="119_bvo3j"]
 [ext_resource type="Texture2D" uid="uid://ces4hq54n2lxc" path="res://UI/Inventory/InventoryCore/Slot/Wood/normal_slot_wood.png" id="123_da65a"]
+
+[sub_resource type="Resource" id="Resource_82yts"]
+script = ExtResource("32_ixmb3")
+stats = ExtResource("4_g5u5n")
+quantity = 1
+metadata/_custom_type_script = "uid://dp8osf7r6xkkt"
+
+[sub_resource type="Resource" id="Resource_n4o3n"]
+script = ExtResource("32_ixmb3")
+stats = ExtResource("4_lo25j")
+quantity = 400
+metadata/_custom_type_script = "uid://dp8osf7r6xkkt"
+
+[sub_resource type="Resource" id="Resource_0t1mv"]
+script = ExtResource("32_ixmb3")
+stats = ExtResource("5_rdrbb")
+quantity = 500
+metadata/_custom_type_script = "uid://dp8osf7r6xkkt"
+
+[sub_resource type="Resource" id="Resource_h1ges"]
+script = ExtResource("32_ixmb3")
+stats = ExtResource("6_hxjay")
+quantity = 8
+metadata/_custom_type_script = "uid://dp8osf7r6xkkt"
+
+[sub_resource type="Resource" id="Resource_hxjay"]
+script = ExtResource("32_ixmb3")
+stats = ExtResource("6_3uq13")
+quantity = 750
+metadata/_custom_type_script = "uid://dp8osf7r6xkkt"
+
+[sub_resource type="Resource" id="Resource_w0i1c"]
+script = ExtResource("32_ixmb3")
+stats = ExtResource("7_o382h")
+quantity = 100
+metadata/_custom_type_script = "uid://dp8osf7r6xkkt"
+
+[sub_resource type="Resource" id="Resource_ou5t4"]
+script = ExtResource("32_ixmb3")
+stats = ExtResource("8_o382h")
+quantity = 1
+metadata/_custom_type_script = "uid://dp8osf7r6xkkt"
+
+[sub_resource type="Resource" id="Resource_ar238"]
+script = ExtResource("32_ixmb3")
+stats = ExtResource("57_gdihr")
+quantity = 1
+metadata/_custom_type_script = "uid://dp8osf7r6xkkt"
+
+[sub_resource type="Resource" id="Resource_bmpdm"]
+script = ExtResource("32_ixmb3")
+stats = ExtResource("10_0t1mv")
+quantity = 12
+metadata/_custom_type_script = "uid://dp8osf7r6xkkt"
+
+[sub_resource type="Resource" id="Resource_8hbs2"]
+script = ExtResource("32_ixmb3")
+stats = ExtResource("11_hxjay")
+quantity = 10
+metadata/_custom_type_script = "uid://dp8osf7r6xkkt"
+
+[sub_resource type="Resource" id="Resource_f5l7i"]
+script = ExtResource("32_ixmb3")
+stats = ExtResource("10_n4o3n")
+quantity = 1
+metadata/_custom_type_script = "uid://dp8osf7r6xkkt"
+
+[sub_resource type="Resource" id="Resource_co77f"]
+script = ExtResource("32_ixmb3")
+stats = ExtResource("11_0t1mv")
+quantity = 1
+metadata/_custom_type_script = "uid://dp8osf7r6xkkt"
+
+[sub_resource type="Resource" id="Resource_gdihr"]
+script = ExtResource("32_ixmb3")
+stats = ExtResource("4_gevai")
+quantity = 1
+metadata/_custom_type_script = "uid://dp8osf7r6xkkt"
+
+[sub_resource type="Resource" id="Resource_g5u5n"]
+script = ExtResource("32_ixmb3")
+stats = ExtResource("5_oe7wn")
+quantity = 2
+metadata/_custom_type_script = "uid://dp8osf7r6xkkt"
+
+[sub_resource type="Resource" id="Resource_0313k"]
+script = ExtResource("32_ixmb3")
+stats = ExtResource("6_qvtc6")
+quantity = 600
+metadata/_custom_type_script = "uid://dp8osf7r6xkkt"
+
+[sub_resource type="Resource" id="Resource_thmqm"]
+script = ExtResource("32_ixmb3")
+stats = ExtResource("7_14ixx")
+quantity = 1
+metadata/_custom_type_script = "uid://dp8osf7r6xkkt"
+
+[sub_resource type="Resource" id="Resource_r5dvw"]
+script = ExtResource("32_ixmb3")
+stats = ExtResource("8_lo25j")
+quantity = 10
+metadata/_custom_type_script = "uid://dp8osf7r6xkkt"
+
+[sub_resource type="Resource" id="Resource_bvo3j"]
+script = ExtResource("32_ixmb3")
+stats = ExtResource("9_rdrbb")
+quantity = 1
+metadata/_custom_type_script = "uid://dp8osf7r6xkkt"
+
+[sub_resource type="Resource" id="Resource_gb65f"]
+script = ExtResource("32_ixmb3")
+stats = ExtResource("10_3uq13")
+quantity = 1
+metadata/_custom_type_script = "uid://dp8osf7r6xkkt"
+
+[sub_resource type="Resource" id="Resource_5qckj"]
+script = ExtResource("32_ixmb3")
+stats = ExtResource("14_0t1mv")
+quantity = 1
+metadata/_custom_type_script = "uid://dp8osf7r6xkkt"
+
+[sub_resource type="Resource" id="Resource_32jvf"]
+script = ExtResource("32_ixmb3")
+stats = ExtResource("23_gdihr")
+quantity = 1
+metadata/_custom_type_script = "uid://dp8osf7r6xkkt"
+
+[sub_resource type="Resource" id="Resource_eufsu"]
+script = ExtResource("32_ixmb3")
+stats = ExtResource("11_o382h")
+quantity = 1
+metadata/_custom_type_script = "uid://dp8osf7r6xkkt"
+
+[sub_resource type="Resource" id="Resource_da65a"]
+script = ExtResource("32_ixmb3")
+stats = ExtResource("12_6wv7y")
+quantity = 1
+metadata/_custom_type_script = "uid://dp8osf7r6xkkt"
+
+[sub_resource type="Resource" id="Resource_6f5us"]
+script = ExtResource("32_ixmb3")
+stats = ExtResource("13_n4o3n")
+quantity = 1
+metadata/_custom_type_script = "uid://dp8osf7r6xkkt"
+
+[sub_resource type="Resource" id="Resource_s4yud"]
+script = ExtResource("32_ixmb3")
+stats = ExtResource("15_hxjay")
+quantity = 5
+metadata/_custom_type_script = "uid://dp8osf7r6xkkt"
+
+[sub_resource type="Resource" id="Resource_5npt6"]
+script = ExtResource("2_l1kq4")
+title = "CONTAINER"
+main_inv_size = 32
+starting_inv = Array[ExtResource("32_ixmb3")]([SubResource("Resource_82yts"), SubResource("Resource_n4o3n"), SubResource("Resource_0t1mv"), SubResource("Resource_h1ges"), null, SubResource("Resource_hxjay"), null, SubResource("Resource_w0i1c"), null, null, null, SubResource("Resource_ou5t4"), SubResource("Resource_ar238"), null, SubResource("Resource_bmpdm"), SubResource("Resource_8hbs2"), SubResource("Resource_f5l7i"), SubResource("Resource_co77f"), null, null, null, SubResource("Resource_gdihr"), SubResource("Resource_g5u5n"), SubResource("Resource_0313k"), null, SubResource("Resource_thmqm"), SubResource("Resource_r5dvw"), SubResource("Resource_bvo3j"), SubResource("Resource_gb65f"), SubResource("Resource_5qckj"), null, null, SubResource("Resource_32jvf"), SubResource("Resource_eufsu"), SubResource("Resource_da65a"), SubResource("Resource_6f5us"), SubResource("Resource_s4yud")])
+metadata/_custom_type_script = "uid://dwmur0cosbbwh"
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_3f130"]
 radius = 2.0
@@ -1155,211 +1304,6 @@ states/spawn/position = Vector2(184.5, 70)
 transitions = ["idle", "run", SubResource("AnimationNodeStateMachineTransition_70g00"), "run", "idle", SubResource("AnimationNodeStateMachineTransition_sdv4y"), "Start", "spawn", SubResource("AnimationNodeStateMachineTransition_8h6fx"), "spawn", "idle", SubResource("AnimationNodeStateMachineTransition_x8kh3")]
 graph_offset = Vector2(-144, -58)
 
-[sub_resource type="Resource" id="Resource_pihal"]
-script = ExtResource("32_ixmb3")
-stats = ExtResource("33_0qw5e")
-quantity = 5
-
-[sub_resource type="Resource" id="Resource_da65a"]
-script = ExtResource("32_ixmb3")
-stats = ExtResource("41_bvo3j")
-quantity = 1
-metadata/_custom_type_script = "uid://dp8osf7r6xkkt"
-
-[sub_resource type="Resource" id="Resource_0313k"]
-script = ExtResource("32_ixmb3")
-stats = ExtResource("75_r5dvw")
-quantity = 3
-metadata/_custom_type_script = "uid://dp8osf7r6xkkt"
-
-[sub_resource type="Resource" id="Resource_6f5us"]
-script = ExtResource("32_ixmb3")
-stats = ExtResource("43_gb65f")
-quantity = 1
-metadata/_custom_type_script = "uid://dp8osf7r6xkkt"
-
-[sub_resource type="Resource" id="Resource_kx1me"]
-script = ExtResource("32_ixmb3")
-stats = ExtResource("35_g2eu7")
-quantity = 1
-
-[sub_resource type="Resource" id="Resource_2ijsm"]
-script = ExtResource("32_ixmb3")
-stats = ExtResource("35_qbswt")
-quantity = 999
-
-[sub_resource type="Resource" id="Resource_gb65f"]
-script = ExtResource("32_ixmb3")
-stats = ExtResource("35_qbswt")
-quantity = 500
-metadata/_custom_type_script = "uid://dp8osf7r6xkkt"
-
-[sub_resource type="Resource" id="Resource_xlc3k"]
-script = ExtResource("32_ixmb3")
-stats = ExtResource("34_i8j5r")
-quantity = 1
-
-[sub_resource type="Resource" id="Resource_n4o3n"]
-script = ExtResource("32_ixmb3")
-stats = ExtResource("40_6wv7y")
-quantity = 100
-metadata/_custom_type_script = ExtResource("32_ixmb3")
-
-[sub_resource type="Resource" id="Resource_3by25"]
-script = ExtResource("32_ixmb3")
-stats = ExtResource("40_7ipu6")
-quantity = 800
-
-[sub_resource type="Resource" id="Resource_oxva3"]
-script = ExtResource("32_ixmb3")
-stats = ExtResource("40_r220t")
-quantity = 900
-
-[sub_resource type="Resource" id="Resource_5qckj"]
-script = ExtResource("32_ixmb3")
-stats = ExtResource("50_eufsu")
-quantity = 1
-metadata/_custom_type_script = "uid://dp8osf7r6xkkt"
-
-[sub_resource type="Resource" id="Resource_x8o50"]
-script = ExtResource("32_ixmb3")
-stats = ExtResource("44_q38m2")
-quantity = 500
-
-[sub_resource type="Resource" id="Resource_s4yud"]
-script = ExtResource("32_ixmb3")
-stats = ExtResource("52_eufsu")
-quantity = 1
-metadata/_custom_type_script = "uid://dp8osf7r6xkkt"
-
-[sub_resource type="Resource" id="Resource_apvym"]
-script = ExtResource("32_ixmb3")
-stats = ExtResource("47_3uq13")
-quantity = 8
-
-[sub_resource type="Resource" id="Resource_ur5wt"]
-script = ExtResource("32_ixmb3")
-stats = ExtResource("48_3uq13")
-quantity = 16
-
-[sub_resource type="Resource" id="Resource_eufsu"]
-script = ExtResource("32_ixmb3")
-stats = ExtResource("50_0313k")
-quantity = 8
-metadata/_custom_type_script = "uid://dp8osf7r6xkkt"
-
-[sub_resource type="Resource" id="Resource_ou5t4"]
-script = ExtResource("32_ixmb3")
-stats = ExtResource("56_da65a")
-quantity = 1
-metadata/_custom_type_script = "uid://dp8osf7r6xkkt"
-
-[sub_resource type="Resource" id="Resource_dyejk"]
-script = ExtResource("32_ixmb3")
-stats = ExtResource("45_xur7q")
-quantity = 1
-
-[sub_resource type="Resource" id="Resource_g5u5n"]
-script = ExtResource("32_ixmb3")
-stats = ExtResource("57_gdihr")
-quantity = 1
-metadata/_custom_type_script = "uid://dp8osf7r6xkkt"
-
-[sub_resource type="Resource" id="Resource_bmpdm"]
-script = ExtResource("32_ixmb3")
-stats = ExtResource("58_6f5us")
-quantity = 1
-metadata/_custom_type_script = "uid://dp8osf7r6xkkt"
-
-[sub_resource type="Resource" id="Resource_vpccy"]
-script = ExtResource("32_ixmb3")
-stats = ExtResource("48_1kvwx")
-quantity = 1
-
-[sub_resource type="Resource" id="Resource_f5l7i"]
-script = ExtResource("32_ixmb3")
-stats = ExtResource("59_eufsu")
-quantity = 1
-metadata/_custom_type_script = "uid://dp8osf7r6xkkt"
-
-[sub_resource type="Resource" id="Resource_gdihr"]
-script = ExtResource("32_ixmb3")
-stats = ExtResource("64_hxjay")
-quantity = 1
-metadata/_custom_type_script = "uid://dp8osf7r6xkkt"
-
-[sub_resource type="Resource" id="Resource_co77f"]
-script = ExtResource("32_ixmb3")
-stats = ExtResource("61_da65a")
-quantity = 1
-metadata/_custom_type_script = "uid://dp8osf7r6xkkt"
-
-[sub_resource type="Resource" id="Resource_p5d28"]
-script = ExtResource("32_ixmb3")
-stats = ExtResource("46_xbbnp")
-quantity = 1
-
-[sub_resource type="Resource" id="Resource_0t1mv"]
-script = ExtResource("32_ixmb3")
-stats = ExtResource("57_6wv7y")
-quantity = 1
-metadata/_custom_type_script = ExtResource("32_ixmb3")
-
-[sub_resource type="Resource" id="Resource_rdrbb"]
-script = ExtResource("32_ixmb3")
-stats = ExtResource("53_lo25j")
-quantity = 1
-metadata/_custom_type_script = ExtResource("32_ixmb3")
-
-[sub_resource type="Resource" id="Resource_0ta0y"]
-script = ExtResource("32_ixmb3")
-stats = ExtResource("37_a2tah")
-quantity = 1
-
-[sub_resource type="Resource" id="Resource_sx7hp"]
-script = ExtResource("32_ixmb3")
-stats = ExtResource("49_gbpko")
-quantity = 1
-
-[sub_resource type="Resource" id="Resource_wjnk6"]
-script = ExtResource("32_ixmb3")
-stats = ExtResource("52_ebist")
-quantity = 1
-
-[sub_resource type="Resource" id="Resource_hevqc"]
-script = ExtResource("32_ixmb3")
-stats = ExtResource("47_devgv")
-quantity = 10
-
-[sub_resource type="Resource" id="Resource_ar238"]
-script = ExtResource("32_ixmb3")
-stats = ExtResource("67_da65a")
-quantity = 1
-metadata/_custom_type_script = "uid://dp8osf7r6xkkt"
-
-[sub_resource type="Resource" id="Resource_w0i1c"]
-script = ExtResource("32_ixmb3")
-stats = ExtResource("64_eufsu")
-quantity = 1
-metadata/_custom_type_script = "uid://dp8osf7r6xkkt"
-
-[sub_resource type="Resource" id="Resource_bvo3j"]
-script = ExtResource("32_ixmb3")
-stats = ExtResource("62_0313k")
-quantity = 1
-metadata/_custom_type_script = "uid://dp8osf7r6xkkt"
-
-[sub_resource type="Resource" id="Resource_hxjay"]
-script = ExtResource("32_ixmb3")
-stats = ExtResource("60_0t1mv")
-quantity = 1
-metadata/_custom_type_script = "uid://dp8osf7r6xkkt"
-
-[sub_resource type="Resource" id="Resource_6stk0"]
-script = ExtResource("32_ixmb3")
-stats = ExtResource("47_a0x8j")
-quantity = 1
-
 [sub_resource type="CircleShape2D" id="CircleShape2D_3wm74"]
 radius = 12.0
 
@@ -1442,11 +1386,22 @@ shadow_offset = Vector2(0.25, 0.25)
 base_font = ExtResource("85_7xlwj")
 spacing_bottom = -1
 
+[sub_resource type="LabelSettings" id="LabelSettings_6wv7y"]
+line_spacing = -1.0
+font_size = 9
+font_color = Color(0.913725, 0.768627, 0.741176, 1)
+outline_size = 2
+outline_color = Color(0.209, 0.114, 0.047, 0.565)
+shadow_size = 0
+shadow_color = Color(0, 0, 0, 0.3)
+shadow_offset = Vector2(0.3, 0.3)
+
 [node name="Player" type="CharacterBody2D" groups=["has_save_logic"]]
 collision_layer = 0
 collision_mask = 0
 motion_mode = 1
 script = ExtResource("1_m33tt")
+inv = SubResource("Resource_5npt6")
 
 [node name="Collision" type="CollisionShape2D" parent="."]
 position = Vector2(0, -2)
@@ -1585,9 +1540,6 @@ parameters/run/blendspace2d/blend_position = Vector2(0, 0)
 
 [node name="ItemReceiverComponent" parent="." node_paths=PackedStringArray("item_interact_hud") instance=ExtResource("30_qgyag")]
 item_interact_hud = NodePath("../OverlayUI/ItemInteractionHUD")
-is_player_inv = true
-hotbar_size = 5
-starting_inv = Array[ExtResource("32_ixmb3")]([SubResource("Resource_pihal"), SubResource("Resource_da65a"), SubResource("Resource_0313k"), SubResource("Resource_6f5us"), SubResource("Resource_kx1me"), SubResource("Resource_2ijsm"), SubResource("Resource_gb65f"), SubResource("Resource_xlc3k"), SubResource("Resource_n4o3n"), SubResource("Resource_3by25"), SubResource("Resource_oxva3"), SubResource("Resource_5qckj"), SubResource("Resource_x8o50"), SubResource("Resource_s4yud"), SubResource("Resource_apvym"), SubResource("Resource_ur5wt"), SubResource("Resource_eufsu"), SubResource("Resource_ou5t4"), SubResource("Resource_dyejk"), SubResource("Resource_g5u5n"), SubResource("Resource_bmpdm"), SubResource("Resource_vpccy"), SubResource("Resource_f5l7i"), SubResource("Resource_gdihr"), SubResource("Resource_co77f"), SubResource("Resource_p5d28"), SubResource("Resource_0t1mv"), SubResource("Resource_rdrbb"), SubResource("Resource_0ta0y"), SubResource("Resource_sx7hp"), SubResource("Resource_wjnk6"), SubResource("Resource_hevqc"), SubResource("Resource_ar238"), SubResource("Resource_w0i1c"), SubResource("Resource_bvo3j"), SubResource("Resource_hxjay"), SubResource("Resource_6stk0")])
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="ItemReceiverComponent"]
 position = Vector2(0, -5)
@@ -1650,7 +1602,6 @@ tint_progress = Color(0.483324, 0.860906, 0.955996, 1)
 [node name="OverlayUI" type="CanvasLayer" parent="."]
 
 [node name="TestButtons" type="Control" parent="OverlayUI" node_paths=PackedStringArray("health_component")]
-visible = false
 layout_mode = 3
 anchors_preset = 0
 offset_right = 40.0
@@ -1815,6 +1766,98 @@ scale = Vector2(0.7, 0.7)
 focus_mode = 0
 theme_override_font_sizes/font_size = 12
 text = "COMBINE ITEMS"
+
+[node name="ItemInteractionHUD" type="NinePatchRect" parent="OverlayUI"]
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -40.0
+offset_top = -8.0
+offset_right = -5.0
+offset_bottom = 15.0
+grow_horizontal = 0
+grow_vertical = 2
+texture = ExtResource("98_s4yud")
+region_rect = Rect2(0, 0, 20, 20)
+patch_margin_left = 3
+patch_margin_top = 3
+patch_margin_right = 3
+patch_margin_bottom = 3
+axis_stretch_vertical = 2
+script = ExtResource("35_45ikj")
+
+[node name="OuterMargins" type="MarginContainer" parent="OverlayUI/ItemInteractionHUD"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 3
+theme_override_constants/margin_top = 3
+theme_override_constants/margin_right = 3
+theme_override_constants/margin_bottom = 3
+
+[node name="InnerBackground" type="NinePatchRect" parent="OverlayUI/ItemInteractionHUD/OuterMargins"]
+layout_mode = 2
+texture = ExtResource("123_da65a")
+patch_margin_left = 2
+patch_margin_top = 2
+patch_margin_right = 2
+patch_margin_bottom = 2
+
+[node name="InnerMargins" type="MarginContainer" parent="OverlayUI/ItemInteractionHUD/OuterMargins"]
+layout_mode = 2
+theme_override_constants/margin_left = 3
+theme_override_constants/margin_top = 0
+theme_override_constants/margin_right = 0
+theme_override_constants/margin_bottom = 0
+
+[node name="ElementHBox" type="HBoxContainer" parent="OverlayUI/ItemInteractionHUD/OuterMargins/InnerMargins"]
+layout_mode = 2
+theme_override_constants/separation = 1
+alignment = 1
+
+[node name="InteractIndicator" type="TextureRect" parent="OverlayUI/ItemInteractionHUD/OuterMargins/InnerMargins/ElementHBox"]
+self_modulate = Color(0.963, 0.899, 0.886, 0.7)
+layout_mode = 2
+texture = ExtResource("89_0313k")
+stretch_mode = 5
+
+[node name="ElementMargins" type="MarginContainer" parent="OverlayUI/ItemInteractionHUD/OuterMargins/InnerMargins/ElementHBox"]
+layout_mode = 2
+size_flags_horizontal = 8
+theme_override_constants/margin_left = 0
+theme_override_constants/margin_top = 0
+theme_override_constants/margin_right = 0
+theme_override_constants/margin_bottom = 0
+
+[node name="PickupPreviewSlot" parent="OverlayUI/ItemInteractionHUD/OuterMargins/InnerMargins/ElementHBox/ElementMargins" instance=ExtResource("42_r422n")]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(15, 15)
+layout_mode = 2
+texture = null
+default_slot_texture = null
+preview_only = true
+
+[node name="QuantityMargins" type="MarginContainer" parent="OverlayUI/ItemInteractionHUD/OuterMargins/InnerMargins/ElementHBox/ElementMargins"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/margin_left = 0
+theme_override_constants/margin_top = 0
+theme_override_constants/margin_right = 1
+theme_override_constants/margin_bottom = 3
+
+[node name="ItemPickupQuantity" type="Label" parent="OverlayUI/ItemInteractionHUD/OuterMargins/InnerMargins/ElementHBox/ElementMargins/QuantityMargins"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 8
+label_settings = SubResource("LabelSettings_hxjay")
+horizontal_alignment = 2
+vertical_alignment = 1
 
 [node name="PlayerStatsHUD" type="Control" parent="OverlayUI" node_paths=PackedStringArray("health_component", "stamina_component")]
 unique_name_in_owner = true
@@ -2141,99 +2184,7 @@ nine_patch_stretch = true
 texture_progress = ExtResource("100_5qckj")
 tint_progress = Color(0, 0.723, 0.405, 1)
 
-[node name="ItemInteractionHUD" type="NinePatchRect" parent="OverlayUI"]
-anchors_preset = 6
-anchor_left = 1.0
-anchor_top = 0.5
-anchor_right = 1.0
-anchor_bottom = 0.5
-offset_left = -40.0
-offset_top = -8.0
-offset_right = -5.0
-offset_bottom = 15.0
-grow_horizontal = 0
-grow_vertical = 2
-texture = ExtResource("98_s4yud")
-region_rect = Rect2(0, 0, 20, 20)
-patch_margin_left = 3
-patch_margin_top = 3
-patch_margin_right = 3
-patch_margin_bottom = 3
-axis_stretch_vertical = 2
-script = ExtResource("35_45ikj")
-
-[node name="OuterMargins" type="MarginContainer" parent="OverlayUI/ItemInteractionHUD"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_constants/margin_left = 3
-theme_override_constants/margin_top = 3
-theme_override_constants/margin_right = 3
-theme_override_constants/margin_bottom = 3
-
-[node name="InnerBackground" type="NinePatchRect" parent="OverlayUI/ItemInteractionHUD/OuterMargins"]
-layout_mode = 2
-texture = ExtResource("123_da65a")
-patch_margin_left = 2
-patch_margin_top = 2
-patch_margin_right = 2
-patch_margin_bottom = 2
-
-[node name="InnerMargins" type="MarginContainer" parent="OverlayUI/ItemInteractionHUD/OuterMargins"]
-layout_mode = 2
-theme_override_constants/margin_left = 3
-theme_override_constants/margin_top = 0
-theme_override_constants/margin_right = 0
-theme_override_constants/margin_bottom = 0
-
-[node name="ElementHBox" type="HBoxContainer" parent="OverlayUI/ItemInteractionHUD/OuterMargins/InnerMargins"]
-layout_mode = 2
-theme_override_constants/separation = 1
-alignment = 1
-
-[node name="InteractIndicator" type="TextureRect" parent="OverlayUI/ItemInteractionHUD/OuterMargins/InnerMargins/ElementHBox"]
-self_modulate = Color(0.963, 0.899, 0.886, 0.7)
-layout_mode = 2
-texture = ExtResource("89_0313k")
-stretch_mode = 5
-
-[node name="ElementMargins" type="MarginContainer" parent="OverlayUI/ItemInteractionHUD/OuterMargins/InnerMargins/ElementHBox"]
-layout_mode = 2
-size_flags_horizontal = 8
-theme_override_constants/margin_left = 0
-theme_override_constants/margin_top = 0
-theme_override_constants/margin_right = 0
-theme_override_constants/margin_bottom = 0
-
-[node name="PickupPreviewSlot" parent="OverlayUI/ItemInteractionHUD/OuterMargins/InnerMargins/ElementHBox/ElementMargins" instance=ExtResource("42_r422n")]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(15, 15)
-layout_mode = 2
-texture = null
-default_slot_texture = null
-preview_only = true
-
-[node name="QuantityMargins" type="MarginContainer" parent="OverlayUI/ItemInteractionHUD/OuterMargins/InnerMargins/ElementHBox/ElementMargins"]
-unique_name_in_owner = true
-layout_mode = 2
-theme_override_constants/margin_left = 0
-theme_override_constants/margin_top = 0
-theme_override_constants/margin_right = 1
-theme_override_constants/margin_bottom = 3
-
-[node name="ItemPickupQuantity" type="Label" parent="OverlayUI/ItemInteractionHUD/OuterMargins/InnerMargins/ElementHBox/ElementMargins/QuantityMargins"]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_horizontal = 8
-size_flags_vertical = 8
-label_settings = SubResource("LabelSettings_hxjay")
-horizontal_alignment = 2
-vertical_alignment = 1
-
-[node name="HotbarUI" type="MarginContainer" parent="OverlayUI" node_paths=PackedStringArray("player_inv", "active_slot_info") groups=["has_save_logic"]]
+[node name="HotbarUI" type="MarginContainer" parent="OverlayUI" node_paths=PackedStringArray("active_slot_info") groups=["has_save_logic"]]
 unique_name_in_owner = true
 anchors_preset = 3
 anchor_left = 1.0
@@ -2247,7 +2198,6 @@ offset_bottom = -4.0
 grow_horizontal = 0
 grow_vertical = 0
 script = ExtResource("58_i567i")
-player_inv = NodePath("../../ItemReceiverComponent")
 active_slot_info = NodePath("../ActiveSlotInfo")
 
 [node name="HotbarNinePatch" type="NinePatchRect" parent="OverlayUI/HotbarUI"]
@@ -2390,8 +2340,9 @@ horizontal_alignment = 2
 vertical_alignment = 2
 uppercase = true
 
-[node name="PlayerInvUI" type="ColorRect" parent="OverlayUI" node_paths=PackedStringArray("hotbar_grid", "hotbar_hud_grid", "trash_slot", "item_details_panel", "crafting_manager", "ammo_viewer_margin", "synced_inv", "main_slot_grid")]
+[node name="PlayerInvUI" type="ColorRect" parent="OverlayUI" node_paths=PackedStringArray("hotbar_grid", "hotbar_hud_grid", "trash_slot", "item_details_panel", "crafting_manager", "wearables_panel", "ammo_viewer_margin", "alternate_inv_panel", "synced_inv_source_node", "main_slot_grid")]
 process_mode = 3
+visible = false
 material = SubResource("ShaderMaterial_2q23q")
 use_parent_material = true
 anchors_preset = 15
@@ -2406,10 +2357,12 @@ hotbar_hud_grid = NodePath("../HotbarUI/HotbarNinePatch/HotbarHUDGrid")
 trash_slot = NodePath("TrashSlotPanel/TrashSlot")
 item_details_panel = NodePath("ItemDetailsPanel")
 crafting_manager = NodePath("CraftingManager")
+wearables_panel = NodePath("WearablesPanel")
 ammo_viewer_margin = NodePath("AmmoViewerMargin")
+alternate_inv_panel = NodePath("AlternateInventoryPanel")
 btn_up_texture = ExtResource("106_0313k")
 btn_down_texture = ExtResource("107_thmqm")
-synced_inv = NodePath("../../ItemReceiverComponent")
+synced_inv_source_node = NodePath("../..")
 main_slot_grid = NodePath("MainGridBackground/GridMargins/GridMarginsBackground/MainSlotGrid")
 
 [node name="MainGridBackground" type="NinePatchRect" parent="OverlayUI/PlayerInvUI"]
@@ -2867,6 +2820,7 @@ backing_texture = ExtResource("94_0313k")
 
 [node name="CraftingManager" type="VBoxContainer" parent="OverlayUI/PlayerInvUI" node_paths=PackedStringArray("inventory_ui")]
 unique_name_in_owner = true
+visible = false
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -3067,6 +3021,7 @@ metadata/_edit_lock_ = true
 
 [node name="WearablesPanel" type="VBoxContainer" parent="OverlayUI/PlayerInvUI" node_paths=PackedStringArray("inventory_ui") groups=["has_save_logic"]]
 unique_name_in_owner = true
+visible = false
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
@@ -3572,6 +3527,210 @@ unique_name_in_owner = true
 layout_mode = 2
 expand_mode = 1
 stretch_mode = 5
+
+[node name="AlternateInventoryPanel" type="VBoxContainer" parent="OverlayUI/PlayerInvUI" node_paths=PackedStringArray("main_slot_grid")]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 339.0
+offset_top = 55.0
+offset_right = 465.0
+offset_bottom = 225.0
+mouse_filter = 2
+script = ExtResource("111_6wv7y")
+main_slot_grid = NodePath("AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/MarginContainer/AlternateInvSlotGrid")
+
+[node name="AlternateInvBkgrdMargin" type="MarginContainer" parent="OverlayUI/PlayerInvUI/AlternateInventoryPanel"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 0
+mouse_filter = 0
+theme_override_constants/margin_left = 0
+theme_override_constants/margin_top = 0
+theme_override_constants/margin_right = 0
+theme_override_constants/margin_bottom = 0
+metadata/_edit_use_anchors_ = true
+
+[node name="AlternateInvBackground" type="NinePatchRect" parent="OverlayUI/PlayerInvUI/AlternateInventoryPanel/AlternateInvBkgrdMargin"]
+layout_mode = 2
+texture = ExtResource("78_jlc36")
+patch_margin_left = 5
+patch_margin_top = 5
+patch_margin_right = 5
+patch_margin_bottom = 5
+axis_stretch_vertical = 1
+
+[node name="GridMargins" type="MarginContainer" parent="OverlayUI/PlayerInvUI/AlternateInventoryPanel/AlternateInvBkgrdMargin"]
+editor_description = "THIS GRIDMARGIN MOUSE FILTER MUST STAY AS IGNORE TO MAKE SORT BUTTONS WORK!"
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 0
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="GridMarginsBackground" type="NinePatchRect" parent="OverlayUI/PlayerInvUI/AlternateInventoryPanel/AlternateInvBkgrdMargin/GridMargins"]
+layout_mode = 2
+texture = ExtResource("109_0313k")
+patch_margin_left = 4
+patch_margin_top = 4
+patch_margin_right = 4
+patch_margin_bottom = 4
+axis_stretch_vertical = 1
+
+[node name="TitleAndSlotVBox" type="VBoxContainer" parent="OverlayUI/PlayerInvUI/AlternateInventoryPanel/AlternateInvBkgrdMargin/GridMargins"]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="AlternateTitleMargin" type="MarginContainer" parent="OverlayUI/PlayerInvUI/AlternateInventoryPanel/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox"]
+layout_mode = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 0
+theme_override_constants/margin_bottom = -4
+
+[node name="AlternateInvTitle" type="Label" parent="OverlayUI/PlayerInvUI/AlternateInventoryPanel/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/AlternateTitleMargin"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "CONTAINER"
+label_settings = SubResource("LabelSettings_6wv7y")
+
+[node name="MarginContainer" type="MarginContainer" parent="OverlayUI/PlayerInvUI/AlternateInventoryPanel/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_constants/margin_left = 3
+theme_override_constants/margin_top = 3
+theme_override_constants/margin_right = 3
+theme_override_constants/margin_bottom = 3
+
+[node name="AlternateInvSlotGrid" type="GridContainer" parent="OverlayUI/PlayerInvUI/AlternateInventoryPanel/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_constants/h_separation = 0
+theme_override_constants/v_separation = 0
+columns = 5
+
+[node name="Slot1" parent="OverlayUI/PlayerInvUI/AlternateInventoryPanel/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/MarginContainer/AlternateInvSlotGrid" instance=ExtResource("42_r422n")]
+layout_mode = 2
+
+[node name="Slot2" parent="OverlayUI/PlayerInvUI/AlternateInventoryPanel/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/MarginContainer/AlternateInvSlotGrid" instance=ExtResource("42_r422n")]
+layout_mode = 2
+
+[node name="Slot3" parent="OverlayUI/PlayerInvUI/AlternateInventoryPanel/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/MarginContainer/AlternateInvSlotGrid" instance=ExtResource("42_r422n")]
+layout_mode = 2
+
+[node name="Slot4" parent="OverlayUI/PlayerInvUI/AlternateInventoryPanel/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/MarginContainer/AlternateInvSlotGrid" instance=ExtResource("42_r422n")]
+layout_mode = 2
+
+[node name="Slot5" parent="OverlayUI/PlayerInvUI/AlternateInventoryPanel/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/MarginContainer/AlternateInvSlotGrid" instance=ExtResource("42_r422n")]
+layout_mode = 2
+
+[node name="Slot6" parent="OverlayUI/PlayerInvUI/AlternateInventoryPanel/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/MarginContainer/AlternateInvSlotGrid" instance=ExtResource("42_r422n")]
+layout_mode = 2
+
+[node name="Slot7" parent="OverlayUI/PlayerInvUI/AlternateInventoryPanel/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/MarginContainer/AlternateInvSlotGrid" instance=ExtResource("42_r422n")]
+layout_mode = 2
+
+[node name="Slot8" parent="OverlayUI/PlayerInvUI/AlternateInventoryPanel/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/MarginContainer/AlternateInvSlotGrid" instance=ExtResource("42_r422n")]
+layout_mode = 2
+
+[node name="Slot9" parent="OverlayUI/PlayerInvUI/AlternateInventoryPanel/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/MarginContainer/AlternateInvSlotGrid" instance=ExtResource("42_r422n")]
+layout_mode = 2
+
+[node name="Slot10" parent="OverlayUI/PlayerInvUI/AlternateInventoryPanel/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/MarginContainer/AlternateInvSlotGrid" instance=ExtResource("42_r422n")]
+layout_mode = 2
+
+[node name="Slot11" parent="OverlayUI/PlayerInvUI/AlternateInventoryPanel/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/MarginContainer/AlternateInvSlotGrid" instance=ExtResource("42_r422n")]
+layout_mode = 2
+
+[node name="Slot12" parent="OverlayUI/PlayerInvUI/AlternateInventoryPanel/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/MarginContainer/AlternateInvSlotGrid" instance=ExtResource("42_r422n")]
+layout_mode = 2
+
+[node name="Slot13" parent="OverlayUI/PlayerInvUI/AlternateInventoryPanel/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/MarginContainer/AlternateInvSlotGrid" instance=ExtResource("42_r422n")]
+layout_mode = 2
+
+[node name="Slot14" parent="OverlayUI/PlayerInvUI/AlternateInventoryPanel/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/MarginContainer/AlternateInvSlotGrid" instance=ExtResource("42_r422n")]
+layout_mode = 2
+
+[node name="Slot15" parent="OverlayUI/PlayerInvUI/AlternateInventoryPanel/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/MarginContainer/AlternateInvSlotGrid" instance=ExtResource("42_r422n")]
+layout_mode = 2
+
+[node name="Slot16" parent="OverlayUI/PlayerInvUI/AlternateInventoryPanel/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/MarginContainer/AlternateInvSlotGrid" instance=ExtResource("42_r422n")]
+layout_mode = 2
+
+[node name="Slot17" parent="OverlayUI/PlayerInvUI/AlternateInventoryPanel/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/MarginContainer/AlternateInvSlotGrid" instance=ExtResource("42_r422n")]
+layout_mode = 2
+
+[node name="Slot18" parent="OverlayUI/PlayerInvUI/AlternateInventoryPanel/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/MarginContainer/AlternateInvSlotGrid" instance=ExtResource("42_r422n")]
+layout_mode = 2
+
+[node name="Slot19" parent="OverlayUI/PlayerInvUI/AlternateInventoryPanel/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/MarginContainer/AlternateInvSlotGrid" instance=ExtResource("42_r422n")]
+layout_mode = 2
+
+[node name="Slot20" parent="OverlayUI/PlayerInvUI/AlternateInventoryPanel/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/MarginContainer/AlternateInvSlotGrid" instance=ExtResource("42_r422n")]
+layout_mode = 2
+
+[node name="Slot21" parent="OverlayUI/PlayerInvUI/AlternateInventoryPanel/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/MarginContainer/AlternateInvSlotGrid" instance=ExtResource("42_r422n")]
+layout_mode = 2
+
+[node name="Slot22" parent="OverlayUI/PlayerInvUI/AlternateInventoryPanel/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/MarginContainer/AlternateInvSlotGrid" instance=ExtResource("42_r422n")]
+layout_mode = 2
+
+[node name="Slot23" parent="OverlayUI/PlayerInvUI/AlternateInventoryPanel/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/MarginContainer/AlternateInvSlotGrid" instance=ExtResource("42_r422n")]
+layout_mode = 2
+
+[node name="Slot24" parent="OverlayUI/PlayerInvUI/AlternateInventoryPanel/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/MarginContainer/AlternateInvSlotGrid" instance=ExtResource("42_r422n")]
+layout_mode = 2
+
+[node name="Slot25" parent="OverlayUI/PlayerInvUI/AlternateInventoryPanel/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/MarginContainer/AlternateInvSlotGrid" instance=ExtResource("42_r422n")]
+layout_mode = 2
+
+[node name="Slot26" parent="OverlayUI/PlayerInvUI/AlternateInventoryPanel/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/MarginContainer/AlternateInvSlotGrid" instance=ExtResource("42_r422n")]
+layout_mode = 2
+
+[node name="Slot27" parent="OverlayUI/PlayerInvUI/AlternateInventoryPanel/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/MarginContainer/AlternateInvSlotGrid" instance=ExtResource("42_r422n")]
+layout_mode = 2
+
+[node name="Slot28" parent="OverlayUI/PlayerInvUI/AlternateInventoryPanel/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/MarginContainer/AlternateInvSlotGrid" instance=ExtResource("42_r422n")]
+layout_mode = 2
+
+[node name="Slot29" parent="OverlayUI/PlayerInvUI/AlternateInventoryPanel/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/MarginContainer/AlternateInvSlotGrid" instance=ExtResource("42_r422n")]
+layout_mode = 2
+
+[node name="Slot30" parent="OverlayUI/PlayerInvUI/AlternateInventoryPanel/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/MarginContainer/AlternateInvSlotGrid" instance=ExtResource("42_r422n")]
+layout_mode = 2
+
+[node name="Slot31" parent="OverlayUI/PlayerInvUI/AlternateInventoryPanel/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/MarginContainer/AlternateInvSlotGrid" instance=ExtResource("42_r422n")]
+layout_mode = 2
+
+[node name="Slot32" parent="OverlayUI/PlayerInvUI/AlternateInventoryPanel/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/MarginContainer/AlternateInvSlotGrid" instance=ExtResource("42_r422n")]
+layout_mode = 2
+
+[node name="Slot33" parent="OverlayUI/PlayerInvUI/AlternateInventoryPanel/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/MarginContainer/AlternateInvSlotGrid" instance=ExtResource("42_r422n")]
+layout_mode = 2
+
+[node name="Slot34" parent="OverlayUI/PlayerInvUI/AlternateInventoryPanel/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/MarginContainer/AlternateInvSlotGrid" instance=ExtResource("42_r422n")]
+layout_mode = 2
+
+[node name="Slot35" parent="OverlayUI/PlayerInvUI/AlternateInventoryPanel/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/MarginContainer/AlternateInvSlotGrid" instance=ExtResource("42_r422n")]
+layout_mode = 2
+
+[node name="Slot36" parent="OverlayUI/PlayerInvUI/AlternateInventoryPanel/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/MarginContainer/AlternateInvSlotGrid" instance=ExtResource("42_r422n")]
+layout_mode = 2
+
+[node name="Slot37" parent="OverlayUI/PlayerInvUI/AlternateInventoryPanel/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/MarginContainer/AlternateInvSlotGrid" instance=ExtResource("42_r422n")]
+layout_mode = 2
+
+[node name="Slot38" parent="OverlayUI/PlayerInvUI/AlternateInventoryPanel/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/MarginContainer/AlternateInvSlotGrid" instance=ExtResource("42_r422n")]
+layout_mode = 2
+
+[node name="Slot39" parent="OverlayUI/PlayerInvUI/AlternateInventoryPanel/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/MarginContainer/AlternateInvSlotGrid" instance=ExtResource("42_r422n")]
+layout_mode = 2
+
+[node name="Slot40" parent="OverlayUI/PlayerInvUI/AlternateInventoryPanel/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/MarginContainer/AlternateInvSlotGrid" instance=ExtResource("42_r422n")]
+layout_mode = 2
 
 [connection signal="pressed" from="OverlayUI/TestButtons/TestHurtBtn" to="OverlayUI/TestButtons" method="_on_test_hurt_btn_pressed"]
 [connection signal="pressed" from="OverlayUI/TestButtons/TestHealBtn" to="OverlayUI/TestButtons" method="_on_test_heal_btn_pressed"]

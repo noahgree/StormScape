@@ -3,11 +3,11 @@ extends MarginContainer
 class_name HotbarUI
 ## The player's hotbar UI controller. Handles logic for the hotbar shown when the inventory is not open.
 
-@export var player_inv: Inventory ## The connected player inventory to reflect as a UI.
 @export var active_slot_info: Control ## The node that controls displaying the info about the active slot.
 
 @onready var hotbar_hud_grid: HBoxContainer = %HotbarHUDGrid ## The container that holds the hotbar slots.
 
+var player_inv: InventoryResource ## The connected player inventory to reflect as a UI.
 var scroll_debounce_timer: Timer = TimerHelpers.create_one_shot_timer(self, 0.1) ## A timer used in debug that restricts scrolling speed of the slots.
 var hotbar_slots: Array[Slot] = [] ## Local representation of the hotbar slots, updated when changed externally.
 var active_slot: Slot ## The slot that is currently selected in the hotbar and potentially contains an equipped item.
@@ -15,15 +15,16 @@ var active_slot: Slot ## The slot that is currently selected in the hotbar and p
 
 ## Connects the hotbar slots to the signal needed to keep them up to date.
 func _ready() -> void:
-	_setup_slots()
-
 	if not Globals.player_node:
 		await SignalBus.player_ready
+	player_inv = Globals.player_node.inv
 	Globals.player_node.stamina_component.max_stamina_changed.connect(func(_new_max_stamina: float) -> void: _update_inv_ammo_ui())
 
 	SignalBus.focused_ui_closed.connect(_update_inv_ammo_ui)
 	SignalBus.focused_ui_opened.connect(hide)
 	SignalBus.focused_ui_closed.connect(show)
+
+	_setup_slots()
 
 ## Sets up the hotbar slots by clearing out any existing slot children and readding them with their needed params.
 func _setup_slots() -> void:

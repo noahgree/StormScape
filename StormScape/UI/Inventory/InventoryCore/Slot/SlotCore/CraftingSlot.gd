@@ -17,7 +17,7 @@ func set_item(new_item: InvItemResource) -> void:
 
 ## Determines if the slot we are hovering over during a drag can accept drag data on mouse release.
 func _can_drop_data(_at_position: Vector2, data: Variant) -> bool:
-	if data.item == null or not synced_inv or data.index == index or is_output_slot:
+	if data.item == null or not synced_inv or is_same_slot_as(data) or is_output_slot:
 		return false
 	if data is ModSlot:
 		if item != null and not (item.stats.is_same_as(data.item.stats) and item.quantity < item.stats.stack_size):

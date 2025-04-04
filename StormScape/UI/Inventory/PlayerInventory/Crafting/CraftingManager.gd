@@ -82,7 +82,7 @@ func _cache_recipes() -> void:
 func _setup_crafting_input_slots() -> void:
 	for input_slot: CraftingSlot in input_slots_container.get_children():
 		input_slot.name = "Input_Slot_" + str(inventory_ui.index_counter)
-		input_slot.synced_inv = inventory_ui.synced_inv
+		input_slot.synced_inv = inventory_ui.synced_inv_source_node.inv
 		input_slot.index = inventory_ui.assign_next_slot_index()
 		input_slot.item_changed.connect(_on_input_item_changed)
 		input_slots.append(input_slot)
@@ -90,7 +90,7 @@ func _setup_crafting_input_slots() -> void:
 ## Sets up the crafting output slot with its needed data.
 func _setup_crafting_output_slot() -> void:
 	output_slot.name = "Output_Slot"
-	output_slot.synced_inv = inventory_ui.synced_inv
+	output_slot.synced_inv = inventory_ui.synced_inv_source_node.inv
 	output_slot.index = inventory_ui.assign_next_slot_index()
 
 ## Sets up the item viewer node reference and the signals needed to respond to changes.

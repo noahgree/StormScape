@@ -34,7 +34,7 @@ static func create_from_slot(item_source_slot: Slot) -> EquippableItem:
 	item.source_slot = item_source_slot
 	item.stats = item_source_slot.item.stats
 	item.stats_already_duplicated = true
-	item.source_entity = item_source_slot.synced_inv.get_parent()
+	item.source_entity = item_source_slot.synced_inv.source_node
 	return item
 
 ## Sets the item stats when changed. Can be overridden by child classes to do specific things on change.

@@ -174,11 +174,12 @@ func _on_remove_anim_completed() -> void:
 	queue_free()
 
 func _on_area_entered(area: Area2D) -> void:
-	if not can_be_picked_up_at_all: return
+	if not can_be_picked_up_at_all:
+		return
 
 	if area is ItemReceiverComponent and area.get_parent() is Player:
 		if stats.auto_pickup and can_be_auto_picked_up:
-			(area as ItemReceiverComponent).add_item_from_world(self)
+			(area as ItemReceiverComponent).synced_inv.add_item_from_world(self)
 		else:
 			(area as ItemReceiverComponent).add_to_in_range_queue(self)
 

@@ -1,45 +1,33 @@
-@tool
-extends Area2D
-class_name Inventory
-## The main inventory controller for all inventory data.
+extends Resource
+class_name InventoryResource
+## The data resource for an inventory.
 
 signal inv_data_updated(index: int, item: InvItemResource) ## Emitted anytime the item in an inv index is changed.
 
-@export var is_player_inv: bool = false ## Whether this is the player's inventory or not. Needed for hotbar and trash slot logic.
-@export var main_inv_size: int = 32 ## The total number of slots in the inventory, not including the hotbar slots or the trash slot if it exists. Must match main slot grid count on any connected UI.
-@export var hotbar_size: int = 0: ## The number of slots in the hotbar. Only changeable if this is the player inv.
-	set(new_value):
-		if is_player_inv:
-			hotbar_size = new_value
-		else:
-			hotbar_size = 0
+@export var title: String = "CONTAINER" ## The title to be used if opened in an alternate inv.
+@export_range(0, 40, 1) var main_inv_size: int = 32 ## The total number of slots in the inventory, not including the hotbar slots or the trash slot if it exists. Must match main slot grid count on any connected UI.
 @export var starting_inv: Array[InvItemResource] ## The inventory that should be loaded when this scene is instantiated.
 
-@onready var auto_decrementer: AutoDecrementer = AutoDecrementer.new() ## The script controlling the cooldowns, warmups, overheats, and recharges for this entity's inventory items.
-
 var inv: Array[InvItemResource] = [] ## The current inventory. Main source of truth.
-var inv_to_load_from_save: Array[InvItemResource] = [] ## Gets loaded when a game is loaded so that it can be iterated into the main inv array.
+var source_node: Node2D ## The node that this inventory is owned by. Could be a physics entity or a chest of sorts.
+var hotbar_size: int ## Gets set to actual size if the source is the player when the initialize method is called.
 var total_inv_size: int ## Number of all slots, including main slots, hotbar slots, and the potential trash slot.s
+var auto_decrementer: AutoDecrementer = AutoDecrementer.new() ## The script controlling the cooldowns, warmups, overheats, and recharges for this entity's inventory items.
 
 
-func _ready() -> void:
-	if Engine.is_editor_hint():
-		return
+## Must be called after this inventory resource is created to set it up.
+func initialize_inventory(source: Node2D) -> void:
+	source_node = source
 
-	total_inv_size = main_inv_size + hotbar_size + (1 if is_player_inv else 0)
+	auto_decrementer.inv = self
+	if source is Player:
+		hotbar_size = 5
+		auto_decrementer.owning_entity_is_player = true
+
+	total_inv_size = main_inv_size + hotbar_size + (1 if source is Player else 0) # +1 for trash slot
 	inv.resize(total_inv_size)
 
-	if is_player_inv:
-		auto_decrementer.owning_entity_is_player = true
-	auto_decrementer.inv = self
-
 	call_deferred("fill_inventory", starting_inv)
-
-func _process(delta: float) -> void:
-	if Engine.is_editor_hint():
-		return
-
-	auto_decrementer.process(delta)
 
 ## Fills the main inventory from an array of inventory items. If an item exceeds stack size, the
 ## quantity that does not fit into one slot is instantiated on the ground as a physical item.
@@ -47,14 +35,13 @@ func _process(delta: float) -> void:
 func fill_inventory(inv_to_fill_from: Array[InvItemResource]) -> void:
 	inv.fill(null)
 	for i: int in range(min(total_inv_size, inv_to_fill_from.size())):
-		if inv_to_fill_from[i] == null:
-			inv[i] = null
-		else:
+		if inv_to_fill_from[i] != null:
 			var copy: InvItemResource = inv_to_fill_from[i].duplicate()
-			var inv_item: InvItemResource = InvItemResource.new(copy.stats, inv_to_fill_from[i].quantity) # Need to use new() so that it initializes
+			copy.assign_unique_suid()
+			var inv_item: InvItemResource = InvItemResource.new(copy.stats, inv_to_fill_from[i].quantity, false) # Need to use new() so that it initializes
 
 			if inv_item.quantity > inv_item.stats.stack_size:
-				Item.spawn_on_ground(inv_item.stats, inv_item.quantity - inv_item.stats.stack_size, global_position, 14.0, true, false, true)
+				Item.spawn_on_ground(inv_item.stats, inv_item.quantity - inv_item.stats.stack_size, source_node.global_position, 14.0, true, false, true)
 				inv_item.quantity = inv_item.stats.stack_size
 
 			inv[i] = inv_item
@@ -68,7 +55,9 @@ func fill_inventory_with_checks(inv_to_fill_from: Array[InvItemResource]) -> voi
 	inv.fill(null)
 	for i: int in range(min(total_inv_size, inv_to_fill_from.size())):
 		if inv_to_fill_from[i] != null:
-			insert_from_inv_item(inv_to_fill_from[i], true, false)
+			var copy: InvItemResource = inv_to_fill_from[i].duplicate()
+			copy.assign_unique_suid()
+			insert_from_inv_item(copy, true, false)
 
 	_emit_changes_for_all_indices()
 

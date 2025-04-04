@@ -24,7 +24,7 @@ static var hovered_slot_size: float = 22.0 ## The size of the hovered over slot 
 @onready var modded_icon: TextureRect = %ModdedIcon ## The icon that shows up on a weapon if it is modded.
 
 var index: int ## The index that this slot represents inside the inventory.
-var synced_inv: Inventory ## The synced inventory that this slot is a part of.
+var synced_inv: InventoryResource ## The synced inventory that this slot is a part of.
 var drag_preview: PackedScene = preload("res://UI/Inventory/InventoryCore/Slot/SlotCore/SlotDragPreview.tscn") ## The control preview for a dragged slot.
 var dragging_only_one: bool = false ## Whether this slot is carrying only a quantity of 1 when in drag data.
 var dragging_half_stack: bool = false ## Whether this slot is carrying only half of its quantity when in drag data.
@@ -347,7 +347,7 @@ func _gui_input(event: InputEvent) -> void:
 
 ## Determines if the slot we are hovering over during a drag can accept drag data on mouse release.
 func _can_drop_data(_at_position: Vector2, data: Variant) -> bool:
-	if data.item == null or not synced_inv or data.index == index or is_hud_ui_preview_slot:
+	if data.item == null or not synced_inv or is_same_slot_as(data) or is_hud_ui_preview_slot:
 		return false
 	elif data is WearableSlot or data is ModSlot:
 		if item != null and not (item.stats.is_same_as(data.item.stats) and item.quantity < item.stats.stack_size):
@@ -594,7 +594,7 @@ func _on_mouse_exited() -> void:
 	var drag_data: Variant
 	if get_viewport().gui_is_dragging():
 		drag_data = get_viewport().gui_get_drag_data()
-		if drag_data is Slot and drag_data.index == index:
+		if drag_data is Slot and is_same_slot_as(drag_data):
 			return
 
 	modulate = Color(1, 1, 1, 1)
@@ -615,6 +615,12 @@ func _on_mouse_exited() -> void:
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_DRAG_END:
 		_reset_post_drag_mods()
+
+## Returns true if this slot and the passed in slot have the same index and the same synced inventory.
+func is_same_slot_as(other_slot: Slot) -> bool:
+	if (self.index == other_slot.index) and (self.synced_inv == other_slot.synced_inv):
+		return true
+	return false
 
 ## Custom string representation of the item in this slot.
 func _to_string() -> String:

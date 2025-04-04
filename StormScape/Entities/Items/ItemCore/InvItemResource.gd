@@ -10,7 +10,11 @@ class_name InvItemResource
 ## The placeholder parameter determines if this resource needs its mod caches set up. If this item is being used
 ## as a preview or just for its image and will not be needing modded stats, mark placeholder as true.
 func _init(item_stats: ItemResource = null, item_quantity: int = 1, placeholder: bool = false) -> void:
-	self.stats = item_stats.duplicate_with_suid() if item_stats != null else item_stats # Otherwise we won't have uniqueness until the stats are part of a physical equipped item and set then
+	if item_stats == null:
+		self.stats = item_stats
+	else:
+		self.stats = item_stats.duplicate_with_suid()
+
 	self.quantity = item_quantity
 
 	if not placeholder:
@@ -20,6 +24,10 @@ func _init(item_stats: ItemResource = null, item_quantity: int = 1, placeholder:
 		elif stats is MeleeWeaponResource:
 			if stats.s_mods.base_values.is_empty():
 				MeleeWeapon.initialize_stats_resource(stats)
+
+## Triggers the session uid generator to give the stats for this inv item a new suid.
+func assign_unique_suid() -> void:
+	stats.session_uid = 0
 
 ## Custom print logic for determining more about the item that just a randomly assigned ID.
 func _to_string() -> String:

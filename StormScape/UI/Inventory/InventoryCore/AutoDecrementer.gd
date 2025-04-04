@@ -12,7 +12,7 @@ var blooms: Dictionary[StringName, Array] = {} ## Represents any active blooms w
 var overheats: Dictionary[StringName, Array] = {} ## Represents any active overheats where the key is an item's id and the value is an array with the following: [current_overheat_progress, decrease_rate_curve, overheat_delay_counter]
 var recharges: Dictionary[StringName, Array] = {} ## Represents any active recharges where the key is an item's id and the value is an array with the following: [current_recharge_progress, item_stats, recharge_delay_counter]
 var owning_entity_is_player: bool = false ## When true, the entity owning the inv this script operates on is a Player.
-var inv: Inventory ## The inventory that controls this auto decrementer.
+var inv: InventoryResource ## The inventory that controls this auto decrementer.
 
 
 func process(delta: float) -> void:

@@ -59,14 +59,14 @@ func _setup_slots() -> void:
 		slot.name = "Mods_Input_Slot_" + str(i)
 		slot.mod_slot_index = i
 		slot.item_viewer_slot = item_viewer_slot
-		slot.synced_inv = inventory_ui.synced_inv
+		slot.synced_inv = inventory_ui.synced_inv_source_node.inv
 		slot.index = inventory_ui.assign_next_slot_index()
 		slot.item_changed.connect(_on_mod_slot_changed)
 		mod_slots.append(slot)
 		i += 1
 
 	item_viewer_slot.name = "Item_Viewer_Slot"
-	item_viewer_slot.synced_inv = inventory_ui.synced_inv
+	item_viewer_slot.synced_inv = inventory_ui.synced_inv_source_node.inv
 	item_viewer_slot.index = inventory_ui.assign_next_slot_index()
 	item_viewer_slot.item_changed.connect(_on_item_viewer_slot_changed)
 

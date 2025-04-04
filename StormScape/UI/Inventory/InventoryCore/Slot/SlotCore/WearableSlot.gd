@@ -8,7 +8,7 @@ var wearable_slot_index: int ## The index within the grid of wearable slots.
 
 ## Determines if the slot we are hovering over during a drag can accept drag data on mouse release.
 func _can_drop_data(_at_position: Vector2, data: Variant) -> bool:
-	if data.item == null or not synced_inv or data.index == index or not data.item.stats is Wearable:
+	if data.item == null or not synced_inv or is_same_slot_as(data) or not data.item.stats is Wearable:
 		return false
 	if not WearablesManager.check_wearable_compatibility(Globals.player_node, data.item.stats):
 		return false

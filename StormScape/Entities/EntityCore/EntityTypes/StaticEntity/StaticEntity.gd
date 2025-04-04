@@ -7,6 +7,7 @@ class_name StaticEntity
 ## This should not be used for moving environmental entities like players and also not for inventory entities like weapons.
 
 @export var team: Globals.Teams = Globals.Teams.PLAYER ## What the effects received by this entity should consider as this entity's team.
+@export var inv: InventoryResource ## The inventory data resource for this entity.
 @export var is_object: bool = false ## When true, this entity's collision logic will follow that of a world object, regardless of team.
 
 @onready var sprite: EntitySprite = $EntitySprite ## The visual representation of the entity. Needs to have the EntityEffectShader applied.
@@ -17,7 +18,7 @@ class_name StaticEntity
 @onready var facing_component: FacingComponent = $FacingComponent ## The component in charge of choosing the entity animation directions.
 @onready var detection_component: DetectionComponent = $DetectionComponent ## The component that defines the radius around this entity that an enemy must enter for that enemy to be alerted.
 @onready var health_component: HealthComponent = $HealthComponent ## The component in charge of entity health and shield.
-@onready var inv: ItemReceiverComponent = get_node_or_null("ItemReceiverComponent") ## The inventory for the entity.
+@onready var item_receiver: ItemReceiverComponent = get_node_or_null("ItemReceiverComponent") ## The item receiver for this entity.
 @onready var hands: HandsComponent = get_node_or_null("%HandsComponent") ## The hands item component for the entity.
 
 var stats: StatModsCacheResource = StatModsCacheResource.new() ## The resource that will cache and work with all stat mods for this entity.
@@ -44,8 +45,12 @@ func _on_save_game(save_data: Array[SaveData]) -> void:
 	data.facing_dir = facing_component.facing_dir
 
 	if inv != null:
+		for item: InvItemResource in inv.inv:
+			if item != null and item.stats is WeaponResource:
+				item.stats.weapon_mods_need_to_be_readded_after_save = true
 		data.inv = inv.inv
-		data.pickup_range = inv.pickup_range
+	if item_receiver != null:
+		data.pickup_range = item_receiver.pickup_range
 
 	save_data.append(data)
 
@@ -71,8 +76,9 @@ func _is_instance_on_load_game(data: StaticEntityData) -> void:
 	facing_component.facing_dir = data.facing_dir
 
 	if inv != null:
-		inv.inv_to_load_from_save = data.inv
-		inv.pickup_range = data.pickup_range
+		inv.call_deferred("fill_inventory", data.inv)
+	if item_receiver != null:
+		item_receiver.pickup_range = data.pickup_range
 #endregion
 
 ## Edits editor warnings for easier debugging.
@@ -110,3 +116,12 @@ func _ready() -> void:
 
 	stats.affected_entity = self
 	sprite.entity = self
+	if inv:
+		inv.initialize_inventory(self)
+
+func _process(delta: float) -> void:
+	if Engine.is_editor_hint():
+		return
+
+	if inv:
+		inv.auto_decrementer.process(delta)
