@@ -1,4 +1,4 @@
-[gd_scene load_steps=35 format=3 uid="uid://bond8rty1ljh"]
+[gd_scene load_steps=34 format=3 uid="uid://bond8rty1ljh"]
 
 [ext_resource type="Script" uid="uid://cn2gulskgn7k3" path="res://Entities/EntityCore/EntityTypes/StaticEntity/StaticEntity.gd" id="1_uvrwn"]
 [ext_resource type="PackedScene" uid="uid://di7vcyrki71nm" path="res://Entities/Components/DetectionComponent/DetectionComponent.tscn" id="3_c4qls"]
@@ -7,7 +7,6 @@
 [ext_resource type="PackedScene" uid="uid://bhcqtorpyerc3" path="res://Utilities/Debug/ParticleEmissionComponent.tscn" id="6_5h6dj"]
 [ext_resource type="Texture2D" uid="uid://2xf1pqc78iin" path="res://Assets/Icon/icon.svg" id="7_7nbuj"]
 [ext_resource type="PackedScene" uid="uid://cdfdy8m6ki3oq" path="res://Entities/Components/HealthComponent/HealthComponent.tscn" id="7_pas02"]
-[ext_resource type="PackedScene" uid="uid://jpq0ij8wwlhy" path="res://Entities/Components/FacingComponent/FacingComponent.tscn" id="9_rk4ta"]
 [ext_resource type="PackedScene" uid="uid://4gl24qwdyti3" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/DmgHandler.tscn" id="10_b3858"]
 [ext_resource type="PackedScene" uid="uid://btba0jmsow1mx" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectReceiverComponent.tscn" id="10_o35vp"]
 [ext_resource type="PackedScene" uid="uid://co3n6m7efg8pd" path="res://Entities/Components/EffectComponents/StatusEffectsComponent/StatusEffectsComponent.tscn" id="11_swclu"]
@@ -25,7 +24,7 @@
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ur1i4"]
 size = Vector2(12, 12)
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_gf8n0"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_5ao0g"]
 resource_local_to_scene = true
 shader = ExtResource("3_xscca")
 
@@ -124,7 +123,7 @@ shape = SubResource("RectangleShape2D_ur1i4")
 
 [node name="EntitySprite" parent="." instance=ExtResource("3_kbhyj")]
 unique_name_in_owner = true
-material = SubResource("ShaderMaterial_gf8n0")
+material = SubResource("ShaderMaterial_5ao0g")
 position = Vector2(0, -7)
 scale = Vector2(0.11, 0.11)
 sprite_frames = SubResource("SpriteFrames_rk4ta")
@@ -146,16 +145,9 @@ shape = SubResource("RectangleShape2D_opl06")
 
 [node name="DmgHandler" parent="EffectReceiverComponent" instance=ExtResource("10_b3858")]
 
-[node name="FacingComponent" parent="." instance=ExtResource("9_rk4ta")]
-
 [node name="StatusEffectsComponent" parent="." node_paths=PackedStringArray("effect_receiver") instance=ExtResource("11_swclu")]
 unique_name_in_owner = true
 effect_receiver = NodePath("../EffectReceiverComponent")
-
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-
-[node name="AnimationTree" type="AnimationTree" parent="."]
-anim_player = NodePath("../AnimationPlayer")
 
 [node name="LootTableComponent" parent="." instance=ExtResource("13_gf8n0")]
 loot_table = SubResource("Resource_6vs8b")

@@ -1,7 +1,9 @@
-[gd_scene load_steps=27 format=3 uid="uid://jdi552emuah8"]
+[gd_scene load_steps=30 format=3 uid="uid://jdi552emuah8"]
 
 [ext_resource type="Script" uid="uid://cn2gulskgn7k3" path="res://Entities/EntityCore/EntityTypes/StaticEntity/StaticEntity.gd" id="1_7qjvm"]
+[ext_resource type="Script" uid="uid://dwmur0cosbbwh" path="res://UI/Inventory/InventoryCore/InventoryResource.gd" id="2_ymdvb"]
 [ext_resource type="PackedScene" uid="uid://di7vcyrki71nm" path="res://Entities/Components/DetectionComponent/DetectionComponent.tscn" id="3_ke02d"]
+[ext_resource type="Script" uid="uid://dp8osf7r6xkkt" path="res://Entities/Items/ItemCore/InvItemResource.gd" id="3_mc2cg"]
 [ext_resource type="PackedScene" uid="uid://cj2wy5f05cos4" path="res://Entities/EntityCore/Shadow/EntityShadow.tscn" id="4_mc2cg"]
 [ext_resource type="PackedScene" uid="uid://dh4ydl7l86ywq" path="res://Entities/EntityCore/Sprites/EntitySprite.tscn" id="5_by2me"]
 [ext_resource type="Shader" uid="uid://cfbagv3hrtar2" path="res://Utilities/Game/Shaders/EntityEffectShader.gdshader" id="6_sc78r"]
@@ -18,10 +20,16 @@
 [ext_resource type="PackedScene" uid="uid://2yy4xfm5g74l" path="res://Entities/Components/ItemComponents/ClippingComponent/ClippingArea.tscn" id="18_7qjvm"]
 [ext_resource type="PackedScene" uid="uid://bhcqtorpyerc3" path="res://Utilities/Debug/ParticleEmissionComponent.tscn" id="18_m60nn"]
 
+[sub_resource type="Resource" id="Resource_by2me"]
+script = ExtResource("2_ymdvb")
+title = "CHEST"
+main_inv_size = 10
+starting_inv = Array[ExtResource("3_mc2cg")]([])
+
 [sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_2kecs"]
 polygon = PackedVector2Array(-7, -6, -7, 0, 7, 0, 7, -6)
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_1mdei"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_sc78r"]
 resource_local_to_scene = true
 shader = ExtResource("6_sc78r")
 
@@ -69,6 +77,7 @@ collision_layer = 0
 collision_mask = 0
 script = ExtResource("1_7qjvm")
 team = 4
+inv = SubResource("Resource_by2me")
 is_object = true
 
 [node name="DetectionComponent" parent="." instance=ExtResource("3_ke02d")]
@@ -83,7 +92,7 @@ scale = Vector2(2.51672, 3.34408)
 
 [node name="EntitySprite" parent="." instance=ExtResource("5_by2me")]
 unique_name_in_owner = true
-material = SubResource("ShaderMaterial_1mdei")
+material = SubResource("ShaderMaterial_sc78r")
 instance_shader_parameters/crack_color = Color(0.246, 0.109, 0.01, 0.85)
 instance_shader_parameters/crack_depth = 0.4
 instance_shader_parameters/crack_intensity = 0.0
@@ -98,9 +107,8 @@ instance_shader_parameters/final_alpha = 1.0
 instance_shader_parameters/outline_color = Color(1, 1, 1, 1)
 instance_shader_parameters/outline_thickness = 0.0
 instance_shader_parameters/use_override_color = false
-position = Vector2(-20, 12)
+position = Vector2(0, -15)
 sprite_frames = SubResource("SpriteFrames_1mdei")
-offset = Vector2(20, -27)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0, -4)
@@ -141,11 +149,6 @@ effect_receiver = NodePath("../EffectReceiverComponent")
 below_extents = Vector2(16, 2)
 above_extents = Vector2(12, 2)
 above_origin = Vector2(0, -30)
-
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-
-[node name="AnimationTree" type="AnimationTree" parent="."]
-anim_player = NodePath("../AnimationPlayer")
 
 [node name="ClippingArea" parent="." instance=ExtResource("18_7qjvm")]
 

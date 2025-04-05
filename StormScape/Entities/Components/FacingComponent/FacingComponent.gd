@@ -33,7 +33,7 @@ func _draw() -> void:
 ## Sets the new animation vector as long as we can currently rotate. Called manually so it syncs with time snares.
 func update_facing_dir(method: Method) -> void:
 	queue_redraw()
-	if not should_rotate:
+	if not should_rotate or Globals.focused_ui_is_open:
 		return
 
 	match method:

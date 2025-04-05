@@ -41,46 +41,12 @@ colors = PackedColorArray(0, 0, 0, 0, 1, 1, 1, 0.631, 1, 1, 1, 0)
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_mrolm"]
 blend_mode = 1
 
-[sub_resource type="Gradient" id="Gradient_8c7dk"]
-offsets = PackedFloat32Array(0.321277)
-colors = PackedColorArray(0.931609, 0, 0.320733, 1)
-
-[sub_resource type="GradientTexture1D" id="GradientTexture1D_u0r6t"]
-gradient = SubResource("Gradient_8c7dk")
-
-[sub_resource type="Gradient" id="Gradient_ujuwf"]
-interpolation_mode = 2
-offsets = PackedFloat32Array(0, 0.486957, 1)
-colors = PackedColorArray(0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 1)
-
-[sub_resource type="GradientTexture1D" id="GradientTexture1D_pytf7"]
-gradient = SubResource("Gradient_ujuwf")
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_qrrcp"]
-resource_local_to_scene = true
-shader = ExtResource("1_att70")
-shader_parameter/outline_color = Color(1.522, 0.359, 0.564, 1)
-shader_parameter/width = 0.5
-shader_parameter/pattern = 2
-shader_parameter/inside = false
-shader_parameter/add_margins = true
-shader_parameter/vertical_gradient = SubResource("GradientTexture1D_pytf7")
-shader_parameter/color_gradient = SubResource("GradientTexture1D_u0r6t")
-shader_parameter/size_effect = 0.4
-shader_parameter/speed = 0.9
-shader_parameter/highlight_strength = 0.4
-shader_parameter/color_mode_toggle = true
-shader_parameter/pause_duration = 1.0
-shader_parameter/angle = 35.0
-shader_parameter/tint_color = Color(1, 1, 1, 0)
-shader_parameter/glow_intensity = 1.3
-
 [sub_resource type="Animation" id="Animation_5tv4j"]
 length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite2D:offset")
+tracks/0/path = NodePath("Sprite:offset")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -101,6 +67,18 @@ tracks/1/keys = {
 "update": 0,
 "values": [Vector2(1, 1)]
 }
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("MultipleIndicatorSprite:offset")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, 0)]
+}
 
 [sub_resource type="Animation" id="Animation_4d1l1"]
 resource_name = "hover"
@@ -110,7 +88,7 @@ step = 0.1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite2D:offset")
+tracks/0/path = NodePath("Sprite:offset")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -130,6 +108,18 @@ tracks/1/keys = {
 "transitions": PackedFloat32Array(1, 1, 1),
 "update": 0,
 "values": [Vector2(1, 1), Vector2(0.75, 0.75), Vector2(1, 1)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("MultipleIndicatorSprite:offset")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 1.6, 3),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(0, 0), Vector2(0, -3), Vector2(0, 0)]
 }
 
 [sub_resource type="Animation" id="Animation_w43ql"]
@@ -202,6 +192,41 @@ _data = {
 &"spawn": SubResource("Animation_i3ewg")
 }
 
+[sub_resource type="Gradient" id="Gradient_8c7dk"]
+offsets = PackedFloat32Array(0.321277)
+colors = PackedColorArray(0.931609, 0, 0.320733, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_u0r6t"]
+gradient = SubResource("Gradient_8c7dk")
+
+[sub_resource type="Gradient" id="Gradient_ujuwf"]
+interpolation_mode = 2
+offsets = PackedFloat32Array(0, 0.486957, 1)
+colors = PackedColorArray(0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_pytf7"]
+gradient = SubResource("Gradient_ujuwf")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_qrrcp"]
+resource_local_to_scene = true
+shader = ExtResource("1_att70")
+shader_parameter/outline_color = Color(1.522, 0.359, 0.564, 1)
+shader_parameter/width = 0.5
+shader_parameter/pattern = 2
+shader_parameter/inside = false
+shader_parameter/add_margins = true
+shader_parameter/vertical_gradient = SubResource("GradientTexture1D_pytf7")
+shader_parameter/color_gradient = SubResource("GradientTexture1D_u0r6t")
+shader_parameter/size_effect = 0.4
+shader_parameter/speed = 0.9
+shader_parameter/highlight_strength = 0.4
+shader_parameter/color_mode_toggle = true
+shader_parameter/pause_duration = 1.0
+shader_parameter/angle = 35.0
+shader_parameter/tint_color = Color(1, 1, 1, 0)
+shader_parameter/glow_intensity = 1.3
+shader_parameter/override_color = Color(1, 1, 1, 0)
+
 [node name="Item" type="Area2D" groups=["has_save_logic"]]
 collision_layer = 0
 collision_mask = 128
@@ -271,17 +296,22 @@ material = SubResource("CanvasItemMaterial_mrolm")
 scale = Vector2(0.05, 0.035)
 texture = ExtResource("5_2unly")
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
-material = SubResource("ShaderMaterial_qrrcp")
-instance_shader_parameters/final_alpha = 1.0
-instance_shader_parameters/override_color = Color(1, 1, 1, 0)
-texture = ExtResource("4_1yl86")
-
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
 &"": SubResource("AnimationLibrary_wgl0c")
 }
 autoplay = "spawn"
+
+[node name="MultipleIndicatorSprite" type="Sprite2D" parent="."]
+material = SubResource("ShaderMaterial_qrrcp")
+instance_shader_parameters/final_alpha = 1.0
+position = Vector2(-1.5, -1.5)
+texture = ExtResource("4_1yl86")
+
+[node name="Sprite" type="Sprite2D" parent="."]
+material = SubResource("ShaderMaterial_qrrcp")
+instance_shader_parameters/final_alpha = 1.0
+texture = ExtResource("4_1yl86")
 
 [connection signal="area_entered" from="." to="." method="_on_area_entered"]
 [connection signal="area_exited" from="." to="." method="_on_area_exited"]

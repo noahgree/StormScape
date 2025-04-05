@@ -656,8 +656,8 @@ func _handle_aoe() -> void:
 
 ## Assigns the collider to a new shape and re-enables it. Takes into account scaling of the projectile itself
 ## to preserve aoe radius.
-## This also applies the initial hit of the aoe effect source to entities in range. The handling function won't apply status
-## effects as a result of this hit.
+## This also applies the initial hit of the aoe effect source to entities in range. The handling
+## function won't apply status effects as a result of this hit.
 func _assign_new_collider_shape_and_aoe_entities(new_shape: Shape2D) -> void:
 	new_shape.radius = (s_mods.get_stat("proj_aoe_radius") / scale.x)
 	collider.shape = new_shape
@@ -685,8 +685,8 @@ func _on_lifetime_timer_timeout_or_reached_max_distance() -> void:
 	else:
 		queue_free()
 
-## Overrides parent hitbox. When in AOE, we add new entities to a dictionary with an associated timer that applies the status
-## effects on an interval.
+## Overrides parent hitbox. When in AOE, we add new entities to a dictionary with an associated timer
+## that applies the status effects on an interval.
 func _on_area_entered(area: Area2D) -> void:
 	if not is_in_aoe_phase:
 		super._on_area_entered(area)
@@ -804,7 +804,9 @@ func _start_being_handled(handling_area: EffectReceiverComponent) -> void:
 		handling_area.handle_effect_source(modified_effect_src, source_entity, false) # Don't reapply status effects.
 
 ## When we hit a handling area during an AOE, we need to apply falloff based on distance from the center of the AOE.
-func _get_effect_source_adjusted_for_falloff(effect_src: EffectSource, handling_area: EffectReceiverComponent, is_aoe: bool = false) -> EffectSource:
+func _get_effect_source_adjusted_for_falloff(effect_src: EffectSource,
+												handling_area: EffectReceiverComponent,
+												is_aoe: bool = false) -> EffectSource:
 	var dist_to_center: float = handling_area.get_parent().global_position.distance_to(global_position)
 	var falloff_effect_src: EffectSource = effect_src.duplicate()
 	var falloff_mult: float
@@ -832,7 +834,8 @@ func _get_effect_source_adjusted_for_falloff(effect_src: EffectSource, handling_
 	return falloff_effect_src
 #endregion
 
-## Checks to see if the speed is fast enough and we aren't headed straight for our target then plays the whiz sound once.
+## Checks to see if the speed is fast enough and we aren't headed straight for our target then plays the
+## whiz sound once.
 func _check_for_whiz_sound() -> void:
 	if true_current_speed > 150:
 		if not played_whiz_sound and Globals.player_node != null:

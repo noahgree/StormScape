@@ -5,13 +5,11 @@ class_name StaticEntityData
 @export var position: Vector2
 @export var sprite_frames_path: String
 @export var sprite_texture_path: String
+@export var inv: Array[InvItemResource]
 
 # Stats
 @export var stat_mods: Dictionary[StringName, Dictionary]
 @export var wearables: Array[Dictionary]
-
-# Rotation
-@export var facing_dir: Vector2
 
 # HealthComponent
 @export var health: int
@@ -19,5 +17,4 @@ class_name StaticEntityData
 @export var armor: int
 
 # ItemReceiverComponent
-@export var inv: Array[InvItemResource]
 @export var pickup_range: int

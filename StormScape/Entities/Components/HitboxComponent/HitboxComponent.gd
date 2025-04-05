@@ -38,6 +38,11 @@ func _on_body_entered(body: Node2D) -> void:
 	if body is TileMapLayer:
 		_process_hit(body)
 
+	# If the body is an entity that doesn't receive effects, it still has collision and should stop projectiles
+	if body is StaticEntity or body is RigidEntity or body is DynamicEntity:
+		if body.effects == null:
+			_process_hit(body)
+
 ## Meant to interact with an EffectReceiverComponent that can handle effects supplied by this instance. This version of the method
 ## handles the general case, but specific behaviors defined in certain weapon weapon hitboxes may want to override it.
 func _start_being_handled(handling_area: EffectReceiverComponent) -> void:

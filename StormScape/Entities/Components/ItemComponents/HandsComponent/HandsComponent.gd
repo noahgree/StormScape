@@ -203,6 +203,9 @@ func _prep_for_pullout_anim() -> void:
 		hands_anchor.global_rotation -= PI/5
 
 func _physics_process(_delta: float) -> void:
+	if Globals.focused_ui_is_open:
+		return
+
 	if equipped_item == null:
 		set_physics_process(false)
 		return

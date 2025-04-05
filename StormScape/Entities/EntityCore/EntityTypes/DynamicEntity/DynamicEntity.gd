@@ -7,7 +7,7 @@ class_name DynamicEntity
 ## This should not be used by things like weapons or trees.
 
 @export var team: Globals.Teams = Globals.Teams.PLAYER ## What the effects received by this entity should consider as this entity's team.
-@export var inv: InventoryResource ## The inventory data resource for this entity.
+@export var inv: InventoryResource = InventoryResource.new() ## The inventory data resource for this entity.
 
 @onready var sprite: EntitySprite = %EntitySprite ## The visual representation of the entity. Needs to have the EntityEffectShader applied.
 @onready var anim_tree: AnimationTree = $AnimationTree ## The animation tree controlling this entity's animation states.

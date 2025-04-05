@@ -36,7 +36,7 @@ func link_new_inventory_source_node(new_source_node: Node2D) -> void:
 ## Returns the current index counter and then increments it to prepare for the next slot.
 func assign_next_slot_index(core_slots: bool = false) -> int:
 	if index_counter == 0: # Let core slots have those first indices
-		index_counter = synced_inv_source_node.inv.main_inv_size + synced_inv_source_node.inv.hotbar_size + (1 if synced_inv_source_node is Player else 0) # +1 for trash slot
+		index_counter = synced_inv_source_node.inv.main_inv_size + ((1 + Globals.HOTBAR_SIZE) if synced_inv_source_node is Player else 0)
 
 	var index: int = index_counter if not core_slots else core_index_counter
 	core_index_counter += 1 if core_slots else 0

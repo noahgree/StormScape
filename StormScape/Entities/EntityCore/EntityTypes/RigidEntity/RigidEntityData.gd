@@ -5,6 +5,7 @@ class_name RigidEntityData
 @export var position: Vector2
 @export var sprite_frames_path: String
 @export var sprite_texture_path: String
+@export var inv: Array[InvItemResource]
 
 # Stats
 @export var stat_mods: Dictionary[StringName, Dictionary]
@@ -19,5 +20,4 @@ class_name RigidEntityData
 @export var armor: int
 
 # ItemReceiverComponent
-@export var inv: Array[InvItemResource]
 @export var pickup_range: int

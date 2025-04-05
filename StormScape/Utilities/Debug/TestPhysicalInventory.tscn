@@ -1,0 +1,84 @@
+[gd_scene load_steps=13 format=3 uid="uid://bq12ugc7lnirg"]
+
+[ext_resource type="Script" uid="uid://06pt5wan8jg1" path="res://Entities/EntityCore/EntityTypes/StaticEntity/PhysicalInventory/PhysicalInventory.gd" id="1_ggkuf"]
+[ext_resource type="Texture2D" uid="uid://2xf1pqc78iin" path="res://Assets/Icon/icon.svg" id="2_mwkkp"]
+[ext_resource type="PackedScene" uid="uid://di7vcyrki71nm" path="res://Entities/Components/DetectionComponent/DetectionComponent.tscn" id="6_c3jxm"]
+[ext_resource type="PackedScene" uid="uid://dh4ydl7l86ywq" path="res://Entities/EntityCore/Sprites/EntitySprite.tscn" id="7_li1wa"]
+[ext_resource type="PackedScene" uid="uid://cdfdy8m6ki3oq" path="res://Entities/Components/HealthComponent/HealthComponent.tscn" id="9_4jcvl"]
+[ext_resource type="PackedScene" uid="uid://bhcqtorpyerc3" path="res://Utilities/Debug/ParticleEmissionComponent.tscn" id="10_l1cdp"]
+[ext_resource type="PackedScene" uid="uid://2yy4xfm5g74l" path="res://Entities/Components/ItemComponents/ClippingComponent/ClippingArea.tscn" id="11_ypx5n"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_6ca8s"]
+size = Vector2(12, 12)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4jcvl"]
+atlas = ExtResource("2_mwkkp")
+region = Rect2(0, 0, 128, 128)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_d07fb"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4jcvl")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_1mmyp"]
+size = Vector2(12, 12)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_44vxu"]
+radius = 16.0
+
+[node name="TestPhysicalInventory" type="StaticBody2D"]
+collision_layer = 0
+script = ExtResource("1_ggkuf")
+interact_radius = 16.0
+prompt_position = Vector2(0, -14)
+team = 4
+is_object = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -6)
+shape = SubResource("RectangleShape2D_6ca8s")
+
+[node name="InteractionPromptPos" type="Marker2D" parent="."]
+position = Vector2(0, -14)
+gizmo_extents = 5.0
+
+[node name="DetectionComponent" parent="." instance=ExtResource("6_c3jxm")]
+
+[node name="EntitySprite" parent="." instance=ExtResource("7_li1wa")]
+unique_name_in_owner = true
+instance_shader_parameters/override_color = Color(0.294668, 0.145089, 0.00435085, 1)
+instance_shader_parameters/use_override_color = true
+position = Vector2(0, -6)
+scale = Vector2(0.09, 0.09)
+sprite_frames = SubResource("SpriteFrames_d07fb")
+disable_floor_light = true
+
+[node name="HealthComponent" parent="." instance=ExtResource("9_4jcvl")]
+infinte_hp = true
+
+[node name="ParticleEmissionComponent" parent="." instance=ExtResource("10_l1cdp")]
+
+[node name="ClippingArea" parent="." instance=ExtResource("11_ypx5n")]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ClippingArea"]
+position = Vector2(0, -6)
+shape = SubResource("RectangleShape2D_1mmyp")
+debug_color = Color(1, 0, 0.0917963, 0.251)
+
+[node name="InteractionArea" type="Area2D" parent="."]
+collision_layer = 0
+monitorable = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="InteractionArea"]
+position = Vector2(0, -3)
+shape = SubResource("CircleShape2D_44vxu")
+debug_color = Color(0.561668, 0.588146, 1, 0.251)
+
+[connection signal="body_entered" from="InteractionArea" to="." method="_on_interaction_area_body_entered"]
+[connection signal="body_exited" from="InteractionArea" to="." method="_on_interaction_area_body_exited"]

@@ -240,10 +240,12 @@ func _check_if_needs_mouse_area_scanner() -> void:
 		Globals.world_root.add_child(mouse_area)
 
 func _enable_mouse_area() -> void:
-	if mouse_area: mouse_area.get_child(0).disabled = false
+	if mouse_area:
+		mouse_area.get_child(0).disabled = false
 
 func _disable_mouse_area() -> void:
-	if mouse_area: mouse_area.get_child(0).disabled = true
+	if mouse_area:
+		mouse_area.get_child(0).disabled = true
 
 func _process(_delta: float) -> void:
 	if Engine.is_editor_hint() or not overhead_ui:
@@ -345,7 +347,7 @@ func reload() -> void:
 func _fire() -> void:
 	if _get_cooldown() > 0:
 		return
-	if not is_reloading_single_and_has_since_released:
+	if not is_reloading_single_and_has_since_released and stats.firing_mode != "Auto":
 		is_holding_hitscan = false
 		return
 	if not _get_has_needed_ammo_and_reload_if_not():
@@ -724,11 +726,11 @@ func _do_firing_fx() -> void:
 ## Spawns a simulated ejected casing to fall to the ground. Requires a Marker2D in the scene
 ## called "CasingEjectionPoint".
 ## Must be called by the animation player due to varying timing of when it should spawn per weapon.
-func _eject_casing() -> void:
+func _eject_casing(per_used_ammo: bool = false) -> void:
 	if not casing_ejection_point:
 		return
 
-	for i: int in range((stats.s_mods.get_stat("mag_size") - stats.ammo_in_mag) if stats.id == "twin" else 1):
+	for i: int in range((stats.s_mods.get_stat("mag_size") - stats.ammo_in_mag) if per_used_ammo else 1):
 		var casing: Node2D = casing_scene.instantiate()
 		casing.global_position = casing_ejection_point.global_position + Vector2(randf_range(-1, 1), randf_range(-1, 1))
 		casing.global_rotation = global_rotation

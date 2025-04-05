@@ -5,11 +5,15 @@ class_name Item
 
 static var item_scene: PackedScene = preload("res://Entities/Items/ItemCore/Item.tscn") ## The item scene to be instantiated when items are dropped onto the ground.
 
-@export var stats: ItemResource = null: set = _set_item ## The item resource driving the stats and type of item.
-@export var quantity: int = 1 ## The quantity associated with the physical item.
+@export_storage var stats: ItemResource = null: set = _set_item ## The item resource driving the stats and type of item.
+@export_storage var quantity: int = 1: ## The quantity associated with the physical item.
+	set(new_quantity):
+		quantity = new_quantity
+		_update_multiple_indicator_sprite()
 
 @onready var collision_shape: CollisionShape2D = $CollisionShape2D ## The active collision shape for the item to be interacted with.
-@onready var icon: Sprite2D = $Sprite2D ## The sprite that shows the item's texture.
+@onready var icon: Sprite2D = $Sprite ## The sprite that shows the item's texture.
+@onready var multiple_indicator_sprite: Sprite2D = $MultipleIndicatorSprite ## The sprite that shows when this has a quantity greater than 1.
 @onready var ground_glow: Sprite2D = $GroundGlowScaler/GroundGlow ## The fake light that immitates a glowing effect on the ground.
 @onready var particles: CPUParticles2D = $Particles ## The orb particles that spawn on higher rarity items.
 @onready var line_particles: CPUParticles2D = $LineParticles ## The line particles that spawn on the highest rarity items.
@@ -33,6 +37,8 @@ func _set_item(item_stats: ItemResource) -> void:
 		$CollisionShape2D.shape.radius = stats.pickup_radius
 		icon.texture = stats.ground_icon
 		icon.position.y = -icon.texture.get_height() / 2.0
+		_update_multiple_indicator_sprite()
+
 		if ground_glow:
 			ground_glow.scale.x = 0.05 * (icon.texture.get_width() / 16.0)
 			ground_glow.scale.y = 0.05 * (icon.texture.get_height() / 32.0)
@@ -111,6 +117,17 @@ func _ready() -> void:
 		await get_tree().create_timer(1.0, false, false, false).timeout
 		can_be_auto_picked_up = true
 
+func _update_multiple_indicator_sprite() -> void:
+	if multiple_indicator_sprite == null:
+		return
+
+	if quantity > 1:
+		multiple_indicator_sprite.texture = stats.ground_icon
+		multiple_indicator_sprite.show()
+	else:
+		multiple_indicator_sprite.hide()
+	multiple_indicator_sprite.position.y = (-icon.texture.get_height() / 2.0) - 1.0
+
 ## Sets the rarity FX using the colors associated with that rarity, given by the dictionary in the Globals.
 func _set_rarity_colors() -> void:
 	icon.material.set_shader_parameter("width", 0.5)
@@ -153,7 +170,7 @@ func _do_blink() -> void:
 			blink_tween.kill()
 
 		blink_tween = create_tween()
-		blink_tween.tween_property(icon, "instance_shader_parameters/override_color:a", target_value, curr_blink_dur)
+		blink_tween.tween_property(icon.material, "shader_parameter/override_color:a", target_value, curr_blink_dur)
 		blink_tween.tween_callback(_do_blink)
 
 ## Ends any lifetime timers and blink sequences and starts the lifetime timer over again.
@@ -179,27 +196,13 @@ func _on_area_entered(area: Area2D) -> void:
 
 	if area is ItemReceiverComponent and area.get_parent() is Player:
 		if stats.auto_pickup and can_be_auto_picked_up:
-			(area as ItemReceiverComponent).synced_inv.add_item_from_world(self)
+			area.synced_inv.add_item_from_world(self)
 		else:
-			(area as ItemReceiverComponent).add_to_in_range_queue(self)
-
-		if not area.items_in_range.is_empty():
-			for item: Item in (area as ItemReceiverComponent).items_in_range:
-				item.icon.material.set_shader_parameter("outline_color", Globals.rarity_colors.outline_color.get(item.stats.rarity))
-				item.icon.material.set_shader_parameter("width", 0.5)
-
-			(area as ItemReceiverComponent).items_in_range[area.items_in_range.size() - 1].icon.material.set_shader_parameter("outline_color", Color.WHITE)
-			(area as ItemReceiverComponent).items_in_range[area.items_in_range.size() - 1].icon.material.set_shader_parameter("width", 0.82)
+			area.add_to_in_range_queue(self)
 
 func _on_area_exited(area: Area2D) -> void:
 	if area is ItemReceiverComponent and area.get_parent() is Player:
-		(area as ItemReceiverComponent).remove_from_in_range_queue(self)
-
-		icon.material.set_shader_parameter("outline_color", Globals.rarity_colors.outline_color.get(stats.rarity))
-		icon.material.set_shader_parameter("width", 0.5)
-		if not (area as ItemReceiverComponent).items_in_range.is_empty():
-			(area as ItemReceiverComponent).items_in_range[area.items_in_range.size() - 1].icon.material.set_shader_parameter("outline_color", Color.WHITE)
-			(area as ItemReceiverComponent).items_in_range[area.items_in_range.size() - 1].icon.material.set_shader_parameter("width", 0.82)
+		area.remove_from_in_range_queue(self)
 
 ## After the quantity of the in-game item changes, we respawn it in the same spot with its updated quantity.
 ## This helps retrigger the pickup HUD with the new quantity.

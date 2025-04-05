@@ -1,9 +1,11 @@
-[gd_scene load_steps=28 format=3 uid="uid://b52c5c7hj2vd"]
+[gd_scene load_steps=30 format=3 uid="uid://b52c5c7hj2vd"]
 
 [ext_resource type="Script" uid="uid://cn2gulskgn7k3" path="res://Entities/EntityCore/EntityTypes/StaticEntity/StaticEntity.gd" id="1_4yxmu"]
+[ext_resource type="Script" uid="uid://dwmur0cosbbwh" path="res://UI/Inventory/InventoryCore/InventoryResource.gd" id="2_7biur"]
 [ext_resource type="PackedScene" uid="uid://cj2wy5f05cos4" path="res://Entities/EntityCore/Shadow/EntityShadow.tscn" id="2_nnf0c"]
 [ext_resource type="PackedScene" uid="uid://di7vcyrki71nm" path="res://Entities/Components/DetectionComponent/DetectionComponent.tscn" id="3_2kecs"]
 [ext_resource type="Shader" uid="uid://cfbagv3hrtar2" path="res://Utilities/Game/Shaders/EntityEffectShader.gdshader" id="3_epxnw"]
+[ext_resource type="Script" uid="uid://dp8osf7r6xkkt" path="res://Entities/Items/ItemCore/InvItemResource.gd" id="3_r6tnu"]
 [ext_resource type="PackedScene" uid="uid://dh4ydl7l86ywq" path="res://Entities/EntityCore/Sprites/EntitySprite.tscn" id="4_5qk3y"]
 [ext_resource type="Texture2D" uid="uid://b0witw234r46t" path="res://Entities/Environment/Trees/dead_tree_1.png" id="4_tx18i"]
 [ext_resource type="PackedScene" uid="uid://btba0jmsow1mx" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectReceiverComponent.tscn" id="6_bxml6"]
@@ -15,9 +17,14 @@
 [ext_resource type="PackedScene" uid="uid://depnx3pnassrq" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/BurningHandler.tscn" id="9_a51pj"]
 [ext_resource type="Script" uid="uid://cgqfx1ve66f3h" path="res://Entities/Components/ItemComponents/LootTableComponent/LootTable.gd" id="10_lnwim"]
 [ext_resource type="Resource" uid="uid://dbnhbsphiw4oe" path="res://Entities/Items/TRESItems/SpruceLog(0).tres" id="12_8oice"]
-[ext_resource type="PackedScene" uid="uid://jpq0ij8wwlhy" path="res://Entities/Components/FacingComponent/FacingComponent.tscn" id="12_o33n8"]
 [ext_resource type="PackedScene" uid="uid://bhcqtorpyerc3" path="res://Utilities/Debug/ParticleEmissionComponent.tscn" id="17_2kecs"]
 [ext_resource type="PackedScene" uid="uid://2yy4xfm5g74l" path="res://Entities/Components/ItemComponents/ClippingComponent/ClippingArea.tscn" id="19_7biur"]
+
+[sub_resource type="Resource" id="Resource_d3uov"]
+script = ExtResource("2_7biur")
+title = "CHEST"
+main_inv_size = 10
+starting_inv = Array[ExtResource("3_r6tnu")]([])
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_l7ldg"]
 radius = 7.0
@@ -26,7 +33,7 @@ height = 19.9999
 [sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_2kecs"]
 polygon = PackedVector2Array(-10, -4, -10, 0, 9, 0, 9, -4)
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_o33n8"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_cncsx"]
 resource_local_to_scene = true
 shader = ExtResource("3_epxnw")
 
@@ -69,6 +76,7 @@ collision_layer = 0
 collision_mask = 0
 script = ExtResource("1_4yxmu")
 team = 4
+inv = SubResource("Resource_d3uov")
 is_object = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
@@ -87,14 +95,13 @@ scale = Vector2(4.69333, 2.75429)
 
 [node name="EntitySprite" parent="." instance=ExtResource("4_5qk3y")]
 unique_name_in_owner = true
-material = SubResource("ShaderMaterial_o33n8")
+material = SubResource("ShaderMaterial_cncsx")
 instance_shader_parameters/crack_color = Color(0.0792545, 0.0300264, 0.00946152, 0.88)
 instance_shader_parameters/crack_intensity = 0.0
 instance_shader_parameters/crack_pixelate = Vector2(96, 96)
 instance_shader_parameters/crack_scale = 12.282
-position = Vector2(37, 2)
+position = Vector2(12, -48)
 sprite_frames = SubResource("SpriteFrames_o33n8")
-offset = Vector2(-23, -50)
 
 [node name="HealthComponent" parent="." instance=ExtResource("7_umo0g")]
 _max_health = 1000
@@ -120,8 +127,6 @@ can_be_crit = false
 
 [node name="BurningHandler" parent="EffectReceiverComponent" instance=ExtResource("9_a51pj")]
 
-[node name="FacingComponent" parent="." instance=ExtResource("12_o33n8")]
-
 [node name="LootTableComponent" parent="." instance=ExtResource("7_dpaaj")]
 loot_table = SubResource("Resource_vx2o2")
 hit_spawn_chance = 15.0
@@ -136,11 +141,6 @@ below_extents = Vector2(20, 2)
 below_origin = Vector2(-1, 0)
 above_extents = Vector2(35, 2)
 above_origin = Vector2(6, -92)
-
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-
-[node name="AnimationTree" type="AnimationTree" parent="."]
-anim_player = NodePath("../AnimationPlayer")
 
 [node name="ClippingArea" parent="." instance=ExtResource("19_7biur")]
 

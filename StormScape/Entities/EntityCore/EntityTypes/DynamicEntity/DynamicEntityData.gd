@@ -5,6 +5,7 @@ class_name DynamicEntityData
 @export var position: Vector2
 @export var sprite_frames_path: String
 @export var sprite_texture_path: String
+@export var inv: Array[InvItemResource]
 
 # Stats
 @export var stat_mods: Dictionary[StringName, Dictionary]
@@ -30,7 +31,6 @@ class_name DynamicEntityData
 @export var can_use_hunger_bars: bool
 
 # ItemReceiverComponent
-@export var inv: Array[InvItemResource]
 @export var pickup_range: int
 
 #region Player Only Data

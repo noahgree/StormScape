@@ -1,4 +1,4 @@
-[gd_scene load_steps=202 format=3 uid="uid://dba8mrurjlekp"]
+[gd_scene load_steps=210 format=3 uid="uid://dba8mrurjlekp"]
 
 [ext_resource type="Script" uid="uid://c3rpxq8pnbdje" path="res://Entities/Player/PlayerCore/Player.gd" id="1_m33tt"]
 [ext_resource type="Script" uid="uid://dwmur0cosbbwh" path="res://UI/Inventory/InventoryCore/InventoryResource.gd" id="2_l1kq4"]
@@ -35,6 +35,7 @@
 [ext_resource type="Resource" uid="uid://14gw464h13vv" path="res://Entities/Items/TRESItems/Cratershot(1).tres" id="10_3uq13"]
 [ext_resource type="PackedScene" uid="uid://bhcqtorpyerc3" path="res://Utilities/Debug/ParticleEmissionComponent.tscn" id="10_6wv7y"]
 [ext_resource type="Resource" uid="uid://nbgi8l36xcgl" path="res://Entities/Items/TRESItems/WeightedBoots(3).tres" id="10_n4o3n"]
+[ext_resource type="Resource" uid="uid://dlfmjgnfk6nqj" path="res://Entities/Items/TRESItems/Revolver(0).tres" id="10_r5dvw"]
 [ext_resource type="Resource" uid="uid://dy8rwyeyusim7" path="res://Entities/Items/TRESItems/Twin(2).tres" id="11_0t1mv"]
 [ext_resource type="Resource" uid="uid://dbnhbsphiw4oe" path="res://Entities/Items/TRESItems/SpruceLog(0).tres" id="11_hxjay"]
 [ext_resource type="Resource" uid="uid://c05ujhrdtx4r5" path="res://Entities/Items/TRESItems/Blunderbuss(2).tres" id="11_o382h"]
@@ -63,7 +64,6 @@
 [ext_resource type="Script" uid="uid://dq62ojsc43p8o" path="res://UI/Inventory/PlayerInventory/PlayerInvUI.gd" id="32_3a185"]
 [ext_resource type="Script" uid="uid://dp8osf7r6xkkt" path="res://Entities/Items/ItemCore/InvItemResource.gd" id="32_ixmb3"]
 [ext_resource type="Script" uid="uid://dvirx67s12tmd" path="res://Entities/Player/PlayerCore/PlayerCamera/CamFXResource.gd" id="32_o382h"]
-[ext_resource type="Script" uid="uid://ccdihncnoj7dh" path="res://UI/Inventory/PlayerInventory/ItemInteractionHUD.gd" id="35_45ikj"]
 [ext_resource type="Script" uid="uid://di5hu6fk5mbfe" path="res://UI/PlayerStatsHUD/PlayerStatsHUD.gd" id="35_yln51"]
 [ext_resource type="PackedScene" uid="uid://b7gdy01q8wsjx" path="res://Entities/Components/ItemComponents/HandsComponent/HandsComponent.tscn" id="39_ngono"]
 [ext_resource type="Shader" uid="uid://c0de04pgeen76" path="res://Utilities/Game/Shaders/BlurBehind.gdshader" id="39_r4tgk"]
@@ -75,9 +75,12 @@
 [ext_resource type="Texture2D" uid="uid://barp24qvngy0m" path="res://UI/OverheadUI/Overheat/overheat_back.png" id="63_3uq13"]
 [ext_resource type="Texture2D" uid="uid://7wf7omw2r50u" path="res://UI/OverheadUI/Overheat/overheat_progress.png" id="64_o382h"]
 [ext_resource type="Resource" uid="uid://caxftf2aer6g4" path="res://Entities/Items/TRESItems/Igniter(4).tres" id="65_14ixx"]
+[ext_resource type="Script" uid="uid://dgibl37gudpj1" path="res://Entities/Player/PlayerCore/Interactions/InteractionOffer.gd" id="66_r5dvw"]
 [ext_resource type="Texture2D" uid="uid://dtft3mljs2y5s" path="res://UI/Inventory/InventoryCore/Slot/Universal/trash_slot_icon.png" id="69_4ao77"]
+[ext_resource type="Texture2D" uid="uid://ddxfmulkpyb2h" path="res://UI/Inventory/InventoryCore/Background/Wood/inv_background_simple_wood.png" id="70_thmqm"]
 [ext_resource type="Script" uid="uid://ct7n8wo1p3b20" path="res://Entities/Items/WeaponMods/WeaponMod.gd" id="74_bvo3j"]
 [ext_resource type="Resource" uid="uid://cwgqj8klx4b3x" path="res://Entities/Items/TRESItems/ExtendedMag(0).tres" id="75_r5dvw"]
+[ext_resource type="Script" uid="uid://cs7bq5fnghjjp" path="res://UI/TemporaryElements/InteractionPrompt.gd" id="75_thmqm"]
 [ext_resource type="Texture2D" uid="uid://lqg70q4wj55g" path="res://UI/Inventory/InventoryCore/Background/Wood/inv_background_wood.png" id="78_jlc36"]
 [ext_resource type="Script" uid="uid://317ipeo41y3c" path="res://Entities/Items/Wearables/Wearable.gd" id="79_gdihr"]
 [ext_resource type="FontFile" uid="uid://bp2lgrlhj8cet" path="res://Assets/Theming/Fonts/Pixel/C&C Red Alert [INET].ttf" id="85_7xlwj"]
@@ -151,6 +154,18 @@ metadata/_custom_type_script = "uid://dp8osf7r6xkkt"
 script = ExtResource("32_ixmb3")
 stats = ExtResource("7_o382h")
 quantity = 100
+metadata/_custom_type_script = "uid://dp8osf7r6xkkt"
+
+[sub_resource type="Resource" id="Resource_fcswf"]
+script = ExtResource("32_ixmb3")
+stats = ExtResource("10_r5dvw")
+quantity = 1
+metadata/_custom_type_script = "uid://dp8osf7r6xkkt"
+
+[sub_resource type="Resource" id="Resource_ve7vt"]
+script = ExtResource("32_ixmb3")
+stats = ExtResource("65_14ixx")
+quantity = 1
 metadata/_custom_type_script = "uid://dp8osf7r6xkkt"
 
 [sub_resource type="Resource" id="Resource_ou5t4"]
@@ -269,9 +284,9 @@ metadata/_custom_type_script = "uid://dp8osf7r6xkkt"
 
 [sub_resource type="Resource" id="Resource_5npt6"]
 script = ExtResource("2_l1kq4")
-title = "CONTAINER"
+title = "CHEST"
 main_inv_size = 32
-starting_inv = Array[ExtResource("32_ixmb3")]([SubResource("Resource_82yts"), SubResource("Resource_n4o3n"), SubResource("Resource_0t1mv"), SubResource("Resource_h1ges"), null, SubResource("Resource_hxjay"), null, SubResource("Resource_w0i1c"), null, null, null, SubResource("Resource_ou5t4"), SubResource("Resource_ar238"), null, SubResource("Resource_bmpdm"), SubResource("Resource_8hbs2"), SubResource("Resource_f5l7i"), SubResource("Resource_co77f"), null, null, null, SubResource("Resource_gdihr"), SubResource("Resource_g5u5n"), SubResource("Resource_0313k"), null, SubResource("Resource_thmqm"), SubResource("Resource_r5dvw"), SubResource("Resource_bvo3j"), SubResource("Resource_gb65f"), SubResource("Resource_5qckj"), null, null, SubResource("Resource_32jvf"), SubResource("Resource_eufsu"), SubResource("Resource_da65a"), SubResource("Resource_6f5us"), SubResource("Resource_s4yud")])
+starting_inv = Array[ExtResource("32_ixmb3")]([SubResource("Resource_82yts"), SubResource("Resource_n4o3n"), SubResource("Resource_0t1mv"), SubResource("Resource_h1ges"), null, SubResource("Resource_hxjay"), null, SubResource("Resource_w0i1c"), SubResource("Resource_fcswf"), SubResource("Resource_ve7vt"), null, SubResource("Resource_ou5t4"), SubResource("Resource_ar238"), null, SubResource("Resource_bmpdm"), SubResource("Resource_8hbs2"), SubResource("Resource_f5l7i"), SubResource("Resource_co77f"), null, null, null, SubResource("Resource_gdihr"), SubResource("Resource_g5u5n"), SubResource("Resource_0313k"), null, SubResource("Resource_thmqm"), SubResource("Resource_r5dvw"), SubResource("Resource_bvo3j"), SubResource("Resource_gb65f"), SubResource("Resource_5qckj"), null, null, SubResource("Resource_32jvf"), SubResource("Resource_eufsu"), SubResource("Resource_da65a"), SubResource("Resource_6f5us"), SubResource("Resource_s4yud")])
 metadata/_custom_type_script = "uid://dwmur0cosbbwh"
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_3f130"]
@@ -1304,6 +1319,18 @@ states/spawn/position = Vector2(184.5, 70)
 transitions = ["idle", "run", SubResource("AnimationNodeStateMachineTransition_70g00"), "run", "idle", SubResource("AnimationNodeStateMachineTransition_sdv4y"), "Start", "spawn", SubResource("AnimationNodeStateMachineTransition_8h6fx"), "spawn", "idle", SubResource("AnimationNodeStateMachineTransition_x8kh3")]
 graph_offset = Vector2(-144, -58)
 
+[sub_resource type="Resource" id="Resource_uu4sw"]
+script = ExtResource("66_r5dvw")
+title = "PICKUP"
+title_color = Color(0.953, 0.871, 0.855, 1)
+title_outline_color = Color(0, 0, 0, 0.565)
+info = ""
+info_color = Color(0.914, 0.769, 0.741, 1)
+info_outline_color = Color(0, 0, 0, 0.565)
+icon = ExtResource("89_0313k")
+remove_on_accept = true
+metadata/_custom_type_script = "uid://dgibl37gudpj1"
+
 [sub_resource type="CircleShape2D" id="CircleShape2D_3wm74"]
 radius = 12.0
 
@@ -1313,14 +1340,25 @@ light_mode = 1
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_n4o3n"]
 light_mode = 1
 
-[sub_resource type="LabelSettings" id="LabelSettings_hxjay"]
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_r5dvw"]
+light_mode = 1
+
+[sub_resource type="LabelSettings" id="LabelSettings_5qrph"]
 line_spacing = 0.0
 font = ExtResource("90_hxjay")
-font_size = 5
+font_size = 8
+font_color = Color(0.961254, 0.893995, 0.881106, 1)
 outline_size = 2
-outline_color = Color(0.219608, 0.137255, 0.113725, 1)
+outline_color = Color(0, 0, 0, 0.564706)
 shadow_size = 0
-shadow_offset = Vector2(0, 0)
+
+[sub_resource type="LabelSettings" id="LabelSettings_uc4hk"]
+line_spacing = 0.0
+font_size = 5
+font_color = Color(0.913725, 0.768627, 0.741176, 1)
+outline_size = 2
+outline_color = Color(0, 0, 0, 0.564706)
+shadow_size = 0
 
 [sub_resource type="LabelSettings" id="LabelSettings_32mf4"]
 line_spacing = 0.0
@@ -1538,8 +1576,8 @@ parameters/idle/blendspace2d/blend_position = Vector2(0, 0)
 parameters/run/TimeScale/scale = 1.5
 parameters/run/blendspace2d/blend_position = Vector2(0, 0)
 
-[node name="ItemReceiverComponent" parent="." node_paths=PackedStringArray("item_interact_hud") instance=ExtResource("30_qgyag")]
-item_interact_hud = NodePath("../OverlayUI/ItemInteractionHUD")
+[node name="ItemReceiverComponent" parent="." instance=ExtResource("30_qgyag")]
+interaction_offer = SubResource("Resource_uu4sw")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="ItemReceiverComponent"]
 position = Vector2(0, -5)
@@ -1598,6 +1636,73 @@ stretch_margin_bottom = 1
 texture_under = ExtResource("63_3uq13")
 texture_progress = ExtResource("61_6wv7y")
 tint_progress = Color(0.483324, 0.860906, 0.955996, 1)
+
+[node name="InteractionPrompt" type="MarginContainer" parent="."]
+unique_name_in_owner = true
+top_level = true
+offset_right = 34.0
+offset_bottom = 17.0
+script = ExtResource("75_thmqm")
+
+[node name="Background" type="NinePatchRect" parent="InteractionPrompt"]
+self_modulate = Color(1, 1, 1, 0.525)
+layout_mode = 2
+texture = ExtResource("70_thmqm")
+patch_margin_left = 2
+patch_margin_top = 2
+patch_margin_right = 2
+patch_margin_bottom = 2
+axis_stretch_vertical = 1
+
+[node name="ElementsHBox" type="HBoxContainer" parent="InteractionPrompt"]
+layout_mode = 2
+theme_override_constants/separation = 0
+alignment = 1
+
+[node name="InteractionIconMargin" type="MarginContainer" parent="InteractionPrompt/ElementsHBox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/margin_left = 3
+theme_override_constants/margin_top = 2
+theme_override_constants/margin_right = 0
+theme_override_constants/margin_bottom = 2
+
+[node name="InteractionPromptIcon" type="TextureRect" parent="InteractionPrompt/ElementsHBox/InteractionIconMargin"]
+unique_name_in_owner = true
+self_modulate = Color(0.837183, 0.837183, 0.837183, 1)
+material = SubResource("CanvasItemMaterial_r5dvw")
+custom_minimum_size = Vector2(8, 8)
+layout_mode = 2
+texture = ExtResource("89_0313k")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="InteractionTextMargins" type="MarginContainer" parent="InteractionPrompt/ElementsHBox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/margin_left = 3
+theme_override_constants/margin_top = 2
+theme_override_constants/margin_right = 3
+theme_override_constants/margin_bottom = 1
+
+[node name="TextVBox" type="VBoxContainer" parent="InteractionPrompt/ElementsHBox/InteractionTextMargins"]
+layout_mode = 2
+theme_override_constants/separation = -1
+alignment = 1
+
+[node name="InteractionTitleLabel" type="Label" parent="InteractionPrompt/ElementsHBox/InteractionTextMargins/TextVBox"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "TITLE"
+label_settings = SubResource("LabelSettings_5qrph")
+vertical_alignment = 1
+
+[node name="InteractionInfoLabel" type="Label" parent="InteractionPrompt/ElementsHBox/InteractionTextMargins/TextVBox"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Info"
+label_settings = SubResource("LabelSettings_uc4hk")
+vertical_alignment = 1
 
 [node name="OverlayUI" type="CanvasLayer" parent="."]
 
@@ -1767,98 +1872,6 @@ focus_mode = 0
 theme_override_font_sizes/font_size = 12
 text = "COMBINE ITEMS"
 
-[node name="ItemInteractionHUD" type="NinePatchRect" parent="OverlayUI"]
-anchors_preset = 6
-anchor_left = 1.0
-anchor_top = 0.5
-anchor_right = 1.0
-anchor_bottom = 0.5
-offset_left = -40.0
-offset_top = -8.0
-offset_right = -5.0
-offset_bottom = 15.0
-grow_horizontal = 0
-grow_vertical = 2
-texture = ExtResource("98_s4yud")
-region_rect = Rect2(0, 0, 20, 20)
-patch_margin_left = 3
-patch_margin_top = 3
-patch_margin_right = 3
-patch_margin_bottom = 3
-axis_stretch_vertical = 2
-script = ExtResource("35_45ikj")
-
-[node name="OuterMargins" type="MarginContainer" parent="OverlayUI/ItemInteractionHUD"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_constants/margin_left = 3
-theme_override_constants/margin_top = 3
-theme_override_constants/margin_right = 3
-theme_override_constants/margin_bottom = 3
-
-[node name="InnerBackground" type="NinePatchRect" parent="OverlayUI/ItemInteractionHUD/OuterMargins"]
-layout_mode = 2
-texture = ExtResource("123_da65a")
-patch_margin_left = 2
-patch_margin_top = 2
-patch_margin_right = 2
-patch_margin_bottom = 2
-
-[node name="InnerMargins" type="MarginContainer" parent="OverlayUI/ItemInteractionHUD/OuterMargins"]
-layout_mode = 2
-theme_override_constants/margin_left = 3
-theme_override_constants/margin_top = 0
-theme_override_constants/margin_right = 0
-theme_override_constants/margin_bottom = 0
-
-[node name="ElementHBox" type="HBoxContainer" parent="OverlayUI/ItemInteractionHUD/OuterMargins/InnerMargins"]
-layout_mode = 2
-theme_override_constants/separation = 1
-alignment = 1
-
-[node name="InteractIndicator" type="TextureRect" parent="OverlayUI/ItemInteractionHUD/OuterMargins/InnerMargins/ElementHBox"]
-self_modulate = Color(0.963, 0.899, 0.886, 0.7)
-layout_mode = 2
-texture = ExtResource("89_0313k")
-stretch_mode = 5
-
-[node name="ElementMargins" type="MarginContainer" parent="OverlayUI/ItemInteractionHUD/OuterMargins/InnerMargins/ElementHBox"]
-layout_mode = 2
-size_flags_horizontal = 8
-theme_override_constants/margin_left = 0
-theme_override_constants/margin_top = 0
-theme_override_constants/margin_right = 0
-theme_override_constants/margin_bottom = 0
-
-[node name="PickupPreviewSlot" parent="OverlayUI/ItemInteractionHUD/OuterMargins/InnerMargins/ElementHBox/ElementMargins" instance=ExtResource("42_r422n")]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(15, 15)
-layout_mode = 2
-texture = null
-default_slot_texture = null
-preview_only = true
-
-[node name="QuantityMargins" type="MarginContainer" parent="OverlayUI/ItemInteractionHUD/OuterMargins/InnerMargins/ElementHBox/ElementMargins"]
-unique_name_in_owner = true
-layout_mode = 2
-theme_override_constants/margin_left = 0
-theme_override_constants/margin_top = 0
-theme_override_constants/margin_right = 1
-theme_override_constants/margin_bottom = 3
-
-[node name="ItemPickupQuantity" type="Label" parent="OverlayUI/ItemInteractionHUD/OuterMargins/InnerMargins/ElementHBox/ElementMargins/QuantityMargins"]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_horizontal = 8
-size_flags_vertical = 8
-label_settings = SubResource("LabelSettings_hxjay")
-horizontal_alignment = 2
-vertical_alignment = 1
-
 [node name="PlayerStatsHUD" type="Control" parent="OverlayUI" node_paths=PackedStringArray("health_component", "stamina_component")]
 unique_name_in_owner = true
 layout_mode = 3
@@ -1963,7 +1976,7 @@ layout_mode = 2
 value = 50.0
 nine_patch_stretch = true
 texture_progress = ExtResource("100_5qckj")
-tint_progress = Color(5.77569e-07, 0.665665, 0.985388, 1)
+tint_progress = Color(0, 0.478457, 0.715125, 1)
 
 [node name="HungerHBox" type="HBoxContainer" parent="OverlayUI/PlayerStatsHUD/StaminaHungerStatsHUD/StaminaHungerMargins/StaminaAndHungerHBox"]
 layout_mode = 2
@@ -2027,7 +2040,7 @@ layout_mode = 2
 value = 50.0
 nine_patch_stretch = true
 texture_progress = ExtResource("100_5qckj")
-tint_progress = Color(1, 0.400106, 0.262861, 1)
+tint_progress = Color(0.716089, 0.245615, 0.157689, 1)
 
 [node name="HealthShieldStatsHUD" type="NinePatchRect" parent="OverlayUI/PlayerStatsHUD"]
 layout_mode = 0
@@ -2120,7 +2133,7 @@ layout_mode = 2
 value = 50.0
 nine_patch_stretch = true
 texture_progress = ExtResource("100_5qckj")
-tint_progress = Color(0.884365, 0.27424, 1, 1)
+tint_progress = Color(0.646002, 0.00153922, 0.809269, 1)
 
 [node name="HealthHBox" type="HBoxContainer" parent="OverlayUI/PlayerStatsHUD/HealthShieldStatsHUD/HealthShieldMargins/HealthShieldVBox"]
 layout_mode = 2
@@ -2182,7 +2195,7 @@ layout_mode = 2
 value = 50.0
 nine_patch_stretch = true
 texture_progress = ExtResource("100_5qckj")
-tint_progress = Color(0, 0.723, 0.405, 1)
+tint_progress = Color(0, 0.499807, 0.273035, 1)
 
 [node name="HotbarUI" type="MarginContainer" parent="OverlayUI" node_paths=PackedStringArray("active_slot_info") groups=["has_save_logic"]]
 unique_name_in_owner = true
@@ -3580,7 +3593,7 @@ axis_stretch_vertical = 1
 
 [node name="TitleAndSlotVBox" type="VBoxContainer" parent="OverlayUI/PlayerInvUI/AlternateInventoryPanel/AlternateInvBkgrdMargin/GridMargins"]
 layout_mode = 2
-theme_override_constants/separation = 0
+theme_override_constants/separation = 1
 
 [node name="AlternateTitleMargin" type="MarginContainer" parent="OverlayUI/PlayerInvUI/AlternateInventoryPanel/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox"]
 layout_mode = 2

@@ -4,13 +4,12 @@ class_name InventoryResource
 
 signal inv_data_updated(index: int, item: InvItemResource) ## Emitted anytime the item in an inv index is changed.
 
-@export var title: String = "CONTAINER" ## The title to be used if opened in an alternate inv.
-@export_range(0, 40, 1) var main_inv_size: int = 32 ## The total number of slots in the inventory, not including the hotbar slots or the trash slot if it exists. Must match main slot grid count on any connected UI.
-@export var starting_inv: Array[InvItemResource] ## The inventory that should be loaded when this scene is instantiated.
+@export var title: String = "CHEST" ## The title to be used if opened in an alternate inv.
+@export_range(0, 40, 1) var main_inv_size: int = 10 ## The total number of slots in the inventory, not including the hotbar slots or the trash slot if it exists. Must match main slot grid count on any connected UI.
+@export var starting_inv: Array[InvItemResource] = [] ## The inventory that should be loaded when this scene is instantiated.
 
 var inv: Array[InvItemResource] = [] ## The current inventory. Main source of truth.
 var source_node: Node2D ## The node that this inventory is owned by. Could be a physics entity or a chest of sorts.
-var hotbar_size: int ## Gets set to actual size if the source is the player when the initialize method is called.
 var total_inv_size: int ## Number of all slots, including main slots, hotbar slots, and the potential trash slot.s
 var auto_decrementer: AutoDecrementer = AutoDecrementer.new() ## The script controlling the cooldowns, warmups, overheats, and recharges for this entity's inventory items.
 
@@ -21,10 +20,9 @@ func initialize_inventory(source: Node2D) -> void:
 
 	auto_decrementer.inv = self
 	if source is Player:
-		hotbar_size = 5
 		auto_decrementer.owning_entity_is_player = true
 
-	total_inv_size = main_inv_size + hotbar_size + (1 if source is Player else 0) # +1 for trash slot
+	total_inv_size = main_inv_size + ((1 + Globals.HOTBAR_SIZE) if source is Player else 0)
 	inv.resize(total_inv_size)
 
 	call_deferred("fill_inventory", starting_inv)
@@ -94,7 +92,7 @@ func insert_from_inv_item(original_item: InvItemResource, delete_extra: bool = t
 ## Attempts to fill the hotbar with the item passed in. Can either be an Item or an InvItemResource.
 ## Returns any leftover quantity that did not fit.
 func _fill_hotbar(original_item: Variant) -> int:
-	return _do_add_item_checks(original_item, main_inv_size, main_inv_size + hotbar_size)
+	return _do_add_item_checks(original_item, main_inv_size, main_inv_size + (Globals.HOTBAR_SIZE if source_node is Player else 0))
 
 ## Attempts to fill the main inventory with the item passed in. Can either be an Item or an InvItemResource.
 ## Returns any leftover quantity that did not fit.
@@ -263,7 +261,7 @@ func get_more_ammo(max_amount_needed: int, take_from_inventory: bool,
 					ammo_type: ProjWeaponResource.ProjAmmoType) -> int:
 	var ammount_collected: int = 0
 
-	for i: int in range(main_inv_size + hotbar_size): # Does not include potential trash slot
+	for i: int in range(main_inv_size + (Globals.HOTBAR_SIZE if source_node is Player else 0)):
 		var item: InvItemResource = inv[i]
 		if item != null and (item.stats is ProjAmmoResource) and (item.stats.ammo_type == ammo_type):
 			var amount_in_slot: int = item.quantity

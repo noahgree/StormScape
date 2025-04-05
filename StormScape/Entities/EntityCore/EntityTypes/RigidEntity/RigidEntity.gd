@@ -1,14 +1,14 @@
 @tool
 extends RigidBody2D
 class_name RigidEntity
-## An entity that can move with physics and that also cannot have non-HP stats like stamina and hunger.
+## An entity that can move and rotate with physics and that also cannot have non-HP stats like stamina and hunger.
 ##
 ## This would be used for things like blocks that respond to explosions and that also need potential health.
 ## This should not be used for static environmental entities like trees and also not for players
 ## or moving enemies.
 
 @export var team: Globals.Teams = Globals.Teams.PLAYER ## What the effects received by this entity should consider as this entity's team.
-@export var inv: InventoryResource ## The inventory data resource for this entity.
+@export var inv: InventoryResource = InventoryResource.new() ## The inventory data resource for this entity.
 @export var is_object: bool = false ## When true, this entity's collision logic will follow that of a world object, regardless of team.
 
 @onready var sprite: EntitySprite = %EntitySprite ## The visual representation of the entity. Needs to have the EntityEffectShader applied.

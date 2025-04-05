@@ -28,11 +28,13 @@ var is_open: bool = false: ## True when the inventory is open and showing.
 	set(new_value):
 		is_open = new_value
 		visible = new_value
-		Globals.focused_ui_is_open = new_value
 		get_tree().paused = new_value
 		if is_open:
+			focused_ui_close_debounce_timer.stop()
+			Globals.focused_ui_is_open = true
 			SignalBus.focused_ui_opened.emit()
 		else:
+			focused_ui_close_debounce_timer.start()
 			showing_alternate_inv = false
 			SignalBus.focused_ui_closed.emit()
 var showing_alternate_inv: bool = false: ## When true, the alternate inv is open and the wearable & crafting panels should be hidden.
@@ -44,6 +46,7 @@ var showing_alternate_inv: bool = false: ## When true, the alternate inv is open
 			wearables_panel.visible = false
 		else:
 			alternate_inv_panel.visible = false
+var focused_ui_close_debounce_timer: Timer = TimerHelpers.create_one_shot_timer(self, 0.08, func() -> void: Globals.focused_ui_is_open = false) ## Debounces turning off the flag so that any inputs like inventory clicks can finish first.
 
 
 func _ready() -> void:
@@ -97,12 +100,14 @@ func _unhandled_key_input(_event: InputEvent) -> void:
 		drag_end_event.pressed = false
 		Input.parse_input_event(drag_end_event)
 
+## Opens the player inventory, conditionally showing the crafting manager and wearables panel.
 func _open_player_inv() -> void:
 	is_open = true
 	if not showing_alternate_inv:
 		crafting_manager.visible = true
 		wearables_panel.visible = true
 
+## When an alternate inventory wants to open, tell the alternate inv panel and open the inventory if possible.
 func _on_alternate_inv_open_request(alternate_inv_source_node: Node2D) -> void:
 	alternate_inv_panel.link_new_inventory_source_node(alternate_inv_source_node)
 	alternate_inv_title.text = alternate_inv_source_node.inv.title
@@ -112,8 +117,9 @@ func _on_alternate_inv_open_request(alternate_inv_source_node: Node2D) -> void:
 #region Dropping On Ground
 ## When we click the empty space around this player inventory, change needed visibilities.
 func _on_blank_space_input_event(_event: InputEvent) -> void:
-	if Input.is_action_just_pressed("primary"):
+	if Input.is_action_just_released("primary"):
 		is_open = false
+		accept_event()
 
 ## Determines if this control node can have item slot data dropped into it.
 func _can_drop_data(_at_position: Vector2, data: Variant) -> bool:

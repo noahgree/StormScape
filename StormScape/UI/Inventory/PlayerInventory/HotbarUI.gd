@@ -84,7 +84,7 @@ func _update_inv_ammo_ui() -> void:
 		if stats is ProjWeaponResource and not stats.hide_ammo_ui:
 			if stats.ammo_type not in [ProjWeaponResource.ProjAmmoType.NONE, ProjWeaponResource.ProjAmmoType.STAMINA, ProjWeaponResource.ProjAmmoType.SELF, ProjWeaponResource.ProjAmmoType.CHARGES]:
 				count = 0
-				for i: int in range(player_inv.main_inv_size + player_inv.hotbar_size):
+				for i: int in range(player_inv.main_inv_size + Globals.HOTBAR_SIZE):
 					var item: InvItemResource = player_inv.inv[i]
 					if item != null and (item.stats is ProjAmmoResource) and (item.stats.ammo_type == active_slot.item.stats.ammo_type):
 						count += item.quantity
@@ -140,7 +140,7 @@ func _change_active_slot_by_count(index_count: int) -> void:
 func _change_active_slot_to_hotbar_index(new_index: int) -> void:
 	if new_index == hotbar_slots.find(active_slot):
 		return
-	new_index = min(new_index, player_inv.hotbar_size)
+	new_index = min(new_index, Globals.HOTBAR_SIZE)
 
 	_remove_selected_slot_fx()
 	active_slot = hotbar_slots[new_index]

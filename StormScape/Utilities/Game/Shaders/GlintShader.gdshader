@@ -18,8 +18,8 @@ uniform float angle = 35.0;
 
 uniform vec4 tint_color: source_color = vec4(1.0, 1.0, 1.0, 0.0);
 uniform float glow_intensity : hint_range(0.0, 4.0) = 1.0;
+uniform vec4 override_color: source_color = vec4(1.0, 1.0, 1.0, 0.0);
 
-instance uniform vec4 override_color: source_color = vec4(1.0, 1.0, 1.0, 0.0);
 instance uniform float random_start_offset = 0.0;
 instance uniform float final_alpha = 1.0;
 

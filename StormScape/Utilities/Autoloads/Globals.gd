@@ -13,6 +13,9 @@ func _ready() -> void:
 	player_node = await SignalBus.player_ready
 	player_camera = get_parent().get_node("Game/WorldRoot/PlayerCamera")
 
+# Player Inv Resource
+const HOTBAR_SIZE: int = 5
+
 # EffectReceiver & StatModManager
 enum Teams {
 	PLAYER = 1 << 0, ## The player team (against the enemies).
@@ -100,4 +103,10 @@ const rarity_colors: Dictionary[String, Dictionary] = {
 	}
 }
 
-var invis_char: String = "[color=#93665800][char=21A5][/color]"
+const invis_char: String = "[color=#93665800][char=21A5][/color]"
+
+const ui_colors: Dictionary[StringName, Color] = {
+	"ui_tan" : Color(0.914, 0.769, 0.741),
+	"ui_light_tan" : Color(0.953, 0.871, 0.855),
+	"ui_text_outline" : Color(0.0, 0.0, 0.0, 0.565)
+}

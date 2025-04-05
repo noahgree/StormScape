@@ -1,21 +1,19 @@
 @tool
 extends StaticBody2D
 class_name StaticEntity
-## An entity without the ability to move at all and that also cannot have non HP stats like stamina and hunger.
+## An entity without the ability to move or rotate at all and that also cannot have non HP stats like
+## stamina and hunger.
 ##
 ## This would be used for things like trees or blocks or buildings that need collision and also potential health.
-## This should not be used for moving environmental entities like players and also not for inventory entities like weapons.
 
 @export var team: Globals.Teams = Globals.Teams.PLAYER ## What the effects received by this entity should consider as this entity's team.
-@export var inv: InventoryResource ## The inventory data resource for this entity.
+@export var inv: InventoryResource = InventoryResource.new() ## The inventory data resource for this entity.
 @export var is_object: bool = false ## When true, this entity's collision logic will follow that of a world object, regardless of team.
 
-@onready var sprite: EntitySprite = $EntitySprite ## The visual representation of the entity. Needs to have the EntityEffectShader applied.
-@onready var anim_tree: AnimationTree = $AnimationTree ## The animation tree controlling this entity's animation states.
+@onready var sprite: EntitySprite = %EntitySprite ## The visual representation of the entity. Needs to have the EntityEffectShader applied.
 @onready var effect_receiver: EffectReceiverComponent = get_node_or_null("EffectReceiverComponent") ## The component that handles incoming effect sources.
 @onready var effects: StatusEffectsComponent = get_node_or_null("%StatusEffectsComponent") ## The node that will cache and manage all status effects for this entity.
 @onready var emission_mgr: ParticleEmissionComponent = $ParticleEmissionComponent ## The component responsible for determining the extents and origins of different particle placements.
-@onready var facing_component: FacingComponent = $FacingComponent ## The component in charge of choosing the entity animation directions.
 @onready var detection_component: DetectionComponent = $DetectionComponent ## The component that defines the radius around this entity that an enemy must enter for that enemy to be alerted.
 @onready var health_component: HealthComponent = $HealthComponent ## The component in charge of entity health and shield.
 @onready var item_receiver: ItemReceiverComponent = get_node_or_null("ItemReceiverComponent") ## The item receiver for this entity.
@@ -41,8 +39,6 @@ func _on_save_game(save_data: Array[SaveData]) -> void:
 	data.health = health_component.health
 	data.shield = health_component.shield
 	data.armor = health_component.armor
-
-	data.facing_dir = facing_component.facing_dir
 
 	if inv != null:
 		for item: InvItemResource in inv.inv:
@@ -72,8 +68,6 @@ func _is_instance_on_load_game(data: StaticEntityData) -> void:
 	health_component.health = data.health
 	health_component.shield = data.shield
 	health_component.armor = data.armor
-
-	facing_component.facing_dir = data.facing_dir
 
 	if inv != null:
 		inv.call_deferred("fill_inventory", data.inv)
