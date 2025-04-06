@@ -1,15 +1,16 @@
 extends HitboxComponent
 class_name Projectile
-## The viusal representation of the projectile. Defines all needed methods for how to travel and seek, with the flags for what
-## to do being set by whatever spawns the projectile.
+## The viusal representation of the projectile. Defines all needed methods for how to travel and seek,
+## with the flags for what to do being set by whatever spawns the projectile.
 
-@export var whiz_sound: String = "" ## The sound to play when whizzing by the player.
+@export var whiz_sound: String = "" ## The sound to play whscanned_phys_layersen whizzing by the player.
 @export_custom(PROPERTY_HINT_NONE, "suffix:pixels") var whiz_sound_distance: int = 25 ## The max distance from the player that the whiz sound will still play.
 @export_range(0, 500, 0.1, "suffix:%") var glow_strength: float = 0 ## How strong the glow should be.
 @export var glow_color: Color = Color(1, 1, 1) ## The color of the glow.
 @export var impact_vfx: PackedScene = null ## The VFX to spawn at the site of impact. Could be a decal or something.
 @export var impact_sound: String = "" ## The sound to play at the site of impact.
 @export var random_rot_on_impact: bool = false ## When true, the sprite will get a random rotation on impact to change how the impact animation looks for circular projectiles.
+@export var in_air_only_particles: Array[CPUParticles2D] = [] ## Any particles selected here will be emitting only while in the air.
 
 @onready var sprite: AnimatedSprite2D = $ProjSprite ## The sprite for this projectile.
 @onready var shadow: Sprite2D = $Shadow ## The shadow sprite for this projectile.
@@ -17,6 +18,7 @@ class_name Projectile
 
 #region Local Vars
 const FOV_RAYCAST_COUNT: int = 36
+const MAX_AOE_RADIUS: float = 85.0
 var stats: ProjectileResource ## The logic for how to operate this projectile.
 var s_mods: StatModsCacheResource ## The cache containing the current numerical values for firing metrics.
 var starting_proj_height: int ## The starting height the projectile is at when calculating the fake z axis.
@@ -119,8 +121,8 @@ func _draw() -> void:
 		if ray["hit"]:
 			draw_circle(to_pos, 2, color)
 
-## Setting up z_index, hiding shadow until rotation is assigned, and initializing timers. Then this sets up spin and arcing
-## logic should we need it.
+## Setting up z_index, hiding shadow until rotation is assigned, and initializing timers. Then this sets up
+## spin and arcing logic should we need it.
 func _ready() -> void:
 	super._ready()
 	add_to_group("has_save_logic")
@@ -155,6 +157,7 @@ func _enable_collider() -> void:
 func _disable_collider() -> void:
 	collider.disabled = true
 
+## Disables monitoring (the ability to detect when things enter this hitbox).
 func _disable_monitoring() -> void:
 	monitoring = false
 	is_disabling_monitoring = false
@@ -191,24 +194,24 @@ func _set_up_starting_transform_and_spin_logic() -> void:
 	resettable_starting_pos = global_position
 	resettable_starting_dir = Vector2(cos(global_rotation), sin(global_rotation)).normalized()
 
-## This is updating our movement direction and determining how to travel based on movement logic in the projectile resource.
+## This is updating our movement direction and determining how to travel based on movement logic in
+## the projectile resource.
 func _physics_process(delta: float) -> void:
 	non_sped_up_time_counter += delta
 
 	previous_position = global_position
 
-	var max_dist: float = s_mods.get_stat("proj_max_distance")
-	if (global_position - starting_position).length() >= (max_dist + max_distance_random_offset):
-		if not is_in_aoe_phase:
+	if not is_in_aoe_phase:
+		var max_dist: float = s_mods.get_stat("proj_max_distance")
+		if (global_position - starting_position).length() >= (max_dist + max_distance_random_offset):
 			_on_lifetime_timer_timeout_or_reached_max_distance()
 
-	if stats.homing_method == "None":
-		if not is_in_aoe_phase and not is_arcing:
-			_do_projectile_movement(delta)
-		elif is_arcing:
-			_do_arc_movement(delta)
-	else:
-		if not is_in_aoe_phase:
+		if stats.homing_method == "None":
+			if not is_arcing:
+				_do_projectile_movement(delta)
+			else:
+				_do_arc_movement(delta)
+		else:
 			_do_projectile_movement(delta)
 
 	split_delay_counter += delta
@@ -284,6 +287,11 @@ func _update_shadow(new_position: Vector2, movement_dir: Vector2) -> void:
 		shadow.global_position.y += starting_proj_height
 
 	shadow.visible = true
+
+## Disables all in-air only particles.
+func _disable_in_air_only_particles() -> void:
+	for node: CPUParticles2D in in_air_only_particles:
+		node.emitting = false
 #endregion
 
 #region Homing
@@ -544,6 +552,7 @@ func _do_arc_movement(delta: float) -> void:
 		non_sped_up_time_counter = 0
 		_reset_arc_logic()
 	else:
+		_disable_in_air_only_particles()
 		z_index = 0
 		is_arcing = false
 		if stats.do_aoe_on_arc_land and (stats.aoe_radius > 0):
@@ -553,7 +562,7 @@ func _do_arc_movement(delta: float) -> void:
 		else:
 			if stats.grounding_free_delay > 0:
 				await get_tree().create_timer(stats.grounding_free_delay, false, true, false).timeout
-			queue_free()
+			_kill_projectile_on_hit()
 
 	if fake_z_axis > stats.max_collision_height:
 		call_deferred("_disable_collider")
@@ -641,25 +650,43 @@ func _handle_aoe() -> void:
 
 	if stats.aoe_delay > 0:
 		call_deferred("_disable_collider")
-		if anim_player != null and anim_player.get_animation_library("ProjectileAnimLibrary").has_animation("aoe"):
-			anim_player.speed_scale = 1 / stats.aoe_delay
-			anim_player.play("ProjectileAnimLibrary/aoe")
 
 		aoe_delay_timer.start(stats.aoe_delay)
 		await aoe_delay_timer.timeout
 
+	if sprite.sprite_frames.has_animation("aoe"):
+		var frame_count: int = sprite.sprite_frames.get_frame_count("aoe")
+		sprite.sprite_frames.set_animation_speed("aoe", frame_count / stats.aoe_anim_dur)
+		sprite.animation_finished.connect(_hide_sprite_after_aoe_anim_ends)
+		sprite.play("aoe")
+	else:
+		_hide_sprite_after_aoe_anim_ends()
+
 	var new_shape: Shape2D = collider.shape.duplicate()
 	call_deferred("_assign_new_collider_shape_and_aoe_entities", new_shape)
 
+	if stats.aoe_vfx != null:
+		var radius: float = min(MAX_AOE_RADIUS, s_mods.get_stat("proj_aoe_radius"))
+		AreaOfEffectVFX.create(stats.aoe_vfx, Globals.world_root, self, radius)
+	if stats.aoe_sound != "":
+		AudioManager.play_sound(stats.aoe_sound, AudioManager.SoundType.SFX_2D, global_position)
+
 	await get_tree().create_timer(max(0.05, stats.aoe_effect_dur), false, true, false).timeout
 	queue_free()
+
+## Hides the sprite and its shadow if need be.
+func _hide_sprite_after_aoe_anim_ends() -> void:
+	if stats.aoe_hide_sprite:
+		sprite.hide()
+		shadow.hide()
 
 ## Assigns the collider to a new shape and re-enables it. Takes into account scaling of the projectile itself
 ## to preserve aoe radius.
 ## This also applies the initial hit of the aoe effect source to entities in range. The handling
 ## function won't apply status effects as a result of this hit.
 func _assign_new_collider_shape_and_aoe_entities(new_shape: Shape2D) -> void:
-	new_shape.radius = (s_mods.get_stat("proj_aoe_radius") / scale.x)
+	var radius: float = min(MAX_AOE_RADIUS, s_mods.get_stat("proj_aoe_radius"))
+	new_shape.radius = (radius / scale.x)
 	collider.shape = new_shape
 	_enable_collider()
 	set_deferred("monitoring", true)
@@ -758,6 +785,8 @@ func _process_hit(object: Node2D) -> void:
 				_handle_pierce()
 				return
 
+		_disable_in_air_only_particles() # Since we have to be grounded at this point
+
 		var original_radius: float = s_mods.get_original_stat("proj_aoe_radius")
 		if original_radius > 0:
 			lifetime_timer.stop()
@@ -798,7 +827,8 @@ func _start_being_handled(handling_area: EffectReceiverComponent) -> void:
 		modified_effect_src.contact_position = global_position
 		handling_area.handle_effect_source(modified_effect_src, source_entity)
 	else:
-		if stats.aoe_effect_source == null: stats.aoe_effect_source = effect_source
+		if stats.aoe_effect_source == null:
+			stats.aoe_effect_source = effect_source
 		var modified_effect_src: EffectSource = _get_effect_source_adjusted_for_falloff(stats.aoe_effect_source, handling_area, true)
 		modified_effect_src.contact_position = global_position
 		handling_area.handle_effect_source(modified_effect_src, source_entity, false) # Don't reapply status effects.
@@ -816,8 +846,8 @@ func _get_effect_source_adjusted_for_falloff(effect_src: EffectSource,
 	if is_aoe:
 		apply_to_bad = stats.bad_effects_aoe_falloff
 		apply_to_good = stats.good_effects_aoe_falloff
-		var radius_stat: float = s_mods.get_stat("proj_aoe_radius")
-		falloff_mult = max(0.05, stats.aoe_effect_falloff_curve.sample_baked(dist_to_center / radius_stat))
+		var radius: float = min(MAX_AOE_RADIUS, s_mods.get_stat("proj_aoe_radius"))
+		falloff_mult = max(0.05, stats.aoe_effect_falloff_curve.sample_baked(dist_to_center / radius))
 	else:
 		apply_to_bad = stats.bad_effects_falloff
 		apply_to_good = stats.good_effects_falloff

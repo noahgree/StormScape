@@ -1,8 +1,11 @@
-[gd_scene load_steps=8 format=3 uid="uid://b26uwbeam6drq"]
+[gd_scene load_steps=18 format=3 uid="uid://b26uwbeam6drq"]
 
-[ext_resource type="Script" uid="uid://d1uexupra43i8" path="res://Entities/Items/Projectiles/Projectile.gd" id="1_3xw38"]
+[ext_resource type="Script" uid="uid://d1uexupra43i8" path="res://Entities/Items/Projectiles/ProjectileCore/Projectile.gd" id="1_3xw38"]
 [ext_resource type="Texture2D" uid="uid://b4bumm88u2qmw" path="res://Entities/Items/Weapons/ProjectileWeapons/BottleOFire/FireBottleThrowableCT.tres" id="2_q4sp5"]
 [ext_resource type="Texture2D" uid="uid://dcbwxgak6a0r8" path="res://Entities/EntityCore/Shadow/entity_shadow.png" id="3_tedc5"]
+[ext_resource type="Texture2D" uid="uid://bwuth2fyl1x12" path="res://Entities/Items/Projectiles/Bullets/SmallBullet/bullet_small.png" id="3_wab4n"]
+[ext_resource type="PackedScene" uid="uid://dau2tuc6mx0by" path="res://Entities/Items/Projectiles/ProjectileCore/Trail/Trail.tscn" id="4_7tntk"]
+[ext_resource type="Texture2D" uid="uid://c6ebk8sa1vvtq" path="res://UI/TemporaryElements/StatusEffects/flames.png" id="5_l2rhp"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_tr4aq"]
 radius = 4.0
@@ -10,6 +13,18 @@ height = 15.0849
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_q4sp5"]
 light_mode = 1
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_pg2je"]
+atlas = ExtResource("3_wab4n")
+region = Rect2(0, 13, 13, 13)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hnctu"]
+atlas = ExtResource("3_wab4n")
+region = Rect2(13, 13, 13, 13)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ruur3"]
+atlas = ExtResource("3_wab4n")
+region = Rect2(26, 13, 13, 13)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_7tntk"]
 atlas = ExtResource("2_q4sp5")
@@ -19,6 +34,20 @@ region = Rect2(0, 0, 16, 16)
 animations = [{
 "frames": [{
 "duration": 1.0,
+"texture": SubResource("AtlasTexture_pg2je")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_hnctu")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ruur3")
+}],
+"loop": false,
+"name": &"aoe",
+"speed": 30.0
+}, {
+"frames": [{
+"duration": 1.0,
 "texture": SubResource("AtlasTexture_7tntk")
 }],
 "loop": true,
@@ -26,11 +55,33 @@ animations = [{
 "speed": 5.0
 }]
 
-[node name="FireBottle" type="Area2D"]
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_l2rhp"]
+blend_mode = 1
+light_mode = 1
+particles_animation = true
+particles_anim_h_frames = 4
+particles_anim_v_frames = 1
+particles_anim_loop = true
+
+[sub_resource type="Curve" id="Curve_pg2je"]
+_data = [Vector2(0.00342466, 0.359578), 0.0, 0.0, 0, 0, Vector2(0.203767, 0.778388), 0.0, 0.0, 0, 0, Vector2(0.760274, 0.73707), 0.0, 0.0, 0, 0, Vector2(0.941781, 0.77651), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 5
+
+[sub_resource type="Gradient" id="Gradient_hnctu"]
+offsets = PackedFloat32Array(0, 0.205394, 0.794606, 1)
+colors = PackedColorArray(0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="Gradient" id="Gradient_7tntk"]
+offsets = PackedFloat32Array(0.237255, 1)
+colors = PackedColorArray(1, 1, 1, 0, 1, 1, 1, 0.2)
+
+[node name="FireBottle" type="Area2D" node_paths=PackedStringArray("in_air_only_particles")]
 editor_description = "DO NOT SET EFFECT SOURCE IF BEING USED DIRECTLY WITH A WEAPON. THE WEAPON WILL SET IT FOR YOU."
+collision_layer = 0
+collision_mask = 0
 script = ExtResource("1_3xw38")
-glow_strength = 75.0
 glow_color = Color(1, 0.901675, 0.877147, 1)
+in_air_only_particles = [NodePath("BurningParticles")]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0, 1.33333)
@@ -42,6 +93,7 @@ debug_color = Color(0.626, 0.349, 1, 0.196)
 light_mask = 2
 material = SubResource("CanvasItemMaterial_q4sp5")
 sprite_frames = SubResource("SpriteFrames_l2rhp")
+autoplay = "default"
 
 [node name="Shadow" type="Sprite2D" parent="."]
 self_modulate = Color(0.16, 0.16, 0.16, 0.185)
@@ -50,3 +102,31 @@ z_index = 1
 position = Vector2(0, 7)
 scale = Vector2(0.45, 0.35)
 texture = ExtResource("3_tedc5")
+
+[node name="BurningParticles" type="CPUParticles2D" parent="."]
+light_mask = 2
+material = SubResource("CanvasItemMaterial_l2rhp")
+position = Vector2(5, -4)
+amount = 9
+texture = ExtResource("5_l2rhp")
+lifetime = 0.5
+lifetime_randomness = 0.15
+direction = Vector2(0, -1)
+gravity = Vector2(0, -10)
+initial_velocity_min = 5.0
+initial_velocity_max = 5.0
+orbit_velocity_min = -0.05
+orbit_velocity_max = 0.05
+scale_amount_min = 0.65
+scale_amount_curve = SubResource("Curve_pg2je")
+color = Color(0.5, 0.5, 0.5, 1)
+color_ramp = SubResource("Gradient_hnctu")
+anim_speed_min = 4.0
+anim_speed_max = 4.0
+anim_offset_max = 1.0
+
+[node name="Trail" parent="." instance=ExtResource("4_7tntk")]
+width = 6.0
+gradient = SubResource("Gradient_7tntk")
+max_points = 15
+x_offset = 0.0

@@ -95,7 +95,7 @@ func _unhandled_input(event: InputEvent) -> void:
 #endregion
 
 func _process(delta: float) -> void:
-	if Globals.focused_ui_is_open:
+	if Globals.focused_ui_is_open or Globals.focused_ui_is_closing_debounce:
 		return
 
 	if entity is Player:

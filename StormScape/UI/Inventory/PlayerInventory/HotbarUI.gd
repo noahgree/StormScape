@@ -47,6 +47,7 @@ func _setup_slots() -> void:
 ## This also triggers the full setup for active item changes including vfx and hotbar tint progresses.
 func _on_hotbar_slot_item_changed(slot: Slot, old_item: InvItemResource, new_item: InvItemResource) -> void:
 	if (old_item != null and new_item != null) and new_item.stats.is_same_as(old_item.stats):
+		_default_ammo_update_method()
 		return # Returning if all we did was change the quantity, since we don't need to tell the hands about that
 
 	if slot.index == active_slot.index:
@@ -55,7 +56,7 @@ func _on_hotbar_slot_item_changed(slot: Slot, old_item: InvItemResource, new_ite
 		update_hotbar_tint_progresses()
 
 ## This will update the mag ammo display with the item quantity by default if no ammo method is
-## defined in the equippable item subclass.
+## defined in the equippable item subclass. Great for consumables and such.
 func _default_ammo_update_method() -> void:
 	if active_slot.item != null:
 		var equipped_item: EquippableItem = Globals.player_node.hands.equipped_item

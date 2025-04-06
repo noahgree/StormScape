@@ -234,7 +234,7 @@ func _update_crafting_result() -> void:
 	for recipe_id: StringName in candidates:
 		var item_resource: ItemResource = CraftingManager.cached_items[recipe_id]
 		if _is_item_craftable(item_resource):
-			output_slot.set_item(InvItemResource.new(item_resource, item_resource.output_quantity))
+			output_slot.set_item(InvItemResource.new(item_resource, item_resource.output_quantity).assign_unique_suid())
 			return
 
 	output_slot.set_item(null)

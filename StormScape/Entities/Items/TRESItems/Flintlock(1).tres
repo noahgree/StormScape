@@ -9,7 +9,7 @@
 [ext_resource type="PackedScene" uid="uid://c3e5wour08d6u" path="res://Entities/Items/Hitscans/LaserBeam.tscn" id="7_x8kn4"]
 [ext_resource type="Script" uid="uid://cje5bobi6o8bo" path="res://Entities/Items/Hitscans/HitscanResource.gd" id="8_iwwon"]
 [ext_resource type="PackedScene" uid="uid://ciyhsebv1hjye" path="res://Entities/Items/Weapons/ProjectileWeapons/Flintlock/Flintlock.tscn" id="9_4womn"]
-[ext_resource type="Script" uid="uid://bj3r5oopspj6l" path="res://Entities/Items/Projectiles/ProjectileResource.gd" id="10_kxkpn"]
+[ext_resource type="Script" uid="uid://bj3r5oopspj6l" path="res://Entities/Items/Projectiles/ProjectileCore/ProjectileResource.gd" id="10_kxkpn"]
 [ext_resource type="PackedScene" uid="uid://bqkyplubhsx43" path="res://Entities/Items/Projectiles/Bullets/SmallBullet/SmallBullet.tscn" id="11_6rgme"]
 [ext_resource type="Script" uid="uid://ctxa7i1mbt7ab" path="res://UI/Inventory/PlayerInventory/Crafting/CraftingIngredient.gd" id="12_os8b6"]
 [ext_resource type="Script" uid="uid://c2gdoebfp12dq" path="res://Entities/Stats/StatMod/StatModsCacheResource.gd" id="13_cutf1"]
@@ -31,7 +31,7 @@ point_count = 2
 script = ExtResource("2_wgsi0")
 source_type = 1
 source_tags = Array[String]([])
-scanned_phys_layers = 191
+scanned_phys_layers = 111
 can_hit_self = true
 bad_effect_affected_teams = 1
 good_effect_affected_teams = 2

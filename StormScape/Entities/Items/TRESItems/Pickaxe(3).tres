@@ -16,7 +16,7 @@
 script = ExtResource("1_urffy")
 source_type = 5
 source_tags = Array[String]([])
-scanned_phys_layers = 191
+scanned_phys_layers = 111
 can_hit_self = false
 bad_effect_affected_teams = 1
 good_effect_affected_teams = 2
@@ -41,7 +41,7 @@ metadata/_custom_type_script = ExtResource("1_urffy")
 script = ExtResource("1_urffy")
 source_type = 5
 source_tags = Array[String]([])
-scanned_phys_layers = 191
+scanned_phys_layers = 111
 can_hit_self = false
 bad_effect_affected_teams = 1
 good_effect_affected_teams = 2

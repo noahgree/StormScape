@@ -6,7 +6,7 @@
 [ext_resource type="Script" uid="uid://dvasncq3tgljs" path="res://Entities/Items/Weapons/ProjectileWeapons/ProjWeaponResource.gd" id="3_br5vb"]
 [ext_resource type="Script" uid="uid://cje5bobi6o8bo" path="res://Entities/Items/Hitscans/HitscanResource.gd" id="3_nvevl"]
 [ext_resource type="Script" uid="uid://cowjdnic7xmkp" path="res://UI/Inventory/PlayerInventory/StatDetail.gd" id="4_7gqp2"]
-[ext_resource type="Script" uid="uid://bj3r5oopspj6l" path="res://Entities/Items/Projectiles/ProjectileResource.gd" id="4_8o3cg"]
+[ext_resource type="Script" uid="uid://bj3r5oopspj6l" path="res://Entities/Items/Projectiles/ProjectileCore/ProjectileResource.gd" id="4_8o3cg"]
 [ext_resource type="Texture2D" uid="uid://bicdpq4he2mgo" path="res://Entities/Items/Weapons/ProjectileWeapons/Cratershot/CratershotBaseCT.tres" id="4_arskj"]
 [ext_resource type="Resource" uid="uid://cvqddapopo145" path="res://Entities/Player/PlayerCore/PlayerCamera/CamFXPresets/5.tres" id="4_qi223"]
 [ext_resource type="PackedScene" uid="uid://bqkyplubhsx43" path="res://Entities/Items/Projectiles/Bullets/SmallBullet/SmallBullet.tscn" id="5_ilshb"]
@@ -22,7 +22,7 @@
 script = ExtResource("1_qcxpp")
 source_type = 1
 source_tags = Array[String]([])
-scanned_phys_layers = 191
+scanned_phys_layers = 111
 can_hit_self = true
 bad_effect_affected_teams = 1
 good_effect_affected_teams = 2

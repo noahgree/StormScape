@@ -136,6 +136,7 @@ func _swing() -> void:
 
 		anim_player.speed_scale = 1.0 / stats.s_mods.get_stat("use_speed")
 		anim_player.play("MeleeWeaponAnimLibrary/use")
+
 		if stats.use_sound != "":
 			AudioManager.play_sound(stats.use_sound, AudioManager.SoundType.SFX_2D, source_entity.global_position)
 
@@ -162,6 +163,7 @@ func _charge_swing() -> void:
 
 		anim_player.speed_scale = 1.0 / stats.s_mods.get_stat("charge_use_speed")
 		anim_player.play("MeleeWeaponAnimLibrary/charge_use")
+
 		if stats.charge_use_sound != "":
 			AudioManager.play_sound(stats.charge_use_sound, AudioManager.SoundType.SFX_2D, source_entity.global_position)
 
@@ -205,6 +207,7 @@ func _on_use_animation_ended(was_charge_use: bool = false) -> void:
 	_apply_post_use_effect(was_charge_use)
 
 ## If a connected ammo UI exists (i.e. for a player), update it with the new ammo available.
-## Typically just reflects the sprint.
+## Typically just reflects the stamina.
 func _update_ammo_ui() -> void:
-	if ammo_ui != null: ammo_ui.update_mag_ammo(source_entity.stamina_component.stamina)
+	if ammo_ui != null:
+		ammo_ui.update_mag_ammo(source_entity.stamina_component.stamina)

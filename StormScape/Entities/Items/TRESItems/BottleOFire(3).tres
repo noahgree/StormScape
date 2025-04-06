@@ -1,8 +1,7 @@
-[gd_resource type="Resource" script_class="ProjWeaponResource" load_steps=25 format=3 uid="uid://3avt5jvd3dye"]
+[gd_resource type="Resource" script_class="ProjWeaponResource" load_steps=26 format=3 uid="uid://3avt5jvd3dye"]
 
 [ext_resource type="Script" uid="uid://boo31eu083dqd" path="res://Entities/Stats/EffectSystemResources/StatusEffects/StatusEffect.gd" id="1_fshhe"]
 [ext_resource type="Script" uid="uid://cje5bobi6o8bo" path="res://Entities/Items/Hitscans/HitscanResource.gd" id="1_kxj7m"]
-[ext_resource type="Script" uid="uid://bj3r5oopspj6l" path="res://Entities/Items/Projectiles/ProjectileResource.gd" id="2_4ioui"]
 [ext_resource type="Resource" uid="uid://cev0y0oe3igus" path="res://Entities/Player/PlayerCore/PlayerCamera/CamFXPresets/6.tres" id="2_am00s"]
 [ext_resource type="Script" uid="uid://dvasncq3tgljs" path="res://Entities/Items/Weapons/ProjectileWeapons/ProjWeaponResource.gd" id="3_ru3fl"]
 [ext_resource type="PackedScene" uid="uid://c7gjhm55x8ymc" path="res://Entities/Items/Weapons/ProjectileWeapons/BottleOFire/BottleOFire.tscn" id="3_yykgi"]
@@ -15,15 +14,17 @@
 [ext_resource type="Resource" uid="uid://blryd3h2c6dsl" path="res://Entities/Stats/EffectSystemResources/StatusEffects/BadEffects/Burning/Burning1Rapid.tres" id="8_ngyy3"]
 [ext_resource type="Script" uid="uid://ctxa7i1mbt7ab" path="res://UI/Inventory/PlayerInventory/Crafting/CraftingIngredient.gd" id="10_u7xjj"]
 [ext_resource type="Script" uid="uid://c2gdoebfp12dq" path="res://Entities/Stats/StatMod/StatModsCacheResource.gd" id="11_3anyb"]
+[ext_resource type="PackedScene" uid="uid://cb5ofy3224fh2" path="res://Entities/Items/Projectiles/ProjectileCore/AreaOfEffectVFX/BurningAoeVfx.tscn" id="11_am00s"]
+[ext_resource type="Script" uid="uid://bj3r5oopspj6l" path="res://Entities/Items/Projectiles/ProjectileCore/ProjectileResource.gd" id="12_ps56o"]
 
 [sub_resource type="Resource" id="Resource_qy5am"]
 script = ExtResource("5_jastm")
 source_type = 1
 source_tags = Array[String]([])
-scanned_phys_layers = 191
+scanned_phys_layers = 111
 can_hit_self = false
-bad_effect_affected_teams = 0
-good_effect_affected_teams = 0
+bad_effect_affected_teams = 1
+good_effect_affected_teams = 2
 base_damage = 0
 object_damage_mult = 1.0
 dmg_affected_stats = 2
@@ -67,7 +68,7 @@ point_count = 2
 script = ExtResource("5_jastm")
 source_type = 3
 source_tags = Array[String]([])
-scanned_phys_layers = 191
+scanned_phys_layers = 111
 can_hit_self = true
 bad_effect_affected_teams = 3
 good_effect_affected_teams = 3
@@ -99,7 +100,7 @@ _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
 point_count = 2
 
 [sub_resource type="Resource" id="Resource_0j8mo"]
-script = ExtResource("2_4ioui")
+script = ExtResource("12_ps56o")
 speed = 350
 speed_curve = SubResource("Curve_qq1e0")
 initial_boost_time = 0.0
@@ -143,14 +144,14 @@ grounding_free_delay = 0.0
 bounce_count = 0
 bounce_falloff_curve = SubResource("Curve_hfy8v")
 ping_pong_bounce = false
-number_of_splits = 0
-split_into_counts = Array[int]([2])
+number_of_splits = 1
+split_into_counts = Array[int]([3])
 angular_spreads = Array[float]([45.0])
 split_delays = Array[float]([0.2])
 splitting_sounds = Array[String]([""])
 split_cam_fx = null
-aoe_radius = 40
 aoe_effect_source = SubResource("Resource_cfkuc")
+aoe_radius = 25
 do_aoe_on_arc_land = true
 aoe_before_freeing = false
 aoe_effect_falloff_curve = SubResource("Curve_2b1hi")
@@ -159,7 +160,10 @@ good_effects_aoe_falloff = false
 aoe_delay = 0.0
 aoe_effect_dur = 5.0
 aoe_effect_interval = 1.0
-aoe_effects_delay = 1.0
+aoe_effects_delay = 0.5
+aoe_anim_dur = 0.2
+aoe_hide_sprite = true
+aoe_vfx = ExtResource("11_am00s")
 aoe_sound = ""
 
 [sub_resource type="Resource" id="Resource_xpvhm"]

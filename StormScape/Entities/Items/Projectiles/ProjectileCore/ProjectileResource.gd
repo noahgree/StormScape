@@ -73,17 +73,21 @@ class_name ProjectileResource
 @export var split_cam_fx: Array[CamFXResource] = [CamFXResource.new()] ## For each split index, you should determine how strong the camera fx will be at the split.
 
 @export_group("Area of Effect")
-@export_range(0, 200, 1, "suffix:pixels") var aoe_radius: int = 0 ## If above 0, this projectile will do AOE damage after hitting something.
 @export var aoe_effect_source: EffectSource = null ## The effect source to apply when something is hit by aoe damage. If null, this will just use the default effect source for this projectile.
+@export_range(0, 200, 1, "suffix:pixels") var aoe_radius: int = 0 ## If above 0, this projectile will do AOE damage after hitting something.
 @export var do_aoe_on_arc_land: bool = true ## Whether to trigger an AOE when we land after an arc shot.
 @export var aoe_before_freeing: bool = false ## Whether to trigger the aoe once we reach end of lifetime if we haven't hit anything yet.
+@export_subgroup("Falloff")
 @export var aoe_effect_falloff_curve: Curve = Curve.new() ## Changes damage and mod times for the effect source based on how far away from the origin of the aoe damage the receiver was hit.
 @export var bad_effects_aoe_falloff: bool = true ## Whether to apply the falloff curve to bad effects in an aoe hit.
 @export var good_effects_aoe_falloff: bool = false ## Whether to apply the falloff curve to good effects in an aoe hit.
+@export_subgroup("Timing")
 @export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var aoe_delay: float = 0.0 ## How long after triggering the AOE does the projectile sit in wait before re-enabling the larger collider.
-@export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var aoe_effect_dur: float = 0.05 ## How long the larger collider will be enabled for once a aoe is triggered.
+@export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var aoe_effect_dur: float = 0.05 ## How long the larger collider will be enabled for once an aoe is triggered.
 @export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var aoe_effect_interval: float = 1 ## How long between applications of the status effects of the AOE to each entity inside it.
 @export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var aoe_effects_delay: float = 0.5 ## How long after an entity enters the AOE effect area before applying the first status effect pulse.
+@export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var aoe_anim_dur: float = 0.2 ## How long the sprite frames' "aoe" animation should take to complete.
 @export_subgroup("AOE FX")
+@export var aoe_hide_sprite: bool = true ## When true, the main proj sprite will be hidden once AOE starts. If there is an "aoe" animation to play, the sprite will hide after it is done.
 @export var aoe_vfx: PackedScene = null ## The scene to instance when activating the aoe.
 @export var aoe_sound: String = "" ## The sound to play when activating the aoe.

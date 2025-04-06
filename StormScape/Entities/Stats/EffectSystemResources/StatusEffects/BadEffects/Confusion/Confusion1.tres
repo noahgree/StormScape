@@ -7,7 +7,7 @@
 script = ExtResource("2_c5w3g")
 stat_id = "confusion_amount"
 mod_id = "Confusion"
-operation = "+%"
+operation = "="
 value = 40.0
 rounding = "Exact"
 priority = 1
@@ -28,6 +28,6 @@ stat_mods = Array[ExtResource("2_c5w3g")]([SubResource("Resource_7xxcl")])
 audio_to_play = ""
 only_cue_on_player_hit = false
 spawn_particles = true
-particle_hander_req = "Confusion"
+particle_hander_req = ""
 make_entity_glow = true
 metadata/_custom_type_script = "uid://dowo7vjco2b7c"

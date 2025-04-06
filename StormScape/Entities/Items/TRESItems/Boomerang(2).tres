@@ -4,7 +4,7 @@
 [ext_resource type="Script" uid="uid://boo31eu083dqd" path="res://Entities/Stats/EffectSystemResources/StatusEffects/StatusEffect.gd" id="2_8ufau"]
 [ext_resource type="Resource" uid="uid://y5iqfraea8ry" path="res://Entities/Player/PlayerCore/PlayerCamera/CamFXPresets/2.tres" id="2_o0qyt"]
 [ext_resource type="Script" uid="uid://cje5bobi6o8bo" path="res://Entities/Items/Hitscans/HitscanResource.gd" id="3_46awu"]
-[ext_resource type="Script" uid="uid://bj3r5oopspj6l" path="res://Entities/Items/Projectiles/ProjectileResource.gd" id="4_7qce5"]
+[ext_resource type="Script" uid="uid://bj3r5oopspj6l" path="res://Entities/Items/Projectiles/ProjectileCore/ProjectileResource.gd" id="4_7qce5"]
 [ext_resource type="Texture2D" uid="uid://cqsoww8i0aya3" path="res://Entities/Items/Weapons/ProjectileWeapons/Boomerang/BoomerangSteelCT.tres" id="4_gupq0"]
 [ext_resource type="Script" uid="uid://cowjdnic7xmkp" path="res://UI/Inventory/PlayerInventory/StatDetail.gd" id="4_o0qyt"]
 [ext_resource type="PackedScene" uid="uid://dna63yojpqy2n" path="res://Entities/Items/Projectiles/Boomerangs/BoomerangSteelProj.tscn" id="5_23285"]
@@ -18,7 +18,7 @@
 script = ExtResource("1_pnsqi")
 source_type = 1
 source_tags = Array[String](["chops_wood"])
-scanned_phys_layers = 191
+scanned_phys_layers = 111
 can_hit_self = false
 bad_effect_affected_teams = 1
 good_effect_affected_teams = 2

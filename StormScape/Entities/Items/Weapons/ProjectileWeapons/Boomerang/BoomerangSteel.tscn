@@ -193,7 +193,7 @@ sprites_to_tint = [NodePath("ItemSprite")]
 [node name="ItemSprite" type="AnimatedSprite2D" parent="."]
 light_mask = 2
 material = SubResource("ShaderMaterial_78dqe")
-instance_shader_parameters/glow_intensity = 1.5
+instance_shader_parameters/glow_intensity = 1.0
 sprite_frames = SubResource("SpriteFrames_2os3s")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]

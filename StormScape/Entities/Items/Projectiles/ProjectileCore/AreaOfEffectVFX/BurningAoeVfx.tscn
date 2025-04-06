@@ -1,0 +1,54 @@
+[gd_scene load_steps=7 format=3 uid="uid://cb5ofy3224fh2"]
+
+[ext_resource type="Script" uid="uid://jwnpvt4k2g7g" path="res://Entities/Items/Projectiles/ProjectileCore/AreaOfEffectVFX/AreaOfEffectVFX.gd" id="1_b5tjp"]
+[ext_resource type="Texture2D" uid="uid://c6ebk8sa1vvtq" path="res://UI/TemporaryElements/StatusEffects/flames.png" id="2_wsfvu"]
+[ext_resource type="Texture2D" uid="uid://b41ueq2htaju0" path="res://Utilities/Game/Particles/faint_light.png" id="3_n7is6"]
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_pk1mm"]
+blend_mode = 1
+light_mode = 1
+particles_animation = true
+particles_anim_h_frames = 4
+particles_anim_v_frames = 1
+particles_anim_loop = true
+
+[sub_resource type="Curve" id="Curve_etv6h"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Gradient" id="Gradient_7iomy"]
+offsets = PackedFloat32Array(0, 0.0411523, 0.794606, 1)
+colors = PackedColorArray(1, 1, 1, 0, 2, 2, 2, 1, 1.25, 1.25, 1.25, 1, 1, 1, 1, 0)
+
+[node name="BurningAOEVfx" type="Node2D" node_paths=PackedStringArray("particles_nodes")]
+z_index = -1
+script = ExtResource("1_b5tjp")
+particles_nodes = [NodePath("BurningParticles")]
+
+[node name="BurningParticles" type="CPUParticles2D" parent="."]
+light_mask = 2
+material = SubResource("CanvasItemMaterial_pk1mm")
+amount = 55
+texture = ExtResource("2_wsfvu")
+lifetime = 8.0
+preprocess = 3.0
+explosiveness = 0.2
+emission_shape = 2
+emission_sphere_radius = 20.0
+direction = Vector2(0, -1)
+gravity = Vector2(0, 0)
+scale_amount_min = 0.65
+scale_amount_max = 0.65
+scale_amount_curve = SubResource("Curve_etv6h")
+color = Color(0.5, 0.5, 0.5, 1)
+color_ramp = SubResource("Gradient_7iomy")
+anim_speed_min = 20.0
+anim_speed_max = 24.0
+anim_offset_max = 1.0
+
+[node name="FloorLight" type="PointLight2D" parent="."]
+light_mask = 0
+energy = 1.75
+range_item_cull_mask = 3
+texture = ExtResource("3_n7is6")
+texture_scale = 0.38

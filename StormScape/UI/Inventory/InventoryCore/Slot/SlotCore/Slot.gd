@@ -215,7 +215,8 @@ func update_tint_progress(duration: float) -> void:
 		if cooldown_source not in item.stats.shown_cooldown_fills:
 			return
 
-		if tint_tween: tint_tween.kill()
+		if tint_tween:
+			tint_tween.kill()
 		tint_progress = (1 - (duration / Globals.player_node.inv.auto_decrementer.get_original_cooldown(item.stats.get_cooldown_id()))) * 100
 		if not Globals.focused_ui_is_open:
 			tint_tween = create_tween()

@@ -1,0 +1,22 @@
+[gd_scene load_steps=4 format=3 uid="uid://dau2tuc6mx0by"]
+
+[ext_resource type="Script" uid="uid://cqrxu1lnpl0u3" path="res://Entities/Items/Projectiles/ProjectileCore/Trail/Trail.gd" id="1_jx6o7"]
+
+[sub_resource type="Curve" id="Curve_6r164"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Gradient" id="Gradient_kk7td"]
+offsets = PackedFloat32Array(0.237255, 1)
+colors = PackedColorArray(1, 1, 1, 0, 1, 1, 1, 0.2)
+
+[node name="Trail" type="Line2D"]
+top_level = true
+z_index = -1
+width = 12.0
+width_curve = SubResource("Curve_6r164")
+gradient = SubResource("Gradient_kk7td")
+end_cap_mode = 2
+round_precision = 4
+script = ExtResource("1_jx6o7")
+x_offset = -10.0

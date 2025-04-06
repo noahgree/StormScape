@@ -10,7 +10,7 @@
 [ext_resource type="Script" uid="uid://cje5bobi6o8bo" path="res://Entities/Items/Hitscans/HitscanResource.gd" id="8_f2brx"]
 [ext_resource type="Texture2D" uid="uid://ide5dl6vilq8" path="res://Entities/Items/Hitscans/glow_circle.png" id="8_iu0as"]
 [ext_resource type="PackedScene" uid="uid://cclotxo1c628r" path="res://Entities/Items/Weapons/ProjectileWeapons/Twin/Twin.tscn" id="10_8mtfe"]
-[ext_resource type="Script" uid="uid://bj3r5oopspj6l" path="res://Entities/Items/Projectiles/ProjectileResource.gd" id="13_82v8g"]
+[ext_resource type="Script" uid="uid://bj3r5oopspj6l" path="res://Entities/Items/Projectiles/ProjectileCore/ProjectileResource.gd" id="13_82v8g"]
 [ext_resource type="PackedScene" uid="uid://bqkyplubhsx43" path="res://Entities/Items/Projectiles/Bullets/SmallBullet/SmallBullet.tscn" id="14_nrwym"]
 [ext_resource type="Script" uid="uid://ctxa7i1mbt7ab" path="res://UI/Inventory/PlayerInventory/Crafting/CraftingIngredient.gd" id="15_fvqti"]
 [ext_resource type="Script" uid="uid://c2gdoebfp12dq" path="res://Entities/Stats/StatMod/StatModsCacheResource.gd" id="16_ecu5v"]
@@ -20,7 +20,7 @@
 script = ExtResource("3_vp4wp")
 source_type = 1
 source_tags = Array[String]([])
-scanned_phys_layers = 191
+scanned_phys_layers = 111
 can_hit_self = true
 bad_effect_affected_teams = 1
 good_effect_affected_teams = 2

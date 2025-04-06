@@ -26,8 +26,9 @@ func _init(item_stats: ItemResource = null, item_quantity: int = 1, placeholder:
 				MeleeWeapon.initialize_stats_resource(stats)
 
 ## Triggers the session uid generator to give the stats for this inv item a new suid.
-func assign_unique_suid() -> void:
+func assign_unique_suid() -> InvItemResource:
 	stats.session_uid = 0
+	return self
 
 ## Custom print logic for determining more about the item that just a randomly assigned ID.
 func _to_string() -> String:

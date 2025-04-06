@@ -9,7 +9,7 @@
 [ext_resource type="Script" uid="uid://cje5bobi6o8bo" path="res://Entities/Items/Hitscans/HitscanResource.gd" id="10_1dkua"]
 [ext_resource type="Script" uid="uid://c0mnwhot5u41x" path="res://Entities/Items/Hitscans/Hitscan.gd" id="10_rfdyk"]
 [ext_resource type="Texture2D" uid="uid://ide5dl6vilq8" path="res://Entities/Items/Hitscans/glow_circle.png" id="11_xl18w"]
-[ext_resource type="Script" uid="uid://bj3r5oopspj6l" path="res://Entities/Items/Projectiles/ProjectileResource.gd" id="13_gtex7"]
+[ext_resource type="Script" uid="uid://bj3r5oopspj6l" path="res://Entities/Items/Projectiles/ProjectileCore/ProjectileResource.gd" id="13_gtex7"]
 [ext_resource type="PackedScene" uid="uid://3d4ghsubde4w" path="res://Entities/Items/Weapons/ProjectileWeapons/RifleX/RifleX.tscn" id="13_mc2hw"]
 [ext_resource type="Script" uid="uid://ctxa7i1mbt7ab" path="res://UI/Inventory/PlayerInventory/Crafting/CraftingIngredient.gd" id="15_5vwnl"]
 [ext_resource type="PackedScene" uid="uid://bqkyplubhsx43" path="res://Entities/Items/Projectiles/Bullets/SmallBullet/SmallBullet.tscn" id="16_8v673"]
@@ -33,7 +33,7 @@ point_count = 2
 script = ExtResource("2_gwjg5")
 source_type = 1
 source_tags = Array[String]([])
-scanned_phys_layers = 127
+scanned_phys_layers = 111
 can_hit_self = false
 bad_effect_affected_teams = 1
 good_effect_affected_teams = 2

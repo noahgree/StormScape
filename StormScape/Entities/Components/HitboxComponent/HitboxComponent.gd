@@ -3,6 +3,7 @@ extends Area2D
 class_name HitboxComponent
 ## The area2d that defines where an effect source comes from.
 
+@export_group("Standalone Hitbox Properties") # Only set these manually if using this as a standalone hitbox and not attached to a projectile or other weapon
 @export var effect_source: EffectSource ## The effect to be applied when this hitbox hits an effect receiver.
 @export var source_entity: PhysicsBody2D ## The entity that the effect was produced by.
 @export var use_self_position: bool = false ## When using the hitbox as a standalone area2d, make this property true so that it uses its own position to handle effects like knockback.
@@ -12,7 +13,8 @@ class_name HitboxComponent
 var movement_direction: Vector2 = Vector2.ZERO ## The current movement direction for this hitbox.
 
 
-## Setup the area detection signal and turn off monitorable for performance.
+## Setup the area detection signal and turn on monitoring just in case it was toggled off somewhere. It needs
+## to be on or for some reason it cannot detect bodies (it'll still detect areas, just not bodies).
 ## Also set collision mask to the matching flags.
 func _ready() -> void:
 	self.area_entered.connect(_on_area_entered)

@@ -1,12 +1,20 @@
-[gd_scene load_steps=13 format=3 uid="uid://bq12ugc7lnirg"]
+[gd_scene load_steps=16 format=3 uid="uid://bq12ugc7lnirg"]
 
 [ext_resource type="Script" uid="uid://06pt5wan8jg1" path="res://Entities/EntityCore/EntityTypes/StaticEntity/PhysicalInventory/PhysicalInventory.gd" id="1_ggkuf"]
+[ext_resource type="Script" uid="uid://dwmur0cosbbwh" path="res://UI/Inventory/InventoryCore/InventoryResource.gd" id="2_hjkvw"]
 [ext_resource type="Texture2D" uid="uid://2xf1pqc78iin" path="res://Assets/Icon/icon.svg" id="2_mwkkp"]
+[ext_resource type="Script" uid="uid://dp8osf7r6xkkt" path="res://Entities/Items/ItemCore/InvItemResource.gd" id="3_s3b18"]
 [ext_resource type="PackedScene" uid="uid://di7vcyrki71nm" path="res://Entities/Components/DetectionComponent/DetectionComponent.tscn" id="6_c3jxm"]
 [ext_resource type="PackedScene" uid="uid://dh4ydl7l86ywq" path="res://Entities/EntityCore/Sprites/EntitySprite.tscn" id="7_li1wa"]
 [ext_resource type="PackedScene" uid="uid://cdfdy8m6ki3oq" path="res://Entities/Components/HealthComponent/HealthComponent.tscn" id="9_4jcvl"]
 [ext_resource type="PackedScene" uid="uid://bhcqtorpyerc3" path="res://Utilities/Debug/ParticleEmissionComponent.tscn" id="10_l1cdp"]
 [ext_resource type="PackedScene" uid="uid://2yy4xfm5g74l" path="res://Entities/Components/ItemComponents/ClippingComponent/ClippingArea.tscn" id="11_ypx5n"]
+
+[sub_resource type="Resource" id="Resource_5wq56"]
+script = ExtResource("2_hjkvw")
+title = "CHEST"
+main_inv_size = 10
+starting_inv = Array[ExtResource("3_s3b18")]([])
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_6ca8s"]
 size = Vector2(12, 12)
@@ -29,15 +37,15 @@ animations = [{
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_1mmyp"]
 size = Vector2(12, 12)
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_44vxu"]
+[sub_resource type="CircleShape2D" id="CircleShape2D_hjkvw"]
 radius = 16.0
 
 [node name="TestPhysicalInventory" type="StaticBody2D"]
-collision_layer = 0
 script = ExtResource("1_ggkuf")
 interact_radius = 16.0
 prompt_position = Vector2(0, -14)
 team = 4
+inv = SubResource("Resource_5wq56")
 is_object = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
@@ -77,7 +85,7 @@ monitorable = false
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="InteractionArea"]
 position = Vector2(0, -3)
-shape = SubResource("CircleShape2D_44vxu")
+shape = SubResource("CircleShape2D_hjkvw")
 debug_color = Color(0.561668, 0.588146, 1, 0.251)
 
 [connection signal="body_entered" from="InteractionArea" to="." method="_on_interaction_area_body_entered"]

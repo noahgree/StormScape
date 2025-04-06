@@ -7,6 +7,7 @@ extends Node
 var player_node: Player = null ## The reference to the player's node.
 var player_camera: PlayerCamera = null ## The reference to the player's main camera.
 var focused_ui_is_open: bool = false ## When true, the main UI that pauses the game is open.
+var focused_ui_is_closing_debounce: bool = false ## When true, the focused ui is still just barely closing.
 
 
 func _ready() -> void:

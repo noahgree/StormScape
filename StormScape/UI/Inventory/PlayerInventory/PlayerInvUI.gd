@@ -32,11 +32,13 @@ var is_open: bool = false: ## True when the inventory is open and showing.
 		if is_open:
 			focused_ui_close_debounce_timer.stop()
 			Globals.focused_ui_is_open = true
+			Globals.focused_ui_is_closing_debounce = true
 			SignalBus.focused_ui_opened.emit()
 		else:
+			Globals.focused_ui_is_open = false
+			SignalBus.focused_ui_closed.emit()
 			focused_ui_close_debounce_timer.start()
 			showing_alternate_inv = false
-			SignalBus.focused_ui_closed.emit()
 var showing_alternate_inv: bool = false: ## When true, the alternate inv is open and the wearable & crafting panels should be hidden.
 	set(new_value):
 		showing_alternate_inv = new_value
@@ -46,7 +48,7 @@ var showing_alternate_inv: bool = false: ## When true, the alternate inv is open
 			wearables_panel.visible = false
 		else:
 			alternate_inv_panel.visible = false
-var focused_ui_close_debounce_timer: Timer = TimerHelpers.create_one_shot_timer(self, 0.08, func() -> void: Globals.focused_ui_is_open = false) ## Debounces turning off the flag so that any inputs like inventory clicks can finish first.
+var focused_ui_close_debounce_timer: Timer = TimerHelpers.create_one_shot_timer(self, 0.05, func() -> void: Globals.focused_ui_is_closing_debounce = false) ## Debounces turning off the flag so that any inputs like inventory clicks can finish first.
 
 
 func _ready() -> void:

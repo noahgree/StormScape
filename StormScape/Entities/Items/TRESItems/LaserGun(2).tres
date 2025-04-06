@@ -11,7 +11,7 @@
 [ext_resource type="Resource" uid="uid://j0v3cxjhkcg8" path="res://Entities/Stats/EffectSystemResources/StatusEffects/BadEffects/Slowness/Slowness2.tres" id="5_si0as"]
 [ext_resource type="PackedScene" uid="uid://ckf7i8bnass5n" path="res://Entities/Items/Projectiles/Laser/Laser.tscn" id="5_xjmn2"]
 [ext_resource type="Resource" uid="uid://3e6mdax7u2av" path="res://Entities/Stats/EffectSystemResources/StatusEffects/BadEffects/Stun/Stun1.tres" id="6_3lyj8"]
-[ext_resource type="Script" uid="uid://bj3r5oopspj6l" path="res://Entities/Items/Projectiles/ProjectileResource.gd" id="6_ll0mi"]
+[ext_resource type="Script" uid="uid://bj3r5oopspj6l" path="res://Entities/Items/Projectiles/ProjectileCore/ProjectileResource.gd" id="6_ll0mi"]
 [ext_resource type="Script" uid="uid://cowjdnic7xmkp" path="res://UI/Inventory/PlayerInventory/StatDetail.gd" id="6_v5gng"]
 [ext_resource type="PackedScene" uid="uid://baxpb3crwepc0" path="res://Entities/Items/Weapons/ProjectileWeapons/LaserGun/LaserGun.tscn" id="11_ykm1j"]
 [ext_resource type="Script" uid="uid://ctxa7i1mbt7ab" path="res://UI/Inventory/PlayerInventory/Crafting/CraftingIngredient.gd" id="14_c7ib1"]
@@ -35,7 +35,7 @@ point_count = 2
 script = ExtResource("2_v1b1g")
 source_type = 1
 source_tags = Array[String]([])
-scanned_phys_layers = 191
+scanned_phys_layers = 111
 can_hit_self = false
 bad_effect_affected_teams = 1
 good_effect_affected_teams = 2

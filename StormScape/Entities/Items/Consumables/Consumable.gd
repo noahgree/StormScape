@@ -1,9 +1,11 @@
 @icon("res://Utilities/Debug/EditorIcons/consumable.png")
 extends EquippableItem
 class_name Consumable
+## The base class for all consumables, which are items that can be eaten or used up in some way to provide effects
+## and/or hunger bars, stamina, etc.
 
-@onready var consumption_timer: Timer = $ConsumptionTimer
-@onready var food_particles: CPUParticles2D = $FoodParticles
+@onready var consumption_timer: Timer = $ConsumptionTimer ## The time it takes to consume the consumable and trigger its effects.
+@onready var food_particles: CPUParticles2D = $FoodParticles ## The particles that fire off when the consumable is consumed.
 
 
 func _set_stats(new_stats: ItemResource) -> void:
@@ -12,12 +14,16 @@ func _set_stats(new_stats: ItemResource) -> void:
 	if sprite:
 		sprite.texture = stats.in_hand_icon
 
+## When activate is triggered, try and consume the item.
 func activate() -> void:
 	consume()
 
+## Consumes the consumable, assuming the previous consumption timer is stopped and we aren't on cooldown.
 func consume() -> void:
-	var stamina_component: StaminaComponent = source_entity.get_node_or_null("StaminaComponent")
-	if stamina_component and source_entity.inv.auto_decrementer.get_cooldown(stats.get_cooldown_id()) == 0 and consumption_timer.is_stopped():
+	if not consumption_timer.is_stopped():
+		return
+
+	if source_entity.inv.auto_decrementer.get_cooldown(stats.get_cooldown_id()) == 0:
 		food_particles.global_position = source_entity.hands.global_position + source_entity.hands.mouth_pos
 		food_particles.lifetime = max(0.2, stats.consumption_time / 2.0)
 		food_particles.color = stats.particles_color
@@ -25,10 +31,14 @@ func consume() -> void:
 
 		consumption_timer.start(stats.consumption_time)
 		await consumption_timer.timeout
+
 		source_entity.inv.auto_decrementer.add_cooldown(stats.get_cooldown_id(), stats.consumption_cooldown)
 
-		stamina_component.gain_hunger_bars(stats.hunger_bar_gain)
-		stamina_component.use_hunger_bars(stats.hunger_bar_deduction)
+		var stamina_component: StaminaComponent = source_entity.get_node_or_null("StaminaComponent")
+		if stamina_component != null:
+			stamina_component.gain_hunger_bars(stats.hunger_bar_gain)
+			stamina_component.use_hunger_bars(stats.hunger_bar_deduction)
+
 		source_entity.effect_receiver.handle_effect_source(stats.effect_source, source_entity)
 
 		source_slot.synced_inv.remove_item(source_slot.index, 1)

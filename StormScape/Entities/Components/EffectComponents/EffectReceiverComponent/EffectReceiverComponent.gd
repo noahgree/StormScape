@@ -127,7 +127,6 @@ func handle_effect_source(effect_source: EffectSource, source_entity:
 					knockback_handler.contact_position = effect_source.contact_position
 					knockback_handler.effect_movement_direction = effect_source.movement_direction
 					knockback_handler.is_source_moving_type = (effect_source.source_type == Globals.EffectSourceSourceType.FROM_PROJECTILE)
-
 				_check_status_effect_team_logic(effect_source, source_entity)
 
 ## Checks if each status effect in the array applies to this entity via team logic, then passes it to be unpacked.

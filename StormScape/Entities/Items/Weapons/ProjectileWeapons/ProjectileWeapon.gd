@@ -152,8 +152,10 @@ func _ready() -> void:
 				func(_new_stamina: float) -> void: _update_ammo_ui()
 				)
 
-	if reload_off_hand: reload_off_hand.hide()
-	if reload_main_hand: reload_main_hand.hide()
+	if reload_off_hand:
+		reload_off_hand.hide()
+	if reload_main_hand:
+		reload_main_hand.hide()
 
 	source_entity.inv.auto_decrementer.cooldown_ended.connect(_on_cooldown_timeout)
 	source_entity.inv.auto_decrementer.recharge_completed.connect(_on_ammo_recharge_completed)
