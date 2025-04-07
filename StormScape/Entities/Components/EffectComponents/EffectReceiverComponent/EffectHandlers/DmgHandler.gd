@@ -4,8 +4,8 @@ class_name DmgHandler
 ## A handler for using the data provided in the effect source to apply damage in different ways.
 
 @export var can_be_crit: bool = true ## When false, critical hits are impossible on this entity.
-@export var _dmg_weakness: float = 1.0 ## Multiplier for increasing ALL incoming damage.
-@export var _dmg_resistance: float = 1.0 ## Multiplier for decreasing ALL incoming damage.
+@export_range(0, 100, 1.0, "hide_slider", "suffix:%") var _dmg_weakness: float = 0.0 ## Multiplier for increasing ALL incoming damage.
+@export_range(0, 100, 1.0, "hide_slider", "suffix:%") var _dmg_resistance: float = 0.0 ## Multiplier for decreasing ALL incoming damage.
 
 @onready var health_component: HealthComponent = get_parent().health_component ## The health component to be affected by the damage.
 @onready var affected_entity: PhysicsBody2D = get_parent().affected_entity ## The entity affected by this dmg handler.
@@ -135,7 +135,9 @@ func _send_handled_dmg(source_type: String, dmg_affected_stats: Globals.DmgAffec
 						was_crit: bool = false) -> void:
 	var dmg_weakness: float = affected_entity.stats.get_stat("dmg_weakness")
 	var dmg_resistance: float = affected_entity.stats.get_stat("dmg_resistance")
-	var positive_dmg: int = max(0, handled_amount * (1 + dmg_weakness - dmg_resistance))
+	var multiplier: float = 1.0 + (dmg_weakness / 100.0) - (dmg_resistance / 100.0)
+	multiplier = clamp(multiplier, 0.0, 2.0)
+	var positive_dmg: int = max(0, handled_amount * multiplier)
 
 	_pass_damage_to_potential_life_steal_handler(positive_dmg, life_steal_percent)
 

@@ -1,13 +1,16 @@
-[gd_scene load_steps=16 format=3 uid="uid://bq12ugc7lnirg"]
+[gd_scene load_steps=21 format=3 uid="uid://bq12ugc7lnirg"]
 
 [ext_resource type="Script" uid="uid://06pt5wan8jg1" path="res://Entities/EntityCore/EntityTypes/StaticEntity/PhysicalInventory/PhysicalInventory.gd" id="1_ggkuf"]
 [ext_resource type="Script" uid="uid://dwmur0cosbbwh" path="res://UI/Inventory/InventoryCore/InventoryResource.gd" id="2_hjkvw"]
-[ext_resource type="Texture2D" uid="uid://2xf1pqc78iin" path="res://Assets/Icon/icon.svg" id="2_mwkkp"]
 [ext_resource type="Script" uid="uid://dp8osf7r6xkkt" path="res://Entities/Items/ItemCore/InvItemResource.gd" id="3_s3b18"]
 [ext_resource type="PackedScene" uid="uid://di7vcyrki71nm" path="res://Entities/Components/DetectionComponent/DetectionComponent.tscn" id="6_c3jxm"]
+[ext_resource type="Texture2D" uid="uid://wlfo5p8d28va" path="res://Entities/Environment/Inventories/SimpleChestCT.tres" id="6_hjkvw"]
 [ext_resource type="PackedScene" uid="uid://dh4ydl7l86ywq" path="res://Entities/EntityCore/Sprites/EntitySprite.tscn" id="7_li1wa"]
+[ext_resource type="PackedScene" uid="uid://cj2wy5f05cos4" path="res://Entities/EntityCore/Shadow/EntityShadow.tscn" id="7_s3b18"]
 [ext_resource type="PackedScene" uid="uid://cdfdy8m6ki3oq" path="res://Entities/Components/HealthComponent/HealthComponent.tscn" id="9_4jcvl"]
 [ext_resource type="PackedScene" uid="uid://bhcqtorpyerc3" path="res://Utilities/Debug/ParticleEmissionComponent.tscn" id="10_l1cdp"]
+[ext_resource type="PackedScene" uid="uid://4gl24qwdyti3" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/DmgHandler.tscn" id="10_tnmyf"]
+[ext_resource type="PackedScene" uid="uid://btba0jmsow1mx" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectReceiverComponent.tscn" id="11_5wq56"]
 [ext_resource type="PackedScene" uid="uid://2yy4xfm5g74l" path="res://Entities/Components/ItemComponents/ClippingComponent/ClippingArea.tscn" id="11_ypx5n"]
 
 [sub_resource type="Resource" id="Resource_5wq56"]
@@ -17,39 +20,49 @@ main_inv_size = 10
 starting_inv = Array[ExtResource("3_s3b18")]([])
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_6ca8s"]
-size = Vector2(12, 12)
+size = Vector2(18, 14)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_4jcvl"]
-atlas = ExtResource("2_mwkkp")
-region = Rect2(0, 0, 128, 128)
+[sub_resource type="AtlasTexture" id="AtlasTexture_hjkvw"]
+atlas = ExtResource("6_hjkvw")
+region = Rect2(0, 0, 20, 18)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_s3b18"]
+atlas = ExtResource("6_hjkvw")
+region = Rect2(20, 0, 20, 18)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_d07fb"]
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_4jcvl")
+"texture": SubResource("AtlasTexture_hjkvw")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_s3b18")
 }],
-"loop": true,
+"loop": false,
 "name": &"default",
 "speed": 5.0
 }]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_1mmyp"]
-size = Vector2(12, 12)
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_tnmyf"]
+size = Vector2(18, 14)
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_hjkvw"]
-radius = 16.0
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_1mmyp"]
+size = Vector2(18, 14)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_tnmyf"]
+radius = 18.0
 
 [node name="TestPhysicalInventory" type="StaticBody2D"]
 script = ExtResource("1_ggkuf")
-interact_radius = 16.0
+interact_radius = 18.0
 prompt_position = Vector2(0, -14)
 team = 4
 inv = SubResource("Resource_5wq56")
 is_object = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(0, -6)
+position = Vector2(0, -7)
 shape = SubResource("RectangleShape2D_6ca8s")
 
 [node name="InteractionPromptPos" type="Marker2D" parent="."]
@@ -60,33 +73,49 @@ gizmo_extents = 5.0
 
 [node name="EntitySprite" parent="." instance=ExtResource("7_li1wa")]
 unique_name_in_owner = true
-instance_shader_parameters/override_color = Color(0.294668, 0.145089, 0.00435085, 1)
-instance_shader_parameters/use_override_color = true
-position = Vector2(0, -6)
-scale = Vector2(0.09, 0.09)
+instance_shader_parameters/override_color = Color(1, 1, 1, 0)
+instance_shader_parameters/use_override_color = false
+position = Vector2(0, -9)
 sprite_frames = SubResource("SpriteFrames_d07fb")
 disable_floor_light = true
 
+[node name="EntityShadow" parent="." instance=ExtResource("7_s3b18")]
+position = Vector2(0, -5)
+scale = Vector2(1.81936, 2.4086)
+
 [node name="HealthComponent" parent="." instance=ExtResource("9_4jcvl")]
-infinte_hp = true
+_max_health = 1000
+_max_shield = 0
+
+[node name="EffectReceiverComponent" parent="." node_paths=PackedStringArray("affected_entity", "health_component", "dmg_handler") instance=ExtResource("11_5wq56")]
+can_receive_status_effects = false
+affected_entity = NodePath("..")
+health_component = NodePath("../HealthComponent")
+dmg_handler = NodePath("DmgHandler")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="EffectReceiverComponent"]
+position = Vector2(0, -7)
+shape = SubResource("RectangleShape2D_tnmyf")
+
+[node name="DmgHandler" parent="EffectReceiverComponent" instance=ExtResource("10_tnmyf")]
 
 [node name="ParticleEmissionComponent" parent="." instance=ExtResource("10_l1cdp")]
 
 [node name="ClippingArea" parent="." instance=ExtResource("11_ypx5n")]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="ClippingArea"]
-position = Vector2(0, -6)
+position = Vector2(0, -7)
 shape = SubResource("RectangleShape2D_1mmyp")
-debug_color = Color(1, 0, 0.0917963, 0.251)
+debug_color = Color(1, 0, 0.092, 0.109)
 
 [node name="InteractionArea" type="Area2D" parent="."]
 collision_layer = 0
 monitorable = false
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="InteractionArea"]
-position = Vector2(0, -3)
-shape = SubResource("CircleShape2D_hjkvw")
-debug_color = Color(0.561668, 0.588146, 1, 0.251)
+position = Vector2(0, -5)
+shape = SubResource("CircleShape2D_tnmyf")
+debug_color = Color(0.562, 0.588, 1, 0.147)
 
 [connection signal="body_entered" from="InteractionArea" to="." method="_on_interaction_area_body_entered"]
 [connection signal="body_exited" from="InteractionArea" to="." method="_on_interaction_area_body_exited"]

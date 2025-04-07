@@ -42,7 +42,8 @@ var current_impact_sounds: Array[int] = [] ## The current impact sounds being pl
 var most_recent_multishot_id: int = 0 ## The most recent multishot id to be received. Prevents multishots from stacking status effects.
 
 
-## This works with the tool script defined above to assign export vars automatically in-editor once added to the tree.
+## This works with the tool script defined above to assign export vars automatically in-editor once added
+## to the tree.
 func _notification(what: int) -> void:
 	if Engine.is_editor_hint():
 		if what == NOTIFICATION_CHILD_ORDER_CHANGED:

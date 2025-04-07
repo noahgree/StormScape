@@ -101,7 +101,7 @@ func _setup_cracks_with_damage(sprite_size: Vector2) -> void:
 	health_component.max_health_changed.connect(_on_max_health_of_entity_changed)
 
 	set_instance_shader_parameter("crack_pixelate", sprite_size)
-	var scale_scaler: float = maxf(sprite_size.x, sprite_size.y) / 30.0
+	var scale_scaler: float = max(30.0, maxf(sprite_size.x, sprite_size.y)) / 30.0
 	min_crack_stats["crack_scale"] = min_crack_stats["crack_scale"] * scale_scaler
 	max_crack_stats["crack_scale"] = max_crack_stats["crack_scale"] * scale_scaler
 

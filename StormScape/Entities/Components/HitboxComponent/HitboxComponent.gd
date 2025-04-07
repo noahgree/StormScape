@@ -35,18 +35,20 @@ func _on_area_entered(area: Area2D) -> void:
 
 	_process_hit(area)
 
-## If we hit a body, process it. Any body you wish to make block or handle attacks should be given an effect receiver.
+## If we hit a body, process it. Any body you wish to make block or handle attacks should be given an effect
+## receiver.
 func _on_body_entered(body: Node2D) -> void:
 	if body is TileMapLayer:
 		_process_hit(body)
 
-	# If the body is an entity that doesn't receive effects, it still has collision and should stop projectiles
+	# If the body is an entity that doesn't receive effect sources, it still has collision and should stop projectiles
 	if body is StaticEntity or body is RigidEntity or body is DynamicEntity:
-		if body.effects == null:
+		if body.effect_receiver == null:
 			_process_hit(body)
 
-## Meant to interact with an EffectReceiverComponent that can handle effects supplied by this instance. This version of the method
-## handles the general case, but specific behaviors defined in certain weapon weapon hitboxes may want to override it.
+## Meant to interact with an EffectReceiverComponent that can handle effects supplied by this instance.
+## This version of the method handles the general case, but specific behaviors defined in certain
+## weapon hitboxes may want to override it.
 func _start_being_handled(handling_area: EffectReceiverComponent) -> void:
 	effect_source = effect_source.duplicate()
 

@@ -1,4 +1,4 @@
-[gd_scene load_steps=44 format=3 uid="uid://xsq1q0fffsin"]
+[gd_scene load_steps=45 format=3 uid="uid://xsq1q0fffsin"]
 
 [ext_resource type="Script" uid="uid://nup3um166s32" path="res://Entities/EntityCore/EntityTypes/RigidEntity/RigidEntity.gd" id="1_6tnit"]
 [ext_resource type="Script" uid="uid://dwmur0cosbbwh" path="res://UI/Inventory/InventoryCore/InventoryResource.gd" id="2_mdi77"]
@@ -6,10 +6,10 @@
 [ext_resource type="PackedScene" uid="uid://di7vcyrki71nm" path="res://Entities/Components/DetectionComponent/DetectionComponent.tscn" id="3_fg1br"]
 [ext_resource type="PackedScene" uid="uid://dh4ydl7l86ywq" path="res://Entities/EntityCore/Sprites/EntitySprite.tscn" id="3_nv7a0"]
 [ext_resource type="Shader" uid="uid://cfbagv3hrtar2" path="res://Utilities/Game/Shaders/EntityEffectShader.gdshader" id="4_l6rwf"]
-[ext_resource type="Texture2D" uid="uid://2xf1pqc78iin" path="res://Assets/Icon/icon.svg" id="5_h2o7w"]
 [ext_resource type="PackedScene" uid="uid://cdfdy8m6ki3oq" path="res://Entities/Components/HealthComponent/HealthComponent.tscn" id="6_1wa26"]
 [ext_resource type="PackedScene" uid="uid://bhcqtorpyerc3" path="res://Utilities/Debug/ParticleEmissionComponent.tscn" id="6_ljryo"]
 [ext_resource type="PackedScene" uid="uid://btba0jmsow1mx" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectReceiverComponent.tscn" id="7_ftqus"]
+[ext_resource type="Texture2D" uid="uid://v1rdlj54siql" path="res://Entities/Environment/Objects/SimpleBoxCT.tres" id="7_mdi77"]
 [ext_resource type="PackedScene" uid="uid://dykiv0tlhwmox" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/KnockbackHandler.tscn" id="8_fapfi"]
 [ext_resource type="PackedScene" uid="uid://4gl24qwdyti3" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/DmgHandler.tscn" id="9_23lbg"]
 [ext_resource type="PackedScene" uid="uid://depnx3pnassrq" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/BurningHandler.tscn" id="10_87rpi"]
@@ -20,6 +20,7 @@
 [ext_resource type="PackedScene" uid="uid://co3n6m7efg8pd" path="res://Entities/Components/EffectComponents/StatusEffectsComponent/StatusEffectsComponent.tscn" id="14_20kf8"]
 [ext_resource type="PackedScene" uid="uid://c4kt3bx0ot3c7" path="res://Entities/Components/ItemComponents/LootTableComponent/LootTableComponent.tscn" id="15_1vdsh"]
 [ext_resource type="Script" uid="uid://1qq7eo7lm8j6" path="res://Entities/Components/ItemComponents/LootTableComponent/LootTableEntry.gd" id="16_fkdnf"]
+[ext_resource type="PackedScene" uid="uid://e3qv2f7w61vy" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/RegenHandler.tscn" id="18_ccp8j"]
 [ext_resource type="Script" uid="uid://cgqfx1ve66f3h" path="res://Entities/Components/ItemComponents/LootTableComponent/LootTable.gd" id="18_w6kaj"]
 [ext_resource type="Resource" uid="uid://cpxev3kvt74vw" path="res://Entities/Items/TRESItems/Shell(0).tres" id="20_mnmab"]
 [ext_resource type="Resource" uid="uid://m8eslst1uuxh" path="res://Entities/Items/TRESItems/Light(0).tres" id="21_iirwy"]
@@ -40,20 +41,21 @@ main_inv_size = 10
 starting_inv = Array[ExtResource("3_ccp8j")]([])
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_sbju2"]
+size = Vector2(18, 18)
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_3nojt"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_arbka"]
 resource_local_to_scene = true
 shader = ExtResource("4_l6rwf")
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_i2rwd"]
-atlas = ExtResource("5_h2o7w")
-region = Rect2(0, 0, 128, 128)
+[sub_resource type="AtlasTexture" id="AtlasTexture_arbka"]
+atlas = ExtResource("7_mdi77")
+region = Rect2(0, 0, 18, 18)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_fg1br"]
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_i2rwd")
+"texture": SubResource("AtlasTexture_arbka")
 }],
 "loop": true,
 "name": &"default",
@@ -135,7 +137,7 @@ inv = SubResource("Resource_arbka")
 is_object = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(0, -10)
+position = Vector2(0, -9)
 shape = SubResource("RectangleShape2D_sbju2")
 debug_color = Color(1.44392e-06, 0.568839, 0.851513, 0.42)
 
@@ -143,18 +145,21 @@ debug_color = Color(1.44392e-06, 0.568839, 0.851513, 0.42)
 
 [node name="EntitySprite" parent="." instance=ExtResource("3_nv7a0")]
 unique_name_in_owner = true
-material = SubResource("ShaderMaterial_3nojt")
-instance_shader_parameters/crack_color = Color(0.541809, 0.000266163, 0.558727, 1)
-position = Vector2(0, -10)
-scale = Vector2(0.156, 0.156)
+material = SubResource("ShaderMaterial_arbka")
+instance_shader_parameters/crack_color = Color(0.246, 0.109, 0.01, 0.85)
+instance_shader_parameters/crack_intensity = 1.0
+instance_shader_parameters/crack_profile = 2.11
+instance_shader_parameters/crack_scale = 3.838
+instance_shader_parameters/crack_width = 0.036
+position = Vector2(0, -9)
 sprite_frames = SubResource("SpriteFrames_fg1br")
 
 [node name="ParticleEmissionComponent" parent="." instance=ExtResource("6_ljryo")]
 
 [node name="HealthComponent" parent="." instance=ExtResource("6_1wa26")]
 
-[node name="EffectReceiverComponent" parent="." node_paths=PackedStringArray("affected_entity", "health_component", "loot_table_component", "dmg_handler", "heal_handler", "knockback_handler", "poison_handler", "frostbite_handler", "burning_handler", "life_steal_handler") instance=ExtResource("7_ftqus")]
-position = Vector2(0, -10)
+[node name="EffectReceiverComponent" parent="." node_paths=PackedStringArray("affected_entity", "health_component", "loot_table_component", "dmg_handler", "heal_handler", "knockback_handler", "poison_handler", "regen_handler", "frostbite_handler", "burning_handler", "life_steal_handler") instance=ExtResource("7_ftqus")]
+position = Vector2(0, -9)
 affected_entity = NodePath("..")
 health_component = NodePath("../HealthComponent")
 loot_table_component = NodePath("../LootTableComponent")
@@ -162,11 +167,13 @@ dmg_handler = NodePath("DmgHandler")
 heal_handler = NodePath("HealHandler")
 knockback_handler = NodePath("KnockbackHandler")
 poison_handler = NodePath("PoisonHandler")
+regen_handler = NodePath("RegenHandler")
 frostbite_handler = NodePath("FrostbiteHandler")
 burning_handler = NodePath("BurningHandler")
 life_steal_handler = NodePath("LifeStealHandler")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="EffectReceiverComponent"]
+visible = false
 shape = SubResource("RectangleShape2D_wpovd")
 debug_color = Color(0.941042, 1.32841e-05, 0.612344, 0.42)
 
@@ -183,6 +190,8 @@ debug_color = Color(0.941042, 1.32841e-05, 0.612344, 0.42)
 [node name="FrostbiteHandler" parent="EffectReceiverComponent" instance=ExtResource("13_0vlu7")]
 
 [node name="LifeStealHandler" parent="EffectReceiverComponent" instance=ExtResource("13_mscgs")]
+
+[node name="RegenHandler" parent="EffectReceiverComponent" instance=ExtResource("18_ccp8j")]
 
 [node name="StatusEffectsComponent" parent="." node_paths=PackedStringArray("effect_receiver") instance=ExtResource("14_20kf8")]
 unique_name_in_owner = true
@@ -201,8 +210,9 @@ hit_spawn_chance = 0.0
 anim_player = NodePath("../AnimationPlayer")
 
 [node name="ClippingArea" parent="." instance=ExtResource("28_2xjsy")]
+visible = false
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="ClippingArea"]
-position = Vector2(0, -10)
+position = Vector2(0, -9)
 shape = SubResource("RectangleShape2D_wpovd")
 debug_color = Color(1, 0.013803, 0.00528418, 0.42)

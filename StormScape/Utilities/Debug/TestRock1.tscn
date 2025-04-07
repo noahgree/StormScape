@@ -73,8 +73,6 @@ die_loot_table = Array[ExtResource("14_v0818")]([])
 height = 28.0
 
 [node name="TestRock1" type="StaticBody2D"]
-collision_layer = 0
-collision_mask = 0
 script = ExtResource("1_7qjvm")
 team = 4
 inv = SubResource("Resource_by2me")

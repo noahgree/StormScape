@@ -84,6 +84,7 @@
 [ext_resource type="Script" uid="uid://ct7n8wo1p3b20" path="res://Entities/Items/WeaponMods/WeaponMod.gd" id="74_bvo3j"]
 [ext_resource type="Resource" uid="uid://cwgqj8klx4b3x" path="res://Entities/Items/TRESItems/ExtendedMag(0).tres" id="75_r5dvw"]
 [ext_resource type="Script" uid="uid://cs7bq5fnghjjp" path="res://UI/TemporaryElements/InteractionPrompt.gd" id="75_thmqm"]
+[ext_resource type="Material" uid="uid://cpbrvm1tp7153" path="res://Utilities/Game/Materials/UnshadedMaterial.tres" id="78_da65a"]
 [ext_resource type="Texture2D" uid="uid://lqg70q4wj55g" path="res://UI/Inventory/InventoryCore/Background/Wood/inv_background_wood.png" id="78_jlc36"]
 [ext_resource type="Script" uid="uid://317ipeo41y3c" path="res://Entities/Items/Wearables/Wearable.gd" id="79_gdihr"]
 [ext_resource type="FontFile" uid="uid://bp2lgrlhj8cet" path="res://Assets/Theming/Fonts/Pixel/C&C Red Alert [INET].ttf" id="85_7xlwj"]
@@ -1361,9 +1362,6 @@ light_mode = 1
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_n4o3n"]
 light_mode = 1
 
-[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_r5dvw"]
-light_mode = 1
-
 [sub_resource type="LabelSettings" id="LabelSettings_5qrph"]
 line_spacing = 0.0
 font = ExtResource("90_hxjay")
@@ -1691,7 +1689,7 @@ theme_override_constants/margin_bottom = 2
 [node name="InteractionPromptIcon" type="TextureRect" parent="InteractionPrompt/ElementsHBox/InteractionIconMargin"]
 unique_name_in_owner = true
 self_modulate = Color(0.837183, 0.837183, 0.837183, 1)
-material = SubResource("CanvasItemMaterial_r5dvw")
+material = ExtResource("78_da65a")
 custom_minimum_size = Vector2(8, 8)
 layout_mode = 2
 texture = ExtResource("89_0313k")
@@ -1713,6 +1711,7 @@ alignment = 1
 
 [node name="InteractionTitleLabel" type="Label" parent="InteractionPrompt/ElementsHBox/InteractionTextMargins/TextVBox"]
 unique_name_in_owner = true
+material = ExtResource("78_da65a")
 layout_mode = 2
 text = "TITLE"
 label_settings = SubResource("LabelSettings_5qrph")
@@ -1720,6 +1719,7 @@ vertical_alignment = 1
 
 [node name="InteractionInfoLabel" type="Label" parent="InteractionPrompt/ElementsHBox/InteractionTextMargins/TextVBox"]
 unique_name_in_owner = true
+material = ExtResource("78_da65a")
 layout_mode = 2
 text = "Info"
 label_settings = SubResource("LabelSettings_uc4hk")

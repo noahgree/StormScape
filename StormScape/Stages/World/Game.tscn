@@ -244,7 +244,7 @@ multishot_id = -1
 
 [sub_resource type="Resource" id="Resource_s2x07"]
 script = ExtResource("19_04pgg")
-title = "CHEST"
+title = "SEARCH"
 title_color = Color(0.953, 0.871, 0.855, 1)
 title_outline_color = Color(0, 0, 0, 0.565)
 info = ""
@@ -275,7 +275,7 @@ metadata/_custom_type_script = "uid://dwmur0cosbbwh"
 
 [sub_resource type="Resource" id="Resource_a2una"]
 script = ExtResource("19_04pgg")
-title = "CHEST"
+title = "SEARCH"
 title_color = Color(0.953, 0.871, 0.855, 1)
 title_outline_color = Color(0, 0, 0, 0.565)
 info = ""

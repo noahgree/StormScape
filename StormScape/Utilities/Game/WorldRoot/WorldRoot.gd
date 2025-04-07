@@ -1,7 +1,7 @@
 extends Node2D
 class_name WorldRoot
-## The root of the active game world. Everything begins here. Mark this node and children of this node that should never unload as
-## being in the "core" group within the global grsoup tab.
+## The root of the active game world. Everything begins here. Mark this node and children of this node
+## that should never unload as being in the "core" group within the global group tab.
 
 @onready var fps_label: Label = $DebugCanvasLayer/FPS ## The label displaying the current FPS.
 

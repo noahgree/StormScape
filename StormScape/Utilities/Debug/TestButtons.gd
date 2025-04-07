@@ -7,10 +7,10 @@ extends Control
 
 
 func _on_test_hurt_btn_pressed() -> void:
-	health_component.damage_shield_then_health(12, "BasicDamage", false, -1)
+	health_component.damage_shield_then_health(12, "basic_damage", false, -1)
 
 func _on_test_heal_btn_pressed() -> void:
-	health_component.heal_health_then_shield(15, "BasicHealing", -1)
+	health_component.heal_health_then_shield(15, "basic_healing", -1)
 
 func _on_test_music_btn_pressed() -> void:
 	var audio_player: Variant = AudioManager.play_and_get_sound("MysteryTheme1", AudioManager.SoundType.MUSIC_GLOBAL, Globals.player_node, 0)
