@@ -4,7 +4,7 @@
 
 [resource]
 script = ExtResource("1_5k1vd")
-name = "PlayerRunBase"
+id = &"player_run_base"
 sound_files_folder = "res://Assets/Audio/Sfx/SfxRawAudio/Characters/Player/Movement/Run/Base"
 sound_file_paths = Array[String]([])
 concurrent_limit = 1

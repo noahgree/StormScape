@@ -4,7 +4,7 @@
 
 [resource]
 script = ExtResource("1_rfrqa")
-name = "PlayerDash"
+id = &"player_dash"
 sound_files_folder = "res://Assets/Audio/Sfx/SfxRawAudio/Characters/Player/Movement/Dash/DashBase"
 sound_file_paths = Array[String]([])
 concurrent_limit = 2

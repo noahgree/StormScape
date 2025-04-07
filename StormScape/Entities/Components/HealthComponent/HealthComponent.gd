@@ -58,7 +58,7 @@ func damage_shield_then_health(amount: int, source_type: String, was_crit: bool,
 		if shield > 0:
 			var src_type: String = source_type if source_type != "basic_damage" else "shield_damage"
 			_create_or_update_popup_for_src_type(src_type, false, was_crit, min(shield, amount))
-			_play_sound("ShieldHit", multishot_id)
+			_play_sound("shield_hit", multishot_id)
 		if amount - shield > 0:
 			var src_type: String = source_type if source_type != "basic_damage" else "health_damage"
 			_create_or_update_popup_for_src_type(src_type, false, was_crit, (amount - shield))
@@ -89,7 +89,7 @@ func damage_shield(amount: int, source_type: String, was_crit: bool, multishot_i
 			shield = max(0, shield - amount)
 		var src_type: String = source_type if source_type != "basic_damage" else "shield_damage"
 		_create_or_update_popup_for_src_type(src_type, false, was_crit, amount)
-		if amount > 0: _play_sound("ShieldHit", multishot_id)
+		if amount > 0: _play_sound("shield_hit", multishot_id)
 
 ## Handles what happens when health reaches 0 for the entity.
 func _check_for_death() -> void:

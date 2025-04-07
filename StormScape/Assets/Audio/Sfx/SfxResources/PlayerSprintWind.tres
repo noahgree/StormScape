@@ -1,10 +1,10 @@
 [gd_resource type="Resource" script_class="AudioResource" load_steps=2 format=3 uid="uid://cjv5d4cwpj1l8"]
 
-[ext_resource type="Script" path="res://Utilities/Game/Audio/AudioResource.gd" id="1_vcftv"]
+[ext_resource type="Script" uid="uid://dwic8harmmplg" path="res://Utilities/Game/Audio/AudioResource.gd" id="1_vcftv"]
 
 [resource]
 script = ExtResource("1_vcftv")
-name = "PlayerSprintWind"
+id = &"player_sprint_wind"
 sound_files_folder = "res://Assets/Audio/Sfx/SfxRawAudio/Characters/Player/Movement/Run/Sprint"
 sound_file_paths = Array[String]([])
 concurrent_limit = 1

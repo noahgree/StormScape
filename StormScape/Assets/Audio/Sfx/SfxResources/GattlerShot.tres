@@ -4,7 +4,7 @@
 
 [resource]
 script = ExtResource("1_xx6wv")
-name = &"GattlerShot"
+id = &"gattler_shot"
 sound_files_folder = "res://Assets/Audio/Sfx/SfxRawAudio/Items/Weapons/Gattler"
 sound_file_paths = Array[String]([])
 concurrent_limit = 10
@@ -16,4 +16,4 @@ restart_if_at_limit = false
 should_loop = false
 max_distance = 500
 attentuation_falloff = 1.0
-metadata/_custom_type_script = ExtResource("1_xx6wv")
+metadata/_custom_type_script = "uid://dwic8harmmplg"

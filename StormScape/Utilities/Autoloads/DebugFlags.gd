@@ -12,6 +12,8 @@ class PrintFlags:
 	static var saver_loader_status_changes: bool = true
 	static var ammo_updates: bool = false
 	static var sounds_starting: bool = false
+	static var sound_preload_changes: bool = true
+	static var sound_refcount_changes: bool = true
 	static var storm_phases: bool = false
 	static var loot_table_updates: bool = false
 

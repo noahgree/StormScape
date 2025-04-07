@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://i6tnlhpg6lt0"]
+
+[ext_resource type="Script" uid="uid://c1sw3hbqa7an2" path="res://Utilities/Game/Audio/AudioPreloader.gd" id="1_4mfyv"]
+
+[node name="AudioPreloader" type="Node"]
+script = ExtResource("1_4mfyv")

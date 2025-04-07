@@ -1453,7 +1453,7 @@ shadow_size = 0
 shadow_color = Color(0, 0, 0, 0.3)
 shadow_offset = Vector2(0.3, 0.3)
 
-[node name="Player" type="CharacterBody2D" groups=["has_save_logic"]]
+[node name="CharacterBody2D" type="CharacterBody2D" groups=["has_save_logic"]]
 collision_layer = 0
 collision_mask = 0
 motion_mode = 1

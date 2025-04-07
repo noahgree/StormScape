@@ -1,10 +1,10 @@
 [gd_resource type="Resource" script_class="AudioResource" load_steps=2 format=3 uid="uid://di0gs4d7ihmp2"]
 
-[ext_resource type="Script" path="res://Utilities/Game/Audio/AudioResource.gd" id="1_plx4t"]
+[ext_resource type="Script" uid="uid://dwic8harmmplg" path="res://Utilities/Game/Audio/AudioResource.gd" id="1_plx4t"]
 
 [resource]
 script = ExtResource("1_plx4t")
-name = "KineticImpactHit"
+id = &"kinetic_impact_hit"
 sound_files_folder = "res://Assets/Audio/Sfx/SfxRawAudio/Characters/StatusEffects/KineticImpact"
 sound_file_paths = Array[String]([])
 concurrent_limit = 2

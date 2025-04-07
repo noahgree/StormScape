@@ -2,7 +2,7 @@ extends Resource
 class_name AudioResource
 ## A resource for linking a sound file path with an associated volume, pitch settings, name, and max concurrent streams.
 
-@export var name: StringName ## The main name of the sound. [b]Must be unique.[/b]
+@export var id: StringName ## The main id of the sound. [b]Must be unique.[/b]
 @export_dir var sound_files_folder: String ## The folder containing all the sound files that can be played for this resource.
 @export_file("*.mp3", "*.wav", "*.ogg") var sound_file_paths: Array[String] ## The file paths to the sound variations. Restricted to mp3, wav, and ogg. Wav is highly recommended because of its efficiency. This array gets filled with everything in the "sound_files_folder" at game load as well.
 @export_range(1, 25, 1) var concurrent_limit: int = 10 ## The max number of instances of this sound that can be played at the same time.
@@ -18,11 +18,12 @@ class_name AudioResource
 @export_exp_easing("attenuation") var attentuation_falloff: float = 1.0
 
 var current_count: int = 0 ## How many instances of this sound are currently being played.
-var id: int = 0 ## Incremented when audio stream players using this sound are instantiated to keep names unique
+var instantiation_id: int = 0 ## Incremented when audio stream players using this sound are instantiated to keep names unique
+var preloaded_streams: Array[AudioStream] = [] ## A reference to the preloaded streams this resource uses. Gets cleared out when no scene needs this resource anymore.
 
 ## Changes the current number of instances value.
 func increment_current_count() -> void:
-	id += 1
+	instantiation_id += 1
 	current_count += 1
 
 ## Called when the connected "finished" signal from the AudioStream created using this resource finishes playing.
