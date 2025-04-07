@@ -1,0 +1,54 @@
+[gd_scene load_steps=4 format=3 uid="uid://b1jkjfdse5570"]
+
+[ext_resource type="Texture2D" uid="uid://6a23kslcgulq" path="res://addons/screen_config_plugin/Assets/next_screen.svg" id="1_kd7ji"]
+[ext_resource type="Script" uid="uid://biuwmwfxd4pc6" path="res://addons/screen_config_plugin/ScreenConfigToolbar.gd" id="1_xqs5j"]
+[ext_resource type="Texture2D" uid="uid://dhtdl38o23jr3" path="res://addons/screen_config_plugin/Assets/primary_screen.svg" id="2_xqs5j"]
+
+[node name="ScreenConfigToolbar" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_xqs5j")
+default_color = Color(0.513726, 0.513726, 0.517647, 1)
+hover_color = Color(1, 1, 1, 1)
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 0
+offset_left = -744.0
+offset_top = 15.0
+offset_right = -617.0
+offset_bottom = 49.0
+theme_override_constants/separation = 16
+
+[node name="NextScreenBtn" type="TextureButton" parent="HBoxContainer"]
+modulate = Color(0.337255, 0.619608, 1, 1)
+custom_minimum_size = Vector2(44, 0)
+layout_mode = 2
+focus_neighbor_right = NodePath("../SameScreenBtn")
+focus_mode = 0
+texture_normal = ExtResource("1_kd7ji")
+stretch_mode = 3
+metadata/screen_index = -3
+metadata/Text = "The game will be placed on the next (usually external) monitor on run."
+
+[node name="SameScreenBtn" type="TextureButton" parent="HBoxContainer"]
+modulate = Color(0.513726, 0.513726, 0.517647, 1)
+layout_mode = 2
+focus_neighbor_left = NodePath("../NextScreenBtn")
+focus_mode = 0
+texture_normal = ExtResource("2_xqs5j")
+stretch_mode = 3
+metadata/screen_index = -2
+metadata/Text = "The game will be placed on the current (usually internal) screen on run."
+
+[node name="Separator" type="ColorRect" parent="HBoxContainer"]
+layout_mode = 2
+color = Color(1, 1, 1, 0)
+
+[node name="ColorRect" type="ColorRect" parent="HBoxContainer"]
+custom_minimum_size = Vector2(1, 34)
+layout_mode = 2
+color = Color(1, 1, 1, 0.352)

@@ -3,7 +3,6 @@
 # Godot 4+ specific ignores
 StormScape/.godot/
 StormScape/android/
-StormScape/addons/
 
 StormScape/.import/
 StormScape/export.cfg
@@ -20,5 +19,3 @@ StormScape/mono_crash.*.json
 FL Studio Files/
 Aseprite Files/
 Progress Media/
-GameDataAlias
-AssetsAlias
