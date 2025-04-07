@@ -17,7 +17,8 @@ metadata/_custom_type_script = ExtResource("2_dvarp")
 
 [resource]
 script = ExtResource("1_nit3d")
-effect_name = "Slowness"
+id = "slowness"
+source_type = 0
 effect_lvl = 2
 is_bad_effect = true
 affected_entities = 1
@@ -30,4 +31,4 @@ only_cue_on_player_hit = false
 spawn_particles = true
 particle_hander_req = ""
 make_entity_glow = true
-metadata/_custom_type_script = ExtResource("1_nit3d")
+metadata/_custom_type_script = "uid://bi2pojxmm61xg"

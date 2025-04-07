@@ -1,0 +1,134 @@
+[gd_scene load_steps=19 format=3 uid="uid://355ervipd44s"]
+
+[ext_resource type="Script" uid="uid://d1uexupra43i8" path="res://Entities/Items/Projectiles/ProjectileCore/Projectile.gd" id="1_kpw6l"]
+[ext_resource type="Texture2D" uid="uid://bwuth2fyl1x12" path="res://Entities/Items/Projectiles/Bullets/SmallBullet/bullet_small.png" id="2_ojnvn"]
+[ext_resource type="Texture2D" uid="uid://bpeyfequ1my8c" path="res://Entities/Items/Weapons/ProjectileWeapons/BottleOFrost/BottleOFrostThrowableCT.tres" id="3_kpw6l"]
+[ext_resource type="Texture2D" uid="uid://dcbwxgak6a0r8" path="res://Entities/EntityCore/Shadow/entity_shadow.png" id="4_smf1p"]
+[ext_resource type="Texture2D" uid="uid://cidg3ea0fltr" path="res://UI/TemporaryElements/StatusEffects/snowflake.png" id="5_kpw6l"]
+[ext_resource type="PackedScene" uid="uid://dau2tuc6mx0by" path="res://Entities/Items/Projectiles/ProjectileCore/Trail/Trail.tscn" id="6_ubjt2"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_kpw6l"]
+radius = 4.0
+height = 15.0849
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_q4sp5"]
+light_mode = 1
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_pg2je"]
+atlas = ExtResource("2_ojnvn")
+region = Rect2(0, 13, 13, 13)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hnctu"]
+atlas = ExtResource("2_ojnvn")
+region = Rect2(13, 13, 13, 13)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ruur3"]
+atlas = ExtResource("2_ojnvn")
+region = Rect2(26, 13, 13, 13)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_v78pw"]
+atlas = ExtResource("3_kpw6l")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_kpw6l"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_pg2je")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_hnctu")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ruur3")
+}],
+"loop": false,
+"name": &"aoe",
+"speed": 30.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_v78pw")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_kpw6l"]
+blend_mode = 1
+light_mode = 1
+
+[sub_resource type="Curve" id="Curve_ojnvn"]
+_limits = [-360.0, 360.0, 0.0, 1.0]
+_data = [Vector2(0, -3.26761), 0.0, 0.0, 0, 0, Vector2(1, 37.7465), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Curve" id="Curve_v78pw"]
+_data = [Vector2(0.00342466, 0.359578), 0.0, 0.0, 0, 0, Vector2(0.121575, 0.707021), 0.0, 0.0, 0, 0, Vector2(0.756849, 0.842242), 0.0, 0.0, 0, 0, Vector2(0.941781, 0.77651), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 5
+
+[sub_resource type="Gradient" id="Gradient_smf1p"]
+offsets = PackedFloat32Array(0, 0.0308642, 0.857414, 1)
+colors = PackedColorArray(0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="Gradient" id="Gradient_7tntk"]
+offsets = PackedFloat32Array(0.237255, 1)
+colors = PackedColorArray(1, 1, 1, 0, 1, 1, 1, 0.2)
+
+[node name="FrostBottle" type="Area2D" node_paths=PackedStringArray("in_air_only_particles")]
+editor_description = "DO NOT SET EFFECT SOURCE IF BEING USED DIRECTLY WITH A WEAPON. THE WEAPON WILL SET IT FOR YOU."
+collision_layer = 0
+collision_mask = 0
+script = ExtResource("1_kpw6l")
+glow_color = Color(0.857947, 0.939727, 1, 1)
+in_air_only_particles = [NodePath("FrostParticles")]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, 1.33333)
+rotation = 0.785398
+shape = SubResource("CapsuleShape2D_kpw6l")
+debug_color = Color(0.626, 0.349, 1, 0.196)
+
+[node name="ProjSprite" type="AnimatedSprite2D" parent="."]
+light_mask = 2
+material = SubResource("CanvasItemMaterial_q4sp5")
+sprite_frames = SubResource("SpriteFrames_kpw6l")
+autoplay = "default"
+
+[node name="Shadow" type="Sprite2D" parent="."]
+self_modulate = Color(0.16, 0.16, 0.16, 0.185)
+top_level = true
+z_index = 1
+position = Vector2(0, 7)
+scale = Vector2(0.45, 0.35)
+texture = ExtResource("4_smf1p")
+
+[node name="FrostParticles" type="CPUParticles2D" parent="."]
+light_mask = 2
+material = SubResource("CanvasItemMaterial_kpw6l")
+position = Vector2(5, -4)
+amount = 9
+texture = ExtResource("5_kpw6l")
+lifetime = 0.5
+lifetime_randomness = 0.15
+direction = Vector2(0, 1)
+gravity = Vector2(0, 10)
+initial_velocity_min = 5.0
+initial_velocity_max = 5.0
+orbit_velocity_min = -0.05
+orbit_velocity_max = 0.05
+angle_min = -10.0
+angle_max = 10.0
+angle_curve = SubResource("Curve_ojnvn")
+scale_amount_min = 0.25
+scale_amount_max = 0.4
+scale_amount_curve = SubResource("Curve_v78pw")
+color = Color(0, 1.9, 2.3, 1)
+color_ramp = SubResource("Gradient_smf1p")
+
+[node name="Trail" parent="." instance=ExtResource("6_ubjt2")]
+width = 6.0
+gradient = SubResource("Gradient_7tntk")
+max_points = 15
+x_offset = 0.0

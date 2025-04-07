@@ -2,14 +2,14 @@
 
 [ext_resource type="Script" uid="uid://ca8xdltgdyjys" path="res://Entities/Items/Weapons/ProjectileWeapons/ProjectileWeapon.gd" id="1_sguuu"]
 [ext_resource type="Shader" uid="uid://cugs1eqtkjsbd" path="res://Utilities/Game/Shaders/TintAndGlow.gdshader" id="3_riusn"]
-[ext_resource type="Texture2D" uid="uid://b4bumm88u2qmw" path="res://Entities/Items/Weapons/ProjectileWeapons/BottleOFire/FireBottleThrowableCT.tres" id="4_hbtxu"]
+[ext_resource type="Texture2D" uid="uid://b4bumm88u2qmw" path="res://Entities/Items/Weapons/ProjectileWeapons/BottleOFire/BottleOFireThrowableCT.tres" id="4_hbtxu"]
 [ext_resource type="PackedScene" uid="uid://bl0lw3ov85t2w" path="res://Entities/Components/ItemComponents/ClippingComponent/ClippingDetector.tscn" id="5_fgpay"]
 [ext_resource type="PackedScene" uid="uid://lw5fgm5pgoif" path="res://Entities/EntityCore/Sprites/EntityHandSprite.tscn" id="5_hbtxu"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_t0vfb"]
 shader = ExtResource("3_riusn")
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_riusn"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_fgpay"]
 atlas = ExtResource("4_hbtxu")
 region = Rect2(0, 0, 16, 16)
 
@@ -17,7 +17,7 @@ region = Rect2(0, 0, 16, 16)
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_riusn")
+"texture": SubResource("AtlasTexture_fgpay")
 }],
 "loop": true,
 "name": &"default",
@@ -77,7 +77,6 @@ tracks/3/keys = {
 
 [sub_resource type="Animation" id="Animation_in3ed"]
 resource_name = "fire"
-length = 1.05
 step = 0.05
 tracks/0/type = "value"
 tracks/0/imported = false

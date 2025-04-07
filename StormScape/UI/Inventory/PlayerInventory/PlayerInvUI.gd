@@ -119,7 +119,7 @@ func _on_alternate_inv_open_request(alternate_inv_source_node: Node2D) -> void:
 #region Dropping On Ground
 ## When we click the empty space around this player inventory, change needed visibilities.
 func _on_blank_space_input_event(_event: InputEvent) -> void:
-	if Input.is_action_just_released("primary"):
+	if Input.is_action_just_pressed("primary"):
 		is_open = false
 		accept_event()
 

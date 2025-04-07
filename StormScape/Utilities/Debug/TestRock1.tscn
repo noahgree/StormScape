@@ -27,9 +27,9 @@ main_inv_size = 10
 starting_inv = Array[ExtResource("3_mc2cg")]([])
 
 [sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_2kecs"]
-polygon = PackedVector2Array(-7, -6, -7, 0, 7, 0, 7, -6)
+polygon = PackedVector2Array(-12, -15, -12, -6, 12, -6, 12, -15)
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_sc78r"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ymdvb"]
 resource_local_to_scene = true
 shader = ExtResource("6_sc78r")
 
@@ -92,7 +92,7 @@ scale = Vector2(2.51672, 3.34408)
 
 [node name="EntitySprite" parent="." instance=ExtResource("5_by2me")]
 unique_name_in_owner = true
-material = SubResource("ShaderMaterial_sc78r")
+material = SubResource("ShaderMaterial_ymdvb")
 instance_shader_parameters/crack_color = Color(0.246, 0.109, 0.01, 0.85)
 instance_shader_parameters/crack_depth = 0.4
 instance_shader_parameters/crack_intensity = 0.0

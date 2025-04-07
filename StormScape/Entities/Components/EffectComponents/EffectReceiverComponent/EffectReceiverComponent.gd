@@ -149,16 +149,16 @@ func _check_status_effect_team_logic(effect_source: EffectSource, source_entity:
 func handle_status_effect(status_effect: StatusEffect) -> void:
 	if not _check_if_applicable_entity_type_for_status_effect(status_effect):
 		return
-	if ("Untouchable" in affected_entity.effects.current_effects) and (status_effect.is_bad_effect):
+	if ("untouchable" in affected_entity.effects.current_effects) and (status_effect.is_bad_effect):
 		return
 
 	for effect_to_stop: String in status_effect.effects_to_stop:
-		affected_entity.effects.request_effect_removal(effect_to_stop)
+		affected_entity.effects.request_effect_removal_for_all_sources(effect_to_stop)
 
 	affected_entity.effects.handle_status_effect(status_effect)
 	_pass_effect_to_handler(status_effect)
 
-	if "Untouchable" in affected_entity.effects.current_effects:
+	if "untouchable" in affected_entity.effects.current_effects:
 		affected_entity.effects.remove_all_bad_status_effects()
 
 ## Passes the status effect to a handler if one is needed for additional logic handling.

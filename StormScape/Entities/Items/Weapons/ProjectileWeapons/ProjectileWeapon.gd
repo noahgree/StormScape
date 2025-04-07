@@ -170,7 +170,7 @@ func disable() -> void:
 	is_reloading_single_and_has_since_released = true
 
 	if stats.charging_stat_effect != null:
-		source_entity.effects.request_effect_removal(stats.charging_stat_effect.effect_name)
+		source_entity.effects.request_effect_removal_by_source(stats.charging_stat_effect.id, Globals.StatusEffectSourceType.FROM_SELF)
 	is_charging = false
 
 func enable() -> void:
@@ -217,7 +217,7 @@ func exit() -> void:
 	if mouse_area: mouse_area.queue_free()
 
 	if stats.charging_stat_effect != null:
-		source_entity.effects.request_effect_removal(stats.charging_stat_effect.effect_name)
+		source_entity.effects.request_effect_removal_by_source(stats.charging_stat_effect.id, Globals.StatusEffectSourceType.FROM_SELF)
 
 	source_entity.hands.smoke_particles.emitting = false
 	source_entity.hands.smoke_particles.visible = false
@@ -329,7 +329,7 @@ func release_hold_activate(hold_time: float) -> void:
 
 	if stats.firing_mode == "Charge":
 		if stats.charging_stat_effect != null:
-			source_entity.effects.request_effect_removal(stats.charging_stat_effect.effect_name)
+			source_entity.effects.request_effect_removal_by_source(stats.charging_stat_effect.id, Globals.StatusEffectSourceType.FROM_SELF)
 		if hold_time > 0:
 			_charge_fire(hold_time)
 		is_charging = false

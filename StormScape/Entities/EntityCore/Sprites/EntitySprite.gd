@@ -22,30 +22,30 @@ class_name EntitySprite
 }
 
 @export_storage var floor_colors: Dictionary[StringName, Color] = { ## The status effect names that have associated colors to change the floor light to.
-	&"Frostbite" : Color(0.435, 0.826, 1),
-	&"Burning" : Color(1, 0.582, 0.484),
-	&"Poison" : Color(0, 0.933, 0.469),
-	&"Slowness" : Color(1, 0.568, 0.56),
-	&"StormSyndrome" : Color(0.861, 0.573, 1),
-	&"Confusion" : Color(0.73, 0.703, 0.701),
-	&"Regen" : Color(0, 0.85, 0.393),
-	&"Speed" : Color(0.692, 0.76, 0),
-	&"Untouchable" : Color(0.29, 0.713, 0.75),
-	&"Stun" : Color(1, 0.909, 0.544),
-	&"TimeSnare": Color(1, 0.4, 0.463)
+	&"frostbite" : Color(0.435, 0.826, 1),
+	&"burning" : Color(1, 0.582, 0.484),
+	&"poison" : Color(0, 0.933, 0.469),
+	&"slowness" : Color(1, 0.568, 0.56),
+	&"storm_syndrome" : Color(0.861, 0.573, 1),
+	&"confusion" : Color(0.73, 0.703, 0.701),
+	&"regen" : Color(0, 0.85, 0.393),
+	&"speed" : Color(0.692, 0.76, 0),
+	&"untouchable" : Color(0.29, 0.713, 0.75),
+	&"stun" : Color(1, 0.909, 0.544),
+	&"time_snare": Color(1, 0.4, 0.463)
 }
 @export_storage var overlay_colors: Dictionary[StringName, Color] = { ## The status effect names that have associated colors to change the overlay to.
-	&"Frostbite" : Color(0.435, 0.826, 1),
-	&"Burning" : Color(1, 0.582, 0.484),
-	&"Poison" : Color(0, 0.933, 0.469),
-	&"Slowness" : Color(1, 0.568, 0.56),
-	&"StormSyndrome" : Color(0.861, 0.573, 1),
-	&"Confusion" : Color(0.73, 0.703, 0.701),
-	&"Regen" : Color(0, 0.8, 0.3),
-	&"Speed" : Color(0.692, 0.76, 0),
-	&"Untouchable" : Color(0.29, 0.713, 0.75),
+	&"frostbite" : Color(0.435, 0.826, 1),
+	&"burning" : Color(1, 0.582, 0.484),
+	&"poison" : Color(0, 0.933, 0.469),
+	&"slowness" : Color(1, 0.568, 0.56),
+	&"storm_syndrome" : Color(0.861, 0.573, 1),
+	&"confusion" : Color(0.73, 0.703, 0.701),
+	&"regen" : Color(0, 0.8, 0.3),
+	&"speed" : Color(0.692, 0.76, 0),
+	&"sntouchable" : Color(0.29, 0.713, 0.75),
 	&"Stun" : Color(1, 0.909, 0.544),
-	&"TimeSnare": Color(1, 0.4, 0.463)
+	&"time_snare": Color(1, 0.4, 0.463)
 }
 
 @onready var floor_light: PointLight2D = $FloorLight ## The light with the effect color that is shining up on the entity.
@@ -108,21 +108,22 @@ func _setup_cracks_with_damage(sprite_size: Vector2) -> void:
 	_update_cracking(health_component.health)
 
 ## Updates the floor light using tweening.
-func update_floor_light(effect_name: String, kill: bool = false) -> void:
+func update_floor_light(effect_id: String, kill: bool = false) -> void:
 	if disable_floor_light:
 		return
 
 	if floor_light_tween:
 		floor_light_tween.kill()
 
-	var change_time_start: float = 0.3 if effect_name != "Stun" else 0.1
-	var change_time_end: float = 1.5 if effect_name != "Stun" else 0.1
+	var change_time_start: float = 0.3 if effect_id != "stun" else 0.1
+	var change_time_end: float = 0.35 if effect_id != "stun" else 0.1
 
 	if not kill:
-		current_floor_light_names.append(effect_name)
+		current_floor_light_names.append(effect_id)
 	else:
-		var removal_index: int = current_floor_light_names.find(effect_name)
-		if removal_index != -1: current_floor_light_names.remove_at(removal_index)
+		var removal_index: int = current_floor_light_names.find(effect_id)
+		if removal_index != -1:
+			current_floor_light_names.remove_at(removal_index)
 
 	if current_floor_light_names.is_empty():
 		floor_light_tween = create_tween()
@@ -133,28 +134,29 @@ func update_floor_light(effect_name: String, kill: bool = false) -> void:
 		floor_light.show()
 
 		floor_light_tween = create_tween()
-		if effect_name != "Stun":
+		if effect_id != "stun":
 			floor_light_tween.set_loops()
 		if current_floor_light_names.size() == 1:
 			floor_light.color = floor_colors.get(effect, Color.WHITE)
 
 		floor_light_tween.tween_property(floor_light, "color", floor_colors.get(effect, Color.WHITE), change_time_start).set_delay(0.01 if effect != "Stun" else 0.05)
-		floor_light_tween.chain().tween_property(floor_light, "energy", 1.65, change_time_start).set_delay(0.01 if effect != "Stun" else 0.05)
+		floor_light_tween.chain().tween_property(floor_light, "energy", 1.65, change_time_start).set_delay(0.01 if effect != "stun" else 0.05)
 		floor_light_tween.tween_property(floor_light, "energy", 1.4, 0.3).set_delay(1.0)
 
 ## Updates the overlay using tweening.
-func update_overlay_color(effect_name: String, kill: bool = false) -> void:
+func update_overlay_color(effect_id: String, kill: bool = false) -> void:
 	if overlay_color_tween:
 		overlay_color_tween.kill()
 
-	var change_time_start: float = 0.2 if effect_name != "Stun" else 0.05
-	var change_time_end: float = 0.2 if effect_name != "Stun" else 0.05
+	var change_time_start: float = 0.2 if effect_id != "stun" else 0.05
+	var change_time_end: float = 0.2 if effect_id != "stun" else 0.05
 
 	if not kill:
-		current_sprite_glow_names.append(effect_name)
+		current_sprite_glow_names.append(effect_id)
 	else:
-		var removal_index: int = current_sprite_glow_names.find(effect_name)
-		if removal_index != -1: current_sprite_glow_names.remove_at(removal_index)
+		var removal_index: int = current_sprite_glow_names.find(effect_id)
+		if removal_index != -1:
+			current_sprite_glow_names.remove_at(removal_index)
 
 	if current_sprite_glow_names.is_empty():
 		overlay_color_tween = create_tween()

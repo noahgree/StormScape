@@ -56,11 +56,11 @@ func _emit_initial_values() -> void:
 func damage_shield_then_health(amount: int, source_type: String, was_crit: bool, multishot_id: int) -> void:
 	if amount > 0 and not is_dying:
 		if shield > 0:
-			var src_type: String = source_type if source_type != "BasicDamage" else "ShieldDamage"
+			var src_type: String = source_type if source_type != "basic_damage" else "shield_damage"
 			_create_or_update_popup_for_src_type(src_type, false, was_crit, min(shield, amount))
 			_play_sound("ShieldHit", multishot_id)
 		if amount - shield > 0:
-			var src_type: String = source_type if source_type != "BasicDamage" else "HealthDamage"
+			var src_type: String = source_type if source_type != "basic_damage" else "health_damage"
 			_create_or_update_popup_for_src_type(src_type, false, was_crit, (amount - shield))
 
 	if infinte_hp:
@@ -78,7 +78,7 @@ func damage_health(amount: int, source_type: String, was_crit: bool, _multishot_
 	if not is_dying:
 		if not infinte_hp:
 			health = max(0, health - amount)
-		var src_type: String = source_type if source_type != "BasicDamage" else "HealthDamage"
+		var src_type: String = source_type if source_type != "basic_damage" else "health_damage"
 		_create_or_update_popup_for_src_type(src_type, false, was_crit, amount)
 		_check_for_death()
 
@@ -87,7 +87,7 @@ func damage_shield(amount: int, source_type: String, was_crit: bool, multishot_i
 	if not is_dying:
 		if not infinte_hp:
 			shield = max(0, shield - amount)
-		var src_type: String = source_type if source_type != "BasicDamage" else "ShieldDamage"
+		var src_type: String = source_type if source_type != "basic_damage" else "shield_damage"
 		_create_or_update_popup_for_src_type(src_type, false, was_crit, amount)
 		if amount > 0: _play_sound("ShieldHit", multishot_id)
 
@@ -116,10 +116,10 @@ func update_armor(new_armor: int) -> void:
 func heal_health_then_shield(amount: int, source_type: String, _multishot_id: int) -> void:
 	if not is_dying:
 		if health < entity.stats.get_stat("max_health"):
-			var src_type: String = source_type if source_type != "BasicHealing" else "HealthHealing"
+			var src_type: String = source_type if source_type != "basic_healing" else "health_healing"
 			_create_or_update_popup_for_src_type(src_type, true, false, amount)
 		else:
-			var src_type: String = source_type if source_type != "BasicHealing" else "ShieldHealing"
+			var src_type: String = source_type if source_type != "basic_healing" else "shield_healing"
 			_create_or_update_popup_for_src_type(src_type, true, false, amount)
 
 		var spillover_health: int = max(0, (amount + health) - entity.stats.get_stat("max_health"))
@@ -132,14 +132,14 @@ func heal_health_then_shield(amount: int, source_type: String, _multishot_id: in
 func heal_health(amount: int, source_type: String, _multishot_id: int) -> void:
 	if not is_dying:
 		health = min(health + amount, entity.stats.get_stat("max_health"))
-		var src_type: String = source_type if source_type != "BasicHealing" else "HealthHealing"
+		var src_type: String = source_type if source_type != "basic_healing" else "health_healing"
 		_create_or_update_popup_for_src_type(src_type, true, false, amount)
 
 ## Heals only shield.
 func heal_shield(amount: int, source_type: String, _multishot_id: int) -> void:
 	if not is_dying:
 		shield = min(shield + amount, entity.stats.get_stat("max_shield"))
-		var src_type: String = source_type if source_type != "BasicHealing" else "ShieldHealing"
+		var src_type: String = source_type if source_type != "basic_healing" else "shield_healing"
 		_create_or_update_popup_for_src_type(src_type, true, false, amount)
 #endregion
 
@@ -199,10 +199,11 @@ func _play_sound(sound_name: String, multishot_id: int) -> void:
 
 #region Popups
 func _create_or_update_popup_for_src_type(src_type: String, was_healing: bool, was_crit: bool, amount: int) -> void:
+	var source_id_only: String = StringHelpers.get_before_colon(src_type)
 	if current_popup:
-		current_popup.update_popup(amount, src_type, was_crit, was_healing)
+		current_popup.update_popup(amount, source_id_only, was_crit, was_healing)
 	else:
-		var new_popup: EffectPopup = EffectPopup.create_popup(src_type, was_healing, was_crit, amount, entity)
+		var new_popup: EffectPopup = EffectPopup.create_popup(source_id_only, was_healing, was_crit, amount, entity)
 		new_popup.tree_exiting.connect(func() -> void: new_popup.queue_free())
 		current_popup = new_popup
 #endregion

@@ -17,7 +17,8 @@ metadata/_custom_type_script = ExtResource("2_fd4bu")
 
 [resource]
 script = ExtResource("1_nv8fq")
-effect_name = "Slowness"
+id = "slowness"
+source_type = 0
 effect_lvl = 1
 is_bad_effect = true
 affected_entities = 1
@@ -29,5 +30,5 @@ audio_to_play = ""
 only_cue_on_player_hit = false
 spawn_particles = true
 particle_hander_req = ""
-update_entity_glow = true
-metadata/_custom_type_script = ExtResource("1_nv8fq")
+make_entity_glow = true
+metadata/_custom_type_script = "uid://bi2pojxmm61xg"

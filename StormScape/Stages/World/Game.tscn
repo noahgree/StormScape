@@ -372,7 +372,8 @@ storm_visuals = SubResource("Resource_h8tfd")
 
 [sub_resource type="Resource" id="Resource_wrdhq"]
 script = ExtResource("13_33bgr")
-effect_name = "TestEffect"
+id = "test_effect"
+source_type = 0
 effect_lvl = 3
 is_bad_effect = true
 affected_entities = 7

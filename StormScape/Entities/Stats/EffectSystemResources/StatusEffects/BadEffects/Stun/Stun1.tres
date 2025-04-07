@@ -6,7 +6,8 @@
 [resource]
 script = ExtResource("1_sdbli")
 stun_time = 0.5
-effect_name = "Stun"
+id = "stun"
+source_type = 0
 effect_lvl = 1
 is_bad_effect = true
 affected_entities = 1

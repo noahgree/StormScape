@@ -17,7 +17,8 @@ hit_flash_color = Color(0, 1, 0, 0.6)
 [resource]
 script = ExtResource("1_ryq06")
 hot_resource = SubResource("Resource_m7vw8")
-effect_name = "Regen"
+id = "regen"
+source_type = 0
 effect_lvl = 1
 is_bad_effect = false
 affected_entities = 7

@@ -150,7 +150,7 @@ static func _update_effect_source_status_effects(weapon_stats: WeaponResource, f
 	var effect_source: EffectSource = weapon_stats.effect_source if not for_charged else weapon_stats.charge_effect_source
 
 	for new_effect: StatusEffect in new_effects:
-		var existing_effect_index: int = effect_source.check_for_effect_and_get_index(new_effect.effect_name)
+		var existing_effect_index: int = effect_source.check_for_effect_and_get_index(new_effect.id)
 		if existing_effect_index != -1:
 			if new_effect.effect_lvl > effect_source.status_effects[existing_effect_index].effect_lvl:
 				effect_source.status_effects[existing_effect_index] = new_effect

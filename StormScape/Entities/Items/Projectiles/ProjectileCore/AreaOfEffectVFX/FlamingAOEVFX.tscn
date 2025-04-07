@@ -1,8 +1,8 @@
 [gd_scene load_steps=7 format=3 uid="uid://cb5ofy3224fh2"]
 
-[ext_resource type="Script" uid="uid://jwnpvt4k2g7g" path="res://Entities/Items/Projectiles/ProjectileCore/AreaOfEffectVFX/AreaOfEffectVFX.gd" id="1_b5tjp"]
-[ext_resource type="Texture2D" uid="uid://c6ebk8sa1vvtq" path="res://UI/TemporaryElements/StatusEffects/flames.png" id="2_wsfvu"]
-[ext_resource type="Texture2D" uid="uid://b41ueq2htaju0" path="res://Utilities/Game/Particles/faint_light.png" id="3_n7is6"]
+[ext_resource type="Script" uid="uid://jwnpvt4k2g7g" path="res://Entities/Items/Projectiles/ProjectileCore/AreaOfEffectVFX/AreaOfEffectVFX.gd" id="1_rc5wt"]
+[ext_resource type="Texture2D" uid="uid://c6ebk8sa1vvtq" path="res://UI/TemporaryElements/StatusEffects/flames.png" id="2_4ubxj"]
+[ext_resource type="Texture2D" uid="uid://b41ueq2htaju0" path="res://Utilities/Game/Particles/faint_light.png" id="3_8r7ys"]
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_pk1mm"]
 blend_mode = 1
@@ -20,16 +20,16 @@ point_count = 2
 offsets = PackedFloat32Array(0, 0.0411523, 0.794606, 1)
 colors = PackedColorArray(1, 1, 1, 0, 2, 2, 2, 1, 1.25, 1.25, 1.25, 1, 1, 1, 1, 0)
 
-[node name="BurningAOEVfx" type="Node2D" node_paths=PackedStringArray("particles_nodes")]
+[node name="FlamingAOEVFX" type="Node2D" node_paths=PackedStringArray("particles_nodes")]
 z_index = -1
-script = ExtResource("1_b5tjp")
-particles_nodes = [NodePath("BurningParticles")]
+script = ExtResource("1_rc5wt")
+particles_nodes = [NodePath("GroundFireParticles")]
 
-[node name="BurningParticles" type="CPUParticles2D" parent="."]
+[node name="GroundFireParticles" type="CPUParticles2D" parent="."]
 light_mask = 2
 material = SubResource("CanvasItemMaterial_pk1mm")
 amount = 55
-texture = ExtResource("2_wsfvu")
+texture = ExtResource("2_4ubxj")
 lifetime = 8.0
 preprocess = 3.0
 explosiveness = 0.2
@@ -50,5 +50,5 @@ anim_offset_max = 1.0
 light_mask = 0
 energy = 1.75
 range_item_cull_mask = 3
-texture = ExtResource("3_n7is6")
+texture = ExtResource("3_8r7ys")
 texture_scale = 0.38

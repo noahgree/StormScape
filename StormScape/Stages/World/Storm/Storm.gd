@@ -339,9 +339,9 @@ func _check_for_transform_delay(new_transform: StormTransform) -> void:
 		var dur: float = max(new_transform.time_to_resize, new_transform.time_to_move)
 		var effect: String = "Keep Previous"
 		if new_transform.effect_setting == "Override":
-			effect = new_transform.status_effect.effect_name + str(new_transform.status_effect.effect_lvl)
+			effect = new_transform.status_effect.get_full_effect_key() + " " + str(new_transform.status_effect.effect_lvl)
 		elif new_transform.effect_setting == "Revert to Default":
-			effect = "Reverted to Default: " + default_storm_effect.effect_name + str(default_storm_effect.effect_lvl)
+			effect = "Reverted to Default: " + default_storm_effect.get_full_effect_key() + " " + str(default_storm_effect.effect_lvl)
 		print_rich("[color=pink]*******[/color][color=purple] [b]Starting[/b] Storm Phase [/color][b]" + str(zone_count) + "[/b][i] [delay = " + str(new_transform.delay) + "] [duration = " + str(dur) + "] " + "[effect = " + effect + "] [/i] [color=pink]*******[/color]")
 
 	# Starting delay timer if we have any delay. Otherwise start applying the new zone transform.
@@ -602,11 +602,11 @@ func _swap_effect_applied_to_entities_out_of_safe_area(new_effect: StatusEffect)
 func _remove_current_effect_from_entity(body: DynamicEntity) -> void:
 	var effects_manager: StatusEffectsComponent = body.effects
 	if effects_manager != null:
-		effects_manager.request_effect_removal(current_effect.effect_name)
+		effects_manager.request_effect_removal_by_source(current_effect.id, current_effect.source_type)
 
 ## Adds the passed in effect to the passed in entity.
 func _add_effect_to_entity(body: DynamicEntity, effect_to_add: StatusEffect) -> void:
 	var receiver: EffectReceiverComponent = body.get_node_or_null("EffectReceiverComponent")
-	if receiver != null and not body.effects.check_if_has_effect(effect_to_add.effect_name):
+	if receiver != null and not body.effects.check_if_has_effect(effect_to_add.id, effect_to_add.source_type):
 		receiver.handle_status_effect(effect_to_add)
 #endregion

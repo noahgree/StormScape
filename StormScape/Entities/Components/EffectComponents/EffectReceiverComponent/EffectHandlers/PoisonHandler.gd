@@ -30,4 +30,4 @@ func handle_poison(poison_effect: PoisonEffect) -> void:
 		for i: int in range(local_dot_resource.dmg_ticks_array.size()):
 			local_dot_resource.dmg_ticks_array[i] = int(roundf(local_dot_resource.dmg_ticks_array[i] * multiplier))
 
-		(effect_receiver.get_node("DmgHandler") as DmgHandler).handle_over_time_dmg(local_dot_resource, poison_effect.effect_name)
+		(effect_receiver.get_node("DmgHandler") as DmgHandler).handle_over_time_dmg(local_dot_resource, poison_effect.get_full_effect_key())

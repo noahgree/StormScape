@@ -10,7 +10,7 @@ class_name DmgHandler
 @onready var health_component: HealthComponent = get_parent().health_component ## The health component to be affected by the damage.
 @onready var affected_entity: PhysicsBody2D = get_parent().affected_entity ## The entity affected by this dmg handler.
 
-var dot_timers: Dictionary[String, Array] = {} ## Holds references to all timers currently tracking active DOT. Keys are source type names and values are an array of all matching timers of that type.
+var dot_timers: Dictionary[String, Array] = {} ## Holds references to all timers currently tracking active DOT. Keys are source type ids and values are an array of all matching timers of that type.
 var dot_delay_timers: Dictionary[String, Array] = {} ## Holds references to all timers current tracking delays for active DOT.
 
 
@@ -50,7 +50,7 @@ func handle_instant_damage(effect_source: EffectSource, life_steal_percent: floa
 	if (affected_entity is RigidEntity or affected_entity is StaticEntity) and affected_entity.is_object:
 		object_dmg_mult = effect_source.object_damage_mult
 
-	_send_handled_dmg("BasicDamage", effect_source.dmg_affected_stats, int(dmg_after_crit_then_armor * object_dmg_mult), effect_source.multishot_id, life_steal_percent, is_crit)
+	_send_handled_dmg("basic_damage", effect_source.dmg_affected_stats, int(dmg_after_crit_then_armor * object_dmg_mult), effect_source.multishot_id, life_steal_percent, is_crit)
 
 ## Handles applying damage that is inflicted over time, whether with a delay, with burst intervals, or with both.
 func handle_over_time_dmg(dot_resource: DOTResource, source_type: String) -> void:
@@ -75,8 +75,8 @@ func handle_over_time_dmg(dot_resource: DOTResource, source_type: String) -> voi
 		delay_timer.name = source_type + "_delayTimer" + str(randf())
 		delay_timer.start()
 
-		_add_timer_to_cache(source_type, dot_timer, dot_timers)
-		_add_timer_to_cache(source_type, delay_timer, dot_delay_timers)
+		TimerHelpers.add_timer_to_cache(source_type, dot_timer, dot_timers)
+		TimerHelpers.add_timer_to_cache(source_type, delay_timer, dot_delay_timers)
 	else: # There is no delay needed
 		dot_timer.set_meta("ticks_completed", 1)
 
@@ -88,50 +88,19 @@ func handle_over_time_dmg(dot_resource: DOTResource, source_type: String) -> voi
 		_send_handled_dmg(source_type, dot_resource.dmg_affected_stats, dot_resource.dmg_ticks_array[0], -1, 0.0, false)
 		affected_entity.sprite.start_hitflash(dot_resource.hit_flash_color, false)
 
-		_add_timer_to_cache(source_type, dot_timer, dot_timers)
+		TimerHelpers.add_timer_to_cache(source_type, dot_timer, dot_timers)
 		dot_timer.start()
 
 ## Called externally to stop a DOT effect from proceeding.
-func cancel_over_time_dmg(source_type: String) -> void:
-	_delete_timers_from_caches(source_type)
-
-## Adds a timer to the timer dict cache with the source type as the key.
-func _add_timer_to_cache(source_type: String, timer: Timer, cache: Dictionary) -> void:
-	if source_type in cache:
-		cache[source_type].append(timer)
-	else:
-		cache[source_type] = [timer]
-
-## Deletes all timers for a source type from the timer cache dict. Can optionally send a single timer to be the only one removed.
-func _delete_timers_from_caches(source_type: String, specific_timer: Timer = null) -> void:
-	var timers: Array = dot_timers.get(source_type, [null])
-	if timers:
-		var to_remove: Array[int] = []
-		for i: int in range(timers.size()):
-			if timers[i] != null:
-				if timers[i] == specific_timer:
-					timers[i].queue_free()
-					timers.remove_at(i)
-					return
-				else:
-					timers[i].queue_free()
-			else:
-				to_remove.append(i)
-
-		for i: int in range(to_remove.size()):
-			timers.remove_at(to_remove[i])
-
+func cancel_over_time_dmg(source_type: String, specific_timer: Timer = null) -> void:
+	var damage_timers: Array = dot_timers.get(source_type, [])
+	if not damage_timers.is_empty():
+		TimerHelpers.delete_timers_from_cache(damage_timers, specific_timer)
 		dot_timers.erase(source_type)
 
-	var delay_timers: Array = dot_delay_timers.get(source_type, [null])
-	if delay_timers:
-		delay_timers = delay_timers.filter(func(timer: Variant) -> bool:
-			if timer != null:
-				timer.queue_free()
-				return false  # Remove this timer
-			return true  # Keep this timer
-		)
-
+	var delay_timers: Array = dot_delay_timers.get(source_type, [])
+	if not delay_timers.is_empty():
+		TimerHelpers.delete_delay_timers_from_cache(delay_timers)
 		dot_delay_timers.erase(source_type)
 
 ## When the damage over time interval timer ends, check what sourced the timer and see if that source
@@ -155,9 +124,9 @@ func _on_dot_timer_timeout(dot_timer: Timer, source_type: String) -> void:
 			dot_timer.set_meta("ticks_completed", ticks_completed + 1)
 
 			if max_ticks == 1:
-				_delete_timers_from_caches(source_type, dot_timer)
+				cancel_over_time_dmg(source_type, dot_timer)
 		else:
-			_delete_timers_from_caches(source_type, dot_timer)
+			cancel_over_time_dmg(source_type, dot_timer)
 
 ## Sends the affected entity's health component the final damage values based on what stats the damage was
 ## allowed to affect.

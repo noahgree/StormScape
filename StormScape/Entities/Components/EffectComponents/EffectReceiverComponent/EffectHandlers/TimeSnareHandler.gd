@@ -19,7 +19,7 @@ func _ready() -> void:
 
 func handle_time_snare(time_snare_effect: TimeSnareEffect) -> void:
 	if effect_receiver.affected_entity.stats.get_stat("time_snare_immunity") > 0:
-		effect_receiver.status_effect_manager.request_effect_removal("Time Snare")
+		effect_receiver.status_effect_manager.request_effect_removal_for_all_sources("time_snare")
 		return
 
 	if effect_receiver.affected_entity is DynamicEntity:

@@ -2,7 +2,8 @@ extends Resource
 class_name StatusEffect
 ## Base class for all status effects in the game.
 
-@export var effect_name: String ## What the effect title is without the level attached.
+@export var id: String ## What the effect is identified by (don't include the level).
+@export var source_type: Globals.StatusEffectSourceType ## The source of this status effect to differentiate it and control how its timing may get reset if another of the same effect with a matching source_id comes in.
 @export_range(1, 100, 1) var effect_lvl: int = 1 ## The level of the effect, 1 is the lowest.
 @export var is_bad_effect: bool = true ## Whether this should be considered a negative effect. If unchecked, this is considered a good effect. This is used when handling which teams should receive which types of effects related to who sent them.
 @export_flags("DynamicEntity:1", "RigidEntity:2", "StaticEntity:4") var affected_entities: int = 0b111
@@ -26,8 +27,16 @@ class_name StatusEffect
 
 ## Overrides the default to_string to print a more readable output when included in a print() call.
 func _to_string() -> String:
-	return (effect_name + str(effect_lvl))
+	return (id + str(effect_lvl))
 
 ## Returns a pretty string representation of this status effect.
 func get_pretty_string() -> String:
-	return (effect_name.capitalize() + " " + str(effect_lvl))
+	return (id.capitalize() + " " + str(effect_lvl))
+
+## Returns a string representing the source type of this status effect.
+func get_source_type_string() -> String:
+	return str(Globals.StatusEffectSourceType.keys()[source_type]).to_lower()
+
+## Gets the full key for this status effect, which is a composite of the effect id and the source type.
+func get_full_effect_key() -> String:
+	return id + ":" + get_source_type_string()

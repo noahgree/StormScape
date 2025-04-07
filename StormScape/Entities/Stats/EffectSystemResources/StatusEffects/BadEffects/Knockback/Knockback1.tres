@@ -7,7 +7,8 @@
 script = ExtResource("1_ofqhb")
 knockback_force = 350
 custom_knockback_direction = Vector2(0, 0)
-effect_name = "Knockback"
+id = "knockback"
+source_type = 0
 effect_lvl = 1
 is_bad_effect = true
 affected_entities = 7
@@ -19,4 +20,4 @@ audio_to_play = "Knockback"
 only_cue_on_player_hit = false
 spawn_particles = false
 particle_hander_req = ""
-update_entity_glow = false
+make_entity_glow = true

@@ -41,7 +41,7 @@ func update_popup(new_value: int, src_type: String, is_crit: bool, is_healing: b
 	number_label.text = str(value)
 	global_position = parent_node.global_position - Vector2(0, SpriteHelpers.SpriteDetails.get_frame_rect(parent_node.sprite).y)
 
-	gradient_tex.texture = text_colors.get(src_type if not is_crit else "CritDamage", GradientTexture1D.new())
+	gradient_tex.texture = text_colors.get(src_type if not is_crit else "crit_damage", GradientTexture1D.new())
 
 	if is_healing:
 		glow.modulate = Color(0, 0.859, 0.18, 0.9)

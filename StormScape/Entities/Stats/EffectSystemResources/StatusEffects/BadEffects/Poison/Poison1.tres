@@ -50,7 +50,8 @@ override_all = false
 [resource]
 script = ExtResource("1_1d4mc")
 dot_resource = SubResource("Resource_d0iyw")
-effect_name = "Poison"
+id = "poison"
+source_type = 0
 effect_lvl = 1
 is_bad_effect = true
 affected_entities = 7

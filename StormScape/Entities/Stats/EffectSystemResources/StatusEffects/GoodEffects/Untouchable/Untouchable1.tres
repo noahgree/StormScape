@@ -9,6 +9,7 @@ stat_id = "stun_resistance"
 mod_id = "Untouchable1"
 operation = "="
 value = 10000.0
+rounding = "Exact"
 priority = 1
 max_stack_count = 3
 override_all = true
@@ -19,6 +20,7 @@ stat_id = "dmg_resistance"
 mod_id = "Untouchable1"
 operation = "="
 value = 10000.0
+rounding = "Exact"
 priority = 1
 max_stack_count = 3
 override_all = true
@@ -29,13 +31,15 @@ stat_id = "knockback_resistance"
 mod_id = "Untouchable1"
 operation = "="
 value = 10000.0
+rounding = "Exact"
 priority = 1
 max_stack_count = 3
 override_all = true
 
 [resource]
 script = ExtResource("1_udufp")
-effect_name = "Untouchable"
+id = "untouchable"
+source_type = 0
 effect_lvl = 1
 is_bad_effect = false
 affected_entities = 7
@@ -47,5 +51,5 @@ audio_to_play = ""
 only_cue_on_player_hit = false
 spawn_particles = true
 particle_hander_req = ""
-update_entity_glow = true
-metadata/_custom_type_script = ExtResource("1_udufp")
+make_entity_glow = true
+metadata/_custom_type_script = "uid://cj85x4dob0peb"

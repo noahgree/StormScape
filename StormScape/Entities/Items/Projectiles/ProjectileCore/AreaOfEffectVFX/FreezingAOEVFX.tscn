@@ -1,0 +1,58 @@
+[gd_scene load_steps=8 format=3 uid="uid://b5rrhd6ano4sf"]
+
+[ext_resource type="Script" uid="uid://jwnpvt4k2g7g" path="res://Entities/Items/Projectiles/ProjectileCore/AreaOfEffectVFX/AreaOfEffectVFX.gd" id="1_agof6"]
+[ext_resource type="Texture2D" uid="uid://cidg3ea0fltr" path="res://UI/TemporaryElements/StatusEffects/snowflake.png" id="3_agof6"]
+[ext_resource type="Texture2D" uid="uid://b41ueq2htaju0" path="res://Utilities/Game/Particles/faint_light.png" id="3_amkww"]
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_4ifa1"]
+blend_mode = 1
+light_mode = 1
+
+[sub_resource type="Curve" id="Curve_amkww"]
+_limits = [-360.0, 360.0, 0.0, 1.0]
+_data = [Vector2(0, -3.26761), 0.0, 0.0, 0, 0, Vector2(1, 37.7465), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Curve" id="Curve_slyom"]
+_data = [Vector2(0.00342466, 0.359578), 0.0, 0.0, 0, 0, Vector2(0.121575, 0.707021), 0.0, 0.0, 0, 0, Vector2(0.756849, 0.842242), 0.0, 0.0, 0, 0, Vector2(0.941781, 0.77651), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 5
+
+[sub_resource type="Gradient" id="Gradient_fqseh"]
+offsets = PackedFloat32Array(0, 0.0308642, 0.857414, 1)
+colors = PackedColorArray(0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0)
+
+[node name="FreezingAOEVFX" type="Node2D" node_paths=PackedStringArray("particles_nodes")]
+z_index = -1
+script = ExtResource("1_agof6")
+particles_nodes = [NodePath("SnowAreaParticles")]
+border_color = Color(5.39064e-06, 0.538559, 0.89054, 0.65)
+fill_color = Color(0.370748, 0.694178, 0.999998, 0.6)
+floor_light_color = Color(0.474576, 0.81018, 1, 1)
+
+[node name="FloorLight" type="PointLight2D" parent="."]
+light_mask = 0
+energy = 1.75
+range_item_cull_mask = 3
+texture = ExtResource("3_amkww")
+texture_scale = 0.38
+
+[node name="SnowAreaParticles" type="CPUParticles2D" parent="."]
+light_mask = 2
+material = SubResource("CanvasItemMaterial_4ifa1")
+amount = 55
+texture = ExtResource("3_agof6")
+lifetime = 3.0
+preprocess = 1.0
+explosiveness = 0.2
+emission_shape = 2
+emission_sphere_radius = 20.0
+direction = Vector2(0, 1)
+gravity = Vector2(0, 0)
+angle_min = -10.0
+angle_max = 10.0
+angle_curve = SubResource("Curve_amkww")
+scale_amount_min = 0.12
+scale_amount_max = 0.3
+scale_amount_curve = SubResource("Curve_slyom")
+color = Color(0, 1.9, 2.3, 1)
+color_ramp = SubResource("Gradient_fqseh")

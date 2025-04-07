@@ -39,11 +39,12 @@ override_all = false
 [resource]
 script = ExtResource("2_murqd")
 dot_resource = SubResource("Resource_ge1fd")
-effect_name = "Frostbite"
+id = "frostbite"
+source_type = 0
 effect_lvl = 2
 is_bad_effect = true
 affected_entities = 7
-effects_to_stop = Array[String](["Burning"])
+effects_to_stop = Array[String](["burning"])
 mod_time = 10.0
 apply_until_removed = false
 stat_mods = Array[ExtResource("3_63sjm")]([SubResource("Resource_xefcn"), SubResource("Resource_3of86")])

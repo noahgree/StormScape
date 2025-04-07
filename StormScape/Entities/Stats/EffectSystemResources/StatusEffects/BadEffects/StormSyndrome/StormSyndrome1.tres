@@ -17,7 +17,8 @@ hit_flash_color = Color(0.769133, 0.615398, 1, 0.6)
 [resource]
 script = ExtResource("1_lgscn")
 dot_resource = SubResource("Resource_dega7")
-effect_name = "Storm Syndrome"
+id = "storm_syndrome"
+source_type = 2
 effect_lvl = 1
 is_bad_effect = true
 affected_entities = 7

@@ -17,7 +17,8 @@ metadata/_custom_type_script = ExtResource("2_c5w3g")
 
 [resource]
 script = ExtResource("1_7xxcl")
-effect_name = "Confusion"
+id = "confusion"
+source_type = 0
 effect_lvl = 1
 is_bad_effect = true
 affected_entities = 7

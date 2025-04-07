@@ -51,6 +51,6 @@ class_name EffectSource
 ## if found, else return -1. Does not handle duplicates.
 func check_for_effect_and_get_index(name: String) -> int:
 	for i: int in range(status_effects.size()):
-		if status_effects[i].effect_name == name:
+		if status_effects[i].id == name:
 			return i
 	return -1

@@ -1,0 +1,8 @@
+[gd_resource type="CanvasTexture" load_steps=3 format=3 uid="uid://bpeyfequ1my8c"]
+
+[ext_resource type="Texture2D" uid="uid://kxsw7bgts4ys" path="res://Entities/Items/Weapons/ProjectileWeapons/BottleOFrost/bottle_o_frost_throwable.png" id="1_xh0di"]
+[ext_resource type="Texture2D" uid="uid://nm4qsb3giqeh" path="res://Entities/Items/Weapons/ProjectileWeapons/BottleOFrost/bottle_o_frost_throwable_n.png" id="2_c81tr"]
+
+[resource]
+diffuse_texture = ExtResource("1_xh0di")
+normal_texture = ExtResource("2_c81tr")

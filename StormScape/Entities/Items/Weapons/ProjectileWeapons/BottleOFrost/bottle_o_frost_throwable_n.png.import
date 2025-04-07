@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dn0kb7oxrj6qi"
-path="res://.godot/imported/fire_bottle_throwable.png-8f4b0bfc34037b20935a569295530a7d.ctex"
+uid="uid://nm4qsb3giqeh"
+path="res://.godot/imported/bottle_o_frost_throwable_n.png-5815293b750bb7678747c8e0f5d4b812.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Entities/Items/Weapons/ProjectileWeapons/BottleOFire/fire_bottle_throwable.png"
-dest_files=["res://.godot/imported/fire_bottle_throwable.png-8f4b0bfc34037b20935a569295530a7d.ctex"]
+source_file="res://Entities/Items/Weapons/ProjectileWeapons/BottleOFrost/bottle_o_frost_throwable_n.png"
+dest_files=["res://.godot/imported/bottle_o_frost_throwable_n.png-5815293b750bb7678747c8e0f5d4b812.ctex"]
 
 [params]
 

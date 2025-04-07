@@ -144,6 +144,8 @@ aoe_delay = 0.0
 aoe_effect_dur = 0.05
 aoe_effect_interval = 1.0
 aoe_effects_delay = 0.5
+aoe_anim_dur = 0.2
+aoe_hide_sprite = true
 aoe_sound = ""
 
 [sub_resource type="Resource" id="Resource_7cfgi"]

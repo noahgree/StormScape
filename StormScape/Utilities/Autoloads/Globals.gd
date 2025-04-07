@@ -37,6 +37,12 @@ enum EffectSourceSourceType {
 	FROM_PHYSICAL_CONTACT, ## For physcial interactions like a punch or running into something with a hitbox attached to the body.
 	FROM_COMBAT_MELEE ## For melee weapons that are primarily damaging weapons like a sword (not tools like the pickaxe).
 }
+enum StatusEffectSourceType {
+	FROM_WEAPON, ## For any status effect that is the result of being hit by a weapon's hitbox (like projectiles).
+	FROM_GROUND_AOE, ## For any status effect that gets applied by walking into a ground AOE like after an explosion.
+	FROM_ENVIRONMENT, ## For any status effect coming from the environment, like the cold weather, etc.
+	FROM_SELF ## For self effects like when weapons apply effects to the entity while being charged up.
+}
 
 # Items
 enum ItemType {

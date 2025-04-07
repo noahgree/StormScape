@@ -72,7 +72,7 @@ func _handle_rigid_entity_collisions() -> void:
 
 		if not collision_shake_complete:
 			dash_impact_cam_fx.activate_all()
-			if entity.effects.check_if_has_effect("KineticImpact"):
+			if entity.effects.check_if_has_effect("kinetic_impact"):
 				AudioManager.play_sound("KineticImpactHit", AudioManager.SoundType.SFX_2D, entity.global_position)
 			else:
 				AudioManager.play_sound("PlayerDashImpact", AudioManager.SoundType.SFX_2D, entity.global_position)

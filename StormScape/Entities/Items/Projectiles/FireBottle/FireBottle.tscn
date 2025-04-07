@@ -1,7 +1,7 @@
 [gd_scene load_steps=18 format=3 uid="uid://b26uwbeam6drq"]
 
 [ext_resource type="Script" uid="uid://d1uexupra43i8" path="res://Entities/Items/Projectiles/ProjectileCore/Projectile.gd" id="1_3xw38"]
-[ext_resource type="Texture2D" uid="uid://b4bumm88u2qmw" path="res://Entities/Items/Weapons/ProjectileWeapons/BottleOFire/FireBottleThrowableCT.tres" id="2_q4sp5"]
+[ext_resource type="Texture2D" uid="uid://b4bumm88u2qmw" path="res://Entities/Items/Weapons/ProjectileWeapons/BottleOFire/BottleOFireThrowableCT.tres" id="2_q4sp5"]
 [ext_resource type="Texture2D" uid="uid://dcbwxgak6a0r8" path="res://Entities/EntityCore/Shadow/entity_shadow.png" id="3_tedc5"]
 [ext_resource type="Texture2D" uid="uid://bwuth2fyl1x12" path="res://Entities/Items/Projectiles/Bullets/SmallBullet/bullet_small.png" id="3_wab4n"]
 [ext_resource type="PackedScene" uid="uid://dau2tuc6mx0by" path="res://Entities/Items/Projectiles/ProjectileCore/Trail/Trail.tscn" id="4_7tntk"]
@@ -26,11 +26,11 @@ region = Rect2(13, 13, 13, 13)
 atlas = ExtResource("3_wab4n")
 region = Rect2(26, 13, 13, 13)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_7tntk"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_wab4n"]
 atlas = ExtResource("2_q4sp5")
 region = Rect2(0, 0, 16, 16)
 
-[sub_resource type="SpriteFrames" id="SpriteFrames_l2rhp"]
+[sub_resource type="SpriteFrames" id="SpriteFrames_wab4n"]
 animations = [{
 "frames": [{
 "duration": 1.0,
@@ -48,7 +48,7 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_7tntk")
+"texture": SubResource("AtlasTexture_wab4n")
 }],
 "loop": true,
 "name": &"default",
@@ -81,7 +81,7 @@ collision_layer = 0
 collision_mask = 0
 script = ExtResource("1_3xw38")
 glow_color = Color(1, 0.901675, 0.877147, 1)
-in_air_only_particles = [NodePath("BurningParticles")]
+in_air_only_particles = [NodePath("FireParticles")]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0, 1.33333)
@@ -92,7 +92,7 @@ debug_color = Color(0.626, 0.349, 1, 0.196)
 [node name="ProjSprite" type="AnimatedSprite2D" parent="."]
 light_mask = 2
 material = SubResource("CanvasItemMaterial_q4sp5")
-sprite_frames = SubResource("SpriteFrames_l2rhp")
+sprite_frames = SubResource("SpriteFrames_wab4n")
 autoplay = "default"
 
 [node name="Shadow" type="Sprite2D" parent="."]
@@ -103,7 +103,7 @@ position = Vector2(0, 7)
 scale = Vector2(0.45, 0.35)
 texture = ExtResource("3_tedc5")
 
-[node name="BurningParticles" type="CPUParticles2D" parent="."]
+[node name="FireParticles" type="CPUParticles2D" parent="."]
 light_mask = 2
 material = SubResource("CanvasItemMaterial_l2rhp")
 position = Vector2(5, -4)

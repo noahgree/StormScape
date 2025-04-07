@@ -1,4 +1,4 @@
-[gd_scene load_steps=214 format=3 uid="uid://dba8mrurjlekp"]
+[gd_scene load_steps=216 format=3 uid="uid://dba8mrurjlekp"]
 
 [ext_resource type="Script" uid="uid://c3rpxq8pnbdje" path="res://Entities/Player/PlayerCore/Player.gd" id="1_m33tt"]
 [ext_resource type="Script" uid="uid://dwmur0cosbbwh" path="res://UI/Inventory/InventoryCore/InventoryResource.gd" id="2_l1kq4"]
@@ -61,6 +61,7 @@
 [ext_resource type="Script" uid="uid://c28itqxmeqbq0" path="res://Entities/FSM/FSMCore/StateMachine.gd" id="25_6wv7y"]
 [ext_resource type="Texture2D" uid="uid://crawnbhc5weqf" path="res://Entities/EntityCore/EntityTypes/DynamicEntity/entity_footstep.png" id="27_0t1mv"]
 [ext_resource type="Resource" uid="uid://kmidnuyti5xi" path="res://Entities/Items/TRESItems/Boomerang(2).tres" id="27_bvo3j"]
+[ext_resource type="Resource" uid="uid://dvnlojpwqoojv" path="res://Entities/Items/TRESItems/BottleOFrost(3).tres" id="27_eufsu"]
 [ext_resource type="Script" uid="uid://evdilpt7dh6f" path="res://Entities/Player/PlayerCore/PlayerController.gd" id="27_n4o3n"]
 [ext_resource type="PackedScene" uid="uid://c4n604w30gx8m" path="res://Entities/Components/ItemComponents/ItemReceiverComponent/ItemReceiverComponent.tscn" id="30_qgyag"]
 [ext_resource type="Script" uid="uid://dq62ojsc43p8o" path="res://UI/Inventory/PlayerInventory/PlayerInvUI.gd" id="32_3a185"]
@@ -260,6 +261,12 @@ stats = ExtResource("14_0t1mv")
 quantity = 1
 metadata/_custom_type_script = "uid://dp8osf7r6xkkt"
 
+[sub_resource type="Resource" id="Resource_1go7j"]
+script = ExtResource("32_ixmb3")
+stats = ExtResource("27_eufsu")
+quantity = 10
+metadata/_custom_type_script = "uid://dp8osf7r6xkkt"
+
 [sub_resource type="Resource" id="Resource_32jvf"]
 script = ExtResource("32_ixmb3")
 stats = ExtResource("23_gdihr")
@@ -300,7 +307,7 @@ metadata/_custom_type_script = "uid://dp8osf7r6xkkt"
 script = ExtResource("2_l1kq4")
 title = "CHEST"
 main_inv_size = 32
-starting_inv = Array[ExtResource("32_ixmb3")]([SubResource("Resource_82yts"), SubResource("Resource_n4o3n"), SubResource("Resource_0t1mv"), SubResource("Resource_h1ges"), SubResource("Resource_4awmn"), SubResource("Resource_hxjay"), null, SubResource("Resource_w0i1c"), SubResource("Resource_fcswf"), SubResource("Resource_ve7vt"), null, SubResource("Resource_ou5t4"), SubResource("Resource_ar238"), null, SubResource("Resource_bmpdm"), SubResource("Resource_8hbs2"), SubResource("Resource_f5l7i"), SubResource("Resource_co77f"), null, null, null, SubResource("Resource_gdihr"), SubResource("Resource_g5u5n"), SubResource("Resource_0313k"), null, SubResource("Resource_thmqm"), SubResource("Resource_r5dvw"), SubResource("Resource_bvo3j"), SubResource("Resource_gb65f"), SubResource("Resource_5qckj"), null, SubResource("Resource_32jvf"), SubResource("Resource_r7bkl"), SubResource("Resource_eufsu"), SubResource("Resource_da65a"), SubResource("Resource_6f5us"), SubResource("Resource_s4yud")])
+starting_inv = Array[ExtResource("32_ixmb3")]([SubResource("Resource_82yts"), SubResource("Resource_n4o3n"), SubResource("Resource_0t1mv"), SubResource("Resource_h1ges"), SubResource("Resource_4awmn"), SubResource("Resource_hxjay"), null, SubResource("Resource_w0i1c"), SubResource("Resource_fcswf"), SubResource("Resource_ve7vt"), null, SubResource("Resource_ou5t4"), SubResource("Resource_ar238"), null, SubResource("Resource_bmpdm"), SubResource("Resource_8hbs2"), SubResource("Resource_f5l7i"), SubResource("Resource_co77f"), null, null, null, SubResource("Resource_gdihr"), SubResource("Resource_g5u5n"), SubResource("Resource_0313k"), null, SubResource("Resource_thmqm"), SubResource("Resource_r5dvw"), SubResource("Resource_bvo3j"), SubResource("Resource_gb65f"), SubResource("Resource_5qckj"), SubResource("Resource_1go7j"), SubResource("Resource_32jvf"), SubResource("Resource_r7bkl"), SubResource("Resource_eufsu"), SubResource("Resource_da65a"), SubResource("Resource_6f5us"), SubResource("Resource_s4yud")])
 metadata/_custom_type_script = "uid://dwmur0cosbbwh"
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_3f130"]

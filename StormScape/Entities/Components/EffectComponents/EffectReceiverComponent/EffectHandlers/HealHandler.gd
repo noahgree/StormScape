@@ -24,7 +24,7 @@ func _ready() -> void:
 
 ## Handles applying instant, one-shot healing to the affected entity.
 func handle_instant_heal(effect_source: EffectSource, heal_affected_stats: Globals.HealAffectedStats) -> void:
-	_send_handled_healing("BasicHealing", heal_affected_stats, effect_source.base_healing, effect_source.multishot_id)
+	_send_handled_healing("basic_healing", heal_affected_stats, effect_source.base_healing, effect_source.multishot_id)
 
 ## Handles applying damage that is inflicted over time, whether with a delay, with burst intervals, or with both.
 func handle_over_time_heal(hot_resource: HOTResource, source_type: String) -> void:
@@ -49,8 +49,8 @@ func handle_over_time_heal(hot_resource: HOTResource, source_type: String) -> vo
 		delay_timer.name = source_type + "_delayTimer"
 		delay_timer.start()
 
-		_add_timer_to_cache(source_type, hot_timer, hot_timers)
-		_add_timer_to_cache(source_type, delay_timer, hot_delay_timers)
+		TimerHelpers.add_timer_to_cache(source_type, hot_timer, hot_timers)
+		TimerHelpers.add_timer_to_cache(source_type, delay_timer, hot_delay_timers)
 	else: # There is no delay needed
 		hot_timer.set_meta("ticks_completed", 1)
 
@@ -62,50 +62,19 @@ func handle_over_time_heal(hot_resource: HOTResource, source_type: String) -> vo
 		_send_handled_healing(source_type, hot_resource.heal_affected_stats, hot_resource.heal_ticks_array[0], -1)
 		affected_entity.sprite.start_hitflash(hot_resource.hit_flash_color, true)
 
-		_add_timer_to_cache(source_type, hot_timer, hot_timers)
+		TimerHelpers.add_timer_to_cache(source_type, hot_timer, hot_timers)
 		hot_timer.start()
 
 ## Called externally to stop a HOT effect from proceeding.
-func cancel_over_time_heal(source_type: String) -> void:
-	_delete_timers_from_caches(source_type)
-
-## Adds a timer to the timer dict cache with the source type as the key.
-func _add_timer_to_cache(source_type: String, timer: Timer, cache: Dictionary) -> void:
-	if source_type in cache:
-		cache[source_type].append(timer)
-	else:
-		cache[source_type] = [timer]
-
-## Deletes all timers for a source type from the timer cache dict. Can optionally send a single timer to be the only one removed.
-func _delete_timers_from_caches(source_type: String, specific_timer: Timer = null) -> void:
-	var timers: Array = hot_timers.get(source_type, [null])
-	if timers:
-		var to_remove: Array[int] = []
-		for i: int in range(timers.size()):
-			if timers[i] != null:
-				if timers[i] == specific_timer:
-					timers[i].queue_free()
-					timers.remove_at(i)
-					return
-				else:
-					timers[i].queue_free()
-			else:
-				to_remove.append(i)
-
-		for i: int in range(to_remove.size()):
-			timers.remove_at(to_remove[i])
-
+func cancel_over_time_heal(source_type: String, specific_timer: Timer = null) -> void:
+	var heal_timers: Array = hot_timers.get(source_type, [])
+	if not heal_timers.is_empty():
+		TimerHelpers.delete_timers_from_cache(heal_timers, specific_timer)
 		hot_timers.erase(source_type)
 
-	var delay_timers: Array = hot_delay_timers.get(source_type, [null])
-	if delay_timers:
-		delay_timers = delay_timers.filter(func(timer: Variant) -> bool:
-			if timer != null:
-				timer.queue_free()
-				return false  # Remove this timer
-			return true  # Keep this timer
-		)
-
+	var delay_timers: Array = hot_delay_timers.get(source_type, [])
+	if not delay_timers.is_empty():
+		TimerHelpers.delete_delay_timers_from_cache(delay_timers)
 		hot_delay_timers.erase(source_type)
 
 ## When the healing over time interval timer ends, check what sourced the timer and see if that source
@@ -129,9 +98,9 @@ func _on_hot_timer_timeout(hot_timer: Timer, source_type: String) -> void:
 			hot_timer.set_meta("ticks_completed", ticks_completed + 1)
 
 			if max_ticks == 1:
-				_delete_timers_from_caches(source_type, hot_timer)
+				cancel_over_time_heal(source_type, hot_timer)
 		else:
-			_delete_timers_from_caches(source_type, hot_timer)
+			cancel_over_time_heal(source_type, hot_timer)
 
 ## Sends the affected entity's health component the final healing values based on what stats the heal was
 ## allowed to affect.

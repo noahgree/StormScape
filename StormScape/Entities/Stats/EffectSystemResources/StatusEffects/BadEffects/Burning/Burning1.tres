@@ -28,11 +28,12 @@ override_all = false
 [resource]
 script = ExtResource("2_ihl6m")
 dot_resource = SubResource("Resource_1q46y")
-effect_name = "Burning"
+id = "burning"
+source_type = 0
 effect_lvl = 1
 is_bad_effect = true
 affected_entities = 7
-effects_to_stop = Array[String](["Frostbite"])
+effects_to_stop = Array[String](["frostbite"])
 mod_time = 10.0
 apply_until_removed = false
 stat_mods = Array[ExtResource("3_85854")]([SubResource("Resource_xigmb")])

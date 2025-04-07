@@ -1,12 +1,13 @@
 [gd_resource type="Resource" script_class="LifeStealEffect" load_steps=3 format=3 uid="uid://c6aw6ev8jctgk"]
 
-[ext_resource type="Script" path="res://Entities/Stats/EffectSystemResources/StatusEffects/BadEffects/LifeSteal/LifeStealEffect.gd" id="1_fkgp2"]
-[ext_resource type="Script" path="res://Entities/Stats/StatMod/StatMod.gd" id="2_pkdk5"]
+[ext_resource type="Script" uid="uid://d4b47pfjuj5om" path="res://Entities/Stats/EffectSystemResources/StatusEffects/BadEffects/LifeSteal/LifeStealEffect.gd" id="1_fkgp2"]
+[ext_resource type="Script" uid="uid://bcjwesiannbd0" path="res://Entities/Stats/StatMod/StatMod.gd" id="2_pkdk5"]
 
 [resource]
 script = ExtResource("1_fkgp2")
 dmg_steal = 35.0
-effect_name = "Life Steal"
+id = "life_steal"
+source_type = 0
 effect_lvl = 2
 is_bad_effect = true
 affected_entities = 7
@@ -17,5 +18,5 @@ stat_mods = Array[ExtResource("2_pkdk5")]([])
 audio_to_play = ""
 only_cue_on_player_hit = false
 spawn_particles = false
-update_entity_glow = false
-particles_req_handler = true
+particle_hander_req = ""
+make_entity_glow = true
