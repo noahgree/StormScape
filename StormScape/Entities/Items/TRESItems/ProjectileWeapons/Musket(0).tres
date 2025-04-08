@@ -13,8 +13,8 @@
 [ext_resource type="Script" uid="uid://bj3r5oopspj6l" path="res://Entities/Items/Projectiles/ProjectileCore/ProjectileResource.gd" id="12_ma2xb"]
 [ext_resource type="PackedScene" uid="uid://bqkyplubhsx43" path="res://Entities/Items/Projectiles/Bullets/SmallBullet/SmallBullet.tscn" id="13_jo86x"]
 [ext_resource type="Script" uid="uid://ctxa7i1mbt7ab" path="res://UI/Inventory/PlayerInventory/Crafting/CraftingIngredient.gd" id="14_cya72"]
-[ext_resource type="Resource" uid="uid://8uj8fwadqlk0" path="res://Entities/Items/TRESItems/Stick(0).tres" id="14_iahun"]
-[ext_resource type="Resource" uid="uid://cfaje12siuo0b" path="res://Entities/Items/TRESItems/Compensator(2).tres" id="15_6grxy"]
+[ext_resource type="Resource" uid="uid://8uj8fwadqlk0" path="res://Entities/Items/TRESItems/WorldResources/Stick(0).tres" id="14_iahun"]
+[ext_resource type="Resource" uid="uid://cfaje12siuo0b" path="res://Entities/Items/TRESItems/WeaponMods/Compensator(2).tres" id="15_6grxy"]
 [ext_resource type="Script" uid="uid://c2gdoebfp12dq" path="res://Entities/Stats/StatMod/StatModsCacheResource.gd" id="15_c2f42"]
 [ext_resource type="Script" uid="uid://dvasncq3tgljs" path="res://Entities/Items/Weapons/ProjectileWeapons/ProjWeaponResource.gd" id="16_58fh8"]
 

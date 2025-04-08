@@ -104,12 +104,12 @@ func _animate() -> void:
 	entity.facing_component.update_blend_position("run")
 
 func _play_run_sound() -> void:
-	AudioManager.play_sound("PlayerRunBase", AudioManager.SoundType.SFX_2D, entity.global_position)
+	AudioManager.play_2d("player_run_base", entity.global_position)
 
 func _play_sprint_sound() -> void:
 	if not is_sprint_audio_playing:
-		AudioManager.fade_in_sound("PlayerSprintWind", AudioManager.SoundType.SFX_GLOBAL, 0.5)
+		AudioManager.play_global("player_sprint_wind", 0.5)
 
 func _stop_sprint_sound() -> void:
 	if is_sprint_audio_playing:
-		AudioManager.fade_out_sound_by_name("PlayerSprintWind", 0.3, 1, true)
+		AudioManager.stop_sound_id("player_sprint_wind", 0.3, 1, true)

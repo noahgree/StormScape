@@ -595,9 +595,7 @@ func _split_self() -> void:
 
 		get_parent().add_child(new_proj)
 
-	var sound: String = ArrayHelpers.get_or_default(stats.splitting_sounds, splits_so_far - 1, stats.splitting_sounds[0])
-	if sound != "":
-		AudioManager.play_sound(sound, AudioManager.SoundType.SFX_2D, global_position)
+	AudioManager.play_2d(stats.splitting_sound, global_position)
 
 	var split_cam_fx: CamFXResource = ArrayHelpers.get_or_default(stats.split_cam_fx, splits_so_far - 1, stats.split_cam_fx[0])
 	split_cam_fx.activate_all()
@@ -668,8 +666,7 @@ func _handle_aoe() -> void:
 	if stats.aoe_vfx != null:
 		var radius: float = min(MAX_AOE_RADIUS, s_mods.get_stat("proj_aoe_radius"))
 		AreaOfEffectVFX.create(stats.aoe_vfx, Globals.world_root, self, radius)
-	if stats.aoe_sound != "":
-		AudioManager.play_sound(stats.aoe_sound, AudioManager.SoundType.SFX_2D, global_position)
+	AudioManager.play_2d(stats.aoe_sound, global_position)
 
 	await get_tree().create_timer(max(0.05, stats.aoe_effect_dur), false, true, false).timeout
 	queue_free()
@@ -872,6 +869,5 @@ func _check_for_whiz_sound() -> void:
 			var player: Player = Globals.player_node
 			if (player.global_position - global_position).dot(movement_direction) > 20:
 				if global_position.distance_squared_to(player.global_position) < pow(whiz_sound_distance, 2):
-					if whiz_sound != "":
-						AudioManager.play_sound(whiz_sound, AudioManager.SoundType.SFX_2D, global_position)
-						played_whiz_sound = true
+					AudioManager.play_2d(whiz_sound, global_position)
+					played_whiz_sound = true

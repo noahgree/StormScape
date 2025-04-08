@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="ProjWeaponResource" load_steps=33 format=3 uid="uid://1q7rlned2r23"]
+[gd_resource type="Resource" script_class="ProjWeaponResource" load_steps=32 format=3 uid="uid://1q7rlned2r23"]
 
 [ext_resource type="Script" uid="uid://dkfssottmsrch" path="res://Entities/Stats/EffectSystemResources/EffectSources/EffectSource.gd" id="1_lbh37"]
 [ext_resource type="Texture2D" uid="uid://bm570hawaupxe" path="res://Entities/Items/Weapons/WeaponVFX/Casings/small_casing.png" id="1_pxe5r"]
@@ -15,7 +15,7 @@
 [ext_resource type="Script" uid="uid://bj3r5oopspj6l" path="res://Entities/Items/Projectiles/ProjectileCore/ProjectileResource.gd" id="8_evybt"]
 [ext_resource type="Script" uid="uid://c2gdoebfp12dq" path="res://Entities/Stats/StatMod/StatModsCacheResource.gd" id="11_ojoph"]
 [ext_resource type="PackedScene" uid="uid://bqkyplubhsx43" path="res://Entities/Items/Projectiles/Bullets/SmallBullet/SmallBullet.tscn" id="12_evybt"]
-[ext_resource type="Resource" uid="uid://8uj8fwadqlk0" path="res://Entities/Items/TRESItems/Stick(0).tres" id="14_pxe5r"]
+[ext_resource type="Resource" uid="uid://8uj8fwadqlk0" path="res://Entities/Items/TRESItems/WorldResources/Stick(0).tres" id="14_pxe5r"]
 
 [sub_resource type="Curve" id="Curve_upocd"]
 _data = [Vector2(0, 0.00289726), 0.0, 0.0, 0, 0, Vector2(0.149254, 0), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
@@ -38,7 +38,7 @@ scanned_phys_layers = 111
 can_hit_self = true
 bad_effect_affected_teams = 1
 good_effect_affected_teams = 2
-base_damage = 5
+base_damage = 9
 object_damage_mult = 1.0
 dmg_affected_stats = 2
 crit_chance = 0
@@ -82,10 +82,6 @@ point_count = 2
 [sub_resource type="Curve" id="Curve_ajwg5"]
 _limits = [0.0, 0.1, 0.0, 1.0]
 _data = [Vector2(0, 0.014), 0.0, 0.0, 0, 0, Vector2(1, 0.017), 0.0, 0.0, 0, 0]
-point_count = 2
-
-[sub_resource type="Curve" id="Curve_lbh37"]
-_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
 point_count = 2
 
 [sub_resource type="Curve" id="Curve_nsxbu"]
@@ -134,18 +130,17 @@ do_y_axis_reflection = false
 move_in_rotated_dir = false
 shadow_matches_spin = false
 launch_angle = 0.0
-arc_travel_distance = 100
-arc_speed = 800.0
+arc_travel_distance = 125
+arc_speed = 500.0
 max_collision_height = 20
 grounding_free_delay = 0.0
-bounce_count = 4
-bounce_falloff_curve = SubResource("Curve_lbh37")
+bounce_count = 0
 ping_pong_bounce = false
 number_of_splits = 0
-split_into_counts = Array[int]([3, 6])
-angular_spreads = Array[float]([45.0, 20.0])
-split_delays = Array[float]([0.05, 0.1])
-splitting_sounds = Array[String]([""])
+split_into_counts = Array[int]([2])
+angular_spreads = Array[float]([45.0])
+split_delays = Array[float]([0.2])
+splitting_sound = ""
 split_cam_fx = null
 aoe_radius = 0
 do_aoe_on_arc_land = true
@@ -203,7 +198,7 @@ post_fire_anim_dur = 0.0
 firing_cam_fx = ExtResource("5_evybt")
 casing_texture = ExtResource("1_pxe5r")
 casing_tint = Color(1, 1, 1, 1)
-firing_sound = "GattlerShot"
+firing_sound = "gattler_shot"
 post_fire_sound = ""
 post_fire_sound_delay = 0.0
 charging_sound = ""

@@ -39,8 +39,7 @@ static func add_wearable(entity: PhysicsBody2D, wearable: Wearable, index: int) 
 	for mod_resource: StatMod in wearable.stat_mods:
 		entity.stats.add_mods([mod_resource] as Array[StatMod])
 
-	if wearable.equipping_audio != "":
-		AudioManager.play_sound(wearable.equipping_audio, AudioManager.SoundType.SFX_GLOBAL)
+	AudioManager.play_global(wearable.equipping_audio)
 
 ## Removes the wearable from the dictionary.
 static func remove_wearable(entity: PhysicsBody2D, wearable: Wearable, index: int) -> void:
@@ -52,8 +51,7 @@ static func remove_wearable(entity: PhysicsBody2D, wearable: Wearable, index: in
 
 	entity.wearables[index] = { "EmptySlot" : null }
 
-	if wearable.removal_audio != "":
-		AudioManager.play_sound(wearable.removal_audio, AudioManager.SoundType.SFX_GLOBAL)
+	AudioManager.play_global(wearable.removal_audio)
 
 ## Removes all wearables from the entity.
 static func removal_all_wearables(entity: PhysicsBody2D) -> void:

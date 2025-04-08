@@ -73,9 +73,9 @@ func _handle_rigid_entity_collisions() -> void:
 		if not collision_shake_complete:
 			dash_impact_cam_fx.activate_all()
 			if entity.effects.check_if_has_effect("kinetic_impact"):
-				AudioManager.play_sound("KineticImpactHit", AudioManager.SoundType.SFX_2D, entity.global_position)
+				AudioManager.play_2d("kinetic_impact_hit", entity.global_position)
 			else:
-				AudioManager.play_sound("PlayerDashImpact", AudioManager.SoundType.SFX_2D, entity.global_position)
+				AudioManager.play_2d("player_dash_impact", entity.global_position)
 
 			collision_shake_complete = true
 
@@ -103,8 +103,8 @@ func _create_ghost() -> void:
 
 ## Plays the dash sound, only for players.
 func _play_dash_sound() -> void:
-	AudioManager.play_sound("PlayerDash", AudioManager.SoundType.SFX_GLOBAL)
+	AudioManager.play_global("player_dash")
 
 ## Stops the dash sound, only for players.
 func _stop_dash_sound() -> void:
-	AudioManager.fade_out_sound_by_name("PlayerDash", 0.1, 1, true)
+	AudioManager.stop_sound_id("player_dash", 0.1, 1, true)

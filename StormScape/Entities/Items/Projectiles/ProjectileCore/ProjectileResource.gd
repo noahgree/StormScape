@@ -69,7 +69,7 @@ class_name ProjectileResource
 @export_custom(PROPERTY_HINT_NONE, "suffix:degrees") var angular_spreads: Array[float] = [45] ## For each split index, you should specify how wide of an angle the projectiles will be spread amongst.
 @export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var split_delays: Array[float] = [0.2] ## For each split index, you should assign how long after the last projectile spawn to wait before splitting again. The first delay is the delay before the initial split.
 @export_subgroup("Splitting FX")
-@export var splitting_sounds: Array[String] = [""] ## For each split index, you should assign the sound to be played during the split.
+@export var splitting_sound: String ## The sound to be played during each split.
 @export var split_cam_fx: Array[CamFXResource] = [CamFXResource.new()] ## For each split index, you should determine how strong the camera fx will be at the split.
 
 @export_group("Area of Effect")

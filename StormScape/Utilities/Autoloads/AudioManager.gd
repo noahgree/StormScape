@@ -5,15 +5,12 @@ extends Node2D
 
 @export_dir var music_resources_folder: String ## The folder holding all .tres music files.
 @export_dir var sfx_resources_folder: String ## The folder holding all .tres sfx files.
-enum SoundCategory { MUSIC, SFX } ## A specifier for determining music vs sfx.
 enum SoundSpace { GLOBAL, SPATIAL } ## A specifier for determining global vs spatial (2d) audio.
-enum SoundType { MUSIC_GLOBAL, MUSIC_2D, SFX_GLOBAL, SFX_2D } ## Combines the two settings into sone for simplicity.
 
 const DISTANCE_FROM_PLAYER_BUFFER: int = 100 ## How far beyond max_distance the player can from the sound origin for a 2d sound to still get created.
 const MAX_SPATIAL_POOL_SIZE: int = 12 ## How many 2d audio player nodes can be waiting around in the pool.
 const MAX_GLOBAL_POOL_SIZE: int = 15 ## How many global audio player nodes can be waiting around in the pool.
-var sfx_cache: Dictionary[StringName, AudioResource] = {} ## The dict of the file paths to all sfx resources, using the sfx id as the key.
-var music_cache: Dictionary[StringName, AudioResource] = {} ## The dict of the file paths to all music resources, using the music id as the key.
+var sound_cache: Dictionary[StringName, AudioResource] = {} ## The dict of the file paths to all sound resources, using the id as the key.
 var scene_ref_counts: Dictionary[StringName, int] = {} ## The number of scenes needing access to certain sound ids.
 var spatial_pool: Array[AudioStreamPlayer2D] ## The 2d audio players current waiting around in memory.
 var global_pool: Array[AudioStreamPlayer] ## The global audio players current waiting around in memory.
@@ -26,8 +23,8 @@ func _ready() -> void:
 		var macbook_device: String = devices[macbook_device_index]
 		AudioServer.output_device = macbook_device if DebugFlags.AudioFlags.set_debug_output_device else "Default"
 
-	_cache_audio_resources(music_resources_folder, music_cache)
-	_cache_audio_resources(sfx_resources_folder, sfx_cache)
+	_cache_audio_resources(music_resources_folder, sound_cache)
+	_cache_audio_resources(sfx_resources_folder, sound_cache)
 
 	var pool_trim_timer: Timer = TimerHelpers.create_repeating_autostart_timer(self, 15.0, _trim_pools)
 	pool_trim_timer.name = "PoolingTrimDaemon"
@@ -67,63 +64,52 @@ func _cache_audio_resources(folder_path: String, cache: Dictionary[StringName, A
 	folder.list_dir_end()
 
 ## Registers a scene as using a certain audio resource, ensuring that its streams are preloaded.
-func register_scene_audio_resource_use(audio_resource: AudioResource) -> void:
-	if scene_ref_counts.has(audio_resource.id):
-		scene_ref_counts[audio_resource.id] += 1
+func register_scene_audio_resource_use(sound_id: StringName) -> void:
+	if scene_ref_counts.has(sound_id):
+		scene_ref_counts[sound_id] += 1
 	else:
-		scene_ref_counts[audio_resource.id] = 1
-		if audio_resource.preloaded_streams.is_empty():
-			for file_path: String in audio_resource.sound_file_paths:
-				var stream: AudioStream = load(file_path)
-				if stream:
-					audio_resource.preloaded_streams.append(stream)
+		var audio_resource: AudioResource = sound_cache.get(sound_id, null)
+		if audio_resource:
+			scene_ref_counts[sound_id] = 1
+			if audio_resource.preloaded_streams.is_empty():
+				for file_path: String in audio_resource.sound_file_paths:
+					var stream: AudioStream = load(file_path)
+					if stream:
+						audio_resource.preloaded_streams.append(stream)
 
-			if DebugFlags.PrintFlags.sound_preload_changes:
-				print_rich("[color=Seagreen]PRELOADED AUDIO RESOURCE STREAMS[/color]: \"[b]" + audio_resource.id + "[/b]\"")
+				if DebugFlags.PrintFlags.sound_preload_changes:
+					print_rich("[color=Seagreen]PRELOADED AUDIO RESOURCE STREAMS[/color]: \"[b]" + sound_id + "[/b]\"")
+		else:
+			push_error("\"" + sound_id + "\" was trying to register as a sound resource but does not exist in the cache.")
 
 	if DebugFlags.PrintFlags.sound_refcount_changes:
-		_debug_print_all_ref_counts()
+		_debug_print_single_ref_count(sound_id)
 
 ## Unregisters a scene as using a certain audio resource, removing the streams from memory if the reference count
 ## is at 0.
-func unregister_scene_audio_resource_use(audio_resource: AudioResource) -> void:
-	if not scene_ref_counts.has(audio_resource.id):
+func unregister_scene_audio_resource_use(sound_id: StringName) -> void:
+	if not scene_ref_counts.has(sound_id):
 		return
 
-	scene_ref_counts[audio_resource.id] -= 1
-	if scene_ref_counts[audio_resource.id] <= 0:
-		scene_ref_counts.erase(audio_resource.id)
+	scene_ref_counts[sound_id] -= 1
+	if scene_ref_counts[sound_id] <= 0:
+		scene_ref_counts.erase(sound_id)
+		var audio_resource: AudioResource = sound_cache.get(sound_id, null)
 		if audio_resource:
 			audio_resource.preloaded_streams.clear()
 
 			if DebugFlags.PrintFlags.sound_preload_changes:
-				print_rich("[color=Firebrick]UNLOADED AUDIO RESOURCE STREAMS[/color]: \"[b]" + audio_resource.id + "[/b]\"")
+				print_rich("[color=Firebrick]UNLOADED AUDIO RESOURCE STREAMS[/color]: \"[b]" + sound_id + "[/b]\"")
+		else:
+			push_error("\"" + sound_id + "\" was trying to UNregister as a sound resource but does not exist in the cache. This should never happen.")
 
 	if DebugFlags.PrintFlags.sound_refcount_changes:
-		_debug_print_all_ref_counts()
+		_debug_print_single_ref_count(sound_id)
 
 ## Attempts to retrive an AudioStreamPlayer or AudioStreamPlayer2D from the list of active nodes.
 ## If there is no active stream under the given id, the function returns null.
 func _get_active_audio_players_by_sound_name(sound_id: StringName) -> Array:
 	return get_tree().get_nodes_in_group(sound_id)
-
-## Returns a reference to a cached audio resource if it exists.
-func _get_audio_resource_by_type(sound_id: StringName, type: SoundType) -> AudioResource:
-	var audio_resource: AudioResource
-	match type:
-		SoundType.MUSIC_GLOBAL:
-			audio_resource = music_cache.get(sound_id, null)
-		SoundType.MUSIC_2D:
-			audio_resource = music_cache.get(sound_id, null)
-		SoundType.SFX_GLOBAL:
-			audio_resource = sfx_cache.get(sound_id, null)
-		SoundType.SFX_2D:
-			audio_resource = sfx_cache.get(sound_id, null)
-
-	if audio_resource:
-		return audio_resource
-	else:
-		return null
 #endregion
 
 #region Pooling
@@ -163,32 +149,30 @@ func _trim_pools() -> void:
 #endregion
 
 #region Starting Sounds
-## Called externally to request creating a sound. Lets this singleton manage all starting and stopping logic.
-func play_sound(sound_id: StringName, type: SoundType, location: Vector2 = Vector2.ZERO) -> void:
-	_create_audio_player(sound_id, type, location, 0, self)
+## Plays a sound in 2D at a given location. The sound can optionally be faded in and parented to any node.
+## The resulting audio player is returned if successful.
+func play_2d(sound_id: StringName, location: Vector2 = Vector2.ZERO, fade_in_time: float = 0,
+				parent_node: Node = self) -> Variant:
+	if sound_id == "":
+		return null
+	var audio_player: Variant = _create_audio_player(sound_id, SoundSpace.SPATIAL, location, fade_in_time, parent_node)
+	return audio_player
 
-## Called externally to request creating a sound with a custom fade in time. Lets this singleton manage
-## all starting and stopping logic.
-func fade_in_sound(sound_id: StringName, type: SoundType, fade_in_time: float = 0.5,
-					location: Vector2 = Vector2.ZERO) -> void:
-	_create_audio_player(sound_id, type, location, fade_in_time, self)
-
-## Called externally to not only setup a sound instance by id, but return a reference to its player
-## for external management.
-## Fade-in time is optional and if left as 0 will not start with a fade.
-## The parent node should typically either be the world_root or the player, otherwise the 2d distance can be buggy.
-func play_and_get_sound(sound_id: StringName, type: SoundType, parent_node: Node,
-						fade_in_time: float = 0, location: Vector2 = Vector2.ZERO) -> Variant:
-	var audio_player: Variant = _create_audio_player(sound_id, type, location, fade_in_time, parent_node)
+## Plays a sound globally (has no location, can be heard everywhere). The sound can optionally be faded in
+## and parented to any node.
+## The resulting audio player is returned if successful.
+func play_global(sound_id: StringName, fade_in_time: float = 0, parent_node: Node = self) -> Variant:
+	if sound_id == "":
+		return null
+	var audio_player: Variant = _create_audio_player(sound_id, SoundSpace.GLOBAL, Vector2.ZERO, fade_in_time, parent_node)
 	return audio_player
 
 ## Pulls a sound resource from one of the caches and sends it to be setup if it exists.
-func _create_audio_player(sound_id: StringName, type: SoundType, location: Vector2,
+func _create_audio_player(sound_id: StringName, space: SoundSpace, location: Vector2,
 							fade_in_time: float, parent_node: Node) -> Variant:
-	var is_2d: bool = true if type == SoundType.MUSIC_2D or type == SoundType.SFX_2D else false
-	var is_music: bool = true if type == SoundType.MUSIC_GLOBAL or type == SoundType.MUSIC_2D else false
+	var is_2d: bool = space == SoundSpace.SPATIAL
 
-	var audio_resource: AudioResource = _get_audio_resource_by_type(sound_id, type)
+	var audio_resource: AudioResource = sound_cache.get(sound_id, null)
 	if audio_resource == null:
 		push_error("Sound id: \"" + sound_id + "\" did not exist as a sound resource in the cache.")
 		return null
@@ -200,7 +184,7 @@ func _create_audio_player(sound_id: StringName, type: SoundType, location: Vecto
 	if audio_stream == null:
 		return null
 
-	var audio_player: Variant = _create_or_restart_audio_player_from_resource(audio_resource, is_2d, is_music, location)
+	var audio_player: Variant = _create_or_restart_audio_player_from_resource(audio_resource, is_2d, location)
 	if audio_player:
 		audio_player.stream = audio_stream
 	else:
@@ -217,7 +201,7 @@ func _create_audio_player(sound_id: StringName, type: SoundType, location: Vecto
 
 ## Applies the settings from the audio resource to the audio player and returns it if it isn't null.
 func _create_or_restart_audio_player_from_resource(audio_resource: AudioResource, is_2d: bool,
-												is_music: bool, location: Vector2) -> Variant:
+													location: Vector2) -> Variant:
 	if (not audio_resource.has_available_stream()) and (not audio_resource.restart_if_at_limit):
 		return null
 	else:
@@ -237,7 +221,7 @@ func _create_or_restart_audio_player_from_resource(audio_resource: AudioResource
 			audio_player = _get_or_create_global_player()
 			audio_player.name = "GLOBAL" + audio_resource.id + "@" + str(audio_resource.instantiation_id)
 
-		if is_music:
+		if audio_resource.category == AudioResource.Category.MUSIC:
 			audio_player.bus = "Music"
 		else:
 			audio_player.bus = "SFX"
@@ -279,13 +263,13 @@ func _stop_sound_by_name_due_to_limit(sound_id: StringName) -> void:
 	if playing_sounds[0]:
 		stop_audio_player(playing_sounds[0])
 
-## Picks a random sound from the array of preloaded resources if they exist, pushing a warning and falling back to
-## simply loading a random stream on the spot if not.
+## Picks a random sound from the array of preloaded resources if they exist, falling back to simply loading a
+## random stream on the spot if not.
 func _pick_stream_resource_from_audio_resource(audio_resource: AudioResource) -> AudioStream:
 	if audio_resource.preloaded_streams.size() > 0:
 		return audio_resource.preloaded_streams[randi_range(0, audio_resource.preloaded_streams.size() - 1)]
 	else:
-		push_warning("\"" + audio_resource.id + "\" did not have its streams preloaded when it was requested.")
+		#push_warning("\"" + audio_resource.id + "\" did not have its streams preloaded when it was requested.")
 		var sound_file: String = audio_resource.sound_file_paths[randi_range(0, audio_resource.sound_file_paths.size() - 1)]
 		return load(sound_file)
 
@@ -353,7 +337,7 @@ func change_attenuation_exponent_by_sound_name(sound_id: StringName, exponent: f
 ## Changes the minimum interval between an audio ending and a spot opening up for when things like footsteps
 ##need to occur at different rhythms and not in bursts. Resets to default on game load.
 func change_sfx_resource_rhythmic_delay(sound_id: StringName, new_delay: float) -> void:
-	var audio_resource: AudioResource = sfx_cache.get(sound_id, null)
+	var audio_resource: AudioResource = sound_cache.get(sound_id, null)
 	if audio_resource:
 		audio_resource.rhythmic_delay = max(0, new_delay)
 #endregion
@@ -381,14 +365,9 @@ func _on_player_finished_playing(audio_player: Variant) -> void:
 			custom_callable.call()
 
 ## Stops all sounds of a sound id by default, or can stop a specific number if given a value besides 0.
-func stop_sound_by_name(sound_id: StringName, number_of_instances_to_stop: int = 0) -> void:
-	_destroy_sounds_by_sound_name(sound_id, number_of_instances_to_stop, 0.0, false)
-
-## Fades out all sounds of a sound id by default, or can stop a specific number if given a value besides 0
-## (up to 10 can actually fade out at once, though).
-func fade_out_sound_by_name(sound_id: StringName, fade_out_time: float = 0.5,
+func stop_sound_id(sound_id: StringName, fade_out_time: float = 0,
 					number_of_instances_to_stop: int = 0, open_spots_during_fade: bool = false) -> void:
-	_destroy_sounds_by_sound_name(sound_id, min(10, number_of_instances_to_stop), fade_out_time, open_spots_during_fade)
+	_destroy_sounds_by_sound_name(sound_id, number_of_instances_to_stop, fade_out_time, open_spots_during_fade)
 
 ## Stops a single sound via stopping its audio player, optionally wide a fade out.
 ## This is called to stop a stored audio player after using play_and_get_sound.
@@ -442,11 +421,7 @@ func _open_audio_resource_spot(audio_player: Variant, return_player_to_pool: boo
 	_remove_meta_from_audio_player(audio_player)
 	audio_player.remove_from_group(sound_id)
 
-	var audio_resource: AudioResource
-	if audio_player.bus == "Music":
-		audio_resource = music_cache.get(sound_id, null)
-	if audio_player.bus == "SFX":
-		audio_resource = sfx_cache.get(sound_id, null)
+	var audio_resource: AudioResource = sound_cache.get(sound_id, null)
 	if audio_resource:
 		if audio_resource.rhythmic_delay > 0:
 			get_tree().create_timer(audio_resource.rhythmic_delay, false, false, true).timeout.connect(func() -> void: audio_resource.decrement_current_count())
@@ -473,9 +448,15 @@ func _return_audio_player(audio_player: Variant) -> void:
 ## Prints all sounds' current refcounts according to the manual refcount dict and how many preloaded streams they have.
 func _debug_print_all_ref_counts() -> void:
 	for key: StringName in scene_ref_counts.keys():
-		var resource: AudioResource = sfx_cache.get(key, null)
-		if resource == null:
-			resource = music_cache.get(key, null)
-		var preloaded_count: int = resource.preloaded_streams.size() if resource != null else 0
+		var audio_resource: AudioResource = sound_cache.get(key, null)
+		var preloaded_count: int = audio_resource.preloaded_streams.size() if audio_resource != null else 0
 		print("Resource: ", key, " | RefCount: ", scene_ref_counts[key], " | Preloaded Streams: ", preloaded_count)
+
+## Prints a single sound's refcounts and preloaded streams.
+func _debug_print_single_ref_count(sound_id: StringName) -> void:
+	if sound_cache.has(sound_id):
+		var audio_resource: AudioResource = sound_cache.get(sound_id, null)
+		var preloaded_count: int = audio_resource.preloaded_streams.size() if audio_resource != null else 0
+		var ref_count: int = scene_ref_counts.get(sound_id, 0)
+		print("Resource: ", sound_id, " | RefCount: ", ref_count, " | Preloaded Streams: ", preloaded_count)
 #endregion

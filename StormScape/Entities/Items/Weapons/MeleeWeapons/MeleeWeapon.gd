@@ -137,8 +137,7 @@ func _swing() -> void:
 		anim_player.speed_scale = 1.0 / stats.s_mods.get_stat("use_speed")
 		anim_player.play("MeleeWeaponAnimLibrary/use")
 
-		if stats.use_sound != "":
-			AudioManager.play_sound(stats.use_sound, AudioManager.SoundType.SFX_2D, source_entity.global_position)
+		AudioManager.play_2d(stats.use_sound, source_entity.global_position)
 
 ## Begins the logic for doing a charged swing.
 func _charge_swing() -> void:
@@ -164,8 +163,7 @@ func _charge_swing() -> void:
 		anim_player.speed_scale = 1.0 / stats.s_mods.get_stat("charge_use_speed")
 		anim_player.play("MeleeWeaponAnimLibrary/charge_use")
 
-		if stats.charge_use_sound != "":
-			AudioManager.play_sound(stats.charge_use_sound, AudioManager.SoundType.SFX_2D, source_entity.global_position)
+		AudioManager.play_2d(stats.charge_use_sound, source_entity.global_position)
 
 ## Spawns a ghosting effect of the weapon sprite to immitate a fast whoosh.
 func _spawn_ghost() -> void:

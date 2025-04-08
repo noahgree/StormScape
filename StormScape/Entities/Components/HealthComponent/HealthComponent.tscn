@@ -9,4 +9,4 @@
 script = ExtResource("1_2k16p")
 
 [node name="AudioPreloader" parent="." instance=ExtResource("2_2n2v1")]
-audio_resources = Array[ExtResource("3_jm3ud")]([ExtResource("4_cy3n2")])
+scene_audio = Array[ExtResource("3_jm3ud")]([ExtResource("4_cy3n2")])

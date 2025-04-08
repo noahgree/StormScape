@@ -177,7 +177,7 @@ func _play_sound(sound_name: String, multishot_id: int) -> void:
 		if (string_name_sound_name in current_sounds.keys()) and (multishot_id in current_sounds[string_name_sound_name]):
 			return
 
-		var player: Variant = AudioManager.play_and_get_sound(sound_name, AudioManager.SoundType.SFX_2D, Globals.world_root, 0, entity.global_position)
+		var player: Variant = AudioManager.play_2d(sound_name, entity.global_position, 0, Globals.world_root)
 		if player != null:
 			if string_name_sound_name in current_sounds.keys():
 				current_sounds[string_name_sound_name].append(multishot_id)
@@ -194,7 +194,7 @@ func _play_sound(sound_name: String, multishot_id: int) -> void:
 			finish_callables.append(callable)
 			player.set_meta("finish_callables", finish_callables)
 	else:
-		AudioManager.play_sound(sound_name, AudioManager.SoundType.SFX_2D, entity.global_position)
+		AudioManager.play_2d(sound_name, entity.global_position)
 #endregion
 
 #region Popups

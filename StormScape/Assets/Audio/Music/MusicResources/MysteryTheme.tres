@@ -1,11 +1,12 @@
 [gd_resource type="Resource" script_class="AudioResource" load_steps=2 format=3 uid="uid://i1r1kb61dedn"]
 
-[ext_resource type="Script" uid="uid://dwic8harmmplg" path="res://Utilities/Game/Audio/AudioResource.gd" id="1_yubck"]
+[ext_resource type="Script" uid="uid://dwic8harmmplg" path="res://Utilities/Game/Audio/AudioResource.gd" id="1_ncgl4"]
 
 [resource]
-script = ExtResource("1_yubck")
-name = "MysteryTheme1"
-sound_files_folder = "res://Assets/Audio/Music/MusicRawAudio/Background/MysteryTheme1"
+script = ExtResource("1_ncgl4")
+id = &"mystery_theme"
+category = 1
+sound_files_folder = "res://Assets/Audio/Music/MusicRawAudio/Background/MysteryTheme"
 sound_file_paths = Array[String]([])
 concurrent_limit = 1
 rhythmic_delay = 0.0

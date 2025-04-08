@@ -28,7 +28,7 @@ class_name ProjectileWeapon
 @onready var debug_emission_box: Polygon2D = get_node_or_null("DebugEmissionBox")
 @onready var reload_off_hand: EntityHandSprite = get_node_or_null("ReloadOffHand") ## The off hand only shown and animated during reloads.
 @onready var reload_main_hand: EntityHandSprite = get_node_or_null("ReloadMainHand") ## The main hand only shown and animated during reloads.
-@onready var firing_vfx: WeaponFiringVFX = get_node_or_null("FiringVFX")
+@onready var firing_vfx: WeaponFiringVFX = get_node_or_null("FiringVFX") ## The vfx that spawns when firing.
 
 #region Local Vars
 const MAX_ALLOTTED_CLUSTER_DELAY: float = 0.5 ## The max amount of time between each projectile
@@ -64,6 +64,7 @@ var just_hit_max_overheat: bool = false ## When true, we reached max overheat af
 var is_tweening_overheat_overlays: bool = false ## Whether the post-overheat penalty tween is lowering the opacity of the overlays.
 var firing_in_progress: bool = false ## When true, we are waiting on burst delays and cluster delays that are still in progress.
 var bursting_in_progress: bool = false ## A second conditional for determining if firing is still ongoing due to bursting potentially taking more time than the barrage/cluster logic.
+var preloaded_sounds: Array[StringName] = [] ## The sounds kept in memory while this weapon scene is alive that must be dereferenced upon exiting the tree.
 #endregion
 
 
@@ -162,6 +163,12 @@ func _ready() -> void:
 
 	anim_player.animation_finished.connect(_on_any_animation_finished)
 	_setup_firing_vfx()
+
+	preloaded_sounds = [stats.firing_sound, stats.charging_sound, stats.projectile_logic.splitting_sound]
+	AudioPreloader.register_sounds_from_ids(preloaded_sounds)
+
+func _exit_tree() -> void:
+	AudioPreloader.unregister_sounds_from_ids(preloaded_sounds)
 
 func disable() -> void:
 	source_entity.facing_component.should_rotate = true
@@ -666,7 +673,7 @@ func _handle_overheat_increase() -> void:
 func _handle_max_overheat_reached() -> void:
 	just_hit_max_overheat = true
 	_handle_adding_cooldown(stats.s_mods.get_stat("overheat_penalty"), "overheat_penalty")
-	if stats.overheated_sound != "": AudioManager.play_sound(stats.overheated_sound, AudioManager.SoundType.SFX_GLOBAL)
+	AudioManager.play_global(stats.overheated_sound)
 	overhead_ui.update_visuals_for_max_overheat()
 	_do_weapon_overheat_visuals(false)
 
@@ -719,8 +726,7 @@ func _do_firing_fx() -> void:
 	if stats.firing_cam_fx:
 		stats.firing_cam_fx.activate_all()
 
-	if stats.firing_sound != "":
-		AudioManager.play_sound(stats.firing_sound, AudioManager.SoundType.SFX_2D, global_position)
+	AudioManager.play_2d(stats.firing_sound, global_position)
 
 	if firing_vfx:
 		firing_vfx.start()
@@ -788,14 +794,11 @@ func _start_post_fire_anim() -> void:
 ## Starts the post-firing sound and vfx if we have one. Good for things like the cocking of a shotgun
 ## barrel after firing.
 func _start_post_fire_fx() -> void:
-	if stats.post_fire_sound == "":
-		return
-
 	var adjusted_post_fire_sound_delay: float = min(stats.s_mods.get_stat("fire_cooldown") - 0.05, stats.post_fire_sound_delay) if stats.post_fire_sound_delay > 0 else 0
 	if adjusted_post_fire_sound_delay > 0.05:
 		await get_tree().create_timer(adjusted_post_fire_sound_delay).timeout
 
-	AudioManager.play_sound(stats.post_fire_sound, AudioManager.SoundType.SFX_2D, global_position)
+	AudioManager.play_2d(stats.post_fire_sound, global_position)
 
 ## Applies a status effect to the source entity after firing.
 func _apply_firing_effect_to_entity() -> void:
@@ -838,8 +841,7 @@ func _get_has_needed_ammo_and_reload_if_not() -> bool:
 		if result == false:
 			if not is_reloading:
 				_attempt_reload()
-				if stats.empty_mag_sound != "":
-					AudioManager.play_sound(stats.empty_mag_sound, AudioManager.SoundType.SFX_GLOBAL)
+				AudioManager.play_global(stats.empty_mag_sound)
 
 	return result
 
@@ -874,7 +876,7 @@ func _attempt_reload() -> void:
 		else:
 			_on_single_reload_delay_timer_timeout() # Calling immediately if there is no delay needed
 	else:
-		if stats.mag_reload_sound != "": AudioManager.play_sound(stats.mag_reload_sound, AudioManager.SoundType.SFX_GLOBAL)
+		AudioManager.play_global(stats.mag_reload_sound)
 		reload_timer.start(stats.s_mods.get_stat("mag_reload_time"))
 		_start_reload_anim("mag_reload")
 
@@ -954,7 +956,7 @@ func _on_single_reload_timer_timeout() -> void:
 	var ammo_needed: int = mag_size - stats.ammo_in_mag
 	var ammo_available: int = _get_more_reload_ammo(min(ammo_needed, stats.s_mods.get_stat("single_reload_quantity")))
 	if ammo_available > 0:
-		if stats.proj_reload_sound != "": AudioManager.play_sound(stats.proj_reload_sound, AudioManager.SoundType.SFX_GLOBAL)
+		AudioManager.play_global(stats.proj_reload_sound)
 
 		stats.ammo_in_mag = min(mag_size, stats.ammo_in_mag + ammo_available)
 		_update_ammo_ui()

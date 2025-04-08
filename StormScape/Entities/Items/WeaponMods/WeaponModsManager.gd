@@ -73,8 +73,7 @@ static func _add_weapon_mod(weapon_stats: WeaponResource, weapon_mod: WeaponMod,
 
 	weapon_mod.on_added(weapon_stats, source_entity.hands.equipped_item if source_entity != null else null)
 
-	if weapon_mod.equipping_audio != "":
-		AudioManager.play_sound(weapon_mod.equipping_audio, AudioManager.SoundType.SFX_GLOBAL)
+	AudioManager.play_global(weapon_mod.equipping_audio)
 
 ## Removes the weapon mod from the dictionary after calling the on_removal method inside the mod itself.
 static func remove_weapon_mod(weapon_stats: WeaponResource, weapon_mod: WeaponMod, index: int,
@@ -97,8 +96,7 @@ static func remove_weapon_mod(weapon_stats: WeaponResource, weapon_mod: WeaponMo
 
 	weapon_mod.on_removal(weapon_stats, source_entity.hands.equipped_item if source_entity != null else null)
 
-	if weapon_mod.removal_audio != "":
-		AudioManager.play_sound(weapon_mod.removal_audio, AudioManager.SoundType.SFX_GLOBAL)
+	AudioManager.play_global(weapon_mod.removal_audio)
 
 ## Adds all mods in the current_mods array to a weapon's stats. Useful for restoring after a save and load.
 static func re_add_all_mods_to_weapon(weapon_stats: WeaponResource, source_entity: PhysicsBody2D) -> void:

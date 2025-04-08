@@ -4,6 +4,6 @@ class_name BackgroundMusicManager
 
 
 func _ready() -> void:
-	#var player: AudioStreamPlayer = AudioManager.play_and_get_sound("MysteryTheme1", AudioManager.SoundType.MUSIC_GLOBAL, self)
+	#var player: AudioStreamPlayer = AudioManager.play_global("mystery_theme", 0, self)
 	#player.process_mode = Node.PROCESS_MODE_ALWAYS
 	pass

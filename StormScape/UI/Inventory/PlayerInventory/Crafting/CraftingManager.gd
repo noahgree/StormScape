@@ -7,7 +7,7 @@ class_name CraftingManager
 
 static var cached_items: Dictionary[StringName, ItemResource] = {} ## All items keyed by their unique item id.
 
-@export_dir var tres_folder: String ## The folder path to all the TRES items.
+@export_dir var tres_folder: String ## The top-level folder path to all the TRES items.
 @export var inventory_ui: PlayerInvUI ## The main controller for all inventory sub-UIs.
 
 @onready var output_slot: CraftingSlot = %OutputSlot ## The slot where the result will appear in.
@@ -31,7 +31,7 @@ static func get_item_by_id(item_id: StringName) -> ItemResource:
 	return item_resource
 
 func _ready() -> void:
-	_cache_recipes()
+	_cache_recipes(tres_folder)
 
 	_on_output_slot_output_changed(false)
 	output_slot.output_changed.connect(_on_output_slot_output_changed)
@@ -42,20 +42,23 @@ func _ready() -> void:
 	_setup_item_viewer_signals()
 
 ## This caches the items by their recipe ID at the start of the game.
-func _cache_recipes() -> void:
-	var dir: DirAccess = DirAccess.open(tres_folder)
+func _cache_recipes(folder: String) -> void:
+	var dir: DirAccess = DirAccess.open(folder)
 	if dir == null:
-		push_error("CraftingManager couldn't open the tres folder to cache the item recipes.")
+		push_error("CraftingManager couldn't open the folder: " + folder)
 		return
 
 	dir.list_dir_begin()
 	var file_name: String = dir.get_next()
 
 	while file_name != "":
-		if file_name.ends_with(".tres"):
-			var file_path: String = tres_folder + "/" + file_name
+		if dir.current_is_dir():
+			if file_name != "." and file_name != "..":
+				_cache_recipes(folder + "/" + file_name)
+		elif file_name.ends_with(".tres"):
+			var file_path: String = folder + "/" + file_name
 			var item_resource: ItemResource = load(file_path)
-			item_resource.session_uid = 0 # Triggers the setter func in the resource to make sure it's given an suid
+			item_resource.session_uid = 0 # Trigger the setter to assign an suid
 			CraftingManager.cached_items[item_resource.id] = item_resource
 
 			for tag: StringName in item_resource.tags:
@@ -74,7 +77,6 @@ func _cache_recipes() -> void:
 						if tag not in tag_to_recipes:
 							tag_to_recipes[tag] = []
 						tag_to_recipes[tag].append(item_resource.id)
-
 		file_name = dir.get_next()
 	dir.list_dir_end()
 
