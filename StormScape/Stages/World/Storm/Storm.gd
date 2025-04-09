@@ -103,6 +103,9 @@ func _ready() -> void:
 
 	_tween_player_see_through_distance()
 
+	DebugConsole.add_command("storm", func() -> void: call("enable_storm" if not is_enabled else "disable_storm"))
+	DebugConsole.add_command("next_phase", force_start_next_phase)
+
 ## Enables the storm to pick up where it left off. Re-enables all fx and the effect for current phase.
 func enable_storm(from_save: bool = false) -> void:
 	if changing_enabled_status:

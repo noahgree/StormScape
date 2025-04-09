@@ -139,3 +139,19 @@ func _on_stamina_wait_timer_timeout() -> void:
 			stamina_recharge_tween.kill()
 	stamina_recharge_tween = create_tween()
 	stamina_recharge_tween.tween_method(_set_stamina, stamina, get_parent().stats.get_stat("max_stamina"), (get_parent().stats.get_stat("max_stamina") - stamina) / get_parent().stats.get_stat("stamina_recharge_rate"))
+
+#region Debug
+## Increases or decreases stamina based on amount.
+func change_stamina_by_amount(amount: float) -> void:
+	if amount >= 0:
+		gain_stamina(amount)
+	else:
+		use_stamina(-amount)
+
+## Increases or decreases hunger bars based on amount.
+func change_hunger_bars_by_amount(amount: int) -> void:
+	if amount >= 0:
+		gain_hunger_bars(amount)
+	else:
+		use_hunger_bars(-amount)
+#endregion

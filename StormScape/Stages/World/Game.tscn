@@ -1,4 +1,4 @@
-[gd_scene load_steps=84 format=4 uid="uid://bscnr6a23l10m"]
+[gd_scene load_steps=86 format=4 uid="uid://bscnr6a23l10m"]
 
 [ext_resource type="Script" uid="uid://mdtvdhu78iqm" path="res://Utilities/Game/WorldRoot/WorldRoot.gd" id="1_q0i4n"]
 [ext_resource type="Script" uid="uid://dpbgynf55anlv" path="res://Stages/World/BackgroundMusicManager.gd" id="1_q5pr2"]
@@ -14,7 +14,7 @@
 [ext_resource type="Resource" uid="uid://b2ekcx7kndqjb" path="res://Entities/Stats/EffectSystemResources/StatusEffects/BadEffects/Frostbite/Frostbite1.tres" id="12_s2x07"]
 [ext_resource type="Resource" uid="uid://b8yo5kmjiwnca" path="res://Entities/Stats/EffectSystemResources/StatusEffects/GoodEffects/Regen/Regen1.tres" id="13_27bcd"]
 [ext_resource type="Script" uid="uid://boo31eu083dqd" path="res://Entities/Stats/EffectSystemResources/StatusEffects/StatusEffect.gd" id="13_33bgr"]
-[ext_resource type="Resource" uid="uid://dvew5cy3k7s48" path="res://Entities/Stats/EffectSystemResources/StatusEffects/BadEffects/Burning/Burning1.tres" id="16_ky7ks"]
+[ext_resource type="Resource" uid="uid://dvew5cy3k7s48" path="res://Entities/Stats/EffectSystemResources/StatusEffects/BadEffects/Burning/Burning1.tres" id="16_s5gqv"]
 [ext_resource type="PackedScene" uid="uid://b52c5c7hj2vd" path="res://Utilities/Debug/TestTree1.tscn" id="17_45bjv"]
 [ext_resource type="PackedScene" uid="uid://bq12ugc7lnirg" path="res://Utilities/Debug/TestPhysicalInventory.tscn" id="17_om42l"]
 [ext_resource type="Texture2D" uid="uid://cd22xh5jduxd6" path="res://UI/TemporaryElements/InteractionIcons/e_prompt.png" id="18_dgobw"]
@@ -34,6 +34,7 @@
 [ext_resource type="Script" uid="uid://cbiskerf2stk6" path="res://Stages/World/Storm/StormTransform.gd" id="25_dqjbe"]
 [ext_resource type="Resource" uid="uid://m8eslst1uuxh" path="res://Entities/Items/TRESItems/Ammo/Light(0).tres" id="25_s5gqv"]
 [ext_resource type="Resource" uid="uid://bnc4tbhdxpauy" path="res://Entities/Items/TRESItems/ProjectileWeapons/Musket(0).tres" id="26_6gn56"]
+[ext_resource type="Resource" uid="uid://cwgqj8klx4b3x" path="res://Entities/Items/TRESItems/WeaponMods/ExtendedMag(0).tres" id="26_a2una"]
 [ext_resource type="Resource" uid="uid://cx6t5cil24ca3" path="res://Stages/World/Storm/StormVisuals/DefaultStormVisuals.tres" id="27_5uvpk"]
 [ext_resource type="Script" uid="uid://cgese4xtht2od" path="res://Stages/World/Storm/StormVisuals/StormVisuals.gd" id="27_8kcf2"]
 [ext_resource type="Shader" uid="uid://bilestavf27wc" path="res://Utilities/Game/Shaders/ScreenFog.gdshader" id="30_rhtsc"]
@@ -219,7 +220,7 @@ title = "CHEST"
 main_inv_size = 10
 starting_inv = Array[ExtResource("21_fx52i")]([])
 
-[sub_resource type="Resource" id="Resource_gr6jp"]
+[sub_resource type="Resource" id="Resource_hkn5b"]
 script = ExtResource("12_jvc44")
 source_type = 0
 source_tags = Array[String]([])
@@ -237,7 +238,7 @@ base_healing = 0
 heal_affected_stats = 2
 impact_sound = ""
 hit_flash_color = Color(1, 1, 1, 0.6)
-status_effects = Array[ExtResource("13_33bgr")]([ExtResource("16_ky7ks")])
+status_effects = Array[ExtResource("13_33bgr")]([ExtResource("16_s5gqv")])
 contact_position = Vector2(0, 0)
 movement_direction = Vector2(0, 0)
 multishot_id = -1
@@ -303,6 +304,12 @@ stats = ExtResource("24_a2una")
 quantity = 1
 metadata/_custom_type_script = "uid://dp8osf7r6xkkt"
 
+[sub_resource type="Resource" id="Resource_1606r"]
+script = ExtResource("21_fx52i")
+stats = ExtResource("26_a2una")
+quantity = 3
+metadata/_custom_type_script = "uid://dp8osf7r6xkkt"
+
 [sub_resource type="Resource" id="Resource_27u15"]
 script = ExtResource("21_fx52i")
 stats = ExtResource("25_s5gqv")
@@ -319,7 +326,7 @@ metadata/_custom_type_script = "uid://dp8osf7r6xkkt"
 script = ExtResource("20_om42l")
 title = "CHEST"
 main_inv_size = 10
-starting_inv = Array[ExtResource("21_fx52i")]([SubResource("Resource_yw2f7"), null, null, SubResource("Resource_ed1p2"), SubResource("Resource_e5rpg"), null, null, SubResource("Resource_27u15"), SubResource("Resource_w76bj")])
+starting_inv = Array[ExtResource("21_fx52i")]([SubResource("Resource_yw2f7"), null, null, SubResource("Resource_ed1p2"), SubResource("Resource_e5rpg"), null, SubResource("Resource_1606r"), SubResource("Resource_27u15"), SubResource("Resource_w76bj")])
 metadata/_custom_type_script = "uid://dwmur0cosbbwh"
 
 [sub_resource type="LabelSettings" id="LabelSettings_lfc2v"]
@@ -624,7 +631,7 @@ inv = SubResource("Resource_f5fhq")
 [node name="TestStaticEffectSource2" type="Area2D" parent="WorldRoot/Testing/TestStaticEntity3" node_paths=PackedStringArray("source_entity")]
 position = Vector2(0, -7)
 script = ExtResource("11_j4dgk")
-effect_source = SubResource("Resource_gr6jp")
+effect_source = SubResource("Resource_hkn5b")
 source_entity = NodePath("..")
 use_self_position = true
 

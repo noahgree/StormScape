@@ -1,18 +1,34 @@
 extends Node
 ## A singleton containing all data needed globally.
 
+var item_dir: String = "res://Entities/Items/TRESItems/" ## The top level folder holding all item resources.
+var status_effects_dir: String = "res://Entities/Stats/EffectSystemResources/StatusEffects/" ## The top level folder holding all status effects.
+
 @onready var world_root: WorldRoot = get_parent().get_node("Game/WorldRoot") ## A reference to the root of the game world.
 @onready var storm: Storm = get_parent().get_node("Game/WorldRoot/Storm") ## A reference to the main storm node.
 
 var player_node: Player = null ## The reference to the player's node.
 var player_camera: PlayerCamera = null ## The reference to the player's main camera.
 var focused_ui_is_open: bool = false ## When true, the main UI that pauses the game is open.
+var player_inv_is_open: bool = false ## When true, the player's inventory is opened.
 var focused_ui_is_closing_debounce: bool = false ## When true, the focused ui is still just barely closing.
+var focused_ui_close_debounce_timer: Timer = TimerHelpers.create_one_shot_timer(self, 0.05, func() -> void: Globals.focused_ui_is_closing_debounce = false) ## Debounces turning off the flag so that any inputs like inventory clicks can finish first.
 
 
 func _ready() -> void:
 	player_node = await SignalBus.player_ready
 	player_camera = get_parent().get_node("Game/WorldRoot/PlayerCamera")
+
+func change_focused_ui_state(open: bool) -> void:
+	get_tree().paused = open
+	focused_ui_is_open = open
+	focused_ui_is_closing_debounce = open
+	if open:
+		focused_ui_close_debounce_timer.stop()
+		SignalBus.focused_ui_opened.emit()
+	else:
+		focused_ui_close_debounce_timer.start()
+		SignalBus.focused_ui_closed.emit()
 
 # Player Inv Resource
 const HOTBAR_SIZE: int = 5

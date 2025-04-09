@@ -1737,10 +1737,13 @@ vertical_alignment = 1
 [node name="OverlayUI" type="CanvasLayer" parent="."]
 
 [node name="TestButtons" type="Control" parent="OverlayUI" node_paths=PackedStringArray("health_component")]
+visible = false
 layout_mode = 3
-anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 mouse_filter = 1
 script = ExtResource("17_vdk5v")
 health_component = NodePath("../../HealthComponent")
@@ -2882,7 +2885,6 @@ mouse_filter = 0
 theme_override_constants/separation = 8
 alignment = 1
 script = ExtResource("118_thmqm")
-tres_folder = "res://Entities/Items/TRESItems"
 inventory_ui = NodePath("..")
 
 [node name="InventoryTexture" type="NinePatchRect" parent="OverlayUI/PlayerInvUI/CraftingManager"]

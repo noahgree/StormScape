@@ -201,7 +201,7 @@ func _update_ammo_viewer_slot(new_item: ItemResource) -> void:
 			if new_item.ammo_type == ProjWeaponResource.ProjAmmoType.STAMINA:
 				ammo_viewer_margin.get_node("%AmmoIcon").texture = stamina_ammo_icon
 			else:
-				var ammo_item: ProjAmmoResource = CraftingManager.get_item_by_id(ProjWeaponResource.get_ammo_item_id_by_enum_value(new_item.ammo_type))
+				var ammo_item: ProjAmmoResource = CraftingManager.get_item_by_id(ProjWeaponResource.get_ammo_item_cache_id_by_enum_value(new_item.ammo_type))
 				ammo_viewer_margin.get_node("%AmmoIcon").texture = ammo_item.inv_icon
 	else:
 		ammo_viewer_margin.visible = true

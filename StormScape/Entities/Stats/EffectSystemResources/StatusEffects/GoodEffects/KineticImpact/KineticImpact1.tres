@@ -1,10 +1,10 @@
 [gd_resource type="Resource" script_class="KineticImpactEffect" load_steps=6 format=3 uid="uid://b6xc4ydycohsk"]
 
-[ext_resource type="Script" uid="uid://drh73fugtfbex" path="res://Entities/Stats/EffectSystemResources/StatusEffects/GoodEffects/KineticImpact/KineticImpactEffect.gd" id="1_xpvas"]
-[ext_resource type="Script" uid="uid://bcjwesiannbd0" path="res://Entities/Stats/StatMod/StatMod.gd" id="2_f3twy"]
+[ext_resource type="Script" uid="uid://drh73fugtfbex" path="res://Entities/Stats/EffectSystemResources/StatusEffects/GoodEffects/KineticImpact/KineticImpactEffect.gd" id="1_1sn0x"]
+[ext_resource type="Script" uid="uid://bcjwesiannbd0" path="res://Entities/Stats/StatMod/StatMod.gd" id="2_tixbk"]
 
 [sub_resource type="Resource" id="Resource_en5vk"]
-script = ExtResource("2_f3twy")
+script = ExtResource("2_tixbk")
 stat_id = "run_collision_impulse_factor"
 mod_id = "kinetic_impact1"
 operation = "+"
@@ -15,7 +15,7 @@ max_stack_count = 3
 override_all = false
 
 [sub_resource type="Resource" id="Resource_1ym7b"]
-script = ExtResource("2_f3twy")
+script = ExtResource("2_tixbk")
 stat_id = "dash_collision_impulse_factor"
 mod_id = "kinetic_impact1"
 operation = "+"
@@ -26,7 +26,7 @@ max_stack_count = 3
 override_all = false
 
 [sub_resource type="Resource" id="Resource_uh5ed"]
-script = ExtResource("2_f3twy")
+script = ExtResource("2_tixbk")
 stat_id = "dash_stamina_usage"
 mod_id = "kinetic_impact1"
 operation = "-%"
@@ -37,7 +37,7 @@ max_stack_count = 3
 override_all = false
 
 [resource]
-script = ExtResource("1_xpvas")
+script = ExtResource("1_1sn0x")
 id = "kinetic_impact"
 source_type = 0
 effect_lvl = 1
@@ -46,7 +46,7 @@ affected_entities = 1
 effects_to_stop = Array[String]([])
 mod_time = 5.0
 apply_until_removed = false
-stat_mods = Array[ExtResource("2_f3twy")]([SubResource("Resource_en5vk"), SubResource("Resource_1ym7b"), SubResource("Resource_uh5ed")])
+stat_mods = Array[ExtResource("2_tixbk")]([SubResource("Resource_en5vk"), SubResource("Resource_1ym7b"), SubResource("Resource_uh5ed")])
 audio_to_play = ""
 only_cue_on_player_hit = false
 spawn_particles = true

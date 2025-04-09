@@ -5,6 +5,7 @@
 [resource]
 script = ExtResource("1_0c1ag")
 id = &"shield_hit"
+category = 0
 sound_files_folder = "res://Assets/Audio/Sfx/SfxRawAudio/Characters/HPActions/ShieldHit"
 sound_file_paths = Array[String]([])
 concurrent_limit = 10

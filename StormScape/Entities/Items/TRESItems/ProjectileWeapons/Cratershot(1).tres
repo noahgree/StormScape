@@ -16,7 +16,7 @@
 [ext_resource type="Script" uid="uid://ctxa7i1mbt7ab" path="res://UI/Inventory/PlayerInventory/Crafting/CraftingIngredient.gd" id="8_rff8j"]
 [ext_resource type="Script" uid="uid://c2gdoebfp12dq" path="res://Entities/Stats/StatMod/StatModsCacheResource.gd" id="9_yxw3n"]
 [ext_resource type="Script" uid="uid://ig4jcnxaphcg" path="res://Entities/Stats/EffectSystemResources/StatusEffects/GoodEffects/SelfKnockback/SelfKnockbackEffect.gd" id="10_c3au3"]
-[ext_resource type="Script" uid="uid://bcjwesiannbd0" path="res://Entities/Stats/StatMod/StatMod.gd" id="11_7gqp2"]
+[ext_resource type="Script" uid="uid://bcjwesiannbd0" path="res://Entities/Stats/StatMod/StatMod.gd" id="12_wd5ub"]
 
 [sub_resource type="Resource" id="Resource_7puc1"]
 script = ExtResource("1_qcxpp")
@@ -85,15 +85,15 @@ custom_knockback_direction = Vector2(0, 0)
 id = ""
 source_type = 0
 effect_lvl = 1
-is_bad_effect = false
+is_bad_effect = true
 affected_entities = 7
 effects_to_stop = Array[String]([])
-mod_time = 0.25
+mod_time = 5.0
 apply_until_removed = false
-stat_mods = Array[ExtResource("11_7gqp2")]([])
+stat_mods = Array[ExtResource("12_wd5ub")]([])
 audio_to_play = ""
 only_cue_on_player_hit = false
-spawn_particles = false
+spawn_particles = true
 particle_hander_req = ""
 make_entity_glow = true
 metadata/_custom_type_script = ExtResource("10_c3au3")
@@ -154,7 +154,7 @@ number_of_splits = 0
 split_into_counts = Array[int]([2])
 angular_spreads = Array[float]([45.0])
 split_delays = Array[float]([0.2])
-splitting_sounds = Array[String]([""])
+splitting_sound = ""
 split_cam_fx = null
 aoe_radius = 0
 do_aoe_on_arc_land = true

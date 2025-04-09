@@ -32,6 +32,15 @@ static func get_max_mod_slots(weapon_stats: WeaponResource) -> int:
 	else:
 		return int(weapon_stats.rarity + 1)
 
+## Gets the next open mod slot within range of the max amount of mods the weapon can have. -1 means no open slots.
+static func get_next_open_mod_slot(weapon_stats: WeaponResource) -> int:
+	var i: int = 0
+	for weapon_mod_entry: Dictionary in weapon_stats.current_mods:
+		if weapon_mod_entry.values()[0] == null:
+			return i
+		i += 1
+	return -1
+
 ## Handles an incoming added weapon mod. Removes it first if it already exists and then just re-adds it.
 static func handle_weapon_mod(weapon_stats: WeaponResource, weapon_mod: WeaponMod, index: int,
 						source_entity: PhysicsBody2D) -> void:
@@ -191,3 +200,20 @@ static func _debug_print_status_effect_lists(weapon_stats: WeaponResource) -> vo
 	if weapon_stats is MeleeWeaponResource:
 		var is_normal_charge: bool = true if weapon_stats.charge_effect_source.status_effects == weapon_stats.original_charge_status_effects else false
 		print_rich("[color=cyan]Charge Effects[/color]" + ("[color=gray][i](base)[/i][/color]" if is_normal_charge else "") + ": [b]"+ str(weapon_stats.charge_effect_source.status_effects) + "[/b]")
+
+#region Debug
+## Tries to add a mod (given by its cache id) to the currently equipped weapon that the player is holding.
+static func add_mod_to_weapon_by_id(mod_cache_id: StringName) -> void:
+	if not Globals.player_node.hands.equipped_item:
+		return
+	var equipped_stats: ItemResource = Globals.player_node.hands.equipped_item.stats
+	if equipped_stats is not WeaponResource:
+		return
+	var mod: ItemResource = CraftingManager.get_item_by_id(mod_cache_id, true)
+	if mod == null or mod is not WeaponMod:
+		printerr("The mod of id \"" + mod_cache_id + "\" does not exist.")
+		return
+	WeaponModsManager.handle_weapon_mod(
+		Globals.player_node.hands.equipped_item.stats, mod, WeaponModsManager.get_next_open_mod_slot(equipped_stats), Globals.player_node
+	)
+#endregion

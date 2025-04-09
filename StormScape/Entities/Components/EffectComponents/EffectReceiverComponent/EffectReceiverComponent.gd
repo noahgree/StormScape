@@ -150,7 +150,7 @@ func _check_status_effect_team_logic(effect_source: EffectSource, source_entity:
 func handle_status_effect(status_effect: StatusEffect) -> void:
 	if not _check_if_applicable_entity_type_for_status_effect(status_effect):
 		return
-	if ("untouchable" in affected_entity.effects.current_effects) and (status_effect.is_bad_effect):
+	if (affected_entity.effects.is_untouchable()) and (status_effect.is_bad_effect):
 		return
 
 	for effect_to_stop: String in status_effect.effects_to_stop:
@@ -159,7 +159,7 @@ func handle_status_effect(status_effect: StatusEffect) -> void:
 	affected_entity.effects.handle_status_effect(status_effect)
 	_pass_effect_to_handler(status_effect)
 
-	if "untouchable" in affected_entity.effects.current_effects:
+	if affected_entity.effects.is_untouchable():
 		affected_entity.effects.remove_all_bad_status_effects()
 
 ## Passes the status effect to a handler if one is needed for additional logic handling.
@@ -264,3 +264,23 @@ func _get_life_steal(effect_source: EffectSource, source_entity: PhysicsBody2D) 
 				life_steal_handler.source_entity = source_entity
 				return status_effect.dmg_steal
 	return 0.0
+
+#region Debug
+## Attempts to apply an effect based on its file name turned into snake case. "poison_1", for example.
+func apply_effect_by_id(effect_key: StringName) -> void:
+	var status_effect: StatusEffect = StatusEffectsComponent.cached_status_effects.get(effect_key, null)
+	if status_effect == null:
+		printerr("The request to apply the effect \"" + effect_key + "\" failed because it does not exist.")
+		return
+
+	handle_status_effect(status_effect)
+
+## Attempts to remove an effect based on its file name turned into snake case. "poison_1", for example.
+func remove_effect_by_id(effect_key: StringName) -> void:
+	var status_effect: StatusEffect = StatusEffectsComponent.cached_status_effects.get(effect_key, null)
+	if status_effect == null:
+		printerr("The request to remove the effect \"" + effect_key + "\" failed because it does not exist.")
+		return
+
+	affected_entity.effects.request_effect_removal_by_source(status_effect.id, status_effect.source_type)
+#endregion

@@ -95,7 +95,7 @@ func create_footprint(offsets: Array) -> void:
 		var trans: Transform2D = Transform2D(atan2(facing_dir.y, facing_dir.x), entity.global_position + offset)
 		var footprint: SpriteGhost = SpriteGhost.create(trans, Vector2(0.8, 0.8), footstep_texture, 3.0)
 
-		footprint.z_index = 0
+		footprint.z_index = -1
 		footprint.set_instance_shader_parameter("tint_color", Color(0.0, 0.0, 0.0, 0.8))
 
 		Globals.world_root.add_child(footprint)

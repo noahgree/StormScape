@@ -14,8 +14,8 @@
 [ext_resource type="PackedScene" uid="uid://bqkyplubhsx43" path="res://Entities/Items/Projectiles/Bullets/SmallBullet/SmallBullet.tscn" id="13_jo86x"]
 [ext_resource type="Script" uid="uid://ctxa7i1mbt7ab" path="res://UI/Inventory/PlayerInventory/Crafting/CraftingIngredient.gd" id="14_cya72"]
 [ext_resource type="Resource" uid="uid://8uj8fwadqlk0" path="res://Entities/Items/TRESItems/WorldResources/Stick(0).tres" id="14_iahun"]
-[ext_resource type="Resource" uid="uid://cfaje12siuo0b" path="res://Entities/Items/TRESItems/WeaponMods/Compensator(2).tres" id="15_6grxy"]
 [ext_resource type="Script" uid="uid://c2gdoebfp12dq" path="res://Entities/Stats/StatMod/StatModsCacheResource.gd" id="15_c2f42"]
+[ext_resource type="Resource" uid="uid://bta1hncad1hd2" path="res://Entities/Items/TRESItems/WeaponMods/ExtendedMag(1).tres" id="15_ipoav"]
 [ext_resource type="Script" uid="uid://dvasncq3tgljs" path="res://Entities/Items/Weapons/ProjectileWeapons/ProjWeaponResource.gd" id="16_58fh8"]
 
 [sub_resource type="Curve" id="Curve_hjiec"]
@@ -175,7 +175,7 @@ number_of_splits = 0
 split_into_counts = Array[int]([2])
 angular_spreads = Array[float]([45.0])
 split_delays = Array[float]([0.2])
-splitting_sounds = Array[String]([""])
+splitting_sound = ""
 split_cam_fx = null
 aoe_radius = 0
 do_aoe_on_arc_land = true
@@ -202,10 +202,10 @@ metadata/_custom_type_script = "uid://ctxa7i1mbt7ab"
 [sub_resource type="Resource" id="Resource_3832c"]
 script = ExtResource("14_cya72")
 type = "Item"
-item = ExtResource("15_6grxy")
+item = ExtResource("15_ipoav")
 quantity = 1
 tags = Array[StringName]([])
-rarity_match = "No"
+rarity_match = "GEQ"
 metadata/_custom_type_script = "uid://ctxa7i1mbt7ab"
 
 [sub_resource type="Resource" id="Resource_x70ma"]

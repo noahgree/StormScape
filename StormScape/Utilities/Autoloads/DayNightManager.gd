@@ -23,6 +23,9 @@ const GAME_TO_IRL_MINUTE: float = (2 * PI) / MINUTES_PER_DAY ## Splits the sin f
 func _ready() -> void:
 	change_time(current_hour)
 
+	DebugConsole.add_command("time", change_time)
+	DebugConsole.add_command("time_scale", func(new_value: float) -> void: game_day_time_scale = new_value)
+
 func _process(delta: float) -> void:
 	time_counter += delta * GAME_TO_IRL_MINUTE * game_day_time_scale
 	var day_offset: float = (sin(time_counter - (0.5 * PI)) + 1.0) / 2.0

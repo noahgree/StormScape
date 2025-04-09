@@ -173,7 +173,29 @@ func _get_mod(stat_id: StringName, mod_id: StringName) -> StatMod:
 		_push_mod_not_found_warning(stat_id, mod_id)
 		return null
 
+#region Debug
+## Adds a mod from scratch.
+func add_mod_from_scratch(stat_id: StringName, operation: String, value: float, rounding: String = "Exact") -> void:
+	var mod: StatMod = StatMod.new()
+	mod.stat_id = stat_id
+	mod.mod_id = "debug"
+	if operation in ["+%", "-%", "+", "-", "*", "/", "="]:
+		mod.operation = operation
+	else:
+		printerr("Not a valid operation for the mod.")
+		return
+	mod.value = value
+	if rounding in ["Exact", "Round Up", "Round Down", "Round Closest"]:
+		mod.rounding = rounding
+	else:
+		printerr("Not a valid rounding method for the mod.")
+		return
+
+	add_mods([mod])
+	print("\"debug\" mod added. Use that id to remove mod if needed.")
+
 ## Pushes an error to the console with the stat id and the mod id for the mod that could not be found.
 func _push_mod_not_found_warning(stat_id: StringName, mod_id: StringName) -> void:
 	if DebugFlags.PushErrors.mod_not_in_cache:
 		push_warning("The mod for stat \"" + stat_id + "\"" + " with mod_id of: \"" + mod_id + "\" was not in the cache: \"" + str(self) + "\".")
+#endregion

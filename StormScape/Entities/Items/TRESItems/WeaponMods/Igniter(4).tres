@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://cowjdnic7xmkp" path="res://UI/Inventory/PlayerInventory/StatDetail.gd" id="1_61rvc"]
 [ext_resource type="Script" uid="uid://boo31eu083dqd" path="res://Entities/Stats/EffectSystemResources/StatusEffects/StatusEffect.gd" id="2_6c076"]
-[ext_resource type="Resource" uid="uid://dvew5cy3k7s48" path="res://Entities/Stats/EffectSystemResources/StatusEffects/BadEffects/Burning/Burning1.tres" id="3_68ut8"]
+[ext_resource type="Resource" uid="uid://dvew5cy3k7s48" path="res://Entities/Stats/EffectSystemResources/StatusEffects/BadEffects/Burning/Burning1.tres" id="3_pt8k7"]
 [ext_resource type="Texture2D" uid="uid://uw5lhqydwiy3" path="res://Entities/Items/WeaponMods/Igniter/IgniterBaseCT.tres" id="4_61rvc"]
 [ext_resource type="Script" uid="uid://ctxa7i1mbt7ab" path="res://UI/Inventory/PlayerInventory/Crafting/CraftingIngredient.gd" id="5_gnequ"]
 [ext_resource type="Script" uid="uid://ct7n8wo1p3b20" path="res://Entities/Items/WeaponMods/WeaponMod.gd" id="6_kyyv3"]
@@ -52,8 +52,8 @@ blocked_mutuals = Array[StringName]([])
 blocked_wpn_stats = Dictionary[StringName, float]({})
 req_all_blocked_stats = false
 wpn_stat_mods = Array[ExtResource("7_agevf")]([SubResource("Resource_1tbmq"), SubResource("Resource_61rvc"), SubResource("Resource_6c076")])
-status_effects = Array[ExtResource("2_6c076")]([ExtResource("3_68ut8")])
-charge_status_effects = Array[ExtResource("2_6c076")]([ExtResource("3_68ut8")])
+status_effects = Array[ExtResource("2_6c076")]([ExtResource("3_pt8k7")])
+charge_status_effects = Array[ExtResource("2_6c076")]([ExtResource("3_pt8k7")])
 applied_details = Array[ExtResource("1_61rvc")]([])
 equipping_audio = ""
 removal_audio = ""

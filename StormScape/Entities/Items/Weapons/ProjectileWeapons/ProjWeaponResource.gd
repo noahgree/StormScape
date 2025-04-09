@@ -116,9 +116,10 @@ enum ProjAmmoType { ## The types of projectile ammo.
 			print_rich("(" + str(self) + ") [b]AMMO[/b]: [color=cyan]" + str(ammo_in_mag) + "[/color]")
 
 
-static func get_ammo_item_id_by_enum_value(enum_value: ProjAmmoType) -> StringName:
+## Returns the cache id for the ammo item based on its enum value in the ProjAmmoType enum.
+static func get_ammo_item_cache_id_by_enum_value(enum_value: ProjAmmoType) -> StringName:
 	var main_string: String = ProjAmmoType.keys()[enum_value]
-	return StringName(main_string.to_lower() + "_" + "ammo")
+	return StringName(main_string.to_lower() + "_" + "ammo" + "_0")
 
 ## An override to return the string title of the item type rather than just the enum integer value.
 func get_item_type_string(exact_weapon_type: bool = false) -> String:

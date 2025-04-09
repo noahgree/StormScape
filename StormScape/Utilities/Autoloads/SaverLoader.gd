@@ -2,6 +2,10 @@ extends Node
 ## Global autoload that manages the saving and loading of node data to a save file when triggered.
 
 
+func _ready() -> void:
+	DebugConsole.add_command("save", save_game)
+	DebugConsole.add_command("load", load_game)
+
 ## When called, a saved game file will be created containing the game's save data.
 func save_game() -> void:
 	if DebugFlags.PrintFlags.saver_loader_status_changes:

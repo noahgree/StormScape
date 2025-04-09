@@ -22,8 +22,10 @@ func _on_before_load_game() -> void:
 func _ready() -> void:
 	combination_attempt_timer.start()
 
-## When the timer ends, start attempting to combine nearby items on the ground. This also cleans up empty grid locations from our
-## dict afterwards.
+	DebugConsole.add_command("combine_items", _on_combination_attempt_timer_timeout)
+
+## When the timer ends, start attempting to combine nearby items on the ground. This also cleans up empty
+## grid locations from our dict afterwards.
 func _on_combination_attempt_timer_timeout() -> void:
 	var processed_items: Dictionary[Item, bool] = {}
 	for grid_pos: Vector2i in grid.keys():

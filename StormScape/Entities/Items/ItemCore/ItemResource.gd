@@ -74,6 +74,10 @@ func get_cooldown_id() -> StringName:
 func get_rarity_string() -> String:
 	return str(Globals.ItemRarity.keys()[rarity])
 
+## Returns the string that identifies the item by its ID and its rarity.
+func get_cache_key() -> String:
+	return id + "_" + str(rarity)
+
 ## Returns the string title of the item type rather than just the enum integer value.
 func get_item_type_string(_exact_weapon_type: bool = false) -> String:
 	return str(Globals.ItemType.keys()[item_type]).capitalize()

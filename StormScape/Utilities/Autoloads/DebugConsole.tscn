@@ -1,0 +1,81 @@
+[gd_scene load_steps=6 format=3 uid="uid://cfojnp56c5051"]
+
+[ext_resource type="Script" uid="uid://dtuvd8m258l6d" path="res://Utilities/Autoloads/DebugConsole.gd" id="1_qnif3"]
+[ext_resource type="FontVariation" uid="uid://by478cplv5w4n" path="res://Assets/Theming/Fonts/GameFontResources/pixel_font_less_margin.tres" id="2_8ir4q"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_qnif3"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_8ir4q"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ar238"]
+content_margin_left = 0.0
+content_margin_top = 0.0
+content_margin_right = 0.0
+content_margin_bottom = 0.0
+bg_color = Color(0, 0, 0, 0.5)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0, 0, 0, 0.65)
+corner_radius_top_left = 1
+corner_radius_top_right = 1
+corner_radius_bottom_right = 1
+corner_radius_bottom_left = 1
+anti_aliasing = false
+
+[node name="DebugConsole" type="CanvasLayer"]
+process_mode = 3
+layer = 3
+script = ExtResource("1_qnif3")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_top = -9.0
+offset_right = 50.0
+offset_bottom = 1.0
+grow_vertical = 2
+theme_override_constants/separation = 0
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 2
+
+[node name="MarginContainer2" type="MarginContainer" parent="VBoxContainer/MarginContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 3
+theme_override_constants/margin_top = -2
+theme_override_constants/margin_right = -6
+theme_override_constants/margin_bottom = -2
+
+[node name="ConsoleInput" type="LineEdit" parent="VBoxContainer/MarginContainer/MarginContainer2"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_colors/font_placeholder_color = Color(1, 1, 1, 0.15)
+theme_override_colors/font_color = Color(0.899692, 0.899692, 0.899692, 1)
+theme_override_constants/caret_width = 1
+theme_override_fonts/font = ExtResource("2_8ir4q")
+theme_override_font_sizes/font_size = 6
+theme_override_styles/focus = SubResource("StyleBoxEmpty_qnif3")
+theme_override_styles/normal = SubResource("StyleBoxEmpty_8ir4q")
+placeholder_text = "Enter command..."
+keep_editing_on_text_submit = true
+expand_to_text_length = true
+context_menu_enabled = false
+emoji_menu_enabled = false
+select_all_on_focus = true
+caret_blink = true
+caret_force_displayed = true
+caret_mid_grapheme = true
+
+[node name="ConsoleInputPanel" type="Panel" parent="VBoxContainer/MarginContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_ar238")
+
+[connection signal="text_changed" from="VBoxContainer/MarginContainer/MarginContainer2/ConsoleInput" to="." method="_on_console_input_text_changed"]
+[connection signal="text_submitted" from="VBoxContainer/MarginContainer/MarginContainer2/ConsoleInput" to="." method="_on_console_input_text_submitted"]

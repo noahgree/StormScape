@@ -12,8 +12,9 @@ func _ready() -> void:
 	item_name.text = ""
 	mag_ammo.text = ""
 	inv_ammo.text = ""
-	SignalBus.focused_ui_opened.connect(hide)
-	SignalBus.focused_ui_closed.connect(show)
+
+	SignalBus.focused_ui_opened.connect(func() -> void: visible = not Globals.player_inv_is_open)
+	SignalBus.focused_ui_closed.connect(func() -> void: visible = not Globals.player_inv_is_open)
 
 ## Updates the magazine ammo portion of the current equipped item info.
 func update_mag_ammo(mag_count: int) -> void:

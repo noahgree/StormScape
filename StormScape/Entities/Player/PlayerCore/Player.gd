@@ -20,6 +20,20 @@ func _ready() -> void:
 	interaction_handler.prompt_ui = interaction_prompt
 	SignalBus.focused_ui_closed.connect(interaction_handler.recheck_queue)
 
+	DebugConsole.add_command("give", inv.grant_from_item_id)
+	DebugConsole.add_command("remove", inv.remove_item)
+	DebugConsole.add_command("print_inv", inv.print_inv)
+	DebugConsole.add_command("effect", effect_receiver.apply_effect_by_id)
+	DebugConsole.add_command("remove_effect", effect_receiver.remove_effect_by_id)
+	DebugConsole.add_command("tp", func(x: int, y: int) -> void: global_position += Vector2(x, y))
+	DebugConsole.add_command("heal", func(amount: int) -> void: health_component.heal_health_then_shield(amount, "basic_healing", 0))
+	DebugConsole.add_command("hurt", func(amount: int) -> void: health_component.damage_shield_then_health(amount, "basic_damage", false, 0))
+	DebugConsole.add_command("stamina", stamina_component.change_stamina_by_amount)
+	DebugConsole.add_command("hunger_bars", stamina_component.change_hunger_bars_by_amount)
+	DebugConsole.add_command("wpn_mod", WeaponModsManager.add_mod_to_weapon_by_id)
+	DebugConsole.add_command("mod", stats.add_mod_from_scratch)
+	DebugConsole.add_command("remove_mod", stats.remove_mod)
+
 func _unhandled_key_input(_event: InputEvent) -> void:
 	if Input.is_action_just_pressed("interact") and not Globals.focused_ui_is_open:
 		interaction_handler.accept_interaction()

@@ -29,6 +29,10 @@ func _ready() -> void:
 	var pool_trim_timer: Timer = TimerHelpers.create_repeating_autostart_timer(self, 15.0, _trim_pools)
 	pool_trim_timer.name = "PoolingTrimDaemon"
 
+	DebugConsole.add_command("sound", _play_sound_globally_by_id)
+	DebugConsole.add_command("stop_sound", stop_sound_id)
+	DebugConsole.add_command("sound_volume", change_volume_by_sound_name)
+
 ## Stores a key-value pair in the appropriate cache dict using the id specified in the sound resource as the key.
 ## Given a key, the cache created by this method will return a file path to the specified audio id.
 func _cache_audio_resources(folder_path: String, cache: Dictionary[StringName, AudioResource]) -> void:
@@ -190,14 +194,9 @@ func _create_audio_player(sound_id: StringName, space: SoundSpace, location: Vec
 	else:
 		return null
 
-	if parent_node == self:
-		_add_audio_player_to_tree_at_node(audio_player, self)
-		_start_audio_player_in_tree(audio_player, audio_resource.volume, fade_in_time)
-		return null
-	else:
-		_add_audio_player_to_tree_at_node(audio_player, parent_node)
-		_start_audio_player_in_tree(audio_player, audio_resource.volume, fade_in_time)
-		return audio_player
+	_add_audio_player_to_tree_at_node(audio_player, parent_node)
+	_start_audio_player_in_tree(audio_player, audio_resource.volume, fade_in_time)
+	return audio_player
 
 ## Applies the settings from the audio resource to the audio player and returns it if it isn't null.
 func _create_or_restart_audio_player_from_resource(audio_resource: AudioResource, is_2d: bool,
@@ -308,6 +307,8 @@ func change_volume_by_sound_name(sound_id: StringName, amount: float, set_to_amo
 				sound.volume_db = clampf(amount, -40, 20)
 			else:
 				sound.volume_db = clampf(sound.volume_db + amount, -40, 20)
+	if playing_sounds.is_empty():
+		push_warning("There were no sounds with the ID \"" + sound_id + "\" playing when trying to change their volume.")
 
 ## Changes the pitch of all streams of an active sound by either adjusting it by an amount or setting
 ## it to that amount.
@@ -459,4 +460,13 @@ func _debug_print_single_ref_count(sound_id: StringName) -> void:
 		var preloaded_count: int = audio_resource.preloaded_streams.size() if audio_resource != null else 0
 		var ref_count: int = scene_ref_counts.get(sound_id, 0)
 		print("Resource: ", sound_id, " | RefCount: ", ref_count, " | Preloaded Streams: ", preloaded_count)
+
+## Plays a sound globally given its sound id. Passing any volume other than 0 will override the default sound volume.
+func _play_sound_globally_by_id(sound_id: StringName, volume: float = 0) -> void:
+	var player: AudioStreamPlayer = play_global(sound_id)
+	if player == null:
+		printerr("The requested sound \"" + sound_id + "\" failed to play because it does not exist.")
+		return
+	if volume != 0:
+		player.volume_db = volume
 #endregion

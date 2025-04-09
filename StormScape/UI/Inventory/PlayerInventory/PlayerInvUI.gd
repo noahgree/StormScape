@@ -28,16 +28,9 @@ var is_open: bool = false: ## True when the inventory is open and showing.
 	set(new_value):
 		is_open = new_value
 		visible = new_value
-		get_tree().paused = new_value
-		if is_open:
-			focused_ui_close_debounce_timer.stop()
-			Globals.focused_ui_is_open = true
-			Globals.focused_ui_is_closing_debounce = true
-			SignalBus.focused_ui_opened.emit()
-		else:
-			Globals.focused_ui_is_open = false
-			SignalBus.focused_ui_closed.emit()
-			focused_ui_close_debounce_timer.start()
+		Globals.player_inv_is_open = is_open
+		Globals.change_focused_ui_state(is_open)
+		if not is_open:
 			showing_alternate_inv = false
 var showing_alternate_inv: bool = false: ## When true, the alternate inv is open and the wearable & crafting panels should be hidden.
 	set(new_value):
@@ -48,7 +41,6 @@ var showing_alternate_inv: bool = false: ## When true, the alternate inv is open
 			wearables_panel.visible = false
 		else:
 			alternate_inv_panel.visible = false
-var focused_ui_close_debounce_timer: Timer = TimerHelpers.create_one_shot_timer(self, 0.05, func() -> void: Globals.focused_ui_is_closing_debounce = false) ## Debounces turning off the flag so that any inputs like inventory clicks can finish first.
 
 
 func _ready() -> void:
@@ -81,15 +73,15 @@ func _setup_trash_slot() -> void:
 	slots.append(trash_slot)
 
 ## Checks when we open and close the player inventory based on certain key inputs.
-func _unhandled_key_input(_event: InputEvent) -> void:
-	if Input.is_action_just_pressed("player_inventory"):
+func _unhandled_key_input(event: InputEvent) -> void:
+	if event.is_action_pressed("player_inventory"):
 		if not is_open:
 			_open_player_inv()
 		else:
 			is_open = false
-	elif Input.is_action_just_pressed("esc"):
+	elif event.is_action_pressed("esc"):
 		is_open = false
-	elif Input.is_action_just_pressed("interact"):
+	elif event.is_action_pressed("interact"):
 		if is_open:
 			is_open = false
 			accept_event() # Otherwise it just reopens it again

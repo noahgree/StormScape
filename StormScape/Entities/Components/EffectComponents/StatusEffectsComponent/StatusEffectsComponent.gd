@@ -5,6 +5,8 @@ class_name StatusEffectsComponent
 ##
 ## This handles things like fire & poison damage not taking into account armor, etc.
 
+static var cached_status_effects: Dictionary[StringName, StatusEffect] = {} ## A cache of all status effects, keyed by their file names turned into snake case.
+
 @export var effect_receiver: EffectReceiverComponent ## The effect receiver that sends status effects to this manager to be cached and handled.
 @export_subgroup("Debug")
 @export var print_effect_updates: bool = false ## Whether to print when this entity has status effects added and removed.
@@ -37,9 +39,35 @@ func _on_before_load_game() -> void:
 			child.queue_free()
 #endregion
 
+#region Core
 ## Assert that this node has a connected effect receiver from which it can receive status effects.
 func _ready() -> void:
 	assert(effect_receiver != null, owner.name + " has a StatusEffectsComponent without a connected EffectReceiverComponent.")
+
+	if StatusEffectsComponent.cached_status_effects.is_empty():
+		_cache_status_effects(Globals.status_effects_dir)
+
+## Searches through the given top level folder and recursively finds all status effect resources for caching.
+func _cache_status_effects(folder: String) -> void:
+	var dir: DirAccess = DirAccess.open(folder)
+	if dir == null:
+		push_error("StatusEffectsComponent couldn't open the folder: " + folder)
+		return
+
+	dir.list_dir_begin()
+	var file_name: String = dir.get_next()
+
+	while file_name != "":
+		if dir.current_is_dir():
+			if file_name != "." and file_name != "..":
+				_cache_status_effects(folder + "/" + file_name)
+		elif file_name.ends_with(".tres"):
+			var file_path: String = folder + "/" + file_name
+			var status_effect: StatusEffect = load(file_path)
+			StatusEffectsComponent.cached_status_effects[file_name.trim_suffix(".tres").to_snake_case()] = status_effect
+		file_name = dir.get_next()
+	dir.list_dir_end()
+#endregion
 
 ## Handles an incoming status effect. It starts by adding any stat mods provided by the status effect, and then
 ## it passes the effect logic to the relevant handler if it exists.
@@ -74,6 +102,9 @@ func _handle_status_effect_mods(status_effect: StatusEffect) -> void:
 
 ## Adds a status effect to the current effects dict, starts its timer, stores its timer, and applies its mods.
 func _add_status_effect(status_effect: StatusEffect) -> void:
+	if status_effect.id == "untouchable":
+		remove_all_bad_status_effects()
+
 	var effect_key: String = status_effect.get_full_effect_key()
 	current_effects[effect_key] = status_effect
 
@@ -247,23 +278,30 @@ func _cancel_over_time_effects(key_to_cancel: String) -> void:
 
 ## Removes all bad status effects except for an optional exception effect that may be specified.
 ## The optional kept effect should be given only as its effect id, not including its source type.
-func remove_all_bad_status_effects(effect_to_keep_key: String = "") -> void:
+func remove_all_bad_status_effects(effect_to_keep_id: String = "") -> void:
 	for status_effect_key: String in current_effects.keys():
-		if effect_to_keep_key == status_effect_key:
+		if effect_to_keep_id == StringHelpers.get_before_colon(status_effect_key):
 			continue
 		elif current_effects[status_effect_key].is_bad_effect:
-			request_effect_removal_for_all_sources(status_effect_key)
+			request_effect_removal_for_all_sources(StringHelpers.get_before_colon(status_effect_key))
 
 ## Removes all good status effects except for an optional exception effect that may be specified.
 ## The optional kept effect should be given only as its effect id, not including its source type.
-func remove_all_good_status_effects(effect_to_keep_key: String = "") -> void:
+func remove_all_good_status_effects(effect_to_keep_id: String = "") -> void:
 	for status_effect_key: String in current_effects.keys():
-		if effect_to_keep_key == status_effect_key:
+		if effect_to_keep_id == StringHelpers.get_before_colon(status_effect_key):
 			continue
 		elif not current_effects[status_effect_key].is_bad_effect:
-			request_effect_removal_for_all_sources(status_effect_key)
+			request_effect_removal_for_all_sources(StringHelpers.get_before_colon(status_effect_key))
 
 ## Removes all status effects.
 func remove_all_status_effects() -> void:
 	for status_effect: StatusEffect in current_effects.values():
 		_remove_status_effect(status_effect)
+
+## Returns true if there is an "untouchable" effect in the current effects.
+func is_untouchable() -> bool:
+	for status_effect: StatusEffect in current_effects.values():
+		if status_effect.id == "untouchable":
+			return true
+	return false
