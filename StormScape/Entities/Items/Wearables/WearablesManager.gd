@@ -31,7 +31,7 @@ static func handle_wearable(entity: PhysicsBody2D, wearable: Wearable, index: in
 
 ## Adds a wearable to the dictionary.
 static func add_wearable(entity: PhysicsBody2D, wearable: Wearable, index: int) -> void:
-	if DebugFlags.PrintFlags.wearable_changes:
+	if DebugFlags.wearable_changes:
 		print_rich("-------[color=green]Adding[/color][b] " + str(wearable.name) + " (" + str(wearable.rarity) + ")[/b][color=gray] to " + entity.name + " (slot " + str(index) + ")" + "-------")
 
 	entity.wearables[index] = { wearable.id : wearable }
@@ -43,7 +43,7 @@ static func add_wearable(entity: PhysicsBody2D, wearable: Wearable, index: int) 
 
 ## Removes the wearable from the dictionary.
 static func remove_wearable(entity: PhysicsBody2D, wearable: Wearable, index: int) -> void:
-	if DebugFlags.PrintFlags.wearable_changes and WearablesManager.has_wearable(entity, wearable.id, index):
+	if DebugFlags.wearable_changes and WearablesManager.has_wearable(entity, wearable.id, index):
 		print_rich("-------[color=red]Removed[/color][b] " + str(wearable.name) + " (" + str(wearable.rarity) + ")[/b][color=gray] from " + entity.name + " (slot " + str(index) + ")" + "-------")
 
 	for mod_resource: StatMod in wearable.stat_mods:

@@ -198,7 +198,7 @@ func disable_storm(from_save: bool = false) -> void:
 ## Reverts the storm visuals and storm entity effect to the defaults. Typically called when the queue is empty and auto-advance
 ## was on for the previous final zone.
 func _revert_to_default_zone() -> void:
-	if DebugFlags.PrintFlags.storm_phases:
+	if DebugFlags.storm_phases:
 		print_rich("[color=pink]*******[/color][color=purple] [b]Starting[/b] Storm Phase [/color][b]0[/b]" + " [color=gray][i](default)[/i][/color] [color=pink]*******[/color]")
 
 	_apply_visual_overrides(default_storm_visuals)
@@ -210,7 +210,7 @@ func force_start_next_phase() -> void:
 	if not is_enabled:
 		return
 
-	if DebugFlags.PrintFlags.storm_phases:
+	if DebugFlags.storm_phases:
 		print_rich("[color=pink]*******[/color][color=gray] [i]Force Ending[/i] Storm Phase[/color] [color=pink]*******[/color]")
 	if zone_count == 0:
 		_process_next_transform_in_queue()
@@ -338,7 +338,7 @@ func _kill_current_motion_tweens_and_timers() -> void:
 ## Kills the current storm sequence and checks if we need to delay before starting the next one.
 ## Starts the next zone if we don't have a delay, otherwise starts the delay timer.
 func _check_for_transform_delay(new_transform: StormTransform) -> void:
-	if DebugFlags.PrintFlags.storm_phases:
+	if DebugFlags.storm_phases:
 		var dur: float = max(new_transform.time_to_resize, new_transform.time_to_move)
 		var effect: String = "Keep Previous"
 		if new_transform.effect_setting == "Override":
@@ -399,7 +399,7 @@ func _tween_to_new_zone_position_and_radius(new_transform: StormTransform) -> vo
 ## When the current transform ends and that transform had auto advance turned on, tell the popping
 ## method to check for next phase.
 func _on_current_storm_transform_time_timer_timeout() -> void:
-	if DebugFlags.PrintFlags.storm_phases:
+	if DebugFlags.storm_phases:
 		print_rich("[color=pink]*******[/color][color=gray] [i]End of[/i] Storm Phase [/color][b]" + str(zone_count) + "[/b] [color=pink]*******[/color]")
 	var auto_advance: bool = current_storm_transform_time_timer.get_meta("auto_advance")
 	if auto_advance:

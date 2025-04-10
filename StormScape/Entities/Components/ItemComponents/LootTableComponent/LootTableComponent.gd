@@ -102,7 +102,7 @@ func _get_random_loot_entry(was_hit: bool) -> LootTableEntry:
 
 	table_selection.shuffle()
 
-	if DebugFlags.PrintFlags.loot_table_updates:
+	if DebugFlags.loot_table_updates:
 		_print_table(true)
 
 	return selected_entry

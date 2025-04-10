@@ -145,6 +145,10 @@ func _on_stamina_wait_timer_timeout() -> void:
 func change_stamina_by_amount(amount: float) -> void:
 	if amount >= 0:
 		gain_stamina(amount)
+		if stamina_recharge_tween:
+			stamina_recharge_tween.kill()
+		stamina_wait_timer.stop()
+		_on_stamina_wait_timer_timeout()
 	else:
 		use_stamina(-amount)
 

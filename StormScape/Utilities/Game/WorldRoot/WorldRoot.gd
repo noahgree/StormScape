@@ -7,14 +7,17 @@ class_name WorldRoot
 
 
 func _ready() -> void:
-	if DebugFlags.OnScreenDebug.frame_rate:
+	if DebugFlags.frame_rate:
 		set_process(true)
 	else:
 		set_process(false)
 		fps_label.text = ""
 
 func _process(_delta: float) -> void:
-	fps_label.text = str(int(Engine.get_frames_per_second()))
+	if DebugFlags.frame_rate:
+		fps_label.text = str(int(Engine.get_frames_per_second()))
+	else:
+		fps_label.text = ""
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("debug_stop"):

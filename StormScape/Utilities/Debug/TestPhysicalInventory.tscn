@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=3 uid="uid://bq12ugc7lnirg"]
+[gd_scene load_steps=23 format=3 uid="uid://bq12ugc7lnirg"]
 
 [ext_resource type="Script" uid="uid://06pt5wan8jg1" path="res://Entities/EntityCore/EntityTypes/StaticEntity/PhysicalInventory/PhysicalInventory.gd" id="1_ggkuf"]
 [ext_resource type="Script" uid="uid://dwmur0cosbbwh" path="res://UI/Inventory/InventoryCore/InventoryResource.gd" id="2_hjkvw"]
@@ -8,9 +8,11 @@
 [ext_resource type="PackedScene" uid="uid://dh4ydl7l86ywq" path="res://Entities/EntityCore/Sprites/EntitySprite.tscn" id="7_li1wa"]
 [ext_resource type="PackedScene" uid="uid://cj2wy5f05cos4" path="res://Entities/EntityCore/Shadow/EntityShadow.tscn" id="7_s3b18"]
 [ext_resource type="PackedScene" uid="uid://cdfdy8m6ki3oq" path="res://Entities/Components/HealthComponent/HealthComponent.tscn" id="9_4jcvl"]
+[ext_resource type="PackedScene" uid="uid://co3n6m7efg8pd" path="res://Entities/Components/EffectComponents/StatusEffectsComponent/StatusEffectsComponent.tscn" id="9_w3nan"]
 [ext_resource type="PackedScene" uid="uid://bhcqtorpyerc3" path="res://Utilities/Debug/ParticleEmissionComponent.tscn" id="10_l1cdp"]
 [ext_resource type="PackedScene" uid="uid://4gl24qwdyti3" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/DmgHandler.tscn" id="10_tnmyf"]
 [ext_resource type="PackedScene" uid="uid://btba0jmsow1mx" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectReceiverComponent.tscn" id="11_5wq56"]
+[ext_resource type="PackedScene" uid="uid://depnx3pnassrq" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/BurningHandler.tscn" id="11_x28yt"]
 [ext_resource type="PackedScene" uid="uid://2yy4xfm5g74l" path="res://Entities/Components/ItemComponents/ClippingComponent/ClippingArea.tscn" id="11_ypx5n"]
 
 [sub_resource type="Resource" id="Resource_5wq56"]
@@ -50,7 +52,7 @@ size = Vector2(18, 14)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_1mmyp"]
 size = Vector2(18, 14)
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_tnmyf"]
+[sub_resource type="CircleShape2D" id="CircleShape2D_w3nan"]
 radius = 18.0
 
 [node name="TestPhysicalInventory" type="StaticBody2D"]
@@ -87,17 +89,23 @@ scale = Vector2(1.81936, 2.4086)
 _max_health = 1000
 _max_shield = 0
 
-[node name="EffectReceiverComponent" parent="." node_paths=PackedStringArray("affected_entity", "health_component", "dmg_handler") instance=ExtResource("11_5wq56")]
-can_receive_status_effects = false
+[node name="StatusEffectsComponent" parent="." node_paths=PackedStringArray("effect_receiver") instance=ExtResource("9_w3nan")]
+unique_name_in_owner = true
+effect_receiver = NodePath("../EffectReceiverComponent")
+
+[node name="EffectReceiverComponent" parent="." node_paths=PackedStringArray("affected_entity", "health_component", "dmg_handler", "burning_handler") instance=ExtResource("11_5wq56")]
 affected_entity = NodePath("..")
 health_component = NodePath("../HealthComponent")
 dmg_handler = NodePath("DmgHandler")
+burning_handler = NodePath("BurningHandler")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="EffectReceiverComponent"]
 position = Vector2(0, -7)
 shape = SubResource("RectangleShape2D_tnmyf")
 
 [node name="DmgHandler" parent="EffectReceiverComponent" instance=ExtResource("10_tnmyf")]
+
+[node name="BurningHandler" parent="EffectReceiverComponent" instance=ExtResource("11_x28yt")]
 
 [node name="ParticleEmissionComponent" parent="." instance=ExtResource("10_l1cdp")]
 
@@ -114,7 +122,7 @@ monitorable = false
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="InteractionArea"]
 position = Vector2(0, -5)
-shape = SubResource("CircleShape2D_tnmyf")
+shape = SubResource("CircleShape2D_w3nan")
 debug_color = Color(0.562, 0.588, 1, 0.147)
 
 [connection signal="body_entered" from="InteractionArea" to="." method="_on_interaction_area_body_entered"]

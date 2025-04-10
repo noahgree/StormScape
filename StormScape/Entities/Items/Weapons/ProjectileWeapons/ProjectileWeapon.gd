@@ -55,7 +55,8 @@ var hitscan_delay: float = 0 ## The calculated delay to be used instead of just 
 var is_holding_hitscan: bool = false: ## Whether we are currently holding down the fire button and keeping the hitscan alive.
 	set(new_value):
 		is_holding_hitscan = new_value
-		if new_value == false: _clean_up_hitscans()
+		if new_value == false:
+			_clean_up_hitscans()
 var current_hitscans: Array[Hitscan] = [] ## The currently spawned array of hitscans to get cleaned up when we unequip this weapon.
 var mouse_scan_area_targets: Array[Node] = [] ## The array of potential targets found and passed to the proj when using the "Mouse Position" homing method.
 var mouse_area: Area2D ## The area around the mouse that scans for targets when using the "Mouse Position" homing method
@@ -64,6 +65,7 @@ var just_hit_max_overheat: bool = false ## When true, we reached max overheat af
 var is_tweening_overheat_overlays: bool = false ## Whether the post-overheat penalty tween is lowering the opacity of the overlays.
 var firing_in_progress: bool = false ## When true, we are waiting on burst delays and cluster delays that are still in progress.
 var bursting_in_progress: bool = false ## A second conditional for determining if firing is still ongoing due to bursting potentially taking more time than the barrage/cluster logic.
+var hitscan_cancelled: bool = false ## Flagged to true if we release the firing button during the initial firing sequence of a hitscan, especially during auto-fire when it could release during the awaits in the fire() func.
 var preloaded_sounds: Array[StringName] = [] ## The sounds kept in memory while this weapon scene is alive that must be dereferenced upon exiting the tree.
 #endregion
 
@@ -325,6 +327,9 @@ func hold_activate(_hold_time: float) -> void:
 
 ## Called from the hands component when we release the mouse. Includes how long we had it held down.
 func release_hold_activate(hold_time: float) -> void:
+	hold_just_released = true
+	hitscan_cancelled = true
+
 	if stats.firing_mode == "Auto" and stats.allow_hitscan_holding and is_holding_hitscan:
 		is_holding_hitscan = false
 
@@ -341,8 +346,6 @@ func release_hold_activate(hold_time: float) -> void:
 			_charge_fire(hold_time)
 		is_charging = false
 
-	hold_just_released = true
-
 ## Called from the hands component when we press the reload key.
 func reload() -> void:
 	if stats.ammo_type not in [ProjWeaponResource.ProjAmmoType.STAMINA, ProjWeaponResource.ProjAmmoType.SELF, ProjWeaponResource.ProjAmmoType.CHARGES]:
@@ -354,6 +357,8 @@ func reload() -> void:
 #region Firing Activations
 ## Check if we can do a normal firing, and if we can, start it.
 func _fire() -> void:
+	hitscan_cancelled = false
+
 	if _get_cooldown() > 0:
 		return
 	if not is_reloading_single_and_has_since_released and stats.firing_mode != "Auto":
@@ -372,7 +377,7 @@ func _fire() -> void:
 
 	var warmup_firing_delay: float = _get_warmup_firing_delay()
 	if warmup_firing_delay > 0:
-		_handle_adding_cooldown(warmup_firing_delay, "warmup")
+		_add_cooldown(warmup_firing_delay, "warmup")
 		while _get_cooldown() > 0: # Signal fires for all ending cooldowns, so we loop until ours has ended
 			await source_entity.inv.auto_decrementer.cooldown_ended
 			if is_reloading: # If we trigger a reload while waiting for this warmup delay it will cause anim problems
@@ -385,6 +390,9 @@ func _fire() -> void:
 	firing_duration_timer.start(max(0.05, stats.firing_duration))
 	_start_firing_anim()
 	await firing_duration_timer.timeout
+
+	if hitscan_cancelled:
+		return
 
 	_set_up_hitscan()
 	_handle_warmup_increase() # We only do this for regular firing, not charge shots
@@ -438,8 +446,10 @@ func _start_firing_sequence() -> void:
 	firing_in_progress = true
 
 	if stats.s_mods.get_stat("projectiles_per_fire") > 1 and not is_holding_hitscan:
-		if not stats.add_bloom_per_burst_shot: _handle_bloom_increase()
-	if not stats.add_overheat_per_burst_shot: _handle_overheat_increase()
+		if not stats.add_bloom_per_burst_shot:
+			_handle_bloom_increase()
+	if not stats.add_overheat_per_burst_shot:
+		_handle_overheat_increase()
 
 	_apply_ammo_consumption()
 
@@ -599,7 +609,7 @@ func _get_bloom() -> float:
 		return 0
 
 ## Adds a cooldown to the auto decrementer for the current cooldown id.
-func _handle_adding_cooldown(duration: float, title: String = "default") -> void:
+func _add_cooldown(duration: float, title: String = "default") -> void:
 	if duration > 0:
 		source_entity.inv.auto_decrementer.add_cooldown(stats.get_cooldown_id(), duration, title)
 
@@ -638,7 +648,7 @@ func _on_cooldown_timeout(item_id: StringName, cooldown_source_title: String) ->
 
 	if is_holding_hitscan:
 		_fire()
-		_handle_adding_cooldown(stats.s_mods.get_stat("fire_cooldown") + hitscan_delay, cooldown_source_title)
+		_add_cooldown(stats.s_mods.get_stat("fire_cooldown") + stats.firing_duration + hitscan_delay, cooldown_source_title)
 	else:
 		_clean_up_hitscans()
 
@@ -650,7 +660,7 @@ func _do_post_fire_cooldown() -> void:
 		return
 
 	var total_cooldown_afterwards: float = stats.s_mods.get_stat("fire_cooldown") + hitscan_delay
-	_handle_adding_cooldown(total_cooldown_afterwards)
+	_add_cooldown(total_cooldown_afterwards)
 
 ## Increases current overheat level via sampling the increase curve using the current overheat.
 func _handle_overheat_increase() -> void:
@@ -672,7 +682,7 @@ func _handle_overheat_increase() -> void:
 ## When we reach max overheat, add a cooldown of some kind.
 func _handle_max_overheat_reached() -> void:
 	just_hit_max_overheat = true
-	_handle_adding_cooldown(stats.s_mods.get_stat("overheat_penalty"), "overheat_penalty")
+	_add_cooldown(stats.s_mods.get_stat("overheat_penalty"), "overheat_penalty")
 	AudioManager.play_global(stats.overheated_sound)
 	overhead_ui.update_visuals_for_max_overheat()
 	_do_weapon_overheat_visuals(false)
@@ -825,7 +835,7 @@ func _get_has_needed_ammo_and_reload_if_not() -> bool:
 	var ammo_needed: int = 0
 
 	if stats.use_ammo_per_burst_proj:
-		ammo_needed += int(stats.s_mods.get_stat("projectiles_per_fire"))
+		ammo_needed = int(stats.s_mods.get_stat("projectiles_per_fire"))
 	else:
 		ammo_needed = 1
 
@@ -1004,4 +1014,5 @@ func _update_ammo_ui() -> void:
 		else:
 			count = stats.ammo_in_mag
 		ammo_ui.update_mag_ammo(count)
+		ammo_ui.calculate_inv_ammo()
 #endregion

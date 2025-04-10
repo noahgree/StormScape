@@ -46,10 +46,10 @@ func parse_item(stats: ItemResource) -> Array[String]:
 ## Parses the information to populate in the player stats viewer.
 func parse_player() -> Array[String]:
 	var strings: Array[String] = []
-	strings.append("HEALTH:" + Globals.invis_char + _get_player_sum(["max_health"], true))
-	strings.append("SHIELD:" + Globals.invis_char + _get_player_sum(["max_shield"], true))
-	strings.append("STAMINA:" + Globals.invis_char + _get_player_sum(["max_stamina"], true))
-	strings.append("HUNGER BARS:" + Globals.invis_char + _get_player_sum(["max_hunger_bars"], true))
+	strings.append("MAX HEALTH:" + Globals.invis_char + _get_player_sum(["max_health"], true))
+	strings.append("MAX SHIELD:" + Globals.invis_char + _get_player_sum(["max_shield"], true))
+	strings.append("MAX STAMINA:" + Globals.invis_char + _get_player_sum(["max_stamina"], true))
+	strings.append("MAX HUNGER BARS:" + Globals.invis_char + _get_player_sum(["max_hunger_bars"], true))
 
 	for wearable_dict: Dictionary in Globals.player_node.wearables:
 		var wearable: Wearable = wearable_dict.values()[0]

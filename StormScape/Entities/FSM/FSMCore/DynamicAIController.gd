@@ -25,7 +25,7 @@ const RAYCAST_LENGTH: int = 25
 
 #region Debug
 func _draw() -> void:
-	if not DebugFlags.Entity.show_collision_avoidance_rays:
+	if not DebugFlags.show_collision_avoidance_rays:
 		return
 
 	for i: int in range(raycast_results.size()):
@@ -40,7 +40,7 @@ func _draw() -> void:
 		else:
 			draw_line(entity.global_position, ray_end, Color.GREEN, 0.25)
 
-	if not DebugFlags.Entity.show_movement_vector:
+	if not DebugFlags.show_movement_vector:
 		return
 
 	var movement_vector_end: Vector2 = entity.global_position + (debug_recent_movement_vector * 35)

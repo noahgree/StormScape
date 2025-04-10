@@ -16,6 +16,12 @@ func _ready() -> void:
 	SignalBus.focused_ui_opened.connect(func() -> void: visible = not Globals.player_inv_is_open)
 	SignalBus.focused_ui_closed.connect(func() -> void: visible = not Globals.player_inv_is_open)
 
+	if not Globals.player_node:
+		await Globals.ready
+
+	SignalBus.focused_ui_closed.connect(calculate_inv_ammo)
+	Globals.player_node.stamina_component.max_stamina_changed.connect(func(_new_max_stamina: float) -> void: calculate_inv_ammo())
+
 ## Updates the magazine ammo portion of the current equipped item info.
 func update_mag_ammo(mag_count: int) -> void:
 	if mag_count == -1:
@@ -42,8 +48,29 @@ func update_inv_ammo(inv_count: int) -> void:
 func update_item_name(item_name_string: String) -> void:
 	item_name.text = item_name_string
 
+## Alter the label margins depending on which ones are showing.
 func _check_both_ammo_labels_visibility() -> void:
 	if not mag_ammo.visible and not inv_ammo.visible:
 		info_margins.add_theme_constant_override("margin_top", 1)
 	else:
 		info_margins.add_theme_constant_override("margin_top", 0)
+
+## Gets the cumulative total of the ammo that corresponds to the currently equipped item.
+func calculate_inv_ammo() -> void:
+	var count: int = -1
+
+	if Globals.player_node.hands.equipped_item != null:
+		var current_item_stats: ItemResource = Globals.player_node.hands.equipped_item.stats
+		if current_item_stats is ProjWeaponResource and not current_item_stats.hide_ammo_ui:
+			if current_item_stats.ammo_type not in [ProjWeaponResource.ProjAmmoType.NONE, ProjWeaponResource.ProjAmmoType.STAMINA, ProjWeaponResource.ProjAmmoType.SELF, ProjWeaponResource.ProjAmmoType.CHARGES]:
+				count = 0
+				for i: int in range(Globals.player_node.inv.main_inv_size + Globals.HOTBAR_SIZE):
+					var item: InvItemResource = Globals.player_node.inv.inv[i]
+					if item != null and (item.stats is ProjAmmoResource) and (item.stats.ammo_type == current_item_stats.ammo_type):
+						count += item.quantity
+			elif current_item_stats.ammo_type == ProjWeaponResource.ProjAmmoType.STAMINA:
+				count = int(floor(Globals.player_node.stats.get_stat("max_stamina")))
+		elif current_item_stats is MeleeWeaponResource:
+			count = int(floor(Globals.player_node.stats.get_stat("max_stamina")))
+
+	update_inv_ammo(count)

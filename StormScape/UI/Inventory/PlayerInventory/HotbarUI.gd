@@ -18,9 +18,7 @@ func _ready() -> void:
 	if not Globals.player_node:
 		await SignalBus.player_ready
 	player_inv = Globals.player_node.inv
-	Globals.player_node.stamina_component.max_stamina_changed.connect(func(_new_max_stamina: float) -> void: _update_inv_ammo_ui())
 
-	SignalBus.focused_ui_closed.connect(_update_inv_ammo_ui)
 	SignalBus.focused_ui_opened.connect(func() -> void: visible = not Globals.player_inv_is_open)
 	SignalBus.focused_ui_closed.connect(func() -> void: visible = not Globals.player_inv_is_open)
 
@@ -76,32 +74,12 @@ func update_hotbar_tint_progresses() -> void:
 		else:
 			slot.update_tint_progress(0)
 
-## Updates the ammo UI with the cumulative total of the ammo that corresponds to the currently equipped item.
-func _update_inv_ammo_ui() -> void:
-	var count: int = -1
-
-	if active_slot.item != null:
-		var stats: ItemResource = active_slot.item.stats
-		if stats is ProjWeaponResource and not stats.hide_ammo_ui:
-			if stats.ammo_type not in [ProjWeaponResource.ProjAmmoType.NONE, ProjWeaponResource.ProjAmmoType.STAMINA, ProjWeaponResource.ProjAmmoType.SELF, ProjWeaponResource.ProjAmmoType.CHARGES]:
-				count = 0
-				for i: int in range(player_inv.main_inv_size + Globals.HOTBAR_SIZE):
-					var item: InvItemResource = player_inv.inv[i]
-					if item != null and (item.stats is ProjAmmoResource) and (item.stats.ammo_type == active_slot.item.stats.ammo_type):
-						count += item.quantity
-			elif stats.ammo_type == ProjWeaponResource.ProjAmmoType.STAMINA:
-				count = int(floor(Globals.player_node.stats.get_stat("max_stamina")))
-		elif stats is MeleeWeaponResource:
-			count = int(floor(Globals.player_node.stats.get_stat("max_stamina")))
-
-	active_slot_info.update_inv_ammo(count)
-
 ## Handles input mainly relating to changing the active slot.
 func _unhandled_input(event: InputEvent) -> void:
 	if Globals.focused_ui_is_open:
 		return
 
-	if DebugFlags.HotbarFlags.use_scroll_debounce and not scroll_debounce_timer.is_stopped():
+	if DebugFlags.use_scroll_debounce and not scroll_debounce_timer.is_stopped():
 		return
 
 	if Input.is_action_just_released("scroll_up", false):
@@ -161,7 +139,7 @@ func change_active_slot_to_index_relative_to_full_inventory_size(new_index: int)
 func _setup_after_active_slot_change() -> void:
 	_apply_selected_slot_fx()
 	_update_hands_about_new_active_item()
-	_update_inv_ammo_ui()
+	active_slot_info.calculate_inv_ammo()
 	_default_ammo_update_method()
 
 ## Updates the hands component with the new active slot and associated item if any. Then updates the

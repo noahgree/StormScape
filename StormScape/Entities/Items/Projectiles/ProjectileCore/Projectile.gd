@@ -96,19 +96,19 @@ static func create(wpn_stats: ProjWeaponResource, src_entity: PhysicsBody2D, pos
 
 ## Used for debugging the homing system & other collisions. Draws vectors to where we have scanned during the "FOV" method.
 func _draw() -> void:
-	if DebugFlags.Projectiles.show_movement_dir:
+	if DebugFlags.show_movement_dir:
 		var local_movement_direction: Vector2 = movement_direction.rotated(-rotation) * 100
 		draw_line(Vector2.ZERO, local_movement_direction, Color(1, 1, 1, 0.5), 0.6)
 
-	if debug_recent_hit_location != Vector2.ZERO and DebugFlags.Projectiles.show_collision_points:
+	if debug_recent_hit_location != Vector2.ZERO and DebugFlags.show_collision_points:
 		z_index = 100
 		draw_circle(to_local(debug_recent_hit_location), 1.5, Color(1, 1, 0, 0.35))
 
-	if DebugFlags.Projectiles.show_homing_targets and homing_target != null:
+	if DebugFlags.show_homing_targets and homing_target != null:
 		z_index = 100
 		draw_circle(to_local(homing_target.global_position), 5, Color(1, 0, 1, 0.3))
 
-	if not DebugFlags.Projectiles.show_homing_rays:
+	if not DebugFlags.show_homing_rays:
 		return
 
 	for ray: Dictionary[String, Variant] in debug_homing_rays:
@@ -223,7 +223,7 @@ func _physics_process(delta: float) -> void:
 	movement_direction = (global_position - previous_position).normalized()
 	_check_for_whiz_sound()
 
-	if DebugFlags.Projectiles.show_homing_rays or DebugFlags.Projectiles.show_collision_points or DebugFlags.Projectiles.show_homing_targets or DebugFlags.Projectiles.show_movement_dir:
+	if DebugFlags.show_homing_rays or DebugFlags.show_collision_points or DebugFlags.show_homing_targets or DebugFlags.show_movement_dir:
 		queue_redraw()
 
 ## This moves the projectile based on the current method, accounting for current rotation if we need to.
@@ -337,7 +337,7 @@ func _find_target_in_fov() -> void:
 	var direction: Vector2 = Vector2.RIGHT.rotated(rotation)
 	var candidates: Array[Node] = []
 
-	if DebugFlags.Projectiles.show_homing_rays:
+	if DebugFlags.show_homing_rays:
 		debug_homing_rays.clear()
 
 	var step: float = fov_radians / FOV_RAYCAST_COUNT

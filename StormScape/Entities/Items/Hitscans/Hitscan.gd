@@ -47,7 +47,7 @@ static func create(hitscan_scene: PackedScene, effect_src: EffectSource, source_
 	return hitscan
 
 func _draw() -> void:
-	if not DebugFlags.Projectiles.show_hitscan_rays:
+	if not DebugFlags.show_hitscan_rays:
 		return
 
 	for ray: Dictionary[String, Variant] in debug_rays:
@@ -110,7 +110,7 @@ func _physics_process(_delta: float) -> void:
 	else:
 		queue_free()
 
-	if DebugFlags.Projectiles.show_hitscan_rays:
+	if DebugFlags.show_hitscan_rays:
 		queue_redraw()
 
 ## Talks to the physics server to cast collider shapes forward to look for receivers.
@@ -120,7 +120,7 @@ func _find_target_receivers() -> void:
 	var candidates: Array[Node] = []
 	var contact_positions: Array[Vector2] = []
 
-	if DebugFlags.Projectiles.show_hitscan_rays:
+	if DebugFlags.show_hitscan_rays:
 		debug_rays.clear()
 
 	var from_pos: Vector2 = global_position
@@ -145,7 +145,7 @@ func _find_target_receivers() -> void:
 		var result: Dictionary[Variant, Variant] = space_state.intersect_ray(query)
 
 		var debug_ray_info: Dictionary[String, Variant]
-		if DebugFlags.Projectiles.show_hitscan_rays: debug_ray_info = { "from": from_pos, "to": to_pos, "hit": false, "hit_position": to_pos }
+		if DebugFlags.show_hitscan_rays: debug_ray_info = { "from": from_pos, "to": to_pos, "hit": false, "hit_position": to_pos }
 
 		if result:
 			var obj: Node = result.collider
@@ -217,6 +217,7 @@ func _select_closest_receiver(targets: Array[Node]) -> int:
 			closest_target = i
 	return closest_target
 
+## Updates the particles that spawn at each impacted node.
 func _update_impact_particles(pierce_list: Dictionary) -> void:
 	for node: Node in pierce_list.keys():
 		if node in impacted_nodes:

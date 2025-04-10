@@ -18,7 +18,7 @@ const DEFAULT_ROTATION_LERPING_FACTOR: float = 0.1 ## The default lerping rate f
 
 #region Debug
 func _draw() -> void:
-	if not DebugFlags.Entity.show_facing_dir:
+	if not DebugFlags.show_facing_dir:
 		return
 
 	var entity_pos_with_sprite_offset: Vector2 = to_local(entity.global_position + (entity.sprite.position / 2.0))

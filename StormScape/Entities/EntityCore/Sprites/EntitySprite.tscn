@@ -26,6 +26,7 @@ material = SubResource("ShaderMaterial_yb3gb")
 script = ExtResource("2_yqofs")
 
 [node name="Overlay" type="TextureRect" parent="."]
+modulate = Color(1, 1, 1, 0.5)
 self_modulate = Color(1, 1, 1, 0)
 light_mask = 2
 material = SubResource("CanvasItemMaterial_h3vni")

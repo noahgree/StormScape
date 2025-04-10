@@ -20,7 +20,7 @@ var particle_fade_tweens: Dictionary[String, Tween] = {} ## Holds references to 
 
 #region Debug
 func _draw() -> void:
-	if not Engine.is_editor_hint() and DebugFlags.Particles.show_status_effect_particle_emission_area:
+	if not Engine.is_editor_hint() and DebugFlags.show_status_effect_particle_emission_area:
 		var emission_mgr: ParticleEmissionComponent = owner.emission_mgr
 		var extents: Vector2 = emission_mgr.get_extents(ParticleEmissionComponent.Boxes.BELOW)
 		var origin: Vector2 = emission_mgr.get_origin(ParticleEmissionComponent.Boxes.BELOW)
@@ -74,7 +74,7 @@ func _cache_status_effects(folder: String) -> void:
 func handle_status_effect(status_effect: StatusEffect) -> void:
 	var effect_key: String = status_effect.get_full_effect_key()
 
-	if DebugFlags.PrintFlags.current_effect_changes and print_effect_updates:
+	if DebugFlags.current_effect_changes and print_effect_updates:
 		if status_effect is StormSyndromeEffect:
 			print_rich("-------[color=green]Adding[/color][b] [color=pink]" + effect_key + " " + str(status_effect.effect_lvl) + "[/color][/b][color=gray] to " + affected_entity.name + "-------")
 		else:
@@ -171,7 +171,7 @@ func _start_effect_fx(status_effect: StatusEffect) -> void:
 	particle_node.modulate.a = 1.0
 	particle_node.emitting = true
 
-	if DebugFlags.Particles.show_status_effect_particle_emission_area:
+	if DebugFlags.show_status_effect_particle_emission_area:
 		queue_redraw()
 
 ## Extends the duration of the timer associated with some current effect.
@@ -195,7 +195,7 @@ func _restart_effect_duration(effect_key: String) -> void:
 func _remove_status_effect(status_effect: StatusEffect) -> void:
 	var effect_key: String = status_effect.get_full_effect_key()
 
-	if DebugFlags.PrintFlags.current_effect_changes and print_effect_updates:
+	if DebugFlags.current_effect_changes and print_effect_updates:
 		if status_effect is StormSyndromeEffect:
 			print_rich("-------[color=red]Removed[/color][b] [color=pink]" + effect_key + " " + str(status_effect.effect_lvl) + "[/color][/b][color=gray] from " + affected_entity.name + "-------")
 		else:

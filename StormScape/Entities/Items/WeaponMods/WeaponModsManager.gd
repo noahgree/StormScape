@@ -64,7 +64,7 @@ static func handle_weapon_mod(weapon_stats: WeaponResource, weapon_mod: WeaponMo
 ## Adds a weapon mod to the dictionary and then calls the on_added method inside the mod itself.
 static func _add_weapon_mod(weapon_stats: WeaponResource, weapon_mod: WeaponMod, index: int,
 					source_entity: PhysicsBody2D) -> void:
-	if DebugFlags.PrintFlags.weapon_mod_changes:
+	if DebugFlags.weapon_mod_changes:
 		print_rich("-------[color=green]Adding[/color][b] " + weapon_mod.name + " (" + str(weapon_mod.rarity) + ")[/b] [color=gray]to " + weapon_stats.name + " (slot " + str(index) + ")" + "-------")
 
 	weapon_stats.current_mods[index] = { weapon_mod.id : weapon_mod }
@@ -77,7 +77,7 @@ static func _add_weapon_mod(weapon_stats: WeaponResource, weapon_mod: WeaponMod,
 	if weapon_stats is MeleeWeaponResource:
 		_update_effect_source_status_effects(weapon_stats, true, weapon_mod.charge_status_effects)
 
-	if DebugFlags.PrintFlags.weapon_mod_changes:
+	if DebugFlags.weapon_mod_changes:
 		_debug_print_status_effect_lists(weapon_stats)
 
 	weapon_mod.on_added(weapon_stats, source_entity.hands.equipped_item if source_entity != null else null)
@@ -87,7 +87,7 @@ static func _add_weapon_mod(weapon_stats: WeaponResource, weapon_mod: WeaponMod,
 ## Removes the weapon mod from the dictionary after calling the on_removal method inside the mod itself.
 static func remove_weapon_mod(weapon_stats: WeaponResource, weapon_mod: WeaponMod, index: int,
 						source_entity: PhysicsBody2D) -> void:
-	if DebugFlags.PrintFlags.weapon_mod_changes and weapon_stats.has_mod(weapon_mod.id, index):
+	if DebugFlags.weapon_mod_changes and weapon_stats.has_mod(weapon_mod.id, index):
 		print_rich("-------[color=red]Removed[/color][b] " + str(weapon_mod.name) + " (" + str(weapon_mod.rarity) + ")[/b] [color=gray]from " + weapon_stats.name + " (slot " + str(index) + ")" + "-------")
 
 	for mod_resource: StatMod in weapon_mod.wpn_stat_mods:
@@ -100,7 +100,7 @@ static func remove_weapon_mod(weapon_stats: WeaponResource, weapon_mod: WeaponMo
 	if weapon_stats is MeleeWeaponResource:
 		_remove_mod_status_effects_from_effect_source(weapon_stats, true)
 
-	if DebugFlags.PrintFlags.weapon_mod_changes:
+	if DebugFlags.weapon_mod_changes:
 		_debug_print_status_effect_lists(weapon_stats)
 
 	weapon_mod.on_removal(weapon_stats, source_entity.hands.equipped_item if source_entity != null else null)
@@ -200,20 +200,3 @@ static func _debug_print_status_effect_lists(weapon_stats: WeaponResource) -> vo
 	if weapon_stats is MeleeWeaponResource:
 		var is_normal_charge: bool = true if weapon_stats.charge_effect_source.status_effects == weapon_stats.original_charge_status_effects else false
 		print_rich("[color=cyan]Charge Effects[/color]" + ("[color=gray][i](base)[/i][/color]" if is_normal_charge else "") + ": [b]"+ str(weapon_stats.charge_effect_source.status_effects) + "[/b]")
-
-#region Debug
-## Tries to add a mod (given by its cache id) to the currently equipped weapon that the player is holding.
-static func add_mod_to_weapon_by_id(mod_cache_id: StringName) -> void:
-	if not Globals.player_node.hands.equipped_item:
-		return
-	var equipped_stats: ItemResource = Globals.player_node.hands.equipped_item.stats
-	if equipped_stats is not WeaponResource:
-		return
-	var mod: ItemResource = CraftingManager.get_item_by_id(mod_cache_id, true)
-	if mod == null or mod is not WeaponMod:
-		printerr("The mod of id \"" + mod_cache_id + "\" does not exist.")
-		return
-	WeaponModsManager.handle_weapon_mod(
-		Globals.player_node.hands.equipped_item.stats, mod, WeaponModsManager.get_next_open_mod_slot(equipped_stats), Globals.player_node
-	)
-#endregion

@@ -21,7 +21,7 @@ func _ready() -> void:
 		var devices: PackedStringArray = AudioServer.get_output_device_list()
 		var macbook_device_index: int = devices.find("Macbook")
 		var macbook_device: String = devices[macbook_device_index]
-		AudioServer.output_device = macbook_device if DebugFlags.AudioFlags.set_debug_output_device else "Default"
+		AudioServer.output_device = macbook_device if DebugFlags.set_debug_output_device else "Default"
 
 	_cache_audio_resources(music_resources_folder, sound_cache)
 	_cache_audio_resources(sfx_resources_folder, sound_cache)
@@ -81,12 +81,12 @@ func register_scene_audio_resource_use(sound_id: StringName) -> void:
 					if stream:
 						audio_resource.preloaded_streams.append(stream)
 
-				if DebugFlags.PrintFlags.sound_preload_changes:
+				if DebugFlags.sound_preload_changes:
 					print_rich("[color=Seagreen]PRELOADED AUDIO RESOURCE STREAMS[/color]: \"[b]" + sound_id + "[/b]\"")
 		else:
 			push_error("\"" + sound_id + "\" was trying to register as a sound resource but does not exist in the cache.")
 
-	if DebugFlags.PrintFlags.sound_refcount_changes:
+	if DebugFlags.sound_refcount_changes:
 		_debug_print_single_ref_count(sound_id)
 
 ## Unregisters a scene as using a certain audio resource, removing the streams from memory if the reference count
@@ -102,12 +102,12 @@ func unregister_scene_audio_resource_use(sound_id: StringName) -> void:
 		if audio_resource:
 			audio_resource.preloaded_streams.clear()
 
-			if DebugFlags.PrintFlags.sound_preload_changes:
+			if DebugFlags.sound_preload_changes:
 				print_rich("[color=Firebrick]UNLOADED AUDIO RESOURCE STREAMS[/color]: \"[b]" + sound_id + "[/b]\"")
 		else:
 			push_error("\"" + sound_id + "\" was trying to UNregister as a sound resource but does not exist in the cache. This should never happen.")
 
-	if DebugFlags.PrintFlags.sound_refcount_changes:
+	if DebugFlags.sound_refcount_changes:
 		_debug_print_single_ref_count(sound_id)
 
 ## Attempts to retrive an AudioStreamPlayer or AudioStreamPlayer2D from the list of active nodes.
@@ -253,7 +253,7 @@ func _start_audio_player_in_tree(audio_player: Variant, volume: float, fade_in_t
 		_start_audio_player_fade_in(audio_player, volume, fade_in_time)
 	else:
 		audio_player.play()
-		if DebugFlags.PrintFlags.sounds_starting:
+		if DebugFlags.sounds_starting:
 			print_rich("\"[b]" + audio_player.get_meta("sound_id") + "[/b]\" sound is starting")
 
 ## Stops the first sound in the group belonging to the passed in sound id, fading if necessary.

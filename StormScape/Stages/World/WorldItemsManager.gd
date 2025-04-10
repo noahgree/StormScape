@@ -23,6 +23,7 @@ func _ready() -> void:
 	combination_attempt_timer.start()
 
 	DebugConsole.add_command("combine_items", _on_combination_attempt_timer_timeout)
+	DebugConsole.add_command("spawn_item", spawn_on_ground_by_id)
 
 ## When the timer ends, start attempting to combine nearby items on the ground. This also cleans up empty
 ## grid locations from our dict afterwards.
@@ -91,3 +92,13 @@ func _combine_items(item_1: Item, item_2: Item) -> void:
 	tween.chain().tween_callback(item_2.queue_free)
 
 	item_1.restart_lifetime_timer_and_cancel_any_blink_sequence()
+
+#region Debug
+func spawn_on_ground_by_id(item_cache_id: StringName, count: int = 1) -> void:
+	var item: ItemResource = CraftingManager.get_item_by_id(item_cache_id, true)
+	if item == null:
+		printerr("The requested item \"" + item_cache_id + "\" does not exist.")
+		return
+
+	Item.spawn_on_ground(item, count, Globals.player_node.global_position, 10, false, false, true)
+#endregion

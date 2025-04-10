@@ -117,6 +117,7 @@ func _ready() -> void:
 		await get_tree().create_timer(1.0, false, false, false).timeout
 		can_be_auto_picked_up = true
 
+## Updates the visibility of the extra sprite that shows when the quantity is higher than 1.
 func _update_multiple_indicator_sprite() -> void:
 	if multiple_indicator_sprite == null:
 		return

@@ -37,7 +37,7 @@ func _on_before_load_game() -> void:
 
 #region Debug
 func _draw() -> void:
-	if equipped_item and DebugFlags.Projectiles.show_aiming_direction:
+	if equipped_item and DebugFlags.show_aiming_direction:
 		# Draw the equipped item position
 		var local_position: Vector2 = to_local(debug_origin_of_projectile_vector)
 		draw_circle(local_position, 4, Color.CORAL)
@@ -349,3 +349,20 @@ func _update_anchor_scale(coord: String, new_value: float) -> void:
 
 func _get_facing_dir() -> Vector2:
 	return entity.facing_component.facing_dir
+
+#region Debug
+## Tries to add a mod (given by its cache id) to the currently equipped weapon that the player is holding.
+func add_mod_to_weapon_by_id(mod_cache_id: StringName) -> void:
+	if not Globals.player_node.hands.equipped_item:
+		return
+	var equipped_stats: ItemResource = Globals.player_node.hands.equipped_item.stats
+	if equipped_stats is not WeaponResource:
+		return
+	var mod: ItemResource = CraftingManager.get_item_by_id(mod_cache_id, true)
+	if mod == null or mod is not WeaponMod:
+		printerr("The mod of id \"" + mod_cache_id + "\" does not exist.")
+		return
+	WeaponModsManager.handle_weapon_mod(
+		Globals.player_node.hands.equipped_item.stats, mod, WeaponModsManager.get_next_open_mod_slot(equipped_stats), Globals.player_node
+	)
+#endregion

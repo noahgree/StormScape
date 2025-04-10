@@ -207,3 +207,12 @@ func _create_or_update_popup_for_src_type(src_type: String, was_healing: bool, w
 		new_popup.tree_exiting.connect(func() -> void: new_popup.queue_free())
 		current_popup = new_popup
 #endregion
+
+#region Debug
+## Increases or decreases hp based on the amount.
+func change_hp_by_amount(amount: int) -> void:
+	if amount >= 0:
+		heal_health_then_shield(amount, "basic_healing", 0)
+	else:
+		damage_shield_then_health(-amount, "basic_damage", false, 0)
+#endregion

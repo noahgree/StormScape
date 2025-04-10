@@ -12,7 +12,7 @@ class_name StateMachine
 
 var current_state: State: ## The current state the state machine is in.
 	set(new_state):
-		if DebugFlags.PrintFlags.state_machine_swaps and print_state_changes:
+		if DebugFlags.state_machine_swaps and print_state_changes:
 			print_rich("[i]" + get_parent().name + " [/i]entered [color=pink][b]" + new_state.name.to_lower() + "[/b][/color] (was " + (current_state.name.to_lower() if current_state else "null") + ")")
 		current_state = new_state
 var states: Dictionary[StringName, State] = {} ## A dict of all current children states of the state machine node.

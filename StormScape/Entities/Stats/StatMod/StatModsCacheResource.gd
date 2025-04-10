@@ -60,9 +60,11 @@ func _recalculate_stat(stat_id: StringName, base_value: float) -> void:
 	cached_stats[stat_id] = max(0, result)
 	_update_ui_for_stat(stat_id, result)
 
-	if DebugFlags.PrintFlags.stat_mod_changes_during_game and not is_loading:
-		var change_text: String = str(snappedf(float(cached_stats[stat_id]) / float(base_values[stat_id]), 0.001))
-		var base_text: String = "[color=gray][i](base)[/i][/color]" if cached_stats[stat_id] == base_values[stat_id] else "[color=pink][i](" + change_text + "%)[/i][/color]"
+	if DebugFlags.stat_mod_changes_during_game and not is_loading:
+		var change_text: String = str(snappedf(float(cached_stats[stat_id]) / float(base_values[stat_id]), 0.001)) + "x"
+		if base_values[stat_id] == 0:
+			change_text = str(snappedf(cached_stats[stat_id], 0.001))
+		var base_text: String = "[color=gray][i](base)[/i][/color]" if cached_stats[stat_id] == base_values[stat_id] else "[color=pink][i](" + change_text + ")[/i][/color]"
 		print_rich("[color=cyan]" + stat_id + base_text + "[/color]: [b]" + str(cached_stats[stat_id]) + "[/b]")
 
 ## Updates an optionally connected UI when a watched stat changes.
@@ -196,6 +198,6 @@ func add_mod_from_scratch(stat_id: StringName, operation: String, value: float, 
 
 ## Pushes an error to the console with the stat id and the mod id for the mod that could not be found.
 func _push_mod_not_found_warning(stat_id: StringName, mod_id: StringName) -> void:
-	if DebugFlags.PushErrors.mod_not_in_cache:
+	if DebugFlags.mod_not_in_cache:
 		push_warning("The mod for stat \"" + stat_id + "\"" + " with mod_id of: \"" + mod_id + "\" was not in the cache: \"" + str(self) + "\".")
 #endregion
