@@ -47,7 +47,7 @@ enum ProjAmmoType { ## The types of projectile ammo.
 @export_enum("Magazine", "Single") var reload_type: String = "Magazine" ## Whether to reload over time or all at once at the end.
 @export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var mag_reload_time: float = 1.0 ## How long it takes to reload an entire mag.
 @export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var single_proj_reload_time: float = 0.25 ## How long it takes to reload a single projectile if the reload type is set to "single".
-@export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var single_proj_reload_delay: float = 0.5 ## An additional delay that occurs before the first single proj is reloaded after triggering a reload.
+@export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var before_single_reload_time: float = 0.5 ## An additional delay that occurs before the first single proj is reloaded after triggering a reload.
 @export var single_reload_quantity: int = 1 ## How much to add to the mag when the single proj timer elapses each time.
 @export var must_reload_fully: bool = false ## When true, if the reload method is "Single", the reload cannot be stopped while in progress and must load all single projectiles in before being able to fire again.
 @export var stamina_use_per_proj: float = 0.5 ## How much stamina is needed per projectile when stamina is the ammo type.
@@ -93,7 +93,7 @@ enum ProjAmmoType { ## The types of projectile ammo.
 @export_group("Burst Logic")
 @export_range(1, 100, 1) var projectiles_per_fire: int = 1 ## How many projectiles are emitted per burst execution.
 @export var use_ammo_per_burst_proj: bool = true ## Whether to consume ammo per projectile emmitted or consume 1 per full burst.
-@export_range(0.03, 1, 0.01, "suffix:seconds", "or_greater", "hide_slider") var burst_bullet_delay: float = 0.05 ## Time between burst shots after execute.
+@export_range(0.03, 1, 0.01, "suffix:seconds", "or_greater", "hide_slider") var burst_proj_delay: float = 0.05 ## Time between burst shots after execute.
 @export var add_bloom_per_burst_shot: bool = true ## Whether or not each bullet from a burst fire increases bloom individually.
 @export var add_overheat_per_burst_shot: bool = true ## Whether or not each bullet from a burst fire increases overheat individually.
 

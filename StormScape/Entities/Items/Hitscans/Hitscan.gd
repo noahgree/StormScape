@@ -24,21 +24,20 @@ var is_hitting_something: bool = false: ## Whether at any point along the hitsca
 var impacted_nodes: Dictionary[Node, CPUParticles2D] = {} ## The nodes being hit at current moment along with their hit particles.
 var holding_allowed: bool = false ## Whether we are allowed to do holding and keep the hitscan active while the fire button is held.
 var is_charge_fire: bool = false ## Whether this hitscan was the result of a charged firing from the source weapon.
+var multishot_id: int = 0 ## The id passed in on creation that relates the sibling hitscans spawned on the same multishot barrage.
 
 
 ## Creates a hitscan scene, assigns its passed in parameters, then returns it.
-static func create(hitscan_scene: PackedScene, effect_src: EffectSource, source_wpn: ProjectileWeapon,
-					src_entity: PhysicsBody2D, pos: Vector2, rot_offset: float,
-					was_charged: bool = false) -> Hitscan:
-	var hitscan: Hitscan = hitscan_scene.instantiate()
-	hitscan.global_position = pos
+static func create(source_wpn: ProjectileWeapon, rot_offset: float) -> Hitscan:
+	var hitscan: Hitscan = source_wpn.stats.hitscan_logic.hitscan_scn.instantiate()
+	hitscan.global_position = source_wpn.proj_origin_node.global_position
 	hitscan.rotation_offset = rot_offset
-	hitscan.effect_source = effect_src
-	hitscan.source_entity = src_entity
+	hitscan.effect_source = source_wpn.stats.effect_source
+	hitscan.source_entity = source_wpn.source_entity
 	hitscan.stats = source_wpn.stats.hitscan_logic
 	hitscan.s_mods = source_wpn.stats.s_mods
 
-	hitscan.is_charge_fire = was_charged
+	hitscan.is_charge_fire = source_wpn.stats.firing_mode == "Charge"
 
 	if source_wpn.stats.allow_hitscan_holding:
 		hitscan.holding_allowed = true
@@ -74,6 +73,7 @@ func _ready() -> void:
 func _set_up_visual_fx() -> void:
 	if not stats.override_vfx_defaults:
 		return
+
 	width = stats.hitscan_max_width
 	width_curve = stats.hitscan_width_curve
 	start_particles.color_ramp.set_color(0, stats.start_particle_color)
@@ -92,7 +92,8 @@ func _set_up_visual_fx() -> void:
 
 func _physics_process(_delta: float) -> void:
 	var equipped_item: EquippableItem = null
-	if is_instance_valid(source_entity.hands.equipped_item): equipped_item = source_entity.hands.equipped_item
+	if is_instance_valid(source_entity.hands.equipped_item):
+		equipped_item = source_entity.hands.equipped_item
 
 	if equipped_item != null and equipped_item == source_item:
 		global_position = equipped_item.proj_origin_node.global_position.rotated(equipped_item.rotation)
@@ -247,6 +248,7 @@ func _update_impact_particles(pierce_list: Dictionary) -> void:
 ## on hit so that we can include unique info like move dir.
 func _start_being_handled(handling_area: EffectReceiverComponent, contact_point: Vector2) -> void:
 	effect_source = effect_source.duplicate()
+	effect_source.multishot_id = multishot_id
 	var modified_effect_src: EffectSource = _get_effect_source_adjusted_for_falloff(effect_source, contact_point)
 	modified_effect_src.movement_direction = Vector2(cos(rotation), sin(rotation)).normalized()
 	effect_source.contact_position = contact_point

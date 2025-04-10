@@ -94,7 +94,8 @@ static func create(wpn_stats: ProjWeaponResource, src_entity: PhysicsBody2D, pos
 	proj.source_entity = src_entity
 	return proj
 
-## Used for debugging the homing system & other collisions. Draws vectors to where we have scanned during the "FOV" method.
+## Used for debugging the homing system & other collisions. Draws vectors to where we have scanned during
+## the "FOV" method.
 func _draw() -> void:
 	if DebugFlags.show_movement_dir:
 		var local_movement_direction: Vector2 = movement_direction.rotated(-rotation) * 100

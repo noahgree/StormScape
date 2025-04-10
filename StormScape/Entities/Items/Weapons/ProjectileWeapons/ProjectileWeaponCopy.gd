@@ -1,7 +1,7 @@
 @tool
 @icon("res://Utilities/Debug/EditorIcons/projectile_weapon.png")
 extends Weapon
-class_name ProjectileWeapon
+class_name ProjectileWeaponCopy
 ## Base class for all weapons that spawn any sort of projectile or hitscan or AOE.
 
 @export var proj_origin: Vector2 = Vector2.ZERO: ## Where the projectile spawns from in local space of the weapon scene.
@@ -250,11 +250,11 @@ func _check_if_needs_mouse_area_scanner() -> void:
 		mouse_area.global_position = CursorManager.get_cursor_mouse_position()
 		Globals.world_root.add_child(mouse_area)
 
-func enable_mouse_area() -> void:
+func _enable_mouse_area() -> void:
 	if mouse_area:
 		mouse_area.get_child(0).disabled = false
 
-func disable_mouse_area() -> void:
+func _disable_mouse_area() -> void:
 	if mouse_area:
 		mouse_area.get_child(0).disabled = true
 
@@ -482,7 +482,7 @@ func _handle_per_shot_delay_and_bloom(shot_count: int, proceed_to_spawn: bool = 
 			_apply_barrage_logic()
 
 			if i != (shot_count - 1):
-				await get_tree().create_timer(max(0.03, stats.burst_proj_delay), false, true, false).timeout
+				await get_tree().create_timer(max(0.03, stats.burst_bullet_delay), false, true, false).timeout
 				if is_reloading: # We could potentially start a reload during this delay and need to break out of the burst loop
 					break
 
@@ -497,6 +497,8 @@ func _handle_per_shot_delay_and_bloom(shot_count: int, proceed_to_spawn: bool = 
 func _apply_barrage_logic() -> void:
 	_do_firing_fx() # Do these two methods before potential cluster delays
 	_apply_firing_effect_to_entity()
+
+	var effect_src: EffectSource = stats.effect_source
 
 	var angular_spread_radians: float = deg_to_rad(stats.s_mods.get_stat("angular_spread"))
 	var close_to_360_adjustment: int = 0 if stats.s_mods.get_stat("angular_spread") > 310 else 1
@@ -519,7 +521,7 @@ func _apply_barrage_logic() -> void:
 			# Handle the mouse-position homing logic if needed
 			if stats.projectile_logic.homing_method == "Mouse Position":
 				mouse_scan_area_targets.clear()
-				enable_mouse_area()
+				_enable_mouse_area()
 				var tree: SceneTree = get_tree()
 				for j: int in range(2): await tree.physics_frame
 				proj.mouse_scan_targets = mouse_scan_area_targets
@@ -530,11 +532,13 @@ func _apply_barrage_logic() -> void:
 			if stats.barrage_proj_delay > 0:
 				await get_tree().create_timer(max(0.01, stats.barrage_proj_delay), false, false, false).timeout
 		else:
+			var hitscan_scene: PackedScene = stats.hitscan_logic.hitscan_scn
+
 			var rotation_adjustment: float = -angular_spread_radians / 2 + (i * spread_segment_width)
 			if stats.do_cluster_barrage:
 				rotation_adjustment = randf() * spread_segment_width
 
-			var hitscan: Hitscan = Hitscan.create(self, rotation_adjustment)
+			var hitscan: Hitscan = Hitscan.create(hitscan_scene, effect_src, ProjectileWeapon.new(), source_entity, proj_origin_node.global_position, rotation_adjustment if stats.s_mods.get_stat("barrage_count") > 1 else 0.0, stats.firing_mode == "Charge") # TODO I made the 3rd arg a .new() when it should be "self".
 			_spawn_hitscan(hitscan)
 
 	firing_in_progress = false
@@ -1012,6 +1016,3 @@ func _update_ammo_ui() -> void:
 		ammo_ui.update_mag_ammo(count)
 		ammo_ui.calculate_inv_ammo()
 #endregion
-
-func reset_animation_state() -> void:
-	anim_player.play("RESET")
