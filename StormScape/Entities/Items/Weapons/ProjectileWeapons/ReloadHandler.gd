@@ -1,30 +1,59 @@
 extends Node
 class_name ReloadHandler
 
-signal reload_started
 signal reload_finished
 
 var weapon: ProjectileWeapon
 var anim_player: AnimationPlayer
 var auto_decrementer: AutoDecrementer
+var reload_dur_timer: Timer
+var before_single_reload_timer: Timer
 
 
-func initialize(new_weapon: ProjectileWeapon) -> void:
-	weapon = new_weapon
+func initialize(parent_weapon: ProjectileWeapon) -> void:
+	weapon = parent_weapon
 	anim_player = weapon.anim_player
 	auto_decrementer = weapon.source_entity.inv.auto_decrementer
+	reload_dur_timer = TimerHelpers.create_one_shot_timer(weapon, -1)
+
+	# When we don't have a before_single_reload anim but we do have the delay, use this timer instead
+	before_single_reload_timer = TimerHelpers.create_one_shot_timer(weapon, -1, _on_reload_animation_finished.bind("before_single_reload"))
+
+func _ready() -> void:
+	if weapon.source_entity is Player:
+		weapon.source_entity.inv.auto_decrementer.recharge_completed.connect(_on_ammo_recharge_delay_completed)
 
 func attempt_reload() -> void:
-	# If we already have a full mag or there is no more reserve ammo in the inventory to reload with, return
-	if _mag_is_full() or _get_more_reload_ammo(1, false) == 0:
+	if weapon.stats.ammo_type in [ProjWeaponResource.ProjAmmoType.STAMINA, ProjWeaponResource.ProjAmmoType.SELF, ProjWeaponResource.ProjAmmoType.CHARGES]:
+		reload_finished.emit()
 		return
-	reload_started.emit()
+	if not weapon.pullout_delay_timer.is_stopped() or _mag_is_full() or _get_more_reload_ammo(1, false) == 0:
+		reload_finished.emit()
+		return
+
+	_start_reload_dur_timer()
 
 	match weapon.stats.reload_type:
-		"Magazine":
+		ProjWeaponResource.ReloadType.MAGAZINE:
 			_start_magazine_reload()
-		"Single":
+		ProjWeaponResource.ReloadType.SINGLE:
 			_start_single_reload_delay()
+
+func _start_reload_dur_timer() -> void:
+	var total_reload_duration: float
+	match weapon.stats.reload_type:
+		ProjWeaponResource.ReloadType.MAGAZINE:
+			total_reload_duration = weapon.stats.s_mods.get_stat("mag_reload_time")
+		ProjWeaponResource.ReloadType.SINGLE:
+			var needed: int = _get_needed_single_reloads_count()
+			var single_proj_reload_time: float = weapon.stats.s_mods.get_stat("single_proj_reload_time")
+			total_reload_duration = weapon.stats.before_single_reload_time + (needed * single_proj_reload_time)
+
+	reload_dur_timer.start(total_reload_duration)
+
+func cancel_reload() -> void:
+	do_post_reload_animation_cleanup()
+	reload_finished.emit()
 
 func _start_magazine_reload() -> void:
 	var reload_time: float = weapon.stats.s_mods.get_stat("mag_reload_time")
@@ -35,7 +64,10 @@ func _start_single_reload_delay() -> void:
 	if delay_time <= 0:
 		_start_single_reload()
 	else:
-		_start_reload_animation("before_single_reload", delay_time)
+		if anim_player.has_animation("before_single_reload"):
+			_start_reload_animation("before_single_reload", delay_time)
+		else:
+			before_single_reload_timer.start()
 
 func _start_single_reload() -> void:
 	var reloads_needed: int = _get_needed_single_reloads_count()
@@ -48,6 +80,7 @@ func _start_single_reload() -> void:
 			anim_name = "single_reload"
 		_start_reload_animation(anim_name, reload_time)
 	else:
+		do_post_reload_animation_cleanup()
 		reload_finished.emit()
 
 func _mag_is_full() -> bool:
@@ -62,11 +95,15 @@ func _get_more_reload_ammo(max_amount_needed: int, take_from_inventory: bool = t
 		return weapon.source_entity.inv.get_more_ammo(max_amount_needed, take_from_inventory, weapon.stats.ammo_type)
 
 func _start_reload_animation(anim_name: String, duration: float) -> void:
+	# Sometimes overheat animation can mess with the scaling
 	if anim_player.current_animation == "overheat":
 		weapon.reset_animation_state()
 
 	anim_player.speed_scale = 1.0 / duration
 	weapon.source_entity.hands.off_hand_sprite.self_modulate.a = 0.0
+
+	if anim_player.animation_finished.is_connected(_on_reload_animation_finished):
+		anim_player.animation_finished.disconnect(_on_reload_animation_finished)
 	anim_player.animation_finished.connect(_on_reload_animation_finished, CONNECT_ONE_SHOT)
 	anim_player.play(anim_name)
 
@@ -86,6 +123,7 @@ func _complete_mag_reload() -> void:
 	var ammo_needed: int = mag_size - weapon.stats.ammo_in_mag
 	var ammo_available: int = _get_more_reload_ammo(ammo_needed)
 	weapon.update_mag_ammo(weapon.stats.ammo_in_mag + ammo_available)
+	do_post_reload_animation_cleanup()
 	reload_finished.emit()
 
 func _complete_single_reload() -> void:
@@ -109,8 +147,12 @@ func _get_needed_single_reloads_count() -> int:
 	return reloads_needed
 
 ## Reshows the hand component's off hand and hides the local reload hand. Also resets the animation state.
-func _do_post_reload_animation_cleanup() -> void:
-	weapon.overhead_ui.update_reload_progress(0)
+func do_post_reload_animation_cleanup() -> void:
+	weapon.reset_animation_state()
+
+	reload_dur_timer.stop()
+	before_single_reload_timer.stop()
+	update_reload_progress_ui()
 	weapon.source_entity.hands.off_hand_sprite.self_modulate.a = 1.0
 
 	if weapon.reload_off_hand:
@@ -118,25 +160,11 @@ func _do_post_reload_animation_cleanup() -> void:
 	if weapon.reload_main_hand:
 		weapon.reload_main_hand.hide()
 
-	weapon.reset_animation_state()
-
-## When an ammo recharge delay is finished, this is called to add more ammo to the mag.
-## If the ammo is then full at that point, we return false back to the caller to let them know we don't need more.
-func _on_ammo_recharge_delay_completed() -> bool:
-	var mag_size: int = weapon.stats.s_mods.get_stat("mag_size")
-	var ammo_needed: int = mag_size - weapon.stats.ammo_in_mag
-	var auto_ammo_count: int = int(weapon.stats.s_mods.get_stat("auto_ammo_count"))
-	ammo_needed = min(ammo_needed, auto_ammo_count)
-
-	if weapon.stats.recharge_uses_inv:
-		var retrieved_ammo: int = _get_more_reload_ammo(ammo_needed, true)
-		weapon.update_mag_ammo(weapon.stats.ammo_in_mag + retrieved_ammo)
-	else:
-		weapon.update_mag_ammo(min(mag_size, weapon.stats.ammo_in_mag + auto_ammo_count))
-
-	if weapon.stats.ammo_in_mag >= mag_size:
-		return false
-	return true
+## When an ammo recharge delay is finished, this is called to resync the ammo in mag with the ammo ui.
+func _on_ammo_recharge_delay_completed(item_id: StringName) -> void:
+	if item_id != str(weapon.stats.session_uid):
+		return
+	weapon.update_mag_ammo(weapon.stats.ammo_in_mag)
 
 ## When we have recently fired, we should not instantly keep recharging ammo, so we send a cooldown to the recharger.
 func restart_ammo_recharge_delay() -> void:
@@ -145,7 +173,34 @@ func restart_ammo_recharge_delay() -> void:
 ## This is called (usually after firing) to request a new ammo recharge instance. It is also called
 ## when first entering if we aren't at max ammo already.
 func request_ammo_recharge() -> void:
+	if weapon.stats.ammo_type in [ProjWeaponResource.ProjAmmoType.SELF, ProjWeaponResource.ProjAmmoType.STAMINA]:
+		return
+	if weapon.stats.ammo_in_mag >= weapon.stats.s_mods.get_stat("mag_size"):
+		return
+
 	var recharge_dur: float = weapon.stats.s_mods.get_stat("auto_ammo_interval")
 	if recharge_dur <= 0:
 		return
-	auto_decrementer.request_recharge(str(weapon.stats.session_uid), recharge_dur, _on_ammo_recharge_delay_completed)
+	auto_decrementer.request_recharge(str(weapon.stats.session_uid), weapon.stats)
+
+func update_reload_progress_ui() -> void:
+	if (weapon.overhead_ui == null) or (weapon.stats.hide_reload_ui):
+		return
+
+	if reload_dur_timer.is_stopped():
+		weapon.overhead_ui.update_reload_progress(0)
+
+		# Only want to update the cursor tint here if we aren't allowed to show cooldowns on the cursor tint
+		if not weapon.stats.show_cursor_cooldown:
+			CursorManager.update_vertical_tint_progress(0)
+		return
+
+	var total_reload: float = reload_dur_timer.wait_time
+	var time_left: float = reload_dur_timer.time_left
+	var progress: int = int((1.0 - (time_left / total_reload)) * 100)
+
+	weapon.overhead_ui.update_reload_progress(progress)
+
+	# Only want to show the reload on the cursor tint if we aren't allowed to show cooldowns on the cursor tint
+	if not weapon.stats.show_cursor_cooldown:
+		CursorManager.update_vertical_tint_progress(progress)

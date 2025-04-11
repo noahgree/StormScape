@@ -258,10 +258,9 @@ _data = {
 radius = 2.0
 height = 16.0
 
-[node name="EagleEye" type="Node2D" node_paths=PackedStringArray("sprites_to_tint")]
+[node name="EagleEye" type="Node2D"]
 script = ExtResource("1_37k38")
 proj_origin = Vector2(16, -2)
-sprites_to_tint = [NodePath("ItemSprite")]
 
 [node name="ItemSprite" type="AnimatedSprite2D" parent="."]
 light_mask = 2

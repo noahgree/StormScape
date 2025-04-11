@@ -14,47 +14,6 @@ var is_swinging: bool = false ## Whether we are currently swinging the weapon in
 var recent_swing_type: RECENT_SWING_TYPE = RECENT_SWING_TYPE.NORMAL ## The most recent type of usage.
 
 
-## Sets up the base values for the stat mod cache so that weapon mods can be added and managed properly.
-static func initialize_stats_resource(stats_resource: MeleeWeaponResource) -> void:
-	stats_resource.s_mods = stats_resource.s_mods.duplicate()
-	stats_resource.effect_source = stats_resource.effect_source.duplicate()
-	stats_resource.charge_effect_source = stats_resource.charge_effect_source.duplicate()
-	stats_resource.original_status_effects = stats_resource.effect_source.status_effects.duplicate()
-	stats_resource.original_charge_status_effects = stats_resource.charge_effect_source.status_effects.duplicate()
-
-	var normal_moddable_stats: Dictionary[StringName, float] = {
-		&"stamina_cost" : stats_resource.stamina_cost,
-		&"cooldown" : stats_resource.cooldown,
-		&"use_speed" : stats_resource.use_speed,
-		&"swing_angle" : stats_resource.swing_angle,
-		&"base_damage" : stats_resource.effect_source.base_damage,
-		&"base_healing" : stats_resource.effect_source.base_healing,
-		&"crit_chance" : stats_resource.effect_source.crit_chance,
-		&"armor_penetration" : stats_resource.effect_source.armor_penetration,
-		&"object_damage_mult" : stats_resource.effect_source.object_damage_mult,
-		&"pullout_delay" : stats_resource.pullout_delay,
-		&"rotation_lerping" : stats_resource.rotation_lerping
-	}
-	var charge_moddable_stats: Dictionary[StringName, float] = {
-		&"min_charge_time" : stats_resource.min_charge_time,
-		&"charge_stamina_cost" : stats_resource.charge_stamina_cost,
-		&"charge_use_cooldown" : stats_resource.charge_use_cooldown,
-		&"charge_use_speed" : stats_resource.charge_use_speed,
-		&"charge_swing_angle" : stats_resource.charge_swing_angle,
-		&"charge_base_damage" : stats_resource.charge_effect_source.base_damage,
-		&"charge_base_healing" : stats_resource.charge_effect_source.base_healing,
-		&"charge_crit_chance" : stats_resource.charge_effect_source.crit_chance,
-		&"charge_armor_penetration" : stats_resource.charge_effect_source.armor_penetration,
-		&"charge_object_damage_mult" : stats_resource.charge_effect_source.object_damage_mult
-	}
-
-	stats_resource.s_mods.add_moddable_stats(normal_moddable_stats)
-	stats_resource.s_mods.add_moddable_stats(charge_moddable_stats)
-
-	if stats_resource.weapon_mods_need_to_be_readded_after_save:
-		WeaponModsManager.reset_original_arrays_after_save(stats_resource, null)
-		stats_resource.weapon_mods_need_to_be_readded_after_save = false
-
 func _ready() -> void:
 	if Engine.is_editor_hint():
 		return

@@ -6,13 +6,14 @@ signal warmup_finished
 var weapon: ProjectileWeapon
 var anim_player: AnimationPlayer
 var auto_decrementer: AutoDecrementer
-var warmup_timer: Timer = TimerHelpers.create_one_shot_timer(self, 1, _on_warmup_timer_timeout)
+var warmup_timer: Timer
 
 
-func initialize(new_weapon: ProjectileWeapon) -> void:
-	weapon = new_weapon
+func initialize(parent_weapon: ProjectileWeapon) -> void:
+	weapon = parent_weapon
 	anim_player = weapon.anim_player
 	auto_decrementer = weapon.source_entity.inv.auto_decrementer
+	warmup_timer = TimerHelpers.create_one_shot_timer(weapon, 1, _on_warmup_timer_timeout)
 
 func needs_warmup() -> bool:
 	return weapon.stats.s_mods.get_stat("initial_fire_rate_delay") > 0

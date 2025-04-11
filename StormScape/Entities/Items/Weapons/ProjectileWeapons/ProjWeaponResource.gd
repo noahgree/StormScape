@@ -12,6 +12,9 @@ enum ProjAmmoType { ## The types of projectile ammo.
 enum FiringType {
 	SEMI_AUTO, AUTO, CHARGE
 }
+enum ReloadType {
+	MAGAZINE, SINGLE
+}
 
 @export var proj_weapon_type: ProjWeaponType = ProjWeaponType.PISTOL ## The kind of projectile weapon this is.
 @export var firing_mode: FiringType = FiringType.SEMI_AUTO ## Whether the weapon should fire projectiles once per click or allow holding down for auto firing logic.
@@ -21,14 +24,14 @@ enum FiringType {
 @export_range(0, 10, 0.01, "hide_slider", "or_greater", "suffix:seconds") var firing_duration: float = 0.1 ## How long it takes to release the projectile after initiating the action. Determines the animation speed as well. Set to 0 by default.
 @export_range(0, 30, 0.01, "hide_slider", "or_greater", "suffix:seconds") var fire_cooldown: float = 0.05 ## Time between fully auto projectile emmision. Also the minimum time that must elapse between clicks if set to semi-auto.
 @export_range(0.1, 10, 0.01, "hide_slider", "or_greater", "suffix:seconds") var min_charge_time: float = 1 ## How long must the activation be held down before releasing the charge shot. [b]Only used when firing mode is set to CHARGE[/b].
+@export var auto_do_charge_use: bool = false ## Whether to auto start a charge use when min_charge_time is reached.
 @export_subgroup("Firing Animations")
 @export var one_frame_per_fire: bool = false ## When true, the sprite frames will only advance one frame when firing normally.
-@export var override_anim_dur: float = 0 ## When greater than 0, the fire animation will run at this override time per loop.
-@export var anim_speed_mult: float = 1.0 ## Multiplies the speed scale of the firing animation.
-@export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var post_fire_anim_delay: float = 0 ## The delay after the firing duration ends before starting the post-fire animation if one exists.
+@export var fire_anim_dur: float = 0 ## When greater than 0, the fire animation will run for this override time.
+@export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var post_fire_fx_delay: float = 0 ## The delay after the firing duration ends before starting the post-fire animation and fx if one exists.
 @export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var post_fire_anim_dur: float = 0 ## The override time for how long the animation should be that plays after firing (if it exists). Anything greater than 0 activates this override.
 @export_subgroup("Entity Effects")
-@export var post_firing_effect: StatusEffect = null ## The status effect to apply to the source entity after firing.
+@export var firing_stat_effect: StatusEffect = null ## The status effect to apply to the source entity when firing.
 @export var charging_stat_effect: StatusEffect = null ## A status effect to apply to the entity while charging. Typically to slow them.
 @export_subgroup("Firing FX")
 @export var firing_cam_fx: CamFXResource ## The resource defining how the camera should react to firing.
@@ -36,7 +39,6 @@ enum FiringType {
 @export var casing_tint: Color = Color.WHITE ## The tint to apply to the casing texture. White means no tint.
 @export var firing_sound: String = "" ## The sound to play when firing.
 @export var post_fire_sound: String = "" ## The sound to play after firing before the cooldown ends.
-@export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var post_fire_sound_delay: float = 0 ## When greater than 0, the post-firing sound waits this delay after the firing duration ends before playing.
 @export var charging_sound: String = "" ## The sound to play when charging.
 
 @export_group("Effect & Logic Resources")
@@ -47,12 +49,12 @@ enum FiringType {
 @export_group("Ammo & Reloading")
 @export var ammo_type: ProjWeaponResource.ProjAmmoType = ProjAmmoType.NONE ## The kind of ammo to consume on use. Leave empty to consider the ammo type to be "None" (or "Self" when the toggle is checked below as well).
 @export var mag_size: int = 30  ## Number of normal attack executions that can happen before a reload is needed.
-@export_enum("Magazine", "Single") var reload_type: String = "Magazine" ## Whether to reload over time or all at once at the end.
+@export var reload_type: ReloadType = ReloadType.MAGAZINE ## Whether to reload over time or all at once at the end.
 @export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var mag_reload_time: float = 1.0 ## How long it takes to reload an entire mag.
-@export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var single_proj_reload_time: float = 0.25 ## How long it takes to reload a single projectile if the reload type is set to "single".
+@export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var single_proj_reload_time: float = 0.25 ## How long it takes to reload a single projectile if the reload type is set to SINGLE.
 @export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var before_single_reload_time: float = 0.5 ## An additional delay that occurs before the first single proj is reloaded after triggering a reload.
 @export var single_reload_quantity: int = 1 ## How much to add to the mag when the single proj timer elapses each time.
-@export var must_reload_fully: bool = false ## When true, if the reload method is "Single", the reload cannot be stopped while in progress and must load all single projectiles in before being able to fire again.
+@export var must_reload_fully: bool = false ## When true, if the reload method is SINGLE, the reload cannot be stopped while in progress and must load all single projectiles in before being able to fire again.
 @export var stamina_use_per_proj: float = 0.5 ## How much stamina is needed per projectile when stamina is the ammo type.
 @export var dont_consume_ammo: bool = false ## When true, this acts like infinite ammo where the weapon doesn't decrement the ammo in mag upon firing.
 @export_subgroup("Recharging")
@@ -60,9 +62,6 @@ enum FiringType {
 @export var auto_ammo_count: int = 1 ## How much ammo to grant after the interval is up.
 @export_range(0.05, 1000, 0.01, "suffix:seconds", "hide_slider", "or_greater") var auto_ammo_delay: float = 0.5 ## How long after firing must we wait before the grant interval countdown starts.
 @export var recharge_uses_inv: bool = false ## When true, the ammo will recharge by consuming ammo from the inventory. When none is left, the recharges will stop.
-@export_subgroup("Reloading Animations")
-@export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var reload_anim_dur: float = 0 ## The override time for how long the animation should be that plays during a reload (if it exists). Anything greater than 0 activates this override.
-@export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var before_single_reload_anim_dur: float = 0 ## The override time for how long the animation should be that plays during the delay before a single reload (if it exists). Anything greater than 0 activates this override.
 @export_subgroup("UI")
 @export var hide_ammo_ui: bool = false ## When a player uses this, should the ammo UI be hidden.
 @export var hide_reload_ui: bool = false ## When a player uses this, should the reloading UI be hidden.

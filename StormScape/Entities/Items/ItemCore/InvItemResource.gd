@@ -20,10 +20,10 @@ func _init(item_stats: ItemResource = null, item_quantity: int = 1, placeholder:
 	if not placeholder:
 		if stats is ProjWeaponResource:
 			if stats.s_mods.base_values.is_empty(): # Otherwise it undoes any changes to values made my mods
-				ProjectileWeapon.initialize_stats_resource(stats)
+				InitializationHelpers.initialize_proj_wpn_stats_resource(stats)
 		elif stats is MeleeWeaponResource:
 			if stats.s_mods.base_values.is_empty():
-				MeleeWeapon.initialize_stats_resource(stats)
+				InitializationHelpers.initialize_melee_wpn_stats_resource(stats)
 
 ## Triggers the session uid generator to give the stats for this inv item a new suid.
 func assign_unique_suid() -> InvItemResource:

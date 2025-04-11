@@ -184,11 +184,12 @@ point_count = 2
 [resource]
 script = ExtResource("18_1rmpi")
 proj_weapon_type = 0
-firing_mode = "Auto"
+firing_mode = 1
 projectile_scn = ExtResource("5_xjmn2")
 firing_duration = 0.06
 fire_cooldown = 0.06
 min_charge_time = 1.0
+auto_do_charge_use = false
 one_frame_per_fire = false
 override_anim_dur = 0.0
 anim_speed_mult = 1.0

@@ -2,6 +2,10 @@ extends Node
 class_name AutoDecrementer
 ## Manages entity-specific item cooldowns, warmups, blooming, overheating, and recharging via item identifiers.
 
+signal cooldown_ended(item_id: StringName, cooldown_title: String) ## Emitted when any cooldown ends.
+signal overheat_empty(item_id: StringName) ## Emitted when any overheat reaches 0 and is removed.
+signal recharge_completed(item_id: StringName) ## Emitted when any recharge completes.
+
 var cooldowns: Dictionary[StringName, Dictionary] = {} ## Represents any active cooldowns where the key is an item's id.
 var warmups: Dictionary[StringName, Dictionary] = {} ## Represents any active warmups where the key is an item's id.
 var blooms: Dictionary[StringName, Dictionary] = {} ## Represents any active blooms where the key is an item's id.
@@ -20,11 +24,10 @@ func process(delta: float) -> void:
 
 #region Cooldowns
 ## Adds a cooldown to the dictionary.
-func add_cooldown(item_id: StringName, duration: float, finished_callable: Callable, title: String = "default") -> void:
+func add_cooldown(item_id: StringName, duration: float, title: String = "default") -> void:
 	cooldowns[item_id] = {
 		&"duration" : duration,
 		&"original_duration" : duration,
-		&"finished_callable" : finished_callable,
 		&"source_title" : title
 	}
 
@@ -41,10 +44,9 @@ func _update_cooldowns(delta: float) -> void:
 			to_remove.append(item_id)
 
 	for item_id: StringName in to_remove:
-		var finished_callable: Callable = cooldowns[item_id].finished_callable
-		if finished_callable.is_valid():
-			finished_callable.call(cooldowns[item_id].source_title)
+		var cooldown_entry: Dictionary = cooldowns[item_id]
 		cooldowns.erase(item_id)
+		cooldown_ended.emit(item_id, cooldown_entry.source_title)
 
 ## Returns a positive float representing the remaining cooldown or 0 if one does not exist.
 func get_cooldown(item_id: StringName) -> float:
@@ -133,8 +135,7 @@ func get_bloom(item_id: StringName) -> float:
 
 #region Overheats
 ## Adds a overheat to the dictionary.
-func add_overheat(item_id: StringName, amount: float, decrease_rate: Curve, decrease_delay: float,
-					finished_callable: Callable) -> void:
+func add_overheat(item_id: StringName, amount: float, decrease_rate: Curve, decrease_delay: float) -> void:
 	var new_value: float
 	if item_id in overheats:
 		new_value = min(1, overheats[item_id].progress + amount)
@@ -144,15 +145,14 @@ func add_overheat(item_id: StringName, amount: float, decrease_rate: Curve, decr
 	overheats[item_id] = {
 		&"progress" : new_value,
 		&"decrease_curve" : decrease_rate,
-		&"decrease_delay" : decrease_delay,
-		&"finished_callable" : finished_callable
+		&"decrease_delay" : decrease_delay
 	}
 
 ## Called every frame to update each overheat value and its potential delay counter.
 func _update_overheats(delta: float) -> void:
 	var to_remove: Array[StringName] = []
 	for item_id: StringName in overheats.keys():
-		var current: Dictionary[StringName, Variant] = overheats[item_id]
+		var current: Dictionary = overheats[item_id]
 		if current.decrease_delay <= 0:
 			current.progress -= delta * max(0.01, current.decrease_curve.sample_baked(current.progress))
 		else:
@@ -162,10 +162,8 @@ func _update_overheats(delta: float) -> void:
 			to_remove.append(item_id)
 
 	for item_id: StringName in to_remove:
-		var finished_callable: Callable = overheats[item_id].finished_callable
-		if finished_callable.is_valid():
-			finished_callable.call()
 		overheats.erase(item_id)
+		overheat_empty.emit(item_id)
 
 ## Returns a positive float representing the current overheat value or 0 if one does not exist.
 func get_overheat(item_id: StringName) -> float:
@@ -174,13 +172,16 @@ func get_overheat(item_id: StringName) -> float:
 
 #region Recharges
 ## Adds a recharge request to the dictionary.
-func request_recharge(item_id: StringName, duration: float, finished_callable: Callable) -> void:
-	if item_id not in recharges:
+func request_recharge(item_id: StringName, stats: WeaponResource) -> void:
+	if item_id in recharges:
+		recharges[item_id].stats = stats
+	else:
+		var auto_ammo_interval: float = stats.s_mods.get_stat("auto_ammo_interval")
 		recharges[item_id] = {
-			&"progress" : duration,
-			&"original_duration" : duration,
+			&"progress" : auto_ammo_interval,
+			&"original_duration" : auto_ammo_interval,
 			&"decrease_delay" : 0,
-			&"finished_callable" : finished_callable
+			&"stats" : stats
 		}
 
 ## Adds a delay to the recharge.
@@ -199,15 +200,32 @@ func _update_recharges(delta: float) -> void:
 			current.decrease_delay -= delta
 
 		if current.progress <= 0:
-			var finished_callable: Callable = current.finished_callable
-			if finished_callable.is_valid():
-				var is_full: bool = finished_callable.call()
-				if is_full:
+			if is_instance_valid(current.stats):
+				var mag_size: int = current.stats.s_mods.get_stat("mag_size")
+				var ammo_needed: int = mag_size - current.stats.ammo_in_mag
+				var auto_ammo_count: int = int(current.stats.s_mods.get_stat("auto_ammo_count"))
+				ammo_needed = min(ammo_needed, auto_ammo_count)
+
+				if current.stats.recharge_uses_inv:
+					var retrieved_ammo: int = inv.get_more_ammo(ammo_needed, true, current.stats.ammo_type)
+					if retrieved_ammo == 0:
+						# Don't keep trying to recharge if we are out of inventory ammo
+						to_remove.append(item_id)
+					current.stats.ammo_in_mag += retrieved_ammo
+				else:
+					current.stats.ammo_in_mag = min(mag_size, current.stats.ammo_in_mag + auto_ammo_count)
+
+				if current.stats.ammo_in_mag >= mag_size:
+					# Don't keep recharging if we are at max ammo
 					to_remove.append(item_id)
 				else:
-					current.progress = current.original_duration
+					# If we aren't at max ammo, reset the progress and charge up again
+					current.progress = current.stats.s_mods.get_stat("auto_ammo_interval")
 			else:
+				# Don't keep trying to recharge if the stats are no longer valid
 				to_remove.append(item_id)
+
+			recharge_completed.emit(item_id)
 
 	for item_id: StringName in to_remove:
 		recharges.erase(item_id)

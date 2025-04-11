@@ -30,18 +30,18 @@ func _ready() -> void:
 		sprite.hide()
 	super._ready()
 
-func _fire() -> void:
-	if returned:
-		super._fire()
-
-func _charge_fire() -> void:
-	if returned:
-		super._charge_fire()
-
-func _spawn_projectile(proj: Projectile) -> void:
-	returned = false
-	proj.source_weapon_instance = self
-	super._spawn_projectile(proj)
+#func _fire() -> void:
+	#if returned:
+		#super._fire()
+#
+#func _charge_fire() -> void:
+	#if returned:
+		#super._charge_fire()
+#
+#func _spawn_projectile(proj: Projectile) -> void:
+	#returned = false
+	#proj.source_weapon_instance = self
+	#super._spawn_projectile(proj)
 
 func _on_tree_exiting() -> void:
 	if not returned:
