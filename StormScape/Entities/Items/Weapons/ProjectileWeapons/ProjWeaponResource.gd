@@ -9,15 +9,18 @@ enum ProjWeaponType { ## The kinds of projectile weapons.
 enum ProjAmmoType { ## The types of projectile ammo.
 	NONE, SELF, LIGHT, MEDIUM, HEAVY, SHELL, ROCKET, MAGIC, ION_CHARGE, STAMINA, CHARGES
 }
+enum FiringType {
+	SEMI_AUTO, AUTO, CHARGE
+}
 
 @export var proj_weapon_type: ProjWeaponType = ProjWeaponType.PISTOL ## The kind of projectile weapon this is.
-@export_enum("Semi Auto", "Auto", "Charge") var firing_mode: String = "Semi Auto" ## Whether the weapon should fire projectiles once per click or allow holding down for auto firing logic.
+@export var firing_mode: FiringType = FiringType.SEMI_AUTO ## Whether the weapon should fire projectiles once per click or allow holding down for auto firing logic.
 @export var projectile_scn: PackedScene ## The projectile scene to spawn on firing.
 
 @export_group("Firing Details")
 @export_range(0, 10, 0.01, "hide_slider", "or_greater", "suffix:seconds") var firing_duration: float = 0.1 ## How long it takes to release the projectile after initiating the action. Determines the animation speed as well. Set to 0 by default.
 @export_range(0, 30, 0.01, "hide_slider", "or_greater", "suffix:seconds") var fire_cooldown: float = 0.05 ## Time between fully auto projectile emmision. Also the minimum time that must elapse between clicks if set to semi-auto.
-@export_range(0.1, 10, 0.01, "hide_slider", "or_greater", "suffix:seconds") var min_charge_time: float = 1 ## How long must the activation be held down before releasing the charge shot. [b]Only used when firing mode is set to "Charge"[/b].
+@export_range(0.1, 10, 0.01, "hide_slider", "or_greater", "suffix:seconds") var min_charge_time: float = 1 ## How long must the activation be held down before releasing the charge shot. [b]Only used when firing mode is set to CHARGE[/b].
 @export_subgroup("Firing Animations")
 @export var one_frame_per_fire: bool = false ## When true, the sprite frames will only advance one frame when firing normally.
 @export var override_anim_dur: float = 0 ## When greater than 0, the fire animation will run at this override time per loop.
@@ -76,7 +79,7 @@ enum ProjAmmoType { ## The types of projectile ammo.
 @export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var bloom_decrease_delay: float = 1.0 ## How long after the last bloom increase must we wait before starting to decrease it.
 
 @export_group("Warmup Logic")
-@export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var initial_fire_rate_delay: float = 0 ## At the lowest warmup level, how long must we wait before a shot fires. This only works when the firing mode is set to "Auto".
+@export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var initial_fire_rate_delay: float = 0 ## At the lowest warmup level, how long must we wait before a shot fires. This only works when the firing mode is set to AUTO.
 @export var warmup_delay_curve: Curve ## X value is warmup amount (0-1), Y value is multiplier on initial_fire_rate_delay.
 @export var warmup_increase_rate: Curve ## A curve for determining how much warmth to add per shot depending on current warmup.
 @export var warmup_decrease_rate: Curve ## How much warmup do we remove per second based on current warmup.

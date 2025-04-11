@@ -37,7 +37,7 @@ static func create(source_wpn: ProjectileWeapon, rot_offset: float) -> Hitscan:
 	hitscan.stats = source_wpn.stats.hitscan_logic
 	hitscan.s_mods = source_wpn.stats.s_mods
 
-	hitscan.is_charge_fire = source_wpn.stats.firing_mode == "Charge"
+	hitscan.is_charge_fire = source_wpn.stats.firing_mode == ProjWeaponResource.FiringType.CHARGE
 
 	if source_wpn.stats.allow_hitscan_holding:
 		hitscan.holding_allowed = true

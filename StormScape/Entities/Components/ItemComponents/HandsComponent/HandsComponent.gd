@@ -21,8 +21,7 @@ class_name HandsComponent
 var equipped_item: EquippableItem = null ## The currently equipped equippable item that the entity is holding.
 var current_x_direction: int = 1 ## A pos or neg toggle for which direction the anim vector has us facing. Used to flip the x-scale.
 var scale_is_lerping: bool = false ## Whether or not the scale is currently lerping between being negative or positive.
-var is_trigger_held: bool = false ## If we are currently considering the trigger button to be held down.
-var been_holding_time: float = 0 ## How long we have considered the trigger button to have been held down so far.
+var trigger_pressed: bool = false ## If we are currently considering the trigger button to be held down.
 var should_rotate: bool = true ## If the equipped item should rotate with the character.
 var starting_hands_component_height: float ## The height relative to the bottom of the entity sprite that this component operates at.
 var starting_off_hand_sprite_height: float ## The height relative to the hands component scene that the off hand sprite node starts at (and is usually animated from).
@@ -53,8 +52,7 @@ func _ready() -> void:
 	drawn_off_hand.visible = false
 
 	SignalBus.focused_ui_opened.connect(func() -> void:
-		is_trigger_held = false
-		been_holding_time = 0
+		trigger_pressed = false
 		)
 
 	starting_hands_component_height = position.y
@@ -64,13 +62,12 @@ func _ready() -> void:
 func handle_trigger_pressed() -> void:
 	if equipped_item != null and equipped_item.enabled and not scale_is_lerping:
 		equipped_item.activate()
-	is_trigger_held = true
+	trigger_pressed = true
 
 func handle_trigger_released() -> void:
 	if equipped_item != null and equipped_item.enabled and not scale_is_lerping:
-		equipped_item.release_hold_activate(been_holding_time)
-	is_trigger_held = false
-	been_holding_time = 0
+		equipped_item.release_hold_activate()
+	trigger_pressed = false
 
 func handle_reload() -> void:
 	if equipped_item != null and equipped_item is ProjectileWeapon:
@@ -84,37 +81,26 @@ func _unhandled_input(event: InputEvent) -> void:
 	if not entity is Player:
 		return
 
-	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
+	if event is InputEventMouseMotion:
+		handle_aim(CursorManager.get_cursor_mouse_position())
+	elif event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
 		if event.is_pressed():
 			handle_trigger_pressed()
 		else:
 			handle_trigger_released()
-
-	if Input.is_action_pressed("reload"):
+	elif event.is_action_pressed("reload"):
 		handle_reload()
 #endregion
 
+## Continuously sends the hold activate call when the trigger is pressed as long as the focused ui is fully closed
+## and the equipped item is enabled and not lerping.
 func _process(delta: float) -> void:
 	if Globals.focused_ui_is_open or Globals.focused_ui_is_closing_debounce:
 		return
+	if (equipped_item == null) or (not equipped_item.enabled) or (scale_is_lerping) or (not trigger_pressed):
+		return
 
-	if entity is Player:
-		handle_aim(CursorManager.get_cursor_mouse_position())
-
-	if equipped_item != null:
-		if not equipped_item.enabled:
-			return
-
-		if is_trigger_held:
-			been_holding_time += delta
-			if not scale_is_lerping:
-				equipped_item.hold_activate(been_holding_time)
-			return
-		elif Input.is_action_just_released("primary"):
-			if not scale_is_lerping:
-				equipped_item.release_hold_activate(been_holding_time)
-
-		been_holding_time = 0
+	equipped_item.hold_activate(delta)
 
 ## Removes the currently equipped item after letting it clean itself up.
 func unequip_current_item() -> void:
@@ -127,8 +113,7 @@ func unequip_current_item() -> void:
 		entity.overhead_ui.reset_all()
 
 	if equipped_item != null:
-		is_trigger_held = false
-		been_holding_time = 0
+		trigger_pressed = false
 		drawn_off_hand.visible = false
 		equipped_item.exit()
 		equipped_item.queue_free()
@@ -153,7 +138,6 @@ func on_equipped_item_change(inv_item_slot: Slot) -> void:
 	main_hand.rotation = 0
 	entity.facing_component.rotation_lerping_factor = equipped_item.stats.s_mods.get_stat("rotation_lerping") if equipped_item is Weapon else equipped_item.stats.rotation_lerping
 	scale_is_lerping = false
-	been_holding_time = 0
 
 	_change_off_hand_sprite_visibility(true)
 	_check_for_drawing_off_hand()

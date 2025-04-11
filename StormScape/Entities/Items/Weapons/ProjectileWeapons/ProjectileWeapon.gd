@@ -2,7 +2,7 @@
 @icon("res://Utilities/Debug/EditorIcons/projectile_weapon.png")
 extends Weapon
 class_name ProjectileWeapon
-## Base class for all weapons that spawn any sort of projectile or hitscan or AOE.
+## Base class for all weapons that spawn any sort of projectile or hitscan.
 
 @export var proj_origin: Vector2 = Vector2.ZERO: ## Where the projectile spawns from in local space of the weapon scene.
 	set(new_origin):
@@ -11,27 +11,14 @@ class_name ProjectileWeapon
 			proj_origin_node.position = proj_origin
 @export var casing_scene: PackedScene = preload("res://Entities/Items/Weapons/WeaponVFX/Casings/Casing.tscn")
 @export var overheat_overlays: Array[TextureRect] = []
-@export var particle_emission_extents: Vector2:
-	set(new_value):
-		particle_emission_extents = new_value
-		if debug_emission_box:
-			_debug_update_particle_emission_box()
-@export var particle_emission_origin: Vector2:
-	set(new_value):
-		particle_emission_origin = new_value
-		if debug_emission_box:
-			_debug_update_particle_emission_box()
 
-@onready var anim_player: AnimationPlayer = $AnimationPlayer ## The animation controller for this projectile weapon.
 @onready var proj_origin_node: Marker2D = $ProjectileOrigin ## The point at which projectiles should spawn from.
 @onready var casing_ejection_point: Marker2D = get_node_or_null("CasingEjectionPoint") ## The point from which casings should eject if need be.
-@onready var debug_emission_box: Polygon2D = get_node_or_null("DebugEmissionBox")
 @onready var reload_off_hand: EntityHandSprite = get_node_or_null("ReloadOffHand") ## The off hand only shown and animated during reloads.
 @onready var reload_main_hand: EntityHandSprite = get_node_or_null("ReloadMainHand") ## The main hand only shown and animated during reloads.
 @onready var firing_vfx: WeaponFiringVFX = get_node_or_null("FiringVFX") ## The vfx that spawns when firing.
 
 #region Local Vars
-const MAX_ALLOTTED_CLUSTER_DELAY: float = 0.5 ## The max amount of time between each projectile
 var firing_duration_timer: Timer = TimerHelpers.create_one_shot_timer(self) ## The timer tracking how long after we press fire before the proj spawns.
 var reload_timer: Timer = TimerHelpers.create_one_shot_timer(self, -1, _on_reload_timer_timeout) ## The timer tracking the delay between reload start and end.
 var single_reload_timer: Timer = TimerHelpers.create_one_shot_timer(self, -1, _on_single_reload_timer_timeout) ## The timer tracking the delay between single bullet reloads.
@@ -67,6 +54,12 @@ var firing_in_progress: bool = false ## When true, we are waiting on burst delay
 var bursting_in_progress: bool = false ## A second conditional for determining if firing is still ongoing due to bursting potentially taking more time than the barrage/cluster logic.
 var hitscan_cancelled: bool = false ## Flagged to true if we release the firing button during the initial firing sequence of a hitscan, especially during auto-fire when it could release during the awaits in the fire() func.
 var preloaded_sounds: Array[StringName] = [] ## The sounds kept in memory while this weapon scene is alive that must be dereferenced upon exiting the tree.
+
+var firing_handler: FiringHandler = FiringHandler.new()
+var warmup_handler: WarmupHandler = WarmupHandler.new()
+#var charging_handler:
+var reload_handler: ReloadHandler = ReloadHandler.new()
+var overheat_handler: OverheatHandler = OverheatHandler.new()
 #endregion
 
 
@@ -147,7 +140,6 @@ func _ready() -> void:
 
 	if source_entity is Player:
 		overhead_ui = source_entity.overhead_ui
-		source_entity.inv.auto_decrementer.overheat_empty.connect(_on_overheat_emptied)
 
 	if stats.ammo_type == ProjWeaponResource.ProjAmmoType.STAMINA:
 		if source_entity is DynamicEntity and not stats.hide_ammo_ui:
@@ -160,8 +152,8 @@ func _ready() -> void:
 	if reload_main_hand:
 		reload_main_hand.hide()
 
-	source_entity.inv.auto_decrementer.cooldown_ended.connect(_on_cooldown_timeout)
-	source_entity.inv.auto_decrementer.recharge_completed.connect(_on_ammo_recharge_completed)
+	#source_entity.inv.auto_decrementer.cooldown_ended.connect(_on_cooldown_timeout)
+	#source_entity.inv.auto_decrementer.recharge_completed.connect(_on_ammo_recharge_completed)
 
 	anim_player.animation_finished.connect(_on_any_animation_finished)
 	_setup_firing_vfx()
@@ -191,7 +183,7 @@ func enter() -> void:
 	if stats.s_mods.get_stat("pullout_delay") > 0:
 		pullout_delay_timer.start(stats.s_mods.get_stat("pullout_delay"))
 
-	_get_has_needed_ammo_and_reload_if_not()
+	get_has_needed_ammo_and_reload_if_not()
 	_update_ammo_ui()
 
 	# Checking to see if we are out of ammo and should reload upon equipping
@@ -232,7 +224,7 @@ func exit() -> void:
 	source_entity.hands.smoke_particles.visible = false
 
 ## If we are set to do mouse position-based homing, we set up the mouse area and its signals and add it as a child.
-func _check_if_needs_mouse_area_scanner() -> void:
+func _check_if_needs_mouse_area_scanner() -> void: #TODO: not done
 	if not stats.use_hitscan and stats.projectile_logic.homing_method == "Mouse Position":
 		mouse_area = Area2D.new()
 		var collision_shape: CollisionShape2D = CollisionShape2D.new()
@@ -250,15 +242,15 @@ func _check_if_needs_mouse_area_scanner() -> void:
 		mouse_area.global_position = CursorManager.get_cursor_mouse_position()
 		Globals.world_root.add_child(mouse_area)
 
-func enable_mouse_area() -> void:
+func enable_mouse_area() -> void: #KEEP
 	if mouse_area:
 		mouse_area.get_child(0).disabled = false
 
-func disable_mouse_area() -> void:
+func disable_mouse_area() -> void: #KEEP
 	if mouse_area:
 		mouse_area.get_child(0).disabled = true
 
-func _process(_delta: float) -> void:
+func _process(_delta: float) -> void: #TODO: not done
 	if Engine.is_editor_hint() or not overhead_ui:
 		return
 
@@ -290,35 +282,37 @@ func _process(_delta: float) -> void:
 		else:
 			overhead_ui.update_overheat_progress(100)
 
-func _physics_process(_delta: float) -> void:
+func _physics_process(_delta: float) -> void: #KEEP
 	if mouse_area != null:
 		mouse_area.global_position = CursorManager.get_cursor_mouse_position()
 #endregion
 
 #region Called From HandsComponent
 ## Called from the hands component when the mouse is clicked.
-func activate() -> void:
+func activate() -> void: #TODO: not done
 	if not pullout_delay_timer.is_stopped() or not firing_duration_timer.is_stopped() or firing_in_progress or bursting_in_progress:
 		return
 	if is_reloading and stats.reload_type == "Magazine" or is_reloading and stats.must_reload_fully:
 		return
 
 	is_reloading_single_and_has_since_released = true
-	if stats.firing_mode == "Semi Auto":
+	if stats.firing_mode == ProjWeaponResource.FiringType.SEMI_AUTO:
 		_fire()
 
 ## Called from the hands component when the mouse is held down. Includes how long it has been held down so far.
-func hold_activate(_hold_time: float) -> void:
+func hold_activate(delta: float) -> void: #TODO: not done
 	if not pullout_delay_timer.is_stopped() or not firing_duration_timer.is_stopped() or firing_in_progress or bursting_in_progress:
-		source_entity.hands.been_holding_time = 0
+		hold_time = 0
 		return
 	if is_reloading and stats.reload_type == "Magazine" or is_reloading and stats.must_reload_fully:
-		source_entity.hands.been_holding_time = 0
+		hold_time = 0
 		return
 
-	if stats.firing_mode == "Auto":
+	hold_time += delta
+
+	if stats.firing_mode == ProjWeaponResource.FiringType.AUTO:
 		_fire()
-	elif stats.firing_mode == "Charge":
+	elif stats.firing_mode == ProjWeaponResource.FiringType.CHARGE:
 		if not is_charging and stats.charging_stat_effect != null:
 			var effect: StatusEffect = stats.charging_stat_effect.duplicate()
 			effect.mod_time = 100000000
@@ -326,28 +320,30 @@ func hold_activate(_hold_time: float) -> void:
 			is_charging = true
 
 ## Called from the hands component when we release the mouse. Includes how long we had it held down.
-func release_hold_activate(hold_time: float) -> void:
+func release_hold_activate() -> void: #TODO: not done
 	hold_just_released = true
 	hitscan_cancelled = true
 
-	if stats.firing_mode == "Auto" and stats.allow_hitscan_holding and is_holding_hitscan:
+	if stats.firing_mode == ProjWeaponResource.FiringType.AUTO and stats.allow_hitscan_holding and is_holding_hitscan:
 		is_holding_hitscan = false
 
 	if not pullout_delay_timer.is_stopped() or (is_reloading and stats.reload_type == "Magazine") or (is_reloading and stats.must_reload_fully) or firing_in_progress or bursting_in_progress:
-		source_entity.hands.been_holding_time = 0
+		hold_time = 0
 		return
 
 	is_reloading_single_and_has_since_released = true
 
-	if stats.firing_mode == "Charge":
+	if stats.firing_mode == ProjWeaponResource.FiringType.CHARGE:
 		if stats.charging_stat_effect != null:
 			source_entity.effects.request_effect_removal_by_source(stats.charging_stat_effect.id, Globals.StatusEffectSourceType.FROM_SELF)
 		if hold_time > 0:
-			_charge_fire(hold_time)
+			_charge_fire()
 		is_charging = false
 
+	hold_time = 0
+
 ## Called from the hands component when we press the reload key.
-func reload() -> void:
+func reload() -> void: #TODO: not done
 	if stats.ammo_type not in [ProjWeaponResource.ProjAmmoType.STAMINA, ProjWeaponResource.ProjAmmoType.SELF, ProjWeaponResource.ProjAmmoType.CHARGES]:
 		if pullout_delay_timer.is_stopped() and not is_reloading:
 			if (stats.ammo_in_mag < stats.s_mods.get_stat("mag_size")):
@@ -356,15 +352,15 @@ func reload() -> void:
 
 #region Firing Activations
 ## Check if we can do a normal firing, and if we can, start it.
-func _fire() -> void:
+func _fire() -> void: #TODO: not done
 	hitscan_cancelled = false
 
 	if _get_cooldown() > 0:
 		return
-	if not is_reloading_single_and_has_since_released and stats.firing_mode != "Auto":
+	if not is_reloading_single_and_has_since_released and stats.firing_mode != ProjWeaponResource.FiringType.AUTO:
 		is_holding_hitscan = false
 		return
-	if not _get_has_needed_ammo_and_reload_if_not():
+	if not get_has_needed_ammo_and_reload_if_not():
 		is_holding_hitscan = false
 		return
 
@@ -398,13 +394,13 @@ func _fire() -> void:
 	_handle_warmup_increase() # We only do this for regular firing, not charge shots
 	_start_firing_sequence()
 
-	if stats.use_hitscan and stats.allow_hitscan_holding and stats.firing_mode == "Auto" and not is_holding_hitscan:
+	if stats.use_hitscan and stats.allow_hitscan_holding and stats.firing_mode == ProjWeaponResource.FiringType.AUTO and not is_holding_hitscan:
 		is_holding_hitscan = true
 
 ## Check if we can do a charge firing, and if we can, start it.
-func _charge_fire(hold_time: float) -> void:
-	if not _get_has_needed_ammo_and_reload_if_not():
-		source_entity.hands.been_holding_time = 0
+func _charge_fire() -> void: #TODO: not done
+	if not get_has_needed_ammo_and_reload_if_not():
+		hold_time = 0
 		return
 
 	if (hold_time >= stats.s_mods.get_stat("min_charge_time")) and _get_cooldown() == 0:
@@ -417,17 +413,17 @@ func _charge_fire(hold_time: float) -> void:
 
 ## Set up the delay we will use if we have a non-holding or charged hitscan. This basically
 ## increases the shot duration.
-func _set_up_hitscan() -> void:
+func _set_up_hitscan() -> void: #TODO: not done
 	if not stats.use_hitscan:
 		hitscan_delay = 0
 	else:
-		if not stats.allow_hitscan_holding or stats.firing_mode == "Charge":
+		if not stats.allow_hitscan_holding or stats.firing_mode == ProjWeaponResource.FiringType.CHARGE:
 			hitscan_delay = stats.s_mods.get_stat("hitscan_duration")
 		else:
 			hitscan_delay = 0
 
 ## When hitscans have ended or we swap off the weapon, free the hitscan itself.
-func _clean_up_hitscans() -> void:
+func _clean_up_hitscans() -> void: #KEEP
 	for hitscan: Variant in current_hitscans:
 		if is_instance_valid(hitscan):
 			hitscan.queue_free()
@@ -436,13 +432,13 @@ func _clean_up_hitscans() -> void:
 
 ## When the timer that runs when we shouldn't follow the mouse (because of an active hitscan) ends,
 ## allow mouse following again.
-func _on_hitscan_hands_freeze_timer_timeout() -> void:
+func _on_hitscan_hands_freeze_timer_timeout() -> void: #DONE
 	source_entity.hands.should_rotate = true
 #endregion
 
 #region Projectile Spawning
 ## Applies the initial logic that occurs at the start of each firing sequence, whether it be a charge shot or not.
-func _start_firing_sequence() -> void:
+func _start_firing_sequence() -> void: #TODO: not done
 	firing_in_progress = true
 
 	if stats.s_mods.get_stat("projectiles_per_fire") > 1 and not is_holding_hitscan:
@@ -454,7 +450,7 @@ func _start_firing_sequence() -> void:
 	_apply_ammo_consumption()
 
 ## Calls to consume ammo based on how many shots we performed.
-func _apply_ammo_consumption() -> void:
+func _apply_ammo_consumption() -> void: #TODO: not done
 	var shot_count: int = int(stats.s_mods.get_stat("projectiles_per_fire"))
 	if stats.dont_consume_ammo:
 		_handle_per_shot_delay_and_bloom(shot_count, (not is_holding_hitscan))
@@ -470,7 +466,7 @@ func _apply_ammo_consumption() -> void:
 
 ## Calls to increase the bloom and awaits burst bullet delays if we have them. Can be told not to
 ## spawn afterwards as well.
-func _handle_per_shot_delay_and_bloom(shot_count: int, proceed_to_spawn: bool = true) -> void:
+func _handle_per_shot_delay_and_bloom(shot_count: int, proceed_to_spawn: bool = true) -> void: #TODO: not done
 	bursting_in_progress = true
 	for i: int in range(shot_count):
 		if stats.add_bloom_per_burst_shot or (stats.s_mods.get_stat("projectiles_per_fire") == 1):
@@ -494,7 +490,7 @@ func _handle_per_shot_delay_and_bloom(shot_count: int, proceed_to_spawn: bool = 
 		_notify_recharge_of_a_recent_firing()
 
 ## Applies barrage logic to potentially spawn multiple projectiles at a specific angle apart.
-func _apply_barrage_logic() -> void:
+func _apply_barrage_logic() -> void: #TODO: not done
 	_do_firing_fx() # Do these two methods before potential cluster delays
 	_apply_firing_effect_to_entity()
 
@@ -544,26 +540,26 @@ func _apply_barrage_logic() -> void:
 		_start_post_fire_fx()
 		_notify_recharge_of_a_recent_firing()
 
-## Spawns the projectile that has been passed to it. Reloads if we don't have enough for the next activation.
-func _spawn_projectile(proj: Projectile) -> void:
+## Spawns the projectile that has been passed to it.
+func _spawn_projectile(proj: Projectile) -> void: #DONE
 	proj.rotation += deg_to_rad(_get_bloom())
 	Globals.world_root.add_child(proj)
 
-## Spawns the hitscan that has been passed to it. Reloads if we don't have enough for the next activation.
-func _spawn_hitscan(hitscan: Hitscan) -> void:
+## Spawns the hitscan that has been passed to it.
+func _spawn_hitscan(hitscan: Hitscan) -> void: #DONE
 	hitscan.rotation_offset += deg_to_rad(_get_bloom())
 	Globals.world_root.add_child(hitscan)
 	current_hitscans.append(hitscan)
 
-	if stats.firing_mode == "Semi Auto" or (stats.firing_mode == "Auto" and stats.s_mods.get_stat("hitscan_duration") < 0.65):
+	if stats.firing_mode == ProjWeaponResource.FiringType.SEMI_AUTO or (stats.firing_mode == ProjWeaponResource.FiringType.AUTO and stats.s_mods.get_stat("hitscan_duration") < 0.065):
 		source_entity.hands.should_rotate = false
 		hitscan_hands_freeze_timer.start(0.065)
 #endregion
 
 #region Warmup & Bloom & Cooldown & Overheat
 ## Increases current warmup level via sampling the increase curve using the current warmup.
-func _handle_warmup_increase() -> void:
-	if stats.s_mods.get_stat("initial_fire_rate_delay") > 0 and stats.firing_mode == "Auto":
+func _handle_warmup_increase() -> void: #DONE
+	if stats.s_mods.get_stat("initial_fire_rate_delay") > 0 and stats.firing_mode == ProjWeaponResource.FiringType.AUTO:
 		var current_warmup: float = source_entity.inv.auto_decrementer.get_warmup(str(stats.session_uid))
 		var sampled_point: float = stats.warmup_increase_rate.sample_baked(current_warmup)
 		var increase_amount: float = max(0.01, sampled_point * stats.s_mods.get_stat("warmup_increase_rate_multiplier"))
@@ -574,7 +570,7 @@ func _handle_warmup_increase() -> void:
 			stats.warmup_decrease_delay)
 
 ## Grabs a point from the warmup curve based on current warmup level given by the auto decrementer.
-func _get_warmup_firing_delay() -> float:
+func _get_warmup_firing_delay() -> float: #DONE
 	var current_warmup: float = source_entity.inv.auto_decrementer.get_warmup(str(stats.session_uid))
 	if current_warmup > 0:
 		var sampled_delay: float = stats.warmup_delay_curve.sample_baked(current_warmup)
@@ -583,7 +579,7 @@ func _get_warmup_firing_delay() -> float:
 		return 0
 
 ## Increases current bloom level via sampling the increase curve using the current bloom.
-func _handle_bloom_increase() -> void:
+func _handle_bloom_increase() -> void: #DONE
 	if stats.s_mods.get_stat("max_bloom") > 0:
 		var current_bloom: float = source_entity.inv.auto_decrementer.get_bloom(str(stats.session_uid))
 		var sampled_point: float = stats.bloom_increase_rate.sample_baked(current_bloom)
@@ -595,7 +591,7 @@ func _handle_bloom_increase() -> void:
 			stats.bloom_decrease_delay)
 
 ## Grabs a point from the bloom curve based on current bloom level given by the auto decrementer.
-func _get_bloom() -> float:
+func _get_bloom() -> float: #DONE
 	var current_bloom: float = source_entity.inv.auto_decrementer.get_bloom(str(stats.session_uid))
 	if current_bloom > 0:
 		var deviation: float = stats.bloom_curve.sample_baked(current_bloom)
@@ -605,42 +601,27 @@ func _get_bloom() -> float:
 		return 0
 
 ## Adds a cooldown to the auto decrementer for the current cooldown id.
-func _add_cooldown(duration: float, title: String = "default") -> void:
-	if duration > 0:
-		source_entity.inv.auto_decrementer.add_cooldown(stats.get_cooldown_id(), duration, title)
+func _add_cooldown(duration: float, title: String = "default") -> void: #KEEP
+	if duration <= 0:
+		return
+	source_entity.inv.auto_decrementer.add_cooldown(stats.get_cooldown_id(), duration, _on_cooldown_ended, title)
 
 ## Gets a current cooldown level from the auto decrementer based on the cooldown id.
-func _get_cooldown() -> float:
+func _get_cooldown() -> float: #KEEP
 	return source_entity.inv.auto_decrementer.get_cooldown(stats.get_cooldown_id())
 
+func _on_cooldown_ended(source_title: String) -> void: #NEW
+	match source_title:
+		"overheat_penalty":
+			overheat_handler.end_max_overheat_visuals()
+
 ## When the cooldown manager from the hands component fires a signal with the matching item id, process the aftermath.
-func _on_cooldown_timeout(item_id: StringName, cooldown_source_title: String) -> void:
+func _on_cooldown_timeout(item_id: StringName, cooldown_source_title: String) -> void: #TODO: not done
 	if item_id != stats.get_cooldown_id():
 		return
 
-	if stats.firing_mode == "Charge":
+	if stats.firing_mode == ProjWeaponResource.FiringType.CHARGE:
 		source_entity.hands.been_holding_time = 0
-
-	if cooldown_source_title == "overheat_penalty": # Handling removing overheat visuals
-		just_hit_max_overheat = false
-		overhead_ui.update_visuals_for_max_overheat(true)
-		source_entity.hands.smoke_particles.emitting = false
-
-		var current_overheat: float = source_entity.inv.auto_decrementer.get_overheat(str(stats.session_uid))
-		if current_overheat == 0:
-			overhead_ui.overheat_bar.hide()
-
-		if not overheat_overlays.is_empty():
-			is_tweening_overheat_overlays = true
-			var tween: Tween = create_tween().parallel()
-			for overlay: TextureRect in overheat_overlays:
-				tween.tween_property(overlay, "self_modulate:a", current_overheat, 0.15)
-				tween.tween_method(func(new_value: Color) -> void: CursorManager.change_cursor_tint(new_value), CursorManager.get_cursor_tint(), Color.WHITE, 0.15)
-				tween.chain().tween_callback(func() -> void: is_tweening_overheat_overlays = false)
-		if anim_player.current_animation == "overheat":
-			anim_player.stop()
-			anim_player.play("RESET")
-			anim_player.stop()
 
 	if is_holding_hitscan:
 		_fire()
@@ -649,7 +630,7 @@ func _on_cooldown_timeout(item_id: StringName, cooldown_source_title: String) ->
 		_clean_up_hitscans()
 
 ## Starts the cooldown that happens after a firing sequence has ended, given that we aren't holding a hitscan.
-func _do_post_fire_cooldown() -> void:
+func _do_post_fire_cooldown() -> void: #TODO: not done
 	if is_holding_hitscan: # There is different logic for the held hitscans when it comes to cooldown
 		return
 	if just_hit_max_overheat:
@@ -659,7 +640,7 @@ func _do_post_fire_cooldown() -> void:
 	_add_cooldown(total_cooldown_afterwards)
 
 ## Increases current overheat level via sampling the increase curve using the current overheat.
-func _handle_overheat_increase() -> void:
+func _handle_overheat_increase() -> void: #DONE
 	if stats.s_mods.get_stat("overheat_penalty") > 0:
 		var current_overheat: float = source_entity.inv.auto_decrementer.get_overheat(str(stats.session_uid))
 		var sampled_point: float = stats.overheat_inc_rate.sample_baked(current_overheat)
@@ -676,7 +657,7 @@ func _handle_overheat_increase() -> void:
 			_handle_max_overheat_reached()
 
 ## When we reach max overheat, add a cooldown of some kind.
-func _handle_max_overheat_reached() -> void:
+func _handle_max_overheat_reached() -> void: #DONE
 	just_hit_max_overheat = true
 	_add_cooldown(stats.s_mods.get_stat("overheat_penalty"), "overheat_penalty")
 	AudioManager.play_global(stats.overheated_sound)
@@ -684,7 +665,7 @@ func _handle_max_overheat_reached() -> void:
 	_do_weapon_overheat_visuals(false)
 
 ## Setup and start the overheating visuals.
-func _do_weapon_overheat_visuals(just_equipped: bool) -> void:
+func _do_weapon_overheat_visuals(just_equipped: bool) -> void: #DONE
 	for overlay: TextureRect in overheat_overlays:
 		overlay.self_modulate.a = 1.0
 
@@ -704,7 +685,7 @@ func _do_weapon_overheat_visuals(just_equipped: bool) -> void:
 		anim_player.play("overheat")
 
 ## When we receive a signal that any overheat has ended, if it matches this weapon, we potentially take action.
-func _on_overheat_emptied(item_id: StringName) -> void:
+func _on_overheat_emptied(item_id: StringName) -> void: #DONE
 	if item_id != str(stats.session_uid):
 		return
 
@@ -716,7 +697,7 @@ func _on_overheat_emptied(item_id: StringName) -> void:
 
 #region FX & Animations
 ## Sets up the firing vfx's positioning and offset to work with y sorting.
-func _setup_firing_vfx() -> void:
+func _setup_firing_vfx() -> void: #TODO: not done
 	if not firing_vfx:
 		return
 
@@ -728,7 +709,7 @@ func _setup_firing_vfx() -> void:
 		firing_vfx.position.x += 8
 
 ## Start the sounds and vfx that should play when firing.
-func _do_firing_fx() -> void:
+func _do_firing_fx() -> void: #TODO: not done
 	if stats.firing_cam_fx:
 		stats.firing_cam_fx.activate_all()
 
@@ -737,24 +718,27 @@ func _do_firing_fx() -> void:
 	if firing_vfx:
 		firing_vfx.start()
 
-## Spawns a simulated ejected casing to fall to the ground. Requires a Marker2D in the scene
-## called "CasingEjectionPoint".
-## Must be called by the animation player due to varying timing of when it should spawn per weapon.
-func _eject_casing(per_used_ammo: bool = false) -> void:
+## Spawns a simulated ejected casing to fall to the ground. Requires a Marker2D in the scene called
+## "CasingEjectionPoint". Must be called by the animation player due to varying timing of when it should
+## spawn per weapon.
+func _eject_casing(per_used_ammo: bool = false) -> void: #KEEP
 	if not casing_ejection_point:
 		return
 
 	for i: int in range((stats.s_mods.get_stat("mag_size") - stats.ammo_in_mag) if per_used_ammo else 1):
 		var casing: Node2D = casing_scene.instantiate()
-		casing.global_position = casing_ejection_point.global_position + Vector2(randf_range(-1, 1), randf_range(-1, 1))
+		var casing_rand_offset: Vector2 = Vector2(randf_range(-1, 1), randf_range(-1, 1))
+		casing.global_position = casing_ejection_point.global_position + casing_rand_offset
 		casing.global_rotation = global_rotation
+
 		Globals.world_root.add_child(casing)
+
 		casing.sprite.texture = stats.casing_texture
 		if stats.casing_tint != Color.WHITE:
 			casing.sprite.modulate = stats.casing_tint
 
 ## Start the firing animation.
-func _start_firing_anim() -> void:
+func _start_firing_anim() -> void: #TODO: not done
 	if anim_player.is_playing():
 		push_warning(source_entity.name + " has a " + stats.name + " that was still playing the \"" + anim_player.current_animation + "\" animation upon the start of the firing animation. This will result in jarring transitions between animations.")
 		anim_player.stop()
@@ -775,9 +759,9 @@ func _start_firing_anim() -> void:
 		anim_player.play("fire")
 
 ## Starts the post-firing animation if we have one.
-func _start_post_fire_anim() -> void:
+func _start_post_fire_anim() -> void: #TODO: not done
 	if not anim_player.has_animation("post_fire"):
-		_get_has_needed_ammo_and_reload_if_not()
+		get_has_needed_ammo_and_reload_if_not()
 		return
 	elif anim_player.is_playing():
 		await anim_player.animation_finished
@@ -799,7 +783,7 @@ func _start_post_fire_anim() -> void:
 
 ## Starts the post-firing sound and vfx if we have one. Good for things like the cocking of a shotgun
 ## barrel after firing.
-func _start_post_fire_fx() -> void:
+func _start_post_fire_fx() -> void: #TODO: not done
 	var adjusted_post_fire_sound_delay: float = min(stats.s_mods.get_stat("fire_cooldown") - 0.05, stats.post_fire_sound_delay) if stats.post_fire_sound_delay > 0 else 0
 	if adjusted_post_fire_sound_delay > 0.05:
 		await get_tree().create_timer(adjusted_post_fire_sound_delay).timeout
@@ -807,64 +791,60 @@ func _start_post_fire_fx() -> void:
 	AudioManager.play_2d(stats.post_fire_sound, global_position)
 
 ## Applies a status effect to the source entity after firing.
-func _apply_firing_effect_to_entity() -> void:
+func _apply_firing_effect_to_entity() -> void: #TODO: not done
 	if stats.post_firing_effect != null:
 		source_entity.effect_receiver.handle_status_effect(stats.post_firing_effect)
 
 ## Checks if we need ammo after the post-firing animation has ended.
-func _on_any_animation_finished(anim_name: StringName) -> void:
+func _on_any_animation_finished(anim_name: StringName) -> void: #TODO: not done
 	if anim_name == "post_fire":
 		await get_tree().process_frame
 		if not is_reloading:
 			source_entity.hands.off_hand_sprite.self_modulate.a = 1.0
-		_get_has_needed_ammo_and_reload_if_not()
+		get_has_needed_ammo_and_reload_if_not()
 #endregion
 
 #region Reloading & Recharging
 ## Checks if we have enough ammo to execute a single firing. Calls for a reload if we don't.
-func _get_has_needed_ammo_and_reload_if_not() -> bool:
-	if stats.ammo_type == ProjWeaponResource.ProjAmmoType.STAMINA and (source_entity is not DynamicEntity):
-		push_error(source_entity.name + " is using a weapon with ammo type \"Stamina\" but is not a dynamic entity.")
+func get_has_needed_ammo_and_reload_if_not() -> bool: #KEEP
+	if stats.ammo_type == ProjWeaponResource.ProjAmmoType.STAMINA and not (source_entity is DynamicEntity):
+		push_error(source_entity.name + " is using a weapon with ammo type 'STAMINA' but is not a dynamic entity.")
 		return false
 
-	var result: bool = false
-	var ammo_needed: int = 0
-
-	if stats.use_ammo_per_burst_proj:
-		ammo_needed = int(stats.s_mods.get_stat("projectiles_per_fire"))
-	else:
+	var ammo_needed: int = int(stats.s_mods.get_stat("projectiles_per_fire"))
+	if not stats.use_ammo_per_burst_proj:
 		ammo_needed = 1
 
-	if stats.ammo_type == ProjWeaponResource.ProjAmmoType.STAMINA:
-		var stamina_uses_left: int = int(floor(source_entity.stamina_component.stamina / (ammo_needed * stats.stamina_use_per_proj)))
-		if stamina_uses_left > 0:
-			result = true
-	elif stats.ammo_type == ProjWeaponResource.ProjAmmoType.SELF:
-		result = true
-	else:
-		if stats.ammo_in_mag >= ammo_needed:
-			result = true
-		if result == false:
+	match stats.ammo_type:
+		ProjWeaponResource.ProjAmmoType.STAMINA:
+			var stamina_needed: float = ammo_needed * stats.stamina_use_per_proj
+			return (source_entity.stamina_component.stamina >= stamina_needed)
+		ProjWeaponResource.ProjAmmoType.SELF:
+			return true
+		_:
+			if stats.ammo_in_mag >= ammo_needed:
+				return true
 			if not is_reloading:
-				_attempt_reload()
-				AudioManager.play_global(stats.empty_mag_sound)
-
-	return result
+				reload_handler.attempt_reload()
+				AudioManager.play_2d(stats.empty_mag_sound, source_entity.global_position)
+			return false
 
 ## Takes away either the passed in amount from the appropriate ammo reserve.
-func _consume_ammo(amount: int) -> void:
+func _consume_ammo(amount: int) -> void: #KEEP
 	if stats.ammo_type == ProjWeaponResource.ProjAmmoType.STAMINA:
-		(source_entity as DynamicEntity).stamina_component.use_stamina(amount * stats.stamina_use_per_proj)
+		source_entity.stamina_component.use_stamina(amount * stats.stamina_use_per_proj)
 	elif stats.ammo_type == ProjWeaponResource.ProjAmmoType.SELF:
 		source_entity.inv.remove_item(source_slot.index, 1)
 	else:
-		stats.ammo_in_mag -= amount
-		_request_ammo_recharge()
+		update_mag_ammo(stats.ammo_in_mag - amount)
+		reload_handler.request_ammo_recharge()
 
+func update_mag_ammo(new_amount: int) -> void: #NEW
+	stats.ammo_in_mag = new_amount
 	_update_ammo_ui()
 
 ## Based on the reload method, starts the timer(s) needed to track how long the reload will take.
-func _attempt_reload() -> void:
+func _attempt_reload() -> void: #DONE
 	var any_ammo: bool = _get_more_reload_ammo(1, false) > 0
 	if not any_ammo:
 		return
@@ -887,7 +867,7 @@ func _attempt_reload() -> void:
 		_start_reload_anim("mag_reload")
 
 ## Checks for and starts the reload animation after hiding the player's off hand sprite from the hands component.
-func _start_reload_anim(anim_name: String) -> void:
+func _start_reload_anim(anim_name: String) -> void: #DONE
 	if anim_name == "final_single_reload" and not anim_player.has_animation("final_single_reload"):
 		anim_name = "single_reload"
 	if not anim_player.has_animation(anim_name):
@@ -915,25 +895,23 @@ func _start_reload_anim(anim_name: String) -> void:
 
 ## Reshows the hand component's off hand and hides the local reload hand.
 ## Then it plays the RESET animation for one frame.
-func _do_post_reload_animation_cleanup() -> void:
+func _do_post_reload_animation_cleanup() -> void: #DONE
 	overhead_ui.update_reload_progress(0)
 	source_entity.hands.off_hand_sprite.self_modulate.a = 1.0
 	if reload_off_hand: reload_off_hand.hide()
 	if reload_main_hand: reload_main_hand.hide()
-	anim_player.stop()
-	anim_player.play("RESET")
-	anim_player.stop()
+	reset_animation_state()
 
 ## Searches through the source entity's inventory for more ammo to fill the magazine.
 ## Can optionally be used to only check for ammo when told not to take from the inventory when found.
-func _get_more_reload_ammo(max_amount_needed: int, take_from_inventory: bool = true) -> int:
+func _get_more_reload_ammo(max_amount_needed: int, take_from_inventory: bool = true) -> int: #DONE
 	if stats.ammo_type == ProjWeaponResource.ProjAmmoType.NONE:
 		return max_amount_needed
 	else:
 		return source_entity.inv.get_more_ammo(max_amount_needed, take_from_inventory, stats.ammo_type)
 
 ## When the main reload timer ends and we are in "Magazine" mode, reload the magazine.
-func _on_reload_timer_timeout() -> void:
+func _on_reload_timer_timeout() -> void: #DONE
 	if stats.reload_type != "Magazine":
 		return
 
@@ -944,7 +922,7 @@ func _on_reload_timer_timeout() -> void:
 	is_reloading = false
 
 ## When the start of a single reload process delay ends, begin the actual reloading timer based on ammo needed.
-func _on_single_reload_delay_timer_timeout() -> void:
+func _on_single_reload_delay_timer_timeout() -> void: #DONE
 	var ammo_needed: int = stats.s_mods.get_stat("mag_size") - stats.ammo_in_mag
 	var single_proj_reload_time: float = stats.s_mods.get_stat("single_proj_reload_time")
 	var dur: float = single_proj_reload_time if stats.reload_anim_dur <= 0 else (min(single_proj_reload_time, stats.reload_anim_dur))
@@ -956,7 +934,7 @@ func _on_single_reload_delay_timer_timeout() -> void:
 	_start_reload_anim("final_single_reload" if reloads_needed == 1 else "single_reload")
 
 ## When the single projectile reload timer ends, try and grab a bullet and see if we need to start it up again.
-func _on_single_reload_timer_timeout() -> void:
+func _on_single_reload_timer_timeout() -> void: #DONE
 	var mag_size: int = stats.s_mods.get_stat("mag_size")
 	var reloads_left: int = single_reload_timer.get_meta("reloads_left")
 	var ammo_needed: int = mag_size - stats.ammo_in_mag
@@ -977,19 +955,19 @@ func _on_single_reload_timer_timeout() -> void:
 
 	is_reloading = false
 
-## When we hav recently fired, we should not instantly keep recharging ammo, so we send a cooldown to the recharger.
-func _notify_recharge_of_a_recent_firing() -> void:
+## When we have recently fired, we should not instantly keep recharging ammo, so we send a cooldown to the recharger.
+func _notify_recharge_of_a_recent_firing() -> void: #DONE
 	if stats.s_mods.get_stat("auto_ammo_interval") > 0:
 		source_entity.inv.auto_decrementer.update_recharge_delay(str(stats.session_uid), stats.auto_ammo_delay)
 
 ## This is called (usually after firing) to request a new ammo recharge instance. It is also called
 ## when first entering if we aren't at max ammo already.
-func _request_ammo_recharge() -> void:
+func _request_ammo_recharge() -> void: #DONE
 	if stats.s_mods.get_stat("auto_ammo_interval") > 0:
 		source_entity.inv.auto_decrementer.request_recharge(StringName(str(stats.session_uid)), stats)
 
 ## When an ammo recharge ends, if it matches our item id, update the ammo ui.
-func _on_ammo_recharge_completed(item_id: StringName) -> void:
+func _on_ammo_recharge_completed(item_id: StringName) -> void: #DONE
 	if item_id != str(stats.session_uid):
 		return
 	else:
@@ -997,21 +975,25 @@ func _on_ammo_recharge_completed(item_id: StringName) -> void:
 
 ## Updates the ammo UI with the ammo in the magazine, assuming this is being used by a Player and the weapon uses
 ## consumable ammo.
-func _update_ammo_ui() -> void:
-	if ammo_ui != null and not stats.hide_ammo_ui:
-		var count: int = -1
-		if stats.ammo_type == ProjWeaponResource.ProjAmmoType.SELF:
+func _update_ammo_ui() -> void: #NEW
+	if ammo_ui == null or stats.hide_ammo_ui:
+		return
+
+	var count: int = -1
+	match stats.ammo_type:
+		ProjWeaponResource.ProjAmmoType.SELF:
 			if source_slot.item == null:
 				count = -1
 			else:
 				count = source_slot.item.quantity
-		elif stats.ammo_type == ProjWeaponResource.ProjAmmoType.STAMINA:
+		ProjWeaponResource.ProjAmmoType.STAMINA:
 			count = source_entity.stamina_component.stamina
-		else:
+		_:
 			count = stats.ammo_in_mag
-		ammo_ui.update_mag_ammo(count)
-		ammo_ui.calculate_inv_ammo()
+
+	ammo_ui.update_mag_ammo(count)
+	ammo_ui.calculate_inv_ammo()
 #endregion
 
-func reset_animation_state() -> void:
+func reset_animation_state() -> void: #NEW
 	anim_player.play("RESET")

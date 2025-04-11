@@ -142,7 +142,7 @@ func _get_attack_speed(stats: ItemResource) -> String:
 
 	if stats is ProjWeaponResource:
 		var sum: String
-		if stats.firing_mode != "Charge":
+		if stats.firing_mode != ProjWeaponResource.FiringType.CHARGE:
 			sum = _get_item_sums(stats, ["firing_duration", "fire_cooldown"], false, "s")
 		else:
 			sum = _get_item_sums(stats, ["firing_duration", "fire_cooldown", "min_charge_time"], false, "s")

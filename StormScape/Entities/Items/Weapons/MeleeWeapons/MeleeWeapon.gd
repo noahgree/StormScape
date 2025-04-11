@@ -8,7 +8,6 @@ enum RECENT_SWING_TYPE { NORMAL, CHARGED }
 
 @export var sprite_visual_rotation: float = 45 ## How rotated the drawn sprite is by default when imported. Straight up would be 0º, angling top-right would be 45º, etc.
 
-@onready var anim_player: AnimationPlayer = $AnimationPlayer ## The animation controller for this melee weapon.
 @onready var hitbox_component: HitboxComponent = %HitboxComponent ## The hitbox responsible for applying the melee hit.
 
 var is_swinging: bool = false ## Whether we are currently swinging the weapon in some fashion.
@@ -94,19 +93,21 @@ func exit() -> void:
 	source_entity.facing_component.should_rotate = true
 
 ## Overrides the parent method to specify what to do on holding use while equipped.
-func hold_activate(hold_time: float) -> void:
+func hold_activate(delta: float) -> void:
 	if not pullout_delay_timer.is_stopped() or not source_entity.inv.auto_decrementer.get_cooldown(stats.get_cooldown_id()) == 0 or is_swinging:
-		source_entity.hands.been_holding_time = 0
+		hold_time = 0
 		return
+
+	hold_time += delta
 
 	if stats.auto_do_charge_use and stats.can_do_charge_use:
 		if (hold_time >= stats.s_mods.get_stat("min_charge_time")):
 			_charge_swing()
 
 ## Overrides the parent method to specify what to do on release of a holding use while equipped.
-func release_hold_activate(hold_time: float) -> void:
+func release_hold_activate() -> void:
 	if not pullout_delay_timer.is_stopped() or not source_entity.inv.auto_decrementer.get_cooldown(stats.get_cooldown_id()) == 0 or is_swinging:
-		source_entity.hands.been_holding_time = 0
+		hold_time = 0
 		return
 
 	if stats.can_do_charge_use and (hold_time >= stats.s_mods.get_stat("min_charge_time")):

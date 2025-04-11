@@ -77,12 +77,12 @@ func activate() -> void:
 
 ## Intended to be overridden by child classes in order to specify what to do when this item
 ## is used after a hold click.
-func hold_activate(_hold_time: float) -> void:
+func hold_activate(_delta: float) -> void:
 	pass
 
 ## Intended to be overridden by child classes in order to specify what to do when this
 ## item is used after a released hold click.
-func release_hold_activate(_hold_time: float) -> void:
+func release_hold_activate() -> void:
 	pass
 
 ## Intended to be overridden by child classes in order to specify what to do when this item is equipped.

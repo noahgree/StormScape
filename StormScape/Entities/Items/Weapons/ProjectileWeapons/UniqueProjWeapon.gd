@@ -10,7 +10,8 @@ var returned: bool = true: ## Whether the unique projectile has come back yet. G
 			return
 
 		if returned == false and new_value == true:
-			_add_cooldown()
+			var cooldown: float = stats.fire_cooldown if stats.firing_mode != ProjWeaponResource.FiringType.CHARGE else stats.charge_fire_cooldown
+			_add_cooldown(cooldown)
 
 		returned = new_value
 
@@ -33,9 +34,9 @@ func _fire() -> void:
 	if returned:
 		super._fire()
 
-func _charge_fire(hold_time: float) -> void:
+func _charge_fire() -> void:
 	if returned:
-		super._charge_fire(hold_time)
+		super._charge_fire()
 
 func _spawn_projectile(proj: Projectile) -> void:
 	returned = false
@@ -44,14 +45,16 @@ func _spawn_projectile(proj: Projectile) -> void:
 
 func _on_tree_exiting() -> void:
 	if not returned:
-		_add_cooldown()
+		var cooldown: float = stats.fire_cooldown if stats.firing_mode != ProjWeaponResource.FiringType.CHARGE else stats.charge_fire_cooldown
+		_add_cooldown(cooldown)
 
 ## Checks for a cooldown and adds it to the manager. Then updates the visuals if needed.
-func _add_cooldown() -> void:
-	var cooldown: float = stats.fire_cooldown if stats.firing_mode != "Charge" else stats.charge_fire_cooldown
-	if cooldown > 0:
-		source_entity.inv.auto_decrementer.add_cooldown(stats.get_cooldown_id(), cooldown)
+func _add_cooldown(duration: float, title: String = "default") -> void:
+	if duration <= 0:
+		return
+	source_entity.inv.auto_decrementer.add_cooldown(stats.get_cooldown_id(), duration, Callable(), title)
 
-## Only exists to override the parent function so that we can do our own, different logic here. Does nothing on purpose in this script.
+## Only exists to override the parent function so that we can do our own, different logic here.
+## Does nothing on purpose in this script.
 func _handle_adding_cooldown(_duration: float, _title: String = "default") -> void:
 	return
