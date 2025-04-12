@@ -228,10 +228,10 @@ tracks/2/path = NodePath("ItemSprite/OffHandSprite:visible")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
-"times": PackedFloat32Array(0, 1),
-"transitions": PackedFloat32Array(1, 1),
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [true, false]
+"values": [true]
 }
 tracks/3/type = "value"
 tracks/3/imported = false
@@ -258,9 +258,10 @@ _data = {
 radius = 2.0
 height = 16.0
 
-[node name="EagleEye" type="Node2D"]
+[node name="EagleEye" type="Node2D" node_paths=PackedStringArray("sprites_to_tint")]
 script = ExtResource("1_37k38")
 proj_origin = Vector2(16, -2)
+sprites_to_tint = [NodePath("ItemSprite")]
 
 [node name="ItemSprite" type="AnimatedSprite2D" parent="."]
 light_mask = 2

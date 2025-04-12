@@ -61,5 +61,5 @@ texture = ExtResource("4_jjt2l")
 [node name="Trail" parent="." instance=ExtResource("4_t2vqv")]
 width = 2.0
 gradient = SubResource("Gradient_mr4vr")
-max_points = 20
+max_points = 42
 x_offset = -3.0

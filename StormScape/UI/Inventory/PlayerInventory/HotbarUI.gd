@@ -61,7 +61,7 @@ func _default_ammo_update_method() -> void:
 		if not equipped_item:
 			return
 
-		if not equipped_item.has_method("_update_ammo_ui"):
+		if not equipped_item.has_method("update_ammo_ui"):
 			active_slot_info.update_mag_ammo(active_slot.item.quantity)
 
 ## Updates all tint progresses for cooldowns on the hotbar slots.

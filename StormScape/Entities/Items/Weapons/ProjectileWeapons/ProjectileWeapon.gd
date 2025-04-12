@@ -6,7 +6,7 @@ class_name ProjectileWeapon
 
 signal state_changed(new_state: WeaponState)
 
-enum WeaponState { IDLE, WARMING_UP, FIRING, RELOADING, OVERHEATED }
+enum WeaponState { IDLE, FIRING, RELOADING }
 
 @export var proj_origin: Vector2 = Vector2.ZERO: set = _set_proj_origin ## Where the projectile spawns from in local space of the weapon scene.
 @export var casing_scene: PackedScene = preload("res://Entities/Items/Weapons/WeaponVFX/Casings/Casing.tscn")
@@ -17,18 +17,19 @@ enum WeaponState { IDLE, WARMING_UP, FIRING, RELOADING, OVERHEATED }
 @onready var reload_off_hand: EntityHandSprite = get_node_or_null("ReloadOffHand") ## The off hand only shown and animated during reloads.
 @onready var reload_main_hand: EntityHandSprite = get_node_or_null("ReloadMainHand") ## The main hand only shown and animated during reloads.
 @onready var firing_vfx: WeaponFiringVFX = get_node_or_null("FiringVFX") ## The vfx that spawns when firing.
+@onready var firing_handler: FiringHandler = FiringHandler.new(self)
+@onready var warmup_handler: WarmupHandler = WarmupHandler.new(self)
+@onready var reload_handler: ReloadHandler = ReloadHandler.new(self)
+@onready var overheat_handler: OverheatHandler = OverheatHandler.new(self)
 
 var state: WeaponState = WeaponState.IDLE: set = set_state
-var firing_handler: FiringHandler = FiringHandler.new()
-var warmup_handler: WarmupHandler = WarmupHandler.new()
-var reload_handler: ReloadHandler = ReloadHandler.new()
-var overheat_handler: OverheatHandler = OverheatHandler.new()
 var is_charging: bool = false ## When true, we are holding the trigger down and trying to charge up.
 var current_hitscans: Array[Hitscan] = [] ## The currently spawned array of hitscans to get cleaned up when we unequip this weapon.
 var mouse_scan_area_targets: Array[Node] = [] ## The array of potential targets found and passed to the proj when using the "Mouse Position" homing method.
 var mouse_area: Area2D ## The area around the mouse that scans for targets when using the "Mouse Position" homing method
 var overhead_ui: PlayerOverheadUI ## The UI showing the overhead stat changes (like reloading) in progress. Only applicable and non-null for players.
 var preloaded_sounds: Array[StringName] = [] ## The sounds kept in memory while this weapon scene is alive that must be dereferenced upon exiting the tree.
+var requesting_reload_after_firing: bool = false ## This is flagged to true when a reload is requested during the firing animation and needs to wait until it is done.
 
 
 #region Debug
@@ -42,18 +43,13 @@ func _ready() -> void:
 		return
 	super._ready()
 
-	firing_handler.initialize(self)
-	warmup_handler.initialize(self)
-	reload_handler.initialize(self)
-	overheat_handler.initialize(self)
-
 	if source_entity is Player:
 		overhead_ui = source_entity.overhead_ui
 
 		# Update the ammo UI when stamina changes
 		if (stats.ammo_type == ProjWeaponResource.ProjAmmoType.STAMINA) and (not stats.hide_ammo_ui):
 				source_entity.stamina_component.stamina_changed.connect(
-					func(_new_stamina: float) -> void: _update_ammo_ui()
+					func(_new_stamina: float) -> void: update_ammo_ui()
 					)
 
 	_setup_firing_vfx()
@@ -77,9 +73,9 @@ func disable() -> void:
 func enter() -> void:
 	if stats.s_mods.get_stat("pullout_delay") > 0:
 		pullout_delay_timer.start(stats.s_mods.get_stat("pullout_delay"))
+		pullout_delay_timer.timeout.connect(_on_pullout_delay_timer_timeout)
 
-	ensure_ammo_or_reload()
-	_update_ammo_ui()
+	update_ammo_ui()
 	reload_handler.request_ammo_recharge()
 	_setup_mouse_area_scanner()
 
@@ -113,6 +109,10 @@ func set_state(new_state: WeaponState) -> void:
 		state = new_state
 		state_changed.emit(state)
 
+func _on_pullout_delay_timer_timeout() -> void:
+	if not ensure_enough_ammo():
+		reload()
+
 func enable_mouse_area() -> void:
 	if mouse_area:
 		mouse_area.get_child(0).disabled = false
@@ -127,6 +127,7 @@ func _setup_mouse_area_scanner() -> void:
 		return
 
 	mouse_area = Area2D.new()
+	mouse_area.name = "HomingMouseArea2D"
 	var collision_shape: CollisionShape2D = CollisionShape2D.new()
 	var circle_shape: CircleShape2D = CircleShape2D.new()
 
@@ -160,10 +161,7 @@ func _process(_delta: float) -> void:
 		return
 
 	reload_handler.update_reload_progress_ui()
-
-	if stats.show_cursor_cooldown:
-		_update_cursor_cooldown_ui()
-
+	_update_cursor_cooldown_ui()
 	overheat_handler.update_overlays_and_overhead_ui()
 
 func _physics_process(_delta: float) -> void:
@@ -171,12 +169,21 @@ func _physics_process(_delta: float) -> void:
 		mouse_area.global_position = CursorManager.get_cursor_mouse_position()
 
 func _can_activate_at_all() -> bool:
-	if state not in [WeaponState.IDLE, WeaponState.RELOADING]:
+	if (not pullout_delay_timer.is_stopped()) or (get_cooldown() > 0):
 		return false
-	if state == WeaponState.RELOADING:
-		if (stats.reload_type == ProjWeaponResource.ReloadType.MAGAZINE) or stats.must_reload_fully:
+	match state:
+		WeaponState.IDLE:
+			if ensure_enough_ammo():
+				return true
+			reload()
 			return false
-	return true
+		WeaponState.RELOADING:
+			if stats.reload_type == ProjWeaponResource.ReloadType.SINGLE and stats.must_reload_fully:
+				if ensure_enough_ammo():
+					return true
+			return false
+		_:
+			return false
 
 func activate() -> void:
 	if not _can_activate_at_all():
@@ -217,55 +224,49 @@ func release_hold_activate() -> void:
 
 		if hold_time >=  stats.s_mods.get_stat("min_charge_time"):
 			_attempt_to_fire()
+		else:
+			hold_time = 0
 
 func _attempt_to_fire() -> void:
 	hold_time = 0
 	start_firing_sequence()
 
 func start_firing_sequence() -> void:
-	# ---Check Can Fire---
-	if not firing_handler.can_fire():
-		set_state(WeaponState.IDLE)
-		return
-
-	# ---Cancel Current Reload---
+	# ---Cancel Any Current Reload---
 	if state == WeaponState.RELOADING:
-		reload_handler.cancel_reload()
-
-	# ---Ammo Check---
-	if not await ensure_ammo_or_reload():
-		set_state(WeaponState.IDLE)
-		return
+		reload_handler.end_reload()
 
 	# ---Warmup Phase---
-	if warmup_handler.needs_warmup():
-		set_state(WeaponState.WARMING_UP)
-		warmup_handler.start_warmup()
-		await warmup_handler.warmup_finished
-
-	# ---Firing Phase---
 	set_state(WeaponState.FIRING)
-	await firing_handler.start_firing()
+	await warmup_handler.start_warmup()
+	if not ensure_enough_ammo():
+		reload()
+		return
 
-	# ---Overheating Phase---
-	if overheat_handler.is_overheated():
-		set_state(WeaponState.OVERHEATED)
-		await overheat_handler.overheat_emptied
+	# ---Spawning Projectile Phase---
+	await firing_handler.start_firing()
+	set_state(WeaponState.IDLE)
+
+	# ---Overheating Check---
+	overheat_handler.check_is_overheated()
 
 	# ---Check Ammo Again---
-	await ensure_ammo_or_reload()
-
-	# ---Idling---
-	set_state(WeaponState.IDLE)
+	if not ensure_enough_ammo() or requesting_reload_after_firing:
+		reload()
+		requesting_reload_after_firing = false
+	else:
+		set_state(WeaponState.IDLE)
 
 ## Called from the hands component when we press the reload key.
 func reload() -> void:
-	if state not in [WeaponState.RELOADING, WeaponState.FIRING, WeaponState.WARMING_UP]:
+	if state == WeaponState.IDLE:
 		set_state(WeaponState.RELOADING)
-		reload_handler.attempt_reload()
-		await reload_handler.reload_finished
+		await reload_handler.attempt_reload()
+		set_state(WeaponState.IDLE)
+	elif state == WeaponState.FIRING:
+		requesting_reload_after_firing = true
 
-func ensure_ammo_or_reload() -> bool:
+func ensure_enough_ammo() -> bool:
 	var has_needed_ammo: bool = false
 
 	var ammo_needed: int = int(stats.s_mods.get_stat("projectiles_per_fire"))
@@ -283,17 +284,15 @@ func ensure_ammo_or_reload() -> bool:
 
 	if has_needed_ammo:
 		return true
-
-	await reload()
 	return false
 
 func update_mag_ammo(new_amount: int) -> void:
 	stats.ammo_in_mag = new_amount
-	_update_ammo_ui()
+	update_ammo_ui()
 
 ## Updates the ammo UI with the ammo in the magazine, assuming this is being used by a Player and the weapon uses
 ## consumable ammo.
-func _update_ammo_ui() -> void:
+func update_ammo_ui() -> void:
 	if ammo_ui == null or stats.hide_ammo_ui:
 		return
 
@@ -340,6 +339,9 @@ func _on_cooldown_ended(item_id: StringName, source_title: String) -> void:
 func _update_cursor_cooldown_ui() -> void:
 	if not source_entity is Player:
 		return
+	if not stats.show_cursor_cooldown and not state == WeaponState.RELOADING:
+		CursorManager.update_vertical_tint_progress(100)
+		return
 
 	var cooldown_remaining: float = get_cooldown()
 	var original_cooldown: float = source_entity.inv.auto_decrementer.get_original_cooldown(stats.get_cooldown_id())
@@ -369,3 +371,4 @@ func _eject_casing(per_used_ammo: bool = false) -> void:
 
 func reset_animation_state() -> void:
 	anim_player.play("RESET")
+	anim_player.stop()

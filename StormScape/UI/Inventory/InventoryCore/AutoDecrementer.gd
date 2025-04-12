@@ -1,4 +1,3 @@
-extends Node
 class_name AutoDecrementer
 ## Manages entity-specific item cooldowns, warmups, blooming, overheating, and recharging via item identifiers.
 
@@ -140,7 +139,7 @@ func add_overheat(item_id: StringName, amount: float, decrease_rate: Curve, decr
 	if item_id in overheats:
 		new_value = min(1, overheats[item_id].progress + amount)
 	else:
-		min(1, amount)
+		new_value = min(1, amount)
 
 	overheats[item_id] = {
 		&"progress" : new_value,

@@ -21,8 +21,8 @@ func _ready() -> void:
 	super._ready()
 
 	call_deferred("_disable_collider")
-	_update_ammo_ui()
-	source_entity.stamina_component.stamina_changed.connect(func(_new_stamina: float) -> void: _update_ammo_ui())
+	update_ammo_ui()
+	source_entity.stamina_component.stamina_changed.connect(func(_new_stamina: float) -> void: update_ammo_ui())
 
 	hitbox_component.source_entity = source_entity
 
@@ -166,6 +166,6 @@ func _on_use_animation_ended(was_charge_use: bool = false) -> void:
 
 ## If a connected ammo UI exists (i.e. for a player), update it with the new ammo available.
 ## Typically just reflects the stamina.
-func _update_ammo_ui() -> void:
+func update_ammo_ui() -> void:
 	if ammo_ui != null:
 		ammo_ui.update_mag_ammo(source_entity.stamina_component.stamina)

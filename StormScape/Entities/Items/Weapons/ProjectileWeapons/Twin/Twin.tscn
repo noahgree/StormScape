@@ -187,6 +187,18 @@ tracks/12/keys = {
 "update": 1,
 "values": [false]
 }
+tracks/13/type = "value"
+tracks/13/imported = false
+tracks/13/enabled = true
+tracks/13/path = NodePath("ReloadMainHand:position")
+tracks/13/interp = 1
+tracks/13/loop_wrap = true
+tracks/13/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(-7, 3)]
+}
 
 [sub_resource type="Animation" id="Animation_7h51o"]
 resource_name = "before_single_reload"
@@ -396,10 +408,10 @@ tracks/4/path = NodePath("ReloadOffHand:position")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/keys = {
-"times": PackedFloat32Array(0, 0.15, 0.5, 0.725, 1),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"times": PackedFloat32Array(0, 0.15, 0.5, 0.675, 0.925, 1),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
 "update": 0,
-"values": [Vector2(1, -5), Vector2(1, -3), Vector2(3, 0), Vector2(1, -2), Vector2(4, 2)]
+"values": [Vector2(1, -5), Vector2(1, -3), Vector2(3, 0), Vector2(1, -2), Vector2(1, -2), Vector2(4, 2)]
 }
 tracks/5/type = "value"
 tracks/5/imported = false
@@ -444,10 +456,10 @@ tracks/8/path = NodePath("ReloadMainHand:visible")
 tracks/8/interp = 1
 tracks/8/loop_wrap = true
 tracks/8/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
 "update": 1,
-"values": [true]
+"values": [true, false]
 }
 tracks/9/type = "value"
 tracks/9/imported = false
@@ -456,7 +468,7 @@ tracks/9/path = NodePath("ReloadOffHand:visible")
 tracks/9/interp = 1
 tracks/9/loop_wrap = true
 tracks/9/keys = {
-"times": PackedFloat32Array(0, 0.725),
+"times": PackedFloat32Array(0, 1),
 "transitions": PackedFloat32Array(1, 1),
 "update": 1,
 "values": [true, false]
@@ -484,6 +496,18 @@ tracks/11/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 0,
 "values": [0.0]
+}
+tracks/12/type = "value"
+tracks/12/imported = false
+tracks/12/enabled = true
+tracks/12/path = NodePath("ReloadMainHand:position")
+tracks/12/interp = 1
+tracks/12/loop_wrap = true
+tracks/12/keys = {
+"times": PackedFloat32Array(0, 0.5, 0.675),
+"transitions": PackedFloat32Array(0, 0, 1),
+"update": 0,
+"values": [Vector2(-7, 3), Vector2(-6, 3), Vector2(-7, 3)]
 }
 
 [sub_resource type="Animation" id="Animation_oaoxh"]
@@ -596,7 +620,7 @@ tracks/5/path = NodePath("Barrel:position")
 tracks/5/interp = 1
 tracks/5/loop_wrap = true
 tracks/5/keys = {
-"times": PackedFloat32Array(0, 0.5, 0.675),
+"times": PackedFloat32Array(0, 0.5, 0.65),
 "transitions": PackedFloat32Array(1, 1, 1),
 "update": 1,
 "values": [Vector2(1.5, 2), Vector2(2.5, 3), Vector2(1.5, 2)]
@@ -608,7 +632,7 @@ tracks/6/path = NodePath("Stock:position")
 tracks/6/interp = 1
 tracks/6/loop_wrap = true
 tracks/6/keys = {
-"times": PackedFloat32Array(0, 0.5, 0.675),
+"times": PackedFloat32Array(0, 0.5, 0.65),
 "transitions": PackedFloat32Array(1, 1, 1),
 "update": 1,
 "values": [Vector2(-13.5, 2), Vector2(-12.5, 2), Vector2(-13.5, 2)]
@@ -672,6 +696,18 @@ tracks/11/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 0,
 "values": [0.0]
+}
+tracks/12/type = "value"
+tracks/12/imported = false
+tracks/12/enabled = true
+tracks/12/path = NodePath("ReloadMainHand:position")
+tracks/12/interp = 1
+tracks/12/loop_wrap = true
+tracks/12/keys = {
+"times": PackedFloat32Array(0, 0.5, 0.65),
+"transitions": PackedFloat32Array(0, 0, 1),
+"update": 0,
+"values": [Vector2(-7, 3), Vector2(-6, 3), Vector2(-7, 3)]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_afab1"]

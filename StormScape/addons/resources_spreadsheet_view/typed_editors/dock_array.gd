@@ -30,7 +30,7 @@ func try_edit_value(value, type, property_hint) -> bool:
 	_stored_type = type
 	_stored_value = value.duplicate()  # Generic arrays are passed by reference
 	contents_label.text = str(value)
-	
+
 	var is_generic_array : bool = _stored_type == TYPE_ARRAY and !value.is_typed()
 	button_box.get_child(1).visible = (
 		is_generic_array or value.get_typed_builtin() == TYPE_STRING or value.get_typed_builtin() == TYPE_STRING_NAME
@@ -80,7 +80,7 @@ func _add_value(value):
 	_stored_value.append(value)
 	var values : Array = sheet.get_edited_cells_values()
 	var cur_value
-	var dupe_array : bool = ProjectSettings.get_setting(TablesPluginSettingsClass.PREFIX + "dupe_arrays") 
+	var dupe_array : bool = ProjectSettings.get_setting(TablesPluginSettingsClass.PREFIX + "dupe_arrays")
 	for i in values.size():
 		cur_value = values[i]
 		if dupe_array:
@@ -96,7 +96,7 @@ func _add_values(added_values : Array):
 	_stored_value.append_array(added_values)
 	var values : Array = sheet.get_edited_cells_values()
 	var cur_value
-	var dupe_array : bool = ProjectSettings.get_setting(TablesPluginSettingsClass.PREFIX + "dupe_arrays") 
+	var dupe_array : bool = ProjectSettings.get_setting(TablesPluginSettingsClass.PREFIX + "dupe_arrays")
 	for i in values.size():
 		cur_value = values[i]
 		if dupe_array:
@@ -112,7 +112,7 @@ func _remove_value(value):
 	_stored_value.remove_at(_stored_value.find(value))
 	var values : Array = sheet.get_edited_cells_values()
 	var cur_value : Array
-	var dupe_array : bool = ProjectSettings.get_setting(TablesPluginSettingsClass.PREFIX + "dupe_arrays") 
+	var dupe_array : bool = ProjectSettings.get_setting(TablesPluginSettingsClass.PREFIX + "dupe_arrays")
 	for i in values.size():
 		cur_value = values[i]
 		if dupe_array:
@@ -120,7 +120,7 @@ func _remove_value(value):
 
 		if cur_value.has(value): # erase() not defined in PoolArrays
 			cur_value.remove_at(cur_value.find(value))
-		
+
 		values[i] = cur_value
 
 	sheet.set_edited_cells_values(values)
@@ -170,7 +170,7 @@ func _on_Remove_pressed():
 
 	elif str_to_var(value_input.text) != null:
 		_remove_value(str_to_var(value_input.text))
-		
+
 	else:
 		_remove_value(value_input.text)
 
@@ -179,7 +179,7 @@ func _on_RemoveLast_pressed():
 	_stored_value.pop_back()
 	var values : Array = sheet.get_edited_cells_values()
 	var cur_value : Array
-	var dupe_array : bool = ProjectSettings.get_setting(TablesPluginSettingsClass.PREFIX + "dupe_arrays") 
+	var dupe_array : bool = ProjectSettings.get_setting(TablesPluginSettingsClass.PREFIX + "dupe_arrays")
 	for i in values.size():
 		cur_value = values[i]
 		if dupe_array:
@@ -195,7 +195,7 @@ func _on_ClearRecent_pressed():
 	for i in recent_container.get_child_count():
 		if i == 0: continue
 		recent_container.get_child(i).free()
-	
+
 
 func _on_Float_pressed():
 	_add_value(value_input.text.to_float())
@@ -213,7 +213,7 @@ func _on_String_pressed():
 func _on_Variant_pressed():
 	if value_input is EditorResourcePicker:
 		_add_value(value_input.edited_resource)
-	
+
 	else:
 		_add_value(str_to_var(value_input.text))
 

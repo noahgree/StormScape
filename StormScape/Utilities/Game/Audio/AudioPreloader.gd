@@ -6,6 +6,10 @@ class_name AudioPreloader
 @export var scene_audio: Array[AudioResource] = [] ## Any audio resource that this scene needs to use.
 
 
+func _init(node_to_become_child_of: Node = null) -> void:
+	if node_to_become_child_of != null:
+		node_to_become_child_of.add_child(self)
+
 func _ready() -> void:
 	register_sounds_from_resources(scene_audio)
 

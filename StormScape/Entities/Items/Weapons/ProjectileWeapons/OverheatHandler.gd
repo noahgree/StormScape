@@ -1,4 +1,3 @@
-extends Node
 class_name OverheatHandler
 
 signal overheat_penalty_ended
@@ -10,13 +9,14 @@ var auto_decrementer: AutoDecrementer
 var is_tweening_overheat_overlays: bool = false ## Whether the post-overheat penalty tween is lowering the opacity of the overlays.
 
 
-func initialize(parent_weapon: ProjectileWeapon) -> void:
+func _init(parent_weapon: ProjectileWeapon) -> void:
+	if Engine.is_editor_hint():
+		return
 	weapon = parent_weapon
 	anim_player = weapon.anim_player
 	source_entity = weapon.source_entity
 	auto_decrementer = source_entity.inv.auto_decrementer
 
-func _ready() -> void:
 	# When there is 0 overheat progress, disable the overheat visuals
 	auto_decrementer.overheat_empty.connect(_on_overheat_emptied)
 	auto_decrementer.cooldown_ended.connect(_on_overheat_penalty_cooldown_ended)
@@ -40,7 +40,7 @@ func add_overheat() -> void:
 	if source_entity is Player:
 		weapon.overhead_ui.overheat_bar.show()
 
-func is_overheated() -> bool:
+func check_is_overheated() -> bool:
 	if _get_overheat() >= 1.0:
 		start_max_overheat_visuals(false)
 		return true
@@ -65,7 +65,7 @@ func start_max_overheat_visuals(just_equipped: bool) -> void:
 
 	weapon.add_cooldown(weapon.stats.s_mods.get_stat("overheat_penalty"), "overheat_penalty")
 	AudioManager.play_2d(weapon.stats.overheated_sound, weapon.global_position)
-	weapon.overheat_ui.update_visuals_for_max_overheat()
+	weapon.overhead_ui.update_visuals_for_max_overheat()
 
 	# Activate overlays and tint the mouse cursor
 	for overlay: TextureRect in weapon.overheat_overlays:
@@ -99,7 +99,7 @@ func end_max_overheat_visuals() -> void:
 
 	if not weapon.overheat_overlays.is_empty():
 		is_tweening_overheat_overlays = true
-		var tween: Tween = create_tween().parallel()
+		var tween: Tween = weapon.create_tween().parallel()
 
 		for overlay: TextureRect in weapon.overheat_overlays:
 			tween.tween_property(overlay, "self_modulate:a", current_overheat, 0.15)
@@ -125,9 +125,11 @@ func update_overlays_and_overhead_ui() -> void:
 
 	# If we aren't on penalty and need to show the visuals as all red, update them with the current overheat progress
 	if auto_decrementer.get_cooldown_source_title(weapon.stats.get_cooldown_id()) != "overheat_penalty":
-		weapon.overhead_ui.update_overheat_progress(int(current_overheat * 100.0))
+		if weapon.overhead_ui != null:
+			weapon.overhead_ui.update_overheat_progress(int(current_overheat * 100.0))
 		if not is_tweening_overheat_overlays:
 			for overlay: TextureRect in weapon.overheat_overlays:
 				overlay.self_modulate.a = current_overheat * 0.5
 	else:
-		weapon.overhead_ui.update_overheat_progress(100)
+		if weapon.overhead_ui != null:
+			weapon.overhead_ui.update_overheat_progress(100)

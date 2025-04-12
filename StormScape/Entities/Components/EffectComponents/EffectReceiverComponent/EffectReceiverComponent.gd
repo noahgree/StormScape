@@ -35,7 +35,7 @@ class_name EffectReceiverComponent
 @export var time_snare_handler: TimeSnareHandler ## The time snare handler of the affected entity.
 @export var life_steal_handler: LifeStealHandler ## The life steal handler of the affected entity.
 
-@onready var tool_script: Node = $EffectReceiverToolScript ## The tool script node that helps auto-assign export nodes relative to this receiver.
+@onready var tool_script: RefCounted = load("res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectReceiverTool.gd").new() ## The tool script node that helps auto-assign export nodes relative to this receiver.
 
 var most_recent_effect_src: EffectSource = null ## The most recent effect source to be successfully handled by this receiver.
 var current_impact_sounds: Array[int] = [] ## The current impact sounds being played and held onto by this effect receiver.

@@ -34,6 +34,7 @@ func _ready() -> void:
 	DebugConsole.add_command("mod", stats.add_mod_from_scratch)
 	DebugConsole.add_command("remove_mod", stats.remove_mod)
 	DebugConsole.add_command("coords", func() -> void: print(global_position))
+	DebugConsole.add_command("orphans", func() -> void: self.print_orphan_nodes())
 
 func _unhandled_key_input(_event: InputEvent) -> void:
 	if Input.is_action_just_pressed("interact") and not Globals.focused_ui_is_open:

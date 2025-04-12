@@ -1,5 +1,4 @@
 @tool
-extends Node
 ## Helps manage auto assigning export references to nodes added as children of an EffectReceiverComponent.
 
 
@@ -38,4 +37,4 @@ func update_editor_parent_export(node: EffectReceiverComponent, parent: Node) ->
 	if parent.has_node("LootTableComponent"):
 		node.loot_table_component = parent.get_node("LootTableComponent")
 	if parent.has_node("StatusEffectsComponent"):
-		parent.get_node("StatusEffectsComponent").effect_receiver = get_parent()
+		parent.get_node("StatusEffectsComponent").effect_receiver = node

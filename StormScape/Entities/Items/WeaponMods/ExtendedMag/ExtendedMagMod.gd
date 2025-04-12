@@ -11,10 +11,10 @@ func on_added(weapon_stats: WeaponResource, equippable_item: EquippableItem) -> 
 			weapon_stats.ammo_in_mag = weapon_stats.s_mods.get_stat("mag_size")
 			# Must check if it is null since the mod manager may call this for inventory items and not only equipped items
 			if equippable_item != null and weapon_stats == equippable_item.stats:
-				equippable_item._update_ammo_ui()
+				equippable_item.update_ammo_ui()
 
 func on_removal(weapon_stats: WeaponResource, equippable_item: EquippableItem) -> void:
 	if weapon_stats is ProjWeaponResource:
 		weapon_stats.ammo_in_mag = min(weapon_stats.ammo_in_mag, weapon_stats.s_mods.get_stat("mag_size"))
 		if equippable_item != null and weapon_stats == equippable_item.stats:
-			equippable_item._update_ammo_ui()
+			equippable_item.update_ammo_ui()

@@ -268,6 +268,7 @@ func _get_drag_data(at_position: Vector2) -> Variant:
 ## Creates a drag preview to display at the mouse when a drag is in progress.
 func _make_drag_preview(at_position: Vector2) -> Control:
 	var c: Control = Control.new()
+	c.name = "DragPreview"
 	if item and item.stats.inv_icon and item.quantity > 0:
 		var preview_scene: Control = drag_preview.instantiate()
 		var preview_tex_margins: MarginContainer = preview_scene.get_node("TextureMargins")

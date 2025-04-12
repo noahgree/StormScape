@@ -1,4 +1,3 @@
-extends Node
 class_name WarmupHandler
 
 signal warmup_finished
@@ -9,19 +8,18 @@ var auto_decrementer: AutoDecrementer
 var warmup_timer: Timer
 
 
-func initialize(parent_weapon: ProjectileWeapon) -> void:
+func _init(parent_weapon: ProjectileWeapon) -> void:
+	if Engine.is_editor_hint():
+		return
 	weapon = parent_weapon
 	anim_player = weapon.anim_player
 	auto_decrementer = weapon.source_entity.inv.auto_decrementer
-	warmup_timer = TimerHelpers.create_one_shot_timer(weapon, 1, _on_warmup_timer_timeout)
 
-func needs_warmup() -> bool:
-	return weapon.stats.s_mods.get_stat("initial_fire_rate_delay") > 0
+	warmup_timer = TimerHelpers.create_one_shot_timer(weapon, 1, _on_warmup_timer_timeout)
 
 func start_warmup() -> void:
 	var warmup_time: float = _get_warmup_delay()
 	if warmup_time <= 0:
-		warmup_finished.emit()
 		return
 
 	if anim_player.has_animation("warmup"):
@@ -29,6 +27,7 @@ func start_warmup() -> void:
 		anim_player.play("warmup")
 
 	warmup_timer.start(warmup_time)
+	await warmup_timer.timeout
 
 ## Increases current warmup level via sampling the increase curve using the current warmup.
 func add_warmup() -> void:

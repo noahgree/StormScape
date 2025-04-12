@@ -28,7 +28,8 @@ enum ReloadType {
 @export_subgroup("Firing Animations")
 @export var one_frame_per_fire: bool = false ## When true, the sprite frames will only advance one frame when firing normally.
 @export var fire_anim_dur: float = 0 ## When greater than 0, the fire animation will run for this override time.
-@export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var post_fire_fx_delay: float = 0 ## The delay after the firing duration ends before starting the post-fire animation and fx if one exists.
+@export var spawn_after_fire_anim: bool = false ## When true, the projectile won't actually spawn and fire until the end of the fire animation.
+@export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var post_fire_anim_delay: float = 0 ## The delay after the firing duration ends before starting the post-fire animation and fx if one exists.
 @export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var post_fire_anim_dur: float = 0 ## The override time for how long the animation should be that plays after firing (if it exists). Anything greater than 0 activates this override.
 @export_subgroup("Entity Effects")
 @export var firing_stat_effect: StatusEffect = null ## The status effect to apply to the source entity when firing.

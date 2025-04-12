@@ -1,4 +1,3 @@
-extends Node
 class_name WearablesManager
 ## A collection of static functions that handle adding, removing, and validating wearables on an entity.
 
