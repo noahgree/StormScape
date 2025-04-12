@@ -9,10 +9,10 @@ enum ProjWeaponType { ## The kinds of projectile weapons.
 enum ProjAmmoType { ## The types of projectile ammo.
 	NONE, SELF, LIGHT, MEDIUM, HEAVY, SHELL, ROCKET, MAGIC, ION_CHARGE, STAMINA, CHARGES
 }
-enum FiringType {
+enum FiringType { ## The kinds of firing modes the weapon can have.
 	SEMI_AUTO, AUTO, CHARGE
 }
-enum ReloadType {
+enum ReloadType { ## The kinds of reloads the weapon can have.
 	MAGAZINE, SINGLE
 }
 
@@ -52,12 +52,13 @@ enum ReloadType {
 @export var mag_size: int = 30  ## Number of normal attack executions that can happen before a reload is needed.
 @export var reload_type: ReloadType = ReloadType.MAGAZINE ## Whether to reload over time or all at once at the end.
 @export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var mag_reload_time: float = 1.0 ## How long it takes to reload an entire mag.
+@export var stamina_use_per_proj: float = 0.5 ## How much stamina is needed per projectile when stamina is the ammo type.
+@export var dont_consume_ammo: bool = false ## When true, this acts like infinite ammo where the weapon doesn't decrement the ammo in mag upon firing.
+@export_subgroup("Single")
 @export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var single_proj_reload_time: float = 0.25 ## How long it takes to reload a single projectile if the reload type is set to SINGLE.
 @export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var before_single_reload_time: float = 0.5 ## An additional delay that occurs before the first single proj is reloaded after triggering a reload.
 @export var single_reload_quantity: int = 1 ## How much to add to the mag when the single proj timer elapses each time.
 @export var must_reload_fully: bool = false ## When true, if the reload method is SINGLE, the reload cannot be stopped while in progress and must load all single projectiles in before being able to fire again.
-@export var stamina_use_per_proj: float = 0.5 ## How much stamina is needed per projectile when stamina is the ammo type.
-@export var dont_consume_ammo: bool = false ## When true, this acts like infinite ammo where the weapon doesn't decrement the ammo in mag upon firing.
 @export_subgroup("Recharging")
 @export var auto_ammo_interval: float = 0 ## How long it takes to recouperate a single ammo when given automatically. Most useful when using the "Charges" ammo type but can also be used to simply grant ammo over time. Anything above 0 activates this feature. Only works with consumable ammo types, meaning not "Self" or "Stamina".
 @export var auto_ammo_count: int = 1 ## How much ammo to grant after the interval is up.

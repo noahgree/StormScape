@@ -57,7 +57,8 @@ func _do_character_dash() -> void:
 	entity.velocity = controller.get_movement_vector() * entity.stats.get_stat("dash_speed")
 	entity.move_and_slide()
 
-	if entity is Player: _handle_rigid_entity_collisions()
+	if entity is Player:
+		_handle_rigid_entity_collisions()
 
 ## Handles moving rigid entities that we collided with in the last frame. Only happens for players.
 func _handle_rigid_entity_collisions() -> void:
@@ -78,6 +79,9 @@ func _handle_rigid_entity_collisions() -> void:
 				AudioManager.play_2d("player_dash_impact", entity.global_position)
 
 			collision_shake_complete = true
+
+		if i == 0:
+			controller.knockback_vector = Vector2.ZERO
 
 func _animate() -> void:
 	entity.facing_component.update_blend_position("run")

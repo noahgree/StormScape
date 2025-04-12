@@ -29,17 +29,20 @@ func reset_all() -> void:
 ## Provides the reload progress bar with a new value.
 func update_reload_progress(value: int) -> void:
 	reload_bar.value = value
+	reload_bar.visible = value > 1
 
 ## Provides the overheat progress bar with a new value.
 func update_overheat_progress(value: int) -> void:
 	overheat_bar.value = value
+	overheat_bar.visible = value > 3 # Using 3 since it looks empty when below that
 
 ## Either enables or disables the max overheat visuals.
-func update_visuals_for_max_overheat(reset: bool = false) -> void:
+func update_visuals_for_max_overheat(start: bool) -> void:
 	if overheat_tween:
 		overheat_tween.kill()
 
-	if not reset:
+	if start:
+		update_overheat_progress(100)
 		overheat_bar.texture_progress = tintable_overheat_progress_texture
 		overheat_tween = create_tween().set_loops()
 		overheat_tween.tween_property(overheat_bar, "tint_progress", max_overheat_progress_tint_color, 0.3).set_delay(0.1)

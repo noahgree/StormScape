@@ -24,6 +24,9 @@ func process(delta: float) -> void:
 #region Cooldowns
 ## Adds a cooldown to the dictionary.
 func add_cooldown(item_id: StringName, duration: float, title: String = "default") -> void:
+	if duration <= 0:
+		return
+
 	cooldowns[item_id] = {
 		&"duration" : duration,
 		&"original_duration" : duration,

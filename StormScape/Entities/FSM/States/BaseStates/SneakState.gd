@@ -42,6 +42,9 @@ func _handle_rigid_entity_collisions() -> void:
 		if collider is RigidEntity:
 			collider.apply_central_impulse(-c.get_normal().normalized() * entity.velocity.length() / (15 / (entity.stats.get_stat("sneak_collision_impulse_factor"))))
 
+		if i == 0:
+			controller.knockback_vector = Vector2.ZERO
+
 ## Updates the dynamic entity with the amount of stealth we currently have.
 func _send_parent_entity_stealth_value() -> void:
 	entity.detection_component.update_stealth(int(entity.stats.get_stat("max_stealth")))

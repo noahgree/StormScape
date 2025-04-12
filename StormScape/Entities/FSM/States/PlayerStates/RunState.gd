@@ -100,6 +100,10 @@ func _handle_rigid_entity_collisions() -> void:
 		if collider is RigidEntity:
 			collider.apply_central_impulse(-c.get_normal().normalized() * entity.velocity.length() / (10 / (entity.stats.get_stat("run_collision_impulse_factor"))))
 
+		# End any knockback if we ran into something
+		if i == 0:
+			controller.knockback_vector = Vector2.ZERO
+
 func _animate() -> void:
 	entity.facing_component.update_blend_position("run")
 

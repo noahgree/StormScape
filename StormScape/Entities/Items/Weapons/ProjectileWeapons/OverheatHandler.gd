@@ -1,14 +1,14 @@
 class_name OverheatHandler
+## Handles the overheat logic for projectile weapons.
 
-signal overheat_penalty_ended
-
-var weapon: ProjectileWeapon
-var anim_player: AnimationPlayer
-var source_entity: PhysicsBody2D
-var auto_decrementer: AutoDecrementer
+var weapon: ProjectileWeapon ## A reference to the weapon.
+var anim_player: AnimationPlayer ## A reference to the animation player on the weapon.
+var source_entity: PhysicsBody2D ## A reference to the entity that controls the weapon.
+var auto_decrementer: AutoDecrementer ## A reference to the auto_decrementer in the source_entity's inventory.
 var is_tweening_overheat_overlays: bool = false ## Whether the post-overheat penalty tween is lowering the opacity of the overlays.
 
 
+## Called when this script is first created to provide a reference to the owning weapon.
 func _init(parent_weapon: ProjectileWeapon) -> void:
 	if Engine.is_editor_hint():
 		return
@@ -37,18 +37,17 @@ func add_overheat() -> void:
 		weapon.stats.overheat_dec_delay
 	)
 
-	if source_entity is Player:
-		weapon.overhead_ui.overheat_bar.show()
-
-func check_is_overheated() -> bool:
+## Checks if the overheat level is at or above 1.0, then adds the cooldown and starts the max overheat visuals if so.
+func check_is_overheated() -> void:
 	if _get_overheat() >= 1.0:
+		weapon.add_cooldown(weapon.stats.s_mods.get_stat("overheat_penalty"), "overheat_penalty")
 		start_max_overheat_visuals(false)
-		return true
-	return false
 
+## Returns the current overheat level.
 func _get_overheat() -> float:
 	return auto_decrementer.get_overheat(str(weapon.stats.session_uid))
 
+## When an overheat ends that matches this item's id and we aren't still on max overheat penalty, stop the visuals.
 func _on_overheat_emptied(item_id: StringName) -> void:
 	if item_id != str(weapon.stats.session_uid):
 		return
@@ -59,13 +58,11 @@ func _on_overheat_emptied(item_id: StringName) -> void:
 		if source_entity is Player:
 			CursorManager.change_cursor_tint(Color.WHITE)
 
+## When we hit max overheat, these visuals are started to update overlays, the mouse cursor, smoke particles, etc.
 func start_max_overheat_visuals(just_equipped: bool) -> void:
-	if source_entity is Player:
-		weapon.overhead_ui.overheat_bar.show()
-
-	weapon.add_cooldown(weapon.stats.s_mods.get_stat("overheat_penalty"), "overheat_penalty")
+	if weapon.overhead_ui:
+		weapon.overhead_ui.update_visuals_for_max_overheat(true)
 	AudioManager.play_2d(weapon.stats.overheated_sound, weapon.global_position)
-	weapon.overhead_ui.update_visuals_for_max_overheat()
 
 	# Activate overlays and tint the mouse cursor
 	for overlay: TextureRect in weapon.overheat_overlays:
@@ -87,17 +84,14 @@ func start_max_overheat_visuals(just_equipped: bool) -> void:
 		anim_player.speed_scale = 1.0 / weapon.stats.overheat_anim_dur
 		anim_player.play("overheat")
 
+## When the overheat penalty ends, stop the max overheat visuals.
 func end_max_overheat_visuals() -> void:
-	weapon.overhead_ui.update_visuals_for_max_overheat(true)
+	if weapon.overhead_ui:
+		weapon.overhead_ui.update_visuals_for_max_overheat(false)
 	source_entity.hands.smoke_particles.emitting = false
 
-	var current_overheat: float = _get_overheat()
-
-	# Only hide the overheat bar after the penalty ends if there isn't any residual overheat progress left
-	if current_overheat == 0:
-		weapon.overhead_ui.overheat_bar.hide()
-
 	if not weapon.overheat_overlays.is_empty():
+		var current_overheat: float = _get_overheat()
 		is_tweening_overheat_overlays = true
 		var tween: Tween = weapon.create_tween().parallel()
 
@@ -109,27 +103,23 @@ func end_max_overheat_visuals() -> void:
 	if anim_player.current_animation == "overheat":
 		weapon.reset_animation_state()
 
+## Detects when the cooldown from the overheat penalty ends, then calls to end the max overheat visuals.
 func _on_overheat_penalty_cooldown_ended(item_id: StringName, source_title: String) -> void:
 	if (item_id != str(weapon.stats.session_uid)) or (source_title != "overheat_penalty"):
 		return
-
 	end_max_overheat_visuals()
-	overheat_penalty_ended.emit()
 
+## Updates the overheat overlays and the overhead ui bar with the most recent overheat value.
 func update_overlays_and_overhead_ui() -> void:
 	var current_overheat: float = _get_overheat()
-	if current_overheat <= 0:
-		if weapon.overhead_ui != null:
-			weapon.overhead_ui.update_overheat_progress(0)
-		return
 
-	# If we aren't on penalty and need to show the visuals as all red, update them with the current overheat progress
-	if auto_decrementer.get_cooldown_source_title(weapon.stats.get_cooldown_id()) != "overheat_penalty":
+	# If on penalty and need to show the visuals as all red, do that instead of showing normal overheat progress
+	if auto_decrementer.get_cooldown_source_title(weapon.stats.get_cooldown_id()) == "overheat_penalty":
+		if weapon.overhead_ui != null:
+			weapon.overhead_ui.update_overheat_progress(100)
+	else:
 		if weapon.overhead_ui != null:
 			weapon.overhead_ui.update_overheat_progress(int(current_overheat * 100.0))
 		if not is_tweening_overheat_overlays:
 			for overlay: TextureRect in weapon.overheat_overlays:
 				overlay.self_modulate.a = current_overheat * 0.5
-	else:
-		if weapon.overhead_ui != null:
-			weapon.overhead_ui.update_overheat_progress(100)

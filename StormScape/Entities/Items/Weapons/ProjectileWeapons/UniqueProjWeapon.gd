@@ -4,57 +4,41 @@ extends ProjectileWeapon
 class_name UniqueProjWeapon
 ## A subclass of projectile weapon that adds extra logic for handling unique projectiles. These cannot hitscan.
 
-var returned: bool = true: ## Whether the unique projectile has come back yet. Gets reset when dropped, but any cooldowns are saved.
-	set(new_value):
-		if Engine.is_editor_hint():
-			return
-
-		if returned == false and new_value == true:
-			var cooldown: float = stats.fire_cooldown if stats.firing_mode != ProjWeaponResource.FiringType.CHARGE else stats.charge_fire_cooldown
-			_add_cooldown(cooldown)
-
-		returned = new_value
-
-		if new_value == true:
-			sprite.show()
-		else:
-			sprite.hide()
+var returned: bool = true: set = _set_returned ## Whether the unique projectile has come back yet. Gets reset when dropped, but any cooldowns are saved.
 
 
 func _ready() -> void:
 	if Engine.is_editor_hint():
 		return
-
-	tree_exiting.connect(_on_tree_exiting)
-	if not returned:
-		sprite.hide()
 	super._ready()
 
-#func _fire() -> void:
-	#if returned:
-		#super._fire()
-#
-#func _charge_fire() -> void:
-	#if returned:
-		#super._charge_fire()
-#
-#func _spawn_projectile(proj: Projectile) -> void:
-	#returned = false
-	#proj.source_weapon_instance = self
-	#super._spawn_projectile(proj)
-
-func _on_tree_exiting() -> void:
 	if not returned:
-		var cooldown: float = stats.fire_cooldown if stats.firing_mode != ProjWeaponResource.FiringType.CHARGE else stats.charge_fire_cooldown
-		_add_cooldown(cooldown)
+		sprite.hide()
 
-## Checks for a cooldown and adds it to the manager. Then updates the visuals if needed.
-func _add_cooldown(duration: float, title: String = "default") -> void:
-	if duration <= 0:
+func _set_returned(new_value: bool) -> void:
+	if Engine.is_editor_hint():
 		return
-	source_entity.inv.auto_decrementer.add_cooldown(stats.get_cooldown_id(), duration, Callable(), title)
 
-## Only exists to override the parent function so that we can do our own, different logic here.
-## Does nothing on purpose in this script.
-func _handle_adding_cooldown(_duration: float, _title: String = "default") -> void:
-	return
+	if (not returned) and (new_value == true):
+		add_unique_proj_cooldown(stats.fire_cooldown)
+
+	returned = new_value
+	sprite.visible = returned
+
+func _can_activate_at_all() -> bool:
+	if not returned:
+		return false
+	return super._can_activate_at_all()
+
+func _exit_tree() -> void:
+	super._exit_tree()
+
+	if not returned:
+		add_unique_proj_cooldown(stats.fire_cooldown)
+
+## Overrides the normal add_cooldown method to do nothing so that we can add our own here
+func add_cooldown(_duration: float, _title: String = "default") -> void:
+	pass
+
+func add_unique_proj_cooldown(duration: float, title: String = "default") -> void:
+	source_entity.inv.auto_decrementer.add_cooldown(stats.get_cooldown_id(), duration, title)
