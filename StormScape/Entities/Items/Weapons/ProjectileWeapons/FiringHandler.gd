@@ -4,7 +4,7 @@ class_name FiringHandler
 var weapon: ProjectileWeapon ## A reference to the weapon.
 var anim_player: AnimationPlayer ## A reference to the animation player on the weapon.
 var auto_decrementer: AutoDecrementer ## A reference to the auto_decrementer in the source_entity's inventory.
-var mouse_area_scan_delay_timer: Timer ## The timer delaying the mouse area scans so that the physics server can catch up to the area being enabled before spawning any projectiles.
+var firing_duration_timer: Timer ## The timer tracking how long the firing duration is, which can in certain cases be different from the animation time.
 var hitscan_hands_freeze_timer: Timer ## The timer that tracks the brief moment after a semi-auto hitscan shot that we shouldn't be rotating.
 const HITSCAN_HANDS_FREEZE_DURATION: float = 0.065 ## The minimum hitscan duration that requires the hands to freeze while firing the hitscans.
 
@@ -17,7 +17,7 @@ func _init(parent_weapon: ProjectileWeapon) -> void:
 	anim_player = weapon.anim_player
 	auto_decrementer = weapon.source_entity.inv.auto_decrementer
 
-	mouse_area_scan_delay_timer = TimerHelpers.create_one_shot_timer(weapon, 0.01, _on_mouse_area_scan_delay_timer_timeout)
+	firing_duration_timer = TimerHelpers.create_one_shot_timer(weapon, -1)
 	hitscan_hands_freeze_timer = TimerHelpers.create_one_shot_timer(weapon, -1, _on_hitscan_hands_freeze_timer_timeout)
 
 ## The main entry point for starting the firing process. Returns control back to the caller once all animations and
@@ -28,12 +28,14 @@ func start_firing() -> void:
 		var sprite: AnimatedSprite2D = weapon.sprite
 		sprite.frame = (sprite.frame + 1) % sprite.sprite_frames.get_frame_count(sprite.animation)
 
-	await _start_firing_animation()
+	await _start_firing_animation_and_timer()
 	_apply_firing_effect_to_entity()
 
 	await _handle_bursting()
 	if anim_player.is_playing() and anim_player.current_animation == "fire":
 		await anim_player.animation_finished
+	if not firing_duration_timer.is_stopped():
+		await firing_duration_timer.timeout
 
 	weapon.add_cooldown(weapon.stats.s_mods.get_stat("fire_cooldown"))
 
@@ -92,11 +94,11 @@ func _handle_barraging() -> void:
 		if weapon.stats.do_cluster_barrage:
 			proj_rot = start_rot + randf_range(0, angular_spread_rads)
 
-		if not weapon.stats.use_hitscan:
+		if not weapon.stats.is_hitscan:
 			_spawn_projectile(proj_rot, multishot_id)
 		else:
 			var start_of_hitscan_rotation_offsets: float = -angular_spread_rads * 0.5
-			_spawn_hitscan(i, spread_segment_width, start_of_hitscan_rotation_offsets)
+			_spawn_hitscan(i, spread_segment_width, start_of_hitscan_rotation_offsets, multishot_id)
 
 		if (weapon.stats.barrage_proj_delay > 0) and (i < barrage_count - 1):
 			await weapon.get_tree().create_timer(weapon.stats.barrage_proj_delay, false).timeout
@@ -114,45 +116,41 @@ func _spawn_projectile(proj_rot: float, multishot_id: int) -> void:
 	if weapon.stats.projectile_logic.homing_method == "Mouse Position":
 		weapon.mouse_scan_area_targets.clear()
 		weapon.enable_mouse_area()
-		mouse_area_scan_delay_timer.add_meta("proj", proj)
-		mouse_area_scan_delay_timer.start()
-	else:
-		Globals.world_root.add_child(proj)
+
+		# Let the physics server catch up with the mouse area being enabled
+		var tree: SceneTree = weapon.get_tree()
+		for i: int in range(3):
+			await tree.physics_frame
+
+		# Duplicate to ensure later changes don't alter the same array now attached to the projectile
+		proj.mouse_scan_targets = weapon.mouse_scan_area_targets.duplicate()
+		weapon.disable_mouse_area()
+
+	Globals.world_root.add_child(proj)
 
 ## Spawns a hitscan with the given index amongst other hitscans, the width between them, and the start of the rotations.
-func _spawn_hitscan(barrage_index: int, spread_segment_width: float, start_of_offsets: float) -> void:
+func _spawn_hitscan(barrage_index: int, spread_segment_width: float, start_of_offsets: float, multishot_id: int) -> void:
+	if weapon.is_holding_continuous_beam:
+		return
+
 	var rotation_offset: float = start_of_offsets + (barrage_index * spread_segment_width)
 	if weapon.stats.do_cluster_barrage:
 		rotation_offset = randf() * spread_segment_width
 	rotation_offset += _get_bloom_to_add_radians()
 
 	var hitscan: Hitscan = Hitscan.create(weapon, rotation_offset)
+	hitscan.multishot_id = multishot_id
 	Globals.world_root.add_child(hitscan)
 	weapon.current_hitscans.append(hitscan)
 
-	# Freezing the hand rotation during semi auto or very brief automatic hitscans
-	if weapon.stats.firing_mode == ProjWeaponResource.FiringType.SEMI_AUTO:
+	# Freezing the hand rotation during very brief hitscans
+	if weapon.stats.firing_duration <= HITSCAN_HANDS_FREEZE_DURATION:
 		weapon.source_entity.hands.should_rotate = false
-	elif weapon.stats.firing_mode == ProjWeaponResource.FiringType.AUTO and weapon.stats.s_mods.get_stat("hitscan_duration") <= HITSCAN_HANDS_FREEZE_DURATION:
-		weapon.source_entity.hands.should_rotate = false
-	else:
-		return
-	hitscan_hands_freeze_timer.start(HITSCAN_HANDS_FREEZE_DURATION)
+		hitscan_hands_freeze_timer.start(HITSCAN_HANDS_FREEZE_DURATION)
 
 ## When the timer that tracks freezing the hands during a short hitscan firing ends, let the hands rotate again.
 func _on_hitscan_hands_freeze_timer_timeout() -> void:
-	weapon.source_slot.hands.should_rotate = true
-
-## When the timer that delays the spawning of projectiles until after the physics server has caught up with the
-## mouse area checking for collisions ends, spawn the projectiles.
-func _on_mouse_area_scan_delay_timer_timeout() -> void:
-	var proj: Projectile = mouse_area_scan_delay_timer.get_meta("proj")
-	mouse_area_scan_delay_timer.set_meta("proj", null)
-
-	# Duplicate to ensure later changes don't alter the same array now attached to the projectile
-	proj.mouse_scan_targets = weapon.mouse_scan_area_targets.duplicate()
-	weapon.disable_mouse_area()
-	Globals.world_root.add_child(proj)
+	weapon.source_entity.hands.should_rotate = true
 
 ## Grabs a point from the bloom curve based on current bloom level given by the auto decrementer.
 func _get_bloom_to_add_radians() -> float:
@@ -199,17 +197,24 @@ func _consume_ammo() -> void:
 
 ## Starts the main firing animation if one exists, potentially waiting for it to end before returning control back
 ## to the main firing sequence.
-func _start_firing_animation() -> void:
+func _start_firing_animation_and_timer() -> void:
+	var firing_duration: float = weapon.stats.firing_duration
+	if firing_duration > 0:
+		firing_duration_timer.start(firing_duration)
+
 	if anim_player.has_animation("fire"):
-		var anim_time: float = weapon.stats.firing_duration
+		var anim_time: float = firing_duration
 		if weapon.stats.fire_anim_dur > 0:
 			anim_time = min(weapon.stats.firing_duration, weapon.stats.fire_anim_dur)
 		if anim_time > 0:
 			anim_player.speed_scale = 1.0 / anim_time
 			anim_player.play("fire")
 
-		if weapon.stats.spawn_after_fire_anim:
-			await anim_player.animation_finished
+			if weapon.stats.spawn_after_fire_anim:
+				await anim_player.animation_finished
+
+				if weapon.stats.is_hitscan and ((firing_duration - anim_time) <= 0.03):
+					push_warning("Hitscans will appear to not fire at all if they must wait until after the firing animation and that \nanimation is the nearly the time as the entire firing duration. Make sure to set the fire_anim_dur to something nonzero and noticeably smaller (-0.04 or more) than the firing_duration in this case.")
 
 ## Start the sounds and vfx that should play when firing.
 func _start_firing_fx() -> void:
@@ -223,6 +228,9 @@ func _start_firing_fx() -> void:
 ## animation itself to end before returning control back to the main firing sequence.
 func _start_post_firing_animation_and_fx() -> void:
 	if not anim_player.has_animation("post_fire"):
+		if not weapon.ensure_enough_ammo():
+			# If we don't have a post-fire anim, wait this small amount so the start of the reload isn't so jarring
+			await weapon.get_tree().create_timer(0.07, false).timeout
 		return
 
 	var firing_cooldown: float = weapon.stats.s_mods.get_stat("fire_cooldown")

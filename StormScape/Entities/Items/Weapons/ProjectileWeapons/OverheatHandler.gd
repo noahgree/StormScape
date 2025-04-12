@@ -38,10 +38,12 @@ func add_overheat() -> void:
 	)
 
 ## Checks if the overheat level is at or above 1.0, then adds the cooldown and starts the max overheat visuals if so.
-func check_is_overheated() -> void:
+func check_is_overheated() -> bool:
 	if _get_overheat() >= 1.0:
 		weapon.add_cooldown(weapon.stats.s_mods.get_stat("overheat_penalty"), "overheat_penalty")
 		start_max_overheat_visuals(false)
+		return true
+	return false
 
 ## Returns the current overheat level.
 func _get_overheat() -> float:

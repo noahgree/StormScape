@@ -1,10 +1,9 @@
-[gd_resource type="Resource" script_class="ProjWeaponResource" load_steps=21 format=3 uid="uid://dlfmjgnfk6nqj"]
+[gd_resource type="Resource" script_class="ProjWeaponResource" load_steps=19 format=3 uid="uid://dlfmjgnfk6nqj"]
 
 [ext_resource type="Texture2D" uid="uid://bm570hawaupxe" path="res://Entities/Items/Weapons/WeaponVFX/Casings/small_casing.png" id="1_80bso"]
 [ext_resource type="Script" uid="uid://boo31eu083dqd" path="res://Entities/Stats/EffectSystemResources/StatusEffects/StatusEffect.gd" id="1_dlrja"]
 [ext_resource type="Script" uid="uid://dkfssottmsrch" path="res://Entities/Stats/EffectSystemResources/EffectSources/EffectSource.gd" id="1_f7ms2"]
 [ext_resource type="Script" uid="uid://dvasncq3tgljs" path="res://Entities/Items/Weapons/ProjectileWeapons/ProjWeaponResource.gd" id="3_ctqw8"]
-[ext_resource type="Script" uid="uid://cje5bobi6o8bo" path="res://Entities/Items/Hitscans/HitscanResource.gd" id="3_hy3sc"]
 [ext_resource type="Texture2D" uid="uid://bn15edu8bniii" path="res://Entities/Items/Weapons/ProjectileWeapons/Revolver/RevolverBaseFrameCT.tres" id="4_4xu4l"]
 [ext_resource type="Script" uid="uid://cowjdnic7xmkp" path="res://UI/Inventory/PlayerInventory/StatDetail.gd" id="4_6hpwe"]
 [ext_resource type="PackedScene" uid="uid://ohg1k8yu1y3r" path="res://Entities/Items/Weapons/ProjectileWeapons/Revolver/Revolver.tscn" id="4_p3ec7"]
@@ -37,25 +36,6 @@ status_effects = Array[ExtResource("1_dlrja")]([])
 contact_position = Vector2(0, 0)
 movement_direction = Vector2(0, 0)
 multishot_id = -1
-
-[sub_resource type="Resource" id="Resource_y0rw7"]
-script = ExtResource("3_hy3sc")
-hitscan_duration = 0.0
-hitscan_effect_interval = -1.0
-hitscan_pierce_count = 0
-hitscan_max_distance = 350
-bad_effects_falloff = true
-good_effects_falloff = false
-override_vfx_defaults = false
-hitscan_max_width = 0.5
-beam_color = Color(1, 0.0784314, 0.576471, 1)
-glow_amount = 1.0
-start_particle_color = Color(1, 0.752941, 0.796078, 1)
-start_particle_mult = 1.0
-impact_particle_color = Color(1, 0.752941, 0.796078, 1)
-impact_particle_mult = 1.0
-beam_particle_color = Color(1, 0, 0, 1)
-beam_particle_mult = 1.0
 
 [sub_resource type="Curve" id="Curve_iijqb"]
 _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.64763), 0.0, 0.0, 0, 0]
@@ -140,9 +120,10 @@ firing_duration = 0.08
 fire_cooldown = 0.02
 min_charge_time = 1.0
 auto_do_charge_use = false
+is_hitscan = false
 one_frame_per_fire = true
 fire_anim_dur = 0.0
-spawn_after_fire_anim = false
+spawn_after_fire_anim = true
 post_fire_anim_delay = 0.0
 post_fire_anim_dur = 0.0
 firing_cam_fx = ExtResource("5_6hpwe")
@@ -152,22 +133,22 @@ firing_sound = ""
 post_fire_sound = ""
 charging_sound = ""
 projectile_logic = SubResource("Resource_ysh4t")
-hitscan_logic = SubResource("Resource_y0rw7")
 effect_source = SubResource("Resource_41nj1")
 ammo_type = 3
 mag_size = 6
 reload_type = 1
-mag_reload_time = 1.0
-stamina_use_per_proj = 0.5
+reload_delay = 0.45
 dont_consume_ammo = false
+mag_reload_time = 1.0
+mag_reload_anim_delay = 0.0
 single_proj_reload_time = 0.21
-before_single_reload_time = 0.5
 single_reload_quantity = 1
 must_reload_fully = true
 auto_ammo_interval = 0.0
 auto_ammo_count = 1
 auto_ammo_delay = 0.5
 recharge_uses_inv = false
+stamina_use_per_proj = 0.5
 hide_ammo_ui = false
 hide_reload_ui = false
 mag_reload_sound = ""
@@ -190,8 +171,6 @@ barrage_count = 1
 angular_spread = 25.0
 do_cluster_barrage = false
 barrage_proj_delay = 0.0
-use_hitscan = false
-allow_hitscan_holding = true
 ammo_in_mag = -1
 pullout_delay = 0.3
 max_mods_override = -1

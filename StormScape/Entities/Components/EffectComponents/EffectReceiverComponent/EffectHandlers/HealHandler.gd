@@ -30,8 +30,8 @@ func handle_instant_heal(effect_source: EffectSource, heal_affected_stats: Globa
 func handle_over_time_heal(hot_resource: HOTResource, source_type: String) -> void:
 	var hot_timer: Timer = TimerHelpers.create_repeating_timer(self)
 	hot_timer.set_meta("hot_resource", hot_resource)
-	hot_timer.timeout.connect(_on_hot_timer_timeout.bind(hot_timer, source_type))
 	hot_timer.name = source_type + "_timer"
+	hot_timer.timeout.connect(_on_hot_timer_timeout.bind(hot_timer, source_type))
 
 	if hot_resource.delay_time > 0: # We have a delay before the healing starts
 		var delay_timer: Timer = TimerHelpers.create_one_shot_timer(self, hot_resource.delay_time)
@@ -43,10 +43,8 @@ func handle_over_time_heal(hot_resource: HOTResource, source_type: String) -> vo
 		else:
 			hot_timer.wait_time = max(0.01, hot_resource.time_between_ticks)
 
-		delay_timer.timeout.connect(_on_hot_timer_timeout.bind(hot_timer, source_type))
-		delay_timer.timeout.connect(hot_timer.start)
-		delay_timer.timeout.connect(delay_timer.queue_free)
 		delay_timer.name = source_type + "_delayTimer"
+		delay_timer.timeout.connect(_on_delay_hot_timer_timeout.bind(hot_timer, source_type, delay_timer))
 		delay_timer.start()
 
 		TimerHelpers.add_timer_to_cache(source_type, hot_timer, hot_timers)
@@ -66,16 +64,29 @@ func handle_over_time_heal(hot_resource: HOTResource, source_type: String) -> vo
 		hot_timer.start()
 
 ## Called externally to stop a HOT effect from proceeding.
-func cancel_over_time_heal(source_type: String, specific_timer: Timer = null) -> void:
-	var heal_timers: Array = hot_timers.get(source_type, [])
-	if not heal_timers.is_empty():
-		TimerHelpers.delete_timers_from_cache(heal_timers, specific_timer)
-		hot_timers.erase(source_type)
+func cancel_over_time_heal(source_type: String) -> void:
+	_cancel_hot_timers(source_type)
 
+	# Cancelling delay timers here as well
 	var delay_timers: Array = hot_delay_timers.get(source_type, [])
 	if not delay_timers.is_empty():
 		TimerHelpers.delete_delay_timers_from_cache(delay_timers)
-		hot_delay_timers.erase(source_type)
+		if hot_delay_timers[source_type].is_empty():
+			hot_delay_timers.erase(source_type)
+
+## Cancels all (or only a specific one) timers for a matching source type.
+func _cancel_hot_timers(source_type: String, specific_timer: Timer = null) -> void:
+	var heal_timers: Array = hot_timers.get(source_type, [])
+	if not heal_timers.is_empty():
+		TimerHelpers.delete_timers_from_cache(heal_timers, specific_timer)
+		if hot_timers[source_type].is_empty():
+			hot_timers.erase(source_type)
+
+## When the delay timer ends, trigger our first tick and then start the normal timer to take it from here.
+func _on_delay_hot_timer_timeout(hot_timer: Timer, source_type: String, delay_timer: Timer) -> void:
+	_on_hot_timer_timeout(hot_timer, source_type)
+	hot_timer.start()
+	delay_timer.queue_free()
 
 ## When the healing over time interval timer ends, check what sourced the timer and see if that source
 ## needs to apply any more healing ticks before ending.
@@ -98,9 +109,9 @@ func _on_hot_timer_timeout(hot_timer: Timer, source_type: String) -> void:
 			hot_timer.set_meta("ticks_completed", ticks_completed + 1)
 
 			if max_ticks == 1:
-				cancel_over_time_heal(source_type, hot_timer)
+				_cancel_hot_timers(source_type, hot_timer)
 		else:
-			cancel_over_time_heal(source_type, hot_timer)
+			_cancel_hot_timers(source_type, hot_timer)
 
 ## Sends the affected entity's health component the final healing values based on what stats the heal was
 ## allowed to affect.

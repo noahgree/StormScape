@@ -75,8 +75,7 @@ static func delete_delay_timers_from_cache(delay_timers_array: Array) -> void:
 	delay_timers_array = delay_timers_array.filter(func(timer: Variant) -> bool:
 		if timer != null:
 			timer.queue_free()
-			return false  # Remove this timer
-		return true  # Keep this timer
+		return false
 		)
 
 ## Adds a timer to the timer dict cache with the source type as the key.

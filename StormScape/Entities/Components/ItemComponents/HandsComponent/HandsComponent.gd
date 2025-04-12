@@ -349,4 +349,13 @@ func add_mod_to_weapon_by_id(mod_cache_id: StringName) -> void:
 	WeaponModsManager.handle_weapon_mod(
 		Globals.player_node.hands.equipped_item.stats, mod, WeaponModsManager.get_next_open_mod_slot(equipped_stats), Globals.player_node
 	)
+
+## Tries to toggle a weapon between using hitscan or not.
+func toggle_hitscan() -> void:
+	if not Globals.player_node.hands.equipped_item:
+		return
+	var equipped_stats: ItemResource = Globals.player_node.hands.equipped_item.stats
+	if equipped_stats is not WeaponResource:
+		return
+	Globals.player_node.hands.equipped_item.stats.is_hitscan = not Globals.player_node.hands.equipped_item.stats.is_hitscan
 #endregion

@@ -7,7 +7,8 @@ var weapon: ProjectileWeapon ## A reference to the weapon.
 var anim_player: AnimationPlayer ## A reference to the animation player on the weapon.
 var auto_decrementer: AutoDecrementer ## A reference to the auto_decrementer in the source_entity's inventory.
 var reload_dur_timer: Timer ## The timer that tracks the progress of the reload as it goes along in order to keep the UI updating smoothly.
-var before_single_reload_timer: Timer ## The timer that delays the first single reload if a "before_single_reload" animation doesn't exist and we therefore can't count on waiting on the animation player.
+var reload_delay_timer: Timer ## The timer that delays the reload if a "before_single_reload" animation doesn't exist or we are reloading the full magazine.
+var mag_reload_anim_delay_timer: Timer ## The timer that delays the start of the magazine reload animation.
 
 
 ## Called when this script is first created to provide a reference to the owning weapon.
@@ -21,9 +22,8 @@ func _init(parent_weapon: ProjectileWeapon) -> void:
 	if weapon.source_entity is Player:
 		weapon.source_entity.inv.auto_decrementer.recharge_completed.connect(_on_ammo_recharge_delay_completed)
 	reload_dur_timer = TimerHelpers.create_one_shot_timer(weapon, -1)
-
-	# When we don't have a before_single_reload anim but we do have the delay, use this timer instead
-	before_single_reload_timer = TimerHelpers.create_one_shot_timer(weapon, -1, _on_reload_animation_finished.bind("before_single_reload"))
+	reload_delay_timer = TimerHelpers.create_one_shot_timer(weapon, -1, _on_reload_delay_timer_timeout)
+	mag_reload_anim_delay_timer = TimerHelpers.create_one_shot_timer(weapon, -1, _on_mag_reload_anim_delay_timer_timeout)
 
 ## The main starting point for reloads, checks for the necessary conditions and then potentially proceeds.
 ## This function waits for the "reload_ended" signal before returning (unless the initial checks fail).
@@ -33,15 +33,10 @@ func attempt_reload() -> void:
 	if _mag_is_full() or _get_more_reload_ammo(1, false) == 0:
 		return
 
-	_start_reload_dur_timer()
 	weapon.source_entity.hands.off_hand_sprite.self_modulate.a = 0.0
 
-	match weapon.stats.reload_type:
-		ProjWeaponResource.ReloadType.MAGAZINE:
-			_start_magazine_reload()
-		ProjWeaponResource.ReloadType.SINGLE:
-			_start_single_reload_delay()
-
+	_start_reload_dur_timer()
+	_start_reload_delay()
 	await reload_ended
 
 ## Checks to see if the mag is already full. Returns true if it is.
@@ -54,14 +49,14 @@ func _start_reload_dur_timer() -> void:
 	if not weapon.source_entity is Player:
 		return
 
-	var total_reload_duration: float
+	var total_reload_duration: float = weapon.stats.reload_delay
 	match weapon.stats.reload_type:
 		ProjWeaponResource.ReloadType.MAGAZINE:
-			total_reload_duration = weapon.stats.s_mods.get_stat("mag_reload_time")
+			total_reload_duration += weapon.stats.s_mods.get_stat("mag_reload_time")
 		ProjWeaponResource.ReloadType.SINGLE:
 			var needed: int = _get_needed_single_reloads_count()
 			var single_proj_reload_time: float = weapon.stats.s_mods.get_stat("single_proj_reload_time")
-			total_reload_duration = weapon.stats.before_single_reload_time + (needed * single_proj_reload_time)
+			total_reload_duration += (needed * single_proj_reload_time)
 
 	reload_dur_timer.start(total_reload_duration)
 
@@ -70,21 +65,46 @@ func end_reload() -> void:
 	do_post_reload_animation_cleanup()
 	reload_ended.emit()
 
+## This is the entry point for the sequence where we choose to either do a delay (and corresponding animation if in
+## single mode), or start the reload immediately.
+func _start_reload_delay() -> void:
+	var delay_time: float = weapon.stats.reload_delay
+	match weapon.stats.reload_type:
+		ProjWeaponResource.ReloadType.MAGAZINE:
+			if delay_time <= 0:
+				_start_magazine_reload()
+			else:
+				reload_delay_timer.start(delay_time)
+		ProjWeaponResource.ReloadType.SINGLE:
+			if delay_time <= 0:
+				_start_single_reload()
+			elif anim_player.has_animation("before_single_reload"):
+				_start_reload_animation("before_single_reload", delay_time)
+			else:
+				reload_delay_timer.start(delay_time)
+
+## When the reload delay timer ends, start the appropriate reload method.
+func _on_reload_delay_timer_timeout() -> void:
+	match weapon.stats.reload_type:
+		ProjWeaponResource.ReloadType.MAGAZINE:
+			_start_magazine_reload()
+		ProjWeaponResource.ReloadType.SINGLE:
+			_start_single_reload()
+
 ## This is the entry point for starting a magazine reload sequence.
 func _start_magazine_reload() -> void:
 	var reload_time: float = weapon.stats.s_mods.get_stat("mag_reload_time")
-	_start_reload_animation("mag_reload", reload_time)
-
-## This is the entry point for starting a single reload sequence.
-func _start_single_reload_delay() -> void:
-	var delay_time: float = weapon.stats.before_single_reload_time
-	if delay_time <= 0:
-		_start_single_reload()
+	var mag_reload_anim_delay: float = min(reload_time, weapon.stats.mag_reload_anim_delay)
+	if (mag_reload_anim_delay != 0) and (reload_time - mag_reload_anim_delay) > 0.05:
+		mag_reload_anim_delay_timer.set_meta("anim_time", reload_time - mag_reload_anim_delay)
+		mag_reload_anim_delay_timer.start(mag_reload_anim_delay)
 	else:
-		if anim_player.has_animation("before_single_reload"):
-			_start_reload_animation("before_single_reload", delay_time)
-		else:
-			before_single_reload_timer.start(delay_time)
+		_start_reload_animation("mag_reload", reload_time)
+
+## When the magazine reload animation delay timer ends, we can now start the animation with the remaining time left.
+func _on_mag_reload_anim_delay_timer_timeout() -> void:
+	var anim_time: float = mag_reload_anim_delay_timer.get_meta("anim_time")
+	_start_reload_animation("mag_reload", anim_time)
 
 ## Starts a single reload.
 func _start_single_reload() -> void:
@@ -158,7 +178,7 @@ func _get_needed_single_reloads_count() -> int:
 ## Reshows the hand component's off hand and hides the local reload hand. Also resets the animation state.
 func do_post_reload_animation_cleanup() -> void:
 	reload_dur_timer.stop()
-	before_single_reload_timer.stop()
+	reload_delay_timer.stop()
 	weapon.source_entity.hands.off_hand_sprite.self_modulate.a = 1.0
 
 	if weapon.reload_off_hand:

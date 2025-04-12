@@ -42,7 +42,6 @@ static func initialize_proj_wpn_stats_resource(stats_resource: ProjWeaponResourc
 		&"proj_arc_travel_distance" : stats_resource.projectile_logic.arc_travel_distance,
 		&"proj_bounce_count" : stats_resource.projectile_logic.bounce_count,
 		&"proj_aoe_radius" : stats_resource.projectile_logic.aoe_radius,
-		&"hitscan_duration" : stats_resource.hitscan_logic.hitscan_duration,
 		&"hitscan_effect_interval" : stats_resource.hitscan_logic.hitscan_effect_interval,
 		&"hitscan_pierce_count" : stats_resource.hitscan_logic.hitscan_pierce_count,
 		&"hitscan_max_distance" : stats_resource.hitscan_logic.hitscan_max_distance

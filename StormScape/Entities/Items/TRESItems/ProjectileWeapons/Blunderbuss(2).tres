@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="ProjWeaponResource" load_steps=23 format=3 uid="uid://c05ujhrdtx4r5"]
+[gd_resource type="Resource" script_class="ProjWeaponResource" load_steps=19 format=3 uid="uid://c05ujhrdtx4r5"]
 
 [ext_resource type="Texture2D" uid="uid://bm570hawaupxe" path="res://Entities/Items/Weapons/WeaponVFX/Casings/small_casing.png" id="1_wvxhv"]
 [ext_resource type="Script" uid="uid://dkfssottmsrch" path="res://Entities/Stats/EffectSystemResources/EffectSources/EffectSource.gd" id="3_iqgpm"]
@@ -6,9 +6,7 @@
 [ext_resource type="Script" uid="uid://cowjdnic7xmkp" path="res://UI/Inventory/PlayerInventory/StatDetail.gd" id="5_d4m1d"]
 [ext_resource type="Texture2D" uid="uid://bmg1c4tf2t0wl" path="res://Entities/Items/Weapons/ProjectileWeapons/Blunderbuss/BlunderbussBaseFrameCT.tres" id="6_olcib"]
 [ext_resource type="Resource" uid="uid://obbfs1l3errg" path="res://Entities/Player/PlayerCore/PlayerCamera/CamFXPresets/8.tres" id="6_wvxhv"]
-[ext_resource type="PackedScene" uid="uid://c3e5wour08d6u" path="res://Entities/Items/Hitscans/LaserBeam.tscn" id="8_pppdl"]
 [ext_resource type="PackedScene" uid="uid://yaawws6setsr" path="res://Entities/Items/Weapons/ProjectileWeapons/Blunderbuss/Blunderbuss.tscn" id="9_ha6iu"]
-[ext_resource type="Script" uid="uid://cje5bobi6o8bo" path="res://Entities/Items/Hitscans/HitscanResource.gd" id="9_jt25l"]
 [ext_resource type="Script" uid="uid://bj3r5oopspj6l" path="res://Entities/Items/Projectiles/ProjectileCore/ProjectileResource.gd" id="12_7ishm"]
 [ext_resource type="PackedScene" uid="uid://bqkyplubhsx43" path="res://Entities/Items/Projectiles/Bullets/SmallBullet/SmallBullet.tscn" id="13_icdbk"]
 [ext_resource type="Script" uid="uid://ctxa7i1mbt7ab" path="res://UI/Inventory/PlayerInventory/Crafting/CraftingIngredient.gd" id="14_efux7"]
@@ -48,31 +46,6 @@ multiplier = 1.0
 addition = 0.0
 fraction_of_orig = false
 metadata/_custom_type_script = "uid://cowjdnic7xmkp"
-
-[sub_resource type="Curve" id="Curve_7bpvq"]
-_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
-point_count = 2
-
-[sub_resource type="Resource" id="Resource_8lm83"]
-script = ExtResource("9_jt25l")
-hitscan_scn = ExtResource("8_pppdl")
-hitscan_duration = 0.0
-hitscan_effect_interval = 0.1
-hitscan_pierce_count = 1
-hitscan_max_distance = 250
-hitscan_effect_falloff = SubResource("Curve_7bpvq")
-bad_effects_falloff = true
-good_effects_falloff = false
-override_vfx_defaults = false
-hitscan_max_width = 0.5
-beam_color = Color(1, 0.0784314, 0.576471, 1)
-glow_amount = 1.0
-start_particle_color = Color(1, 0.752941, 0.796078, 1)
-start_particle_mult = 1.0
-impact_particle_color = Color(1, 0.752941, 0.796078, 1)
-impact_particle_mult = 1.0
-beam_particle_color = Color(1, 0, 0, 1)
-beam_particle_mult = 1.0
 
 [sub_resource type="Curve" id="Curve_r1td5"]
 _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.599362), 0.0, 0.0, 0, 0]
@@ -157,6 +130,7 @@ firing_duration = 0.25
 fire_cooldown = 0.9
 min_charge_time = 1.0
 auto_do_charge_use = false
+is_hitscan = false
 one_frame_per_fire = false
 fire_anim_dur = 0.0
 spawn_after_fire_anim = false
@@ -169,22 +143,22 @@ firing_sound = ""
 post_fire_sound = ""
 charging_sound = ""
 projectile_logic = SubResource("Resource_wluh4")
-hitscan_logic = SubResource("Resource_8lm83")
 effect_source = SubResource("Resource_3mxcx")
 ammo_type = 5
 mag_size = 1
 reload_type = 1
+reload_delay = 0.9
+dont_consume_ammo = false
 mag_reload_time = 1.0
+mag_reload_anim_delay = 0.0
 single_proj_reload_time = 1.0
-before_single_reload_time = 0.5
 single_reload_quantity = 1
 must_reload_fully = false
-stamina_use_per_proj = 0.5
-dont_consume_ammo = false
 auto_ammo_interval = 0.0
 auto_ammo_count = 1
 auto_ammo_delay = 0.5
 recharge_uses_inv = false
+stamina_use_per_proj = 0.5
 hide_ammo_ui = false
 hide_reload_ui = false
 mag_reload_sound = ""
@@ -207,8 +181,6 @@ barrage_count = 5
 angular_spread = 30.0
 do_cluster_barrage = false
 barrage_proj_delay = 0.0
-use_hitscan = false
-allow_hitscan_holding = true
 ammo_in_mag = -1
 pullout_delay = 0.55
 max_mods_override = -1

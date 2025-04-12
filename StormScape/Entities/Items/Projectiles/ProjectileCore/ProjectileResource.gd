@@ -3,17 +3,17 @@ class_name ProjectileResource
 
 @export_group("General")
 @export var speed: int = 350 ## The highest speed the projectile can travel in.
-@export var speed_curve: Curve = Curve.new() ## How the speed changes based on time alive.
+@export var speed_curve: Curve ## How the speed changes based on time alive.
 @export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var initial_boost_time: float = 0 ## The duration of any initial boost we want to start with on.
 @export var initial_boost_mult: float = 2.0 ## The speed multiplier for the initial boost, if any.
 @export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var lifetime: float = 3 ## The max time this projectile can be in the air.
 @export_custom(PROPERTY_HINT_NONE, "suffix:pixels") var max_distance: int = 500 ## The max distance this projectile can travel from its starting position.
-@export_subgroup("Height")
+@export_subgroup("Height Override")
 @export var override_gun_height: bool = false ## Whether to use this custom height or keep the height the gun passes in.
 @export_custom(PROPERTY_HINT_NONE, "suffix:pixels") var height_override: int = 6 ## How high off the ground to simulate this projectile being. Basically just moves the shadow's y offset.
 
-@export_subgroup("Effects Falloff")
-@export var effect_falloff_curve: Curve = Curve.new() ## The falloff curve for all effects in the effect source.
+@export_group("Falloff")
+@export var effect_falloff_curve: Curve ## The falloff curve for all effects in the effect source.
 @export_custom(PROPERTY_HINT_NONE, "suffix:pixels") var point_of_max_falloff: float = 500 ## The cumulative distance travelled at which the projectile attains the minimum remaining stats due to falloff.
 @export var bad_effects_falloff: bool = true ## Whether to apply the falloff curve to bad effects.
 @export var good_effects_falloff: bool = false ## Whether to apply the falloff curve to good effects.
@@ -35,7 +35,7 @@ class_name ProjectileResource
 @export_enum("None", "FOV", "Closest", "Mouse Position", "Boomerang") var homing_method: String = "None" ## Whether this projectile should home-in on its target.
 @export var homing_speed_mult: float = 1.0 ## Multiplies the speed by a factor unique to the homing movement.
 @export_custom(PROPERTY_HINT_NONE, "suffix:º/sec") var max_turn_rate: float = 100 ## The max turn rate in degrees per second.
-@export var turn_rate_curve: Curve = Curve.new() ## The change in turn rate as lifetime elapses.
+@export var turn_rate_curve: Curve ## The change in turn rate as lifetime elapses.
 @export_range(0, 360, 1, "suffix:degrees") var homing_fov_angle: float = 180 ## The FOV for aquiring targets.
 @export var homing_max_range: int = 850 ## The max range for aquiring targets when using the "closest" method.
 @export var homing_duration: float = -1 ## The duration for which homing is active. -1 means 'always'.
@@ -60,7 +60,7 @@ class_name ProjectileResource
 @export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var grounding_free_delay: float = 0 ## How much time after we hit the ground do we wait before freeing the projectile. Note that this doesn't apply if we start an AOE after grounding.
 @export_subgroup("Bouncing")
 @export var bounce_count: int = 0 ## How many more times to bounce off the ground after landing from the first arc.
-@export var bounce_falloff_curve: Curve = Curve.new() ## How the bounces simulate losing energy and travel less distance each time as a function of time alive.
+@export var bounce_falloff_curve: Curve ## How the bounces simulate losing energy and travel less distance each time as a function of time alive.
 @export var ping_pong_bounce: bool = false ## Whether to bounce back and forth instead of in the original direction.
 
 @export_group("Splitting Logic")
@@ -78,7 +78,7 @@ class_name ProjectileResource
 @export var do_aoe_on_arc_land: bool = true ## Whether to trigger an AOE when we land after an arc shot.
 @export var aoe_before_freeing: bool = false ## Whether to trigger the aoe once we reach end of lifetime if we haven't hit anything yet.
 @export_subgroup("Falloff")
-@export var aoe_effect_falloff_curve: Curve = Curve.new() ## Changes damage and mod times for the effect source based on how far away from the origin of the aoe damage the receiver was hit.
+@export var aoe_effect_falloff_curve: Curve ## Changes damage and mod times for the effect source based on how far away from the origin of the aoe damage the receiver was hit.
 @export var bad_effects_aoe_falloff: bool = true ## Whether to apply the falloff curve to bad effects in an aoe hit.
 @export var good_effects_aoe_falloff: bool = false ## Whether to apply the falloff curve to good effects in an aoe hit.
 @export_subgroup("Timing")

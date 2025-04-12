@@ -304,7 +304,8 @@ func _set_up_potential_homing_delay() -> void:
 		else:
 			_start_homing()
 
-## Starts the homing sequence by turning it on and starting the homing timer if needed. Then calls for us to find a target.
+## Starts the homing sequence by turning it on and starting the homing timer if needed. Then calls for us
+## to find a target.
 func _start_homing() -> void:
 	is_homing_active = true
 	var original_dur: float = s_mods.get_original_stat("proj_homing_duration")
@@ -321,7 +322,7 @@ func _find_homing_target_based_on_method() -> void:
 	elif stats.homing_method == "Mouse Position":
 		if splits_so_far == 0:
 			_choose_from_mouse_area_targets()
-		elif is_instance_valid(homing_target):
+		else:
 			homing_target = null
 			is_homing_active = false
 	elif stats.homing_method == "Boomerang":
@@ -370,16 +371,16 @@ func _find_target_in_fov() -> void:
 		var result: Dictionary[Variant, Variant] = space_state.intersect_ray(query)
 
 		var debug_ray_info: Dictionary[String, Variant]
-		if DebugFlags.Projectiles.show_homing_rays: debug_ray_info = { "from": from_pos, "to": to_pos, "hit": false, "hit_position": to_pos }
+		if DebugFlags.show_homing_rays: debug_ray_info = { "from": from_pos, "to": to_pos, "hit": false, "hit_position": to_pos }
 
 		if result:
 			var obj: Node = result.collider
 			if obj and _is_valid_homing_target(obj):
 				candidates.append(obj)
-				if DebugFlags.Projectiles.show_homing_rays:
+				if DebugFlags.show_homing_rays:
 					debug_ray_info["hit"] = true
 					debug_ray_info["hit_position"] = result.position
-		if DebugFlags.Projectiles.show_homing_rays:
+		if DebugFlags.show_homing_rays:
 			debug_homing_rays.append(debug_ray_info)
 
 	if candidates.size() > 0:
@@ -424,6 +425,7 @@ func _find_closest_target() -> void:
 		homing_target = null
 		is_homing_active = false
 
+## Isolates valid candidates from the mouse area scan and passes them on to have the closest one chosen.
 func _choose_from_mouse_area_targets() -> void:
 	var candidates: Array[Node] = []
 	for obj: Node in mouse_scan_targets:

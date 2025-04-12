@@ -11,7 +11,7 @@ class_name Hitscan
 
 var stats: HitscanResource ## The stats driving this hitscan.
 var s_mods: StatModsCacheResource ## The stat mods resource used to retrieve modified, updated stats for calculations and logic.
-var source_item: ProjectileWeapon ## The weapon that produced this hitscan.
+var source_weapon: ProjectileWeapon ## The weapon that produced this hitscan.
 var rotation_offset: float ## The offset to rotate the hitscan by, determined by the source weapon.
 var lifetime_timer: Timer = TimerHelpers.create_one_shot_timer(self, -1, queue_free) ## The timer tracking lifetime left before freeing.
 var effect_tick_timer: Timer = TimerHelpers.create_one_shot_timer(self) ## The timer delaying the intervals of applying the effect source.
@@ -22,14 +22,12 @@ var is_hitting_something: bool = false: ## Whether at any point along the hitsca
 		is_hitting_something = new_value
 		impact_particles.emitting = new_value
 var impacted_nodes: Dictionary[Node, CPUParticles2D] = {} ## The nodes being hit at current moment along with their hit particles.
-var holding_allowed: bool = false ## Whether we are allowed to do holding and keep the hitscan active while the fire button is held.
-var is_charge_fire: bool = false ## Whether this hitscan was the result of a charged firing from the source weapon.
 var multishot_id: int = 0 ## The id passed in on creation that relates the sibling hitscans spawned on the same multishot barrage.
 
 
 ## Creates a hitscan scene, assigns its passed in parameters, then returns it.
 static func create(source_wpn: ProjectileWeapon, rot_offset: float) -> Hitscan:
-	var hitscan: Hitscan = source_wpn.stats.hitscan_logic.hitscan_scn.instantiate()
+	var hitscan: Hitscan = source_wpn.stats.hitscan_scn.instantiate()
 	hitscan.global_position = source_wpn.proj_origin_node.global_position
 	hitscan.rotation_offset = rot_offset
 	hitscan.effect_source = source_wpn.stats.effect_source
@@ -37,12 +35,7 @@ static func create(source_wpn: ProjectileWeapon, rot_offset: float) -> Hitscan:
 	hitscan.stats = source_wpn.stats.hitscan_logic
 	hitscan.s_mods = source_wpn.stats.s_mods
 
-	hitscan.is_charge_fire = source_wpn.stats.firing_mode == ProjWeaponResource.FiringType.CHARGE
-
-	if source_wpn.stats.allow_hitscan_holding:
-		hitscan.holding_allowed = true
-
-	hitscan.source_item = source_wpn
+	hitscan.source_weapon = source_wpn
 	return hitscan
 
 func _draw() -> void:
@@ -62,12 +55,11 @@ func _draw() -> void:
 			draw_circle(to_pos, 2, color)
 
 func _ready() -> void:
-	if not holding_allowed or is_charge_fire:
-		var dur_stat: float = s_mods.get_stat("hitscan_duration")
+	if not (stats.continuous_beam) or (source_weapon.stats.firing_mode == ProjWeaponResource.FiringType.CHARGE):
+		var dur_stat: float = source_weapon.stats.firing_duration
 		lifetime_timer.start(max(0.05, dur_stat))
 
 	start_particles.emitting = true
-
 	_set_up_visual_fx()
 
 func _set_up_visual_fx() -> void:
@@ -95,7 +87,7 @@ func _physics_process(_delta: float) -> void:
 	if is_instance_valid(source_entity.hands.equipped_item):
 		equipped_item = source_entity.hands.equipped_item
 
-	if equipped_item != null and equipped_item == source_item:
+	if equipped_item != null and equipped_item == source_weapon:
 		global_position = equipped_item.proj_origin_node.global_position.rotated(equipped_item.rotation)
 		global_rotation = equipped_item.global_rotation + rotation_offset
 

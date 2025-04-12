@@ -41,6 +41,7 @@ points = PackedVector2Array(0, 0)
 width = 1.5
 width_curve = SubResource("Curve_rgawo")
 default_color = Color(2.86, 0.852, 0.78, 1)
+texture_mode = 1
 end_cap_mode = 2
 round_precision = 5
 script = ExtResource("1_i0es2")

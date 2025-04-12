@@ -20,7 +20,7 @@ enum MeleeWeaponType { ## The kinds of melee weapons.
 @export var post_use_effect: StatusEffect ## The status effect to apply to the source entity after use.
 @export_subgroup("Usage FX")
 @export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var ghost_fade_time: float = 0.32 ## How long the ghosting effect takes to fade after normal use.
-@export var use_vfx_scene: PackedScene = null ## The scene that spawns and controls usage vfx.
+@export var use_vfx_scene: PackedScene ## The scene that spawns and controls usage vfx.
 @export var use_sound: String = "" ## The sound to play when using the item.
 
 @export_group("Charge Use Details")
@@ -37,8 +37,8 @@ enum MeleeWeaponType { ## The kinds of melee weapons.
 @export var post_chg_use_effect: StatusEffect ## The status effect to apply to the source entity after charge use.
 @export_subgroup("Usage FX")
 @export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var charge_ghost_fade_time: float = 1.0 ## How long the ghosting effect takes to fade after charge use.
-@export var charge_use_vfx_scene: PackedScene = null ## The scene that spawns and controls usage vfx.
-@export var charge_use_sound: String = "" ## The sound to play when a charge use happens.
+@export var charge_use_vfx_scene: PackedScene ## The scene that spawns and controls usage vfx.
+@export var charge_use_sound: String ## The sound to play when a charge use happens.
 
 
 ## An override to return the string title of the item type rather than just the enum integer value.

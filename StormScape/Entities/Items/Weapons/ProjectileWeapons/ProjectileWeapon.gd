@@ -22,12 +22,14 @@ enum WeaponState { IDLE, FIRING, RELOADING } ## The potential weapon states.
 
 var state: WeaponState = WeaponState.IDLE ## The current weapon state.
 var is_charging: bool = false ## When true, we are holding the trigger down and trying to charge up.
-var current_hitscans: Array[Hitscan] = [] ## The currently spawned array of hitscans to get cleaned up when we unequip this weapon.
 var mouse_scan_area_targets: Array[Node] = [] ## The array of potential targets found and passed to the proj when using the "Mouse Position" homing method.
 var mouse_area: Area2D ## The area around the mouse that scans for targets when using the "Mouse Position" homing method
 var overhead_ui: PlayerOverheadUI ## The UI showing the overhead stat changes (like reloading) in progress. Only applicable and non-null for players.
 var preloaded_sounds: Array[StringName] = [] ## The sounds kept in memory while this weapon scene is alive that must be dereferenced upon exiting the tree.
 var requesting_reload_after_firing: bool = false ## This is flagged to true when a reload is requested during the firing animation and needs to wait until it is done.
+var current_hitscans: Array[Hitscan] = [] ## The currently spawned array of hitscans to get cleaned up when we unequip this weapon.
+var is_holding_continuous_beam: bool = false
+var has_released: bool = false
 
 
 #region Debug
@@ -58,7 +60,7 @@ func _ready() -> void:
 ## Any rapidly or highly used sounds in this weapon should stay in memory for the entire lifetime of this weapon
 ## if they aren't already.
 func _register_preloaded_sounds() -> void:
-	preloaded_sounds = [stats.firing_sound, stats.charging_sound, stats.projectile_logic.splitting_sound]
+	preloaded_sounds = [stats.firing_sound, stats.charging_sound]
 	AudioPreloader.register_sounds_from_ids(preloaded_sounds)
 
 ## Called when the weapon is enabled, usually because it stopped clipping with an object.
@@ -73,6 +75,7 @@ func disable() -> void:
 	if stats.charging_stat_effect != null:
 		source_entity.effects.request_effect_removal_by_source(stats.charging_stat_effect.id, Globals.StatusEffectSourceType.FROM_SELF)
 	is_charging = false
+	_delay_clean_up_hitscans()
 
 ## Called when the weapon first enters, but after the _ready function.
 func enter() -> void:
@@ -96,8 +99,6 @@ func exit() -> void:
 	source_entity.hands.should_rotate = true
 	reload_handler.do_post_reload_animation_cleanup()
 
-	_clean_up_hitscans()
-
 	if mouse_area:
 		mouse_area.queue_free()
 
@@ -106,6 +107,8 @@ func exit() -> void:
 
 	source_entity.hands.smoke_particles.emitting = false
 	source_entity.hands.smoke_particles.visible = false
+
+	_clean_up_hitscans()
 
 ## When this scene is ultimately freed, unregister any preloaded audio references.
 func _exit_tree() -> void:
@@ -126,9 +129,34 @@ func disable_mouse_area() -> void:
 	if mouse_area:
 		mouse_area.get_child(0).disabled = true
 
+## Chooses to either delay cleaning up the hitscans by flagging for the need to (since we are still firing), or
+## immediately clean them up.
+func _delay_clean_up_hitscans() -> void:
+	if state == WeaponState.FIRING:
+		has_released = true
+	else:
+		_clean_up_hitscans()
+
+## When hitscans have ended or we swap off the weapon, free the hitscan itself.
+func _clean_up_hitscans() -> void:
+	is_holding_continuous_beam = false
+	has_released = false
+	for hitscan: Variant in current_hitscans:
+		if is_instance_valid(hitscan):
+			hitscan.queue_free()
+	current_hitscans.clear()
+
+## Updates continuous hitscans with new multishot IDs each time the firing sequence is triggered.
+func _update_hitscans_with_new_multishot_id() -> void:
+	for hitscan: Variant in current_hitscans:
+		if is_instance_valid(hitscan):
+			hitscan.multishot_id = UIDHelper.generate_multishot_uid()
+
 ## If we are set to do mouse position-based homing, we set up the mouse area and its signals and add it as a child.
 func _setup_mouse_area_scanner() -> void:
-	if stats.use_hitscan or stats.projectile_logic.homing_method != "Mouse Position":
+	if stats is HitscanWeaponResource:
+		return
+	if stats.projectile_logic.homing_method != "Mouse Position":
 		return
 
 	mouse_area = Area2D.new()
@@ -189,7 +217,7 @@ func _can_activate_at_all() -> bool:
 			reload()
 			return false
 		WeaponState.RELOADING:
-			if stats.reload_type == ProjWeaponResource.ReloadType.SINGLE and stats.must_reload_fully:
+			if stats.reload_type == ProjWeaponResource.ReloadType.SINGLE and not stats.must_reload_fully:
 				if ensure_enough_ammo():
 					return true
 			return false
@@ -211,8 +239,6 @@ func hold_activate(delta: float) -> void:
 		hold_time = 0
 		return
 
-	hold_time += delta
-
 	match stats.firing_mode:
 		ProjWeaponResource.FiringType.AUTO:
 			hold_time = 0
@@ -228,8 +254,12 @@ func hold_activate(delta: float) -> void:
 				hold_time = 0
 				start_firing_sequence()
 
+	hold_time += delta
+
 ## Called when a trigger is released.
 func release_hold_activate() -> void:
+	_delay_clean_up_hitscans()
+
 	if not _can_activate_at_all():
 		hold_time = 0
 		return
@@ -254,22 +284,31 @@ func start_firing_sequence() -> void:
 	state = WeaponState.FIRING
 	await warmup_handler.start_warmup()
 	if not ensure_enough_ammo():
+		_clean_up_hitscans()
 		reload()
 		return
 
 	# ---Spawning Projectile Phase---
+	if is_holding_continuous_beam:
+		_update_hitscans_with_new_multishot_id()
 	await firing_handler.start_firing()
 	state = WeaponState.IDLE
+	if stats.hitscan_logic.continuous_beam:
+		is_holding_continuous_beam = true
 
 	# ---Overheating Check---
-	overheat_handler.check_is_overheated()
+	if overheat_handler.check_is_overheated():
+		_clean_up_hitscans()
+
+	# ---Continuous Release Check---
+	if not stats.hitscan_logic.continuous_beam or has_released or stats.firing_mode != ProjWeaponResource.FiringType.AUTO:
+		_clean_up_hitscans()
 
 	# ---Check Ammo Again---
 	if not ensure_enough_ammo() or requesting_reload_after_firing:
-		reload()
 		requesting_reload_after_firing = false
-	else:
-		state = WeaponState.IDLE
+		reload()
+		_clean_up_hitscans()
 
 ## Called from the hands component when we press the reload key.
 func reload() -> void:
@@ -325,13 +364,6 @@ func update_ammo_ui() -> void:
 
 	ammo_ui.update_mag_ammo(count)
 	ammo_ui.calculate_inv_ammo()
-
-## When hitscans have ended or we swap off the weapon, free the hitscan itself.
-func _clean_up_hitscans() -> void:
-	for hitscan: Variant in current_hitscans:
-		if is_instance_valid(hitscan):
-			hitscan.queue_free()
-	current_hitscans.clear()
 
 ## Gets a current cooldown level from the auto decrementer based on the cooldown id.
 func get_cooldown() -> float:

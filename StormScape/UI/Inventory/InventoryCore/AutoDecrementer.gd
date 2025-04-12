@@ -182,7 +182,7 @@ func request_recharge(item_id: StringName, stats: WeaponResource) -> void:
 		recharges[item_id] = {
 			&"progress" : auto_ammo_interval,
 			&"original_duration" : auto_ammo_interval,
-			&"decrease_delay" : 0,
+			&"decrease_delay" : stats.auto_ammo_delay,
 			&"stats" : stats
 		}
 
@@ -209,11 +209,14 @@ func _update_recharges(delta: float) -> void:
 				ammo_needed = min(ammo_needed, auto_ammo_count)
 
 				if current.stats.recharge_uses_inv:
-					var retrieved_ammo: int = inv.get_more_ammo(ammo_needed, true, current.stats.ammo_type)
-					if retrieved_ammo == 0:
-						# Don't keep trying to recharge if we are out of inventory ammo
-						to_remove.append(item_id)
-					current.stats.ammo_in_mag += retrieved_ammo
+					if current.stats.ammo_type == ProjWeaponResource.ProjAmmoType.CHARGES:
+						current.stats.ammo_in_mag += ammo_needed
+					else:
+						var retrieved_ammo: int = inv.get_more_ammo(ammo_needed, true, current.stats.ammo_type)
+						if retrieved_ammo == 0:
+							# Don't keep trying to recharge if we are out of inventory ammo
+							to_remove.append(item_id)
+						current.stats.ammo_in_mag += retrieved_ammo
 				else:
 					current.stats.ammo_in_mag = min(mag_size, current.stats.ammo_in_mag + auto_ammo_count)
 

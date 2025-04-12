@@ -31,9 +31,10 @@ func _ready() -> void:
 	DebugConsole.add_command("stamina", stamina_component.change_stamina_by_amount)
 	DebugConsole.add_command("hunger_bars", stamina_component.change_hunger_bars_by_amount)
 	DebugConsole.add_command("wpn_mod", hands.add_mod_to_weapon_by_id)
+	DebugConsole.add_command("hitscan", hands.toggle_hitscan)
 	DebugConsole.add_command("mod", stats.add_mod_from_scratch)
 	DebugConsole.add_command("remove_mod", stats.remove_mod)
-	DebugConsole.add_command("coords", func() -> void: print(global_position))
+	DebugConsole.add_command("coords", func() -> void: print_rich("PLAYER COORDINATES: [b]", global_position))
 	DebugConsole.add_command("orphans", func() -> void: self.print_orphan_nodes())
 
 func _unhandled_key_input(_event: InputEvent) -> void:
