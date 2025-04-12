@@ -1,6 +1,0 @@
-[gd_scene load_steps=2 format=3 uid="uid://depnx3pnassrq"]
-
-[ext_resource type="Script" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/BurningHandler.gd" id="1_xosba"]
-
-[node name="BurningHandler" type="Node"]
-script = ExtResource("1_xosba")

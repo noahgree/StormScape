@@ -1,22 +1,22 @@
 @icon("res://Utilities/Debug/EditorIcons/frostbite_handler.svg")
-extends Node
+extends Resource
 class_name FrostbiteHandler
+## A handler for using the data provided in the effect source to apply frostbite in different ways.
 
 @export_range(0, 100, 1.0, "hide_slider", "suffix:%") var _frostbite_weakness: float = 0.0 ## A multiplier for frostbite damage on an entity.
 @export_range(0, 100, 1.0, "hide_slider", "suffix:%") var _frostbite_resistance: float = 0.0 ## A multiplier for frostbite reduction on an entity.
 
-@onready var effect_receiver: EffectReceiverComponent = get_parent() ## The receiver that passes the effect to this handler node.
+var effect_receiver: EffectReceiverComponent ## The receiver that passes the effect to this handler node.
 
 
-## Sets up moddable stats.
-func _ready() -> void:
-	assert(get_parent().has_node("DmgHandler"), get_parent().get_parent().name + " has a FrostbiteHandler but no DmgHandler.")
+func initialize(receiver: EffectReceiverComponent) -> void:
+	effect_receiver = receiver
+	assert(effect_receiver.dmg_handler, effect_receiver.get_parent().name + " has a FrostbiteHandler but no DmgHandler.")
 
 	var moddable_stats: Dictionary[StringName, float] = {
 		&"frostbite_weakness" : _frostbite_weakness, &"frostbite_resistance" : _frostbite_resistance
 	}
 	effect_receiver.affected_entity.stats.add_moddable_stats(moddable_stats)
-
 
 func handle_frostbite(frostbite_effect: FrostbiteEffect) -> void:
 	var local_dot_resource: DOTResource = frostbite_effect.dot_resource.duplicate()

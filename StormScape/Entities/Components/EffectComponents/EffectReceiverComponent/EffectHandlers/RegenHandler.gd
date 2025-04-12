@@ -1,23 +1,22 @@
 @icon("res://Utilities/Debug/EditorIcons/regen_handler.svg")
-extends Node
+extends Resource
 class_name RegenHandler
 ## A handler for using the data provided in the effect source to apply regeneration in different ways.
 
 @export_range(0, 100, 1.0, "hide_slider", "suffix:%") var _regen_boost: float = 0.0 ## A multiplier for regen boosting on an entity.
 @export_range(0, 100, 1.0, "hide_slider", "suffix:%") var _regen_penalty: float = 0.0 ## A multiplier for regen reduction on an entity.
 
-@onready var effect_receiver: EffectReceiverComponent = get_parent() ## The receiver that passes the effect to this handler node.
+var effect_receiver: EffectReceiverComponent ## The receiver that passes the effect to this handler node.
 
 
-## Sets up moddable stats.
-func _ready() -> void:
-	assert(get_parent().has_node("HealHandler"), get_parent().get_parent().name + " has a RegenHandler but no HealHandler.")
+func initialize(receiver: EffectReceiverComponent) -> void:
+	effect_receiver = receiver
+	assert(effect_receiver.heal_handler, effect_receiver.get_parent().name + " has a RegenHandler but no HealHandler.")
 
 	var moddable_stats: Dictionary[StringName, float] = {
 		&"regen_boost" : _regen_boost, &"regen_penalty" : _regen_penalty
 	}
 	effect_receiver.affected_entity.stats.add_moddable_stats(moddable_stats)
-
 
 func handle_regen(regen_effect: RegenEffect) -> void:
 	if regen_effect.hot_resource != null: # Needed for when we nullify on game load

@@ -1,17 +1,17 @@
 @icon("res://Utilities/Debug/EditorIcons/poison_handler.svg")
-extends Node
+extends Resource
 class_name PoisonHandler
 ## A handler for using the data provided in the effect source to apply poison in different ways.
 
 @export_range(0, 100, 1.0, "hide_slider", "suffix:%") var _poison_weakness: float = 0.0 ## A multiplier for poison damage on an entity.
 @export_range(0, 100, 1.0, "hide_slider", "suffix:%") var _poison_resistance: float = 0.0 ## A multiplier for poison damage on an entity.
 
-@onready var effect_receiver: EffectReceiverComponent = get_parent() ## The receiver that passes the effect to this handler node.
+var effect_receiver: EffectReceiverComponent ## The receiver that passes the effect to this handler node.
 
 
-## Sets up moddable stats.
-func _ready() -> void:
-	assert(get_parent().has_node("DmgHandler"), get_parent().get_parent().name + " has a PoisonHandler but no DmgHandler.")
+func initialize(receiver: EffectReceiverComponent) -> void:
+	effect_receiver = receiver
+	assert(effect_receiver.dmg_handler, effect_receiver.get_parent().name + " has a PoisonHandler but no DmgHandler.")
 
 	var moddable_stats: Dictionary[StringName, float] = {
 		&"poison_weakness" : _poison_weakness, &"poison_resistance" : _poison_resistance

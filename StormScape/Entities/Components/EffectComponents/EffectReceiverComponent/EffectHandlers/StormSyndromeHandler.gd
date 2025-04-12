@@ -1,18 +1,18 @@
 @icon("res://Utilities/Debug/EditorIcons/storm_syndrome_handler.svg")
-extends Node
+extends Resource
 class_name StormSyndromeHandler
 ## A handler for using the data provided in the effect source to apply storm syndrome in different ways.
 
 @export_range(0, 100, 1.0, "hide_slider", "suffix:%") var _storm_weakness: float = 0.0 ## A multiplier for increasing storm damage on an entity.
 @export_range(0, 100, 1.0, "hide_slider", "suffix:%") var _storm_resistance: float = 0.0 ## A multiplier for reducing storm damage on an entity.
 
-@onready var effect_receiver: EffectReceiverComponent = get_parent() ## The receiver that passes the effect to this handler node.
+var effect_receiver: EffectReceiverComponent ## The receiver that passes the effect to this handler node.
 
 
-## Sets up moddable stats.
-func _ready() -> void:
-	assert(get_parent().get_parent() is DynamicEntity, get_parent().affected_entity.name + " has an effect receiver intended to handle storm syndrome, but the affected entity is not a DynamicEntity.")
-	assert(get_parent().has_node("DmgHandler"), get_parent().get_parent().name + " has a StormSyndromeHandler but no DmgHandler.")
+func initialize(receiver: EffectReceiverComponent) -> void:
+	effect_receiver = receiver
+	assert(effect_receiver.get_parent() is DynamicEntity, effect_receiver.affected_entity.name + " has an effect receiver intended to handle storm syndrome, but the affected entity is not a DynamicEntity.")
+	assert(effect_receiver.dmg_handler, effect_receiver.get_parent().name + " has a StormSyndromeHandler but no DmgHandler.")
 
 	var moddable_stats: Dictionary[StringName, float] = {
 		&"storm_weakness" : _storm_weakness, &"storm_resistance" : _storm_resistance

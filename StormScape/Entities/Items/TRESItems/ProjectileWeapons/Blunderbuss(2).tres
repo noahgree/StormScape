@@ -159,6 +159,7 @@ min_charge_time = 1.0
 auto_do_charge_use = false
 one_frame_per_fire = false
 fire_anim_dur = 0.0
+spawn_after_fire_anim = false
 post_fire_anim_delay = 0.0
 post_fire_anim_dur = 0.45
 firing_cam_fx = ExtResource("6_wvxhv")

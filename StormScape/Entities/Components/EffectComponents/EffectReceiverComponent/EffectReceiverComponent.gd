@@ -22,9 +22,9 @@ class_name EffectReceiverComponent
 @export var health_component: HealthComponent ## The health component of the affected entity.
 @export var stamina_component: StaminaComponent ## The stamina component of the affected entity.
 @export var loot_table_component: LootTableComponent ## The loot table component of the affected entity.
-@export_subgroup("Handlers")
 @export var dmg_handler: DmgHandler ## The dmg handler of the affected entity.
 @export var heal_handler: HealHandler ## The heal handler of the affected entity.
+@export_group("Effect Handlers")
 @export var storm_syndrome_handler: StormSyndromeHandler ## The storm syndrome of the affected entity.
 @export var knockback_handler: KnockbackHandler ## The knockback of the affected entity.
 @export var stun_handler: StunHandler ## The stun handler of the affected entity.
@@ -35,7 +35,7 @@ class_name EffectReceiverComponent
 @export var time_snare_handler: TimeSnareHandler ## The time snare handler of the affected entity.
 @export var life_steal_handler: LifeStealHandler ## The life steal handler of the affected entity.
 
-@onready var tool_script: RefCounted = load("res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectReceiverTool.gd").new() ## The tool script node that helps auto-assign export nodes relative to this receiver.
+@onready var tool_script: RefCounted = load("res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectReceiverTool.gd").new(self) ## The tool script node that helps auto-assign export nodes relative to this receiver.
 
 var most_recent_effect_src: EffectSource = null ## The most recent effect source to be successfully handled by this receiver.
 var current_impact_sounds: Array[int] = [] ## The current impact sounds being played and held onto by this effect receiver.
@@ -46,17 +46,18 @@ var most_recent_multishot_id: int = 0 ## The most recent multishot id to be rece
 ## to the tree.
 func _notification(what: int) -> void:
 	if Engine.is_editor_hint():
-		if what == NOTIFICATION_CHILD_ORDER_CHANGED:
-			if tool_script: tool_script.update_editor_children_exports(self, get_children())
-		elif what == NOTIFICATION_ENTER_TREE:
-			if tool_script: tool_script.update_editor_parent_export(self, get_parent())
+		if tool_script and what == NOTIFICATION_EDITOR_PRE_SAVE:
+			tool_script.update_editor_children_exports(self, get_children())
+			tool_script.update_editor_parent_export(self, get_parent())
+			tool_script.ensure_effect_handler_resource_unique_to_scene(self)
 
 ## Asserts that the affected entity has been set for easy debugging, then sets the monitoring to off for
 ## performance reasons in case it was changed in the editor. It also ensures the collision layer is the same as the
 ## affected entity so that the effect sources only see it when they should.
 func _ready() -> void:
 	assert(affected_entity or get_parent() is SubViewport, get_parent().name + " has an effect receiver that is missing a reference to an entity.")
-	if can_receive_status_effects: assert(get_parent() is SubViewport or get_parent().has_node("%StatusEffectsComponent"), get_parent().name + " has an effect receiver flagged as being able to handle status effects, yet has no StatusEffectsComponent. Make sure it has a unique name.")
+	if can_receive_status_effects:
+		assert(get_parent() is SubViewport or get_parent().has_node("%StatusEffectsComponent"), get_parent().name + " has an effect receiver flagged as being able to handle status effects, yet has no StatusEffectsComponent. Make sure it has a unique name.")
 
 	if Engine.is_editor_hint():
 		return
@@ -258,7 +259,7 @@ func _handle_cam_fx(effect_source: EffectSource) -> void:
 
 ## Checks if there is a life steal effect in the status effects and returns the percent to steal if so.
 func _get_life_steal(effect_source: EffectSource, source_entity: PhysicsBody2D) -> float:
-	if can_receive_status_effects and life_steal_handler != null:
+	if can_receive_status_effects and life_steal_handler:
 		for status_effect: StatusEffect in effect_source.status_effects:
 			if status_effect is LifeStealEffect:
 				life_steal_handler.source_entity = source_entity

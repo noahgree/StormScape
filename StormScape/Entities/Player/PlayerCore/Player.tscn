@@ -1,4 +1,4 @@
-[gd_scene load_steps=224 format=3 uid="uid://dba8mrurjlekp"]
+[gd_scene load_steps=233 format=3 uid="uid://dba8mrurjlekp"]
 
 [ext_resource type="Script" uid="uid://c3rpxq8pnbdje" path="res://Entities/Player/PlayerCore/Player.gd" id="1_m33tt"]
 [ext_resource type="Script" uid="uid://dwmur0cosbbwh" path="res://UI/Inventory/InventoryCore/InventoryResource.gd" id="2_l1kq4"]
@@ -22,7 +22,6 @@
 [ext_resource type="Resource" uid="uid://m8eslst1uuxh" path="res://Entities/Items/TRESItems/Ammo/Light(0).tres" id="6_qvtc6"]
 [ext_resource type="Resource" uid="uid://bx2nl7cqe7odq" path="res://Entities/Items/TRESItems/WeaponMods/AdvancedScope(3).tres" id="7_14ixx"]
 [ext_resource type="Script" uid="uid://c2sjdkql76qca" path="res://Entities/FSM/States/BaseStates/IdleState.gd" id="7_15a5x"]
-[ext_resource type="PackedScene" uid="uid://dykiv0tlhwmox" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/KnockbackHandler.tscn" id="7_k0pv8"]
 [ext_resource type="Resource" uid="uid://c5jim46mul7ex" path="res://Entities/Items/TRESItems/Ammo/IonCharge(0).tres" id="7_o382h"]
 [ext_resource type="Resource" uid="uid://4nvp28pvjtk3" path="res://Entities/Items/TRESItems/ProjectileWeapons/Boomerang(1).tres" id="8_gb65f"]
 [ext_resource type="Resource" uid="uid://3avt5jvd3dye" path="res://Entities/Items/TRESItems/ProjectileWeapons/BottleOFire(3).tres" id="8_lo25j"]
@@ -31,7 +30,6 @@
 [ext_resource type="Script" uid="uid://cy73p3okq3cic" path="res://Entities/FSM/States/BaseStates/DashState.gd" id="9_a1qv1"]
 [ext_resource type="Texture2D" uid="uid://cs3clmnktksd6" path="res://Entities/Player/PlayerCore/player_hand.png" id="9_n4o3n"]
 [ext_resource type="Resource" uid="uid://dpmwqsai6gxsr" path="res://Entities/Items/TRESItems/ProjectileWeapons/FlameBlower(5).tres" id="9_rdrbb"]
-[ext_resource type="PackedScene" uid="uid://cx4b21058vypq" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/StunHandler.tscn" id="9_w4lel"]
 [ext_resource type="Resource" uid="uid://bs4rqdt46yav7" path="res://Entities/Items/TRESItems/WorldResources/OakLog(0).tres" id="10_0t1mv"]
 [ext_resource type="Resource" uid="uid://14gw464h13vv" path="res://Entities/Items/TRESItems/ProjectileWeapons/Cratershot(1).tres" id="10_3uq13"]
 [ext_resource type="PackedScene" uid="uid://bhcqtorpyerc3" path="res://Utilities/Debug/ParticleEmissionComponent.tscn" id="10_6wv7y"]
@@ -40,22 +38,15 @@
 [ext_resource type="Resource" uid="uid://dy8rwyeyusim7" path="res://Entities/Items/TRESItems/ProjectileWeapons/Twin(2).tres" id="11_0t1mv"]
 [ext_resource type="Resource" uid="uid://dbnhbsphiw4oe" path="res://Entities/Items/TRESItems/WorldResources/SpruceLog(0).tres" id="11_hxjay"]
 [ext_resource type="Resource" uid="uid://c05ujhrdtx4r5" path="res://Entities/Items/TRESItems/ProjectileWeapons/Blunderbuss(2).tres" id="11_o382h"]
-[ext_resource type="PackedScene" uid="uid://tc2awdm3onyi" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/PoisonHandler.tscn" id="11_rtl41"]
 [ext_resource type="Resource" uid="uid://duc0xfejpfs1" path="res://Entities/Items/TRESItems/ProjectileWeapons/EagleEye(3).tres" id="12_6wv7y"]
-[ext_resource type="PackedScene" uid="uid://e3qv2f7w61vy" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/RegenHandler.tscn" id="12_goxma"]
-[ext_resource type="PackedScene" uid="uid://bhg7jmodo3t5t" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/FrostbiteHandler.tscn" id="13_hqb6d"]
 [ext_resource type="Resource" uid="uid://fmf7upx7tsln" path="res://Entities/Items/TRESItems/ProjectileWeapons/RifleX(3).tres" id="13_n4o3n"]
 [ext_resource type="Resource" uid="uid://bper7kxtsf7f1" path="res://Entities/Items/TRESItems/MeleeWeapons/Axe(1).tres" id="14_0t1mv"]
-[ext_resource type="PackedScene" uid="uid://d1ml6s716obw0" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/TimeSnareHandler.tscn" id="14_63vgk"]
-[ext_resource type="PackedScene" uid="uid://depnx3pnassrq" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/BurningHandler.tscn" id="14_q2ueb"]
 [ext_resource type="Script" uid="uid://cbyg4eleptthh" path="res://Entities/FSM/States/BaseStates/StunnedState.gd" id="15_eiig3"]
 [ext_resource type="Resource" uid="uid://cx1ydw2jde1y8" path="res://Entities/Items/TRESItems/Consumables/Apple(0).tres" id="15_hxjay"]
-[ext_resource type="PackedScene" uid="uid://csrq1m4rp52vf" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/StormSyndromeHandler.tscn" id="17_2cms1"]
 [ext_resource type="Script" uid="uid://i7ucoc123rpe" path="res://Entities/FSM/States/BaseStates/SpawnState.gd" id="17_fwsnm"]
 [ext_resource type="Script" uid="uid://clmf6cxgxu6kb" path="res://Utilities/Debug/TestButtons.gd" id="17_vdk5v"]
 [ext_resource type="Script" uid="uid://cbuaklpos5jdp" path="res://Entities/FSM/States/BaseStates/DieState.gd" id="18_jcofa"]
 [ext_resource type="Script" uid="uid://cf7pyv5l3pefi" path="res://Entities/FSM/States/BaseStates/SneakState.gd" id="19_alhqe"]
-[ext_resource type="PackedScene" uid="uid://b4bmp3jehto3g" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/LifeStealHandler.tscn" id="20_f770q"]
 [ext_resource type="Resource" uid="uid://bh18kqp2up3oe" path="res://Entities/Items/TRESItems/MeleeWeapons/Pickaxe(3).tres" id="23_gdihr"]
 [ext_resource type="PackedScene" uid="uid://jpq0ij8wwlhy" path="res://Entities/Components/FacingComponent/FacingComponent.tscn" id="25_0t1mv"]
 [ext_resource type="Script" uid="uid://c28itqxmeqbq0" path="res://Entities/FSM/FSMCore/StateMachine.gd" id="25_6wv7y"]
@@ -72,9 +63,18 @@
 [ext_resource type="PackedScene" uid="uid://b7gdy01q8wsjx" path="res://Entities/Components/ItemComponents/HandsComponent/HandsComponent.tscn" id="39_ngono"]
 [ext_resource type="Shader" uid="uid://c0de04pgeen76" path="res://Utilities/Game/Shaders/BlurBehind.gdshader" id="39_r4tgk"]
 [ext_resource type="PackedScene" uid="uid://m4ur3n2hwsp8" path="res://UI/Inventory/InventoryCore/Slot/SlotCore/Slot.tscn" id="42_r422n"]
+[ext_resource type="Script" uid="uid://bqw1ufs6jb7cf" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/RegenHandler.gd" id="52_eufsu"]
+[ext_resource type="Script" uid="uid://bv40a7n5sorxe" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/StormSyndromeHandler.gd" id="52_f5l7i"]
+[ext_resource type="Script" uid="uid://dk6uef3uxmeev" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/KnockbackHandler.gd" id="53_co77f"]
+[ext_resource type="Script" uid="uid://b21sy1r0nxgpv" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/StunHandler.gd" id="54_bmpdm"]
+[ext_resource type="Script" uid="uid://5krnqdrdbey1" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/PoisonHandler.gd" id="55_8hbs2"]
 [ext_resource type="Resource" uid="uid://m8ws6ct8yu3b" path="res://Entities/Items/TRESItems/Wearables/FireCharm(5).tres" id="57_gdihr"]
+[ext_resource type="Script" uid="uid://b1lo2mdb3otax" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/FrostbiteHandler.gd" id="57_h1ges"]
 [ext_resource type="Script" uid="uid://dih45lqhjg0xx" path="res://UI/OverheadUI/PlayerOverheadUI.gd" id="57_n8srl"]
+[ext_resource type="Script" uid="uid://dubq8xgav66ue" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/BurningHandler.gd" id="58_32jvf"]
 [ext_resource type="Script" uid="uid://c0n0ja8tkrnkf" path="res://UI/Inventory/PlayerInventory/HotbarUI.gd" id="58_i567i"]
+[ext_resource type="Script" uid="uid://5w234psf0oln" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/TimeSnareHandler.gd" id="59_82yts"]
+[ext_resource type="Script" uid="uid://ckiyd2nbdcofr" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/LifeStealHandler.gd" id="60_uu4sw"]
 [ext_resource type="Texture2D" uid="uid://bq3d1uclexvcm" path="res://UI/OverheadUI/progress_tintable.png" id="61_6wv7y"]
 [ext_resource type="Texture2D" uid="uid://barp24qvngy0m" path="res://UI/OverheadUI/Overheat/overheat_back.png" id="63_3uq13"]
 [ext_resource type="Texture2D" uid="uid://7wf7omw2r50u" path="res://UI/OverheadUI/Overheat/overheat_progress.png" id="64_o382h"]
@@ -333,6 +333,67 @@ polygon = PackedVector2Array(-5, -2.98466, -6, -1.98977, -5, 0, 5, 0, 6, -1.9897
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_0tj2u"]
 shader = ExtResource("4_ubhyl")
+
+[sub_resource type="Resource" id="Resource_jgqai"]
+resource_local_to_scene = true
+script = ExtResource("52_f5l7i")
+_storm_weakness = 0.0
+_storm_resistance = 0.0
+metadata/_custom_type_script = "uid://bv40a7n5sorxe"
+
+[sub_resource type="Resource" id="Resource_xsics"]
+resource_local_to_scene = true
+script = ExtResource("53_co77f")
+_knockback_weakness = 0.0
+_knockback_resistance = 0.0
+entity_dir_influence = 0.25
+metadata/_custom_type_script = "uid://dk6uef3uxmeev"
+
+[sub_resource type="Resource" id="Resource_xjdir"]
+resource_local_to_scene = true
+script = ExtResource("54_bmpdm")
+_stun_weakness = 0.0
+_stun_resistance = 0.0
+metadata/_custom_type_script = "uid://b21sy1r0nxgpv"
+
+[sub_resource type="Resource" id="Resource_bjgul"]
+resource_local_to_scene = true
+script = ExtResource("55_8hbs2")
+_poison_weakness = 0.0
+_poison_resistance = 0.0
+metadata/_custom_type_script = "uid://5krnqdrdbey1"
+
+[sub_resource type="Resource" id="Resource_223lv"]
+resource_local_to_scene = true
+script = ExtResource("52_eufsu")
+_regen_boost = 0.0
+_regen_penalty = 0.0
+metadata/_custom_type_script = "uid://bqw1ufs6jb7cf"
+
+[sub_resource type="Resource" id="Resource_14mu6"]
+resource_local_to_scene = true
+script = ExtResource("57_h1ges")
+_frostbite_weakness = 0.0
+_frostbite_resistance = 0.0
+metadata/_custom_type_script = "uid://b1lo2mdb3otax"
+
+[sub_resource type="Resource" id="Resource_botqa"]
+resource_local_to_scene = true
+script = ExtResource("58_32jvf")
+_burning_weakness = 0.0
+_burning_resistance = 0.0
+metadata/_custom_type_script = "uid://dubq8xgav66ue"
+
+[sub_resource type="Resource" id="Resource_b6nlp"]
+resource_local_to_scene = true
+script = ExtResource("59_82yts")
+_time_snare_immunity = 0.0
+metadata/_custom_type_script = "uid://5w234psf0oln"
+
+[sub_resource type="Resource" id="Resource_erwji"]
+resource_local_to_scene = true
+script = ExtResource("60_uu4sw")
+metadata/_custom_type_script = "uid://ckiyd2nbdcofr"
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_7dc0v"]
 size = Vector2(14, 15)
@@ -1520,22 +1581,22 @@ active_slot_info = NodePath("../../OverlayUI/ActiveSlotInfo")
 
 [node name="StaminaComponent" parent="." instance=ExtResource("5_k4fu6")]
 
-[node name="EffectReceiverComponent" parent="." node_paths=PackedStringArray("affected_entity", "health_component", "stamina_component", "dmg_handler", "heal_handler", "storm_syndrome_handler", "knockback_handler", "stun_handler", "poison_handler", "regen_handler", "frostbite_handler", "burning_handler", "time_snare_handler", "life_steal_handler") instance=ExtResource("4_hhm8x")]
+[node name="EffectReceiverComponent" parent="." node_paths=PackedStringArray("affected_entity", "health_component", "stamina_component", "dmg_handler", "heal_handler") instance=ExtResource("4_hhm8x")]
 allowed_source_types = Array[int]([0])
 affected_entity = NodePath("..")
 health_component = NodePath("../HealthComponent")
 stamina_component = NodePath("../StaminaComponent")
 dmg_handler = NodePath("DmgHandler")
 heal_handler = NodePath("HealHandler")
-storm_syndrome_handler = NodePath("StormSyndromeHandler")
-knockback_handler = NodePath("KnockbackHandler")
-stun_handler = NodePath("StunHandler")
-poison_handler = NodePath("PoisonHandler")
-regen_handler = NodePath("RegenHandler")
-frostbite_handler = NodePath("FrostbiteHandler")
-burning_handler = NodePath("BurningHandler")
-time_snare_handler = NodePath("TimeSnareHandler")
-life_steal_handler = NodePath("LifeStealHandler")
+storm_syndrome_handler = SubResource("Resource_jgqai")
+knockback_handler = SubResource("Resource_xsics")
+stun_handler = SubResource("Resource_xjdir")
+poison_handler = SubResource("Resource_bjgul")
+regen_handler = SubResource("Resource_223lv")
+frostbite_handler = SubResource("Resource_14mu6")
+burning_handler = SubResource("Resource_botqa")
+time_snare_handler = SubResource("Resource_b6nlp")
+life_steal_handler = SubResource("Resource_erwji")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="EffectReceiverComponent"]
 position = Vector2(0, -7.5)
@@ -1545,24 +1606,6 @@ debug_color = Color(1, 0.294, 0.588, 0.06)
 [node name="DmgHandler" parent="EffectReceiverComponent" instance=ExtResource("5_g3ixu")]
 
 [node name="HealHandler" parent="EffectReceiverComponent" instance=ExtResource("6_5e1ju")]
-
-[node name="StormSyndromeHandler" parent="EffectReceiverComponent" instance=ExtResource("17_2cms1")]
-
-[node name="KnockbackHandler" parent="EffectReceiverComponent" instance=ExtResource("7_k0pv8")]
-
-[node name="StunHandler" parent="EffectReceiverComponent" instance=ExtResource("9_w4lel")]
-
-[node name="PoisonHandler" parent="EffectReceiverComponent" instance=ExtResource("11_rtl41")]
-
-[node name="RegenHandler" parent="EffectReceiverComponent" instance=ExtResource("12_goxma")]
-
-[node name="FrostbiteHandler" parent="EffectReceiverComponent" instance=ExtResource("13_hqb6d")]
-
-[node name="BurningHandler" parent="EffectReceiverComponent" instance=ExtResource("14_q2ueb")]
-
-[node name="TimeSnareHandler" parent="EffectReceiverComponent" instance=ExtResource("14_63vgk")]
-
-[node name="LifeStealHandler" parent="EffectReceiverComponent" instance=ExtResource("20_f770q")]
 
 [node name="FacingComponent" parent="." instance=ExtResource("25_0t1mv")]
 

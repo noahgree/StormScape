@@ -1,6 +1,0 @@
-[gd_scene load_steps=2 format=3 uid="uid://b4bmp3jehto3g"]
-
-[ext_resource type="Script" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/LifeStealHandler.gd" id="1_c6hge"]
-
-[node name="LifeStealHandler" type="Node"]
-script = ExtResource("1_c6hge")

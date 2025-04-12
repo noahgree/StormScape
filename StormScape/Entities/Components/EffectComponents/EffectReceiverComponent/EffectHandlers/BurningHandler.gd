@@ -1,17 +1,17 @@
 @icon("res://Utilities/Debug/EditorIcons/burning_handler.svg")
-extends Node
+extends Resource
 class_name BurningHandler
 ## A handler for using the data provided in the effect source to apply burning in different ways.
 
 @export_range(0, 100, 1.0, "hide_slider", "suffix:%") var _burning_weakness: float = 0.0 ## A multiplier for burning damage on an entity.
 @export_range(0, 100, 1.0, "hide_slider", "suffix:%") var _burning_resistance: float = 0.0 ## A multiplier for burning reduction on an entity.
 
-@onready var effect_receiver: EffectReceiverComponent = get_parent() ## The receiver that passes the effect to this handler node.
+var effect_receiver: EffectReceiverComponent ## The receiver that passes the effect to this handler node.
 
 
-## Sets up moddable stats.
-func _ready() -> void:
-	assert(get_parent().has_node("DmgHandler"), get_parent().get_parent().name + " has a BurningHandler but no DmgHandler.")
+func initialize(receiver: EffectReceiverComponent) -> void:
+	effect_receiver = receiver
+	assert(effect_receiver.dmg_handler, effect_receiver.get_parent().name + " has a BurningHandler but no DmgHandler.")
 
 	var moddable_stats: Dictionary[StringName, float] = {
 		&"burning_weakness" : _burning_weakness, &"burning_resistance" : _burning_resistance

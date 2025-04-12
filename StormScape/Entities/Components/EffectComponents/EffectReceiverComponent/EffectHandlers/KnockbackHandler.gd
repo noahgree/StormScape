@@ -1,5 +1,5 @@
 @icon("res://Utilities/Debug/EditorIcons/knockback_handler.svg")
-extends Node
+extends Resource
 class_name KnockbackHandler
 ## A handler for using the data provided in the effect source to apply knockback in different ways.
 
@@ -8,19 +8,18 @@ class_name KnockbackHandler
 @export_subgroup("Other")
 @export_range(0.0, 0.5, 0.01) var entity_dir_influence: float = 0.25 ## How strong of an influence the entity's movement direction should have on the knockback vector.
 
-@onready var effect_receiver: EffectReceiverComponent = get_parent() ## The receiver that passes the knockback to this handler node.
-
+var effect_receiver: EffectReceiverComponent ## The receiver that passes the effect to this handler node.
 var contact_position: Vector2 = Vector2.ZERO ## Set by the status effect component for incoming knockback.
 var effect_movement_direction: Vector2 = Vector2.ZERO ## Set by the status effect component for incoming knockback.
 var is_source_moving_type: bool = false ## Set by the status effect component for incoming knockback.
 
 
-## Sets up moddable stats.
-func _ready() -> void:
+func initialize(receiver: EffectReceiverComponent) -> void:
+	effect_receiver = receiver
 	var moddable_stats: Dictionary[StringName, float] = {
 		&"knockback_weakness" : _knockback_weakness, &"knockback_resistance" : _knockback_resistance
 	}
-	get_parent().affected_entity.stats.add_moddable_stats(moddable_stats)
+	effect_receiver.affected_entity.stats.add_moddable_stats(moddable_stats)
 
 ## Handles applying knockback to a dynamic entity when they hit something that provides knockback.
 func handle_knockback(knockback_effect: KnockbackEffect) -> void:

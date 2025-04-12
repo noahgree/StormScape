@@ -1,16 +1,16 @@
 @icon("res://Utilities/Debug/EditorIcons/time_snare_handler.svg")
-extends Node
+extends Resource
 class_name TimeSnareHandler
 ## A handler for using the data provided in the effect source to apply time snare in different ways.
 
 @export_range(0, 1, 1, "hide_slider", "suffix:(1 = on | 0 = off)") var _time_snare_immunity: float = 0 ## If aything besides 0, the time snare effect is nullified.
 
-@onready var effect_receiver: EffectReceiverComponent = get_parent() ## The receiver that passes the effect to this handler node.
+var effect_receiver: EffectReceiverComponent ## The receiver that passes the effect to this handler node.
 
 
-## Sets up moddable stats.
-func _ready() -> void:
-	assert(get_parent().get_parent() is DynamicEntity, get_parent().affected_entity.name + " has an effect receiver intended to handle time snares, but the affected entity is not a DynamicEntity.")
+func initialize(receiver: EffectReceiverComponent) -> void:
+	effect_receiver = receiver
+	assert(effect_receiver.get_parent() is DynamicEntity, effect_receiver.affected_entity.name + " has an effect receiver intended to handle time snares, but the affected entity is not a DynamicEntity.")
 
 	var moddable_stats: Dictionary[StringName, float] = {
 		&"time_snare_immunity" : _time_snare_immunity

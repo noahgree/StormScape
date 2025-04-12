@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=3 uid="uid://bq12ugc7lnirg"]
+[gd_scene load_steps=24 format=3 uid="uid://bq12ugc7lnirg"]
 
 [ext_resource type="Script" uid="uid://06pt5wan8jg1" path="res://Entities/EntityCore/EntityTypes/StaticEntity/PhysicalInventory/PhysicalInventory.gd" id="1_ggkuf"]
 [ext_resource type="Script" uid="uid://dwmur0cosbbwh" path="res://UI/Inventory/InventoryCore/InventoryResource.gd" id="2_hjkvw"]
@@ -12,7 +12,7 @@
 [ext_resource type="PackedScene" uid="uid://bhcqtorpyerc3" path="res://Utilities/Debug/ParticleEmissionComponent.tscn" id="10_l1cdp"]
 [ext_resource type="PackedScene" uid="uid://4gl24qwdyti3" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/DmgHandler.tscn" id="10_tnmyf"]
 [ext_resource type="PackedScene" uid="uid://btba0jmsow1mx" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectReceiverComponent.tscn" id="11_5wq56"]
-[ext_resource type="PackedScene" uid="uid://depnx3pnassrq" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/BurningHandler.tscn" id="11_x28yt"]
+[ext_resource type="Script" uid="uid://dubq8xgav66ue" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/BurningHandler.gd" id="11_w3nan"]
 [ext_resource type="PackedScene" uid="uid://2yy4xfm5g74l" path="res://Entities/Components/ItemComponents/ClippingComponent/ClippingArea.tscn" id="11_ypx5n"]
 
 [sub_resource type="Resource" id="Resource_5wq56"]
@@ -45,6 +45,13 @@ animations = [{
 "name": &"default",
 "speed": 5.0
 }]
+
+[sub_resource type="Resource" id="Resource_dwqj1"]
+resource_local_to_scene = true
+script = ExtResource("11_w3nan")
+_burning_weakness = 0.0
+_burning_resistance = 0.0
+metadata/_custom_type_script = "uid://dubq8xgav66ue"
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_tnmyf"]
 size = Vector2(18, 14)
@@ -93,19 +100,17 @@ _max_shield = 0
 unique_name_in_owner = true
 effect_receiver = NodePath("../EffectReceiverComponent")
 
-[node name="EffectReceiverComponent" parent="." node_paths=PackedStringArray("affected_entity", "health_component", "dmg_handler", "burning_handler") instance=ExtResource("11_5wq56")]
+[node name="EffectReceiverComponent" parent="." node_paths=PackedStringArray("affected_entity", "health_component", "dmg_handler") instance=ExtResource("11_5wq56")]
 affected_entity = NodePath("..")
 health_component = NodePath("../HealthComponent")
 dmg_handler = NodePath("DmgHandler")
-burning_handler = NodePath("BurningHandler")
+burning_handler = SubResource("Resource_dwqj1")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="EffectReceiverComponent"]
 position = Vector2(0, -7)
 shape = SubResource("RectangleShape2D_tnmyf")
 
 [node name="DmgHandler" parent="EffectReceiverComponent" instance=ExtResource("10_tnmyf")]
-
-[node name="BurningHandler" parent="EffectReceiverComponent" instance=ExtResource("11_x28yt")]
 
 [node name="ParticleEmissionComponent" parent="." instance=ExtResource("10_l1cdp")]
 

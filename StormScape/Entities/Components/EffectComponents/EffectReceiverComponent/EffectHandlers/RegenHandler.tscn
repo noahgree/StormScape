@@ -1,6 +1,0 @@
-[gd_scene load_steps=2 format=3 uid="uid://e3qv2f7w61vy"]
-
-[ext_resource type="Script" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/RegenHandler.gd" id="1_dx5or"]
-
-[node name="RegenHandler" type="Node"]
-script = ExtResource("1_dx5or")

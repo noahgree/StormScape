@@ -8,24 +8,17 @@ func update_editor_children_exports(node: EffectReceiverComponent, children: Arr
 			node.dmg_handler = child
 		if child is HealHandler:
 			node.heal_handler = child
-		if child is StormSyndromeHandler:
-			node.storm_syndrome_handler = child
-		if child is KnockbackHandler:
-			node.knockback_handler = child
-		if child is StunHandler:
-			node.stun_handler = child
-		if child is PoisonHandler:
-			node.poison_handler = child
-		if child is RegenHandler:
-			node.regen_handler = child
-		if child is FrostbiteHandler:
-			node.frostbite_handler = child
-		if child is BurningHandler:
-			node.burning_handler = child
-		if child is TimeSnareHandler:
-			node.time_snare_handler = child
-		if child is LifeStealHandler:
-			node.life_steal_handler = child
+
+func ensure_effect_handler_resource_unique_to_scene(node: EffectReceiverComponent) -> void:
+	if node.storm_syndrome_handler: node.storm_syndrome_handler.resource_local_to_scene = true
+	if node.knockback_handler: node.knockback_handler.resource_local_to_scene = true
+	if node.stun_handler: node.stun_handler.resource_local_to_scene = true
+	if node.poison_handler: node.poison_handler.resource_local_to_scene = true
+	if node.regen_handler: node.regen_handler.resource_local_to_scene = true
+	if node.frostbite_handler: node.frostbite_handler.resource_local_to_scene = true
+	if node.burning_handler: node.burning_handler.resource_local_to_scene = true
+	if node.time_snare_handler: node.time_snare_handler.resource_local_to_scene = true
+	if node.life_steal_handler: node.life_steal_handler.resource_local_to_scene = true
 
 func update_editor_parent_export(node: EffectReceiverComponent, parent: Node) -> void:
 	if parent is DynamicEntity or parent is RigidEntity or parent is StaticEntity:
@@ -38,3 +31,16 @@ func update_editor_parent_export(node: EffectReceiverComponent, parent: Node) ->
 		node.loot_table_component = parent.get_node("LootTableComponent")
 	if parent.has_node("StatusEffectsComponent"):
 		parent.get_node("StatusEffectsComponent").effect_receiver = node
+
+func _init(node: EffectReceiverComponent) -> void:
+	if Engine.is_editor_hint():
+		return
+	if node.storm_syndrome_handler: node.storm_syndrome_handler.initialize(node)
+	if node.knockback_handler: node.knockback_handler.initialize(node)
+	if node.stun_handler: node.stun_handler.initialize(node)
+	if node.poison_handler: node.poison_handler.initialize(node)
+	if node.regen_handler: node.regen_handler.initialize(node)
+	if node.frostbite_handler: node.frostbite_handler.initialize(node)
+	if node.burning_handler: node.burning_handler.initialize(node)
+	if node.time_snare_handler: node.time_snare_handler.initialize(node)
+	if node.life_steal_handler: node.life_steal_handler.initialize(node)

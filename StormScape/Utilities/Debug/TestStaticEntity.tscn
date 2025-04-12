@@ -1,6 +1,8 @@
-[gd_scene load_steps=34 format=3 uid="uid://bond8rty1ljh"]
+[gd_scene load_steps=39 format=3 uid="uid://bond8rty1ljh"]
 
 [ext_resource type="Script" uid="uid://cn2gulskgn7k3" path="res://Entities/EntityCore/EntityTypes/StaticEntity/StaticEntity.gd" id="1_uvrwn"]
+[ext_resource type="Script" uid="uid://dwmur0cosbbwh" path="res://UI/Inventory/InventoryCore/InventoryResource.gd" id="2_oq3a2"]
+[ext_resource type="Script" uid="uid://dp8osf7r6xkkt" path="res://Entities/Items/ItemCore/InvItemResource.gd" id="3_4hy3y"]
 [ext_resource type="PackedScene" uid="uid://di7vcyrki71nm" path="res://Entities/Components/DetectionComponent/DetectionComponent.tscn" id="3_c4qls"]
 [ext_resource type="PackedScene" uid="uid://dh4ydl7l86ywq" path="res://Entities/EntityCore/Sprites/EntitySprite.tscn" id="3_kbhyj"]
 [ext_resource type="Shader" uid="uid://cfbagv3hrtar2" path="res://Utilities/Game/Shaders/EntityEffectShader.gdshader" id="3_xscca"]
@@ -10,6 +12,7 @@
 [ext_resource type="PackedScene" uid="uid://4gl24qwdyti3" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/DmgHandler.tscn" id="10_b3858"]
 [ext_resource type="PackedScene" uid="uid://btba0jmsow1mx" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectReceiverComponent.tscn" id="10_o35vp"]
 [ext_resource type="PackedScene" uid="uid://co3n6m7efg8pd" path="res://Entities/Components/EffectComponents/StatusEffectsComponent/StatusEffectsComponent.tscn" id="11_swclu"]
+[ext_resource type="Script" uid="uid://ckiyd2nbdcofr" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/LifeStealHandler.gd" id="12_3rk2w"]
 [ext_resource type="PackedScene" uid="uid://c4kt3bx0ot3c7" path="res://Entities/Components/ItemComponents/LootTableComponent/LootTableComponent.tscn" id="13_gf8n0"]
 [ext_resource type="Script" uid="uid://1qq7eo7lm8j6" path="res://Entities/Components/ItemComponents/LootTableComponent/LootTableEntry.gd" id="14_h0qkk"]
 [ext_resource type="Resource" uid="uid://cpxev3kvt74vw" path="res://Entities/Items/TRESItems/Ammo/Shell(0).tres" id="15_jtbe1"]
@@ -21,10 +24,16 @@
 [ext_resource type="Script" uid="uid://cgqfx1ve66f3h" path="res://Entities/Components/ItemComponents/LootTableComponent/LootTable.gd" id="21_uxavk"]
 [ext_resource type="PackedScene" uid="uid://2yy4xfm5g74l" path="res://Entities/Components/ItemComponents/ClippingComponent/ClippingArea.tscn" id="22_h0qkk"]
 
+[sub_resource type="Resource" id="Resource_tmtom"]
+script = ExtResource("2_oq3a2")
+title = "CHEST"
+main_inv_size = 10
+starting_inv = Array[ExtResource("3_4hy3y")]([])
+
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ur1i4"]
 size = Vector2(12, 12)
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_5ao0g"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_jtbe1"]
 resource_local_to_scene = true
 shader = ExtResource("3_xscca")
 
@@ -42,6 +51,11 @@ animations = [{
 "name": &"default",
 "speed": 5.0
 }]
+
+[sub_resource type="Resource" id="Resource_4hy3y"]
+resource_local_to_scene = true
+script = ExtResource("12_3rk2w")
+metadata/_custom_type_script = "uid://ckiyd2nbdcofr"
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_opl06"]
 size = Vector2(14, 14)
@@ -113,6 +127,7 @@ collision_layer = 0
 collision_mask = 0
 script = ExtResource("1_uvrwn")
 team = 2
+inv = SubResource("Resource_tmtom")
 is_object = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
@@ -123,7 +138,7 @@ shape = SubResource("RectangleShape2D_ur1i4")
 
 [node name="EntitySprite" parent="." instance=ExtResource("3_kbhyj")]
 unique_name_in_owner = true
-material = SubResource("ShaderMaterial_5ao0g")
+material = SubResource("ShaderMaterial_jtbe1")
 position = Vector2(0, -7)
 scale = Vector2(0.11, 0.11)
 sprite_frames = SubResource("SpriteFrames_rk4ta")
@@ -138,6 +153,7 @@ affected_entity = NodePath("..")
 health_component = NodePath("../HealthComponent")
 loot_table_component = NodePath("../LootTableComponent")
 dmg_handler = NodePath("DmgHandler")
+life_steal_handler = SubResource("Resource_4hy3y")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="EffectReceiverComponent"]
 position = Vector2(0, -7)

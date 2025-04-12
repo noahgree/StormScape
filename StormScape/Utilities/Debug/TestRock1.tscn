@@ -10,8 +10,8 @@
 [ext_resource type="Texture2D" uid="uid://y4h3ce1ifonf" path="res://Entities/Environment/Rocks/Rock1CT.tres" id="7_7qjvm"]
 [ext_resource type="PackedScene" uid="uid://cdfdy8m6ki3oq" path="res://Entities/Components/HealthComponent/HealthComponent.tscn" id="8_c8cii"]
 [ext_resource type="PackedScene" uid="uid://btba0jmsow1mx" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectReceiverComponent.tscn" id="9_wje6d"]
-[ext_resource type="PackedScene" uid="uid://4gl24qwdyti3" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/DmgHandler.tscn" id="10_e60ct"]
 [ext_resource type="PackedScene" uid="uid://jpq0ij8wwlhy" path="res://Entities/Components/FacingComponent/FacingComponent.tscn" id="12_1nxg5"]
+[ext_resource type="PackedScene" uid="uid://4gl24qwdyti3" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/DmgHandler.tscn" id="12_ymdvb"]
 [ext_resource type="PackedScene" uid="uid://c4kt3bx0ot3c7" path="res://Entities/Components/ItemComponents/LootTableComponent/LootTableComponent.tscn" id="13_ednmi"]
 [ext_resource type="Script" uid="uid://1qq7eo7lm8j6" path="res://Entities/Components/ItemComponents/LootTableComponent/LootTableEntry.gd" id="14_v0818"]
 [ext_resource type="Resource" uid="uid://dbnhbsphiw4oe" path="res://Entities/Items/TRESItems/WorldResources/SpruceLog(0).tres" id="15_b13xo"]
@@ -52,8 +52,7 @@ animations = [{
 radius = 8.0
 height = 28.0
 
-[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_ke02d"]
-radius = 9.0
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_mc2cg"]
 height = 28.0
 
 [sub_resource type="Resource" id="Resource_m6yab"]
@@ -114,6 +113,12 @@ rotation = -1.5708
 shape = SubResource("CapsuleShape2D_l7ldg")
 debug_color = Color(0, 0.632808, 0.44745, 0.251)
 
+[node name="HealthComponent" parent="." instance=ExtResource("8_c8cii")]
+_max_health = 500
+_max_shield = 0
+
+[node name="FacingComponent" parent="." instance=ExtResource("12_1nxg5")]
+
 [node name="EffectReceiverComponent" parent="." node_paths=PackedStringArray("affected_entity", "health_component", "loot_table_component", "dmg_handler") instance=ExtResource("9_wje6d")]
 affected_entity = NodePath("..")
 health_component = NodePath("../HealthComponent")
@@ -121,18 +126,11 @@ loot_table_component = NodePath("../LootTableComponent")
 dmg_handler = NodePath("DmgHandler")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="EffectReceiverComponent"]
-position = Vector2(0, -10)
+position = Vector2(0, -12)
 rotation = -1.5708
-shape = SubResource("CapsuleShape2D_ke02d")
+shape = SubResource("CapsuleShape2D_mc2cg")
 
-[node name="DmgHandler" parent="EffectReceiverComponent" instance=ExtResource("10_e60ct")]
-can_be_crit = false
-
-[node name="HealthComponent" parent="." instance=ExtResource("8_c8cii")]
-_max_health = 500
-_max_shield = 0
-
-[node name="FacingComponent" parent="." instance=ExtResource("12_1nxg5")]
+[node name="DmgHandler" parent="EffectReceiverComponent" instance=ExtResource("12_ymdvb")]
 
 [node name="LootTableComponent" parent="." instance=ExtResource("13_ednmi")]
 loot_table = SubResource("Resource_vx2o2")

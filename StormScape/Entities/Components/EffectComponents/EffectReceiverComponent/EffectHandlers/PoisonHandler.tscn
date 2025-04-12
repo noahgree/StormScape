@@ -1,6 +1,0 @@
-[gd_scene load_steps=2 format=3 uid="uid://tc2awdm3onyi"]
-
-[ext_resource type="Script" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/PoisonHandler.gd" id="1_oi8w0"]
-
-[node name="PoisonHandler" type="Node"]
-script = ExtResource("1_oi8w0")

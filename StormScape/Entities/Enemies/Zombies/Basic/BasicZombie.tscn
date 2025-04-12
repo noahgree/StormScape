@@ -1,11 +1,12 @@
-[gd_scene load_steps=127 format=3 uid="uid://bl2igmtwo1a3v"]
+[gd_scene load_steps=137 format=3 uid="uid://bl2igmtwo1a3v"]
 
 [ext_resource type="Script" uid="uid://db4npghrxc6u" path="res://Entities/Enemies/Zombies/Basic/BasicZombie.gd" id="1_8bt15"]
 [ext_resource type="PackedScene" uid="uid://cj2wy5f05cos4" path="res://Entities/EntityCore/Shadow/EntityShadow.tscn" id="1_ko3ep"]
 [ext_resource type="PackedScene" uid="uid://dh4ydl7l86ywq" path="res://Entities/EntityCore/Sprites/EntitySprite.tscn" id="2_8a5el"]
-[ext_resource type="Script" uid="uid://c2gdoebfp12dq" path="res://Entities/Stats/StatMod/StatModsCacheResource.gd" id="2_lm42a"]
+[ext_resource type="Script" uid="uid://dwmur0cosbbwh" path="res://UI/Inventory/InventoryCore/InventoryResource.gd" id="2_dcca3"]
 [ext_resource type="Shader" uid="uid://cfbagv3hrtar2" path="res://Utilities/Game/Shaders/EntityEffectShader.gdshader" id="3_3cie3"]
 [ext_resource type="PackedScene" uid="uid://bhcqtorpyerc3" path="res://Utilities/Debug/ParticleEmissionComponent.tscn" id="3_6bt22"]
+[ext_resource type="Script" uid="uid://dp8osf7r6xkkt" path="res://Entities/Items/ItemCore/InvItemResource.gd" id="3_hj6es"]
 [ext_resource type="PackedScene" uid="uid://di7vcyrki71nm" path="res://Entities/Components/DetectionComponent/DetectionComponent.tscn" id="3_tsyff"]
 [ext_resource type="Texture2D" uid="uid://yypje8l5ouqy" path="res://Entities/Enemies/Zombies/Basic/BasicZombieBaseFramesCT.tres" id="4_8a5el"]
 [ext_resource type="PackedScene" uid="uid://co3n6m7efg8pd" path="res://Entities/Components/EffectComponents/StatusEffectsComponent/StatusEffectsComponent.tscn" id="5_g4fx3"]
@@ -16,17 +17,18 @@
 [ext_resource type="PackedScene" uid="uid://4gl24qwdyti3" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/DmgHandler.tscn" id="9_eigs2"]
 [ext_resource type="PackedScene" uid="uid://cxpv7l7rcaq1o" path="res://Entities/Components/StaminaComponent/StaminaComponent.tscn" id="10_kc883"]
 [ext_resource type="PackedScene" uid="uid://ddj5ippwwkvop" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/HealHandler.tscn" id="10_mbh3n"]
-[ext_resource type="PackedScene" uid="uid://dykiv0tlhwmox" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/KnockbackHandler.tscn" id="11_3l4yw"]
-[ext_resource type="PackedScene" uid="uid://cx4b21058vypq" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/StunHandler.tscn" id="12_u70e3"]
-[ext_resource type="PackedScene" uid="uid://tc2awdm3onyi" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/PoisonHandler.tscn" id="13_2qho1"]
-[ext_resource type="PackedScene" uid="uid://e3qv2f7w61vy" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/RegenHandler.tscn" id="14_8bt15"]
-[ext_resource type="PackedScene" uid="uid://bhg7jmodo3t5t" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/FrostbiteHandler.tscn" id="15_lm42a"]
-[ext_resource type="PackedScene" uid="uid://depnx3pnassrq" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/BurningHandler.tscn" id="16_epk84"]
-[ext_resource type="PackedScene" uid="uid://b4bmp3jehto3g" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/LifeStealHandler.tscn" id="17_coxcp"]
+[ext_resource type="Script" uid="uid://dk6uef3uxmeev" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/KnockbackHandler.gd" id="16_yrrsd"]
+[ext_resource type="Script" uid="uid://b21sy1r0nxgpv" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/StunHandler.gd" id="17_oiiqe"]
 [ext_resource type="PackedScene" uid="uid://c4kt3bx0ot3c7" path="res://Entities/Components/ItemComponents/LootTableComponent/LootTableComponent.tscn" id="18_2qho1"]
+[ext_resource type="Script" uid="uid://5krnqdrdbey1" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/PoisonHandler.gd" id="18_qrtn1"]
 [ext_resource type="Script" uid="uid://1qq7eo7lm8j6" path="res://Entities/Components/ItemComponents/LootTableComponent/LootTableEntry.gd" id="19_8bt15"]
+[ext_resource type="Script" uid="uid://bqw1ufs6jb7cf" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/RegenHandler.gd" id="19_lal78"]
+[ext_resource type="Script" uid="uid://b1lo2mdb3otax" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/FrostbiteHandler.gd" id="20_cw5if"]
 [ext_resource type="Resource" uid="uid://c5jim46mul7ex" path="res://Entities/Items/TRESItems/Ammo/IonCharge(0).tres" id="20_lm42a"]
 [ext_resource type="Script" uid="uid://cgqfx1ve66f3h" path="res://Entities/Components/ItemComponents/LootTableComponent/LootTable.gd" id="21_epk84"]
+[ext_resource type="Script" uid="uid://dubq8xgav66ue" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/BurningHandler.gd" id="21_oqrkc"]
+[ext_resource type="Script" uid="uid://5w234psf0oln" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/TimeSnareHandler.gd" id="22_s1u3v"]
+[ext_resource type="Script" uid="uid://ckiyd2nbdcofr" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/LifeStealHandler.gd" id="23_n5xoq"]
 [ext_resource type="Texture2D" uid="uid://crawnbhc5weqf" path="res://Entities/EntityCore/EntityTypes/DynamicEntity/entity_footstep.png" id="25_kc883"]
 [ext_resource type="Script" uid="uid://c28itqxmeqbq0" path="res://Entities/FSM/FSMCore/StateMachine.gd" id="27_5gwv1"]
 [ext_resource type="PackedScene" uid="uid://jpq0ij8wwlhy" path="res://Entities/Components/FacingComponent/FacingComponent.tscn" id="27_pfgxp"]
@@ -37,10 +39,11 @@
 [ext_resource type="Script" uid="uid://cbuaklpos5jdp" path="res://Entities/FSM/States/BaseStates/DieState.gd" id="32_kuvhw"]
 [ext_resource type="Script" uid="uid://q3yeopc5wdlo" path="res://Entities/FSM/States/EnemyStates/ChaseState.gd" id="34_dcca3"]
 
-[sub_resource type="Resource" id="Resource_epk84"]
-script = ExtResource("2_lm42a")
-debug_print_mod_changes = false
-metadata/_custom_type_script = ExtResource("2_lm42a")
+[sub_resource type="Resource" id="Resource_yrrsd"]
+script = ExtResource("2_dcca3")
+title = "CHEST"
+main_inv_size = 10
+starting_inv = Array[ExtResource("3_hj6es")]([])
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_2h2fy"]
 radius = 6.0
@@ -49,7 +52,7 @@ height = 24.0
 [sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_6bt22"]
 polygon = PackedVector2Array(-5, -2.98466, -6, -1.98977, -5, 0, 5, 0, 6, -1.98977, 5, -2.98466)
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_dcca3"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_yrrsd"]
 resource_local_to_scene = true
 shader = ExtResource("3_3cie3")
 
@@ -401,6 +404,60 @@ animations = [{
 "name": &"run",
 "speed": 5.0
 }]
+
+[sub_resource type="Resource" id="Resource_ylj7g"]
+resource_local_to_scene = true
+script = ExtResource("16_yrrsd")
+_knockback_weakness = 0.0
+_knockback_resistance = 0.0
+entity_dir_influence = 0.25
+metadata/_custom_type_script = "uid://dk6uef3uxmeev"
+
+[sub_resource type="Resource" id="Resource_naanu"]
+resource_local_to_scene = true
+script = ExtResource("17_oiiqe")
+_stun_weakness = 0.0
+_stun_resistance = 0.0
+metadata/_custom_type_script = "uid://b21sy1r0nxgpv"
+
+[sub_resource type="Resource" id="Resource_nonw0"]
+resource_local_to_scene = true
+script = ExtResource("18_qrtn1")
+_poison_weakness = 0.0
+_poison_resistance = 0.0
+metadata/_custom_type_script = "uid://5krnqdrdbey1"
+
+[sub_resource type="Resource" id="Resource_6vrim"]
+resource_local_to_scene = true
+script = ExtResource("19_lal78")
+_regen_boost = 0.0
+_regen_penalty = 0.0
+metadata/_custom_type_script = "uid://bqw1ufs6jb7cf"
+
+[sub_resource type="Resource" id="Resource_86drt"]
+resource_local_to_scene = true
+script = ExtResource("20_cw5if")
+_frostbite_weakness = 0.0
+_frostbite_resistance = 0.0
+metadata/_custom_type_script = "uid://b1lo2mdb3otax"
+
+[sub_resource type="Resource" id="Resource_kq2k7"]
+resource_local_to_scene = true
+script = ExtResource("21_oqrkc")
+_burning_weakness = 0.0
+_burning_resistance = 0.0
+metadata/_custom_type_script = "uid://dubq8xgav66ue"
+
+[sub_resource type="Resource" id="Resource_175e0"]
+resource_local_to_scene = true
+script = ExtResource("22_s1u3v")
+_time_snare_immunity = 0.0
+metadata/_custom_type_script = "uid://5w234psf0oln"
+
+[sub_resource type="Resource" id="Resource_gtdxm"]
+resource_local_to_scene = true
+script = ExtResource("23_n5xoq")
+metadata/_custom_type_script = "uid://ckiyd2nbdcofr"
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_2ks4g"]
 size = Vector2(16, 28)
@@ -908,7 +965,7 @@ collision_mask = 0
 motion_mode = 1
 script = ExtResource("1_8bt15")
 team = 2
-stats = SubResource("Resource_epk84")
+inv = SubResource("Resource_yrrsd")
 
 [node name="Collision" type="CollisionShape2D" parent="."]
 rotation = -1.5708
@@ -936,7 +993,7 @@ occluder = SubResource("OccluderPolygon2D_6bt22")
 
 [node name="EntitySprite" parent="YSorter" instance=ExtResource("2_8a5el")]
 unique_name_in_owner = true
-material = SubResource("ShaderMaterial_dcca3")
+material = SubResource("ShaderMaterial_yrrsd")
 position = Vector2(0, -16)
 sprite_frames = SubResource("SpriteFrames_gi80f")
 animation = &"idle"
@@ -957,20 +1014,21 @@ below_extents = Vector2(8, 1)
 
 [node name="StaminaComponent" parent="." instance=ExtResource("10_kc883")]
 
-[node name="EffectReceiverComponent" parent="." node_paths=PackedStringArray("affected_entity", "health_component", "stamina_component", "loot_table_component", "dmg_handler", "heal_handler", "knockback_handler", "stun_handler", "poison_handler", "regen_handler", "frostbite_handler", "burning_handler", "life_steal_handler") instance=ExtResource("8_u4xth")]
+[node name="EffectReceiverComponent" parent="." node_paths=PackedStringArray("affected_entity", "health_component", "stamina_component", "loot_table_component", "dmg_handler", "heal_handler") instance=ExtResource("8_u4xth")]
 affected_entity = NodePath("..")
 health_component = NodePath("../HealthComponent")
 stamina_component = NodePath("../StaminaComponent")
 loot_table_component = NodePath("../LootTableComponent")
 dmg_handler = NodePath("DmgHandler")
 heal_handler = NodePath("HealHandler")
-knockback_handler = NodePath("KnockbackHandler")
-stun_handler = NodePath("StunHandler")
-poison_handler = NodePath("PoisonHandler")
-regen_handler = NodePath("RegenHandler")
-frostbite_handler = NodePath("FrostbiteHandler")
-burning_handler = NodePath("BurningHandler")
-life_steal_handler = NodePath("LifeStealHandler")
+knockback_handler = SubResource("Resource_ylj7g")
+stun_handler = SubResource("Resource_naanu")
+poison_handler = SubResource("Resource_nonw0")
+regen_handler = SubResource("Resource_6vrim")
+frostbite_handler = SubResource("Resource_86drt")
+burning_handler = SubResource("Resource_kq2k7")
+time_snare_handler = SubResource("Resource_175e0")
+life_steal_handler = SubResource("Resource_gtdxm")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="EffectReceiverComponent"]
 position = Vector2(0, -14)
@@ -980,20 +1038,6 @@ debug_color = Color(0.932, 0, 0.649, 0.122)
 [node name="DmgHandler" parent="EffectReceiverComponent" instance=ExtResource("9_eigs2")]
 
 [node name="HealHandler" parent="EffectReceiverComponent" instance=ExtResource("10_mbh3n")]
-
-[node name="KnockbackHandler" parent="EffectReceiverComponent" instance=ExtResource("11_3l4yw")]
-
-[node name="StunHandler" parent="EffectReceiverComponent" instance=ExtResource("12_u70e3")]
-
-[node name="PoisonHandler" parent="EffectReceiverComponent" instance=ExtResource("13_2qho1")]
-
-[node name="RegenHandler" parent="EffectReceiverComponent" instance=ExtResource("14_8bt15")]
-
-[node name="FrostbiteHandler" parent="EffectReceiverComponent" instance=ExtResource("15_lm42a")]
-
-[node name="BurningHandler" parent="EffectReceiverComponent" instance=ExtResource("16_epk84")]
-
-[node name="LifeStealHandler" parent="EffectReceiverComponent" instance=ExtResource("17_coxcp")]
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
