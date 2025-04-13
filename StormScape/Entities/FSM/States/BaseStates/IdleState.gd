@@ -3,6 +3,9 @@ class_name IdleState
 ## Handles when the dynamic entity is not moving.
 
 
+func _init() -> void:
+	state_id = "idle"
+
 func enter() -> void:
 	entity.facing_component.travel_anim_tree("idle")
 

@@ -11,3 +11,5 @@ extends Node
 @warning_ignore("unused_signal") signal slot_hovered(slot: Slot)
 @warning_ignore("unused_signal") signal slot_not_hovered
 @warning_ignore("unused_signal") signal alternate_inv_open_request(inv_source_node: Node2D)
+@warning_ignore("unused_signal") signal player_entered_safe_zone
+@warning_ignore("unused_signal") signal player_exited_safe_zone

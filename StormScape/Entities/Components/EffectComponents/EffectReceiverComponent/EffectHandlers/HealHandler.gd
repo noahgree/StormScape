@@ -3,9 +3,9 @@ extends Node
 class_name HealHandler
 ## A handler for using the data provided in the effect source to apply healing in different ways.
 
-@onready var health_component: HealthComponent = get_parent().health_component ## The health component to be affected by the healing.
 @onready var affected_entity: PhysicsBody2D = get_parent().affected_entity ## The entity affected by this heal handler.
 
+var health_component: HealthComponent ## The health component to be affected by the healing.
 var hot_timers: Dictionary[String, Array] = {} ## Holds references to all timers currently tracking active HOT.
 var hot_delay_timers: Dictionary[String, Array] = {} ## Holds references to all timers current tracking delays for active HOT.
 
@@ -20,7 +20,10 @@ func _on_before_load_game() -> void:
 
 ## Asserts that there is a valid health component on the affected entity before trying to handle healing.
 func _ready() -> void:
-	assert(get_parent().health_component, affected_entity.name + " has an effect receiver that is intended to handle healing, but no health component is connected.")
+	if not affected_entity.is_node_ready():
+		await affected_entity.ready
+	health_component = affected_entity.health_component
+	assert(health_component, affected_entity.name + " has an effect receiver that is intended to handle healing, but no health component is connected.")
 
 ## Handles applying instant, one-shot healing to the affected entity.
 func handle_instant_heal(effect_source: EffectSource, heal_affected_stats: Globals.HealAffectedStats) -> void:

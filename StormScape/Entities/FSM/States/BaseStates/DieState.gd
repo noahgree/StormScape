@@ -3,6 +3,9 @@ class_name DieState
 ## Handles when the entity is actively dying.
 
 
+func _init() -> void:
+	state_id = "die"
+
 func enter() -> void:
 	controller.can_receive_effects = false
 	entity.facing_component.travel_anim_tree("die")

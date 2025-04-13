@@ -4,9 +4,7 @@ class_name PlayerController
 
 
 #region Inputs
-func controller_handle_input(event: InputEvent) -> void:
-	super.controller_handle_input(event)
-
+func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("dash"):
 		notify_requested_dash()
 	elif event.is_action_pressed("sneak"):
@@ -26,34 +24,17 @@ func get_should_sneak() -> bool:
 #region Core
 func controller_process(delta: float) -> void:
 	super.controller_process(delta)
-
 	entity.facing_component.update_facing_dir(FacingComponent.Method.MOUSE_POS)
 #endregion
 
 #region States
 func notify_stopped_moving() -> void:
-	match fsm.current_state.name:
-		"Run", "Sneak", "Dash", "Stunned", "Spawn":
-			fsm.change_state("Idle")
+	match fsm.current_state.state_id:
+		"run", "sneak", "dash", "stunned", "spawn":
+			fsm.change_state("idle")
 
 func notify_started_moving() -> void:
-	match fsm.current_state.name:
-		"Idle", "Sneak":
-			fsm.change_state("Run")
-
-func notify_requested_dash() -> void:
-	match fsm.current_state.name:
-		"Run", "Sneak":
-			if get_movement_vector().length() == 0:
-				return
-
-			var dash_stamina_usage: float = entity.stats.get_stat("dash_stamina_usage")
-			if dash_cooldown_timer.is_stopped() and entity.stamina_component.use_stamina(dash_stamina_usage):
-				fsm.change_state("Dash")
-
-func notify_requested_sneak() -> void:
-	match fsm.current_state.name:
-		"Run", "Idle":
-			if knockback_vector == Vector2.ZERO:
-				fsm.change_state("Sneak")
+	match fsm.current_state.state_id:
+		"idle", "sneak":
+			fsm.change_state("run")
 #endregion

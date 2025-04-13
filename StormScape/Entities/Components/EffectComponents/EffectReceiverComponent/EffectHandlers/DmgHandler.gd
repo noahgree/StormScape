@@ -7,9 +7,9 @@ class_name DmgHandler
 @export_range(0, 100, 1.0, "hide_slider", "suffix:%") var _dmg_weakness: float = 0.0 ## Multiplier for increasing ALL incoming damage.
 @export_range(0, 100, 1.0, "hide_slider", "suffix:%") var _dmg_resistance: float = 0.0 ## Multiplier for decreasing ALL incoming damage.
 
-@onready var health_component: HealthComponent = get_parent().health_component ## The health component to be affected by the damage.
 @onready var affected_entity: PhysicsBody2D = get_parent().affected_entity ## The entity affected by this dmg handler.
 
+var health_component: HealthComponent ## The health component to be affected by the damage.
 var dot_timers: Dictionary[String, Array] = {} ## Holds references to all timers currently tracking active DOT. Keys are source type ids and values are an array of all matching timers of that type.
 var dot_delay_timers: Dictionary[String, Array] = {} ## Holds references to all timers current tracking delays for active DOT.
 
@@ -24,7 +24,10 @@ func _on_before_load_game() -> void:
 
 ## Asserts that there is a valid health component on the affected entity before trying to handle damage.
 func _ready() -> void:
-	assert(get_parent().health_component, affected_entity.name + " has an effect receiver that is intended to handle damage, but no health component is connected.")
+	if not affected_entity.is_node_ready():
+		await affected_entity.ready
+	health_component = affected_entity.health_component
+	assert(health_component, affected_entity.name + " has an effect receiver that is intended to handle damage, but no health component is connected.")
 
 	var moddable_stats: Dictionary[StringName, float] = {
 		&"dmg_weakness" : _dmg_weakness, &"dmg_resistance" : _dmg_resistance

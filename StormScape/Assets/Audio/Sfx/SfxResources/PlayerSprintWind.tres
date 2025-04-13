@@ -5,11 +5,12 @@
 [resource]
 script = ExtResource("1_vcftv")
 id = &"player_sprint_wind"
+category = 0
 sound_files_folder = "res://Assets/Audio/Sfx/SfxRawAudio/Characters/Player/Movement/Run/Sprint"
 sound_file_paths = Array[String]([])
 concurrent_limit = 1
 rhythmic_delay = 0.0
-volume = -18
+volume = -16.0
 pitch_scale = 1.0
 pitch_randomness = 0.0
 restart_if_at_limit = false

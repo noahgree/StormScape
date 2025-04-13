@@ -6,6 +6,7 @@ class_name DynamicEntityData
 @export var sprite_frames_path: String
 @export var sprite_texture_path: String
 @export var inv: Array[InvItemResource]
+@export var loot: LootTableResource
 
 # Stats
 @export var stat_mods: Dictionary[StringName, Dictionary]

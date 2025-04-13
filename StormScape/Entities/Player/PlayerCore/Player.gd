@@ -20,6 +20,14 @@ func _ready() -> void:
 	interaction_handler.prompt_ui = interaction_prompt
 	SignalBus.focused_ui_closed.connect(interaction_handler.recheck_queue)
 
+	_add_player_debug_commands()
+
+func _unhandled_key_input(_event: InputEvent) -> void:
+	if Input.is_action_just_pressed("interact") and not Globals.focused_ui_is_open:
+		interaction_handler.accept_interaction()
+
+#region Debug
+func _add_player_debug_commands() -> void:
 	DebugConsole.add_command("give", inv.grant_from_item_id)
 	DebugConsole.add_command("remove", inv.remove_item)
 	DebugConsole.add_command("print_inv", inv.print_inv)
@@ -37,10 +45,6 @@ func _ready() -> void:
 	DebugConsole.add_command("coords", func() -> void: print_rich("PLAYER COORDINATES: [b]", global_position))
 	DebugConsole.add_command("orphans", func() -> void: self.print_orphan_nodes())
 
-func _unhandled_key_input(_event: InputEvent) -> void:
-	if Input.is_action_just_pressed("interact") and not Globals.focused_ui_is_open:
-		interaction_handler.accept_interaction()
-
 ## Moves the player by the given x and y amounts relative to the current global position.
 func teleport_relative(x: int, y: int) -> void:
 	global_position += Vector2(x, y)
@@ -48,3 +52,4 @@ func teleport_relative(x: int, y: int) -> void:
 ## Moves the player to the given x and y coordinate.
 func teleport(x: int, y: int) -> void:
 	global_position = Vector2(x, y)
+#endregion

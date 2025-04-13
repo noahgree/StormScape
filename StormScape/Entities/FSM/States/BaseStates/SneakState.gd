@@ -2,8 +2,11 @@ extends State
 class_name SneakState
 ## Handles when the dynamic entity is sneaking, passing a stealth factor back up to the parent entity itself.
 
-@export var DEFAULT_SNEAK_ANIM_TIME_SCALE: float = 0.65 ## How fast the sneak anim should play before stat mods.
+const DEFAULT_SNEAK_ANIM_TIME_SCALE: float = 0.65 ## How fast the sneak anim should play before stat mods.
 
+
+func _init() -> void:
+	state_id = "sneak"
 
 func enter() -> void:
 	pass
@@ -32,18 +35,7 @@ func _do_character_sneak(delta: float) -> void:
 		entity.velocity = entity.velocity.limit_length(entity.stats.get_stat("max_sneak_speed"))
 
 	entity.move_and_slide()
-	if entity is Player: _handle_rigid_entity_collisions()
-
-## Handles moving rigid entities that we collided with in the last frame. Only for players.
-func _handle_rigid_entity_collisions() -> void:
-	for i: int in entity.get_slide_collision_count():
-		var c: KinematicCollision2D = entity.get_slide_collision(i)
-		var collider: Object = c.get_collider()
-		if collider is RigidEntity:
-			collider.apply_central_impulse(-c.get_normal().normalized() * entity.velocity.length() / (15 / (entity.stats.get_stat("sneak_collision_impulse_factor"))))
-
-		if i == 0:
-			controller.knockback_vector = Vector2.ZERO
+	StateFunctions.handle_rigid_entity_collisions(entity, controller)
 
 ## Updates the dynamic entity with the amount of stealth we currently have.
 func _send_parent_entity_stealth_value() -> void:
@@ -53,13 +45,12 @@ func _send_parent_entity_stealth_value() -> void:
 func _check_if_stopped_sneaking() -> void:
 	if controller.get_should_sneak():
 		return
-
-	if controller.get_movement_vector().length() == 0:
+	elif controller.get_movement_vector().length() == 0:
 		controller.notify_stopped_moving()
 	else:
 		controller.notify_started_moving()
 
-func _animate() -> void: # FIXME: NEED SNEAK ANIMATION!
+func _animate() -> void:
 	if controller.get_movement_vector() == Vector2.ZERO:
 		entity.facing_component.travel_anim_tree("idle")
 		entity.facing_component.update_blend_position("idle")

@@ -6,9 +6,9 @@ class_name HealthComponent
 ## Has functions for handling taking damage and healing.
 ## This class should always remain agnostic about the entity and the entity's UI it updates.
 
-signal health_changed(new_health: int)
+signal health_changed(new_health: int, old_health: int)
 signal max_health_changed(new_max_health: int)
-signal shield_changed(new_shield: int)
+signal shield_changed(new_shield: int, old_shield: int)
 signal max_shield_changed(new_max_shield: int)
 signal armor_changed(new_armor: int)
 
@@ -95,7 +95,7 @@ func damage_shield(amount: int, source_type: String, was_crit: bool, multishot_i
 func _check_for_death() -> void:
 	if health <= 0 and not is_dying:
 		is_dying = true
-		var loot_table: LootTableComponent = entity.get_node_or_null("LootTableComponent")
+		var loot_table: LootTableResource = entity.loot
 		if loot_table != null:
 			loot_table.handle_death()
 
@@ -146,13 +146,15 @@ func heal_shield(amount: int, source_type: String, _multishot_id: int) -> void:
 #region Setters & On-Change Funcs
 ## Setter for the current health. Clamps the new value to the allowed range and updates any connected UI.
 func _set_health(new_value: int) -> void:
+	var old_health: int = health
 	health = clampi(new_value, 0, int(entity.stats.get_stat("max_health")))
-	health_changed.emit(health)
+	health_changed.emit(health, old_health)
 
 ## Setter for the current shield. Clamps the new value to the allowed range and updates any connected UI.
 func _set_shield(new_value: int) -> void:
+	var old_shield: int = shield
 	shield = clampi(new_value, 0, int(entity.stats.get_stat("max_shield")))
-	shield_changed.emit(shield)
+	shield_changed.emit(shield, old_shield)
 
 ## Setter for the current armor. Clamps the new value to the allowed range.
 func _set_armor(new_value: int) -> void:
@@ -178,21 +180,20 @@ func _play_sound(sound_name: String, multishot_id: int) -> void:
 			return
 
 		var player: Variant = AudioManager.play_2d(sound_name, entity.global_position, 0, Globals.world_root)
-		if player != null:
-			if string_name_sound_name in current_sounds.keys():
-				current_sounds[string_name_sound_name].append(multishot_id)
-			else:
-				current_sounds[string_name_sound_name] = [multishot_id]
+		if not AudioManager.is_player_valid(player):
+			return
 
-			var callable: Callable = Callable(func() -> void:
-				if is_instance_valid(player):
-					current_sounds[string_name_sound_name].erase(multishot_id)
-					if current_sounds[string_name_sound_name].is_empty():
-						current_sounds.erase(string_name_sound_name)
-				)
-			var finish_callables: Variant = player.get_meta("finish_callables")
-			finish_callables.append(callable)
-			player.set_meta("finish_callables", finish_callables)
+		if string_name_sound_name in current_sounds.keys():
+			current_sounds[string_name_sound_name].append(multishot_id)
+		else:
+			current_sounds[string_name_sound_name] = [multishot_id]
+
+		var callable: Callable = Callable(func() -> void:
+			current_sounds[string_name_sound_name].erase(multishot_id)
+			if current_sounds[string_name_sound_name].is_empty():
+				current_sounds.erase(string_name_sound_name)
+			)
+		AudioManager.add_finish_callable_to_player(player, callable)
 	else:
 		AudioManager.play_2d(sound_name, entity.global_position)
 #endregion

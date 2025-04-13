@@ -6,9 +6,9 @@ class_name StaminaComponent
 ## Has functions for handling using stamina and hunger.
 ## This class should always remain agnostic about the entity, and the UI it updates is optional.
 
-signal stamina_changed(new_stamina: float)
+signal stamina_changed(new_stamina: float, old_stamina: float)
 signal max_stamina_changed(new_max_stamina: float)
-signal hunger_bars_changed(new_hunger_bars: int)
+signal hunger_bars_changed(new_hunger_bars: int, old_hunger_bars: int)
 signal max_hunger_bars_changed(new_max_hunger_bars: int)
 signal stamina_use_per_hunger_deduction_changed(new_stamina_use_per_hunger_deduction: float)
 
@@ -91,13 +91,15 @@ func gain_hunger_bars(amount: int) -> void:
 
 ## Setter for stamina. Clamps the new value to the allowed range.
 func _set_stamina(new_value: float) -> void:
+	var old_stamina: float = stamina
 	stamina = clampf(new_value, 0, get_parent().stats.get_stat("max_stamina"))
-	stamina_changed.emit(stamina)
+	stamina_changed.emit(stamina, old_stamina)
 
 ## Setter for hunger. Clamps the new value to the allowed range.
 func _set_hunger_bars(new_value: int) -> void:
+	var old_hunger_bars: int = hunger_bars
 	hunger_bars = clampi(new_value, 0, int(get_parent().stats.get_stat("max_hunger_bars")))
-	hunger_bars_changed.emit(hunger_bars)
+	hunger_bars_changed.emit(hunger_bars, old_hunger_bars)
 
 ## Setter for stamina_to_hunger_count. Clamps the new value to the allowed range.
 func _set_stamina_to_hunger_count(new_value: float) -> void:

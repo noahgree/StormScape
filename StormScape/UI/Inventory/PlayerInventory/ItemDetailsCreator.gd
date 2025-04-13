@@ -179,7 +179,7 @@ func _get_ammo_and_reload(stats: ItemResource) -> String:
 		var mult: float = ceilf(stats.s_mods.get_stat("mag_size") / stats.s_mods.get_stat("single_reload_quantity"))
 		reload = _get_item_sums(stats, ["single_proj_reload_time", "reload_delay"], false, "s", mult)
 	else:
-		reload = _get_item_sums(stats, ["mag_reload_time"], false, "s")
+		reload = _get_item_sums(stats, ["mag_reload_time", "reload_delay"], false, "s")
 
 	if stats.mag_size == -1 and stats.ammo_type != ProjWeaponResource.ProjAmmoType.STAMINA:
 		return "RELOAD:" + Globals.invis_char + reload

@@ -2,10 +2,12 @@ extends State
 class_name StunnedState
 ## Handles when the entity is stunned. This is a required state for all dynamic entities.
 
-@export var indicator_scene: PackedScene = load("res://Entities/Stats/EffectSystemResources/StatusEffects/BadEffects/Stun/StunIndicator.tscn") ## The instance that will be spawned above the character to indicate stun.
-
+var indicator_scene: PackedScene = load("res://Entities/Stats/EffectSystemResources/StatusEffects/BadEffects/Stun/StunIndicator.tscn") ## The instance that will be spawned above the character to indicate stun.
 var stun_indicator: AnimatedSprite2D ## The animated sprite showing the stun indicator over the entity.
 
+
+func _init() -> void:
+	state_id = "stunned"
 
 func enter() -> void:
 	entity.facing_component.travel_anim_tree("idle")
@@ -43,7 +45,7 @@ func _animate() -> void:
 ## Creates the stun indicator scene above the entity and adds it as a child.
 func _create_stun_indicator() -> void:
 	stun_indicator = indicator_scene.instantiate()
-	add_child(stun_indicator)
+	controller.add_child(stun_indicator)
 	stun_indicator.hide()
 
 ## Update where the stun indicator should be based on the entity size and position.

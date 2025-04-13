@@ -1,6 +1,0 @@
-[gd_scene load_steps=2 format=3 uid="uid://c4kt3bx0ot3c7"]
-
-[ext_resource type="Script" path="res://Entities/Components/ItemComponents/LootTableComponent/LootTableComponent.gd" id="1_nyrmv"]
-
-[node name="LootTableComponent" type="Node"]
-script = ExtResource("1_nyrmv")

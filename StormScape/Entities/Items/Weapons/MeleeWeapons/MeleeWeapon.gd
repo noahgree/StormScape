@@ -22,7 +22,9 @@ func _ready() -> void:
 
 	call_deferred("_disable_collider")
 	update_ammo_ui()
-	source_entity.stamina_component.stamina_changed.connect(func(_new_stamina: float) -> void: update_ammo_ui())
+	source_entity.stamina_component.stamina_changed.connect(
+		func(_new_stamina: float, _old_stamina: float) -> void: update_ammo_ui()
+		)
 
 	hitbox_component.source_entity = source_entity
 

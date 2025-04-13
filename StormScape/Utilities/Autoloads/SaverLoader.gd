@@ -24,7 +24,7 @@ func save_game() -> void:
 
 ## When called, any existing saved save file will be loaded in.
 func load_game() -> void:
-	var saved_game: SavedGame = load("user://savegame1.tres") as SavedGame
+	var saved_game: SavedGame = load("user://savegame1.tres")
 
 	if DebugFlags.saver_loader_status_changes:
 		print_rich("[color=yellow]Performing 'Before Load' Functions...[/color]")

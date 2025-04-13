@@ -2,7 +2,6 @@ extends Controller
 class_name DynamicController
 ## FSM Controller designed to work with dynamic entities.
 
-@export var entity: DynamicEntity ## The entity that this FSM moves.
 @export var footstep_texture: Texture2D ## The footstep texture used to leave a trail behind.
 @export var footstreak_offsets: Array[Vector2] = [Vector2(-4, 0), Vector2(4, 0)] ## The offsets to draw the footstreaks at when hit by knockback.
 @export var MAX_KNOCKBACK: int = 3000 ## The highest length the knockback vector can ever be to prevent dramatic movement.
@@ -39,10 +38,7 @@ var knockback_streak_nodes: Array[FootStreak] = [] ## The current foot streak in
 
 ## Asserts the necessary components exist to support a dynamic entity, then caches the child
 ## states and sets them up.
-func _ready() -> void:
-	assert(fsm.has_node("Idle"), "Dynamic entities must have an Idle state in the FSM. Add one to " + owner.name + ".")
-	assert(fsm.has_node("Stunned"), "Dynamic entities must have a Stunned state in the FSM. Add one to " + owner.name + ".")
-
+func setup() -> void:
 	var moddable_stats: Dictionary[StringName, float] = {
 		&"max_speed" : _max_speed,
 		&"acceleration" : _acceleration,
@@ -88,7 +84,8 @@ func controller_physics_process(delta: float) -> void:
 #endregion
 
 #region Footprints & Streaks
-func create_footprint(offsets: Array) -> void:
+## Creates a footprint and starts the needed step sound. Called from the animation player.
+func create_footprint_and_sound(offsets: Array) -> void:
 	var facing_dir: Vector2 = entity.facing_component.facing_dir
 
 	for offset: Vector2 in offsets:
@@ -99,6 +96,8 @@ func create_footprint(offsets: Array) -> void:
 		footprint.set_instance_shader_parameter("tint_color", Color(0.0, 0.0, 0.0, 0.8))
 
 		Globals.world_root.add_child(footprint)
+
+	AudioManager.play_2d("player_run_base", entity.global_position)
 
 ## Updates the knockback streak points array that determines how the streak line is drawn.
 func update_knockback_streak() -> void:
@@ -112,6 +111,7 @@ func update_knockback_streak() -> void:
 		else:
 			knockback_streak_nodes.clear()
 
+## Resets and recreates the knockback streak.
 func reset_and_create_knockback_streak() -> void:
 	if knockback_streak_nodes.is_empty() or (not is_instance_valid(knockback_streak_nodes[0])) or (knockback_streak_nodes[0] == null) or (knockback_streak_nodes[0].is_fading):
 		knockback_streak_nodes.clear()
@@ -125,16 +125,16 @@ func reset_and_create_knockback_streak() -> void:
 
 #region States
 func notify_stopped_moving() -> void:
-	match fsm.current_state.name:
-		"Run", "Sneak", "Dash", "Stunned", "Spawn":
-			fsm.change_state("Idle")
+	match fsm.current_state.state_id:
+		"run", "sneak", "dash", "stunned", "spawn":
+			fsm.change_state("idle")
 
 ## Requests to add a value to the current knockback vector, doing so if possible.
 func notify_requested_knockback(knockback: Vector2) -> void:
-	match fsm.current_state.name:
-		"Run", "Sneak", "Idle", "Stunned":
+	match fsm.current_state.state_id:
+		"run", "sneak", "idle", "stunned":
 			knockback_vector = (knockback_vector + knockback).limit_length(MAX_KNOCKBACK)
-			fsm.change_state("Run")
+			fsm.change_state("run")
 			reset_and_create_knockback_streak()
 
 ## When the stun timer ends, notify that we can return to Idle if needed.
@@ -146,30 +146,32 @@ func _on_dash_timer_timeout() -> void:
 	notify_stopped_moving()
 
 func notify_spawn_ended() -> void:
-	match fsm.current_state.name:
-		"Spawn":
-			fsm.change_state("Idle")
+	match fsm.current_state.state_id:
+		"spawn":
+			fsm.change_state("idle")
 
 func notify_requested_stun(duration: float) -> void:
-	match fsm.current_state.name:
-		"Run", "Idle", "Stunned", "Sneak":
+	match fsm.current_state.state_id:
+		"run", "idle", "stunned", "sneak":
 			stunned_timer.wait_time = duration
-			fsm.change_state("Stunned")
+			fsm.change_state("stunned")
 			stunned_timer.start()
 
 func notify_requested_dash() -> void:
-	match fsm.current_state.name:
-		"Run", "Sneak":
+	if not fsm.has_state("dash"):
+		return
+	match fsm.current_state.state_id:
+		"run", "sneak":
 			if get_movement_vector().length() == 0:
 				return
 
 			var dash_stamina_usage: float = entity.stats.get_stat("dash_stamina_usage")
-			if fsm.dash_cooldown_timer.is_stopped() and entity.stamina_component.use_stamina(dash_stamina_usage):
-				fsm.change_state("Dash")
+			if dash_cooldown_timer.is_stopped() and entity.stamina_component.use_stamina(dash_stamina_usage):
+				fsm.change_state("dash")
 
 func notify_requested_sneak() -> void:
-	match fsm.current_state.name:
-		"Run", "Idle":
-			if fsm.knockback_vector == Vector2.ZERO:
-				fsm.change_state("Sneak")
+	match fsm.current_state.state_id:
+		"run", "idle":
+			if knockback_vector == Vector2.ZERO:
+				fsm.change_state("sneak")
 #endregion

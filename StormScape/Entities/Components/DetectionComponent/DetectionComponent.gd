@@ -49,14 +49,12 @@ func update_stealth(new_value: int) -> void:
 	radius = max(10, original_radius * (1 - stealth_percent))
 
 func _on_area_entered(area: Area2D) -> void:
-	if area is not EffectReceiverComponent:
-		return
-	area.affected_entity.detection_component.enemy_entered(entity)
+	if area is EffectReceiverComponent:
+		area.affected_entity.detection_component.enemy_entered(entity)
 
 func _on_area_exited(area: Area2D) -> void:
-	if area is not EffectReceiverComponent:
-		return
-	area.affected_entity.detection_component.enemy_exited(entity)
+	if area is EffectReceiverComponent:
+		area.affected_entity.detection_component.enemy_exited(entity)
 
 func enemy_entered(body: PhysicsBody2D) -> void:
 	enemies_in_range.append(body)

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c1qjp6vn8s0s"
-path="res://.godot/imported/loot_table_component.svg-f5ff0e0feefcb25df9c1b04d6223f35f.ctex"
+uid="uid://c8gn0777o08t4"
+path="res://.godot/imported/tintable_corner_overlay.png-c940241d7a7368b7c5f80384d97a5abc.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Utilities/Debug/EditorIcons/loot_table_component.svg"
-dest_files=["res://.godot/imported/loot_table_component.svg-f5ff0e0feefcb25df9c1b04d6223f35f.ctex"]
+source_file="res://UI/TemporaryElements/FeedbackTints/tintable_corner_overlay.png"
+dest_files=["res://.godot/imported/tintable_corner_overlay.png-c940241d7a7368b7c5f80384d97a5abc.ctex"]
 
 [params]
 
@@ -32,6 +32,3 @@ process/hdr_as_srgb=false
 process/hdr_clamp_exposure=false
 process/size_limit=0
 detect_3d/compress_to=1
-svg/scale=1.0
-editor/scale_with_editor_scale=false
-editor/convert_colors_with_editor_theme=false

@@ -23,12 +23,6 @@ func ensure_effect_handler_resource_unique_to_scene(node: EffectReceiverComponen
 func update_editor_parent_export(node: EffectReceiverComponent, parent: Node) -> void:
 	if parent is DynamicEntity or parent is RigidEntity or parent is StaticEntity:
 		node.affected_entity = parent
-	if parent.has_node("HealthComponent"):
-		node.health_component = parent.get_node("HealthComponent")
-	if parent.has_node("StaminaComponent"):
-		node.stamina_component = parent.get_node("StaminaComponent")
-	if parent.has_node("LootTableComponent"):
-		node.loot_table_component = parent.get_node("LootTableComponent")
 	if parent.has_node("StatusEffectsComponent"):
 		parent.get_node("StatusEffectsComponent").effect_receiver = node
 

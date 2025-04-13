@@ -105,7 +105,7 @@ func _setup_cracks_with_damage(sprite_size: Vector2) -> void:
 	min_crack_stats["crack_scale"] = min_crack_stats["crack_scale"] * scale_scaler
 	max_crack_stats["crack_scale"] = max_crack_stats["crack_scale"] * scale_scaler
 
-	_update_cracking(health_component.health)
+	_update_cracking(health_component.health, -1)
 
 ## Updates the floor light using tweening.
 func update_floor_light(effect_id: String, kill: bool = false) -> void:
@@ -190,7 +190,7 @@ func start_hitflash(flash_color: Color = Color(1, 1, 1, 0.6), tween_in: bool = f
 
 ## Updates the level of cracking shown by the shader. Uses the new current health as a percentage of the max
 ## health to determine how cracked it should be between the min and max cracking dictionaries.
-func _update_cracking(new_health: int) -> void:
+func _update_cracking(new_health: int, _old_health: int) -> void:
 	if new_health == 0:
 		return
 	var max_health: int = int(entity.stats.get_stat("max_health"))
@@ -214,4 +214,4 @@ func _update_cracking(new_health: int) -> void:
 
 ## Potentially updates the cracking when the max health changes since it would be at a different level of damage.
 func _on_max_health_of_entity_changed(_new_max_health: int) -> void:
-	_update_cracking(entity.health_component.health)
+	_update_cracking(entity.health_component.health, -1)

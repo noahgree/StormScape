@@ -1,4 +1,4 @@
-[gd_scene load_steps=235 format=3 uid="uid://dba8mrurjlekp"]
+[gd_scene load_steps=243 format=3 uid="uid://dba8mrurjlekp"]
 
 [ext_resource type="Script" uid="uid://c3rpxq8pnbdje" path="res://Entities/Player/PlayerCore/Player.gd" id="1_m33tt"]
 [ext_resource type="Script" uid="uid://dwmur0cosbbwh" path="res://UI/Inventory/InventoryCore/InventoryResource.gd" id="2_l1kq4"]
@@ -21,13 +21,10 @@
 [ext_resource type="PackedScene" uid="uid://co3n6m7efg8pd" path="res://Entities/Components/EffectComponents/StatusEffectsComponent/StatusEffectsComponent.tscn" id="6_n0x5k"]
 [ext_resource type="Resource" uid="uid://m8eslst1uuxh" path="res://Entities/Items/TRESItems/Ammo/Light(0).tres" id="6_qvtc6"]
 [ext_resource type="Resource" uid="uid://bx2nl7cqe7odq" path="res://Entities/Items/TRESItems/WeaponMods/AdvancedScope(3).tres" id="7_14ixx"]
-[ext_resource type="Script" uid="uid://c2sjdkql76qca" path="res://Entities/FSM/States/BaseStates/IdleState.gd" id="7_15a5x"]
 [ext_resource type="Resource" uid="uid://c5jim46mul7ex" path="res://Entities/Items/TRESItems/Ammo/IonCharge(0).tres" id="7_o382h"]
 [ext_resource type="Resource" uid="uid://4nvp28pvjtk3" path="res://Entities/Items/TRESItems/ProjectileWeapons/Boomerang(1).tres" id="8_gb65f"]
 [ext_resource type="Resource" uid="uid://3avt5jvd3dye" path="res://Entities/Items/TRESItems/ProjectileWeapons/BottleOFire(3).tres" id="8_lo25j"]
 [ext_resource type="Resource" uid="uid://caw1yglbt2nf6" path="res://Entities/Items/TRESItems/Wearables/FrostCharm(5).tres" id="8_o382h"]
-[ext_resource type="Script" uid="uid://dxekqhvcykqrq" path="res://Entities/FSM/States/PlayerStates/RunState.gd" id="9_0dcld"]
-[ext_resource type="Script" uid="uid://cy73p3okq3cic" path="res://Entities/FSM/States/BaseStates/DashState.gd" id="9_a1qv1"]
 [ext_resource type="Texture2D" uid="uid://cs3clmnktksd6" path="res://Entities/Player/PlayerCore/player_hand.png" id="9_n4o3n"]
 [ext_resource type="Resource" uid="uid://dpmwqsai6gxsr" path="res://Entities/Items/TRESItems/ProjectileWeapons/FlameBlower(5).tres" id="9_rdrbb"]
 [ext_resource type="Resource" uid="uid://bs4rqdt46yav7" path="res://Entities/Items/TRESItems/WorldResources/OakLog(0).tres" id="10_0t1mv"]
@@ -42,12 +39,8 @@
 [ext_resource type="Resource" uid="uid://duc0xfejpfs1" path="res://Entities/Items/TRESItems/ProjectileWeapons/EagleEye(3).tres" id="12_6wv7y"]
 [ext_resource type="Resource" uid="uid://fmf7upx7tsln" path="res://Entities/Items/TRESItems/ProjectileWeapons/RifleX(3).tres" id="13_n4o3n"]
 [ext_resource type="Resource" uid="uid://bper7kxtsf7f1" path="res://Entities/Items/TRESItems/MeleeWeapons/Axe(1).tres" id="14_0t1mv"]
-[ext_resource type="Script" uid="uid://cbyg4eleptthh" path="res://Entities/FSM/States/BaseStates/StunnedState.gd" id="15_eiig3"]
 [ext_resource type="Resource" uid="uid://cx1ydw2jde1y8" path="res://Entities/Items/TRESItems/Consumables/Apple(0).tres" id="15_hxjay"]
-[ext_resource type="Script" uid="uid://i7ucoc123rpe" path="res://Entities/FSM/States/BaseStates/SpawnState.gd" id="17_fwsnm"]
 [ext_resource type="Script" uid="uid://clmf6cxgxu6kb" path="res://Utilities/Debug/TestButtons.gd" id="17_vdk5v"]
-[ext_resource type="Script" uid="uid://cbuaklpos5jdp" path="res://Entities/FSM/States/BaseStates/DieState.gd" id="18_jcofa"]
-[ext_resource type="Script" uid="uid://cf7pyv5l3pefi" path="res://Entities/FSM/States/BaseStates/SneakState.gd" id="19_alhqe"]
 [ext_resource type="Resource" uid="uid://bh18kqp2up3oe" path="res://Entities/Items/TRESItems/MeleeWeapons/Pickaxe(3).tres" id="23_gdihr"]
 [ext_resource type="PackedScene" uid="uid://jpq0ij8wwlhy" path="res://Entities/Components/FacingComponent/FacingComponent.tscn" id="25_0t1mv"]
 [ext_resource type="Script" uid="uid://c28itqxmeqbq0" path="res://Entities/FSM/FSMCore/StateMachine.gd" id="25_6wv7y"]
@@ -59,7 +52,6 @@
 [ext_resource type="PackedScene" uid="uid://c4n604w30gx8m" path="res://Entities/Components/ItemComponents/ItemReceiverComponent/ItemReceiverComponent.tscn" id="30_qgyag"]
 [ext_resource type="Script" uid="uid://dq62ojsc43p8o" path="res://UI/Inventory/PlayerInventory/PlayerInvUI.gd" id="32_3a185"]
 [ext_resource type="Script" uid="uid://dp8osf7r6xkkt" path="res://Entities/Items/ItemCore/InvItemResource.gd" id="32_ixmb3"]
-[ext_resource type="Script" uid="uid://dvirx67s12tmd" path="res://Entities/Player/PlayerCore/PlayerCamera/CamFXResource.gd" id="32_o382h"]
 [ext_resource type="Script" uid="uid://di5hu6fk5mbfe" path="res://UI/PlayerStatsHUD/PlayerStatsHUD.gd" id="35_yln51"]
 [ext_resource type="PackedScene" uid="uid://b7gdy01q8wsjx" path="res://Entities/Components/ItemComponents/HandsComponent/HandsComponent.tscn" id="39_ngono"]
 [ext_resource type="Shader" uid="uid://c0de04pgeen76" path="res://Utilities/Game/Shaders/BlurBehind.gdshader" id="39_r4tgk"]
@@ -80,9 +72,17 @@
 [ext_resource type="Texture2D" uid="uid://barp24qvngy0m" path="res://UI/OverheadUI/Overheat/overheat_back.png" id="63_3uq13"]
 [ext_resource type="Texture2D" uid="uid://7wf7omw2r50u" path="res://UI/OverheadUI/Overheat/overheat_progress.png" id="64_o382h"]
 [ext_resource type="Resource" uid="uid://caxftf2aer6g4" path="res://Entities/Items/TRESItems/WeaponMods/Igniter(4).tres" id="65_14ixx"]
+[ext_resource type="Script" uid="uid://bvla7pmnsimif" path="res://Entities/FSM/FSMCore/State.gd" id="66_8hbs2"]
 [ext_resource type="Script" uid="uid://dgibl37gudpj1" path="res://Entities/Player/PlayerCore/Interactions/InteractionOffer.gd" id="66_r5dvw"]
+[ext_resource type="Script" uid="uid://c2sjdkql76qca" path="res://Entities/FSM/States/BaseStates/IdleState.gd" id="67_h1ges"]
+[ext_resource type="Script" uid="uid://cy73p3okq3cic" path="res://Entities/FSM/States/BaseStates/DashState.gd" id="68_32jvf"]
 [ext_resource type="Texture2D" uid="uid://dtft3mljs2y5s" path="res://UI/Inventory/InventoryCore/Slot/Universal/trash_slot_icon.png" id="69_4ao77"]
+[ext_resource type="Script" uid="uid://dxekqhvcykqrq" path="res://Entities/FSM/States/PlayerStates/RunState.gd" id="69_82yts"]
 [ext_resource type="Texture2D" uid="uid://ddxfmulkpyb2h" path="res://UI/Inventory/InventoryCore/Background/Wood/inv_background_simple_wood.png" id="70_thmqm"]
+[ext_resource type="Script" uid="uid://cf7pyv5l3pefi" path="res://Entities/FSM/States/BaseStates/SneakState.gd" id="70_uu4sw"]
+[ext_resource type="Script" uid="uid://cbyg4eleptthh" path="res://Entities/FSM/States/BaseStates/StunnedState.gd" id="71_ve7vt"]
+[ext_resource type="Script" uid="uid://i7ucoc123rpe" path="res://Entities/FSM/States/BaseStates/SpawnState.gd" id="72_fcswf"]
+[ext_resource type="Script" uid="uid://cbuaklpos5jdp" path="res://Entities/FSM/States/BaseStates/DieState.gd" id="73_r7bkl"]
 [ext_resource type="Script" uid="uid://ct7n8wo1p3b20" path="res://Entities/Items/WeaponMods/WeaponMod.gd" id="74_bvo3j"]
 [ext_resource type="Resource" uid="uid://cwgqj8klx4b3x" path="res://Entities/Items/TRESItems/WeaponMods/ExtendedMag(0).tres" id="75_r5dvw"]
 [ext_resource type="Script" uid="uid://cs7bq5fnghjjp" path="res://UI/TemporaryElements/InteractionPrompt.gd" id="75_thmqm"]
@@ -131,6 +131,8 @@
 [ext_resource type="Resource" uid="uid://dm4eq3xm13a38" path="res://Assets/Audio/Sfx/SfxResources/PlayerRunBase.tres" id="127_ou5t4"]
 [ext_resource type="Resource" uid="uid://cjv5d4cwpj1l8" path="res://Assets/Audio/Sfx/SfxResources/PlayerSprintWind.tres" id="128_ar238"]
 [ext_resource type="Resource" uid="uid://dalv82plgsllj" path="res://Assets/Audio/Sfx/SfxResources/PlayerDash.tres" id="129_bmpdm"]
+[ext_resource type="Texture2D" uid="uid://c8gn0777o08t4" path="res://UI/TemporaryElements/FeedbackTints/tintable_corner_overlay.png" id="132_bmpdm"]
+[ext_resource type="Script" uid="uid://pmmj51awratp" path="res://UI/TemporaryElements/FeedbackTints/CornerFeedbackTint.gd" id="133_8hbs2"]
 
 [sub_resource type="Resource" id="Resource_82yts"]
 script = ExtResource("32_ixmb3")
@@ -405,28 +407,37 @@ metadata/_custom_type_script = "uid://ckiyd2nbdcofr"
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_7dc0v"]
 size = Vector2(14, 15)
 
-[sub_resource type="Resource" id="Resource_6wv7y"]
-script = ExtResource("32_o382h")
-shake_strength = 2.2
-shake_duration = 0.3
-shake_trans_type = 2
-shake_ease_type = 0
-freeze_multiplier = 1.0
-freeze_duration = 0.03
-freeze_instant_change = true
-freeze_trans_type = 2
-freeze_ease_type = 0
-zoom_multiplier = 1.0
-zoom_duration = 0.04
-zoom_trans_type = 0
-zoom_ease_type = 2
-trans_player_only = false
-trans_max_dist = 125
-trans_use_falloff = true
-freeze_player_only = false
-freeze_max_dist = 125
-freeze_uses_falloff = true
-metadata/_custom_type_script = ExtResource("32_o382h")
+[sub_resource type="Resource" id="Resource_65vc5"]
+script = ExtResource("67_h1ges")
+metadata/_custom_type_script = "uid://c2sjdkql76qca"
+
+[sub_resource type="Resource" id="Resource_6oagw"]
+script = ExtResource("69_82yts")
+DEFAULT_RUN_ANIM_TIME_SCALE = 1.5
+MAX_RUN_ANIM_TIME_SCALE = 4.0
+metadata/_custom_type_script = "uid://dxekqhvcykqrq"
+
+[sub_resource type="Resource" id="Resource_1jicd"]
+script = ExtResource("70_uu4sw")
+metadata/_custom_type_script = "uid://cf7pyv5l3pefi"
+
+[sub_resource type="Resource" id="Resource_g1usa"]
+script = ExtResource("68_32jvf")
+ghost_count = 8
+ghost_fade_time = 0.1
+metadata/_custom_type_script = "uid://cy73p3okq3cic"
+
+[sub_resource type="Resource" id="Resource_uvn5e"]
+script = ExtResource("71_ve7vt")
+metadata/_custom_type_script = "uid://cbyg4eleptthh"
+
+[sub_resource type="Resource" id="Resource_2enqj"]
+script = ExtResource("72_fcswf")
+metadata/_custom_type_script = "uid://i7ucoc123rpe"
+
+[sub_resource type="Resource" id="Resource_26nah"]
+script = ExtResource("73_r7bkl")
+metadata/_custom_type_script = "uid://cbuaklpos5jdp"
 
 [sub_resource type="Animation" id="Animation_sys1a"]
 length = 0.001
@@ -493,20 +504,6 @@ tracks/0/keys = {
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
 "values": [Vector2(1, 1), Vector2(1.00136e-05, 1.00136e-05)]
-}
-tracks/1/type = "method"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("StateMachine/Die")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0.2),
-"transitions": PackedFloat32Array(1),
-"values": [{
-"args": [],
-"method": &"_on_die_anim_ended"
-}]
 }
 
 [sub_resource type="Animation" id="Animation_0xfck"]
@@ -778,62 +775,45 @@ tracks/0/keys = {
 "update": 1,
 "values": [0, 1, 2, 3, 4, 5]
 }
-tracks/1/type = "method"
+tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("StateMachine/Run")
+tracks/1/path = NodePath("YSorter/HandsComponent/OffHandSprite:offset")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.3),
-"transitions": PackedFloat32Array(1, 1),
-"values": [{
-"args": [],
-"method": &"_play_run_sound"
-}, {
-"args": [],
-"method": &"_play_run_sound"
-}]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("YSorter/HandsComponent/OffHandSprite:offset")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
 "times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5),
 "transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
 "update": 1,
 "values": [Vector2(0, 0), Vector2(0, -3), Vector2(0, -2), Vector2(0, -1), Vector2(0, -3), Vector2(0, -2)]
 }
-tracks/3/type = "value"
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/path = NodePath("YSorter/EntitySprite:animation")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/keys = {
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("YSorter/EntitySprite:animation")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
 "values": [&"run"]
 }
-tracks/4/type = "method"
-tracks/4/imported = false
-tracks/4/enabled = true
-tracks/4/path = NodePath("StateMachine/Controller")
-tracks/4/interp = 1
-tracks/4/loop_wrap = true
-tracks/4/keys = {
+tracks/3/type = "method"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("StateMachine/Controller")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
 "times": PackedFloat32Array(0, 0.3),
 "transitions": PackedFloat32Array(1, 1),
 "values": [{
 "args": [[Vector2(-4, 0)]],
-"method": &"create_footprint"
+"method": &"create_footprint_and_sound"
 }, {
 "args": [[Vector2(4, 0)]],
-"method": &"create_footprint"
+"method": &"create_footprint_and_sound"
 }]
 }
 
@@ -866,50 +846,33 @@ tracks/1/keys = {
 "update": 1,
 "values": [&"run"]
 }
-tracks/2/type = "method"
+tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("StateMachine/Run")
+tracks/2/path = NodePath("YSorter/HandsComponent/OffHandSprite:offset")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
-"times": PackedFloat32Array(0, 0.3),
-"transitions": PackedFloat32Array(1, 1),
-"values": [{
-"args": [],
-"method": &"_play_run_sound"
-}, {
-"args": [],
-"method": &"_play_run_sound"
-}]
-}
-tracks/3/type = "value"
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/path = NodePath("YSorter/HandsComponent/OffHandSprite:offset")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/keys = {
 "times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5),
 "transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
 "update": 1,
 "values": [Vector2(0, 0), Vector2(0, -5), Vector2(0, -2), Vector2(0, -1), Vector2(0, -3), Vector2(0, 1)]
 }
-tracks/4/type = "method"
-tracks/4/imported = false
-tracks/4/enabled = true
-tracks/4/path = NodePath("StateMachine/Controller")
-tracks/4/interp = 1
-tracks/4/loop_wrap = true
-tracks/4/keys = {
+tracks/3/type = "method"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("StateMachine/Controller")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
 "times": PackedFloat32Array(0, 0.3),
 "transitions": PackedFloat32Array(1, 1),
 "values": [{
-"args": [[Vector2(4, 0)]],
-"method": &"create_footprint"
-}, {
 "args": [[Vector2(-4, 0)]],
-"method": &"create_footprint"
+"method": &"create_footprint_and_sound"
+}, {
+"args": [[Vector2(4, 0)]],
+"method": &"create_footprint_and_sound"
 }]
 }
 
@@ -942,50 +905,33 @@ tracks/1/keys = {
 "update": 1,
 "values": [&"run"]
 }
-tracks/2/type = "method"
+tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("StateMachine/Run")
+tracks/2/path = NodePath("YSorter/HandsComponent/OffHandSprite:offset")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
-"times": PackedFloat32Array(0, 0.3),
-"transitions": PackedFloat32Array(1, 1),
-"values": [{
-"args": [],
-"method": &"_play_run_sound"
-}, {
-"args": [],
-"method": &"_play_run_sound"
-}]
-}
-tracks/3/type = "value"
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/path = NodePath("YSorter/HandsComponent/OffHandSprite:offset")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/keys = {
 "times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5),
 "transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
 "update": 1,
 "values": [Vector2(0, 0), Vector2(0, -5), Vector2(0, -2), Vector2(0, -1), Vector2(0, -3), Vector2(0, 1)]
 }
-tracks/4/type = "method"
-tracks/4/imported = false
-tracks/4/enabled = true
-tracks/4/path = NodePath("StateMachine/Controller")
-tracks/4/interp = 1
-tracks/4/loop_wrap = true
-tracks/4/keys = {
+tracks/3/type = "method"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("StateMachine/Controller")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
 "times": PackedFloat32Array(0, 0.3),
 "transitions": PackedFloat32Array(1, 1),
 "values": [{
-"args": [[Vector2(4, 0)]],
-"method": &"create_footprint"
-}, {
 "args": [[Vector2(-4, 0)]],
-"method": &"create_footprint"
+"method": &"create_footprint_and_sound"
+}, {
+"args": [[Vector2(4, 0)]],
+"method": &"create_footprint_and_sound"
 }]
 }
 
@@ -1018,50 +964,33 @@ tracks/1/keys = {
 "update": 1,
 "values": [&"run"]
 }
-tracks/2/type = "method"
+tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("StateMachine/Run")
+tracks/2/path = NodePath("YSorter/HandsComponent/OffHandSprite:offset")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
-"times": PackedFloat32Array(0, 0.3),
-"transitions": PackedFloat32Array(1, 1),
-"values": [{
-"args": [],
-"method": &"_play_run_sound"
-}, {
-"args": [],
-"method": &"_play_run_sound"
-}]
-}
-tracks/3/type = "value"
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/path = NodePath("YSorter/HandsComponent/OffHandSprite:offset")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/keys = {
 "times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5),
 "transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
 "update": 1,
 "values": [Vector2(0, 0), Vector2(0, -4), Vector2(0, -2), Vector2(0, -1), Vector2(0, -6), Vector2(0, 0)]
 }
-tracks/4/type = "method"
-tracks/4/imported = false
-tracks/4/enabled = true
-tracks/4/path = NodePath("StateMachine/Controller")
-tracks/4/interp = 1
-tracks/4/loop_wrap = true
-tracks/4/keys = {
+tracks/3/type = "method"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("StateMachine/Controller")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
 "times": PackedFloat32Array(0, 0.3),
 "transitions": PackedFloat32Array(1, 1),
 "values": [{
-"args": [[Vector2(4, 0)]],
-"method": &"create_footprint"
-}, {
 "args": [[Vector2(-4, 0)]],
-"method": &"create_footprint"
+"method": &"create_footprint_and_sound"
+}, {
+"args": [[Vector2(4, 0)]],
+"method": &"create_footprint_and_sound"
 }]
 }
 
@@ -1094,50 +1023,33 @@ tracks/1/keys = {
 "update": 1,
 "values": [&"run"]
 }
-tracks/2/type = "method"
+tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("StateMachine/Run")
+tracks/2/path = NodePath("YSorter/HandsComponent/OffHandSprite:offset")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
-"times": PackedFloat32Array(0, 0.3),
-"transitions": PackedFloat32Array(1, 1),
-"values": [{
-"args": [],
-"method": &"_play_run_sound"
-}, {
-"args": [],
-"method": &"_play_run_sound"
-}]
-}
-tracks/3/type = "value"
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/path = NodePath("YSorter/HandsComponent/OffHandSprite:offset")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/keys = {
 "times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5),
 "transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
 "update": 1,
 "values": [Vector2(0, 0), Vector2(0, -3), Vector2(0, -5), Vector2(0, -1), Vector2(0, -3), Vector2(0, 1)]
 }
-tracks/4/type = "method"
-tracks/4/imported = false
-tracks/4/enabled = true
-tracks/4/path = NodePath("StateMachine/Controller")
-tracks/4/interp = 1
-tracks/4/loop_wrap = true
-tracks/4/keys = {
+tracks/3/type = "method"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("StateMachine/Controller")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
 "times": PackedFloat32Array(0, 0.3),
 "transitions": PackedFloat32Array(1, 1),
 "values": [{
-"args": [[Vector2(4, 0)]],
-"method": &"create_footprint"
-}, {
 "args": [[Vector2(-4, 0)]],
-"method": &"create_footprint"
+"method": &"create_footprint_and_sound"
+}, {
+"args": [[Vector2(4, 0)]],
+"method": &"create_footprint_and_sound"
 }]
 }
 
@@ -1170,50 +1082,33 @@ tracks/1/keys = {
 "update": 1,
 "values": [&"run"]
 }
-tracks/2/type = "method"
+tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("StateMachine/Run")
+tracks/2/path = NodePath("YSorter/HandsComponent/OffHandSprite:offset")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
-"times": PackedFloat32Array(0, 0.3),
-"transitions": PackedFloat32Array(1, 1),
-"values": [{
-"args": [],
-"method": &"_play_run_sound"
-}, {
-"args": [],
-"method": &"_play_run_sound"
-}]
-}
-tracks/3/type = "value"
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/path = NodePath("YSorter/HandsComponent/OffHandSprite:offset")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/keys = {
 "times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5),
 "transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
 "update": 1,
 "values": [Vector2(0, 0), Vector2(0, -3), Vector2(0, -2), Vector2(0, -1), Vector2(0, -3), Vector2(0, -2)]
 }
-tracks/4/type = "method"
-tracks/4/imported = false
-tracks/4/enabled = true
-tracks/4/path = NodePath("StateMachine/Controller")
-tracks/4/interp = 1
-tracks/4/loop_wrap = true
-tracks/4/keys = {
+tracks/3/type = "method"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("StateMachine/Controller")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
 "times": PackedFloat32Array(0, 0.3),
 "transitions": PackedFloat32Array(1, 1),
 "values": [{
-"args": [[Vector2(4, 0)]],
-"method": &"create_footprint"
-}, {
 "args": [[Vector2(-4, 0)]],
-"method": &"create_footprint"
+"method": &"create_footprint_and_sound"
+}, {
+"args": [[Vector2(4, 0)]],
+"method": &"create_footprint_and_sound"
 }]
 }
 
@@ -1257,27 +1152,13 @@ tracks/2/keys = {
 "update": 1,
 "values": [&"idle"]
 }
-tracks/3/type = "method"
+tracks/3/type = "value"
 tracks/3/imported = false
 tracks/3/enabled = true
-tracks/3/path = NodePath("StateMachine/Spawn")
+tracks/3/path = NodePath("YSorter/HandsComponent/OffHandSprite:scale")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
-"times": PackedFloat32Array(0.4),
-"transitions": PackedFloat32Array(1),
-"values": [{
-"args": [],
-"method": &"_on_spawn_anim_ended"
-}]
-}
-tracks/4/type = "value"
-tracks/4/imported = false
-tracks/4/enabled = true
-tracks/4/path = NodePath("YSorter/HandsComponent/OffHandSprite:scale")
-tracks/4/interp = 1
-tracks/4/loop_wrap = true
-tracks/4/keys = {
 "times": PackedFloat32Array(0, 0.4),
 "transitions": PackedFloat32Array(1, 1),
 "update": 1,
@@ -1588,11 +1469,9 @@ active_slot_info = NodePath("../../OverlayUI/ActiveSlotInfo")
 
 [node name="StaminaComponent" parent="." instance=ExtResource("5_k4fu6")]
 
-[node name="EffectReceiverComponent" parent="." node_paths=PackedStringArray("affected_entity", "health_component", "stamina_component", "dmg_handler", "heal_handler") instance=ExtResource("4_hhm8x")]
+[node name="EffectReceiverComponent" parent="." node_paths=PackedStringArray("affected_entity", "dmg_handler", "heal_handler") instance=ExtResource("4_hhm8x")]
 allowed_source_types = Array[int]([0])
 affected_entity = NodePath("..")
-health_component = NodePath("../HealthComponent")
-stamina_component = NodePath("../StaminaComponent")
 dmg_handler = NodePath("DmgHandler")
 heal_handler = NodePath("HealHandler")
 storm_syndrome_handler = SubResource("Resource_jgqai")
@@ -1616,36 +1495,13 @@ debug_color = Color(1, 0.294, 0.588, 0.06)
 
 [node name="FacingComponent" parent="." instance=ExtResource("25_0t1mv")]
 
-[node name="StateMachine" type="Node" parent="." node_paths=PackedStringArray("initial_state") groups=["has_save_logic"]]
+[node name="StateMachine" type="Node" parent="." groups=["has_save_logic"]]
 script = ExtResource("25_6wv7y")
-initial_state = NodePath("Spawn")
+states = Array[ExtResource("66_8hbs2")]([SubResource("Resource_65vc5"), SubResource("Resource_6oagw"), SubResource("Resource_1jicd"), SubResource("Resource_g1usa"), SubResource("Resource_uvn5e"), SubResource("Resource_2enqj"), SubResource("Resource_26nah")])
 
-[node name="Controller" type="Node2D" parent="StateMachine" node_paths=PackedStringArray("entity")]
+[node name="Controller" type="Node2D" parent="StateMachine"]
 script = ExtResource("27_n4o3n")
-entity = NodePath("../..")
 footstep_texture = ExtResource("27_0t1mv")
-
-[node name="Spawn" type="Node" parent="StateMachine"]
-script = ExtResource("17_fwsnm")
-
-[node name="Die" type="Node" parent="StateMachine"]
-script = ExtResource("18_jcofa")
-
-[node name="Idle" type="Node" parent="StateMachine"]
-script = ExtResource("7_15a5x")
-
-[node name="Run" type="Node" parent="StateMachine"]
-script = ExtResource("9_0dcld")
-
-[node name="Sneak" type="Node" parent="StateMachine"]
-script = ExtResource("19_alhqe")
-
-[node name="Dash" type="Node" parent="StateMachine"]
-script = ExtResource("9_a1qv1")
-dash_impact_cam_fx = SubResource("Resource_6wv7y")
-
-[node name="Stunned" type="Node" parent="StateMachine"]
-script = ExtResource("15_eiig3")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
@@ -2445,6 +2301,20 @@ label_settings = SubResource("LabelSettings_ye7qx")
 horizontal_alignment = 2
 vertical_alignment = 2
 uppercase = true
+
+[node name="CornerFeedbackTint" type="TextureRect" parent="OverlayUI"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(240, 135)
+texture = ExtResource("132_bmpdm")
+expand_mode = 1
+script = ExtResource("133_8hbs2")
+storm_tint_color = Color(0.530741, 0.0017714, 0.740423, 1)
+damage_color = Color(0.738, 0, 0.205, 1)
+heal_color = Color(0, 0.579, 0.249, 1)
 
 [node name="PlayerInvUI" type="ColorRect" parent="OverlayUI" node_paths=PackedStringArray("hotbar_grid", "hotbar_hud_grid", "trash_slot", "item_details_panel", "crafting_manager", "wearables_panel", "ammo_viewer_margin", "alternate_inv_panel", "synced_inv_source_node", "main_slot_grid")]
 process_mode = 3

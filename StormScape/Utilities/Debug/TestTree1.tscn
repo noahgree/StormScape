@@ -1,4 +1,4 @@
-[gd_scene load_steps=33 format=3 uid="uid://b52c5c7hj2vd"]
+[gd_scene load_steps=32 format=3 uid="uid://b52c5c7hj2vd"]
 
 [ext_resource type="Script" uid="uid://cn2gulskgn7k3" path="res://Entities/EntityCore/EntityTypes/StaticEntity/StaticEntity.gd" id="1_4yxmu"]
 [ext_resource type="Script" uid="uid://dwmur0cosbbwh" path="res://UI/Inventory/InventoryCore/InventoryResource.gd" id="2_7biur"]
@@ -8,13 +8,12 @@
 [ext_resource type="Script" uid="uid://dp8osf7r6xkkt" path="res://Entities/Items/ItemCore/InvItemResource.gd" id="3_r6tnu"]
 [ext_resource type="PackedScene" uid="uid://dh4ydl7l86ywq" path="res://Entities/EntityCore/Sprites/EntitySprite.tscn" id="4_5qk3y"]
 [ext_resource type="Texture2D" uid="uid://b0witw234r46t" path="res://Entities/Environment/Trees/dead_tree_1.png" id="4_tx18i"]
+[ext_resource type="Script" uid="uid://baglarh3m4c8o" path="res://Entities/Components/ItemComponents/LootTableComponent/LootTableResource.gd" id="6_7biur"]
 [ext_resource type="PackedScene" uid="uid://btba0jmsow1mx" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectReceiverComponent.tscn" id="6_bxml6"]
 [ext_resource type="PackedScene" uid="uid://co3n6m7efg8pd" path="res://Entities/Components/EffectComponents/StatusEffectsComponent/StatusEffectsComponent.tscn" id="7_7lx3c"]
-[ext_resource type="PackedScene" uid="uid://c4kt3bx0ot3c7" path="res://Entities/Components/ItemComponents/LootTableComponent/LootTableComponent.tscn" id="7_dpaaj"]
 [ext_resource type="PackedScene" uid="uid://cdfdy8m6ki3oq" path="res://Entities/Components/HealthComponent/HealthComponent.tscn" id="7_umo0g"]
 [ext_resource type="PackedScene" uid="uid://4gl24qwdyti3" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/DmgHandler.tscn" id="8_4pw5b"]
 [ext_resource type="Script" uid="uid://1qq7eo7lm8j6" path="res://Entities/Components/ItemComponents/LootTableComponent/LootTableEntry.gd" id="8_v4qb0"]
-[ext_resource type="Script" uid="uid://cgqfx1ve66f3h" path="res://Entities/Components/ItemComponents/LootTableComponent/LootTable.gd" id="10_lnwim"]
 [ext_resource type="Script" uid="uid://b1lo2mdb3otax" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/FrostbiteHandler.gd" id="11_r6tnu"]
 [ext_resource type="Resource" uid="uid://dbnhbsphiw4oe" path="res://Entities/Items/TRESItems/WorldResources/SpruceLog(0).tres" id="12_8oice"]
 [ext_resource type="Script" uid="uid://dubq8xgav66ue" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/BurningHandler.gd" id="12_d3uov"]
@@ -27,6 +26,34 @@ title = "CHEST"
 main_inv_size = 10
 starting_inv = Array[ExtResource("3_r6tnu")]([])
 
+[sub_resource type="Resource" id="Resource_r6tnu"]
+script = ExtResource("8_v4qb0")
+item = ExtResource("12_8oice")
+quantity = 1
+weighting = 1.0
+last_used = 0
+spawn_count = 0
+metadata/_custom_type_script = "uid://1qq7eo7lm8j6"
+
+[sub_resource type="Resource" id="Resource_cncsx"]
+script = ExtResource("6_7biur")
+hit_loot_table = Array[ExtResource("8_v4qb0")]([SubResource("Resource_r6tnu")])
+hit_spawn_chance = 10.0
+remove_when_dropped = false
+require_dmg_on_hit = true
+hit_chance_scale = 1
+die_loot_table = Array[ExtResource("8_v4qb0")]([])
+die_spawn_chance = 100.0
+rarity_scaling_factors = Dictionary[int, float]({
+0: 0.5,
+1: 0.4,
+2: 0.3,
+3: 0.1,
+4: 0.05,
+5: 0.005
+})
+metadata/_custom_type_script = "uid://baglarh3m4c8o"
+
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_l7ldg"]
 radius = 7.0
 height = 19.9999
@@ -34,7 +61,7 @@ height = 19.9999
 [sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_2kecs"]
 polygon = PackedVector2Array(-10, -4, -10, 0, 9, 0, 9, -4)
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_r6tnu"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_80oc5"]
 resource_local_to_scene = true
 shader = ExtResource("3_epxnw")
 
@@ -53,14 +80,14 @@ animations = [{
 "speed": 5.0
 }]
 
-[sub_resource type="Resource" id="Resource_80oc5"]
+[sub_resource type="Resource" id="Resource_ill5l"]
 resource_local_to_scene = true
 script = ExtResource("11_r6tnu")
 _frostbite_weakness = 0.0
 _frostbite_resistance = 0.0
 metadata/_custom_type_script = "uid://b1lo2mdb3otax"
 
-[sub_resource type="Resource" id="Resource_ill5l"]
+[sub_resource type="Resource" id="Resource_8swan"]
 resource_local_to_scene = true
 script = ExtResource("12_d3uov")
 _burning_weakness = 0.0
@@ -70,19 +97,6 @@ metadata/_custom_type_script = "uid://dubq8xgav66ue"
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ij8lb"]
 size = Vector2(14, 19)
 
-[sub_resource type="Resource" id="Resource_m6yab"]
-script = ExtResource("8_v4qb0")
-item = ExtResource("12_8oice")
-quantity = 1
-weighting = 1.0
-last_used = 0
-spawn_count = 0
-
-[sub_resource type="Resource" id="Resource_vx2o2"]
-script = ExtResource("10_lnwim")
-hit_loot_table = Array[ExtResource("8_v4qb0")]([SubResource("Resource_m6yab")])
-die_loot_table = Array[ExtResource("8_v4qb0")]([])
-
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_r6tnu"]
 size = Vector2(14, 19)
 
@@ -91,8 +105,9 @@ collision_layer = 0
 collision_mask = 0
 script = ExtResource("1_4yxmu")
 team = 4
-inv = SubResource("Resource_d3uov")
 is_object = true
+inv = SubResource("Resource_d3uov")
+loot = SubResource("Resource_cncsx")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0, -7)
@@ -110,7 +125,7 @@ scale = Vector2(4.69333, 2.75429)
 
 [node name="EntitySprite" parent="." instance=ExtResource("4_5qk3y")]
 unique_name_in_owner = true
-material = SubResource("ShaderMaterial_r6tnu")
+material = SubResource("ShaderMaterial_80oc5")
 instance_shader_parameters/crack_color = Color(0.0792545, 0.0300264, 0.00946152, 0.88)
 instance_shader_parameters/crack_intensity = 0.0
 instance_shader_parameters/crack_pixelate = Vector2(96, 96)
@@ -122,16 +137,15 @@ sprite_frames = SubResource("SpriteFrames_o33n8")
 _max_health = 1000
 _max_shield = 0
 
-[node name="EffectReceiverComponent" parent="." node_paths=PackedStringArray("affected_entity", "health_component", "loot_table_component", "dmg_handler") instance=ExtResource("6_bxml6")]
+[node name="EffectReceiverComponent" parent="." node_paths=PackedStringArray("affected_entity", "health_component", "dmg_handler") instance=ExtResource("6_bxml6")]
 absorb_full_hit = true
 filter_source_tags = true
 allowed_source_tags = Array[String](["chops_wood"])
 affected_entity = NodePath("..")
 health_component = NodePath("../HealthComponent")
-loot_table_component = NodePath("../LootTableComponent")
 dmg_handler = NodePath("DmgHandler")
-frostbite_handler = SubResource("Resource_80oc5")
-burning_handler = SubResource("Resource_ill5l")
+frostbite_handler = SubResource("Resource_ill5l")
+burning_handler = SubResource("Resource_8swan")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="EffectReceiverComponent"]
 position = Vector2(0, -7)
@@ -140,11 +154,6 @@ shape = SubResource("RectangleShape2D_ij8lb")
 
 [node name="DmgHandler" parent="EffectReceiverComponent" instance=ExtResource("8_4pw5b")]
 can_be_crit = false
-
-[node name="LootTableComponent" parent="." instance=ExtResource("7_dpaaj")]
-loot_table = SubResource("Resource_vx2o2")
-hit_spawn_chance = 15.0
-require_dmg_on_hit = false
 
 [node name="StatusEffectsComponent" parent="." node_paths=PackedStringArray("effect_receiver") instance=ExtResource("7_7lx3c")]
 unique_name_in_owner = true

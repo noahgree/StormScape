@@ -7,8 +7,9 @@ class_name StaticEntity
 ## This would be used for things like trees or blocks or buildings that need collision and also potential health.
 
 @export var team: Globals.Teams = Globals.Teams.PLAYER ## What the effects received by this entity should consider as this entity's team.
-@export var inv: InventoryResource = InventoryResource.new() ## The inventory data resource for this entity.
 @export var is_object: bool = false ## When true, this entity's collision logic will follow that of a world object, regardless of team.
+@export var inv: InventoryResource = InventoryResource.new() ## The inventory data resource for this entity.
+@export var loot: LootTableResource ## The loot table resource for this entity.
 
 @onready var sprite: EntitySprite = %EntitySprite ## The visual representation of the entity. Needs to have the EntityEffectShader applied.
 @onready var effect_receiver: EffectReceiverComponent = get_node_or_null("EffectReceiverComponent") ## The component that handles incoming effect sources.
@@ -48,6 +49,8 @@ func _on_save_game(save_data: Array[SaveData]) -> void:
 	if item_receiver != null:
 		data.pickup_range = item_receiver.pickup_range
 
+	data.loot = loot.duplicate() if loot else null
+
 	save_data.append(data)
 
 func _on_before_load_game() -> void:
@@ -73,6 +76,10 @@ func _is_instance_on_load_game(data: StaticEntityData) -> void:
 		inv.call_deferred("fill_inventory", data.inv)
 	if item_receiver != null:
 		item_receiver.pickup_range = data.pickup_range
+
+	loot = data.loot
+	if loot:
+		loot.initialize(self)
 #endregion
 
 ## Edits editor warnings for easier debugging.
@@ -86,8 +93,6 @@ func _get_configuration_warnings() -> PackedStringArray:
 func _ready() -> void:
 	if Engine.is_editor_hint():
 		return
-
-	assert(has_node("DetectionComponent"), name + " is a StaticEntity but does not have a DetectionComponent.")
 
 	add_to_group("has_save_logic")
 	if is_object:
@@ -112,6 +117,9 @@ func _ready() -> void:
 	sprite.entity = self
 	if inv:
 		inv.initialize_inventory(self)
+	if loot:
+		loot = loot.duplicate()
+		loot.initialize(self)
 
 func _process(delta: float) -> void:
 	if Engine.is_editor_hint():

@@ -3,6 +3,8 @@
 extends Weapon
 class_name ProjectileWeapon
 ## Controls the operations of projectile weapons, including firing & reloading.
+##
+## The only script that ever checks the weapon state is this one. Not even the member scripts check it.
 
 enum WeaponState { IDLE, FIRING, RELOADING } ## The potential weapon states.
 
@@ -15,10 +17,10 @@ enum WeaponState { IDLE, FIRING, RELOADING } ## The potential weapon states.
 @onready var reload_off_hand: EntityHandSprite = get_node_or_null("ReloadOffHand") ## The off hand only shown and animated during reloads.
 @onready var reload_main_hand: EntityHandSprite = get_node_or_null("ReloadMainHand") ## The main hand only shown and animated during reloads.
 @onready var firing_vfx: WeaponFiringVFX = get_node_or_null("FiringVFX") ## The vfx that spawns when firing.
-@onready var firing_handler: FiringHandler = FiringHandler.new(self)
-@onready var warmup_handler: WarmupHandler = WarmupHandler.new(self)
-@onready var reload_handler: ReloadHandler = ReloadHandler.new(self)
-@onready var overheat_handler: OverheatHandler = OverheatHandler.new(self)
+@onready var firing_handler: FiringHandler = FiringHandler.new(self) ## The firing handler helper script.
+@onready var warmup_handler: WarmupHandler = WarmupHandler.new(self) ## The warmup handler helper script.
+@onready var reload_handler: ReloadHandler = ReloadHandler.new(self) ## The reload handler helper script.
+@onready var overheat_handler: OverheatHandler = OverheatHandler.new(self) ## The overheat handler helper script.
 
 var state: WeaponState = WeaponState.IDLE ## The current weapon state.
 var is_charging: bool = false ## When true, we are holding the trigger down and trying to charge up.
@@ -28,8 +30,8 @@ var overhead_ui: PlayerOverheadUI ## The UI showing the overhead stat changes (l
 var preloaded_sounds: Array[StringName] = [] ## The sounds kept in memory while this weapon scene is alive that must be dereferenced upon exiting the tree.
 var requesting_reload_after_firing: bool = false ## This is flagged to true when a reload is requested during the firing animation and needs to wait until it is done.
 var current_hitscans: Array[Hitscan] = [] ## The currently spawned array of hitscans to get cleaned up when we unequip this weapon.
-var is_holding_continuous_beam: bool = false
-var has_released: bool = false
+var is_holding_continuous_beam: bool = false ## When true, we are holding down a continuous hitscan and should not recreate any new hitscan instances.
+var has_released: bool = false ## Used to flag when a hitscan hold has ended but we are still in the firing phase, so we check this after the firing phase to see if we should clean up the hitscans.
 
 
 #region Debug

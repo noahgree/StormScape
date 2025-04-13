@@ -19,9 +19,6 @@ class_name EffectReceiverComponent
 @export var allowed_source_tags: Array[String] = [] ## Effect sources must have a tag that matches something in this array in order to be handled when the filter_source_tags is set to true.
 @export_group("Connected Nodes")
 @export var affected_entity: PhysicsBody2D  ## The connected entity to be affected by the effects be received.
-@export var health_component: HealthComponent ## The health component of the affected entity.
-@export var stamina_component: StaminaComponent ## The stamina component of the affected entity.
-@export var loot_table_component: LootTableComponent ## The loot table component of the affected entity.
 @export var dmg_handler: DmgHandler ## The dmg handler of the affected entity.
 @export var heal_handler: HealHandler ## The heal handler of the affected entity.
 @export_group("Effect Handlers")
@@ -37,28 +34,14 @@ class_name EffectReceiverComponent
 
 @onready var tool_script: RefCounted = load("res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectReceiverTool.gd").new(self) ## The tool script node that helps auto-assign export nodes relative to this receiver.
 
-var most_recent_effect_src: EffectSource = null ## The most recent effect source to be successfully handled by this receiver.
 var current_impact_sounds: Array[int] = [] ## The current impact sounds being played and held onto by this effect receiver.
 var most_recent_multishot_id: int = 0 ## The most recent multishot id to be received. Prevents multishots from stacking status effects.
 
-
-## This works with the tool script defined above to assign export vars automatically in-editor once added
-## to the tree.
-func _notification(what: int) -> void:
-	if Engine.is_editor_hint():
-		if tool_script and what == NOTIFICATION_EDITOR_PRE_SAVE:
-			tool_script.update_editor_children_exports(self, get_children())
-			tool_script.update_editor_parent_export(self, get_parent())
-			tool_script.ensure_effect_handler_resource_unique_to_scene(self)
 
 ## Asserts that the affected entity has been set for easy debugging, then sets the monitoring to off for
 ## performance reasons in case it was changed in the editor. It also ensures the collision layer is the same as the
 ## affected entity so that the effect sources only see it when they should.
 func _ready() -> void:
-	assert(affected_entity or get_parent() is SubViewport, get_parent().name + " has an effect receiver that is missing a reference to an entity.")
-	if can_receive_status_effects:
-		assert(get_parent() is SubViewport or get_parent().has_node("%StatusEffectsComponent"), get_parent().name + " has an effect receiver flagged as being able to handle status effects, yet has no StatusEffectsComponent. Make sure it has a unique name.")
-
 	if Engine.is_editor_hint():
 		return
 
@@ -90,11 +73,9 @@ func handle_effect_source(effect_source: EffectSource, source_entity:
 		if not match_found:
 			return
 
-	most_recent_effect_src = effect_source
-
 	if source_entity.team == Globals.Teams.PASSIVE or ((affected_entity is DynamicEntity) and not affected_entity.fsm.controller.can_receive_effects):
-		if loot_table_component:
-			loot_table_component.handle_effect_source(effect_source)
+		if affected_entity.loot:
+			affected_entity.loot.handle_hit()
 		return
 
 	if effect_source.impact_vfx != null:
@@ -102,17 +83,14 @@ func handle_effect_source(effect_source: EffectSource, source_entity:
 		vfx.global_position = affected_entity.global_position
 		add_child(vfx)
 
+	if affected_entity.loot and not affected_entity.loot.require_dmg_on_hit:
+		affected_entity.loot.handle_hit()
+
 	if effect_source.base_damage > 0 and dmg_handler != null:
 		if _check_same_team(source_entity) and _check_if_bad_effects_apply_to_allies(effect_source):
 			dmg_handler.handle_instant_damage(effect_source, _get_life_steal(effect_source, source_entity))
-			if loot_table_component:
-				loot_table_component.handle_effect_source(effect_source)
 		elif not _check_same_team(source_entity) and _check_if_bad_effects_apply_to_enemies(effect_source):
 			dmg_handler.handle_instant_damage(effect_source, _get_life_steal(effect_source, source_entity))
-			if loot_table_component:
-				loot_table_component.handle_effect_source(effect_source)
-	elif loot_table_component and not loot_table_component.require_dmg_on_hit:
-		loot_table_component.handle_effect_source(effect_source)
 
 	if effect_source.base_healing > 0 and heal_handler != null:
 		if _check_same_team(source_entity) and _check_if_good_effects_apply_to_allies(effect_source):
@@ -267,6 +245,23 @@ func _get_life_steal(effect_source: EffectSource, source_entity: PhysicsBody2D) 
 	return 0.0
 
 #region Debug
+## This works with the tool script defined above to assign export vars automatically in-editor once added
+## to the tree.
+func _notification(what: int) -> void:
+	if Engine.is_editor_hint():
+		if tool_script and what == NOTIFICATION_EDITOR_PRE_SAVE:
+			tool_script.update_editor_children_exports(self, get_children())
+			tool_script.update_editor_parent_export(self, get_parent())
+			tool_script.ensure_effect_handler_resource_unique_to_scene(self)
+
+## Edits editor warnings for easier debugging.
+func _get_configuration_warnings() -> PackedStringArray:
+	if can_receive_status_effects and not get_parent().has_node("%StatusEffectsComponent"):
+		return [
+			"Entities with effect receievers marked as being able to receive status effects must have a StatusEffectsComponent. Make sure it has a unique name (%)."
+			]
+	return []
+
 ## Attempts to apply an effect based on its file name turned into snake case. "poison_1", for example.
 func apply_effect_by_id(effect_key: StringName) -> void:
 	var status_effect: StatusEffect = StatusEffectsComponent.cached_status_effects.get(effect_key, null)
