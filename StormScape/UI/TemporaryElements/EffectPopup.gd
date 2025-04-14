@@ -13,13 +13,13 @@ static var popup_scene: PackedScene = preload("res://UI/TemporaryElements/Effect
 @onready var starting_scale: Vector2 = scale ## The scale of the popup when first created.
 
 var value: int = 0 ## The current value of the popup.
-var parent_node: PhysicsBody2D ## The parent of the popup node.
+var parent_node: Entity ## The parent of the popup node.
 var tween: Tween ## The tween animating the motion and scale of the popup.
 var was_healing_before: bool = false ## Whether or not we were healing the last time the popup was updated.
 
 ## Creates and adds an effect popup to the entity that requested it.
 static func create_popup(src_type: String, was_healing: bool,
-						was_crit: bool, popup_value: int, node: PhysicsBody2D) -> EffectPopup:
+						was_crit: bool, popup_value: int, node: Entity) -> EffectPopup:
 	var popup: EffectPopup = popup_scene.instantiate()
 
 	popup.parent_node = node

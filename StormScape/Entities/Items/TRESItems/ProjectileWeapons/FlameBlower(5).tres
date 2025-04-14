@@ -1,6 +1,7 @@
-[gd_resource type="Resource" script_class="ProjWeaponResource" load_steps=27 format=3 uid="uid://dpmwqsai6gxsr"]
+[gd_resource type="Resource" script_class="ProjWeaponResource" load_steps=28 format=3 uid="uid://dpmwqsai6gxsr"]
 
 [ext_resource type="Script" uid="uid://dkfssottmsrch" path="res://Entities/Stats/EffectSystemResources/EffectSources/EffectSource.gd" id="2_hrsx2"]
+[ext_resource type="Resource" uid="uid://c8reitxej77jy" path="res://Entities/Stats/EffectSystemResources/StatusEffects/BadEffects/Burning/Burning1FlameBlower.tres" id="3_cibnu"]
 [ext_resource type="Script" uid="uid://boo31eu083dqd" path="res://Entities/Stats/EffectSystemResources/StatusEffects/StatusEffect.gd" id="3_frpgg"]
 [ext_resource type="Script" uid="uid://cowjdnic7xmkp" path="res://UI/Inventory/PlayerInventory/StatDetail.gd" id="4_5cw7p"]
 [ext_resource type="Resource" uid="uid://cl4lqk1b8bquo" path="res://Entities/Player/PlayerCore/PlayerCamera/CamFXPresets/0.tres" id="5_ifwgd"]
@@ -32,7 +33,7 @@ base_healing = 0
 heal_affected_stats = 2
 impact_sound = ""
 hit_flash_color = Color(1, 1, 1, 0.6)
-status_effects = Array[ExtResource("3_frpgg")]([])
+status_effects = Array[ExtResource("3_frpgg")]([ExtResource("3_cibnu")])
 contact_position = Vector2(0, 0)
 movement_direction = Vector2(0, 0)
 multishot_id = -1

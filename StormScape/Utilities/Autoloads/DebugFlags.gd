@@ -2,7 +2,7 @@ extends Node
 ## An autoload singleton file for flagging certain debug features like print statements and audio device switches.
 
 # Print Flags
-var state_machine_swaps: bool = true
+var state_machine_swaps: bool = false
 var stat_mod_changes_during_game: bool = true
 var stat_mod_changes_on_load: bool = false
 var current_effect_changes: bool = false
@@ -44,7 +44,7 @@ var frame_rate: bool = true
 
 # Entity Flags
 var show_facing_dir: bool = false
-var show_movement_vector: bool = true
+var show_movement_vector: bool = false
 var show_collision_avoidance_rays: bool = false
 
 

@@ -3,7 +3,7 @@ class_name OverheatHandler
 
 var weapon: ProjectileWeapon ## A reference to the weapon.
 var anim_player: AnimationPlayer ## A reference to the animation player on the weapon.
-var source_entity: PhysicsBody2D ## A reference to the entity that controls the weapon.
+var source_entity: Entity ## A reference to the entity that controls the weapon.
 var auto_decrementer: AutoDecrementer ## A reference to the auto_decrementer in the source_entity's inventory.
 var is_tweening_overheat_overlays: bool = false ## Whether the post-overheat penalty tween is lowering the opacity of the overlays.
 

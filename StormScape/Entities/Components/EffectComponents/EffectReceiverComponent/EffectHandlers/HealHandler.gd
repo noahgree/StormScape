@@ -3,7 +3,7 @@ extends Node
 class_name HealHandler
 ## A handler for using the data provided in the effect source to apply healing in different ways.
 
-@onready var affected_entity: PhysicsBody2D = get_parent().affected_entity ## The entity affected by this heal handler.
+@onready var affected_entity: Entity = get_parent().affected_entity ## The entity affected by this heal handler.
 
 var health_component: HealthComponent ## The health component to be affected by the healing.
 var hot_timers: Dictionary[String, Array] = {} ## Holds references to all timers currently tracking active HOT.

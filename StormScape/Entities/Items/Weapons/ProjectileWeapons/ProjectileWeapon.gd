@@ -53,7 +53,7 @@ func _ready() -> void:
 		# Update the ammo UI when stamina changes
 		if (stats.ammo_type == ProjWeaponResource.ProjAmmoType.STAMINA) and (not stats.hide_ammo_ui):
 				source_entity.stamina_component.stamina_changed.connect(
-					func(_new_stamina: float) -> void: update_ammo_ui()
+					func(_new_stamina: float, _old_stamina: float) -> void: update_ammo_ui()
 					)
 
 	_setup_firing_vfx()

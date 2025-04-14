@@ -25,7 +25,7 @@ class_name LootTableResource
 		Globals.ItemRarity.SINGULAR: 0.005
 	}
 
-var source_entity: PhysicsBody2D ## The entity that this loot table reflects.
+var source_entity: Entity ## The entity that this loot table reflects.
 var hit_loot_table_total_weight: float ## Sum of all weights for all possible hit loot.
 var die_loot_table_total_weight: float ## Sum of all weights for all possible die loot.
 var times_since_drop: int ## Tracks the times we did a hit check in a row without dropping any loot.
@@ -34,7 +34,7 @@ var hp_change_counter: int
 
 
 ## Called once the owning node is ready in order to pass a reference of itself and also set up the weightings.
-func initialize(entity: PhysicsBody2D) -> void:
+func initialize(entity: Entity) -> void:
 	source_entity = entity
 	if require_dmg_on_hit:
 		source_entity.health_component.health_changed.connect(_on_hp_changed)

@@ -6,7 +6,7 @@ class_name FacingComponent
 ##
 ## This is completely separate from the FSM.
 
-@onready var entity: PhysicsBody2D = get_parent() ## The entity this facing component controls.
+@onready var entity: Entity = get_parent() ## The entity this facing component controls.
 
 enum Method { MOVEMENT_DIR, TARGET_POS, MOUSE_POS, NONE } ## The ways the facing component can choose direction.
 
@@ -19,6 +19,9 @@ const DEFAULT_ROTATION_LERPING_FACTOR: float = 0.1 ## The default lerping rate f
 
 #region Debug
 func _draw() -> void:
+	if not DebugFlags.show_facing_dir:
+		return
+
 	var entity_pos_with_sprite_offset: Vector2 = to_local(entity.global_position + (entity.sprite.position / 2.0))
 	var end_point: Vector2 = entity_pos_with_sprite_offset + facing_dir.normalized() * 20.0
 	draw_line(entity_pos_with_sprite_offset, end_point, Color.DARK_ORANGE, 0.5)
@@ -44,7 +47,7 @@ func update_facing_dir(method: Method) -> void:
 				last_movement_dir = target_dir
 			facing_dir = LerpHelpers.lerp_direction_vectors(facing_dir, target_dir, rotation_lerping_factor)
 		Method.TARGET_POS:
-			var target: PhysicsBody2D = entity.fsm.controller.target
+			var target: Entity = entity.fsm.controller.target
 			if target:
 				var entity_pos_with_sprite_offset: Vector2 = (entity.sprite.position / 2.0) + entity.global_position
 				facing_dir = LerpHelpers.lerp_direction(facing_dir, target.global_position, entity_pos_with_sprite_offset, rotation_lerping_factor)

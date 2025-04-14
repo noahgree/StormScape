@@ -12,8 +12,9 @@ class_name EquippableItem
 
 var stats_already_duplicated: bool = false ## Whether the stats have already been duplicated when they were first created in the slot.
 var source_slot: Slot ## The slot this equippable item is in whilst equipped.
-var source_entity: PhysicsBody2D ## The entity that is holding the equippable item.
+var source_entity: Entity ## The entity that is holding the equippable item.
 var ammo_ui: MarginContainer ## The ui assigned by the hands component that displays the ammo. Only for the player.
+var overlaps: Array[Area2D]
 var enabled: bool = true: ## When false, any activation or reload actions are blocked.
 	set(new_value):
 		enabled = new_value
@@ -54,13 +55,16 @@ func _ready() -> void:
 
 ## Disables the item when it starts to clip. Only applies to items with clipping detectors.
 func _on_item_enters_clipping_area(area: Area2D) -> void:
-	if area.owner != source_entity:
+	if area.get_parent() != source_entity and enabled:
 		enabled = false
+		overlaps.append(area)
 
 ## Enables the item when it stops clipping. Only applies to items with clipping detectors.
 func _on_item_leaves_clipping_area(area: Area2D) -> void:
-	var overlaps: Array[Node2D] = clipping_detector.get_overlapping_bodies()
-	if (overlaps.is_empty() and area.owner != source_entity) or (overlaps.size() == 1 and overlaps[0].owner == source_entity):
+	var area_index: int = overlaps.find(area)
+	if area_index != -1:
+		overlaps.remove_at(area_index)
+	if overlaps.is_empty() and not enabled:
 		enabled = true
 
 ## Intended to be overridden by child classes in order to specify what to do when this item is disabled.

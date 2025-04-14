@@ -19,22 +19,26 @@ var state_indices: Dictionary[StringName, int] = {} ## Maps state names to the i
 func _ready() -> void:
 	if not get_parent().is_node_ready():
 		await get_parent().ready
-
 	controller.entity = get_parent()
 	controller.fsm = self
 	controller.setup()
 
-	states = states.duplicate()
+	make_states_unique()
 
-	for i: int in range(states.size()):
-		states[i] = states[i].duplicate()
-
-		var state: State = states[i]
+	var i: int = 0
+	for state: State in states:
 		state.initialize(self, controller, get_parent())
 		state_indices[state.state_id] = i
-
+		i += 1
 	states[0].enter()
 	current_state = states[0]
+
+## Makes the states scene-unique by creating a new instance of the array itself and everything in it on ready.
+func make_states_unique() -> void:
+	var new_array: Array[State]
+	for state: State in states:
+		new_array.append(state.duplicate())
+	states = new_array
 
 ## Setter for the state variable. Prints debug output according to a flag in the debug flags.
 func _set_state(new_state: State) -> void:

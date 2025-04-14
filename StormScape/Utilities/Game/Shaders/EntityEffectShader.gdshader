@@ -10,12 +10,13 @@ instance uniform float final_alpha = 1.0;
 
 instance uniform vec4 override_color : source_color = vec4(1.0, 1.0, 1.0, 0.0);
 instance uniform bool use_override_color = false;
+instance uniform float brightness_mult = 1.0;
 
 // ─── Crack Generation Parameters ─────────────────────────────────────────
 instance uniform float crack_depth : hint_range(0.0, 10.0) = 0.4;
 instance uniform float crack_scale : hint_range(1.0, 25.0) = 3.838;
 instance uniform float crack_zebra_scale : hint_range(0.0, 10.0) = 0.841;
-instance uniform float crack_zebra_amp : hint_range(0.0, 10.0) = 1.183;
+const float crack_zebra_amp = 1.183;
 instance uniform float crack_profile : hint_range(0.0, 10.0) = 2.11;
 instance uniform float crack_slope : hint_range(0.0, 250.0) = 86.2;
 instance uniform float crack_width : hint_range(0.0, 1.0) = 0.036;
@@ -174,4 +175,5 @@ void fragment() {
     }
 
     COLOR.a *= final_alpha;
+	COLOR.rgb *= brightness_mult;
 }

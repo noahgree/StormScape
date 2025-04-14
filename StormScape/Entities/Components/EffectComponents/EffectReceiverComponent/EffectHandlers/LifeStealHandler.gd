@@ -3,7 +3,7 @@ extends Resource
 class_name LifeStealHandler
 ## A handler for using the data provided in the effect source to apply life steal in different ways.
 
-var source_entity: PhysicsBody2D = null ## The source entity of the most recent effect source. Updated by the effect receiver.
+var source_entity: Entity = null ## The source entity of the most recent effect source. Updated by the effect receiver.
 var effect_receiver: EffectReceiverComponent ## The receiver that passes the effect to this handler node.
 
 

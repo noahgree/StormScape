@@ -18,7 +18,7 @@ class_name EffectReceiverComponent
 @export var filter_source_tags: bool = false ## When true, only allow matching source tags as specified in the below array.
 @export var allowed_source_tags: Array[String] = [] ## Effect sources must have a tag that matches something in this array in order to be handled when the filter_source_tags is set to true.
 @export_group("Connected Nodes")
-@export var affected_entity: PhysicsBody2D  ## The connected entity to be affected by the effects be received.
+@export var affected_entity: Entity  ## The connected entity to be affected by the effects be received.
 @export var dmg_handler: DmgHandler ## The dmg handler of the affected entity.
 @export var heal_handler: HealHandler ## The heal handler of the affected entity.
 @export_group("Effect Handlers")
@@ -55,7 +55,7 @@ func _ready() -> void:
 ## Handles an incoming effect source, passing it to present receivers for further processing before changing
 ## entity stats.
 func handle_effect_source(effect_source: EffectSource, source_entity:
-							PhysicsBody2D, process_status_effects: bool = true) -> void:
+							Entity, process_status_effects: bool = true) -> void:
 	_handle_cam_fx(effect_source)
 	_handle_impact_sound(effect_source)
 	affected_entity.sprite.start_hitflash(effect_source.hit_flash_color, false)
@@ -110,7 +110,7 @@ func handle_effect_source(effect_source: EffectSource, source_entity:
 				_check_status_effect_team_logic(effect_source, source_entity)
 
 ## Checks if each status effect in the array applies to this entity via team logic, then passes it to be unpacked.
-func _check_status_effect_team_logic(effect_source: EffectSource, source_entity: PhysicsBody2D) -> void:
+func _check_status_effect_team_logic(effect_source: EffectSource, source_entity: Entity) -> void:
 	var is_same_team: bool = _check_same_team(source_entity)
 	var bad_effects_to_enemies: bool = not is_same_team and _check_if_bad_effects_apply_to_enemies(effect_source)
 	var good_effects_to_enemies: bool = not is_same_team and _check_if_good_effects_apply_to_enemies(effect_source)
@@ -172,7 +172,7 @@ func _pass_effect_to_handler(status_effect: StatusEffect) -> void:
 		AudioManager.play_2d(status_effect.audio_to_play, affected_entity.global_position)
 
 ## Checks if the affected entity is on the same team as the producer of the effect source.
-func _check_same_team(source_entity: PhysicsBody2D) -> bool:
+func _check_same_team(source_entity: Entity) -> bool:
 	return affected_entity.team & source_entity.team != 0
 
 ## Checks if the effect source should do bad effects to allies.
@@ -236,7 +236,7 @@ func _handle_cam_fx(effect_source: EffectSource) -> void:
 	effect_source.impact_cam_fx.apply_falloffs_and_activate_all(is_player, dist_to_player)
 
 ## Checks if there is a life steal effect in the status effects and returns the percent to steal if so.
-func _get_life_steal(effect_source: EffectSource, source_entity: PhysicsBody2D) -> float:
+func _get_life_steal(effect_source: EffectSource, source_entity: Entity) -> float:
 	if can_receive_status_effects and life_steal_handler:
 		for status_effect: StatusEffect in effect_source.status_effects:
 			if status_effect is LifeStealEffect:

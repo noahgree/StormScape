@@ -21,7 +21,7 @@ func ensure_effect_handler_resource_unique_to_scene(node: EffectReceiverComponen
 	if node.life_steal_handler: node.life_steal_handler.resource_local_to_scene = true
 
 func update_editor_parent_export(node: EffectReceiverComponent, parent: Node) -> void:
-	if parent is DynamicEntity or parent is RigidEntity or parent is StaticEntity:
+	if parent is Entity:
 		node.affected_entity = parent
 	if parent.has_node("StatusEffectsComponent"):
 		parent.get_node("StatusEffectsComponent").effect_receiver = node

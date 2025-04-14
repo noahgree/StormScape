@@ -74,7 +74,7 @@ func _on_before_load_game() -> void:
 
 #region Core
 ## Creates a projectile and assigns its needed variables in a specific order. Then it returns it.
-static func create(wpn_stats: ProjWeaponResource, src_entity: PhysicsBody2D, pos: Vector2, rot: float) -> Projectile:
+static func create(wpn_stats: ProjWeaponResource, src_entity: Entity, pos: Vector2, rot: float) -> Projectile:
 	var proj_scene: PackedScene = wpn_stats.projectile_scn
 	var proj: Projectile = proj_scene.instantiate()
 	proj.source_wpn_stats = wpn_stats
@@ -391,7 +391,7 @@ func _find_target_in_fov() -> void:
 
 ## Checks if the homing target is something we are even allowed to target.
 func _is_valid_homing_target(obj: Node) -> bool:
-	if obj is DynamicEntity or obj is RigidEntity or obj is StaticEntity:
+	if obj is Entity:
 		if obj.team != source_entity.team and obj.team != Globals.Teams.PASSIVE:
 			return true
 	return false
@@ -781,7 +781,7 @@ func _process_hit(object: Node2D) -> void:
 
 		var pierce_stat: int = int(s_mods.get_stat("proj_max_pierce"))
 		if pierce_count < pierce_stat:
-			if object is DynamicEntity or object is RigidEntity or object is StaticEntity or object is EffectReceiverComponent:
+			if object is Entity or object is EffectReceiverComponent:
 				_handle_pierce()
 				return
 

@@ -1,30 +1,16 @@
 @tool
-extends CharacterBody2D
+extends Entity
 class_name DynamicEntity
 ## An entity that has vitals stats and can move.
 ##
 ## This should be used by things like players, enemies, moving environmental entities, etc.
 ## This should not be used by things like weapons or trees.
 
-@export var team: Globals.Teams = Globals.Teams.PLAYER ## What the effects received by this entity should consider as this entity's team.
-@export var inv: InventoryResource = InventoryResource.new() ## The inventory data resource for this entity.
-@export var loot: LootTableResource ## The loot table resource for this entity.
-
-@onready var sprite: EntitySprite = %EntitySprite ## The visual representation of the entity. Needs to have the EntityEffectShader applied.
-@onready var anim_tree: AnimationTree = $AnimationTree ## The animation tree controlling this entity's animation states.
-@onready var effect_receiver: EffectReceiverComponent = get_node_or_null("EffectReceiverComponent") ## The component that handles incoming effect sources.
-@onready var effects: StatusEffectsComponent = get_node_or_null("%StatusEffectsComponent") ## The node that will cache and manage all status effects for this entity.
-@onready var emission_mgr: ParticleEmissionComponent = $ParticleEmissionComponent ## The component responsible for determining the extents and origins of different particle placements.
 @onready var fsm: StateMachine = $StateMachine ## The FSM controlling the entity.
-@onready var facing_component: FacingComponent = $FacingComponent ## The component in charge of choosing the entity animation directions.
-@onready var detection_component: DetectionComponent = $DetectionComponent ## The component that defines the radius around this entity that an enemy must enter for that enemy to be alerted.
-@onready var health_component: HealthComponent = $HealthComponent ## The component in charge of entity health and shield.
 @onready var stamina_component: StaminaComponent = get_node_or_null("StaminaComponent") ## The component in charge of entity stamina and hunger.
-@onready var item_receiver: ItemReceiverComponent = get_node_or_null("ItemReceiverComponent") ## The item receiver for this entity.
-@onready var hands: HandsComponent = get_node_or_null("%HandsComponent") ## The hands item component for the entity.
+@onready var anim_tree: AnimationTree = $AnimationTree ## The animation tree controlling this entity's animation states.
+@onready var facing_component: FacingComponent = $FacingComponent ## The component in charge of choosing the entity animation directions.
 
-var stats: StatModsCacheResource = StatModsCacheResource.new() ## The resource that will cache and work with all stat mods for this entity.
-var wearables: Array[Dictionary] = [{ &"1" : null }, { &"2" : null }, { &"3" : null }, { &"4" : null }, { &"5" : null }] ## The equipped wearables on this entity.
 var time_snare_counter: float = 0 ## The ticker that slows down delta when under a time snare.
 var snare_factor: float = 0 ## Multiplier for delta time during time snares.
 var snare_timer: Timer ## A reference to a timer that might currently be tracking a time snare instance.
@@ -37,7 +23,7 @@ func _on_save_game(save_data: Array[SaveData]) -> void:
 	data.scene_path = scene_file_path
 
 	data.position = global_position
-	data.velocity = velocity
+	data.velocity = self.velocity
 
 	data.stat_mods = stats.stat_mods
 	data.wearables = wearables
@@ -86,7 +72,7 @@ func _on_before_load_game() -> void:
 
 func _is_instance_on_load_game(data: DynamicEntityData) -> void:
 	global_position = data.position
-	velocity = data.velocity
+	self.velocity = data.velocity
 
 	if not data.is_player:
 		Globals.world_root.add_child(self)

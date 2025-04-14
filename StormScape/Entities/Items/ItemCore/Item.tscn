@@ -305,7 +305,7 @@ autoplay = "spawn"
 [node name="MultipleIndicatorSprite" type="Sprite2D" parent="."]
 material = SubResource("ShaderMaterial_qrrcp")
 instance_shader_parameters/final_alpha = 1.0
-position = Vector2(-1.5, -1.5)
+position = Vector2(-1, -1)
 texture = ExtResource("4_1yl86")
 
 [node name="Sprite" type="Sprite2D" parent="."]

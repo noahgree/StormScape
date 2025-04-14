@@ -43,7 +43,7 @@ static func get_next_open_mod_slot(weapon_stats: WeaponResource) -> int:
 
 ## Handles an incoming added weapon mod. Removes it first if it already exists and then just re-adds it.
 static func handle_weapon_mod(weapon_stats: WeaponResource, weapon_mod: WeaponMod, index: int,
-						source_entity: PhysicsBody2D) -> void:
+						source_entity: Entity) -> void:
 	if not check_mod_compatibility(weapon_stats, weapon_mod):
 		return
 	if index > WeaponModsManager.get_max_mod_slots(weapon_stats) - 1:
@@ -63,7 +63,7 @@ static func handle_weapon_mod(weapon_stats: WeaponResource, weapon_mod: WeaponMo
 
 ## Adds a weapon mod to the dictionary and then calls the on_added method inside the mod itself.
 static func _add_weapon_mod(weapon_stats: WeaponResource, weapon_mod: WeaponMod, index: int,
-					source_entity: PhysicsBody2D) -> void:
+					source_entity: Entity) -> void:
 	if DebugFlags.weapon_mod_changes:
 		print_rich("-------[color=green]Adding[/color][b] " + weapon_mod.name + " (" + str(weapon_mod.rarity) + ")[/b] [color=gray]to " + weapon_stats.name + " (slot " + str(index) + ")" + "-------")
 
@@ -86,7 +86,7 @@ static func _add_weapon_mod(weapon_stats: WeaponResource, weapon_mod: WeaponMod,
 
 ## Removes the weapon mod from the dictionary after calling the on_removal method inside the mod itself.
 static func remove_weapon_mod(weapon_stats: WeaponResource, weapon_mod: WeaponMod, index: int,
-						source_entity: PhysicsBody2D) -> void:
+						source_entity: Entity) -> void:
 	if DebugFlags.weapon_mod_changes and weapon_stats.has_mod(weapon_mod.id, index):
 		print_rich("-------[color=red]Removed[/color][b] " + str(weapon_mod.name) + " (" + str(weapon_mod.rarity) + ")[/b] [color=gray]from " + weapon_stats.name + " (slot " + str(index) + ")" + "-------")
 
@@ -108,7 +108,7 @@ static func remove_weapon_mod(weapon_stats: WeaponResource, weapon_mod: WeaponMo
 	AudioManager.play_global(weapon_mod.removal_audio)
 
 ## Adds all mods in the current_mods array to a weapon's stats. Useful for restoring after a save and load.
-static func re_add_all_mods_to_weapon(weapon_stats: WeaponResource, source_entity: PhysicsBody2D) -> void:
+static func re_add_all_mods_to_weapon(weapon_stats: WeaponResource, source_entity: Entity) -> void:
 	var i: int = 0
 	for weapon_mod_entry: Dictionary in weapon_stats.current_mods:
 		if weapon_mod_entry.values()[0] != null:
@@ -116,7 +116,7 @@ static func re_add_all_mods_to_weapon(weapon_stats: WeaponResource, source_entit
 		i += 1
 
 ## Removes all mods from a passed in weapon_stats resource.
-static func remove_all_mods_from_weapon(weapon_stats: WeaponResource, source_entity: PhysicsBody2D) -> void:
+static func remove_all_mods_from_weapon(weapon_stats: WeaponResource, source_entity: Entity) -> void:
 	var i: int = 0
 	for weapon_mod_entry: Dictionary in weapon_stats.current_mods:
 		if weapon_mod_entry.values()[0] != null:
@@ -178,7 +178,7 @@ static func _remove_mod_status_effects_from_effect_source(weapon_stats: WeaponRe
 
 ## Resets the original (non-modded) status effects for the weapon after a save so that they correctly reflect
 ## the effects not provided by mods. This then removes and then readds all the weapon mods from the save.
-static func reset_original_arrays_after_save(weapon_stats: WeaponResource, source_entity: PhysicsBody2D) -> void:
+static func reset_original_arrays_after_save(weapon_stats: WeaponResource, source_entity: Entity) -> void:
 	var mods_copy: Array[Dictionary] = weapon_stats.current_mods.duplicate()
 
 	weapon_stats.original_status_effects = []

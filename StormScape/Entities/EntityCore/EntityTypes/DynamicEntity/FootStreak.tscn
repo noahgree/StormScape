@@ -1,7 +1,7 @@
 [gd_scene load_steps=8 format=3 uid="uid://b8f5sbvlr6fb3"]
 
 [ext_resource type="Texture2D" uid="uid://dsgx4sr31dhrs" path="res://Entities/EntityCore/EntityTypes/DynamicEntity/mud_texture.png" id="2_84nfn"]
-[ext_resource type="Script" path="res://Entities/EntityCore/EntityTypes/DynamicEntity/FootStreak.gd" id="2_rdmki"]
+[ext_resource type="Script" uid="uid://d26p2rni355yp" path="res://Entities/EntityCore/EntityTypes/DynamicEntity/FootStreak.gd" id="2_rdmki"]
 
 [sub_resource type="Curve" id="Curve_ogbsm"]
 _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.848544), 0.0, 0.0, 0, 0]
@@ -13,8 +13,7 @@ offsets = PackedFloat32Array(0, 0.65019, 1)
 colors = PackedColorArray(1, 1, 1, 0.752, 1, 1, 1, 0.657, 1, 1, 1, 0)
 
 [sub_resource type="Curve" id="Curve_vpxp6"]
-min_value = -360.0
-max_value = 360.0
+_limits = [-360.0, 360.0, 0.0, 1.0]
 _data = [Vector2(0, -360), 0.0, 0.0, 0, 0, Vector2(1, 360), 0.0, 0.0, 0, 0]
 point_count = 2
 
@@ -23,11 +22,12 @@ offsets = PackedFloat32Array(0, 0.553232, 1)
 colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0)
 
 [sub_resource type="Curve" id="Curve_bstyt"]
-min_value = -1.0
+_limits = [-1.0, 1.0, 0.0, 1.0]
 _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, -1), 0.0, 0.0, 0, 0]
 point_count = 2
 
 [node name="FootStreak" type="Line2D"]
+z_index = -1
 width = 4.0
 width_curve = SubResource("Curve_ogbsm")
 gradient = SubResource("Gradient_au2uq")

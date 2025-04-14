@@ -5,7 +5,7 @@ class_name HitboxComponent
 
 @export_group("Standalone Hitbox Properties") # Only set these manually if using this as a standalone hitbox and not attached to a projectile or other weapon
 @export var effect_source: EffectSource ## The effect to be applied when this hitbox hits an effect receiver.
-@export var source_entity: PhysicsBody2D ## The entity that the effect was produced by.
+@export var source_entity: Entity ## The entity that the effect was produced by.
 @export var use_self_position: bool = false ## When using the hitbox as a standalone area2d, make this property true so that it uses its own position to handle effects like knockback.
 
 @onready var collider: CollisionShape2D = $CollisionShape2D ## The collision shape for this hitbox.
@@ -42,7 +42,7 @@ func _on_body_entered(body: Node2D) -> void:
 		_process_hit(body)
 
 	# If the body is an entity that doesn't receive effect sources, it still has collision and should stop projectiles
-	if body is StaticEntity or body is RigidEntity or body is DynamicEntity:
+	if body is Entity:
 		if body.effect_receiver == null:
 			_process_hit(body)
 

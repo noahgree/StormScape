@@ -77,13 +77,13 @@ metadata/_custom_type_script = "uid://1qq7eo7lm8j6"
 [sub_resource type="Resource" id="Resource_oqrkc"]
 script = ExtResource("7_qrtn1")
 hit_loot_table = Array[ExtResource("19_8bt15")]([SubResource("Resource_lal78"), SubResource("Resource_cw5if")])
-hit_spawn_chance = 100.0
+hit_spawn_chance = 2.0
 hit_chance_scale = 1
 remove_when_dropped = false
 require_dmg_on_hit = true
 hp_percent_hit_checks = 15
 die_loot_table = Array[ExtResource("19_8bt15")]([SubResource("Resource_qrtn1")])
-die_spawn_chance = 100.0
+die_spawn_chance = 15.0
 rarity_scaling_factors = Dictionary[int, float]({
 0: 0.5,
 1: 0.4,
@@ -511,6 +511,10 @@ metadata/_custom_type_script = "uid://ckiyd2nbdcofr"
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_2ks4g"]
 size = Vector2(16, 28)
 
+[sub_resource type="Resource" id="Resource_i4r08"]
+script = ExtResource("29_vjlik")
+metadata/_custom_type_script = "uid://i7ucoc123rpe"
+
 [sub_resource type="Resource" id="Resource_kq2k7"]
 script = ExtResource("30_vjlik")
 metadata/_custom_type_script = "uid://c2sjdkql76qca"
@@ -526,10 +530,6 @@ metadata/_custom_type_script = "uid://q3yeopc5wdlo"
 [sub_resource type="Resource" id="Resource_gtdxm"]
 script = ExtResource("30_5gwv1")
 metadata/_custom_type_script = "uid://cbyg4eleptthh"
-
-[sub_resource type="Resource" id="Resource_i4r08"]
-script = ExtResource("29_vjlik")
-metadata/_custom_type_script = "uid://i7ucoc123rpe"
 
 [sub_resource type="Resource" id="Resource_6hj0o"]
 script = ExtResource("32_kuvhw")
@@ -564,7 +564,7 @@ tracks/1/keys = {
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("YSorter/EntitySprite:scale")
+tracks/2/path = NodePath("YSorter:scale")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
@@ -576,16 +576,16 @@ tracks/2/keys = {
 
 [sub_resource type="Animation" id="Animation_u70e3"]
 resource_name = "die"
-length = 0.6
-step = 0.1
+length = 0.25
+step = 0.05
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("YSorter/EntitySprite:scale")
+tracks/0/path = NodePath("YSorter:scale")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.3),
+"times": PackedFloat32Array(0, 0.25),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
 "values": [Vector2(1, 1), Vector2(0, 0)]
@@ -833,7 +833,7 @@ tracks/1/keys = {
 
 [sub_resource type="Animation" id="Animation_3l4yw"]
 resource_name = "spawn"
-length = 0.6
+length = 0.4
 step = 0.1
 tracks/0/type = "value"
 tracks/0/imported = false
@@ -862,14 +862,14 @@ tracks/1/keys = {
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("YSorter/EntitySprite:scale")
+tracks/2/path = NodePath("YSorter:scale")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
-"times": PackedFloat32Array(0, 0.3),
-"transitions": PackedFloat32Array(1, 1),
+"times": PackedFloat32Array(0, 0.1, 0.4),
+"transitions": PackedFloat32Array(1, 1, 1),
 "update": 0,
-"values": [Vector2(0, 0), Vector2(1, 1)]
+"values": [Vector2(0, 0), Vector2(0, 0), Vector2(1, 1)]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_3l4yw"]
@@ -1006,7 +1006,6 @@ debug_color = Color(0.66339, 0.512878, 0, 0.251)
 
 [node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
 avoidance_enabled = true
-radius = 500.0
 max_neighbors = 8
 debug_use_custom = true
 debug_path_custom_color = Color(1, 0.523276, 0.90389, 1)
@@ -1026,10 +1025,17 @@ occluder = SubResource("OccluderPolygon2D_6bt22")
 [node name="EntitySprite" parent="YSorter" instance=ExtResource("2_8a5el")]
 unique_name_in_owner = true
 material = SubResource("ShaderMaterial_qrtn1")
+instance_shader_parameters/final_alpha = 1.0
+instance_shader_parameters/outline_thickness = 0.0
+instance_shader_parameters/override_color = Color(1, 1, 1, 0)
+instance_shader_parameters/tint_color = Color(1, 1, 1, 0)
+instance_shader_parameters/use_override_color = false
 position = Vector2(0, -16)
 sprite_frames = SubResource("SpriteFrames_gi80f")
 animation = &"idle"
 autoplay = "idle"
+disable_floor_light = true
+time_brightness_min_max = Vector2(1, 2.35)
 
 [node name="StatusEffectsComponent" parent="YSorter" node_paths=PackedStringArray("effect_receiver") instance=ExtResource("5_g4fx3")]
 unique_name_in_owner = true
@@ -1072,11 +1078,12 @@ debug_color = Color(0.932, 0, 0.649, 0.122)
 
 [node name="StateMachine" type="Node" parent="."]
 script = ExtResource("27_5gwv1")
-states = Array[ExtResource("33_qrtn1")]([SubResource("Resource_kq2k7"), SubResource("Resource_175e0"), SubResource("Resource_gtdxm"), SubResource("Resource_i4r08"), SubResource("Resource_6hj0o")])
+states = Array[ExtResource("33_qrtn1")]([SubResource("Resource_i4r08"), SubResource("Resource_kq2k7"), SubResource("Resource_175e0"), SubResource("Resource_gtdxm"), SubResource("Resource_6hj0o")])
 print_state_changes = true
 
 [node name="Controller" type="Node2D" parent="StateMachine"]
 script = ExtResource("30_tsyff")
+path_delay_minmax = Vector2(0.5, 1)
 footstep_texture = ExtResource("25_kc883")
 _max_speed = 60.0
 _acceleration = 1000.0

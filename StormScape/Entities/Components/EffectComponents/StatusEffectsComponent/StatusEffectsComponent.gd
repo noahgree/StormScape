@@ -11,7 +11,7 @@ static var cached_status_effects: Dictionary[StringName, StatusEffect] = {} ## A
 @export_subgroup("Debug")
 @export var print_effect_updates: bool = false ## Whether to print when this entity has status effects added and removed.
 
-@onready var affected_entity: PhysicsBody2D = owner ## The entity affected by these status effects.
+@onready var affected_entity: Entity = owner ## The entity affected by these status effects.
 
 var current_effects: Dictionary[String, StatusEffect] = {} ## Keys are general status effect ids and values are the effect resources themselves.
 var effect_timers: Dictionary[String, Timer] = {} ## Holds references to all timers currently tracking active status effects.

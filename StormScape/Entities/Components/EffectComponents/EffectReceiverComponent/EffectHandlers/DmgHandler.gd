@@ -7,7 +7,7 @@ class_name DmgHandler
 @export_range(0, 100, 1.0, "hide_slider", "suffix:%") var _dmg_weakness: float = 0.0 ## Multiplier for increasing ALL incoming damage.
 @export_range(0, 100, 1.0, "hide_slider", "suffix:%") var _dmg_resistance: float = 0.0 ## Multiplier for decreasing ALL incoming damage.
 
-@onready var affected_entity: PhysicsBody2D = get_parent().affected_entity ## The entity affected by this dmg handler.
+@onready var affected_entity: Entity = get_parent().affected_entity ## The entity affected by this dmg handler.
 
 var health_component: HealthComponent ## The health component to be affected by the damage.
 var dot_timers: Dictionary[String, Array] = {} ## Holds references to all timers currently tracking active DOT. Keys are source type ids and values are an array of all matching timers of that type.

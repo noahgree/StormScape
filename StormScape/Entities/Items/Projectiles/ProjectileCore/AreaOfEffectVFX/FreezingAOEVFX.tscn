@@ -19,7 +19,7 @@ point_count = 5
 
 [sub_resource type="Gradient" id="Gradient_fqseh"]
 offsets = PackedFloat32Array(0, 0.0308642, 0.857414, 1)
-colors = PackedColorArray(0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0)
+colors = PackedColorArray(0, 0, 0, 0, 1, 1, 1, 0.5, 1, 1, 1, 0.5, 1, 1, 1, 0)
 
 [node name="FreezingAOEVFX" type="Node2D" node_paths=PackedStringArray("particles_nodes")]
 z_index = -1

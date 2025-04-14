@@ -6,11 +6,11 @@ class_name State
 var state_id: StringName ## The ID of this state, used by the FSM to cache the states. Set this in _init().
 var fsm: StateMachine ## The finite state machine controlling this state.
 var controller: Controller ## The controller that controls the entity's actions.
-var entity: PhysicsBody2D ## The entity which contains the FSM that this state is a part of.
+var entity: Entity ## The entity which contains the FSM that this state is a part of.
 
 
 ## Sets up the state with its needed info. Called by the FSM.
-func initialize(state_machine: StateMachine, entity_controller: Controller, source_entity: PhysicsBody2D) -> void:
+func initialize(state_machine: StateMachine, entity_controller: Controller, source_entity: Entity) -> void:
 	fsm = state_machine
 	controller = entity_controller
 	entity = source_entity

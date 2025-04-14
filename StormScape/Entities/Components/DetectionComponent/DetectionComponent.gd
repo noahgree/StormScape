@@ -9,7 +9,7 @@ class_name DetectionComponent
 ## to scale up and down. Note that the effect receiver of the entity detecting this component is what
 ## determines the collision shape for what interacts with this zone.
 
-signal enemies_in_range_changed(enemies_in_range: Array[PhysicsBody2D]) ## Emitted when the enemies in range array is altered.
+signal enemies_in_range_changed(enemies_in_range: Array[Entity]) ## Emitted when the enemies in range array is altered.
 
 @export_custom(PROPERTY_HINT_NONE, "suffix:pixels") var radius: float = 150: ## The detection radius.
 	set(new_value):
@@ -22,10 +22,10 @@ signal enemies_in_range_changed(enemies_in_range: Array[PhysicsBody2D]) ## Emitt
 
 @onready var collider: CollisionShape2D = $CollisionShape2D ## The collision shape for this detection component.
 
-var entity: PhysicsBody2D ## The ntity that this detection component belongs to.
+var entity: Entity ## The ntity that this detection component belongs to.
 var original_radius: float = radius ## The original radius used to readjust the calculations after stealth.
 var current_stealth: int = 0 ## The extra percentage of closeness this entity can achieve to an enemy before being detected.
-var enemies_in_range: Array[PhysicsBody2D] = [] ## The enemies that we can see due to being inside the detection component radius of each of them. Array updated by detection components of those other entities.
+var enemies_in_range: Array[Entity] = [] ## The enemies that we can see due to being inside the detection component radius of each of them. Array updated by detection components of those other entities.
 
 
 func _ready() -> void:
@@ -56,15 +56,15 @@ func _on_area_exited(area: Area2D) -> void:
 	if area is EffectReceiverComponent:
 		area.affected_entity.detection_component.enemy_exited(entity)
 
-func enemy_entered(body: PhysicsBody2D) -> void:
+func enemy_entered(body: Entity) -> void:
 	enemies_in_range.append(body)
 	body.tree_exiting.connect(_remove_from_enemies_in_range.bind(body))
 	enemies_in_range_changed.emit(enemies_in_range)
 
-func enemy_exited(body: PhysicsBody2D) -> void:
+func enemy_exited(body: Entity) -> void:
 	_remove_from_enemies_in_range(body)
 	body.tree_exiting.disconnect(_remove_from_enemies_in_range)
 
-func _remove_from_enemies_in_range(body: PhysicsBody2D) -> void:
+func _remove_from_enemies_in_range(body: Entity) -> void:
 	enemies_in_range.erase(body)
 	enemies_in_range_changed.emit(enemies_in_range)

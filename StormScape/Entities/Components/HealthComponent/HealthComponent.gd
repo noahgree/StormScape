@@ -17,7 +17,7 @@ signal armor_changed(new_armor: int)
 @export_range(0, 100, 1) var base_armor: int = 0 ## The initial percentage of damage deflected.
 @export var infinte_hp: bool = false ## When true, the entity cannot run out of health or shield.
 
-@onready var entity: PhysicsBody2D = get_parent() ## The entity this health component operates on.
+@onready var entity: Entity = get_parent() ## The entity this health component operates on.
 
 var health: int: set = _set_health ## The current health of the entity.
 var shield: int: set = _set_shield ## The current shield of the entity.

@@ -407,6 +407,10 @@ metadata/_custom_type_script = "uid://ckiyd2nbdcofr"
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_7dc0v"]
 size = Vector2(14, 15)
 
+[sub_resource type="Resource" id="Resource_2enqj"]
+script = ExtResource("72_fcswf")
+metadata/_custom_type_script = "uid://i7ucoc123rpe"
+
 [sub_resource type="Resource" id="Resource_65vc5"]
 script = ExtResource("67_h1ges")
 metadata/_custom_type_script = "uid://c2sjdkql76qca"
@@ -430,10 +434,6 @@ metadata/_custom_type_script = "uid://cy73p3okq3cic"
 [sub_resource type="Resource" id="Resource_uvn5e"]
 script = ExtResource("71_ve7vt")
 metadata/_custom_type_script = "uid://cbyg4eleptthh"
-
-[sub_resource type="Resource" id="Resource_2enqj"]
-script = ExtResource("72_fcswf")
-metadata/_custom_type_script = "uid://i7ucoc123rpe"
 
 [sub_resource type="Resource" id="Resource_26nah"]
 script = ExtResource("73_r7bkl")
@@ -489,6 +489,18 @@ tracks/3/keys = {
 "update": 0,
 "values": [Vector2(1, 1)]
 }
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("YSorter:scale")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
 
 [sub_resource type="Animation" id="Animation_y7dy5"]
 resource_name = "die"
@@ -496,14 +508,14 @@ length = 0.2
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("YSorter/EntitySprite:scale")
+tracks/0/path = NodePath("YSorter:scale")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
 "times": PackedFloat32Array(0, 0.2),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
-"values": [Vector2(1, 1), Vector2(1.00136e-05, 1.00136e-05)]
+"values": [Vector2(1, 1), Vector2(0, 0)]
 }
 
 [sub_resource type="Animation" id="Animation_0xfck"]
@@ -1164,6 +1176,18 @@ tracks/3/keys = {
 "update": 1,
 "values": [Vector2(0, 0), Vector2(1, 1)]
 }
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("YSorter:scale")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.4),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(0, 0), Vector2(0, 0), Vector2(1, 1)]
+}
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_xrucm"]
 _data = {
@@ -1452,6 +1476,7 @@ material = SubResource("ShaderMaterial_0tj2u")
 position = Vector2(0, -16)
 sprite_frames = ExtResource("5_vy6lk")
 animation = &"idle"
+time_brightness_min_max = Vector2(1, 2.35)
 
 [node name="StatusEffectsComponent" parent="YSorter" node_paths=PackedStringArray("effect_receiver") instance=ExtResource("6_n0x5k")]
 unique_name_in_owner = true
@@ -1466,6 +1491,10 @@ active_slot_info = NodePath("../../OverlayUI/ActiveSlotInfo")
 [node name="ParticleEmissionComponent" parent="." instance=ExtResource("10_6wv7y")]
 
 [node name="HealthComponent" parent="." instance=ExtResource("3_ojev3")]
+_max_health = null
+_max_shield = null
+base_armor = null
+infinte_hp = null
 
 [node name="StaminaComponent" parent="." instance=ExtResource("5_k4fu6")]
 
@@ -1497,7 +1526,7 @@ debug_color = Color(1, 0.294, 0.588, 0.06)
 
 [node name="StateMachine" type="Node" parent="." groups=["has_save_logic"]]
 script = ExtResource("25_6wv7y")
-states = Array[ExtResource("66_8hbs2")]([SubResource("Resource_65vc5"), SubResource("Resource_6oagw"), SubResource("Resource_1jicd"), SubResource("Resource_g1usa"), SubResource("Resource_uvn5e"), SubResource("Resource_2enqj"), SubResource("Resource_26nah")])
+states = Array[ExtResource("66_8hbs2")]([SubResource("Resource_2enqj"), SubResource("Resource_65vc5"), SubResource("Resource_6oagw"), SubResource("Resource_1jicd"), SubResource("Resource_g1usa"), SubResource("Resource_uvn5e"), SubResource("Resource_26nah")])
 
 [node name="Controller" type="Node2D" parent="StateMachine"]
 script = ExtResource("27_n4o3n")

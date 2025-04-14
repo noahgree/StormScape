@@ -3,7 +3,7 @@ class_name Hitscan
 ## The base class for all hitscan objects. These emit as beams or rays from the source weapon instead of traveling along a path.
 
 @export var effect_source: EffectSource ## The effect to be applied when this ray hits an effect receiver.
-@export var source_entity: PhysicsBody2D ## The entity that the effect was produced by.
+@export var source_entity: Entity ## The entity that the effect was produced by.
 
 @onready var start_particles: CPUParticles2D = $StartParticles ## The particles emitting at the source point (at the weapon).
 @onready var impact_particles: CPUParticles2D = $ImpactParticles ## The particles emitting at each impact site.

@@ -3,7 +3,7 @@ class_name StateFunctions
 
 
 ## Handles the decision logic for choosing run vs sprint and moves the entity accordingly.
-static func handle_run_logic(delta: float, entity: PhysicsBody2D, controller: DynamicController,
+static func handle_run_logic(delta: float, entity: Entity, controller: DynamicController,
 								stats: StatModsCacheResource, max_anim_scale: float, default_anim_scale: float,
 								extra_run_mult: float = 1.0, extra_sprint_mult: float = 1.0) -> void:
 	if controller.knockback_vector.length() > 0:
@@ -27,7 +27,7 @@ static func handle_run_logic(delta: float, entity: PhysicsBody2D, controller: Dy
 	StateFunctions.handle_rigid_entity_collisions(entity, controller)
 
 ## Applies sprint movement to the entity's velocity.
-static func apply_sprint_movement(delta: float, entity: PhysicsBody2D, controller: DynamicController,
+static func apply_sprint_movement(delta: float, entity: Entity, controller: DynamicController,
 									stats: StatModsCacheResource, max_anim_scale: float, default_anim_scale: float,
 									extra_multiplier: float = 1.0) -> void:
 	# Update anim speed multiplier
@@ -43,7 +43,7 @@ static func apply_sprint_movement(delta: float, entity: PhysicsBody2D, controlle
 	entity.velocity = entity.velocity.limit_length(max_speed * sprint_mult)
 
 ## Applies non-sprint movement to the entity's velocity.
-static func apply_non_sprint_movement(delta: float, entity: PhysicsBody2D, controller: DynamicController,
+static func apply_non_sprint_movement(delta: float, entity: Entity, controller: DynamicController,
 										stats: StatModsCacheResource, max_anim_scale: float,
 										default_anim_scale: float, extra_multiplier: float = 1.0) -> void:
 	var anim_time_scale: float = min(max_anim_scale, default_anim_scale * (stats.get_stat("max_speed") / stats.get_original_stat("max_speed")))
@@ -54,7 +54,7 @@ static func apply_non_sprint_movement(delta: float, entity: PhysicsBody2D, contr
 	entity.velocity = entity.velocity.limit_length(stats.get_stat("max_speed"))
 
 ## Handles moving rigid entities that we collided with in the last frame. Returns if we did collide.
-static func handle_rigid_entity_collisions(entity: PhysicsBody2D, controller: DynamicController) -> bool:
+static func handle_rigid_entity_collisions(entity: Entity, controller: DynamicController) -> bool:
 	var hit_rigid_entity: bool = false
 	for i: int in entity.get_slide_collision_count():
 		var c: KinematicCollision2D = entity.get_slide_collision(i)

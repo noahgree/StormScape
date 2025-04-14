@@ -17,8 +17,8 @@ _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
 point_count = 2
 
 [sub_resource type="Gradient" id="Gradient_7iomy"]
-offsets = PackedFloat32Array(0, 0.0411523, 0.794606, 1)
-colors = PackedColorArray(1, 1, 1, 0, 2, 2, 2, 1, 1.25, 1.25, 1.25, 1, 1, 1, 1, 0)
+offsets = PackedFloat32Array(0, 0.0411523, 0.780992, 1)
+colors = PackedColorArray(1, 1, 1, 0, 2, 2, 2, 0.5, 1.25, 1.25, 1.25, 0.5, 1, 1, 1, 0)
 
 [node name="FlamingAOEVFX" type="Node2D" node_paths=PackedStringArray("particles_nodes")]
 z_index = -1

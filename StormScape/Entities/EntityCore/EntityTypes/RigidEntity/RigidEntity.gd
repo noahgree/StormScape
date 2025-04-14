@@ -1,5 +1,5 @@
 @tool
-extends RigidBody2D
+extends Entity
 class_name RigidEntity
 ## An entity that can move and rotate with physics and that also cannot have non-HP stats like stamina and hunger.
 ##
@@ -7,24 +7,10 @@ class_name RigidEntity
 ## This should not be used for static environmental entities like trees and also not for players
 ## or moving enemies.
 
-@export var team: Globals.Teams = Globals.Teams.PLAYER ## What the effects received by this entity should consider as this entity's team.
-@export var is_object: bool = false ## When true, this entity's collision logic will follow that of a world object, regardless of team.
-@export var inv: InventoryResource = InventoryResource.new() ## The inventory data resource for this entity.
-@export var loot: LootTableResource ## The loot table resource for this entity.
+@export var immovable: bool = false ## When true, this will not be able to be moved around by impulse forces.
 
-@onready var sprite: EntitySprite = %EntitySprite ## The visual representation of the entity. Needs to have the EntityEffectShader applied.
 @onready var anim_tree: AnimationTree = $AnimationTree ## The animation tree controlling this entity's animation states.
-@onready var effect_receiver: EffectReceiverComponent = get_node_or_null("EffectReceiverComponent") ## The component that handles incoming effect sources.
-@onready var effects: StatusEffectsComponent = get_node_or_null("%StatusEffectsComponent") ## The node that will cache and manage all status effects for this entity.
-@onready var emission_mgr: ParticleEmissionComponent = $ParticleEmissionComponent ## The component responsible for determining the extents and origins of different particle placements.
 @onready var facing_component: FacingComponent = $FacingComponent ## The component in charge of choosing the entity animation directions.
-@onready var detection_component: DetectionComponent = $DetectionComponent ## The component that defines the radius around this entity that an enemy must enter for that enemy to be alerted.
-@onready var health_component: HealthComponent = $HealthComponent ## The component in charge of entity health and shield.
-@onready var item_receiver: ItemReceiverComponent = get_node_or_null("ItemReceiverComponent") ## The item receiver for this entity.
-@onready var hands: HandsComponent = get_node_or_null("%HandsComponent") ## The hands item component for the entity.
-
-var stats: StatModsCacheResource = StatModsCacheResource.new() ## The resource that will cache and work with all stat mods for this entity.
-var wearables: Array[Dictionary] = [{ &"1" : null }, { &"2" : null }, { &"3" : null }, { &"4" : null }, { &"5" : null }] ## The equipped wearables on this entity.
 
 
 #region Save & Load
@@ -129,12 +115,14 @@ func _ready() -> void:
 		loot = loot.duplicate()
 		loot.initialize(self)
 
-	mass = 3
-	linear_damp = 4.5
+	self.mass = 3
+	self.linear_damp = 4.5
 	var phys_material: PhysicsMaterial = PhysicsMaterial.new()
 	phys_material.friction = 1.0
 	phys_material.rough = true
 	self.physics_material_override = phys_material
+	if immovable:
+		self.freeze = true
 
 func _process(delta: float) -> void:
 	if Engine.is_editor_hint():

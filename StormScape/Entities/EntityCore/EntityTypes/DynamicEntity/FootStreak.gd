@@ -5,7 +5,7 @@ static var scene: PackedScene = load("res://Entities/EntityCore/EntityTypes/Dyna
 
 @onready var particles: CPUParticles2D = $CPUParticles2D
 
-const MAX_TRAIL_LENGTH: float = 50.0
+const MAX_TRAIL_LENGTH: float = 15.0
 var lifetime_timer: Timer = TimerHelpers.create_one_shot_timer(self, 0.5, _on_lifetime_timer_timeout)
 var is_fading: bool = false
 

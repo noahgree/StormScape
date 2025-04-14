@@ -5,6 +5,7 @@ class_name EntitySprite
 
 @export var disable_floor_light: bool = false ## When true, the light that shines at the base of the sprite in response to status effects will be disabled.
 @export var cracks_with_damage: bool = true ## When true, the shader will simulate cracking based on the percentage of health left (note that shield changing does nothing, this only updates with health changes). This only applies to non-dynamic entities.
+@export var time_brightness_min_max: Vector2 = Vector2(1.0, 1.0) ## How the brightness of the sprite should change in response to time of day. Anything besides (1, 1) activates this.
 
 ## The min values to interpolate to for the cracking shader when health is at its highest (but not completely full).
 ## The crack_scale will adjust for sprite size automatically upon game start.
@@ -51,7 +52,7 @@ class_name EntitySprite
 @onready var floor_light: PointLight2D = $FloorLight ## The light with the effect color that is shining up on the entity.
 @onready var overlay: TextureRect = $Overlay ## The color overlay that shows when a status effect triggers it.
 
-var entity: PhysicsBody2D ## The entity this sprite is attached to.
+var entity: Entity ## The entity this sprite is attached to.
 var floor_light_tween: Tween = null ## The tween controlling the floor light's self-modulate.
 var overlay_color_tween: Tween = null ## The tween controlling the overlay color.
 var current_floor_light_names: Array[String] = [] ## The queue for the next colors to show when the previous ones finish.
@@ -76,8 +77,16 @@ func _ready() -> void:
 	else:
 		floor_light.queue_free()
 
+	if time_brightness_min_max != Vector2(1.0, 1.0):
+		DayNightManager.brightness_signal.connect(_on_day_night_brightness_tick)
+
 	call_deferred("_setup_overlay_size", sprite_size)
 	call_deferred("_setup_cracks_with_damage", sprite_size)
+
+## Interpolates the brightness mult on the sprite shader based on the brightness given by the day-night manager.
+func _on_day_night_brightness_tick(progress: float) -> void:
+	var brightness: float = time_brightness_min_max.y + (time_brightness_min_max.x - time_brightness_min_max.y) * progress
+	set_instance_shader_parameter("brightness_mult", brightness)
 
 ## Sets up the floor light size to be proportional to the sprite boundaries.
 func _setup_floor_light_size(sprite_size: Vector2) -> void:
