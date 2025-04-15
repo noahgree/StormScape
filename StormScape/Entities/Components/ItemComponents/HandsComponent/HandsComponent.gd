@@ -51,9 +51,11 @@ func _ready() -> void:
 	off_hand_sprite.visible = false
 	drawn_off_hand.visible = false
 
-	SignalBus.focused_ui_opened.connect(func() -> void:
-		trigger_pressed = false
-		)
+	SignalBus.focused_ui_opened.connect(func() -> void: trigger_pressed = false)
+
+	# Make sure to update item rotation on game resume
+	if entity is Player:
+		SignalBus.focused_ui_closed.connect(func() -> void: handle_aim(CursorManager.get_cursor_mouse_position()))
 
 	starting_hands_component_height = position.y
 	starting_off_hand_sprite_height = off_hand_sprite.position.y

@@ -49,8 +49,8 @@ animations = [{
 }]
 
 [sub_resource type="Gradient" id="Gradient_mj6fi"]
-offsets = PackedFloat32Array(0.288235, 0.796078, 1)
-colors = PackedColorArray(0.984, 0.749, 0, 0, 1, 0.739739, 0.474594, 1, 0.999974, 0.252637, 0.210166, 1)
+offsets = PackedFloat32Array(0.288235, 0.732283, 1)
+colors = PackedColorArray(0.984, 0.749, 0, 0, 1, 0.733, 0.554, 0.22, 1, 0.253, 0.21, 0.35)
 
 [node name="Flame" type="Area2D"]
 editor_description = "DO NOT SET EFFECT SOURCE IF BEING USED DIRECTLY WITH A WEAPON. THE WEAPON WILL SET IT FOR YOU."
@@ -65,6 +65,7 @@ shape = SubResource("CapsuleShape2D_gicwb")
 debug_color = Color(0.626, 0.349, 1, 0.196)
 
 [node name="ProjSprite" type="AnimatedSprite2D" parent="."]
+modulate = Color(1, 1, 1, 0.18)
 light_mask = 2
 material = SubResource("CanvasItemMaterial_mbfhr")
 sprite_frames = SubResource("SpriteFrames_wi72s")
@@ -80,7 +81,8 @@ scale = Vector2(0.266667, 0.35)
 texture = ExtResource("3_vm36o")
 
 [node name="Trail" parent="." instance=ExtResource("4_bygqs")]
+position = Vector2(0, 2)
 width = 6.0
 gradient = SubResource("Gradient_mj6fi")
-max_points = 6
+max_points = 7
 x_offset = 0.0

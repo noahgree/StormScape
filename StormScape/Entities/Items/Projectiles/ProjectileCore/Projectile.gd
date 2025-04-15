@@ -15,6 +15,7 @@ class_name Projectile
 @onready var sprite: AnimatedSprite2D = $ProjSprite ## The sprite for this projectile.
 @onready var shadow: Sprite2D = $Shadow ## The shadow sprite for this projectile.
 @onready var anim_player: AnimationPlayer = get_node_or_null("AnimationPlayer") ## The anim player for this projectile.
+@onready var trail: Trail = get_node_or_null("Trail") ## The trail behind this projectile.
 
 #region Local Vars
 const FOV_RAYCAST_COUNT: int = 36
@@ -135,8 +136,10 @@ func _ready() -> void:
 
 	_set_up_potential_homing_delay()
 
-	if stats.override_gun_height and splits_so_far == 0:
+	if stats.height_override != -1 and splits_so_far == 0:
 		starting_proj_height = stats.height_override
+	if stats.disable_trail and trail != null:
+		trail.queue_free()
 
 	_set_up_starting_transform_and_spin_logic()
 	if stats.launch_angle > 0 and stats.homing_method == "None":

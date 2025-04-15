@@ -44,8 +44,7 @@ var frame_rate: bool = true
 
 # Entity Flags
 var show_facing_dir: bool = false
-var show_movement_vector: bool = false
-var show_collision_avoidance_rays: bool = false
+var show_nav: bool = true
 
 
 func _ready() -> void:

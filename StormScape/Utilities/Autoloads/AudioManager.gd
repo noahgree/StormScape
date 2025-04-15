@@ -368,10 +368,11 @@ func _on_player_finished_playing(audio_player: Variant) -> void:
 	var finish_callables: Variant = audio_player.get_meta("finish_callables", [])
 
 	for custom_callable: Callable in finish_callables:
-		if custom_callable.is_valid():
-			if loops_completed > 0 and custom_callable.get_method() != "_on_looped_audio_player_end":
-				continue
-			custom_callable.call()
+		if is_instance_valid(custom_callable):
+			if custom_callable.is_valid():
+				if loops_completed > 0 and custom_callable.get_method() != "_on_looped_audio_player_end":
+					continue
+				custom_callable.call()
 
 ## Stops all sounds of a sound id by default, or can stop a specific number if given a value besides 0.
 func stop_sound_id(sound_id: StringName, fade_out_time: float = 0,

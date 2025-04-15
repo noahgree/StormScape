@@ -158,6 +158,7 @@ sources/1 = SubResource("TileSetAtlasSource_lb4xb")
 script = ExtResource("20_om42l")
 title = "CHEST"
 main_inv_size = 10
+drop_on_death = false
 starting_inv = Array[ExtResource("21_fx52i")]([])
 
 [sub_resource type="Resource" id="Resource_t15sm"]
@@ -190,6 +191,7 @@ size = Vector2(14, 14)
 script = ExtResource("20_om42l")
 title = "CHEST"
 main_inv_size = 10
+drop_on_death = false
 starting_inv = Array[ExtResource("21_fx52i")]([])
 
 [sub_resource type="Resource" id="Resource_twwwg"]
@@ -219,6 +221,7 @@ multishot_id = -1
 script = ExtResource("20_om42l")
 title = "CHEST"
 main_inv_size = 10
+drop_on_death = false
 starting_inv = Array[ExtResource("21_fx52i")]([])
 
 [sub_resource type="Resource" id="Resource_hkn5b"]
@@ -272,6 +275,7 @@ metadata/_custom_type_script = "uid://dp8osf7r6xkkt"
 script = ExtResource("20_om42l")
 title = "CHEST"
 main_inv_size = 10
+drop_on_death = false
 starting_inv = Array[ExtResource("21_fx52i")]([null, null, null, SubResource("Resource_6gn56"), null, SubResource("Resource_jb7gg")])
 metadata/_custom_type_script = "uid://dwmur0cosbbwh"
 
@@ -327,6 +331,7 @@ metadata/_custom_type_script = "uid://dp8osf7r6xkkt"
 script = ExtResource("20_om42l")
 title = "CHEST"
 main_inv_size = 10
+drop_on_death = true
 starting_inv = Array[ExtResource("21_fx52i")]([SubResource("Resource_yw2f7"), null, null, SubResource("Resource_ed1p2"), SubResource("Resource_e5rpg"), null, SubResource("Resource_1606r"), SubResource("Resource_27u15"), SubResource("Resource_w76bj")])
 metadata/_custom_type_script = "uid://dwmur0cosbbwh"
 
@@ -700,7 +705,6 @@ inv = SubResource("Resource_vi22v")
 
 [node name="BasicZombie" parent="WorldRoot/Testing" instance=ExtResource("30_6gn56")]
 position = Vector2(-3, -3)
-enabled = false
 
 [node name="BasicZombie2" parent="WorldRoot/Testing" instance=ExtResource("30_6gn56")]
 position = Vector2(55, -7)
@@ -745,152 +749,6 @@ enabled = false
 [node name="BasicZombie12" parent="WorldRoot/Testing" instance=ExtResource("30_6gn56")]
 position = Vector2(22, -13)
 enabled = false
-
-[node name="BasicZombie13" parent="WorldRoot/Testing" instance=ExtResource("30_6gn56")]
-position = Vector2(47, -38)
-enabled = false
-
-[node name="BasicZombie14" parent="WorldRoot/Testing" instance=ExtResource("30_6gn56")]
-position = Vector2(78, -39)
-enabled = false
-
-[node name="BasicZombie15" parent="WorldRoot/Testing" instance=ExtResource("30_6gn56")]
-position = Vector2(104, -32)
-enabled = false
-
-[node name="BasicZombie16" parent="WorldRoot/Testing" instance=ExtResource("30_6gn56")]
-position = Vector2(124, -2)
-enabled = false
-
-[node name="BasicZombie17" parent="WorldRoot/Testing" instance=ExtResource("30_6gn56")]
-position = Vector2(161, -31)
-enabled = false
-
-[node name="BasicZombie18" parent="WorldRoot/Testing" instance=ExtResource("30_6gn56")]
-position = Vector2(163, -1)
-enabled = false
-
-[node name="BasicZombie19" parent="WorldRoot/Testing" instance=ExtResource("30_6gn56")]
-position = Vector2(155, 43)
-enabled = false
-
-[node name="BasicZombie20" parent="WorldRoot/Testing" instance=ExtResource("30_6gn56")]
-position = Vector2(120, 58)
-enabled = false
-
-[node name="BasicZombie21" parent="WorldRoot/Testing" instance=ExtResource("30_6gn56")]
-position = Vector2(80, 65)
-enabled = false
-
-[node name="BasicZombie22" parent="WorldRoot/Testing" instance=ExtResource("30_6gn56")]
-position = Vector2(47, 63)
-enabled = false
-
-[node name="BasicZombie23" parent="WorldRoot/Testing" instance=ExtResource("30_6gn56")]
-position = Vector2(36, 86)
-enabled = false
-
-[node name="BasicZombie24" parent="WorldRoot/Testing" instance=ExtResource("30_6gn56")]
-position = Vector2(5, 96)
-enabled = false
-
-[node name="BasicZombie25" parent="WorldRoot/Testing" instance=ExtResource("30_6gn56")]
-position = Vector2(-30, 84)
-enabled = false
-
-[node name="BasicZombie26" parent="WorldRoot/Testing" instance=ExtResource("30_6gn56")]
-position = Vector2(-48, 58)
-enabled = false
-
-[node name="BasicZombie27" parent="WorldRoot/Testing" instance=ExtResource("30_6gn56")]
-position = Vector2(-72, 24)
-enabled = false
-
-[node name="BasicZombie28" parent="WorldRoot/Testing" instance=ExtResource("30_6gn56")]
-position = Vector2(-73, -9)
-enabled = false
-
-[node name="BasicZombie29" parent="WorldRoot/Testing" instance=ExtResource("30_6gn56")]
-position = Vector2(-64, -48)
-enabled = false
-
-[node name="BasicZombie30" parent="WorldRoot/Testing" instance=ExtResource("30_6gn56")]
-position = Vector2(-95, 6)
-enabled = false
-
-[node name="BasicZombie31" parent="WorldRoot/Testing" instance=ExtResource("30_6gn56")]
-position = Vector2(-92, 37)
-enabled = false
-
-[node name="BasicZombie32" parent="WorldRoot/Testing" instance=ExtResource("30_6gn56")]
-position = Vector2(-76, 58)
-enabled = false
-
-[node name="BasicZombie33" parent="WorldRoot/Testing" instance=ExtResource("30_6gn56")]
-position = Vector2(-49, 22)
-enabled = false
-
-[node name="BasicZombie34" parent="WorldRoot/Testing" instance=ExtResource("30_6gn56")]
-position = Vector2(-14, 55)
-enabled = false
-
-[node name="BasicZombie35" parent="WorldRoot/Testing" instance=ExtResource("30_6gn56")]
-position = Vector2(179, 27)
-enabled = false
-
-[node name="BasicZombie36" parent="WorldRoot/Testing" instance=ExtResource("30_6gn56")]
-position = Vector2(199, 6)
-enabled = false
-
-[node name="BasicZombie37" parent="WorldRoot/Testing" instance=ExtResource("30_6gn56")]
-position = Vector2(217, 25)
-enabled = false
-
-[node name="BasicZombie38" parent="WorldRoot/Testing" instance=ExtResource("30_6gn56")]
-position = Vector2(199, 46)
-enabled = false
-
-[node name="BasicZombie39" parent="WorldRoot/Testing" instance=ExtResource("30_6gn56")]
-position = Vector2(176, 67)
-enabled = false
-
-[node name="BasicZombie40" parent="WorldRoot/Testing" instance=ExtResource("30_6gn56")]
-position = Vector2(158, 90)
-enabled = false
-
-[node name="BasicZombie41" parent="WorldRoot/Testing" instance=ExtResource("30_6gn56")]
-position = Vector2(139, 117)
-enabled = false
-
-[node name="BasicZombie42" parent="WorldRoot/Testing" instance=ExtResource("30_6gn56")]
-position = Vector2(110, 109)
-enabled = false
-
-[node name="BasicZombie43" parent="WorldRoot/Testing" instance=ExtResource("30_6gn56")]
-position = Vector2(74, 99)
-enabled = false
-
-[node name="BasicZombie44" parent="WorldRoot/Testing" instance=ExtResource("30_6gn56")]
-position = Vector2(95, 123)
-enabled = false
-
-[node name="BasicZombie45" parent="WorldRoot/Testing" instance=ExtResource("30_6gn56")]
-position = Vector2(85, 144)
-enabled = false
-
-[node name="BasicZombie46" parent="WorldRoot/Testing" instance=ExtResource("30_6gn56")]
-position = Vector2(70, 168)
-enabled = false
-
-[node name="BasicZombie47" parent="WorldRoot/Testing" instance=ExtResource("30_6gn56")]
-position = Vector2(42, 163)
-enabled = false
-
-[node name="BasicZombie48" parent="WorldRoot/Testing" instance=ExtResource("30_6gn56")]
-position = Vector2(29, 145)
-
-[node name="BasicZombie49" parent="WorldRoot/Testing" instance=ExtResource("30_6gn56")]
-position = Vector2(44, 117)
 
 [node name="Player" parent="WorldRoot" instance=ExtResource("4_ptig0")]
 position = Vector2(226, 75)

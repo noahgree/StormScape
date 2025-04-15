@@ -45,6 +45,7 @@
 script = ExtResource("2_dcca3")
 title = "CHEST"
 main_inv_size = 10
+drop_on_death = false
 starting_inv = Array[ExtResource("3_hj6es")]([])
 
 [sub_resource type="Resource" id="Resource_qrtn1"]
@@ -1083,7 +1084,7 @@ print_state_changes = true
 
 [node name="Controller" type="Node2D" parent="StateMachine"]
 script = ExtResource("30_tsyff")
-path_delay_minmax = Vector2(0.5, 1)
+ray_start_offset = Vector2(0, -2)
 footstep_texture = ExtResource("25_kc883")
 _max_speed = 60.0
 _acceleration = 1000.0

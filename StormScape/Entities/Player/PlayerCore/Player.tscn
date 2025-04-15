@@ -1,4 +1,4 @@
-[gd_scene load_steps=243 format=3 uid="uid://dba8mrurjlekp"]
+[gd_scene load_steps=238 format=3 uid="uid://dba8mrurjlekp"]
 
 [ext_resource type="Script" uid="uid://c3rpxq8pnbdje" path="res://Entities/Player/PlayerCore/Player.gd" id="1_m33tt"]
 [ext_resource type="Script" uid="uid://dwmur0cosbbwh" path="res://UI/Inventory/InventoryCore/InventoryResource.gd" id="2_l1kq4"]
@@ -40,7 +40,6 @@
 [ext_resource type="Resource" uid="uid://fmf7upx7tsln" path="res://Entities/Items/TRESItems/ProjectileWeapons/RifleX(3).tres" id="13_n4o3n"]
 [ext_resource type="Resource" uid="uid://bper7kxtsf7f1" path="res://Entities/Items/TRESItems/MeleeWeapons/Axe(1).tres" id="14_0t1mv"]
 [ext_resource type="Resource" uid="uid://cx1ydw2jde1y8" path="res://Entities/Items/TRESItems/Consumables/Apple(0).tres" id="15_hxjay"]
-[ext_resource type="Script" uid="uid://clmf6cxgxu6kb" path="res://Utilities/Debug/TestButtons.gd" id="17_vdk5v"]
 [ext_resource type="Resource" uid="uid://bh18kqp2up3oe" path="res://Entities/Items/TRESItems/MeleeWeapons/Pickaxe(3).tres" id="23_gdihr"]
 [ext_resource type="PackedScene" uid="uid://jpq0ij8wwlhy" path="res://Entities/Components/FacingComponent/FacingComponent.tscn" id="25_0t1mv"]
 [ext_resource type="Script" uid="uid://c28itqxmeqbq0" path="res://Entities/FSM/FSMCore/StateMachine.gd" id="25_6wv7y"]
@@ -83,16 +82,12 @@
 [ext_resource type="Script" uid="uid://cbyg4eleptthh" path="res://Entities/FSM/States/BaseStates/StunnedState.gd" id="71_ve7vt"]
 [ext_resource type="Script" uid="uid://i7ucoc123rpe" path="res://Entities/FSM/States/BaseStates/SpawnState.gd" id="72_fcswf"]
 [ext_resource type="Script" uid="uid://cbuaklpos5jdp" path="res://Entities/FSM/States/BaseStates/DieState.gd" id="73_r7bkl"]
-[ext_resource type="Script" uid="uid://ct7n8wo1p3b20" path="res://Entities/Items/WeaponMods/WeaponMod.gd" id="74_bvo3j"]
-[ext_resource type="Resource" uid="uid://cwgqj8klx4b3x" path="res://Entities/Items/TRESItems/WeaponMods/ExtendedMag(0).tres" id="75_r5dvw"]
 [ext_resource type="Script" uid="uid://cs7bq5fnghjjp" path="res://UI/TemporaryElements/InteractionPrompt.gd" id="75_thmqm"]
 [ext_resource type="Material" uid="uid://cpbrvm1tp7153" path="res://Utilities/Game/Materials/UnshadedMaterial.tres" id="78_da65a"]
 [ext_resource type="Texture2D" uid="uid://lqg70q4wj55g" path="res://UI/Inventory/InventoryCore/Background/Wood/inv_background_wood.png" id="78_jlc36"]
-[ext_resource type="Script" uid="uid://317ipeo41y3c" path="res://Entities/Items/Wearables/Wearable.gd" id="79_gdihr"]
 [ext_resource type="PackedScene" uid="uid://i6tnlhpg6lt0" path="res://Utilities/Game/Audio/AudioPreloader.tscn" id="84_s4yud"]
 [ext_resource type="FontFile" uid="uid://bp2lgrlhj8cet" path="res://Assets/Theming/Fonts/Pixel/C&C Red Alert [INET].ttf" id="85_7xlwj"]
 [ext_resource type="Script" uid="uid://dwic8harmmplg" path="res://Utilities/Game/Audio/AudioResource.gd" id="85_w0i1c"]
-[ext_resource type="Resource" uid="uid://i1r1kb61dedn" path="res://Assets/Audio/Music/MusicResources/MysteryTheme.tres" id="86_ou5t4"]
 [ext_resource type="Texture2D" uid="uid://cd22xh5jduxd6" path="res://UI/TemporaryElements/InteractionIcons/e_prompt.png" id="89_0313k"]
 [ext_resource type="FontVariation" uid="uid://by478cplv5w4n" path="res://Assets/Theming/Fonts/GameFontResources/pixel_font_less_margin.tres" id="90_hxjay"]
 [ext_resource type="Script" uid="uid://dbc2ecb1mkugh" path="res://UI/PlayerStatsHUD/ActiveSlotInfo.gd" id="91_qr476"]
@@ -330,6 +325,7 @@ metadata/_custom_type_script = "uid://dp8osf7r6xkkt"
 script = ExtResource("2_l1kq4")
 title = "CHEST"
 main_inv_size = 32
+drop_on_death = false
 starting_inv = Array[ExtResource("32_ixmb3")]([SubResource("Resource_82yts"), SubResource("Resource_n4o3n"), SubResource("Resource_0t1mv"), SubResource("Resource_h1ges"), SubResource("Resource_4awmn"), SubResource("Resource_hxjay"), SubResource("Resource_mc6is"), SubResource("Resource_w0i1c"), SubResource("Resource_fcswf"), SubResource("Resource_ve7vt"), null, SubResource("Resource_ou5t4"), SubResource("Resource_ar238"), null, SubResource("Resource_bmpdm"), SubResource("Resource_eufsu"), SubResource("Resource_8hbs2"), SubResource("Resource_f5l7i"), SubResource("Resource_co77f"), null, null, SubResource("Resource_gdihr"), SubResource("Resource_g5u5n"), SubResource("Resource_0313k"), SubResource("Resource_r7bkl"), SubResource("Resource_thmqm"), SubResource("Resource_r5dvw"), SubResource("Resource_bvo3j"), SubResource("Resource_gb65f"), SubResource("Resource_5qckj"), SubResource("Resource_1go7j"), SubResource("Resource_32jvf"), SubResource("Resource_inle7"), null, SubResource("Resource_da65a"), SubResource("Resource_6f5us"), SubResource("Resource_s4yud")])
 metadata/_custom_type_script = "uid://dwmur0cosbbwh"
 
@@ -1678,178 +1674,6 @@ vertical_alignment = 1
 
 [node name="OverlayUI" type="CanvasLayer" parent="."]
 
-[node name="TestButtons" type="Control" parent="OverlayUI" node_paths=PackedStringArray("health_component")]
-visible = false
-layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 1
-script = ExtResource("17_vdk5v")
-health_component = NodePath("../../HealthComponent")
-mods = Array[ExtResource("74_bvo3j")]([ExtResource("65_14ixx"), ExtResource("75_r5dvw")])
-wearables = Array[ExtResource("79_gdihr")]([ExtResource("57_gdihr")])
-
-[node name="TestHurtBtn" type="Button" parent="OverlayUI/TestButtons"]
-layout_mode = 0
-offset_left = 94.0
-offset_top = 252.0
-offset_right = 125.0
-offset_bottom = 272.0
-scale = Vector2(0.7, 0.7)
-focus_mode = 0
-theme_override_font_sizes/font_size = 12
-text = "HURT"
-
-[node name="TestHealBtn" type="Button" parent="OverlayUI/TestButtons"]
-texture_filter = 1
-layout_mode = 0
-offset_left = 94.0
-offset_top = 237.0
-offset_right = 123.0
-offset_bottom = 257.0
-scale = Vector2(0.7, 0.7)
-focus_mode = 0
-theme_override_font_sizes/font_size = 12
-text = "HEAL"
-
-[node name="TestMusicBtn" type="Button" parent="OverlayUI/TestButtons"]
-texture_filter = 1
-layout_mode = 0
-offset_left = 142.0
-offset_top = 252.0
-offset_right = 202.0
-offset_bottom = 272.0
-scale = Vector2(0.7, 0.7)
-focus_mode = 0
-theme_override_font_sizes/font_size = 12
-text = "TEST MUSIC"
-
-[node name="TestSaveBtn" type="Button" parent="OverlayUI/TestButtons"]
-texture_filter = 1
-layout_mode = 0
-offset_left = 118.0
-offset_top = 237.0
-offset_right = 148.0
-offset_bottom = 257.0
-scale = Vector2(0.7, 0.7)
-focus_mode = 0
-theme_override_font_sizes/font_size = 12
-text = "SAVE"
-
-[node name="TestLoadBtn" type="Button" parent="OverlayUI/TestButtons"]
-texture_filter = 1
-layout_mode = 0
-offset_left = 118.0
-offset_top = 252.0
-offset_right = 148.0
-offset_bottom = 272.0
-scale = Vector2(0.7, 0.7)
-focus_mode = 0
-theme_override_font_sizes/font_size = 12
-text = "LOAD"
-
-[node name="TestModBtn1" type="Button" parent="OverlayUI/TestButtons"]
-texture_filter = 1
-layout_mode = 0
-offset_left = 242.0
-offset_top = 237.0
-offset_right = 277.0
-offset_bottom = 257.0
-scale = Vector2(0.7, 0.7)
-focus_mode = 0
-theme_override_font_sizes/font_size = 12
-text = "MOD 1"
-
-[node name="TestModBtn2" type="Button" parent="OverlayUI/TestButtons"]
-texture_filter = 1
-layout_mode = 0
-offset_left = 242.0
-offset_top = 252.0
-offset_right = 279.0
-offset_bottom = 272.0
-scale = Vector2(0.7, 0.7)
-focus_mode = 0
-theme_override_font_sizes/font_size = 12
-text = "MOD 2"
-
-[node name="TestModBtn3" type="Button" parent="OverlayUI/TestButtons"]
-texture_filter = 1
-layout_mode = 0
-offset_left = 271.0
-offset_top = 237.0
-offset_right = 308.0
-offset_bottom = 257.0
-scale = Vector2(0.7, 0.7)
-focus_mode = 0
-theme_override_font_sizes/font_size = 12
-text = "MOD 3"
-
-[node name="TestModBtn4" type="Button" parent="OverlayUI/TestButtons"]
-texture_filter = 1
-layout_mode = 0
-offset_left = 271.0
-offset_top = 252.0
-offset_right = 308.0
-offset_bottom = 272.0
-scale = Vector2(0.7, 0.7)
-focus_mode = 0
-theme_override_font_sizes/font_size = 12
-text = "MOD 4"
-
-[node name="TestStormBtn" type="Button" parent="OverlayUI/TestButtons"]
-texture_filter = 1
-layout_mode = 0
-offset_left = 187.0
-offset_top = 237.0
-offset_right = 225.0
-offset_bottom = 257.0
-scale = Vector2(0.7, 0.7)
-focus_mode = 0
-theme_override_font_sizes/font_size = 12
-text = "STORM"
-
-[node name="TestTimeBtn" type="Button" parent="OverlayUI/TestButtons"]
-texture_filter = 1
-layout_mode = 0
-offset_left = 219.0
-offset_top = 237.0
-offset_right = 247.0
-offset_bottom = 257.0
-scale = Vector2(0.7, 0.7)
-focus_mode = 0
-theme_override_font_sizes/font_size = 12
-text = "TIME"
-
-[node name="TestStormBtn2" type="Button" parent="OverlayUI/TestButtons"]
-texture_filter = 1
-layout_mode = 0
-offset_left = 142.0
-offset_top = 237.0
-offset_right = 203.0
-offset_bottom = 257.0
-scale = Vector2(0.7, 0.7)
-focus_mode = 0
-theme_override_font_sizes/font_size = 12
-text = "NEXT PHASE"
-
-[node name="TestCombineItems" type="Button" parent="OverlayUI/TestButtons"]
-texture_filter = 1
-layout_mode = 0
-offset_left = 187.0
-offset_top = 252.0
-offset_right = 261.0
-offset_bottom = 272.0
-scale = Vector2(0.7, 0.7)
-focus_mode = 0
-theme_override_font_sizes/font_size = 12
-text = "COMBINE ITEMS"
-
-[node name="AudioPreloader" parent="OverlayUI/TestButtons" instance=ExtResource("84_s4yud")]
-scene_audio = Array[ExtResource("85_w0i1c")]([ExtResource("86_ou5t4")])
-
 [node name="PlayerStatsHUD" type="Control" parent="OverlayUI" node_paths=PackedStringArray("health_component", "stamina_component")]
 unique_name_in_owner = true
 layout_mode = 3
@@ -2332,6 +2156,7 @@ vertical_alignment = 2
 uppercase = true
 
 [node name="CornerFeedbackTint" type="TextureRect" parent="OverlayUI"]
+visible = false
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -3735,19 +3560,6 @@ layout_mode = 2
 [node name="Slot40" parent="OverlayUI/PlayerInvUI/AlternateInventoryPanel/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/MarginContainer/AlternateInvSlotGrid" instance=ExtResource("42_r422n")]
 layout_mode = 2
 
-[connection signal="pressed" from="OverlayUI/TestButtons/TestHurtBtn" to="OverlayUI/TestButtons" method="_on_test_hurt_btn_pressed"]
-[connection signal="pressed" from="OverlayUI/TestButtons/TestHealBtn" to="OverlayUI/TestButtons" method="_on_test_heal_btn_pressed"]
-[connection signal="pressed" from="OverlayUI/TestButtons/TestMusicBtn" to="OverlayUI/TestButtons" method="_on_test_music_btn_pressed"]
-[connection signal="pressed" from="OverlayUI/TestButtons/TestSaveBtn" to="OverlayUI/TestButtons" method="_on_test_save_btn_pressed"]
-[connection signal="pressed" from="OverlayUI/TestButtons/TestLoadBtn" to="OverlayUI/TestButtons" method="_on_test_load_btn_pressed"]
-[connection signal="pressed" from="OverlayUI/TestButtons/TestModBtn1" to="OverlayUI/TestButtons" method="_on_test_mod_btn_1_pressed"]
-[connection signal="pressed" from="OverlayUI/TestButtons/TestModBtn2" to="OverlayUI/TestButtons" method="_on_test_mod_btn_2_pressed"]
-[connection signal="pressed" from="OverlayUI/TestButtons/TestModBtn3" to="OverlayUI/TestButtons" method="_on_test_mod_btn_3_pressed"]
-[connection signal="pressed" from="OverlayUI/TestButtons/TestModBtn4" to="OverlayUI/TestButtons" method="_on_test_mod_btn_4_pressed"]
-[connection signal="pressed" from="OverlayUI/TestButtons/TestStormBtn" to="OverlayUI/TestButtons" method="_on_test_storm_pressed"]
-[connection signal="pressed" from="OverlayUI/TestButtons/TestTimeBtn" to="OverlayUI/TestButtons" method="_on_test_time_btn_pressed"]
-[connection signal="pressed" from="OverlayUI/TestButtons/TestStormBtn2" to="OverlayUI/TestButtons" method="_on_test_storm_btn_2_pressed"]
-[connection signal="pressed" from="OverlayUI/TestButtons/TestCombineItems" to="OverlayUI/TestButtons" method="_on_test_combine_items_pressed"]
 [connection signal="visibility_changed" from="OverlayUI/HotbarUI" to="OverlayUI/HotbarUI" method="_on_visibility_changed"]
 [connection signal="visibility_changed" from="OverlayUI/HotbarUI/HotbarNinePatch" to="OverlayUI/HotbarUI/HotbarNinePatch" method="_on_visibility_changed"]
 [connection signal="button_down" from="OverlayUI/PlayerInvUI/MainGridBackground/SortByName/SortByNameBtn" to="OverlayUI/PlayerInvUI" method="_on_sort_by_name_btn_button_down"]

@@ -22,7 +22,7 @@ signal enemies_in_range_changed(enemies_in_range: Array[Entity]) ## Emitted when
 
 @onready var collider: CollisionShape2D = $CollisionShape2D ## The collision shape for this detection component.
 
-var entity: Entity ## The ntity that this detection component belongs to.
+var entity: Entity ## The entity that this detection component belongs to.
 var original_radius: float = radius ## The original radius used to readjust the calculations after stealth.
 var current_stealth: int = 0 ## The extra percentage of closeness this entity can achieve to an enemy before being detected.
 var enemies_in_range: Array[Entity] = [] ## The enemies that we can see due to being inside the detection component radius of each of them. Array updated by detection components of those other entities.

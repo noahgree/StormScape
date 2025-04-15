@@ -5,8 +5,8 @@ static var scene: PackedScene = load("res://Entities/EntityCore/EntityTypes/Dyna
 
 @onready var particles: CPUParticles2D = $CPUParticles2D
 
-const MAX_TRAIL_LENGTH: float = 15.0
-var lifetime_timer: Timer = TimerHelpers.create_one_shot_timer(self, 0.5, _on_lifetime_timer_timeout)
+const MAX_TRAIL_LENGTH: float = 30.0
+var lifetime_timer: Timer = TimerHelpers.create_one_shot_timer(self, 0.15, _on_lifetime_timer_timeout)
 var is_fading: bool = false
 
 
@@ -27,7 +27,7 @@ func update_trail_position(pos: Vector2, particle_rot: float) -> void:
 	particles.emitting = true
 
 	if points.size() > MAX_TRAIL_LENGTH:
-		remove_point(0)
+		_on_lifetime_timer_timeout()
 
 func _on_lifetime_timer_timeout() -> void:
 	is_fading = true

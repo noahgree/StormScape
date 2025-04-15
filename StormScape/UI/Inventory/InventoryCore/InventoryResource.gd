@@ -6,6 +6,7 @@ signal inv_data_updated(index: int, item: InvItemResource) ## Emitted anytime th
 
 @export var title: String = "CHEST" ## The title to be used if opened in an alternate inv.
 @export_range(0, 40, 1) var main_inv_size: int = 10 ## The total number of slots in the inventory, not including the hotbar slots or the trash slot if it exists. Must match main slot grid count on any connected UI.
+@export var drop_on_death: bool = false ## When true, this entity will drop everything in its inventory when it dies.
 @export var starting_inv: Array[InvItemResource] = [] ## The inventory that should be loaded when this scene is instantiated.
 
 var inv: Array[InvItemResource] = [] ## The current inventory. Main source of truth.
@@ -21,6 +22,9 @@ func initialize_inventory(source: Node2D) -> void:
 	auto_decrementer.inv = self
 	if source is Player:
 		auto_decrementer.owning_entity_is_player = true
+
+	if drop_on_death:
+		source_node.tree_exiting.connect(drop_entire_inventory)
 
 	total_inv_size = main_inv_size + ((1 + Globals.HOTBAR_SIZE) if source is Player else 0)
 	inv.resize(total_inv_size)
@@ -159,6 +163,17 @@ func remove_item(index: int, amount: int) -> void:
 	else:
 		inv[index] = updated_item
 	inv_data_updated.emit(index, inv[index])
+
+## Drops all items in the inventory on to the ground.
+func drop_entire_inventory() -> void:
+	var i: int = 0
+	for item: InvItemResource in inv:
+		if item != null:
+			Item.spawn_on_ground(item.stats, item.quantity, source_node.global_position, 30, true, true, false)
+			inv[i] = null
+		i += 1
+
+	_emit_changes_for_all_indices()
 
 ## This updates all connected slots in order to reflect the UI properly.
 func _emit_changes_for_all_indices() -> void:
