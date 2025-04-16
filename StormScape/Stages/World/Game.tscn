@@ -602,21 +602,111 @@ position = Vector2(65, 140)
 
 [node name="TestRigidEntity4" parent="WorldRoot/Testing" instance=ExtResource("9_37jga")]
 position = Vector2(126, 160)
+immovable = true
 
 [node name="TestRigidEntity5" parent="WorldRoot/Testing" instance=ExtResource("9_37jga")]
 position = Vector2(145, 160)
+immovable = true
 
 [node name="TestRigidEntity6" parent="WorldRoot/Testing" instance=ExtResource("9_37jga")]
 position = Vector2(164, 160)
+immovable = true
 
 [node name="TestRigidEntity7" parent="WorldRoot/Testing" instance=ExtResource("9_37jga")]
 position = Vector2(183, 160)
+immovable = true
 
 [node name="TestRigidEntity8" parent="WorldRoot/Testing" instance=ExtResource("9_37jga")]
 position = Vector2(221, 160)
+immovable = true
 
 [node name="TestRigidEntity9" parent="WorldRoot/Testing" instance=ExtResource("9_37jga")]
 position = Vector2(202, 160)
+immovable = true
+
+[node name="TestRigidEntity11" parent="WorldRoot/Testing" instance=ExtResource("9_37jga")]
+position = Vector2(221, 141)
+immovable = true
+
+[node name="TestRigidEntity12" parent="WorldRoot/Testing" instance=ExtResource("9_37jga")]
+position = Vector2(221, 122)
+immovable = true
+
+[node name="TestRigidEntity13" parent="WorldRoot/Testing" instance=ExtResource("9_37jga")]
+position = Vector2(221, 103)
+immovable = true
+
+[node name="TestRigidEntity14" parent="WorldRoot/Testing" instance=ExtResource("9_37jga")]
+position = Vector2(178, 118)
+immovable = true
+
+[node name="TestRigidEntity15" parent="WorldRoot/Testing" instance=ExtResource("9_37jga")]
+position = Vector2(159, 118)
+immovable = true
+
+[node name="TestRigidEntity16" parent="WorldRoot/Testing" instance=ExtResource("9_37jga")]
+position = Vector2(140, 118)
+immovable = true
+
+[node name="TestRigidEntity17" parent="WorldRoot/Testing" instance=ExtResource("9_37jga")]
+position = Vector2(121, 118)
+immovable = true
+
+[node name="TestRigidEntity18" parent="WorldRoot/Testing" instance=ExtResource("9_37jga")]
+position = Vector2(102, 118)
+immovable = true
+
+[node name="TestRigidEntity19" parent="WorldRoot/Testing" instance=ExtResource("9_37jga")]
+position = Vector2(178, 99)
+immovable = true
+
+[node name="TestRigidEntity20" parent="WorldRoot/Testing" instance=ExtResource("9_37jga")]
+position = Vector2(178, 80)
+immovable = true
+
+[node name="TestRigidEntity21" parent="WorldRoot/Testing" instance=ExtResource("9_37jga")]
+position = Vector2(221, 84)
+immovable = true
+
+[node name="TestRigidEntity22" parent="WorldRoot/Testing" instance=ExtResource("9_37jga")]
+position = Vector2(221, 65)
+immovable = true
+
+[node name="TestRigidEntity23" parent="WorldRoot/Testing" instance=ExtResource("9_37jga")]
+position = Vector2(178, 61)
+immovable = true
+
+[node name="TestRigidEntity24" parent="WorldRoot/Testing" instance=ExtResource("9_37jga")]
+position = Vector2(178, 42)
+immovable = true
+
+[node name="TestRigidEntity25" parent="WorldRoot/Testing" instance=ExtResource("9_37jga")]
+position = Vector2(178, 23)
+immovable = true
+
+[node name="TestRigidEntity26" parent="WorldRoot/Testing" instance=ExtResource("9_37jga")]
+position = Vector2(197, 23)
+immovable = true
+
+[node name="TestRigidEntity27" parent="WorldRoot/Testing" instance=ExtResource("9_37jga")]
+position = Vector2(216, 23)
+immovable = true
+
+[node name="TestRigidEntity28" parent="WorldRoot/Testing" instance=ExtResource("9_37jga")]
+position = Vector2(235, 23)
+immovable = true
+
+[node name="TestRigidEntity29" parent="WorldRoot/Testing" instance=ExtResource("9_37jga")]
+position = Vector2(254, 23)
+immovable = true
+
+[node name="TestRigidEntity30" parent="WorldRoot/Testing" instance=ExtResource("9_37jga")]
+position = Vector2(240, 65)
+immovable = true
+
+[node name="TestRigidEntity31" parent="WorldRoot/Testing" instance=ExtResource("9_37jga")]
+position = Vector2(107, 160)
+immovable = true
 
 [node name="TestStaticEntity" parent="WorldRoot/Testing" instance=ExtResource("11_6kn41")]
 position = Vector2(221, 193)
@@ -705,6 +795,7 @@ inv = SubResource("Resource_vi22v")
 
 [node name="BasicZombie" parent="WorldRoot/Testing" instance=ExtResource("30_6gn56")]
 position = Vector2(-3, -3)
+enabled = false
 
 [node name="BasicZombie2" parent="WorldRoot/Testing" instance=ExtResource("30_6gn56")]
 position = Vector2(55, -7)
@@ -751,7 +842,7 @@ position = Vector2(22, -13)
 enabled = false
 
 [node name="Player" parent="WorldRoot" instance=ExtResource("4_ptig0")]
-position = Vector2(226, 75)
+position = Vector2(278, 70)
 
 [node name="PlayerCamera" type="Camera2D" parent="WorldRoot" node_paths=PackedStringArray("player") groups=["core"]]
 unique_name_in_owner = true

@@ -12,7 +12,7 @@ enum MeleeWeaponType { ## The kinds of melee weapons.
 @export_group("Normal Use Details")
 @export var effect_source: EffectSource ## The resource that defines what happens to the entity that is hit by this weapon. Includes things like damage and status effects.
 @export var stamina_cost: float = 3.0 ## The amount of stamina to consume per use.
-@export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var cooldown: float = 0.5 ## The minimum time between usages.
+@export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var use_cooldown: float = 0.5 ## The minimum time between usages.
 @export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var use_speed: float = 0.25 ## How long one swing, punch, or other kind of "usage" of this melee item takes.
 @export var swing_angle: int = 125 ## How wide of an angle to swing when triggered.
 @export_subgroup("Entity Effects")

@@ -9,8 +9,8 @@
 [ext_resource type="Texture2D" uid="uid://b1cms5yjmoiqi" path="res://Entities/Items/Weapons/ProjectileWeapons/Gattler/GattlerBaseFrameCT.tres" id="4_ajwg5"]
 [ext_resource type="Texture2D" uid="uid://dmuwcjpos2kl8" path="res://Entities/Items/Weapons/ProjectileWeapons/Gattler/gattler_base_frame.png" id="4_g5312"]
 [ext_resource type="Script" uid="uid://cje5bobi6o8bo" path="res://Entities/Items/Hitscans/HitscanResource.gd" id="5_ajwg5"]
-[ext_resource type="Resource" uid="uid://jdmp0abbwxm5" path="res://Entities/Player/PlayerCore/PlayerCamera/CamFXPresets/1.tres" id="5_evybt"]
 [ext_resource type="Script" uid="uid://cowjdnic7xmkp" path="res://UI/Inventory/PlayerInventory/StatDetail.gd" id="5_pxe5r"]
+[ext_resource type="Resource" uid="uid://jdmp0abbwxm5" path="res://Entities/Player/PlayerCore/PlayerCamera/CamFXPresets/1(NoFreeze).tres" id="6_d4fbp"]
 [ext_resource type="PackedScene" uid="uid://c17oqm8amalvy" path="res://Entities/Items/Weapons/ProjectileWeapons/Gattler/Gattler.tscn" id="6_huwqf"]
 [ext_resource type="Script" uid="uid://bj3r5oopspj6l" path="res://Entities/Items/Projectiles/ProjectileCore/ProjectileResource.gd" id="8_evybt"]
 [ext_resource type="Script" uid="uid://c2gdoebfp12dq" path="res://Entities/Stats/StatMod/StatModsCacheResource.gd" id="11_ojoph"]
@@ -197,7 +197,7 @@ fire_anim_dur = 0.0
 spawn_after_fire_anim = false
 post_fire_anim_delay = 0.0
 post_fire_anim_dur = 0.0
-firing_cam_fx = ExtResource("5_evybt")
+firing_cam_fx = ExtResource("6_d4fbp")
 casing_texture = ExtResource("1_pxe5r")
 casing_tint = Color(1, 1, 1, 1)
 firing_sound = "gattler_shot"
@@ -211,6 +211,7 @@ mag_size = 100
 reload_type = 0
 reload_delay = 0.0
 dont_consume_ammo = false
+hide_reload_ui = false
 mag_reload_time = 4.25
 mag_reload_anim_delay = 0.0
 single_proj_reload_time = 0.25
@@ -221,8 +222,6 @@ auto_ammo_count = 1
 auto_ammo_delay = 0.5
 recharge_uses_inv = false
 stamina_use_per_proj = 0.5
-hide_ammo_ui = false
-hide_reload_ui = false
 mag_reload_sound = ""
 proj_reload_sound = ""
 empty_mag_sound = ""
@@ -253,6 +252,7 @@ do_cluster_barrage = false
 barrage_proj_delay = 0.0
 ammo_in_mag = -1
 pullout_delay = 0.5
+hide_ammo_ui = false
 max_mods_override = -1
 blocked_mods = Array[StringName]([])
 s_mods = SubResource("Resource_fe8se")
@@ -302,6 +302,6 @@ draw_off_hand_offset = Vector2(0, 0)
 main_hand_offset = Vector2(0, 0)
 cooldowns_per_suid = true
 shown_cooldown_fills = Array[String](["overheat_penalty"])
-show_cursor_cooldown = false
+show_cursor_cooldown = true
 session_uid = 0
 metadata/_custom_type_script = "uid://dvasncq3tgljs"

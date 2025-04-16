@@ -36,14 +36,21 @@ func _on_before_load_game() -> void:
 
 #region Debug
 func _draw() -> void:
-	if equipped_item and DebugFlags.show_aiming_direction:
-		# Draw the equipped item position
+	if not equipped_item or not DebugFlags.show_aiming_direction:
+		return
+
+	if equipped_item is ProjectileWeapon:
 		var local_position: Vector2 = to_local(debug_origin_of_projectile_vector)
 		draw_circle(local_position, 4, Color.CORAL)
 
-		# Draw the direction vector
 		var direction_vector: Vector2 = Vector2.RIGHT.rotated(hands_anchor.rotation)
-		draw_line(local_position, local_position + direction_vector * 50, Color.GREEN, 0.25)
+		draw_line(local_position, local_position + direction_vector * 50, Color.GREEN, 0.3)
+	elif equipped_item is MeleeWeapon:
+		var local_position: Vector2 = to_local(entity.hands.main_hand.global_position)
+		draw_circle(local_position, 4, Color.CORAL)
+
+		var direction_vector: Vector2 = Vector2.RIGHT.rotated(hands_anchor.global_rotation)
+		draw_line(local_position, local_position + direction_vector * 50, Color.GREEN, 0.3)
 #endregion
 
 func _ready() -> void:
@@ -83,9 +90,7 @@ func _unhandled_input(event: InputEvent) -> void:
 	if not entity is Player:
 		return
 
-	if event is InputEventMouseMotion:
-		handle_aim(CursorManager.get_cursor_mouse_position())
-	elif event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
+	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
 		if event.is_pressed():
 			handle_trigger_pressed()
 		else:
@@ -99,10 +104,13 @@ func _unhandled_input(event: InputEvent) -> void:
 func _process(delta: float) -> void:
 	if Globals.focused_ui_is_open or Globals.focused_ui_is_closing_debounce:
 		return
-	if (equipped_item == null) or (not equipped_item.enabled) or (scale_is_lerping) or (not trigger_pressed):
+	handle_aim(CursorManager.get_cursor_mouse_position())
+	if (equipped_item == null) or (not equipped_item.enabled) or (scale_is_lerping):
 		return
-
-	equipped_item.hold_activate(delta)
+	if trigger_pressed:
+		equipped_item.hold_activate(delta)
+	elif equipped_item is Weapon:
+		equipped_item.hold_time = max(0, equipped_item.hold_time - delta)
 
 ## Removes the currently equipped item after letting it clean itself up.
 func unequip_current_item() -> void:
@@ -221,7 +229,7 @@ func _manage_proj_weapon_hands(facing_dir: Vector2) -> void:
 		return
 
 	var y_offset: float = equipped_item.proj_origin.y + equipped_item.stats.holding_offset.y
-	y_offset *= -1 if hands_anchor.scale.y < 0 else 1
+	y_offset *= hands_anchor.scale.y
 
 	var rotated_offset: Vector2 = Vector2(0, y_offset).rotated(hands_anchor.global_rotation)
 	var sprite_pos_with_offsets: Vector2 = hands_anchor.global_position + rotated_offset
@@ -256,19 +264,27 @@ func _manage_melee_weapon_hands(facing_dir: Vector2) -> void:
 	if not should_rotate:
 		return
 
+	var offset: Vector2 = Vector2(equipped_item.stats.holding_offset.x, equipped_item.stats.holding_offset.x)
+	offset.y *= hands_anchor.scale.y
+
 	var swing_angle_offset: float = hands_anchor.scale.y * deg_to_rad(equipped_item.stats.swing_angle / 2.0)
 	var sprite_visual_rot_offset: float = hands_anchor.scale.y * deg_to_rad(equipped_item.sprite_visual_rotation)
 
-	var origin_of_rotation: Vector2 = hands_anchor.global_position - Vector2(0, hands_anchor.global_rotation - swing_angle_offset + sprite_visual_rot_offset)
+	var rotated_offset: Vector2 = offset.rotated(hands_anchor.global_rotation)
+	var sprite_pos_with_offsets: Vector2 = hands_anchor.global_position + rotated_offset
+
+	var adjusted_aim_pos: Vector2 = (aim_target_pos - sprite_pos_with_offsets).rotated(sprite_visual_rot_offset - swing_angle_offset)
 
 	var curr_direction: Vector2 = Vector2.RIGHT.rotated(hands_anchor.global_rotation)
 
-	var lerped_direction_angle: float = LerpHelpers.lerp_direction(
-		curr_direction, aim_target_pos, origin_of_rotation,
-		entity.facing_component.rotation_lerping_factor
+	var lerped_direction_angle: float = LerpHelpers.lerp_direction_vectors(
+		curr_direction, adjusted_aim_pos, entity.facing_component.rotation_lerping_factor
 		).angle()
 
 	hands_anchor.global_rotation = lerped_direction_angle
+
+	# Debug drawing
+	queue_redraw()
 
 ## This manages how the hands operate when not holding a melee or projectile weapon.
 func _manage_normal_hands(facing_dir: Vector2) -> void:

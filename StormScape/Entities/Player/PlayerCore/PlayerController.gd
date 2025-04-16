@@ -3,6 +3,12 @@ class_name PlayerController
 ## The FSM controller specific to the player.
 
 
+#region Core
+func controller_process(delta: float) -> void:
+	super.controller_process(delta)
+	entity.facing_component.update_facing_dir(facing_method)
+#endregion
+
 #region Inputs
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("dash"):
@@ -19,12 +25,6 @@ func get_should_sprint() -> bool:
 
 func get_should_sneak() -> bool:
 	return Input.is_action_pressed("sneak")
-#endregion
-
-#region Core
-func controller_process(delta: float) -> void:
-	super.controller_process(delta)
-	entity.facing_component.update_facing_dir(FacingComponent.Method.MOUSE_POS)
 #endregion
 
 #region States

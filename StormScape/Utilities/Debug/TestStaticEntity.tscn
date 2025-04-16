@@ -1,4 +1,4 @@
-[gd_scene load_steps=28 format=3 uid="uid://bond8rty1ljh"]
+[gd_scene load_steps=29 format=3 uid="uid://bond8rty1ljh"]
 
 [ext_resource type="Script" uid="uid://cn2gulskgn7k3" path="res://Entities/EntityCore/EntityTypes/StaticEntity/StaticEntity.gd" id="1_uvrwn"]
 [ext_resource type="Script" uid="uid://dwmur0cosbbwh" path="res://UI/Inventory/InventoryCore/InventoryResource.gd" id="2_oq3a2"]
@@ -12,6 +12,7 @@
 [ext_resource type="PackedScene" uid="uid://cdfdy8m6ki3oq" path="res://Entities/Components/HealthComponent/HealthComponent.tscn" id="7_pas02"]
 [ext_resource type="PackedScene" uid="uid://4gl24qwdyti3" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/DmgHandler.tscn" id="10_b3858"]
 [ext_resource type="PackedScene" uid="uid://btba0jmsow1mx" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectReceiverComponent.tscn" id="10_o35vp"]
+[ext_resource type="PackedScene" uid="uid://cj2wy5f05cos4" path="res://Entities/EntityCore/Shadow/EntityShadow.tscn" id="11_axhmd"]
 [ext_resource type="PackedScene" uid="uid://co3n6m7efg8pd" path="res://Entities/Components/EffectComponents/StatusEffectsComponent/StatusEffectsComponent.tscn" id="11_swclu"]
 [ext_resource type="Script" uid="uid://ckiyd2nbdcofr" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/LifeStealHandler.gd" id="12_3rk2w"]
 [ext_resource type="Script" uid="uid://1qq7eo7lm8j6" path="res://Entities/Components/ItemComponents/LootTableComponent/LootTableEntry.gd" id="14_h0qkk"]
@@ -22,6 +23,7 @@
 script = ExtResource("2_oq3a2")
 title = "CHEST"
 main_inv_size = 10
+drop_on_death = false
 starting_inv = Array[ExtResource("3_4hy3y")]([])
 
 [sub_resource type="Resource" id="Resource_axhmd"]
@@ -37,9 +39,10 @@ metadata/_custom_type_script = "uid://1qq7eo7lm8j6"
 script = ExtResource("6_3mtfl")
 hit_loot_table = Array[ExtResource("14_h0qkk")]([SubResource("Resource_axhmd")])
 hit_spawn_chance = 1.0
+hit_chance_scale = 1
 remove_when_dropped = false
 require_dmg_on_hit = true
-hit_chance_scale = 1
+hp_percent_hit_checks = 15
 die_loot_table = Array[ExtResource("14_h0qkk")]([])
 die_spawn_chance = 100.0
 rarity_scaling_factors = Dictionary[int, float]({
@@ -55,7 +58,7 @@ metadata/_custom_type_script = "uid://baglarh3m4c8o"
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ur1i4"]
 size = Vector2(12, 12)
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_qp637"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_g1258"]
 resource_local_to_scene = true
 shader = ExtResource("3_xscca")
 
@@ -74,7 +77,7 @@ animations = [{
 "speed": 5.0
 }]
 
-[sub_resource type="Resource" id="Resource_3mapw"]
+[sub_resource type="Resource" id="Resource_5ao0g"]
 resource_local_to_scene = true
 script = ExtResource("12_3rk2w")
 metadata/_custom_type_script = "uid://ckiyd2nbdcofr"
@@ -102,21 +105,24 @@ shape = SubResource("RectangleShape2D_ur1i4")
 
 [node name="EntitySprite" parent="." instance=ExtResource("3_kbhyj")]
 unique_name_in_owner = true
-material = SubResource("ShaderMaterial_qp637")
+material = SubResource("ShaderMaterial_g1258")
 position = Vector2(0, -7)
 scale = Vector2(0.11, 0.11)
 sprite_frames = SubResource("SpriteFrames_rk4ta")
+
+[node name="EntityShadow" parent="." instance=ExtResource("11_axhmd")]
+position = Vector2(0, -1)
+scale = Vector2(1.08, 0.8)
 
 [node name="HealthComponent" parent="." instance=ExtResource("7_pas02")]
 infinte_hp = true
 
 [node name="ParticleEmissionComponent" parent="." instance=ExtResource("6_5h6dj")]
 
-[node name="EffectReceiverComponent" parent="." node_paths=PackedStringArray("affected_entity", "health_component", "dmg_handler") instance=ExtResource("10_o35vp")]
+[node name="EffectReceiverComponent" parent="." node_paths=PackedStringArray("affected_entity", "dmg_handler") instance=ExtResource("10_o35vp")]
 affected_entity = NodePath("..")
-health_component = NodePath("../HealthComponent")
 dmg_handler = NodePath("DmgHandler")
-life_steal_handler = SubResource("Resource_3mapw")
+life_steal_handler = SubResource("Resource_5ao0g")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="EffectReceiverComponent"]
 position = Vector2(0, -7)

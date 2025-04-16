@@ -51,7 +51,8 @@ enum EffectSourceSourceType {
 	FROM_MAGIC, ## For magic weapons.
 	FROM_TOOL, ## For melee weapons like pickaxes and axes that exist primary to interact with the world resources.
 	FROM_PHYSICAL_CONTACT, ## For physcial interactions like a punch or running into something with a hitbox attached to the body.
-	FROM_COMBAT_MELEE ## For melee weapons that are primarily damaging weapons like a sword (not tools like the pickaxe).
+	FROM_COMBAT_MELEE, ## For melee weapons that are primarily damaging weapons like a sword (not tools like the pickaxe).
+	FROM_CONSUMABLE ## For receiving effects from consuming consumables.
 }
 enum StatusEffectSourceType {
 	FROM_WEAPON, ## For any status effect that is the result of being hit by a weapon's hitbox (like projectiles).

@@ -5,8 +5,9 @@ class_name PlayerOverheadUI
 @export var tintable_overheat_progress_texture: Texture2D
 @export var max_overheat_progress_tint_color: Color
 
-@onready var reload_bar: TextureProgressBar = $VBoxContainer/ReloadBar
 @onready var overheat_bar: TextureProgressBar = $VBoxContainer/OverheatBar
+@onready var charge_bar: TextureProgressBar = $VBoxContainer/ChargeBar
+@onready var reload_bar: TextureProgressBar = $VBoxContainer/ReloadBar
 
 var default_overheat_progress_texture: Texture2D ## The default overheat progress texture used when not at max overheat.
 var overheat_tween: Tween = null ## The tween responsible for pulsing the overheat bar when at max overheat.
@@ -19,10 +20,12 @@ func _ready() -> void:
 ## Reset all aspects of this UI.
 func reset_all() -> void:
 	if overheat_tween: overheat_tween.kill()
-	reload_bar.hide()
 	overheat_bar.hide()
-	reload_bar.value = 0
+	charge_bar.hide()
+	reload_bar.hide()
 	overheat_bar.value = 0
+	charge_bar.value = 0
+	reload_bar.value = 0
 	overheat_bar.tint_progress = Color.WHITE
 	overheat_bar.texture_progress = default_overheat_progress_texture
 
@@ -35,6 +38,11 @@ func update_reload_progress(value: int) -> void:
 func update_overheat_progress(value: int) -> void:
 	overheat_bar.value = value
 	overheat_bar.visible = value > 3 # Using 3 since it looks empty when below that
+
+## Provides the charge progress bar with a new value.
+func update_charge_progress(value: int) -> void:
+	charge_bar.value = value
+	charge_bar.visible = value > 5 # Using 5 since we need to ensure they meant to hold down a charge
 
 ## Either enables or disables the max overheat visuals.
 func update_visuals_for_max_overheat(start: bool) -> void:

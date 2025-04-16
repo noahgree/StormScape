@@ -15,6 +15,7 @@ static func create(trans: Transform2D, size: Vector2,
 	var ghost_instance: SpriteGhost = ghost_scene.instantiate()
 	ghost_instance.transform = trans
 	ghost_instance.scale = size
+	ghost_instance.z_index = -1
 	if sprite_frame:
 		ghost_instance.texture = sprite_frame
 	ghost_instance.fade_out_time = fade_time

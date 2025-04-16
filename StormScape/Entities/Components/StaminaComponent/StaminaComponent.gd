@@ -142,6 +142,10 @@ func _on_stamina_wait_timer_timeout() -> void:
 	stamina_recharge_tween = create_tween()
 	stamina_recharge_tween.tween_method(_set_stamina, stamina, get_parent().stats.get_stat("max_stamina"), (get_parent().stats.get_stat("max_stamina") - stamina) / get_parent().stats.get_stat("stamina_recharge_rate"))
 
+## Returns if the current stamina is greater than or equal to the needed stamina.
+func has_enough_stamina(needed: float) -> bool:
+	return stamina >= needed
+
 #region Debug
 ## Increases or decreases stamina based on amount.
 func change_stamina_by_amount(amount: float) -> void:

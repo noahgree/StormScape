@@ -1,4 +1,4 @@
-[gd_scene load_steps=146 format=3 uid="uid://bl2igmtwo1a3v"]
+[gd_scene load_steps=147 format=3 uid="uid://bl2igmtwo1a3v"]
 
 [ext_resource type="Script" uid="uid://db4npghrxc6u" path="res://Entities/Enemies/Zombies/Basic/BasicZombie.gd" id="1_8bt15"]
 [ext_resource type="PackedScene" uid="uid://cj2wy5f05cos4" path="res://Entities/EntityCore/Shadow/EntityShadow.tscn" id="1_ko3ep"]
@@ -40,6 +40,7 @@
 [ext_resource type="Script" uid="uid://cbuaklpos5jdp" path="res://Entities/FSM/States/BaseStates/DieState.gd" id="32_kuvhw"]
 [ext_resource type="Script" uid="uid://bvla7pmnsimif" path="res://Entities/FSM/FSMCore/State.gd" id="33_qrtn1"]
 [ext_resource type="Script" uid="uid://q3yeopc5wdlo" path="res://Entities/FSM/States/EnemyStates/ChaseState.gd" id="34_dcca3"]
+[ext_resource type="Resource" uid="uid://cs2y6ebkb3wa7" path="res://Entities/FSM/FSMCore/MoveBehaviors/FullApproach.tres" id="40_lal78"]
 
 [sub_resource type="Resource" id="Resource_yrrsd"]
 script = ExtResource("2_dcca3")
@@ -102,7 +103,7 @@ height = 16.0
 [sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_6bt22"]
 polygon = PackedVector2Array(-5, -2.98466, -6, -1.98977, -5, 0, 5, 0, 6, -1.98977, 5, -2.98466)
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_qrtn1"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_lal78"]
 resource_local_to_scene = true
 shader = ExtResource("3_3cie3")
 
@@ -1025,7 +1026,7 @@ occluder = SubResource("OccluderPolygon2D_6bt22")
 
 [node name="EntitySprite" parent="YSorter" instance=ExtResource("2_8a5el")]
 unique_name_in_owner = true
-material = SubResource("ShaderMaterial_qrtn1")
+material = SubResource("ShaderMaterial_lal78")
 instance_shader_parameters/final_alpha = 1.0
 instance_shader_parameters/outline_thickness = 0.0
 instance_shader_parameters/override_color = Color(1, 1, 1, 0)
@@ -1085,6 +1086,7 @@ print_state_changes = true
 [node name="Controller" type="Node2D" parent="StateMachine"]
 script = ExtResource("30_tsyff")
 ray_start_offset = Vector2(0, -2)
+behavior = ExtResource("40_lal78")
 footstep_texture = ExtResource("25_kc883")
 _max_speed = 60.0
 _acceleration = 1000.0

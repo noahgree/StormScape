@@ -8,4 +8,4 @@ class_name BasicZombie
 func _ready() -> void:
 	super._ready()
 	if not enabled:
-		fsm.states = [IdleState.new(), DieState.new()]
+		fsm.states = [IdleState.new(), KnockbackState.new(), DieState.new()]

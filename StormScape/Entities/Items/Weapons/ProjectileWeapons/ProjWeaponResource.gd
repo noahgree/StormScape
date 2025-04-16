@@ -55,6 +55,7 @@ enum ReloadType { ## The kinds of reloads the weapon can have.
 @export var reload_type: ReloadType = ReloadType.MAGAZINE ## Whether to reload over time or all at once at the end.
 @export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var reload_delay: float ## An additional delay that occurs before the reload begins. This determines the runtime of the "before_single_reload" animation.
 @export var dont_consume_ammo: bool = false ## When true, this acts like infinite ammo where the weapon doesn't decrement the ammo in mag upon firing.
+@export var hide_reload_ui: bool = false ## When a player uses this, should the reloading UI be hidden.
 @export_subgroup("Magazine")
 @export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var mag_reload_time: float = 1.0 ## How long it takes to reload an entire mag.
 @export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var mag_reload_anim_delay: float ## An additional delay that occurs before the magazine reload begins. This will be clamped to the mag_reload_time.
@@ -69,9 +70,6 @@ enum ReloadType { ## The kinds of reloads the weapon can have.
 @export var recharge_uses_inv: bool = false ## When true, the ammo will recharge by consuming ammo from the inventory. When none is left, the recharges will stop.
 @export_subgroup("Stamina Use")
 @export_custom(PROPERTY_HINT_NONE, "suffix:stamina") var stamina_use_per_proj: float = 0.5 ## How much stamina is needed per projectile when stamina is the ammo type.
-@export_subgroup("UI")
-@export var hide_ammo_ui: bool = false ## When a player uses this, should the ammo UI be hidden.
-@export var hide_reload_ui: bool = false ## When a player uses this, should the reloading UI be hidden.
 @export_subgroup("Reloading FX")
 @export var mag_reload_sound: String ## The sound to play when reloading a whole mag.
 @export var proj_reload_sound: String ## The sound to play when reloading a single projectile.

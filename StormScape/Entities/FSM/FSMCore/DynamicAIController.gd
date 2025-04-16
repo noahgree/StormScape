@@ -10,18 +10,13 @@ class_name DynamicAIController
 @export var ray_start_offset: Vector2 = Vector2.ZERO ## How much to offset the starting point of the raycasts.
 
 @export_group("Avoidance Details")
-@export_range(0.01, 1, 0.01) var smoothing_factor: float = 0.2 ## The lerping rate for changing direction.
+@export_range(0.01, 1, 0.01) var smoothing_factor: float = 0.15 ## The lerping rate for changing direction.
 @export_range(0.01, 1, 0.01) var momentum_penalty_mult: float = 0.1 ## Penalizes directions that are 120º or more different from the current direction.
 @export var candidate_clearance_threshold: float = 12.0 ## How far away ray collisions must be when checking to see if we can fit through a gap (happens when the main direction is open but the ones adjacent to it are not).
 @export var avoidance_multiplier: float = 2.0 ## How much to multiply the motion that occurs when avoiding a local obstacle by.
 
-@export_group("Movement Behaviors")
-@export_range(0, 1, 0.01, "suffix:%") var behavior_blend: float = 0.3 ## 0 means only consider global & local movement contributions, 1 means do exactly as the behaviors below say, any blend in between 0 and 1 will compromise between the two accordingly.
-@export_range(0, 1, 0.01, "suffix:%") var approach_weight: float = 1.0 ## How much priority should be given to beelining for the target.
-@export_range(0, 1, 0.01, "suffix:%") var orbit_weight: float = 0.0 ## How much priority should be given to orbiting the target.
-@export_range(0, 1, 0.01, "suffix:%") var retreat_weight: float = 0.0 ## How much priority should be given to running directly away from the target.
-@export_range(-1, 1, 2, "suffix:1=CW | -1=CCW") var orbit_dir: int = 1 ## 1=clockwise, -1=counterclockwise for determining the orbit direction.
-@export_range(0, 1000, 1, "suffix:pixels") var desired_target_dist: int = 80 ## How far away ideally the entity should be performing these behaviors from its target. When too close or too far, the direction it should move gets stronger to allow it to more directly and accurately reposition.
+@export_group("Movement Behavior")
+@export var behavior: MoveBehaviorResource = MoveBehaviorResource.new()
 
 var nav_agent: NavigationAgent2D ## The global nav agent.
 var detector: DetectionComponent ## The detector component of the entity this is attached to, used to notify when enemies have entered or exited our detection range.
@@ -83,7 +78,7 @@ func setup() -> void:
 
 func controller_process(delta: float) -> void:
 	super.controller_process(delta)
-	entity.facing_component.update_facing_dir(FacingComponent.Method.MOVEMENT_DIR)
+	entity.facing_component.update_facing_dir(facing_method)
 
 #region Movement Vector
 #===========================================================================
@@ -100,40 +95,33 @@ func get_movement_vector() -> Vector2:
 	# Evaluate the local candidates
 	var ray_start: Vector2 = entity.global_position + ray_start_offset
 	var candidate_data: Dictionary = evaluate_local_candidates(ray_start, nav_direction)
-	var best_direction: Vector2 = candidate_data["best_direction"]
+	var best_local_direction: Vector2 = candidate_data["best_direction"]
 	var best_index: int = candidate_data["best_index"]
 	var candidate_scores: Array[float] = candidate_data["candidate_scores"]
 
-	# Confirm candidate clearance
-	var candidate_clear: bool = is_candidate_clear(best_index, candidate_scores, ray_start)
-
-	# Apply any confusion effects
-	best_direction = best_direction.rotated(entity.stats.get_stat("confusion_amount"))
-
-	# Blend the global navigation direction with the locally evaluated candidate
-	var preliminary_direction: Vector2 = ((nav_direction * global_weight) + (best_direction * local_weight)).normalized()
-
 	# If candidate clearance fails, compute the avoidance force
+	var candidate_clear: bool = is_candidate_clear(best_index, candidate_scores, ray_start)
 	if not candidate_clear:
 		var avoidance: Vector2 = compute_avoidance_force(ray_start, best_index)
 		avoidance *= avoidance_multiplier
 
-		# Blend the avoidance with the current desired direction
-		preliminary_direction = ((nav_direction * global_weight) + (best_direction * local_weight) + avoidance).normalized()
+		best_local_direction = (best_local_direction + avoidance).normalized()
 
-		# Optionally, if the avoidance force is very strong and is driving backward, override
-		if avoidance.length() > 0 and avoidance.dot(preliminary_direction) < 0:
-			preliminary_direction = avoidance.normalized()
+		# If the avoidance force is very strong and is driving backward, override entire local movement vector
+		if avoidance.length() > 0 and avoidance.dot(best_local_direction) < 0:
+			best_local_direction = avoidance.normalized()
 
 	# Blend in target-based behavior
-	preliminary_direction = apply_target_behavior(preliminary_direction)
+	best_local_direction = apply_target_behavior(best_local_direction)
+
+	# Apply any confusion effects
+	best_local_direction = best_local_direction.rotated(entity.stats.get_stat("confusion_amount"))
 
 	# Smooth the new direction with the last frame’s movement
-	var smoothed_direction: Vector2 = apply_dynamic_smoothing(preliminary_direction, last_movement_direction)
-	last_movement_direction = smoothed_direction
+	last_movement_direction = apply_dynamic_smoothing(best_local_direction, last_movement_direction).normalized()
 
 	queue_redraw()
-	return smoothed_direction
+	return last_movement_direction
 
 #===========================================================================
 # Helper: Cast a ray in the given direction for local obstacle checking.
@@ -265,43 +253,46 @@ func compute_avoidance_force(ray_start: Vector2, best_index: int) -> Vector2:
 #===========================================================================
 # Step 5: Blend in target behavior such as approaching, orbiting, or retreating.
 #===========================================================================
-func apply_target_behavior(direction: Vector2) -> Vector2:
+func apply_target_behavior(global_nav: Vector2) -> Vector2:
 	if target == null:
-		return direction
+		return global_nav
 
-	# Determine the vector toward the target.
+	# Compute a normalized vector pointing toward the target.
 	var to_target: Vector2 = target.global_position - entity.global_position
 	if to_target == Vector2.ZERO:
-		return direction  # Prevent division by zero.
+		return global_nav  # Avoid division by zero.
 	var target_direction: Vector2 = to_target.normalized()
-	var orbit_vector: Vector2 = target_direction.rotated(orbit_dir * deg_to_rad(90))
+	var orbit_vector: Vector2 = target_direction.rotated(behavior.orbit_dir * deg_to_rad(90))
 
-	# --- Dynamic Weighting Based on Distance ---
+	# --- Dynamic Weighting Based on Desired Target Distance ---
 	var distance_to_target: float = entity.global_position.distance_to(target.global_position)
-	var ratio: float = clampf(distance_to_target / float(desired_target_dist), 0.0, 2.0)
-	# When ratio == 1, the target is exactly at the desired distance.
-	# When ratio > 1, the target is farther than desired and we boost the approach.
-	# When ratio < 1, the target is too close and we boost the retreat.
+	var ratio: float = clamp(distance_to_target / behavior.desired_target_dist, 0.0, 2.0)
+	# ratio == 1.0: target is exactly at desired distance.
+	# ratio > 1.0: target is farther than desired; boost the approach.
+	# ratio < 1.0: target is too close; boost the retreat.
 	var approach_factor: float = 1.0
 	var retreat_factor: float = 1.0
 
 	if ratio < 1.0:
-		# Too close – decrease approach influence and increase retreat.
-		approach_factor = ratio           # Lower value (0 to 1) weakens approach.
-		retreat_factor = 1.0 + (1.0 - ratio)  # Boost retreat factor when close.
+		# When too close, weaken the approach and increase retreat.
+		approach_factor = ratio
+		retreat_factor = 1.0 + (1.0 - ratio)
 	else:
-		# Too far – strengthen approach.
+		# When too far, strengthen the approach.
 		approach_factor = 1.0 + (ratio - 1.0)
 		retreat_factor = 1.0
 
-	# --- Compose the behavior vector ---
-	# The orbit component remains unaffected.
-	var behavior_vector: Vector2 = (approach_weight * approach_factor * target_direction) + (orbit_weight * orbit_vector) + (retreat_weight * retreat_factor * (-target_direction))
+	# --- Combine the Behavior Components ---
+	# The orbit component can remain as assigned.
+	var behavior_vector: Vector2 = (behavior.approach_weight * approach_factor * target_direction) + (behavior.orbit_weight * orbit_vector) + (behavior.retreat_weight * retreat_factor * (-target_direction))
 	behavior_vector = behavior_vector.normalized()
 
-	# Blend the target behavior vector with your base navigation/avoidance direction.
-	var final_direction: Vector2 = ((1.0 - behavior_blend) * direction + (behavior_blend * behavior_vector)).normalized()
-	return final_direction
+	# --- Blend Behavior with Global Navigation ---
+	# behavior_blend of 0 means purely global nav,
+	# 1 means completely follow target behavior.
+	var modified_global: Vector2 = ((1.0 - behavior.behavior_blend) * global_nav + behavior.behavior_blend * behavior_vector).normalized()
+
+	return modified_global
 
 #===========================================================================
 # Step 6: Apply dynamic smoothing based on the last movement direction.
@@ -343,6 +334,7 @@ func notify_requested_knockback(knockback: Vector2) -> void:
 	match fsm.current_state.state_id:
 		"sneak", "idle", "stunned", "chase":
 			knockback_vector = (knockback_vector + knockback).limit_length(MAX_KNOCKBACK)
+			fsm.change_state("knockback")
 			reset_and_create_knockback_streak()
 
 func notify_spawn_ended() -> void:

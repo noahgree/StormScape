@@ -14,6 +14,9 @@ func _set_stats(new_stats: ItemResource) -> void:
 	if sprite:
 		sprite.texture = stats.in_hand_icon
 
+func _process(_delta: float) -> void:
+	_update_cursor_cooldown_ui()
+
 ## When activate is triggered, try and consume the item.
 func activate() -> void:
 	consume()
@@ -42,3 +45,12 @@ func consume() -> void:
 		source_entity.effect_receiver.handle_effect_source(stats.effect_source, source_entity)
 
 		source_slot.synced_inv.remove_item(source_slot.index, 1)
+
+## Updates the mouse cursor's cooldown progress based on active cooldowns.
+func _update_cursor_cooldown_ui() -> void:
+	if not source_entity is Player or not stats.show_cursor_cooldown:
+		return
+
+	if source_entity.inv.auto_decrementer.get_cooldown_source_title(stats.get_cooldown_id()) in stats.shown_cooldown_fills:
+		var tint_progress: float = source_entity.inv.auto_decrementer.get_cooldown_percent(stats.get_cooldown_id(), true)
+		CursorManager.update_vertical_tint_progress(tint_progress * 100.0)

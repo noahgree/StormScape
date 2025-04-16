@@ -8,11 +8,10 @@ class_name FacingComponent
 
 @onready var entity: Entity = get_parent() ## The entity this facing component controls.
 
-enum Method { MOVEMENT_DIR, TARGET_POS, MOUSE_POS, NONE } ## The ways the facing component can choose direction.
+enum Method { MOVEMENT_DIR, TARGET_POS, MOUSE_POS, ITEM_ROT, NONE } ## The ways the facing component can choose direction.
 
 var facing_dir: Vector2 ## The current animation vector determining animation directionality.
 var last_movement_dir: Vector2 ## The last movement dir if it is currently 0 so we know what direction to continue facing while standing still.
-var should_rotate: bool = true ## Reflects whether or not we are performing an action that prevents us from changing the current anim vector used by child states to rotate the entity animation.
 var rotation_lerping_factor: float = DEFAULT_ROTATION_LERPING_FACTOR ## The current lerping rate for getting the current mouse direction.
 const DEFAULT_ROTATION_LERPING_FACTOR: float = 0.1 ## The default lerping rate for getting the current mouse direction.
 
@@ -35,9 +34,10 @@ func _draw() -> void:
 func update_facing_dir(method: Method) -> void:
 	if DebugFlags.show_facing_dir:
 		queue_redraw()
-	if not should_rotate or Globals.focused_ui_is_open:
+	if Globals.focused_ui_is_open:
 		return
 
+	var entity_pos_with_sprite_offset: Vector2 = (entity.sprite.position / 2.0) + entity.global_position
 	match method:
 		Method.MOVEMENT_DIR:
 			var target_dir: Vector2 = entity.fsm.controller.get_movement_vector().normalized()
@@ -49,12 +49,17 @@ func update_facing_dir(method: Method) -> void:
 		Method.TARGET_POS:
 			var target: Entity = entity.fsm.controller.target
 			if target:
-				var entity_pos_with_sprite_offset: Vector2 = (entity.sprite.position / 2.0) + entity.global_position
 				facing_dir = LerpHelpers.lerp_direction(facing_dir, target.global_position, entity_pos_with_sprite_offset, rotation_lerping_factor)
 		Method.MOUSE_POS:
 			var target_pos: Vector2 = CursorManager.get_cursor_mouse_position()
-			var entity_pos_with_sprite_offset: Vector2 = (entity.sprite.position / 2.0) + entity.global_position
 			facing_dir = LerpHelpers.lerp_direction(facing_dir, target_pos, entity_pos_with_sprite_offset, rotation_lerping_factor)
+		Method.ITEM_ROT:
+			var item: EquippableItem = entity.hands.equipped_item
+			if item == null:
+				return
+			var direction: Vector2 = (item.global_position - entity_pos_with_sprite_offset).normalized()
+			var item_rotation: float = item.sprite.rotation
+			facing_dir = direction.rotated(-item_rotation if entity.hands.current_x_direction == -1 else item_rotation)
 
 ## Travels to a new animation in the animation tree.
 func travel_anim_tree(new_anim: String) -> void:

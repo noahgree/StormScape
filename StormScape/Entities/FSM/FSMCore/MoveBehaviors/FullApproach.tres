@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="MoveBehaviorResource" load_steps=2 format=3 uid="uid://cs2y6ebkb3wa7"]
+
+[ext_resource type="Script" uid="uid://c02fgnkpcm6fe" path="res://Entities/FSM/FSMCore/MoveBehaviors/MoveBehaviorResource.gd" id="1_gin2k"]
+
+[resource]
+script = ExtResource("1_gin2k")
+behavior_blend = 0.3
+approach_weight = 1.0
+orbit_weight = 0.0
+retreat_weight = 0.0
+orbit_dir = 1
+desired_target_dist = 20
+metadata/_custom_type_script = "uid://c02fgnkpcm6fe"

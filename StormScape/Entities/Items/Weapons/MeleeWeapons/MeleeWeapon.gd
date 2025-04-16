@@ -2,149 +2,173 @@
 @icon("res://Utilities/Debug/EditorIcons/melee_weapon.png")
 extends Weapon
 class_name MeleeWeapon
-## The base class for all melee weapons. Melee weapons are based on swings and have all needed behavior logic defined here.
+## The base class for all melee weapons, which are based on swings.
 
-enum RECENT_SWING_TYPE { NORMAL, CHARGED }
+enum WeaponState { IDLE, SWINGING } ## The states the melee weapon can be in.
+enum RecentSwingType { NORMAL, CHARGED } ## The kinds of usage that could have just occurred.
 
 @export var sprite_visual_rotation: float = 45 ## How rotated the drawn sprite is by default when imported. Straight up would be 0º, angling top-right would be 45º, etc.
 
 @onready var hitbox_component: HitboxComponent = %HitboxComponent ## The hitbox responsible for applying the melee hit.
 
-var is_swinging: bool = false ## Whether we are currently swinging the weapon in some fashion.
-var recent_swing_type: RECENT_SWING_TYPE = RECENT_SWING_TYPE.NORMAL ## The most recent type of usage.
+var state: WeaponState = WeaponState.IDLE
+var recent_swing_type: RecentSwingType = RecentSwingType.NORMAL ## The most recent type of usage.
 
 
 func _ready() -> void:
 	if Engine.is_editor_hint():
 		return
-
 	super._ready()
 
-	call_deferred("_disable_collider")
-	update_ammo_ui()
-	source_entity.stamina_component.stamina_changed.connect(
-		func(_new_stamina: float, _old_stamina: float) -> void: update_ammo_ui()
-		)
-
 	hitbox_component.source_entity = source_entity
+	set_deferred("hitbox_component:collider:disabled", true)
 
+	if source_entity is Player:
+		source_entity.stamina_component.stamina_changed.connect(
+			func(_new_stamina: float, _old_stamina: float) -> void: update_ammo_ui()
+			)
+
+## Called when the weapon first enters, but after the _ready function.
+func enter() -> void:
+	if stats.s_mods.get_stat("pullout_delay") > 0:
+		pullout_delay_timer.start(stats.s_mods.get_stat("pullout_delay"))
+
+	update_ammo_ui()
+	reset_animation_state("MeleeWeaponAnimLibrary/RESET")
+
+## Called when the weapon is about to queue_free, but before the _exit_tree function.
+func exit() -> void:
+	super.exit()
+	source_entity.fsm.controller.reset_facing_method()
+
+## Updates the UIs that depend on frame-by-frame updates.
 func _process(_delta: float) -> void:
 	if Engine.is_editor_hint():
 		return
 
-	var cooldown_remaining: float = source_entity.inv.auto_decrementer.get_cooldown(stats.get_cooldown_id())
-	var original_cooldown: float = source_entity.inv.auto_decrementer.get_original_cooldown(stats.get_cooldown_id())
-	if cooldown_remaining > 0:
-		CursorManager.update_vertical_tint_progress((1 - (cooldown_remaining / original_cooldown)) * 100.0)
-	else:
-		CursorManager.update_vertical_tint_progress(100.0)
+	if source_entity is Player:
+		_update_overhead_charge_ui()
+	_update_cursor_cooldown_ui()
 
-## Disables the hitbox collider for the weapon.
-func _disable_collider() -> void:
-	hitbox_component.collider.disabled = true
+## Checks the conditions needed to be able to start using the weapon. If they all pass, it returns true.
+func _can_activate_at_all(for_charged: bool) -> bool:
+	if (not pullout_delay_timer.is_stopped()) or (get_cooldown() > 0):
+		return false
+	match state:
+		WeaponState.IDLE:
+			var cost: float = stats.s_mods.get_stat("stamina_cost")
+			if for_charged:
+				cost = stats.s_mods.get_stat("charge_stamina_cost")
+				if not stats.can_do_charge_use:
+					return false
+			if source_entity.stamina_component.has_enough_stamina(cost):
+				return true
+			return false
+		_:
+			return false
 
-func enter() -> void:
-	anim_player.play("MeleeWeaponAnimLibrary/RESET")
-
-	if stats.s_mods.get_stat("pullout_delay") > 0:
-		pullout_delay_timer.start(stats.s_mods.get_stat("pullout_delay"))
-
-func exit() -> void:
-	super.exit()
-	source_entity.facing_component.should_rotate = true
-
-## Overrides the parent method to specify what to do on holding use while equipped.
-func hold_activate(delta: float) -> void:
-	if not pullout_delay_timer.is_stopped() or not source_entity.inv.auto_decrementer.get_cooldown(stats.get_cooldown_id()) == 0 or is_swinging:
-		hold_time = 0
+## Called when a trigger is initially pressed.
+func activate() -> void:
+	if stats.can_do_charge_use or not _can_activate_at_all(false):
 		return
 
+	_swing()
+
+## Called for every frame that a trigger is pressed.
+func hold_activate(delta: float) -> void:
 	hold_time += delta
 
-	if stats.auto_do_charge_use and stats.can_do_charge_use:
-		if (hold_time >= stats.s_mods.get_stat("min_charge_time")):
+	if _can_activate_at_all(true):
+		if stats.auto_do_charge_use and (hold_time >= stats.s_mods.get_stat("min_charge_time")):
+			hold_time = 0
 			_charge_swing()
-
-## Overrides the parent method to specify what to do on release of a holding use while equipped.
-func release_hold_activate() -> void:
-	if not pullout_delay_timer.is_stopped() or not source_entity.inv.auto_decrementer.get_cooldown(stats.get_cooldown_id()) == 0 or is_swinging:
-		hold_time = 0
-		return
-
-	if stats.can_do_charge_use and (hold_time >= stats.s_mods.get_stat("min_charge_time")):
-		_charge_swing()
 	else:
+		hold_time = max(0, hold_time - delta)
+
+## Called when a trigger is released.
+func release_hold_activate() -> void:
+	if (hold_time >= stats.s_mods.get_stat("min_charge_time")) and _can_activate_at_all(true):
+		hold_time = 0
+		_charge_swing()
+	elif _can_activate_at_all(false):
 		_swing()
 
 ## Begins the logic for doing a normal weapon swing.
 func _swing() -> void:
-	if source_entity.stamina_component.use_stamina(stats.s_mods.get_stat("stamina_cost")):
-		recent_swing_type = RECENT_SWING_TYPE.NORMAL
+	state = WeaponState.SWINGING
+	source_entity.stamina_component.use_stamina(stats.s_mods.get_stat("stamina_cost"))
+	recent_swing_type = RecentSwingType.NORMAL
 
-		hitbox_component.effect_source = stats.effect_source
-		hitbox_component.collision_mask = hitbox_component.effect_source.scanned_phys_layers
+	# Force no rotation during normal swings
+	source_entity.fsm.controller.facing_method = FacingComponent.Method.NONE
+	source_entity.hands.snap_y_scale()
 
-		var cooldown_time: float = stats.cooldown + stats.s_mods.get_stat("use_speed")
-		source_entity.inv.auto_decrementer.add_cooldown(stats.get_cooldown_id(), cooldown_time)
-		is_swinging = true
-		source_entity.facing_component.should_rotate = false
+	_set_hitbox_effect_source_and_collision(stats.effect_source)
+	_apply_start_use_effect(false)
+	add_cooldown(stats.s_mods.get_stat("use_cooldown") + stats.s_mods.get_stat("use_speed"))
 
-		_apply_start_use_effect(false)
+	await _start_swing_anim_and_fx(false)
 
-		var lib: AnimationLibrary = anim_player.get_animation_library("MeleeWeaponAnimLibrary")
-		var anim: Animation = lib.get_animation("use")
-		var main_sprite_track: int = anim.find_track("ItemSprite:rotation", Animation.TYPE_VALUE)
-		anim.track_set_key_value(main_sprite_track, 1, deg_to_rad(stats.s_mods.get_stat("swing_angle")))
-
-		anim_player.speed_scale = 1.0 / stats.s_mods.get_stat("use_speed")
-		anim_player.play("MeleeWeaponAnimLibrary/use")
-
-		AudioManager.play_2d(stats.use_sound, source_entity.global_position)
+	state = WeaponState.IDLE
+	source_entity.fsm.controller.reset_facing_method()
+	_apply_post_use_effect(false)
 
 ## Begins the logic for doing a charged swing.
 func _charge_swing() -> void:
-	hitbox_component.effect_source = stats.charge_effect_source
-	hitbox_component.collision_mask = hitbox_component.effect_source.scanned_phys_layers
+	state = WeaponState.SWINGING
+	source_entity.stamina_component.use_stamina(stats.s_mods.get_stat("charge_stamina_cost"))
+	recent_swing_type = RecentSwingType.CHARGED
 
-	if source_entity.stamina_component.use_stamina(stats.s_mods.get_stat("charge_stamina_cost")):
-		recent_swing_type = RECENT_SWING_TYPE.CHARGED
+	# Follow the rotation of the swing during charged swings, since it will likely spin all the way around
+	source_entity.fsm.controller.facing_method = FacingComponent.Method.ITEM_ROT
+	source_entity.hands.snap_y_scale()
 
-		var cooldown_time: float = stats.s_mods.get_stat("charge_use_cooldown") + stats.s_mods.get_stat("charge_use_speed")
-		source_entity.inv.auto_decrementer.add_cooldown(stats.get_cooldown_id(), cooldown_time)
-		is_swinging = true
-		source_entity.facing_component.should_rotate = false
-		source_entity.hands.snap_y_scale()
+	_set_hitbox_effect_source_and_collision(stats.charge_effect_source)
+	_apply_start_use_effect(true)
+	add_cooldown(stats.s_mods.get_stat("charge_use_cooldown") + stats.s_mods.get_stat("charge_use_speed"))
 
-		_apply_start_use_effect(true)
+	await _start_swing_anim_and_fx(true)
 
-		var lib: AnimationLibrary = anim_player.get_animation_library("MeleeWeaponAnimLibrary")
-		var anim: Animation = lib.get_animation("charge_use")
-		var main_sprite_track: int = anim.find_track("ItemSprite:rotation", Animation.TYPE_VALUE)
-		anim.track_set_key_value(main_sprite_track, 1, deg_to_rad(stats.s_mods.get_stat("charge_swing_angle")))
+	state = WeaponState.IDLE
+	source_entity.fsm.controller.reset_facing_method()
+	_apply_post_use_effect(true)
 
-		anim_player.speed_scale = 1.0 / stats.s_mods.get_stat("charge_use_speed")
-		anim_player.play("MeleeWeaponAnimLibrary/charge_use")
+## Sets the hitbox's effect source and collision mask (what to hit) for the swing.
+func _set_hitbox_effect_source_and_collision(new_effect_source: EffectSource) -> void:
+	hitbox_component.effect_source = new_effect_source
+	hitbox_component.collision_mask = new_effect_source.scanned_phys_layers
 
-		AudioManager.play_2d(stats.charge_use_sound, source_entity.global_position)
+## Starts the swing animation and plays any associated fx. Awaits the animation ending and returns control to the caller.
+func _start_swing_anim_and_fx(for_charged: bool) -> void:
+	AudioManager.play_2d(stats.charge_use_sound if for_charged else stats.use_sound, source_entity.global_position)
+
+	var library: AnimationLibrary = anim_player.get_animation_library("MeleeWeaponAnimLibrary")
+	var anim: Animation = library.get_animation("charge_use" if for_charged else "use")
+	var angle_radians: float = deg_to_rad(stats.s_mods.get_stat("charge_swing_angle" if for_charged else "swing_angle"))
+	var main_sprite_track: int = anim.find_track("ItemSprite:rotation", Animation.TYPE_VALUE)
+	anim.track_set_key_value(main_sprite_track, 1, angle_radians)
+
+	var use_speed: float = stats.s_mods.get_stat("charge_use_speed" if for_charged else "use_speed")
+	if use_speed > 0:
+		anim_player.speed_scale = 1.0 / use_speed
+		anim_player.play("MeleeWeaponAnimLibrary/charge_use" if for_charged else "MeleeWeaponAnimLibrary/use")
+		await anim_player.animation_finished
 
 ## Spawns a ghosting effect of the weapon sprite to immitate a fast whoosh.
 func _spawn_ghost() -> void:
-	var current_anim: String = sprite.animation
-	var current_frame: int = sprite.frame
-	var sprite_texture: Texture2D = sprite.sprite_frames.get_frame_texture(current_anim, current_frame)
+	var sprite_texture: Texture2D = sprite.sprite_frames.get_frame_texture(sprite.animation, sprite.frame)
+	var fade_time: float = stats.ghost_fade_time
+	if recent_swing_type == RecentSwingType.CHARGED:
+		fade_time = stats.charge_ghost_fade_time
 
 	var adjusted_transform: Transform2D = sprite.global_transform
-	var fade_time: float = stats.ghost_fade_time if recent_swing_type != RECENT_SWING_TYPE.CHARGED else stats.charge_ghost_fade_time
-
 	var ghost_instance: SpriteGhost = SpriteGhost.create(adjusted_transform, sprite.scale, sprite_texture, fade_time)
+
+	ghost_instance.scale = Vector2(1, -1) if source_entity.hands.current_x_direction != 1 else Vector2(1, 1)
 	ghost_instance.flip_h = sprite.flip_h
-
-	if source_entity.hands.current_x_direction != 1:
-		ghost_instance.scale = Vector2(1, -1)
-
 	ghost_instance.offset = sprite.offset
-	ghost_instance.z_index -= 1
 	ghost_instance.make_white()
+
 	Globals.world_root.add_child(ghost_instance)
 
 ## Applies a status effect to the source entity at the start of use.
@@ -159,15 +183,17 @@ func _apply_post_use_effect(was_charge_fire: bool = false) -> void:
 	if effect != null:
 		source_entity.effect_receiver.handle_status_effect(effect)
 
-## When the swing animation ends, mark that we are no longer swinging and let the entity rotate again.
-func _on_use_animation_ended(was_charge_use: bool = false) -> void:
-	is_swinging = false
-	source_entity.facing_component.should_rotate = true
-
-	_apply_post_use_effect(was_charge_use)
-
 ## If a connected ammo UI exists (i.e. for a player), update it with the new ammo available.
 ## Typically just reflects the stamina.
 func update_ammo_ui() -> void:
-	if ammo_ui != null:
-		ammo_ui.update_mag_ammo(source_entity.stamina_component.stamina)
+	if ammo_ui == null or stats.hide_ammo_ui:
+		return
+	ammo_ui.update_mag_ammo(source_entity.stamina_component.stamina)
+
+## Updates the mouse cursor's cooldown progress based on active cooldowns.
+func _update_cursor_cooldown_ui() -> void:
+	if not source_entity is Player:
+		return
+	if source_entity.inv.auto_decrementer.get_cooldown_source_title(stats.get_cooldown_id()) in stats.shown_cooldown_fills:
+		var tint_progress: float = source_entity.inv.auto_decrementer.get_cooldown_percent(stats.get_cooldown_id(), true)
+		CursorManager.update_vertical_tint_progress(tint_progress * 100.0)

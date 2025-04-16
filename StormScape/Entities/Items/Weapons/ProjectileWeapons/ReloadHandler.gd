@@ -30,7 +30,7 @@ func _init(parent_weapon: ProjectileWeapon) -> void:
 func attempt_reload() -> void:
 	if weapon.stats.ammo_type in [ProjWeaponResource.ProjAmmoType.STAMINA, ProjWeaponResource.ProjAmmoType.SELF, ProjWeaponResource.ProjAmmoType.CHARGES]:
 		return
-	if _mag_is_full() or _get_more_reload_ammo(1, false) == 0:
+	if _get_more_reload_ammo(1, false) == 0:
 		return
 
 	weapon.source_entity.hands.off_hand_sprite.self_modulate.a = 0.0
@@ -40,7 +40,7 @@ func attempt_reload() -> void:
 	await reload_ended
 
 ## Checks to see if the mag is already full. Returns true if it is.
-func _mag_is_full() -> bool:
+func mag_is_full() -> bool:
 	return weapon.stats.ammo_in_mag >= weapon.stats.s_mods.get_stat("mag_size")
 
 ## Starts the timer that tracks the entire duration of the reload in order to provide the UI with continuous progress.
@@ -223,20 +223,12 @@ func update_overhead_and_cursor_ui() -> void:
 	if not weapon.overhead_ui or weapon.stats.hide_reload_ui:
 		return
 
-	if reload_dur_timer.is_stopped():
-		weapon.overhead_ui.update_reload_progress(0)
-
-		# Only want to update the cursor tint here if we aren't allowed to show cooldowns on the cursor tint
-		if not weapon.stats.show_cursor_cooldown:
-			CursorManager.update_vertical_tint_progress(0)
-		return
-
 	var total_reload: float = reload_dur_timer.wait_time
 	var time_left: float = reload_dur_timer.time_left
 	var progress: int = int((1.0 - (time_left / total_reload)) * 100)
 
 	weapon.overhead_ui.update_reload_progress(progress)
 
-	# Only want to show the reload on the cursor tint if we aren't allowed to show cooldowns on the cursor tint
-	if not weapon.stats.show_cursor_cooldown:
+	# Only show reload cursor tint if we aren't showing another cooldown
+	if not auto_decrementer.get_cooldown_source_title(weapon.stats.get_cooldown_id()) in weapon.stats.shown_cooldown_fills or not weapon.stats.shown_cooldown_fills:
 		CursorManager.update_vertical_tint_progress(progress)

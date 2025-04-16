@@ -1,9 +1,9 @@
 [gd_resource type="Resource" script_class="CamFXResource" load_steps=2 format=3 uid="uid://y5iqfraea8ry"]
 
-[ext_resource type="Script" uid="uid://dvirx67s12tmd" path="res://Entities/Player/PlayerCore/PlayerCamera/CamFXResource.gd" id="1_bfr3b"]
+[ext_resource type="Script" uid="uid://dvirx67s12tmd" path="res://Entities/Player/PlayerCore/PlayerCamera/CamFXResource.gd" id="1_1wuy2"]
 
 [resource]
-script = ExtResource("1_bfr3b")
+script = ExtResource("1_1wuy2")
 shake_strength = 1.0
 shake_duration = 0.04
 shake_trans_type = 2
@@ -23,4 +23,4 @@ trans_use_falloff = true
 freeze_player_only = false
 freeze_max_dist = 125
 freeze_uses_falloff = true
-metadata/_custom_type_script = ExtResource("1_bfr3b")
+metadata/_custom_type_script = "uid://dvirx67s12tmd"

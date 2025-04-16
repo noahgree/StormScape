@@ -4,7 +4,7 @@
 [ext_resource type="Resource" uid="uid://c8reitxej77jy" path="res://Entities/Stats/EffectSystemResources/StatusEffects/BadEffects/Burning/Burning1FlameBlower.tres" id="3_cibnu"]
 [ext_resource type="Script" uid="uid://boo31eu083dqd" path="res://Entities/Stats/EffectSystemResources/StatusEffects/StatusEffect.gd" id="3_frpgg"]
 [ext_resource type="Script" uid="uid://cowjdnic7xmkp" path="res://UI/Inventory/PlayerInventory/StatDetail.gd" id="4_5cw7p"]
-[ext_resource type="Resource" uid="uid://cl4lqk1b8bquo" path="res://Entities/Player/PlayerCore/PlayerCamera/CamFXPresets/0.tres" id="5_ifwgd"]
+[ext_resource type="Resource" uid="uid://cl4lqk1b8bquo" path="res://Entities/Player/PlayerCore/PlayerCamera/CamFXPresets/0(NoFreeze).tres" id="5_cibnu"]
 [ext_resource type="Texture2D" uid="uid://bhse86b50y7vx" path="res://Entities/Items/Weapons/ProjectileWeapons/FlameBlower/FlameBlowerBaseFrameCT.tres" id="6_1teer"]
 [ext_resource type="Script" uid="uid://cje5bobi6o8bo" path="res://Entities/Items/Hitscans/HitscanResource.gd" id="7_8pg8v"]
 [ext_resource type="Texture2D" uid="uid://dwtjxkvqe21h4" path="res://Entities/Items/Weapons/ProjectileWeapons/FlameBlower/flame_blower_base_frame.png" id="8_l60l2"]
@@ -178,7 +178,7 @@ fire_anim_dur = 0.0
 spawn_after_fire_anim = false
 post_fire_anim_delay = 0.0
 post_fire_anim_dur = 0.0
-firing_cam_fx = ExtResource("5_ifwgd")
+firing_cam_fx = ExtResource("5_cibnu")
 casing_tint = Color(1, 1, 1, 1)
 firing_sound = ""
 post_fire_sound = ""
@@ -191,6 +191,7 @@ mag_size = 100
 reload_type = 0
 reload_delay = 0.0
 dont_consume_ammo = true
+hide_reload_ui = false
 mag_reload_time = 1.0
 mag_reload_anim_delay = 0.0
 single_proj_reload_time = 0.25
@@ -201,8 +202,6 @@ auto_ammo_count = 1
 auto_ammo_delay = 0.5
 recharge_uses_inv = false
 stamina_use_per_proj = 0.5
-hide_ammo_ui = true
-hide_reload_ui = false
 mag_reload_sound = ""
 proj_reload_sound = ""
 empty_mag_sound = ""
@@ -230,6 +229,7 @@ do_cluster_barrage = true
 barrage_proj_delay = 0.0
 ammo_in_mag = -1
 pullout_delay = 0.25
+hide_ammo_ui = true
 max_mods_override = 0
 blocked_mods = Array[StringName]([])
 s_mods = SubResource("Resource_7cfgi")
@@ -278,5 +278,5 @@ draw_off_hand_offset = Vector2(0, 0)
 main_hand_offset = Vector2(0, 0)
 cooldowns_per_suid = true
 shown_cooldown_fills = Array[String](["overheat_penalty"])
-show_cursor_cooldown = false
+show_cursor_cooldown = true
 session_uid = 0

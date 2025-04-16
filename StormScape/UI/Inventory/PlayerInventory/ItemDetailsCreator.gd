@@ -148,7 +148,7 @@ func _get_attack_speed(stats: ItemResource) -> String:
 
 		string += StringHelpers.remove_trailing_zero(sum)
 	else:
-		string += _get_item_sums(stats, ["use_speed", "cooldown"], false, "s")
+		string += _get_item_sums(stats, ["use_speed", "use_cooldown"], false, "s")
 
 		if stats.can_do_charge_use:
 			var chg_sum: String = _get_item_sums(stats, ["min_charge_time", "charge_use_speed", "charge_use_cooldown"], false, "s")

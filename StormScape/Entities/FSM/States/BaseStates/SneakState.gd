@@ -9,10 +9,13 @@ func _init() -> void:
 	state_id = "sneak"
 
 func enter() -> void:
-	pass
+	if entity is Player:
+		SignalBus.player_sneak_state_changed.emit(true)
 
 func exit() -> void:
 	entity.detection_component.update_stealth(0)
+	if entity is Player:
+		SignalBus.player_sneak_state_changed.emit(false)
 
 func state_physics_process(delta: float) -> void:
 	_do_character_sneak(delta)

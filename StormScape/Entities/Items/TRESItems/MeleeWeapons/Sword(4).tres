@@ -1,11 +1,11 @@
 [gd_resource type="Resource" script_class="MeleeWeaponResource" load_steps=14 format=3 uid="uid://dk3vlbvu2b7eq"]
 
-[ext_resource type="Resource" uid="uid://cvqddapopo145" path="res://Entities/Player/PlayerCore/PlayerCamera/CamFXPresets/5.tres" id="1_gypsi"]
-[ext_resource type="Resource" uid="uid://y5iqfraea8ry" path="res://Entities/Player/PlayerCore/PlayerCamera/CamFXPresets/2.tres" id="2_emnl3"]
+[ext_resource type="Resource" uid="uid://o8dc73c74md6" path="res://Entities/Player/PlayerCore/PlayerCamera/CamFXPresets/4(NoFreeze).tres" id="1_e5g0w"]
 [ext_resource type="Script" uid="uid://djlk3y511igng" path="res://Entities/Items/Weapons/MeleeWeapons/MeleeWeaponResource.gd" id="2_k1y1s"]
 [ext_resource type="Script" uid="uid://boo31eu083dqd" path="res://Entities/Stats/EffectSystemResources/StatusEffects/StatusEffect.gd" id="3_8m4wh"]
 [ext_resource type="Script" uid="uid://dkfssottmsrch" path="res://Entities/Stats/EffectSystemResources/EffectSources/EffectSource.gd" id="3_67eer"]
 [ext_resource type="Script" uid="uid://ctxa7i1mbt7ab" path="res://UI/Inventory/PlayerInventory/Crafting/CraftingIngredient.gd" id="4_267mj"]
+[ext_resource type="Resource" uid="uid://y5iqfraea8ry" path="res://Entities/Player/PlayerCore/PlayerCamera/CamFXPresets/2(NoFreeze).tres" id="4_e5g0w"]
 [ext_resource type="Script" uid="uid://cowjdnic7xmkp" path="res://UI/Inventory/PlayerInventory/StatDetail.gd" id="5_3cchv"]
 [ext_resource type="Texture2D" uid="uid://b3wtl45dungco" path="res://Entities/Items/Weapons/MeleeWeapons/Sword/SwordBaseCT.tres" id="5_67eer"]
 [ext_resource type="PackedScene" uid="uid://dqsa4rcdahhwv" path="res://Entities/Items/Weapons/MeleeWeapons/Sword/Sword.tscn" id="5_gypsi"]
@@ -27,7 +27,7 @@ crit_multiplier = 1.5
 armor_penetration = 0
 base_healing = 0
 heal_affected_stats = 2
-impact_cam_fx = ExtResource("1_gypsi")
+impact_cam_fx = ExtResource("1_e5g0w")
 impact_sound = ""
 hit_flash_color = Color(1, 1, 1, 0.6)
 status_effects = Array[ExtResource("3_8m4wh")]([])
@@ -52,7 +52,7 @@ crit_multiplier = 1.5
 armor_penetration = 0
 base_healing = 0
 heal_affected_stats = 2
-impact_cam_fx = ExtResource("2_emnl3")
+impact_cam_fx = ExtResource("4_e5g0w")
 impact_sound = ""
 hit_flash_color = Color(1, 1, 1, 0.6)
 status_effects = Array[ExtResource("3_8m4wh")]([])
@@ -70,9 +70,9 @@ script = ExtResource("2_k1y1s")
 melee_weapon_type = 2
 effect_source = SubResource("Resource_chlgx")
 stamina_cost = 3.0
-cooldown = 0.2
-use_speed = 0.18
-swing_angle = 175
+use_cooldown = 0.3
+use_speed = 0.25
+swing_angle = 150
 ghost_fade_time = 0.32
 use_sound = ""
 can_do_charge_use = true
@@ -86,6 +86,7 @@ charge_stamina_cost = 25
 charge_ghost_fade_time = 1.0
 charge_use_sound = ""
 pullout_delay = 0.25
+hide_ammo_ui = false
 max_mods_override = -1
 blocked_mods = Array[StringName]([])
 s_mods = SubResource("Resource_vevwc")
@@ -125,8 +126,8 @@ recipe = Array[ExtResource("4_267mj")]([])
 output_quantity = 1
 recipe_unlocked = false
 item_scene = ExtResource("5_gypsi")
-rotation_lerping = 0.06
-holding_offset = Vector2(0, 0)
+rotation_lerping = 0.08
+holding_offset = Vector2(-4, 6)
 holding_degrees = 0.0
 is_gripped_by_one_hand = false
 draw_off_hand = false

@@ -3,6 +3,7 @@ class_name WeaponResource
 ## The base resource for all weapons. This will be subclasses to define more traits, but everything here applies to all weapons.
 
 @export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var pullout_delay: float = 0.25 ## How long after equipping must we wait before we can use this weapon.
+@export var hide_ammo_ui: bool = false ## Whether to hide the ammo UI when the player uses this weapon.
 @export_group("Modding Details")
 @export_range(-1, 6, 1) var max_mods_override: int = -1 ## The override for the maximum number of mod slots for this weapon. By default it is based on rarity. Anything other than -1 will activate the override.
 @export var blocked_mods: Array[StringName] = [] ## The string names of weapon mod titles that are not allowed to be applied to this weapon.

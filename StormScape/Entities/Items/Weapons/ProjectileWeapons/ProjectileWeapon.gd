@@ -26,8 +26,6 @@ var state: WeaponState = WeaponState.IDLE ## The current weapon state.
 var is_charging: bool = false ## When true, we are holding the trigger down and trying to charge up.
 var mouse_scan_area_targets: Array[Node] = [] ## The array of potential targets found and passed to the proj when using the "Mouse Position" homing method.
 var mouse_area: Area2D ## The area around the mouse that scans for targets when using the "Mouse Position" homing method
-var overhead_ui: PlayerOverheadUI ## The UI showing the overhead stat changes (like reloading) in progress. Only applicable and non-null for players.
-var preloaded_sounds: Array[StringName] = [] ## The sounds kept in memory while this weapon scene is alive that must be dereferenced upon exiting the tree.
 var requesting_reload_after_firing: bool = false ## This is flagged to true when a reload is requested during the firing animation and needs to wait until it is done.
 var current_hitscans: Array[Hitscan] = [] ## The currently spawned array of hitscans to get cleaned up when we unequip this weapon.
 var is_holding_continuous_beam: bool = false ## When true, we are holding down a continuous hitscan and should not recreate any new hitscan instances.
@@ -48,8 +46,6 @@ func _ready() -> void:
 	super._ready()
 
 	if source_entity is Player:
-		overhead_ui = source_entity.overhead_ui
-
 		# Update the ammo UI when stamina changes
 		if (stats.ammo_type == ProjWeaponResource.ProjAmmoType.STAMINA) and (not stats.hide_ammo_ui):
 				source_entity.stamina_component.stamina_changed.connect(
@@ -85,9 +81,10 @@ func enter() -> void:
 		pullout_delay_timer.start(stats.s_mods.get_stat("pullout_delay"))
 		pullout_delay_timer.timeout.connect(_on_pullout_delay_timer_timeout)
 
-	update_ammo_ui()
 	reload_handler.request_ammo_recharge()
-	_setup_mouse_area_scanner()
+	if source_entity is Player:
+		_setup_mouse_area_scanner()
+		update_ammo_ui()
 
 	# When entering, see if we stil are in overheat penalty and need to show the visuals again
 	if source_entity.inv.auto_decrementer.get_cooldown_source_title(stats.get_cooldown_id()) == "overheat_penalty":
@@ -111,10 +108,6 @@ func exit() -> void:
 	source_entity.hands.smoke_particles.visible = false
 
 	_clean_up_hitscans()
-
-## When this scene is ultimately freed, unregister any preloaded audio references.
-func _exit_tree() -> void:
-	AudioPreloader.unregister_sounds_from_ids(preloaded_sounds)
 
 ## When the pullout timer ends, see if we need to automatically reload.
 func _on_pullout_delay_timer_timeout() -> void:
@@ -202,6 +195,7 @@ func _process(_delta: float) -> void:
 		overhead_ui.reload_bar.hide()
 	overheat_handler.update_overlays_and_overhead_ui()
 	_update_cursor_cooldown_ui()
+	_update_overhead_charge_ui()
 
 ## Updates the homing mouse area every physics frame if it exists.
 func _physics_process(_delta: float) -> void:
@@ -229,7 +223,6 @@ func _can_activate_at_all() -> bool:
 ## Called when a trigger is initially pressed.
 func activate() -> void:
 	if not _can_activate_at_all():
-		hold_time = 0
 		return
 
 	if stats.firing_mode == ProjWeaponResource.FiringType.SEMI_AUTO:
@@ -238,10 +231,14 @@ func activate() -> void:
 ## Called for every frame that a trigger is pressed.
 func hold_activate(delta: float) -> void:
 	if not _can_activate_at_all():
-		hold_time = 0
+		hold_time = max(0, hold_time - delta)
 		return
 
+	hold_time += delta
+
 	match stats.firing_mode:
+		ProjWeaponResource.FiringType.SEMI_AUTO:
+			hold_time = 0
 		ProjWeaponResource.FiringType.AUTO:
 			hold_time = 0
 			start_firing_sequence()
@@ -256,14 +253,11 @@ func hold_activate(delta: float) -> void:
 				hold_time = 0
 				start_firing_sequence()
 
-	hold_time += delta
-
 ## Called when a trigger is released.
 func release_hold_activate() -> void:
 	_delay_clean_up_hitscans()
 
 	if not _can_activate_at_all():
-		hold_time = 0
 		return
 
 	if stats.firing_mode == ProjWeaponResource.FiringType.CHARGE:
@@ -272,9 +266,8 @@ func release_hold_activate() -> void:
 		is_charging = false
 
 		if hold_time >=  stats.s_mods.get_stat("min_charge_time"):
+			hold_time = 0
 			start_firing_sequence()
-
-	hold_time = 0
 
 ## Starts the main firing sequence that awaits at the needed steps each stage.
 func start_firing_sequence() -> void:
@@ -314,12 +307,17 @@ func start_firing_sequence() -> void:
 
 ## Called from the hands component when we press the reload key.
 func reload() -> void:
-	if state == WeaponState.IDLE:
-		state = WeaponState.RELOADING
-		await reload_handler.attempt_reload()
-		state = WeaponState.IDLE
-	elif state == WeaponState.FIRING:
-		requesting_reload_after_firing = true
+	if reload_handler.mag_is_full():
+		return
+	hold_time = 0
+
+	match state:
+		WeaponState.IDLE:
+			state = WeaponState.RELOADING
+			await reload_handler.attempt_reload()
+			state = WeaponState.IDLE
+		WeaponState.FIRING:
+			requesting_reload_after_firing = true
 
 ## Checks that the weapon has enough ammo to initiate the next firing sequence.
 func ensure_enough_ammo() -> bool:
@@ -332,7 +330,7 @@ func ensure_enough_ammo() -> bool:
 	match stats.ammo_type:
 		ProjWeaponResource.ProjAmmoType.STAMINA:
 			var stamina_needed: float = ammo_needed * stats.stamina_use_per_proj
-			has_needed_ammo = (source_entity.stamina_component.stamina >= stamina_needed)
+			has_needed_ammo = source_entity.stamina_component.has_enough_stamina(stamina_needed)
 		ProjWeaponResource.ProjAmmoType.SELF:
 			has_needed_ammo = true
 		_:
@@ -367,28 +365,17 @@ func update_ammo_ui() -> void:
 	ammo_ui.update_mag_ammo(count)
 	ammo_ui.calculate_inv_ammo()
 
-## Gets a current cooldown level from the auto decrementer based on the cooldown id.
-func get_cooldown() -> float:
-	return source_entity.inv.auto_decrementer.get_cooldown(stats.get_cooldown_id())
-
-## Adds a cooldown to the auto decrementer for the current cooldown id.
-func add_cooldown(duration: float, title: String = "default") -> void:
-	source_entity.inv.auto_decrementer.add_cooldown(stats.get_cooldown_id(), duration, title)
-
 ## Updates the mouse cursor's cooldown progress and coloration based on active cooldowns and/or overheats.
 func _update_cursor_cooldown_ui() -> void:
 	if not source_entity is Player:
 		return
 	if not stats.show_cursor_cooldown and not state == WeaponState.RELOADING:
-		CursorManager.update_vertical_tint_progress(100)
+		CursorManager.update_vertical_tint_progress(100.0)
 		return
 
-	var cooldown_remaining: float = get_cooldown()
-	var original_cooldown: float = source_entity.inv.auto_decrementer.get_original_cooldown(stats.get_cooldown_id())
-	var tint_progress: float = 100.0
-	if cooldown_remaining > 0:
-		tint_progress = (1 - (cooldown_remaining / original_cooldown)) * 100.0
-	CursorManager.update_vertical_tint_progress(tint_progress)
+	if source_entity.inv.auto_decrementer.get_cooldown_source_title(stats.get_cooldown_id()) in stats.shown_cooldown_fills:
+		var tint_progress: float = source_entity.inv.auto_decrementer.get_cooldown_percent(stats.get_cooldown_id(), true)
+		CursorManager.update_vertical_tint_progress(tint_progress * 100.0)
 
 ## Spawns a simulated ejected casing to fall to the ground. Requires a Marker2D in the scene called
 ## "CasingEjectionPoint". Must be called by the animation player due to varying timing of when it should
@@ -408,8 +395,3 @@ func _eject_casing(per_used_ammo: bool = false) -> void:
 		casing.sprite.texture = stats.casing_texture
 		if stats.casing_tint != Color.WHITE:
 			casing.sprite.modulate = stats.casing_tint
-
-## Resets the visual animation state of the weapon scene to its default.
-func reset_animation_state() -> void:
-	anim_player.play("RESET")
-	anim_player.stop()

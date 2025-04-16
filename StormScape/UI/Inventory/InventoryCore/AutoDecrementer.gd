@@ -61,6 +61,22 @@ func get_original_cooldown(item_id: StringName) -> float:
 ## Returns a string representing the cooldown source title if one exists, otherwise it returns a string of "null".
 func get_cooldown_source_title(item_id: StringName) -> String:
 	return cooldowns.get(item_id, {}).get(&"source_title", "null")
+
+## Returns a float from 0 -> 1 indicating progress so far, or optionally progress remaining if specified.
+## full_when_none_found means that it will return 1 (meaning 100%) if no cooldown exists for the item_id.
+func get_cooldown_percent(item_id: StringName, remaining: bool, full_when_none_found: bool = true) -> float:
+	if not cooldowns.has(item_id):
+		if full_when_none_found or not remaining:
+			return 1
+		else:
+			return 0
+
+	var cooldown: float = get_cooldown(item_id)
+	var original_cooldown: float = get_original_cooldown(item_id)
+	var progress: float = cooldown / original_cooldown
+	if remaining:
+		return (1 - progress)
+	return progress
 #endregion
 
 #region Warmups

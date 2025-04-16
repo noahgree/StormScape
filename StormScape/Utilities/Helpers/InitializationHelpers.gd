@@ -66,7 +66,7 @@ static func initialize_melee_wpn_stats_resource(stats_resource: MeleeWeaponResou
 
 	var normal_moddable_stats: Dictionary[StringName, float] = {
 		&"stamina_cost" : stats_resource.stamina_cost,
-		&"cooldown" : stats_resource.cooldown,
+		&"use_cooldown" : stats_resource.use_cooldown,
 		&"use_speed" : stats_resource.use_speed,
 		&"swing_angle" : stats_resource.swing_angle,
 		&"base_damage" : stats_resource.effect_source.base_damage,

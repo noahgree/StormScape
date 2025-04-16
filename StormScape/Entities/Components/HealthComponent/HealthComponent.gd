@@ -76,20 +76,21 @@ func damage_shield_then_health(amount: int, source_type: String, was_crit: bool,
 ## Decrements only the health value by the passed in amount.
 func damage_health(amount: int, source_type: String, was_crit: bool, _multishot_id: int) -> void:
 	if not is_dying:
+		var src_type: String = source_type if source_type != "basic_damage" else "health_damage"
+		_create_or_update_popup_for_src_type(src_type, false, was_crit, min(health, amount))
 		if not infinte_hp:
 			health = max(0, health - amount)
-		var src_type: String = source_type if source_type != "basic_damage" else "health_damage"
-		_create_or_update_popup_for_src_type(src_type, false, was_crit, amount)
 		_check_for_death()
 
 ## Decrements only the shield value by the passed in amount.
 func damage_shield(amount: int, source_type: String, was_crit: bool, multishot_id: int) -> void:
 	if not is_dying:
+		var src_type: String = source_type if source_type != "basic_damage" else "shield_damage"
+		_create_or_update_popup_for_src_type(src_type, false, was_crit, min(shield, amount))
 		if not infinte_hp:
 			shield = max(0, shield - amount)
-		var src_type: String = source_type if source_type != "basic_damage" else "shield_damage"
-		_create_or_update_popup_for_src_type(src_type, false, was_crit, amount)
-		if amount > 0: _play_sound("shield_hit", multishot_id)
+		if amount > 0:
+			_play_sound("shield_hit", multishot_id)
 
 ## Handles what happens when health reaches 0 for the entity.
 func _check_for_death() -> void:
@@ -115,32 +116,41 @@ func update_armor(new_armor: int) -> void:
 ## Heals to both health and shield, starting with health then applying any remaining amount to shield.
 func heal_health_then_shield(amount: int, source_type: String, _multishot_id: int) -> void:
 	if not is_dying:
-		if health < entity.stats.get_stat("max_health"):
+		var max_health: int = int(entity.stats.get_stat("max_health"))
+		var max_shield: int = int(entity.stats.get_stat("max_shield"))
+
+		if health < max_health:
 			var src_type: String = source_type if source_type != "basic_healing" else "health_healing"
-			_create_or_update_popup_for_src_type(src_type, true, false, amount)
+			var current_total: int = health + shield
+			var max_total: int = max_health + max_shield
+			_create_or_update_popup_for_src_type(src_type, true, false, min((max_total - current_total), amount))
 		else:
 			var src_type: String = source_type if source_type != "basic_healing" else "shield_healing"
-			_create_or_update_popup_for_src_type(src_type, true, false, amount)
+			_create_or_update_popup_for_src_type(src_type, true, false, min(max_shield - shield, amount))
 
-		var spillover_health: int = max(0, (amount + health) - entity.stats.get_stat("max_health"))
-		health = clampi(health + amount, 0, int(entity.stats.get_stat("max_health")))
+		var spillover_health: int = max(0, (amount + health) - max_health)
+		health = clampi(health + amount, 0, max_health)
 
 		if spillover_health > 0:
-			shield = clampi(shield + spillover_health, 0, int(entity.stats.get_stat("max_shield")))
+			shield = clampi(shield + spillover_health, 0, max_shield)
 
 ## Heals only health.
 func heal_health(amount: int, source_type: String, _multishot_id: int) -> void:
 	if not is_dying:
-		health = min(health + amount, entity.stats.get_stat("max_health"))
+		var max_health: int = int(entity.stats.get_stat("max_health"))
 		var src_type: String = source_type if source_type != "basic_healing" else "health_healing"
-		_create_or_update_popup_for_src_type(src_type, true, false, amount)
+		_create_or_update_popup_for_src_type(src_type, true, false, min(max_health - health, amount))
+
+		health = min(health + amount, max_health)
 
 ## Heals only shield.
 func heal_shield(amount: int, source_type: String, _multishot_id: int) -> void:
 	if not is_dying:
-		shield = min(shield + amount, entity.stats.get_stat("max_shield"))
+		var max_shield: int = int(entity.stats.get_stat("max_shield"))
 		var src_type: String = source_type if source_type != "basic_healing" else "shield_healing"
-		_create_or_update_popup_for_src_type(src_type, true, false, amount)
+		_create_or_update_popup_for_src_type(src_type, true, false, min(max_shield - shield, amount))
+
+		shield = min(shield + amount, max_shield)
 #endregion
 
 #region Setters & On-Change Funcs
@@ -200,6 +210,9 @@ func _play_sound(sound_name: String, multishot_id: int) -> void:
 
 #region Popups
 func _create_or_update_popup_for_src_type(src_type: String, was_healing: bool, was_crit: bool, amount: int) -> void:
+	if amount == 0:
+		return
+
 	var source_id_only: String = StringHelpers.get_before_colon(src_type)
 	if current_popup:
 		current_popup.update_popup(amount, source_id_only, was_crit, was_healing)

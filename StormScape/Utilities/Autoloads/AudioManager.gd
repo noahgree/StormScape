@@ -368,7 +368,7 @@ func _on_player_finished_playing(audio_player: Variant) -> void:
 	var finish_callables: Variant = audio_player.get_meta("finish_callables", [])
 
 	for custom_callable: Callable in finish_callables:
-		if is_instance_valid(custom_callable):
+		if is_instance_valid(custom_callable.get_object()):
 			if custom_callable.is_valid():
 				if loops_completed > 0 and custom_callable.get_method() != "_on_looped_audio_player_end":
 					continue

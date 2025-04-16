@@ -36,7 +36,7 @@ script = ExtResource("1_lbp1q")
 [node name="ItemSprite" type="AnimatedSprite2D" parent="."]
 material = SubResource("ShaderMaterial_rbgd3")
 instance_shader_parameters/glow_intensity = 1.5
-position = Vector2(-14, 14)
+position = Vector2(-10, 10)
 sprite_frames = SubResource("SpriteFrames_6vtii")
 offset = Vector2(14, -14)
 

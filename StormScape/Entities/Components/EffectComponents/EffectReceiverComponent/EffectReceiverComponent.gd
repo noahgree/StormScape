@@ -60,7 +60,7 @@ func handle_effect_source(effect_source: EffectSource, source_entity:
 	_handle_impact_sound(effect_source)
 	affected_entity.sprite.start_hitflash(effect_source.hit_flash_color, false)
 
-	if source_entity is Player:
+	if source_entity is Player and not affected_entity is Player:
 		CursorManager.change_cursor(null, "hit")
 
 	if filter_source_types and (effect_source.source_type not in allowed_source_types):

@@ -2,6 +2,7 @@ extends Controller
 class_name DynamicController
 ## FSM Controller designed to work with dynamic entities.
 
+@export var facing_method: FacingComponent.Method = FacingComponent.Method.MOVEMENT_DIR ## What the facing component of this entity should look at.
 @export var footstep_texture: Texture2D ## The footstep texture used to leave a trail behind.
 @export var footstreak_offsets: Array[Vector2] = [Vector2(-4, 0), Vector2(4, 0)] ## The offsets to draw the footstreaks at when hit by knockback.
 @export var MAX_KNOCKBACK: int = 3000 ## The highest length the knockback vector can ever be to prevent dramatic movement.
@@ -28,6 +29,8 @@ class_name DynamicController
 @export_custom(PROPERTY_HINT_NONE, "suffix:per dash") var _dash_stamina_usage: float = 20.0 ## The amount of stamina used per dash activation.
 @export var _dash_collision_impulse_factor: float = 1.0 ## A multiplier that controls how much impulse gets applied to rigid entites when colliding with them during a dash.
 #endregion
+
+@onready var default_facing_method: FacingComponent.Method = facing_method ## A copy of the initial facing method to restore to.
 
 var dash_timer: Timer = TimerHelpers.create_one_shot_timer(self, -1, _on_dash_timer_timeout)
 var dash_cooldown_timer: Timer = TimerHelpers.create_one_shot_timer(self) ## The timer controlling the minimum time between activating dashes.
@@ -81,6 +84,10 @@ func controller_physics_process(delta: float) -> void:
 		knockback_vector = lerp(knockback_vector, Vector2.ZERO, 6 * delta)
 	else:
 		knockback_vector = Vector2.ZERO
+
+## Resets the facing method being passed to the facing component each frame to the default.
+func reset_facing_method() -> void:
+	facing_method = default_facing_method
 #endregion
 
 #region Footprints & Streaks
@@ -126,7 +133,7 @@ func reset_and_create_knockback_streak() -> void:
 #region States
 func notify_stopped_moving() -> void:
 	match fsm.current_state.state_id:
-		"run", "sneak", "dash", "stunned", "spawn":
+		"run", "sneak", "dash", "stunned", "spawn", "knockback":
 			fsm.change_state("idle")
 
 ## Requests to add a value to the current knockback vector, doing so if possible.
