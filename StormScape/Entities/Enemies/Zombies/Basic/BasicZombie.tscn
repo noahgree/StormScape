@@ -1046,6 +1046,7 @@ effect_receiver = NodePath("../../EffectReceiverComponent")
 [node name="HandsComponent" parent="YSorter" instance=ExtResource("6_j2ytj")]
 unique_name_in_owner = true
 hand_texture = ExtResource("9_5go1u")
+time_brightness_min_max = Vector2(1, 1.9)
 
 [node name="ParticleEmissionComponent" parent="." instance=ExtResource("3_6bt22")]
 below_extents = Vector2(8, 1)

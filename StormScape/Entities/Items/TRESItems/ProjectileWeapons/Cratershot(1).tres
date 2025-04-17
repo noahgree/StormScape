@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="ProjWeaponResource" load_steps=20 format=3 uid="uid://14gw464h13vv"]
+[gd_resource type="Resource" script_class="ProjWeaponResource" load_steps=21 format=3 uid="uid://14gw464h13vv"]
 
 [ext_resource type="Texture2D" uid="uid://bm570hawaupxe" path="res://Entities/Items/Weapons/WeaponVFX/Casings/small_casing.png" id="1_7gqp2"]
 [ext_resource type="Script" uid="uid://boo31eu083dqd" path="res://Entities/Stats/EffectSystemResources/StatusEffects/StatusEffect.gd" id="1_oi18d"]
@@ -10,6 +10,7 @@
 [ext_resource type="Resource" uid="uid://cvqddapopo145" path="res://Entities/Player/PlayerCore/PlayerCamera/CamFXPresets/5.tres" id="4_qi223"]
 [ext_resource type="PackedScene" uid="uid://bqkyplubhsx43" path="res://Entities/Items/Projectiles/Bullets/SmallBullet/SmallBullet.tscn" id="5_ilshb"]
 [ext_resource type="Texture2D" uid="uid://b2bgxo22c1tup" path="res://Entities/Items/Weapons/ProjectileWeapons/Cratershot/cratershot_base.png" id="6_2s01n"]
+[ext_resource type="Resource" uid="uid://budyhbdyh7yme" path="res://Entities/Stats/EffectSystemResources/StatusEffects/GoodEffects/SelfKnockback/SelfKnockback1.tres" id="6_uecoq"]
 [ext_resource type="PackedScene" uid="uid://dwyof8hbs8fxr" path="res://Entities/Items/Weapons/ProjectileWeapons/Cratershot/Cratershot.tscn" id="8_af8pb"]
 [ext_resource type="Script" uid="uid://ctxa7i1mbt7ab" path="res://UI/Inventory/PlayerInventory/Crafting/CraftingIngredient.gd" id="8_rff8j"]
 [ext_resource type="Script" uid="uid://c2gdoebfp12dq" path="res://Entities/Stats/StatMod/StatModsCacheResource.gd" id="9_yxw3n"]
@@ -138,6 +139,7 @@ fire_anim_dur = 0.0
 spawn_after_fire_anim = false
 post_fire_anim_delay = 0.0
 post_fire_anim_dur = 0.22
+firing_stat_effect = ExtResource("6_uecoq")
 firing_cam_fx = ExtResource("4_qi223")
 casing_texture = ExtResource("1_7gqp2")
 casing_tint = Color(0.77622, 0, 0.0846659, 1)
@@ -187,6 +189,8 @@ pullout_delay = 0.3
 hide_ammo_ui = false
 max_mods_override = -1
 blocked_mods = Array[StringName]([])
+level = 1
+lvl_progress = 0
 s_mods = SubResource("Resource_t1k21")
 weapon_mods_need_to_be_readded_after_save = false
 current_mods = Array[Dictionary]([{

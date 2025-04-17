@@ -9,6 +9,7 @@ class_name HandsComponent
 @export var main_hand_with_proj_weapon_pos: Vector2 = Vector2(11, 0) ## The position the main hand would start at while holding a projectile weapon. This will most likely be farther out in the x-direction to give more rotational room for the weapon.
 @export var main_hand_with_melee_weapon_pos: Vector2 = Vector2(8, 0) ## The position the main hand would start at while holding a melee weapon. This will most likely be farther out in the x-direction to give more rotational room for the weapon.
 @export var mouth_pos: Vector2 = Vector2(0, -8) ## Used for emitting food particles from wherever the mouth should be.
+@export var time_brightness_min_max: Vector2 = Vector2(1.0, 1.0) ## How the brightness of the hand sprites should change in response to time of day. Anything besides (1, 1) activates this.
 
 @onready var hands_anchor: Node2D = $HandsAnchor ## The anchor for rotating and potentially scaling the hands.
 @onready var main_hand: Node2D = $HandsAnchor/MainHand ## The main hand node who's child will any equipped item.
@@ -353,27 +354,47 @@ func _get_facing_dir() -> Vector2:
 	return entity.facing_component.facing_dir
 
 #region Debug
-## Tries to add a mod (given by its cache id) to the currently equipped weapon that the player is holding.
-func add_mod_to_weapon_by_id(mod_cache_id: StringName) -> void:
+## Returns if the player is currently holding a weapon.
+func _check_is_holding_weapon() -> bool:
 	if not Globals.player_node.hands.equipped_item:
-		return
+		return false
 	var equipped_stats: ItemResource = Globals.player_node.hands.equipped_item.stats
 	if equipped_stats is not WeaponResource:
+		return false
+	return true
+
+## Tries to add a mod (given by its cache id) to the currently equipped weapon that the player is holding.
+func add_mod_to_weapon_by_id(mod_cache_id: StringName) -> void:
+	if not _check_is_holding_weapon():
 		return
+	var equipped_stats: ItemResource = Globals.player_node.hands.equipped_item.stats
 	var mod: ItemResource = CraftingManager.get_item_by_id(mod_cache_id, true)
 	if mod == null or mod is not WeaponMod:
 		printerr("The mod of id \"" + mod_cache_id + "\" does not exist.")
 		return
 	WeaponModsManager.handle_weapon_mod(
-		Globals.player_node.hands.equipped_item.stats, mod, WeaponModsManager.get_next_open_mod_slot(equipped_stats), Globals.player_node
+		equipped_stats, mod, WeaponModsManager.get_next_open_mod_slot(equipped_stats), Globals.player_node
 	)
 
 ## Tries to toggle a weapon between using hitscan or not.
 func toggle_hitscan() -> void:
-	if not Globals.player_node.hands.equipped_item:
+	if not _check_is_holding_weapon():
 		return
 	var equipped_stats: ItemResource = Globals.player_node.hands.equipped_item.stats
-	if equipped_stats is not WeaponResource:
+	equipped_stats.is_hitscan = not equipped_stats.is_hitscan
+
+## Tries to add xp to the current weapon.
+func add_weapon_xp(amount: int) -> void:
+	if not _check_is_holding_weapon() or Globals.player_inv_is_open:
+		printerr("Either the player is not holding a weapon or a focused UI is open, so no xp was added.")
 		return
-	Globals.player_node.hands.equipped_item.stats.is_hitscan = not Globals.player_node.hands.equipped_item.stats.is_hitscan
+	var source_slot_index: int = Globals.player_node.hands.equipped_item.source_slot.index
+	Globals.player_node.inv.add_xp_to_weapon(source_slot_index, amount)
+
+## Debug prints the total needed xp for each level up to the passed in level.
+func debug_print_xp_needed_for_lvl(lvl: int) -> void:
+	if not _check_is_holding_weapon():
+		return
+	var equipped_stats: ItemResource = Globals.player_node.hands.equipped_item.stats
+	equipped_stats.print_total_needed(lvl)
 #endregion

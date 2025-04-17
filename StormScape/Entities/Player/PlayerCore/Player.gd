@@ -39,6 +39,8 @@ func _add_player_debug_commands() -> void:
 	DebugConsole.add_command("stamina", stamina_component.change_stamina_by_amount)
 	DebugConsole.add_command("hunger_bars", stamina_component.change_hunger_bars_by_amount)
 	DebugConsole.add_command("wpn_mod", hands.add_mod_to_weapon_by_id)
+	DebugConsole.add_command("wpn_xp", hands.add_weapon_xp)
+	DebugConsole.add_command("wpn_xp_print", hands.debug_print_xp_needed_for_lvl)
 	DebugConsole.add_command("hitscan", hands.toggle_hitscan)
 	DebugConsole.add_command("mod", stats.add_mod_from_scratch)
 	DebugConsole.add_command("remove_mod", stats.remove_mod)

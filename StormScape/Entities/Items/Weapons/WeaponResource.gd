@@ -1,6 +1,11 @@
 extends ItemResource
 class_name WeaponResource
-## The base resource for all weapons. This will be subclasses to define more traits, but everything here applies to all weapons.
+## The base resource for all weapons.
+
+const BASE_XP_FOR_LVL: int = 100
+const LVL_SCALING_EXPONENT: float = 1.025
+const RARITY_LEVELING_FACTOR: float = 0.2
+const MAX_LEVEL: int = 40
 
 @export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var pullout_delay: float = 0.25 ## How long after equipping must we wait before we can use this weapon.
 @export var hide_ammo_ui: bool = false ## Whether to hide the ammo UI when the player uses this weapon.
@@ -10,12 +15,20 @@ class_name WeaponResource
 
 
 # Unique Properties #
+@export_custom(PROPERTY_HINT_RANGE, "1,40,1", PROPERTY_USAGE_DEFAULT) var level: int = 1 ## The level for this weapon.
+@export_storage var lvl_progress: int ## Any xp gained towards the progress of the next level is stored here.
 @export_storage var s_mods: StatModsCacheResource = StatModsCacheResource.new() ## The cache of all up to date stats for this weapon with mods factored in.
 @export_storage var weapon_mods_need_to_be_readded_after_save: bool = false ## When the weapons are loaded from a save, the weapon mods end up getting added to the old stats reference and not the new duplicated one after load. But since these properties transfer over, we check this each time the weapon is readied to see if we should readd all weapon mods.
 @export_storage var current_mods: Array[Dictionary] = [{ &"1" : null }, { &"2" : null }, { &"3" : null }, { &"4" : null }, { &"5" : null }, { &"6" : null }] ## The current mods applied to this weapon. This is an array of dictionaries so that the KV pairs can be ordered. Keys are StringName mod names and values are weapon_mod resources.
 @export_storage var original_status_effects: Array[StatusEffect] = [] ## The original status effect list of the effect source before any mods are applied.
 @export_storage var original_charge_status_effects: Array[StatusEffect] = [] ## The original status effect list of the charge effect source before any mods are applied.
 
+## Returns the amount of xp we need to attain the next level that we aren't at yet.
+static func xp_needed_for_lvl(weapon_stats: WeaponResource, lvl: int) -> int:
+	var rarity_mult: float = 1 + (weapon_stats.rarity * RARITY_LEVELING_FACTOR)
+
+	# Subtract one iteration at the end since we start at level 1
+	return int(BASE_XP_FOR_LVL * pow(lvl, LVL_SCALING_EXPONENT) * rarity_mult) - int(BASE_XP_FOR_LVL * rarity_mult)
 
 ## Whether the weapon is the same as another weapon when called externally to compare.
 ## Overrides base method to also compare weapon mods.
@@ -60,3 +73,29 @@ func get_nested_stat(stat: StringName, get_original: bool = false) -> float:
 	else:
 		push_error("Couldn't find the requested stat (" + stat + ") anywhere.")
 		return 0
+
+## Adds xp to the weapon, potentially leveling it up if it has reached enough accumulation of xp.
+func add_xp(amount: int) -> void:
+	lvl_progress += amount
+	while level < MAX_LEVEL:
+		var xp_needed: int = xp_needed_for_lvl(self, level + 1)
+		if lvl_progress >= xp_needed and xp_needed > 0:
+			lvl_progress -= xp_needed
+			level += 1
+		else:
+			break
+
+	if level == MAX_LEVEL:
+		lvl_progress = 0
+
+	var xp_needed_now: int = xp_needed_for_lvl(self, level + 1)
+	print("XP_LEFT: ", lvl_progress, " | LEVEL: ", level, " | NEXT_NEEDED_TOTAL: ", xp_needed_now)
+
+## prints the total needed xp for each level up to the requested level.
+func print_total_needed(for_level: int) -> void:
+	print("-------------------------------------------------------------------------")
+	var total: int = 0
+	for lvl: int in range(1, for_level + 1):
+		var xp: int = xp_needed_for_lvl(self, lvl)
+		total += xp
+		print("LVL: ", lvl, " | LVL_XP: ", xp, " | TOTAL: ", total)

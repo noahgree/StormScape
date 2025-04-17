@@ -124,10 +124,18 @@ const rarity_colors: Dictionary[String, Dictionary] = {
 		ItemRarity.EPIC : Color(0.545, 0.312, 1, 0.75),
 		ItemRarity.LEGENDARY : Color(0.948, 0.642, 0, 0.75),
 		ItemRarity.SINGULAR : Color(0.805, 0.266, 0.443, 0.75)
+	},
+	"ui_text" : {
+		ItemRarity.COMMON : Color(0.755, 0.781, 0.772),
+		ItemRarity.UNCOMMON : Color(0.558, 0.923, 0.67),
+		ItemRarity.RARE : Color(0.245, 0.739, 1.0),
+		ItemRarity.EPIC : Color(0.765, 0.68, 1.0),
+		ItemRarity.LEGENDARY : Color(0.971, 0.76, 0.509),
+		ItemRarity.SINGULAR : Color(1.0, 0.53, 0.665)
 	}
 }
 
-const invis_char: String = "[color=#93665800][char=21A5][/color]"
+const invis_char: String = "[color=#AAAAAA00][char=21A5][/color]"
 
 const ui_colors: Dictionary[StringName, Color] = {
 	"ui_tan" : Color(0.914, 0.769, 0.741),

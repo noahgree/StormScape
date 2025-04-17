@@ -1,4 +1,4 @@
-[gd_scene load_steps=240 format=3 uid="uid://dba8mrurjlekp"]
+[gd_scene load_steps=239 format=3 uid="uid://dba8mrurjlekp"]
 
 [ext_resource type="Script" uid="uid://c3rpxq8pnbdje" path="res://Entities/Player/PlayerCore/Player.gd" id="1_m33tt"]
 [ext_resource type="Script" uid="uid://dwmur0cosbbwh" path="res://UI/Inventory/InventoryCore/InventoryResource.gd" id="2_l1kq4"]
@@ -114,7 +114,6 @@
 [ext_resource type="Script" uid="uid://cy756xiw3ikj7" path="res://UI/Inventory/InventoryCore/Slot/SlotCore/ModSlot.gd" id="114_gdihr"]
 [ext_resource type="PackedScene" uid="uid://di7vcyrki71nm" path="res://Entities/Components/DetectionComponent/DetectionComponent.tscn" id="114_hxjay"]
 [ext_resource type="Texture2D" uid="uid://bqxdg28d1twy1" path="res://UI/Inventory/InventoryCore/Background/Wood/inv_background_thin_wood.png" id="115_gdihr"]
-[ext_resource type="Texture2D" uid="uid://c7rjucvq351g3" path="res://UI/Inventory/InventoryCore/Slot/Wood/translucent_slot_wood.png" id="116_0313k"]
 [ext_resource type="Script" uid="uid://g7648i4hb0q8" path="res://UI/Inventory/PlayerInventory/ItemDetailsPanel.gd" id="116_g5u5n"]
 [ext_resource type="Texture2D" uid="uid://bckcwc1xslu54" path="res://UI/Inventory/InventoryCore/Slot/Wood/clear_slot_wood.png" id="116_r5dvw"]
 [ext_resource type="Texture2D" uid="uid://b6oke8chd1otq" path="res://UI/Inventory/InventoryCore/Slot/Universal/item_viewer_slot_icon.png" id="117_gb65f"]
@@ -123,7 +122,7 @@
 [ext_resource type="Script" uid="uid://djsaegsb00xsu" path="res://UI/Inventory/PlayerInventory/Crafting/CraftingManager.gd" id="118_thmqm"]
 [ext_resource type="Texture2D" uid="uid://bcw0dq5ww2bs1" path="res://Entities/Items/Ammo/Stamina/stamina.png" id="119_6f5us"]
 [ext_resource type="Texture2D" uid="uid://0qokvcd3ucop" path="res://UI/Inventory/InventoryCore/Background/Universal/arrow_icon.png" id="119_bvo3j"]
-[ext_resource type="Texture2D" uid="uid://ces4hq54n2lxc" path="res://UI/Inventory/InventoryCore/Slot/Wood/normal_slot_wood.png" id="123_da65a"]
+[ext_resource type="Texture2D" uid="uid://cpgqebvnv0d0b" path="res://UI/Inventory/InventoryCore/Slot/Wood/normal_slot_wood_no_stripes.png" id="125_ar238"]
 [ext_resource type="Resource" uid="uid://dm4eq3xm13a38" path="res://Assets/Audio/Sfx/SfxResources/PlayerRunBase.tres" id="127_ou5t4"]
 [ext_resource type="Resource" uid="uid://cjv5d4cwpj1l8" path="res://Assets/Audio/Sfx/SfxResources/PlayerSprintWind.tres" id="128_ar238"]
 [ext_resource type="Resource" uid="uid://dalv82plgsllj" path="res://Assets/Audio/Sfx/SfxResources/PlayerDash.tres" id="129_bmpdm"]
@@ -1372,7 +1371,7 @@ shadow_size = 0
 line_spacing = 0.0
 font = ExtResource("90_hxjay")
 font_size = 12
-font_color = Color(0.913725, 0.768627, 0.741176, 1)
+font_color = Color(0.961254, 0.893995, 0.881106, 1)
 outline_size = 2
 outline_color = Color(0, 0, 0, 0.564706)
 shadow_size = 0
@@ -1383,7 +1382,7 @@ shadow_offset = Vector2(0.75, 0.75)
 line_spacing = 0.0
 font = ExtResource("90_hxjay")
 font_size = 8
-font_color = Color(0.913725, 0.768627, 0.741176, 1)
+font_color = Color(0.961254, 0.893995, 0.881106, 1)
 outline_size = 2
 outline_color = Color(0, 0, 0, 0.564706)
 shadow_size = 0
@@ -1392,7 +1391,7 @@ shadow_size = 0
 line_spacing = 0.0
 font = ExtResource("90_hxjay")
 font_size = 8
-font_color = Color(0.914, 0.769, 0.741, 0.7)
+font_color = Color(0.913725, 0.768627, 0.741176, 1)
 outline_size = 2
 outline_color = Color(0, 0, 0, 0.35)
 shadow_size = 0
@@ -1405,7 +1404,7 @@ shader_parameter/darken_factor = 0.45
 [sub_resource type="LabelSettings" id="LabelSettings_83b3b"]
 line_spacing = -1.0
 font_size = 6
-font_color = Color(0.913725, 0.768627, 0.741176, 1)
+font_color = Color(0.961254, 0.893995, 0.881106, 1)
 outline_color = Color(0.209203, 0.113957, 0.0471381, 1)
 shadow_color = Color(0, 0, 0, 0.3)
 shadow_offset = Vector2(0.3, 0.3)
@@ -1413,7 +1412,7 @@ shadow_offset = Vector2(0.3, 0.3)
 [sub_resource type="LabelSettings" id="LabelSettings_thmqm"]
 line_spacing = 0.0
 font_size = 6
-font_color = Color(0.913725, 0.768627, 0.741176, 1)
+font_color = Color(0.961254, 0.893995, 0.881106, 1)
 outline_color = Color(0.209203, 0.113957, 0.0471381, 1)
 shadow_color = Color(0, 0, 0, 0.3)
 shadow_offset = Vector2(0.5, 0.5)
@@ -1490,6 +1489,7 @@ print_effect_updates = true
 unique_name_in_owner = true
 hand_texture = ExtResource("9_n4o3n")
 active_slot_info = NodePath("../../OverlayUI/ActiveSlotInfo")
+time_brightness_min_max = Vector2(1, 1.9)
 
 [node name="ParticleEmissionComponent" parent="." instance=ExtResource("10_6wv7y")]
 
@@ -1626,6 +1626,7 @@ top_level = true
 offset_right = 34.0
 offset_bottom = 17.0
 script = ExtResource("75_thmqm")
+metadata/_edit_use_anchors_ = true
 
 [node name="Background" type="NinePatchRect" parent="InteractionPrompt"]
 self_modulate = Color(1, 1, 1, 0.525)
@@ -2114,7 +2115,7 @@ theme_override_constants/margin_bottom = 3
 
 [node name="InnerBorderBackground" type="NinePatchRect" parent="OverlayUI/ActiveSlotInfo/InnerBorderMargins"]
 layout_mode = 2
-texture = ExtResource("123_da65a")
+texture = ExtResource("125_ar238")
 patch_margin_left = 2
 patch_margin_top = 2
 patch_margin_right = 2
@@ -3160,7 +3161,7 @@ theme_override_constants/margin_bottom = -1
 [node name="ItemNameLabel" type="RichTextLabel" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox/ElementsMargin/ElementsVBox/ItemNameMargin"]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_colors/default_color = Color(0.913725, 0.768627, 0.741176, 1)
+theme_override_colors/default_color = Color(0.961254, 0.893995, 0.881106, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 0.564706)
 theme_override_constants/outline_size = 2
 theme_override_fonts/normal_font = ExtResource("85_7xlwj")
@@ -3183,7 +3184,7 @@ theme_override_constants/margin_bottom = 0
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_colors/default_color = Color(0.913725, 0.768627, 0.741176, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 0.329412)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 0.329)
 theme_override_constants/outline_size = 2
 theme_override_fonts/normal_font = ExtResource("85_7xlwj")
 theme_override_font_sizes/normal_font_size = 5
@@ -3203,7 +3204,7 @@ theme_override_constants/margin_top = -1
 
 [node name="InfoBackground" type="NinePatchRect" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox/ElementsMargin/ElementsVBox/InfoMargin"]
 layout_mode = 2
-texture = ExtResource("116_0313k")
+texture = ExtResource("125_ar238")
 patch_margin_left = 1
 patch_margin_top = 1
 patch_margin_right = 1
@@ -3238,7 +3239,7 @@ size_flags_vertical = 3
 
 [node name="DetailsBackground" type="NinePatchRect" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox/ElementsMargin/ElementsVBox/DetailsMargin"]
 layout_mode = 2
-texture = ExtResource("116_0313k")
+texture = ExtResource("125_ar238")
 patch_margin_left = 1
 patch_margin_top = 1
 patch_margin_right = 1

@@ -266,7 +266,7 @@ func _name_sort_logic(a: InvItemResource, b: InvItemResource) -> bool:
 		return a.quantity > b.quantity
 #endregion
 
-#region Projectile Weapon Helpers
+#region Weapon Helpers
 ## Consumes ammo from this inventory and returns the amount back to the caller.
 func get_more_ammo(max_amount_needed: int, take_from_inventory: bool,
 					ammo_type: ProjWeaponResource.ProjAmmoType) -> int:
@@ -286,6 +286,15 @@ func get_more_ammo(max_amount_needed: int, take_from_inventory: bool,
 				break
 
 	return ammount_collected
+
+## Adds xp to the weapon in the given index if it exists.
+func add_xp_to_weapon(index: int, amount: int) -> void:
+	var item: InvItemResource = inv[index]
+	if item == null or not item.stats is WeaponResource:
+		return
+
+	item.stats.add_xp(amount)
+	inv_data_updated.emit(index, inv[index])
 #endregion
 
 #region Debug

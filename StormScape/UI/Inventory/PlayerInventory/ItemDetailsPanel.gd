@@ -169,7 +169,9 @@ func _on_item_viewer_slot_changed(_slot: Slot, _old_item: InvItemResource, new_i
 	else:
 		_show_and_update_item_title(new_item.stats.name)
 		main_item_viewer_margin.visible = true
-		item_rarity_label.text = Globals.invis_char + new_item.stats.get_item_type_string(true) + " (" + new_item.stats.get_rarity_string().capitalize() + ") " + "[color=#93665800][char=02D9][/color]"
+		var item_type_string: String = new_item.stats.get_rarity_string().to_upper() + " " + new_item.stats.get_item_type_string(true) + "  "
+		var type_color_hex: String = Globals.rarity_colors.ui_text.get(new_item.stats.rarity).to_html(false)
+		item_rarity_label.text = Globals.invis_char + "[color=" + type_color_hex + "]" + item_type_string + "[/color]"
 		item_rarity_margin.visible = true
 		info_label.text = new_item.stats.info
 		info_margin.visible = true
@@ -189,6 +191,8 @@ func _on_item_viewer_slot_changed(_slot: Slot, _old_item: InvItemResource, new_i
 
 	if new_item.stats is WeaponResource:
 		_update_ammo_viewer_slot(new_item.stats)
+		var level_string: String = "• [color=ffd6e0FF] LVL " + str(new_item.stats.level) + "[/color][color=AAAAAA00][char=02D9][/color]" + "[color=AAAAAA00][char=02D9][/color]"
+		item_rarity_label.text += level_string
 
 	changing_item_viewer_slot = false
 
