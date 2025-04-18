@@ -55,7 +55,7 @@ metadata/_custom_type_script = "uid://bcjwesiannbd0"
 
 [resource]
 script = ExtResource("4_uwrdt")
-allowed_proj_wpns = Array[int]([0, 1, 2, 3, 4, 5, 6, 7, 9])
+allowed_proj_wpns = Array[int]([0, 1, 2, 3, 4, 5, 6, 7, 8, 9])
 allowed_melee_wpns = Array[int]([])
 blocked_mutuals = Array[StringName]([])
 blocked_wpn_stats = Dictionary[StringName, float]({})
@@ -63,6 +63,7 @@ req_all_blocked_stats = false
 wpn_stat_mods = Array[ExtResource("5_w7u81")]([SubResource("Resource_8xytx"), SubResource("Resource_y0kyh")])
 status_effects = Array[ExtResource("1_8xytx")]([])
 charge_status_effects = Array[ExtResource("1_8xytx")]([])
+aoe_status_effects = Array[ExtResource("1_8xytx")]([])
 applied_details = Array[ExtResource("2_ed86i")]([SubResource("Resource_ed86i"), SubResource("Resource_uwrdt")])
 equipping_audio = ""
 removal_audio = ""
@@ -79,6 +80,7 @@ extra_details = Array[ExtResource("2_ed86i")]([])
 ground_icon = ExtResource("3_ed86i")
 in_hand_icon = ExtResource("3_ed86i")
 inv_icon = ExtResource("3_ed86i")
+flip_inv_icon_h = false
 inv_icon_offset = Vector2(0, 0)
 inv_icon_scale = Vector2(1, 1)
 inv_icon_rotation = 0.0

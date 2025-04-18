@@ -11,7 +11,7 @@ class_name Hitscan
 
 var stats: HitscanResource ## The stats driving this hitscan.
 var s_mods: StatModsCacheResource ## The stat mods resource used to retrieve modified, updated stats for calculations and logic.
-var source_weapon: ProjectileWeapon ## The weapon that produced this hitscan.
+var source_weapon_item: ProjectileWeapon ## The weapon item that produced this hitscan.
 var rotation_offset: float ## The offset to rotate the hitscan by, determined by the source weapon.
 var lifetime_timer: Timer = TimerHelpers.create_one_shot_timer(self, -1, queue_free) ## The timer tracking lifetime left before freeing.
 var effect_tick_timer: Timer = TimerHelpers.create_one_shot_timer(self) ## The timer delaying the intervals of applying the effect source.
@@ -35,7 +35,7 @@ static func create(source_wpn: ProjectileWeapon, rot_offset: float) -> Hitscan:
 	hitscan.stats = source_wpn.stats.hitscan_logic
 	hitscan.s_mods = source_wpn.stats.s_mods
 
-	hitscan.source_weapon = source_wpn
+	hitscan.source_weapon_item = source_wpn
 	return hitscan
 
 func _draw() -> void:
@@ -55,8 +55,8 @@ func _draw() -> void:
 			draw_circle(to_pos, 2, color)
 
 func _ready() -> void:
-	if not (stats.continuous_beam) or (source_weapon.stats.firing_mode == ProjWeaponResource.FiringType.CHARGE):
-		var dur_stat: float = source_weapon.stats.firing_duration
+	if not (stats.continuous_beam) or (source_weapon_item.stats.firing_mode == ProjWeaponResource.FiringType.CHARGE):
+		var dur_stat: float = source_weapon_item.stats.firing_duration
 		lifetime_timer.start(max(0.05, dur_stat))
 
 	start_particles.emitting = true
@@ -87,7 +87,7 @@ func _physics_process(_delta: float) -> void:
 	if is_instance_valid(source_entity.hands.equipped_item):
 		equipped_item = source_entity.hands.equipped_item
 
-	if equipped_item != null and equipped_item == source_weapon:
+	if equipped_item != null and equipped_item == source_weapon_item:
 		global_position = equipped_item.proj_origin_node.global_position.rotated(equipped_item.rotation)
 		global_rotation = equipped_item.global_rotation + rotation_offset
 
@@ -244,7 +244,7 @@ func _start_being_handled(handling_area: EffectReceiverComponent, contact_point:
 	var modified_effect_src: EffectSource = _get_effect_source_adjusted_for_falloff(effect_source, contact_point)
 	modified_effect_src.movement_direction = Vector2(cos(rotation), sin(rotation)).normalized()
 	effect_source.contact_position = contact_point
-	handling_area.handle_effect_source(modified_effect_src, source_entity)
+	handling_area.handle_effect_source(modified_effect_src, source_entity, source_weapon_item.stats)
 
 ## When we hit a handling area during a hitscan, we apply falloff to the components of the effect source.
 func _get_effect_source_adjusted_for_falloff(effect_src: EffectSource, contact_point: Vector2) -> EffectSource:

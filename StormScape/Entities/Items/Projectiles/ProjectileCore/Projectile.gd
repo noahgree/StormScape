@@ -58,7 +58,6 @@ var mouse_scan_targets: Array[Node] ## The current list of targets in range of t
 var played_whiz_sound: bool = false ## Whether this has already played the whiz sound once or not.
 var debug_homing_rays: Array[Dictionary] = [] ## An array of debug info about the FOV homing method raycasts.
 var debug_recent_hit_location: Vector2 ## The location of the most recent point we hit something.
-var source_wpn_stats: ProjWeaponResource ## The projectile weapon resource for the weapon that fired this projectile.
 var aoe_overlapped_receivers: Dictionary[Area2D, Timer] = {} ## The areas that are currently in an AOE area.
 var is_disabling_monitoring: bool = false ## When true, we are waiting on the deferred call to disable collision monitoring.
 var about_to_free: bool = false ## This is true once we have started the impact animation and should no longer be able to hit new entities.
@@ -78,7 +77,6 @@ func _on_before_load_game() -> void:
 static func create(wpn_stats: ProjWeaponResource, src_entity: Entity, pos: Vector2, rot: float) -> Projectile:
 	var proj_scene: PackedScene = wpn_stats.projectile_scn
 	var proj: Projectile = proj_scene.instantiate()
-	proj.source_wpn_stats = wpn_stats
 	proj.split_proj_scene = proj_scene
 	proj.global_position = pos
 	proj.rotation = rot
@@ -93,6 +91,7 @@ static func create(wpn_stats: ProjWeaponResource, src_entity: Entity, pos: Vecto
 	proj.effect_source = effect_src
 	proj.collision_mask = effect_src.scanned_phys_layers
 	proj.source_entity = src_entity
+	proj.source_weapon = wpn_stats
 	return proj
 
 ## Used for debugging the homing system & other collisions. Draws vectors to where we have scanned during
@@ -593,7 +592,7 @@ func _split_self() -> void:
 
 	for i: int in range(split_into_count_offset_by_one):
 		var angle: float = start_angle + (i * step_angle)
-		var new_proj: Projectile = Projectile.create(source_wpn_stats, source_entity, position, angle)
+		var new_proj: Projectile = Projectile.create(source_weapon, source_entity, position, angle)
 		new_proj.splits_so_far = splits_so_far
 		new_proj.spin_dir = spin_dir
 		new_proj.multishot_id = new_multishot_id
@@ -828,13 +827,13 @@ func _start_being_handled(handling_area: EffectReceiverComponent) -> void:
 		var modified_effect_src: EffectSource = _get_effect_source_adjusted_for_falloff(effect_source, handling_area, false)
 		modified_effect_src.movement_direction = movement_direction
 		modified_effect_src.contact_position = global_position
-		handling_area.handle_effect_source(modified_effect_src, source_entity)
+		handling_area.handle_effect_source(modified_effect_src, source_entity, source_weapon)
 	else:
 		if stats.aoe_effect_source == null:
 			stats.aoe_effect_source = effect_source
 		var modified_effect_src: EffectSource = _get_effect_source_adjusted_for_falloff(stats.aoe_effect_source, handling_area, true)
 		modified_effect_src.contact_position = global_position
-		handling_area.handle_effect_source(modified_effect_src, source_entity, false) # Don't reapply status effects.
+		handling_area.handle_effect_source(modified_effect_src, source_entity, source_weapon, false) # Don't reapply status effects.
 
 ## When we hit a handling area during an AOE, we need to apply falloff based on distance from the center of the AOE.
 func _get_effect_source_adjusted_for_falloff(effect_src: EffectSource,

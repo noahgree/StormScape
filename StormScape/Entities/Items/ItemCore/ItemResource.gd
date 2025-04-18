@@ -17,6 +17,7 @@ class_name ItemResource
 @export var ground_icon: Texture2D ## The on-ground representation of the item.
 @export var in_hand_icon: Texture2D ## The physical representation of the item.
 @export var inv_icon: Texture2D ## The inventordy representation of the item.
+@export var flip_inv_icon_h: bool = false ## When true, the inv icon will be flipped over the y axis.
 @export var inv_icon_offset: Vector2 = Vector2.ZERO ## How much to offset the inv icon in a slot.
 @export var inv_icon_scale: Vector2 = Vector2.ONE ## How much to scale the inv icon in a slot.
 @export_range(-360, 360, 1, "suffix:degrees") var inv_icon_rotation: float = 0 ## How much to rotate the inv icon in a slot.
@@ -58,6 +59,22 @@ class_name ItemResource
 			session_uid = abs(new_value)
 			UIDHelper.session_uid_counter -= 1
 
+
+## Finds the place a stat is stored at within the resource and returns it. Can optionally get the unmodified stat
+## if it exists in the stat mods cache.
+func get_nested_stat(stat: StringName, get_original: bool = false) -> float:
+	if "s_mods" in self and get("s_mods").has_stat(stat):
+		if not get_original: return get("s_mods").get_stat(stat)
+		else: return get("s_mods").get_original_stat(stat)
+	elif stat in self:
+		return get(stat)
+	elif stat in get("effect_source"):
+		return get("effect_source").get(stat)
+	elif "projectile_logic" in self and stat in get("projectile_logic"):
+		return get("projectile_logic").get(stat)
+	else:
+		push_error("Couldn't find the requested stat (" + stat + ") anywhere.")
+		return 0
 
 ## The custom string representation of this item resource.
 func _to_string() -> String:

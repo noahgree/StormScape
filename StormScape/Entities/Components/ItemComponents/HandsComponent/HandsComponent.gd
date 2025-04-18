@@ -222,7 +222,10 @@ func _manage_proj_weapon_hands(facing_dir: Vector2) -> void:
 	_handle_y_scale_lerping(facing_dir)
 
 	if facing_dir.x < -0.12:
-		_change_off_hand_sprite_visibility(false)
+		if facing_dir.y > 0:
+			_change_off_hand_sprite_visibility(false)
+		else:
+			_change_off_hand_sprite_visibility(true)
 	elif facing_dir.x > 0.12:
 		_change_off_hand_sprite_visibility(true)
 
@@ -253,7 +256,10 @@ func _manage_melee_weapon_hands(facing_dir: Vector2) -> void:
 	_handle_y_scale_lerping(facing_dir)
 
 	if facing_dir.x < -0.12:
-		_change_off_hand_sprite_visibility(false)
+		if facing_dir.y > 0:
+			_change_off_hand_sprite_visibility(false)
+		else:
+			_change_off_hand_sprite_visibility(true)
 	elif facing_dir.x > 0.12:
 		_change_off_hand_sprite_visibility(true)
 

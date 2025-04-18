@@ -49,6 +49,7 @@ extra_details = Array[ExtResource("1_y3gsb")]([])
 ground_icon = ExtResource("2_y3gsb")
 in_hand_icon = ExtResource("2_y3gsb")
 inv_icon = ExtResource("2_y3gsb")
+flip_inv_icon_h = false
 inv_icon_offset = Vector2(0, 0)
 inv_icon_scale = Vector2(1, 1)
 inv_icon_rotation = 0.0

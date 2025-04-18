@@ -21,6 +21,7 @@ func _ready() -> void:
 	super._ready()
 
 	hitbox_component.source_entity = source_entity
+	hitbox_component.source_weapon = stats
 	set_deferred("hitbox_component:collider:disabled", true)
 
 	if source_entity is Player:

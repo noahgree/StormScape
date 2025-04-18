@@ -49,6 +49,7 @@ extra_details = Array[ExtResource("1_fvnnl")]([])
 ground_icon = ExtResource("2_fvnnl")
 in_hand_icon = ExtResource("2_fvnnl")
 inv_icon = ExtResource("2_fvnnl")
+flip_inv_icon_h = false
 inv_icon_offset = Vector2(0, 0)
 inv_icon_scale = Vector2(1, 1)
 inv_icon_rotation = 0.0

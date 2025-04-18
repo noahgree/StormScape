@@ -25,9 +25,10 @@ func _ready() -> void:
 	health_component = affected_entity.health_component
 	assert(health_component, affected_entity.name + " has an effect receiver that is intended to handle healing, but no health component is connected.")
 
-## Handles applying instant, one-shot healing to the affected entity.
-func handle_instant_heal(effect_source: EffectSource, heal_affected_stats: Globals.HealAffectedStats) -> void:
+## Handles applying instant, one-shot healing to the affected entity. Returns the appropriate xp amount to apply.
+func handle_instant_heal(effect_source: EffectSource, heal_affected_stats: Globals.HealAffectedStats) -> int:
 	_send_handled_healing("basic_healing", heal_affected_stats, effect_source.base_healing, effect_source.multishot_id)
+	return effect_source.base_healing
 
 ## Handles applying damage that is inflicted over time, whether with a delay, with burst intervals, or with both.
 func handle_over_time_heal(hot_resource: HOTResource, source_type: String) -> void:
@@ -118,8 +119,8 @@ func _on_hot_timer_timeout(hot_timer: Timer, source_type: String) -> void:
 
 ## Sends the affected entity's health component the final healing values based on what stats the heal was
 ## allowed to affect.
-func _send_handled_healing(source_type: String, heal_affected_stats: Globals.HealAffectedStats,
-							handled_amount: int, multishot_id: int) -> void:
+func _send_handled_healing(source_type: String, heal_affected_stats: Globals.HealAffectedStats, handled_amount: int,
+							multishot_id: int) -> void:
 	var positive_healing: int = max(0, handled_amount)
 	match heal_affected_stats:
 		Globals.HealAffectedStats.HEALTH_ONLY:

@@ -1,6 +1,8 @@
 class_name WeaponModsManager
 ## A collection of static functions that handle adding, removing, and restoring weapon mods on a weapon.
 
+enum EffectSourceType { NORMAL, CHARGE, AOE } ## The kinds of effect sources that can be modified.
+
 
 ## Checks if the mod can be attached to the weapon.
 static func check_mod_compatibility(weapon_stats: WeaponResource, weapon_mod: WeaponMod) -> bool:
@@ -73,9 +75,11 @@ static func _add_weapon_mod(weapon_stats: WeaponResource, weapon_mod: WeaponMod,
 		weapon_stats.s_mods.add_mods([mod_resource] as Array[StatMod])
 		_update_effect_source_stats(weapon_stats, mod_resource.stat_id)
 
-	_update_effect_source_status_effects(weapon_stats, false, weapon_mod.status_effects)
+	_update_effect_source_status_effects(weapon_stats, EffectSourceType.NORMAL, weapon_mod.status_effects)
 	if weapon_stats is MeleeWeaponResource:
-		_update_effect_source_status_effects(weapon_stats, true, weapon_mod.charge_status_effects)
+		_update_effect_source_status_effects(weapon_stats, EffectSourceType.CHARGE, weapon_mod.charge_status_effects)
+	elif weapon_stats is ProjWeaponResource:
+		_update_effect_source_status_effects(weapon_stats, EffectSourceType.AOE, weapon_mod.aoe_status_effects)
 
 	if DebugFlags.weapon_mod_changes:
 		_debug_print_status_effect_lists(weapon_stats)
@@ -96,9 +100,11 @@ static func remove_weapon_mod(weapon_stats: WeaponResource, weapon_mod: WeaponMo
 
 	weapon_stats.current_mods[index] = { "EmptySlot" : null }
 
-	_remove_mod_status_effects_from_effect_source(weapon_stats, false)
+	_remove_mod_status_effects_from_effect_source(weapon_stats, EffectSourceType.NORMAL)
 	if weapon_stats is MeleeWeaponResource:
-		_remove_mod_status_effects_from_effect_source(weapon_stats, true)
+		_remove_mod_status_effects_from_effect_source(weapon_stats, EffectSourceType.CHARGE)
+	elif weapon_stats is ProjWeaponResource:
+		_remove_mod_status_effects_from_effect_source(weapon_stats, EffectSourceType.AOE)
 
 	if DebugFlags.weapon_mod_changes:
 		_debug_print_status_effect_lists(weapon_stats)
@@ -137,7 +143,8 @@ static func _update_effect_source_stats(weapon_stats: WeaponResource, stat_id: S
 		&"object_damage_mult":
 			weapon_stats.effect_source.object_damage_mult = weapon_stats.s_mods.get_stat("object_damage_mult")
 
-	if weapon_stats is MeleeWeaponResource: # Projectile weapons don't have separate charge stats since they can only be one firing type
+	# Projectile weapons don't have separate charge stats since they can only be one firing type
+	if weapon_stats is MeleeWeaponResource:
 		match(stat_id):
 			&"charge_base_damage":
 				weapon_stats.charge_effect_source.base_damage = weapon_stats.s_mods.get_stat("charge_base_damage")
@@ -150,14 +157,31 @@ static func _update_effect_source_stats(weapon_stats: WeaponResource, stat_id: S
 			&"charge_object_damage_mult":
 				weapon_stats.charge_effect_source.object_damage_mult = weapon_stats.s_mods.get_stat("charge_object_damage_mult")
 
+	# Melee weapons don't have separate aoe stats since they cannot produce areas of effect
+	elif weapon_stats is ProjWeaponResource:
+		match(stat_id):
+			&"proj_aoe_base_damage":
+				weapon_stats.projectile_logic.aoe_effect_source.base_damage = weapon_stats.s_mods.get_stat("proj_aoe_base_damage")
+			&"proj_aoe_base_healing":
+				weapon_stats.projectile_logic.aoe_effect_source.base_healing = weapon_stats.s_mods.get_stat("proj_aoe_base_healing")
+
 ## Updates the effect source status effect lists based on an incoming stat mod.
 ## Handles duplicates by keeping the highest level.
-static func _update_effect_source_status_effects(weapon_stats: WeaponResource, for_charged: bool,
+static func _update_effect_source_status_effects(weapon_stats: WeaponResource, type: EffectSourceType,
 											new_effects: Array[StatusEffect]) -> void:
-	var effect_source: EffectSource = weapon_stats.effect_source if not for_charged else weapon_stats.charge_effect_source
+	var effect_source: EffectSource
+	match type:
+		EffectSourceType.NORMAL:
+			effect_source = weapon_stats.effect_source
+		EffectSourceType.CHARGE when weapon_stats is MeleeWeaponResource:
+			effect_source = weapon_stats.charge_effect_source
+		EffectSourceType.AOE when weapon_stats is ProjWeaponResource and weapon_stats.projectile_logic.aoe_effect_source:
+			effect_source = weapon_stats.projectile_logic.aoe_effect_source
 
+	if effect_source == null:
+		return
 	for new_effect: StatusEffect in new_effects:
-		var existing_effect_index: int = effect_source.check_for_effect_and_get_index(new_effect.id)
+		var existing_effect_index: int = effect_source.check_for_effect_and_get_index(new_effect.get_full_effect_key())
 		if existing_effect_index != -1:
 			if new_effect.effect_lvl > effect_source.status_effects[existing_effect_index].effect_lvl:
 				effect_source.status_effects[existing_effect_index] = new_effect
@@ -165,16 +189,37 @@ static func _update_effect_source_status_effects(weapon_stats: WeaponResource, f
 			effect_source.status_effects.append(new_effect)
 
 ## Updates the status effect lists after removing a mod (by not using the old mod's status effects anymore).
-static func _remove_mod_status_effects_from_effect_source(weapon_stats: WeaponResource, for_charged: bool) -> void:
-	var effect_source: EffectSource = weapon_stats.effect_source if not for_charged else weapon_stats.charge_effect_source
-	var orig_array: Array[StatusEffect] = weapon_stats.original_status_effects if not for_charged else weapon_stats.original_charge_status_effects
+static func _remove_mod_status_effects_from_effect_source(weapon_stats: WeaponResource, type: EffectSourceType) -> void:
+	var effect_source: EffectSource
+	var orig_array: Array[StatusEffect]
+	match type:
+		EffectSourceType.NORMAL:
+			effect_source = weapon_stats.effect_source
+			orig_array = weapon_stats.original_status_effects
+		EffectSourceType.CHARGE when weapon_stats is MeleeWeaponResource:
+			effect_source = weapon_stats.charge_effect_source
+			orig_array = weapon_stats.original_charge_status_effects
+		EffectSourceType.AOE when weapon_stats is ProjWeaponResource and weapon_stats.projectile_logic.aoe_effect_source:
+			effect_source = weapon_stats.projectile_logic.aoe_effect_source
+			orig_array = weapon_stats.original_aoe_status_effects
 
+	if effect_source == null:
+		return
 	effect_source.status_effects = orig_array.duplicate()
 
 	for weapon_mod_entry: Dictionary in weapon_stats.current_mods:
 		var mod: WeaponMod = weapon_mod_entry.values()[0]
 		if mod != null:
-			_update_effect_source_status_effects(weapon_stats, for_charged, mod.status_effects if not for_charged else mod.charge_status_effects)
+			var mod_status_effects: Array[StatusEffect]
+			match type:
+				EffectSourceType.NORMAL:
+					mod_status_effects = mod.status_effects
+				EffectSourceType.CHARGE when weapon_stats is MeleeWeaponResource:
+					mod_status_effects = mod.charge_status_effects
+				EffectSourceType.AOE when weapon_stats is ProjWeaponResource:
+					mod_status_effects = mod.aoe_status_effects
+
+			_update_effect_source_status_effects(weapon_stats, type, mod_status_effects)
 
 ## Resets the original (non-modded) status effects for the weapon after a save so that they correctly reflect
 ## the effects not provided by mods. This then removes and then readds all the weapon mods from the save.
@@ -184,15 +229,20 @@ static func reset_original_arrays_after_save(weapon_stats: WeaponResource, sourc
 	weapon_stats.original_status_effects = []
 	if weapon_stats is MeleeWeaponResource:
 		weapon_stats.original_charge_status_effects = []
+	elif weapon_stats is ProjWeaponResource:
+		weapon_stats.projectile_logic.aoe_effect_source.status_effects = []
 	remove_all_mods_from_weapon(weapon_stats, source_entity)
 
 	weapon_stats.original_status_effects = weapon_stats.effect_source.status_effects
 	if weapon_stats is MeleeWeaponResource:
 		weapon_stats.original_charge_status_effects = weapon_stats.charge_effect_source.status_effects
+	elif weapon_stats is ProjWeaponResource:
+		weapon_stats.projectile_logic.aoe_effect_source.status_effects = weapon_stats.original_aoe_status_effects
 
 	weapon_stats.current_mods = mods_copy
 	re_add_all_mods_to_weapon(weapon_stats, source_entity)
 
+#region Debug
 ## Formats the updated lists of status effects and prints them out.
 static func _debug_print_status_effect_lists(weapon_stats: WeaponResource) -> void:
 	var is_normal_base: bool = true if weapon_stats.effect_source.status_effects == weapon_stats.original_status_effects else false
@@ -200,3 +250,7 @@ static func _debug_print_status_effect_lists(weapon_stats: WeaponResource) -> vo
 	if weapon_stats is MeleeWeaponResource:
 		var is_normal_charge: bool = true if weapon_stats.charge_effect_source.status_effects == weapon_stats.original_charge_status_effects else false
 		print_rich("[color=cyan]Charge Effects[/color]" + ("[color=gray][i](base)[/i][/color]" if is_normal_charge else "") + ": [b]"+ str(weapon_stats.charge_effect_source.status_effects) + "[/b]")
+	if weapon_stats is ProjWeaponResource and weapon_stats.projectile_logic.aoe_radius > 0:
+		var is_normal_aoe: bool = true if weapon_stats.projectile_logic.aoe_effect_source.status_effects == weapon_stats.original_aoe_status_effects else false
+		print_rich("[color=cyan]AOE Effects[/color]" + ("[color=gray][i](base)[/i][/color]" if is_normal_aoe else "") + ": [b]"+ str(weapon_stats.projectile_logic.aoe_effect_source.status_effects) + "[/b]")
+#endregion

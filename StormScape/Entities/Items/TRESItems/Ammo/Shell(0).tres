@@ -1,41 +1,40 @@
-[gd_resource type="Resource" script_class="ProjAmmoResource" load_steps=6 format=3 uid="uid://cpxev3kvt74vw"]
+[gd_resource type="Resource" script_class="ProjAmmoResource" load_steps=4 format=3 uid="uid://cpxev3kvt74vw"]
 
-[ext_resource type="Script" uid="uid://cowjdnic7xmkp" path="res://UI/Inventory/PlayerInventory/StatDetail.gd" id="1_47cf0"]
 [ext_resource type="Texture2D" uid="uid://1t1qwr4iklu0" path="res://Entities/Items/Ammo/Shell/ShellAmmoThumbCT.tres" id="1_kme5u"]
 [ext_resource type="Texture2D" uid="uid://d3xj606lsbvfm" path="res://Entities/Items/Ammo/Shell/shell_ammo.png" id="2_ptjmx"]
-[ext_resource type="Script" uid="uid://ctxa7i1mbt7ab" path="res://UI/Inventory/PlayerInventory/Crafting/CraftingIngredient.gd" id="3_y6c6l"]
 [ext_resource type="Script" uid="uid://bpc1cwr4a6lgo" path="res://Entities/Items/Ammo/ProjAmmoResource.gd" id="4_j07wo"]
 
 [resource]
 script = ExtResource("4_j07wo")
-ammo_type = 5
+ammo_type = 3
 id = "shell_ammo"
 name = "Shell Ammo"
-tags = Array[StringName]([])
+tags = null
 item_type = 2
 rarity = 0
 stack_size = 500
 auto_pickup = true
-pickup_radius = 4
+pickup_radius = null
 info = "Ammo used in shotgun weapons."
-extra_details = Array[ExtResource("1_47cf0")]([])
+extra_details = null
 ground_icon = ExtResource("1_kme5u")
 in_hand_icon = ExtResource("1_kme5u")
 inv_icon = ExtResource("2_ptjmx")
-inv_icon_offset = Vector2(0, 0)
-inv_icon_scale = Vector2(1, 1)
-inv_icon_rotation = 0.0
-recipe = Array[ExtResource("3_y6c6l")]([])
-output_quantity = 1
-recipe_unlocked = false
-rotation_lerping = 0.1
-holding_offset = Vector2(0, 0)
-holding_degrees = 0.0
-is_gripped_by_one_hand = true
-draw_off_hand = false
-draw_off_hand_offset = Vector2(0, 0)
-main_hand_offset = Vector2(0, 0)
-cooldowns_per_suid = true
-shown_cooldown_fills = Array[String]([])
-show_cursor_cooldown = false
-session_uid = 0
+flip_inv_icon_h = null
+inv_icon_offset = null
+inv_icon_scale = null
+inv_icon_rotation = null
+recipe = null
+output_quantity = null
+recipe_unlocked = null
+rotation_lerping = null
+holding_offset = null
+holding_degrees = null
+is_gripped_by_one_hand = null
+draw_off_hand = null
+draw_off_hand_offset = null
+main_hand_offset = null
+cooldowns_per_suid = null
+shown_cooldown_fills = null
+show_cursor_cooldown = null
+session_uid = null

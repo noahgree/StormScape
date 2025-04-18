@@ -28,14 +28,11 @@ heal_affected_stats = 0
 impact_sound = ""
 hit_flash_color = Color(1, 1, 1, 0)
 status_effects = Array[ExtResource("2_kdgs1")]([])
-contact_position = Vector2(0, 0)
-movement_direction = Vector2(0, 0)
-multishot_id = -1
 
 [resource]
 script = ExtResource("1_jepoi")
 effect_source = SubResource("Resource_hsou2")
-hunger_bar_gain = 1
+hunger_bar_gain = 2
 hunger_bar_deduction = 0
 consumption_time = 1.0
 consumption_cooldown = 0.75
@@ -55,6 +52,7 @@ extra_details = Array[ExtResource("3_8vr7p")]([])
 ground_icon = ExtResource("3_7kd7o")
 in_hand_icon = ExtResource("3_7kd7o")
 inv_icon = ExtResource("4_8vr7p")
+flip_inv_icon_h = false
 inv_icon_offset = Vector2(0, 0)
 inv_icon_scale = Vector2(1, 1)
 inv_icon_rotation = 0.0

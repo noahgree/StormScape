@@ -2,4 +2,4 @@
 extends ItemResource
 class_name ProjAmmoResource
 
-@export var ammo_type: ProjWeaponResource.ProjAmmoType = ProjWeaponResource.ProjAmmoType.LIGHT
+@export var ammo_type: ProjWeaponResource.ProjAmmoType = ProjWeaponResource.ProjAmmoType.BULLETS

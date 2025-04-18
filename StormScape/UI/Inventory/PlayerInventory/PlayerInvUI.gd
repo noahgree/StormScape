@@ -10,7 +10,6 @@ class_name PlayerInvUI
 @export var item_details_panel: ItemDetailsPanel ## The item viewer in the inventory.
 @export var crafting_manager: CraftingManager ## The crafting manager panel.
 @export var wearables_panel: WearablesPanel ## The wearables panel.
-@export var ammo_viewer_margin: MarginContainer ## The ammo viewer margin that sits inside the item details panel.
 @export var alternate_inv_panel: VBoxContainer ## The panel that fills with alternate inventories like chests.
 
 @export_group("Textures")
@@ -110,8 +109,8 @@ func _on_alternate_inv_open_request(alternate_inv_source_node: Node2D) -> void:
 
 #region Dropping On Ground
 ## When we click the empty space around this player inventory, change needed visibilities.
-func _on_blank_space_input_event(_event: InputEvent) -> void:
-	if Input.is_action_just_pressed("primary"):
+func _on_blank_space_input_event(event: InputEvent) -> void:
+	if event.is_action_released("primary"):
 		is_open = false
 		accept_event()
 

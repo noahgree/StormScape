@@ -31,9 +31,6 @@ impact_cam_fx = ExtResource("1_e5g0w")
 impact_sound = ""
 hit_flash_color = Color(1, 1, 1, 0.6)
 status_effects = Array[ExtResource("3_8m4wh")]([])
-contact_position = Vector2(0, 0)
-movement_direction = Vector2(0, 0)
-multishot_id = -1
 metadata/_custom_type_script = ExtResource("3_67eer")
 
 [sub_resource type="Resource" id="Resource_chlgx"]
@@ -56,9 +53,6 @@ impact_cam_fx = ExtResource("4_e5g0w")
 impact_sound = ""
 hit_flash_color = Color(1, 1, 1, 0.6)
 status_effects = Array[ExtResource("3_8m4wh")]([])
-contact_position = Vector2(0, 0)
-movement_direction = Vector2(0, 0)
-multishot_id = -1
 metadata/_custom_type_script = ExtResource("3_67eer")
 
 [sub_resource type="Resource" id="Resource_vevwc"]
@@ -86,6 +80,7 @@ charge_stamina_cost = 25
 charge_ghost_fade_time = 1.0
 charge_use_sound = ""
 pullout_delay = 0.25
+no_levels = false
 hide_ammo_ui = false
 max_mods_override = -1
 blocked_mods = Array[StringName]([])
@@ -108,6 +103,7 @@ current_mods = Array[Dictionary]([{
 }])
 original_status_effects = Array[ExtResource("3_8m4wh")]([])
 original_charge_status_effects = Array[ExtResource("3_8m4wh")]([])
+original_aoe_status_effects = Array[ExtResource("3_8m4wh")]([])
 id = "sword"
 name = "Sword"
 tags = Array[StringName]([])
@@ -121,6 +117,7 @@ extra_details = Array[ExtResource("5_3cchv")]([])
 ground_icon = ExtResource("5_67eer")
 in_hand_icon = ExtResource("5_67eer")
 inv_icon = ExtResource("5_67eer")
+flip_inv_icon_h = false
 inv_icon_offset = Vector2(0, 0)
 inv_icon_scale = Vector2(1, 1)
 inv_icon_rotation = 0.0

@@ -111,7 +111,7 @@ func _spawn_projectile(proj_rot: float, multishot_id: int) -> void:
 
 	if weapon is UniqueProjWeapon:
 		weapon.returned = false
-		proj.source_weapon = weapon
+		proj.source_weapon_item = weapon
 
 	if weapon.stats.projectile_logic.homing_method == "Mouse Position":
 		weapon.mouse_scan_area_targets.clear()

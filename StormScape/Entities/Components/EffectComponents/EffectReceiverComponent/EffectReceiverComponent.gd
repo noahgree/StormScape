@@ -54,15 +54,18 @@ func _ready() -> void:
 
 ## Handles an incoming effect source, passing it to present receivers for further processing before changing
 ## entity stats.
-func handle_effect_source(effect_source: EffectSource, source_entity:
-							Entity, process_status_effects: bool = true) -> void:
+func handle_effect_source(effect_source: EffectSource, source_entity: Entity, source_weapon: WeaponResource,
+							process_status_effects: bool = true) -> void:
+	# --- Applying Cam FX, Hit Sound, & Hitflash ----
 	_handle_cam_fx(effect_source)
 	_handle_impact_sound(effect_source)
 	affected_entity.sprite.start_hitflash(effect_source.hit_flash_color, false)
 
-	if source_entity is Player and not affected_entity is Player:
+	# --- Changing Cursor to Reflect Hit ---
+	if source_entity and source_entity is Player and not affected_entity is Player:
 		CursorManager.change_cursor(null, "hit")
 
+	# --- Filtering Source Types & Tags ---
 	if filter_source_types and (effect_source.source_type not in allowed_source_types):
 		return
 	if filter_source_tags:
@@ -73,31 +76,49 @@ func handle_effect_source(effect_source: EffectSource, source_entity:
 		if not match_found:
 			return
 
-	if source_entity.team == Globals.Teams.PASSIVE or ((affected_entity is DynamicEntity) and not affected_entity.fsm.controller.can_receive_effects):
+	# --- Checking if Sender is Passive or Receiver Can't Receive Effect Sources ---
+	if (source_entity and source_entity.team == Globals.Teams.PASSIVE) or ((affected_entity is DynamicEntity) and not affected_entity.fsm.controller.can_receive_effect_srcs):
 		if affected_entity.loot:
 			affected_entity.loot.handle_hit()
 		return
 
+	# --- Spawning Impact VFX ---
 	if effect_source.impact_vfx != null:
 		var vfx: Node2D = effect_source.impact_vfx.instantiate()
 		vfx.global_position = affected_entity.global_position
 		add_child(vfx)
 
+	# --- Validating Source Entity ---
+	if not source_entity:
+		return
+
+	# --- Triggering Loot Component ---
 	if affected_entity.loot and not affected_entity.loot.require_dmg_on_hit:
 		affected_entity.loot.handle_hit()
 
+	# --- Applying Base Damage & Base Healing ---
+	var xp: int = 0
 	if effect_source.base_damage > 0 and dmg_handler != null:
 		if _check_same_team(source_entity) and _check_if_bad_effects_apply_to_allies(effect_source):
 			dmg_handler.handle_instant_damage(effect_source, _get_life_steal(effect_source, source_entity))
 		elif not _check_same_team(source_entity) and _check_if_bad_effects_apply_to_enemies(effect_source):
-			dmg_handler.handle_instant_damage(effect_source, _get_life_steal(effect_source, source_entity))
+			xp = dmg_handler.handle_instant_damage(effect_source, _get_life_steal(effect_source, source_entity))
 
 	if effect_source.base_healing > 0 and heal_handler != null:
 		if _check_same_team(source_entity) and _check_if_good_effects_apply_to_allies(effect_source):
-			heal_handler.handle_instant_heal(effect_source, effect_source.heal_affected_stats)
+			xp = heal_handler.handle_instant_heal(effect_source, effect_source.heal_affected_stats)
 		elif not _check_same_team(source_entity) and _check_if_good_effects_apply_to_enemies(effect_source):
 			heal_handler.handle_instant_heal(effect_source, effect_source.heal_affected_stats)
 
+	# --- Applying Resulting Weapon XP ---
+	if source_entity is Player and source_weapon and is_instance_valid(source_weapon):
+		var xp_to_add: int = ceili(WeaponResource.EFFECT_AMOUNT_XP_MULT * xp)
+		if source_entity.hands.equipped_item and source_entity.hands.equipped_item.stats == source_weapon:
+			Globals.player_node.inv.add_xp_to_weapon(source_entity.hands.equipped_item.source_slot.index, xp_to_add)
+		else:
+			source_weapon.add_xp(xp_to_add)
+
+	# --- Start of Status Effect Processing Chain ---
 	if process_status_effects:
 		if can_receive_status_effects:
 			if (effect_source.multishot_id == -1) or (effect_source.multishot_id != most_recent_multishot_id):

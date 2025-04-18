@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cjuiqhgcljofe"
-path="res://.godot/imported/heavy_ammo.png-b117a72c3a9e59dd83d6f7e39023b6bb.ctex"
+uid="uid://baj6slyni0t6u"
+path="res://.godot/imported/walking_dust.png-b89a030d2c3926f8f30b6c5d08f9725a.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Entities/Items/Ammo/Heavy/heavy_ammo.png"
-dest_files=["res://.godot/imported/heavy_ammo.png-b117a72c3a9e59dd83d6f7e39023b6bb.ctex"]
+source_file="res://Entities/Player/PlayerCore/walking_dust.png"
+dest_files=["res://.godot/imported/walking_dust.png-b89a030d2c3926f8f30b6c5d08f9725a.ctex"]
 
 [params]
 

@@ -1,4 +1,4 @@
-[gd_scene load_steps=29 format=3 uid="uid://bond8rty1ljh"]
+[gd_scene load_steps=27 format=3 uid="uid://bond8rty1ljh"]
 
 [ext_resource type="Script" uid="uid://cn2gulskgn7k3" path="res://Entities/EntityCore/EntityTypes/StaticEntity/StaticEntity.gd" id="1_uvrwn"]
 [ext_resource type="Script" uid="uid://dwmur0cosbbwh" path="res://UI/Inventory/InventoryCore/InventoryResource.gd" id="2_oq3a2"]
@@ -16,7 +16,6 @@
 [ext_resource type="PackedScene" uid="uid://co3n6m7efg8pd" path="res://Entities/Components/EffectComponents/StatusEffectsComponent/StatusEffectsComponent.tscn" id="11_swclu"]
 [ext_resource type="Script" uid="uid://ckiyd2nbdcofr" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/LifeStealHandler.gd" id="12_3rk2w"]
 [ext_resource type="Script" uid="uid://1qq7eo7lm8j6" path="res://Entities/Components/ItemComponents/LootTableComponent/LootTableEntry.gd" id="14_h0qkk"]
-[ext_resource type="Resource" uid="uid://bcvljie626314" path="res://Entities/Items/TRESItems/Ammo/Heavy(0).tres" id="17_oq3a2"]
 [ext_resource type="PackedScene" uid="uid://2yy4xfm5g74l" path="res://Entities/Components/ItemComponents/ClippingComponent/ClippingArea.tscn" id="22_h0qkk"]
 
 [sub_resource type="Resource" id="Resource_tmtom"]
@@ -26,18 +25,9 @@ main_inv_size = 10
 drop_on_death = false
 starting_inv = Array[ExtResource("3_4hy3y")]([])
 
-[sub_resource type="Resource" id="Resource_axhmd"]
-script = ExtResource("14_h0qkk")
-item = ExtResource("17_oq3a2")
-quantity = 1
-weighting = 1.0
-last_used = 0
-spawn_count = 0
-metadata/_custom_type_script = "uid://1qq7eo7lm8j6"
-
 [sub_resource type="Resource" id="Resource_g1258"]
 script = ExtResource("6_3mtfl")
-hit_loot_table = Array[ExtResource("14_h0qkk")]([SubResource("Resource_axhmd")])
+hit_loot_table = Array[ExtResource("14_h0qkk")]([])
 hit_spawn_chance = 1.0
 hit_chance_scale = 1
 remove_when_dropped = false
@@ -58,7 +48,7 @@ metadata/_custom_type_script = "uid://baglarh3m4c8o"
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ur1i4"]
 size = Vector2(12, 12)
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_g1258"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_3mtfl"]
 resource_local_to_scene = true
 shader = ExtResource("3_xscca")
 
@@ -77,7 +67,7 @@ animations = [{
 "speed": 5.0
 }]
 
-[sub_resource type="Resource" id="Resource_5ao0g"]
+[sub_resource type="Resource" id="Resource_axhmd"]
 resource_local_to_scene = true
 script = ExtResource("12_3rk2w")
 metadata/_custom_type_script = "uid://ckiyd2nbdcofr"
@@ -105,7 +95,7 @@ shape = SubResource("RectangleShape2D_ur1i4")
 
 [node name="EntitySprite" parent="." instance=ExtResource("3_kbhyj")]
 unique_name_in_owner = true
-material = SubResource("ShaderMaterial_g1258")
+material = SubResource("ShaderMaterial_3mtfl")
 position = Vector2(0, -7)
 scale = Vector2(0.11, 0.11)
 sprite_frames = SubResource("SpriteFrames_rk4ta")
@@ -122,7 +112,7 @@ infinte_hp = true
 [node name="EffectReceiverComponent" parent="." node_paths=PackedStringArray("affected_entity", "dmg_handler") instance=ExtResource("10_o35vp")]
 affected_entity = NodePath("..")
 dmg_handler = NodePath("DmgHandler")
-life_steal_handler = SubResource("Resource_5ao0g")
+life_steal_handler = SubResource("Resource_axhmd")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="EffectReceiverComponent"]
 position = Vector2(0, -7)

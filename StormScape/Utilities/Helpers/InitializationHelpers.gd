@@ -7,6 +7,10 @@ static func initialize_proj_wpn_stats_resource(stats_resource: ProjWeaponResourc
 	stats_resource.effect_source = stats_resource.effect_source.duplicate()
 	stats_resource.original_status_effects = stats_resource.effect_source.status_effects.duplicate()
 
+	stats_resource.original_aoe_status_effects = []
+	if stats_resource.projectile_logic.aoe_effect_source:
+		stats_resource.original_aoe_status_effects = stats_resource.projectile_logic.aoe_effect_source.status_effects.duplicate()
+
 	var normal_moddable_stats: Dictionary[StringName, float] = {
 		&"fire_cooldown" : stats_resource.fire_cooldown,
 		&"min_charge_time" : stats_resource.min_charge_time,
@@ -48,6 +52,13 @@ static func initialize_proj_wpn_stats_resource(stats_resource: ProjWeaponResourc
 	}
 
 	stats_resource.s_mods.add_moddable_stats(normal_moddable_stats)
+
+	if stats_resource.projectile_logic.aoe_effect_source:
+		var aoe_effect_source_moddable_stats: Dictionary[StringName, float] = {
+			&"proj_aoe_base_damage" : stats_resource.projectile_logic.aoe_effect_source.base_damage,
+			&"proj_aoe_base_healing" : stats_resource.projectile_logic.aoe_effect_source.base_healing
+		}
+		stats_resource.s_mods.add_moddable_stats(aoe_effect_source_moddable_stats)
 
 	if (stats_resource.ammo_in_mag == -1) and (stats_resource.ammo_type != ProjWeaponResource.ProjAmmoType.STAMINA):
 		stats_resource.ammo_in_mag = int(stats_resource.s_mods.get_stat("mag_size"))

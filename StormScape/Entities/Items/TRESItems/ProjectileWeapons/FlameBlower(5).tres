@@ -34,9 +34,6 @@ heal_affected_stats = 2
 impact_sound = ""
 hit_flash_color = Color(1, 1, 1, 0.6)
 status_effects = Array[ExtResource("3_frpgg")]([ExtResource("3_cibnu")])
-contact_position = Vector2(0, 0)
-movement_direction = Vector2(0, 0)
-multishot_id = -1
 
 [sub_resource type="Resource" id="Resource_awnew"]
 script = ExtResource("7_8pg8v")
@@ -229,6 +226,7 @@ do_cluster_barrage = true
 barrage_proj_delay = 0.0
 ammo_in_mag = -1
 pullout_delay = 0.25
+no_levels = false
 hide_ammo_ui = true
 max_mods_override = 0
 blocked_mods = Array[StringName]([])
@@ -251,6 +249,7 @@ current_mods = Array[Dictionary]([{
 }])
 original_status_effects = Array[ExtResource("3_frpgg")]([])
 original_charge_status_effects = Array[ExtResource("3_frpgg")]([])
+original_aoe_status_effects = Array[ExtResource("3_frpgg")]([])
 id = "flame_blower"
 name = "Flame Blower"
 tags = Array[StringName]([])
@@ -264,6 +263,7 @@ extra_details = Array[ExtResource("4_5cw7p")]([])
 ground_icon = ExtResource("6_1teer")
 in_hand_icon = ExtResource("6_1teer")
 inv_icon = ExtResource("8_l60l2")
+flip_inv_icon_h = false
 inv_icon_offset = Vector2(-0.7, -0.8)
 inv_icon_scale = Vector2(1.29, 1.29)
 inv_icon_rotation = -42.0

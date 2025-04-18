@@ -23,7 +23,6 @@ var detector: DetectionComponent ## The detector component of the entity this is
 var target: Node2D = null ## The currently sought after target node.
 var path_recalc_timer: Timer = TimerHelpers.create_repeating_timer(self, -1, _calculate_path_to_target) ## The timer tracking how long between recalculating the path to the target via the nav agent.
 var raycast_results: Array[Dictionary] = [] ## Stores the most recent set of raycast results.
-var last_movement_direction: Vector2 ## The most recent movement direction.
 var last_candidate_scores: Array = [] ## The most recent set of scores for each possible direction.
 var ray_directions: Array[Vector2] = [ ## The directions in which rays are cast and avoidance is processed.
 	Vector2.from_angle(0),

@@ -40,17 +40,15 @@ class_name EffectSource
 @export_group("Status Effects")
 @export var status_effects: Array[StatusEffect] ## The array of status effects that can be applied to the receiving entity.
 
-
-# Unique Properties #
-@export_storage var contact_position: Vector2 ## The position of what the effect source is attached to when it makes contact with a receiver.
-@export_storage var movement_direction: Vector2 ## The direction vector of this effect source at contact used for knockback.
-@export_storage var multishot_id: int = -1 ## The id used to relate multishot projectiles with each other. Unique to each game load. -1 means it did not come from a multishot.
+var contact_position: Vector2 ## The position of what the effect source is attached to when it makes contact with a receiver.
+var movement_direction: Vector2 ## The direction vector of this effect source at contact used for knockback.
+var multishot_id: int = -1 ## The id used to relate multishot projectiles with each other. Unique to each game load. -1 means it did not come from a multishot.
 
 
-## Looks to see if there is a status effect with the matching name in this effect source's array of status effects. Return its index
-## if found, else return -1. Does not handle duplicates.
-func check_for_effect_and_get_index(name: String) -> int:
+## Looks to see if there is a status effect with a full matching effect key in this effect source's array of
+## status effects. Return its index if found, else return -1. Does not handle duplicates.
+func check_for_effect_and_get_index(effect_key: String) -> int:
 	for i: int in range(status_effects.size()):
-		if status_effects[i].id == name:
+		if status_effects[i].get_full_effect_key() == effect_key:
 			return i
 	return -1

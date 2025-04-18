@@ -15,6 +15,7 @@ var sound_preload_changes: bool = false
 var sound_refcount_changes: bool = false
 var storm_phases: bool = false
 var loot_table_updates: bool = false
+var weapon_xp_updates: bool = false
 
 # Push Error Flags
 var mod_not_in_cache: bool = false ## Anytime a stat mod is applied to a nonexistent stat, push an error. This should be turned off unless debugging a new stat mod, since entities who don't have certain stats like max_speed will always push an error for status effects that try to mod it (but it isn't really an error since it won't affect anything by design).

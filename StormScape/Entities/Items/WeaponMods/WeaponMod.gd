@@ -16,6 +16,7 @@ class_name WeaponMod
 @export var wpn_stat_mods: Array[StatMod] ## The stat modifiers applied by this mod. Do not have duplicates in this array.
 @export var status_effects: Array[StatusEffect] ## The status effects to add to the weapon's effect source status effects.
 @export var charge_status_effects: Array[StatusEffect] ## The status effects to add to the weapon's charge effect source status effects.
+@export var aoe_status_effects: Array[StatusEffect] ## The status effects to add to the weapon's aoe effect source status effects.
 @export_subgroup("Applied Details")
 @export var applied_details: Array[StatDetail] = [] ## The extra information to populate in the item viewer details panel for the weapon that this is attached to. If inside one of the detail resources you leave the stat array empty, the title will turn green and be displayed alone without a colon and any associated numerical value.
 

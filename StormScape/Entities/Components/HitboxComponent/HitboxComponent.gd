@@ -11,6 +11,7 @@ class_name HitboxComponent
 @onready var collider: CollisionShape2D = $CollisionShape2D ## The collision shape for this hitbox.
 
 var movement_direction: Vector2 = Vector2.ZERO ## The current movement direction for this hitbox.
+var source_weapon: WeaponResource ## The reference to the weapon that produced this effect source, if any.
 
 
 ## Setup the area detection signal and turn on monitoring just in case it was toggled off somewhere. It needs
@@ -61,7 +62,7 @@ func _start_being_handled(handling_area: EffectReceiverComponent) -> void:
 
 	if handling_area.absorb_full_hit:
 		collider.set_deferred("disabled", true) # Does not apply to hitscans
-	handling_area.handle_effect_source(effect_source, source_entity)
+	handling_area.handle_effect_source(effect_source, source_entity, source_weapon)
 
 ## Meant to be overridden by subclasses to determine what to do after hitting an object.
 func _process_hit(_object: Node2D) -> void:

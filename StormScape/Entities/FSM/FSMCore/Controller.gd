@@ -5,7 +5,7 @@ class_name Controller
 
 var entity: DynamicEntity ## The entity that this controller operates on.
 var fsm: StateMachine ## The FSM that this controller works with.
-var can_receive_effects: bool = true ## Whether the entity is in a state that can receive effects.
+var can_receive_effect_srcs: bool = true ## Whether the entity is in a state that can receive effect sources.
 var last_facing_dir: Vector2 = Vector2.ZERO ## The facing_dir updated during the last frame. Used to make lerping work.
 
 

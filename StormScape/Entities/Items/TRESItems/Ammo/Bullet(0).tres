@@ -1,0 +1,40 @@
+[gd_resource type="Resource" script_class="ProjAmmoResource" load_steps=4 format=3 uid="uid://bdjhfsluk53lc"]
+
+[ext_resource type="Texture2D" uid="uid://dm4207hijonur" path="res://Entities/Items/Ammo/Bullet/BulletAmmoThumbCT.tres" id="1_xy8oh"]
+[ext_resource type="Texture2D" uid="uid://bj8cxp5cf4lw0" path="res://Entities/Items/Ammo/Bullet/bullet_ammo.png" id="2_6f2gy"]
+[ext_resource type="Script" uid="uid://bpc1cwr4a6lgo" path="res://Entities/Items/Ammo/ProjAmmoResource.gd" id="4_yhhkm"]
+
+[resource]
+script = ExtResource("4_yhhkm")
+ammo_type = 2
+id = "bullet_ammo"
+name = "Bullet Ammo"
+tags = null
+item_type = 2
+rarity = 0
+stack_size = 999
+auto_pickup = true
+pickup_radius = null
+info = "Ammo used in standard weapons like rifles."
+extra_details = null
+ground_icon = ExtResource("1_xy8oh")
+in_hand_icon = ExtResource("1_xy8oh")
+inv_icon = ExtResource("2_6f2gy")
+flip_inv_icon_h = null
+inv_icon_offset = null
+inv_icon_scale = null
+inv_icon_rotation = null
+recipe = null
+output_quantity = null
+recipe_unlocked = null
+rotation_lerping = null
+holding_offset = null
+holding_degrees = null
+is_gripped_by_one_hand = null
+draw_off_hand = null
+draw_off_hand_offset = null
+main_hand_offset = null
+cooldowns_per_suid = null
+shown_cooldown_fills = null
+show_cursor_cooldown = null
+session_uid = null

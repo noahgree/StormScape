@@ -11,19 +11,23 @@ static var hovered_slot_size: float = 22.0 ## The size of the hovered over slot 
 @export var no_item_slot_texture: Texture2D ## The texture of the slot with no item when it is selected or active.
 @export var backing_texture: Texture2D ## The texture of the slot that appears behind everything else.
 @export var preview_only: bool = false ## When true, this slot will not react to drags or hovers.
-@export var hide_corner_icons: bool = false ## When true, the corner icons for the item will not show.
+@export var hide_corner_level: bool = false ## When true, the corner level icons for the item will not show.
+@export var hide_corner_info: bool = false ## When true, the corner info icons for the item will not show.
+@export var hide_tint_progress: bool = false ## When true, the tint progress for the item will not show.
 
 @onready var texture_margins: MarginContainer = $TextureMargins ## The item texture margins node for this slot.
 @onready var back_color: ColorRect = $BackColorMargin/BackColor ## The color behind the item.
 @onready var item_texture: TextureRect = $TextureMargins/ItemTexture ## The item texture node for this slot.
 @onready var quantity: Label = $QuantityMargins/Quantity ## The quantity label for this slot.
 @onready var rarity_glow: TextureRect = $RarityGlowMargin/RarityGlow ## The glow behind the weapon in the slot.
-@onready var selected_texture: TextureRect = $SelectedTexture ## The texture that appears when this slot is selected or active.
+@onready var selected_texture: NinePatchRect = $SelectedTexture ## The texture that appears when this slot is selected or active.
 @onready var backing_texture_rect: TextureRect = $BackingTextureMargin/BackingTexture ## The texture rect that appears behind everything as an icon.
 @onready var corner_info_icons_margin: MarginContainer = $CornerInfoIconsMargin ## The margins for the corner info.
 @onready var corner_info_icons_grid: HBoxContainer = %CornerInfoIconsHBox ## The grid holding the corner info icons.
 @onready var corner_level_icons_h_box: HBoxContainer = %CornerLevelIconsHBox ## The grid holding the corner level icons.
 @onready var modded_icon: TextureRect = %ModdedIcon ## The icon that shows up on a weapon if it is modded.
+@onready var corner_icons_background: ColorRect = %CornerIconsBackground ## The color rect behind the corner icons.
+@onready var level_background: ColorRect = %LevelBackground ## The color rect behind the level icons.
 
 var index: int ## The index that this slot represents inside the inventory.
 var synced_inv: InventoryResource ## The synced inventory that this slot is a part of.
@@ -38,7 +42,10 @@ var tint_tween: Tween = null ## The tween animating the tint progress.
 var tint_progress: float = 100.0: ## How much of the tint should be filled upwards. Runs from 0 - 100.
 	set(new_value):
 		tint_progress = new_value
-		back_color.set_instance_shader_parameter("progress", new_value)
+		if hide_tint_progress:
+			back_color.set_instance_shader_parameter("progress", 100.0)
+		else:
+			back_color.set_instance_shader_parameter("progress", new_value)
 var pause_changed_signals: bool = false ## When true, the item_changed signal will not be emitted by the setter. Useful for when the slot itself is making changes like when the slot quantity limit is only 1 and we have to send extra quantities back out.
 var preview_items: Array[Dictionary] = []: ## When this isn't null, this items will display as a cycling preview and nothing will be able to be dragged out of this slot.
 	set(new_preview_items):
@@ -93,22 +100,6 @@ func _ready() -> void:
 	texture_margins.add_theme_constant_override("margin_left", margin_size)
 	texture_margins.add_theme_constant_override("margin_right", margin_size)
 
-	# Setting up corner icons
-	var corner_icon_size: float = 3.25 * texture_margins_ratio
-	for icon: TextureRect in corner_info_icons_grid.get_children():
-		icon.custom_minimum_size = Vector2(corner_icon_size, corner_icon_size)
-	var corner_lvl_icon_size: float = 1.0 * texture_margins_ratio
-	for icon: TextureRect in corner_level_icons_h_box.get_children():
-		icon.custom_minimum_size = Vector2(corner_lvl_icon_size, corner_lvl_icon_size)
-	if texture_margins_ratio > 1.5:
-		corner_level_icons_h_box.add_theme_constant_override("separation", 2)
-
-	corner_info_icons_grid.add_theme_constant_override("separation", 1 if texture_margins.size.x <= 30.0 else 3)
-	corner_info_icons_margin.add_theme_constant_override("margin_left", max(1, floori(int(2 * texture_margins_ratio))))
-	corner_info_icons_margin.add_theme_constant_override("margin_right", max(1, floori(int(2 * texture_margins_ratio))))
-	corner_info_icons_margin.add_theme_constant_override("margin_top", max(1, floori(int(2 * texture_margins_ratio))))
-	corner_info_icons_margin.add_theme_constant_override("margin_bottom", max(1, floori(int(2 * texture_margins_ratio))))
-
 	# Using the texture margins minus its margin amount to get the item texture size since it doesn't update immediately at game start
 	var margins: int = texture_margins.get_theme_constant("margin_bottom") * 2
 	item_texture.size = texture_margins.size - Vector2(margins, margins)
@@ -135,6 +126,7 @@ func _update_visuals(new_item_dict: Dictionary) -> void:
 		update_tint_progress(Globals.player_node.inv.auto_decrementer.get_cooldown(new_item.stats.get_cooldown_id()))
 
 		item_texture.texture = new_item.stats.inv_icon
+		item_texture.flip_h = new_item.stats.flip_inv_icon_h
 
 		texture_margins.rotation_degrees = new_item.stats.inv_icon_rotation
 		texture_margins.scale = new_item.stats.inv_icon_scale
@@ -205,17 +197,24 @@ func _reset_corner_icons() -> void:
 		icon.hide()
 	for icon: TextureRect in corner_level_icons_h_box.get_children():
 		icon.hide()
+	level_background.hide()
+	corner_icons_background.hide()
 
 ## Conditionally shows the needed corner icons for things like the modded indicator icon and the weapon lvl.
 func update_corner_icons(new_item: InvItemResource) -> void:
-	if new_item == null or hide_corner_icons:
+	if new_item == null:
 		return
 
 	if new_item.stats is WeaponResource:
-		if new_item.stats.has_any_mods():
+		if new_item.stats.has_any_mods() and not hide_corner_info:
 			modded_icon.show()
+			corner_icons_background.show()
+			corner_info_icons_grid.modulate = Globals.rarity_colors.slot_fill.get(new_item.stats.rarity).lightened(0.6)
 		else:
 			modded_icon.hide()
+
+		if hide_corner_level:
+			return
 
 		var lvl: int = new_item.stats.level
 		var icons_to_show: int = clampi(floori(float(lvl) / 10.0), 0, 4)
@@ -223,6 +222,10 @@ func update_corner_icons(new_item: InvItemResource) -> void:
 		for icon: TextureRect in corner_level_icons_h_box.get_children():
 			icon.visible = i < icons_to_show
 			i += 1
+		if icons_to_show > 0:
+			level_background.show()
+			level_background.custom_minimum_size.x = 1 + (icons_to_show * 2)
+			corner_level_icons_h_box.modulate = Globals.rarity_colors.slot_fill.get(new_item.stats.rarity).lightened(0.6)
 
 ## When this is shown or hidden and different slots are displayed, update the local tint progress
 ## with the current item.
@@ -297,6 +300,7 @@ func _make_drag_preview(at_position: Vector2) -> Control:
 		var preview_texture: TextureRect = preview_tex_margins.get_node("ItemTexture")
 
 		preview_texture.texture = item.stats.inv_icon
+		preview_texture.flip_h = item.stats.flip_inv_icon_h
 
 		preview_tex_margins.rotation_degrees = item.stats.inv_icon_rotation
 		preview_tex_margins.position = item.stats.inv_icon_offset * (item_texture.size / 16.0)
@@ -606,6 +610,7 @@ func _on_mouse_entered() -> void:
 
 			if item == null:
 				item_texture.texture = drag_data.item_texture.texture
+				item_texture.flip_h = drag_data.item.stats.flip_inv_icon_h
 				texture_margins.rotation_degrees = drag_data.item.stats.inv_icon_rotation
 				texture_margins.position = drag_data.item.stats.inv_icon_offset * (item_texture.size / 16.0)
 				texture_margins.scale = drag_data.item.stats.inv_icon_scale

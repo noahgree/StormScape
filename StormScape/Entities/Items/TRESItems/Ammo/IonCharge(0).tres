@@ -1,42 +1,41 @@
-[gd_resource type="Resource" script_class="ProjAmmoResource" load_steps=6 format=3 uid="uid://c5jim46mul7ex"]
+[gd_resource type="Resource" script_class="ProjAmmoResource" load_steps=4 format=3 uid="uid://c5jim46mul7ex"]
 
 [ext_resource type="Texture2D" uid="uid://damxkqnfy7nie" path="res://Entities/Items/Ammo/IonCharge/IonChargeThumbCT.tres" id="1_2kknk"]
-[ext_resource type="Script" uid="uid://cowjdnic7xmkp" path="res://UI/Inventory/PlayerInventory/StatDetail.gd" id="1_7ctb4"]
 [ext_resource type="Texture2D" uid="uid://egdmabwj4ceh" path="res://Entities/Items/Ammo/IonCharge/ion_charge.png" id="2_7ctb4"]
 [ext_resource type="Script" uid="uid://bpc1cwr4a6lgo" path="res://Entities/Items/Ammo/ProjAmmoResource.gd" id="3_h00y8"]
-[ext_resource type="Script" uid="uid://ctxa7i1mbt7ab" path="res://UI/Inventory/PlayerInventory/Crafting/CraftingIngredient.gd" id="4_wobl8"]
 
 [resource]
 script = ExtResource("3_h00y8")
-ammo_type = 8
+ammo_type = 6
 id = "ion_charge_ammo"
 name = "Ion Charge"
-tags = Array[StringName]([])
+tags = null
 item_type = 2
 rarity = 0
 stack_size = 100
 auto_pickup = true
-pickup_radius = 4
+pickup_radius = null
 info = "Like a battery, but better. Specially designed to power electric weapons."
-extra_details = Array[ExtResource("1_7ctb4")]([])
+extra_details = null
 ground_icon = ExtResource("1_2kknk")
 in_hand_icon = ExtResource("1_2kknk")
 inv_icon = ExtResource("2_7ctb4")
-inv_icon_offset = Vector2(0, 0)
-inv_icon_scale = Vector2(1, 1)
-inv_icon_rotation = 0.0
-recipe = Array[ExtResource("4_wobl8")]([])
-output_quantity = 1
-recipe_unlocked = false
-rotation_lerping = 0.1
-holding_offset = Vector2(0, 0)
-holding_degrees = 0.0
-is_gripped_by_one_hand = true
-draw_off_hand = false
-draw_off_hand_offset = Vector2(0, 0)
-main_hand_offset = Vector2(0, 0)
-cooldowns_per_suid = true
-shown_cooldown_fills = Array[String]([])
-show_cursor_cooldown = false
-session_uid = 0
+flip_inv_icon_h = null
+inv_icon_offset = null
+inv_icon_scale = null
+inv_icon_rotation = null
+recipe = null
+output_quantity = null
+recipe_unlocked = null
+rotation_lerping = null
+holding_offset = null
+holding_degrees = null
+is_gripped_by_one_hand = null
+draw_off_hand = null
+draw_off_hand_offset = null
+main_hand_offset = null
+cooldowns_per_suid = null
+shown_cooldown_fills = null
+show_cursor_cooldown = null
+session_uid = null
 metadata/_custom_type_script = "uid://bpc1cwr4a6lgo"

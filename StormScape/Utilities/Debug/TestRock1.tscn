@@ -1,4 +1,4 @@
-[gd_scene load_steps=33 format=3 uid="uid://jdi552emuah8"]
+[gd_scene load_steps=31 format=3 uid="uid://jdi552emuah8"]
 
 [ext_resource type="Script" uid="uid://cn2gulskgn7k3" path="res://Entities/EntityCore/EntityTypes/StaticEntity/StaticEntity.gd" id="1_7qjvm"]
 [ext_resource type="Script" uid="uid://dwmur0cosbbwh" path="res://UI/Inventory/InventoryCore/InventoryResource.gd" id="2_ymdvb"]
@@ -11,7 +11,6 @@
 [ext_resource type="Shader" uid="uid://cfbagv3hrtar2" path="res://Utilities/Game/Shaders/EntityEffectShader.gdshader" id="6_sc78r"]
 [ext_resource type="Script" uid="uid://baglarh3m4c8o" path="res://Entities/Components/ItemComponents/LootTableComponent/LootTableResource.gd" id="6_ymdvb"]
 [ext_resource type="Texture2D" uid="uid://y4h3ce1ifonf" path="res://Entities/Environment/Rocks/Rock1CT.tres" id="7_7qjvm"]
-[ext_resource type="Resource" uid="uid://bdjhfsluk53lc" path="res://Entities/Items/TRESItems/Ammo/Medium(0).tres" id="7_mc2cg"]
 [ext_resource type="PackedScene" uid="uid://cdfdy8m6ki3oq" path="res://Entities/Components/HealthComponent/HealthComponent.tscn" id="8_c8cii"]
 [ext_resource type="PackedScene" uid="uid://btba0jmsow1mx" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectReceiverComponent.tscn" id="9_wje6d"]
 [ext_resource type="PackedScene" uid="uid://jpq0ij8wwlhy" path="res://Entities/Components/FacingComponent/FacingComponent.tscn" id="12_1nxg5"]
@@ -25,6 +24,7 @@
 script = ExtResource("2_ymdvb")
 title = "CHEST"
 main_inv_size = 10
+drop_on_death = false
 starting_inv = Array[ExtResource("3_mc2cg")]([])
 
 [sub_resource type="Resource" id="Resource_ke02d"]
@@ -45,18 +45,9 @@ last_used = 0
 spawn_count = 0
 metadata/_custom_type_script = "uid://1qq7eo7lm8j6"
 
-[sub_resource type="Resource" id="Resource_jd6t2"]
-script = ExtResource("14_v0818")
-item = ExtResource("7_mc2cg")
-quantity = 10
-weighting = 1.0
-last_used = 0
-spawn_count = 0
-metadata/_custom_type_script = "uid://1qq7eo7lm8j6"
-
 [sub_resource type="Resource" id="Resource_mc2cg"]
 script = ExtResource("6_ymdvb")
-hit_loot_table = Array[ExtResource("14_v0818")]([SubResource("Resource_ke02d"), SubResource("Resource_sc78r"), SubResource("Resource_jd6t2")])
+hit_loot_table = Array[ExtResource("14_v0818")]([SubResource("Resource_ke02d"), SubResource("Resource_sc78r")])
 hit_spawn_chance = 100.0
 hit_chance_scale = 1
 remove_when_dropped = true
@@ -77,7 +68,7 @@ metadata/_custom_type_script = "uid://baglarh3m4c8o"
 [sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_2kecs"]
 polygon = PackedVector2Array(-12, -15, -12, -6, 12, -6, 12, -15)
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_ke02d"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ymdvb"]
 resource_local_to_scene = true
 shader = ExtResource("6_sc78r")
 
@@ -125,7 +116,7 @@ scale = Vector2(2.51672, 3.34408)
 
 [node name="EntitySprite" parent="." instance=ExtResource("5_by2me")]
 unique_name_in_owner = true
-material = SubResource("ShaderMaterial_ke02d")
+material = SubResource("ShaderMaterial_ymdvb")
 instance_shader_parameters/crack_color = Color(0.246, 0.109, 0.01, 0.85)
 instance_shader_parameters/crack_depth = 0.4
 instance_shader_parameters/crack_intensity = 0.0
@@ -134,7 +125,6 @@ instance_shader_parameters/crack_profile = 1.214
 instance_shader_parameters/crack_scale = 3.838
 instance_shader_parameters/crack_slope = 86.2
 instance_shader_parameters/crack_width = 0.036
-instance_shader_parameters/crack_zebra_amp = 1.183
 instance_shader_parameters/crack_zebra_scale = 0.841
 instance_shader_parameters/final_alpha = 1.0
 instance_shader_parameters/outline_color = Color(1, 1, 1, 1)

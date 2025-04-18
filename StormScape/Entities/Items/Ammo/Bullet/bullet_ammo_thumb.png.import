@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://emfg6q1q42wm"
-path="res://.godot/imported/heavy_ammo_thumb.png-33929e47998a17c05e49463f2e5c8c8e.ctex"
+uid="uid://cr1cdh1f8n7ut"
+path="res://.godot/imported/bullet_ammo_thumb.png-88783cfd42de1498c51926dd3222c96b.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Entities/Items/Ammo/Heavy/heavy_ammo_thumb.png"
-dest_files=["res://.godot/imported/heavy_ammo_thumb.png-33929e47998a17c05e49463f2e5c8c8e.ctex"]
+source_file="res://Entities/Items/Ammo/Bullet/bullet_ammo_thumb.png"
+dest_files=["res://.godot/imported/bullet_ammo_thumb.png-88783cfd42de1498c51926dd3222c96b.ctex"]
 
 [params]
 

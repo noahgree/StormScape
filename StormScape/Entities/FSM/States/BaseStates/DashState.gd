@@ -3,7 +3,7 @@ class_name DashState
 ## Handles when the dynamic entity is dashing.
 
 @export var ghost_count: int = 8 ## How many ghosts to make during the dash.
-@export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var ghost_fade_time: float = 0.1 ## How long ghosts take to fade.
+@export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var ghost_fade_time: float = 0.28 ## How long ghosts take to fade.
 
 var dash_impact_cam_fx: CamFXResource = load("res://Entities/Player/PlayerCore/PlayerCamera/CamFXPresets/4(NoFreeze).tres") ## The cam impact to create when a dash hits a collidable entity.
 var ghosts_spawned: int = 0 ## The number of ghosts spawned so far in this dash.
@@ -26,7 +26,7 @@ func enter() -> void:
 	entity.facing_component.travel_anim_tree("run")
 
 	controller.knockback_vector = Vector2.ZERO
-	controller.can_receive_effects = false
+	controller.can_receive_effect_srcs = false
 	collision_shake_complete = false
 
 	_play_dash_sound()
@@ -42,7 +42,7 @@ func exit() -> void:
 	if entity is Player:
 		entity.collision_mask = initial_collision_mask
 
-	controller.can_receive_effects = true
+	controller.can_receive_effect_srcs = true
 	controller.dash_timer.stop()
 	entity.velocity = Vector2.ZERO
 	controller.knockback_vector = Vector2.ZERO

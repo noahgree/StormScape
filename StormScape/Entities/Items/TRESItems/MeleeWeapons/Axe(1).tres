@@ -32,9 +32,6 @@ impact_cam_fx = ExtResource("1_8vcks")
 impact_sound = ""
 hit_flash_color = Color(1, 1, 1, 0.6)
 status_effects = Array[ExtResource("2_kry0o")]([])
-contact_position = Vector2(0, 0)
-movement_direction = Vector2(0, 0)
-multishot_id = -1
 metadata/_custom_type_script = ExtResource("1_x4rfe")
 
 [sub_resource type="Resource" id="Resource_c7rci"]
@@ -57,9 +54,6 @@ impact_cam_fx = ExtResource("4_ib65y")
 impact_sound = ""
 hit_flash_color = Color(1, 1, 1, 0.6)
 status_effects = Array[ExtResource("2_kry0o")]([])
-contact_position = Vector2(0, 0)
-movement_direction = Vector2(0, 0)
-multishot_id = -1
 metadata/_custom_type_script = ExtResource("1_x4rfe")
 
 [sub_resource type="Resource" id="Resource_ieaky"]
@@ -86,6 +80,7 @@ charge_stamina_cost = 25
 charge_ghost_fade_time = 1.0
 charge_use_sound = ""
 pullout_delay = 0.25
+no_levels = false
 hide_ammo_ui = false
 max_mods_override = -1
 blocked_mods = Array[StringName]([])
@@ -108,6 +103,7 @@ current_mods = Array[Dictionary]([{
 }])
 original_status_effects = Array[ExtResource("2_kry0o")]([])
 original_charge_status_effects = Array[ExtResource("2_kry0o")]([])
+original_aoe_status_effects = Array[ExtResource("2_kry0o")]([])
 id = "axe"
 name = "Axe"
 tags = Array[StringName]([&"tool"])
@@ -121,6 +117,7 @@ extra_details = Array[ExtResource("5_ff5e7")]([])
 ground_icon = ExtResource("4_c7rci")
 in_hand_icon = ExtResource("4_c7rci")
 inv_icon = ExtResource("5_xkirk")
+flip_inv_icon_h = true
 inv_icon_offset = Vector2(0, 0)
 inv_icon_scale = Vector2(1, 1)
 inv_icon_rotation = 0.0

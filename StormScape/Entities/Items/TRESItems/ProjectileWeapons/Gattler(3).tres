@@ -49,9 +49,6 @@ heal_affected_stats = 2
 impact_sound = ""
 hit_flash_color = Color(1, 1, 1, 0.6)
 status_effects = Array[ExtResource("3_gsntq")]([])
-contact_position = Vector2(0, 0)
-movement_direction = Vector2(0, 0)
-multishot_id = -1
 metadata/_custom_type_script = ExtResource("1_lbh37")
 
 [sub_resource type="Resource" id="Resource_vt4jh"]
@@ -252,6 +249,7 @@ do_cluster_barrage = false
 barrage_proj_delay = 0.0
 ammo_in_mag = -1
 pullout_delay = 0.5
+no_levels = false
 hide_ammo_ui = false
 max_mods_override = -1
 blocked_mods = Array[StringName]([])
@@ -274,6 +272,7 @@ current_mods = Array[Dictionary]([{
 }])
 original_status_effects = Array[ExtResource("3_gsntq")]([])
 original_charge_status_effects = Array[ExtResource("3_gsntq")]([])
+original_aoe_status_effects = Array[ExtResource("3_gsntq")]([])
 id = "gattler"
 name = "Gattler"
 tags = Array[StringName]([])
@@ -287,6 +286,7 @@ extra_details = Array[ExtResource("5_pxe5r")]([])
 ground_icon = ExtResource("4_ajwg5")
 in_hand_icon = ExtResource("4_ajwg5")
 inv_icon = ExtResource("4_g5312")
+flip_inv_icon_h = false
 inv_icon_offset = Vector2(0, 0.5)
 inv_icon_scale = Vector2(1.31, 1.31)
 inv_icon_rotation = -41.0

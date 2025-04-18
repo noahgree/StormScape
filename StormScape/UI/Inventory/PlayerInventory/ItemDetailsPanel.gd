@@ -7,7 +7,6 @@ class_name ItemDetailsPanel
 
 @export_group("Connections")
 @export var inventory_ui: PlayerInvUI ## The main controller for all inventory sub-UIs.
-@export var ammo_viewer_margin: MarginContainer ## The slot that shows the ammo type of the main viewed item.
 @export_group("Textures")
 @export var stamina_ammo_icon: Texture2D ## The icon used for stamina when displaying ammo type of viewed weapon.
 
@@ -44,7 +43,6 @@ func _ready() -> void:
 	info_margin.visible = false
 	details_margin.visible = false
 	changing_item_viewer_slot = false
-	ammo_viewer_margin.visible = false
 
 	if Globals.player_node == null:
 		await SignalBus.player_ready
@@ -148,7 +146,6 @@ func _on_mod_slot_changed(slot: ModSlot, old_item: InvItemResource, new_item: In
 func _on_item_viewer_slot_changed(_slot: Slot, _old_item: InvItemResource, new_item: InvItemResource) -> void:
 	changing_item_viewer_slot = true
 
-	ammo_viewer_margin.visible = false
 	player_icon_margin.visible = false
 
 	if new_item == null:
@@ -190,26 +187,11 @@ func _on_item_viewer_slot_changed(_slot: Slot, _old_item: InvItemResource, new_i
 		_change_mod_slot_visibilities(false)
 
 	if new_item.stats is WeaponResource:
-		_update_ammo_viewer_slot(new_item.stats)
-		var level_string: String = "• [color=ffd6e0FF] LVL " + str(new_item.stats.level) + "[/color][color=AAAAAA00][char=02D9][/color]" + "[color=AAAAAA00][char=02D9][/color]"
-		item_rarity_label.text += level_string
+		if not new_item.stats.no_levels:
+			var level_string: String = "• [color=8df0ffFF] LVL " + str(new_item.stats.level) + "[/color][color=AAAAAA00][char=02D9][/color]" + "[color=AAAAAA00][char=02D9][/color]"
+			item_rarity_label.text += level_string
 
 	changing_item_viewer_slot = false
-
-## Updates the ammo viewer slot with the appropriate ammo type for the currently selected weapon.
-func _update_ammo_viewer_slot(new_item: ItemResource) -> void:
-	ammo_viewer_margin.visible = false
-	if new_item is ProjWeaponResource:
-		if new_item.ammo_type not in [ProjWeaponResource.ProjAmmoType.NONE, ProjWeaponResource.ProjAmmoType.SELF, ProjWeaponResource.ProjAmmoType.CHARGES]:
-			ammo_viewer_margin.visible = true
-			if new_item.ammo_type == ProjWeaponResource.ProjAmmoType.STAMINA:
-				ammo_viewer_margin.get_node("%AmmoIcon").texture = stamina_ammo_icon
-			else:
-				var ammo_item: ProjAmmoResource = CraftingManager.get_item_by_id(ProjWeaponResource.get_ammo_item_cache_id_by_enum_value(new_item.ammo_type))
-				ammo_viewer_margin.get_node("%AmmoIcon").texture = ammo_item.inv_icon
-	else:
-		ammo_viewer_margin.visible = true
-		ammo_viewer_margin.get_node("%AmmoIcon").texture = stamina_ammo_icon
 
 ## Changes the visibility of the mod slots depending on whether we have a moddable weapon under review.
 func _change_mod_slot_visibilities(shown: bool, stats: WeaponResource = null) -> void:

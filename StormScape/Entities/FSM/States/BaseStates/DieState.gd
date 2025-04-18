@@ -12,7 +12,7 @@ func enter() -> void:
 		)
 	entity.anim_tree.process_mode = Node.PROCESS_MODE_PAUSABLE
 	entity.process_mode = Node.PROCESS_MODE_DISABLED
-	controller.can_receive_effects = false
+	controller.can_receive_effect_srcs = false
 	entity.anim_tree.animation_finished.connect(_on_die_anim_ended, CONNECT_ONE_SHOT)
 	entity.facing_component.travel_anim_tree("die")
 

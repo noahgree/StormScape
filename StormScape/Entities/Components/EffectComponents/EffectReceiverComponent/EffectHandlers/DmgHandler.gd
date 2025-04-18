@@ -44,16 +44,22 @@ func _get_dmg_after_crit_then_armor(effect_source: EffectSource, is_crit: bool) 
 	var new_damage: int = max(0, round(dmg_after_crit * (1 - (float(armor_block_percent) / 100))))
 	return new_damage
 
-## Handles instantaneous damage that will be affected by armor.
-func handle_instant_damage(effect_source: EffectSource, life_steal_percent: float = 0.0) -> void:
+## Handles instantaneous damage that will be affected by armor. Returns the appropriate xp amount to apply.
+func handle_instant_damage(effect_source: EffectSource, life_steal_percent: float = 0.0) -> int:
 	var is_crit: bool = (randf_range(0, 100) <= effect_source.crit_chance) and can_be_crit
 	var dmg_after_crit_then_armor: int = _get_dmg_after_crit_then_armor(effect_source, is_crit)
 
 	var object_dmg_mult: float = 1.0
-	if (affected_entity is RigidEntity or affected_entity is StaticEntity) and affected_entity.is_object:
+	if affected_entity.is_object:
 		object_dmg_mult = effect_source.object_damage_mult
+	var final_damage: int = int(dmg_after_crit_then_armor * object_dmg_mult)
 
-	_send_handled_dmg("basic_damage", effect_source.dmg_affected_stats, int(dmg_after_crit_then_armor * object_dmg_mult), effect_source.multishot_id, life_steal_percent, is_crit)
+	var final_xp: int = final_damage
+	if final_damage >= affected_entity.health_component.health + affected_entity.health_component.shield:
+		final_xp += WeaponResource.LARGE_XP
+
+	_send_handled_dmg("basic_damage", effect_source.dmg_affected_stats, final_damage, effect_source.multishot_id, life_steal_percent, is_crit)
+	return final_xp
 
 ## Handles applying damage that is inflicted over time, whether with a delay, with burst intervals, or with both.
 func handle_over_time_dmg(dot_resource: DOTResource, source_type: String) -> void:
@@ -144,9 +150,8 @@ func _on_dot_timer_timeout(dot_timer: Timer, source_type: String) -> void:
 
 ## Sends the affected entity's health component the final damage values based on what stats the damage was
 ## allowed to affect.
-func _send_handled_dmg(source_type: String, dmg_affected_stats: Globals.DmgAffectedStats,
-						handled_amount: int, multishot_id: int, life_steal_percent: float = 0.0,
-						was_crit: bool = false) -> void:
+func _send_handled_dmg(source_type: String, dmg_affected_stats: Globals.DmgAffectedStats, handled_amount: int,
+						multishot_id: int, life_steal_percent: float = 0.0, was_crit: bool = false) -> void:
 	var dmg_weakness: float = affected_entity.stats.get_stat("dmg_weakness")
 	var dmg_resistance: float = affected_entity.stats.get_stat("dmg_resistance")
 	var multiplier: float = 1.0 + (dmg_weakness / 100.0) - (dmg_resistance / 100.0)

@@ -32,6 +32,7 @@ class_name DynamicController
 
 @onready var default_facing_method: FacingComponent.Method = facing_method ## A copy of the initial facing method to restore to.
 
+var last_movement_direction: Vector2 ## The most recent movement direction.
 var dash_timer: Timer = TimerHelpers.create_one_shot_timer(self, -1, _on_dash_timer_timeout)
 var dash_cooldown_timer: Timer = TimerHelpers.create_one_shot_timer(self) ## The timer controlling the minimum time between activating dashes.
 var stunned_timer: Timer = TimerHelpers.create_one_shot_timer(self, -1, _on_stun_timer_timeout) ## The timer controlling how long the stun effect has remaining.
@@ -101,8 +102,13 @@ func create_footprint_and_sound(offsets: Array) -> void:
 
 		footprint.z_index = -1
 		footprint.set_instance_shader_parameter("tint_color", Color(0.0, 0.0, 0.0, 0.8))
-
 		Globals.world_root.add_child(footprint)
+
+		if entity is Player:
+			entity.step_dust_particles.direction = -last_movement_direction.normalized()
+			entity.step_dust_particles.position = offset
+			entity.step_dust_particles.restart()
+
 
 	AudioManager.play_2d("player_run_base", entity.global_position)
 

@@ -13,17 +13,22 @@ func parse_item(stats: ItemResource) -> Array[String]:
 
 	match stats.item_type:
 		Globals.ItemType.CONSUMABLE:
-			pass
+			strings.append(_get_health_bars_change(stats))
+			strings.append(_get_damage(stats))
+			strings.append(_get_healing(stats))
+			strings.append(_get_use_speed(stats))
 		Globals.ItemType.WEAPON:
+			strings.append(_get_ammo_type(stats))
 			strings.append(_get_damage(stats))
 			strings.append(_get_charge_damage(stats))
 			strings.append(_get_healing(stats))
 			strings.append(_get_charge_healing(stats))
-			strings.append(_get_attack_speed(stats))
-			strings.append(_get_ammo_and_reload(stats))
+			strings.append(_get_use_speed(stats))
+			strings.append(_get_mag_and_reload(stats))
 			strings.append(_get_bloom(stats))
 			strings.append(_get_status_effects(stats))
 			strings.append(_get_charge_status_effects(stats))
+			strings.append_array(_get_aoe_stats(stats))
 		Globals.ItemType.AMMO:
 			pass
 		Globals.ItemType.WEARABLE:
@@ -98,6 +103,10 @@ func _get_damage(stats: ItemResource) -> String:
 	if stats.effect_source.crit_chance > 0:
 		string += " (" + crit_mult + " crit)"
 
+	if not stats is WeaponResource:
+		if float(dmg) == 0:
+			string = ""
+
 	return string
 
 ## Gets the charge damage details for melee weapons.
@@ -135,11 +144,17 @@ func _get_charge_healing(stats: ItemResource) -> String:
 
 	return _get_title("CHRG HEAL") + _get_item_sums(stats, ["charge_base_healing"], true)
 
+func _get_health_bars_change(stats: ItemResource) -> String:
+	var string: String = _get_title("FOOD VALUE")
+	string += _get_item_sums(stats, ["hunger_bar_gain"], true)
+	return string
+
 ## Gets the attack speed details.
-func _get_attack_speed(stats: ItemResource) -> String:
-	var string: String = _get_title("FIRE RATE")
+func _get_use_speed(stats: ItemResource) -> String:
+	var string: String
 
 	if stats is ProjWeaponResource:
+		string = _get_title("FIRE RATE")
 		var sum: String
 		if stats.firing_mode != ProjWeaponResource.FiringType.CHARGE:
 			sum = _get_item_sums(stats, ["firing_duration", "fire_cooldown"], false, "s")
@@ -147,16 +162,32 @@ func _get_attack_speed(stats: ItemResource) -> String:
 			sum = _get_item_sums(stats, ["firing_duration", "fire_cooldown", "min_charge_time"], false, "s")
 
 		string += StringHelpers.remove_trailing_zero(sum)
-	else:
+	elif stats is MeleeWeaponResource:
+		string = _get_title("USE SPEED")
 		string += _get_item_sums(stats, ["use_speed", "use_cooldown"], false, "s")
 
 		if stats.can_do_charge_use:
 			var chg_sum: String = _get_item_sums(stats, ["min_charge_time", "charge_use_speed", "charge_use_cooldown"], false, "s")
 			string += " (" + chg_sum + " chrg)"
+	elif stats is ConsumableResource:
+		string = _get_title("CONSUMPTION SPEED")
+		string += _get_item_sums(stats, ["consumption_time", "consumption_cooldown"], false, "s")
+
+	return string
+
+## Gets the ammo type string used by the weapon.
+func _get_ammo_type(stats: WeaponResource) -> String:
+	var string: String = _get_title("AMMO TYPE")
+	if stats is ProjWeaponResource:
+		if stats.ammo_type in [ProjWeaponResource.ProjAmmoType.NONE, ProjWeaponResource.ProjAmmoType.SELF, ProjWeaponResource.ProjAmmoType.CHARGES]:
+			return ""
+		string += stats.get_ammo_string()
+	else:
+		return ""
 	return string
 
 ## Gets the magazine ammo and reload time details. Gets stamina use for melee weapons.
-func _get_ammo_and_reload(stats: ItemResource) -> String:
+func _get_mag_and_reload(stats: ItemResource) -> String:
 	var string: String = _get_title("MAG")
 
 	if stats is MeleeWeaponResource:
@@ -231,6 +262,36 @@ func _get_charge_status_effects(stats: ItemResource) -> String:
 		string = ""
 
 	return string
+
+## Gets the aoe radius for the weapon if it can do aoe.
+func _get_aoe_stats(stats: WeaponResource) -> Array[String]:
+	if stats is not ProjWeaponResource:
+		return [""]
+	elif stats.s_mods.get_stat("proj_aoe_radius") == 0:
+		return [""]
+
+	var strings: Array[String] = [_get_title("AOE RADIUS") + _get_item_sums(stats, ["proj_aoe_radius"], true, " px")]
+
+	var damage: String = _get_title("AOE DMG")
+	if stats.s_mods.get_stat("proj_aoe_base_damage") > 0:
+		damage += _get_item_sums(stats, ["proj_aoe_base_damage"], true)
+		strings.append(damage)
+
+	var healing: String = _get_title("AOE HEAL")
+	if stats.s_mods.get_stat("proj_aoe_base_healing") > 0:
+		healing += _get_item_sums(stats, ["proj_aoe_base_healing"], true)
+		strings.append(healing)
+
+	var effects: String = _get_title("AOE EFFECTS")
+	for effect: StatusEffect in stats.projectile_logic.aoe_effect_source.status_effects:
+		if effect not in stats.original_aoe_status_effects:
+			effects += "[color=Lawngreen]" + effect.get_pretty_string() + "[/color], "
+		else:
+			effects += effect.get_pretty_string() + ", "
+	effects = effects.trim_suffix(", ")
+	strings.append(effects)
+
+	return strings
 
 ## Gets the list of allowed proj and melee weapon types for a mod.
 func _get_allowed_weapons_for_mod(stats: WeaponMod) -> Array[String]:

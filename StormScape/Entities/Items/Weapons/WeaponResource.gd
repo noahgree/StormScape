@@ -6,8 +6,17 @@ const BASE_XP_FOR_LVL: int = 100
 const LVL_SCALING_EXPONENT: float = 1.025
 const RARITY_LEVELING_FACTOR: float = 0.2
 const MAX_LEVEL: int = 40
+const TINY_XP: int = 2
+const SMALL_XP: int = 5
+const MEDIUM_XP: int = 25
+const MEDIUM_LARGE_XP: int = 50
+const LARGE_XP: int = 100
+const HUGE_XP: int = 250
+const ENORMOUS_XP: int = 500
+const EFFECT_AMOUNT_XP_MULT: float = 0.35 ## Multiplies effect source amounts (dmg,heal) before adding that amount as xp.
 
 @export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var pullout_delay: float = 0.25 ## How long after equipping must we wait before we can use this weapon.
+@export var no_levels: bool = false ## When true, this weapon does not engage with the weapon leveling system.
 @export var hide_ammo_ui: bool = false ## Whether to hide the ammo UI when the player uses this weapon.
 @export_group("Modding Details")
 @export_range(-1, 6, 1) var max_mods_override: int = -1 ## The override for the maximum number of mod slots for this weapon. By default it is based on rarity. Anything other than -1 will activate the override.
@@ -15,13 +24,14 @@ const MAX_LEVEL: int = 40
 
 
 # Unique Properties #
-@export_custom(PROPERTY_HINT_RANGE, "1,40,1", PROPERTY_USAGE_DEFAULT) var level: int = 1 ## The level for this weapon.
+@export_custom(PROPERTY_HINT_RANGE, "1,40,1", PROPERTY_USAGE_STORAGE) var level: int = 1 ## The level for this weapon.
 @export_storage var lvl_progress: int ## Any xp gained towards the progress of the next level is stored here.
 @export_storage var s_mods: StatModsCacheResource = StatModsCacheResource.new() ## The cache of all up to date stats for this weapon with mods factored in.
 @export_storage var weapon_mods_need_to_be_readded_after_save: bool = false ## When the weapons are loaded from a save, the weapon mods end up getting added to the old stats reference and not the new duplicated one after load. But since these properties transfer over, we check this each time the weapon is readied to see if we should readd all weapon mods.
 @export_storage var current_mods: Array[Dictionary] = [{ &"1" : null }, { &"2" : null }, { &"3" : null }, { &"4" : null }, { &"5" : null }, { &"6" : null }] ## The current mods applied to this weapon. This is an array of dictionaries so that the KV pairs can be ordered. Keys are StringName mod names and values are weapon_mod resources.
 @export_storage var original_status_effects: Array[StatusEffect] = [] ## The original status effect list of the effect source before any mods are applied.
 @export_storage var original_charge_status_effects: Array[StatusEffect] = [] ## The original status effect list of the charge effect source before any mods are applied.
+@export_storage var original_aoe_status_effects: Array[StatusEffect] = [] ## The original status effect list of the aoe effect source before any mods are applied.
 
 ## Returns the amount of xp we need to attain the next level that we aren't at yet.
 static func xp_needed_for_lvl(weapon_stats: WeaponResource, lvl: int) -> int:
@@ -58,24 +68,10 @@ func has_any_mods() -> bool:
 			return true
 	return false
 
-## Finds the place a stat is stored at within the resource and returns it. Can optionally get the unmodified stat
-## if it exists in the stat mods cache.
-func get_nested_stat(stat: StringName, get_original: bool = false) -> float:
-	if s_mods.has_stat(stat):
-		if not get_original: return s_mods.get_stat(stat)
-		else: return s_mods.get_original_stat(stat)
-	elif stat in self:
-		return get(stat)
-	elif stat in get("effect_source"):
-		return get("effect_source").get(stat)
-	elif "projectile_logic" in self and stat in get("projectile_logic"):
-		return get("projectile_logic").get(stat)
-	else:
-		push_error("Couldn't find the requested stat (" + stat + ") anywhere.")
-		return 0
-
 ## Adds xp to the weapon, potentially leveling it up if it has reached enough accumulation of xp.
 func add_xp(amount: int) -> void:
+	if no_levels:
+		return
 	lvl_progress += amount
 	while level < MAX_LEVEL:
 		var xp_needed: int = xp_needed_for_lvl(self, level + 1)
@@ -88,8 +84,9 @@ func add_xp(amount: int) -> void:
 	if level == MAX_LEVEL:
 		lvl_progress = 0
 
-	var xp_needed_now: int = xp_needed_for_lvl(self, level + 1)
-	print("XP_LEFT: ", lvl_progress, " | LEVEL: ", level, " | NEXT_NEEDED_TOTAL: ", xp_needed_now)
+	if DebugFlags.weapon_xp_updates:
+		var xp_needed_now: int = xp_needed_for_lvl(self, level + 1)
+		print("AMOUNT: ", amount, " | PROGRESS: ", lvl_progress, " | LEVEL: ", level, " | REMAINING_NEEDED: ", xp_needed_now - lvl_progress)
 
 ## prints the total needed xp for each level up to the requested level.
 func print_total_needed(for_level: int) -> void:
