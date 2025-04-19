@@ -5,7 +5,8 @@ class_name Slot
 
 signal item_changed(slot: Slot, old_item: InvItemResource, new_item: InvItemResource) ## Emitted when the item in the slot is changed or set.
 
-static var hovered_slot_size: float = 22.0 ## The size of the hovered over slot used to conditionally center the drag preview when scaling is messed up. 22 comes from the normally-sized inventory slots.
+static var hovered_slot: Slot ## The currently hovered over slot for all slots in the game.
+static var last_hovered_slot_size: float = 22.0 ## The most recently hovered over slot's size.
 
 @export var default_slot_texture: Texture2D ## The default texture of the slot with an item in it.
 @export var no_item_slot_texture: Texture2D ## The texture of the slot with no item when it is selected or active.
@@ -14,6 +15,7 @@ static var hovered_slot_size: float = 22.0 ## The size of the hovered over slot 
 @export var hide_corner_level: bool = false ## When true, the corner level icons for the item will not show.
 @export var hide_corner_info: bool = false ## When true, the corner info icons for the item will not show.
 @export var hide_tint_progress: bool = false ## When true, the tint progress for the item will not show.
+@export var hide_hover_tooltip: bool = false ## When true, the hover tooltip will never show over this slot.
 
 @onready var texture_margins: MarginContainer = $TextureMargins ## The item texture margins node for this slot.
 @onready var back_color: ColorRect = $BackColorMargin/BackColor ## The color behind the item.
@@ -319,7 +321,7 @@ func _make_drag_preview(at_position: Vector2) -> Control:
 		else:
 			preview_scene.get_node("QuantityMargins/Quantity").text = str(item.quantity) if item.quantity > 1 else ""
 
-		if Slot.hovered_slot_size > 22:
+		if last_hovered_slot_size > 22:
 			preview_scene.position = -Vector2(22.0 / 2.0, 22.0 / 2.0)
 		else:
 			preview_scene.position = -at_position
@@ -338,6 +340,17 @@ func _input(event: InputEvent) -> void:
 				event = event.duplicate()
 				event.button_index = MOUSE_BUTTON_LEFT
 				Input.parse_input_event(event)
+	elif event.is_action_pressed("dash") and hovered_slot == self:
+		if not get_viewport().gui_is_dragging() and item != null and not ("is_output_slot" in self and get("is_output_slot")):
+			var item_viewer_slot: Slot = Globals.player_node.get_node("%ItemViewerSlot")
+			var item_details_panel: ItemDetailsPanel = Globals.player_node.get_node("%ItemDetailsPanel")
+			if item_viewer_slot._can_drop_data(Vector2.ZERO, self):
+				if not item_details_panel.pinned:
+					item_viewer_slot.set_item(null)
+				item_viewer_slot._drop_data(Vector2.ZERO, self)
+				CursorManager.hide_tooltip()
+				await get_tree().process_frame
+				hovered_slot = self
 
 ## When we start a right click drag, interpret it as starting a left click drag.
 ## Runs single quantity and half quantity logic.
@@ -596,7 +609,8 @@ func _fill_slot_to_stack_size() -> void:
 ## When mouse enters, if we can drop, display an effect on this slot. Also stop previews temporarily if they are
 ## in progress.
 func _on_mouse_entered() -> void:
-	Slot.hovered_slot_size = size.x
+	hovered_slot = self
+	last_hovered_slot_size = size.x
 
 	if get_viewport().gui_is_dragging():
 		if not preview_items.is_empty():
@@ -622,6 +636,7 @@ func _on_mouse_entered() -> void:
 
 ## When mouse exits, if we are dragging, remove effects on this slot. If we have queued previews, resume them.
 func _on_mouse_exited() -> void:
+	hovered_slot = null
 	SignalBus.slot_not_hovered.emit()
 
 	var drag_data: Variant

@@ -11,13 +11,13 @@ class_name HandsComponent
 @export var mouth_pos: Vector2 = Vector2(0, -8) ## Used for emitting food particles from wherever the mouth should be.
 @export var time_brightness_min_max: Vector2 = Vector2(1.0, 1.0) ## How the brightness of the hand sprites should change in response to time of day. Anything besides (1, 1) activates this.
 
+@onready var entity: Entity = get_parent().get_parent() ## The entity using this hands component.
 @onready var hands_anchor: Node2D = $HandsAnchor ## The anchor for rotating and potentially scaling the hands.
 @onready var main_hand: Node2D = $HandsAnchor/MainHand ## The main hand node who's child will any equipped item.
 @onready var main_hand_sprite: Sprite2D = $HandsAnchor/MainHandSprite ## The main hand sprite to draw if that equipped item needs it.
 @onready var off_hand_sprite: Sprite2D = $OffHandSprite ## The off hand sprite that is drawn when holding a one handed weapon.
 @onready var drawn_off_hand: Sprite2D = $HandsAnchor/DrawnOffHand ## The extra off hand sprite that is drawn on top of a weapon that needs it. See the equippability details inside the item resources for more info.
 @onready var smoke_particles: CPUParticles2D = $HandsAnchor/SmokeParticles ## The smoke particles used when an item has overheated.
-@onready var entity: Entity = get_parent().get_parent() ## The entity using this hands component.
 
 var equipped_item: EquippableItem = null ## The currently equipped equippable item that the entity is holding.
 var current_x_direction: int = 1 ## A pos or neg toggle for which direction the anim vector has us facing. Used to flip the x-scale.
@@ -39,6 +39,9 @@ func _on_before_load_game() -> void:
 func _draw() -> void:
 	if not equipped_item or not DebugFlags.show_aiming_direction:
 		return
+
+	# Aim target position
+	draw_circle(to_local(aim_target_pos), 3, Color.AQUA)
 
 	if equipped_item is ProjectileWeapon:
 		var local_position: Vector2 = to_local(debug_origin_of_projectile_vector)
@@ -101,17 +104,35 @@ func _unhandled_input(event: InputEvent) -> void:
 #endregion
 
 ## Continuously sends the hold activate call when the trigger is pressed as long as the focused ui is fully closed
-## and the equipped item is enabled and not lerping.
+## and the equipped item is enabled and not lerping. Also manages calling hand placement funcs for equipped items.
 func _process(delta: float) -> void:
+	# Player Inputs
 	if Globals.focused_ui_is_open or Globals.focused_ui_is_closing_debounce:
 		return
-	handle_aim(CursorManager.get_cursor_mouse_position())
-	if (equipped_item == null) or (not equipped_item.enabled) or (scale_is_lerping):
+
+	if entity is Player:
+		handle_aim(CursorManager.get_cursor_mouse_position())
+
+	if not ((equipped_item == null) or (not equipped_item.enabled) or (scale_is_lerping)):
+		if trigger_pressed:
+			equipped_item.hold_activate(delta)
+		elif equipped_item is Weapon:
+			equipped_item.hold_time = max(0, equipped_item.hold_time - delta)
+
+	# Hand Placements
+	if equipped_item == null:
+		set_physics_process(false)
 		return
-	if trigger_pressed:
-		equipped_item.hold_activate(delta)
-	elif equipped_item is Weapon:
-		equipped_item.hold_time = max(0, equipped_item.hold_time - delta)
+
+	if equipped_item.stats.item_type == Globals.ItemType.WEAPON:
+		if equipped_item is ProjectileWeapon:
+			_manage_proj_weapon_hands(_get_facing_dir())
+		elif equipped_item is MeleeWeapon:
+			# Don't override the hands rotation when the animation is playing and controlling it
+			if not equipped_item.anim_player.is_playing():
+				_manage_melee_weapon_hands(_get_facing_dir())
+	elif equipped_item.stats.item_type in [Globals.ItemType.CONSUMABLE, Globals.ItemType.WORLD_RESOURCE]:
+		_manage_normal_hands(_get_facing_dir())
 
 ## Removes the currently equipped item after letting it clean itself up.
 func unequip_current_item() -> void:
@@ -131,10 +152,10 @@ func unequip_current_item() -> void:
 		equipped_item = null
 
 ## Handles positioning of the hands for the newly equipped item and then lets physics process take over.
-func on_equipped_item_change(inv_item_slot: Slot) -> void:
+func on_equipped_item_change(stats: ItemResource, inv_index: int) -> void:
 	unequip_current_item()
 
-	if inv_item_slot.item == null or inv_item_slot.item.stats.item_scene == null:
+	if stats == null or stats.item_scene == null:
 		set_physics_process(false)
 		main_hand_sprite.visible = false
 		off_hand_sprite.visible = false
@@ -142,7 +163,7 @@ func on_equipped_item_change(inv_item_slot: Slot) -> void:
 		CursorManager.reset()
 		return
 
-	equipped_item = EquippableItem.create_from_slot(inv_item_slot)
+	equipped_item = EquippableItem.create_from_inv_index(stats, entity, inv_index)
 
 	_update_anchor_scale("x", 1)
 	_update_anchor_scale("y", 1)
@@ -151,7 +172,7 @@ func on_equipped_item_change(inv_item_slot: Slot) -> void:
 	scale_is_lerping = false
 
 	_change_off_hand_sprite_visibility(true)
-	_check_for_drawing_off_hand()
+	_check_for_and_draw_off_hand()
 
 	if equipped_item.stats.item_type == Globals.ItemType.WEAPON:
 		main_hand_sprite.visible = false
@@ -197,25 +218,6 @@ func _prep_for_pullout_anim() -> void:
 	else:
 		hands_anchor.global_rotation -= PI/5
 
-func _physics_process(_delta: float) -> void:
-	if Globals.focused_ui_is_open:
-		return
-
-	if equipped_item == null:
-		set_physics_process(false)
-		return
-
-	if equipped_item.stats.item_type == Globals.ItemType.WEAPON:
-		if equipped_item is ProjectileWeapon:
-			_manage_proj_weapon_hands(_get_facing_dir())
-		elif equipped_item is MeleeWeapon:
-			if not equipped_item.is_node_ready():
-				_manage_melee_weapon_hands(_get_facing_dir())
-			elif not equipped_item.anim_player.is_playing():
-				_manage_melee_weapon_hands(_get_facing_dir())
-	elif equipped_item.stats.item_type in [Globals.ItemType.CONSUMABLE, Globals.ItemType.WORLD_RESOURCE]:
-		_manage_normal_hands(_get_facing_dir())
-
 ## Manages the placement of the hands when holding a projectile weapon.
 func _manage_proj_weapon_hands(facing_dir: Vector2) -> void:
 	_change_y_sort(facing_dir)
@@ -234,17 +236,20 @@ func _manage_proj_weapon_hands(facing_dir: Vector2) -> void:
 
 	var y_offset: float = equipped_item.proj_origin.y + equipped_item.stats.holding_offset.y
 	y_offset *= hands_anchor.scale.y
-
 	var rotated_offset: Vector2 = Vector2(0, y_offset).rotated(hands_anchor.global_rotation)
+
 	var sprite_pos_with_offsets: Vector2 = hands_anchor.global_position + rotated_offset
+	var adjusted_aim_pos: Vector2 = aim_target_pos - sprite_pos_with_offsets
 
-	var curr_direction: Vector2 = Vector2.RIGHT.rotated(hands_anchor.global_rotation)
-
-	var lerped_direction_angle: float = LerpHelpers.lerp_direction(
-		curr_direction, aim_target_pos, sprite_pos_with_offsets,
-		entity.facing_component.rotation_lerping_factor
-		).angle()
-	hands_anchor.global_rotation = lerped_direction_angle
+	if equipped_item.stats.snap_to_six_dirs:
+		hands_anchor.global_rotation = _snap_dir_six_ways(adjusted_aim_pos.angle(), facing_dir)
+	else:
+		var curr_direction: Vector2 = Vector2.RIGHT.rotated(hands_anchor.global_rotation)
+		var lerped_direction_angle: float = LerpHelpers.lerp_direction(
+			curr_direction, aim_target_pos, sprite_pos_with_offsets,
+			entity.facing_component.rotation_lerping_factor
+			).angle()
+		hands_anchor.global_rotation = lerped_direction_angle
 
 	# Debug drawing
 	debug_origin_of_projectile_vector = sprite_pos_with_offsets
@@ -276,19 +281,19 @@ func _manage_melee_weapon_hands(facing_dir: Vector2) -> void:
 
 	var swing_angle_offset: float = hands_anchor.scale.y * deg_to_rad(equipped_item.stats.swing_angle / 2.0)
 	var sprite_visual_rot_offset: float = hands_anchor.scale.y * deg_to_rad(equipped_item.sprite_visual_rotation)
-
 	var rotated_offset: Vector2 = offset.rotated(hands_anchor.global_rotation)
-	var sprite_pos_with_offsets: Vector2 = hands_anchor.global_position + rotated_offset
 
+	var sprite_pos_with_offsets: Vector2 = hands_anchor.global_position + rotated_offset
 	var adjusted_aim_pos: Vector2 = (aim_target_pos - sprite_pos_with_offsets).rotated(sprite_visual_rot_offset - swing_angle_offset)
 
-	var curr_direction: Vector2 = Vector2.RIGHT.rotated(hands_anchor.global_rotation)
-
-	var lerped_direction_angle: float = LerpHelpers.lerp_direction_vectors(
-		curr_direction, adjusted_aim_pos, entity.facing_component.rotation_lerping_factor
-		).angle()
-
-	hands_anchor.global_rotation = lerped_direction_angle
+	if equipped_item.stats.snap_to_six_dirs:
+		hands_anchor.global_rotation = _snap_dir_six_ways(adjusted_aim_pos.angle(), facing_dir)
+	else:
+		var curr_direction: Vector2 = Vector2.RIGHT.rotated(hands_anchor.global_rotation)
+		var lerped_direction_angle: float = LerpHelpers.lerp_direction_vectors(
+			curr_direction, adjusted_aim_pos, entity.facing_component.rotation_lerping_factor
+			).angle()
+		hands_anchor.global_rotation = lerped_direction_angle
 
 	# Debug drawing
 	queue_redraw()
@@ -304,6 +309,27 @@ func _manage_normal_hands(facing_dir: Vector2) -> void:
 		_update_anchor_scale("x", 1)
 		_change_off_hand_sprite_visibility(true)
 
+## For items that need to only snap to six directions, this forces the rotation to be one of the six.
+func _snap_dir_six_ways(angle_rad: float, facing_dir: Vector2) -> float:
+	var snap_angles_deg: Array[float] = [40, 90, 140]
+	if facing_dir.y < 0:
+		snap_angles_deg = [220, 270, 320]
+
+	var angle_deg: float = fposmod(rad_to_deg(angle_rad), 360)
+	var closest_angle: float = snap_angles_deg[0]
+	var min_diff: float = abs(angle_deg - closest_angle)
+
+	for snap_angle: float in snap_angles_deg:
+		var diff: float = abs(angle_deg - snap_angle)
+		diff = min(diff, 360 - diff)
+		if diff < min_diff:
+			min_diff = diff
+			closest_angle = snap_angle
+
+	return deg_to_rad(closest_angle)
+
+## Changes the off hand sprite's visibility depending on the equipped item and whether or not to show the off
+## hand (which is based on the facing direction).
 func _change_off_hand_sprite_visibility(show_off_hand: bool) -> void:
 	if equipped_item != null:
 		if show_off_hand and equipped_item.stats.is_gripped_by_one_hand:
@@ -313,11 +339,15 @@ func _change_off_hand_sprite_visibility(show_off_hand: bool) -> void:
 	else:
 		off_hand_sprite.visible = false
 
-func _check_for_drawing_off_hand() -> void:
+## Checks for the need to draw the off hand based on the equipped item, then positions it and shows it
+## if appropriate.
+func _check_for_and_draw_off_hand() -> void:
 	if equipped_item.stats.draw_off_hand and not equipped_item.stats.is_gripped_by_one_hand:
-		drawn_off_hand.position = Vector2(off_hand_sprite.position.x, starting_off_hand_sprite_height) + equipped_item.stats.draw_off_hand_offset + equipped_item.stats.holding_offset
+		drawn_off_hand.position = Vector2(off_hand_sprite.position.x, starting_off_hand_sprite_height) + equipped_item.stats.draw_off_hand_offset
 		drawn_off_hand.visible = true
 
+## Forces the y sort of equipped items to change by artificially moving them up or down depending on the faced
+## direction. To keep them in the same spot visually, the hands anchor's position is moved to counteract it.
 func _change_y_sort(facing_dir: Vector2) -> void:
 	if facing_dir.y < 0: # Facing up
 		position = entity.sprite.position - Vector2(0, 1)
@@ -334,21 +364,31 @@ func _change_y_sort(facing_dir: Vector2) -> void:
 			hands_anchor.position.y = 0
 			off_hand_sprite.position.y = starting_off_hand_sprite_height
 
+## Handles lerping the y scale when we cross over the y axis.
 func _handle_y_scale_lerping(facing_dir: Vector2) -> void:
-	if facing_dir.x > 0.12:
+	var snaps: bool = equipped_item.stats is WeaponResource and equipped_item.stats.snap_to_six_dirs
+	if equipped_item and equipped_item.stats.stay_flat_on_rotate:
 		current_x_direction = 1
-	elif facing_dir.x < -0.12:
+	elif facing_dir.x > (0.12 if not snaps else 0.005):
+		current_x_direction = 1
+	elif facing_dir.x < (-0.12 if not snaps else -0.005):
 		current_x_direction = -1
 
-	_update_anchor_scale("y", lerp(hands_anchor.scale.y, -1.0 if current_x_direction == -1 else 1.0, 0.24))
+	var lerp_speed: float = 0.24 if not snaps else 1.0
+	_update_anchor_scale("y", lerp(hands_anchor.scale.y, -1.0 if current_x_direction == -1 else 1.0, lerp_speed))
 
+## Forces the snapping of the y scale based on the faced direction.
 func snap_y_scale() -> void:
-	if _get_facing_dir().x > 0.12:
+	if equipped_item.stats.stay_flat_on_rotate:
+		current_x_direction = 1
+	elif _get_facing_dir().x > 0.12:
 		current_x_direction = 1
 	elif _get_facing_dir().x < -0.12:
 		current_x_direction = -1
+
 	_update_anchor_scale("y", -1.0 if current_x_direction == -1 else 1.0)
 
+## Updates the hands anchor's x or y scale with a new value as long as we can rotate.
 func _update_anchor_scale(coord: String, new_value: float) -> void:
 	if should_rotate:
 		if coord == "y":
@@ -356,6 +396,7 @@ func _update_anchor_scale(coord: String, new_value: float) -> void:
 		else:
 			hands_anchor.scale.x = new_value
 
+## Returns the currently faced direction as dictated by the facing component.
 func _get_facing_dir() -> Vector2:
 	return entity.facing_component.facing_dir
 
@@ -394,8 +435,8 @@ func add_weapon_xp(amount: int) -> void:
 	if not _check_is_holding_weapon() or Globals.player_inv_is_open:
 		printerr("Either the player is not holding a weapon or a focused UI is open, so no xp was added.")
 		return
-	var source_slot_index: int = Globals.player_node.hands.equipped_item.source_slot.index
-	Globals.player_node.inv.add_xp_to_weapon(source_slot_index, amount)
+	var inv_index: int = Globals.player_node.hands.equipped_item.inv_index
+	Globals.player_node.inv.add_xp_to_weapon(inv_index, amount)
 
 ## Debug prints the total needed xp for each level up to the passed in level.
 func debug_print_xp_needed_for_lvl(lvl: int) -> void:

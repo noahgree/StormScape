@@ -128,7 +128,7 @@ const rarity_colors: Dictionary[String, Dictionary] = {
 	"ui_text" : {
 		ItemRarity.COMMON : Color(0.755, 0.781, 0.772),
 		ItemRarity.UNCOMMON : Color(0.558, 0.923, 0.67),
-		ItemRarity.RARE : Color(0.245, 0.739, 1.0),
+		ItemRarity.RARE : Color(0.374, 0.766, 1.0),
 		ItemRarity.EPIC : Color(0.765, 0.68, 1.0),
 		ItemRarity.LEGENDARY : Color(0.971, 0.76, 0.509),
 		ItemRarity.SINGULAR : Color(1.0, 0.53, 0.665)

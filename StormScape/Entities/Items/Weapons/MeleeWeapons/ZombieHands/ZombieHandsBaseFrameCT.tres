@@ -1,0 +1,8 @@
+[gd_resource type="CanvasTexture" load_steps=3 format=3 uid="uid://df8efruyxa73h"]
+
+[ext_resource type="Texture2D" uid="uid://rakdd57dkbuq" path="res://Entities/Items/Weapons/MeleeWeapons/ZombieHands/zombie_hands_base_frame.png" id="1_nlmfb"]
+[ext_resource type="Texture2D" uid="uid://gdfdeakf5agd" path="res://Entities/Items/Weapons/MeleeWeapons/ZombieHands/zombie_hands_base_frame_n.png" id="2_wp55q"]
+
+[resource]
+diffuse_texture = ExtResource("1_nlmfb")
+normal_texture = ExtResource("2_wp55q")

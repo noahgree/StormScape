@@ -58,6 +58,7 @@ var overlay_color_tween: Tween = null ## The tween controlling the overlay color
 var current_floor_light_names: Array[String] = [] ## The queue for the next colors to show when the previous ones finish.
 var current_sprite_glow_names: Array[String] = [] ## The queue for the next colors to show when the previous ones finish.
 var hitflash_tween: Tween ## The tween that animates the hitflash effect.
+var shader_node: Node2D = self
 const HITFLASH_DURATION: float = 0.05 ## The duration of the hitflash effect.
 
 
@@ -86,7 +87,7 @@ func _ready() -> void:
 ## Interpolates the brightness mult on the sprite shader based on the brightness given by the day-night manager.
 func _on_day_night_brightness_tick(progress: float) -> void:
 	var brightness: float = time_brightness_min_max.y + (time_brightness_min_max.x - time_brightness_min_max.y) * progress
-	set_instance_shader_parameter("brightness_mult", brightness)
+	shader_node.set_instance_shader_parameter("brightness_mult", brightness)
 
 ## Sets up the floor light size to be proportional to the sprite boundaries.
 func _setup_floor_light_size(sprite_size: Vector2) -> void:
@@ -98,6 +99,8 @@ func _setup_floor_light_size(sprite_size: Vector2) -> void:
 ## Sets up the overlay size to be twice as big at the sprite boundaries.
 func _setup_overlay_size(sprite_size: Vector2) -> void:
 	overlay.size = sprite_size * 2
+	if entity is Player:
+		print(sprite_size)
 	overlay.position = Vector2(overlay.size.y * -0.5, overlay.size.x * 0.5)
 
 ## Sets up the potential for showing cracks with damage.
@@ -109,7 +112,7 @@ func _setup_cracks_with_damage(sprite_size: Vector2) -> void:
 	health_component.health_changed.connect(_update_cracking)
 	health_component.max_health_changed.connect(_on_max_health_of_entity_changed)
 
-	set_instance_shader_parameter("crack_pixelate", sprite_size)
+	shader_node.set_instance_shader_parameter("crack_pixelate", sprite_size)
 	var scale_scaler: float = max(30.0, maxf(sprite_size.x, sprite_size.y)) / 30.0
 	min_crack_stats["crack_scale"] = min_crack_stats["crack_scale"] * scale_scaler
 	max_crack_stats["crack_scale"] = max_crack_stats["crack_scale"] * scale_scaler
@@ -185,17 +188,17 @@ func start_hitflash(flash_color: Color = Color(1, 1, 1, 0.6), tween_in: bool = f
 		hitflash_tween.kill()
 	hitflash_tween = create_tween()
 
-	set_instance_shader_parameter("use_override_color", true)
+	shader_node.set_instance_shader_parameter("use_override_color", true)
 
 	if tween_in:
-		hitflash_tween.tween_property(self, "instance_shader_parameters/override_color", flash_color, 0.1)
+		hitflash_tween.tween_property(shader_node, "instance_shader_parameters/override_color", flash_color, 0.1)
 		hitflash_tween.tween_interval(HITFLASH_DURATION)
 	else:
-		set_instance_shader_parameter("override_color", flash_color)
+		shader_node.set_instance_shader_parameter("override_color", flash_color)
 		hitflash_tween.tween_interval(HITFLASH_DURATION)
 
-	hitflash_tween.tween_property(self, "instance_shader_parameters/override_color", Color.TRANSPARENT, 0.1)
-	hitflash_tween.tween_callback(func() -> void: set_instance_shader_parameter("use_override_color", false))
+	hitflash_tween.tween_property(shader_node, "instance_shader_parameters/override_color", Color.TRANSPARENT, 0.1)
+	hitflash_tween.tween_callback(func() -> void: shader_node.set_instance_shader_parameter("use_override_color", false))
 
 ## Updates the level of cracking shown by the shader. Uses the new current health as a percentage of the max
 ## health to determine how cracked it should be between the min and max cracking dictionaries.
@@ -210,16 +213,16 @@ func _update_cracking(new_health: int, _old_health: int) -> void:
 		crack_depth = 1.15
 	else:
 		crack_depth = 0.4
-	set_instance_shader_parameter("crack_depth", crack_depth)
+	shader_node.set_instance_shader_parameter("crack_depth", crack_depth)
 
 	for value_name: StringName in min_crack_stats:
 		var min_value: float = min_crack_stats[value_name]
 		var max_value: float = max_crack_stats[value_name]
 		var interpolated_value: float = max_value - ((max_value - min_value) * percent_health)
 		if value_name == "crack_intensity" and percent_health >= 1.0:
-			set_instance_shader_parameter("crack_intensity", 0.0)
+			shader_node.set_instance_shader_parameter("crack_intensity", 0.0)
 		else:
-			set_instance_shader_parameter(value_name, interpolated_value)
+			shader_node.set_instance_shader_parameter(value_name, interpolated_value)
 
 ## Potentially updates the cracking when the max health changes since it would be at a different level of damage.
 func _on_max_health_of_entity_changed(_new_max_health: int) -> void:

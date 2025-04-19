@@ -28,10 +28,11 @@
 [ext_resource type="PackedScene" uid="uid://jpq0ij8wwlhy" path="res://Entities/Components/FacingComponent/FacingComponent.tscn" id="24_i2rwd"]
 [ext_resource type="PackedScene" uid="uid://2yy4xfm5g74l" path="res://Entities/Components/ItemComponents/ClippingComponent/ClippingArea.tscn" id="28_2xjsy"]
 
-[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_ljryo"]
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_iirwy"]
 rough = true
 
 [sub_resource type="Resource" id="Resource_arbka"]
+resource_local_to_scene = true
 script = ExtResource("2_mdi77")
 title = "CHEST"
 main_inv_size = 10
@@ -66,6 +67,7 @@ spawn_count = 0
 metadata/_custom_type_script = "uid://1qq7eo7lm8j6"
 
 [sub_resource type="Resource" id="Resource_wbmts"]
+resource_local_to_scene = true
 script = ExtResource("9_2xjsy")
 hit_loot_table = Array[ExtResource("16_fkdnf")]([])
 hit_spawn_chance = 100.0
@@ -88,7 +90,7 @@ metadata/_custom_type_script = "uid://baglarh3m4c8o"
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_sbju2"]
 size = Vector2(18, 18)
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_iirwy"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_2xjsy"]
 resource_local_to_scene = true
 shader = ExtResource("4_l6rwf")
 
@@ -107,7 +109,7 @@ animations = [{
 "speed": 5.0
 }]
 
-[sub_resource type="Resource" id="Resource_2xjsy"]
+[sub_resource type="Resource" id="Resource_3nojt"]
 resource_local_to_scene = true
 script = ExtResource("11_ccp8j")
 _knockback_weakness = 0.0
@@ -115,35 +117,35 @@ _knockback_resistance = 0.0
 entity_dir_influence = 0.25
 metadata/_custom_type_script = "uid://dk6uef3uxmeev"
 
-[sub_resource type="Resource" id="Resource_3nojt"]
+[sub_resource type="Resource" id="Resource_mou4w"]
 resource_local_to_scene = true
 script = ExtResource("12_arbka")
 _poison_weakness = 0.0
 _poison_resistance = 0.0
 metadata/_custom_type_script = "uid://5krnqdrdbey1"
 
-[sub_resource type="Resource" id="Resource_mou4w"]
+[sub_resource type="Resource" id="Resource_uv3nk"]
 resource_local_to_scene = true
 script = ExtResource("13_3nojt")
 _regen_boost = 0.0
 _regen_penalty = 0.0
 metadata/_custom_type_script = "uid://bqw1ufs6jb7cf"
 
-[sub_resource type="Resource" id="Resource_uv3nk"]
+[sub_resource type="Resource" id="Resource_v6eom"]
 resource_local_to_scene = true
 script = ExtResource("14_ssl24")
 _frostbite_weakness = 0.0
 _frostbite_resistance = 0.0
 metadata/_custom_type_script = "uid://b1lo2mdb3otax"
 
-[sub_resource type="Resource" id="Resource_v6eom"]
+[sub_resource type="Resource" id="Resource_p34sx"]
 resource_local_to_scene = true
 script = ExtResource("15_wbmts")
 _burning_weakness = 0.0
 _burning_resistance = 0.0
 metadata/_custom_type_script = "uid://dubq8xgav66ue"
 
-[sub_resource type="Resource" id="Resource_p34sx"]
+[sub_resource type="Resource" id="Resource_3advh"]
 resource_local_to_scene = true
 script = ExtResource("12_mnmab")
 metadata/_custom_type_script = "uid://ckiyd2nbdcofr"
@@ -155,7 +157,7 @@ size = Vector2(18, 18)
 collision_layer = 32
 collision_mask = 245
 mass = 3.0
-physics_material_override = SubResource("PhysicsMaterial_ljryo")
+physics_material_override = SubResource("PhysicsMaterial_iirwy")
 gravity_scale = 0.0
 lock_rotation = true
 linear_damp = 4.5
@@ -174,12 +176,16 @@ debug_color = Color(1.44392e-06, 0.568839, 0.851513, 0.42)
 
 [node name="EntitySprite" parent="." instance=ExtResource("3_nv7a0")]
 unique_name_in_owner = true
-material = SubResource("ShaderMaterial_iirwy")
+material = SubResource("ShaderMaterial_2xjsy")
+instance_shader_parameters/brightness_mult = 1.0
 instance_shader_parameters/crack_color = Color(0.246, 0.109, 0.01, 0.85)
 instance_shader_parameters/crack_intensity = 1.0
 instance_shader_parameters/crack_profile = 2.11
 instance_shader_parameters/crack_scale = 3.838
 instance_shader_parameters/crack_width = 0.036
+instance_shader_parameters/override_color = Color(1, 1, 1, 0)
+instance_shader_parameters/tint_color = Color(0, 0, 0, 0)
+instance_shader_parameters/use_override_color = false
 position = Vector2(0, -9)
 sprite_frames = SubResource("SpriteFrames_fg1br")
 
@@ -196,12 +202,12 @@ position = Vector2(0, -9)
 affected_entity = NodePath("..")
 dmg_handler = NodePath("DmgHandler")
 heal_handler = NodePath("HealHandler")
-knockback_handler = SubResource("Resource_2xjsy")
-poison_handler = SubResource("Resource_3nojt")
-regen_handler = SubResource("Resource_mou4w")
-frostbite_handler = SubResource("Resource_uv3nk")
-burning_handler = SubResource("Resource_v6eom")
-life_steal_handler = SubResource("Resource_p34sx")
+knockback_handler = SubResource("Resource_3nojt")
+poison_handler = SubResource("Resource_mou4w")
+regen_handler = SubResource("Resource_uv3nk")
+frostbite_handler = SubResource("Resource_v6eom")
+burning_handler = SubResource("Resource_p34sx")
+life_steal_handler = SubResource("Resource_3advh")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="EffectReceiverComponent"]
 visible = false

@@ -85,35 +85,7 @@ func _get_configuration_warnings() -> PackedStringArray:
 
 ## Making sure we know we have save logic, even if not set in editor. Then set up rigid body physics.
 func _ready() -> void:
-	if Engine.is_editor_hint():
-		return
-
-	add_to_group("has_save_logic")
-	if is_object:
-		collision_layer = 0b100000
-		match team:
-			Globals.Teams.PLAYER:
-				add_to_group("player_entities")
-			Globals.Teams.ENEMY:
-				add_to_group("enemy_entities")
-	elif team == Globals.Teams.PLAYER:
-		collision_layer = 0b10
-		add_to_group("player_entities")
-	elif team == Globals.Teams.ENEMY:
-		add_to_group("enemy_entities")
-		collision_layer = 0b100
-	elif team == Globals.Teams.PASSIVE:
-		collision_layer = 0b1000
-
-	collision_mask = 0b1101111
-
-	stats.affected_entity = self
-	sprite.entity = self
-	if inv:
-		inv.initialize_inventory(self)
-	if loot:
-		loot = loot.duplicate()
-		loot.initialize(self)
+	super()
 
 	self.mass = 3
 	self.linear_damp = 4.5

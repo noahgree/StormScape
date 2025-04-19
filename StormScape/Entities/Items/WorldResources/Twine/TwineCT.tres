@@ -1,0 +1,8 @@
+[gd_resource type="CanvasTexture" load_steps=3 format=3 uid="uid://ditk0br4gd0xy"]
+
+[ext_resource type="Texture2D" uid="uid://b1gk6yjp4kk3v" path="res://Entities/Items/WorldResources/Twine/twine.png" id="1_ilfri"]
+[ext_resource type="Texture2D" uid="uid://drfch7p8c1luw" path="res://Entities/Items/WorldResources/Twine/twine_n.png" id="2_kto5b"]
+
+[resource]
+diffuse_texture = ExtResource("1_ilfri")
+normal_texture = ExtResource("2_kto5b")

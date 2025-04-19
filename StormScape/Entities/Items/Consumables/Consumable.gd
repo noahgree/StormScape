@@ -44,7 +44,7 @@ func consume() -> void:
 
 		source_entity.effect_receiver.handle_effect_source(stats.effect_source, source_entity, null)
 
-		source_slot.synced_inv.remove_item(source_slot.index, 1)
+		source_entity.inv.remove_item(inv_index, 1)
 
 ## Updates the mouse cursor's cooldown progress based on active cooldowns.
 func _update_cursor_cooldown_ui() -> void:

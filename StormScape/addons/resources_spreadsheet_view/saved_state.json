@@ -10,9 +10,45 @@
       "resource_name": {
         "visibility": 0.0
       }
+    },
+    "res://Entities/Items/TRESItems/Ammo/": {
+      "metadata/_custom_type_script": {
+        "visibility": 0.0
+      },
+      "resource_local_to_scene": {
+        "visibility": 0.0
+      },
+      "resource_name": {
+        "visibility": 0.0
+      }
+    },
+    "res://Entities/Items/TRESItems/Consumables/": {
+      "metadata/_custom_type_script": {
+        "visibility": 0.0
+      },
+      "resource_local_to_scene": {
+        "visibility": 0.0
+      },
+      "resource_name": {
+        "visibility": 0.0
+      }
+    },
+    "res://Entities/Items/TRESItems/MeleeWeapons/": {
+      "metadata/_custom_type_script": {
+        "visibility": 0.0
+      },
+      "resource_local_to_scene": {
+        "visibility": 0.0
+      },
+      "resource_name": {
+        "visibility": 0.0
+      }
     }
   },
   "recent_paths": [
+    "res://Entities/Items/TRESItems/Ammo/",
+    "res://Entities/Items/TRESItems/Consumables/",
+    "res://Entities/Items/TRESItems/MeleeWeapons/",
     "res://Entities/Items/TRESItems/"
   ],
   "table_functions": {

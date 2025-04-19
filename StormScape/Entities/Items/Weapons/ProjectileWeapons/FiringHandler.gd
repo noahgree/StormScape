@@ -189,7 +189,7 @@ func _consume_ammo() -> void:
 		ProjWeaponResource.ProjAmmoType.STAMINA:
 			weapon.source_entity.stamina_component.use_stamina(weapon.stats.stamina_use_per_proj)
 		ProjWeaponResource.ProjAmmoType.SELF:
-			weapon.source_entity.inv.remove_item(weapon.source_slot.index, 1)
+			weapon.source_entity.inv.remove_item(weapon.inv_index, 1)
 			weapon.update_ammo_ui()
 		_:
 			weapon.update_mag_ammo(weapon.stats.ammo_in_mag - 1)

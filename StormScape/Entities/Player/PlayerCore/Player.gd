@@ -6,8 +6,7 @@ class_name Player
 @onready var hotbar_ui: HotbarUI = %HotbarUI ## The UI script that manages the player hotbar.
 @onready var overhead_ui: PlayerOverheadUI = %OverheadUI ## The UI script that manages the player overhead UI for things like reload bars.
 @onready var interaction_prompt: Control = %InteractionPrompt ## The UI that shows when an interaction is available.
-@onready var step_dust_particles: CPUParticles2D = $StepDustParticles
-
+@onready var step_dust_particles: CPUParticles2D = $StepDustParticles ## The particles that spawn when taking a step.
 
 var interaction_handler: InteractionHandler = InteractionHandler.new() ## The script handling offered interactions and what to do when they are accepted.
 
@@ -16,13 +15,15 @@ func _ready() -> void:
 	if Engine.is_editor_hint():
 		return
 
-	super._ready()
+	super()
 	SignalBus.player_ready.emit(self)
 
 	interaction_handler.prompt_ui = interaction_prompt
 	SignalBus.focused_ui_closed.connect(interaction_handler.recheck_queue)
 
 	_add_player_debug_commands()
+
+	collision_layer = 0b1
 
 func _unhandled_key_input(_event: InputEvent) -> void:
 	if Input.is_action_just_pressed("interact") and not Globals.focused_ui_is_open:

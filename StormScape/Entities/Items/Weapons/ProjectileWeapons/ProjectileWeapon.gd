@@ -353,10 +353,10 @@ func update_ammo_ui() -> void:
 	var count: int = -1
 	match stats.ammo_type:
 		ProjWeaponResource.ProjAmmoType.SELF:
-			if source_slot.item == null:
+			if source_entity.inv.inv[inv_index].stats == null:
 				count = -1
 			else:
-				count = source_slot.item.quantity
+				count = source_entity.inv.inv[inv_index].quantity
 		ProjWeaponResource.ProjAmmoType.STAMINA:
 			count = source_entity.stamina_component.stamina
 		_:

@@ -28,7 +28,7 @@ func _do_entity_knockback(delta: float) -> void:
 	else: # No motion
 		controller.knockback_vector = Vector2.ZERO
 		entity.velocity = Vector2.ZERO
-		controller.notify_stopped_moving()
+		controller.notify_knockback_ended()
 
 	entity.move_and_slide()
 	StateFunctions.handle_rigid_entity_collisions(entity, controller)

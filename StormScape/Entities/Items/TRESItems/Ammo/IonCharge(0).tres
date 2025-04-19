@@ -30,6 +30,7 @@ recipe_unlocked = null
 rotation_lerping = null
 holding_offset = null
 holding_degrees = null
+stay_flat_on_rotate = false
 is_gripped_by_one_hand = null
 draw_off_hand = null
 draw_off_hand_offset = null

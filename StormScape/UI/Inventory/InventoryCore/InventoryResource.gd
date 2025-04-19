@@ -175,6 +175,11 @@ func drop_entire_inventory() -> void:
 
 	_emit_changes_for_all_indices()
 
+## Updates an item at an index and emits the changes.
+func update_index_and_emit_changes(index: int, new_item: InvItemResource) -> void:
+	inv[index] = new_item
+	inv_data_updated.emit(index, inv[index])
+
 ## This updates all connected slots in order to reflect the UI properly.
 func _emit_changes_for_all_indices() -> void:
 	for i: int in range(total_inv_size):

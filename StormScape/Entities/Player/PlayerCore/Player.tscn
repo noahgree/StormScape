@@ -1,4 +1,4 @@
-[gd_scene load_steps=238 format=3 uid="uid://dba8mrurjlekp"]
+[gd_scene load_steps=240 format=3 uid="uid://dba8mrurjlekp"]
 
 [ext_resource type="Script" uid="uid://c3rpxq8pnbdje" path="res://Entities/Player/PlayerCore/Player.gd" id="1_m33tt"]
 [ext_resource type="Script" uid="uid://dwmur0cosbbwh" path="res://UI/Inventory/InventoryCore/InventoryResource.gd" id="2_l1kq4"]
@@ -8,7 +8,6 @@
 [ext_resource type="Resource" uid="uid://1q7rlned2r23" path="res://Entities/Items/TRESItems/ProjectileWeapons/Gattler(3).tres" id="4_g5u5n"]
 [ext_resource type="Resource" uid="uid://b8gvf7ta6a2rj" path="res://Entities/Items/TRESItems/WeaponMods/Foregrip(1).tres" id="4_gevai"]
 [ext_resource type="PackedScene" uid="uid://btba0jmsow1mx" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectReceiverComponent.tscn" id="4_hhm8x"]
-[ext_resource type="Shader" uid="uid://cfbagv3hrtar2" path="res://Utilities/Game/Shaders/EntityEffectShader.gdshader" id="4_ubhyl"]
 [ext_resource type="PackedScene" uid="uid://4gl24qwdyti3" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/DmgHandler.tscn" id="5_g3ixu"]
 [ext_resource type="PackedScene" uid="uid://cxpv7l7rcaq1o" path="res://Entities/Components/StaminaComponent/StaminaComponent.tscn" id="5_k4fu6"]
 [ext_resource type="Resource" uid="uid://bta1hncad1hd2" path="res://Entities/Items/TRESItems/WeaponMods/ExtendedMag(1).tres" id="5_oe7wn"]
@@ -36,8 +35,10 @@
 [ext_resource type="Resource" uid="uid://c05ujhrdtx4r5" path="res://Entities/Items/TRESItems/ProjectileWeapons/Blunderbuss(2).tres" id="11_o382h"]
 [ext_resource type="Resource" uid="uid://duc0xfejpfs1" path="res://Entities/Items/TRESItems/ProjectileWeapons/EagleEye(3).tres" id="12_6wv7y"]
 [ext_resource type="Resource" uid="uid://fmf7upx7tsln" path="res://Entities/Items/TRESItems/ProjectileWeapons/RifleX(3).tres" id="13_n4o3n"]
+[ext_resource type="Resource" uid="uid://ddtvqrt702vcs" path="res://Entities/Items/TRESItems/WorldResources/Twine(0).tres" id="13_ou5t4"]
 [ext_resource type="Resource" uid="uid://bper7kxtsf7f1" path="res://Entities/Items/TRESItems/MeleeWeapons/Axe(1).tres" id="14_0t1mv"]
 [ext_resource type="Resource" uid="uid://cx1ydw2jde1y8" path="res://Entities/Items/TRESItems/Consumables/Apple(0).tres" id="15_hxjay"]
+[ext_resource type="Resource" uid="uid://dkx627k2ek8ew" path="res://Entities/Items/TRESItems/WorldResources/Graystone(0).tres" id="20_w0i1c"]
 [ext_resource type="Resource" uid="uid://bh18kqp2up3oe" path="res://Entities/Items/TRESItems/MeleeWeapons/Pickaxe(3).tres" id="23_gdihr"]
 [ext_resource type="PackedScene" uid="uid://jpq0ij8wwlhy" path="res://Entities/Components/FacingComponent/FacingComponent.tscn" id="25_0t1mv"]
 [ext_resource type="Script" uid="uid://c28itqxmeqbq0" path="res://Entities/FSM/FSMCore/StateMachine.gd" id="25_6wv7y"]
@@ -50,6 +51,7 @@
 [ext_resource type="Script" uid="uid://dq62ojsc43p8o" path="res://UI/Inventory/PlayerInventory/PlayerInvUI.gd" id="32_3a185"]
 [ext_resource type="Resource" uid="uid://dk3vlbvu2b7eq" path="res://Entities/Items/TRESItems/MeleeWeapons/Sword(4).tres" id="32_ar238"]
 [ext_resource type="Script" uid="uid://dp8osf7r6xkkt" path="res://Entities/Items/ItemCore/InvItemResource.gd" id="32_ixmb3"]
+[ext_resource type="Resource" uid="uid://xuswqfh3rvdy" path="res://Entities/Items/TRESItems/MeleeWeapons/ZombieHands(0).tres" id="33_ar238"]
 [ext_resource type="Script" uid="uid://di5hu6fk5mbfe" path="res://UI/PlayerStatsHUD/PlayerStatsHUD.gd" id="35_yln51"]
 [ext_resource type="PackedScene" uid="uid://b7gdy01q8wsjx" path="res://Entities/Components/ItemComponents/HandsComponent/HandsComponent.tscn" id="39_ngono"]
 [ext_resource type="Shader" uid="uid://c0de04pgeen76" path="res://Utilities/Game/Shaders/BlurBehind.gdshader" id="39_r4tgk"]
@@ -77,7 +79,6 @@
 [ext_resource type="Script" uid="uid://cy73p3okq3cic" path="res://Entities/FSM/States/BaseStates/DashState.gd" id="68_32jvf"]
 [ext_resource type="Texture2D" uid="uid://dtft3mljs2y5s" path="res://UI/Inventory/InventoryCore/Slot/Universal/trash_slot_icon.png" id="69_4ao77"]
 [ext_resource type="Script" uid="uid://dxekqhvcykqrq" path="res://Entities/FSM/States/PlayerStates/RunState.gd" id="69_82yts"]
-[ext_resource type="Texture2D" uid="uid://ddxfmulkpyb2h" path="res://UI/Inventory/InventoryCore/Background/Wood/inv_background_simple_wood.png" id="70_thmqm"]
 [ext_resource type="Script" uid="uid://cf7pyv5l3pefi" path="res://Entities/FSM/States/BaseStates/SneakState.gd" id="70_uu4sw"]
 [ext_resource type="Script" uid="uid://cbyg4eleptthh" path="res://Entities/FSM/States/BaseStates/StunnedState.gd" id="71_ve7vt"]
 [ext_resource type="Script" uid="uid://i7ucoc123rpe" path="res://Entities/FSM/States/BaseStates/SpawnState.gd" id="72_fcswf"]
@@ -88,6 +89,7 @@
 [ext_resource type="PackedScene" uid="uid://i6tnlhpg6lt0" path="res://Utilities/Game/Audio/AudioPreloader.tscn" id="84_s4yud"]
 [ext_resource type="FontFile" uid="uid://bp2lgrlhj8cet" path="res://Assets/Theming/Fonts/Pixel/C&C Red Alert [INET].ttf" id="85_7xlwj"]
 [ext_resource type="Script" uid="uid://dwic8harmmplg" path="res://Utilities/Game/Audio/AudioResource.gd" id="85_w0i1c"]
+[ext_resource type="Texture2D" uid="uid://bbcajkbyc0c6y" path="res://UI/Inventory/InventoryCore/Background/Universal/inv_background_simple_tintable.png" id="86_ou5t4"]
 [ext_resource type="Texture2D" uid="uid://cd22xh5jduxd6" path="res://UI/TemporaryElements/InteractionIcons/e_prompt.png" id="89_0313k"]
 [ext_resource type="FontVariation" uid="uid://by478cplv5w4n" path="res://Assets/Theming/Fonts/GameFontResources/pixel_font_less_margin.tres" id="90_hxjay"]
 [ext_resource type="Script" uid="uid://dbc2ecb1mkugh" path="res://UI/PlayerStatsHUD/ActiveSlotInfo.gd" id="91_qr476"]
@@ -181,6 +183,12 @@ stats = ExtResource("65_14ixx")
 quantity = 1
 metadata/_custom_type_script = "uid://dp8osf7r6xkkt"
 
+[sub_resource type="Resource" id="Resource_hdwgy"]
+script = ExtResource("32_ixmb3")
+stats = ExtResource("13_ou5t4")
+quantity = 6
+metadata/_custom_type_script = "uid://dp8osf7r6xkkt"
+
 [sub_resource type="Resource" id="Resource_ou5t4"]
 script = ExtResource("32_ixmb3")
 stats = ExtResource("8_o382h")
@@ -221,6 +229,12 @@ metadata/_custom_type_script = "uid://dp8osf7r6xkkt"
 script = ExtResource("32_ixmb3")
 stats = ExtResource("11_0t1mv")
 quantity = 1
+metadata/_custom_type_script = "uid://dp8osf7r6xkkt"
+
+[sub_resource type="Resource" id="Resource_a5af3"]
+script = ExtResource("32_ixmb3")
+stats = ExtResource("20_w0i1c")
+quantity = 10
 metadata/_custom_type_script = "uid://dp8osf7r6xkkt"
 
 [sub_resource type="Resource" id="Resource_gdihr"]
@@ -289,6 +303,12 @@ stats = ExtResource("32_ar238")
 quantity = 1
 metadata/_custom_type_script = "uid://dp8osf7r6xkkt"
 
+[sub_resource type="Resource" id="Resource_1i2dj"]
+script = ExtResource("32_ixmb3")
+stats = ExtResource("33_ar238")
+quantity = 1
+metadata/_custom_type_script = "uid://dp8osf7r6xkkt"
+
 [sub_resource type="Resource" id="Resource_inle7"]
 script = ExtResource("32_ixmb3")
 stats = ExtResource("30_f5l7i")
@@ -314,11 +334,12 @@ quantity = 5
 metadata/_custom_type_script = "uid://dp8osf7r6xkkt"
 
 [sub_resource type="Resource" id="Resource_5npt6"]
+resource_local_to_scene = true
 script = ExtResource("2_l1kq4")
 title = "CHEST"
 main_inv_size = 32
 drop_on_death = false
-starting_inv = Array[ExtResource("32_ixmb3")]([SubResource("Resource_82yts"), null, SubResource("Resource_0t1mv"), SubResource("Resource_h1ges"), SubResource("Resource_4awmn"), SubResource("Resource_25xrm"), SubResource("Resource_mc6is"), SubResource("Resource_w0i1c"), SubResource("Resource_fcswf"), SubResource("Resource_ve7vt"), null, SubResource("Resource_ou5t4"), SubResource("Resource_ar238"), null, SubResource("Resource_bmpdm"), SubResource("Resource_eufsu"), SubResource("Resource_8hbs2"), SubResource("Resource_f5l7i"), SubResource("Resource_co77f"), null, null, SubResource("Resource_gdihr"), SubResource("Resource_g5u5n"), null, SubResource("Resource_r7bkl"), SubResource("Resource_thmqm"), SubResource("Resource_r5dvw"), SubResource("Resource_bvo3j"), SubResource("Resource_gb65f"), SubResource("Resource_5qckj"), SubResource("Resource_1go7j"), SubResource("Resource_32jvf"), SubResource("Resource_jgqai"), SubResource("Resource_inle7"), SubResource("Resource_da65a"), SubResource("Resource_6f5us"), SubResource("Resource_s4yud")])
+starting_inv = Array[ExtResource("32_ixmb3")]([SubResource("Resource_82yts"), null, SubResource("Resource_0t1mv"), SubResource("Resource_h1ges"), SubResource("Resource_4awmn"), SubResource("Resource_25xrm"), SubResource("Resource_mc6is"), SubResource("Resource_w0i1c"), SubResource("Resource_fcswf"), SubResource("Resource_ve7vt"), SubResource("Resource_hdwgy"), SubResource("Resource_ou5t4"), SubResource("Resource_ar238"), null, SubResource("Resource_bmpdm"), SubResource("Resource_eufsu"), SubResource("Resource_8hbs2"), SubResource("Resource_f5l7i"), SubResource("Resource_co77f"), SubResource("Resource_a5af3"), null, SubResource("Resource_gdihr"), SubResource("Resource_g5u5n"), SubResource("Resource_r7bkl"), SubResource("Resource_thmqm"), SubResource("Resource_r5dvw"), SubResource("Resource_bvo3j"), SubResource("Resource_gb65f"), SubResource("Resource_5qckj"), SubResource("Resource_1go7j"), SubResource("Resource_32jvf"), SubResource("Resource_jgqai"), SubResource("Resource_1i2dj"), SubResource("Resource_inle7"), SubResource("Resource_da65a"), SubResource("Resource_6f5us"), SubResource("Resource_s4yud")])
 metadata/_custom_type_script = "uid://dwmur0cosbbwh"
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_3f130"]
@@ -327,9 +348,6 @@ height = 12.0
 
 [sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_o382h"]
 polygon = PackedVector2Array(-5, -2.98466, -6, -1.98977, -5, 0, 5, 0, 6, -1.98977, 5, -2.98466)
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_0tj2u"]
-shader = ExtResource("4_ubhyl")
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_f5l7i"]
 particles_animation = true
@@ -1350,23 +1368,6 @@ light_mode = 1
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_n4o3n"]
 light_mode = 1
 
-[sub_resource type="LabelSettings" id="LabelSettings_5qrph"]
-line_spacing = 0.0
-font = ExtResource("90_hxjay")
-font_size = 8
-font_color = Color(0.961254, 0.893995, 0.881106, 1)
-outline_size = 2
-outline_color = Color(0, 0, 0, 0.564706)
-shadow_size = 0
-
-[sub_resource type="LabelSettings" id="LabelSettings_uc4hk"]
-line_spacing = 0.0
-font_size = 5
-font_color = Color(0.913725, 0.768627, 0.741176, 1)
-outline_size = 2
-outline_color = Color(0, 0, 0, 0.564706)
-shadow_size = 0
-
 [sub_resource type="LabelSettings" id="LabelSettings_32mf4"]
 line_spacing = 0.0
 font = ExtResource("90_hxjay")
@@ -1422,10 +1423,8 @@ line_spacing = -1.0
 font_size = 6
 font_color = Color(0.913725, 0.768627, 0.741176, 1)
 outline_size = 2
-outline_color = Color(0, 0, 0, 0.329412)
+outline_color = Color(0.122, 0.035, 0, 0.4)
 shadow_size = 0
-shadow_color = Color(0, 0, 0, 0.3)
-shadow_offset = Vector2(0.25, 0.25)
 
 [sub_resource type="FontVariation" id="FontVariation_da65a"]
 base_font = ExtResource("85_7xlwj")
@@ -1468,28 +1467,28 @@ scale = Vector2(1, 1.00514)
 occluder = SubResource("OccluderPolygon2D_o382h")
 
 [node name="YSorter" type="Node2D" parent="."]
+editor_description = "MUST TURN ON Y SORTING ON THIS NODE!"
 y_sort_enabled = true
 
 [node name="EntityShadow" parent="YSorter" instance=ExtResource("3_05f62")]
 
 [node name="EntitySprite" parent="YSorter" instance=ExtResource("4_fmbcv")]
 unique_name_in_owner = true
-material = SubResource("ShaderMaterial_0tj2u")
 position = Vector2(0, -16)
 sprite_frames = ExtResource("5_vy6lk")
 animation = &"idle"
 time_brightness_min_max = Vector2(1, 2.35)
 
-[node name="StatusEffectsComponent" parent="YSorter" node_paths=PackedStringArray("effect_receiver") instance=ExtResource("6_n0x5k")]
-unique_name_in_owner = true
-effect_receiver = NodePath("../../EffectReceiverComponent")
-print_effect_updates = true
-
 [node name="HandsComponent" parent="YSorter" node_paths=PackedStringArray("active_slot_info") instance=ExtResource("39_ngono")]
 unique_name_in_owner = true
 hand_texture = ExtResource("9_n4o3n")
 active_slot_info = NodePath("../../OverlayUI/ActiveSlotInfo")
-time_brightness_min_max = Vector2(1, 1.9)
+time_brightness_min_max = Vector2(1, 1.15)
+
+[node name="StatusEffectsComponent" parent="YSorter" node_paths=PackedStringArray("effect_receiver") instance=ExtResource("6_n0x5k")]
+unique_name_in_owner = true
+effect_receiver = NodePath("../../EffectReceiverComponent")
+print_effect_updates = true
 
 [node name="StepDustParticles" type="CPUParticles2D" parent="."]
 z_index = -1
@@ -1505,8 +1504,8 @@ initial_velocity_min = 20.0
 initial_velocity_max = 25.0
 scale_amount_min = 0.65
 color_ramp = SubResource("Gradient_ar238")
-anim_speed_min = 1.0
-anim_speed_max = 1.0
+anim_speed_min = 0.95
+anim_speed_max = 1.05
 anim_offset_max = 1.0
 anim_offset_curve = SubResource("Curve_f5l7i")
 
@@ -1642,15 +1641,15 @@ tint_progress = Color(0.483324, 0.860906, 0.955996, 1)
 [node name="InteractionPrompt" type="MarginContainer" parent="."]
 unique_name_in_owner = true
 top_level = true
-offset_right = 34.0
-offset_bottom = 17.0
+offset_right = 14.0
+offset_bottom = 12.0
 script = ExtResource("75_thmqm")
 metadata/_edit_use_anchors_ = true
 
 [node name="Background" type="NinePatchRect" parent="InteractionPrompt"]
-self_modulate = Color(1, 1, 1, 0.525)
+self_modulate = Color(0.067, 0.02, 0.004, 0.65)
 layout_mode = 2
-texture = ExtResource("70_thmqm")
+texture = ExtResource("86_ou5t4")
 patch_margin_left = 2
 patch_margin_top = 2
 patch_margin_right = 2
@@ -1667,7 +1666,7 @@ unique_name_in_owner = true
 layout_mode = 2
 theme_override_constants/margin_left = 3
 theme_override_constants/margin_top = 2
-theme_override_constants/margin_right = 0
+theme_override_constants/margin_right = 1
 theme_override_constants/margin_bottom = 2
 
 [node name="InteractionPromptIcon" type="TextureRect" parent="InteractionPrompt/ElementsHBox/InteractionIconMargin"]
@@ -1684,8 +1683,8 @@ stretch_mode = 5
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_constants/margin_left = 3
-theme_override_constants/margin_top = 2
-theme_override_constants/margin_right = 3
+theme_override_constants/margin_top = 0
+theme_override_constants/margin_right = 0
 theme_override_constants/margin_bottom = 1
 
 [node name="TextVBox" type="VBoxContainer" parent="InteractionPrompt/ElementsHBox/InteractionTextMargins"]
@@ -1693,20 +1692,35 @@ layout_mode = 2
 theme_override_constants/separation = -1
 alignment = 1
 
-[node name="InteractionTitleLabel" type="Label" parent="InteractionPrompt/ElementsHBox/InteractionTextMargins/TextVBox"]
+[node name="InteractionTitleLabel" type="RichTextLabel" parent="InteractionPrompt/ElementsHBox/InteractionTextMargins/TextVBox"]
 unique_name_in_owner = true
 material = ExtResource("78_da65a")
+clip_contents = false
 layout_mode = 2
-text = "TITLE"
-label_settings = SubResource("LabelSettings_5qrph")
+theme_override_colors/default_color = Color(0.961254, 0.893995, 0.881106, 1)
+theme_override_colors/font_outline_color = Color(0.122, 0.035, 0, 0.67)
+theme_override_constants/outline_size = 2
+theme_override_fonts/normal_font = ExtResource("90_hxjay")
+theme_override_font_sizes/normal_font_size = 8
+bbcode_enabled = true
+fit_content = true
+scroll_active = false
+autowrap_mode = 0
 vertical_alignment = 1
 
-[node name="InteractionInfoLabel" type="Label" parent="InteractionPrompt/ElementsHBox/InteractionTextMargins/TextVBox"]
+[node name="InteractionInfoLabel" type="RichTextLabel" parent="InteractionPrompt/ElementsHBox/InteractionTextMargins/TextVBox"]
 unique_name_in_owner = true
 material = ExtResource("78_da65a")
+clip_contents = false
 layout_mode = 2
-text = "Info"
-label_settings = SubResource("LabelSettings_uc4hk")
+theme_override_colors/default_color = Color(0.913725, 0.768627, 0.741176, 1)
+theme_override_colors/font_outline_color = Color(0.122, 0.035, 0, 0.67)
+theme_override_constants/outline_size = 2
+theme_override_font_sizes/normal_font_size = 5
+bbcode_enabled = true
+fit_content = true
+scroll_active = false
+autowrap_mode = 0
 vertical_alignment = 1
 
 [node name="OverlayUI" type="CanvasLayer" parent="."]
@@ -2198,6 +2212,7 @@ vertical_alignment = 2
 uppercase = true
 
 [node name="CornerFeedbackTint" type="TextureRect" parent="OverlayUI"]
+visible = false
 material = ExtResource("78_da65a")
 anchors_preset = 15
 anchor_right = 1.0
@@ -3167,6 +3182,7 @@ backing_texture = ExtResource("117_gb65f")
 hide_corner_level = true
 hide_corner_info = true
 hide_tint_progress = true
+hide_hover_tooltip = true
 
 [node name="ElementsMargin" type="MarginContainer" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox"]
 unique_name_in_owner = true
@@ -3202,7 +3218,7 @@ theme_override_constants/margin_bottom = -1
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_colors/default_color = Color(0.961254, 0.893995, 0.881106, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 0.564706)
+theme_override_colors/font_outline_color = Color(0.122, 0.035, 0, 0.67)
 theme_override_constants/outline_size = 2
 theme_override_fonts/normal_font = ExtResource("85_7xlwj")
 theme_override_font_sizes/normal_font_size = 9
@@ -3224,7 +3240,7 @@ theme_override_constants/margin_bottom = 0
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_colors/default_color = Color(0.913725, 0.768627, 0.741176, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 0.329)
+theme_override_colors/font_outline_color = Color(0.122, 0.035, 0, 0.67)
 theme_override_constants/outline_size = 2
 theme_override_fonts/normal_font = ExtResource("85_7xlwj")
 theme_override_font_sizes/normal_font_size = 5
@@ -3300,7 +3316,7 @@ clip_contents = false
 custom_minimum_size = Vector2(82, 8)
 layout_mode = 2
 theme_override_colors/default_color = Color(0.913725, 0.768627, 0.741176, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 0.329412)
+theme_override_colors/font_outline_color = Color(0.121569, 0.0352941, 0, 0.65098)
 theme_override_constants/table_v_separation = 0
 theme_override_constants/table_h_separation = 0
 theme_override_constants/text_highlight_v_padding = 0

@@ -4,7 +4,7 @@ class_name Entity
 
 @export var team: Globals.Teams = Globals.Teams.PLAYER ## What the effects received by this entity should consider as this entity's team.
 @export var is_object: bool = false ## When true, this entity's collision logic will follow that of a world object, regardless of team.
-@export var inv: InventoryResource = InventoryResource.new() ## The inventory data resource for this entity.
+@export var inv: InventoryResource ## The inventory data resource for this entity.
 @export var loot: LootTableResource ## The loot table resource for this entity.
 
 @onready var sprite: EntitySprite = %EntitySprite ## The visual representation of the entity. Needs to have the EntityEffectShader applied.
@@ -20,6 +20,7 @@ var stats: StatModsCacheResource = StatModsCacheResource.new() ## The resource t
 var wearables: Array[Dictionary] = [{ &"1" : null }, { &"2" : null }, { &"3" : null }, { &"4" : null }, { &"5" : null }] ## The equipped wearables on this entity.
 
 
+#region Debug
 ## Edits editor warnings for easier debugging.
 func _get_configuration_warnings() -> PackedStringArray:
 	if get_node_or_null("%EntitySprite") == null or not %EntitySprite is EntitySprite:
@@ -28,11 +29,21 @@ func _get_configuration_warnings() -> PackedStringArray:
 			]
 	return []
 
+## Ensures uniqueness of resources.
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_EDITOR_POST_SAVE:
+		if inv:
+			inv.resource_local_to_scene = true
+		if loot:
+			loot.resource_local_to_scene = true
+#endregion
+
 func _ready() -> void:
 	if Engine.is_editor_hint():
 		return
 
 	add_to_group("has_save_logic")
+
 	if is_object:
 		collision_layer = 0b100000
 		match team:
@@ -56,7 +67,6 @@ func _ready() -> void:
 	if inv:
 		inv.initialize_inventory(self)
 	if loot:
-		loot = loot.duplicate()
 		loot.initialize(self)
 
 func _process(delta: float) -> void:

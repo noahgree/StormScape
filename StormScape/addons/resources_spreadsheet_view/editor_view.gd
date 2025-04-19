@@ -185,7 +185,7 @@ func _load_resources_from_path(path : String, sort_by : StringName, sort_reverse
 
 		else:
 			io = ResourceTablesEditFormatTres.new()
-	
+
 	io.editor_view = self
 	remembered_paths.clear()
 	rows = io.import_from_path(path, insert_row_sorted, sort_by, sort_reverse)
@@ -206,7 +206,7 @@ func _update_visible_rows(force_rebuild : bool = true):
 	while cells_left_to_free > 0:
 		node_table_root.get_child(0).free()
 		cells_left_to_free -= 1
-	
+
 	var color_rows : bool = ProjectSettings.get_setting(TablesPluginSettingsClass.PREFIX + "color_rows")
 	for i in last_row - first_row:
 		_update_row(first_row + i, color_rows)
@@ -279,7 +279,7 @@ func insert_row_sorted(res : Resource, loaded_rows : Array, sort_by : StringName
 		if sort_reverse == compare_values(sort_value, loaded_rows[i][sort_by]):
 			loaded_rows.insert(i, res)
 			return
-	
+
 	remembered_paths[res.resource_path] = res
 	loaded_rows.append(res)
 
@@ -348,7 +348,7 @@ func _update_row(row_index : int, color_rows : bool = true):
 		if columns[i] == &"resource_path":
 			column_editors[i].set_value(current_node, shortened_path)
 
-		else:			
+		else:
 			var cell_value = io.get_value(rows[row_index], columns[i])
 			if cell_value != null or column_types[i] == TYPE_OBJECT:
 				column_editors[i].set_value(current_node, cell_value)
@@ -419,7 +419,7 @@ func set_edited_cells_values(new_cell_values : Array):
 
 func rename_row(row, new_name):
 	if !has_row_names(): return
-		
+
 	io.rename_row(row, new_name)
 	refresh()
 
@@ -450,7 +450,7 @@ func get_edited_cells_values() -> Array:
 	result.resize(cells.size())
 	for i in cells.size():
 		result[i] = io.get_value(rows[_selection.get_cell_row(cells[i])], columns[column_index])
-	
+
 	return result
 
 

@@ -1,0 +1,8 @@
+[gd_resource type="CanvasTexture" load_steps=3 format=3 uid="uid://ct0cd8cted1hk"]
+
+[ext_resource type="Texture2D" uid="uid://phmrw0f2cxm2" path="res://Entities/Items/WorldResources/Stones/sandstone.png" id="1_f8pai"]
+[ext_resource type="Texture2D" uid="uid://c25yjrsam4s2i" path="res://Entities/Items/WorldResources/Stones/sandstone_n.png" id="2_4toot"]
+
+[resource]
+diffuse_texture = ExtResource("1_f8pai")
+normal_texture = ExtResource("2_4toot")

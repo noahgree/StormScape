@@ -1,0 +1,8 @@
+[gd_resource type="CanvasTexture" load_steps=3 format=3 uid="uid://cryjjhlygvi04"]
+
+[ext_resource type="Texture2D" uid="uid://bfnisvne6pcj4" path="res://Entities/Items/WorldResources/Stones/graystone.png" id="1_13cqn"]
+[ext_resource type="Texture2D" uid="uid://dtfluc5f5nqsv" path="res://Entities/Items/WorldResources/Stones/graystone_n.png" id="2_54k66"]
+
+[resource]
+diffuse_texture = ExtResource("1_13cqn")
+normal_texture = ExtResource("2_54k66")

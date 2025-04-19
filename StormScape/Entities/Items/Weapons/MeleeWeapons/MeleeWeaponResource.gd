@@ -3,9 +3,7 @@ extends WeaponResource
 class_name MeleeWeaponResource
 ## The resource that defines all stats for a melee weapon. Passing this around essentially passes the weapon around.
 
-enum MeleeWeaponType { ## The kinds of melee weapons.
-	TOOL, PHYSICAL, COMBAT
-}
+enum MeleeWeaponType { TOOL, PHYSICAL, COMBAT } ## The kinds of melee weapons.
 
 @export var melee_weapon_type: MeleeWeaponType = MeleeWeaponType.TOOL ## The kind of melee weapon this is.
 
@@ -15,6 +13,7 @@ enum MeleeWeaponType { ## The kinds of melee weapons.
 @export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var use_cooldown: float = 0.5 ## The minimum time between usages.
 @export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var use_speed: float = 0.25 ## How long one swing, punch, or other kind of "usage" of this melee item takes.
 @export var swing_angle: int = 125 ## How wide of an angle to swing when triggered.
+@export var use_anim: String ## What to use instead of the "use" anim inside the standard melee anim library.
 @export_subgroup("Entity Effects")
 @export var use_start_effect: StatusEffect ## The status effect to apply to the source entity at the start of use.
 @export var post_use_effect: StatusEffect ## The status effect to apply to the source entity after use.
@@ -32,6 +31,7 @@ enum MeleeWeaponType { ## The kinds of melee weapons.
 @export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var charge_use_speed: float = 0.75 ## How long one charge use takes to execute.
 @export var charge_swing_angle: int = 720 ## How wide of an angle to swing when triggered with charge.
 @export var charge_stamina_cost: int = 25 ## How much stamina to consume on charge usages. Overrides standard stamina use.
+@export var charge_use_anim: String ## What to use instead of the "charge_use" anim inside the standard melee anim library.
 @export_subgroup("Entity Effects")
 @export var chg_use_start_effect: StatusEffect ## The status effect to apply to the source entity at the start of a charge use.
 @export var post_chg_use_effect: StatusEffect ## The status effect to apply to the source entity after charge use.

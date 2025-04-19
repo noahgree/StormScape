@@ -146,7 +146,8 @@ func _setup_after_active_slot_change() -> void:
 ## UI for the new item name. This must happen here since the signal's order isn't guaranteed,
 ## and we need the active slot to update first.
 func _update_hands_about_new_active_item() -> void:
-	Globals.player_node.hands.on_equipped_item_change(active_slot)
+	var stats_to_send: ItemResource = active_slot.item.stats if active_slot.item else null
+	Globals.player_node.hands.on_equipped_item_change(stats_to_send, active_slot.index)
 	if active_slot.item != null:
 		active_slot_info.update_item_name(active_slot.item.stats.name)
 	else:

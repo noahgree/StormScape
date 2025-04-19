@@ -1,0 +1,173 @@
+[gd_scene load_steps=30 format=3 uid="uid://clf1njlp4stbn"]
+
+[ext_resource type="Script" uid="uid://cn2gulskgn7k3" path="res://Entities/EntityCore/EntityTypes/StaticEntity/StaticEntity.gd" id="1_b403c"]
+[ext_resource type="Script" uid="uid://dwmur0cosbbwh" path="res://UI/Inventory/InventoryCore/InventoryResource.gd" id="2_3aoki"]
+[ext_resource type="Script" uid="uid://dp8osf7r6xkkt" path="res://Entities/Items/ItemCore/InvItemResource.gd" id="3_b403c"]
+[ext_resource type="Script" uid="uid://1qq7eo7lm8j6" path="res://Entities/Components/ItemComponents/LootTableComponent/LootTableEntry.gd" id="4_unf1g"]
+[ext_resource type="Resource" uid="uid://dkx627k2ek8ew" path="res://Entities/Items/TRESItems/WorldResources/Graystone(0).tres" id="5_3aoki"]
+[ext_resource type="Script" uid="uid://baglarh3m4c8o" path="res://Entities/Components/ItemComponents/LootTableComponent/LootTableResource.gd" id="7_qgbkl"]
+[ext_resource type="PackedScene" uid="uid://di7vcyrki71nm" path="res://Entities/Components/DetectionComponent/DetectionComponent.tscn" id="8_y2id4"]
+[ext_resource type="PackedScene" uid="uid://cj2wy5f05cos4" path="res://Entities/EntityCore/Shadow/EntityShadow.tscn" id="9_kerkt"]
+[ext_resource type="PackedScene" uid="uid://dh4ydl7l86ywq" path="res://Entities/EntityCore/Sprites/EntitySprite.tscn" id="10_kkd23"]
+[ext_resource type="Shader" uid="uid://cfbagv3hrtar2" path="res://Utilities/Game/Shaders/EntityEffectShader.gdshader" id="11_pg7ae"]
+[ext_resource type="Texture2D" uid="uid://vyww0ruffm15" path="res://Entities/Environment/Rocks/Rock2CT.tres" id="12_b403c"]
+[ext_resource type="PackedScene" uid="uid://cdfdy8m6ki3oq" path="res://Entities/Components/HealthComponent/HealthComponent.tscn" id="13_3mtpp"]
+[ext_resource type="PackedScene" uid="uid://jpq0ij8wwlhy" path="res://Entities/Components/FacingComponent/FacingComponent.tscn" id="14_d40yk"]
+[ext_resource type="PackedScene" uid="uid://btba0jmsow1mx" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectReceiverComponent.tscn" id="15_8664o"]
+[ext_resource type="PackedScene" uid="uid://4gl24qwdyti3" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/DmgHandler.tscn" id="16_11n4a"]
+[ext_resource type="PackedScene" uid="uid://co3n6m7efg8pd" path="res://Entities/Components/EffectComponents/StatusEffectsComponent/StatusEffectsComponent.tscn" id="17_3r7ao"]
+[ext_resource type="PackedScene" uid="uid://bhcqtorpyerc3" path="res://Utilities/Debug/ParticleEmissionComponent.tscn" id="18_6nkmp"]
+[ext_resource type="PackedScene" uid="uid://2yy4xfm5g74l" path="res://Entities/Components/ItemComponents/ClippingComponent/ClippingArea.tscn" id="19_jf6jy"]
+
+[sub_resource type="Resource" id="Resource_5yo6j"]
+script = ExtResource("2_3aoki")
+title = "CHEST"
+main_inv_size = 10
+drop_on_death = false
+starting_inv = Array[ExtResource("3_b403c")]([])
+
+[sub_resource type="Resource" id="Resource_5ld8i"]
+script = ExtResource("4_unf1g")
+item = ExtResource("5_3aoki")
+quantity = 2
+weighting = 1.0
+last_used = 0
+spawn_count = 0
+metadata/_custom_type_script = "uid://1qq7eo7lm8j6"
+
+[sub_resource type="Resource" id="Resource_b403c"]
+script = ExtResource("4_unf1g")
+item = ExtResource("5_3aoki")
+quantity = 1
+weighting = 1.0
+last_used = 0
+spawn_count = 0
+metadata/_custom_type_script = "uid://1qq7eo7lm8j6"
+
+[sub_resource type="Resource" id="Resource_mc2cg"]
+script = ExtResource("7_qgbkl")
+hit_loot_table = Array[ExtResource("4_unf1g")]([SubResource("Resource_b403c")])
+hit_spawn_chance = 100.0
+hit_chance_scale = 1
+remove_when_dropped = false
+require_dmg_on_hit = true
+hp_percent_hit_checks = 51
+die_loot_table = Array[ExtResource("4_unf1g")]([SubResource("Resource_5ld8i")])
+die_spawn_chance = 100.0
+rarity_scaling_factors = Dictionary[int, float]({
+0: 0.5,
+1: 0.4,
+2: 0.3,
+3: 0.1,
+4: 0.05,
+5: 0.005
+})
+metadata/_custom_type_script = "uid://baglarh3m4c8o"
+
+[sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_2kecs"]
+polygon = PackedVector2Array(-9, -15, -9, -6, 9, -6, 9, -15)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_nmdsi"]
+resource_local_to_scene = true
+shader = ExtResource("11_pg7ae")
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_nmdsi"]
+atlas = ExtResource("12_b403c")
+region = Rect2(0, 0, 30, 30)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_1mdei"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_nmdsi")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_l7ldg"]
+radius = 9.0
+height = 22.0
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_b403c"]
+height = 22.0
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_5yo6j"]
+height = 22.0
+
+[node name="TestRock2" type="StaticBody2D"]
+script = ExtResource("1_b403c")
+team = 4
+is_object = true
+inv = SubResource("Resource_5yo6j")
+loot = SubResource("Resource_mc2cg")
+
+[node name="DetectionComponent" parent="." instance=ExtResource("8_y2id4")]
+
+[node name="LightOccluder2D" type="LightOccluder2D" parent="."]
+occluder = SubResource("OccluderPolygon2D_2kecs")
+
+[node name="EntityShadow" parent="." instance=ExtResource("9_kerkt")]
+self_modulate = Color(0, 0, 0, 0.164)
+position = Vector2(0, -11)
+scale = Vector2(1.94999, 3.61307)
+
+[node name="EntitySprite" parent="." instance=ExtResource("10_kkd23")]
+unique_name_in_owner = true
+material = SubResource("ShaderMaterial_nmdsi")
+instance_shader_parameters/crack_color = Color(0.132138, 0.153553, 0.183094, 0.85)
+instance_shader_parameters/crack_depth = 0.4
+instance_shader_parameters/crack_intensity = 0.0
+instance_shader_parameters/crack_pixelate = Vector2(30, 30)
+instance_shader_parameters/crack_profile = 1.214
+instance_shader_parameters/crack_scale = 3.838
+instance_shader_parameters/crack_slope = 86.2
+instance_shader_parameters/crack_width = 0.036
+instance_shader_parameters/crack_zebra_scale = 0.841
+instance_shader_parameters/final_alpha = 1.0
+instance_shader_parameters/outline_color = Color(1, 1, 1, 1)
+instance_shader_parameters/outline_thickness = 0.0
+instance_shader_parameters/use_override_color = false
+position = Vector2(0, -12)
+sprite_frames = SubResource("SpriteFrames_1mdei")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -9)
+rotation = -1.5708
+shape = SubResource("CapsuleShape2D_l7ldg")
+debug_color = Color(0, 0.632808, 0.44745, 0.251)
+
+[node name="HealthComponent" parent="." instance=ExtResource("13_3mtpp")]
+_max_health = 500
+_max_shield = 0
+
+[node name="FacingComponent" parent="." instance=ExtResource("14_d40yk")]
+
+[node name="EffectReceiverComponent" parent="." node_paths=PackedStringArray("affected_entity", "dmg_handler") instance=ExtResource("15_8664o")]
+affected_entity = NodePath("..")
+dmg_handler = NodePath("DmgHandler")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="EffectReceiverComponent"]
+position = Vector2(0, -12)
+rotation = -1.5708
+shape = SubResource("CapsuleShape2D_b403c")
+
+[node name="DmgHandler" parent="EffectReceiverComponent" instance=ExtResource("16_11n4a")]
+
+[node name="StatusEffectsComponent" parent="." node_paths=PackedStringArray("effect_receiver") instance=ExtResource("17_3r7ao")]
+unique_name_in_owner = true
+effect_receiver = NodePath("../EffectReceiverComponent")
+
+[node name="ParticleEmissionComponent" parent="." instance=ExtResource("18_6nkmp")]
+below_extents = Vector2(16, 2)
+above_extents = Vector2(12, 2)
+above_origin = Vector2(0, -30)
+
+[node name="ClippingArea" parent="." instance=ExtResource("19_jf6jy")]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ClippingArea"]
+position = Vector2(0, -12)
+rotation = -1.5708
+shape = SubResource("CapsuleShape2D_5yo6j")
+debug_color = Color(0.918819, 6.42064e-05, 0.700756, 0.251)

@@ -10,14 +10,14 @@ shader = ExtResource("1_xxxwy")
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_h3vni"]
 light_mode = 1
 
-[sub_resource type="Gradient" id="Gradient_h3vni"]
+[sub_resource type="Gradient" id="Gradient_tflsg"]
 resource_local_to_scene = true
 offsets = PackedFloat32Array(0.0577689, 0.697211)
 colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 0.343)
 
 [sub_resource type="GradientTexture1D" id="GradientTexture1D_avd8k"]
 resource_local_to_scene = true
-gradient = SubResource("Gradient_h3vni")
+gradient = SubResource("Gradient_tflsg")
 
 [node name="EntitySprite" type="AnimatedSprite2D"]
 clip_children = 2

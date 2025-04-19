@@ -1,14 +1,14 @@
-[gd_scene load_steps=145 format=3 uid="uid://bl2igmtwo1a3v"]
+[gd_scene load_steps=147 format=3 uid="uid://bl2igmtwo1a3v"]
 
 [ext_resource type="Script" uid="uid://db4npghrxc6u" path="res://Entities/Enemies/Zombies/Basic/BasicZombie.gd" id="1_8bt15"]
 [ext_resource type="PackedScene" uid="uid://cj2wy5f05cos4" path="res://Entities/EntityCore/Shadow/EntityShadow.tscn" id="1_ko3ep"]
 [ext_resource type="PackedScene" uid="uid://dh4ydl7l86ywq" path="res://Entities/EntityCore/Sprites/EntitySprite.tscn" id="2_8a5el"]
 [ext_resource type="Script" uid="uid://dwmur0cosbbwh" path="res://UI/Inventory/InventoryCore/InventoryResource.gd" id="2_dcca3"]
-[ext_resource type="Shader" uid="uid://cfbagv3hrtar2" path="res://Utilities/Game/Shaders/EntityEffectShader.gdshader" id="3_3cie3"]
 [ext_resource type="PackedScene" uid="uid://bhcqtorpyerc3" path="res://Utilities/Debug/ParticleEmissionComponent.tscn" id="3_6bt22"]
 [ext_resource type="Script" uid="uid://dp8osf7r6xkkt" path="res://Entities/Items/ItemCore/InvItemResource.gd" id="3_hj6es"]
 [ext_resource type="PackedScene" uid="uid://di7vcyrki71nm" path="res://Entities/Components/DetectionComponent/DetectionComponent.tscn" id="3_tsyff"]
 [ext_resource type="Texture2D" uid="uid://yypje8l5ouqy" path="res://Entities/Enemies/Zombies/Basic/BasicZombieBaseFramesCT.tres" id="4_8a5el"]
+[ext_resource type="Resource" uid="uid://xuswqfh3rvdy" path="res://Entities/Items/TRESItems/MeleeWeapons/ZombieHands(0).tres" id="4_cw5if"]
 [ext_resource type="PackedScene" uid="uid://co3n6m7efg8pd" path="res://Entities/Components/EffectComponents/StatusEffectsComponent/StatusEffectsComponent.tscn" id="5_g4fx3"]
 [ext_resource type="Resource" uid="uid://dk3vlbvu2b7eq" path="res://Entities/Items/TRESItems/MeleeWeapons/Sword(4).tres" id="5_oiiqe"]
 [ext_resource type="PackedScene" uid="uid://b7gdy01q8wsjx" path="res://Entities/Components/ItemComponents/HandsComponent/HandsComponent.tscn" id="6_j2ytj"]
@@ -39,14 +39,22 @@
 [ext_resource type="Script" uid="uid://cbuaklpos5jdp" path="res://Entities/FSM/States/BaseStates/DieState.gd" id="32_kuvhw"]
 [ext_resource type="Script" uid="uid://bvla7pmnsimif" path="res://Entities/FSM/FSMCore/State.gd" id="33_qrtn1"]
 [ext_resource type="Script" uid="uid://q3yeopc5wdlo" path="res://Entities/FSM/States/EnemyStates/ChaseState.gd" id="34_dcca3"]
+[ext_resource type="Script" uid="uid://d0y26kxw6latu" path="res://Entities/FSM/States/EnemyStates/KnockbackState.gd" id="36_lal78"]
 [ext_resource type="Resource" uid="uid://cs2y6ebkb3wa7" path="res://Entities/FSM/FSMCore/MoveBehaviors/FullApproach.tres" id="40_lal78"]
 
+[sub_resource type="Resource" id="Resource_jfdci"]
+script = ExtResource("3_hj6es")
+stats = ExtResource("4_cw5if")
+quantity = 1
+metadata/_custom_type_script = "uid://dp8osf7r6xkkt"
+
 [sub_resource type="Resource" id="Resource_yrrsd"]
+resource_local_to_scene = true
 script = ExtResource("2_dcca3")
 title = "CHEST"
 main_inv_size = 10
 drop_on_death = false
-starting_inv = Array[ExtResource("3_hj6es")]([])
+starting_inv = Array[ExtResource("3_hj6es")]([SubResource("Resource_jfdci")])
 
 [sub_resource type="Resource" id="Resource_qrtn1"]
 script = ExtResource("19_8bt15")
@@ -67,6 +75,7 @@ spawn_count = 0
 metadata/_custom_type_script = "uid://1qq7eo7lm8j6"
 
 [sub_resource type="Resource" id="Resource_oqrkc"]
+resource_local_to_scene = true
 script = ExtResource("7_qrtn1")
 hit_loot_table = Array[ExtResource("19_8bt15")]([null, SubResource("Resource_cw5if")])
 hit_spawn_chance = 2.0
@@ -92,10 +101,6 @@ height = 16.0
 
 [sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_6bt22"]
 polygon = PackedVector2Array(-5, -2.98466, -6, -1.98977, -5, 0, 5, 0, 6, -1.98977, 5, -2.98466)
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_qrtn1"]
-resource_local_to_scene = true
-shader = ExtResource("3_3cie3")
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_3cie3"]
 atlas = ExtResource("4_8a5el")
@@ -518,6 +523,10 @@ chase_sprint_speed_mult = 1.0
 DEFAULT_RUN_ANIM_TIME_SCALE = 1.5
 MAX_RUN_ANIM_TIME_SCALE = 4.0
 metadata/_custom_type_script = "uid://q3yeopc5wdlo"
+
+[sub_resource type="Resource" id="Resource_1uee3"]
+script = ExtResource("36_lal78")
+metadata/_custom_type_script = "uid://d0y26kxw6latu"
 
 [sub_resource type="Resource" id="Resource_gtdxm"]
 script = ExtResource("30_5gwv1")
@@ -1011,32 +1020,31 @@ scale = Vector2(1, 1.00514)
 occluder = SubResource("OccluderPolygon2D_6bt22")
 
 [node name="YSorter" type="Node2D" parent="."]
+editor_description = "MUST TURN ON Y SORTING ON THIS NODE!"
+y_sort_enabled = true
 
 [node name="EntityShadow" parent="YSorter" instance=ExtResource("1_ko3ep")]
 
 [node name="EntitySprite" parent="YSorter" instance=ExtResource("2_8a5el")]
 unique_name_in_owner = true
-material = SubResource("ShaderMaterial_qrtn1")
-instance_shader_parameters/final_alpha = 1.0
-instance_shader_parameters/outline_thickness = 0.0
-instance_shader_parameters/override_color = Color(1, 1, 1, 0)
-instance_shader_parameters/tint_color = Color(1, 1, 1, 0)
-instance_shader_parameters/use_override_color = false
-position = Vector2(0, -16)
+position = Vector2(0, -14.5105)
+scale = Vector2(1.01285, 0.906908)
 sprite_frames = SubResource("SpriteFrames_gi80f")
 animation = &"idle"
 autoplay = "idle"
 disable_floor_light = true
 time_brightness_min_max = Vector2(1, 2.35)
 
+[node name="HandsComponent" parent="YSorter" instance=ExtResource("6_j2ytj")]
+unique_name_in_owner = true
+position = Vector2(0, -8.16217)
+scale = Vector2(1.01285, 0.906908)
+hand_texture = ExtResource("9_5go1u")
+time_brightness_min_max = Vector2(1, 1.15)
+
 [node name="StatusEffectsComponent" parent="YSorter" node_paths=PackedStringArray("effect_receiver") instance=ExtResource("5_g4fx3")]
 unique_name_in_owner = true
 effect_receiver = NodePath("../../EffectReceiverComponent")
-
-[node name="HandsComponent" parent="YSorter" instance=ExtResource("6_j2ytj")]
-unique_name_in_owner = true
-hand_texture = ExtResource("9_5go1u")
-time_brightness_min_max = Vector2(1, 1.9)
 
 [node name="ParticleEmissionComponent" parent="." instance=ExtResource("3_6bt22")]
 below_extents = Vector2(8, 1)
@@ -1071,7 +1079,7 @@ debug_color = Color(0.932, 0, 0.649, 0.122)
 
 [node name="StateMachine" type="Node" parent="."]
 script = ExtResource("27_5gwv1")
-states = Array[ExtResource("33_qrtn1")]([SubResource("Resource_i4r08"), SubResource("Resource_kq2k7"), SubResource("Resource_175e0"), SubResource("Resource_gtdxm"), SubResource("Resource_6hj0o")])
+states = Array[ExtResource("33_qrtn1")]([SubResource("Resource_i4r08"), SubResource("Resource_kq2k7"), SubResource("Resource_175e0"), SubResource("Resource_1uee3"), SubResource("Resource_gtdxm"), SubResource("Resource_6hj0o")])
 print_state_changes = true
 
 [node name="Controller" type="Node2D" parent="StateMachine"]

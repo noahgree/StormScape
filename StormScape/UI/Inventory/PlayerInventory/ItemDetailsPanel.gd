@@ -63,7 +63,6 @@ func _setup_slots() -> void:
 		mod_slots.append(slot)
 		i += 1
 
-	item_viewer_slot.name = "Item_Viewer_Slot"
 	item_viewer_slot.synced_inv = inventory_ui.synced_inv_source_node.inv
 	item_viewer_slot.index = inventory_ui.assign_next_slot_index()
 	item_viewer_slot.item_changed.connect(_on_item_viewer_slot_changed)
@@ -100,15 +99,14 @@ func _notification(what: int) -> void:
 ## When the slot is hovered over, potentially start a delay for showing stats of the underneath item.
 ## If something is instead pinned, return and do nothing.
 func _on_slot_hovered(slot: Slot) -> void:
-	if pinned:
-		return
-	elif not _is_dragging_slot():
+	if not _is_dragging_slot():
 		item_hover_delay_timer.set_meta("slot", slot)
 		item_hover_delay_timer.start()
 
 ## When a slot is no longer hovered over, stop the hover delay timer and remove the viewer slot item unless
 ## something is currently pinned.
 func _on_slot_not_hovered() -> void:
+	CursorManager.hide_tooltip()
 	item_hover_delay_timer.stop()
 	if not pinned:
 		is_updating_via_hover = true
@@ -188,7 +186,7 @@ func _on_item_viewer_slot_changed(_slot: Slot, _old_item: InvItemResource, new_i
 
 	if new_item.stats is WeaponResource:
 		if not new_item.stats.no_levels:
-			var level_string: String = "• [color=8df0ffFF] LVL " + str(new_item.stats.level) + "[/color][color=AAAAAA00][char=02D9][/color]" + "[color=AAAAAA00][char=02D9][/color]"
+			var level_string: String = "• [color=27f7ff] LVL " + str(new_item.stats.level) + "[/color][color=AAAAAA00][char=02D9][/color]" + "[color=AAAAAA00][char=02D9][/color]"
 			item_rarity_label.text += level_string
 
 	changing_item_viewer_slot = false
@@ -265,7 +263,15 @@ func _on_hover_delay_ended() -> void:
 	if not is_instance_valid(slot):
 		return
 	if slot.item != null:
-		is_updating_via_hover = true
-		var temp_item: InvItemResource = InvItemResource.new(slot.item.stats, 1)
-		item_viewer_slot.set_item(temp_item)
-		is_updating_via_hover = false
+		if pinned:
+			if slot.hide_hover_tooltip:
+				return
+			var info: String = slot.item.stats.get_item_type_string(true)
+			if slot.item.stats is WeaponResource and not slot.item.stats.no_levels:
+				info += " (LVL " + str(slot.item.stats.level) + ")"
+			CursorManager.update_tooltip(slot.item.stats.name, info, Globals.rarity_colors.ui_text.get(slot.item.stats.rarity))
+		else:
+			is_updating_via_hover = true
+			var temp_item: InvItemResource = InvItemResource.new(slot.item.stats, 1)
+			item_viewer_slot.set_item(temp_item)
+			is_updating_via_hover = false

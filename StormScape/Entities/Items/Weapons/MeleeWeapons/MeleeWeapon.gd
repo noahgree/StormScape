@@ -18,7 +18,7 @@ var recent_swing_type: RecentSwingType = RecentSwingType.NORMAL ## The most rece
 func _ready() -> void:
 	if Engine.is_editor_hint():
 		return
-	super._ready()
+	super()
 
 	hitbox_component.source_entity = source_entity
 	hitbox_component.source_weapon = stats
@@ -79,12 +79,17 @@ func activate() -> void:
 func hold_activate(delta: float) -> void:
 	hold_time += delta
 
-	if _can_activate_at_all(true):
-		if stats.auto_do_charge_use and (hold_time >= stats.s_mods.get_stat("min_charge_time")):
-			hold_time = 0
-			_charge_swing()
+	if stats.can_do_charge_use:
+		if _can_activate_at_all(true):
+			if stats.auto_do_charge_use and (hold_time >= stats.s_mods.get_stat("min_charge_time")):
+				hold_time = 0
+				_charge_swing()
+		else:
+			hold_time = max(0, hold_time - delta)
 	else:
-		hold_time = max(0, hold_time - delta)
+		if _can_activate_at_all(false):
+			_swing()
+		hold_time = 0
 
 ## Called when a trigger is released.
 func release_hold_activate() -> void:
@@ -139,20 +144,26 @@ func _set_hitbox_effect_source_and_collision(new_effect_source: EffectSource) ->
 	hitbox_component.effect_source = new_effect_source
 	hitbox_component.collision_mask = new_effect_source.scanned_phys_layers
 
-## Starts the swing animation and plays any associated fx. Awaits the animation ending and returns control to the caller.
+## Starts the swing animation and plays any associated fx. Awaits the animation ending and returns control
+## to the caller.
 func _start_swing_anim_and_fx(for_charged: bool) -> void:
 	AudioManager.play_2d(stats.charge_use_sound if for_charged else stats.use_sound, source_entity.global_position)
+	var anim_to_play: String
 
-	var library: AnimationLibrary = anim_player.get_animation_library("MeleeWeaponAnimLibrary")
-	var anim: Animation = library.get_animation("charge_use" if for_charged else "use")
-	var angle_radians: float = deg_to_rad(stats.s_mods.get_stat("charge_swing_angle" if for_charged else "swing_angle"))
-	var main_sprite_track: int = anim.find_track("ItemSprite:rotation", Animation.TYPE_VALUE)
-	anim.track_set_key_value(main_sprite_track, 1, angle_radians)
+	if (stats.use_anim == "" and not for_charged) or (stats.charge_use_anim == "" and for_charged):
+		var library: AnimationLibrary = anim_player.get_animation_library("MeleeWeaponAnimLibrary")
+		var anim: Animation = library.get_animation("charge_use" if for_charged else "use")
+		var angle_radians: float = deg_to_rad(stats.s_mods.get_stat("charge_swing_angle" if for_charged else "swing_angle"))
+		var main_sprite_track: int = anim.find_track("ItemSprite:rotation", Animation.TYPE_VALUE)
+		anim.track_set_key_value(main_sprite_track, 1, angle_radians)
+		anim_to_play = "MeleeWeaponAnimLibrary/charge_use" if for_charged else "MeleeWeaponAnimLibrary/use"
+	else:
+		anim_to_play = stats.charge_use_anim if for_charged else stats.use_anim
 
 	var use_speed: float = stats.s_mods.get_stat("charge_use_speed" if for_charged else "use_speed")
 	if use_speed > 0:
 		anim_player.speed_scale = 1.0 / use_speed
-		anim_player.play("MeleeWeaponAnimLibrary/charge_use" if for_charged else "MeleeWeaponAnimLibrary/use")
+		anim_player.play(anim_to_play)
 		await anim_player.animation_finished
 
 ## Spawns a ghosting effect of the weapon sprite to immitate a fast whoosh.

@@ -34,6 +34,7 @@ class_name ItemResource
 @export_range(0, 1, 0.001) var rotation_lerping: float = 0.1 ## How fast the rotation lerping should be while holding this item.
 @export var holding_offset: Vector2 = Vector2.ZERO ## The offset for placing the icon of the sprite in the entity's hand.
 @export_custom(PROPERTY_HINT_NONE, "suffix:degrees") var holding_degrees: float = 0 ## The rotation offset for holding the thumnbail sprite in the entity's hand.
+@export var stay_flat_on_rotate: bool = false ## When true, rotating over the y axis will not flip the sprite.
 
 @export_group("Hand Positioning")
 @export var is_gripped_by_one_hand: bool = true ## Whether or not this item should only have one hand shown gripping it.

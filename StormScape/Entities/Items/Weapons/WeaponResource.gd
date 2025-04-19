@@ -13,9 +13,10 @@ const MEDIUM_LARGE_XP: int = 50
 const LARGE_XP: int = 100
 const HUGE_XP: int = 250
 const ENORMOUS_XP: int = 500
-const EFFECT_AMOUNT_XP_MULT: float = 0.35 ## Multiplies effect source amounts (dmg,heal) before adding that amount as xp.
+const EFFECT_AMOUNT_XP_MULT: float = 0.35 ## Multiplies effect src amounts (dmg,heal) before adding that amount as xp.
 
 @export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var pullout_delay: float = 0.25 ## How long after equipping must we wait before we can use this weapon.
+@export var snap_to_six_dirs: bool = false ## When true, free rotation of the sprite is disabled and will snap to six predefined directions.
 @export var no_levels: bool = false ## When true, this weapon does not engage with the weapon leveling system.
 @export var hide_ammo_ui: bool = false ## Whether to hide the ammo UI when the player uses this weapon.
 @export_group("Modding Details")

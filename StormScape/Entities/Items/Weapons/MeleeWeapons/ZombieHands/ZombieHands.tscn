@@ -1,0 +1,160 @@
+[gd_scene load_steps=16 format=3 uid="uid://cdbf0tdqr3eww"]
+
+[ext_resource type="Script" uid="uid://ut1n80th00qw" path="res://Entities/Items/Weapons/MeleeWeapons/MeleeWeapon.gd" id="1_cxccv"]
+[ext_resource type="Shader" uid="uid://cugs1eqtkjsbd" path="res://Utilities/Game/Shaders/TintAndGlow.gdshader" id="2_a1ayi"]
+[ext_resource type="Texture2D" uid="uid://c5oqm868vkvhb" path="res://Entities/Items/Weapons/MeleeWeapons/ZombieHands/ZombieHandsBaseCT.tres" id="3_nwxvl"]
+[ext_resource type="PackedScene" uid="uid://b7ckcb2xdimpo" path="res://Entities/Components/HitboxComponent/HitboxComponent.tscn" id="4_1rbak"]
+[ext_resource type="AnimationLibrary" uid="uid://dk7m82xohebji" path="res://Entities/Items/Weapons/MeleeWeapons/MeleeWeaponAnimLibrary.res" id="6_kybxr"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_8aqmb"]
+shader = ExtResource("2_a1ayi")
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8w6u3"]
+atlas = ExtResource("3_nwxvl")
+region = Rect2(0, 0, 28, 14)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_j865f"]
+atlas = ExtResource("3_nwxvl")
+region = Rect2(28, 0, 28, 14)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_o3tkr"]
+atlas = ExtResource("3_nwxvl")
+region = Rect2(56, 0, 28, 14)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_65kdh"]
+atlas = ExtResource("3_nwxvl")
+region = Rect2(84, 0, 28, 14)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_pldj5"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_8w6u3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_j865f")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_o3tkr")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_65kdh")
+}],
+"loop": true,
+"name": &"use",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_sjv0y"]
+size = Vector2(26, 7)
+
+[sub_resource type="Animation" id="Animation_8w6u3"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("ItemSprite/HitboxComponent/CollisionShape2D:disabled")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("ItemSprite:frame")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+
+[sub_resource type="Animation" id="Animation_nwxvl"]
+resource_name = "punch"
+step = 0.05
+tracks/0/type = "method"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.25, 0.5, 0.75),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"values": [{
+"args": [],
+"method": &"_spawn_ghost"
+}, {
+"args": [],
+"method": &"_spawn_ghost"
+}, {
+"args": [],
+"method": &"_spawn_ghost"
+}, {
+"args": [],
+"method": &"_spawn_ghost"
+}]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("ItemSprite/HitboxComponent/CollisionShape2D:disabled")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.75, 1),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [true, false, true]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("ItemSprite:frame")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.25, 0.5, 0.75, 1),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3, 0]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_j865f"]
+_data = {
+&"RESET": SubResource("Animation_8w6u3"),
+&"punch": SubResource("Animation_nwxvl")
+}
+
+[node name="ZombieHands" type="Node2D"]
+modulate = Color(1, 1, 1, 0)
+script = ExtResource("1_cxccv")
+sprite_visual_rotation = 0.0
+
+[node name="ItemSprite" type="AnimatedSprite2D" parent="."]
+light_mask = 2
+material = SubResource("ShaderMaterial_8aqmb")
+sprite_frames = SubResource("SpriteFrames_pldj5")
+animation = &"use"
+
+[node name="HitboxComponent" parent="ItemSprite" instance=ExtResource("4_1rbak")]
+unique_name_in_owner = true
+position = Vector2(0, -2)
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ItemSprite/HitboxComponent"]
+position = Vector2(0, 0.5)
+shape = SubResource("RectangleShape2D_sjv0y")
+disabled = true
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_j865f"),
+&"MeleeWeaponAnimLibrary": ExtResource("6_kybxr")
+}

@@ -3,6 +3,9 @@ extends CanvasLayer
 
 @onready var cursor: AnimatedSprite2D = $Cursor ## The animated sprite node responsible for displaying the cursor.
 @onready var default_cursor: SpriteFrames = cursor.sprite_frames ## The default sprite frames used as the cursor when one isn't specified.
+@onready var hover_tooltip: MarginContainer = %HoverTooltip ## The hover tooltip main margin container.
+@onready var tooltip_title: RichTextLabel = %TooltipTitle ## The hover tooltip title.
+@onready var tooltip_info: RichTextLabel = %TooltipInfo ## The hover tooltip info.
 
 var previous_angle: float = 0 ## The angle of the cursor relative to the player as of the last frame. Used for lerping.
 var restore_after_hitmarker_countdown: float = 0 ## Counts down after being changed to the hitmarker cursor before restoring the default.
@@ -11,6 +14,7 @@ const DEFAULT_MAX_PROXIMITY_TO_CHAR: float = 8.0 ## The closest number of pixels
 
 func _ready() -> void:
 	Input.mouse_mode = Input.MOUSE_MODE_HIDDEN
+	hide_tooltip()
 
 func _process(delta: float) -> void:
 	var mouse_position: Vector2 = cursor.get_global_mouse_position()
@@ -68,9 +72,24 @@ func change_cursor(sprite_frames: SpriteFrames, animation: StringName = &"defaul
 func change_cursor_tint(tint: Color) -> void:
 	cursor.set_instance_shader_parameter("main_color", tint)
 
+## Gets the current cursor tint.
 func get_cursor_tint() -> Color:
 	return cursor.get_instance_shader_parameter("main_color")
 
 ## Updates the shader controlling the vertical fill progress.
 func update_vertical_tint_progress(value: float) -> void:
 	cursor.set_instance_shader_parameter("progress", clampf(value, 0.0, 100.0))
+
+## Updates the mouse tooltip with a title and info string.
+func update_tooltip(title_str: String, info_str: String, info_str_color: Color = Color.TRANSPARENT) -> void:
+	tooltip_title.text = title_str + Globals.invis_char
+	tooltip_info.text = info_str + Globals.invis_char
+	if info_str_color != Color.TRANSPARENT:
+		tooltip_info.add_theme_color_override("default_color", info_str_color)
+	else:
+		tooltip_info.remove_theme_color_override("default_color")
+	hover_tooltip.show()
+
+## Hides the hover tooltip.
+func hide_tooltip() -> void:
+	hover_tooltip.hide()

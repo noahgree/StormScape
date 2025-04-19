@@ -76,7 +76,7 @@ func setup() -> void:
 	_on_enemies_in_range_changed(detector.enemies_in_range)
 
 func controller_process(delta: float) -> void:
-	super.controller_process(delta)
+	super(delta)
 	entity.facing_component.update_facing_dir(facing_method)
 
 #region Movement Vector
@@ -307,12 +307,12 @@ func apply_dynamic_smoothing(preliminary_direction: Vector2, current_direction: 
 func get_should_sprint() -> bool:
 	return false
 
-func _on_enemies_in_range_changed(enemies_in_range: Array[Entity]) -> void:
+func _on_enemies_in_range_changed(enemies_in_range: Array[Entity] = detector.enemies_in_range) -> void:
 	if enemies_in_range.is_empty():
 		target = null
 		path_recalc_timer.stop()
 		match fsm.current_state.state_id:
-			"chase":
+			"chase", "knockback":
 				fsm.change_state("idle")
 	else:
 		if target not in enemies_in_range:
@@ -324,9 +324,7 @@ func _on_enemies_in_range_changed(enemies_in_range: Array[Entity]) -> void:
 ## have enemies in range first.
 func _on_stun_timer_timeout() -> void:
 	fsm.change_state("idle")
-
-	if not detector.enemies_in_range.is_empty():
-		notify_enemy_in_range()
+	_on_enemies_in_range_changed()
 
 ## Requests to add a value to the current knockback vector, doing so if possible.
 func notify_requested_knockback(knockback: Vector2) -> void:
@@ -336,13 +334,14 @@ func notify_requested_knockback(knockback: Vector2) -> void:
 			fsm.change_state("knockback")
 			reset_and_create_knockback_streak()
 
+## When a knockback vector is no longer moving the entity, this is called.
+func notify_knockback_ended() -> void:
+	fsm.change_state("idle")
+	_on_enemies_in_range_changed()
+
 func notify_spawn_ended() -> void:
 	fsm.change_state("idle")
-
-	if detector.enemies_in_range.is_empty():
-		notify_stopped_moving()
-	else:
-		notify_enemy_in_range()
+	_on_enemies_in_range_changed()
 
 func notify_requested_stun(duration: float) -> void:
 	match fsm.current_state.state_id:

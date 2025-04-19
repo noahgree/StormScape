@@ -11,7 +11,7 @@ class_name EquippableItem
 @onready var audio_preloader: AudioPreloader = AudioPreloader.new(self) ## The node registering preloaded audios.
 
 var stats_already_duplicated: bool = false ## Whether the stats have already been duplicated when they were first created in the slot.
-var source_slot: Slot ## The slot this equippable item is in whilst equipped.
+var inv_index: int ## The slot this equippable item is in whilst equipped.
 var source_entity: Entity ## The entity that is holding the equippable item.
 var ammo_ui: MarginContainer ## The ui assigned by the hands component that displays the ammo. Only for the player.
 var overlaps: Array[Area2D]
@@ -30,21 +30,20 @@ var enabled: bool = true: ## When false, any activation or reload actions are bl
 			enable()
 
 
-## Creates an equippable item to be used via the slot it is currently in.
-static func create_from_slot(item_source_slot: Slot) -> EquippableItem:
-	var item: EquippableItem = item_source_slot.item.stats.item_scene.instantiate()
-	item.source_slot = item_source_slot
-	item.stats = item_source_slot.item.stats
+## Creates an equippable item to be used via the inv index it is currently in.
+static func create_from_inv_index(item_stats: ItemResource, entity: Entity, index: int) -> EquippableItem:
+	var item: EquippableItem = item_stats.item_scene.instantiate()
+	item.inv_index = index
+	item.source_entity = entity
+	item.stats = item_stats
 	item.stats_already_duplicated = true
-	item.source_entity = item_source_slot.synced_inv.source_node
 	return item
 
 ## Sets the item stats when changed. Can be overridden by child classes to do specific things on change.
 func _set_stats(new_stats: ItemResource) -> void:
 	if not stats_already_duplicated:
 		stats = new_stats.duplicate_with_suid()
-	source_slot.synced_inv.inv[source_slot.index].stats = stats
-	source_slot.item.stats = stats
+	source_entity.inv.update_index_and_emit_changes(inv_index, source_entity.inv.inv[inv_index])
 
 func _ready() -> void:
 	_set_stats(stats)

@@ -40,12 +40,13 @@ func initialize(entity: Entity) -> void:
 		source_entity.health_component.health_changed.connect(_on_hp_changed)
 		source_entity.health_component.shield_changed.connect(_on_hp_changed)
 
+	hit_loot_table = hit_loot_table.filter(func(element: LootTableEntry) -> bool: return element != null)
+	die_loot_table = die_loot_table.filter(func(element: LootTableEntry) -> bool: return element != null)
+
 	for i: int in range(hit_loot_table.size()):
-		if hit_loot_table[i]:
-			hit_loot_table_total_weight += hit_loot_table[i].weighting
+		hit_loot_table_total_weight += hit_loot_table[i].weighting
 	for i: int in range(die_loot_table.size()):
-		if die_loot_table[i]:
-			die_loot_table_total_weight += die_loot_table[i].weighting
+		die_loot_table_total_weight += die_loot_table[i].weighting
 
 ## Called when the health or shield of the source_entity changes. When we require damage on hit to trigger a drop
 ## check, this is the entry point. This doesn't check until we have accumulated enough damagaccording to

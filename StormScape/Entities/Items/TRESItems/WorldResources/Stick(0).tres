@@ -40,6 +40,7 @@ item_scene = ExtResource("3_kf8ve")
 rotation_lerping = 0.1
 holding_offset = Vector2(4, -4)
 holding_degrees = 0.0
+stay_flat_on_rotate = false
 is_gripped_by_one_hand = true
 draw_off_hand = false
 draw_off_hand_offset = Vector2(0, 0)

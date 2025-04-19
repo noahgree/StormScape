@@ -1,15 +1,14 @@
-[gd_resource type="Resource" script_class="MeleeWeaponResource" load_steps=15 format=3 uid="uid://bper7kxtsf7f1"]
+[gd_resource type="Resource" script_class="MeleeWeaponResource" load_steps=14 format=3 uid="uid://bper7kxtsf7f1"]
 
 [ext_resource type="Script" uid="uid://djlk3y511igng" path="res://Entities/Items/Weapons/MeleeWeapons/MeleeWeaponResource.gd" id="1_0xu6s"]
 [ext_resource type="Resource" uid="uid://b5dad578bsduf" path="res://Entities/Player/PlayerCore/PlayerCamera/CamFXPresets/3(NoFreeze).tres" id="1_8vcks"]
 [ext_resource type="Script" uid="uid://dkfssottmsrch" path="res://Entities/Stats/EffectSystemResources/EffectSources/EffectSource.gd" id="1_x4rfe"]
-[ext_resource type="PackedScene" uid="uid://bgj0b83wrmlon" path="res://Entities/Items/Weapons/MeleeWeapons/Axe/Axe.tscn" id="2_50myi"]
 [ext_resource type="Script" uid="uid://boo31eu083dqd" path="res://Entities/Stats/EffectSystemResources/StatusEffects/StatusEffect.gd" id="2_kry0o"]
-[ext_resource type="Texture2D" uid="uid://brmpeymhp2hix" path="res://Entities/Items/Weapons/MeleeWeapons/Axe/AxeBaseCT.tres" id="4_c7rci"]
 [ext_resource type="Resource" uid="uid://jdmp0abbwxm5" path="res://Entities/Player/PlayerCore/PlayerCamera/CamFXPresets/1(NoFreeze).tres" id="4_ib65y"]
 [ext_resource type="Script" uid="uid://cowjdnic7xmkp" path="res://UI/Inventory/PlayerInventory/StatDetail.gd" id="5_ff5e7"]
-[ext_resource type="Texture2D" uid="uid://ec7bui23pv1m" path="res://Entities/Items/Weapons/MeleeWeapons/Axe/axe_base.png" id="5_xkirk"]
 [ext_resource type="Script" uid="uid://c2gdoebfp12dq" path="res://Entities/Stats/StatMod/StatModsCacheResource.gd" id="6_iunw2"]
+[ext_resource type="Texture2D" uid="uid://c8mku0yilyape" path="res://Entities/Items/Weapons/MeleeWeapons/Axe/AxeWoodCT.tres" id="6_tm0oq"]
+[ext_resource type="PackedScene" uid="uid://4jfk7na2inix" path="res://Entities/Items/Weapons/MeleeWeapons/Axe/AxeWood.tscn" id="7_tm0oq"]
 [ext_resource type="Script" uid="uid://ctxa7i1mbt7ab" path="res://UI/Inventory/PlayerInventory/Crafting/CraftingIngredient.gd" id="11_qdoaj"]
 
 [sub_resource type="Resource" id="Resource_klx1g"]
@@ -66,7 +65,8 @@ effect_source = SubResource("Resource_c7rci")
 stamina_cost = 3.0
 use_cooldown = 0.18
 use_speed = 0.25
-swing_angle = 125
+swing_angle = 115
+use_anim = ""
 ghost_fade_time = 0.32
 use_sound = ""
 can_do_charge_use = true
@@ -77,9 +77,11 @@ charge_use_cooldown = 1.5
 charge_use_speed = 1.0
 charge_swing_angle = 900
 charge_stamina_cost = 25
+charge_use_anim = ""
 charge_ghost_fade_time = 1.0
 charge_use_sound = ""
 pullout_delay = 0.25
+snap_to_six_dirs = false
 no_levels = false
 hide_ammo_ui = false
 max_mods_override = -1
@@ -114,20 +116,21 @@ auto_pickup = false
 pickup_radius = 6
 info = "A mighty axe."
 extra_details = Array[ExtResource("5_ff5e7")]([])
-ground_icon = ExtResource("4_c7rci")
-in_hand_icon = ExtResource("4_c7rci")
-inv_icon = ExtResource("5_xkirk")
+ground_icon = ExtResource("6_tm0oq")
+in_hand_icon = ExtResource("6_tm0oq")
+inv_icon = ExtResource("6_tm0oq")
 flip_inv_icon_h = true
 inv_icon_offset = Vector2(0, 0)
 inv_icon_scale = Vector2(1, 1)
 inv_icon_rotation = 0.0
 recipe = Array[ExtResource("11_qdoaj")]([])
 output_quantity = 1
-recipe_unlocked = true
-item_scene = ExtResource("2_50myi")
+recipe_unlocked = false
+item_scene = ExtResource("7_tm0oq")
 rotation_lerping = 0.1
 holding_offset = Vector2(0, 0)
 holding_degrees = 0.0
+stay_flat_on_rotate = false
 is_gripped_by_one_hand = true
 draw_off_hand = false
 draw_off_hand_offset = Vector2(0, 0)

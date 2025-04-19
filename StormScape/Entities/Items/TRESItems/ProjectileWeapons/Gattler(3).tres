@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="ProjWeaponResource" load_steps=32 format=3 uid="uid://1q7rlned2r23"]
+[gd_resource type="Resource" script_class="ProjWeaponResource" load_steps=30 format=3 uid="uid://1q7rlned2r23"]
 
 [ext_resource type="Script" uid="uid://dkfssottmsrch" path="res://Entities/Stats/EffectSystemResources/EffectSources/EffectSource.gd" id="1_lbh37"]
 [ext_resource type="Texture2D" uid="uid://bm570hawaupxe" path="res://Entities/Items/Weapons/WeaponVFX/Casings/small_casing.png" id="1_pxe5r"]
@@ -15,7 +15,6 @@
 [ext_resource type="Script" uid="uid://bj3r5oopspj6l" path="res://Entities/Items/Projectiles/ProjectileCore/ProjectileResource.gd" id="8_evybt"]
 [ext_resource type="Script" uid="uid://c2gdoebfp12dq" path="res://Entities/Stats/StatMod/StatModsCacheResource.gd" id="11_ojoph"]
 [ext_resource type="PackedScene" uid="uid://bqkyplubhsx43" path="res://Entities/Items/Projectiles/Bullets/SmallBullet/SmallBullet.tscn" id="12_evybt"]
-[ext_resource type="Resource" uid="uid://8uj8fwadqlk0" path="res://Entities/Items/TRESItems/WorldResources/Stick(0).tres" id="14_pxe5r"]
 
 [sub_resource type="Curve" id="Curve_upocd"]
 _data = [Vector2(0, 0.00289726), 0.0, 0.0, 0, 0, Vector2(0.149254, 0), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
@@ -153,15 +152,6 @@ aoe_hide_sprite = true
 aoe_sound = ""
 metadata/_custom_type_script = ExtResource("8_evybt")
 
-[sub_resource type="Resource" id="Resource_ojoph"]
-script = ExtResource("4_64txm")
-type = "Item"
-item = ExtResource("14_pxe5r")
-quantity = 1
-tags = Array[StringName]([])
-rarity_match = "No"
-metadata/_custom_type_script = "uid://ctxa7i1mbt7ab"
-
 [sub_resource type="Resource" id="Resource_fe8se"]
 script = ExtResource("11_ojoph")
 metadata/_custom_type_script = ExtResource("11_ojoph")
@@ -249,6 +239,7 @@ do_cluster_barrage = false
 barrage_proj_delay = 0.0
 ammo_in_mag = -1
 pullout_delay = 0.5
+snap_to_six_dirs = false
 no_levels = false
 hide_ammo_ui = false
 max_mods_override = -1
@@ -291,13 +282,14 @@ inv_icon_offset = Vector2(0, 0.5)
 inv_icon_scale = Vector2(1.31, 1.31)
 inv_icon_rotation = -41.0
 cursors = ExtResource("2_huwqf")
-recipe = Array[ExtResource("4_64txm")]([SubResource("Resource_ojoph")])
+recipe = Array[ExtResource("4_64txm")]([])
 output_quantity = 1
 recipe_unlocked = true
 item_scene = ExtResource("6_huwqf")
 rotation_lerping = 0.07
 holding_offset = Vector2(3, 3)
 holding_degrees = 0.0
+stay_flat_on_rotate = false
 is_gripped_by_one_hand = false
 draw_off_hand = false
 draw_off_hand_offset = Vector2(0, 0)

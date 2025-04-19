@@ -78,7 +78,7 @@ func get_should_sneak() -> bool:
 ## Checks if knockback needs to be lerped to 0 and passes the physics process to the active state.
 ## Advances animation tree manually so that it respects time snares. Overrides parent state machine class.
 func controller_physics_process(delta: float) -> void:
-	super.controller_physics_process(delta)
+	super(delta)
 
 	if knockback_vector.length() > 100:
 		update_knockback_streak()
@@ -149,6 +149,12 @@ func notify_requested_knockback(knockback: Vector2) -> void:
 			knockback_vector = (knockback_vector + knockback).limit_length(MAX_KNOCKBACK)
 			fsm.change_state("run")
 			reset_and_create_knockback_streak()
+
+## When a knockback vector is no longer moving the entity, this is called.
+func notify_knockback_ended() -> void:
+	match fsm.current_state.state_id:
+		_:
+			fsm.change_state("idle")
 
 ## When the stun timer ends, notify that we can return to Idle if needed.
 func _on_stun_timer_timeout() -> void:

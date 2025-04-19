@@ -1,14 +1,12 @@
-[gd_scene load_steps=31 format=3 uid="uid://jdi552emuah8"]
+[gd_scene load_steps=27 format=3 uid="uid://jdi552emuah8"]
 
 [ext_resource type="Script" uid="uid://cn2gulskgn7k3" path="res://Entities/EntityCore/EntityTypes/StaticEntity/StaticEntity.gd" id="1_7qjvm"]
 [ext_resource type="Script" uid="uid://dwmur0cosbbwh" path="res://UI/Inventory/InventoryCore/InventoryResource.gd" id="2_ymdvb"]
 [ext_resource type="PackedScene" uid="uid://di7vcyrki71nm" path="res://Entities/Components/DetectionComponent/DetectionComponent.tscn" id="3_ke02d"]
 [ext_resource type="Script" uid="uid://dp8osf7r6xkkt" path="res://Entities/Items/ItemCore/InvItemResource.gd" id="3_mc2cg"]
 [ext_resource type="PackedScene" uid="uid://cj2wy5f05cos4" path="res://Entities/EntityCore/Shadow/EntityShadow.tscn" id="4_mc2cg"]
-[ext_resource type="Resource" uid="uid://8uj8fwadqlk0" path="res://Entities/Items/TRESItems/WorldResources/Stick(0).tres" id="5_7qjvm"]
+[ext_resource type="Resource" uid="uid://cljdjbul1tfde" path="res://Entities/Items/TRESItems/WorldResources/Sandstone(0).tres" id="5_7qjvm"]
 [ext_resource type="PackedScene" uid="uid://dh4ydl7l86ywq" path="res://Entities/EntityCore/Sprites/EntitySprite.tscn" id="5_by2me"]
-[ext_resource type="Resource" uid="uid://cx1ydw2jde1y8" path="res://Entities/Items/TRESItems/Consumables/Apple(0).tres" id="6_ke02d"]
-[ext_resource type="Shader" uid="uid://cfbagv3hrtar2" path="res://Utilities/Game/Shaders/EntityEffectShader.gdshader" id="6_sc78r"]
 [ext_resource type="Script" uid="uid://baglarh3m4c8o" path="res://Entities/Components/ItemComponents/LootTableComponent/LootTableResource.gd" id="6_ymdvb"]
 [ext_resource type="Texture2D" uid="uid://y4h3ce1ifonf" path="res://Entities/Environment/Rocks/Rock1CT.tres" id="7_7qjvm"]
 [ext_resource type="PackedScene" uid="uid://cdfdy8m6ki3oq" path="res://Entities/Components/HealthComponent/HealthComponent.tscn" id="8_c8cii"]
@@ -21,13 +19,14 @@
 [ext_resource type="PackedScene" uid="uid://bhcqtorpyerc3" path="res://Utilities/Debug/ParticleEmissionComponent.tscn" id="18_m60nn"]
 
 [sub_resource type="Resource" id="Resource_by2me"]
+resource_local_to_scene = true
 script = ExtResource("2_ymdvb")
 title = "CHEST"
 main_inv_size = 10
 drop_on_death = false
 starting_inv = Array[ExtResource("3_mc2cg")]([])
 
-[sub_resource type="Resource" id="Resource_ke02d"]
+[sub_resource type="Resource" id="Resource_ymdvb"]
 script = ExtResource("14_v0818")
 item = ExtResource("5_7qjvm")
 quantity = 1
@@ -36,23 +35,15 @@ last_used = 0
 spawn_count = 0
 metadata/_custom_type_script = "uid://1qq7eo7lm8j6"
 
-[sub_resource type="Resource" id="Resource_sc78r"]
-script = ExtResource("14_v0818")
-item = ExtResource("6_ke02d")
-quantity = 3
-weighting = 1.0
-last_used = 0
-spawn_count = 0
-metadata/_custom_type_script = "uid://1qq7eo7lm8j6"
-
 [sub_resource type="Resource" id="Resource_mc2cg"]
+resource_local_to_scene = true
 script = ExtResource("6_ymdvb")
-hit_loot_table = Array[ExtResource("14_v0818")]([SubResource("Resource_ke02d"), SubResource("Resource_sc78r")])
+hit_loot_table = Array[ExtResource("14_v0818")]([SubResource("Resource_ymdvb")])
 hit_spawn_chance = 100.0
 hit_chance_scale = 1
-remove_when_dropped = true
+remove_when_dropped = false
 require_dmg_on_hit = true
-hp_percent_hit_checks = 10
+hp_percent_hit_checks = 33
 die_loot_table = Array[ExtResource("14_v0818")]([])
 die_spawn_chance = 100.0
 rarity_scaling_factors = Dictionary[int, float]({
@@ -67,10 +58,6 @@ metadata/_custom_type_script = "uid://baglarh3m4c8o"
 
 [sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_2kecs"]
 polygon = PackedVector2Array(-12, -15, -12, -6, 12, -6, 12, -15)
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_ymdvb"]
-resource_local_to_scene = true
-shader = ExtResource("6_sc78r")
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ymdvb"]
 atlas = ExtResource("7_7qjvm")
@@ -116,7 +103,7 @@ scale = Vector2(2.51672, 3.34408)
 
 [node name="EntitySprite" parent="." instance=ExtResource("5_by2me")]
 unique_name_in_owner = true
-material = SubResource("ShaderMaterial_ymdvb")
+instance_shader_parameters/brightness_mult = 1.0
 instance_shader_parameters/crack_color = Color(0.246, 0.109, 0.01, 0.85)
 instance_shader_parameters/crack_depth = 0.4
 instance_shader_parameters/crack_intensity = 0.0

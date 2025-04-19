@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c1d005fgev8ro"
-path="res://.godot/imported/axe_base_n.png-85665d01490d0b6f9a92745665b43447.ctex"
+uid="uid://bfy6r1r825f0"
+path="res://.godot/imported/zombie_hands_base.png-e20ee1f6f3fca5e53fbca340e0514e4b.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Entities/Items/Weapons/MeleeWeapons/Axe/axe_base_n.png"
-dest_files=["res://.godot/imported/axe_base_n.png-85665d01490d0b6f9a92745665b43447.ctex"]
+source_file="res://Entities/Items/Weapons/MeleeWeapons/ZombieHands/zombie_hands_base.png"
+dest_files=["res://.godot/imported/zombie_hands_base.png-e20ee1f6f3fca5e53fbca340e0514e4b.ctex"]
 
 [params]
 

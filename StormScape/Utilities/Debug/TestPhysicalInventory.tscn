@@ -15,11 +15,14 @@
 [ext_resource type="Script" uid="uid://dubq8xgav66ue" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/BurningHandler.gd" id="11_w3nan"]
 [ext_resource type="PackedScene" uid="uid://2yy4xfm5g74l" path="res://Entities/Components/ItemComponents/ClippingComponent/ClippingArea.tscn" id="11_ypx5n"]
 
-[sub_resource type="Resource" id="Resource_5wq56"]
+[sub_resource type="Resource" id="Resource_w3nan"]
+resource_local_to_scene = true
 script = ExtResource("2_hjkvw")
 title = "CHEST"
 main_inv_size = 10
+drop_on_death = false
 starting_inv = Array[ExtResource("3_s3b18")]([])
+metadata/_custom_type_script = "uid://dwmur0cosbbwh"
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_6ca8s"]
 size = Vector2(18, 14)
@@ -59,7 +62,7 @@ size = Vector2(18, 14)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_1mmyp"]
 size = Vector2(18, 14)
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_w3nan"]
+[sub_resource type="CircleShape2D" id="CircleShape2D_h35lp"]
 radius = 18.0
 
 [node name="TestPhysicalInventory" type="StaticBody2D"]
@@ -67,8 +70,8 @@ script = ExtResource("1_ggkuf")
 interact_radius = 18.0
 prompt_position = Vector2(0, -14)
 team = 4
-inv = SubResource("Resource_5wq56")
 is_object = true
+inv = SubResource("Resource_w3nan")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0, -7)
@@ -100,9 +103,8 @@ _max_shield = 0
 unique_name_in_owner = true
 effect_receiver = NodePath("../EffectReceiverComponent")
 
-[node name="EffectReceiverComponent" parent="." node_paths=PackedStringArray("affected_entity", "health_component", "dmg_handler") instance=ExtResource("11_5wq56")]
+[node name="EffectReceiverComponent" parent="." node_paths=PackedStringArray("affected_entity", "dmg_handler") instance=ExtResource("11_5wq56")]
 affected_entity = NodePath("..")
-health_component = NodePath("../HealthComponent")
 dmg_handler = NodePath("DmgHandler")
 burning_handler = SubResource("Resource_dwqj1")
 
@@ -127,7 +129,7 @@ monitorable = false
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="InteractionArea"]
 position = Vector2(0, -5)
-shape = SubResource("CircleShape2D_w3nan")
+shape = SubResource("CircleShape2D_h35lp")
 debug_color = Color(0.562, 0.588, 1, 0.147)
 
 [connection signal="body_entered" from="InteractionArea" to="." method="_on_interaction_area_body_entered"]

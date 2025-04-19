@@ -1,0 +1,8 @@
+[gd_resource type="CanvasTexture" load_steps=3 format=3 uid="uid://c8mku0yilyape"]
+
+[ext_resource type="Texture2D" uid="uid://c0ncjcmiq6pgw" path="res://Entities/Items/Weapons/MeleeWeapons/Axe/axe_wood.png" id="1_ttafg"]
+[ext_resource type="Texture2D" uid="uid://cy7gpgu6t348k" path="res://Entities/Items/Weapons/MeleeWeapons/Axe/axe_wood_n.png" id="2_4a7xi"]
+
+[resource]
+diffuse_texture = ExtResource("1_ttafg")
+normal_texture = ExtResource("2_4a7xi")

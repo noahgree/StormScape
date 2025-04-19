@@ -314,7 +314,7 @@ func _get_allowed_weapons_for_mod(stats: WeaponMod) -> Array[String]:
 
 ## Formats the line title with the needed color and invisible char.
 func _get_title(title: String) -> String:
-	return "[color=f5e4e1]" + title + ":[/color]" + Globals.invis_char
+	return "[outline_color=1f0900ab][color=f5e4e1]" + title + ":[/color]" + Globals.invis_char + "[/outline_color][outline_color=1f090066]"
 
 ## Gets the sum (index 0) and original sum (index 1) for a list of stats inside an item.
 func _get_item_stat_sums(stats: ItemResource, list: Array[String]) -> Array[float]:
