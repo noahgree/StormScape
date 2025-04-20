@@ -33,7 +33,7 @@ func enter() -> void:
 
 	controller.dash_timer.start(entity.stats.get_stat("dash_duration"))
 	controller.dash_cooldown_timer.start(entity.stats.get_stat("dash_duration") + entity.stats.get_stat("dash_cooldown"))
-	entity.facing_component.facing_dir = controller.last_facing_dir
+	controller.facing_method = FacingComponent.Method.NONE
 
 	ghosts_spawned = 0
 	_create_ghost()
@@ -46,6 +46,7 @@ func exit() -> void:
 	controller.dash_timer.stop()
 	entity.velocity = Vector2.ZERO
 	controller.knockback_vector = Vector2.ZERO
+	controller.reset_facing_method()
 
 	_stop_dash_sound()
 

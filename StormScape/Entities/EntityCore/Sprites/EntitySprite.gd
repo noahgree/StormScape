@@ -99,8 +99,6 @@ func _setup_floor_light_size(sprite_size: Vector2) -> void:
 ## Sets up the overlay size to be twice as big at the sprite boundaries.
 func _setup_overlay_size(sprite_size: Vector2) -> void:
 	overlay.size = sprite_size * 2
-	if entity is Player:
-		print(sprite_size)
 	overlay.position = Vector2(overlay.size.y * -0.5, overlay.size.x * 0.5)
 
 ## Sets up the potential for showing cracks with damage.

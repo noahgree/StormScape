@@ -1,7 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://b7ckcb2xdimpo"]
 
-[ext_resource type="Script" path="res://Entities/Components/HitboxComponent/HitboxComponent.gd" id="1_ldrqf"]
+[ext_resource type="Script" uid="uid://c2dtyfq8k2oj2" path="res://Entities/Components/HitboxComponent/HitboxComponent.gd" id="1_ldrqf"]
 
 [node name="HitboxComponent" type="Area2D"]
-monitorable = false
 script = ExtResource("1_ldrqf")

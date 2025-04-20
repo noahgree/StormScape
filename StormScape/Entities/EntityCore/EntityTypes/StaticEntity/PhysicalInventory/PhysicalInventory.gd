@@ -31,8 +31,6 @@ func _ready() -> void:
 		interaction_offer = InteractionOffer.new() # Temporary workaround until save system is reworked
 	interaction_offer.accept_callable = Callable(func() -> void: SignalBus.alternate_inv_open_request.emit(self))
 
-	print(collision_mask)
-
 ## When the player enters the interaction area, offer the interaction.
 func _on_interaction_area_body_entered(body: Node2D) -> void:
 	if body is Player:

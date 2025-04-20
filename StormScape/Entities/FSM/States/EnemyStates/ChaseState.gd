@@ -14,7 +14,7 @@ func _init() -> void:
 
 func enter() -> void:
 	entity.facing_component.travel_anim_tree("run")
-	entity.hands.on_equipped_item_change(entity.inv.inv[0].stats, 0)
+	call_deferred("_equip_primary_item")
 
 func exit() -> void:
 	pass
@@ -30,8 +30,10 @@ func state_physics_process(delta: float) -> void:
 
 func _do_entity_chase(delta: float) -> void:
 	var stats: StatModsCacheResource = entity.stats
-
 	StateFunctions.handle_run_logic(delta, entity, controller, stats, MAX_RUN_ANIM_TIME_SCALE, DEFAULT_RUN_ANIM_TIME_SCALE, chase_speed_mult, chase_sprint_speed_mult)
+
+func _equip_primary_item() -> void:
+	entity.hands.on_equipped_item_change(entity.inv.inv[0].stats, 0)
 
 func _animate() -> void:
 	entity.facing_component.update_blend_position("run")

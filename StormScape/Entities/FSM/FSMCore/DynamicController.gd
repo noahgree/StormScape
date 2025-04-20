@@ -33,13 +33,28 @@ class_name DynamicController
 @onready var default_facing_method: FacingComponent.Method = facing_method ## A copy of the initial facing method to restore to.
 
 var last_movement_direction: Vector2 ## The most recent movement direction.
-var dash_timer: Timer = TimerHelpers.create_one_shot_timer(self, -1, _on_dash_timer_timeout)
+var dash_timer: Timer = TimerHelpers.create_one_shot_timer(self, -1, notify_dash_ended)
 var dash_cooldown_timer: Timer = TimerHelpers.create_one_shot_timer(self) ## The timer controlling the minimum time between activating dashes.
-var stunned_timer: Timer = TimerHelpers.create_one_shot_timer(self, -1, _on_stun_timer_timeout) ## The timer controlling how long the stun effect has remaining.
+var stunned_timer: Timer = TimerHelpers.create_one_shot_timer(self, -1, notify_stun_ended) ## The timer controlling how long the stun effect has remaining.
 var knockback_vector: Vector2 = Vector2.ZERO ## The current knockback to apply to any state that can move.
 var knockback_streak_nodes: Array[FootStreak] = [] ## The current foot streak in the ground from knockback.
 
 
+#region Inputs
+## Returns the direction to move in.
+func get_movement_vector() -> Vector2:
+	return (Vector2.ZERO.rotated(entity.stats.get_stat("confusion_amount")))
+
+## Determines if the state controlling the movement should use sprinting.
+func get_should_sprint() -> bool:
+	return false
+
+## Determines if the state controlling the movement should be sneaking.
+func get_should_sneak() -> bool:
+	return false
+#endregion
+
+#region Core
 ## Asserts the necessary components exist to support a dynamic entity, then caches the child
 ## states and sets them up.
 func setup() -> void:
@@ -63,18 +78,6 @@ func setup() -> void:
 	}
 	entity.stats.add_moddable_stats(moddable_stats)
 
-#region Inputs
-func get_movement_vector() -> Vector2:
-	return (Vector2.ZERO.rotated(entity.stats.get_stat("confusion_amount")))
-
-func get_should_sprint() -> bool:
-	return false
-
-func get_should_sneak() -> bool:
-	return false
-#endregion
-
-#region Core
 ## Checks if knockback needs to be lerped to 0 and passes the physics process to the active state.
 ## Advances animation tree manually so that it respects time snares. Overrides parent state machine class.
 func controller_physics_process(delta: float) -> void:
@@ -109,7 +112,6 @@ func create_footprint_and_sound(offsets: Array) -> void:
 			entity.step_dust_particles.position = offset
 			entity.step_dust_particles.restart()
 
-
 	AudioManager.play_2d("player_run_base", entity.global_position)
 
 ## Updates the knockback streak points array that determines how the streak line is drawn.
@@ -136,7 +138,8 @@ func reset_and_create_knockback_streak() -> void:
 			Globals.world_root.add_child(streak)
 #endregion
 
-#region States
+#region Notifications
+## Called when the entity is no longer moving or wants to simply idle for other reasons.
 func notify_stopped_moving() -> void:
 	match fsm.current_state.state_id:
 		"run", "sneak", "dash", "stunned", "spawn", "knockback":
@@ -157,18 +160,20 @@ func notify_knockback_ended() -> void:
 			fsm.change_state("idle")
 
 ## When the stun timer ends, notify that we can return to Idle if needed.
-func _on_stun_timer_timeout() -> void:
+func notify_stun_ended() -> void:
 	notify_stopped_moving()
 
 ## When the dash timer ends, notify that we can return to Idle if needed.
-func _on_dash_timer_timeout() -> void:
+func notify_dash_ended() -> void:
 	notify_stopped_moving()
 
+## Called when the spawn animation ends.
 func notify_spawn_ended() -> void:
 	match fsm.current_state.state_id:
 		"spawn":
 			fsm.change_state("idle")
 
+## Called to request starting being stunned.
 func notify_requested_stun(duration: float) -> void:
 	match fsm.current_state.state_id:
 		"run", "idle", "stunned", "sneak":
@@ -176,6 +181,7 @@ func notify_requested_stun(duration: float) -> void:
 			fsm.change_state("stunned")
 			stunned_timer.start()
 
+## Called to request starting a dash.
 func notify_requested_dash() -> void:
 	if not fsm.has_state("dash"):
 		return
@@ -188,6 +194,7 @@ func notify_requested_dash() -> void:
 			if dash_cooldown_timer.is_stopped() and entity.stamina_component.use_stamina(dash_stamina_usage):
 				fsm.change_state("dash")
 
+## Called to request sneaking.
 func notify_requested_sneak() -> void:
 	match fsm.current_state.state_id:
 		"run", "idle":

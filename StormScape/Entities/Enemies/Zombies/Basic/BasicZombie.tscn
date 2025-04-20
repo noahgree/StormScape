@@ -1,4 +1,4 @@
-[gd_scene load_steps=147 format=3 uid="uid://bl2igmtwo1a3v"]
+[gd_scene load_steps=146 format=3 uid="uid://bl2igmtwo1a3v"]
 
 [ext_resource type="Script" uid="uid://db4npghrxc6u" path="res://Entities/Enemies/Zombies/Basic/BasicZombie.gd" id="1_8bt15"]
 [ext_resource type="PackedScene" uid="uid://cj2wy5f05cos4" path="res://Entities/EntityCore/Shadow/EntityShadow.tscn" id="1_ko3ep"]
@@ -40,7 +40,6 @@
 [ext_resource type="Script" uid="uid://bvla7pmnsimif" path="res://Entities/FSM/FSMCore/State.gd" id="33_qrtn1"]
 [ext_resource type="Script" uid="uid://q3yeopc5wdlo" path="res://Entities/FSM/States/EnemyStates/ChaseState.gd" id="34_dcca3"]
 [ext_resource type="Script" uid="uid://d0y26kxw6latu" path="res://Entities/FSM/States/EnemyStates/KnockbackState.gd" id="36_lal78"]
-[ext_resource type="Resource" uid="uid://cs2y6ebkb3wa7" path="res://Entities/FSM/FSMCore/MoveBehaviors/FullApproach.tres" id="40_lal78"]
 
 [sub_resource type="Resource" id="Resource_jfdci"]
 script = ExtResource("3_hj6es")
@@ -1085,7 +1084,10 @@ print_state_changes = true
 [node name="Controller" type="Node2D" parent="StateMachine"]
 script = ExtResource("30_tsyff")
 ray_start_offset = Vector2(0, -2)
-behavior = ExtResource("40_lal78")
+seek_weight = 0.4
+orbit_weight = 0.5
+preferred_distance = 100.0
+max_turn_rate = 1.75
 footstep_texture = ExtResource("25_kc883")
 _max_speed = 60.0
 _acceleration = 1000.0

@@ -40,7 +40,7 @@ func update_facing_dir(method: Method) -> void:
 	var entity_pos_with_sprite_offset: Vector2 = (entity.sprite.position / 2.0) + entity.global_position
 	match method:
 		Method.MOVEMENT_DIR:
-			var target_dir: Vector2 = entity.fsm.controller.get_movement_vector().normalized()
+			var target_dir: Vector2 = entity.fsm.controller.last_movement_direction
 			if target_dir.length() == 0:
 				target_dir = last_movement_dir
 			else:

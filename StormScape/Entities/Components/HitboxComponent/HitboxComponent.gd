@@ -14,13 +14,12 @@ var movement_direction: Vector2 = Vector2.ZERO ## The current movement direction
 var source_weapon: WeaponResource ## The reference to the weapon that produced this effect source, if any.
 
 
-## Setup the area detection signal and turn on monitoring just in case it was toggled off somewhere. It needs
+## Setup the area detection signal and turn on monitorable just in case it was toggled off somewhere. It needs
 ## to be on or for some reason it cannot detect bodies (it'll still detect areas, just not bodies).
 ## Also set collision mask to the matching flags.
 func _ready() -> void:
 	self.area_entered.connect(_on_area_entered)
 	self.body_entered.connect(_on_body_entered)
-	monitorable = true
 	collision_layer = 0
 	if effect_source:
 		collision_mask = effect_source.scanned_phys_layers
@@ -28,7 +27,7 @@ func _ready() -> void:
 ## When detecting an area, start having it handled. This method can be overridden in subclasses.
 func _on_area_entered(area: Area2D) -> void:
 	if (area.get_parent() == source_entity):
-		if not effect_source.can_hit_self:
+		if not effect_source or not effect_source.can_hit_self:
 			return
 
 	if area is EffectReceiverComponent:

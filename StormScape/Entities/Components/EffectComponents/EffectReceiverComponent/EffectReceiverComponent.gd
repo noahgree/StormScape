@@ -56,10 +56,9 @@ func _ready() -> void:
 ## entity stats.
 func handle_effect_source(effect_source: EffectSource, source_entity: Entity, source_weapon: WeaponResource,
 							process_status_effects: bool = true) -> void:
-	# --- Applying Cam FX, Hit Sound, & Hitflash ----
+	# --- Applying Cam FX & Hit Sound ----
 	_handle_cam_fx(effect_source)
 	_handle_impact_sound(effect_source)
-	affected_entity.sprite.start_hitflash(effect_source.hit_flash_color, false)
 
 	# --- Changing Cursor to Reflect Hit ---
 	if source_entity and source_entity is Player and not affected_entity is Player:
@@ -75,6 +74,9 @@ func handle_effect_source(effect_source: EffectSource, source_entity: Entity, so
 				match_found = true
 		if not match_found:
 			return
+
+	# --- Hitflash ---
+	affected_entity.sprite.start_hitflash(effect_source.hit_flash_color, false)
 
 	# --- Checking if Sender is Passive or Receiver Can't Receive Effect Sources ---
 	if (source_entity and source_entity.team == Globals.Teams.PASSIVE) or ((affected_entity is DynamicEntity) and not affected_entity.fsm.controller.can_receive_effect_srcs):

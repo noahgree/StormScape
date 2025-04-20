@@ -11,7 +11,7 @@ enum RecentSwingType { NORMAL, CHARGED } ## The kinds of usage that could have j
 
 @onready var hitbox_component: HitboxComponent = %HitboxComponent ## The hitbox responsible for applying the melee hit.
 
-var state: WeaponState = WeaponState.IDLE
+var state: WeaponState = WeaponState.IDLE ## The melee weapon's current state.
 var recent_swing_type: RecentSwingType = RecentSwingType.NORMAL ## The most recent type of usage.
 
 
@@ -22,7 +22,7 @@ func _ready() -> void:
 
 	hitbox_component.source_entity = source_entity
 	hitbox_component.source_weapon = stats
-	set_deferred("hitbox_component:collider:disabled", true)
+	reset_animation_state("MeleeWeaponAnimLibrary/RESET")
 
 	if source_entity is Player:
 		source_entity.stamina_component.stamina_changed.connect(
@@ -35,12 +35,15 @@ func enter() -> void:
 		pullout_delay_timer.start(stats.s_mods.get_stat("pullout_delay"))
 
 	update_ammo_ui()
-	reset_animation_state("MeleeWeaponAnimLibrary/RESET")
 
 ## Called when the weapon is about to queue_free, but before the _exit_tree function.
 func exit() -> void:
-	super.exit()
+	super()
 	source_entity.fsm.controller.reset_facing_method()
+
+## Enables or disabled the hitbox on the weapon in a deferred manner so as to let queries flush.
+func change_collider_state(collider_enabled: bool) -> void:
+	hitbox_component.collider.set_deferred("disabled", not collider_enabled)
 
 ## Updates the UIs that depend on frame-by-frame updates.
 func _process(_delta: float) -> void:
