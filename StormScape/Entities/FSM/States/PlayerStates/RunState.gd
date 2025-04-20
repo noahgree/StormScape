@@ -3,8 +3,8 @@ class_name RunState
 ## Handles when the dynamic entity is moving, including both running and sprinting.
 
 @export_subgroup("Animation Constants")
-@export var DEFAULT_RUN_ANIM_TIME_SCALE: float = 1.5 ## How fast the run anim should play before stat mods.
-@export var MAX_RUN_ANIM_TIME_SCALE: float = 4.0 ## How fast the run anim can play at most.
+@export var default_run_anim_time_scale: float = 1.5 ## How fast the run anim should play before stat mods.
+@export var max_run_anim_time_scale: float = 4.0 ## How fast the run anim can play at most.
 
 const PLAYER_SPRINT_SOUND_THRESHOLD: int = 25 ## The extra speed above the "max_speed" stat the player must be moving to trigger the sprint sound.
 var sprint_audio_player: AudioStreamPlayer ## A reference to the current sprint audio player (if player).
@@ -31,14 +31,14 @@ func state_physics_process(delta: float) -> void:
 ## the matching directional anim.
 func _do_entity_run(delta: float) -> void:
 	var stats: StatModsCacheResource = entity.stats
-	actual_movement_speed = (entity.global_position - previous_pos).length() / delta
+	actual_movement_speed = (entity.global_position - previous_pos).length() / (delta * (1.0 / Engine.time_scale))
 	previous_pos = entity.global_position
 
 	# Check if we should stop the sprint sound based on movement speed
 	if ceil(actual_movement_speed) <= floor(stats.get_stat("max_speed")):
 		_stop_sprint_sound()
 
-	StateFunctions.handle_run_logic(delta, entity, controller, stats, MAX_RUN_ANIM_TIME_SCALE, DEFAULT_RUN_ANIM_TIME_SCALE)
+	StateFunctions.handle_run_logic(delta, entity, controller, stats, max_run_anim_time_scale, default_run_anim_time_scale)
 
 	# Do sprinting sounds if we are moving fast enough afterwards
 	if (entity is Player) and (actual_movement_speed > (stats.get_stat("max_speed") + PLAYER_SPRINT_SOUND_THRESHOLD)):

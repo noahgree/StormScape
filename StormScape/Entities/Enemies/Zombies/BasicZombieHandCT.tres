@@ -1,0 +1,8 @@
+[gd_resource type="CanvasTexture" load_steps=3 format=3 uid="uid://qn73m3tiw42f"]
+
+[ext_resource type="Texture2D" uid="uid://d1bkkxuw7qmvg" path="res://Entities/Enemies/Zombies/zombie_hand.png" id="1_eser3"]
+[ext_resource type="Texture2D" uid="uid://di66pcutyliqi" path="res://Entities/Enemies/Zombies/zombie_hand_n.png" id="2_msqa3"]
+
+[resource]
+diffuse_texture = ExtResource("1_eser3")
+normal_texture = ExtResource("2_msqa3")

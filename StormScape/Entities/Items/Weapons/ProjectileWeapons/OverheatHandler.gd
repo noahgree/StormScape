@@ -56,13 +56,13 @@ func _on_overheat_emptied(item_id: StringName) -> void:
 
 	# Only hide the bar and change the cursor at 0 overheat progress if the penalty isn't active
 	if auto_decrementer.get_cooldown_source_title(weapon.stats.get_cooldown_id()) != "overheat_penalty":
-		weapon.overhead_ui.overheat_bar.hide()
 		if source_entity is Player:
+			weapon.overhead_ui.overheat_bar.hide()
 			CursorManager.change_cursor_tint(Color.WHITE)
 
 ## When we hit max overheat, these visuals are started to update overlays, the mouse cursor, smoke particles, etc.
 func start_max_overheat_visuals(just_equipped: bool) -> void:
-	if weapon.overhead_ui:
+	if source_entity is Player:
 		weapon.overhead_ui.update_visuals_for_max_overheat(true)
 	AudioManager.play_2d(weapon.stats.overheated_sound, weapon.global_position)
 
@@ -88,7 +88,7 @@ func start_max_overheat_visuals(just_equipped: bool) -> void:
 
 ## When the overheat penalty ends, stop the max overheat visuals.
 func end_max_overheat_visuals() -> void:
-	if weapon.overhead_ui:
+	if source_entity is Player:
 		weapon.overhead_ui.update_visuals_for_max_overheat(false)
 	source_entity.hands.smoke_particles.emitting = false
 
@@ -117,10 +117,10 @@ func update_overlays_and_overhead_ui() -> void:
 
 	# If on penalty and need to show the visuals as all red, do that instead of showing normal overheat progress
 	if auto_decrementer.get_cooldown_source_title(weapon.stats.get_cooldown_id()) == "overheat_penalty":
-		if weapon.overhead_ui != null:
+		if source_entity is Player:
 			weapon.overhead_ui.update_overheat_progress(100)
 	else:
-		if weapon.overhead_ui != null:
+		if source_entity is Player:
 			weapon.overhead_ui.update_overheat_progress(int(current_overheat * 100.0))
 		if not is_tweening_overheat_overlays:
 			for overlay: TextureRect in weapon.overheat_overlays:

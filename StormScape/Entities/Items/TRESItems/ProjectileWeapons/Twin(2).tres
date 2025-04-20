@@ -4,7 +4,7 @@
 [ext_resource type="Script" uid="uid://dkfssottmsrch" path="res://Entities/Stats/EffectSystemResources/EffectSources/EffectSource.gd" id="3_vp4wp"]
 [ext_resource type="Script" uid="uid://cowjdnic7xmkp" path="res://UI/Inventory/PlayerInventory/StatDetail.gd" id="4_lo1fw"]
 [ext_resource type="Script" uid="uid://boo31eu083dqd" path="res://Entities/Stats/EffectSystemResources/StatusEffects/StatusEffect.gd" id="4_prcay"]
-[ext_resource type="Resource" uid="uid://cev0y0oe3igus" path="res://Entities/Player/PlayerCore/PlayerCamera/CamFXPresets/6.tres" id="5_lo1fw"]
+[ext_resource type="Resource" uid="uid://o8dc73c74md6" path="res://Entities/Player/PlayerCore/PlayerCamera/CamFXPresets/4(NoFreeze).tres" id="5_qaa2o"]
 [ext_resource type="Texture2D" uid="uid://d05er482r6c5u" path="res://Entities/Items/Weapons/ProjectileWeapons/Twin/TwinBaseCT.tres" id="6_lo1fw"]
 [ext_resource type="PackedScene" uid="uid://cclotxo1c628r" path="res://Entities/Items/Weapons/ProjectileWeapons/Twin/Twin.tscn" id="10_8mtfe"]
 [ext_resource type="Script" uid="uid://bj3r5oopspj6l" path="res://Entities/Items/Projectiles/ProjectileCore/ProjectileResource.gd" id="13_82v8g"]
@@ -134,7 +134,7 @@ fire_anim_dur = 0.0
 spawn_after_fire_anim = false
 post_fire_anim_delay = 0.0
 post_fire_anim_dur = 0.0
-firing_cam_fx = ExtResource("5_lo1fw")
+firing_cam_fx = ExtResource("5_qaa2o")
 casing_texture = ExtResource("1_iu0as")
 casing_tint = Color(0.77622, 0, 0.0846659, 1)
 firing_sound = ""

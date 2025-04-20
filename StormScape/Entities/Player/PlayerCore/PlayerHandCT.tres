@@ -1,0 +1,8 @@
+[gd_resource type="CanvasTexture" load_steps=3 format=3 uid="uid://bli0i6fkxi43o"]
+
+[ext_resource type="Texture2D" uid="uid://cs3clmnktksd6" path="res://Entities/Player/PlayerCore/player_hand.png" id="1_0epjh"]
+[ext_resource type="Texture2D" uid="uid://clnxqcxw2qc38" path="res://Entities/Player/PlayerCore/player_hand_n.png" id="2_7waab"]
+
+[resource]
+diffuse_texture = ExtResource("1_0epjh")
+normal_texture = ExtResource("2_7waab")

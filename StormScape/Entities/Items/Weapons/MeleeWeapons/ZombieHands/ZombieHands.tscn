@@ -143,7 +143,6 @@ _data = {
 }
 
 [node name="ZombieHands" type="Node2D"]
-modulate = Color(1, 1, 1, 0)
 script = ExtResource("1_cxccv")
 sprite_visual_rotation = 0.0
 

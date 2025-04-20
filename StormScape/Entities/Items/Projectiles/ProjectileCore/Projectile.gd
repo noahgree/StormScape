@@ -3,14 +3,14 @@ class_name Projectile
 ## The viusal representation of the projectile. Defines all needed methods for how to travel and seek,
 ## with the flags for what to do being set by whatever spawns the projectile.
 
-@export var whiz_sound: String = "" ## The sound to play whscanned_phys_layersen whizzing by the player.
-@export_custom(PROPERTY_HINT_NONE, "suffix:pixels") var whiz_sound_distance: int = 25 ## The max distance from the player that the whiz sound will still play.
-@export_range(0, 500, 0.1, "suffix:%") var glow_strength: float = 0 ## How strong the glow should be.
+@export var whiz_sound: String ## The sound to play whscanned_phys_layersen whizzing by the player.
+@export_custom(PROPERTY_HINT_NONE, "suffix:pixels") var whiz_sound_distance: int = 30 ## The max distance from the player that the whiz sound will still play.
+@export_range(0, 500, 0.1, "suffix:%") var glow_strength: float ## How strong the glow should be.
 @export var glow_color: Color = Color(1, 1, 1) ## The color of the glow.
-@export var impact_vfx: PackedScene = null ## The VFX to spawn at the site of impact. Could be a decal or something.
-@export var impact_sound: String = "" ## The sound to play at the site of impact.
+@export var impact_vfx: PackedScene ## The VFX to spawn at the site of impact. Could be a decal or something.
+@export var impact_sound: String ## The sound to play at the site of impact.
 @export var random_rot_on_impact: bool = false ## When true, the sprite will get a random rotation on impact to change how the impact animation looks for circular projectiles.
-@export var in_air_only_particles: Array[CPUParticles2D] = [] ## Any particles selected here will be emitting only while in the air.
+@export var in_air_only_particles: Array[CPUParticles2D] ## Any particles selected here will be emitting only while in the air.
 
 @onready var sprite: AnimatedSprite2D = $ProjSprite ## The sprite for this projectile.
 @onready var shadow: Sprite2D = $Shadow ## The shadow sprite for this projectile.
@@ -56,9 +56,9 @@ var is_homing_active: bool = false ## Indicates if homing is currently active.
 var homing_target: Node = null ## The current homing target.
 var mouse_scan_targets: Array[Node] ## The current list of targets in range of the mouse click for the mouse position homing.
 var played_whiz_sound: bool = false ## Whether this has already played the whiz sound once or not.
-var debug_homing_rays: Array[Dictionary] = [] ## An array of debug info about the FOV homing method raycasts.
+var debug_homing_rays: Array[Dictionary] ## An array of debug info about the FOV homing method raycasts.
 var debug_recent_hit_location: Vector2 ## The location of the most recent point we hit something.
-var aoe_overlapped_receivers: Dictionary[Area2D, Timer] = {} ## The areas that are currently in an AOE area.
+var aoe_overlapped_receivers: Dictionary[Area2D, Timer] ## The areas that are currently in an AOE area.
 var is_disabling_monitoring: bool = false ## When true, we are waiting on the deferred call to disable collision monitoring.
 var about_to_free: bool = false ## This is true once we have started the impact animation and should no longer be able to hit new entities.
 var multishot_id: int = 0 ## The id passed in on creation that relates the sibling projectiles spawned on the same multishot barrage.
@@ -870,8 +870,8 @@ func _get_effect_source_adjusted_for_falloff(effect_src: EffectSource,
 ## whiz sound once.
 func _check_for_whiz_sound() -> void:
 	if true_current_speed > 150:
-		if not played_whiz_sound and Globals.player_node != null:
-			var player: Player = Globals.player_node
+		var player: Player = Globals.player_node
+		if not played_whiz_sound:
 			if (player.global_position - global_position).dot(movement_direction) > 20:
 				if global_position.distance_squared_to(player.global_position) < pow(whiz_sound_distance, 2):
 					AudioManager.play_2d(whiz_sound, global_position)

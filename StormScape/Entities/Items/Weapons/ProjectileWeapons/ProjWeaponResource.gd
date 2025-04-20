@@ -116,7 +116,7 @@ enum ReloadType { ## The kinds of reloads the weapon can have.
 	set(new_ammo_amount):
 		ammo_in_mag = new_ammo_amount
 		if DebugFlags.ammo_updates and self.name != "":
-			print_rich("(" + str(self) + ") [b]AMMO[/b]: [color=cyan]" + str(ammo_in_mag) + "[/color]")
+			print_rich("(" + str(self) + ") [b]AMMO[/b]: [color=Crimson]" + str(ammo_in_mag) + "[/color]")
 
 
 ## Returns a nicely formatted string of the ammo type.

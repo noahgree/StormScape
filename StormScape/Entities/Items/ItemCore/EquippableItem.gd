@@ -43,7 +43,8 @@ static func create_from_inv_index(item_stats: ItemResource, entity: Entity, inde
 func _set_stats(new_stats: ItemResource) -> void:
 	if not stats_already_duplicated:
 		stats = new_stats.duplicate_with_suid()
-	source_entity.inv.update_index_and_emit_changes(inv_index, source_entity.inv.inv[inv_index])
+	source_entity.inv.inv[inv_index].stats = stats
+	source_entity.inv.inv_data_updated.emit(inv_index, source_entity.inv.inv[inv_index])
 
 func _ready() -> void:
 	_set_stats(stats)

@@ -32,10 +32,12 @@ func _get_configuration_warnings() -> PackedStringArray:
 ## Ensures uniqueness of resources.
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_EDITOR_POST_SAVE:
-		if inv:
+		if inv and not inv.resource_local_to_scene:
 			inv.resource_local_to_scene = true
-		if loot:
+			printerr(self, " HAS AN INVENTORY THAT WAS NOT SET TO UNIQUE PER SCENE")
+		if loot and not loot.resource_local_to_scene:
 			loot.resource_local_to_scene = true
+			printerr(self, " HAS A LOOT TABLE THAT WAS NOT SET TO UNIQUE PER SCENE")
 #endregion
 
 func _ready() -> void:

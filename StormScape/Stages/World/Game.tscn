@@ -1,4 +1,4 @@
-[gd_scene load_steps=227 format=4 uid="uid://bscnr6a23l10m"]
+[gd_scene load_steps=230 format=4 uid="uid://bscnr6a23l10m"]
 
 [ext_resource type="Script" uid="uid://mdtvdhu78iqm" path="res://Utilities/Game/WorldRoot/WorldRoot.gd" id="1_q0i4n"]
 [ext_resource type="Script" uid="uid://dpbgynf55anlv" path="res://Stages/World/BackgroundMusicManager.gd" id="1_q5pr2"]
@@ -191,7 +191,7 @@ sources/1 = SubResource("TileSetAtlasSource_lb4xb")
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_2bq37"]
 rough = true
 
-[sub_resource type="Resource" id="Resource_sjx8w"]
+[sub_resource type="Resource" id="Resource_nncee"]
 resource_local_to_scene = true
 script = ExtResource("20_om42l")
 title = "CHEST"
@@ -226,7 +226,7 @@ last_used = 0
 spawn_count = 0
 metadata/_custom_type_script = "uid://1qq7eo7lm8j6"
 
-[sub_resource type="Resource" id="Resource_dsspc"]
+[sub_resource type="Resource" id="Resource_bimqo"]
 resource_local_to_scene = true
 script = ExtResource("14_nncee")
 hit_loot_table = Array[ExtResource("10_2bq37")]([])
@@ -248,6 +248,38 @@ rarity_scaling_factors = Dictionary[int, float]({
 metadata/_custom_type_script = "uid://baglarh3m4c8o"
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_nncee"]
+rough = true
+
+[sub_resource type="Resource" id="Resource_sjx8w"]
+resource_local_to_scene = true
+script = ExtResource("20_om42l")
+title = "CHEST"
+main_inv_size = 10
+drop_on_death = false
+starting_inv = Array[ExtResource("21_fx52i")]([])
+
+[sub_resource type="Resource" id="Resource_dsspc"]
+resource_local_to_scene = true
+script = ExtResource("14_nncee")
+hit_loot_table = Array[ExtResource("10_2bq37")]([])
+hit_spawn_chance = 100.0
+hit_chance_scale = 1
+remove_when_dropped = false
+require_dmg_on_hit = true
+hp_percent_hit_checks = 15
+die_loot_table = Array[ExtResource("10_2bq37")]([SubResource("Resource_mdi77"), SubResource("Resource_ccp8j"), SubResource("Resource_ssl24")])
+die_spawn_chance = 100.0
+rarity_scaling_factors = Dictionary[int, float]({
+0: 0.5,
+1: 0.4,
+2: 0.3,
+3: 0.1,
+4: 0.05,
+5: 0.005
+})
+metadata/_custom_type_script = "uid://baglarh3m4c8o"
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_bimqo"]
 rough = true
 
 [sub_resource type="Resource" id="Resource_6uccm"]
@@ -279,47 +311,15 @@ rarity_scaling_factors = Dictionary[int, float]({
 })
 metadata/_custom_type_script = "uid://baglarh3m4c8o"
 
-[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_bimqo"]
-rough = true
+[sub_resource type="Resource" id="Resource_6jm3s"]
+resource_local_to_scene = true
+script = ExtResource("20_om42l")
+title = "CHEST"
+main_inv_size = 10
+drop_on_death = false
+starting_inv = Array[ExtResource("21_fx52i")]([])
 
 [sub_resource type="Resource" id="Resource_tftdh"]
-resource_local_to_scene = true
-script = ExtResource("20_om42l")
-title = "CHEST"
-main_inv_size = 10
-drop_on_death = false
-starting_inv = Array[ExtResource("21_fx52i")]([])
-
-[sub_resource type="Resource" id="Resource_0x6wk"]
-resource_local_to_scene = true
-script = ExtResource("14_nncee")
-hit_loot_table = Array[ExtResource("10_2bq37")]([])
-hit_spawn_chance = 100.0
-hit_chance_scale = 1
-remove_when_dropped = false
-require_dmg_on_hit = true
-hp_percent_hit_checks = 15
-die_loot_table = Array[ExtResource("10_2bq37")]([SubResource("Resource_mdi77"), SubResource("Resource_ccp8j"), SubResource("Resource_ssl24")])
-die_spawn_chance = 100.0
-rarity_scaling_factors = Dictionary[int, float]({
-0: 0.5,
-1: 0.4,
-2: 0.3,
-3: 0.1,
-4: 0.05,
-5: 0.005
-})
-metadata/_custom_type_script = "uid://baglarh3m4c8o"
-
-[sub_resource type="Resource" id="Resource_rfi36"]
-resource_local_to_scene = true
-script = ExtResource("20_om42l")
-title = "CHEST"
-main_inv_size = 10
-drop_on_death = false
-starting_inv = Array[ExtResource("21_fx52i")]([])
-
-[sub_resource type="Resource" id="Resource_e5c60"]
 resource_local_to_scene = true
 script = ExtResource("14_nncee")
 hit_loot_table = Array[ExtResource("10_2bq37")]([])
@@ -363,7 +363,7 @@ status_effects = Array[ExtResource("13_33bgr")]([ExtResource("12_s2x07")])
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_rk2ia"]
 size = Vector2(14, 14)
 
-[sub_resource type="Resource" id="Resource_6jm3s"]
+[sub_resource type="Resource" id="Resource_0x6wk"]
 resource_local_to_scene = true
 script = ExtResource("20_om42l")
 title = "CHEST"
@@ -644,7 +644,7 @@ rarity_scaling_factors = Dictionary[int, float]({
 })
 metadata/_custom_type_script = "uid://baglarh3m4c8o"
 
-[sub_resource type="Resource" id="Resource_eg4nl"]
+[sub_resource type="Resource" id="Resource_dg2uc"]
 resource_local_to_scene = true
 script = ExtResource("20_om42l")
 title = "CHEST"
@@ -661,7 +661,7 @@ last_used = 0
 spawn_count = 0
 metadata/_custom_type_script = "uid://1qq7eo7lm8j6"
 
-[sub_resource type="Resource" id="Resource_ump5w"]
+[sub_resource type="Resource" id="Resource_p0fni"]
 resource_local_to_scene = true
 script = ExtResource("14_nncee")
 hit_loot_table = Array[ExtResource("10_2bq37")]([SubResource("Resource_ymdvb")])
@@ -682,7 +682,7 @@ rarity_scaling_factors = Dictionary[int, float]({
 })
 metadata/_custom_type_script = "uid://baglarh3m4c8o"
 
-[sub_resource type="Resource" id="Resource_nniq8"]
+[sub_resource type="Resource" id="Resource_q65h6"]
 resource_local_to_scene = true
 script = ExtResource("20_om42l")
 title = "CHEST"
@@ -690,7 +690,7 @@ main_inv_size = 10
 drop_on_death = false
 starting_inv = Array[ExtResource("21_fx52i")]([])
 
-[sub_resource type="Resource" id="Resource_fafnq"]
+[sub_resource type="Resource" id="Resource_xivm6"]
 resource_local_to_scene = true
 script = ExtResource("14_nncee")
 hit_loot_table = Array[ExtResource("10_2bq37")]([SubResource("Resource_ymdvb")])
@@ -711,7 +711,7 @@ rarity_scaling_factors = Dictionary[int, float]({
 })
 metadata/_custom_type_script = "uid://baglarh3m4c8o"
 
-[sub_resource type="Resource" id="Resource_yjw3r"]
+[sub_resource type="Resource" id="Resource_70pf8"]
 resource_local_to_scene = true
 script = ExtResource("20_om42l")
 title = "CHEST"
@@ -719,7 +719,7 @@ main_inv_size = 10
 drop_on_death = false
 starting_inv = Array[ExtResource("21_fx52i")]([])
 
-[sub_resource type="Resource" id="Resource_lbked"]
+[sub_resource type="Resource" id="Resource_s6yan"]
 resource_local_to_scene = true
 script = ExtResource("14_nncee")
 hit_loot_table = Array[ExtResource("10_2bq37")]([SubResource("Resource_ymdvb")])
@@ -740,7 +740,7 @@ rarity_scaling_factors = Dictionary[int, float]({
 })
 metadata/_custom_type_script = "uid://baglarh3m4c8o"
 
-[sub_resource type="Resource" id="Resource_i7ap2"]
+[sub_resource type="Resource" id="Resource_fcgau"]
 resource_local_to_scene = true
 script = ExtResource("20_om42l")
 title = "CHEST"
@@ -748,7 +748,7 @@ main_inv_size = 10
 drop_on_death = false
 starting_inv = Array[ExtResource("21_fx52i")]([])
 
-[sub_resource type="Resource" id="Resource_enlnh"]
+[sub_resource type="Resource" id="Resource_0mtt3"]
 resource_local_to_scene = true
 script = ExtResource("14_nncee")
 hit_loot_table = Array[ExtResource("10_2bq37")]([SubResource("Resource_ymdvb")])
@@ -855,17 +855,35 @@ metadata/_custom_type_script = "uid://dwmur0cosbbwh"
 
 [sub_resource type="Resource" id="Resource_jfdci"]
 script = ExtResource("21_fx52i")
-stats = ExtResource("59_lhp03")
+stats = ExtResource("26_6gn56")
 quantity = 1
 metadata/_custom_type_script = "uid://dp8osf7r6xkkt"
 
-[sub_resource type="Resource" id="Resource_dykn5"]
+[sub_resource type="Resource" id="Resource_bijca"]
+script = ExtResource("21_fx52i")
+stats = ExtResource("35_2bq37")
+quantity = 999
+metadata/_custom_type_script = "uid://dp8osf7r6xkkt"
+
+[sub_resource type="Resource" id="Resource_ar5xw"]
+script = ExtResource("21_fx52i")
+stats = ExtResource("32_yfjs6")
+quantity = 999
+metadata/_custom_type_script = "uid://dp8osf7r6xkkt"
+
+[sub_resource type="Resource" id="Resource_2qaea"]
+script = ExtResource("21_fx52i")
+stats = ExtResource("37_bimqo")
+quantity = 999
+metadata/_custom_type_script = "uid://dp8osf7r6xkkt"
+
+[sub_resource type="Resource" id="Resource_yg6cs"]
 resource_local_to_scene = true
 script = ExtResource("20_om42l")
 title = "CHEST"
 main_inv_size = 10
 drop_on_death = false
-starting_inv = Array[ExtResource("21_fx52i")]([SubResource("Resource_jfdci")])
+starting_inv = Array[ExtResource("21_fx52i")]([SubResource("Resource_jfdci"), SubResource("Resource_bijca"), SubResource("Resource_ar5xw"), SubResource("Resource_2qaea")])
 
 [sub_resource type="Resource" id="Resource_qrtn1"]
 script = ExtResource("10_2bq37")
@@ -885,7 +903,7 @@ last_used = 0
 spawn_count = 0
 metadata/_custom_type_script = "uid://1qq7eo7lm8j6"
 
-[sub_resource type="Resource" id="Resource_2bicj"]
+[sub_resource type="Resource" id="Resource_ymr70"]
 resource_local_to_scene = true
 script = ExtResource("14_nncee")
 hit_loot_table = Array[ExtResource("10_2bq37")]([null, SubResource("Resource_cw5if")])
@@ -906,15 +924,15 @@ rarity_scaling_factors = Dictionary[int, float]({
 })
 metadata/_custom_type_script = "uid://baglarh3m4c8o"
 
-[sub_resource type="Resource" id="Resource_a626h"]
+[sub_resource type="Resource" id="Resource_bg3k1"]
 resource_local_to_scene = true
 script = ExtResource("20_om42l")
 title = "CHEST"
 main_inv_size = 10
 drop_on_death = false
-starting_inv = Array[ExtResource("21_fx52i")]([SubResource("Resource_jfdci")])
+starting_inv = Array[ExtResource("21_fx52i")]([SubResource("Resource_jfdci"), SubResource("Resource_bijca"), SubResource("Resource_ar5xw"), SubResource("Resource_2qaea")])
 
-[sub_resource type="Resource" id="Resource_yfhh5"]
+[sub_resource type="Resource" id="Resource_6338u"]
 resource_local_to_scene = true
 script = ExtResource("14_nncee")
 hit_loot_table = Array[ExtResource("10_2bq37")]([null, SubResource("Resource_cw5if")])
@@ -935,15 +953,15 @@ rarity_scaling_factors = Dictionary[int, float]({
 })
 metadata/_custom_type_script = "uid://baglarh3m4c8o"
 
-[sub_resource type="Resource" id="Resource_g4530"]
+[sub_resource type="Resource" id="Resource_xgric"]
 resource_local_to_scene = true
 script = ExtResource("20_om42l")
 title = "CHEST"
 main_inv_size = 10
 drop_on_death = false
-starting_inv = Array[ExtResource("21_fx52i")]([SubResource("Resource_jfdci")])
+starting_inv = Array[ExtResource("21_fx52i")]([SubResource("Resource_jfdci"), SubResource("Resource_bijca"), SubResource("Resource_ar5xw"), SubResource("Resource_2qaea")])
 
-[sub_resource type="Resource" id="Resource_c5fd7"]
+[sub_resource type="Resource" id="Resource_20i1n"]
 resource_local_to_scene = true
 script = ExtResource("14_nncee")
 hit_loot_table = Array[ExtResource("10_2bq37")]([null, SubResource("Resource_cw5if")])
@@ -964,15 +982,15 @@ rarity_scaling_factors = Dictionary[int, float]({
 })
 metadata/_custom_type_script = "uid://baglarh3m4c8o"
 
-[sub_resource type="Resource" id="Resource_at3sg"]
+[sub_resource type="Resource" id="Resource_5el5i"]
 resource_local_to_scene = true
 script = ExtResource("20_om42l")
 title = "CHEST"
 main_inv_size = 10
 drop_on_death = false
-starting_inv = Array[ExtResource("21_fx52i")]([SubResource("Resource_jfdci")])
+starting_inv = Array[ExtResource("21_fx52i")]([SubResource("Resource_jfdci"), SubResource("Resource_bijca"), SubResource("Resource_ar5xw"), SubResource("Resource_2qaea")])
 
-[sub_resource type="Resource" id="Resource_7o62s"]
+[sub_resource type="Resource" id="Resource_4vs0b"]
 resource_local_to_scene = true
 script = ExtResource("14_nncee")
 hit_loot_table = Array[ExtResource("10_2bq37")]([null, SubResource("Resource_cw5if")])
@@ -993,15 +1011,15 @@ rarity_scaling_factors = Dictionary[int, float]({
 })
 metadata/_custom_type_script = "uid://baglarh3m4c8o"
 
-[sub_resource type="Resource" id="Resource_jmw81"]
+[sub_resource type="Resource" id="Resource_oxgsv"]
 resource_local_to_scene = true
 script = ExtResource("20_om42l")
 title = "CHEST"
 main_inv_size = 10
 drop_on_death = false
-starting_inv = Array[ExtResource("21_fx52i")]([SubResource("Resource_jfdci")])
+starting_inv = Array[ExtResource("21_fx52i")]([SubResource("Resource_jfdci"), SubResource("Resource_bijca"), SubResource("Resource_ar5xw"), SubResource("Resource_2qaea")])
 
-[sub_resource type="Resource" id="Resource_ycyl1"]
+[sub_resource type="Resource" id="Resource_pk3xi"]
 resource_local_to_scene = true
 script = ExtResource("14_nncee")
 hit_loot_table = Array[ExtResource("10_2bq37")]([null, SubResource("Resource_cw5if")])
@@ -1022,15 +1040,15 @@ rarity_scaling_factors = Dictionary[int, float]({
 })
 metadata/_custom_type_script = "uid://baglarh3m4c8o"
 
-[sub_resource type="Resource" id="Resource_fpcdc"]
+[sub_resource type="Resource" id="Resource_bl5mg"]
 resource_local_to_scene = true
 script = ExtResource("20_om42l")
 title = "CHEST"
 main_inv_size = 10
 drop_on_death = false
-starting_inv = Array[ExtResource("21_fx52i")]([SubResource("Resource_jfdci")])
+starting_inv = Array[ExtResource("21_fx52i")]([SubResource("Resource_jfdci"), SubResource("Resource_bijca"), SubResource("Resource_ar5xw"), SubResource("Resource_2qaea")])
 
-[sub_resource type="Resource" id="Resource_wtuuf"]
+[sub_resource type="Resource" id="Resource_recjj"]
 resource_local_to_scene = true
 script = ExtResource("14_nncee")
 hit_loot_table = Array[ExtResource("10_2bq37")]([null, SubResource("Resource_cw5if")])
@@ -1051,15 +1069,15 @@ rarity_scaling_factors = Dictionary[int, float]({
 })
 metadata/_custom_type_script = "uid://baglarh3m4c8o"
 
-[sub_resource type="Resource" id="Resource_6lhdw"]
+[sub_resource type="Resource" id="Resource_1naey"]
 resource_local_to_scene = true
 script = ExtResource("20_om42l")
 title = "CHEST"
 main_inv_size = 10
 drop_on_death = false
-starting_inv = Array[ExtResource("21_fx52i")]([SubResource("Resource_jfdci")])
+starting_inv = Array[ExtResource("21_fx52i")]([SubResource("Resource_jfdci"), SubResource("Resource_bijca"), SubResource("Resource_ar5xw"), SubResource("Resource_2qaea")])
 
-[sub_resource type="Resource" id="Resource_l222e"]
+[sub_resource type="Resource" id="Resource_pavah"]
 resource_local_to_scene = true
 script = ExtResource("14_nncee")
 hit_loot_table = Array[ExtResource("10_2bq37")]([null, SubResource("Resource_cw5if")])
@@ -1080,15 +1098,15 @@ rarity_scaling_factors = Dictionary[int, float]({
 })
 metadata/_custom_type_script = "uid://baglarh3m4c8o"
 
-[sub_resource type="Resource" id="Resource_en3ww"]
+[sub_resource type="Resource" id="Resource_iwpwc"]
 resource_local_to_scene = true
 script = ExtResource("20_om42l")
 title = "CHEST"
 main_inv_size = 10
 drop_on_death = false
-starting_inv = Array[ExtResource("21_fx52i")]([SubResource("Resource_jfdci")])
+starting_inv = Array[ExtResource("21_fx52i")]([SubResource("Resource_jfdci"), SubResource("Resource_bijca"), SubResource("Resource_ar5xw"), SubResource("Resource_2qaea")])
 
-[sub_resource type="Resource" id="Resource_p71yx"]
+[sub_resource type="Resource" id="Resource_enst5"]
 resource_local_to_scene = true
 script = ExtResource("14_nncee")
 hit_loot_table = Array[ExtResource("10_2bq37")]([null, SubResource("Resource_cw5if")])
@@ -1109,15 +1127,15 @@ rarity_scaling_factors = Dictionary[int, float]({
 })
 metadata/_custom_type_script = "uid://baglarh3m4c8o"
 
-[sub_resource type="Resource" id="Resource_k6qll"]
+[sub_resource type="Resource" id="Resource_wpe8i"]
 resource_local_to_scene = true
 script = ExtResource("20_om42l")
 title = "CHEST"
 main_inv_size = 10
 drop_on_death = false
-starting_inv = Array[ExtResource("21_fx52i")]([SubResource("Resource_jfdci")])
+starting_inv = Array[ExtResource("21_fx52i")]([SubResource("Resource_jfdci"), SubResource("Resource_bijca"), SubResource("Resource_ar5xw"), SubResource("Resource_2qaea")])
 
-[sub_resource type="Resource" id="Resource_srfoq"]
+[sub_resource type="Resource" id="Resource_p1fc4"]
 resource_local_to_scene = true
 script = ExtResource("14_nncee")
 hit_loot_table = Array[ExtResource("10_2bq37")]([null, SubResource("Resource_cw5if")])
@@ -1138,15 +1156,15 @@ rarity_scaling_factors = Dictionary[int, float]({
 })
 metadata/_custom_type_script = "uid://baglarh3m4c8o"
 
-[sub_resource type="Resource" id="Resource_xbvxn"]
+[sub_resource type="Resource" id="Resource_s2gj4"]
 resource_local_to_scene = true
 script = ExtResource("20_om42l")
 title = "CHEST"
 main_inv_size = 10
 drop_on_death = false
-starting_inv = Array[ExtResource("21_fx52i")]([SubResource("Resource_jfdci")])
+starting_inv = Array[ExtResource("21_fx52i")]([SubResource("Resource_jfdci"), SubResource("Resource_bijca"), SubResource("Resource_ar5xw"), SubResource("Resource_2qaea")])
 
-[sub_resource type="Resource" id="Resource_0x2lg"]
+[sub_resource type="Resource" id="Resource_102wr"]
 resource_local_to_scene = true
 script = ExtResource("14_nncee")
 hit_loot_table = Array[ExtResource("10_2bq37")]([null, SubResource("Resource_cw5if")])
@@ -1167,15 +1185,15 @@ rarity_scaling_factors = Dictionary[int, float]({
 })
 metadata/_custom_type_script = "uid://baglarh3m4c8o"
 
-[sub_resource type="Resource" id="Resource_4x4lk"]
+[sub_resource type="Resource" id="Resource_pdyh0"]
 resource_local_to_scene = true
 script = ExtResource("20_om42l")
 title = "CHEST"
 main_inv_size = 10
 drop_on_death = false
-starting_inv = Array[ExtResource("21_fx52i")]([SubResource("Resource_jfdci")])
+starting_inv = Array[ExtResource("21_fx52i")]([SubResource("Resource_jfdci"), SubResource("Resource_bijca"), SubResource("Resource_ar5xw"), SubResource("Resource_2qaea")])
 
-[sub_resource type="Resource" id="Resource_e56ar"]
+[sub_resource type="Resource" id="Resource_0ppwj"]
 resource_local_to_scene = true
 script = ExtResource("14_nncee")
 hit_loot_table = Array[ExtResource("10_2bq37")]([null, SubResource("Resource_cw5if")])
@@ -1196,15 +1214,15 @@ rarity_scaling_factors = Dictionary[int, float]({
 })
 metadata/_custom_type_script = "uid://baglarh3m4c8o"
 
-[sub_resource type="Resource" id="Resource_2m2n0"]
+[sub_resource type="Resource" id="Resource_dtb37"]
 resource_local_to_scene = true
 script = ExtResource("20_om42l")
 title = "CHEST"
 main_inv_size = 10
 drop_on_death = false
-starting_inv = Array[ExtResource("21_fx52i")]([SubResource("Resource_jfdci")])
+starting_inv = Array[ExtResource("21_fx52i")]([SubResource("Resource_jfdci"), SubResource("Resource_bijca"), SubResource("Resource_ar5xw"), SubResource("Resource_2qaea")])
 
-[sub_resource type="Resource" id="Resource_kpk68"]
+[sub_resource type="Resource" id="Resource_4tj1l"]
 resource_local_to_scene = true
 script = ExtResource("14_nncee")
 hit_loot_table = Array[ExtResource("10_2bq37")]([null, SubResource("Resource_cw5if")])
@@ -1225,7 +1243,7 @@ rarity_scaling_factors = Dictionary[int, float]({
 })
 metadata/_custom_type_script = "uid://baglarh3m4c8o"
 
-[sub_resource type="Resource" id="Resource_dg2uc"]
+[sub_resource type="Resource" id="Resource_e0pk2"]
 resource_local_to_scene = true
 script = ExtResource("20_om42l")
 title = "CHEST"
@@ -1251,7 +1269,7 @@ last_used = 0
 spawn_count = 0
 metadata/_custom_type_script = "uid://1qq7eo7lm8j6"
 
-[sub_resource type="Resource" id="Resource_p0fni"]
+[sub_resource type="Resource" id="Resource_eyckr"]
 resource_local_to_scene = true
 script = ExtResource("14_nncee")
 hit_loot_table = Array[ExtResource("10_2bq37")]([SubResource("Resource_b403c")])
@@ -1272,7 +1290,7 @@ rarity_scaling_factors = Dictionary[int, float]({
 })
 metadata/_custom_type_script = "uid://baglarh3m4c8o"
 
-[sub_resource type="Resource" id="Resource_q65h6"]
+[sub_resource type="Resource" id="Resource_1dir5"]
 resource_local_to_scene = true
 script = ExtResource("20_om42l")
 title = "CHEST"
@@ -1280,7 +1298,7 @@ main_inv_size = 10
 drop_on_death = false
 starting_inv = Array[ExtResource("21_fx52i")]([])
 
-[sub_resource type="Resource" id="Resource_xivm6"]
+[sub_resource type="Resource" id="Resource_t53ll"]
 resource_local_to_scene = true
 script = ExtResource("14_nncee")
 hit_loot_table = Array[ExtResource("10_2bq37")]([SubResource("Resource_b403c")])
@@ -1301,7 +1319,7 @@ rarity_scaling_factors = Dictionary[int, float]({
 })
 metadata/_custom_type_script = "uid://baglarh3m4c8o"
 
-[sub_resource type="Resource" id="Resource_70pf8"]
+[sub_resource type="Resource" id="Resource_kq3ra"]
 resource_local_to_scene = true
 script = ExtResource("20_om42l")
 title = "CHEST"
@@ -1309,7 +1327,7 @@ main_inv_size = 10
 drop_on_death = false
 starting_inv = Array[ExtResource("21_fx52i")]([])
 
-[sub_resource type="Resource" id="Resource_s6yan"]
+[sub_resource type="Resource" id="Resource_pt854"]
 resource_local_to_scene = true
 script = ExtResource("14_nncee")
 hit_loot_table = Array[ExtResource("10_2bq37")]([SubResource("Resource_b403c")])
@@ -1799,27 +1817,27 @@ y_sort_enabled = true
 [node name="TestRigidEntity" parent="WorldRoot/Testing" instance=ExtResource("9_37jga")]
 position = Vector2(127, 27)
 physics_material_override = SubResource("PhysicsMaterial_2bq37")
-inv = SubResource("Resource_sjx8w")
-loot = SubResource("Resource_dsspc")
+inv = SubResource("Resource_nncee")
+loot = SubResource("Resource_bimqo")
 
 [node name="TestRigidEntity2" parent="WorldRoot/Testing" instance=ExtResource("9_37jga")]
 position = Vector2(129, 87)
 physics_material_override = SubResource("PhysicsMaterial_nncee")
-inv = SubResource("Resource_6uccm")
-loot = SubResource("Resource_vp8q1")
+inv = SubResource("Resource_sjx8w")
+loot = SubResource("Resource_dsspc")
 
 [node name="TestRigidEntity3" parent="WorldRoot/Testing" instance=ExtResource("9_37jga")]
 position = Vector2(65, 118)
 physics_material_override = SubResource("PhysicsMaterial_bimqo")
 freeze = true
 immovable = true
-inv = SubResource("Resource_tftdh")
-loot = SubResource("Resource_0x6wk")
+inv = SubResource("Resource_6uccm")
+loot = SubResource("Resource_vp8q1")
 
 [node name="TestStaticEntity" parent="WorldRoot/Testing" instance=ExtResource("11_6kn41")]
 position = Vector2(221, 193)
-inv = SubResource("Resource_rfi36")
-loot = SubResource("Resource_e5c60")
+inv = SubResource("Resource_6jm3s")
+loot = SubResource("Resource_tftdh")
 
 [node name="TestStaticEffectSource2" type="Area2D" parent="WorldRoot/Testing/TestStaticEntity" node_paths=PackedStringArray("source_entity")]
 position = Vector2(0, -7)
@@ -1834,7 +1852,7 @@ debug_color = Color(0.994, 0, 0.227, 0.225)
 
 [node name="TestStaticEntity2" parent="WorldRoot/Testing" instance=ExtResource("11_6kn41")]
 position = Vector2(283, 217)
-inv = SubResource("Resource_6jm3s")
+inv = SubResource("Resource_0x6wk")
 loot = SubResource("Resource_56o3e")
 
 [node name="TestStaticEffectSource2" type="Area2D" parent="WorldRoot/Testing/TestStaticEntity2" node_paths=PackedStringArray("source_entity")]
@@ -1896,23 +1914,23 @@ loot = SubResource("Resource_xcjjm")
 
 [node name="TestRock1" parent="WorldRoot/Testing" instance=ExtResource("32_melxk")]
 position = Vector2(363, 71)
-inv = SubResource("Resource_eg4nl")
-loot = SubResource("Resource_ump5w")
+inv = SubResource("Resource_dg2uc")
+loot = SubResource("Resource_p0fni")
 
 [node name="TestRock2" parent="WorldRoot/Testing" instance=ExtResource("32_melxk")]
 position = Vector2(420, 43)
-inv = SubResource("Resource_nniq8")
-loot = SubResource("Resource_fafnq")
+inv = SubResource("Resource_q65h6")
+loot = SubResource("Resource_xivm6")
 
 [node name="TestRock3" parent="WorldRoot/Testing" instance=ExtResource("32_melxk")]
 position = Vector2(443, 79)
-inv = SubResource("Resource_yjw3r")
-loot = SubResource("Resource_lbked")
+inv = SubResource("Resource_70pf8")
+loot = SubResource("Resource_s6yan")
 
 [node name="TestRock4" parent="WorldRoot/Testing" instance=ExtResource("32_melxk")]
 position = Vector2(423, 116)
-inv = SubResource("Resource_i7ap2")
-loot = SubResource("Resource_enlnh")
+inv = SubResource("Resource_fcgau")
+loot = SubResource("Resource_0mtt3")
 
 [node name="TestPhysicalInventory" parent="WorldRoot/Testing" instance=ExtResource("17_om42l")]
 position = Vector2(211, -25)
@@ -1926,87 +1944,89 @@ inv = SubResource("Resource_q188t")
 
 [node name="BasicZombie" parent="WorldRoot/Testing" instance=ExtResource("30_6gn56")]
 position = Vector2(-3, -3)
-inv = SubResource("Resource_dykn5")
-loot = SubResource("Resource_2bicj")
+inv = SubResource("Resource_yg6cs")
+loot = SubResource("Resource_ymr70")
 
 [node name="BasicZombie2" parent="WorldRoot/Testing" instance=ExtResource("30_6gn56")]
 position = Vector2(6, -12)
-inv = SubResource("Resource_a626h")
-loot = SubResource("Resource_yfhh5")
+enabled = false
+inv = SubResource("Resource_bg3k1")
+loot = SubResource("Resource_6338u")
 
 [node name="BasicZombie3" parent="WorldRoot/Testing" instance=ExtResource("30_6gn56")]
 position = Vector2(45, -11)
-inv = SubResource("Resource_g4530")
-loot = SubResource("Resource_c5fd7")
+enabled = false
+inv = SubResource("Resource_xgric")
+loot = SubResource("Resource_20i1n")
 
 [node name="BasicZombie4" parent="WorldRoot/Testing" instance=ExtResource("30_6gn56")]
 position = Vector2(26, 21)
 enabled = false
-inv = SubResource("Resource_at3sg")
-loot = SubResource("Resource_7o62s")
+inv = SubResource("Resource_5el5i")
+loot = SubResource("Resource_4vs0b")
 
 [node name="BasicZombie5" parent="WorldRoot/Testing" instance=ExtResource("30_6gn56")]
 position = Vector2(-13, 23)
 enabled = false
-inv = SubResource("Resource_jmw81")
-loot = SubResource("Resource_ycyl1")
+inv = SubResource("Resource_oxgsv")
+loot = SubResource("Resource_pk3xi")
 
 [node name="BasicZombie6" parent="WorldRoot/Testing" instance=ExtResource("30_6gn56")]
 position = Vector2(-39, 57)
 enabled = false
-inv = SubResource("Resource_fpcdc")
-loot = SubResource("Resource_wtuuf")
+inv = SubResource("Resource_bl5mg")
+loot = SubResource("Resource_recjj")
 
 [node name="BasicZombie7" parent="WorldRoot/Testing" instance=ExtResource("30_6gn56")]
 position = Vector2(-74, 30)
 enabled = false
-inv = SubResource("Resource_6lhdw")
-loot = SubResource("Resource_l222e")
+inv = SubResource("Resource_1naey")
+loot = SubResource("Resource_pavah")
 
 [node name="BasicZombie8" parent="WorldRoot/Testing" instance=ExtResource("30_6gn56")]
 position = Vector2(-92, -12)
 enabled = false
-inv = SubResource("Resource_en3ww")
-loot = SubResource("Resource_p71yx")
+inv = SubResource("Resource_iwpwc")
+loot = SubResource("Resource_enst5")
 
 [node name="BasicZombie9" parent="WorldRoot/Testing" instance=ExtResource("30_6gn56")]
 position = Vector2(-75, -37)
 enabled = false
-inv = SubResource("Resource_k6qll")
-loot = SubResource("Resource_srfoq")
+inv = SubResource("Resource_wpe8i")
+loot = SubResource("Resource_p1fc4")
 
 [node name="BasicZombie10" parent="WorldRoot/Testing" instance=ExtResource("30_6gn56")]
 position = Vector2(-30, -49)
 enabled = false
-inv = SubResource("Resource_xbvxn")
-loot = SubResource("Resource_0x2lg")
+inv = SubResource("Resource_s2gj4")
+loot = SubResource("Resource_102wr")
 
 [node name="BasicZombie11" parent="WorldRoot/Testing" instance=ExtResource("30_6gn56")]
 position = Vector2(-52, -38)
 enabled = false
-inv = SubResource("Resource_4x4lk")
-loot = SubResource("Resource_e56ar")
+inv = SubResource("Resource_pdyh0")
+loot = SubResource("Resource_0ppwj")
 
 [node name="BasicZombie12" parent="WorldRoot/Testing" instance=ExtResource("30_6gn56")]
 position = Vector2(-27, -18)
 enabled = false
-inv = SubResource("Resource_2m2n0")
-loot = SubResource("Resource_kpk68")
+inv = SubResource("Resource_dtb37")
+loot = SubResource("Resource_4tj1l")
 
 [node name="TestRock5" parent="WorldRoot/Testing" instance=ExtResource("30_yw2f7")]
 position = Vector2(437, 158)
-inv = SubResource("Resource_dg2uc")
-loot = SubResource("Resource_p0fni")
+inv = SubResource("Resource_e0pk2")
+loot = SubResource("Resource_eyckr")
 
 [node name="TestRock6" parent="WorldRoot/Testing" instance=ExtResource("30_yw2f7")]
 position = Vector2(466, 144)
-inv = SubResource("Resource_q65h6")
-loot = SubResource("Resource_xivm6")
+inv = SubResource("Resource_1dir5")
+loot = SubResource("Resource_t53ll")
 
 [node name="TestRock7" parent="WorldRoot/Testing" instance=ExtResource("30_yw2f7")]
 position = Vector2(476, 111)
-inv = SubResource("Resource_70pf8")
-loot = SubResource("Resource_s6yan")
+inv = SubResource("Resource_kq3ra")
+loot = SubResource("Resource_pt854")
 
 [node name="Player" parent="WorldRoot" instance=ExtResource("4_ptig0")]
 position = Vector2(278, 70)

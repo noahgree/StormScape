@@ -75,9 +75,6 @@ func handle_effect_source(effect_source: EffectSource, source_entity: Entity, so
 		if not match_found:
 			return
 
-	# --- Hitflash ---
-	affected_entity.sprite.start_hitflash(effect_source.hit_flash_color, false)
-
 	# --- Checking if Sender is Passive or Receiver Can't Receive Effect Sources ---
 	if (source_entity and source_entity.team == Globals.Teams.PASSIVE) or ((affected_entity is DynamicEntity) and not affected_entity.fsm.controller.can_receive_effect_srcs):
 		if affected_entity.loot:
@@ -100,17 +97,25 @@ func handle_effect_source(effect_source: EffectSource, source_entity: Entity, so
 
 	# --- Applying Base Damage & Base Healing ---
 	var xp: int = 0
+	var do_hitflash: bool = false
 	if effect_source.base_damage > 0 and dmg_handler != null:
 		if _check_same_team(source_entity) and _check_if_bad_effects_apply_to_allies(effect_source):
 			dmg_handler.handle_instant_damage(effect_source, _get_life_steal(effect_source, source_entity))
+			do_hitflash = true
 		elif not _check_same_team(source_entity) and _check_if_bad_effects_apply_to_enemies(effect_source):
 			xp = dmg_handler.handle_instant_damage(effect_source, _get_life_steal(effect_source, source_entity))
+			do_hitflash = true
 
 	if effect_source.base_healing > 0 and heal_handler != null:
 		if _check_same_team(source_entity) and _check_if_good_effects_apply_to_allies(effect_source):
 			xp = heal_handler.handle_instant_heal(effect_source, effect_source.heal_affected_stats)
+			do_hitflash = true
 		elif not _check_same_team(source_entity) and _check_if_good_effects_apply_to_enemies(effect_source):
 			heal_handler.handle_instant_heal(effect_source, effect_source.heal_affected_stats)
+			do_hitflash = true
+
+	if do_hitflash:
+		affected_entity.sprite.start_hitflash(effect_source.hit_flash_color, false)
 
 	# --- Applying Resulting Weapon XP ---
 	if source_entity is Player and source_weapon and is_instance_valid(source_weapon):
