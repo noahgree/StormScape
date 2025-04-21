@@ -53,6 +53,9 @@ func _ready() -> void:
 		clipping_detector.area_entered.connect(_on_item_enters_clipping_area)
 		clipping_detector.area_exited.connect(_on_item_leaves_clipping_area)
 
+	if source_entity is Player:
+		AudioManager.play_global(stats.equip_audio, 0, false, -1, self)
+
 ## Disables the item when it starts to clip. Only applies to items with clipping detectors.
 func _on_item_enters_clipping_area(area: Area2D) -> void:
 	if area.get_parent() != source_entity and enabled:

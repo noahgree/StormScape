@@ -21,9 +21,11 @@
 [ext_resource type="PackedScene" uid="uid://2yy4xfm5g74l" path="res://Entities/Components/ItemComponents/ClippingComponent/ClippingArea.tscn" id="19_7biur"]
 
 [sub_resource type="Resource" id="Resource_d3uov"]
+resource_local_to_scene = true
 script = ExtResource("2_7biur")
 title = "CHEST"
 main_inv_size = 10
+drop_on_death = false
 starting_inv = Array[ExtResource("3_r6tnu")]([])
 
 [sub_resource type="Resource" id="Resource_r6tnu"]
@@ -36,12 +38,14 @@ spawn_count = 0
 metadata/_custom_type_script = "uid://1qq7eo7lm8j6"
 
 [sub_resource type="Resource" id="Resource_cncsx"]
+resource_local_to_scene = true
 script = ExtResource("6_7biur")
 hit_loot_table = Array[ExtResource("8_v4qb0")]([SubResource("Resource_r6tnu")])
 hit_spawn_chance = 10.0
+hit_chance_scale = 1
 remove_when_dropped = false
 require_dmg_on_hit = true
-hit_chance_scale = 1
+hp_percent_hit_checks = 15
 die_loot_table = Array[ExtResource("8_v4qb0")]([])
 die_spawn_chance = 100.0
 rarity_scaling_factors = Dictionary[int, float]({
@@ -61,7 +65,7 @@ height = 19.9999
 [sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_2kecs"]
 polygon = PackedVector2Array(-10, -4, -10, 0, 9, 0, 9, -4)
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_80oc5"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_7biur"]
 resource_local_to_scene = true
 shader = ExtResource("3_epxnw")
 
@@ -80,14 +84,14 @@ animations = [{
 "speed": 5.0
 }]
 
-[sub_resource type="Resource" id="Resource_ill5l"]
+[sub_resource type="Resource" id="Resource_80oc5"]
 resource_local_to_scene = true
 script = ExtResource("11_r6tnu")
 _frostbite_weakness = 0.0
 _frostbite_resistance = 0.0
 metadata/_custom_type_script = "uid://b1lo2mdb3otax"
 
-[sub_resource type="Resource" id="Resource_8swan"]
+[sub_resource type="Resource" id="Resource_ill5l"]
 resource_local_to_scene = true
 script = ExtResource("12_d3uov")
 _burning_weakness = 0.0
@@ -125,7 +129,7 @@ scale = Vector2(4.69333, 2.75429)
 
 [node name="EntitySprite" parent="." instance=ExtResource("4_5qk3y")]
 unique_name_in_owner = true
-material = SubResource("ShaderMaterial_80oc5")
+material = SubResource("ShaderMaterial_7biur")
 instance_shader_parameters/crack_color = Color(0.0792545, 0.0300264, 0.00946152, 0.88)
 instance_shader_parameters/crack_intensity = 0.0
 instance_shader_parameters/crack_pixelate = Vector2(96, 96)
@@ -137,15 +141,14 @@ sprite_frames = SubResource("SpriteFrames_o33n8")
 _max_health = 1000
 _max_shield = 0
 
-[node name="EffectReceiverComponent" parent="." node_paths=PackedStringArray("affected_entity", "health_component", "dmg_handler") instance=ExtResource("6_bxml6")]
+[node name="EffectReceiverComponent" parent="." node_paths=PackedStringArray("affected_entity", "dmg_handler") instance=ExtResource("6_bxml6")]
 absorb_full_hit = true
 filter_source_tags = true
 allowed_source_tags = Array[String](["chops_wood"])
 affected_entity = NodePath("..")
-health_component = NodePath("../HealthComponent")
 dmg_handler = NodePath("DmgHandler")
-frostbite_handler = SubResource("Resource_ill5l")
-burning_handler = SubResource("Resource_8swan")
+frostbite_handler = SubResource("Resource_80oc5")
+burning_handler = SubResource("Resource_ill5l")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="EffectReceiverComponent"]
 position = Vector2(0, -7)

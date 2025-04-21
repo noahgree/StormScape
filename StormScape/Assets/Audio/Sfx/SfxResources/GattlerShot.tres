@@ -5,6 +5,7 @@
 [resource]
 script = ExtResource("1_xx6wv")
 id = &"gattler_shot"
+category = 0
 sound_files_folder = "res://Assets/Audio/Sfx/SfxRawAudio/Items/Weapons/Gattler"
 sound_file_paths = Array[String]([])
 concurrent_limit = 10

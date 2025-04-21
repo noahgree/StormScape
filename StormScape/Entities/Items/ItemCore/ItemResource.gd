@@ -47,6 +47,11 @@ class_name ItemResource
 @export var shown_cooldown_fills: Array[String] = [] ## Which cooldown source's can show the vertical fill on the slot when the player invokes a cooldown on this item.
 @export var show_cursor_cooldown: bool = false ## When true, the cursor will vertically fill for any cooldown in the array above instead of ever vertically filling for reloads in progress.
 
+@export_group("Sounds")
+@export var equip_audio: String ## The sound to play when the item is equipped as an equippable item.
+@export var pickup_audio: String ## The sound to play when the item is picked up off the ground.
+@export var drop_audio: String ## The sound to play when the item is dropped onto the ground.
+
 
 # Unique Properties #
 @export_storage var session_uid: int: ## The unique id for this resource instance that is relevant only for the current game load.

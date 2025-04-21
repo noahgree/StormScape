@@ -43,6 +43,8 @@ enum ReloadType { ## The kinds of reloads the weapon can have.
 @export var firing_sound: String ## The sound to play when firing.
 @export var post_fire_sound: String ## The sound to play after firing before the cooldown ends.
 @export var charging_sound: String ## The sound to play when charging.
+@export var mag_almost_empty_sound: String = "mag_almost_empty" ## The sound to play alongside each shot sound when the ammo in the mag is almost depleted.
+@export var empty_mag_sound: String = "dry_fire" ## The sound to play when trying to fire with no ammo left.
 
 @export_group("Effect & Logic Resources")
 @export var projectile_logic: ProjectileResource ## The logic for each spawned projectile determining how it behaves.
@@ -71,9 +73,7 @@ enum ReloadType { ## The kinds of reloads the weapon can have.
 @export_subgroup("Stamina Use")
 @export_custom(PROPERTY_HINT_NONE, "suffix:stamina") var stamina_use_per_proj: float = 0.5 ## How much stamina is needed per projectile when stamina is the ammo type.
 @export_subgroup("Reloading FX")
-@export var mag_reload_sound: String ## The sound to play when reloading a whole mag.
-@export var proj_reload_sound: String ## The sound to play when reloading a single projectile.
-@export var empty_mag_sound: String ## The sound to play when trying to fire with no ammo left.
+@export var reload_sound: String ## The sound resource to play when reloading. Usually called from animation player. The resource should contain each partial reload sound in order.
 
 @export_group("Blooming Logic")
 @export_custom(PROPERTY_HINT_NONE, "suffix:degrees") var max_bloom: float ## The max amount of bloom the weapon can have.

@@ -13,7 +13,7 @@ func _on_test_heal_btn_pressed() -> void:
 	health_component.heal_health_then_shield(15, "basic_healing", -1)
 
 func _on_test_music_btn_pressed() -> void:
-	var audio_player: Variant = AudioManager.play_global("mystery_theme", 0, Globals.player_node)
+	var audio_player: Variant = AudioManager.play_global("mystery_theme", 0, false, -1, Globals.player_node)
 	if audio_player:
 		(audio_player as AudioStreamPlayer).process_mode = Node.PROCESS_MODE_ALWAYS
 		await get_tree().create_timer(2.5).timeout

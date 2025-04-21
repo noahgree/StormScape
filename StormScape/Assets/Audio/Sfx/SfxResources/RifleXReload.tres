@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="AudioResource" load_steps=2 format=3 uid="uid://c5f2gkbvmegnh"]
+
+[ext_resource type="Script" uid="uid://dwic8harmmplg" path="res://Utilities/Game/Audio/AudioResource.gd" id="1_5gc3b"]
+
+[resource]
+script = ExtResource("1_5gc3b")
+id = &"rifle_x_reload"
+category = 0
+sound_files_folder = ""
+sound_file_paths = Array[String](["uid://ck5dy06su46wc", "uid://0d28bi1srh3", "uid://7to8mwnhh3hk", "uid://b30tk4ce4525w"])
+concurrent_limit = 20
+rhythmic_delay = 0.0
+volume = -10.0
+pitch_scale = 1.0
+pitch_randomness = 0.0
+restart_if_at_limit = false
+should_loop = false
+max_distance = 500
+attentuation_falloff = 1.0
+metadata/_custom_type_script = "uid://dwic8harmmplg"

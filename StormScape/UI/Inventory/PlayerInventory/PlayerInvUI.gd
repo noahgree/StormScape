@@ -147,6 +147,9 @@ func _drop_data(_at_position: Vector2, data: Variant) -> void:
 
 		Item.spawn_on_ground(ground_item_res, ground_item_quantity, Globals.player_node.global_position, 15, true, false, true)
 
+		if ground_item_res is ProjAmmoResource:
+			synced_inv_source_node.hands.active_slot_info.calculate_inv_ammo()
+
 	data._on_mouse_exited()
 #endregion
 

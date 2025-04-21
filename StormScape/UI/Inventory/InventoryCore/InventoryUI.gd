@@ -69,6 +69,9 @@ func _fill_slots_with_items() -> void:
 ## When an index gets updated in the inventory, this is received via signal in order to update a slot here.
 func _on_inv_data_updated(index: int, item: InvItemResource) -> void:
 	slots[index].set_item(item)
+	if item and item.stats is ProjAmmoResource:
+		if synced_inv_source_node is Player:
+			synced_inv_source_node.hands.active_slot_info.calculate_inv_ammo()
 
 #region Debug
 ## Custom printing method to show the items inside the slots populated by this node.

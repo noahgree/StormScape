@@ -58,7 +58,7 @@ func _ready() -> void:
 ## Any rapidly or highly used sounds in this weapon should stay in memory for the entire lifetime of this weapon
 ## if they aren't already.
 func _register_preloaded_sounds() -> void:
-	preloaded_sounds = [stats.firing_sound, stats.charging_sound]
+	preloaded_sounds = [stats.firing_sound, stats.charging_sound, stats.reload_sound]
 	AudioPreloader.register_sounds_from_ids(preloaded_sounds)
 
 ## Called when the weapon is enabled, usually because it stopped clipping with an object.
@@ -223,6 +223,8 @@ func _can_activate_at_all() -> bool:
 ## Called when a trigger is initially pressed.
 func activate() -> void:
 	if not _can_activate_at_all():
+		if source_entity is Player and stats.ammo_in_mag == 0 and state == WeaponState.IDLE:
+			AudioManager.play_2d(stats.empty_mag_sound, global_position)
 		return
 
 	if stats.firing_mode == ProjWeaponResource.FiringType.SEMI_AUTO:
@@ -395,3 +397,10 @@ func _eject_casing(per_used_ammo: bool = false) -> void:
 		casing.sprite.texture = stats.casing_texture
 		if stats.casing_tint != Color.WHITE:
 			casing.sprite.modulate = stats.casing_tint
+
+## Ease of use method for triggering sounds from within the animation player.
+func play_reload_sound(index: int, use_reverb: bool = false) -> void:
+	if source_entity is Player:
+		AudioManager.play_global(stats.reload_sound, 0, false, index, self)
+	else:
+		AudioManager.play_2d(stats.reload_sound, global_position, 0, use_reverb, index, self)

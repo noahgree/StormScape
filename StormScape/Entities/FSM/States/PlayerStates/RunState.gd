@@ -49,7 +49,7 @@ func _animate() -> void:
 
 func _play_sprint_sound() -> void:
 	if not AudioManager.is_player_valid(sprint_audio_player):
-		sprint_audio_player = AudioManager.play_global("player_sprint_wind", 0.45, entity)
+		sprint_audio_player = AudioManager.play_global("player_sprint_wind", 0.45, false, -1, entity)
 
 func _stop_sprint_sound() -> void:
 	if AudioManager.is_player_valid(sprint_audio_player):

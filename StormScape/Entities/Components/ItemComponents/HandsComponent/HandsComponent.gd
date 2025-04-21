@@ -213,6 +213,8 @@ func _prep_for_pullout_anim() -> void:
 	if equipped_item.stats is WeaponResource and equipped_item.stats.s_mods.get_stat("pullout_delay") == 0:
 		return
 
+	hands_anchor.global_rotation = _get_facing_dir().angle()
+
 	if _get_facing_dir().x > 0:
 		hands_anchor.global_rotation += PI/5
 	else:

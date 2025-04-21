@@ -239,7 +239,7 @@ func _handle_impact_sound(effect_source: EffectSource) -> void:
 	var multishot_id: int = effect_source.multishot_id
 	if multishot_id != -1:
 		if multishot_id not in current_impact_sounds:
-			var player: Variant = AudioManager.play_2d(effect_source.impact_sound, affected_entity.global_position, 0, Globals.world_root)
+			var player: Variant = AudioManager.play_2d(effect_source.impact_sound, affected_entity.global_position, 0, true, -1, Globals.world_root)
 			if player:
 				current_impact_sounds.append(multishot_id)
 
@@ -251,7 +251,7 @@ func _handle_impact_sound(effect_source: EffectSource) -> void:
 				finish_callables.append(callable)
 				player.set_meta("finish_callables", finish_callables)
 	else:
-		AudioManager.play_2d(effect_source.impact_sound, affected_entity.global_position)
+		AudioManager.play_2d(effect_source.impact_sound, affected_entity.global_position, 0, true)
 
 ## Starts the player camera fx from the effect source details.
 func _handle_cam_fx(effect_source: EffectSource) -> void:

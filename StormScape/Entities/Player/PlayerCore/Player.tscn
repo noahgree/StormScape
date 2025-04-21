@@ -2120,6 +2120,7 @@ hide_corner_info = true
 metadata/_edit_lock_ = true
 
 [node name="ActiveSlotInfo" type="MarginContainer" parent="OverlayUI"]
+unique_name_in_owner = true
 anchors_preset = 3
 anchor_left = 1.0
 anchor_top = 1.0

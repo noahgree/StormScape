@@ -48,7 +48,7 @@ func _cache_audio_resources(folder_path: String, cache: Dictionary[StringName, A
 			var resource_path: String = folder_path + "/" + file_name
 			var resource: AudioResource = load(resource_path)
 
-			if resource.sound_files_folder == "":
+			if resource.sound_files_folder == "" and resource.sound_file_paths.is_empty():
 				push_error(resource.id + " audio resource does not have a sound files folder specified.")
 				file_name = folder.get_next()
 				continue
@@ -168,24 +168,25 @@ func _trim_pools() -> void:
 ## Plays a sound in 2D at a given location. The sound can optionally be faded in and parented to any node.
 ## The resulting audio player is returned if successful.
 func play_2d(sound_id: StringName, location: Vector2 = Vector2.ZERO, fade_in_time: float = 0,
-				parent_node: Node = self) -> Variant:
+				use_reverb: bool = false, stream_index: int = -1, parent_node: Node = self) -> Variant:
 	if sound_id == "":
 		return null
-	var audio_player: Variant = _create_audio_player(sound_id, SoundSpace.SPATIAL, location, fade_in_time, parent_node)
+	var audio_player: Variant = _create_audio_player(sound_id, SoundSpace.SPATIAL, location, fade_in_time, use_reverb, stream_index, parent_node)
 	return audio_player
 
 ## Plays a sound globally (has no location, can be heard everywhere). The sound can optionally be faded in
 ## and parented to any node.
 ## The resulting audio player is returned if successful.
-func play_global(sound_id: StringName, fade_in_time: float = 0, parent_node: Node = self) -> Variant:
+func play_global(sound_id: StringName, fade_in_time: float = 0, use_reverb: bool = false,
+					stream_index: int = -1, parent_node: Node = self) -> Variant:
 	if sound_id == "":
 		return null
-	var audio_player: Variant = _create_audio_player(sound_id, SoundSpace.GLOBAL, Vector2.ZERO, fade_in_time, parent_node)
+	var audio_player: Variant = _create_audio_player(sound_id, SoundSpace.GLOBAL, Vector2.ZERO, fade_in_time, use_reverb, stream_index, parent_node)
 	return audio_player
 
 ## Pulls a sound resource from one of the caches and sends it to be setup if it exists.
 func _create_audio_player(sound_id: StringName, space: SoundSpace, location: Vector2,
-							fade_in_time: float, parent_node: Node) -> Variant:
+							fade_in_time: float, use_reverb: bool, stream_index: int, parent_node: Node) -> Variant:
 	var is_2d: bool = space == SoundSpace.SPATIAL
 
 	var audio_resource: AudioResource = sound_cache.get(sound_id, null)
@@ -196,11 +197,11 @@ func _create_audio_player(sound_id: StringName, space: SoundSpace, location: Vec
 	if is_2d and not _is_close_enough_to_play_2d(audio_resource, location):
 		return null
 
-	var audio_stream: AudioStream = _pick_stream_resource_from_audio_resource(audio_resource)
+	var audio_stream: AudioStream = _pick_stream_resource_from_audio_resource(audio_resource, stream_index)
 	if audio_stream == null:
 		return null
 
-	var audio_player: Variant = _create_or_restart_audio_player_from_resource(audio_resource, is_2d, location)
+	var audio_player: Variant = _create_or_restart_audio_player_from_resource(audio_resource, is_2d, location, use_reverb)
 	if audio_player:
 		audio_player.stream = audio_stream
 	else:
@@ -212,7 +213,7 @@ func _create_audio_player(sound_id: StringName, space: SoundSpace, location: Vec
 
 ## Applies the settings from the audio resource to the audio player and returns it if it isn't null.
 func _create_or_restart_audio_player_from_resource(audio_resource: AudioResource, is_2d: bool,
-													location: Vector2) -> Variant:
+													location: Vector2, use_reverb: bool) -> Variant:
 	if (not audio_resource.has_available_stream()) and (not audio_resource.restart_if_at_limit):
 		return null
 	else:
@@ -235,7 +236,7 @@ func _create_or_restart_audio_player_from_resource(audio_resource: AudioResource
 		if audio_resource.category == AudioResource.Category.MUSIC:
 			audio_player.bus = "Music"
 		else:
-			audio_player.bus = "SFX"
+			audio_player.bus = "Reverb" if use_reverb else "SFX"
 
 		audio_player.add_to_group(str(audio_resource.id))
 		audio_player.set_meta("sound_id", str(audio_resource.id))
@@ -276,13 +277,19 @@ func _stop_sound_by_name_due_to_limit(sound_id: StringName) -> void:
 		stop_audio_player(playing_sounds[0])
 
 ## Picks a random sound from the array of preloaded resources if they exist, falling back to simply loading a
-## random stream on the spot if not.
-func _pick_stream_resource_from_audio_resource(audio_resource: AudioResource) -> AudioStream:
+## random stream on the spot if not. You can also specify an exact sound index to play.
+func _pick_stream_resource_from_audio_resource(audio_resource: AudioResource, stream_index: int) -> AudioStream:
 	if audio_resource.preloaded_streams.size() > 0:
-		return audio_resource.preloaded_streams[randi_range(0, audio_resource.preloaded_streams.size() - 1)]
+		if stream_index < 0:
+			stream_index = randi_range(0, audio_resource.preloaded_streams.size() - 1)
+		return ArrayHelpers.get_or_default(audio_resource.preloaded_streams, stream_index, null)
 	else:
-		var sound_file: String = audio_resource.sound_file_paths[randi_range(0, audio_resource.sound_file_paths.size() - 1)]
-		return load(sound_file)
+		if stream_index < 0:
+			stream_index = randi_range(0, audio_resource.sound_file_paths.size() - 1)
+		var sound_file: String = ArrayHelpers.get_or_default(audio_resource.sound_file_paths, stream_index, null)
+		if sound_file:
+			return load(sound_file)
+		return null
 
 ## Checks if a 2d sound is close enough to the player to start playing in an effort to save off screen resources.
 func _is_close_enough_to_play_2d(audio_resource: AudioResource, location: Vector2) -> bool:

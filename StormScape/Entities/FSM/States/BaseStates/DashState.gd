@@ -99,7 +99,7 @@ func _create_ghost() -> void:
 
 func _play_dash_sound() -> void:
 	if not AudioManager.is_player_valid(active_dash_sound):
-		active_dash_sound = AudioManager.play_2d("player_dash", entity.global_position, 0, fsm)
+		active_dash_sound = AudioManager.play_2d("player_dash", entity.global_position, 0, false, -1, fsm)
 
 func _stop_dash_sound() -> void:
 	if AudioManager.is_player_valid(active_dash_sound):

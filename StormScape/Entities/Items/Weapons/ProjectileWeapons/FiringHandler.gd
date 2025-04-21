@@ -222,7 +222,13 @@ func _start_firing_fx() -> void:
 		weapon.stats.firing_cam_fx.activate_all()
 	if weapon.firing_vfx:
 		weapon.firing_vfx.start()
-	AudioManager.play_2d(weapon.stats.firing_sound, weapon.global_position)
+
+	AudioManager.play_2d(weapon.stats.firing_sound, weapon.global_position, 0, true)
+	var mag_size: int = int(weapon.stats.s_mods.get_stat("mag_size"))
+	var ammo_left: int = weapon.stats.ammo_in_mag
+	if weapon.source_entity is Player:
+		if (mag_size > 8) and (ammo_left <= 10) and (float(ammo_left) / float(mag_size) <= 0.25):
+			AudioManager.play_2d(weapon.stats.mag_almost_empty_sound, weapon.global_position, 0, true)
 
 ## Starts the post-firing animation and sounds if they exist, waiting for the delay (at the very least) and also the
 ## animation itself to end before returning control back to the main firing sequence.

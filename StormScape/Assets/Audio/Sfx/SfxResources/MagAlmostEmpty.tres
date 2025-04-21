@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="AudioResource" load_steps=2 format=3 uid="uid://cvbqxty1yak58"]
+
+[ext_resource type="Script" uid="uid://dwic8harmmplg" path="res://Utilities/Game/Audio/AudioResource.gd" id="1_1m3fj"]
+
+[resource]
+script = ExtResource("1_1m3fj")
+id = &"mag_almost_empty"
+category = 0
+sound_files_folder = "res://Assets/Audio/Sfx/SfxRawAudio/Items/Weapons/MagAlmostEmpty"
+sound_file_paths = Array[String]([])
+concurrent_limit = 20
+rhythmic_delay = 0.0
+volume = -2.0
+pitch_scale = 1.05
+pitch_randomness = 0.03
+restart_if_at_limit = false
+should_loop = false
+max_distance = 500
+attentuation_falloff = 1.0
+metadata/_custom_type_script = "uid://dwic8harmmplg"
