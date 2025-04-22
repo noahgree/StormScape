@@ -28,14 +28,6 @@ func _get_configuration_warnings() -> PackedStringArray:
 			"This entity must have an EntitySprite typed sprite node. Make sure its name is unique with a %."
 			]
 	return []
-
-## Ensures uniqueness of resources.
-func _notification(what: int) -> void:
-	if what == NOTIFICATION_EDITOR_POST_SAVE:
-		if inv and not inv.resource_local_to_scene:
-			printerr(self, " HAS AN INVENTORY THAT IS NOT SET TO UNIQUE PER SCENE")
-		if loot and not loot.resource_local_to_scene:
-			printerr(self, " HAS A LOOT TABLE THAT IS NOT SET TO UNIQUE PER SCENE")
 #endregion
 
 func _ready() -> void:
@@ -65,8 +57,10 @@ func _ready() -> void:
 	stats.affected_entity = self
 	sprite.entity = self
 	if inv:
+		inv = inv.duplicate()
 		inv.initialize_inventory(self)
 	if loot:
+		loot = loot.duplicate()
 		loot.initialize(self)
 
 func _process(delta: float) -> void:

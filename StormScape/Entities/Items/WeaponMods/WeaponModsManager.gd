@@ -226,17 +226,17 @@ static func _remove_mod_status_effects_from_effect_source(weapon_stats: WeaponRe
 static func reset_original_arrays_after_save(weapon_stats: WeaponResource, source_entity: Entity) -> void:
 	var mods_copy: Array[Dictionary] = weapon_stats.current_mods.duplicate()
 
-	weapon_stats.original_status_effects = []
+	weapon_stats.original_status_effects.clear()
 	if weapon_stats is MeleeWeaponResource:
-		weapon_stats.original_charge_status_effects = []
-	elif weapon_stats is ProjWeaponResource:
-		weapon_stats.projectile_logic.aoe_effect_source.status_effects = []
+		weapon_stats.original_charge_status_effects.clear()
+	elif weapon_stats is ProjWeaponResource and weapon_stats.projectile_logic.aoe_effect_source:
+		weapon_stats.projectile_logic.aoe_effect_source.status_effects.clear()
 	remove_all_mods_from_weapon(weapon_stats, source_entity)
 
 	weapon_stats.original_status_effects = weapon_stats.effect_source.status_effects
 	if weapon_stats is MeleeWeaponResource:
 		weapon_stats.original_charge_status_effects = weapon_stats.charge_effect_source.status_effects
-	elif weapon_stats is ProjWeaponResource:
+	elif weapon_stats is ProjWeaponResource and weapon_stats.projectile_logic.aoe_effect_source:
 		weapon_stats.projectile_logic.aoe_effect_source.status_effects = weapon_stats.original_aoe_status_effects
 
 	weapon_stats.current_mods = mods_copy

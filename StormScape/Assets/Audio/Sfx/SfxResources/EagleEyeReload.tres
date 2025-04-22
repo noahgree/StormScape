@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="AudioResource" load_steps=2 format=3 uid="uid://6uah6j0v74xb"]
+
+[ext_resource type="Script" uid="uid://dwic8harmmplg" path="res://Utilities/Game/Audio/AudioResource.gd" id="1_6an3q"]
+
+[resource]
+script = ExtResource("1_6an3q")
+id = &"eagle_eye_reload"
+category = 0
+sound_files_folder = ""
+sound_file_paths = Array[String](["uid://cvcjkb5qk3r8l", "uid://b7vfm23ufm1ud"])
+concurrent_limit = 20
+rhythmic_delay = 0.0
+volume = -5.0
+pitch_scale = 1.0
+pitch_randomness = 0.07
+restart_if_at_limit = false
+should_loop = false
+max_distance = 500
+attentuation_falloff = 1.0
+metadata/_custom_type_script = "uid://dwic8harmmplg"

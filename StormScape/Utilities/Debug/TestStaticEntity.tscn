@@ -19,7 +19,6 @@
 [ext_resource type="PackedScene" uid="uid://2yy4xfm5g74l" path="res://Entities/Components/ItemComponents/ClippingComponent/ClippingArea.tscn" id="22_h0qkk"]
 
 [sub_resource type="Resource" id="Resource_tmtom"]
-resource_local_to_scene = true
 script = ExtResource("2_oq3a2")
 title = "CHEST"
 main_inv_size = 10
@@ -27,7 +26,6 @@ drop_on_death = false
 starting_inv = Array[ExtResource("3_4hy3y")]([])
 
 [sub_resource type="Resource" id="Resource_g1258"]
-resource_local_to_scene = true
 script = ExtResource("6_3mtfl")
 hit_loot_table = Array[ExtResource("14_h0qkk")]([])
 hit_spawn_chance = 1.0

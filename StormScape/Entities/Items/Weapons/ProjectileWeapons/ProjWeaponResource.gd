@@ -40,11 +40,12 @@ enum ReloadType { ## The kinds of reloads the weapon can have.
 @export var firing_cam_fx: CamFXResource ## The resource defining how the camera should react to firing.
 @export var casing_texture: Texture2D ## The texture to use as the casing that ejects on firing.
 @export var casing_tint: Color = Color.WHITE ## The tint to apply to the casing texture. White means no tint.
+@export var casing_sound: String ## The sound to play when the casing hits the ground.
 @export var firing_sound: String ## The sound to play when firing.
 @export var post_fire_sound: String ## The sound to play after firing before the cooldown ends.
 @export var charging_sound: String ## The sound to play when charging.
-@export var mag_almost_empty_sound: String = "mag_almost_empty" ## The sound to play alongside each shot sound when the ammo in the mag is almost depleted.
-@export var empty_mag_sound: String = "dry_fire" ## The sound to play when trying to fire with no ammo left.
+@export var mag_almost_empty_sound: String ## The sound to play alongside each shot sound when the ammo in the mag is almost depleted.
+@export var empty_mag_sound: String ## The sound to play when trying to fire with no ammo left.
 
 @export_group("Effect & Logic Resources")
 @export var projectile_logic: ProjectileResource ## The logic for each spawned projectile determining how it behaves.

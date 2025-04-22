@@ -38,4 +38,7 @@ main_hand_offset = null
 cooldowns_per_suid = null
 shown_cooldown_fills = null
 show_cursor_cooldown = null
+equip_audio = ""
+pickup_audio = ""
+drop_audio = ""
 session_uid = null

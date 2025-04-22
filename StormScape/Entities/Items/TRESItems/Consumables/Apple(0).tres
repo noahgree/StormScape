@@ -71,4 +71,7 @@ main_hand_offset = Vector2(0, 1)
 cooldowns_per_suid = false
 shown_cooldown_fills = Array[String](["default"])
 show_cursor_cooldown = true
+equip_audio = ""
+pickup_audio = ""
+drop_audio = ""
 session_uid = 0

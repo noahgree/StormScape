@@ -1,12 +1,12 @@
 [gd_resource type="Resource" script_class="AudioResource" load_steps=2 format=3 uid="uid://cvbqxty1yak58"]
 
-[ext_resource type="Script" uid="uid://dwic8harmmplg" path="res://Utilities/Game/Audio/AudioResource.gd" id="1_1m3fj"]
+[ext_resource type="Script" uid="uid://dwic8harmmplg" path="res://Utilities/Game/Audio/AudioResource.gd" id="1_7i7ca"]
 
 [resource]
-script = ExtResource("1_1m3fj")
-id = &"mag_almost_empty"
+script = ExtResource("1_7i7ca")
+id = &"bullet_low_ammo"
 category = 0
-sound_files_folder = "res://Assets/Audio/Sfx/SfxRawAudio/Items/Weapons/MagAlmostEmpty"
+sound_files_folder = "res://Assets/Audio/Sfx/SfxRawAudio/Items/Weapons/General/LowAmmo/Bullet"
 sound_file_paths = Array[String]([])
 concurrent_limit = 20
 rhythmic_delay = 0.0

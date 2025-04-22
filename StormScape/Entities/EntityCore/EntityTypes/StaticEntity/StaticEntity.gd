@@ -36,6 +36,9 @@ func _on_save_game(save_data: Array[SaveData]) -> void:
 	save_data.append(data)
 
 func _on_before_load_game() -> void:
+	# In case we try to drop inventory on death
+	if inv:
+		inv.clear_inventory()
 	queue_free()
 
 func _is_instance_on_load_game(data: StaticEntityData) -> void:
@@ -54,9 +57,9 @@ func _is_instance_on_load_game(data: StaticEntityData) -> void:
 	health_component.shield = data.shield
 	health_component.armor = data.armor
 
-	if inv != null:
+	if inv:
 		inv.call_deferred("fill_inventory", data.inv)
-	if item_receiver != null:
+	if item_receiver:
 		item_receiver.pickup_range = data.pickup_range
 
 	loot = data.loot

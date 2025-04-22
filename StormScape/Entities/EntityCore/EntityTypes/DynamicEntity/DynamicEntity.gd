@@ -66,6 +66,9 @@ func _on_save_game(save_data: Array[SaveData]) -> void:
 
 func _on_before_load_game() -> void:
 	if not self is Player:
+		# In case we try to drop inventory on death
+		if inv:
+			inv.clear_inventory()
 		queue_free()
 	else:
 		WearablesManager.removal_all_wearables(self)
@@ -126,10 +129,9 @@ func _get_configuration_warnings() -> PackedStringArray:
 func _process(delta: float) -> void:
 	if Engine.is_editor_hint():
 		return
+	super(delta)
 
 	fsm.controller.controller_process(delta)
-	if inv:
-		inv.auto_decrementer.process(delta)
 
 func _physics_process(delta: float) -> void:
 	if Engine.is_editor_hint():

@@ -391,6 +391,7 @@ func _eject_casing(per_used_ammo: bool = false) -> void:
 		var casing_rand_offset: Vector2 = Vector2(randf_range(-1, 1), randf_range(-1, 1))
 		casing.global_position = casing_ejection_point.global_position + casing_rand_offset
 		casing.global_rotation = global_rotation
+		casing.sound = stats.casing_sound
 
 		Globals.world_root.add_child(casing)
 

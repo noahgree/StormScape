@@ -45,6 +45,9 @@ func _on_save_game(save_data: Array[SaveData]) -> void:
 	save_data.append(data)
 
 func _on_before_load_game() -> void:
+	# In case we try to drop inventory on death
+	if inv:
+		inv.clear_inventory()
 	queue_free()
 
 func _is_instance_on_load_game(data: RigidEntityData) -> void:
@@ -95,10 +98,3 @@ func _ready() -> void:
 	self.physics_material_override = phys_material
 	if immovable:
 		self.freeze = true
-
-func _process(delta: float) -> void:
-	if Engine.is_editor_hint():
-		return
-
-	if inv:
-		inv.auto_decrementer.process(delta)

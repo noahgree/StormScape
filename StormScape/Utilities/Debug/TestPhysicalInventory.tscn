@@ -16,7 +16,6 @@
 [ext_resource type="PackedScene" uid="uid://2yy4xfm5g74l" path="res://Entities/Components/ItemComponents/ClippingComponent/ClippingArea.tscn" id="11_ypx5n"]
 
 [sub_resource type="Resource" id="Resource_w3nan"]
-resource_local_to_scene = true
 script = ExtResource("2_hjkvw")
 title = "CHEST"
 main_inv_size = 10

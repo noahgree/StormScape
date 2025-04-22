@@ -19,7 +19,7 @@
 [ext_resource type="PackedScene" uid="uid://bhcqtorpyerc3" path="res://Utilities/Debug/ParticleEmissionComponent.tscn" id="18_6nkmp"]
 [ext_resource type="PackedScene" uid="uid://2yy4xfm5g74l" path="res://Entities/Components/ItemComponents/ClippingComponent/ClippingArea.tscn" id="19_jf6jy"]
 
-[sub_resource type="Resource" id="Resource_5yo6j"]
+[sub_resource type="Resource" id="Resource_3aoki"]
 script = ExtResource("2_3aoki")
 title = "CHEST"
 main_inv_size = 10
@@ -44,7 +44,7 @@ last_used = 0
 spawn_count = 0
 metadata/_custom_type_script = "uid://1qq7eo7lm8j6"
 
-[sub_resource type="Resource" id="Resource_mc2cg"]
+[sub_resource type="Resource" id="Resource_5yo6j"]
 script = ExtResource("7_qgbkl")
 hit_loot_table = Array[ExtResource("4_unf1g")]([SubResource("Resource_b403c")])
 hit_spawn_chance = 100.0
@@ -67,7 +67,7 @@ metadata/_custom_type_script = "uid://baglarh3m4c8o"
 [sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_2kecs"]
 polygon = PackedVector2Array(-9, -15, -9, -6, 9, -6, 9, -15)
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_nmdsi"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_b403c"]
 resource_local_to_scene = true
 shader = ExtResource("11_pg7ae")
 
@@ -100,8 +100,8 @@ height = 22.0
 script = ExtResource("1_b403c")
 team = 4
 is_object = true
-inv = SubResource("Resource_5yo6j")
-loot = SubResource("Resource_mc2cg")
+inv = SubResource("Resource_3aoki")
+loot = SubResource("Resource_5yo6j")
 
 [node name="DetectionComponent" parent="." instance=ExtResource("8_y2id4")]
 
@@ -115,7 +115,7 @@ scale = Vector2(1.94999, 3.61307)
 
 [node name="EntitySprite" parent="." instance=ExtResource("10_kkd23")]
 unique_name_in_owner = true
-material = SubResource("ShaderMaterial_nmdsi")
+material = SubResource("ShaderMaterial_b403c")
 instance_shader_parameters/crack_color = Color(0.132138, 0.153553, 0.183094, 0.85)
 instance_shader_parameters/crack_depth = 0.4
 instance_shader_parameters/crack_intensity = 0.0

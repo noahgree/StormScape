@@ -113,7 +113,7 @@ func _process(delta: float) -> void:
 	if entity is Player:
 		handle_aim(CursorManager.get_cursor_mouse_position())
 
-	if not ((equipped_item == null) or (not equipped_item.enabled) or (scale_is_lerping)):
+	if (equipped_item != null) and (equipped_item.enabled) and (not scale_is_lerping):
 		if trigger_pressed:
 			equipped_item.hold_activate(delta)
 		elif equipped_item is Weapon:
@@ -121,7 +121,7 @@ func _process(delta: float) -> void:
 
 	# Hand Placements
 	if equipped_item == null:
-		set_physics_process(false)
+		set_process(false)
 		return
 
 	if equipped_item.stats.item_type == Globals.ItemType.WEAPON:
@@ -156,7 +156,7 @@ func on_equipped_item_change(stats: ItemResource, inv_index: int) -> void:
 	unequip_current_item()
 
 	if stats == null or stats.item_scene == null:
-		set_physics_process(false)
+		set_process(false)
 		main_hand_sprite.visible = false
 		off_hand_sprite.visible = false
 		entity.facing_component.rotation_lerping_factor = entity.facing_component.DEFAULT_ROTATION_LERPING_FACTOR
@@ -205,7 +205,7 @@ func on_equipped_item_change(stats: ItemResource, inv_index: int) -> void:
 
 	main_hand.add_child(equipped_item)
 	equipped_item.enter()
-	set_physics_process(true)
+	set_process(true)
 
 ## Based on the current anim vector, we artificially move the rotation of the hands over before
 ## the items to simulate a pullout animation.

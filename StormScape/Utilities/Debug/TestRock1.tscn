@@ -19,7 +19,6 @@
 [ext_resource type="PackedScene" uid="uid://bhcqtorpyerc3" path="res://Utilities/Debug/ParticleEmissionComponent.tscn" id="18_m60nn"]
 
 [sub_resource type="Resource" id="Resource_by2me"]
-resource_local_to_scene = true
 script = ExtResource("2_ymdvb")
 title = "CHEST"
 main_inv_size = 10
@@ -36,7 +35,6 @@ spawn_count = 0
 metadata/_custom_type_script = "uid://1qq7eo7lm8j6"
 
 [sub_resource type="Resource" id="Resource_mc2cg"]
-resource_local_to_scene = true
 script = ExtResource("6_ymdvb")
 hit_loot_table = Array[ExtResource("14_v0818")]([SubResource("Resource_ymdvb")])
 hit_spawn_chance = 100.0

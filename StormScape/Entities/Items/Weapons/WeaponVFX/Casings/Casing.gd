@@ -8,6 +8,7 @@ const UPWARD_ANGLE: float = 0.12 ## Angle in radians for upward ejection.
 const DOWNWARD_DIST: int = 10 ## How far down to travel to the 'ground'.
 const BOUNCE_HEIGHT: int = 2 ## How high to bounce off the 'ground'.
 const BOUNCE_FORWARD_OFFSET: int = 4 ## How much forward movement to retain in the bounce.
+var sound: String ## The passed in sound id on creation to play when hitting the ground.
 
 func _ready() -> void:
 	_do_casing_ejection()
@@ -33,6 +34,8 @@ func _do_casing_ejection() -> void:
 	# Tween for downward movement
 	tween.parallel().tween_property(sprite, "global_position", final_target_pos, 0.2).set_trans(Tween.TRANS_LINEAR).set_ease(Tween.EASE_IN).set_delay(0.1)
 
+	tween.tween_callback(_play_ground_sound)
+
 	# Add the bounce effect
 	tween.tween_property(sprite, "global_position", bounce_pos, 0.15).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
 	tween.tween_property(sprite, "global_position", post_bounce_pos, 0.15).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
@@ -40,3 +43,9 @@ func _do_casing_ejection() -> void:
 	# Fade out and free the casing
 	tween.parallel().tween_property(sprite, "self_modulate:a", 0.0, 0.5).set_delay(0.4)
 	tween.tween_callback(queue_free).set_delay(0.05)
+
+## Plays the sound for the casing hitting the ground (a little less than half the time).
+func _play_ground_sound() -> void:
+	if randf() > 0.6:
+		await get_tree().create_timer(randf_range(0, 0.08), false).timeout
+		AudioManager.play_2d(sound, global_position, 0, true)

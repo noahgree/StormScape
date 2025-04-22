@@ -43,6 +43,9 @@ var showing_alternate_inv: bool = false: ## When true, the alternate inv is open
 
 
 func _ready() -> void:
+	if not Globals.player_node:
+		await SignalBus.player_ready
+
 	super()
 	gui_input.connect(_on_blank_space_input_event)
 	SignalBus.alternate_inv_open_request.connect(_on_alternate_inv_open_request)

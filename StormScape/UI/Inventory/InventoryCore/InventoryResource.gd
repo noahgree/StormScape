@@ -28,8 +28,14 @@ func initialize_inventory(source: Node2D) -> void:
 
 	total_inv_size = main_inv_size + ((1 + Globals.HOTBAR_SIZE) if source is Player else 0)
 	inv.resize(total_inv_size)
+	clear_inventory()
 
 	call_deferred("fill_inventory", starting_inv)
+
+## Clears the entire inventory and emits all changes.
+func clear_inventory() -> void:
+	inv.fill(null)
+	_emit_changes_for_all_indices()
 
 ## Fills the main inventory from an array of inventory items. If an item exceeds stack size, the
 ## quantity that does not fit into one slot is instantiated on the ground as a physical item.
