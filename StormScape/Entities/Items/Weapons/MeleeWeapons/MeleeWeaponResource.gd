@@ -30,6 +30,9 @@ enum MeleeWeaponType { TOOL, PHYSICAL, COMBAT } ## The kinds of melee weapons.
 @export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var charge_use_cooldown: float = 1.5 ## How long after a charge use must we wait before being able to do it again.
 @export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var charge_use_speed: float = 0.75 ## How long one charge use takes to execute.
 @export var charge_swing_angle: int = 720 ## How wide of an angle to swing when triggered with charge.
+@export_range(0, 10.0, 0.01, "suffix:x") var charge_loss_mult: float = 1.0 ## How much faster or slower charge progress is lost when usage is not available (but not during usage itself). Set to 0 to disable charge progress loss on anything other than successfully using the weapon (assuming that flag is true below).
+@export var reset_charge_on_use: bool = false ## When true, charge progress will reset to 0 upon successfully using the weapon.
+@export var normal_use_on_fail: bool = true ## When true, a normal usage will attempt to start when releasing a charge up that didn't charge enough.
 @export var charge_stamina_cost: int = 25 ## How much stamina to consume on charge usages. Overrides standard stamina use.
 @export var charge_use_anim: String ## What to use instead of the "charge_use" anim inside the standard melee anim library.
 @export_subgroup("Entity Effects")

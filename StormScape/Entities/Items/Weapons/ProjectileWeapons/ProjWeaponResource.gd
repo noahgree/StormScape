@@ -18,24 +18,28 @@ enum ReloadType { ## The kinds of reloads the weapon can have.
 
 @export var proj_weapon_type: ProjWeaponType = ProjWeaponType.PISTOL ## The kind of projectile weapon this is.
 @export var firing_mode: FiringType = FiringType.SEMI_AUTO ## Whether the weapon should fire projectiles once per click or allow holding down for auto firing logic.
+@export var is_hitscan: bool = false ## When true, this weapon will become a hitscan weapon.
 @export var projectile_scn: PackedScene ## The projectile scene to spawn on firing.
 @export var hitscan_scn: PackedScene ## The hitscan scene to spawn when using hitscan firing.
 
 @export_group("Firing Details")
 @export_range(0, 10, 0.01, "hide_slider", "or_greater", "suffix:seconds") var firing_duration: float = 0.1 ## How long the "fire" animation takes, unless overridden by a smaller value in "fire_anim_dur" below. Check the "spawn_after_fire_anim" box below to make it so the animation must finish before things are spawned.
 @export_range(0, 30, 0.01, "hide_slider", "or_greater", "suffix:seconds") var fire_cooldown: float = 0.05 ## Time between fully auto projectile emmision. Also the minimum time that must elapse between clicks if set to semi-auto.
-@export_range(0.1, 10, 0.01, "hide_slider", "or_greater", "suffix:seconds") var min_charge_time: float = 1 ## How long must the activation be held down before releasing the charge shot. [b]Only used when firing mode is set to CHARGE[/b].
+@export_subgroup("Charge Details")
+@export_range(0.1, 10, 0.01, "hide_slider", "or_greater", "suffix:seconds") var min_charge_time: float = 1.0 ## How long must the activation be held down before releasing the charge shot. [b]Only used when firing mode is set to CHARGE[/b].
 @export var auto_do_charge_use: bool = false ## Whether to auto start a charge use when min_charge_time is reached.
-@export var is_hitscan: bool = false ## When true, this weapon will become a hitscan weapon.
+@export_range(0, 10.0, 0.01, "suffix:x") var charge_loss_mult: float = 1.0 ## How much faster or slower charge progress is lost when firing is not available (but not during firing itself). Set to 0 to disable charge progress loss on anything other than successfully firing (assuming that flag is true below).
+@export var dec_charge_on_cooldown: bool = false ## If true, the charge will decrease according to the rate above while on default firing cooldown as well as when idling. It will never decrease during firing, though.
+@export var reset_charge_on_fire: bool = false ## When true, charge progress will reset to 0 upon successfully firing the weapon.
+@export_subgroup("Firing Stat Effects")
+@export var firing_stat_effect: StatusEffect ## The status effect to apply to the source entity when firing.
+@export var charging_stat_effect: StatusEffect ## A status effect to apply to the entity while charging. Typically to slow them.
 @export_subgroup("Firing Animations")
 @export var one_frame_per_fire: bool = false ## When true, the sprite frames will only advance one frame when firing normally.
 @export var fire_anim_dur: float ## When greater than 0, the fire animation will run for this override time.
 @export var spawn_after_fire_anim: bool = false ## When true, the projectile won't actually spawn and fire until the end of the fire animation.
 @export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var post_fire_anim_delay: float ## The delay after the firing duration ends before starting the post-fire animation and fx if one exists.
 @export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var post_fire_anim_dur: float ## The override time for how long the animation should be that plays after firing (if it exists). Anything greater than 0 activates this override.
-@export_subgroup("Entity Effects")
-@export var firing_stat_effect: StatusEffect ## The status effect to apply to the source entity when firing.
-@export var charging_stat_effect: StatusEffect ## A status effect to apply to the entity while charging. Typically to slow them.
 @export_subgroup("Firing FX")
 @export var firing_cam_fx: CamFXResource ## The resource defining how the camera should react to firing.
 @export var casing_texture: Texture2D ## The texture to use as the casing that ejects on firing.

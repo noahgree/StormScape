@@ -11,6 +11,7 @@ enum RecentSwingType { NORMAL, CHARGED } ## The kinds of usage that could have j
 
 @onready var hitbox_component: HitboxComponent = %HitboxComponent ## The hitbox responsible for applying the melee hit.
 
+const MIN_HOLD_TIME: float = 0.25 ## The time it takes to consider the activation an attempt to charge up the weapon.
 var state: WeaponState = WeaponState.IDLE ## The melee weapon's current state.
 var recent_swing_type: RecentSwingType = RecentSwingType.NORMAL ## The most recent type of usage.
 
@@ -80,27 +81,35 @@ func activate() -> void:
 
 ## Called for every frame that a trigger is pressed.
 func hold_activate(delta: float) -> void:
-	hold_time += delta
-
 	if stats.can_do_charge_use:
 		if _can_activate_at_all(true):
 			if stats.auto_do_charge_use and (hold_time >= stats.s_mods.get_stat("min_charge_time")):
-				hold_time = 0
+				if stats.reset_charge_on_use:
+					hold_time = 0
 				_charge_swing()
+				return
 		else:
-			hold_time = max(0, hold_time - delta)
+			decrement_hold_time(delta)
+			return
 	else:
 		if _can_activate_at_all(false):
 			_swing()
 		hold_time = 0
+		return
+
+	hold_time += delta
 
 ## Called when a trigger is released.
 func release_hold_activate() -> void:
 	if (hold_time >= stats.s_mods.get_stat("min_charge_time")) and _can_activate_at_all(true):
-		hold_time = 0
+		if stats.reset_charge_on_use:
+			hold_time = 0
 		_charge_swing()
 	elif _can_activate_at_all(false):
+		if not stats.normal_use_on_fail and hold_time > MIN_HOLD_TIME:
+			return
 		_swing()
+		hold_time = 0
 
 ## Begins the logic for doing a normal weapon swing.
 func _swing() -> void:

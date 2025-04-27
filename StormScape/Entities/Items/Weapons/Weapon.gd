@@ -33,6 +33,10 @@ func _ready() -> void:
 func _exit_tree() -> void:
 	AudioPreloader.unregister_sounds_from_ids(preloaded_sounds)
 
+## Decrements the current hold time for the weapon.
+func decrement_hold_time(delta: float) -> void:
+	hold_time = max(0, (hold_time - (delta * stats.charge_loss_mult)))
+
 ## Gets a current cooldown level from the auto decrementer based on the cooldown id.
 func get_cooldown() -> float:
 	return source_entity.inv.auto_decrementer.get_cooldown(stats.get_cooldown_id())

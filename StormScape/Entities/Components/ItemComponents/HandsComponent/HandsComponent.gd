@@ -117,7 +117,7 @@ func _process(delta: float) -> void:
 		if trigger_pressed:
 			equipped_item.hold_activate(delta)
 		elif equipped_item is Weapon:
-			equipped_item.hold_time = max(0, equipped_item.hold_time - delta)
+			equipped_item.decrement_hold_time(delta)
 
 	# Hand Placements
 	if equipped_item == null:
@@ -376,7 +376,7 @@ func _handle_y_scale_lerping(facing_dir: Vector2) -> void:
 	elif facing_dir.x < (-0.12 if not snaps else -0.005):
 		current_x_direction = -1
 
-	var lerp_speed: float = 0.24 if not snaps else 1.0
+	var lerp_speed: float = 0.23 if not snaps else 1.0
 	_update_anchor_scale("y", lerp(hands_anchor.scale.y, -1.0 if current_x_direction == -1 else 1.0, lerp_speed))
 
 ## Forces the snapping of the y scale based on the faced direction.

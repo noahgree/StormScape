@@ -55,7 +55,7 @@ func _draw() -> void:
 			draw_circle(to_pos, 2, color)
 
 func _ready() -> void:
-	if not (stats.continuous_beam) or (source_weapon_item.stats.firing_mode == ProjWeaponResource.FiringType.CHARGE):
+	if not stats.continuous_beam:
 		var dur_stat: float = source_weapon_item.stats.firing_duration
 		lifetime_timer.start(max(0.05, dur_stat))
 

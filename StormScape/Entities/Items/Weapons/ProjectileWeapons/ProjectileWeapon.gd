@@ -30,6 +30,7 @@ var requesting_reload_after_firing: bool = false ## This is flagged to true when
 var current_hitscans: Array[Hitscan] = [] ## The currently spawned array of hitscans to get cleaned up when we unequip this weapon.
 var is_holding_continuous_beam: bool = false ## When true, we are holding down a continuous hitscan and should not recreate any new hitscan instances.
 var has_released: bool = false ## Used to flag when a hitscan hold has ended but we are still in the firing phase, so we check this after the firing phase to see if we should clean up the hitscans.
+var recent_holding_cooldown_check: bool = true ## Flags to false when we query the _can_activate_at_all function and the default cooldown is in progress. Prevents having to query the cooldowns dictionary from the auto decrementer twice every frame.
 
 
 #region Debug
@@ -149,7 +150,7 @@ func _update_hitscans_with_new_multishot_id() -> void:
 
 ## If we are set to do mouse position-based homing, we set up the mouse area and its signals and add it as a child.
 func _setup_mouse_area_scanner() -> void:
-	if stats is HitscanWeaponResource:
+	if stats.is_hitscan:
 		return
 	if stats.projectile_logic.homing_method != "Mouse Position":
 		return
@@ -204,7 +205,13 @@ func _physics_process(_delta: float) -> void:
 
 ## Checks the conditions needed to be able to start firing the weapon. If they all pass, it returns true.
 func _can_activate_at_all() -> bool:
-	if (not pullout_delay_timer.is_stopped()) or (get_cooldown() > 0):
+	recent_holding_cooldown_check = true
+
+	if not pullout_delay_timer.is_stopped():
+		return false
+	if get_cooldown() > 0:
+		if source_entity.inv.auto_decrementer.get_cooldown_source_title(stats.get_cooldown_id()) == "default":
+			recent_holding_cooldown_check = false
 		return false
 	match state:
 		WeaponState.IDLE:
@@ -233,7 +240,10 @@ func activate() -> void:
 ## Called for every frame that a trigger is pressed.
 func hold_activate(delta: float) -> void:
 	if not _can_activate_at_all():
-		hold_time = max(0, hold_time - delta)
+		if not state == WeaponState.FIRING:
+			if not stats.dec_charge_on_cooldown and recent_holding_cooldown_check == false:
+				return
+			decrement_hold_time(delta)
 		return
 
 	hold_time += delta
@@ -252,7 +262,8 @@ func hold_activate(delta: float) -> void:
 			is_charging = true
 
 			if stats.auto_do_charge_use and hold_time >= stats.s_mods.get_stat("min_charge_time"):
-				hold_time = 0
+				if stats.reset_charge_on_fire:
+					hold_time = 0
 				start_firing_sequence()
 
 ## Called when a trigger is released.
@@ -268,7 +279,8 @@ func release_hold_activate() -> void:
 		is_charging = false
 
 		if hold_time >=  stats.s_mods.get_stat("min_charge_time"):
-			hold_time = 0
+			if stats.reset_charge_on_fire:
+				hold_time = 0
 			start_firing_sequence()
 
 ## Starts the main firing sequence that awaits at the needed steps each stage.
@@ -297,9 +309,12 @@ func start_firing_sequence() -> void:
 	if overheat_handler.check_is_overheated():
 		_clean_up_hitscans()
 
-	# ---Continuous Release Check---
-	if not stats.hitscan_logic.continuous_beam or has_released or stats.firing_mode != ProjWeaponResource.FiringType.AUTO:
-		_clean_up_hitscans()
+	# ---Hitscan Release Check---
+	if stats.is_hitscan:
+		if stats.firing_mode == ProjWeaponResource.FiringType.CHARGE and stats.reset_charge_on_fire:
+			_clean_up_hitscans()
+		elif not stats.hitscan_logic.continuous_beam or has_released or stats.firing_mode == ProjWeaponResource.FiringType.SEMI_AUTO:
+			_clean_up_hitscans()
 
 	# ---Check Ammo Again---
 	if not ensure_enough_ammo() or requesting_reload_after_firing:

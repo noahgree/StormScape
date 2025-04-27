@@ -204,6 +204,23 @@ tracks/6/keys = {
 "method": &"_eject_casing"
 }]
 }
+tracks/7/type = "method"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath(".")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0.4, 0.85),
+"transitions": PackedFloat32Array(1, 1),
+"values": [{
+"args": [0, false],
+"method": &"play_reload_sound"
+}, {
+"args": [1, false],
+"method": &"play_reload_sound"
+}]
+}
 
 [sub_resource type="Animation" id="Animation_4vgqh"]
 resource_name = "final_single_reload"
@@ -279,6 +296,23 @@ tracks/5/keys = {
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
 "values": [0.523599, 0.0]
+}
+tracks/6/type = "method"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath(".")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0.45, 0.75),
+"transitions": PackedFloat32Array(1, 1),
+"values": [{
+"args": [2, false],
+"method": &"play_reload_sound"
+}, {
+"args": [3, false],
+"method": &"play_reload_sound"
+}]
 }
 
 [sub_resource type="Animation" id="Animation_iaeg5"]
@@ -395,6 +429,20 @@ tracks/5/keys = {
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
 "values": [0.523599, 0.523599]
+}
+tracks/6/type = "method"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath(".")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0.45),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [2, false],
+"method": &"play_reload_sound"
+}]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_sen2k"]
