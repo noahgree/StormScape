@@ -5,6 +5,7 @@ class_name DynamicController
 @export var facing_method: FacingComponent.Method = FacingComponent.Method.MOVEMENT_DIR ## What the facing component of this entity should look at.
 @export var footstep_texture: Texture2D ## The footstep texture used to leave a trail behind.
 @export var footstreak_offsets: Array[Vector2] = [Vector2(-4, 0), Vector2(4, 0)] ## The offsets to draw the footstreaks at when hit by knockback.
+@export var step_sound: String ## The sound to play after each footstep.
 @export var MAX_KNOCKBACK: int = 3000 ## The highest length the knockback vector can ever be to prevent dramatic movement.
 
 #region Stats
@@ -107,12 +108,12 @@ func create_footprint_and_sound(offsets: Array) -> void:
 		footprint.set_instance_shader_parameter("tint_color", Color(0.0, 0.0, 0.0, 0.8))
 		Globals.world_root.add_child(footprint)
 
-		if entity is Player:
-			entity.step_dust_particles.direction = -last_movement_direction.normalized()
-			entity.step_dust_particles.position = offset
-			entity.step_dust_particles.restart()
+	if entity.step_dust_particles:
+		entity.step_dust_particles.direction = -last_movement_direction.normalized()
+		entity.step_dust_particles.position = ArrayHelpers.get_or_default(offsets, 0, Vector2.ZERO)
+		entity.step_dust_particles.restart()
 
-	AudioManager.play_2d("player_run_base", entity.global_position)
+	AudioManager.play_2d(step_sound, entity.global_position)
 
 ## Updates the knockback streak points array that determines how the streak line is drawn.
 func update_knockback_streak() -> void:

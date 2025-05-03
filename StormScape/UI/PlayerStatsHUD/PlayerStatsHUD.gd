@@ -38,10 +38,10 @@ func _ready() -> void:
 
 ## When health changes, update the bar and tween the change bar after a delay.
 ## Only activate the delay timer that triggers the tween if we are decreasing the amount.
-func on_health_changed(new_health: int, old_shield: int) -> void:
+func on_health_changed(new_health: int, old_health: int) -> void:
 	health_bar.value = new_health
 	health_changed_timer.stop()
-	if new_health < old_shield:
+	if new_health < old_health:
 		health_changed_timer.start()
 	else:
 		health_change_bar.value = health_bar.value

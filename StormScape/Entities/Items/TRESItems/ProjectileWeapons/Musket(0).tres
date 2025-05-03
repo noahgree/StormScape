@@ -4,7 +4,7 @@
 [ext_resource type="Script" uid="uid://dkfssottmsrch" path="res://Entities/Stats/EffectSystemResources/EffectSources/EffectSource.gd" id="4_78vf2"]
 [ext_resource type="Script" uid="uid://cowjdnic7xmkp" path="res://UI/Inventory/PlayerInventory/StatDetail.gd" id="5_hjiec"]
 [ext_resource type="Script" uid="uid://boo31eu083dqd" path="res://Entities/Stats/EffectSystemResources/StatusEffects/StatusEffect.gd" id="5_ks1up"]
-[ext_resource type="Resource" uid="uid://58oau5i62soh" path="res://Entities/Player/PlayerCore/PlayerCamera/CamFXPresets/4.tres" id="6_iahun"]
+[ext_resource type="Resource" uid="uid://o8dc73c74md6" path="res://Entities/Player/PlayerCore/PlayerCamera/CamFXPresets/4(NoFreeze).tres" id="5_o52iq"]
 [ext_resource type="Texture2D" uid="uid://c2ul6ws6q5hxx" path="res://Entities/Items/Weapons/ProjectileWeapons/Musket/MusketBaseCT.tres" id="7_hjiec"]
 [ext_resource type="Script" uid="uid://cje5bobi6o8bo" path="res://Entities/Items/Hitscans/HitscanResource.gd" id="9_fhpo5"]
 [ext_resource type="PackedScene" uid="uid://dogs4tqif0u8h" path="res://Entities/Items/Weapons/ProjectileWeapons/Musket/Musket.tscn" id="11_hjiec"]
@@ -164,25 +164,28 @@ script = ExtResource("15_c2f42")
 script = ExtResource("16_58fh8")
 proj_weapon_type = 3
 firing_mode = 0
+is_hitscan = false
 projectile_scn = ExtResource("13_jo86x")
 firing_duration = 0.11
 fire_cooldown = 0.72
 min_charge_time = 1.0
 auto_do_charge_use = false
-is_hitscan = false
+charge_loss_mult = 1.0
+dec_charge_on_cooldown = false
+reset_charge_on_fire = false
 one_frame_per_fire = false
 fire_anim_dur = 0.0
 spawn_after_fire_anim = false
 post_fire_anim_delay = 0.0
 post_fire_anim_dur = 0.0
-firing_cam_fx = ExtResource("6_iahun")
+firing_cam_fx = ExtResource("5_o52iq")
 casing_texture = ExtResource("1_hjiec")
 casing_tint = Color(1, 1, 1, 1)
-casing_sound = "casing_ground"
+casing_sound = "bullet_casing"
 firing_sound = ""
 post_fire_sound = ""
 charging_sound = ""
-mag_almost_empty_sound = "mag_almost_empty"
+mag_almost_empty_sound = ""
 empty_mag_sound = ""
 projectile_logic = SubResource("Resource_qacbk")
 hitscan_logic = SubResource("Resource_4epke")

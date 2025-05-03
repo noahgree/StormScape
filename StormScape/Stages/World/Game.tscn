@@ -684,6 +684,42 @@ inv = SubResource("Resource_f5fhq")
 position = Vector2(-78, 169)
 enabled = false
 
+[node name="BasicZombie4" parent="WorldRoot/Testing" instance=ExtResource("30_6gn56")]
+position = Vector2(45, 214)
+enabled = false
+
+[node name="BasicZombie5" parent="WorldRoot/Testing" instance=ExtResource("30_6gn56")]
+position = Vector2(503, 59)
+enabled = false
+
+[node name="BasicZombie6" parent="WorldRoot/Testing" instance=ExtResource("30_6gn56")]
+position = Vector2(548, 91)
+enabled = false
+
+[node name="BasicZombie7" parent="WorldRoot/Testing" instance=ExtResource("30_6gn56")]
+position = Vector2(527, 108)
+enabled = false
+
+[node name="BasicZombie8" parent="WorldRoot/Testing" instance=ExtResource("30_6gn56")]
+position = Vector2(559, 150)
+enabled = false
+
+[node name="BasicZombie9" parent="WorldRoot/Testing" instance=ExtResource("30_6gn56")]
+position = Vector2(543, 245)
+enabled = false
+
+[node name="BasicZombie10" parent="WorldRoot/Testing" instance=ExtResource("30_6gn56")]
+position = Vector2(400, 328)
+enabled = false
+
+[node name="BasicZombie11" parent="WorldRoot/Testing" instance=ExtResource("30_6gn56")]
+position = Vector2(371, 338)
+enabled = false
+
+[node name="BasicZombie12" parent="WorldRoot/Testing" instance=ExtResource("30_6gn56")]
+position = Vector2(386, 383)
+enabled = false
+
 [node name="TestRock5" parent="WorldRoot/Testing" instance=ExtResource("30_yw2f7")]
 position = Vector2(437, 158)
 

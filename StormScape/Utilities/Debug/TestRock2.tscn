@@ -67,7 +67,7 @@ metadata/_custom_type_script = "uid://baglarh3m4c8o"
 [sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_2kecs"]
 polygon = PackedVector2Array(-9, -15, -9, -6, 9, -6, 9, -15)
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_b403c"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_3aoki"]
 resource_local_to_scene = true
 shader = ExtResource("11_pg7ae")
 
@@ -115,7 +115,7 @@ scale = Vector2(1.94999, 3.61307)
 
 [node name="EntitySprite" parent="." instance=ExtResource("10_kkd23")]
 unique_name_in_owner = true
-material = SubResource("ShaderMaterial_b403c")
+material = SubResource("ShaderMaterial_3aoki")
 instance_shader_parameters/crack_color = Color(0.132138, 0.153553, 0.183094, 0.85)
 instance_shader_parameters/crack_depth = 0.4
 instance_shader_parameters/crack_intensity = 0.0

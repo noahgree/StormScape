@@ -20,7 +20,7 @@ class_name PlayerInvUI
 @onready var sort_by_type: NinePatchRect = %SortByType ## The sort by type button.
 @onready var sort_by_rarity: NinePatchRect = %SortByRarity ## The sort by rarity button.
 @onready var auto_stack: NinePatchRect = %AutoStack ## The autostacking button.
-@onready var craft: NinePatchRect = %Craft ## The craft button.
+@onready var craft: NinePatchRect = %CraftBackground ## The craft button.
 @onready var alternate_inv_title: Label = %AlternateInvTitle ## The title label of the alternate side inventory.
 
 var is_open: bool = false: ## True when the inventory is open and showing.
@@ -196,4 +196,18 @@ func _on_craft_btn_button_down() -> void:
 	craft.texture = btn_down_texture
 func _on_craft_btn_button_up() -> void:
 	craft.texture = btn_up_texture
+
+## Showing and hiding sort & stack tooltips.
+func _on_sort_btn_mouse_entered(sort_method: String) -> void:
+	CursorManager.update_tooltip("Sort by " + sort_method)
+func _on_autostack_btn_mouse_entered() -> void:
+	CursorManager.update_tooltip("Autostack Items")
+func _on_craft_btn_mouse_entered() -> void:
+	CursorManager.update_tooltip("Craft")
+func _hide_tooltip() -> void:
+	CursorManager.hide_tooltip()
 #endregion
+
+
+func _on_craft_btn_mouse_exited() -> void:
+	pass # Replace with function body.

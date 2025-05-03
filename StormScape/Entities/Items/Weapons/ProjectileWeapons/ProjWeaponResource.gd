@@ -28,7 +28,7 @@ enum ReloadType { ## The kinds of reloads the weapon can have.
 @export_subgroup("Charge Details")
 @export_range(0.1, 10, 0.01, "hide_slider", "or_greater", "suffix:seconds") var min_charge_time: float = 1.0 ## How long must the activation be held down before releasing the charge shot. [b]Only used when firing mode is set to CHARGE[/b].
 @export var auto_do_charge_use: bool = false ## Whether to auto start a charge use when min_charge_time is reached.
-@export_range(0, 10.0, 0.01, "suffix:x") var charge_loss_mult: float = 1.0 ## How much faster or slower charge progress is lost when firing is not available (but not during firing itself). Set to 0 to disable charge progress loss on anything other than successfully firing (assuming that flag is true below).
+@export_range(0, 10.0, 0.01, "suffix:x", "hide_slider") var charge_loss_mult: float = 1.0 ## How much faster or slower charge progress is lost when firing is not available (but not during firing itself). Set to 0 to disable charge progress loss on anything other than successfully firing (assuming that flag is true below).
 @export var dec_charge_on_cooldown: bool = false ## If true, the charge will decrease according to the rate above while on default firing cooldown as well as when idling. It will never decrease during firing, though.
 @export var reset_charge_on_fire: bool = false ## When true, charge progress will reset to 0 upon successfully firing the weapon.
 @export_subgroup("Firing Stat Effects")

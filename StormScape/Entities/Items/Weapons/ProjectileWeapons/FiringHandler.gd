@@ -219,7 +219,7 @@ func _start_firing_animation_and_timer() -> void:
 ## Start the sounds and vfx that should play when firing.
 func _start_firing_fx() -> void:
 	if weapon.stats.firing_cam_fx:
-		weapon.stats.firing_cam_fx.activate_all()
+		weapon.stats.firing_cam_fx.apply_falloffs_and_activate_all(weapon.source_entity)
 	if weapon.firing_vfx:
 		weapon.firing_vfx.start()
 

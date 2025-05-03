@@ -603,7 +603,7 @@ func _split_self() -> void:
 	AudioManager.play_2d(stats.splitting_sound, global_position)
 
 	var split_cam_fx: CamFXResource = ArrayHelpers.get_or_default(stats.split_cam_fx, splits_so_far - 1, stats.split_cam_fx[0])
-	split_cam_fx.activate_all()
+	split_cam_fx.apply_falloffs_and_activate_all(source_entity)
 
 	queue_free()
 

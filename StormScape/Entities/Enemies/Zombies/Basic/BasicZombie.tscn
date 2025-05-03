@@ -1,4 +1,4 @@
-[gd_scene load_steps=154 format=3 uid="uid://bl2igmtwo1a3v"]
+[gd_scene load_steps=164 format=3 uid="uid://bl2igmtwo1a3v"]
 
 [ext_resource type="Script" uid="uid://db4npghrxc6u" path="res://Entities/Enemies/Zombies/Basic/BasicZombie.gd" id="1_8bt15"]
 [ext_resource type="PackedScene" uid="uid://cj2wy5f05cos4" path="res://Entities/EntityCore/Shadow/EntityShadow.tscn" id="1_ko3ep"]
@@ -8,7 +8,7 @@
 [ext_resource type="Script" uid="uid://dp8osf7r6xkkt" path="res://Entities/Items/ItemCore/InvItemResource.gd" id="3_hj6es"]
 [ext_resource type="PackedScene" uid="uid://di7vcyrki71nm" path="res://Entities/Components/DetectionComponent/DetectionComponent.tscn" id="3_tsyff"]
 [ext_resource type="Texture2D" uid="uid://yypje8l5ouqy" path="res://Entities/Enemies/Zombies/Basic/BasicZombieBaseFramesCT.tres" id="4_8a5el"]
-[ext_resource type="Resource" uid="uid://bnc4tbhdxpauy" path="res://Entities/Items/TRESItems/ProjectileWeapons/Musket(0).tres" id="4_s1u3v"]
+[ext_resource type="Resource" uid="uid://xuswqfh3rvdy" path="res://Entities/Items/TRESItems/MeleeWeapons/ZombieHands(0).tres" id="4_naanu"]
 [ext_resource type="PackedScene" uid="uid://co3n6m7efg8pd" path="res://Entities/Components/EffectComponents/StatusEffectsComponent/StatusEffectsComponent.tscn" id="5_g4fx3"]
 [ext_resource type="Resource" uid="uid://dk3vlbvu2b7eq" path="res://Entities/Items/TRESItems/MeleeWeapons/Sword(4).tres" id="5_oiiqe"]
 [ext_resource type="Resource" uid="uid://bdjhfsluk53lc" path="res://Entities/Items/TRESItems/Ammo/Bullet(0).tres" id="5_oqrkc"]
@@ -28,6 +28,7 @@
 [ext_resource type="Script" uid="uid://5krnqdrdbey1" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/PoisonHandler.gd" id="18_qrtn1"]
 [ext_resource type="Script" uid="uid://1qq7eo7lm8j6" path="res://Entities/Components/ItemComponents/LootTableComponent/LootTableEntry.gd" id="19_8bt15"]
 [ext_resource type="Script" uid="uid://bqw1ufs6jb7cf" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/RegenHandler.gd" id="19_lal78"]
+[ext_resource type="Texture2D" uid="uid://baj6slyni0t6u" path="res://Entities/Player/PlayerCore/walking_dust.png" id="19_nonw0"]
 [ext_resource type="Script" uid="uid://b1lo2mdb3otax" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/FrostbiteHandler.gd" id="20_cw5if"]
 [ext_resource type="Script" uid="uid://dubq8xgav66ue" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/BurningHandler.gd" id="21_oqrkc"]
 [ext_resource type="Script" uid="uid://5w234psf0oln" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/TimeSnareHandler.gd" id="22_s1u3v"]
@@ -44,10 +45,14 @@
 [ext_resource type="Script" uid="uid://q3yeopc5wdlo" path="res://Entities/FSM/States/EnemyStates/ChaseState.gd" id="34_dcca3"]
 [ext_resource type="Script" uid="uid://d0y26kxw6latu" path="res://Entities/FSM/States/EnemyStates/KnockbackState.gd" id="36_lal78"]
 [ext_resource type="Script" uid="uid://dtljj2u0ce864" path="res://Entities/FSM/FSMCore/MoveBehaviorResource.gd" id="40_lal78"]
+[ext_resource type="Script" uid="uid://buuc5cn44g6l3" path="res://UI/OverheadUI/EntityOverheadUI.gd" id="45_ylj7g"]
+[ext_resource type="Texture2D" uid="uid://b6ka8ce5h1w6w" path="res://UI/OverheadUI/left_half_border_no_corners.png" id="46_naanu"]
+[ext_resource type="Texture2D" uid="uid://ce54cav6krhkj" path="res://UI/OverheadUI/right_half_border_no_corners.png" id="48_6vrim"]
+[ext_resource type="Texture2D" uid="uid://bq3d1uclexvcm" path="res://UI/OverheadUI/progress_tintable.png" id="49_nonw0"]
 
 [sub_resource type="Resource" id="Resource_jfdci"]
 script = ExtResource("3_hj6es")
-stats = ExtResource("4_s1u3v")
+stats = ExtResource("4_naanu")
 quantity = 1
 metadata/_custom_type_script = "uid://dp8osf7r6xkkt"
 
@@ -470,7 +475,21 @@ animations = [{
 "speed": 5.0
 }]
 
-[sub_resource type="Resource" id="Resource_s1u3v"]
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_6vrim"]
+particles_animation = true
+particles_anim_h_frames = 3
+particles_anim_v_frames = 1
+particles_anim_loop = false
+
+[sub_resource type="Gradient" id="Gradient_86drt"]
+offsets = PackedFloat32Array(0, 0.809917, 1)
+colors = PackedColorArray(1, 0.907, 0.834, 0.5, 1, 0.752, 0.46, 0.4, 1, 1, 1, 0)
+
+[sub_resource type="Curve" id="Curve_kq2k7"]
+_data = [Vector2(0, 0), 0.0, 1.0, 0, 1, Vector2(1, 1), 1.0, 0.0, 1, 0]
+point_count = 2
+
+[sub_resource type="Resource" id="Resource_nonw0"]
 resource_local_to_scene = true
 script = ExtResource("16_yrrsd")
 _knockback_weakness = 0.0
@@ -478,48 +497,48 @@ _knockback_resistance = 0.0
 entity_dir_influence = 0.25
 metadata/_custom_type_script = "uid://dk6uef3uxmeev"
 
-[sub_resource type="Resource" id="Resource_n5xoq"]
+[sub_resource type="Resource" id="Resource_6vrim"]
 resource_local_to_scene = true
 script = ExtResource("17_oiiqe")
 _stun_weakness = 0.0
 _stun_resistance = 0.0
 metadata/_custom_type_script = "uid://b21sy1r0nxgpv"
 
-[sub_resource type="Resource" id="Resource_3s3sr"]
+[sub_resource type="Resource" id="Resource_xm53k"]
 resource_local_to_scene = true
 script = ExtResource("18_qrtn1")
 _poison_weakness = 0.0
 _poison_resistance = 0.0
 metadata/_custom_type_script = "uid://5krnqdrdbey1"
 
-[sub_resource type="Resource" id="Resource_ylj7g"]
+[sub_resource type="Resource" id="Resource_gpye6"]
 resource_local_to_scene = true
 script = ExtResource("19_lal78")
 _regen_boost = 0.0
 _regen_penalty = 0.0
 metadata/_custom_type_script = "uid://bqw1ufs6jb7cf"
 
-[sub_resource type="Resource" id="Resource_naanu"]
+[sub_resource type="Resource" id="Resource_feojw"]
 resource_local_to_scene = true
 script = ExtResource("20_cw5if")
 _frostbite_weakness = 0.0
 _frostbite_resistance = 0.0
 metadata/_custom_type_script = "uid://b1lo2mdb3otax"
 
-[sub_resource type="Resource" id="Resource_nonw0"]
+[sub_resource type="Resource" id="Resource_wtw5m"]
 resource_local_to_scene = true
 script = ExtResource("21_oqrkc")
 _burning_weakness = 0.0
 _burning_resistance = 0.0
 metadata/_custom_type_script = "uid://dubq8xgav66ue"
 
-[sub_resource type="Resource" id="Resource_6vrim"]
+[sub_resource type="Resource" id="Resource_gvtqy"]
 resource_local_to_scene = true
 script = ExtResource("22_s1u3v")
 _time_snare_immunity = 0.0
 metadata/_custom_type_script = "uid://5w234psf0oln"
 
-[sub_resource type="Resource" id="Resource_xm53k"]
+[sub_resource type="Resource" id="Resource_3q24o"]
 resource_local_to_scene = true
 script = ExtResource("23_n5xoq")
 metadata/_custom_type_script = "uid://ckiyd2nbdcofr"
@@ -769,6 +788,23 @@ tracks/1/keys = {
 "update": 1,
 "values": [0, 1, 2, 3, 4, 5]
 }
+tracks/2/type = "method"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("StateMachine/Controller")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"values": [{
+"args": [[Vector2(-4, 0)]],
+"method": &"create_footprint_and_sound"
+}, {
+"args": [[Vector2(4, 0)]],
+"method": &"create_footprint_and_sound"
+}]
+}
 
 [sub_resource type="Animation" id="Animation_tsyff"]
 resource_name = "run_left_down"
@@ -798,6 +834,23 @@ tracks/1/keys = {
 "transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
 "update": 1,
 "values": [18, 19, 20, 21, 22, 23]
+}
+tracks/2/type = "method"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("StateMachine/Controller")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"values": [{
+"args": [[Vector2(-4, 0)]],
+"method": &"create_footprint_and_sound"
+}, {
+"args": [[Vector2(4, 0)]],
+"method": &"create_footprint_and_sound"
+}]
 }
 
 [sub_resource type="Animation" id="Animation_pfgxp"]
@@ -829,6 +882,23 @@ tracks/1/keys = {
 "update": 1,
 "values": [12, 13, 14, 15, 16, 17]
 }
+tracks/2/type = "method"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("StateMachine/Controller")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"values": [{
+"args": [[Vector2(-4, 0)]],
+"method": &"create_footprint_and_sound"
+}, {
+"args": [[Vector2(4, 0)]],
+"method": &"create_footprint_and_sound"
+}]
+}
 
 [sub_resource type="Animation" id="Animation_6bt22"]
 resource_name = "run_up"
@@ -858,6 +928,23 @@ tracks/1/keys = {
 "transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
 "update": 1,
 "values": [6, 7, 8, 9, 10, 11]
+}
+tracks/2/type = "method"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("StateMachine/Controller")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"values": [{
+"args": [[Vector2(-4, 0)]],
+"method": &"create_footprint_and_sound"
+}, {
+"args": [[Vector2(4, 0)]],
+"method": &"create_footprint_and_sound"
+}]
 }
 
 [sub_resource type="Animation" id="Animation_3l4yw"]
@@ -1018,6 +1105,12 @@ states/spawn/position = Vector2(310, 50.5)
 transitions = ["Start", "spawn", SubResource("AnimationNodeStateMachineTransition_epk84"), "spawn", "idle", SubResource("AnimationNodeStateMachineTransition_3l4yw"), "idle", "run", SubResource("AnimationNodeStateMachineTransition_u70e3"), "run", "idle", SubResource("AnimationNodeStateMachineTransition_2qho1")]
 graph_offset = Vector2(-37.58, -52.9375)
 
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_anuam"]
+light_mode = 1
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_6tbo3"]
+light_mode = 1
+
 [node name="BasicZombie" type="CharacterBody2D" groups=["has_save_logic"]]
 collision_layer = 0
 collision_mask = 0
@@ -1074,6 +1167,26 @@ time_brightness_min_max = Vector2(1, 1.15)
 unique_name_in_owner = true
 effect_receiver = NodePath("../../EffectReceiverComponent")
 
+[node name="StepDustParticles" type="CPUParticles2D" parent="."]
+z_index = -1
+material = SubResource("CanvasItemMaterial_6vrim")
+emitting = false
+amount = 3
+texture = ExtResource("19_nonw0")
+lifetime = 0.5
+one_shot = true
+explosiveness = 1.0
+spread = 40.0
+gravity = Vector2(0, 2)
+initial_velocity_min = 20.0
+initial_velocity_max = 25.0
+scale_amount_min = 0.65
+color_ramp = SubResource("Gradient_86drt")
+anim_speed_min = 0.95
+anim_speed_max = 1.05
+anim_offset_max = 1.0
+anim_offset_curve = SubResource("Curve_kq2k7")
+
 [node name="ParticleEmissionComponent" parent="." instance=ExtResource("3_6bt22")]
 below_extents = Vector2(8, 1)
 
@@ -1085,14 +1198,14 @@ below_extents = Vector2(8, 1)
 affected_entity = NodePath("..")
 dmg_handler = NodePath("DmgHandler")
 heal_handler = NodePath("HealHandler")
-knockback_handler = SubResource("Resource_s1u3v")
-stun_handler = SubResource("Resource_n5xoq")
-poison_handler = SubResource("Resource_3s3sr")
-regen_handler = SubResource("Resource_ylj7g")
-frostbite_handler = SubResource("Resource_naanu")
-burning_handler = SubResource("Resource_nonw0")
-time_snare_handler = SubResource("Resource_6vrim")
-life_steal_handler = SubResource("Resource_xm53k")
+knockback_handler = SubResource("Resource_nonw0")
+stun_handler = SubResource("Resource_6vrim")
+poison_handler = SubResource("Resource_xm53k")
+regen_handler = SubResource("Resource_gpye6")
+frostbite_handler = SubResource("Resource_feojw")
+burning_handler = SubResource("Resource_wtw5m")
+time_snare_handler = SubResource("Resource_gvtqy")
+life_steal_handler = SubResource("Resource_3q24o")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="EffectReceiverComponent"]
 position = Vector2(0, -14)
@@ -1115,6 +1228,7 @@ script = ExtResource("30_tsyff")
 ray_start_offset = Vector2(0, -2)
 behavior = SubResource("Resource_86drt")
 footstep_texture = ExtResource("25_kc883")
+step_sound = "player_run_base"
 _max_speed = 60.0
 _acceleration = 1000.0
 _friction = 1300.0
@@ -1132,3 +1246,69 @@ parameters/idle/TimeScale/scale = 1.0
 parameters/idle/blendspace2d/blend_position = Vector2(0, 0)
 parameters/run/TimeScale/scale = 1.0
 parameters/run/blendspace2d/blend_position = Vector2(0, 0)
+
+[node name="OverheadUI" type="Control" parent="." node_paths=PackedStringArray("health_component")]
+unique_name_in_owner = true
+layout_mode = 3
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -11.0
+offset_top = -32.0
+offset_right = -11.0
+offset_bottom = -32.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("45_ylj7g")
+health_component = NodePath("../HealthComponent")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="OverheadUI"]
+custom_minimum_size = Vector2(21, 3)
+layout_mode = 0
+offset_right = 21.0
+offset_bottom = 3.0
+theme_override_constants/separation = 1
+alignment = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="OverheadUI/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = -1
+alignment = 1
+
+[node name="OverheadHealthBar" type="TextureProgressBar" parent="OverheadUI/VBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
+material = SubResource("CanvasItemMaterial_anuam")
+custom_minimum_size = Vector2(0, 3)
+layout_mode = 2
+size_flags_horizontal = 3
+value = 100.0
+nine_patch_stretch = true
+stretch_margin_left = 1
+stretch_margin_top = 1
+stretch_margin_right = 1
+stretch_margin_bottom = 1
+texture_under = ExtResource("49_nonw0")
+texture_over = ExtResource("46_naanu")
+texture_progress = ExtResource("49_nonw0")
+tint_under = Color(0, 0.16263, 0.0741151, 1)
+tint_progress = Color(7.55653e-06, 0.637396, 0.357541, 1)
+
+[node name="OverheadShieldBar" type="TextureProgressBar" parent="OverheadUI/VBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
+material = SubResource("CanvasItemMaterial_6tbo3")
+custom_minimum_size = Vector2(0, 3)
+layout_mode = 2
+size_flags_horizontal = 3
+value = 100.0
+nine_patch_stretch = true
+stretch_margin_left = 1
+stretch_margin_top = 1
+stretch_margin_right = 1
+stretch_margin_bottom = 1
+texture_under = ExtResource("49_nonw0")
+texture_over = ExtResource("48_6vrim")
+texture_progress = ExtResource("49_nonw0")
+tint_under = Color(0.208478, 0.000189166, 0.268788, 1)
+tint_progress = Color(0.734358, 0.00200185, 0.915051, 1)

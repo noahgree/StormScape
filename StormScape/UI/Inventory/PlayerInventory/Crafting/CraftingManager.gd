@@ -12,7 +12,8 @@ static var cached_items: Dictionary[StringName, ItemResource] = {} ## All items 
 @onready var output_slot: CraftingSlot = %OutputSlot ## The slot where the result will appear in.
 @onready var input_slots_container: GridContainer = %InputSlots ## The container holding the input slots as children.
 @onready var crafting_down_arrow: TextureRect = %CraftingDownArrow ## The arrow symbol.
-@onready var craft_button: NinePatchRect = %Craft ## The nine patch background for the craft button.
+@onready var craft_btn_v_box: VBoxContainer = %CraftButtonVBox ## The container for the entire craft button.
+@onready var craft_btn: Button = %CraftBtn ## The button to press when attempting a craft.
 
 var item_to_recipes: Dictionary[StringName, Array] = {} ## Maps items to the list of recipes that include them.
 var tag_to_recipes: Dictionary[StringName, Array] = {} ## Maps tags to the list of recipes that include them.
@@ -104,14 +105,14 @@ func _setup_item_viewer_signals() -> void:
 ## Shows or hides the main craft button depending on whether a valid output is present.
 func _on_output_slot_output_changed(is_craftable: bool) -> void:
 	if is_craftable:
-		craft_button.modulate = Color.WHITE
-		craft_button.modulate.a = 1.0
-		craft_button.get_node("CraftBtn").disabled = false
+		craft_btn_v_box.modulate = Color.WHITE
+		craft_btn_v_box.modulate.a = 1.0
+		craft_btn.disabled = false
 		crafting_down_arrow.modulate.a = 0.65
 	else:
-		craft_button.modulate = Color.LIGHT_GRAY
-		craft_button.modulate.a = 0.5
-		craft_button.get_node("CraftBtn").disabled = true
+		craft_btn_v_box.modulate = Color.LIGHT_GRAY
+		craft_btn_v_box.modulate.a = 0.5
+		craft_btn.disabled = true
 		crafting_down_arrow.modulate.a = 0.2
 
 ## This processes the items in the input slots so that they can be worked with faster by

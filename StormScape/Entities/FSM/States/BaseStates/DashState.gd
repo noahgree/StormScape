@@ -10,7 +10,7 @@ var ghosts_spawned: int = 0 ## The number of ghosts spawned so far in this dash.
 var time_since_ghost: float = 0.0 ## The number of seconds since the last ghost spawn.
 var collision_shake_complete: bool = false ## Whether the character hit a collider and had shake applied (if player) during the current dash state
 var initial_collision_mask: int = 0 ## Saves the pre-dash collision mask so we can restore it on exit (if player).
-var active_dash_sound: AudioStreamPlayer2D ## A reference to the active dash sound, if any.
+var dash_sound_inst: AudioPlayerInstance ## A reference to the active dash sound instance, if any.
 
 
 func _init() -> void:
@@ -66,7 +66,7 @@ func _do_character_dash() -> void:
 
 	if StateFunctions.handle_rigid_entity_collisions(entity, controller):
 		if not collision_shake_complete:
-			dash_impact_cam_fx.activate_all()
+			dash_impact_cam_fx.apply_falloffs_and_activate_all(entity)
 			if entity.effects.check_if_has_effect("kinetic_impact"):
 				AudioManager.play_2d("kinetic_impact_hit", entity.global_position)
 			else:
@@ -98,9 +98,9 @@ func _create_ghost() -> void:
 	ghosts_spawned += 1
 
 func _play_dash_sound() -> void:
-	if not AudioManager.is_player_valid(active_dash_sound):
-		active_dash_sound = AudioManager.play_2d("player_dash", entity.global_position, 0, false, -1, fsm)
+	if not AudioManager.is_inst_valid(dash_sound_inst):
+		dash_sound_inst = AudioManager.play_2d("player_dash", entity.global_position, 0, false, -1, fsm)
 
 func _stop_dash_sound() -> void:
-	if AudioManager.is_player_valid(active_dash_sound):
-		AudioManager.stop_audio_player(active_dash_sound, 0.1, true)
+	if AudioManager.is_inst_valid(dash_sound_inst):
+		AudioManager.stop_audio_player(dash_sound_inst.player, 0.1, true)

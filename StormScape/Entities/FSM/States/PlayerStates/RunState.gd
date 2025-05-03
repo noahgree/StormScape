@@ -7,7 +7,7 @@ class_name RunState
 @export var max_run_anim_time_scale: float = 4.0 ## How fast the run anim can play at most.
 
 const PLAYER_SPRINT_SOUND_THRESHOLD: int = 25 ## The extra speed above the "max_speed" stat the player must be moving to trigger the sprint sound.
-var sprint_audio_player: AudioStreamPlayer ## A reference to the current sprint audio player (if player).
+var sprint_audio_inst: AudioPlayerInstance ## A reference to the current sprint audio player (if player).
 var previous_pos: Vector2 ## The previous position of the entity as of the last frame. Used for speed calculations to determine if sprint audio should play for the player.
 var actual_movement_speed: float = 0 ## The movement speed determined by change in distance over time.
 
@@ -48,9 +48,9 @@ func _animate() -> void:
 	entity.facing_component.update_blend_position("run")
 
 func _play_sprint_sound() -> void:
-	if not AudioManager.is_player_valid(sprint_audio_player):
-		sprint_audio_player = AudioManager.play_global("player_sprint_wind", 0.45, false, -1, entity)
+	if not AudioManager.is_inst_valid(sprint_audio_inst):
+		sprint_audio_inst = AudioManager.play_global("player_sprint_wind", 0.45, false, -1, entity)
 
 func _stop_sprint_sound() -> void:
-	if AudioManager.is_player_valid(sprint_audio_player):
-		AudioManager.stop_audio_player(sprint_audio_player, 0.3, true)
+	if AudioManager.is_inst_valid(sprint_audio_inst):
+		AudioManager.stop_audio_player(sprint_audio_inst.player, 0.3, true)

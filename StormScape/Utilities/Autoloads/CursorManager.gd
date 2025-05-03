@@ -6,6 +6,7 @@ extends CanvasLayer
 @onready var hover_tooltip: MarginContainer = %HoverTooltip ## The hover tooltip main margin container.
 @onready var tooltip_title: RichTextLabel = %TooltipTitle ## The hover tooltip title.
 @onready var tooltip_info: RichTextLabel = %TooltipInfo ## The hover tooltip info.
+@onready var hover_tooltip_margins: MarginContainer = %HoverTooltipMargins
 
 var previous_angle: float = 0 ## The angle of the cursor relative to the player as of the last frame. Used for lerping.
 var restore_after_hitmarker_countdown: float = 0 ## Counts down after being changed to the hitmarker cursor before restoring the default.
@@ -81,13 +82,17 @@ func update_vertical_tint_progress(value: float) -> void:
 	cursor.set_instance_shader_parameter("progress", clampf(value, 0.0, 100.0))
 
 ## Updates the mouse tooltip with a title and info string.
-func update_tooltip(title_str: String, info_str: String, info_str_color: Color = Color.TRANSPARENT) -> void:
+func update_tooltip(title_str: String, info_str: String = "", info_str_color: Color = Color.TRANSPARENT) -> void:
 	tooltip_title.text = title_str + Globals.invis_char
-	tooltip_info.text = info_str + Globals.invis_char
+	tooltip_info.text = (info_str + Globals.invis_char) if info_str != "" else ""
 	if info_str_color != Color.TRANSPARENT:
 		tooltip_info.add_theme_color_override("default_color", info_str_color)
 	else:
 		tooltip_info.remove_theme_color_override("default_color")
+
+	tooltip_info.visible = info_str != ""
+	hover_tooltip_margins.add_theme_constant_override("margin_bottom", 2 if info_str == "" else 1)
+	hover_tooltip_margins.add_theme_constant_override("margin_right", -2 if info_str == "" else -1)
 	hover_tooltip.show()
 
 ## Hides the hover tooltip.

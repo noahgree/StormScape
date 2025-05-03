@@ -189,8 +189,8 @@ func _play_sound(sound_name: String, multishot_id: int) -> void:
 		if (string_name_sound_name in current_sounds.keys()) and (multishot_id in current_sounds[string_name_sound_name]):
 			return
 
-		var player: Variant = AudioManager.play_2d(sound_name, entity.global_position, 0, false, -1, Globals.world_root)
-		if not AudioManager.is_player_valid(player):
+		var player_inst: AudioPlayerInstance = AudioManager.play_2d(sound_name, entity.global_position, 0, false, -1, Globals.world_root)
+		if not player_inst:
 			return
 
 		if string_name_sound_name in current_sounds.keys():
@@ -203,7 +203,7 @@ func _play_sound(sound_name: String, multishot_id: int) -> void:
 			if current_sounds[string_name_sound_name].is_empty():
 				current_sounds.erase(string_name_sound_name)
 			)
-		AudioManager.add_finish_callable_to_player(player, callable)
+		AudioManager.add_finish_callable_to_player(player_inst.player, callable)
 	else:
 		AudioManager.play_2d(sound_name, entity.global_position)
 #endregion

@@ -239,17 +239,12 @@ func _handle_impact_sound(effect_source: EffectSource) -> void:
 	var multishot_id: int = effect_source.multishot_id
 	if multishot_id != -1:
 		if multishot_id not in current_impact_sounds:
-			var player: Variant = AudioManager.play_2d(effect_source.impact_sound, affected_entity.global_position, 0, true, -1, Globals.world_root)
-			if player:
+			var player_inst: AudioPlayerInstance = AudioManager.play_2d(effect_source.impact_sound, affected_entity.global_position, 0, true, -1, Globals.world_root)
+			if player_inst:
 				current_impact_sounds.append(multishot_id)
 
-				var callable: Callable = Callable(func() -> void:
-					if is_instance_valid(player):
-						current_impact_sounds.erase(multishot_id)
-					)
-				var finish_callables: Variant = player.get_meta("finish_callables")
-				finish_callables.append(callable)
-				player.set_meta("finish_callables", finish_callables)
+				var callable: Callable = Callable(func() -> void: current_impact_sounds.erase(multishot_id))
+				AudioManager.add_finish_callable_to_player(player_inst.player, callable)
 	else:
 		AudioManager.play_2d(effect_source.impact_sound, affected_entity.global_position, 0, true)
 
@@ -257,11 +252,7 @@ func _handle_impact_sound(effect_source: EffectSource) -> void:
 func _handle_cam_fx(effect_source: EffectSource) -> void:
 	if effect_source.impact_cam_fx == null:
 		return
-
-	var is_player: bool = (affected_entity is Player)
-	var dist_to_player: float = max(0, effect_source.contact_position.distance_to(Globals.player_node.global_position) - 16) # Buffer for player's arm distance
-
-	effect_source.impact_cam_fx.apply_falloffs_and_activate_all(is_player, dist_to_player)
+	effect_source.impact_cam_fx.apply_falloffs_and_activate_all(affected_entity)
 
 ## Checks if there is a life steal effect in the status effects and returns the percent to steal if so.
 func _get_life_steal(effect_source: EffectSource, source_entity: Entity) -> float:

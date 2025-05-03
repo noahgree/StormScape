@@ -10,6 +10,7 @@ class_name DynamicEntity
 @onready var stamina_component: StaminaComponent = get_node_or_null("StaminaComponent") ## The component in charge of entity stamina and hunger.
 @onready var anim_tree: AnimationTree = $AnimationTree ## The animation tree controlling this entity's animation states.
 @onready var facing_component: FacingComponent = $FacingComponent ## The component in charge of choosing the entity animation directions.
+@onready var step_dust_particles: CPUParticles2D = get_node_or_null("StepDustParticles") ## The optional particles that could spawn when taking a step.
 
 var time_snare_counter: float = 0 ## The ticker that slows down delta when under a time snare.
 var snare_factor: float = 0 ## Multiplier for delta time during time snares.

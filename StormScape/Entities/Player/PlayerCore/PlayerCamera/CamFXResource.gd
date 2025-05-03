@@ -28,22 +28,20 @@ class_name CamFXResource
 @export_range(1, 1000, 1, "hide_slider", "or_greater") var trans_max_dist: int = 125 ## How close the player must be from the site of the effect source application to start to feel the cam shake and zoom.
 @export var trans_use_falloff: bool = true ## When true, the camera shake and zoom falls off up to the transform_max_dist.
 @export_subgroup("Freeze")
-@export var freeze_player_only: bool = false ## When true and this is activated by an effect receiver, the freeze will only play when the effect source is received by the player.
 @export_range(1, 1000, 1, "hide_slider", "or_greater") var freeze_max_dist: int = 125 ## How close the player must be from the site of the effect source application to start to feel the cam freeze.
 @export var freeze_uses_falloff: bool = true ## When true, the camera freeze multiplier falls off up to the freeze_max_dist.
 
 
-## Easy method for activating all events.
-func activate_all() -> void:
-	Globals.player_camera.start_shake(self)
-	Globals.player_camera.start_freeze(self)
-	Globals.player_camera.start_zoom(self)
-
 ## Applies the falloffs where needed and activates all the effects.
-func apply_falloffs_and_activate_all(is_player: bool, dist_to_player: float = 0) -> void:
+func apply_falloffs_and_activate_all(source_entity: Node2D) -> void:
 	var new_shake_strength: float = shake_strength
 	var new_zoom_multiplier: float = zoom_multiplier
 	var new_freeze_multiplier: float = freeze_multiplier
+	var is_player: bool = source_entity is Player
+	var dist_to_player: float = 0
+	if not is_player:
+		# Subtract 16 for buffer for player arm length
+		dist_to_player = max(0, source_entity.global_position.distance_to(Globals.player_node.global_position) - 16)
 	var distance_fraction: float = clampf(dist_to_player / trans_max_dist, 0, 1.0)
 
 	if trans_use_falloff:
@@ -62,11 +60,13 @@ func apply_falloffs_and_activate_all(is_player: bool, dist_to_player: float = 0)
 	if freeze_uses_falloff: # Can only falloff up to a 3/4 the original multiplier
 		var change_portion: float = 1.0 - new_freeze_multiplier
 		new_freeze_multiplier = 1.0 - (change_portion * max(0.75, 1 - distance_fraction))
-	if (dist_to_player > freeze_max_dist) or (not is_player and freeze_player_only):
-		new_freeze_multiplier = 1.0
 
 	var new_cam_fx: CamFXResource = self.duplicate()
 	new_cam_fx.shake_strength = new_shake_strength
 	new_cam_fx.zoom_multiplier = new_zoom_multiplier
 	new_cam_fx.freeze_multiplier = new_freeze_multiplier
-	new_cam_fx.activate_all()
+
+	Globals.player_camera.start_shake(self)
+	if (source_entity is Player) and (dist_to_player <= freeze_max_dist):
+		Globals.player_camera.start_freeze(self)
+	Globals.player_camera.start_zoom(self)

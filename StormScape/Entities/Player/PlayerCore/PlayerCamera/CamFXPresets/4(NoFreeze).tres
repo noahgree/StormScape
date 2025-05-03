@@ -20,7 +20,6 @@ zoom_ease_type = 2
 trans_player_only = false
 trans_max_dist = 125
 trans_use_falloff = true
-freeze_player_only = false
 freeze_max_dist = 125
 freeze_uses_falloff = true
 metadata/_custom_type_script = "uid://dvirx67s12tmd"
