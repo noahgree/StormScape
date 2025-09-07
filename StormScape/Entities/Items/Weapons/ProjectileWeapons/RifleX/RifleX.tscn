@@ -1,10 +1,11 @@
-[gd_scene load_steps=28 format=3 uid="uid://3d4ghsubde4w"]
+[gd_scene load_steps=29 format=3 uid="uid://3d4ghsubde4w"]
 
 [ext_resource type="Script" uid="uid://ca8xdltgdyjys" path="res://Entities/Items/Weapons/ProjectileWeapons/ProjectileWeapon.gd" id="1_s8t10"]
 [ext_resource type="Shader" uid="uid://cugs1eqtkjsbd" path="res://Utilities/Game/Shaders/TintAndGlow.gdshader" id="2_be6ii"]
 [ext_resource type="Texture2D" uid="uid://bvbokmfcccs5v" path="res://Entities/Items/Weapons/ProjectileWeapons/RifleX/RifleXBaseCT.tres" id="3_0ipdu"]
 [ext_resource type="PackedScene" uid="uid://lw5fgm5pgoif" path="res://Entities/EntityCore/Sprites/EntityHandSprite.tscn" id="4_jgoo5"]
 [ext_resource type="Texture2D" uid="uid://c7dplv78y6jg0" path="res://Entities/Items/Weapons/ProjectileWeapons/RifleX/RifleXBaseMagCT.tres" id="6_pbvst"]
+[ext_resource type="Texture2D" uid="uid://bli0i6fkxi43o" path="res://Entities/Player/PlayerCore/PlayerHandCT.tres" id="7_1b6to"]
 [ext_resource type="Texture2D" uid="uid://ca47l1joaccam" path="res://Entities/Items/Weapons/ProjectileWeapons/RifleX/RifleXBaseSpriteNoMagCT.tres" id="7_uhlvh"]
 [ext_resource type="PackedScene" uid="uid://wda4fiuxi8kh" path="res://Entities/Items/Weapons/WeaponVFX/FiringVFX/Simple/SimpleFiringVFX.tscn" id="8_uhlvh"]
 [ext_resource type="Texture2D" uid="uid://bj4xowuewlfds" path="res://Entities/Items/Weapons/WeaponVFX/FiringVFX/Simple/simple1.png" id="9_1b6to"]
@@ -674,10 +675,12 @@ texture = ExtResource("7_uhlvh")
 [node name="ReloadOffHand" parent="." instance=ExtResource("4_jgoo5")]
 visible = false
 position = Vector2(4, 0)
+texture = ExtResource("7_1b6to")
 
 [node name="ReloadMainHand" parent="." instance=ExtResource("4_jgoo5")]
 visible = false
 position = Vector2(-9, 3)
+texture = ExtResource("7_1b6to")
 
 [node name="CasingEjectionPoint" type="Marker2D" parent="."]
 position = Vector2(-2, -3)

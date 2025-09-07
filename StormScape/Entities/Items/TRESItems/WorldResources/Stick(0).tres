@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="WorldResourceResource" load_steps=7 format=3 uid="uid://8uj8fwadqlk0"]
 
-[ext_resource type="Script" uid="uid://cowjdnic7xmkp" path="res://UI/Inventory/PlayerInventory/StatDetail.gd" id="1_cgtgx"]
+[ext_resource type="Script" uid="uid://cowjdnic7xmkp" path="res://UI/Inventory/PlayerInventory/StatDetail.gd" id="1_0xb1x"]
 [ext_resource type="Texture2D" uid="uid://dhr6ujbdy31nl" path="res://Entities/Items/WorldResources/Stick/StickCT.tres" id="1_svgfi"]
 [ext_resource type="PackedScene" uid="uid://bhmmr2f1hs8mk" path="res://Entities/Items/WorldResources/WorldResource.tscn" id="3_kf8ve"]
 [ext_resource type="Script" uid="uid://crlmvnjkf7c3g" path="res://Entities/Items/WorldResources/WorldResourceResource.gd" id="4_xv5sp"]
@@ -9,47 +9,21 @@
 [sub_resource type="Resource" id="Resource_svgfi"]
 script = ExtResource("5_npuiu")
 type = "Tags"
-quantity = 1
 tags = Array[StringName]([&"log"])
-rarity_match = "No"
 metadata/_custom_type_script = "uid://ctxa7i1mbt7ab"
 
 [resource]
 script = ExtResource("4_xv5sp")
 id = "stick"
 name = "Stick"
-tags = Array[StringName]([])
 item_type = 4
-rarity = 0
 stack_size = 64
-auto_pickup = false
-pickup_radius = 4
 info = "A simple crafting ingredient for many tools."
-extra_details = Array[ExtResource("1_cgtgx")]([])
 ground_icon = ExtResource("1_svgfi")
 in_hand_icon = ExtResource("1_svgfi")
 inv_icon = ExtResource("1_svgfi")
-flip_inv_icon_h = false
-inv_icon_offset = Vector2(0, 0)
-inv_icon_scale = Vector2(1, 1)
-inv_icon_rotation = 0.0
 recipe = Array[ExtResource("5_npuiu")]([SubResource("Resource_svgfi")])
 output_quantity = 4
-recipe_unlocked = true
 item_scene = ExtResource("3_kf8ve")
-rotation_lerping = 0.1
 holding_offset = Vector2(4, -4)
-holding_degrees = 0.0
-stay_flat_on_rotate = false
-is_gripped_by_one_hand = true
-draw_off_hand = false
-draw_off_hand_offset = Vector2(0, 0)
-main_hand_offset = Vector2(0, 0)
-cooldowns_per_suid = true
-shown_cooldown_fills = Array[String]([])
-show_cursor_cooldown = false
-equip_audio = ""
-pickup_audio = ""
-drop_audio = ""
-session_uid = 0
 metadata/_custom_type_script = "uid://crlmvnjkf7c3g"

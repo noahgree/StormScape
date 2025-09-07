@@ -2,19 +2,13 @@
 
 [ext_resource type="Script" uid="uid://cowjdnic7xmkp" path="res://UI/Inventory/PlayerInventory/StatDetail.gd" id="1_y3gsb"]
 [ext_resource type="Texture2D" uid="uid://cn5hqfioewj4j" path="res://Entities/Items/Wearables/PoisonCharm/PoisonCharmCT.tres" id="2_y3gsb"]
-[ext_resource type="Script" uid="uid://ctxa7i1mbt7ab" path="res://UI/Inventory/PlayerInventory/Crafting/CraftingIngredient.gd" id="3_btdk0"]
+[ext_resource type="Script" uid="uid://ctxa7i1mbt7ab" path="res://UI/Inventory/PlayerInventory/Crafting/CraftingIngredient.gd" id="3_kgxhl"]
 [ext_resource type="Script" uid="uid://317ipeo41y3c" path="res://Entities/Items/Wearables/Wearable.gd" id="4_0uxcx"]
 [ext_resource type="Script" uid="uid://bcjwesiannbd0" path="res://Entities/Stats/StatMod/StatMod.gd" id="5_w23c4"]
 
 [sub_resource type="Resource" id="Resource_y3gsb"]
 script = ExtResource("1_y3gsb")
 title = "POISON IMMUNITY"
-stat_array = Array[String]([])
-up_is_good = true
-suffix = ""
-multiplier = 1.0
-addition = 0.0
-fraction_of_orig = false
 metadata/_custom_type_script = "uid://cowjdnic7xmkp"
 
 [sub_resource type="Resource" id="Resource_jup86"]
@@ -23,52 +17,18 @@ stat_id = &"poison_resistance"
 mod_id = &"poison_charm"
 operation = "="
 value = 100.0
-rounding = "Exact"
-priority = 1
-max_stack_count = 1
-override_all = false
 metadata/_custom_type_script = "uid://bcjwesiannbd0"
 
 [resource]
 script = ExtResource("4_0uxcx")
 stat_mods = Array[ExtResource("5_w23c4")]([SubResource("Resource_jup86")])
 applied_details = Array[ExtResource("1_y3gsb")]([SubResource("Resource_y3gsb")])
-blocked_mutuals = Array[StringName]([])
-equipping_audio = ""
-removal_audio = ""
 id = "poison_charm"
 name = "Poison Charm"
-tags = Array[StringName]([])
 item_type = 3
 rarity = 5
-stack_size = 1
-auto_pickup = false
-pickup_radius = 4
 info = "Grants immunity to damage from poison when worn."
-extra_details = Array[ExtResource("1_y3gsb")]([])
 ground_icon = ExtResource("2_y3gsb")
 in_hand_icon = ExtResource("2_y3gsb")
 inv_icon = ExtResource("2_y3gsb")
-flip_inv_icon_h = false
-inv_icon_offset = Vector2(0, 0)
-inv_icon_scale = Vector2(1, 1)
-inv_icon_rotation = 0.0
-recipe = Array[ExtResource("3_btdk0")]([])
-output_quantity = 1
-recipe_unlocked = true
-rotation_lerping = 0.1
-holding_offset = Vector2(0, 0)
-holding_degrees = 0.0
-stay_flat_on_rotate = false
-is_gripped_by_one_hand = true
-draw_off_hand = false
-draw_off_hand_offset = Vector2(0, 0)
-main_hand_offset = Vector2(0, 0)
-cooldowns_per_suid = true
-shown_cooldown_fills = Array[String]([])
-show_cursor_cooldown = false
-equip_audio = ""
-pickup_audio = ""
-drop_audio = ""
-session_uid = 0
 metadata/_custom_type_script = "uid://317ipeo41y3c"

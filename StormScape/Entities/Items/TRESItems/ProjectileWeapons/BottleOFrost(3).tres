@@ -3,58 +3,33 @@
 [ext_resource type="Resource" uid="uid://cev0y0oe3igus" path="res://Entities/Player/PlayerCore/PlayerCamera/CamFXPresets/6.tres" id="1_bgdcb"]
 [ext_resource type="Script" uid="uid://dkfssottmsrch" path="res://Entities/Stats/EffectSystemResources/EffectSources/EffectSource.gd" id="2_4q57q"]
 [ext_resource type="Script" uid="uid://boo31eu083dqd" path="res://Entities/Stats/EffectSystemResources/StatusEffects/StatusEffect.gd" id="3_be5sn"]
-[ext_resource type="Script" uid="uid://cowjdnic7xmkp" path="res://UI/Inventory/PlayerInventory/StatDetail.gd" id="4_3yptu"]
+[ext_resource type="Script" uid="uid://cowjdnic7xmkp" path="res://UI/Inventory/PlayerInventory/StatDetail.gd" id="4_ns2jq"]
 [ext_resource type="Texture2D" uid="uid://ndv23me2pjpp" path="res://Entities/Items/Weapons/ProjectileWeapons/BottleOFrost/BottleOFrostBaseCT.tres" id="5_hqxuj"]
 [ext_resource type="Script" uid="uid://cje5bobi6o8bo" path="res://Entities/Items/Hitscans/HitscanResource.gd" id="6_36ar8"]
 [ext_resource type="Texture2D" uid="uid://bpeyfequ1my8c" path="res://Entities/Items/Weapons/ProjectileWeapons/BottleOFrost/BottleOFrostThrowableCT.tres" id="7_bgdcb"]
 [ext_resource type="Resource" uid="uid://mj7sofyhdcaj" path="res://Entities/Stats/EffectSystemResources/StatusEffects/BadEffects/Frostbite/Frostbite1Ground.tres" id="10_bgdcb"]
 [ext_resource type="PackedScene" uid="uid://b5rrhd6ano4sf" path="res://Entities/Items/Projectiles/ProjectileCore/AreaOfEffectVFX/FreezingAOEVFX.tscn" id="11_4q57q"]
-[ext_resource type="PackedScene" uid="uid://355ervipd44s" path="res://Entities/Items/Projectiles/FireBottle/FrostBottle.tscn" id="12_bgdcb"]
 [ext_resource type="PackedScene" uid="uid://c6qs5fggipaja" path="res://Entities/Items/Weapons/ProjectileWeapons/BottleOFrost/BottleOFrost.tscn" id="12_hqxuj"]
+[ext_resource type="PackedScene" uid="uid://355ervipd44s" path="res://Entities/Items/Projectiles/Explosives/FrostBottle/FrostBottle.tscn" id="12_ns2jq"]
 [ext_resource type="Script" uid="uid://bj3r5oopspj6l" path="res://Entities/Items/Projectiles/ProjectileCore/ProjectileResource.gd" id="12_oiymh"]
-[ext_resource type="Script" uid="uid://ctxa7i1mbt7ab" path="res://UI/Inventory/PlayerInventory/Crafting/CraftingIngredient.gd" id="14_looao"]
+[ext_resource type="Script" uid="uid://ctxa7i1mbt7ab" path="res://UI/Inventory/PlayerInventory/Crafting/CraftingIngredient.gd" id="13_bx1py"]
 [ext_resource type="Script" uid="uid://c2gdoebfp12dq" path="res://Entities/Stats/StatMod/StatModsCacheResource.gd" id="15_a3lcf"]
 [ext_resource type="Script" uid="uid://dvasncq3tgljs" path="res://Entities/Items/Weapons/ProjectileWeapons/ProjWeaponResource.gd" id="16_nqhes"]
 
 [sub_resource type="Resource" id="Resource_bgdcb"]
 script = ExtResource("2_4q57q")
 source_type = 1
-source_tags = Array[String]([])
-scanned_phys_layers = 111
-can_hit_self = true
 bad_effect_affected_teams = 3
 good_effect_affected_teams = 3
-base_damage = 0
-object_damage_mult = 1.0
-dmg_affected_stats = 2
-crit_chance = 0
-crit_multiplier = 1.5
-armor_penetration = 0
-base_healing = 0
-heal_affected_stats = 2
 impact_cam_fx = ExtResource("1_bgdcb")
-impact_sound = ""
-hit_flash_color = Color(1, 1, 1, 0.6)
-status_effects = Array[ExtResource("3_be5sn")]([])
 
 [sub_resource type="Resource" id="Resource_4q57q"]
 script = ExtResource("6_36ar8")
-continuous_beam = true
-hitscan_effect_interval = -1.0
 hitscan_max_distance = 350
-hitscan_pierce_count = 0
-bad_effects_falloff = true
-good_effects_falloff = false
-override_vfx_defaults = false
 hitscan_max_width = 0.5
 beam_color = Color(1, 0.0784314, 0.576471, 1)
-glow_amount = 1.0
 start_particle_color = Color(1, 0.752941, 0.796078, 1)
-start_particle_mult = 1.0
 impact_particle_color = Color(1, 0.752941, 0.796078, 1)
-impact_particle_mult = 1.0
-beam_particle_color = Color(1, 0, 0, 1)
-beam_particle_mult = 1.0
 
 [sub_resource type="Curve" id="Curve_be5sn"]
 _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
@@ -63,21 +38,9 @@ point_count = 2
 [sub_resource type="Resource" id="Resource_be5sn"]
 script = ExtResource("2_4q57q")
 source_type = 3
-source_tags = Array[String]([])
-scanned_phys_layers = 111
-can_hit_self = true
 bad_effect_affected_teams = 3
 good_effect_affected_teams = 3
 base_damage = 10
-object_damage_mult = 1.0
-dmg_affected_stats = 2
-crit_chance = 0
-crit_multiplier = 1.5
-armor_penetration = 0
-base_healing = 0
-heal_affected_stats = 2
-impact_sound = ""
-hit_flash_color = Color(1, 1, 1, 0.6)
 status_effects = Array[ExtResource("3_be5sn")]([ExtResource("10_bgdcb")])
 
 [sub_resource type="Curve" id="Curve_4q57q"]
@@ -94,70 +57,23 @@ point_count = 2
 
 [sub_resource type="Resource" id="Resource_36ar8"]
 script = ExtResource("12_oiymh")
-speed = 350
 speed_curve = SubResource("Curve_0ssqt")
-initial_boost_time = 0.0
-initial_boost_mult = 2.0
 lifetime = 5.0
-max_distance = 500
 height_override = 6
-disable_trail = false
 effect_falloff_curve = SubResource("Curve_3yptu")
-point_of_max_falloff = 500.0
-bad_effects_falloff = true
-good_effects_falloff = false
-path_type = "Default"
-amplitude = 5.0
-frequency = 2.0
-max_pierce = 0
-max_ricochet = 0
-ricochet_angle_bounce = true
-ricochet_walls_only = false
-homing_method = "None"
-homing_speed_mult = 1.0
-max_turn_rate = 100.0
-homing_fov_angle = 180.0
-homing_max_range = 850
-homing_duration = -1.0
-homing_start_delay = 0.0
-can_change_target = false
-boomerang_home_radius = 5.0
-mouse_target_radius = 50.0
 spin_speed = 200.0
-spin_both_ways = false
-spin_direction = "Forward"
-do_y_axis_reflection = false
-move_in_rotated_dir = false
-shadow_matches_spin = false
 launch_angle = 70.0
 arc_travel_distance = 100
 arc_speed = 750.0
 max_collision_height = -1
-grounding_free_delay = 0.0
-bounce_count = 0
 bounce_falloff_curve = SubResource("Curve_4q57q")
-ping_pong_bounce = false
-number_of_splits = 0
-split_into_counts = Array[int]([2])
-angular_spreads = Array[float]([45.0])
-split_delays = Array[float]([0.2])
-splitting_sound = ""
 split_cam_fx = null
 aoe_effect_source = SubResource("Resource_be5sn")
 aoe_radius = 25
-do_aoe_on_arc_land = true
-aoe_before_freeing = false
 aoe_effect_falloff_curve = SubResource("Curve_be5sn")
-bad_effects_aoe_falloff = true
-good_effects_aoe_falloff = false
-aoe_delay = 0.0
 aoe_effect_dur = 5.0
-aoe_effect_interval = 1.0
 aoe_effects_delay = 0.0
-aoe_anim_dur = 0.2
-aoe_hide_sprite = true
 aoe_vfx = ExtResource("11_4q57q")
-aoe_sound = ""
 
 [sub_resource type="Resource" id="Resource_xpvhm"]
 script = ExtResource("15_a3lcf")
@@ -165,125 +81,29 @@ script = ExtResource("15_a3lcf")
 [resource]
 script = ExtResource("16_nqhes")
 proj_weapon_type = 8
-firing_mode = 0
-is_hitscan = false
-projectile_scn = ExtResource("12_bgdcb")
+projectile_scn = ExtResource("12_ns2jq")
 firing_duration = 0.15
 fire_cooldown = 1.0
-min_charge_time = 1.0
-auto_do_charge_use = false
-charge_loss_mult = 1.0
-dec_charge_on_cooldown = false
-reset_charge_on_fire = false
-one_frame_per_fire = false
-fire_anim_dur = 0.0
 spawn_after_fire_anim = true
-post_fire_anim_delay = 0.0
-post_fire_anim_dur = 0.0
-casing_tint = Color(1, 1, 1, 1)
-casing_sound = "casing_ground"
-firing_sound = ""
-post_fire_sound = ""
-charging_sound = ""
-mag_almost_empty_sound = "mag_almost_empty"
-empty_mag_sound = ""
 projectile_logic = SubResource("Resource_36ar8")
 hitscan_logic = SubResource("Resource_4q57q")
 effect_source = SubResource("Resource_bgdcb")
 ammo_type = 1
 mag_size = -1
-reload_type = 0
-reload_delay = 0.0
-dont_consume_ammo = false
-hide_reload_ui = false
-mag_reload_time = 1.0
-mag_reload_anim_delay = 0.0
-single_proj_reload_time = 0.25
-single_reload_quantity = 1
-must_reload_fully = false
-auto_ammo_interval = 0.0
-auto_ammo_count = 1
-auto_ammo_delay = 0.5
-recharge_uses_inv = false
-stamina_use_per_proj = 0.5
-reload_sound = ""
-max_bloom = 0.0
-bloom_decrease_delay = 1.0
-initial_fire_rate_delay = 0.0
-warmup_decrease_delay = 0.75
-overheat_penalty = 0.0
-overheat_dec_delay = 0.75
-overheated_sound = ""
-overheat_anim_dur = 0.5
-projectiles_per_fire = 1
-use_ammo_per_burst_proj = true
-burst_proj_delay = 0.05
-add_bloom_per_burst_shot = true
-add_overheat_per_burst_shot = true
-barrage_count = 1
-angular_spread = 25.0
-do_cluster_barrage = false
-barrage_proj_delay = 0.0
-ammo_in_mag = -1
-pullout_delay = 0.25
-snap_to_six_dirs = false
 no_levels = true
-hide_ammo_ui = false
-max_mods_override = -1
-blocked_mods = Array[StringName]([])
-level = 1
-lvl_progress = 0
 s_mods = SubResource("Resource_xpvhm")
-weapon_mods_need_to_be_readded_after_save = false
-current_mods = Array[Dictionary]([{
-&"1": null
-}, {
-&"2": null
-}, {
-&"3": null
-}, {
-&"4": null
-}, {
-&"5": null
-}, {
-&"6": null
-}])
-original_status_effects = Array[ExtResource("3_be5sn")]([])
-original_charge_status_effects = Array[ExtResource("3_be5sn")]([])
-original_aoe_status_effects = Array[ExtResource("3_be5sn")]([])
 id = "bottle_o_frost"
 name = "Bottle O' Frost"
-tags = Array[StringName]([])
 item_type = 1
 rarity = 3
 stack_size = 10
-auto_pickup = false
 pickup_radius = 5
 info = "A high pressure blizard that freezes an area around it on impact."
-extra_details = Array[ExtResource("4_3yptu")]([])
 ground_icon = ExtResource("5_hqxuj")
 in_hand_icon = ExtResource("7_bgdcb")
 inv_icon = ExtResource("5_hqxuj")
-flip_inv_icon_h = false
-inv_icon_offset = Vector2(0, 0)
-inv_icon_scale = Vector2(1, 1)
-inv_icon_rotation = 0.0
-recipe = Array[ExtResource("14_looao")]([])
-output_quantity = 1
 recipe_unlocked = false
 item_scene = ExtResource("12_hqxuj")
-rotation_lerping = 0.1
-holding_offset = Vector2(0, 0)
-holding_degrees = 0.0
-stay_flat_on_rotate = false
-is_gripped_by_one_hand = true
-draw_off_hand = false
-draw_off_hand_offset = Vector2(0, 0)
-main_hand_offset = Vector2(0, 0)
 cooldowns_per_suid = false
 shown_cooldown_fills = Array[String](["default"])
 show_cursor_cooldown = true
-equip_audio = ""
-pickup_audio = ""
-drop_audio = ""
-session_uid = 0

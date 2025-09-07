@@ -1,4 +1,4 @@
-[gd_scene load_steps=241 format=3 uid="uid://dba8mrurjlekp"]
+[gd_scene load_steps=245 format=3 uid="uid://dba8mrurjlekp"]
 
 [ext_resource type="Script" uid="uid://c3rpxq8pnbdje" path="res://Entities/Player/PlayerCore/Player.gd" id="1_m33tt"]
 [ext_resource type="Script" uid="uid://dwmur0cosbbwh" path="res://UI/Inventory/InventoryCore/InventoryResource.gd" id="2_l1kq4"]
@@ -37,6 +37,7 @@
 [ext_resource type="Resource" uid="uid://ddtvqrt702vcs" path="res://Entities/Items/TRESItems/WorldResources/Twine(0).tres" id="13_ou5t4"]
 [ext_resource type="Resource" uid="uid://bper7kxtsf7f1" path="res://Entities/Items/TRESItems/MeleeWeapons/Axe(1).tres" id="14_0t1mv"]
 [ext_resource type="Resource" uid="uid://cx1ydw2jde1y8" path="res://Entities/Items/TRESItems/Consumables/Apple(0).tres" id="15_hxjay"]
+[ext_resource type="Resource" uid="uid://de6d4b7xfr4am" path="res://Entities/Items/TRESItems/WeaponMods/ClusterRig(4).tres" id="16_h1ges"]
 [ext_resource type="Resource" uid="uid://dkx627k2ek8ew" path="res://Entities/Items/TRESItems/WorldResources/Graystone(0).tres" id="20_w0i1c"]
 [ext_resource type="Resource" uid="uid://bh18kqp2up3oe" path="res://Entities/Items/TRESItems/MeleeWeapons/Pickaxe(3).tres" id="23_gdihr"]
 [ext_resource type="PackedScene" uid="uid://jpq0ij8wwlhy" path="res://Entities/Components/FacingComponent/FacingComponent.tscn" id="25_0t1mv"]
@@ -50,6 +51,7 @@
 [ext_resource type="Script" uid="uid://dq62ojsc43p8o" path="res://UI/Inventory/PlayerInventory/PlayerInvUI.gd" id="32_3a185"]
 [ext_resource type="Resource" uid="uid://dk3vlbvu2b7eq" path="res://Entities/Items/TRESItems/MeleeWeapons/Sword(4).tres" id="32_ar238"]
 [ext_resource type="Script" uid="uid://dp8osf7r6xkkt" path="res://Entities/Items/ItemCore/InvItemResource.gd" id="32_ixmb3"]
+[ext_resource type="Resource" uid="uid://h1xp0w2wx18e" path="res://Entities/Items/TRESItems/ProjectileWeapons/Grizzly(3).tres" id="33_8hbs2"]
 [ext_resource type="Script" uid="uid://di5hu6fk5mbfe" path="res://UI/PlayerStatsHUD/PlayerStatsHUD.gd" id="35_yln51"]
 [ext_resource type="PackedScene" uid="uid://b7gdy01q8wsjx" path="res://Entities/Components/ItemComponents/HandsComponent/HandsComponent.tscn" id="39_ngono"]
 [ext_resource type="Shader" uid="uid://c0de04pgeen76" path="res://Utilities/Game/Shaders/BlurBehind.gdshader" id="39_r4tgk"]
@@ -89,7 +91,7 @@
 [ext_resource type="FontFile" uid="uid://bp2lgrlhj8cet" path="res://Assets/Theming/Fonts/Pixel/C&C Red Alert [INET].ttf" id="85_7xlwj"]
 [ext_resource type="Script" uid="uid://dwic8harmmplg" path="res://Utilities/Game/Audio/AudioResource.gd" id="85_w0i1c"]
 [ext_resource type="Texture2D" uid="uid://bbcajkbyc0c6y" path="res://UI/Inventory/InventoryCore/Background/Universal/inv_background_simple_tintable.png" id="86_ou5t4"]
-[ext_resource type="Texture2D" uid="uid://cd22xh5jduxd6" path="res://UI/TemporaryElements/InteractionIcons/e_prompt.png" id="89_0313k"]
+[ext_resource type="Texture2D" uid="uid://cd22xh5jduxd6" path="res://UI/TemporaryElements/InteractionIcons/e_prompt.png" id="87_8hbs2"]
 [ext_resource type="FontVariation" uid="uid://by478cplv5w4n" path="res://Assets/Theming/Fonts/GameFontResources/pixel_font_less_margin.tres" id="90_hxjay"]
 [ext_resource type="Script" uid="uid://dbc2ecb1mkugh" path="res://UI/PlayerStatsHUD/ActiveSlotInfo.gd" id="91_qr476"]
 [ext_resource type="Texture2D" uid="uid://jx4y3elkn7rq" path="res://UI/Inventory/InventoryCore/Slot/Universal/empty_slot_icon.png" id="94_0313k"]
@@ -136,7 +138,6 @@
 [sub_resource type="Resource" id="Resource_82yts"]
 script = ExtResource("32_ixmb3")
 stats = ExtResource("4_g5u5n")
-quantity = 1
 metadata/_custom_type_script = "uid://dp8osf7r6xkkt"
 
 [sub_resource type="Resource" id="Resource_0t1mv"]
@@ -154,7 +155,6 @@ metadata/_custom_type_script = "uid://dp8osf7r6xkkt"
 [sub_resource type="Resource" id="Resource_4awmn"]
 script = ExtResource("32_ixmb3")
 stats = ExtResource("8_gb65f")
-quantity = 1
 metadata/_custom_type_script = "uid://dp8osf7r6xkkt"
 
 [sub_resource type="Resource" id="Resource_25xrm"]
@@ -166,7 +166,6 @@ metadata/_custom_type_script = "uid://dp8osf7r6xkkt"
 [sub_resource type="Resource" id="Resource_mc6is"]
 script = ExtResource("32_ixmb3")
 stats = ExtResource("10_co77f")
-quantity = 1
 metadata/_custom_type_script = "uid://dp8osf7r6xkkt"
 
 [sub_resource type="Resource" id="Resource_w0i1c"]
@@ -178,13 +177,11 @@ metadata/_custom_type_script = "uid://dp8osf7r6xkkt"
 [sub_resource type="Resource" id="Resource_fcswf"]
 script = ExtResource("32_ixmb3")
 stats = ExtResource("10_r5dvw")
-quantity = 1
 metadata/_custom_type_script = "uid://dp8osf7r6xkkt"
 
 [sub_resource type="Resource" id="Resource_ve7vt"]
 script = ExtResource("32_ixmb3")
 stats = ExtResource("65_14ixx")
-quantity = 1
 metadata/_custom_type_script = "uid://dp8osf7r6xkkt"
 
 [sub_resource type="Resource" id="Resource_hdwgy"]
@@ -196,13 +193,16 @@ metadata/_custom_type_script = "uid://dp8osf7r6xkkt"
 [sub_resource type="Resource" id="Resource_ou5t4"]
 script = ExtResource("32_ixmb3")
 stats = ExtResource("8_o382h")
-quantity = 1
 metadata/_custom_type_script = "uid://dp8osf7r6xkkt"
 
 [sub_resource type="Resource" id="Resource_ar238"]
 script = ExtResource("32_ixmb3")
 stats = ExtResource("57_gdihr")
-quantity = 1
+metadata/_custom_type_script = "uid://dp8osf7r6xkkt"
+
+[sub_resource type="Resource" id="Resource_xjdir"]
+script = ExtResource("32_ixmb3")
+stats = ExtResource("16_h1ges")
 metadata/_custom_type_script = "uid://dp8osf7r6xkkt"
 
 [sub_resource type="Resource" id="Resource_bmpdm"]
@@ -214,7 +214,6 @@ metadata/_custom_type_script = "uid://dp8osf7r6xkkt"
 [sub_resource type="Resource" id="Resource_eufsu"]
 script = ExtResource("32_ixmb3")
 stats = ExtResource("11_o382h")
-quantity = 1
 metadata/_custom_type_script = "uid://dp8osf7r6xkkt"
 
 [sub_resource type="Resource" id="Resource_8hbs2"]
@@ -226,13 +225,11 @@ metadata/_custom_type_script = "uid://dp8osf7r6xkkt"
 [sub_resource type="Resource" id="Resource_f5l7i"]
 script = ExtResource("32_ixmb3")
 stats = ExtResource("10_n4o3n")
-quantity = 1
 metadata/_custom_type_script = "uid://dp8osf7r6xkkt"
 
 [sub_resource type="Resource" id="Resource_co77f"]
 script = ExtResource("32_ixmb3")
 stats = ExtResource("11_0t1mv")
-quantity = 1
 metadata/_custom_type_script = "uid://dp8osf7r6xkkt"
 
 [sub_resource type="Resource" id="Resource_a5af3"]
@@ -244,7 +241,6 @@ metadata/_custom_type_script = "uid://dp8osf7r6xkkt"
 [sub_resource type="Resource" id="Resource_gdihr"]
 script = ExtResource("32_ixmb3")
 stats = ExtResource("4_gevai")
-quantity = 1
 metadata/_custom_type_script = "uid://dp8osf7r6xkkt"
 
 [sub_resource type="Resource" id="Resource_g5u5n"]
@@ -256,13 +252,11 @@ metadata/_custom_type_script = "uid://dp8osf7r6xkkt"
 [sub_resource type="Resource" id="Resource_r7bkl"]
 script = ExtResource("32_ixmb3")
 stats = ExtResource("27_bvo3j")
-quantity = 1
 metadata/_custom_type_script = "uid://dp8osf7r6xkkt"
 
 [sub_resource type="Resource" id="Resource_thmqm"]
 script = ExtResource("32_ixmb3")
 stats = ExtResource("7_14ixx")
-quantity = 1
 metadata/_custom_type_script = "uid://dp8osf7r6xkkt"
 
 [sub_resource type="Resource" id="Resource_r5dvw"]
@@ -274,19 +268,16 @@ metadata/_custom_type_script = "uid://dp8osf7r6xkkt"
 [sub_resource type="Resource" id="Resource_bvo3j"]
 script = ExtResource("32_ixmb3")
 stats = ExtResource("9_rdrbb")
-quantity = 1
 metadata/_custom_type_script = "uid://dp8osf7r6xkkt"
 
 [sub_resource type="Resource" id="Resource_gb65f"]
 script = ExtResource("32_ixmb3")
 stats = ExtResource("10_3uq13")
-quantity = 1
 metadata/_custom_type_script = "uid://dp8osf7r6xkkt"
 
 [sub_resource type="Resource" id="Resource_5qckj"]
 script = ExtResource("32_ixmb3")
 stats = ExtResource("14_0t1mv")
-quantity = 1
 metadata/_custom_type_script = "uid://dp8osf7r6xkkt"
 
 [sub_resource type="Resource" id="Resource_1go7j"]
@@ -298,31 +289,31 @@ metadata/_custom_type_script = "uid://dp8osf7r6xkkt"
 [sub_resource type="Resource" id="Resource_32jvf"]
 script = ExtResource("32_ixmb3")
 stats = ExtResource("23_gdihr")
-quantity = 1
 metadata/_custom_type_script = "uid://dp8osf7r6xkkt"
 
 [sub_resource type="Resource" id="Resource_jgqai"]
 script = ExtResource("32_ixmb3")
 stats = ExtResource("32_ar238")
-quantity = 1
+metadata/_custom_type_script = "uid://dp8osf7r6xkkt"
+
+[sub_resource type="Resource" id="Resource_xsics"]
+script = ExtResource("32_ixmb3")
+stats = ExtResource("33_8hbs2")
 metadata/_custom_type_script = "uid://dp8osf7r6xkkt"
 
 [sub_resource type="Resource" id="Resource_inle7"]
 script = ExtResource("32_ixmb3")
 stats = ExtResource("30_f5l7i")
-quantity = 1
 metadata/_custom_type_script = "uid://dp8osf7r6xkkt"
 
 [sub_resource type="Resource" id="Resource_da65a"]
 script = ExtResource("32_ixmb3")
 stats = ExtResource("12_6wv7y")
-quantity = 1
 metadata/_custom_type_script = "uid://dp8osf7r6xkkt"
 
 [sub_resource type="Resource" id="Resource_6f5us"]
 script = ExtResource("32_ixmb3")
 stats = ExtResource("13_n4o3n")
-quantity = 1
 metadata/_custom_type_script = "uid://dp8osf7r6xkkt"
 
 [sub_resource type="Resource" id="Resource_s4yud"]
@@ -333,10 +324,8 @@ metadata/_custom_type_script = "uid://dp8osf7r6xkkt"
 
 [sub_resource type="Resource" id="Resource_5npt6"]
 script = ExtResource("2_l1kq4")
-title = "CHEST"
 main_inv_size = 32
-drop_on_death = false
-starting_inv = Array[ExtResource("32_ixmb3")]([SubResource("Resource_82yts"), null, SubResource("Resource_0t1mv"), SubResource("Resource_h1ges"), SubResource("Resource_4awmn"), SubResource("Resource_25xrm"), SubResource("Resource_mc6is"), SubResource("Resource_w0i1c"), SubResource("Resource_fcswf"), SubResource("Resource_ve7vt"), SubResource("Resource_hdwgy"), SubResource("Resource_ou5t4"), SubResource("Resource_ar238"), null, SubResource("Resource_bmpdm"), SubResource("Resource_eufsu"), SubResource("Resource_8hbs2"), SubResource("Resource_f5l7i"), SubResource("Resource_co77f"), SubResource("Resource_a5af3"), null, SubResource("Resource_gdihr"), SubResource("Resource_g5u5n"), SubResource("Resource_r7bkl"), SubResource("Resource_thmqm"), SubResource("Resource_r5dvw"), SubResource("Resource_bvo3j"), SubResource("Resource_gb65f"), SubResource("Resource_5qckj"), SubResource("Resource_1go7j"), SubResource("Resource_32jvf"), null, SubResource("Resource_jgqai"), SubResource("Resource_inle7"), SubResource("Resource_da65a"), SubResource("Resource_6f5us"), SubResource("Resource_s4yud")])
+starting_inv = Array[ExtResource("32_ixmb3")]([SubResource("Resource_82yts"), null, SubResource("Resource_0t1mv"), SubResource("Resource_h1ges"), SubResource("Resource_4awmn"), SubResource("Resource_25xrm"), SubResource("Resource_mc6is"), SubResource("Resource_w0i1c"), SubResource("Resource_fcswf"), SubResource("Resource_ve7vt"), SubResource("Resource_hdwgy"), SubResource("Resource_ou5t4"), SubResource("Resource_ar238"), SubResource("Resource_xjdir"), SubResource("Resource_bmpdm"), SubResource("Resource_eufsu"), SubResource("Resource_8hbs2"), SubResource("Resource_f5l7i"), SubResource("Resource_co77f"), SubResource("Resource_a5af3"), null, SubResource("Resource_gdihr"), SubResource("Resource_g5u5n"), SubResource("Resource_r7bkl"), SubResource("Resource_thmqm"), SubResource("Resource_r5dvw"), SubResource("Resource_bvo3j"), SubResource("Resource_gb65f"), SubResource("Resource_5qckj"), SubResource("Resource_1go7j"), SubResource("Resource_32jvf"), SubResource("Resource_jgqai"), SubResource("Resource_xsics"), SubResource("Resource_inle7"), SubResource("Resource_da65a"), SubResource("Resource_6f5us"), SubResource("Resource_s4yud")])
 metadata/_custom_type_script = "uid://dwmur0cosbbwh"
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_3f130"]
@@ -360,63 +349,47 @@ colors = PackedColorArray(1, 0.907, 0.834, 0.5, 1, 0.752, 0.46, 0.4, 1, 1, 1, 0)
 _data = [Vector2(0, 0), 0.0, 1.0, 0, 1, Vector2(1, 1), 1.0, 0.0, 1, 0]
 point_count = 2
 
-[sub_resource type="Resource" id="Resource_xsics"]
-resource_local_to_scene = true
-script = ExtResource("52_f5l7i")
-_storm_weakness = 0.0
-_storm_resistance = 0.0
-metadata/_custom_type_script = "uid://bv40a7n5sorxe"
-
-[sub_resource type="Resource" id="Resource_xjdir"]
-resource_local_to_scene = true
-script = ExtResource("53_co77f")
-_knockback_weakness = 0.0
-_knockback_resistance = 0.0
-entity_dir_influence = 0.25
-metadata/_custom_type_script = "uid://dk6uef3uxmeev"
-
 [sub_resource type="Resource" id="Resource_bjgul"]
 resource_local_to_scene = true
-script = ExtResource("54_bmpdm")
-_stun_weakness = 0.0
-_stun_resistance = 0.0
-metadata/_custom_type_script = "uid://b21sy1r0nxgpv"
+script = ExtResource("52_f5l7i")
+metadata/_custom_type_script = "uid://bv40a7n5sorxe"
 
 [sub_resource type="Resource" id="Resource_223lv"]
 resource_local_to_scene = true
-script = ExtResource("55_8hbs2")
-_poison_weakness = 0.0
-_poison_resistance = 0.0
-metadata/_custom_type_script = "uid://5krnqdrdbey1"
+script = ExtResource("53_co77f")
+metadata/_custom_type_script = "uid://dk6uef3uxmeev"
 
 [sub_resource type="Resource" id="Resource_14mu6"]
 resource_local_to_scene = true
-script = ExtResource("52_eufsu")
-_regen_boost = 0.0
-_regen_penalty = 0.0
-metadata/_custom_type_script = "uid://bqw1ufs6jb7cf"
+script = ExtResource("54_bmpdm")
+metadata/_custom_type_script = "uid://b21sy1r0nxgpv"
 
 [sub_resource type="Resource" id="Resource_botqa"]
 resource_local_to_scene = true
-script = ExtResource("57_h1ges")
-_frostbite_weakness = 0.0
-_frostbite_resistance = 0.0
-metadata/_custom_type_script = "uid://b1lo2mdb3otax"
+script = ExtResource("55_8hbs2")
+metadata/_custom_type_script = "uid://5krnqdrdbey1"
 
 [sub_resource type="Resource" id="Resource_b6nlp"]
 resource_local_to_scene = true
-script = ExtResource("58_32jvf")
-_burning_weakness = 0.0
-_burning_resistance = 0.0
-metadata/_custom_type_script = "uid://dubq8xgav66ue"
+script = ExtResource("52_eufsu")
+metadata/_custom_type_script = "uid://bqw1ufs6jb7cf"
 
 [sub_resource type="Resource" id="Resource_erwji"]
 resource_local_to_scene = true
-script = ExtResource("59_82yts")
-_time_snare_immunity = 0.0
-metadata/_custom_type_script = "uid://5w234psf0oln"
+script = ExtResource("57_h1ges")
+metadata/_custom_type_script = "uid://b1lo2mdb3otax"
 
 [sub_resource type="Resource" id="Resource_r17bj"]
+resource_local_to_scene = true
+script = ExtResource("58_32jvf")
+metadata/_custom_type_script = "uid://dubq8xgav66ue"
+
+[sub_resource type="Resource" id="Resource_1i2dj"]
+resource_local_to_scene = true
+script = ExtResource("59_82yts")
+metadata/_custom_type_script = "uid://5w234psf0oln"
+
+[sub_resource type="Resource" id="Resource_1lcq3"]
 resource_local_to_scene = true
 script = ExtResource("60_uu4sw")
 metadata/_custom_type_script = "uid://ckiyd2nbdcofr"
@@ -434,8 +407,6 @@ metadata/_custom_type_script = "uid://c2sjdkql76qca"
 
 [sub_resource type="Resource" id="Resource_6oagw"]
 script = ExtResource("69_82yts")
-default_run_anim_time_scale = 1.5
-max_run_anim_time_scale = 4.0
 metadata/_custom_type_script = "uid://dxekqhvcykqrq"
 
 [sub_resource type="Resource" id="Resource_1jicd"]
@@ -444,8 +415,6 @@ metadata/_custom_type_script = "uid://cf7pyv5l3pefi"
 
 [sub_resource type="Resource" id="Resource_g1usa"]
 script = ExtResource("68_32jvf")
-ghost_count = 8
-ghost_fade_time = 0.28
 metadata/_custom_type_script = "uid://cy73p3okq3cic"
 
 [sub_resource type="Resource" id="Resource_uvn5e"]
@@ -1265,12 +1234,12 @@ blend_mode = 1
 
 [sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_xmxd0"]
 graph_offset = Vector2(-225.05, 34.7129)
+nodes/output/position = Vector2(380, 260)
 nodes/TimeScale/node = SubResource("AnimationNodeTimeScale_dcuk4")
 nodes/TimeScale/position = Vector2(180, 210)
 nodes/blendspace2d/node = SubResource("AnimationNodeBlendSpace2D_s8iwx")
 nodes/blendspace2d/position = Vector2(-60, 180)
-nodes/output/position = Vector2(380, 260)
-node_connections = [&"TimeScale", 0, &"blendspace2d", &"output", 0, &"TimeScale"]
+node_connections = [&"output", 0, &"TimeScale", &"TimeScale", 0, &"blendspace2d"]
 
 [sub_resource type="AnimationNodeTimeScale" id="AnimationNodeTimeScale_48h8v"]
 
@@ -1309,12 +1278,12 @@ blend_mode = 1
 
 [sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_w6nco"]
 graph_offset = Vector2(-11.0598, 3.96877)
+nodes/output/position = Vector2(640, 210)
 nodes/TimeScale/node = SubResource("AnimationNodeTimeScale_48h8v")
 nodes/TimeScale/position = Vector2(400, 190)
 nodes/blendspace2d/node = SubResource("AnimationNodeBlendSpace2D_ykscl")
 nodes/blendspace2d/position = Vector2(180, 140)
-nodes/output/position = Vector2(640, 210)
-node_connections = [&"TimeScale", 0, &"blendspace2d", &"output", 0, &"TimeScale"]
+node_connections = [&"output", 0, &"TimeScale", &"TimeScale", 0, &"blendspace2d"]
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_5b1k5"]
 animation = &"spawn"
@@ -1347,12 +1316,6 @@ graph_offset = Vector2(-144, -58)
 [sub_resource type="Resource" id="Resource_uu4sw"]
 script = ExtResource("66_r5dvw")
 title = "PICKUP"
-title_color = Color(0.953, 0.871, 0.855, 1)
-title_outline_color = Color(0, 0, 0, 0.565)
-info = ""
-info_color = Color(0.914, 0.769, 0.741, 1)
-info_outline_color = Color(0, 0, 0, 0.565)
-icon = ExtResource("89_0313k")
 remove_on_accept = true
 metadata/_custom_type_script = "uid://dgibl37gudpj1"
 
@@ -1449,13 +1412,15 @@ editor_description = "MUST TURN ON Y SORTING ON THIS NODE!"
 y_sort_enabled = true
 
 [node name="EntityShadow" parent="YSorter" instance=ExtResource("3_05f62")]
+offset_left = -8.0
+offset_right = 8.0
 
 [node name="EntitySprite" parent="YSorter" instance=ExtResource("4_fmbcv")]
 unique_name_in_owner = true
 position = Vector2(0, -16)
 sprite_frames = ExtResource("5_vy6lk")
 animation = &"idle"
-time_brightness_min_max = Vector2(1, 2.35)
+time_brightness_min_max = Vector2(1, 2)
 
 [node name="HandsComponent" parent="YSorter" node_paths=PackedStringArray("active_slot_info") instance=ExtResource("39_ngono")]
 unique_name_in_owner = true
@@ -1499,15 +1464,15 @@ allowed_source_types = Array[int]([0])
 affected_entity = NodePath("..")
 dmg_handler = NodePath("DmgHandler")
 heal_handler = NodePath("HealHandler")
-storm_syndrome_handler = SubResource("Resource_xsics")
-knockback_handler = SubResource("Resource_xjdir")
-stun_handler = SubResource("Resource_bjgul")
-poison_handler = SubResource("Resource_223lv")
-regen_handler = SubResource("Resource_14mu6")
-frostbite_handler = SubResource("Resource_botqa")
-burning_handler = SubResource("Resource_b6nlp")
-time_snare_handler = SubResource("Resource_erwji")
-life_steal_handler = SubResource("Resource_r17bj")
+storm_syndrome_handler = SubResource("Resource_bjgul")
+knockback_handler = SubResource("Resource_223lv")
+stun_handler = SubResource("Resource_14mu6")
+poison_handler = SubResource("Resource_botqa")
+regen_handler = SubResource("Resource_b6nlp")
+frostbite_handler = SubResource("Resource_erwji")
+burning_handler = SubResource("Resource_r17bj")
+time_snare_handler = SubResource("Resource_1i2dj")
+life_steal_handler = SubResource("Resource_1lcq3")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="EffectReceiverComponent"]
 position = Vector2(0, -7.5)
@@ -1537,6 +1502,9 @@ libraries = {
 
 [node name="AnimationTree" type="AnimationTree" parent="."]
 callback_mode_process = 2
+libraries = {
+&"": SubResource("AnimationLibrary_xrucm")
+}
 tree_root = SubResource("AnimationNodeStateMachine_342k8")
 anim_player = NodePath("../AnimationPlayer")
 parameters/idle/TimeScale/scale = 1.0
@@ -1657,7 +1625,7 @@ self_modulate = Color(0.837183, 0.837183, 0.837183, 1)
 material = ExtResource("78_da65a")
 custom_minimum_size = Vector2(8, 8)
 layout_mode = 2
-texture = ExtResource("89_0313k")
+texture = ExtResource("87_8hbs2")
 expand_mode = 1
 stretch_mode = 5
 
@@ -1762,7 +1730,6 @@ theme_override_constants/margin_right = 1
 theme_override_constants/margin_bottom = 1
 
 [node name="StaminaIcon" type="TextureRect" parent="OverlayUI/PlayerStatsHUD/StaminaHungerStatsHUD/StaminaHungerMargins/StaminaAndHungerHBox/StaminaHBox/StaminaIconMargins"]
-visible = false
 modulate = Color(0.305882, 0.196078, 0.168627, 1)
 layout_mode = 2
 texture = ExtResource("108_n4o3n")
@@ -1827,7 +1794,6 @@ theme_override_constants/margin_right = 1
 theme_override_constants/margin_bottom = 1
 
 [node name="HungerIcon" type="TextureRect" parent="OverlayUI/PlayerStatsHUD/StaminaHungerStatsHUD/StaminaHungerMargins/StaminaAndHungerHBox/HungerHBox/HungerIconMargins"]
-visible = false
 modulate = Color(0.305882, 0.196078, 0.168627, 1)
 layout_mode = 2
 texture = ExtResource("111_0t1mv")
@@ -1914,7 +1880,6 @@ size_flags_vertical = 3
 theme_override_constants/separation = 0
 
 [node name="ShieldIconMargins" type="MarginContainer" parent="OverlayUI/PlayerStatsHUD/HealthShieldStatsHUD/HealthShieldMargins/HealthShieldVBox/ShieldHBox"]
-visible = false
 layout_mode = 2
 theme_override_constants/margin_left = 1
 theme_override_constants/margin_top = 0
@@ -1979,7 +1944,6 @@ size_flags_vertical = 3
 theme_override_constants/separation = 0
 
 [node name="HealthIconMargins" type="MarginContainer" parent="OverlayUI/PlayerStatsHUD/HealthShieldStatsHUD/HealthShieldMargins/HealthShieldVBox/HealthHBox"]
-visible = false
 layout_mode = 2
 theme_override_constants/margin_left = 1
 theme_override_constants/margin_top = 0
@@ -2065,7 +2029,7 @@ axis_stretch_vertical = 1
 [node name="HotbarHUDGrid" type="HBoxContainer" parent="OverlayUI/HotbarUI/HotbarNinePatch"]
 unique_name_in_owner = true
 layout_mode = 1
-anchors_preset = 8
+anchors_preset = -1
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
@@ -2222,6 +2186,7 @@ heal_color = Color(0, 0.579, 0.249, 1)
 
 [node name="PlayerInvUI" type="ColorRect" parent="OverlayUI" node_paths=PackedStringArray("hotbar_grid", "hotbar_hud_grid", "trash_slot", "item_details_panel", "crafting_manager", "wearables_panel", "alternate_inv_panel", "synced_inv_source_node", "main_slot_grid")]
 process_mode = 3
+visible = false
 material = SubResource("ShaderMaterial_2q23q")
 use_parent_material = true
 anchors_preset = 15
@@ -2244,7 +2209,7 @@ synced_inv_source_node = NodePath("../..")
 main_slot_grid = NodePath("MainGridBackground/GridMargins/GridMarginsBackground/MainSlotGrid")
 
 [node name="MainGridBackground" type="NinePatchRect" parent="OverlayUI/PlayerInvUI"]
-layout_mode = 2
+layout_mode = 0
 offset_left = 144.0
 offset_top = 55.0
 offset_right = 336.0
@@ -2288,7 +2253,7 @@ axis_stretch_vertical = 1
 [node name="MainSlotGrid" type="GridContainer" parent="OverlayUI/PlayerInvUI/MainGridBackground/GridMargins/GridMarginsBackground"]
 unique_name_in_owner = true
 layout_mode = 1
-anchors_preset = 7
+anchors_preset = -1
 anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
@@ -2562,7 +2527,7 @@ texture = ExtResource("111_co77f")
 stretch_mode = 5
 
 [node name="TrashSlotPanel" type="NinePatchRect" parent="OverlayUI/PlayerInvUI"]
-layout_mode = 2
+layout_mode = 0
 offset_left = 303.0
 offset_top = 168.0
 offset_right = 331.0
@@ -2580,7 +2545,7 @@ metadata/_edit_group_ = true
 [node name="TrashSlot" parent="OverlayUI/PlayerInvUI/TrashSlotPanel" instance=ExtResource("42_r422n")]
 unique_name_in_owner = true
 layout_mode = 1
-anchors_preset = 8
+anchors_preset = -1
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
@@ -2596,7 +2561,7 @@ backing_texture = ExtResource("69_4ao77")
 
 [node name="HotbarSlotMargins" type="MarginContainer" parent="OverlayUI/PlayerInvUI"]
 layout_mode = 1
-anchors_preset = 8
+anchors_preset = -1
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
@@ -2624,7 +2589,7 @@ patch_margin_bottom = 4
 [node name="HotbarGrid" type="HBoxContainer" parent="OverlayUI/PlayerInvUI/HotbarSlotMargins/HotbarTexture"]
 unique_name_in_owner = true
 layout_mode = 1
-anchors_preset = 8
+anchors_preset = -1
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
@@ -2661,7 +2626,7 @@ backing_texture = ExtResource("94_0313k")
 [node name="CraftingManager" type="VBoxContainer" parent="OverlayUI/PlayerInvUI" node_paths=PackedStringArray("inventory_ui")]
 unique_name_in_owner = true
 layout_mode = 1
-anchors_preset = 8
+anchors_preset = -1
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
@@ -2692,7 +2657,7 @@ axis_stretch_vertical = 1
 [node name="GridMargins" type="MarginContainer" parent="OverlayUI/PlayerInvUI/CraftingManager/InventoryTexture"]
 editor_description = "THIS GRIDMARGIN MOUSE FILTER MUST STAY AS IGNORE TO MAKE SORT BUTTONS WORK!"
 layout_mode = 1
-anchors_preset = 5
+anchors_preset = -1
 anchor_left = 0.5
 anchor_right = 0.5
 offset_left = -17.0
@@ -2725,7 +2690,7 @@ axis_stretch_vertical = 1
 [node name="InputSlots" type="GridContainer" parent="OverlayUI/PlayerInvUI/CraftingManager/InventoryTexture/GridMargins/SlotsVBox/NinePatchRect"]
 unique_name_in_owner = true
 layout_mode = 1
-anchors_preset = 8
+anchors_preset = -1
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
@@ -2798,7 +2763,7 @@ axis_stretch_vertical = 1
 
 [node name="VBoxContainer" type="VBoxContainer" parent="OverlayUI/PlayerInvUI/CraftingManager/InventoryTexture/GridMargins/SlotsVBox/NinePatchRect2"]
 layout_mode = 1
-anchors_preset = 15
+anchors_preset = -1
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_right = 1.0
@@ -2873,7 +2838,7 @@ stretch_mode = 5
 [node name="WearablesPanel" type="VBoxContainer" parent="OverlayUI/PlayerInvUI" node_paths=PackedStringArray("inventory_ui") groups=["has_save_logic"]]
 unique_name_in_owner = true
 layout_mode = 1
-anchors_preset = 5
+anchors_preset = -1
 anchor_left = 0.5
 anchor_right = 0.5
 offset_left = 140.0
@@ -3269,15 +3234,15 @@ custom_minimum_size = Vector2(82, 8)
 layout_mode = 2
 theme_override_colors/default_color = Color(0.913725, 0.768627, 0.741176, 1)
 theme_override_colors/font_outline_color = Color(0.121569, 0.0352941, 0, 0.65098)
-theme_override_constants/table_v_separation = 0
-theme_override_constants/table_h_separation = 0
-theme_override_constants/text_highlight_v_padding = 0
-theme_override_constants/text_highlight_h_padding = 0
-theme_override_constants/outline_size = 2
-theme_override_constants/shadow_offset_y = 0
-theme_override_constants/shadow_offset_x = 0
-theme_override_constants/shadow_outline_size = 0
 theme_override_constants/line_separation = 0
+theme_override_constants/shadow_outline_size = 0
+theme_override_constants/shadow_offset_x = 0
+theme_override_constants/shadow_offset_y = 0
+theme_override_constants/outline_size = 2
+theme_override_constants/text_highlight_h_padding = 0
+theme_override_constants/text_highlight_v_padding = 0
+theme_override_constants/table_h_separation = 0
+theme_override_constants/table_v_separation = 0
 theme_override_fonts/normal_font = SubResource("FontVariation_da65a")
 theme_override_font_sizes/normal_font_size = 6
 bbcode_enabled = true

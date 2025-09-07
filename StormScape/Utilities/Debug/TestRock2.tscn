@@ -1,4 +1,4 @@
-[gd_scene load_steps=30 format=3 uid="uid://clf1njlp4stbn"]
+[gd_scene load_steps=31 format=3 uid="uid://clf1njlp4stbn"]
 
 [ext_resource type="Script" uid="uid://cn2gulskgn7k3" path="res://Entities/EntityCore/EntityTypes/StaticEntity/StaticEntity.gd" id="1_b403c"]
 [ext_resource type="Script" uid="uid://dwmur0cosbbwh" path="res://UI/Inventory/InventoryCore/InventoryResource.gd" id="2_3aoki"]
@@ -7,6 +7,7 @@
 [ext_resource type="Resource" uid="uid://dkx627k2ek8ew" path="res://Entities/Items/TRESItems/WorldResources/Graystone(0).tres" id="5_3aoki"]
 [ext_resource type="Script" uid="uid://baglarh3m4c8o" path="res://Entities/Components/ItemComponents/LootTableComponent/LootTableResource.gd" id="7_qgbkl"]
 [ext_resource type="PackedScene" uid="uid://di7vcyrki71nm" path="res://Entities/Components/DetectionComponent/DetectionComponent.tscn" id="8_y2id4"]
+[ext_resource type="Texture2D" uid="uid://tt44u2wmer3n" path="res://Entities/EntityCore/Shadow/shadow_large.png" id="9_b403c"]
 [ext_resource type="PackedScene" uid="uid://cj2wy5f05cos4" path="res://Entities/EntityCore/Shadow/EntityShadow.tscn" id="9_kerkt"]
 [ext_resource type="PackedScene" uid="uid://dh4ydl7l86ywq" path="res://Entities/EntityCore/Sprites/EntitySprite.tscn" id="10_kkd23"]
 [ext_resource type="Shader" uid="uid://cfbagv3hrtar2" path="res://Utilities/Game/Shaders/EntityEffectShader.gdshader" id="11_pg7ae"]
@@ -67,7 +68,7 @@ metadata/_custom_type_script = "uid://baglarh3m4c8o"
 [sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_2kecs"]
 polygon = PackedVector2Array(-9, -15, -9, -6, 9, -6, 9, -15)
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_3aoki"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_b403c"]
 resource_local_to_scene = true
 shader = ExtResource("11_pg7ae")
 
@@ -110,12 +111,20 @@ occluder = SubResource("OccluderPolygon2D_2kecs")
 
 [node name="EntityShadow" parent="." instance=ExtResource("9_kerkt")]
 self_modulate = Color(0, 0, 0, 0.164)
-position = Vector2(0, -11)
-scale = Vector2(1.94999, 3.61307)
+offset_left = -13.0
+offset_top = -21.0
+offset_right = 13.0
+offset_bottom = 2.0
+texture = ExtResource("9_b403c")
+patch_margin_left = 8
+patch_margin_top = 8
+patch_margin_right = 8
+patch_margin_bottom = 8
+type = 3
 
 [node name="EntitySprite" parent="." instance=ExtResource("10_kkd23")]
 unique_name_in_owner = true
-material = SubResource("ShaderMaterial_3aoki")
+material = SubResource("ShaderMaterial_b403c")
 instance_shader_parameters/crack_color = Color(0.132138, 0.153553, 0.183094, 0.85)
 instance_shader_parameters/crack_depth = 0.4
 instance_shader_parameters/crack_intensity = 0.0

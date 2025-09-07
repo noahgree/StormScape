@@ -17,70 +17,38 @@
 script = ExtResource("2_bfhbg")
 source_type = 5
 source_tags = Array[String](["chops_wood"])
-scanned_phys_layers = 111
 can_hit_self = false
-bad_effect_affected_teams = 1
-good_effect_affected_teams = 2
 base_damage = 25
 object_damage_mult = 5.0
-dmg_affected_stats = 2
 crit_chance = 5
-crit_multiplier = 1.5
-armor_penetration = 0
-base_healing = 0
-heal_affected_stats = 2
 impact_cam_fx = ExtResource("1_ef0fw")
-impact_sound = ""
-hit_flash_color = Color(1, 1, 1, 0.6)
-status_effects = Array[ExtResource("3_r1oeb")]([])
 metadata/_custom_type_script = ExtResource("2_bfhbg")
 
 [sub_resource type="Resource" id="Resource_r1oeb"]
 script = ExtResource("2_bfhbg")
 source_type = 5
 source_tags = Array[String](["chops_wood"])
-scanned_phys_layers = 111
 can_hit_self = false
-bad_effect_affected_teams = 1
-good_effect_affected_teams = 2
 base_damage = 8
 object_damage_mult = 5.0
-dmg_affected_stats = 2
-crit_chance = 0
-crit_multiplier = 1.5
-armor_penetration = 0
-base_healing = 0
-heal_affected_stats = 2
 impact_cam_fx = ExtResource("4_2hf6i")
-impact_sound = ""
-hit_flash_color = Color(1, 1, 1, 0.6)
-status_effects = Array[ExtResource("3_r1oeb")]([])
 metadata/_custom_type_script = ExtResource("2_bfhbg")
 
 [sub_resource type="Resource" id="Resource_2hf6i"]
 script = ExtResource("9_gpb85")
-type = "Item"
 item = ExtResource("9_bfhbg")
 quantity = 2
-tags = Array[StringName]([])
-rarity_match = "No"
 metadata/_custom_type_script = "uid://ctxa7i1mbt7ab"
 
 [sub_resource type="Resource" id="Resource_2eemx"]
 script = ExtResource("9_gpb85")
-type = "Item"
 item = ExtResource("10_r1oeb")
-quantity = 1
-tags = Array[StringName]([])
-rarity_match = "No"
 metadata/_custom_type_script = "uid://ctxa7i1mbt7ab"
 
 [sub_resource type="Resource" id="Resource_ewff2"]
 script = ExtResource("9_gpb85")
 type = "Tags"
-quantity = 1
 tags = Array[StringName]([&"log"])
-rarity_match = "No"
 metadata/_custom_type_script = "uid://ctxa7i1mbt7ab"
 
 [sub_resource type="Resource" id="Resource_ieaky"]
@@ -88,88 +56,20 @@ script = ExtResource("10_dwct0")
 
 [resource]
 script = ExtResource("11_4pa72")
-melee_weapon_type = 0
 effect_source = SubResource("Resource_r1oeb")
-stamina_cost = 3.0
 use_cooldown = 0.25
-use_speed = 0.25
 swing_angle = 110
-use_anim = ""
-ghost_fade_time = 0.32
-use_sound = ""
-can_do_charge_use = false
 charge_effect_source = SubResource("Resource_bfhbg")
-min_charge_time = 2.0
-auto_do_charge_use = false
-charge_use_cooldown = 1.5
-charge_use_speed = 0.75
-charge_swing_angle = 720
-charge_loss_mult = 1.0
-reset_charge_on_use = false
-normal_use_on_fail = true
-charge_stamina_cost = 25
-charge_use_anim = ""
-charge_ghost_fade_time = 1.0
-charge_use_sound = ""
-pullout_delay = 0.25
-snap_to_six_dirs = false
-no_levels = false
-hide_ammo_ui = false
-max_mods_override = -1
-blocked_mods = Array[StringName]([])
-level = 1
-lvl_progress = 0
 s_mods = SubResource("Resource_ieaky")
-weapon_mods_need_to_be_readded_after_save = false
-current_mods = Array[Dictionary]([{
-&"1": null
-}, {
-&"2": null
-}, {
-&"3": null
-}, {
-&"4": null
-}, {
-&"5": null
-}, {
-&"6": null
-}])
-original_status_effects = Array[ExtResource("3_r1oeb")]([])
-original_charge_status_effects = Array[ExtResource("3_r1oeb")]([])
-original_aoe_status_effects = Array[ExtResource("3_r1oeb")]([])
 id = "axe"
 name = "Axe"
 tags = Array[StringName]([&"tool"])
 item_type = 1
-rarity = 0
-stack_size = 1
-auto_pickup = false
 pickup_radius = 6
 info = "A mighty axe."
-extra_details = Array[ExtResource("5_2eemx")]([])
 ground_icon = ExtResource("6_5lu8p")
 in_hand_icon = ExtResource("6_5lu8p")
 inv_icon = ExtResource("6_5lu8p")
-flip_inv_icon_h = true
-inv_icon_offset = Vector2(0, 0)
-inv_icon_scale = Vector2(1, 1)
-inv_icon_rotation = 0.0
 recipe = Array[ExtResource("9_gpb85")]([SubResource("Resource_2hf6i"), SubResource("Resource_2eemx"), SubResource("Resource_ewff2")])
-output_quantity = 1
-recipe_unlocked = true
 item_scene = ExtResource("7_5lu8p")
-rotation_lerping = 0.1
-holding_offset = Vector2(0, 0)
-holding_degrees = 0.0
-stay_flat_on_rotate = false
-is_gripped_by_one_hand = true
-draw_off_hand = false
-draw_off_hand_offset = Vector2(0, 0)
-main_hand_offset = Vector2(0, 0)
-cooldowns_per_suid = true
 shown_cooldown_fills = Array[String](["default"])
-show_cursor_cooldown = false
-equip_audio = ""
-pickup_audio = ""
-drop_audio = ""
-session_uid = 0

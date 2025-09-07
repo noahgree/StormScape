@@ -1,4 +1,4 @@
-[gd_scene load_steps=27 format=3 uid="uid://jdi552emuah8"]
+[gd_scene load_steps=28 format=3 uid="uid://jdi552emuah8"]
 
 [ext_resource type="Script" uid="uid://cn2gulskgn7k3" path="res://Entities/EntityCore/EntityTypes/StaticEntity/StaticEntity.gd" id="1_7qjvm"]
 [ext_resource type="Script" uid="uid://dwmur0cosbbwh" path="res://UI/Inventory/InventoryCore/InventoryResource.gd" id="2_ymdvb"]
@@ -10,6 +10,7 @@
 [ext_resource type="Script" uid="uid://baglarh3m4c8o" path="res://Entities/Components/ItemComponents/LootTableComponent/LootTableResource.gd" id="6_ymdvb"]
 [ext_resource type="Texture2D" uid="uid://y4h3ce1ifonf" path="res://Entities/Environment/Rocks/Rock1CT.tres" id="7_7qjvm"]
 [ext_resource type="PackedScene" uid="uid://cdfdy8m6ki3oq" path="res://Entities/Components/HealthComponent/HealthComponent.tscn" id="8_c8cii"]
+[ext_resource type="Texture2D" uid="uid://tt44u2wmer3n" path="res://Entities/EntityCore/Shadow/shadow_large.png" id="9_7qjvm"]
 [ext_resource type="PackedScene" uid="uid://btba0jmsow1mx" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectReceiverComponent.tscn" id="9_wje6d"]
 [ext_resource type="PackedScene" uid="uid://jpq0ij8wwlhy" path="res://Entities/Components/FacingComponent/FacingComponent.tscn" id="12_1nxg5"]
 [ext_resource type="PackedScene" uid="uid://4gl24qwdyti3" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/DmgHandler.tscn" id="12_ymdvb"]
@@ -96,8 +97,15 @@ occluder = SubResource("OccluderPolygon2D_2kecs")
 
 [node name="EntityShadow" parent="." instance=ExtResource("4_mc2cg")]
 self_modulate = Color(0, 0, 0, 0.164)
-position = Vector2(0, -10)
-scale = Vector2(2.51672, 3.34408)
+offset_left = -17.0
+offset_top = -21.0
+offset_right = 17.0
+texture = ExtResource("9_7qjvm")
+patch_margin_left = 8
+patch_margin_top = 8
+patch_margin_right = 8
+patch_margin_bottom = 8
+type = 3
 
 [node name="EntitySprite" parent="." instance=ExtResource("5_by2me")]
 unique_name_in_owner = true

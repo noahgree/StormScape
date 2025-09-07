@@ -2,19 +2,13 @@
 
 [ext_resource type="Script" uid="uid://cowjdnic7xmkp" path="res://UI/Inventory/PlayerInventory/StatDetail.gd" id="1_fvnnl"]
 [ext_resource type="Texture2D" uid="uid://iqydrmrk3xs0" path="res://Entities/Items/Wearables/FrostCharm/FrostCharmCT.tres" id="2_fvnnl"]
-[ext_resource type="Script" uid="uid://ctxa7i1mbt7ab" path="res://UI/Inventory/PlayerInventory/Crafting/CraftingIngredient.gd" id="3_mhirk"]
+[ext_resource type="Script" uid="uid://ctxa7i1mbt7ab" path="res://UI/Inventory/PlayerInventory/Crafting/CraftingIngredient.gd" id="3_ei0fa"]
 [ext_resource type="Script" uid="uid://317ipeo41y3c" path="res://Entities/Items/Wearables/Wearable.gd" id="4_usiap"]
 [ext_resource type="Script" uid="uid://bcjwesiannbd0" path="res://Entities/Stats/StatMod/StatMod.gd" id="5_ni1nb"]
 
 [sub_resource type="Resource" id="Resource_fvnnl"]
 script = ExtResource("1_fvnnl")
 title = "FROSTBITE IMMUNITY"
-stat_array = Array[String]([])
-up_is_good = true
-suffix = ""
-multiplier = 1.0
-addition = 0.0
-fraction_of_orig = false
 metadata/_custom_type_script = "uid://cowjdnic7xmkp"
 
 [sub_resource type="Resource" id="Resource_jup86"]
@@ -23,52 +17,18 @@ stat_id = &"frostbite_resistance"
 mod_id = &"frost_charm"
 operation = "="
 value = 100.0
-rounding = "Exact"
-priority = 1
-max_stack_count = 1
-override_all = false
 metadata/_custom_type_script = "uid://bcjwesiannbd0"
 
 [resource]
 script = ExtResource("4_usiap")
 stat_mods = Array[ExtResource("5_ni1nb")]([SubResource("Resource_jup86")])
 applied_details = Array[ExtResource("1_fvnnl")]([SubResource("Resource_fvnnl")])
-blocked_mutuals = Array[StringName]([])
-equipping_audio = ""
-removal_audio = ""
 id = "frost_charm"
 name = "Frost Charm"
-tags = Array[StringName]([])
 item_type = 3
 rarity = 5
-stack_size = 1
-auto_pickup = false
-pickup_radius = 4
 info = "Grants immunity to damage from frostbite when worn."
-extra_details = Array[ExtResource("1_fvnnl")]([])
 ground_icon = ExtResource("2_fvnnl")
 in_hand_icon = ExtResource("2_fvnnl")
 inv_icon = ExtResource("2_fvnnl")
-flip_inv_icon_h = false
-inv_icon_offset = Vector2(0, 0)
-inv_icon_scale = Vector2(1, 1)
-inv_icon_rotation = 0.0
-recipe = Array[ExtResource("3_mhirk")]([])
-output_quantity = 1
-recipe_unlocked = true
-rotation_lerping = 0.1
-holding_offset = Vector2(0, 0)
-holding_degrees = 0.0
-stay_flat_on_rotate = false
-is_gripped_by_one_hand = true
-draw_off_hand = false
-draw_off_hand_offset = Vector2(0, 0)
-main_hand_offset = Vector2(0, 0)
-cooldowns_per_suid = true
-shown_cooldown_fills = Array[String]([])
-show_cursor_cooldown = false
-equip_audio = ""
-pickup_audio = ""
-drop_audio = ""
-session_uid = 0
 metadata/_custom_type_script = "uid://317ipeo41y3c"

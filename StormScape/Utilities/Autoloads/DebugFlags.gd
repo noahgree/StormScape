@@ -31,8 +31,8 @@ var use_scroll_debounce: bool = true
 
 # Projectile Flags
 var show_collision_points: bool = false
-var show_homing_rays: bool = false
-var show_homing_targets: bool = false
+var show_homing_rays: bool = true
+var show_homing_targets: bool = true
 var show_movement_dir: bool = false
 var show_hitscan_rays: bool = false
 var show_aiming_direction: bool = false
@@ -45,7 +45,7 @@ var frame_rate: bool = true
 
 # Entity Flags
 var show_facing_dir: bool = false
-var show_nav: bool = false
+var show_nav: bool = true
 
 
 func _ready() -> void:

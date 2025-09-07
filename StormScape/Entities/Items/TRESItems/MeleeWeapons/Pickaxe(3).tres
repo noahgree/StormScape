@@ -2,58 +2,32 @@
 
 [ext_resource type="Resource" uid="uid://b5dad578bsduf" path="res://Entities/Player/PlayerCore/PlayerCamera/CamFXPresets/3(NoFreeze).tres" id="1_grgtv"]
 [ext_resource type="Script" uid="uid://dkfssottmsrch" path="res://Entities/Stats/EffectSystemResources/EffectSources/EffectSource.gd" id="1_urffy"]
-[ext_resource type="Script" uid="uid://boo31eu083dqd" path="res://Entities/Stats/EffectSystemResources/StatusEffects/StatusEffect.gd" id="2_ypwee"]
+[ext_resource type="Script" uid="uid://boo31eu083dqd" path="res://Entities/Stats/EffectSystemResources/StatusEffects/StatusEffect.gd" id="3_grgtv"]
 [ext_resource type="Texture2D" uid="uid://byxhss0dhepgs" path="res://Entities/Items/Weapons/MeleeWeapons/Pickaxe/PickaxeBaseCT.tres" id="4_3csw6"]
 [ext_resource type="PackedScene" uid="uid://b0wwbgbbfkso4" path="res://Entities/Items/Weapons/MeleeWeapons/Pickaxe/Pickaxe.tscn" id="4_6vlkm"]
 [ext_resource type="Resource" uid="uid://jdmp0abbwxm5" path="res://Entities/Player/PlayerCore/PlayerCamera/CamFXPresets/1(NoFreeze).tres" id="4_n05aj"]
 [ext_resource type="Script" uid="uid://c2gdoebfp12dq" path="res://Entities/Stats/StatMod/StatModsCacheResource.gd" id="5_3g32j"]
-[ext_resource type="Script" uid="uid://cowjdnic7xmkp" path="res://UI/Inventory/PlayerInventory/StatDetail.gd" id="5_77plg"]
+[ext_resource type="Script" uid="uid://cowjdnic7xmkp" path="res://UI/Inventory/PlayerInventory/StatDetail.gd" id="5_n05aj"]
 [ext_resource type="Texture2D" uid="uid://b6q76o13tanxi" path="res://Entities/Items/Weapons/MeleeWeapons/Pickaxe/pickaxe_base.png" id="5_s4oy3"]
 [ext_resource type="Script" uid="uid://djlk3y511igng" path="res://Entities/Items/Weapons/MeleeWeapons/MeleeWeaponResource.gd" id="5_uecum"]
-[ext_resource type="Script" uid="uid://ctxa7i1mbt7ab" path="res://UI/Inventory/PlayerInventory/Crafting/CraftingIngredient.gd" id="5_x5580"]
+[ext_resource type="Script" uid="uid://ctxa7i1mbt7ab" path="res://UI/Inventory/PlayerInventory/Crafting/CraftingIngredient.gd" id="9_lph6g"]
 
 [sub_resource type="Resource" id="Resource_e3dpw"]
 script = ExtResource("1_urffy")
 source_type = 5
-source_tags = Array[String]([])
-scanned_phys_layers = 111
 can_hit_self = false
-bad_effect_affected_teams = 1
-good_effect_affected_teams = 2
 base_damage = 10
 object_damage_mult = 5.0
-dmg_affected_stats = 2
-crit_chance = 0
-crit_multiplier = 1.5
-armor_penetration = 0
-base_healing = 0
-heal_affected_stats = 2
 impact_cam_fx = ExtResource("1_grgtv")
-impact_sound = ""
-hit_flash_color = Color(1, 1, 1, 0.6)
-status_effects = Array[ExtResource("2_ypwee")]([])
 metadata/_custom_type_script = ExtResource("1_urffy")
 
 [sub_resource type="Resource" id="Resource_3csw6"]
 script = ExtResource("1_urffy")
 source_type = 5
-source_tags = Array[String]([])
-scanned_phys_layers = 111
 can_hit_self = false
-bad_effect_affected_teams = 1
-good_effect_affected_teams = 2
 base_damage = 5
 object_damage_mult = 5.0
-dmg_affected_stats = 2
-crit_chance = 0
-crit_multiplier = 1.5
-armor_penetration = 0
-base_healing = 0
-heal_affected_stats = 2
 impact_cam_fx = ExtResource("4_n05aj")
-impact_sound = ""
-hit_flash_color = Color(1, 1, 1, 0.6)
-status_effects = Array[ExtResource("2_ypwee")]([])
 metadata/_custom_type_script = ExtResource("1_urffy")
 
 [sub_resource type="Resource" id="Resource_wwtqn"]
@@ -61,88 +35,22 @@ script = ExtResource("5_3g32j")
 
 [resource]
 script = ExtResource("5_uecum")
-melee_weapon_type = 0
 effect_source = SubResource("Resource_3csw6")
-stamina_cost = 3.0
 use_cooldown = 0.25
 use_speed = 0.2
 swing_angle = 65
-use_anim = ""
-ghost_fade_time = 0.32
-use_sound = ""
-can_do_charge_use = false
 charge_effect_source = SubResource("Resource_e3dpw")
-min_charge_time = 2.0
-auto_do_charge_use = false
-charge_use_cooldown = 1.5
-charge_use_speed = 0.75
-charge_swing_angle = 720
-charge_loss_mult = 1.0
-reset_charge_on_use = false
-normal_use_on_fail = true
-charge_stamina_cost = 25
-charge_use_anim = ""
-charge_ghost_fade_time = 1.0
-charge_use_sound = ""
-pullout_delay = 0.25
-snap_to_six_dirs = false
-no_levels = false
-hide_ammo_ui = false
-max_mods_override = -1
-blocked_mods = Array[StringName]([])
-level = 1
-lvl_progress = 0
 s_mods = SubResource("Resource_wwtqn")
-weapon_mods_need_to_be_readded_after_save = false
-current_mods = Array[Dictionary]([{
-&"1": null
-}, {
-&"2": null
-}, {
-&"3": null
-}, {
-&"4": null
-}, {
-&"5": null
-}, {
-&"6": null
-}])
-original_status_effects = Array[ExtResource("2_ypwee")]([])
-original_charge_status_effects = Array[ExtResource("2_ypwee")]([])
-original_aoe_status_effects = Array[ExtResource("2_ypwee")]([])
 id = "pickaxe"
 name = "Pickaxe"
-tags = Array[StringName]([])
 item_type = 1
 rarity = 3
-stack_size = 1
-auto_pickup = false
 pickup_radius = 6
 info = "A handy pick."
-extra_details = Array[ExtResource("5_77plg")]([])
 ground_icon = ExtResource("4_3csw6")
 in_hand_icon = ExtResource("4_3csw6")
 inv_icon = ExtResource("5_s4oy3")
-flip_inv_icon_h = true
-inv_icon_offset = Vector2(0, 0)
-inv_icon_scale = Vector2(1, 1)
-inv_icon_rotation = 0.0
-recipe = Array[ExtResource("5_x5580")]([])
-output_quantity = 1
-recipe_unlocked = true
 item_scene = ExtResource("4_6vlkm")
-rotation_lerping = 0.1
 holding_offset = Vector2(-2, 2)
-holding_degrees = 0.0
-stay_flat_on_rotate = false
 is_gripped_by_one_hand = false
-draw_off_hand = false
-draw_off_hand_offset = Vector2(0, 0)
-main_hand_offset = Vector2(0, 0)
-cooldowns_per_suid = true
 shown_cooldown_fills = Array[String](["default"])
-show_cursor_cooldown = false
-equip_audio = ""
-pickup_audio = ""
-drop_audio = ""
-session_uid = 0

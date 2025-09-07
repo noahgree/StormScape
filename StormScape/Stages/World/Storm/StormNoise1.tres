@@ -7,5 +7,5 @@ frequency = 0.0388
 fractal_octaves = 3
 
 [resource]
-seamless = true
 noise = SubResource("FastNoiseLite_8lm63")
+seamless = true

@@ -22,7 +22,7 @@ func _ready() -> void:
 	Globals.player_node.health_component.health_changed.connect(_show_hp_change_fx)
 	Globals.player_node.health_component.shield_changed.connect(_show_hp_change_fx)
 
-	_change_storm_fx(true)
+	_change_storm_fx()
 
 ## If we aren't showing any effect, tween according to whether the player is sneaking or not.
 func _change_sneak_fx(is_sneaking: bool) -> void:
@@ -38,8 +38,11 @@ func _change_sneak_fx(is_sneaking: bool) -> void:
 		tint_tween.parallel().tween_property(self, "modulate", Color.BLACK, 0.3)
 
 ## If we aren't showing an effect, tween according to whether the player is in the storm or not.
-func _change_storm_fx(is_in_safe_zone: bool) -> void:
-	player_in_safe_zone = is_in_safe_zone
+func _change_storm_fx() -> void:
+	if Globals.player_node.is_in_group("entities_out_of_safe_area"):
+		player_in_safe_zone = false
+	else:
+		player_in_safe_zone = true
 	if showing_effect:
 		return
 	tint_tween = _reset_tween()
@@ -65,7 +68,7 @@ func _show_hp_change_fx(new_value: int, old_value: int) -> void:
 		tint_tween.parallel().tween_property(self, "modulate", damage_color, 0.03)
 
 	tint_tween.tween_callback(func() -> void: showing_effect = false)
-	tint_tween.tween_callback(_change_storm_fx.bind(player_in_safe_zone))
+	tint_tween.tween_callback(_change_storm_fx)
 	tint_tween.tween_property(self, "scale", Vector2(1.0, 1.0), 0.06)
 
 ## Kills any active tween and returns a new one.

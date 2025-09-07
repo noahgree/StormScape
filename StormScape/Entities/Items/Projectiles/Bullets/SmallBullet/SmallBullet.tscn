@@ -95,7 +95,7 @@ debug_color = Color(0.626, 0.349, 1, 0.196)
 light_mask = 2
 material = SubResource("CanvasItemMaterial_mtv1g")
 sprite_frames = SubResource("SpriteFrames_8obu2")
-animation = &"impact"
+animation = &"flying"
 autoplay = "flying"
 
 [node name="Shadow" type="Sprite2D" parent="."]

@@ -16,15 +16,20 @@ static func check_mod_compatibility(weapon_stats: WeaponResource, weapon_mod: We
 		if weapon_stats.has_mod(blocked_mutual):
 			return false
 
-	var found_blocked_stat: bool = false
+	var failed: bool = false
 	for blocked_stat: StringName in weapon_mod.blocked_wpn_stats:
 		if weapon_stats.get_nested_stat(blocked_stat, false) == weapon_mod.blocked_wpn_stats[blocked_stat]:
-			found_blocked_stat = true
-		else:
-			if weapon_mod.req_all_blocked_stats:
-				return true
-	if found_blocked_stat:
+			failed = true
+		elif weapon_mod.req_all_blocked_stats:
+			failed = false
+			break
+	if failed:
 		return false
+
+	for required_stat: StringName in weapon_mod.required_stats:
+		if weapon_stats.get_nested_stat(required_stat, false) != weapon_mod.required_stats[required_stat]:
+			return false
+
 	return true
 
 ## Returns how many mods the weapon can have on it.
@@ -189,7 +194,8 @@ static func _update_effect_source_status_effects(weapon_stats: WeaponResource, t
 			effect_source.status_effects.append(new_effect)
 
 ## Updates the status effect lists after removing a mod (by not using the old mod's status effects anymore).
-static func _remove_mod_status_effects_from_effect_source(weapon_stats: WeaponResource, type: EffectSourceType) -> void:
+static func _remove_mod_status_effects_from_effect_source(weapon_stats: WeaponResource,
+															type: EffectSourceType) -> void:
 	var effect_source: EffectSource
 	var orig_array: Array[StatusEffect]
 	match type:

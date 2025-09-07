@@ -1,0 +1,93 @@
+[gd_scene load_steps=14 format=3 uid="uid://cqvc0w84kou6a"]
+
+[ext_resource type="Script" uid="uid://d1uexupra43i8" path="res://Entities/Items/Projectiles/ProjectileCore/Projectile.gd" id="1_wj07j"]
+[ext_resource type="Texture2D" uid="uid://bwuth2fyl1x12" path="res://Entities/Items/Projectiles/Bullets/SmallBullet/bullet_small.png" id="2_x0l4u"]
+[ext_resource type="Texture2D" uid="uid://c4uq0oetio1yt" path="res://Entities/Items/Projectiles/Explosives/Grenade/grenade.png" id="3_p60ir"]
+[ext_resource type="Texture2D" uid="uid://dcbwxgak6a0r8" path="res://Entities/EntityCore/Shadow/entity_shadow.png" id="4_jai5b"]
+[ext_resource type="PackedScene" uid="uid://dau2tuc6mx0by" path="res://Entities/Items/Projectiles/ProjectileCore/Trail/Trail.tscn" id="5_t7wkl"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_tr4aq"]
+radius = 3.0
+height = 8.0
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_q4sp5"]
+light_mode = 1
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_pg2je"]
+atlas = ExtResource("2_x0l4u")
+region = Rect2(0, 13, 13, 13)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hnctu"]
+atlas = ExtResource("2_x0l4u")
+region = Rect2(13, 13, 13, 13)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ruur3"]
+atlas = ExtResource("2_x0l4u")
+region = Rect2(26, 13, 13, 13)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wj07j"]
+atlas = ExtResource("3_p60ir")
+region = Rect2(0, 0, 7, 7)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_wab4n"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_pg2je")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_hnctu")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ruur3")
+}],
+"loop": false,
+"name": &"aoe",
+"speed": 30.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wj07j")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="Gradient" id="Gradient_7tntk"]
+offsets = PackedFloat32Array(0.237255, 1)
+colors = PackedColorArray(1, 1, 1, 0, 1, 1, 1, 0.2)
+
+[node name="Grenade" type="Area2D"]
+editor_description = "DO NOT SET EFFECT SOURCE IF BEING USED DIRECTLY WITH A WEAPON. THE WEAPON WILL SET IT FOR YOU."
+collision_layer = 0
+collision_mask = 0
+script = ExtResource("1_wj07j")
+glow_color = Color(1, 0.901675, 0.877147, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+rotation = 1.5707964
+shape = SubResource("CapsuleShape2D_tr4aq")
+debug_color = Color(0.626, 0.349, 1, 0.196)
+
+[node name="ProjSprite" type="AnimatedSprite2D" parent="."]
+light_mask = 2
+material = SubResource("CanvasItemMaterial_q4sp5")
+rotation = 1.5707964
+sprite_frames = SubResource("SpriteFrames_wab4n")
+animation = &"aoe"
+autoplay = "default"
+
+[node name="Shadow" type="Sprite2D" parent="."]
+self_modulate = Color(0.16, 0.16, 0.16, 0.185)
+top_level = true
+z_index = 1
+position = Vector2(0, 7)
+scale = Vector2(0.45, 0.35)
+texture = ExtResource("4_jai5b")
+
+[node name="Trail" parent="." instance=ExtResource("5_t7wkl")]
+width = 6.0
+gradient = SubResource("Gradient_7tntk")
+max_points = 15
+x_offset = 0.0

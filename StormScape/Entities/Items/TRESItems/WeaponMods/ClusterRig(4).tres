@@ -1,0 +1,49 @@
+[gd_resource type="Resource" script_class="WeaponMod" load_steps=10 format=3 uid="uid://de6d4b7xfr4am"]
+
+[ext_resource type="Script" uid="uid://boo31eu083dqd" path="res://Entities/Stats/EffectSystemResources/StatusEffects/StatusEffect.gd" id="1_4sejx"]
+[ext_resource type="Script" uid="uid://cowjdnic7xmkp" path="res://UI/Inventory/PlayerInventory/StatDetail.gd" id="3_jrpdv"]
+[ext_resource type="Texture2D" uid="uid://uw5lhqydwiy3" path="res://Entities/Items/WeaponMods/Igniter/IgniterBaseCT.tres" id="5_u8pd8"]
+[ext_resource type="Script" uid="uid://ctxa7i1mbt7ab" path="res://UI/Inventory/PlayerInventory/Crafting/CraftingIngredient.gd" id="6_7la06"]
+[ext_resource type="Script" uid="uid://ct7n8wo1p3b20" path="res://Entities/Items/WeaponMods/WeaponMod.gd" id="7_rcwbr"]
+[ext_resource type="Script" uid="uid://bcjwesiannbd0" path="res://Entities/Stats/StatMod/StatMod.gd" id="8_c2cdw"]
+
+[sub_resource type="Resource" id="Resource_x6clt"]
+script = ExtResource("3_jrpdv")
+title = "Barrage Count"
+stat_array = Array[String](["barrage_count"])
+metadata/_custom_type_script = "uid://cowjdnic7xmkp"
+
+[sub_resource type="Resource" id="Resource_1tbmq"]
+script = ExtResource("8_c2cdw")
+stat_id = &"barrage_count"
+mod_id = &"cluster_rig"
+operation = "="
+value = 3.0
+metadata/_custom_type_script = "uid://bcjwesiannbd0"
+
+[sub_resource type="Resource" id="Resource_3k0eb"]
+script = ExtResource("8_c2cdw")
+stat_id = &"base_damage"
+mod_id = &"cluster_rig"
+operation = "-%"
+value = 30.0
+rounding = "Round Up"
+metadata/_custom_type_script = "uid://bcjwesiannbd0"
+
+[resource]
+script = ExtResource("7_rcwbr")
+allowed_proj_wpns = Array[int]([0, 1, 2, 3, 4, 5, 6, 7, 9])
+allowed_melee_wpns = Array[int]([])
+required_stats = Dictionary[StringName, float]({
+&"barrage_count": 1.0
+})
+wpn_stat_mods = Array[ExtResource("8_c2cdw")]([SubResource("Resource_1tbmq"), SubResource("Resource_3k0eb")])
+applied_details = Array[ExtResource("3_jrpdv")]([SubResource("Resource_x6clt")])
+id = "cluster_rig"
+name = "Cluster Rig"
+item_type = 6
+rarity = 4
+info = "Lets the weapon fire a cluster for no additional ammo cost, but decreases per-projectile damage."
+ground_icon = ExtResource("5_u8pd8")
+in_hand_icon = ExtResource("5_u8pd8")
+inv_icon = ExtResource("5_u8pd8")

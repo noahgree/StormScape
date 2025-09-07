@@ -43,7 +43,8 @@ func attempt_reload() -> void:
 func mag_is_full() -> bool:
 	return weapon.stats.ammo_in_mag >= weapon.stats.s_mods.get_stat("mag_size")
 
-## Starts the timer that tracks the entire duration of the reload in order to provide the UI with continuous progress.
+## Starts the timer that tracks the entire duration of the reload in order to provide the UI with
+## continuous progress.
 func _start_reload_dur_timer() -> void:
 	# Only do these calculations and start the timer if we need it for updating the UI.
 	if not weapon.source_entity is Player:

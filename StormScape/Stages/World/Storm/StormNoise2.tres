@@ -4,5 +4,5 @@
 frequency = 0.0118
 
 [resource]
-seamless = true
 noise = SubResource("FastNoiseLite_s5gqv")
+seamless = true

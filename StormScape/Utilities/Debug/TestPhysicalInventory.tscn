@@ -91,8 +91,10 @@ sprite_frames = SubResource("SpriteFrames_d07fb")
 disable_floor_light = true
 
 [node name="EntityShadow" parent="." instance=ExtResource("7_s3b18")]
-position = Vector2(0, -5)
-scale = Vector2(1.81936, 2.4086)
+offset_left = -12.0
+offset_top = -14.0
+offset_right = 12.0
+offset_bottom = 2.0
 
 [node name="HealthComponent" parent="." instance=ExtResource("9_4jcvl")]
 _max_health = 1000

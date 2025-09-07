@@ -9,8 +9,8 @@ enum SoundSpace { GLOBAL, SPATIAL } ## A specifier for determining global vs spa
 @export_dir var sfx_resources_folder: String ## The folder holding all .tres sfx files.
 
 const DISTANCE_FROM_PLAYER_BUFFER: int = 100 ## How far beyond max_distance the player can from the sound origin for a 2d sound to still get created.
-const MAX_SPATIAL_POOL_SIZE: int = 12 ## How many 2d audio player nodes can be waiting around in the pool.
-const MAX_GLOBAL_POOL_SIZE: int = 15 ## How many global audio player nodes can be waiting around in the pool.
+const MAX_SPATIAL_POOL_SIZE: int = 16 ## How many 2d audio player nodes can be waiting around in the pool.
+const MAX_GLOBAL_POOL_SIZE: int = 16 ## How many global audio player nodes can be waiting around in the pool.
 var sound_cache: Dictionary[StringName, AudioResource] = {} ## The dict of the file paths to all sound resources, using the id as the key.
 var scene_ref_counts: Dictionary[StringName, int] = {} ## The number of scenes needing access to certain sound ids.
 var spatial_pool: Array[PooledAudioPlayer2D] ## The 2d audio players current waiting around in memory.
@@ -18,22 +18,32 @@ var global_pool: Array[PooledAudioPlayer] ## The global audio players current wa
 
 #region Setup & Cache
 func _ready() -> void:
-	#if OS.get_unique_id() == "W1RHWL2KQ6": # Needed to make audio work on Noah's computer, only affects him
-		#var devices: PackedStringArray = AudioServer.get_output_device_list()
-		#var macbook_device_index: int = devices.find("Macbook")
-		#var macbook_device: String = devices[macbook_device_index]
-		#AudioServer.output_device = macbook_device if DebugFlags.set_debug_output_device else "Default"
+	if OS.get_unique_id() == "W1RHWL2KQ6":
+		_setup_output_device()
 
 	_cache_audio_resources(music_resources_folder, sound_cache)
 	_cache_audio_resources(sfx_resources_folder, sound_cache)
 
-	var pool_trim_timer: Timer = TimerHelpers.create_repeating_autostart_timer(self, 15.0, _trim_pools)
+	var pool_trim_timer: Timer = TimerHelpers.create_repeating_autostart_timer(self, 20.0, _trim_pools)
 	pool_trim_timer.name = "PoolingTrimDaemon"
 
 	DebugConsole.add_command("sound", _play_sound_globally_by_id)
 	DebugConsole.add_command("stop_sound", stop_sound_id)
 	DebugConsole.add_command("sound_volume", change_volume_by_sound_name)
 	DebugConsole.add_command("sound_group", _debug_print_active_nodes_in_group)
+
+## Debug setup for Noah's macbook audio output. Only affects him.
+func _setup_output_device() -> void:
+	if not DebugFlags.set_debug_output_device:
+		AudioServer.output_device = "Default"
+		return
+
+	var devices: PackedStringArray = AudioServer.get_output_device_list()
+	var mb_index: int = devices.find("MacBook Pro Speakers (118)")
+	if mb_index == -1:
+		printerr("MacBook Pro Speakers device could not be set as output!")
+	var macbook_device: String = ArrayHelpers.get_or_default(devices, mb_index, "Default")
+	AudioServer.output_device = macbook_device
 
 ## Stores a key-value pair in the appropriate cache dict using the id specified in the sound resource as the key.
 ## Given a key, the cache created by this method will return a file path to the specified audio id.

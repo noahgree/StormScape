@@ -582,7 +582,7 @@ func _on_safe_zone_body_entered(body: Node2D) -> void:
 		_remove_current_effect_from_entity(body)
 		body.remove_from_group("entities_out_of_safe_area")
 	if body is Player:
-		SignalBus.player_in_safe_zone_changed.emit(true)
+		SignalBus.player_in_safe_zone_changed.emit()
 
 ## When a dynamic entity exits the inner safe circle, we apply the current storm effect.
 func _on_safe_zone_body_exited(body: Node2D) -> void:
@@ -595,7 +595,7 @@ func _on_safe_zone_body_exited(body: Node2D) -> void:
 			_add_effect_to_entity(body, current_effect)
 		body.add_to_group("entities_out_of_safe_area")
 	if body is Player:
-		SignalBus.player_in_safe_zone_changed.emit(false)
+		SignalBus.player_in_safe_zone_changed.emit()
 
 ## Removes the current effect from entities out of the safe area and applies the new one.
 ## The new one will be the default effect if we have no upcoming zone, otherwise it will be the effect

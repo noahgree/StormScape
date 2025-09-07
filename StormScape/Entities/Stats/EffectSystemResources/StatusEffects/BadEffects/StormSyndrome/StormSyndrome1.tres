@@ -2,16 +2,14 @@
 
 [ext_resource type="Script" uid="uid://20acrt2hb6y" path="res://Entities/Stats/EffectSystemResources/EffectOverTimeResources/DOTResource.gd" id="1_byjya"]
 [ext_resource type="Script" uid="uid://bq0632kqw53el" path="res://Entities/Stats/EffectSystemResources/StatusEffects/BadEffects/StormSyndrome/StormSyndromeEffect.gd" id="1_lgscn"]
-[ext_resource type="Script" uid="uid://bcjwesiannbd0" path="res://Entities/Stats/StatMod/StatMod.gd" id="2_tlg1s"]
+[ext_resource type="Script" uid="uid://bcjwesiannbd0" path="res://Entities/Stats/StatMod/StatMod.gd" id="3_rsqf7"]
 
 [sub_resource type="Resource" id="Resource_dega7"]
 script = ExtResource("1_byjya")
-damaging_time = 0.0
 dmg_ticks_array = Array[int]([2])
 delay_time = 1.0
 dmg_affected_stats = 0
 run_until_removed = true
-time_between_ticks = 1.0
 hit_flash_color = Color(0.769133, 0.615398, 1, 0.6)
 
 [resource]
@@ -19,15 +17,7 @@ script = ExtResource("1_lgscn")
 dot_resource = SubResource("Resource_dega7")
 id = "storm_syndrome"
 source_type = 2
-effect_lvl = 1
-is_bad_effect = true
-affected_entities = 7
-effects_to_stop = Array[String]([])
 mod_time = 0.0
 apply_until_removed = true
-stat_mods = Array[ExtResource("2_tlg1s")]([])
-audio_to_play = ""
 only_cue_on_player_hit = true
-spawn_particles = true
 particle_hander_req = "StormSyndrome"
-make_entity_glow = true

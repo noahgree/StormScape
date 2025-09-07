@@ -8,10 +8,7 @@
 script = ExtResource("1_3x1ys")
 damaging_time = 1.0
 dmg_ticks_array = Array[int]([3])
-delay_time = 0.0
 dmg_affected_stats = 0
-run_until_removed = false
-time_between_ticks = 1.0
 hit_flash_color = Color(0.501001, 0.670876, 1, 0.6)
 
 [sub_resource type="Resource" id="Resource_xefcn"]
@@ -20,10 +17,7 @@ stat_id = &"friction"
 mod_id = &"frostbite1"
 operation = "-%"
 value = 75.0
-rounding = "Exact"
-priority = 1
 max_stack_count = 3
-override_all = false
 
 [sub_resource type="Resource" id="Resource_4k2h3"]
 script = ExtResource("3_20sev")
@@ -31,25 +25,14 @@ stat_id = &"acceleration"
 mod_id = &"frostbite1"
 operation = "-%"
 value = 75.0
-rounding = "Exact"
-priority = 1
 max_stack_count = 3
-override_all = false
 
 [resource]
 script = ExtResource("2_ig58d")
 dot_resource = SubResource("Resource_ge1fd")
 id = "frostbite"
 source_type = 1
-effect_lvl = 1
-is_bad_effect = true
-affected_entities = 7
 effects_to_stop = Array[String](["burning"])
 mod_time = 1.0
-apply_until_removed = false
 stat_mods = Array[ExtResource("3_20sev")]([SubResource("Resource_xefcn"), SubResource("Resource_4k2h3")])
-audio_to_play = ""
-only_cue_on_player_hit = false
-spawn_particles = true
 particle_hander_req = "Frostbite"
-make_entity_glow = true

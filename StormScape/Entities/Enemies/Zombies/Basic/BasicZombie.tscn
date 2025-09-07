@@ -53,7 +53,6 @@
 [sub_resource type="Resource" id="Resource_jfdci"]
 script = ExtResource("3_hj6es")
 stats = ExtResource("4_naanu")
-quantity = 1
 metadata/_custom_type_script = "uid://dp8osf7r6xkkt"
 
 [sub_resource type="Resource" id="Resource_bijca"]
@@ -76,18 +75,11 @@ metadata/_custom_type_script = "uid://dp8osf7r6xkkt"
 
 [sub_resource type="Resource" id="Resource_yrrsd"]
 script = ExtResource("2_dcca3")
-title = "CHEST"
-main_inv_size = 10
-drop_on_death = false
 starting_inv = Array[ExtResource("3_hj6es")]([SubResource("Resource_jfdci"), SubResource("Resource_bijca"), SubResource("Resource_ar5xw"), SubResource("Resource_2qaea")])
 
 [sub_resource type="Resource" id="Resource_qrtn1"]
 script = ExtResource("19_8bt15")
 item = ExtResource("5_oiiqe")
-quantity = 1
-weighting = 1.0
-last_used = 0
-spawn_count = 0
 metadata/_custom_type_script = "uid://1qq7eo7lm8j6"
 
 [sub_resource type="Resource" id="Resource_cw5if"]
@@ -95,28 +87,14 @@ script = ExtResource("19_8bt15")
 item = ExtResource("6_oiiqe")
 quantity = 3
 weighting = 5.0
-last_used = 0
-spawn_count = 0
 metadata/_custom_type_script = "uid://1qq7eo7lm8j6"
 
 [sub_resource type="Resource" id="Resource_oqrkc"]
 script = ExtResource("7_qrtn1")
 hit_loot_table = Array[ExtResource("19_8bt15")]([null, SubResource("Resource_cw5if")])
 hit_spawn_chance = 2.0
-hit_chance_scale = 1
-remove_when_dropped = false
-require_dmg_on_hit = true
-hp_percent_hit_checks = 15
 die_loot_table = Array[ExtResource("19_8bt15")]([SubResource("Resource_qrtn1")])
 die_spawn_chance = 15.0
-rarity_scaling_factors = Dictionary[int, float]({
-0: 0.5,
-1: 0.4,
-2: 0.3,
-3: 0.1,
-4: 0.05,
-5: 0.005
-})
 metadata/_custom_type_script = "uid://baglarh3m4c8o"
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_2h2fy"]
@@ -492,50 +470,36 @@ point_count = 2
 [sub_resource type="Resource" id="Resource_nonw0"]
 resource_local_to_scene = true
 script = ExtResource("16_yrrsd")
-_knockback_weakness = 0.0
-_knockback_resistance = 0.0
-entity_dir_influence = 0.25
 metadata/_custom_type_script = "uid://dk6uef3uxmeev"
 
 [sub_resource type="Resource" id="Resource_6vrim"]
 resource_local_to_scene = true
 script = ExtResource("17_oiiqe")
-_stun_weakness = 0.0
-_stun_resistance = 0.0
 metadata/_custom_type_script = "uid://b21sy1r0nxgpv"
 
 [sub_resource type="Resource" id="Resource_xm53k"]
 resource_local_to_scene = true
 script = ExtResource("18_qrtn1")
-_poison_weakness = 0.0
-_poison_resistance = 0.0
 metadata/_custom_type_script = "uid://5krnqdrdbey1"
 
 [sub_resource type="Resource" id="Resource_gpye6"]
 resource_local_to_scene = true
 script = ExtResource("19_lal78")
-_regen_boost = 0.0
-_regen_penalty = 0.0
 metadata/_custom_type_script = "uid://bqw1ufs6jb7cf"
 
 [sub_resource type="Resource" id="Resource_feojw"]
 resource_local_to_scene = true
 script = ExtResource("20_cw5if")
-_frostbite_weakness = 0.0
-_frostbite_resistance = 0.0
 metadata/_custom_type_script = "uid://b1lo2mdb3otax"
 
 [sub_resource type="Resource" id="Resource_wtw5m"]
 resource_local_to_scene = true
 script = ExtResource("21_oqrkc")
-_burning_weakness = 0.0
-_burning_resistance = 0.0
 metadata/_custom_type_script = "uid://dubq8xgav66ue"
 
 [sub_resource type="Resource" id="Resource_gvtqy"]
 resource_local_to_scene = true
 script = ExtResource("22_s1u3v")
-_time_snare_immunity = 0.0
 metadata/_custom_type_script = "uid://5w234psf0oln"
 
 [sub_resource type="Resource" id="Resource_3q24o"]
@@ -544,7 +508,7 @@ script = ExtResource("23_n5xoq")
 metadata/_custom_type_script = "uid://ckiyd2nbdcofr"
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_2ks4g"]
-size = Vector2(16, 28)
+size = Vector2(18, 26)
 
 [sub_resource type="Resource" id="Resource_i4r08"]
 script = ExtResource("29_vjlik")
@@ -556,10 +520,6 @@ metadata/_custom_type_script = "uid://c2sjdkql76qca"
 
 [sub_resource type="Resource" id="Resource_175e0"]
 script = ExtResource("34_dcca3")
-chase_speed_mult = 1.0
-chase_sprint_speed_mult = 1.0
-default_run_anim_time_scale = 1.5
-max_run_anim_time_scale = 4.0
 metadata/_custom_type_script = "uid://q3yeopc5wdlo"
 
 [sub_resource type="Resource" id="Resource_1uee3"]
@@ -576,11 +536,6 @@ metadata/_custom_type_script = "uid://cbuaklpos5jdp"
 
 [sub_resource type="Resource" id="Resource_86drt"]
 script = ExtResource("40_lal78")
-seek_weight = 1.0
-orbit_weight = 0.0
-preferred_distance = 50.0
-distance_weight = 1.0
-max_turn_rate = 1.35
 metadata/_custom_type_script = "uid://dtljj2u0ce864"
 
 [sub_resource type="Animation" id="Animation_mbh3n"]
@@ -1033,12 +988,12 @@ blend_mode = 1
 
 [sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_eigs2"]
 graph_offset = Vector2(-518, -60)
+nodes/output/position = Vector2(90, 50)
 nodes/TimeScale/node = SubResource("AnimationNodeTimeScale_mbh3n")
 nodes/TimeScale/position = Vector2(-90, 50)
 nodes/blendspace2d/node = SubResource("AnimationNodeBlendSpace2D_eigs2")
 nodes/blendspace2d/position = Vector2(-290, 80)
-nodes/output/position = Vector2(90, 50)
-node_connections = [&"TimeScale", 0, &"blendspace2d", &"output", 0, &"TimeScale"]
+node_connections = [&"output", 0, &"TimeScale", &"TimeScale", 0, &"blendspace2d"]
 
 [sub_resource type="AnimationNodeTimeScale" id="AnimationNodeTimeScale_3l4yw"]
 
@@ -1076,7 +1031,7 @@ nodes/TimeScale/node = SubResource("AnimationNodeTimeScale_3l4yw")
 nodes/TimeScale/position = Vector2(30, 110)
 nodes/blendspace2d/node = SubResource("AnimationNodeBlendSpace2D_mbh3n")
 nodes/blendspace2d/position = Vector2(-240, 100)
-node_connections = [&"TimeScale", 0, &"blendspace2d", &"output", 0, &"TimeScale"]
+node_connections = [&"output", 0, &"TimeScale", &"TimeScale", 0, &"blendspace2d"]
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_lm42a"]
 animation = &"spawn"
@@ -1145,6 +1100,8 @@ editor_description = "MUST TURN ON Y SORTING ON THIS NODE!"
 y_sort_enabled = true
 
 [node name="EntityShadow" parent="YSorter" instance=ExtResource("1_ko3ep")]
+offset_left = -8.0
+offset_right = 8.0
 
 [node name="EntitySprite" parent="YSorter" instance=ExtResource("2_8a5el")]
 unique_name_in_owner = true
@@ -1208,7 +1165,8 @@ time_snare_handler = SubResource("Resource_gvtqy")
 life_steal_handler = SubResource("Resource_3q24o")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="EffectReceiverComponent"]
-position = Vector2(0, -14)
+position = Vector2(0, -13)
+scale = Vector2(1, 0.998166)
 shape = SubResource("RectangleShape2D_2ks4g")
 debug_color = Color(0.932, 0, 0.649, 0.122)
 
@@ -1240,6 +1198,9 @@ libraries = {
 
 [node name="AnimationTree" type="AnimationTree" parent="."]
 callback_mode_process = 2
+libraries = {
+&"": SubResource("AnimationLibrary_3l4yw")
+}
 tree_root = SubResource("AnimationNodeStateMachine_eigs2")
 anim_player = NodePath("../AnimationPlayer")
 parameters/idle/TimeScale/scale = 1.0

@@ -1,4 +1,4 @@
-[gd_scene load_steps=32 format=3 uid="uid://b52c5c7hj2vd"]
+[gd_scene load_steps=33 format=3 uid="uid://b52c5c7hj2vd"]
 
 [ext_resource type="Script" uid="uid://cn2gulskgn7k3" path="res://Entities/EntityCore/EntityTypes/StaticEntity/StaticEntity.gd" id="1_4yxmu"]
 [ext_resource type="Script" uid="uid://dwmur0cosbbwh" path="res://UI/Inventory/InventoryCore/InventoryResource.gd" id="2_7biur"]
@@ -14,6 +14,7 @@
 [ext_resource type="PackedScene" uid="uid://cdfdy8m6ki3oq" path="res://Entities/Components/HealthComponent/HealthComponent.tscn" id="7_umo0g"]
 [ext_resource type="PackedScene" uid="uid://4gl24qwdyti3" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/DmgHandler.tscn" id="8_4pw5b"]
 [ext_resource type="Script" uid="uid://1qq7eo7lm8j6" path="res://Entities/Components/ItemComponents/LootTableComponent/LootTableEntry.gd" id="8_v4qb0"]
+[ext_resource type="Texture2D" uid="uid://c3e5rxu6csi7p" path="res://Entities/EntityCore/Shadow/shadow_extra_large.png" id="9_r6tnu"]
 [ext_resource type="Script" uid="uid://b1lo2mdb3otax" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/FrostbiteHandler.gd" id="11_r6tnu"]
 [ext_resource type="Resource" uid="uid://dbnhbsphiw4oe" path="res://Entities/Items/TRESItems/WorldResources/SpruceLog(0).tres" id="12_8oice"]
 [ext_resource type="Script" uid="uid://dubq8xgav66ue" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/BurningHandler.gd" id="12_d3uov"]
@@ -63,7 +64,7 @@ height = 19.9999
 [sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_2kecs"]
 polygon = PackedVector2Array(-10, -4, -10, 0, 9, 0, 9, -4)
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_7biur"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_r6tnu"]
 resource_local_to_scene = true
 shader = ExtResource("3_epxnw")
 
@@ -123,11 +124,20 @@ occluder = SubResource("OccluderPolygon2D_2kecs")
 
 [node name="EntityShadow" parent="." instance=ExtResource("2_nnf0c")]
 self_modulate = Color(0, 0, 0, 0.164)
-scale = Vector2(4.69333, 2.75429)
+offset_left = -34.0
+offset_top = -15.0
+offset_right = 43.0
+offset_bottom = 15.0
+texture = ExtResource("9_r6tnu")
+patch_margin_left = 12
+patch_margin_top = 12
+patch_margin_right = 12
+patch_margin_bottom = 12
+type = 4
 
 [node name="EntitySprite" parent="." instance=ExtResource("4_5qk3y")]
 unique_name_in_owner = true
-material = SubResource("ShaderMaterial_7biur")
+material = SubResource("ShaderMaterial_r6tnu")
 instance_shader_parameters/crack_color = Color(0.0792545, 0.0300264, 0.00946152, 0.88)
 instance_shader_parameters/crack_intensity = 0.0
 instance_shader_parameters/crack_pixelate = Vector2(96, 96)

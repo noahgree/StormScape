@@ -10,35 +10,19 @@ damaging_time = 8.0
 dmg_ticks_array = Array[int]([3, 3, 3, 3])
 delay_time = 2.0
 dmg_affected_stats = 0
-run_until_removed = false
-time_between_ticks = 1.0
 hit_flash_color = Color(1, 0.517681, 0.336621, 0.6)
 
 [sub_resource type="Resource" id="Resource_xigmb"]
 script = ExtResource("3_85854")
-stat_id = &""
-mod_id = &""
 operation = "-%"
 value = 25.0
-rounding = "Exact"
-priority = 1
 max_stack_count = 3
-override_all = false
 
 [resource]
 script = ExtResource("2_ihl6m")
 dot_resource = SubResource("Resource_1q46y")
 id = "burning"
-source_type = 0
-effect_lvl = 1
-is_bad_effect = true
-affected_entities = 7
 effects_to_stop = Array[String](["frostbite"])
 mod_time = 10.0
-apply_until_removed = false
 stat_mods = Array[ExtResource("3_85854")]([SubResource("Resource_xigmb")])
-audio_to_play = ""
-only_cue_on_player_hit = false
-spawn_particles = true
 particle_hander_req = "Burning"
-make_entity_glow = true

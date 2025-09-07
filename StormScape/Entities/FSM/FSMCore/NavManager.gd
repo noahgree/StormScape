@@ -24,44 +24,6 @@ func _init(controller_node: DynamicAIController) -> void:
 	controller = controller_node
 	path_recalc_timer = TimerHelpers.create_repeating_timer(controller, -1, _calculate_path_to_target)
 
-#region Debug
-func _draw() -> void:
-	if not DebugFlags.show_nav:
-		return
-
-	var max_score: float = -100000
-	var min_score: float = 100000
-	for score: float in dir_interests:
-		if score < min_score:
-			min_score = score
-		if score > max_score:
-			max_score = score
-
-	var ray_start: Vector2 = controller.entity.global_position + controller.ray_start_offset
-	for i: int in range(raycast_results.size()):
-		var result: Dictionary = raycast_results[i]
-		var direction: Vector2 = ray_directions[i]
-		var ray_end: Vector2 = ray_start + (direction * controller.local_avoidance_range)
-
-		var score: float = 0.0
-		if i < dir_interests.size() and max_score != min_score:
-			score = (dir_interests[i] - min_score) / (max_score - min_score)
-			score = clamp(score, 0.0, 1.0)
-		else:
-			score = 0.5
-		var ray_color: Color = Color(1.0 - score, score, 0)
-
-		if result.size() > 0:
-			var hit_position: Vector2 = result["position"]
-			controller.draw_line(ray_start, hit_position, ray_color, 0.5)
-			controller.draw_circle(hit_position, 1.25, ray_color)
-		else:
-			controller.draw_line(ray_start, ray_end, ray_color, 0.25)
-
-	var movement_vector_end: Vector2 = controller.entity.global_position + (controller.last_movement_direction * 35)
-	controller.draw_line(controller.entity.global_position, movement_vector_end, Color.YELLOW, 0.75)
-#endregion
-
 #region Target Selection
 ## If we have a valid target, this recalculates the path by reassigning the target's position to the next
 ## path position in the nav agent.
@@ -102,7 +64,6 @@ func get_movement_vector() -> Vector2:
 
 	controller.last_movement_direction = _steer_direction(preliminary_dir).rotated(controller.entity.stats.get_stat("confusion_amount"))
 
-	controller.queue_redraw()
 	return controller.last_movement_direction
 
 ## Gets the next point in behthe nav agent's found path.

@@ -1,0 +1,101 @@
+[gd_resource type="Resource" script_class="ProjWeaponResource" load_steps=22 format=3 uid="uid://h1xp0w2wx18e"]
+
+[ext_resource type="Texture2D" uid="uid://bm570hawaupxe" path="res://Entities/Items/Weapons/WeaponVFX/Casings/small_casing.png" id="1_uisqv"]
+[ext_resource type="Script" uid="uid://dkfssottmsrch" path="res://Entities/Stats/EffectSystemResources/EffectSources/EffectSource.gd" id="2_0b3vo"]
+[ext_resource type="Script" uid="uid://boo31eu083dqd" path="res://Entities/Stats/EffectSystemResources/StatusEffects/StatusEffect.gd" id="3_u3ltu"]
+[ext_resource type="Script" uid="uid://cowjdnic7xmkp" path="res://UI/Inventory/PlayerInventory/StatDetail.gd" id="4_l6wxt"]
+[ext_resource type="Resource" uid="uid://cev0y0oe3igus" path="res://Entities/Player/PlayerCore/PlayerCamera/CamFXPresets/6.tres" id="5_rd00v"]
+[ext_resource type="Texture2D" uid="uid://bklufxkybkmq7" path="res://Entities/Items/Weapons/ProjectileWeapons/Grizzly/GrizzlyBaseFrameCT.tres" id="6_0b3vo"]
+[ext_resource type="PackedScene" uid="uid://cov3jlrva1tvx" path="res://Entities/Items/Weapons/ProjectileWeapons/Grizzly/Grizzly.tscn" id="7_0b3vo"]
+[ext_resource type="PackedScene" uid="uid://cb5ofy3224fh2" path="res://Entities/Items/Projectiles/ProjectileCore/AreaOfEffectVFX/FlamingAOEVFX.tscn" id="8_0b3vo"]
+[ext_resource type="Script" uid="uid://bj3r5oopspj6l" path="res://Entities/Items/Projectiles/ProjectileCore/ProjectileResource.gd" id="8_3l2c2"]
+[ext_resource type="PackedScene" uid="uid://cqvc0w84kou6a" path="res://Entities/Items/Projectiles/Explosives/Grenade/Grenade.tscn" id="10_0b3vo"]
+[ext_resource type="Script" uid="uid://ctxa7i1mbt7ab" path="res://UI/Inventory/PlayerInventory/Crafting/CraftingIngredient.gd" id="10_t0njd"]
+[ext_resource type="Script" uid="uid://c2gdoebfp12dq" path="res://Entities/Stats/StatMod/StatModsCacheResource.gd" id="11_qvdyt"]
+[ext_resource type="Script" uid="uid://dvasncq3tgljs" path="res://Entities/Items/Weapons/ProjectileWeapons/ProjWeaponResource.gd" id="12_r5xci"]
+
+[sub_resource type="Resource" id="Resource_slitw"]
+script = ExtResource("2_0b3vo")
+source_type = 1
+base_damage = 5
+
+[sub_resource type="Curve" id="Curve_0b3vo"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.79934096), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Resource" id="Resource_u3ltu"]
+script = ExtResource("2_0b3vo")
+source_type = 2
+bad_effect_affected_teams = 3
+base_damage = 75
+metadata/_custom_type_script = "uid://dkfssottmsrch"
+
+[sub_resource type="Curve" id="Curve_l6wxt"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.59631145, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Curve" id="Curve_nyi5w"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.599362), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Curve" id="Curve_x8kn4"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.797205), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Resource" id="Resource_iwwon"]
+script = ExtResource("8_3l2c2")
+speed = 650
+speed_curve = SubResource("Curve_x8kn4")
+max_distance = 400
+height_override = 6
+effect_falloff_curve = SubResource("Curve_nyi5w")
+point_of_max_falloff = 200.0
+max_ricochet = 6
+launch_angle = 45.0
+arc_travel_distance = 90
+arc_speed = 600.0
+bounce_count = 4
+bounce_falloff_curve = SubResource("Curve_l6wxt")
+split_cam_fx = null
+aoe_effect_source = SubResource("Resource_u3ltu")
+aoe_radius = 50
+aoe_before_freeing = true
+aoe_effect_falloff_curve = SubResource("Curve_0b3vo")
+aoe_delay = 0.1
+aoe_vfx = ExtResource("8_0b3vo")
+
+[sub_resource type="Resource" id="Resource_pm717"]
+script = ExtResource("11_qvdyt")
+
+[resource]
+script = ExtResource("12_r5xci")
+proj_weapon_type = 5
+projectile_scn = ExtResource("10_0b3vo")
+fire_cooldown = 0.85
+one_frame_per_fire = true
+post_fire_anim_dur = 0.45
+firing_cam_fx = ExtResource("5_rd00v")
+casing_texture = ExtResource("1_uisqv")
+casing_tint = Color(0.13387674, 0.5284075, 0.33648983, 1)
+projectile_logic = SubResource("Resource_iwwon")
+effect_source = SubResource("Resource_slitw")
+ammo_type = 2
+mag_size = 6
+reload_delay = 0.5
+mag_reload_time = 4.2
+pullout_delay = 0.3
+s_mods = SubResource("Resource_pm717")
+id = "grizzly"
+name = "Grizzly"
+item_type = 1
+rarity = 3
+pickup_radius = 6
+info = "Your standard issue grenade launcher."
+ground_icon = ExtResource("6_0b3vo")
+in_hand_icon = ExtResource("6_0b3vo")
+inv_icon = ExtResource("6_0b3vo")
+inv_icon_scale = Vector2(1.2, 1.2)
+inv_icon_rotation = -40.0
+item_scene = ExtResource("7_0b3vo")
+holding_offset = Vector2(-1, -1)
+is_gripped_by_one_hand = false

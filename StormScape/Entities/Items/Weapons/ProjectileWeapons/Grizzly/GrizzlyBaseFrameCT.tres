@@ -1,0 +1,8 @@
+[gd_resource type="CanvasTexture" load_steps=3 format=3 uid="uid://bklufxkybkmq7"]
+
+[ext_resource type="Texture2D" uid="uid://dq3dol523vyvb" path="res://Entities/Items/Weapons/ProjectileWeapons/Grizzly/grizzly_base_frame.png" id="1_ojb2o"]
+[ext_resource type="Texture2D" uid="uid://dsxup31acmab1" path="res://Entities/Items/Weapons/ProjectileWeapons/Grizzly/grizzly_base_frame_n.png" id="2_o0dr0"]
+
+[resource]
+diffuse_texture = ExtResource("1_ojb2o")
+normal_texture = ExtResource("2_o0dr0")

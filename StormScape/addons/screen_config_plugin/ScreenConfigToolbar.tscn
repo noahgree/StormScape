@@ -17,15 +17,14 @@ hover_color = Color(1, 1, 1, 1)
 
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
 layout_mode = 0
-offset_left = -744.0
-offset_top = 15.0
-offset_right = -617.0
-offset_bottom = 49.0
-theme_override_constants/separation = 16
+offset_left = -717.0
+offset_top = 13.0
+offset_right = -578.0
+offset_bottom = 47.0
+theme_override_constants/separation = 14
 
 [node name="NextScreenBtn" type="TextureButton" parent="HBoxContainer"]
-modulate = Color(0.337255, 0.619608, 1, 1)
-custom_minimum_size = Vector2(44, 0)
+modulate = Color(0.34901962, 0.6784314, 1, 1)
 layout_mode = 2
 focus_neighbor_right = NodePath("../SameScreenBtn")
 focus_mode = 0
@@ -36,6 +35,7 @@ metadata/Text = "The game will be placed on the next (usually external) monitor 
 
 [node name="SameScreenBtn" type="TextureButton" parent="HBoxContainer"]
 modulate = Color(0.513726, 0.513726, 0.517647, 1)
+custom_minimum_size = Vector2(48, 0)
 layout_mode = 2
 focus_neighbor_left = NodePath("../NextScreenBtn")
 focus_mode = 0

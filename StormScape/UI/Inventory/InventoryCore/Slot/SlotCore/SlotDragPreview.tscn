@@ -19,6 +19,7 @@ shader_parameter/pause_duration = 1.0
 shader_parameter/angle = 35.0
 shader_parameter/tint_color = Color(1, 1, 1, 0)
 shader_parameter/glow_intensity = 1.0
+shader_parameter/override_color = Color(1, 1, 1, 0)
 
 [sub_resource type="LabelSettings" id="LabelSettings_c1tbv"]
 line_spacing = 0.0
@@ -55,7 +56,6 @@ theme_override_constants/margin_bottom = 3
 
 [node name="ItemTexture" type="TextureRect" parent="TextureMargins"]
 material = SubResource("ShaderMaterial_73rrd")
-custom_minimum_size = Vector2(16, 16)
 layout_mode = 2
 expand_mode = 1
 stretch_mode = 5

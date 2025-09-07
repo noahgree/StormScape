@@ -17,7 +17,7 @@
 [ext_resource type="Resource" uid="uid://dvew5cy3k7s48" path="res://Entities/Stats/EffectSystemResources/StatusEffects/BadEffects/Burning/Burning1.tres" id="16_s5gqv"]
 [ext_resource type="PackedScene" uid="uid://b52c5c7hj2vd" path="res://Utilities/Debug/TestTree1.tscn" id="17_45bjv"]
 [ext_resource type="PackedScene" uid="uid://bq12ugc7lnirg" path="res://Utilities/Debug/TestPhysicalInventory.tscn" id="17_om42l"]
-[ext_resource type="Texture2D" uid="uid://cd22xh5jduxd6" path="res://UI/TemporaryElements/InteractionIcons/e_prompt.png" id="18_dgobw"]
+[ext_resource type="Texture2D" uid="uid://cd22xh5jduxd6" path="res://UI/TemporaryElements/InteractionIcons/e_prompt.png" id="18_yw2f7"]
 [ext_resource type="Script" uid="uid://dgibl37gudpj1" path="res://Entities/Player/PlayerCore/Interactions/InteractionOffer.gd" id="19_04pgg"]
 [ext_resource type="Script" uid="uid://dwmur0cosbbwh" path="res://UI/Inventory/InventoryCore/InventoryResource.gd" id="20_om42l"]
 [ext_resource type="Script" uid="uid://dp8osf7r6xkkt" path="res://Entities/Items/ItemCore/InvItemResource.gd" id="21_fx52i"]
@@ -43,8 +43,8 @@
 [ext_resource type="Texture2D" uid="uid://daa6casude472" path="res://Utilities/Game/Particles/light_ray.png" id="31_melxk"]
 [ext_resource type="PackedScene" uid="uid://jdi552emuah8" path="res://Utilities/Debug/TestRock1.tscn" id="32_melxk"]
 [ext_resource type="Texture2D" uid="uid://cx7u0pbdtc6eb" path="res://Utilities/Game/Particles/grunge_light.png" id="32_s5gqv"]
+[ext_resource type="Script" uid="uid://bcjwesiannbd0" path="res://Entities/Stats/StatMod/StatMod.gd" id="37_ed1p2"]
 [ext_resource type="Texture2D" uid="uid://dsago31sb51b0" path="res://Stages/World/Storm/StormNoise1.tres" id="42_s5gqv"]
-[ext_resource type="Script" uid="uid://bcjwesiannbd0" path="res://Entities/Stats/StatMod/StatMod.gd" id="43_0c5fh"]
 [ext_resource type="Texture2D" uid="uid://d2utxp2le0rkm" path="res://Stages/World/Storm/StormNoise2.tres" id="43_6gn56"]
 
 [sub_resource type="Environment" id="Environment_2wouv"]
@@ -166,22 +166,9 @@ rough = true
 
 [sub_resource type="Resource" id="Resource_t15sm"]
 script = ExtResource("12_jvc44")
-source_type = 0
-source_tags = Array[String]([])
-scanned_phys_layers = 111
 can_hit_self = false
 bad_effect_affected_teams = 3
 good_effect_affected_teams = 3
-base_damage = 0
-object_damage_mult = 1.0
-dmg_affected_stats = 2
-crit_chance = 0
-crit_multiplier = 1.5
-armor_penetration = 0
-base_healing = 0
-heal_affected_stats = 2
-impact_sound = ""
-hit_flash_color = Color(1, 1, 1, 0.6)
 status_effects = Array[ExtResource("13_33bgr")]([ExtResource("12_s2x07")])
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_rk2ia"]
@@ -190,103 +177,56 @@ size = Vector2(14, 14)
 [sub_resource type="Resource" id="Resource_twwwg"]
 script = ExtResource("12_jvc44")
 source_type = 6
-source_tags = Array[String]([])
-scanned_phys_layers = 111
 can_hit_self = false
 bad_effect_affected_teams = 3
 good_effect_affected_teams = 3
-base_damage = 0
-object_damage_mult = 1.0
-dmg_affected_stats = 2
-crit_chance = 0
-crit_multiplier = 1.5
-armor_penetration = 0
-base_healing = 0
-heal_affected_stats = 2
-impact_sound = ""
-hit_flash_color = Color(1, 1, 1, 0.6)
 status_effects = Array[ExtResource("13_33bgr")]([ExtResource("13_27bcd")])
 
 [sub_resource type="Resource" id="Resource_hkn5b"]
 script = ExtResource("12_jvc44")
-source_type = 0
-source_tags = Array[String]([])
-scanned_phys_layers = 111
 can_hit_self = false
 bad_effect_affected_teams = 3
 good_effect_affected_teams = 3
-base_damage = 0
-object_damage_mult = 1.0
-dmg_affected_stats = 2
-crit_chance = 0
-crit_multiplier = 1.5
-armor_penetration = 0
-base_healing = 0
-heal_affected_stats = 2
-impact_sound = ""
-hit_flash_color = Color(1, 1, 1, 0.6)
 status_effects = Array[ExtResource("13_33bgr")]([ExtResource("16_s5gqv")])
 
 [sub_resource type="Resource" id="Resource_s2x07"]
 script = ExtResource("19_04pgg")
 title = "SEARCH"
-title_color = Color(0.953, 0.871, 0.855, 1)
-title_outline_color = Color(0, 0, 0, 0.565)
-info = ""
-info_color = Color(0.914, 0.769, 0.741, 1)
-info_outline_color = Color(0, 0, 0, 0.565)
-icon = ExtResource("18_dgobw")
-remove_on_accept = false
 metadata/_custom_type_script = "uid://dgibl37gudpj1"
 
 [sub_resource type="Resource" id="Resource_6gn56"]
 script = ExtResource("21_fx52i")
 stats = ExtResource("22_a2una")
-quantity = 1
 metadata/_custom_type_script = "uid://dp8osf7r6xkkt"
 
 [sub_resource type="Resource" id="Resource_jb7gg"]
 script = ExtResource("21_fx52i")
 stats = ExtResource("23_s5gqv")
-quantity = 1
 metadata/_custom_type_script = "uid://dp8osf7r6xkkt"
 
 [sub_resource type="Resource" id="Resource_27u15"]
 script = ExtResource("20_om42l")
-title = "CHEST"
-main_inv_size = 10
-drop_on_death = false
 starting_inv = Array[ExtResource("21_fx52i")]([null, null, null, SubResource("Resource_6gn56"), null, SubResource("Resource_jb7gg")])
 metadata/_custom_type_script = "uid://dwmur0cosbbwh"
 
 [sub_resource type="Resource" id="Resource_a2una"]
 script = ExtResource("19_04pgg")
 title = "SEARCH"
-title_color = Color(0.953, 0.871, 0.855, 1)
-title_outline_color = Color(0, 0, 0, 0.565)
-info = ""
-info_color = Color(0.914, 0.769, 0.741, 1)
-info_outline_color = Color(0, 0, 0, 0.565)
-icon = ExtResource("18_dgobw")
-remove_on_accept = false
 metadata/_custom_type_script = "uid://dgibl37gudpj1"
 
 [sub_resource type="Resource" id="Resource_yw2f7"]
 script = ExtResource("21_fx52i")
 stats = ExtResource("22_iotvt")
-quantity = 1
 metadata/_custom_type_script = "uid://dp8osf7r6xkkt"
 
 [sub_resource type="Resource" id="Resource_ed1p2"]
 script = ExtResource("21_fx52i")
 stats = ExtResource("23_8lm63")
-quantity = 1
 metadata/_custom_type_script = "uid://dp8osf7r6xkkt"
 
 [sub_resource type="Resource" id="Resource_e5rpg"]
 script = ExtResource("21_fx52i")
 stats = ExtResource("24_a2una")
-quantity = 1
 metadata/_custom_type_script = "uid://dp8osf7r6xkkt"
 
 [sub_resource type="Resource" id="Resource_1606r"]
@@ -298,13 +238,10 @@ metadata/_custom_type_script = "uid://dp8osf7r6xkkt"
 [sub_resource type="Resource" id="Resource_w76bj"]
 script = ExtResource("21_fx52i")
 stats = ExtResource("26_6gn56")
-quantity = 1
 metadata/_custom_type_script = "uid://dp8osf7r6xkkt"
 
 [sub_resource type="Resource" id="Resource_vi22v"]
 script = ExtResource("20_om42l")
-title = "CHEST"
-main_inv_size = 10
 drop_on_death = true
 starting_inv = Array[ExtResource("21_fx52i")]([SubResource("Resource_yw2f7"), null, null, SubResource("Resource_ed1p2"), SubResource("Resource_e5rpg"), null, SubResource("Resource_1606r"), null, SubResource("Resource_w76bj")])
 metadata/_custom_type_script = "uid://dwmur0cosbbwh"
@@ -317,8 +254,6 @@ metadata/_custom_type_script = "uid://dp8osf7r6xkkt"
 
 [sub_resource type="Resource" id="Resource_f5fhq"]
 script = ExtResource("20_om42l")
-title = "CHEST"
-main_inv_size = 10
 drop_on_death = true
 starting_inv = Array[ExtResource("21_fx52i")]([SubResource("Resource_3156l")])
 
@@ -329,104 +264,49 @@ outline_color = Color(0, 0, 0, 1)
 [sub_resource type="Resource" id="Resource_h8tfd"]
 script = ExtResource("27_8kcf2")
 viusal_change_time = 4.0
-day_see_thru = 25.0
-night_see_thru = 45.0
-see_through_pulse_mult = 1.0
-see_thru_dist_mult = 1.0
 storm_gradient_colors = Array[Color]([Color(1.44392e-07, 0.663415, 0.433462, 0.574), Color(0.668381, 0.483265, 0, 0.542), Color(0.558, 0.396, 1, 0.772), Color(0.345, 0.001, 0.829, 0.877)])
-final_color_distance = 600.0
 reflection_intensity = 0.4
-reflection_thickness = 30.0
-reflection_color = Color(0.287, 0.287, 0.287, 0.293)
 turbulence = 10.0
-ripple_intensity = 0.5
-ripple_frequency = 0.6
 ripple_speed = 1.0
 rain_amount = 35
 rain_slant = -0.75
 rain_speed = 20.0
-rain_color = Color(0.857, 0.903, 1, 0.417)
 rain_size = Vector2(0.01, 0.2)
 wind_brightness = 3.5
 ground_wind_speed = 0.45
 top_wind_speed = 4.5
-wind_reversal_factor = 0.0
 wind_spiral_factor = 1.0
-ring_glow_color = Color(0.722, 0.681, 1, 0.743)
-ring_glow_intensity = 2.3
-ring_pulse_speed = 4.0
 
 [sub_resource type="Resource" id="Resource_0ujfv"]
 script = ExtResource("25_dqjbe")
 new_location = Vector2(50, -50)
 offset_location = true
-new_radius = 50.0
-offset_radius = false
 delay = 1.0
-time_to_move = 10.0
-time_to_resize = 10.0
-auto_advance = true
-effect_setting = "Keep Previous"
 visuals_setting = "Override"
 storm_visuals = SubResource("Resource_h8tfd")
 
 [sub_resource type="Resource" id="Resource_wrdhq"]
 script = ExtResource("13_33bgr")
 id = "test_effect"
-source_type = 0
 effect_lvl = 3
-is_bad_effect = true
-affected_entities = 7
-effects_to_stop = Array[String]([])
-mod_time = 5.0
 apply_until_removed = true
-stat_mods = Array[ExtResource("43_0c5fh")]([])
-audio_to_play = ""
-only_cue_on_player_hit = false
-spawn_particles = true
-particle_hander_req = ""
-make_entity_glow = true
 
 [sub_resource type="Resource" id="Resource_l1t3e"]
 script = ExtResource("27_8kcf2")
 viusal_change_time = 3.0
-day_see_thru = 25.0
-night_see_thru = 45.0
-see_through_pulse_mult = 1.0
-see_thru_dist_mult = 1.0
 storm_gradient_colors = Array[Color]([Color(0.992306, 3.27289e-06, 0.58646, 0.574), Color(0.949186, 0.142911, 0, 0.542), Color(0.749196, 0.459432, 1.92523e-07, 0.772), Color(0.406298, 0.311656, 0, 0.877)])
 final_color_distance = 400.0
-reflection_intensity = 0.15
-reflection_thickness = 30.0
-reflection_color = Color(0.287, 0.287, 0.287, 0.293)
-turbulence = 1.5
-ripple_intensity = 0.5
-ripple_frequency = 0.6
-ripple_speed = 0.5
 rain_amount = 25
-rain_slant = 0.15
-rain_speed = 25.0
-rain_color = Color(0.857, 0.903, 1, 0.417)
-rain_size = Vector2(0.008, 0.19)
-wind_brightness = 1.25
-ground_wind_speed = 0.2
-top_wind_speed = 2.75
-wind_reversal_factor = 0.0
-wind_spiral_factor = 0.0
-ring_glow_color = Color(0.722, 0.681, 1, 0.743)
 ring_glow_intensity = 3.5
-ring_pulse_speed = 4.0
 
 [sub_resource type="Resource" id="Resource_32mph"]
 script = ExtResource("25_dqjbe")
 new_location = Vector2(25, -15)
 offset_location = true
 new_radius = 100.0
-offset_radius = false
 delay = 3.0
 time_to_move = 5.0
 time_to_resize = 5.0
-auto_advance = true
 effect_setting = "Override"
 status_effect = SubResource("Resource_wrdhq")
 visuals_setting = "Override"
@@ -435,44 +315,18 @@ storm_visuals = SubResource("Resource_l1t3e")
 [sub_resource type="Resource" id="Resource_j2wa6"]
 script = ExtResource("27_8kcf2")
 viusal_change_time = 3.0
-day_see_thru = 25.0
-night_see_thru = 45.0
-see_through_pulse_mult = 1.0
-see_thru_dist_mult = 1.0
 storm_gradient_colors = Array[Color]([Color(1.29953e-06, 0.514757, 0.375111, 0.804), Color(0.963253, 0, 0.244638, 0.542), Color(0, 0.605301, 0.664768, 0.772), Color(0.345, 0.001, 0.829, 0.877)])
-final_color_distance = 600.0
-reflection_intensity = 0.15
-reflection_thickness = 30.0
-reflection_color = Color(0.287, 0.287, 0.287, 0.293)
-turbulence = 1.5
-ripple_intensity = 0.5
-ripple_frequency = 0.6
-ripple_speed = 0.5
-rain_amount = 0
-rain_slant = 0.15
-rain_speed = 25.0
-rain_color = Color(0.857, 0.903, 1, 0.417)
-rain_size = Vector2(0.008, 0.19)
 wind_brightness = 1.0
 ground_wind_speed = 5.0
-top_wind_speed = 2.75
 wind_reversal_factor = 1.0
 wind_spiral_factor = 5.0
-ring_glow_color = Color(0.722, 0.681, 1, 0.743)
-ring_glow_intensity = 2.3
-ring_pulse_speed = 4.0
 
 [sub_resource type="Resource" id="Resource_nc4mn"]
 script = ExtResource("25_dqjbe")
 new_location = Vector2(-50, 40)
 offset_location = true
 new_radius = 150.0
-offset_radius = false
 delay = 5.0
-time_to_move = 10.0
-time_to_resize = 10.0
-auto_advance = true
-effect_setting = "Keep Previous"
 visuals_setting = "Override"
 storm_visuals = SubResource("Resource_j2wa6")
 
@@ -535,8 +389,8 @@ frequency = 0.0056
 [sub_resource type="NoiseTexture2D" id="NoiseTexture2D_npyjk"]
 width = 480
 height = 270
-seamless = true
 noise = SubResource("FastNoiseLite_yrru3")
+seamless = true
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_83k6t"]
 shader = ExtResource("30_rhtsc")
@@ -673,7 +527,6 @@ inv = SubResource("Resource_vi22v")
 
 [node name="BasicZombie" parent="WorldRoot/Testing" instance=ExtResource("30_6gn56")]
 position = Vector2(-3, -3)
-enabled = false
 
 [node name="BasicZombie2" parent="WorldRoot/Testing" instance=ExtResource("30_6gn56")]
 position = Vector2(7, -30)

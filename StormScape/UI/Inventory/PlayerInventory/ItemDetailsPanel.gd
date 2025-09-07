@@ -262,16 +262,16 @@ func _on_hover_delay_ended() -> void:
 	var slot: Variant = item_hover_delay_timer.get_meta("slot")
 	if not is_instance_valid(slot):
 		return
-	if slot.item != null:
-		if pinned:
-			if slot.hide_hover_tooltip:
-				return
+	if pinned:
+		if slot.hide_hover_tooltip:
+			return
+		if slot.item != null:
 			var info: String = slot.item.stats.get_item_type_string(true)
 			if slot.item.stats is WeaponResource and not slot.item.stats.no_levels:
 				info += " (LVL " + str(slot.item.stats.level) + ")"
 			CursorManager.update_tooltip(slot.item.stats.name, info, Globals.rarity_colors.ui_text.get(slot.item.stats.rarity))
-		else:
-			is_updating_via_hover = true
-			var temp_item: InvItemResource = InvItemResource.new(slot.item.stats, 1)
-			item_viewer_slot.set_item(temp_item)
-			is_updating_via_hover = false
+	elif slot.item != null:
+		is_updating_via_hover = true
+		var temp_item: InvItemResource = InvItemResource.new(slot.item.stats, 1)
+		item_viewer_slot.set_item(temp_item)
+		is_updating_via_hover = false

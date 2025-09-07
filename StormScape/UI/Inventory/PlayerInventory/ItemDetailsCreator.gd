@@ -269,6 +269,8 @@ func _get_aoe_stats(stats: WeaponResource) -> Array[String]:
 		return [""]
 	elif stats.s_mods.get_stat("proj_aoe_radius") == 0:
 		return [""]
+	elif stats.projectile_logic.aoe_effect_source.status_effects.size() == 0:
+		return[""]
 
 	var strings: Array[String] = [_get_title("AOE RADIUS") + _get_item_sums(stats, ["proj_aoe_radius"], true, " px")]
 

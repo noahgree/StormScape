@@ -11,6 +11,7 @@ class_name WeaponMod
 @export var blocked_mutuals: Array[StringName] = [] ## The mods that cannot be placed on the same weapon as this mod. In other words, only one of the mods in this list and this mod itself can be on a weapon at a time.
 @export var blocked_wpn_stats: Dictionary[StringName, float] = {} ## A dictionary of stats and disallowed values for said stats that the weapon must not have in order for the mod to be compatible. This also means the weapon must be the type that actually has this stat at all.
 @export var req_all_blocked_stats: bool = false ## When true, every stat in the above list must have their disallowed value. When false, it only takes one stat having the disallowed value to block this mod entirely.
+@export var required_stats: Dictionary[StringName, float] = {} ## A dictionary of stats and required values for said stats that the weapon must have in order for the mod to be compatible. This also means the weapon must be the type that actually has this stat at all.
 
 @export_group("Stat & Effect Mods")
 @export var wpn_stat_mods: Array[StatMod] ## The stat modifiers applied by this mod. Do not have duplicates in this array.

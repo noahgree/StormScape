@@ -26,7 +26,7 @@ resources_spreadsheet_view/array_color_tint=100.0
 config/name="StormScape"
 config/version="0.1"
 run/main_scene="res://Stages/World/Game.tscn"
-config/features=PackedStringArray("4.4", "Forward Plus")
+config/features=PackedStringArray("4.5", "Forward Plus")
 run/max_fps=120
 boot_splash/bg_color=Color(0.104389, 0.121748, 0.27417, 1)
 config/macos_native_icon="uid://2xf1pqc78iin"
@@ -89,8 +89,8 @@ has_save_logic="A collection of all nodes in the game that must be saved and sub
 
 [gui]
 
-theme/custom="res://Assets/Theming/DefaultTheme.tres"
 theme/default_font_subpixel_positioning=0
+theme/custom="res://Assets/Theming/DefaultTheme.tres"
 
 [input]
 

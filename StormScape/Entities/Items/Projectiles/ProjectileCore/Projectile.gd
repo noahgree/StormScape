@@ -298,7 +298,8 @@ func _disable_in_air_only_particles() -> void:
 #endregion
 
 #region Homing
-## Sets up the homing delay if one exists, otherwise begins homing immediately if we have a valid homing method selected.
+## Sets up the homing delay if one exists, otherwise begins homing immediately if we have a valid
+## homing method selected.
 func _set_up_potential_homing_delay() -> void:
 	if stats.homing_method != "None":
 		if stats.homing_start_delay > 0:
@@ -368,12 +369,13 @@ func _find_target_in_fov() -> void:
 
 		query.exclude = exclusion_list
 		query.collide_with_bodies = true
-		query.collide_with_areas = true
+		query.collide_with_areas = false # Only collides with Entity type
 
 		var result: Dictionary[Variant, Variant] = space_state.intersect_ray(query)
 
 		var debug_ray_info: Dictionary[String, Variant]
-		if DebugFlags.show_homing_rays: debug_ray_info = { "from": from_pos, "to": to_pos, "hit": false, "hit_position": to_pos }
+		if DebugFlags.show_homing_rays:
+			debug_ray_info = { "from": from_pos, "to": to_pos, "hit": false, "hit_position": to_pos }
 
 		if result:
 			var obj: Node = result.collider
@@ -393,6 +395,7 @@ func _find_target_in_fov() -> void:
 
 ## Checks if the homing target is something we are even allowed to target.
 func _is_valid_homing_target(obj: Node) -> bool:
+	print(obj)
 	if obj is Entity:
 		if obj.team != source_entity.team and obj.team != Globals.Teams.PASSIVE:
 			return true
@@ -525,7 +528,9 @@ func find_initial_arc_speed(target_distance: float, angle: float, height: int) -
 func _do_arc_movement(delta: float) -> void:
 	arc_time_counter += delta * (stats.arc_speed / 90.0) * current_initial_boost
 
-	fake_z_axis = starting_arc_speed * sin(deg_to_rad(updated_arc_angle)) * arc_time_counter - 0.5 * 9.8 * pow(arc_time_counter, 2)
+	fake_z_axis = (
+		starting_arc_speed * sin(deg_to_rad(updated_arc_angle)) * arc_time_counter - 0.5 * 9.8 * pow(arc_time_counter, 2)
+		)
 
 	var ground_level: float = -(starting_proj_height) if bounces_so_far == 0 else 0
 	var bounce_stat: int = int(s_mods.get_stat("proj_bounce_count"))

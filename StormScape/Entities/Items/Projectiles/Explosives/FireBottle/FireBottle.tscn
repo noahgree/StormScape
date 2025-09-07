@@ -1,11 +1,11 @@
 [gd_scene load_steps=18 format=3 uid="uid://b26uwbeam6drq"]
 
-[ext_resource type="Script" uid="uid://d1uexupra43i8" path="res://Entities/Items/Projectiles/ProjectileCore/Projectile.gd" id="1_3xw38"]
-[ext_resource type="Texture2D" uid="uid://b4bumm88u2qmw" path="res://Entities/Items/Weapons/ProjectileWeapons/BottleOFire/BottleOFireThrowableCT.tres" id="2_q4sp5"]
-[ext_resource type="Texture2D" uid="uid://dcbwxgak6a0r8" path="res://Entities/EntityCore/Shadow/entity_shadow.png" id="3_tedc5"]
-[ext_resource type="Texture2D" uid="uid://bwuth2fyl1x12" path="res://Entities/Items/Projectiles/Bullets/SmallBullet/bullet_small.png" id="3_wab4n"]
-[ext_resource type="PackedScene" uid="uid://dau2tuc6mx0by" path="res://Entities/Items/Projectiles/ProjectileCore/Trail/Trail.tscn" id="4_7tntk"]
-[ext_resource type="Texture2D" uid="uid://c6ebk8sa1vvtq" path="res://UI/TemporaryElements/StatusEffects/flames.png" id="5_l2rhp"]
+[ext_resource type="Script" uid="uid://d1uexupra43i8" path="res://Entities/Items/Projectiles/ProjectileCore/Projectile.gd" id="1_d5lyv"]
+[ext_resource type="Texture2D" uid="uid://bwuth2fyl1x12" path="res://Entities/Items/Projectiles/Bullets/SmallBullet/bullet_small.png" id="2_mjep8"]
+[ext_resource type="Texture2D" uid="uid://b4bumm88u2qmw" path="res://Entities/Items/Weapons/ProjectileWeapons/BottleOFire/BottleOFireThrowableCT.tres" id="3_qgnn6"]
+[ext_resource type="Texture2D" uid="uid://dcbwxgak6a0r8" path="res://Entities/EntityCore/Shadow/entity_shadow.png" id="4_7cm0k"]
+[ext_resource type="Texture2D" uid="uid://c6ebk8sa1vvtq" path="res://UI/TemporaryElements/StatusEffects/flames.png" id="5_4e5w2"]
+[ext_resource type="PackedScene" uid="uid://dau2tuc6mx0by" path="res://Entities/Items/Projectiles/ProjectileCore/Trail/Trail.tscn" id="6_k0esx"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_tr4aq"]
 radius = 4.0
@@ -15,19 +15,19 @@ height = 15.0849
 light_mode = 1
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_pg2je"]
-atlas = ExtResource("3_wab4n")
+atlas = ExtResource("2_mjep8")
 region = Rect2(0, 13, 13, 13)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_hnctu"]
-atlas = ExtResource("3_wab4n")
+atlas = ExtResource("2_mjep8")
 region = Rect2(13, 13, 13, 13)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ruur3"]
-atlas = ExtResource("3_wab4n")
+atlas = ExtResource("2_mjep8")
 region = Rect2(26, 13, 13, 13)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_wab4n"]
-atlas = ExtResource("2_q4sp5")
+atlas = ExtResource("3_qgnn6")
 region = Rect2(0, 0, 16, 16)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_wab4n"]
@@ -79,7 +79,7 @@ colors = PackedColorArray(1, 1, 1, 0, 1, 1, 1, 0.2)
 editor_description = "DO NOT SET EFFECT SOURCE IF BEING USED DIRECTLY WITH A WEAPON. THE WEAPON WILL SET IT FOR YOU."
 collision_layer = 0
 collision_mask = 0
-script = ExtResource("1_3xw38")
+script = ExtResource("1_d5lyv")
 glow_color = Color(1, 0.901675, 0.877147, 1)
 in_air_only_particles = [NodePath("FireParticles")]
 
@@ -101,14 +101,14 @@ top_level = true
 z_index = 1
 position = Vector2(0, 7)
 scale = Vector2(0.45, 0.35)
-texture = ExtResource("3_tedc5")
+texture = ExtResource("4_7cm0k")
 
 [node name="FireParticles" type="CPUParticles2D" parent="."]
 light_mask = 2
 material = SubResource("CanvasItemMaterial_l2rhp")
 position = Vector2(5, -4)
 amount = 9
-texture = ExtResource("5_l2rhp")
+texture = ExtResource("5_4e5w2")
 lifetime = 0.5
 lifetime_randomness = 0.15
 direction = Vector2(0, -1)
@@ -125,7 +125,7 @@ anim_speed_min = 4.0
 anim_speed_max = 4.0
 anim_offset_max = 1.0
 
-[node name="Trail" parent="." instance=ExtResource("4_7tntk")]
+[node name="Trail" parent="." instance=ExtResource("6_k0esx")]
 width = 6.0
 gradient = SubResource("Gradient_7tntk")
 max_points = 15
