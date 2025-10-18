@@ -90,4 +90,5 @@ class_name ProjectileResource
 @export_subgroup("AOE FX")
 @export var aoe_hide_sprite: bool = true ## When true, the main proj sprite will be hidden once AOE starts. If there is an "aoe" animation to play, the sprite will hide after it is done.
 @export var aoe_vfx: PackedScene = null ## The scene to instance when activating the aoe.
+@export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var aoe_vfx_dur: float = 0.0 ## When anything besides 0, the vfx will stick around for this amount of seconds instead of immediately fading upon the projectile being freed.
 @export var aoe_sound: String ## The sound to play when activating the aoe.

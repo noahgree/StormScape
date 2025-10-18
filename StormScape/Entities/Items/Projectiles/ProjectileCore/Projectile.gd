@@ -675,7 +675,8 @@ func _handle_aoe() -> void:
 
 	if stats.aoe_vfx != null:
 		var radius: float = min(MAX_AOE_RADIUS, s_mods.get_stat("proj_aoe_radius"))
-		AreaOfEffectVFX.create(stats.aoe_vfx, Globals.world_root, self, radius)
+		var dur: float = stats.aoe_vfx_dur if stats.aoe_vfx_dur != 0.0 else max(0.05, stats.aoe_effect_dur)
+		AreaOfEffectVFX.create(stats.aoe_vfx, Globals.world_root, self, radius, dur)
 	AudioManager.play_2d(stats.aoe_sound, global_position)
 
 	await get_tree().create_timer(max(0.05, stats.aoe_effect_dur), false, true, false).timeout

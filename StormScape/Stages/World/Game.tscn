@@ -1,4 +1,4 @@
-[gd_scene load_steps=89 format=4 uid="uid://bscnr6a23l10m"]
+[gd_scene load_steps=93 format=4 uid="uid://bscnr6a23l10m"]
 
 [ext_resource type="Script" uid="uid://mdtvdhu78iqm" path="res://Utilities/Game/WorldRoot/WorldRoot.gd" id="1_q0i4n"]
 [ext_resource type="Script" uid="uid://dpbgynf55anlv" path="res://Stages/World/BackgroundMusicManager.gd" id="1_q5pr2"]
@@ -43,9 +43,11 @@
 [ext_resource type="Texture2D" uid="uid://daa6casude472" path="res://Utilities/Game/Particles/light_ray.png" id="31_melxk"]
 [ext_resource type="PackedScene" uid="uid://jdi552emuah8" path="res://Utilities/Debug/TestRock1.tscn" id="32_melxk"]
 [ext_resource type="Texture2D" uid="uid://cx7u0pbdtc6eb" path="res://Utilities/Game/Particles/grunge_light.png" id="32_s5gqv"]
+[ext_resource type="Texture2D" uid="uid://blb7ahx7xq5dq" path="res://icon.png" id="35_e5rpg"]
 [ext_resource type="Script" uid="uid://bcjwesiannbd0" path="res://Entities/Stats/StatMod/StatMod.gd" id="37_ed1p2"]
 [ext_resource type="Texture2D" uid="uid://dsago31sb51b0" path="res://Stages/World/Storm/StormNoise1.tres" id="42_s5gqv"]
 [ext_resource type="Texture2D" uid="uid://d2utxp2le0rkm" path="res://Stages/World/Storm/StormNoise2.tres" id="43_6gn56"]
+[ext_resource type="Script" uid="uid://by6ifp7vltc41" path="res://Entities/StormBase/StormBase.gd" id="46_ed1p2"]
 
 [sub_resource type="Environment" id="Environment_2wouv"]
 background_mode = 3
@@ -155,13 +157,13 @@ physics_layer_1/collision_layer = 128
 physics_layer_1/collision_mask = 0
 sources/1 = SubResource("TileSetAtlasSource_lb4xb")
 
-[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_yw2f7"]
-rough = true
-
-[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_ed1p2"]
-rough = true
-
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_e5rpg"]
+rough = true
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_27u15"]
+rough = true
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_w76bj"]
 rough = true
 
 [sub_resource type="Resource" id="Resource_t15sm"]
@@ -260,6 +262,21 @@ starting_inv = Array[ExtResource("21_fx52i")]([SubResource("Resource_3156l")])
 [sub_resource type="LabelSettings" id="LabelSettings_lfc2v"]
 outline_size = 3
 outline_color = Color(0, 0, 0, 1)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_jb7gg"]
+atlas = ExtResource("35_e5rpg")
+region = Rect2(0, 0, 400, 400)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_e5rpg"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_jb7gg")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
 
 [sub_resource type="Resource" id="Resource_h8tfd"]
 script = ExtResource("27_8kcf2")
@@ -431,15 +448,15 @@ y_sort_enabled = true
 
 [node name="TestRigidEntity" parent="WorldRoot/Testing" instance=ExtResource("9_37jga")]
 position = Vector2(127, 27)
-physics_material_override = SubResource("PhysicsMaterial_yw2f7")
+physics_material_override = SubResource("PhysicsMaterial_e5rpg")
 
 [node name="TestRigidEntity2" parent="WorldRoot/Testing" instance=ExtResource("9_37jga")]
 position = Vector2(129, 87)
-physics_material_override = SubResource("PhysicsMaterial_ed1p2")
+physics_material_override = SubResource("PhysicsMaterial_27u15")
 
 [node name="TestRigidEntity3" parent="WorldRoot/Testing" instance=ExtResource("9_37jga")]
 position = Vector2(65, 118)
-physics_material_override = SubResource("PhysicsMaterial_e5rpg")
+physics_material_override = SubResource("PhysicsMaterial_w76bj")
 freeze = true
 immovable = true
 
@@ -530,48 +547,37 @@ position = Vector2(-3, -3)
 
 [node name="BasicZombie2" parent="WorldRoot/Testing" instance=ExtResource("30_6gn56")]
 position = Vector2(7, -30)
-enabled = false
 inv = SubResource("Resource_f5fhq")
 
 [node name="BasicZombie3" parent="WorldRoot/Testing" instance=ExtResource("30_6gn56")]
 position = Vector2(-78, 169)
-enabled = false
 
 [node name="BasicZombie4" parent="WorldRoot/Testing" instance=ExtResource("30_6gn56")]
 position = Vector2(45, 214)
-enabled = false
 
 [node name="BasicZombie5" parent="WorldRoot/Testing" instance=ExtResource("30_6gn56")]
 position = Vector2(503, 59)
-enabled = false
 
 [node name="BasicZombie6" parent="WorldRoot/Testing" instance=ExtResource("30_6gn56")]
 position = Vector2(548, 91)
-enabled = false
 
 [node name="BasicZombie7" parent="WorldRoot/Testing" instance=ExtResource("30_6gn56")]
 position = Vector2(527, 108)
-enabled = false
 
 [node name="BasicZombie8" parent="WorldRoot/Testing" instance=ExtResource("30_6gn56")]
 position = Vector2(559, 150)
-enabled = false
 
 [node name="BasicZombie9" parent="WorldRoot/Testing" instance=ExtResource("30_6gn56")]
 position = Vector2(543, 245)
-enabled = false
 
 [node name="BasicZombie10" parent="WorldRoot/Testing" instance=ExtResource("30_6gn56")]
 position = Vector2(400, 328)
-enabled = false
 
 [node name="BasicZombie11" parent="WorldRoot/Testing" instance=ExtResource("30_6gn56")]
 position = Vector2(371, 338)
-enabled = false
 
 [node name="BasicZombie12" parent="WorldRoot/Testing" instance=ExtResource("30_6gn56")]
 position = Vector2(386, 383)
-enabled = false
 
 [node name="TestRock5" parent="WorldRoot/Testing" instance=ExtResource("30_yw2f7")]
 position = Vector2(437, 158)
@@ -600,6 +606,14 @@ offset_left = 3.0
 offset_right = 43.0
 offset_bottom = 12.0
 label_settings = SubResource("LabelSettings_lfc2v")
+
+[node name="StormBase" type="Node2D" parent="WorldRoot"]
+position = Vector2(211, 108)
+script = ExtResource("46_ed1p2")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="WorldRoot/StormBase"]
+scale = Vector2(0.08, 0.08)
+sprite_frames = SubResource("SpriteFrames_e5rpg")
 
 [node name="Storm" type="Node2D" parent="WorldRoot" groups=["core", "has_save_logic"]]
 visible = false

@@ -10,22 +10,26 @@ class_name AreaOfEffectVFX
 @onready var floor_light: PointLight2D = $FloorLight ## The floor light that shines up.
 
 var radius: float ## The radius of the particles and other indicators.
+var duration: float ## The duration of the visuals before fading.
+var lifetime_timer: Timer = TimerHelpers.create_one_shot_timer(self, 1.0, _on_lifetime_ending, "VFXLifeTimer")
 var pulse_tween: Tween ## The tween tracking the pulsing of the circle color.
 const RADIUS_TO_BASE_OFF_OF: float = 20.0 ## The radius to base the floor light resizing calculations off of.
 const MAX_PARTICLE_COUNT: int = 80 ## The max amount any single particle emitter can emit.
 
 
 ## Creates and sets up an AOE VFX scene.
-static func create(scene: PackedScene, tree_parent: Node2D, life_and_loc_parent: Node2D, vfx_radius: float) -> void:
+static func create(scene: PackedScene, tree_parent: Node2D, life_and_loc_parent: Node2D,
+					vfx_radius: float, vfx_duration: float) -> void:
 	var vfx_scene: AreaOfEffectVFX = scene.instantiate()
 	vfx_scene.radius = vfx_radius
+	vfx_scene.duration = vfx_duration
 
 	tree_parent.add_child(vfx_scene)
 	vfx_scene.global_position = life_and_loc_parent.global_position
 
-	life_and_loc_parent.tree_exiting.connect(vfx_scene._on_lifetime_parent_tree_exiting)
-
 func _ready() -> void:
+	lifetime_timer.start(duration)
+
 	for node: CPUParticles2D in particles_nodes:
 		node.amount = min(int(node.amount * (radius / node.emission_sphere_radius)), MAX_PARTICLE_COUNT)
 		node.emission_sphere_radius = radius
@@ -52,8 +56,8 @@ func _draw() -> void:
 				else:
 					draw_rect(Rect2(Vector2(x, y), Vector2(1, 1)), fill_color)
 
-## When the lifetime parent exits the tree, start the tweens to fade things out and then queue free via the timer.
-func _on_lifetime_parent_tree_exiting() -> void:
+## When the lifetime timer ends, start the tweens to fade things out and then queue free.
+func _on_lifetime_ending() -> void:
 	for node: CPUParticles2D in particles_nodes:
 		node.emitting = false
 
