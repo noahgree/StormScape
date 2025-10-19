@@ -100,5 +100,5 @@ func spawn_on_ground_by_id(item_cache_id: StringName, count: int = 1) -> void:
 		printerr("The requested item \"" + item_cache_id + "\" does not exist.")
 		return
 
-	Item.spawn_on_ground(item, count, Globals.player_node.global_position, 10, false, false, true)
+	Item.spawn_on_ground(item.duplicate_deep(Resource.DEEP_DUPLICATE_INTERNAL), count, Globals.player_node.global_position, 10, false, false, true)
 #endregion

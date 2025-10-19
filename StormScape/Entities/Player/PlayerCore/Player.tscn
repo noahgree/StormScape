@@ -1417,6 +1417,9 @@ offset_right = 8.0
 
 [node name="EntitySprite" parent="YSorter" instance=ExtResource("4_fmbcv")]
 unique_name_in_owner = true
+instance_shader_parameters/override_color = Color(0.57214785, 0.39297795, 0.89827347, 0)
+instance_shader_parameters/tint_color = Color(0.8580836, 0.5053218, 1, 0)
+instance_shader_parameters/use_override_color = false
 position = Vector2(0, -16)
 sprite_frames = ExtResource("5_vy6lk")
 animation = &"idle"
@@ -1502,9 +1505,6 @@ libraries = {
 
 [node name="AnimationTree" type="AnimationTree" parent="."]
 callback_mode_process = 2
-libraries = {
-&"": SubResource("AnimationLibrary_xrucm")
-}
 tree_root = SubResource("AnimationNodeStateMachine_342k8")
 anim_player = NodePath("../AnimationPlayer")
 parameters/idle/TimeScale/scale = 1.0

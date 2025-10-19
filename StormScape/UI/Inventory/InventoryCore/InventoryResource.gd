@@ -44,7 +44,10 @@ func fill_inventory(inv_to_fill_from: Array[InvItemResource]) -> void:
 	inv.fill(null)
 	for i: int in range(min(total_inv_size, inv_to_fill_from.size())):
 		if inv_to_fill_from[i] != null:
-			var inv_item: InvItemResource = InvItemResource.new(inv_to_fill_from[i].stats, inv_to_fill_from[i].quantity, false).assign_unique_suid() # Need to ensure it is new and not the same as the inv to fill from
+			var inv_item: InvItemResource = InvItemResource.new(
+				inv_to_fill_from[i].stats.duplicate_deep(Resource.DEEP_DUPLICATE_INTERNAL), inv_to_fill_from[i].quantity,
+				false
+				).assign_unique_suid() # Need to ensure it is new and not the same as the inv to fill from
 
 			if inv_item.quantity > inv_item.stats.stack_size:
 				Item.spawn_on_ground(inv_item.stats, inv_item.quantity - inv_item.stats.stack_size, source_node.global_position, 14.0, true, false, true)
@@ -61,7 +64,10 @@ func fill_inventory_with_checks(inv_to_fill_from: Array[InvItemResource]) -> voi
 	inv.fill(null)
 	for i: int in range(min(total_inv_size, inv_to_fill_from.size())):
 		if inv_to_fill_from[i] != null:
-			insert_from_inv_item(InvItemResource.new(inv_to_fill_from[i].stats, inv_to_fill_from[i].quantity, false).assign_unique_suid(), true, false)
+			insert_from_inv_item(InvItemResource.new(
+				inv_to_fill_from[i].stats.duplicate_deep(Resource.DEEP_DUPLICATE_INTERNAL), inv_to_fill_from[i].quantity,
+				false
+				).assign_unique_suid(), true, false)
 
 	_emit_changes_for_all_indices()
 
@@ -297,15 +303,6 @@ func get_more_ammo(max_amount_needed: int, take_from_inventory: bool,
 				break
 
 	return ammount_collected
-
-## Adds xp to the weapon in the given index if it exists.
-func add_xp_to_weapon(index: int, amount: int) -> void:
-	var item: InvItemResource = inv[index]
-	if item == null or not item.stats is WeaponResource:
-		return
-
-	item.stats.add_xp(amount)
-	inv_data_updated.emit(index, inv[index])
 #endregion
 
 #region Debug

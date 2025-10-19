@@ -8,9 +8,14 @@ class_name ProjectileResource
 @export var initial_boost_mult: float = 2.0 ## The speed multiplier for the initial boost, if any.
 @export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var lifetime: float = 3 ## The max time this projectile can be in the air.
 @export_custom(PROPERTY_HINT_NONE, "suffix:pixels") var max_distance: int = 500 ## The max distance this projectile can travel from its starting position.
-@export_subgroup("Visual Overrides")
+@export_subgroup("VFX")
 @export_custom(PROPERTY_HINT_NONE, "suffix:pixels") var height_override: int = -1 ## How high off the ground to simulate this projectile being. Basically just moves the shadow's y offset. Anything besides -1 activates this.
 @export var disable_trail: bool = false ## When true, the projectile will not have a trail if it had one originally. Turn this on when spawning a lot of projectiles from one weapon, as trails can be expensive.
+@export var glow_color: Color = Color(1, 1, 1) ## The color of the glow.
+@export_range(0, 500, 0.1, "suffix:%") var glow_strength: float ## How strong the glow should be.
+@export var impact_vfx: PackedScene ## The VFX to spawn at the site of impact. Could be a decal or something.
+@export var impact_sound: String ## The sound to play at the site of impact.
+@export var rand_impact_rot: bool = false ## When true, the sprite will get a random rotation on impact to change how the impact animation looks for circular projectiles.
 
 @export_group("Falloff")
 @export var effect_falloff_curve: Curve ## The falloff curve for all effects in the effect source.
@@ -30,6 +35,7 @@ class_name ProjectileResource
 @export_range(0, 100, 1) var max_ricochet: int ## The max amount of ricochets this can do before trying to pierce and then freeing.
 @export var ricochet_angle_bounce: bool = true ## Whether the ricochets should bounce at an angle or just reverse the direction they were travelling in. Note that when colliding with TileMaps, it always just reverses direction.
 @export var ricochet_walls_only: bool = false ## When true, the projectile will only bounce off walls with no limit.
+@export var ignore_dynamic_entities: bool = false ## When true, the projectile will pass through dynamic entities when it would have otherwise ricocheted.
 
 @export_group("Homing Logic")
 @export_enum("None", "FOV", "Closest", "Mouse Position", "Boomerang") var homing_method: String = "None" ## Whether this projectile should home-in on its target.

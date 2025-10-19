@@ -128,8 +128,10 @@ func _spawn_projectile(proj_rot: float, multishot_id: int) -> void:
 
 	Globals.world_root.add_child(proj)
 
-## Spawns a hitscan with the given index amongst other hitscans, the width between them, and the start of the rotations.
-func _spawn_hitscan(barrage_index: int, spread_segment_width: float, start_of_offsets: float, multishot_id: int) -> void:
+## Spawns a hitscan with the given index amongst other hitscans, the width between them, and the start of
+## the rotations.
+func _spawn_hitscan(barrage_index: int, spread_segment_width: float, start_of_offsets: float,
+					multishot_id: int) -> void:
 	if weapon.is_holding_continuous_beam:
 		return
 

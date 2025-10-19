@@ -13,7 +13,7 @@ const MEDIUM_LARGE_XP: int = 50
 const LARGE_XP: int = 100
 const HUGE_XP: int = 250
 const ENORMOUS_XP: int = 500
-const EFFECT_AMOUNT_XP_MULT: float = 0.35 ## Multiplies effect src amounts (dmg,heal) before adding that amount as xp.
+const EFFECT_AMOUNT_XP_MULT: float = 0.35 ## Multiplies effect src amounts (dmg, heal) before adding that amount as xp.
 
 @export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var pullout_delay: float = 0.25 ## How long after equipping must we wait before we can use this weapon.
 @export var snap_to_six_dirs: bool = false ## When true, free rotation of the sprite is disabled and will snap to six predefined directions.
@@ -69,25 +69,35 @@ func has_any_mods() -> bool:
 			return true
 	return false
 
-## Adds xp to the weapon, potentially leveling it up if it has reached enough accumulation of xp.
-func add_xp(amount: int) -> void:
+## Adds xp to the weapon, potentially leveling it up if it has reached enough accumulation of xp. Returns true
+## if a level up occurred as a result of the added xp.
+func add_xp(amount: int) -> bool:
 	if no_levels:
-		return
+		return false
+
+	var leveled_up: bool = false
 	lvl_progress += amount
 	while level < MAX_LEVEL:
 		var xp_needed: int = xp_needed_for_lvl(self, level + 1)
 		if lvl_progress >= xp_needed and xp_needed > 0:
 			lvl_progress -= xp_needed
 			level += 1
+			leveled_up = true
 		else:
 			break
 
 	if level == MAX_LEVEL:
 		lvl_progress = 0
 
+	if Globals.player_node.hands.do_these_stats_match_equipped_item(self):
+		var idx: int = Globals.player_node.hands.equipped_item.inv_index
+		Globals.player_node.inv.inv_data_updated.emit(idx, Globals.player_node.inv.inv[idx])
+
 	if DebugFlags.weapon_xp_updates:
 		var xp_needed_now: int = xp_needed_for_lvl(self, level + 1)
 		print("AMOUNT: ", amount, " | PROGRESS: ", lvl_progress, " | LEVEL: ", level, " | REMAINING_NEEDED: ", xp_needed_now - lvl_progress)
+
+	return leveled_up
 
 ## prints the total needed xp for each level up to the requested level.
 func print_total_needed(for_level: int) -> void:

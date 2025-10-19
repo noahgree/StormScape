@@ -63,7 +63,6 @@ editor_description = "DO NOT SET EFFECT SOURCE IF BEING USED DIRECTLY WITH A WEA
 collision_layer = 0
 collision_mask = 0
 script = ExtResource("1_wj07j")
-glow_color = Color(1, 0.901675, 0.877147, 1)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 rotation = 1.5707964

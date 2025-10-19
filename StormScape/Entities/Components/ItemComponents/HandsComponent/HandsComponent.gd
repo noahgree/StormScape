@@ -207,6 +207,12 @@ func on_equipped_item_change(stats: ItemResource, inv_index: int) -> void:
 	equipped_item.enter()
 	set_process(true)
 
+## Returns whether or not the stats to check match that of a currently equipped item.
+func do_these_stats_match_equipped_item(stats_to_check: ItemResource) -> bool:
+	if equipped_item and equipped_item.stats == stats_to_check:
+		return true
+	return false
+
 ## Based on the current anim vector, we artificially move the rotation of the hands over before
 ## the items to simulate a pullout animation.
 func _prep_for_pullout_anim() -> void:
@@ -437,8 +443,7 @@ func add_weapon_xp(amount: int) -> void:
 	if not _check_is_holding_weapon() or Globals.player_inv_is_open:
 		printerr("Either the player is not holding a weapon or a focused UI is open, so no xp was added.")
 		return
-	var inv_index: int = Globals.player_node.hands.equipped_item.inv_index
-	Globals.player_node.inv.add_xp_to_weapon(inv_index, amount)
+	Globals.player_node.hands.equipped_item.stats.add_xp(amount)
 
 ## Debug prints the total needed xp for each level up to the passed in level.
 func debug_print_xp_needed_for_lvl(lvl: int) -> void:

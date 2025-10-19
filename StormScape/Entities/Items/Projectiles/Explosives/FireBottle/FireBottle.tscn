@@ -80,7 +80,6 @@ editor_description = "DO NOT SET EFFECT SOURCE IF BEING USED DIRECTLY WITH A WEA
 collision_layer = 0
 collision_mask = 0
 script = ExtResource("1_d5lyv")
-glow_color = Color(1, 0.901675, 0.877147, 1)
 in_air_only_particles = [NodePath("FireParticles")]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
