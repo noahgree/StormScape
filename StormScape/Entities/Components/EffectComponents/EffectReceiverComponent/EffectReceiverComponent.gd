@@ -100,18 +100,18 @@ func handle_effect_source(effect_source: EffectSource, source_entity: Entity, so
 	var do_hitflash: bool = false
 	if effect_source.base_damage > 0 and dmg_handler != null:
 		if _check_same_team(source_entity) and _check_if_bad_effects_apply_to_allies(effect_source):
-			dmg_handler.handle_instant_damage(effect_source, _get_life_steal(effect_source, source_entity))
+			dmg_handler.handle_instant_damage(effect_source, source_weapon.level, _get_life_steal(effect_source, source_entity))
 			do_hitflash = true
 		elif not _check_same_team(source_entity) and _check_if_bad_effects_apply_to_enemies(effect_source):
-			xp = dmg_handler.handle_instant_damage(effect_source, _get_life_steal(effect_source, source_entity))
+			xp = dmg_handler.handle_instant_damage(effect_source, source_weapon.level, _get_life_steal(effect_source, source_entity))
 			do_hitflash = true
 
 	if effect_source.base_healing > 0 and heal_handler != null:
 		if _check_same_team(source_entity) and _check_if_good_effects_apply_to_allies(effect_source):
-			xp = heal_handler.handle_instant_heal(effect_source, effect_source.heal_affected_stats)
+			xp = heal_handler.handle_instant_heal(effect_source, effect_source.heal_affected_stats, source_weapon.level)
 			do_hitflash = true
 		elif not _check_same_team(source_entity) and _check_if_good_effects_apply_to_enemies(effect_source):
-			heal_handler.handle_instant_heal(effect_source, effect_source.heal_affected_stats)
+			heal_handler.handle_instant_heal(effect_source, effect_source.heal_affected_stats, source_weapon.level)
 			do_hitflash = true
 
 	if do_hitflash:
@@ -132,6 +132,7 @@ func handle_effect_source(effect_source: EffectSource, source_entity: Entity, so
 					knockback_handler.contact_position = effect_source.contact_position
 					knockback_handler.effect_movement_direction = effect_source.movement_direction
 					knockback_handler.is_source_moving_type = (effect_source.source_type == Globals.EffectSourceSourceType.FROM_PROJECTILE)
+
 				_check_status_effect_team_logic(effect_source, source_entity)
 
 ## Checks if each status effect in the array applies to this entity via team logic, then passes it to be unpacked.

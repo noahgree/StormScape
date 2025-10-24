@@ -1,4 +1,4 @@
-[gd_scene load_steps=93 format=4 uid="uid://bscnr6a23l10m"]
+[gd_scene load_steps=97 format=4 uid="uid://bscnr6a23l10m"]
 
 [ext_resource type="Script" uid="uid://mdtvdhu78iqm" path="res://Utilities/Game/WorldRoot/WorldRoot.gd" id="1_q0i4n"]
 [ext_resource type="Script" uid="uid://dpbgynf55anlv" path="res://Stages/World/BackgroundMusicManager.gd" id="1_q5pr2"]
@@ -31,7 +31,9 @@
 [ext_resource type="Resource" uid="uid://cfaje12siuo0b" path="res://Entities/Items/TRESItems/WeaponMods/Compensator(2).tres" id="23_8lm63"]
 [ext_resource type="Resource" uid="uid://dw5jtfoba6mwy" path="res://Entities/Items/TRESItems/Wearables/PoisonCharm(5).tres" id="23_s5gqv"]
 [ext_resource type="Resource" uid="uid://ciel2rrqq4dvv" path="res://Entities/Items/TRESItems/ProjectileWeapons/LaserGun(2).tres" id="24_a2una"]
+[ext_resource type="Resource" uid="uid://cmyuoxk4c1mx6" path="res://Entities/Items/TRESItems/WeaponMods/RapidTrigger(3).tres" id="24_w76bj"]
 [ext_resource type="Script" uid="uid://cbiskerf2stk6" path="res://Stages/World/Storm/StormTransform.gd" id="25_dqjbe"]
+[ext_resource type="Resource" uid="uid://hchaonec5px1" path="res://Entities/Items/TRESItems/WeaponMods/CoolingAparatus(2).tres" id="25_vi22v"]
 [ext_resource type="Resource" uid="uid://bnc4tbhdxpauy" path="res://Entities/Items/TRESItems/ProjectileWeapons/Musket(0).tres" id="26_6gn56"]
 [ext_resource type="Resource" uid="uid://cwgqj8klx4b3x" path="res://Entities/Items/TRESItems/WeaponMods/ExtendedMag(0).tres" id="26_a2una"]
 [ext_resource type="Resource" uid="uid://cx6t5cil24ca3" path="res://Stages/World/Storm/StormVisuals/DefaultStormVisuals.tres" id="27_5uvpk"]
@@ -206,10 +208,22 @@ script = ExtResource("21_fx52i")
 stats = ExtResource("22_a2una")
 metadata/_custom_type_script = "uid://dp8osf7r6xkkt"
 
+[sub_resource type="Resource" id="Resource_8jild"]
+script = ExtResource("21_fx52i")
+stats = ExtResource("24_w76bj")
+metadata/_custom_type_script = "uid://dp8osf7r6xkkt"
+
+[sub_resource type="Resource" id="Resource_yng6w"]
+script = ExtResource("21_fx52i")
+stats = ExtResource("25_vi22v")
+quantity = 2
+metadata/_custom_type_script = "uid://dp8osf7r6xkkt"
+
 [sub_resource type="Resource" id="Resource_27u15"]
 script = ExtResource("20_om42l")
-main_inv_size = 5
-starting_inv = Array[ExtResource("21_fx52i")]([null, SubResource("Resource_340rl"), null, null, SubResource("Resource_jb7gg")])
+main_inv_size = 8
+drop_on_death = true
+starting_inv = Array[ExtResource("21_fx52i")]([null, SubResource("Resource_340rl"), null, null, SubResource("Resource_jb7gg"), null, SubResource("Resource_8jild"), SubResource("Resource_yng6w")])
 metadata/_custom_type_script = "uid://dwmur0cosbbwh"
 
 [sub_resource type="Resource" id="Resource_a2una"]
@@ -546,40 +560,52 @@ inv = SubResource("Resource_vi22v")
 
 [node name="BasicZombie" parent="WorldRoot/Testing" instance=ExtResource("30_6gn56")]
 position = Vector2(-3, -3)
+enabled = false
 
 [node name="BasicZombie2" parent="WorldRoot/Testing" instance=ExtResource("30_6gn56")]
 position = Vector2(7, -30)
+enabled = false
 inv = SubResource("Resource_f5fhq")
 
 [node name="BasicZombie3" parent="WorldRoot/Testing" instance=ExtResource("30_6gn56")]
 position = Vector2(-78, 169)
+enabled = false
 
 [node name="BasicZombie4" parent="WorldRoot/Testing" instance=ExtResource("30_6gn56")]
 position = Vector2(45, 214)
+enabled = false
 
 [node name="BasicZombie5" parent="WorldRoot/Testing" instance=ExtResource("30_6gn56")]
 position = Vector2(503, 59)
+enabled = false
 
 [node name="BasicZombie6" parent="WorldRoot/Testing" instance=ExtResource("30_6gn56")]
 position = Vector2(548, 91)
+enabled = false
 
 [node name="BasicZombie7" parent="WorldRoot/Testing" instance=ExtResource("30_6gn56")]
 position = Vector2(527, 108)
+enabled = false
 
 [node name="BasicZombie8" parent="WorldRoot/Testing" instance=ExtResource("30_6gn56")]
 position = Vector2(559, 150)
+enabled = false
 
 [node name="BasicZombie9" parent="WorldRoot/Testing" instance=ExtResource("30_6gn56")]
 position = Vector2(543, 245)
+enabled = false
 
 [node name="BasicZombie10" parent="WorldRoot/Testing" instance=ExtResource("30_6gn56")]
 position = Vector2(400, 328)
+enabled = false
 
 [node name="BasicZombie11" parent="WorldRoot/Testing" instance=ExtResource("30_6gn56")]
 position = Vector2(371, 338)
+enabled = false
 
 [node name="BasicZombie12" parent="WorldRoot/Testing" instance=ExtResource("30_6gn56")]
 position = Vector2(386, 383)
+enabled = false
 
 [node name="TestRock5" parent="WorldRoot/Testing" instance=ExtResource("30_yw2f7")]
 position = Vector2(437, 158)

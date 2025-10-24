@@ -20,7 +20,8 @@ script = ExtResource("4_yomsf")
 stat_id = &"bloom_increase_rate_multiplier"
 mod_id = &"compensator"
 operation = "-%"
-value = 18.0
+value = 20.0
+panel_title = "Bloom Rate"
 metadata/_custom_type_script = "uid://bcjwesiannbd0"
 
 [resource]

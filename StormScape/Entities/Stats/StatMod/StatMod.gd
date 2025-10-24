@@ -8,10 +8,15 @@ class_name StatMod
 @export var value: float ## The value that will be applied according to the specified operation.
 @export_enum("Exact", "Round Up", "Round Down", "Round Closest") var rounding: String = "Exact" ## How to round the value after the operation.
 
-@export_group("More Options")
+@export_group("Priority & Stacking")
 @export_range(1, 5, 1) var priority: int = 1 ## The relative ordering in which it should be applied. 5 goes first.
 @export var max_stack_count: int = 1 ## The max number of times this can stack. 1 is the default, meaning no stacking.
 @export var override_all: bool = false ## Whether this effect should become the only applied effect on this stat.
+
+@export_group("Stat Panel Details")
+@export var panel_title: String = "" ## When not a blank string, this stat mod as part of a weapon mod will populate with this title in the item details panel. Use title case.
+@export var panel_suffix: String = "" ## When including in the panel, this will be the suffix.
+@export var is_good_mod: bool = true ## When true, the value will be displayed as green, when false, it will be red.
 
 var stack_count: int = 1 ## The current number of times this mod is applied (via stacking).
 var before_stack_value: float = 0 ## The original value before stacking got applied.

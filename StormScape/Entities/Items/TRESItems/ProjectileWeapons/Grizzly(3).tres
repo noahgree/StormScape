@@ -51,7 +51,6 @@ height_override = 6
 effect_falloff_curve = SubResource("Curve_nyi5w")
 point_of_max_falloff = 200.0
 max_ricochet = 2
-ignore_dynamic_entities = true
 launch_angle = 60.0
 arc_travel_distance = 60
 arc_speed = 600.0

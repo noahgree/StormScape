@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="ExtendedMagMod" load_steps=9 format=3 uid="uid://cwgqj8klx4b3x"]
+[gd_resource type="Resource" script_class="ExtendedMagMod" load_steps=10 format=3 uid="uid://cwgqj8klx4b3x"]
 
 [ext_resource type="Script" uid="uid://boo31eu083dqd" path="res://Entities/Stats/EffectSystemResources/StatusEffects/StatusEffect.gd" id="1_d44er"]
 [ext_resource type="Script" uid="uid://cowjdnic7xmkp" path="res://UI/Inventory/PlayerInventory/StatDetail.gd" id="2_hs1lr"]
@@ -13,13 +13,23 @@ stat_id = &"mag_size"
 mod_id = &"extended_mag"
 value = 10.0
 rounding = "Round Up"
+panel_title = "Mag Size"
 metadata/_custom_type_script = "uid://bcjwesiannbd0"
 
 [sub_resource type="Resource" id="Resource_686hq"]
 script = ExtResource("4_xtfwk")
 stat_id = &"mag_reload_time"
 mod_id = &"extended_mag"
-value = 8.0
+value = 11.0
+panel_title = "Reload Time"
+is_good_mod = false
+metadata/_custom_type_script = "uid://bcjwesiannbd0"
+
+[sub_resource type="Resource" id="Resource_d44er"]
+script = ExtResource("4_xtfwk")
+stat_id = &"single_proj_reload_time"
+mod_id = &"extended_mag"
+value = 11.0
 metadata/_custom_type_script = "uid://bcjwesiannbd0"
 
 [resource]
@@ -29,7 +39,7 @@ allowed_melee_wpns = Array[int]([])
 blocked_wpn_stats = Dictionary[StringName, float]({
 &"mag_size": 0.0
 })
-wpn_stat_mods = Array[ExtResource("4_xtfwk")]([SubResource("Resource_xtfwk"), SubResource("Resource_686hq")])
+wpn_stat_mods = Array[ExtResource("4_xtfwk")]([SubResource("Resource_xtfwk"), SubResource("Resource_686hq"), SubResource("Resource_d44er")])
 id = "extended_mag"
 name = "Extended Mag"
 item_type = 6

@@ -1,4 +1,4 @@
-extends VBoxContainer
+extends CenterContainer
 class_name ItemDetailsPanel
 ## This is responsible for handling the item details inside the player's inventory.
 ##
@@ -91,7 +91,7 @@ func _notification(what: int) -> void:
 		visible = false
 	if what == NOTIFICATION_DRAG_BEGIN and _is_dragging_slot():
 		if not pinned:
-			_show_and_update_item_title("Drop Here to Pin")
+			_show_and_update_item_title("Drop Above to Pin")
 			player_icon_margin.visible = false
 			details_margin.visible = false
 			main_item_viewer_margin.visible = true
@@ -157,7 +157,7 @@ func _on_item_viewer_slot_changed(_slot: Slot, _old_item: InvItemResource, new_i
 			visible = false
 		else:
 			main_item_viewer_margin.visible = true
-			_show_and_update_item_title("Drop Here to Pin")
+			_show_and_update_item_title("Drop Above to Pin")
 
 		changing_item_viewer_slot = false
 		return
@@ -186,7 +186,7 @@ func _on_item_viewer_slot_changed(_slot: Slot, _old_item: InvItemResource, new_i
 
 	if new_item.stats is WeaponResource:
 		if not new_item.stats.no_levels:
-			var level_string: String = "• [color=27f7ff] LVL " + str(new_item.stats.level) + "[/color][color=AAAAAA00][char=02D9][/color]" + "[color=AAAAAA00][char=02D9][/color]"
+			var level_string: String = "• [color=Cyan] LVL " + str(new_item.stats.level) + "[/color][color=AAAAAA00][char=02D9][/color]" + "[color=AAAAAA00][char=02D9][/color]"
 			item_rarity_label.text += level_string
 
 	changing_item_viewer_slot = false

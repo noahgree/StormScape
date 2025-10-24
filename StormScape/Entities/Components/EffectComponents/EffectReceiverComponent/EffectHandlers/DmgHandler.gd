@@ -35,8 +35,9 @@ func _ready() -> void:
 	affected_entity.stats.add_moddable_stats(moddable_stats)
 
 ## Calculates the final damage to apply after considering whether the crit hit and also how much the armor blocks.
-func _get_dmg_after_crit_then_armor(effect_source: EffectSource, is_crit: bool) -> int:
-	var dmg_after_crit: int = effect_source.base_damage
+func _get_dmg_after_crit_then_armor(effect_source: EffectSource, is_crit: bool, lvl: int) -> int:
+	var level_mult: float = ((floori(lvl / 10.0) * effect_source.lvl_dmg_scalar) / 100.0) + 1
+	var dmg_after_crit: int = ceili(effect_source.base_damage * level_mult)
 	if is_crit:
 		dmg_after_crit = round(dmg_after_crit * effect_source.crit_multiplier)
 
@@ -45,9 +46,9 @@ func _get_dmg_after_crit_then_armor(effect_source: EffectSource, is_crit: bool) 
 	return new_damage
 
 ## Handles instantaneous damage that will be affected by armor. Returns the appropriate xp amount to apply.
-func handle_instant_damage(effect_source: EffectSource, life_steal_percent: float = 0.0) -> int:
+func handle_instant_damage(effect_source: EffectSource, lvl: int, life_steal_percent: float = 0.0) -> int:
 	var is_crit: bool = (randf_range(0, 100) <= effect_source.crit_chance) and can_be_crit
-	var dmg_after_crit_then_armor: int = _get_dmg_after_crit_then_armor(effect_source, is_crit)
+	var dmg_after_crit_then_armor: int = _get_dmg_after_crit_then_armor(effect_source, is_crit, lvl)
 
 	var object_dmg_mult: float = 1.0
 	if affected_entity.is_object:

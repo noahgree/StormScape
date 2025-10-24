@@ -76,6 +76,7 @@ func add_xp(amount: int) -> bool:
 		return false
 
 	var leveled_up: bool = false
+
 	lvl_progress += amount
 	while level < MAX_LEVEL:
 		var xp_needed: int = xp_needed_for_lvl(self, level + 1)

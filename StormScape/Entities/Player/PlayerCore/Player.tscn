@@ -2186,7 +2186,6 @@ heal_color = Color(0, 0.579, 0.249, 1)
 
 [node name="PlayerInvUI" type="ColorRect" parent="OverlayUI" node_paths=PackedStringArray("hotbar_grid", "hotbar_hud_grid", "trash_slot", "item_details_panel", "crafting_manager", "wearables_panel", "alternate_inv_panel", "synced_inv_source_node", "main_slot_grid")]
 process_mode = 3
-visible = false
 material = SubResource("ShaderMaterial_2q23q")
 use_parent_material = true
 anchors_preset = 15
@@ -2209,11 +2208,18 @@ synced_inv_source_node = NodePath("../..")
 main_slot_grid = NodePath("MainGridBackground/GridMargins/GridMarginsBackground/MainSlotGrid")
 
 [node name="MainGridBackground" type="NinePatchRect" parent="OverlayUI/PlayerInvUI"]
-layout_mode = 0
-offset_left = 144.0
-offset_top = 55.0
-offset_right = 336.0
-offset_bottom = 201.0
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -96.0
+offset_top = -73.0
+offset_right = 96.0
+offset_bottom = 73.0
+grow_horizontal = 2
+grow_vertical = 2
 size_flags_vertical = 3
 mouse_filter = 0
 texture = ExtResource("78_jlc36")
@@ -2529,9 +2535,9 @@ stretch_mode = 5
 [node name="TrashSlotPanel" type="NinePatchRect" parent="OverlayUI/PlayerInvUI"]
 layout_mode = 0
 offset_left = 303.0
-offset_top = 168.0
+offset_top = 175.0
 offset_right = 331.0
-offset_bottom = 196.0
+offset_bottom = 203.0
 size_flags_horizontal = 8
 size_flags_vertical = 8
 mouse_filter = 0
@@ -2561,15 +2567,15 @@ backing_texture = ExtResource("69_4ao77")
 
 [node name="HotbarSlotMargins" type="MarginContainer" parent="OverlayUI/PlayerInvUI"]
 layout_mode = 1
-anchors_preset = -1
+anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -58.0
-offset_top = 33.0
+offset_top = 40.0
 offset_right = 58.0
-offset_bottom = 61.0
+offset_bottom = 68.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 0
@@ -2632,9 +2638,9 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = 99.0
-offset_top = -80.0
+offset_top = -79.0
 offset_right = 137.0
-offset_bottom = 78.0
+offset_bottom = 79.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 0
@@ -2842,9 +2848,9 @@ anchors_preset = -1
 anchor_left = 0.5
 anchor_right = 0.5
 offset_left = 140.0
-offset_top = 55.0
+offset_top = 56.0
 offset_right = 178.0
-offset_bottom = 213.0
+offset_bottom = 214.0
 grow_horizontal = 2
 mouse_filter = 0
 alignment = 1
@@ -2978,21 +2984,31 @@ layout_mode = 2
 script = ExtResource("113_bvo3j")
 backing_texture = ExtResource("103_g5u5n")
 
-[node name="ItemDetailsPanel" type="VBoxContainer" parent="OverlayUI/PlayerInvUI" node_paths=PackedStringArray("inventory_ui")]
+[node name="ItemDetailsPanel" type="CenterContainer" parent="OverlayUI/PlayerInvUI" node_paths=PackedStringArray("inventory_ui")]
 unique_name_in_owner = true
-layout_mode = 0
+custom_minimum_size = Vector2(106, 0)
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
 offset_left = 35.0
-offset_top = 55.0
+offset_top = -98.0
 offset_right = 141.0
-offset_bottom = 205.0
+offset_bottom = 98.0
+grow_vertical = 2
 script = ExtResource("116_g5u5n")
 inventory_ui = NodePath("..")
 stamina_ammo_icon = ExtResource("119_6f5us")
 
-[node name="BackgroundMargin" type="MarginContainer" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel"]
+[node name="ItemDetailsPanelVBox" type="VBoxContainer" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel"]
+custom_minimum_size = Vector2(106, 0)
+layout_mode = 2
+metadata/_edit_use_anchors_ = true
+
+[node name="BackgroundMargin" type="MarginContainer" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/ItemDetailsPanelVBox"]
 layout_mode = 2
 
-[node name="InventoryTexture" type="NinePatchRect" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/BackgroundMargin"]
+[node name="InventoryTexture" type="NinePatchRect" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/ItemDetailsPanelVBox/BackgroundMargin"]
 layout_mode = 2
 size_flags_vertical = 3
 mouse_filter = 0
@@ -3003,7 +3019,7 @@ patch_margin_right = 5
 patch_margin_bottom = 5
 axis_stretch_vertical = 1
 
-[node name="DetailsInnerMargin" type="MarginContainer" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/BackgroundMargin"]
+[node name="DetailsInnerMargin" type="MarginContainer" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/ItemDetailsPanelVBox/BackgroundMargin"]
 unique_name_in_owner = true
 editor_description = "THIS GRIDMARGIN MOUSE FILTER MUST STAY AS IGNORE TO MAKE SORT BUTTONS WORK!"
 layout_mode = 2
@@ -3014,12 +3030,12 @@ theme_override_constants/margin_top = 5
 theme_override_constants/margin_right = 9
 theme_override_constants/margin_bottom = 9
 
-[node name="ItemViewerVBox" type="VBoxContainer" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/BackgroundMargin/DetailsInnerMargin"]
+[node name="ItemViewerVBox" type="VBoxContainer" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/ItemDetailsPanelVBox/BackgroundMargin/DetailsInnerMargin"]
 layout_mode = 2
 mouse_filter = 0
 theme_override_constants/separation = 4
 
-[node name="PlayerIconMargin" type="MarginContainer" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox"]
+[node name="PlayerIconMargin" type="MarginContainer" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/ItemDetailsPanelVBox/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(46, 46)
 layout_mode = 2
@@ -3030,7 +3046,7 @@ theme_override_constants/margin_top = 0
 theme_override_constants/margin_right = 0
 theme_override_constants/margin_bottom = 0
 
-[node name="PlayerIconBackground" type="NinePatchRect" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox/PlayerIconMargin"]
+[node name="PlayerIconBackground" type="NinePatchRect" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/ItemDetailsPanelVBox/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox/PlayerIconMargin"]
 layout_mode = 2
 size_flags_vertical = 3
 texture = ExtResource("109_0313k")
@@ -3039,14 +3055,14 @@ patch_margin_top = 3
 patch_margin_right = 3
 patch_margin_bottom = 3
 
-[node name="PlayerIconFrameMargin" type="MarginContainer" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox/PlayerIconMargin"]
+[node name="PlayerIconFrameMargin" type="MarginContainer" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/ItemDetailsPanelVBox/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox/PlayerIconMargin"]
 layout_mode = 2
 theme_override_constants/margin_left = 3
 theme_override_constants/margin_top = 3
 theme_override_constants/margin_right = 3
 theme_override_constants/margin_bottom = 3
 
-[node name="PlayerIconFrameBgrd" type="NinePatchRect" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox/PlayerIconMargin/PlayerIconFrameMargin"]
+[node name="PlayerIconFrameBgrd" type="NinePatchRect" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/ItemDetailsPanelVBox/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox/PlayerIconMargin/PlayerIconFrameMargin"]
 layout_mode = 2
 texture = ExtResource("113_5qckj")
 patch_margin_left = 2
@@ -3054,26 +3070,26 @@ patch_margin_top = 2
 patch_margin_right = 2
 patch_margin_bottom = 2
 
-[node name="PlayerIconMargin" type="MarginContainer" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox/PlayerIconMargin/PlayerIconFrameMargin"]
+[node name="PlayerIconMargin" type="MarginContainer" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/ItemDetailsPanelVBox/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox/PlayerIconMargin/PlayerIconFrameMargin"]
 layout_mode = 2
 theme_override_constants/margin_left = 1
 theme_override_constants/margin_top = 0
 theme_override_constants/margin_right = 1
 theme_override_constants/margin_bottom = 2
 
-[node name="PlayerIcon" type="TextureRect" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox/PlayerIconMargin/PlayerIconFrameMargin/PlayerIconMargin"]
+[node name="PlayerIcon" type="TextureRect" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/ItemDetailsPanelVBox/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox/PlayerIconMargin/PlayerIconFrameMargin/PlayerIconMargin"]
 layout_mode = 2
 texture = ExtResource("117_thmqm")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="ItemViewerBkgrdMargin" type="MarginContainer" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox"]
+[node name="ItemViewerBkgrdMargin" type="MarginContainer" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/ItemDetailsPanelVBox/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 
-[node name="ItemBackground" type="NinePatchRect" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox/ItemViewerBkgrdMargin"]
+[node name="ItemBackground" type="NinePatchRect" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/ItemDetailsPanelVBox/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox/ItemViewerBkgrdMargin"]
 layout_mode = 2
 texture = ExtResource("109_0313k")
 patch_margin_left = 4
@@ -3082,14 +3098,14 @@ patch_margin_right = 4
 patch_margin_bottom = 4
 axis_stretch_vertical = 1
 
-[node name="ItemViewerSlotMargin" type="MarginContainer" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox/ItemViewerBkgrdMargin"]
+[node name="ItemViewerSlotMargin" type="MarginContainer" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/ItemDetailsPanelVBox/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox/ItemViewerBkgrdMargin"]
 layout_mode = 2
 theme_override_constants/margin_left = 3
 theme_override_constants/margin_top = 3
 theme_override_constants/margin_right = 3
 theme_override_constants/margin_bottom = 3
 
-[node name="ItemViewerSlot" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox/ItemViewerBkgrdMargin/ItemViewerSlotMargin" instance=ExtResource("42_r422n")]
+[node name="ItemViewerSlot" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/ItemDetailsPanelVBox/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox/ItemViewerBkgrdMargin/ItemViewerSlotMargin" instance=ExtResource("42_r422n")]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(40, 40)
 layout_mode = 2
@@ -3101,18 +3117,18 @@ hide_corner_info = true
 hide_tint_progress = true
 hide_hover_tooltip = true
 
-[node name="ElementsMargin" type="MarginContainer" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox"]
+[node name="ElementsMargin" type="MarginContainer" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/ItemDetailsPanelVBox/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox"]
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="ElementsBkrgdMargin" type="MarginContainer" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox/ElementsMargin"]
+[node name="ElementsBkrgdMargin" type="MarginContainer" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/ItemDetailsPanelVBox/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox/ElementsMargin"]
 layout_mode = 2
 theme_override_constants/margin_left = -4
 theme_override_constants/margin_top = -4
 theme_override_constants/margin_right = -4
 theme_override_constants/margin_bottom = -4
 
-[node name="ElementsBackground" type="NinePatchRect" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox/ElementsMargin/ElementsBkrgdMargin"]
+[node name="ElementsBackground" type="NinePatchRect" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/ItemDetailsPanelVBox/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox/ElementsMargin/ElementsBkrgdMargin"]
 layout_mode = 2
 texture = ExtResource("109_0313k")
 patch_margin_left = 4
@@ -3121,17 +3137,17 @@ patch_margin_right = 4
 patch_margin_bottom = 4
 axis_stretch_vertical = 1
 
-[node name="ElementsVBox" type="VBoxContainer" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox/ElementsMargin"]
+[node name="ElementsVBox" type="VBoxContainer" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/ItemDetailsPanelVBox/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox/ElementsMargin"]
 layout_mode = 2
 theme_override_constants/separation = 2
 
-[node name="ItemNameMargin" type="MarginContainer" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox/ElementsMargin/ElementsVBox"]
+[node name="ItemNameMargin" type="MarginContainer" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/ItemDetailsPanelVBox/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox/ElementsMargin/ElementsVBox"]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_constants/margin_top = -3
 theme_override_constants/margin_bottom = -1
 
-[node name="ItemNameLabel" type="RichTextLabel" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox/ElementsMargin/ElementsVBox/ItemNameMargin"]
+[node name="ItemNameLabel" type="RichTextLabel" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/ItemDetailsPanelVBox/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox/ElementsMargin/ElementsVBox/ItemNameMargin"]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_colors/default_color = Color(0.961254, 0.893995, 0.881106, 1)
@@ -3147,13 +3163,13 @@ tab_size = 0
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="ItemRarityMargin" type="MarginContainer" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox/ElementsMargin/ElementsVBox"]
+[node name="ItemRarityMargin" type="MarginContainer" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/ItemDetailsPanelVBox/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox/ElementsMargin/ElementsVBox"]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_constants/margin_top = -3
 theme_override_constants/margin_bottom = 0
 
-[node name="ItemRarityLabel" type="RichTextLabel" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox/ElementsMargin/ElementsVBox/ItemRarityMargin"]
+[node name="ItemRarityLabel" type="RichTextLabel" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/ItemDetailsPanelVBox/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox/ElementsMargin/ElementsVBox/ItemRarityMargin"]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_colors/default_color = Color(0.913725, 0.768627, 0.741176, 1)
@@ -3169,13 +3185,13 @@ tab_size = 0
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="InfoMargin" type="MarginContainer" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox/ElementsMargin/ElementsVBox"]
+[node name="InfoMargin" type="MarginContainer" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/ItemDetailsPanelVBox/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox/ElementsMargin/ElementsVBox"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_constants/margin_top = -1
 
-[node name="InfoBackground" type="NinePatchRect" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox/ElementsMargin/ElementsVBox/InfoMargin"]
+[node name="InfoBackground" type="NinePatchRect" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/ItemDetailsPanelVBox/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox/ElementsMargin/ElementsVBox/InfoMargin"]
 layout_mode = 2
 texture = ExtResource("125_ar238")
 patch_margin_left = 1
@@ -3184,14 +3200,14 @@ patch_margin_right = 1
 patch_margin_bottom = 1
 axis_stretch_vertical = 2
 
-[node name="InfoLabelMargin" type="MarginContainer" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox/ElementsMargin/ElementsVBox/InfoMargin"]
+[node name="InfoLabelMargin" type="MarginContainer" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/ItemDetailsPanelVBox/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox/ElementsMargin/ElementsVBox/InfoMargin"]
 layout_mode = 2
 theme_override_constants/margin_left = 3
 theme_override_constants/margin_top = 2
 theme_override_constants/margin_right = 3
 theme_override_constants/margin_bottom = 2
 
-[node name="InfoLabel" type="Label" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox/ElementsMargin/ElementsVBox/InfoMargin/InfoLabelMargin"]
+[node name="InfoLabel" type="Label" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/ItemDetailsPanelVBox/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox/ElementsMargin/ElementsVBox/InfoMargin/InfoLabelMargin"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(82, 0)
 layout_mode = 2
@@ -3205,12 +3221,12 @@ vertical_alignment = 1
 autowrap_mode = 3
 max_lines_visible = 4
 
-[node name="DetailsMargin" type="MarginContainer" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox/ElementsMargin/ElementsVBox"]
+[node name="DetailsMargin" type="MarginContainer" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/ItemDetailsPanelVBox/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox/ElementsMargin/ElementsVBox"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="DetailsBackground" type="NinePatchRect" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox/ElementsMargin/ElementsVBox/DetailsMargin"]
+[node name="DetailsBackground" type="NinePatchRect" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/ItemDetailsPanelVBox/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox/ElementsMargin/ElementsVBox/DetailsMargin"]
 layout_mode = 2
 texture = ExtResource("125_ar238")
 patch_margin_left = 1
@@ -3219,7 +3235,7 @@ patch_margin_right = 1
 patch_margin_bottom = 1
 axis_stretch_vertical = 2
 
-[node name="DetailsLabelMargin" type="MarginContainer" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox/ElementsMargin/ElementsVBox/DetailsMargin"]
+[node name="DetailsLabelMargin" type="MarginContainer" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/ItemDetailsPanelVBox/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox/ElementsMargin/ElementsVBox/DetailsMargin"]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_constants/margin_left = 3
@@ -3227,7 +3243,7 @@ theme_override_constants/margin_top = 1
 theme_override_constants/margin_right = 3
 theme_override_constants/margin_bottom = 2
 
-[node name="DetailsLabel" type="RichTextLabel" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox/ElementsMargin/ElementsVBox/DetailsMargin/DetailsLabelMargin"]
+[node name="DetailsLabel" type="RichTextLabel" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/ItemDetailsPanelVBox/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox/ElementsMargin/ElementsVBox/DetailsMargin/DetailsLabelMargin"]
 unique_name_in_owner = true
 clip_contents = false
 custom_minimum_size = Vector2(82, 8)
@@ -3253,14 +3269,14 @@ tab_size = 0
 vertical_alignment = 1
 visible_characters_behavior = 2
 
-[node name="ModSlotsMargin" type="MarginContainer" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox/ElementsMargin/ElementsVBox"]
+[node name="ModSlotsMargin" type="MarginContainer" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/ItemDetailsPanelVBox/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox/ElementsMargin/ElementsVBox"]
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="ModSlotsCenter" type="CenterContainer" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox/ElementsMargin/ElementsVBox/ModSlotsMargin"]
+[node name="ModSlotsCenter" type="CenterContainer" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/ItemDetailsPanelVBox/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox/ElementsMargin/ElementsVBox/ModSlotsMargin"]
 layout_mode = 2
 
-[node name="ModSlots" type="GridContainer" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox/ElementsMargin/ElementsVBox/ModSlotsMargin/ModSlotsCenter"]
+[node name="ModSlots" type="GridContainer" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/ItemDetailsPanelVBox/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox/ElementsMargin/ElementsVBox/ModSlotsMargin/ModSlotsCenter"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 4
@@ -3268,49 +3284,58 @@ theme_override_constants/h_separation = 0
 theme_override_constants/v_separation = 0
 columns = 4
 
-[node name="Slot1" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox/ElementsMargin/ElementsVBox/ModSlotsMargin/ModSlotsCenter/ModSlots" instance=ExtResource("42_r422n")]
+[node name="Slot1" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/ItemDetailsPanelVBox/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox/ElementsMargin/ElementsVBox/ModSlotsMargin/ModSlotsCenter/ModSlots" instance=ExtResource("42_r422n")]
 layout_mode = 2
 script = ExtResource("114_gdihr")
 backing_texture = ExtResource("118_r5dvw")
 
-[node name="Slot2" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox/ElementsMargin/ElementsVBox/ModSlotsMargin/ModSlotsCenter/ModSlots" instance=ExtResource("42_r422n")]
+[node name="Slot2" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/ItemDetailsPanelVBox/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox/ElementsMargin/ElementsVBox/ModSlotsMargin/ModSlotsCenter/ModSlots" instance=ExtResource("42_r422n")]
 layout_mode = 2
 script = ExtResource("114_gdihr")
 backing_texture = ExtResource("118_r5dvw")
 
-[node name="Slot3" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox/ElementsMargin/ElementsVBox/ModSlotsMargin/ModSlotsCenter/ModSlots" instance=ExtResource("42_r422n")]
+[node name="Slot3" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/ItemDetailsPanelVBox/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox/ElementsMargin/ElementsVBox/ModSlotsMargin/ModSlotsCenter/ModSlots" instance=ExtResource("42_r422n")]
 layout_mode = 2
 script = ExtResource("114_gdihr")
 backing_texture = ExtResource("118_r5dvw")
 
-[node name="Slot4" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox/ElementsMargin/ElementsVBox/ModSlotsMargin/ModSlotsCenter/ModSlots" instance=ExtResource("42_r422n")]
+[node name="Slot4" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/ItemDetailsPanelVBox/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox/ElementsMargin/ElementsVBox/ModSlotsMargin/ModSlotsCenter/ModSlots" instance=ExtResource("42_r422n")]
 layout_mode = 2
 script = ExtResource("114_gdihr")
 backing_texture = ExtResource("118_r5dvw")
 
-[node name="Slot5" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox/ElementsMargin/ElementsVBox/ModSlotsMargin/ModSlotsCenter/ModSlots" instance=ExtResource("42_r422n")]
+[node name="Slot5" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/ItemDetailsPanelVBox/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox/ElementsMargin/ElementsVBox/ModSlotsMargin/ModSlotsCenter/ModSlots" instance=ExtResource("42_r422n")]
 layout_mode = 2
 script = ExtResource("114_gdihr")
 backing_texture = ExtResource("118_r5dvw")
 
-[node name="Slot6" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox/ElementsMargin/ElementsVBox/ModSlotsMargin/ModSlotsCenter/ModSlots" instance=ExtResource("42_r422n")]
+[node name="Slot6" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/ItemDetailsPanelVBox/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox/ElementsMargin/ElementsVBox/ModSlotsMargin/ModSlotsCenter/ModSlots" instance=ExtResource("42_r422n")]
 layout_mode = 2
 script = ExtResource("114_gdihr")
 backing_texture = ExtResource("118_r5dvw")
 
-[node name="AlternateInventoryPanel" type="VBoxContainer" parent="OverlayUI/PlayerInvUI" node_paths=PackedStringArray("main_slot_grid")]
+[node name="AlternateInventoryPanel" type="CenterContainer" parent="OverlayUI/PlayerInvUI" node_paths=PackedStringArray("main_slot_grid")]
 unique_name_in_owner = true
-visible = false
-layout_mode = 0
-offset_left = 339.0
-offset_top = 55.0
-offset_right = 465.0
-offset_bottom = 225.0
-mouse_filter = 2
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -141.0
+offset_top = -101.0
+offset_right = -15.0
+offset_bottom = 102.0
+grow_horizontal = 0
+grow_vertical = 2
 script = ExtResource("111_6wv7y")
-main_slot_grid = NodePath("AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/MarginContainer/AlternateInvSlotGrid")
+main_slot_grid = NodePath("AlternateInventoryVBox/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/MarginContainer/AlternateInvSlotGrid")
 
-[node name="AlternateInvBkgrdMargin" type="MarginContainer" parent="OverlayUI/PlayerInvUI/AlternateInventoryPanel"]
+[node name="AlternateInventoryVBox" type="VBoxContainer" parent="OverlayUI/PlayerInvUI/AlternateInventoryPanel"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="AlternateInvBkgrdMargin" type="MarginContainer" parent="OverlayUI/PlayerInvUI/AlternateInventoryPanel/AlternateInventoryVBox"]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 0
@@ -3321,7 +3346,7 @@ theme_override_constants/margin_right = 0
 theme_override_constants/margin_bottom = 0
 metadata/_edit_use_anchors_ = true
 
-[node name="AlternateInvBackground" type="NinePatchRect" parent="OverlayUI/PlayerInvUI/AlternateInventoryPanel/AlternateInvBkgrdMargin"]
+[node name="AlternateInvBackground" type="NinePatchRect" parent="OverlayUI/PlayerInvUI/AlternateInventoryPanel/AlternateInventoryVBox/AlternateInvBkgrdMargin"]
 layout_mode = 2
 texture = ExtResource("78_jlc36")
 patch_margin_left = 5
@@ -3330,7 +3355,7 @@ patch_margin_right = 5
 patch_margin_bottom = 5
 axis_stretch_vertical = 1
 
-[node name="GridMargins" type="MarginContainer" parent="OverlayUI/PlayerInvUI/AlternateInventoryPanel/AlternateInvBkgrdMargin"]
+[node name="GridMargins" type="MarginContainer" parent="OverlayUI/PlayerInvUI/AlternateInventoryPanel/AlternateInventoryVBox/AlternateInvBkgrdMargin"]
 editor_description = "THIS GRIDMARGIN MOUSE FILTER MUST STAY AS IGNORE TO MAKE SORT BUTTONS WORK!"
 layout_mode = 2
 size_flags_horizontal = 4
@@ -3340,7 +3365,7 @@ theme_override_constants/margin_top = 5
 theme_override_constants/margin_right = 5
 theme_override_constants/margin_bottom = 5
 
-[node name="GridMarginsBackground" type="NinePatchRect" parent="OverlayUI/PlayerInvUI/AlternateInventoryPanel/AlternateInvBkgrdMargin/GridMargins"]
+[node name="GridMarginsBackground" type="NinePatchRect" parent="OverlayUI/PlayerInvUI/AlternateInventoryPanel/AlternateInventoryVBox/AlternateInvBkgrdMargin/GridMargins"]
 layout_mode = 2
 texture = ExtResource("109_0313k")
 patch_margin_left = 4
@@ -3349,24 +3374,24 @@ patch_margin_right = 4
 patch_margin_bottom = 4
 axis_stretch_vertical = 1
 
-[node name="TitleAndSlotVBox" type="VBoxContainer" parent="OverlayUI/PlayerInvUI/AlternateInventoryPanel/AlternateInvBkgrdMargin/GridMargins"]
+[node name="TitleAndSlotVBox" type="VBoxContainer" parent="OverlayUI/PlayerInvUI/AlternateInventoryPanel/AlternateInventoryVBox/AlternateInvBkgrdMargin/GridMargins"]
 layout_mode = 2
 theme_override_constants/separation = 1
 
-[node name="AlternateTitleMargin" type="MarginContainer" parent="OverlayUI/PlayerInvUI/AlternateInventoryPanel/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox"]
+[node name="AlternateTitleMargin" type="MarginContainer" parent="OverlayUI/PlayerInvUI/AlternateInventoryPanel/AlternateInventoryVBox/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox"]
 layout_mode = 2
 theme_override_constants/margin_left = 5
 theme_override_constants/margin_top = 4
 theme_override_constants/margin_right = 0
 theme_override_constants/margin_bottom = -4
 
-[node name="AlternateInvTitle" type="Label" parent="OverlayUI/PlayerInvUI/AlternateInventoryPanel/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/AlternateTitleMargin"]
+[node name="AlternateInvTitle" type="Label" parent="OverlayUI/PlayerInvUI/AlternateInventoryPanel/AlternateInventoryVBox/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/AlternateTitleMargin"]
 unique_name_in_owner = true
 layout_mode = 2
 text = "CONTAINER"
 label_settings = SubResource("LabelSettings_6wv7y")
 
-[node name="MarginContainer" type="MarginContainer" parent="OverlayUI/PlayerInvUI/AlternateInventoryPanel/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox"]
+[node name="MarginContainer" type="MarginContainer" parent="OverlayUI/PlayerInvUI/AlternateInventoryPanel/AlternateInventoryVBox/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox"]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
@@ -3375,7 +3400,7 @@ theme_override_constants/margin_top = 3
 theme_override_constants/margin_right = 3
 theme_override_constants/margin_bottom = 3
 
-[node name="AlternateInvSlotGrid" type="GridContainer" parent="OverlayUI/PlayerInvUI/AlternateInventoryPanel/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/MarginContainer"]
+[node name="AlternateInvSlotGrid" type="GridContainer" parent="OverlayUI/PlayerInvUI/AlternateInventoryPanel/AlternateInventoryVBox/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/MarginContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
@@ -3383,124 +3408,124 @@ theme_override_constants/h_separation = 0
 theme_override_constants/v_separation = 0
 columns = 5
 
-[node name="Slot1" parent="OverlayUI/PlayerInvUI/AlternateInventoryPanel/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/MarginContainer/AlternateInvSlotGrid" instance=ExtResource("42_r422n")]
+[node name="Slot1" parent="OverlayUI/PlayerInvUI/AlternateInventoryPanel/AlternateInventoryVBox/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/MarginContainer/AlternateInvSlotGrid" instance=ExtResource("42_r422n")]
 layout_mode = 2
 
-[node name="Slot2" parent="OverlayUI/PlayerInvUI/AlternateInventoryPanel/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/MarginContainer/AlternateInvSlotGrid" instance=ExtResource("42_r422n")]
+[node name="Slot2" parent="OverlayUI/PlayerInvUI/AlternateInventoryPanel/AlternateInventoryVBox/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/MarginContainer/AlternateInvSlotGrid" instance=ExtResource("42_r422n")]
 layout_mode = 2
 
-[node name="Slot3" parent="OverlayUI/PlayerInvUI/AlternateInventoryPanel/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/MarginContainer/AlternateInvSlotGrid" instance=ExtResource("42_r422n")]
+[node name="Slot3" parent="OverlayUI/PlayerInvUI/AlternateInventoryPanel/AlternateInventoryVBox/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/MarginContainer/AlternateInvSlotGrid" instance=ExtResource("42_r422n")]
 layout_mode = 2
 
-[node name="Slot4" parent="OverlayUI/PlayerInvUI/AlternateInventoryPanel/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/MarginContainer/AlternateInvSlotGrid" instance=ExtResource("42_r422n")]
+[node name="Slot4" parent="OverlayUI/PlayerInvUI/AlternateInventoryPanel/AlternateInventoryVBox/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/MarginContainer/AlternateInvSlotGrid" instance=ExtResource("42_r422n")]
 layout_mode = 2
 
-[node name="Slot5" parent="OverlayUI/PlayerInvUI/AlternateInventoryPanel/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/MarginContainer/AlternateInvSlotGrid" instance=ExtResource("42_r422n")]
+[node name="Slot5" parent="OverlayUI/PlayerInvUI/AlternateInventoryPanel/AlternateInventoryVBox/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/MarginContainer/AlternateInvSlotGrid" instance=ExtResource("42_r422n")]
 layout_mode = 2
 
-[node name="Slot6" parent="OverlayUI/PlayerInvUI/AlternateInventoryPanel/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/MarginContainer/AlternateInvSlotGrid" instance=ExtResource("42_r422n")]
+[node name="Slot6" parent="OverlayUI/PlayerInvUI/AlternateInventoryPanel/AlternateInventoryVBox/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/MarginContainer/AlternateInvSlotGrid" instance=ExtResource("42_r422n")]
 layout_mode = 2
 
-[node name="Slot7" parent="OverlayUI/PlayerInvUI/AlternateInventoryPanel/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/MarginContainer/AlternateInvSlotGrid" instance=ExtResource("42_r422n")]
+[node name="Slot7" parent="OverlayUI/PlayerInvUI/AlternateInventoryPanel/AlternateInventoryVBox/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/MarginContainer/AlternateInvSlotGrid" instance=ExtResource("42_r422n")]
 layout_mode = 2
 
-[node name="Slot8" parent="OverlayUI/PlayerInvUI/AlternateInventoryPanel/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/MarginContainer/AlternateInvSlotGrid" instance=ExtResource("42_r422n")]
+[node name="Slot8" parent="OverlayUI/PlayerInvUI/AlternateInventoryPanel/AlternateInventoryVBox/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/MarginContainer/AlternateInvSlotGrid" instance=ExtResource("42_r422n")]
 layout_mode = 2
 
-[node name="Slot9" parent="OverlayUI/PlayerInvUI/AlternateInventoryPanel/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/MarginContainer/AlternateInvSlotGrid" instance=ExtResource("42_r422n")]
+[node name="Slot9" parent="OverlayUI/PlayerInvUI/AlternateInventoryPanel/AlternateInventoryVBox/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/MarginContainer/AlternateInvSlotGrid" instance=ExtResource("42_r422n")]
 layout_mode = 2
 
-[node name="Slot10" parent="OverlayUI/PlayerInvUI/AlternateInventoryPanel/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/MarginContainer/AlternateInvSlotGrid" instance=ExtResource("42_r422n")]
+[node name="Slot10" parent="OverlayUI/PlayerInvUI/AlternateInventoryPanel/AlternateInventoryVBox/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/MarginContainer/AlternateInvSlotGrid" instance=ExtResource("42_r422n")]
 layout_mode = 2
 
-[node name="Slot11" parent="OverlayUI/PlayerInvUI/AlternateInventoryPanel/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/MarginContainer/AlternateInvSlotGrid" instance=ExtResource("42_r422n")]
+[node name="Slot11" parent="OverlayUI/PlayerInvUI/AlternateInventoryPanel/AlternateInventoryVBox/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/MarginContainer/AlternateInvSlotGrid" instance=ExtResource("42_r422n")]
 layout_mode = 2
 
-[node name="Slot12" parent="OverlayUI/PlayerInvUI/AlternateInventoryPanel/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/MarginContainer/AlternateInvSlotGrid" instance=ExtResource("42_r422n")]
+[node name="Slot12" parent="OverlayUI/PlayerInvUI/AlternateInventoryPanel/AlternateInventoryVBox/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/MarginContainer/AlternateInvSlotGrid" instance=ExtResource("42_r422n")]
 layout_mode = 2
 
-[node name="Slot13" parent="OverlayUI/PlayerInvUI/AlternateInventoryPanel/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/MarginContainer/AlternateInvSlotGrid" instance=ExtResource("42_r422n")]
+[node name="Slot13" parent="OverlayUI/PlayerInvUI/AlternateInventoryPanel/AlternateInventoryVBox/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/MarginContainer/AlternateInvSlotGrid" instance=ExtResource("42_r422n")]
 layout_mode = 2
 
-[node name="Slot14" parent="OverlayUI/PlayerInvUI/AlternateInventoryPanel/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/MarginContainer/AlternateInvSlotGrid" instance=ExtResource("42_r422n")]
+[node name="Slot14" parent="OverlayUI/PlayerInvUI/AlternateInventoryPanel/AlternateInventoryVBox/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/MarginContainer/AlternateInvSlotGrid" instance=ExtResource("42_r422n")]
 layout_mode = 2
 
-[node name="Slot15" parent="OverlayUI/PlayerInvUI/AlternateInventoryPanel/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/MarginContainer/AlternateInvSlotGrid" instance=ExtResource("42_r422n")]
+[node name="Slot15" parent="OverlayUI/PlayerInvUI/AlternateInventoryPanel/AlternateInventoryVBox/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/MarginContainer/AlternateInvSlotGrid" instance=ExtResource("42_r422n")]
 layout_mode = 2
 
-[node name="Slot16" parent="OverlayUI/PlayerInvUI/AlternateInventoryPanel/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/MarginContainer/AlternateInvSlotGrid" instance=ExtResource("42_r422n")]
+[node name="Slot16" parent="OverlayUI/PlayerInvUI/AlternateInventoryPanel/AlternateInventoryVBox/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/MarginContainer/AlternateInvSlotGrid" instance=ExtResource("42_r422n")]
 layout_mode = 2
 
-[node name="Slot17" parent="OverlayUI/PlayerInvUI/AlternateInventoryPanel/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/MarginContainer/AlternateInvSlotGrid" instance=ExtResource("42_r422n")]
+[node name="Slot17" parent="OverlayUI/PlayerInvUI/AlternateInventoryPanel/AlternateInventoryVBox/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/MarginContainer/AlternateInvSlotGrid" instance=ExtResource("42_r422n")]
 layout_mode = 2
 
-[node name="Slot18" parent="OverlayUI/PlayerInvUI/AlternateInventoryPanel/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/MarginContainer/AlternateInvSlotGrid" instance=ExtResource("42_r422n")]
+[node name="Slot18" parent="OverlayUI/PlayerInvUI/AlternateInventoryPanel/AlternateInventoryVBox/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/MarginContainer/AlternateInvSlotGrid" instance=ExtResource("42_r422n")]
 layout_mode = 2
 
-[node name="Slot19" parent="OverlayUI/PlayerInvUI/AlternateInventoryPanel/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/MarginContainer/AlternateInvSlotGrid" instance=ExtResource("42_r422n")]
+[node name="Slot19" parent="OverlayUI/PlayerInvUI/AlternateInventoryPanel/AlternateInventoryVBox/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/MarginContainer/AlternateInvSlotGrid" instance=ExtResource("42_r422n")]
 layout_mode = 2
 
-[node name="Slot20" parent="OverlayUI/PlayerInvUI/AlternateInventoryPanel/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/MarginContainer/AlternateInvSlotGrid" instance=ExtResource("42_r422n")]
+[node name="Slot20" parent="OverlayUI/PlayerInvUI/AlternateInventoryPanel/AlternateInventoryVBox/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/MarginContainer/AlternateInvSlotGrid" instance=ExtResource("42_r422n")]
 layout_mode = 2
 
-[node name="Slot21" parent="OverlayUI/PlayerInvUI/AlternateInventoryPanel/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/MarginContainer/AlternateInvSlotGrid" instance=ExtResource("42_r422n")]
+[node name="Slot21" parent="OverlayUI/PlayerInvUI/AlternateInventoryPanel/AlternateInventoryVBox/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/MarginContainer/AlternateInvSlotGrid" instance=ExtResource("42_r422n")]
 layout_mode = 2
 
-[node name="Slot22" parent="OverlayUI/PlayerInvUI/AlternateInventoryPanel/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/MarginContainer/AlternateInvSlotGrid" instance=ExtResource("42_r422n")]
+[node name="Slot22" parent="OverlayUI/PlayerInvUI/AlternateInventoryPanel/AlternateInventoryVBox/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/MarginContainer/AlternateInvSlotGrid" instance=ExtResource("42_r422n")]
 layout_mode = 2
 
-[node name="Slot23" parent="OverlayUI/PlayerInvUI/AlternateInventoryPanel/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/MarginContainer/AlternateInvSlotGrid" instance=ExtResource("42_r422n")]
+[node name="Slot23" parent="OverlayUI/PlayerInvUI/AlternateInventoryPanel/AlternateInventoryVBox/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/MarginContainer/AlternateInvSlotGrid" instance=ExtResource("42_r422n")]
 layout_mode = 2
 
-[node name="Slot24" parent="OverlayUI/PlayerInvUI/AlternateInventoryPanel/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/MarginContainer/AlternateInvSlotGrid" instance=ExtResource("42_r422n")]
+[node name="Slot24" parent="OverlayUI/PlayerInvUI/AlternateInventoryPanel/AlternateInventoryVBox/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/MarginContainer/AlternateInvSlotGrid" instance=ExtResource("42_r422n")]
 layout_mode = 2
 
-[node name="Slot25" parent="OverlayUI/PlayerInvUI/AlternateInventoryPanel/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/MarginContainer/AlternateInvSlotGrid" instance=ExtResource("42_r422n")]
+[node name="Slot25" parent="OverlayUI/PlayerInvUI/AlternateInventoryPanel/AlternateInventoryVBox/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/MarginContainer/AlternateInvSlotGrid" instance=ExtResource("42_r422n")]
 layout_mode = 2
 
-[node name="Slot26" parent="OverlayUI/PlayerInvUI/AlternateInventoryPanel/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/MarginContainer/AlternateInvSlotGrid" instance=ExtResource("42_r422n")]
+[node name="Slot26" parent="OverlayUI/PlayerInvUI/AlternateInventoryPanel/AlternateInventoryVBox/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/MarginContainer/AlternateInvSlotGrid" instance=ExtResource("42_r422n")]
 layout_mode = 2
 
-[node name="Slot27" parent="OverlayUI/PlayerInvUI/AlternateInventoryPanel/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/MarginContainer/AlternateInvSlotGrid" instance=ExtResource("42_r422n")]
+[node name="Slot27" parent="OverlayUI/PlayerInvUI/AlternateInventoryPanel/AlternateInventoryVBox/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/MarginContainer/AlternateInvSlotGrid" instance=ExtResource("42_r422n")]
 layout_mode = 2
 
-[node name="Slot28" parent="OverlayUI/PlayerInvUI/AlternateInventoryPanel/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/MarginContainer/AlternateInvSlotGrid" instance=ExtResource("42_r422n")]
+[node name="Slot28" parent="OverlayUI/PlayerInvUI/AlternateInventoryPanel/AlternateInventoryVBox/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/MarginContainer/AlternateInvSlotGrid" instance=ExtResource("42_r422n")]
 layout_mode = 2
 
-[node name="Slot29" parent="OverlayUI/PlayerInvUI/AlternateInventoryPanel/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/MarginContainer/AlternateInvSlotGrid" instance=ExtResource("42_r422n")]
+[node name="Slot29" parent="OverlayUI/PlayerInvUI/AlternateInventoryPanel/AlternateInventoryVBox/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/MarginContainer/AlternateInvSlotGrid" instance=ExtResource("42_r422n")]
 layout_mode = 2
 
-[node name="Slot30" parent="OverlayUI/PlayerInvUI/AlternateInventoryPanel/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/MarginContainer/AlternateInvSlotGrid" instance=ExtResource("42_r422n")]
+[node name="Slot30" parent="OverlayUI/PlayerInvUI/AlternateInventoryPanel/AlternateInventoryVBox/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/MarginContainer/AlternateInvSlotGrid" instance=ExtResource("42_r422n")]
 layout_mode = 2
 
-[node name="Slot31" parent="OverlayUI/PlayerInvUI/AlternateInventoryPanel/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/MarginContainer/AlternateInvSlotGrid" instance=ExtResource("42_r422n")]
+[node name="Slot31" parent="OverlayUI/PlayerInvUI/AlternateInventoryPanel/AlternateInventoryVBox/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/MarginContainer/AlternateInvSlotGrid" instance=ExtResource("42_r422n")]
 layout_mode = 2
 
-[node name="Slot32" parent="OverlayUI/PlayerInvUI/AlternateInventoryPanel/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/MarginContainer/AlternateInvSlotGrid" instance=ExtResource("42_r422n")]
+[node name="Slot32" parent="OverlayUI/PlayerInvUI/AlternateInventoryPanel/AlternateInventoryVBox/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/MarginContainer/AlternateInvSlotGrid" instance=ExtResource("42_r422n")]
 layout_mode = 2
 
-[node name="Slot33" parent="OverlayUI/PlayerInvUI/AlternateInventoryPanel/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/MarginContainer/AlternateInvSlotGrid" instance=ExtResource("42_r422n")]
+[node name="Slot33" parent="OverlayUI/PlayerInvUI/AlternateInventoryPanel/AlternateInventoryVBox/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/MarginContainer/AlternateInvSlotGrid" instance=ExtResource("42_r422n")]
 layout_mode = 2
 
-[node name="Slot34" parent="OverlayUI/PlayerInvUI/AlternateInventoryPanel/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/MarginContainer/AlternateInvSlotGrid" instance=ExtResource("42_r422n")]
+[node name="Slot34" parent="OverlayUI/PlayerInvUI/AlternateInventoryPanel/AlternateInventoryVBox/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/MarginContainer/AlternateInvSlotGrid" instance=ExtResource("42_r422n")]
 layout_mode = 2
 
-[node name="Slot35" parent="OverlayUI/PlayerInvUI/AlternateInventoryPanel/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/MarginContainer/AlternateInvSlotGrid" instance=ExtResource("42_r422n")]
+[node name="Slot35" parent="OverlayUI/PlayerInvUI/AlternateInventoryPanel/AlternateInventoryVBox/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/MarginContainer/AlternateInvSlotGrid" instance=ExtResource("42_r422n")]
 layout_mode = 2
 
-[node name="Slot36" parent="OverlayUI/PlayerInvUI/AlternateInventoryPanel/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/MarginContainer/AlternateInvSlotGrid" instance=ExtResource("42_r422n")]
+[node name="Slot36" parent="OverlayUI/PlayerInvUI/AlternateInventoryPanel/AlternateInventoryVBox/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/MarginContainer/AlternateInvSlotGrid" instance=ExtResource("42_r422n")]
 layout_mode = 2
 
-[node name="Slot37" parent="OverlayUI/PlayerInvUI/AlternateInventoryPanel/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/MarginContainer/AlternateInvSlotGrid" instance=ExtResource("42_r422n")]
+[node name="Slot37" parent="OverlayUI/PlayerInvUI/AlternateInventoryPanel/AlternateInventoryVBox/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/MarginContainer/AlternateInvSlotGrid" instance=ExtResource("42_r422n")]
 layout_mode = 2
 
-[node name="Slot38" parent="OverlayUI/PlayerInvUI/AlternateInventoryPanel/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/MarginContainer/AlternateInvSlotGrid" instance=ExtResource("42_r422n")]
+[node name="Slot38" parent="OverlayUI/PlayerInvUI/AlternateInventoryPanel/AlternateInventoryVBox/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/MarginContainer/AlternateInvSlotGrid" instance=ExtResource("42_r422n")]
 layout_mode = 2
 
-[node name="Slot39" parent="OverlayUI/PlayerInvUI/AlternateInventoryPanel/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/MarginContainer/AlternateInvSlotGrid" instance=ExtResource("42_r422n")]
+[node name="Slot39" parent="OverlayUI/PlayerInvUI/AlternateInventoryPanel/AlternateInventoryVBox/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/MarginContainer/AlternateInvSlotGrid" instance=ExtResource("42_r422n")]
 layout_mode = 2
 
-[node name="Slot40" parent="OverlayUI/PlayerInvUI/AlternateInventoryPanel/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/MarginContainer/AlternateInvSlotGrid" instance=ExtResource("42_r422n")]
+[node name="Slot40" parent="OverlayUI/PlayerInvUI/AlternateInventoryPanel/AlternateInventoryVBox/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/MarginContainer/AlternateInvSlotGrid" instance=ExtResource("42_r422n")]
 layout_mode = 2
 
 [connection signal="visibility_changed" from="OverlayUI/HotbarUI" to="OverlayUI/HotbarUI" method="_on_visibility_changed"]

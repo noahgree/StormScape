@@ -91,6 +91,7 @@ effect_source = SubResource("Resource_qy5am")
 ammo_type = 1
 mag_size = -1
 no_levels = true
+max_mods_override = 0
 s_mods = SubResource("Resource_xpvhm")
 id = "bottle_o_fire"
 name = "Bottle O' Fire"

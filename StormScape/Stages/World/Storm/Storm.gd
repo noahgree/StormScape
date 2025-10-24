@@ -193,7 +193,7 @@ func disable_storm(from_save: bool = false) -> void:
 	var entities_with_effect: Array[Node] = get_tree().get_nodes_in_group("entities_out_of_safe_area")
 	for entity: Node in entities_with_effect:
 		_remove_current_effect_from_entity(entity)
-	SignalBus.player_in_safe_zone_changed.emit(true)
+	SignalBus.player_in_safe_zone_changed.emit()
 	is_enabled = false
 
 ## Reverts the storm visuals and storm entity effect to the defaults. Typically called when the queue is empty and auto-advance

@@ -10,7 +10,7 @@ class_name PlayerInvUI
 @export var item_details_panel: ItemDetailsPanel ## The item viewer in the inventory.
 @export var crafting_manager: CraftingManager ## The crafting manager panel.
 @export var wearables_panel: WearablesPanel ## The wearables panel.
-@export var alternate_inv_panel: VBoxContainer ## The panel that fills with alternate inventories like chests.
+@export var alternate_inv_panel: CenterContainer ## The panel that fills with alternate inventories like chests.
 
 @export_group("Textures")
 @export var btn_up_texture: Texture2D ## The texture for buttons when not pressed.

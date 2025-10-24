@@ -24,12 +24,14 @@ class_name EffectSource
 @export_range(0, 100, 1, "suffix:%") var crit_chance: int = 0 ## The chance the application of damage will be a critial hit.
 @export var crit_multiplier: float = 1.5 ## How much stronger critical hits are than normal hits.
 @export_range(0, 100, 1, "suffix:%") var armor_penetration: int = 0 ## The percent of armor ignored.
+@export_range(0, 100, 1, "suffix:%") var lvl_dmg_scalar: int = 8 ## The percent of base damage that gets added on for every 10 levels, calculated as (((floor(current_lvl / 10) * lvl_dmg_scalar) + 1.0) / 100.0) * base_damage.
 
 @export_group("Base Healing")
 @export var base_healing: int: ## The base numerical amount of health associated with this effect source.
 	set(new_value):
 		base_healing = max(0, new_value)
 @export var heal_affected_stats: Globals.HealAffectedStats = Globals.HealAffectedStats.HEALTH_THEN_SHIELD ## Which entity stats are affected by this healing source.
+@export_range(0, 100, 1, "suffix:%") var lvl_heal_scalar: int = 8 ## The percent of base healing that gets added on for every 10 levels, calculated as (((floor(current_lvl / 10) * lvl_heal_scalar) + 1.0) / 100.0) * base_healing.
 
 @export_group("Impact FX")
 @export var impact_cam_fx: CamFXResource ## The resource defining how the camera should react to firing.

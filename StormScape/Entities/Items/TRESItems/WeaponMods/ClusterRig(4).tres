@@ -19,6 +19,7 @@ stat_id = &"barrage_count"
 mod_id = &"cluster_rig"
 operation = "="
 value = 3.0
+panel_title = "Barrage Count"
 metadata/_custom_type_script = "uid://bcjwesiannbd0"
 
 [sub_resource type="Resource" id="Resource_3k0eb"]
@@ -26,8 +27,10 @@ script = ExtResource("8_c2cdw")
 stat_id = &"base_damage"
 mod_id = &"cluster_rig"
 operation = "-%"
-value = 30.0
+value = 32.0
 rounding = "Round Up"
+panel_title = "Damage"
+is_good_mod = false
 metadata/_custom_type_script = "uid://bcjwesiannbd0"
 
 [resource]
@@ -42,7 +45,7 @@ applied_details = Array[ExtResource("3_jrpdv")]([SubResource("Resource_x6clt")])
 id = "cluster_rig"
 name = "Cluster Rig"
 item_type = 6
-rarity = 4
+rarity = 5
 info = "Lets the weapon fire a cluster for no additional ammo cost, but decreases per-projectile damage."
 ground_icon = ExtResource("5_u8pd8")
 in_hand_icon = ExtResource("5_u8pd8")

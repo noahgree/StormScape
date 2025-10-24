@@ -136,9 +136,8 @@ func _start_effect_fx(status_effect: StatusEffect) -> void:
 	if particle_node == null:
 		return
 
-	var handler_check: bool = status_effect.particle_hander_req == "" or effect_receiver.get(effect_name.to_camel_case() + "_handler") != null
-	var spawn_particles: bool = status_effect.spawn_particles and handler_check
-	if not spawn_particles:
+	var handler_check: bool = status_effect.particle_hander_req == "" or effect_receiver.get(effect_name.to_snake_case() + "_handler") != null
+	if not (status_effect.spawn_particles and handler_check):
 		return
 
 	if status_effect.make_entity_glow and handler_check:

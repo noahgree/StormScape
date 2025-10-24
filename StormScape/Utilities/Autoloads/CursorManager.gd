@@ -14,7 +14,7 @@ const DEFAULT_MAX_PROXIMITY_TO_CHAR: float = 8.0 ## The closest number of pixels
 
 
 func _ready() -> void:
-	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+	Input.mouse_mode = Input.MOUSE_MODE_HIDDEN
 	hide_tooltip()
 
 func _process(delta: float) -> void:

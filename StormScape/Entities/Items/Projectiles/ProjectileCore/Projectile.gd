@@ -531,8 +531,8 @@ func _start_being_handled(handling_area: EffectReceiverComponent) -> void:
 
 	if not is_in_aoe_phase:
 		effect_source = effect_source.duplicate()
-		effect_source.multishot_id = multishot_id
 		var modified_effect_src: EffectSource = _get_effect_source_adjusted_for_falloff(effect_source, handling_area, false)
+		modified_effect_src.multishot_id = multishot_id
 		modified_effect_src.movement_direction = movement_direction
 		modified_effect_src.contact_position = global_position
 		handling_area.handle_effect_source(modified_effect_src, source_entity, source_weapon)

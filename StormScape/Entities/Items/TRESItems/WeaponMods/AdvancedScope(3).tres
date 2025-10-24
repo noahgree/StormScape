@@ -12,7 +12,8 @@ script = ExtResource("5_ovewf")
 stat_id = &"max_bloom"
 mod_id = &"advanced_scope"
 operation = "-%"
-value = 35.0
+value = 50.0
+panel_title = "Bloom"
 metadata/_custom_type_script = "uid://bcjwesiannbd0"
 
 [sub_resource type="Resource" id="Resource_57sy7"]
@@ -20,14 +21,17 @@ script = ExtResource("5_ovewf")
 stat_id = &"angular_spread"
 mod_id = &"advanced_scope"
 operation = "-%"
-value = 30.0
+value = 40.0
+panel_title = "Spread"
 metadata/_custom_type_script = "uid://bcjwesiannbd0"
 
 [sub_resource type="Resource" id="Resource_01uku"]
 script = ExtResource("5_ovewf")
 stat_id = &"fire_cooldown"
 mod_id = &"advanced_scope"
-value = 8.0
+value = 45.0
+panel_title = "Trigger Cooldown"
+is_good_mod = false
 metadata/_custom_type_script = "uid://bcjwesiannbd0"
 
 [resource]
