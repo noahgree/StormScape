@@ -1198,9 +1198,6 @@ libraries = {
 
 [node name="AnimationTree" type="AnimationTree" parent="."]
 callback_mode_process = 2
-libraries = {
-&"": SubResource("AnimationLibrary_3l4yw")
-}
 tree_root = SubResource("AnimationNodeStateMachine_eigs2")
 anim_player = NodePath("../AnimationPlayer")
 parameters/idle/TimeScale/scale = 1.0

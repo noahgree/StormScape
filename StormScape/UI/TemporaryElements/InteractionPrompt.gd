@@ -24,7 +24,7 @@ func _update_text(interaction_offer: InteractionOffer) -> void:
 	title_label.visible = title_label.text != Globals.invis_char
 	info_label.visible = info_label.text != Globals.invis_char
 
-	text_margins.add_theme_constant_override("margin_bottom", 0 if not info_label.visible else 1)
+	text_margins.add_theme_constant_override("margin_bottom", 2 if not info_label.visible else 1)
 	text_margins.add_theme_constant_override("margin_right", -2 if not info_label.visible else 0)
 
 ## Updates the prompt interaction icon and changes visibilities accordingly.

@@ -1,4 +1,4 @@
-[gd_scene load_steps=24 format=3 uid="uid://bq12ugc7lnirg"]
+[gd_scene load_steps=27 format=3 uid="uid://bq12ugc7lnirg"]
 
 [ext_resource type="Script" uid="uid://06pt5wan8jg1" path="res://Entities/EntityCore/EntityTypes/StaticEntity/PhysicalInventory/PhysicalInventory.gd" id="1_ggkuf"]
 [ext_resource type="Script" uid="uid://dwmur0cosbbwh" path="res://UI/Inventory/InventoryCore/InventoryResource.gd" id="2_hjkvw"]
@@ -14,13 +14,12 @@
 [ext_resource type="PackedScene" uid="uid://btba0jmsow1mx" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectReceiverComponent.tscn" id="11_5wq56"]
 [ext_resource type="Script" uid="uid://dubq8xgav66ue" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/BurningHandler.gd" id="11_w3nan"]
 [ext_resource type="PackedScene" uid="uid://2yy4xfm5g74l" path="res://Entities/Components/ItemComponents/ClippingComponent/ClippingArea.tscn" id="11_ypx5n"]
+[ext_resource type="PackedScene" uid="uid://bj7vw8d6oqv0m" path="res://Entities/Player/PlayerCore/Interactions/InteractionArea.tscn" id="15_h35lp"]
+[ext_resource type="Texture2D" uid="uid://cd22xh5jduxd6" path="res://UI/TemporaryElements/InteractionIcons/e_prompt.png" id="16_c5a4i"]
+[ext_resource type="Script" uid="uid://dgibl37gudpj1" path="res://Entities/Player/PlayerCore/Interactions/InteractionOffer.gd" id="17_f6uiu"]
 
 [sub_resource type="Resource" id="Resource_w3nan"]
 script = ExtResource("2_hjkvw")
-title = "CHEST"
-main_inv_size = 10
-drop_on_death = false
-starting_inv = Array[ExtResource("3_s3b18")]([])
 metadata/_custom_type_script = "uid://dwmur0cosbbwh"
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_6ca8s"]
@@ -48,11 +47,9 @@ animations = [{
 "speed": 5.0
 }]
 
-[sub_resource type="Resource" id="Resource_dwqj1"]
+[sub_resource type="Resource" id="Resource_c5a4i"]
 resource_local_to_scene = true
 script = ExtResource("11_w3nan")
-_burning_weakness = 0.0
-_burning_resistance = 0.0
 metadata/_custom_type_script = "uid://dubq8xgav66ue"
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_tnmyf"]
@@ -61,28 +58,26 @@ size = Vector2(18, 14)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_1mmyp"]
 size = Vector2(18, 14)
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_h35lp"]
-radius = 18.0
+[sub_resource type="Resource" id="Resource_f6uiu"]
+resource_local_to_scene = true
+script = ExtResource("17_f6uiu")
+title = "Search"
+info = "Lvl 1 Chest"
+metadata/_custom_type_script = "uid://dgibl37gudpj1"
 
-[node name="TestPhysicalInventory" type="StaticBody2D"]
+[node name="TestPhysicalInventory" type="StaticBody2D" unique_id=1496331235]
 script = ExtResource("1_ggkuf")
-interact_radius = 18.0
-prompt_position = Vector2(0, -14)
 team = 4
 is_object = true
 inv = SubResource("Resource_w3nan")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=645994398]
 position = Vector2(0, -7)
 shape = SubResource("RectangleShape2D_6ca8s")
 
-[node name="InteractionPromptPos" type="Marker2D" parent="."]
-position = Vector2(0, -14)
-gizmo_extents = 5.0
+[node name="DetectionComponent" parent="." unique_id=1505612352 instance=ExtResource("6_c3jxm")]
 
-[node name="DetectionComponent" parent="." instance=ExtResource("6_c3jxm")]
-
-[node name="EntitySprite" parent="." instance=ExtResource("7_li1wa")]
+[node name="EntitySprite" parent="." unique_id=184419543 instance=ExtResource("7_li1wa")]
 unique_name_in_owner = true
 instance_shader_parameters/override_color = Color(1, 1, 1, 0)
 instance_shader_parameters/use_override_color = false
@@ -90,48 +85,43 @@ position = Vector2(0, -9)
 sprite_frames = SubResource("SpriteFrames_d07fb")
 disable_floor_light = true
 
-[node name="EntityShadow" parent="." instance=ExtResource("7_s3b18")]
+[node name="EntityShadow" parent="." unique_id=1545615169 instance=ExtResource("7_s3b18")]
 offset_left = -12.0
 offset_top = -14.0
 offset_right = 12.0
 offset_bottom = 2.0
 
-[node name="HealthComponent" parent="." instance=ExtResource("9_4jcvl")]
+[node name="HealthComponent" parent="." unique_id=1918971287 instance=ExtResource("9_4jcvl")]
 _max_health = 1000
 _max_shield = 0
 
-[node name="StatusEffectsComponent" parent="." node_paths=PackedStringArray("effect_receiver") instance=ExtResource("9_w3nan")]
+[node name="StatusEffectsComponent" parent="." unique_id=1885960744 node_paths=PackedStringArray("effect_receiver") instance=ExtResource("9_w3nan")]
 unique_name_in_owner = true
 effect_receiver = NodePath("../EffectReceiverComponent")
 
-[node name="EffectReceiverComponent" parent="." node_paths=PackedStringArray("affected_entity", "dmg_handler") instance=ExtResource("11_5wq56")]
+[node name="EffectReceiverComponent" parent="." unique_id=1762623481 node_paths=PackedStringArray("affected_entity", "dmg_handler") instance=ExtResource("11_5wq56")]
 affected_entity = NodePath("..")
 dmg_handler = NodePath("DmgHandler")
-burning_handler = SubResource("Resource_dwqj1")
+burning_handler = SubResource("Resource_c5a4i")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="EffectReceiverComponent"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="EffectReceiverComponent" unique_id=2051548302]
 position = Vector2(0, -7)
 shape = SubResource("RectangleShape2D_tnmyf")
 
-[node name="DmgHandler" parent="EffectReceiverComponent" instance=ExtResource("10_tnmyf")]
+[node name="DmgHandler" parent="EffectReceiverComponent" unique_id=514916372 instance=ExtResource("10_tnmyf")]
 
-[node name="ParticleEmissionComponent" parent="." instance=ExtResource("10_l1cdp")]
+[node name="ParticleEmissionComponent" parent="." unique_id=1005076344 instance=ExtResource("10_l1cdp")]
 
-[node name="ClippingArea" parent="." instance=ExtResource("11_ypx5n")]
+[node name="ClippingArea" parent="." unique_id=1444916932 instance=ExtResource("11_ypx5n")]
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="ClippingArea"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ClippingArea" unique_id=1129611797]
 position = Vector2(0, -7)
 shape = SubResource("RectangleShape2D_1mmyp")
 debug_color = Color(1, 0, 0.092, 0.109)
 
-[node name="InteractionArea" type="Area2D" parent="."]
-collision_layer = 0
-monitorable = false
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="InteractionArea"]
-position = Vector2(0, -5)
-shape = SubResource("CircleShape2D_h35lp")
-debug_color = Color(0.562, 0.588, 1, 0.147)
-
-[connection signal="body_entered" from="InteractionArea" to="." method="_on_interaction_area_body_entered"]
-[connection signal="body_exited" from="InteractionArea" to="." method="_on_interaction_area_body_exited"]
+[node name="InteractionArea" parent="." unique_id=897230405 instance=ExtResource("15_h35lp")]
+unique_name_in_owner = true
+prompt_radius = 18.0
+radius_offset = Vector2(0, -6)
+interaction_offer = SubResource("Resource_f6uiu")
+prompt_offset = Vector2(0, -16)

@@ -48,6 +48,7 @@ speed = 650
 speed_curve = SubResource("Curve_x8kn4")
 max_distance = 400
 height_override = 6
+glow_strength = 5.0
 effect_falloff_curve = SubResource("Curve_nyi5w")
 point_of_max_falloff = 200.0
 max_ricochet = 2

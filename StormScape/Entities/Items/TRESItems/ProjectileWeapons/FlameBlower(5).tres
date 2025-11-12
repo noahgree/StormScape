@@ -114,7 +114,6 @@ barrage_count = 5
 angular_spread = 20.0
 do_cluster_barrage = true
 hide_ammo_ui = true
-max_mods_override = 0
 s_mods = SubResource("Resource_7cfgi")
 id = "flame_blower"
 name = "Flame Blower"

@@ -12,7 +12,7 @@ class_name ProjectileResource
 @export_custom(PROPERTY_HINT_NONE, "suffix:pixels") var height_override: int = -1 ## How high off the ground to simulate this projectile being. Basically just moves the shadow's y offset. Anything besides -1 activates this.
 @export var disable_trail: bool = false ## When true, the projectile will not have a trail if it had one originally. Turn this on when spawning a lot of projectiles from one weapon, as trails can be expensive.
 @export var glow_color: Color = Color(1, 1, 1) ## The color of the glow.
-@export_range(0, 500, 0.1, "suffix:%") var glow_strength: float ## How strong the glow should be.
+@export_range(0, 500, 0.1, "suffix:%") var glow_strength: float = 35 ## How strong the glow should be.
 @export var impact_vfx: PackedScene ## The VFX to spawn at the site of impact. Could be a decal or something.
 @export var impact_sound: String ## The sound to play at the site of impact.
 @export var rand_impact_rot: bool = false ## When true, the sprite will get a random rotation on impact to change how the impact animation looks for circular projectiles.

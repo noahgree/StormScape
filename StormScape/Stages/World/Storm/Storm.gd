@@ -192,12 +192,13 @@ func disable_storm(from_save: bool = false) -> void:
 	collision_shape.set_deferred("disabled", true)
 	var entities_with_effect: Array[Node] = get_tree().get_nodes_in_group("entities_out_of_safe_area")
 	for entity: Node in entities_with_effect:
+		entity.remove_from_group("entities_out_of_safe_area")
 		_remove_current_effect_from_entity(entity)
 	SignalBus.player_in_safe_zone_changed.emit()
 	is_enabled = false
 
-## Reverts the storm visuals and storm entity effect to the defaults. Typically called when the queue is empty and auto-advance
-## was on for the previous final zone.
+## Reverts the storm visuals and storm entity effect to the defaults. Typically called when the queue
+## is empty and auto-advance was on for the previous final zone.
 func _revert_to_default_zone() -> void:
 	if DebugFlags.storm_phases:
 		print_rich("[color=pink]*******[/color][color=purple] [b]Starting[/b] Storm Phase [/color][b]0[/b]" + " [color=gray][i](default)[/i][/color] [color=pink]*******[/color]")
@@ -205,8 +206,8 @@ func _revert_to_default_zone() -> void:
 	_apply_visual_overrides(default_storm_visuals)
 	_swap_effect_applied_to_entities_out_of_safe_area(default_storm_effect)
 
-## Called externally to forcefully transition to the next phase no matter what. If we haven't started any zones before, don't
-## pop off the queue, just use the first in the queue.
+## Called externally to forcefully transition to the next phase no matter what.
+## If we haven't started any zones before, don't pop off the queue, just use the first in the queue.
 func force_start_next_phase() -> void:
 	if not is_enabled:
 		return
@@ -329,6 +330,7 @@ func _process_next_transform_in_queue() -> void:
 
 		_check_for_transform_delay(new_transform)
 
+## Stops and kills the active tweens and timers related to the current phase.
 func _kill_current_motion_tweens_and_timers() -> void:
 	storm_change_delay_timer.stop()
 	current_storm_transform_time_timer.stop()
@@ -342,9 +344,9 @@ func _check_for_transform_delay(new_transform: StormTransform) -> void:
 	if DebugFlags.storm_phases:
 		var dur: float = max(new_transform.time_to_resize, new_transform.time_to_move)
 		var effect: String = "Keep Previous"
-		if new_transform.effect_setting == "Override":
+		if new_transform.effect_setting == StormTransform.UpdateTypes.OVERRIDE:
 			effect = new_transform.status_effect.get_full_effect_key() + " " + str(new_transform.status_effect.effect_lvl)
-		elif new_transform.effect_setting == "Revert to Default":
+		elif new_transform.effect_setting == StormTransform.UpdateTypes.REVERT_TO_DEFAULT:
 			effect = "Reverted to Default: " + default_storm_effect.get_full_effect_key() + " " + str(default_storm_effect.effect_lvl)
 		print_rich("[color=pink]*******[/color][color=purple] [b]Starting[/b] Storm Phase [/color][b]" + str(zone_count) + "[/b][i] [delay = " + str(new_transform.delay) + "] [duration = " + str(dur) + "] " + "[effect = " + effect + "] [/i] [color=pink]*******[/color]")
 
@@ -363,18 +365,18 @@ func _on_storm_change_delay_timer_timeout() -> void:
 ## Starts the next zone sequence using a new passed in storm transform resource.
 func _start_zone(new_transform: StormTransform) -> void:
 	# Check if we need to override visuals or reset them to default
-	if new_transform.visuals_setting == "Override":
+	if new_transform.visuals_setting == StormTransform.UpdateTypes.OVERRIDE:
 		_apply_visual_overrides(new_transform.storm_visuals)
-	elif new_transform.visuals_setting == "Revert to Default":
+	elif new_transform.visuals_setting == StormTransform.UpdateTypes.REVERT_TO_DEFAULT:
 		_apply_visual_overrides(default_storm_visuals)
 
 	# Start the actual zone movement and resize
 	_tween_to_new_zone_position_and_radius(new_transform)
 
 	# Check if we need to override the status effect or reset it to default
-	if new_transform.effect_setting == "Override":
+	if new_transform.effect_setting == StormTransform.UpdateTypes.OVERRIDE:
 		_swap_effect_applied_to_entities_out_of_safe_area(new_transform.status_effect)
-	elif new_transform.effect_setting == "Revert to Default":
+	elif new_transform.effect_setting == StormTransform.UpdateTypes.REVERT_TO_DEFAULT:
 		_swap_effect_applied_to_entities_out_of_safe_area(default_storm_effect)
 
 	# Giving the transform timer the data it needs to determine what to do on timeout, then starting the transform timer.
