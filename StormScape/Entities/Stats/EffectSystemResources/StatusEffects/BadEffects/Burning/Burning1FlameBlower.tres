@@ -6,9 +6,9 @@
 
 [sub_resource type="Resource" id="Resource_3ws2o"]
 script = ExtResource("1_no6hk")
-damaging_time = 4.0
+damaging_time = 2.0
 dmg_ticks_array = Array[int]([1, 1])
-delay_time = 2.0
+delay_time = 1.0
 dmg_affected_stats = 0
 hit_flash_color = Color(1, 0.517647, 0.337255, 0.6)
 
@@ -23,6 +23,6 @@ script = ExtResource("2_g7avd")
 dot_resource = SubResource("Resource_3ws2o")
 id = "burning"
 effects_to_stop = Array[String](["frostbite"])
-mod_time = 6.0
+mod_time = 4.0
 stat_mods = Array[ExtResource("3_3id7k")]([SubResource("Resource_xigmb")])
 particle_hander_req = "Burning"

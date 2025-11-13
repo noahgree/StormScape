@@ -17,22 +17,24 @@ var ui_offset: Vector2 ## The offset for the position of the ui relevant to the 
 
 
 ## Init function for creating interaction offers in code.
-func _init(title_txt: String = "Interact", title_clr: Color = Globals.ui_colors["ui_light_tan"],
+static func create(title_txt: String = "Interact", title_clr: Color = Globals.ui_colors["ui_light_tan"],
 			title_out_clr: Color = Globals.ui_colors["ui_text_outline"], info_txt: String = "",
 			info_clr: Color = Globals.ui_colors["ui_tan"],
 			info_out_clr: Color = Globals.ui_colors["ui_text_outline"],
 			icon_path: String = "uid://cd22xh5jduxd6", remove_after_accept: bool = false,
 			on_accept_callable: Callable = Callable(), anchor_node: Node2D = null,
-			ui_offset_vector: Vector2 = Vector2.ZERO) -> void:
-	title = title_txt
-	title_color = title_clr
-	title_outline_color = title_out_clr
-	info = info_txt
-	info_color = info_clr
-	info_outline_color = info_out_clr
-	icon = load(icon_path)
-	remove_on_accept = remove_after_accept
-	accept_callable = on_accept_callable
-	ui_anchor_node = anchor_node
-	ui_offset = ui_offset_vector
-	resource_local_to_scene = true
+			ui_offset_vector: Vector2 = Vector2.ZERO) -> InteractionOffer:
+	var io: InteractionOffer = InteractionOffer.new()
+	io.title = title_txt
+	io.title_color = title_clr
+	io.title_outline_color = title_out_clr
+	io.info = info_txt
+	io.info_color = info_clr
+	io.info_outline_color = info_out_clr
+	io.icon = load(icon_path)
+	io.remove_on_accept = remove_after_accept
+	io.accept_callable = on_accept_callable
+	io.ui_anchor_node = anchor_node
+	io.ui_offset = ui_offset_vector
+	io.resource_local_to_scene = true
+	return io

@@ -224,6 +224,8 @@ func _can_activate_at_all() -> bool:
 				if ensure_enough_ammo():
 					return true
 			return false
+		WeaponState.FIRING:
+			return false
 		_:
 			return false
 

@@ -214,6 +214,7 @@ func _start_firing_animation_and_timer() -> void:
 
 			if weapon.stats.spawn_after_fire_anim:
 				await anim_player.animation_finished
+				await weapon.get_tree().process_frame
 
 				if weapon.stats.is_hitscan and ((firing_duration - anim_time) <= 0.03):
 					push_warning("Hitscans will appear to not fire at all if they must wait until after the firing animation and that \nanimation is the nearly the time as the entire firing duration. Make sure to set the fire_anim_dur to something nonzero and noticeably smaller (-0.04 or more) than the firing_duration in this case.")

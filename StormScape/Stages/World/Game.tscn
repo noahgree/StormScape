@@ -1,4 +1,4 @@
-[gd_scene load_steps=87 format=4 uid="uid://bscnr6a23l10m"]
+[gd_scene load_steps=90 format=4 uid="uid://bscnr6a23l10m"]
 
 [ext_resource type="Script" uid="uid://mdtvdhu78iqm" path="res://Utilities/Game/WorldRoot/WorldRoot.gd" id="1_q0i4n"]
 [ext_resource type="Script" uid="uid://dpbgynf55anlv" path="res://Stages/World/BackgroundMusicManager.gd" id="1_q5pr2"]
@@ -45,6 +45,7 @@
 [ext_resource type="Texture2D" uid="uid://cx7u0pbdtc6eb" path="res://Utilities/Game/Particles/grunge_light.png" id="32_s5gqv"]
 [ext_resource type="Texture2D" uid="uid://blb7ahx7xq5dq" path="res://icon.png" id="35_e5rpg"]
 [ext_resource type="PackedScene" uid="uid://bj7vw8d6oqv0m" path="res://Entities/Player/PlayerCore/Interactions/InteractionArea.tscn" id="36_e5rpg"]
+[ext_resource type="Script" uid="uid://cbiskerf2stk6" path="res://Stages/World/Storm/StormTransform.gd" id="40_27u15"]
 [ext_resource type="Texture2D" uid="uid://dsago31sb51b0" path="res://Stages/World/Storm/StormNoise1.tres" id="42_s5gqv"]
 [ext_resource type="Texture2D" uid="uid://d2utxp2le0rkm" path="res://Stages/World/Storm/StormNoise2.tres" id="43_6gn56"]
 [ext_resource type="Script" uid="uid://by6ifp7vltc41" path="res://Entities/StormBase/StormBase.gd" id="46_ed1p2"]
@@ -55,7 +56,6 @@ background_canvas_max_layer = 1
 tonemap_white = 0.0
 glow_enabled = true
 glow_normalized = true
-glow_intensity = 1.5
 glow_strength = 0.9
 glow_hdr_luminance_cap = 10.0
 
@@ -156,13 +156,13 @@ physics_layer_1/collision_layer = 128
 physics_layer_1/collision_mask = 0
 sources/1 = SubResource("TileSetAtlasSource_lb4xb")
 
-[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_e5rpg"]
-rough = true
-
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_27u15"]
 rough = true
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_w76bj"]
+rough = true
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_vi22v"]
 rough = true
 
 [sub_resource type="Resource" id="Resource_t15sm"]
@@ -266,6 +266,13 @@ starting_inv = Array[ExtResource("21_fx52i")]([SubResource("Resource_3156l")])
 outline_size = 3
 outline_color = Color(0, 0, 0, 1)
 
+[sub_resource type="Resource" id="Resource_4ti61"]
+script = ExtResource("40_27u15")
+new_location = Vector2(211, 108)
+new_radius = 200.0
+auto_advance = false
+metadata/_custom_type_script = "uid://cbiskerf2stk6"
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_jb7gg"]
 atlas = ExtResource("35_e5rpg")
 region = Rect2(0, 0, 400, 400)
@@ -284,11 +291,19 @@ animations = [{
 [sub_resource type="Resource" id="Resource_01d0t"]
 resource_local_to_scene = true
 script = ExtResource("19_04pgg")
-title = "Interact"
+title = "Add Fuel (10)"
 title_color = Color(0.91065544, 0.8698037, 0.9772052, 1)
 info = "Storm Base"
 info_color = Color(0.9050975, 0.7290963, 0.9920781, 1)
 metadata/_custom_type_script = "uid://dgibl37gudpj1"
+
+[sub_resource type="Resource" id="Resource_h3uly"]
+script = ExtResource("40_27u15")
+new_location = Vector2(225, 120)
+time_to_move = 7.0
+time_to_resize = 7.0
+auto_advance = false
+metadata/_custom_type_script = "uid://cbiskerf2stk6"
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_7o6b3"]
 radius = 615.0
@@ -391,15 +406,15 @@ y_sort_enabled = true
 
 [node name="TestRigidEntity" parent="WorldRoot/Testing" unique_id=120789680 instance=ExtResource("9_37jga")]
 position = Vector2(127, 27)
-physics_material_override = SubResource("PhysicsMaterial_e5rpg")
+physics_material_override = SubResource("PhysicsMaterial_27u15")
 
 [node name="TestRigidEntity2" parent="WorldRoot/Testing" unique_id=294390776 instance=ExtResource("9_37jga")]
 position = Vector2(129, 87)
-physics_material_override = SubResource("PhysicsMaterial_27u15")
+physics_material_override = SubResource("PhysicsMaterial_w76bj")
 
 [node name="TestRigidEntity3" parent="WorldRoot/Testing" unique_id=941546994 instance=ExtResource("9_37jga")]
 position = Vector2(65, 118)
-physics_material_override = SubResource("PhysicsMaterial_w76bj")
+physics_material_override = SubResource("PhysicsMaterial_vi22v")
 freeze = true
 immovable = true
 
@@ -563,6 +578,7 @@ label_settings = SubResource("LabelSettings_lfc2v")
 [node name="StormBase" type="Node2D" parent="WorldRoot" unique_id=1619823746]
 position = Vector2(211, 108)
 script = ExtResource("46_ed1p2")
+default_transform = SubResource("Resource_4ti61")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="WorldRoot/StormBase" unique_id=383895131]
 scale = Vector2(0.08, 0.08)
@@ -579,7 +595,7 @@ z_index = -2
 z_as_relative = false
 position = Vector2(189, 143)
 script = ExtResource("22_0op7h")
-auto_start = false
+transform_queue = Array[ExtResource("40_27u15")]([SubResource("Resource_h3uly")])
 default_storm_effect = ExtResource("23_5x8gm")
 default_storm_visuals = ExtResource("27_5uvpk")
 metadata/_edit_group_ = true

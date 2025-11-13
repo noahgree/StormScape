@@ -39,9 +39,10 @@ func _setup_output_device() -> void:
 		return
 
 	var devices: PackedStringArray = AudioServer.get_output_device_list()
-	var mb_index: int = devices.find("MacBook Pro Speakers (121)")
+	var mb_index: int = devices.find("MacBook Pro Speakers (119)")
 	if mb_index == -1:
-		printerr("MacBook Pro Speakers device could not be set as output!")
+		var available: PackedStringArray = AudioServer.get_output_device_list()
+		print_rich("[color=gray]Warning! MacBook Pro Speakers device could not be set as output! Choose from " + str(available) + " instead.")
 	var macbook_device: String = ArrayHelpers.get_or_default(devices, mb_index, "Default")
 	AudioServer.output_device = macbook_device
 

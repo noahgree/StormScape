@@ -186,29 +186,29 @@ _data = {
 radius = 4.24264
 height = 18.3848
 
-[node name="BoomerangSteel" type="Node2D" node_paths=PackedStringArray("sprites_to_tint")]
+[node name="BoomerangSteel" type="Node2D" unique_id=1313159494 node_paths=PackedStringArray("sprites_to_tint")]
 script = ExtResource("1_tuval")
 sprites_to_tint = [NodePath("ItemSprite")]
 
-[node name="ItemSprite" type="AnimatedSprite2D" parent="."]
+[node name="ItemSprite" type="AnimatedSprite2D" parent="." unique_id=1212881890]
 light_mask = 2
 material = SubResource("ShaderMaterial_78dqe")
 instance_shader_parameters/glow_intensity = 1.0
 sprite_frames = SubResource("SpriteFrames_2os3s")
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1217284551]
 libraries = {
 &"": SubResource("AnimationLibrary_imi0m")
 }
 
-[node name="ProjectileOrigin" type="Marker2D" parent="."]
+[node name="ProjectileOrigin" type="Marker2D" parent="." unique_id=2025030196]
 
-[node name="MainHandSprite" parent="." instance=ExtResource("5_1pg7u")]
+[node name="MainHandSprite" parent="." unique_id=844006501 instance=ExtResource("5_1pg7u")]
 position = Vector2(-5, 5)
 
-[node name="ClippingDetector" parent="." instance=ExtResource("5_tuval")]
+[node name="ClippingDetector" parent="." unique_id=1745462913 instance=ExtResource("5_tuval")]
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="ClippingDetector"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ClippingDetector" unique_id=188779501]
 position = Vector2(-1, -1)
 rotation = 0.785398
 shape = SubResource("CapsuleShape2D_bkow1")

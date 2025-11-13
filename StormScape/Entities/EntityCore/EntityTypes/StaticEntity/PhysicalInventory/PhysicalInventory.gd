@@ -7,8 +7,9 @@ class_name PhysicalInventory
 
 
 func _ready() -> void:
-	interaction_area.set_accept_callable(_accept_callable)
-	super()
+	if not Engine.is_editor_hint():
+		interaction_area.set_accept_callable(_accept_callable)
+		super()
 
 ## The function to call when the interaction offer of this inventory is accepted.
 func _accept_callable() -> void:

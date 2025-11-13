@@ -98,20 +98,21 @@ func handle_effect_source(effect_source: EffectSource, source_entity: Entity, so
 	# --- Applying Base Damage & Base Healing ---
 	var xp: int = 0
 	var do_hitflash: bool = false
+	var source_level: int = source_weapon.level if source_weapon else 1
 	if effect_source.base_damage > 0 and dmg_handler != null:
 		if _check_same_team(source_entity) and _check_if_bad_effects_apply_to_allies(effect_source):
-			dmg_handler.handle_instant_damage(effect_source, source_weapon.level, _get_life_steal(effect_source, source_entity))
+			dmg_handler.handle_instant_damage(effect_source, source_level, _get_life_steal(effect_source, source_entity))
 			do_hitflash = true
 		elif not _check_same_team(source_entity) and _check_if_bad_effects_apply_to_enemies(effect_source):
-			xp = dmg_handler.handle_instant_damage(effect_source, source_weapon.level, _get_life_steal(effect_source, source_entity))
+			xp = dmg_handler.handle_instant_damage(effect_source, source_level, _get_life_steal(effect_source, source_entity))
 			do_hitflash = true
 
 	if effect_source.base_healing > 0 and heal_handler != null:
 		if _check_same_team(source_entity) and _check_if_good_effects_apply_to_allies(effect_source):
-			xp = heal_handler.handle_instant_heal(effect_source, effect_source.heal_affected_stats, source_weapon.level)
+			xp = heal_handler.handle_instant_heal(effect_source, effect_source.heal_affected_stats, source_level)
 			do_hitflash = true
 		elif not _check_same_team(source_entity) and _check_if_good_effects_apply_to_enemies(effect_source):
-			heal_handler.handle_instant_heal(effect_source, effect_source.heal_affected_stats, source_weapon.level)
+			heal_handler.handle_instant_heal(effect_source, effect_source.heal_affected_stats, source_level)
 			do_hitflash = true
 
 	if do_hitflash:
