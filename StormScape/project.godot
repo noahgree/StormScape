@@ -76,10 +76,9 @@ enabled=PackedStringArray("res://addons/Todo_Manager/plugin.cfg", "res://addons/
 [file_customization]
 
 folder_colors={
-"res://Assets/": "red",
+"res://Assets/": "pink",
 "res://Entities/": "green",
 "res://Stages/": "orange",
-"res://UI/": "blue",
 "res://Utilities/": "purple",
 "res://Utilities/Common/": "purple",
 "res://addons/": "gray"

@@ -3,7 +3,6 @@ extends DynamicEntity
 class_name Player
 ## The main class for the player character.
 
-@onready var hotbar_ui: HotbarUI = %HotbarUI ## The UI script that manages the player hotbar.
 @onready var overhead_ui: PlayerOverheadUI = %OverheadUI ## The UI script that manages the player overhead UI for things like reload bars.
 @onready var interaction_prompt: Control = %InteractionPrompt ## The UI that shows when an interaction is available.
 

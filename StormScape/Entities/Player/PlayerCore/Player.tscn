@@ -1,7 +1,7 @@
 [gd_scene load_steps=243 format=3 uid="uid://dba8mrurjlekp"]
 
 [ext_resource type="Script" uid="uid://c3rpxq8pnbdje" path="res://Entities/Player/PlayerCore/Player.gd" id="1_m33tt"]
-[ext_resource type="Script" uid="uid://dwmur0cosbbwh" path="res://UI/Inventory/InventoryCore/InventoryResource.gd" id="2_l1kq4"]
+[ext_resource type="Script" uid="uid://dwmur0cosbbwh" path="res://Entities/Player/UI/Inventory/InventoryCore/InventoryResource.gd" id="2_l1kq4"]
 [ext_resource type="PackedScene" uid="uid://cj2wy5f05cos4" path="res://Entities/EntityCore/Shadow/EntityShadow.tscn" id="3_05f62"]
 [ext_resource type="PackedScene" uid="uid://cdfdy8m6ki3oq" path="res://Entities/Components/HealthComponent/HealthComponent.tscn" id="3_ojev3"]
 [ext_resource type="PackedScene" uid="uid://dh4ydl7l86ywq" path="res://Entities/EntityCore/Sprites/EntitySprite.tscn" id="4_fmbcv"]
@@ -48,14 +48,14 @@
 [ext_resource type="Script" uid="uid://evdilpt7dh6f" path="res://Entities/Player/PlayerCore/PlayerController.gd" id="27_n4o3n"]
 [ext_resource type="Resource" uid="uid://ciel2rrqq4dvv" path="res://Entities/Items/TRESItems/ProjectileWeapons/LaserGun(2).tres" id="30_f5l7i"]
 [ext_resource type="PackedScene" uid="uid://c4n604w30gx8m" path="res://Entities/Components/ItemComponents/ItemReceiverComponent/ItemReceiverComponent.tscn" id="30_qgyag"]
-[ext_resource type="Script" uid="uid://dq62ojsc43p8o" path="res://UI/Inventory/PlayerInventory/PlayerInvUI.gd" id="32_3a185"]
+[ext_resource type="Script" uid="uid://dq62ojsc43p8o" path="res://Entities/Player/UI/Inventory/Panels/MainPanel/PlayerInvUI.gd" id="32_3a185"]
 [ext_resource type="Resource" uid="uid://dk3vlbvu2b7eq" path="res://Entities/Items/TRESItems/MeleeWeapons/Sword(4).tres" id="32_ar238"]
 [ext_resource type="Script" uid="uid://dp8osf7r6xkkt" path="res://Entities/Items/ItemCore/InvItemResource.gd" id="32_ixmb3"]
 [ext_resource type="Resource" uid="uid://h1xp0w2wx18e" path="res://Entities/Items/TRESItems/ProjectileWeapons/Grizzly(3).tres" id="33_8hbs2"]
-[ext_resource type="Script" uid="uid://di5hu6fk5mbfe" path="res://UI/PlayerStatsHUD/PlayerStatsHUD.gd" id="35_yln51"]
+[ext_resource type="Script" uid="uid://di5hu6fk5mbfe" path="res://Entities/Player/UI/Vitals/PlayerVitalsHUD.gd" id="35_yln51"]
 [ext_resource type="PackedScene" uid="uid://b7gdy01q8wsjx" path="res://Entities/Components/ItemComponents/HandsComponent/HandsComponent.tscn" id="39_ngono"]
 [ext_resource type="Shader" uid="uid://c0de04pgeen76" path="res://Utilities/Game/Shaders/BlurBehind.gdshader" id="39_r4tgk"]
-[ext_resource type="PackedScene" uid="uid://m4ur3n2hwsp8" path="res://UI/Inventory/InventoryCore/Slot/SlotCore/Slot.tscn" id="42_r422n"]
+[ext_resource type="PackedScene" uid="uid://m4ur3n2hwsp8" path="res://Entities/Player/UI/Inventory/InventoryCore/Slot.tscn" id="42_r422n"]
 [ext_resource type="Texture2D" uid="uid://bli0i6fkxi43o" path="res://Entities/Player/PlayerCore/PlayerHandCT.tres" id="48_ou5t4"]
 [ext_resource type="Texture2D" uid="uid://baj6slyni0t6u" path="res://Entities/Player/PlayerCore/walking_dust.png" id="50_ar238"]
 [ext_resource type="Script" uid="uid://bqw1ufs6jb7cf" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/RegenHandler.gd" id="52_eufsu"]
@@ -65,74 +65,74 @@
 [ext_resource type="Script" uid="uid://5krnqdrdbey1" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/PoisonHandler.gd" id="55_8hbs2"]
 [ext_resource type="Resource" uid="uid://m8ws6ct8yu3b" path="res://Entities/Items/TRESItems/Wearables/FireCharm(5).tres" id="57_gdihr"]
 [ext_resource type="Script" uid="uid://b1lo2mdb3otax" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/FrostbiteHandler.gd" id="57_h1ges"]
-[ext_resource type="Script" uid="uid://dih45lqhjg0xx" path="res://UI/OverheadUI/PlayerOverheadUI.gd" id="57_n8srl"]
+[ext_resource type="Script" uid="uid://dih45lqhjg0xx" path="res://Entities/Player/UI/Overhead/PlayerOverheadUI.gd" id="57_n8srl"]
 [ext_resource type="Script" uid="uid://dubq8xgav66ue" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/BurningHandler.gd" id="58_32jvf"]
-[ext_resource type="Script" uid="uid://c0n0ja8tkrnkf" path="res://UI/Inventory/PlayerInventory/HotbarUI.gd" id="58_i567i"]
+[ext_resource type="Script" uid="uid://c0n0ja8tkrnkf" path="res://Entities/Player/UI/Inventory/HotbarHUD/HotbarHUD.gd" id="58_i567i"]
 [ext_resource type="Script" uid="uid://5w234psf0oln" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/TimeSnareHandler.gd" id="59_82yts"]
 [ext_resource type="Script" uid="uid://ckiyd2nbdcofr" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/LifeStealHandler.gd" id="60_uu4sw"]
-[ext_resource type="Texture2D" uid="uid://bq3d1uclexvcm" path="res://UI/OverheadUI/progress_tintable.png" id="61_6wv7y"]
-[ext_resource type="Texture2D" uid="uid://barp24qvngy0m" path="res://UI/OverheadUI/Overheat/overheat_back.png" id="63_3uq13"]
-[ext_resource type="Texture2D" uid="uid://7wf7omw2r50u" path="res://UI/OverheadUI/Overheat/overheat_progress.png" id="64_o382h"]
+[ext_resource type="Texture2D" uid="uid://bq3d1uclexvcm" path="res://Entities/EntityCore/UI/Overhead/Assets/progress_tintable.png" id="61_6wv7y"]
+[ext_resource type="Texture2D" uid="uid://barp24qvngy0m" path="res://Entities/Player/UI/Overhead/Assets/Overheat/overheat_back.png" id="63_3uq13"]
+[ext_resource type="Texture2D" uid="uid://7wf7omw2r50u" path="res://Entities/Player/UI/Overhead/Assets/Overheat/overheat_progress.png" id="64_o382h"]
 [ext_resource type="Resource" uid="uid://caxftf2aer6g4" path="res://Entities/Items/TRESItems/WeaponMods/Igniter(4).tres" id="65_14ixx"]
 [ext_resource type="Script" uid="uid://bvla7pmnsimif" path="res://Entities/FSM/FSMCore/State.gd" id="66_8hbs2"]
-[ext_resource type="Script" uid="uid://dgibl37gudpj1" path="res://Entities/Player/PlayerCore/Interactions/InteractionOffer.gd" id="66_r5dvw"]
+[ext_resource type="Script" uid="uid://dgibl37gudpj1" path="res://Entities/Player/UI/Interactions/InteractionsCore/InteractionOffer.gd" id="66_r5dvw"]
 [ext_resource type="Script" uid="uid://c2sjdkql76qca" path="res://Entities/FSM/States/BaseStates/IdleState.gd" id="67_h1ges"]
 [ext_resource type="Script" uid="uid://cy73p3okq3cic" path="res://Entities/FSM/States/BaseStates/DashState.gd" id="68_32jvf"]
-[ext_resource type="Texture2D" uid="uid://dtft3mljs2y5s" path="res://UI/Inventory/InventoryCore/Slot/Universal/trash_slot_icon.png" id="69_4ao77"]
+[ext_resource type="Texture2D" uid="uid://dtft3mljs2y5s" path="res://Entities/Player/UI/Inventory/Assets/Slot/Universal/trash_slot_icon.png" id="69_4ao77"]
 [ext_resource type="Script" uid="uid://dxekqhvcykqrq" path="res://Entities/FSM/States/PlayerStates/RunState.gd" id="69_82yts"]
 [ext_resource type="Script" uid="uid://cf7pyv5l3pefi" path="res://Entities/FSM/States/BaseStates/SneakState.gd" id="70_uu4sw"]
 [ext_resource type="Script" uid="uid://cbyg4eleptthh" path="res://Entities/FSM/States/BaseStates/StunnedState.gd" id="71_ve7vt"]
 [ext_resource type="Script" uid="uid://i7ucoc123rpe" path="res://Entities/FSM/States/BaseStates/SpawnState.gd" id="72_fcswf"]
 [ext_resource type="Script" uid="uid://cbuaklpos5jdp" path="res://Entities/FSM/States/BaseStates/DieState.gd" id="73_r7bkl"]
-[ext_resource type="Script" uid="uid://cs7bq5fnghjjp" path="res://UI/TemporaryElements/InteractionPrompt.gd" id="75_thmqm"]
+[ext_resource type="Script" uid="uid://cs7bq5fnghjjp" path="res://Entities/Player/UI/Interactions/InteractionsCore/InteractionPrompt.gd" id="75_thmqm"]
 [ext_resource type="Material" uid="uid://cpbrvm1tp7153" path="res://Utilities/Game/Materials/UnshadedMaterial.tres" id="78_da65a"]
-[ext_resource type="Texture2D" uid="uid://lqg70q4wj55g" path="res://UI/Inventory/InventoryCore/Background/Wood/inv_background_wood.png" id="78_jlc36"]
+[ext_resource type="Texture2D" uid="uid://lqg70q4wj55g" path="res://Entities/Player/UI/Inventory/Assets/Background/Wood/inv_background_wood.png" id="78_jlc36"]
 [ext_resource type="PackedScene" uid="uid://i6tnlhpg6lt0" path="res://Utilities/Game/Audio/AudioPreloader.tscn" id="84_s4yud"]
 [ext_resource type="FontFile" uid="uid://bp2lgrlhj8cet" path="res://Assets/Theming/Fonts/Pixel/C&C Red Alert [INET].ttf" id="85_7xlwj"]
 [ext_resource type="Script" uid="uid://dwic8harmmplg" path="res://Utilities/Game/Audio/AudioResource.gd" id="85_w0i1c"]
-[ext_resource type="Texture2D" uid="uid://bbcajkbyc0c6y" path="res://UI/Inventory/InventoryCore/Background/Universal/inv_background_simple_tintable.png" id="86_ou5t4"]
-[ext_resource type="Texture2D" uid="uid://cd22xh5jduxd6" path="res://UI/TemporaryElements/InteractionIcons/e_prompt.png" id="87_8hbs2"]
+[ext_resource type="Texture2D" uid="uid://bbcajkbyc0c6y" path="res://Entities/Player/UI/Inventory/Assets/Background/Universal/inv_background_simple_tintable.png" id="86_ou5t4"]
+[ext_resource type="Texture2D" uid="uid://cd22xh5jduxd6" path="res://Entities/Player/UI/Interactions/Assets/e_prompt.png" id="87_8hbs2"]
 [ext_resource type="FontVariation" uid="uid://by478cplv5w4n" path="res://Assets/Theming/Fonts/GameFontResources/pixel_font_less_margin.tres" id="90_hxjay"]
-[ext_resource type="Script" uid="uid://dbc2ecb1mkugh" path="res://UI/PlayerStatsHUD/ActiveSlotInfo.gd" id="91_qr476"]
-[ext_resource type="Texture2D" uid="uid://jx4y3elkn7rq" path="res://UI/Inventory/InventoryCore/Slot/Universal/empty_slot_icon.png" id="94_0313k"]
-[ext_resource type="Texture2D" uid="uid://wsv6cyckepdw" path="res://UI/Inventory/InventoryCore/Background/Wood/inv_background_medium_wood.png" id="98_s4yud"]
-[ext_resource type="Texture2D" uid="uid://dlecwbci6aggo" path="res://UI/PlayerStatsHUD/ProgressBars/progress_white.png" id="100_5qckj"]
-[ext_resource type="Texture2D" uid="uid://cp7uxam0b4khc" path="res://UI/Inventory/InventoryCore/Slot/Universal/craft_input_slot_icon.png" id="101_g5u5n"]
-[ext_resource type="Texture2D" uid="uid://3kkpkmyi20wj" path="res://UI/Inventory/InventoryCore/Slot/Universal/wearable_slot_icon.png" id="103_g5u5n"]
-[ext_resource type="Texture2D" uid="uid://dg4k8vt7nqpl6" path="res://UI/Inventory/InventoryCore/Button/button_raised_wood.png" id="106_0313k"]
-[ext_resource type="Texture2D" uid="uid://2fldkutlispo" path="res://UI/Inventory/InventoryCore/Button/button_pressed_wood.png" id="107_32jvf"]
-[ext_resource type="Texture2D" uid="uid://5avvx8ycv3w1" path="res://UI/Inventory/InventoryCore/Slot/Wood/dark_wood_no_stripes.png" id="108_3uq13"]
-[ext_resource type="Texture2D" uid="uid://d2kkhfd8uj5rr" path="res://UI/Inventory/InventoryCore/Button/stack_icon.png" id="108_f5l7i"]
-[ext_resource type="Texture2D" uid="uid://ce173dp6evl1s" path="res://UI/PlayerStatsHUD/Icons/stamina_icon.png" id="108_n4o3n"]
-[ext_resource type="Texture2D" uid="uid://dj16xk01w22w1" path="res://UI/Inventory/InventoryCore/Background/Wood/inv_background_thin_no_stripes_wood.png" id="109_0313k"]
-[ext_resource type="Script" uid="uid://cyi1ibaqhdjag" path="res://UI/Inventory/PlayerInventory/WearablesPanel.gd" id="109_bvo3j"]
-[ext_resource type="Texture2D" uid="uid://ho5adc71xxpc" path="res://UI/Inventory/InventoryCore/Button/sort_rarity_icon.png" id="109_co77f"]
-[ext_resource type="Texture2D" uid="uid://comcgk0iu7yb8" path="res://UI/PlayerStatsHUD/Icons/shield_icon.png" id="110_6wv7y"]
-[ext_resource type="Texture2D" uid="uid://cx2jmdqmspkri" path="res://UI/Inventory/InventoryCore/Button/sort_type_icon.png" id="110_bmpdm"]
-[ext_resource type="Texture2D" uid="uid://cn54g3yxn4t4e" path="res://UI/Inventory/InventoryCore/Slot/Universal/output_slot_icon_left.png" id="110_g5u5n"]
-[ext_resource type="Texture2D" uid="uid://dil8w58e3xdt5" path="res://UI/PlayerStatsHUD/Icons/hunger_icon.png" id="111_0t1mv"]
-[ext_resource type="Texture2D" uid="uid://dpe7plb3keqa2" path="res://UI/Inventory/InventoryCore/Button/sort_name_icon.png" id="111_co77f"]
-[ext_resource type="Script" uid="uid://cvuh82pqmf5ja" path="res://UI/Inventory/InventoryCore/Slot/SlotCore/CraftingSlot.gd" id="111_hxjay"]
-[ext_resource type="Texture2D" uid="uid://c7elu72hhoy5l" path="res://UI/PlayerStatsHUD/Icons/health_icon.png" id="111_n4o3n"]
-[ext_resource type="Texture2D" uid="uid://dq4bom0xaskme" path="res://UI/Inventory/InventoryCore/Slot/Wood/light_border_filled_wood_slot.png" id="113_5qckj"]
-[ext_resource type="Script" uid="uid://wrr38aolthsi" path="res://UI/Inventory/InventoryCore/Slot/SlotCore/WearableSlot.gd" id="113_bvo3j"]
-[ext_resource type="Script" uid="uid://cy756xiw3ikj7" path="res://UI/Inventory/InventoryCore/Slot/SlotCore/ModSlot.gd" id="114_gdihr"]
+[ext_resource type="Script" uid="uid://dbc2ecb1mkugh" path="res://Entities/Player/UI/Inventory/HotbarHUD/ActiveSlotInfo.gd" id="91_qr476"]
+[ext_resource type="Texture2D" uid="uid://jx4y3elkn7rq" path="res://Entities/Player/UI/Inventory/Assets/Slot/Universal/empty_slot_icon.png" id="94_0313k"]
+[ext_resource type="Texture2D" uid="uid://wsv6cyckepdw" path="res://Entities/Player/UI/Inventory/Assets/Background/Wood/inv_background_medium_wood.png" id="98_s4yud"]
+[ext_resource type="Texture2D" uid="uid://dlecwbci6aggo" path="res://Entities/Player/UI/Vitals/Assets/ProgressBars/progress_white.png" id="100_5qckj"]
+[ext_resource type="Texture2D" uid="uid://cp7uxam0b4khc" path="res://Entities/Player/UI/Inventory/Assets/Slot/Universal/craft_input_slot_icon.png" id="101_g5u5n"]
+[ext_resource type="Texture2D" uid="uid://3kkpkmyi20wj" path="res://Entities/Player/UI/Inventory/Assets/Slot/Universal/wearable_slot_icon.png" id="103_g5u5n"]
+[ext_resource type="Texture2D" uid="uid://dg4k8vt7nqpl6" path="res://Entities/Player/UI/Inventory/Assets/Button/button_raised_wood.png" id="106_0313k"]
+[ext_resource type="Texture2D" uid="uid://2fldkutlispo" path="res://Entities/Player/UI/Inventory/Assets/Button/button_pressed_wood.png" id="107_32jvf"]
+[ext_resource type="Texture2D" uid="uid://5avvx8ycv3w1" path="res://Entities/Player/UI/Inventory/Assets/Slot/Wood/dark_wood_no_stripes.png" id="108_3uq13"]
+[ext_resource type="Texture2D" uid="uid://d2kkhfd8uj5rr" path="res://Entities/Player/UI/Inventory/Assets/Button/stack_icon.png" id="108_f5l7i"]
+[ext_resource type="Texture2D" uid="uid://ce173dp6evl1s" path="res://Entities/Player/UI/Vitals/Assets/Icons/stamina_icon.png" id="108_n4o3n"]
+[ext_resource type="Texture2D" uid="uid://dj16xk01w22w1" path="res://Entities/Player/UI/Inventory/Assets/Background/Wood/inv_background_thin_no_stripes_wood.png" id="109_0313k"]
+[ext_resource type="Script" uid="uid://cyi1ibaqhdjag" path="res://Entities/Player/UI/Inventory/Panels/WearablesPanel/WearablesPanel.gd" id="109_bvo3j"]
+[ext_resource type="Texture2D" uid="uid://ho5adc71xxpc" path="res://Entities/Player/UI/Inventory/Assets/Button/sort_rarity_icon.png" id="109_co77f"]
+[ext_resource type="Texture2D" uid="uid://comcgk0iu7yb8" path="res://Entities/Player/UI/Vitals/Assets/Icons/shield_icon.png" id="110_6wv7y"]
+[ext_resource type="Texture2D" uid="uid://cx2jmdqmspkri" path="res://Entities/Player/UI/Inventory/Assets/Button/sort_type_icon.png" id="110_bmpdm"]
+[ext_resource type="Texture2D" uid="uid://cn54g3yxn4t4e" path="res://Entities/Player/UI/Inventory/Assets/Slot/Universal/output_slot_icon_left.png" id="110_g5u5n"]
+[ext_resource type="Texture2D" uid="uid://dil8w58e3xdt5" path="res://Entities/Player/UI/Vitals/Assets/Icons/hunger_icon.png" id="111_0t1mv"]
+[ext_resource type="Texture2D" uid="uid://dpe7plb3keqa2" path="res://Entities/Player/UI/Inventory/Assets/Button/sort_name_icon.png" id="111_co77f"]
+[ext_resource type="Script" uid="uid://cvuh82pqmf5ja" path="res://Entities/Player/UI/Inventory/InventoryCore/CraftingSlot.gd" id="111_hxjay"]
+[ext_resource type="Texture2D" uid="uid://c7elu72hhoy5l" path="res://Entities/Player/UI/Vitals/Assets/Icons/health_icon.png" id="111_n4o3n"]
+[ext_resource type="Texture2D" uid="uid://dq4bom0xaskme" path="res://Entities/Player/UI/Inventory/Assets/Slot/Wood/light_border_filled_wood_slot.png" id="113_5qckj"]
+[ext_resource type="Script" uid="uid://wrr38aolthsi" path="res://Entities/Player/UI/Inventory/InventoryCore/WearableSlot.gd" id="113_bvo3j"]
+[ext_resource type="Script" uid="uid://cy756xiw3ikj7" path="res://Entities/Player/UI/Inventory/InventoryCore/ModSlot.gd" id="114_gdihr"]
 [ext_resource type="PackedScene" uid="uid://di7vcyrki71nm" path="res://Entities/Components/DetectionComponent/DetectionComponent.tscn" id="114_hxjay"]
-[ext_resource type="Texture2D" uid="uid://bqxdg28d1twy1" path="res://UI/Inventory/InventoryCore/Background/Wood/inv_background_thin_wood.png" id="115_gdihr"]
-[ext_resource type="Script" uid="uid://g7648i4hb0q8" path="res://UI/Inventory/PlayerInventory/ItemDetailsPanel.gd" id="116_g5u5n"]
-[ext_resource type="Texture2D" uid="uid://b6oke8chd1otq" path="res://UI/Inventory/InventoryCore/Slot/Universal/item_viewer_slot_icon.png" id="117_gb65f"]
+[ext_resource type="Texture2D" uid="uid://bqxdg28d1twy1" path="res://Entities/Player/UI/Inventory/Assets/Background/Wood/inv_background_thin_wood.png" id="115_gdihr"]
+[ext_resource type="Script" uid="uid://g7648i4hb0q8" path="res://Entities/Player/UI/Inventory/Panels/ItemDetailsPanel/ItemDetailsPanel.gd" id="116_g5u5n"]
+[ext_resource type="Texture2D" uid="uid://b6oke8chd1otq" path="res://Entities/Player/UI/Inventory/Assets/Slot/Universal/item_viewer_slot_icon.png" id="117_gb65f"]
 [ext_resource type="Texture2D" uid="uid://ttewd1cvitt0" path="res://Entities/Player/Sprites/Base/player_base_frame.png" id="117_thmqm"]
-[ext_resource type="Texture2D" uid="uid://bhwg6ynp1bscr" path="res://UI/Inventory/InventoryCore/Slot/Universal/mod_slot_icon.png" id="118_r5dvw"]
-[ext_resource type="Script" uid="uid://djsaegsb00xsu" path="res://UI/Inventory/PlayerInventory/Crafting/CraftingManager.gd" id="118_thmqm"]
-[ext_resource type="Texture2D" uid="uid://dcmskq1jefam" path="res://UI/Inventory/InventoryCore/Button/craft_confirm_icon.png" id="119_bmpdm"]
-[ext_resource type="Texture2D" uid="uid://0qokvcd3ucop" path="res://UI/Inventory/InventoryCore/Background/Universal/arrow_icon.png" id="119_bvo3j"]
-[ext_resource type="Texture2D" uid="uid://cpgqebvnv0d0b" path="res://UI/Inventory/InventoryCore/Slot/Wood/normal_slot_wood_no_stripes.png" id="125_ar238"]
+[ext_resource type="Texture2D" uid="uid://bhwg6ynp1bscr" path="res://Entities/Player/UI/Inventory/Assets/Slot/Universal/mod_slot_icon.png" id="118_r5dvw"]
+[ext_resource type="Script" uid="uid://djsaegsb00xsu" path="res://Entities/Player/UI/Inventory/Panels/CraftingPanel/CraftingManager.gd" id="118_thmqm"]
+[ext_resource type="Texture2D" uid="uid://dcmskq1jefam" path="res://Entities/Player/UI/Inventory/Assets/Button/craft_confirm_icon.png" id="119_bmpdm"]
+[ext_resource type="Texture2D" uid="uid://0qokvcd3ucop" path="res://Entities/Player/UI/Inventory/Assets/Background/Universal/arrow_icon.png" id="119_bvo3j"]
+[ext_resource type="Texture2D" uid="uid://cpgqebvnv0d0b" path="res://Entities/Player/UI/Inventory/Assets/Slot/Wood/normal_slot_wood_no_stripes.png" id="125_ar238"]
 [ext_resource type="Resource" uid="uid://dm4eq3xm13a38" path="res://Assets/Audio/Sfx/SfxResources/PlayerRunBase.tres" id="127_ou5t4"]
 [ext_resource type="Resource" uid="uid://cjv5d4cwpj1l8" path="res://Assets/Audio/Sfx/SfxResources/PlayerSprintWind.tres" id="128_ar238"]
 [ext_resource type="Resource" uid="uid://dalv82plgsllj" path="res://Assets/Audio/Sfx/SfxResources/PlayerDash.tres" id="129_bmpdm"]
-[ext_resource type="Texture2D" uid="uid://dftsjhii43mgr" path="res://UI/TemporaryElements/FeedbackTints/tintable_corner_overlay.png" id="132_bmpdm"]
-[ext_resource type="Script" uid="uid://pmmj51awratp" path="res://UI/TemporaryElements/FeedbackTints/CornerFeedbackTint.gd" id="133_8hbs2"]
-[ext_resource type="Script" uid="uid://cq30nail2rqmt" path="res://UI/Inventory/PlayerInventory/SidePanelManager.gd" id="133_h1ges"]
+[ext_resource type="Texture2D" uid="uid://dftsjhii43mgr" path="res://Entities/Player/UI/Overlays/CornerTint/tintable_corner_overlay.png" id="132_bmpdm"]
+[ext_resource type="Script" uid="uid://pmmj51awratp" path="res://Entities/Player/UI/Overlays/CornerTint/CornerFeedbackTint.gd" id="133_8hbs2"]
+[ext_resource type="Script" uid="uid://cq30nail2rqmt" path="res://Entities/Player/UI/Inventory/Panels/SidePanels/SidePanelsCore/SidePanelManager.gd" id="133_h1ges"]
 
 [sub_resource type="Resource" id="Resource_82yts"]
 script = ExtResource("32_ixmb3")
@@ -1989,7 +1989,7 @@ nine_patch_stretch = true
 texture_progress = ExtResource("100_5qckj")
 tint_progress = Color(0, 0.499807, 0.273035, 1)
 
-[node name="HotbarUI" type="MarginContainer" parent="OverlayUI" unique_id=1914499256 node_paths=PackedStringArray("active_slot_info") groups=["has_save_logic"]]
+[node name="HotbarHUD" type="MarginContainer" parent="OverlayUI" unique_id=1914499256 node_paths=PackedStringArray("active_slot_info") groups=["has_save_logic"]]
 unique_name_in_owner = true
 anchors_preset = 3
 anchor_left = 1.0
@@ -2005,7 +2005,7 @@ grow_vertical = 0
 script = ExtResource("58_i567i")
 active_slot_info = NodePath("../ActiveSlotInfo")
 
-[node name="HotbarNinePatch" type="NinePatchRect" parent="OverlayUI/HotbarUI" unique_id=582191314]
+[node name="HotbarNinePatch" type="NinePatchRect" parent="OverlayUI/HotbarHUD" unique_id=582191314]
 layout_mode = 2
 texture = ExtResource("98_s4yud")
 region_rect = Rect2(0, 0, 20, 20)
@@ -2015,7 +2015,7 @@ patch_margin_right = 3
 patch_margin_bottom = 3
 axis_stretch_vertical = 1
 
-[node name="HotbarHUDGrid" type="HBoxContainer" parent="OverlayUI/HotbarUI/HotbarNinePatch" unique_id=273450644]
+[node name="HotbarHUDGrid" type="HBoxContainer" parent="OverlayUI/HotbarHUD/HotbarNinePatch" unique_id=273450644]
 unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = -1
@@ -2033,27 +2033,27 @@ theme_override_constants/separation = 0
 alignment = 1
 metadata/_edit_lock_ = true
 
-[node name="Slot1" parent="OverlayUI/HotbarUI/HotbarNinePatch/HotbarHUDGrid" unique_id=895905780 instance=ExtResource("42_r422n")]
+[node name="Slot1" parent="OverlayUI/HotbarHUD/HotbarNinePatch/HotbarHUDGrid" unique_id=895905780 instance=ExtResource("42_r422n")]
 layout_mode = 2
 hide_corner_info = true
 metadata/_edit_lock_ = true
 
-[node name="Slot2" parent="OverlayUI/HotbarUI/HotbarNinePatch/HotbarHUDGrid" unique_id=1707829914 instance=ExtResource("42_r422n")]
+[node name="Slot2" parent="OverlayUI/HotbarHUD/HotbarNinePatch/HotbarHUDGrid" unique_id=1707829914 instance=ExtResource("42_r422n")]
 layout_mode = 2
 hide_corner_info = true
 metadata/_edit_lock_ = true
 
-[node name="Slot3" parent="OverlayUI/HotbarUI/HotbarNinePatch/HotbarHUDGrid" unique_id=1621737549 instance=ExtResource("42_r422n")]
+[node name="Slot3" parent="OverlayUI/HotbarHUD/HotbarNinePatch/HotbarHUDGrid" unique_id=1621737549 instance=ExtResource("42_r422n")]
 layout_mode = 2
 hide_corner_info = true
 metadata/_edit_lock_ = true
 
-[node name="Slot4" parent="OverlayUI/HotbarUI/HotbarNinePatch/HotbarHUDGrid" unique_id=684966083 instance=ExtResource("42_r422n")]
+[node name="Slot4" parent="OverlayUI/HotbarHUD/HotbarNinePatch/HotbarHUDGrid" unique_id=684966083 instance=ExtResource("42_r422n")]
 layout_mode = 2
 hide_corner_info = true
 metadata/_edit_lock_ = true
 
-[node name="Slot5" parent="OverlayUI/HotbarUI/HotbarNinePatch/HotbarHUDGrid" unique_id=212085547 instance=ExtResource("42_r422n")]
+[node name="Slot5" parent="OverlayUI/HotbarHUD/HotbarNinePatch/HotbarHUDGrid" unique_id=212085547 instance=ExtResource("42_r422n")]
 layout_mode = 2
 hide_corner_info = true
 metadata/_edit_lock_ = true
@@ -3311,8 +3311,8 @@ offset_bottom = 102.0
 grow_vertical = 2
 script = ExtResource("133_h1ges")
 
-[connection signal="visibility_changed" from="OverlayUI/HotbarUI" to="OverlayUI/HotbarUI" method="_on_visibility_changed"]
-[connection signal="visibility_changed" from="OverlayUI/HotbarUI/HotbarNinePatch" to="OverlayUI/HotbarUI/HotbarNinePatch" method="_on_visibility_changed"]
+[connection signal="visibility_changed" from="OverlayUI/HotbarHUD" to="OverlayUI/HotbarHUD" method="_on_visibility_changed"]
+[connection signal="visibility_changed" from="OverlayUI/HotbarHUD/HotbarNinePatch" to="OverlayUI/HotbarHUD/HotbarNinePatch" method="_on_visibility_changed"]
 [connection signal="button_down" from="OverlayUI/PlayerInvUI/MainGridBackground/MarginContainer/MarginContainer/AutoStackBtn" to="OverlayUI/PlayerInvUI" method="_on_auto_stack_btn_button_down"]
 [connection signal="button_up" from="OverlayUI/PlayerInvUI/MainGridBackground/MarginContainer/MarginContainer/AutoStackBtn" to="OverlayUI/PlayerInvUI" method="_on_auto_stack_btn_button_up"]
 [connection signal="mouse_entered" from="OverlayUI/PlayerInvUI/MainGridBackground/MarginContainer/MarginContainer/AutoStackBtn" to="OverlayUI/PlayerInvUI" method="_on_autostack_btn_mouse_entered"]

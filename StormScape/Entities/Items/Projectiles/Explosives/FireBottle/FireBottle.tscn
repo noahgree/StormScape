@@ -4,7 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://bwuth2fyl1x12" path="res://Entities/Items/Projectiles/Bullets/SmallBullet/bullet_small.png" id="2_mjep8"]
 [ext_resource type="Texture2D" uid="uid://b4bumm88u2qmw" path="res://Entities/Items/Weapons/ProjectileWeapons/BottleOFire/BottleOFireThrowableCT.tres" id="3_qgnn6"]
 [ext_resource type="Texture2D" uid="uid://dcbwxgak6a0r8" path="res://Entities/EntityCore/Shadow/entity_shadow.png" id="4_7cm0k"]
-[ext_resource type="Texture2D" uid="uid://c6ebk8sa1vvtq" path="res://UI/TemporaryElements/StatusEffects/flames.png" id="5_4e5w2"]
+[ext_resource type="Texture2D" uid="uid://c6ebk8sa1vvtq" path="res://Entities/EntityCore/UI/StatusEffects/Icons/flames.png" id="5_4e5w2"]
 [ext_resource type="PackedScene" uid="uid://dau2tuc6mx0by" path="res://Entities/Items/Projectiles/ProjectileCore/Trail/Trail.tscn" id="6_k0esx"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_tr4aq"]

@@ -1,20 +1,21 @@
 @tool
 extends StaticEntity
 class_name StormBase
+## The main storm-controlling entity, providing the functionality for the core gameplay element of controlling
+## the storm.
 
+@export var level: int = 1 ## The current level of the storm base.
+@export var default_transform: StormTransform ## The transform that the storm will start at, responsive to when this entity is moved in-editor. The starting radius in this resource defines the default radius for when the base has 100% fuel.
+@export var side_panel: PackedScene ## The side panel to pass along when the player opens the storm base UI.
 
-@export var level: int = 1
-@export var default_transform: StormTransform
-@export var side_panel: PackedScene
+@onready var interaction_area: InteractionArea = $InteractionArea ## The interaction area that offers an interaction to the nearby player.
 
-@onready var interaction_area: InteractionArea = $InteractionArea
-
-var storm: Storm
-var level_progress: int = 0
-var fuel: int = 5: set = _set_fuel
-var max_fuel: int = 100
-var fuel_change_resize_factor: float = 15.0
-var fuel_change_move_factor: float = 40.0
+var storm: Storm ## A reference to the storm node.
+var level_progress: int = 0 ## The progress leading up to the next level.
+var fuel: int = 5: set = _set_fuel ## The current amount of fuel left.
+var max_fuel: int = 100 ## The max fuel the base can have.
+var fuel_change_resize_factor: float = 15.0 ## The greater the value, the faster the zone will change size.
+var fuel_change_move_factor: float = 40.0 ## The greater the value, the faster the zone will move locations.
 
 
 func _ready() -> void:
@@ -25,11 +26,11 @@ func _ready() -> void:
 		if global_position != default_transform.new_location:
 			push_error("The default transform of the storm base has not automatically updated to the correct position of the storm base.")
 
-		interaction_area.set_accept_callable(add_fuel)
+		interaction_area.set_accept_callable(_open_ui)
 	super()
 
-## Adds fuel to the available amount.
-func add_fuel() -> void:
+
+func _open_ui() -> void:
 	fuel += 10
 	SignalBus.side_panel_open_request.emit(side_panel, self)
 

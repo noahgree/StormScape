@@ -7,9 +7,9 @@
 [ext_resource type="Resource" uid="uid://y5iqfraea8ry" path="res://Entities/Player/PlayerCore/PlayerCamera/CamFXPresets/2(NoFreeze).tres" id="4_e5g0w"]
 [ext_resource type="Texture2D" uid="uid://b3wtl45dungco" path="res://Entities/Items/Weapons/MeleeWeapons/Sword/SwordBaseCT.tres" id="5_67eer"]
 [ext_resource type="PackedScene" uid="uid://dqsa4rcdahhwv" path="res://Entities/Items/Weapons/MeleeWeapons/Sword/Sword.tscn" id="5_gypsi"]
-[ext_resource type="Script" uid="uid://cowjdnic7xmkp" path="res://UI/Inventory/PlayerInventory/StatDetail.gd" id="5_oxyfa"]
+[ext_resource type="Script" uid="uid://cowjdnic7xmkp" path="res://Entities/Player/UI/Inventory/Panels/ItemDetailsPanel/StatDetail.gd" id="5_oxyfa"]
 [ext_resource type="Script" uid="uid://c2gdoebfp12dq" path="res://Entities/Stats/StatMod/StatModsCacheResource.gd" id="8_3cchv"]
-[ext_resource type="Script" uid="uid://ctxa7i1mbt7ab" path="res://UI/Inventory/PlayerInventory/Crafting/CraftingIngredient.gd" id="8_mpt70"]
+[ext_resource type="Script" uid="uid://ctxa7i1mbt7ab" path="res://Entities/Player/UI/Inventory/Panels/CraftingPanel/CraftingIngredient.gd" id="8_mpt70"]
 
 [sub_resource type="Resource" id="Resource_67eer"]
 script = ExtResource("3_67eer")

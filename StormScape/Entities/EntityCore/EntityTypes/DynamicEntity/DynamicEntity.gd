@@ -61,7 +61,7 @@ func _on_save_game(save_data: Array[SaveData]) -> void:
 
 	if self.name == "Player":
 		data.is_player = true
-		data.active_slot_index = %HotbarUI.active_slot.index
+		data.active_slot_index = %HotbarHUD.active_slot.index
 
 	save_data.append(data)
 
@@ -117,7 +117,7 @@ func _is_instance_on_load_game(data: DynamicEntityData) -> void:
 	if data.snare_time_left > 0: request_time_snare(data.snare_factor, data.snare_time_left)
 
 	if data.is_player:
-		%HotbarUI.change_active_slot_to_index_relative_to_full_inventory_size(data.active_slot_index)
+		%HotbarHUD.change_active_slot_to_index_relative_to_full_inventory_size(data.active_slot_index)
 		WearablesManager.re_add_all_wearables(self)
 #endregion
 

@@ -5,9 +5,9 @@
 [ext_resource type="PackedScene" uid="uid://bdaogdtcus1ac" path="res://Entities/Items/Consumables/Consumable.tscn" id="2_1oeu8"]
 [ext_resource type="Script" uid="uid://boo31eu083dqd" path="res://Entities/Stats/EffectSystemResources/StatusEffects/StatusEffect.gd" id="2_2c2ph"]
 [ext_resource type="Texture2D" uid="uid://bibinc8ql8wl1" path="res://Entities/Items/Consumables/Apple/AppleThumbCT.tres" id="3_7kd7o"]
-[ext_resource type="Script" uid="uid://cowjdnic7xmkp" path="res://UI/Inventory/PlayerInventory/StatDetail.gd" id="3_awbqi"]
+[ext_resource type="Script" uid="uid://cowjdnic7xmkp" path="res://Entities/Player/UI/Inventory/Panels/ItemDetailsPanel/StatDetail.gd" id="3_awbqi"]
 [ext_resource type="Texture2D" uid="uid://b4acjy3ujbtoy" path="res://Entities/Items/Consumables/Apple/apple_base.png" id="4_8vr7p"]
-[ext_resource type="Script" uid="uid://ctxa7i1mbt7ab" path="res://UI/Inventory/PlayerInventory/Crafting/CraftingIngredient.gd" id="7_l0gb1"]
+[ext_resource type="Script" uid="uid://ctxa7i1mbt7ab" path="res://Entities/Player/UI/Inventory/Panels/CraftingPanel/CraftingIngredient.gd" id="7_l0gb1"]
 
 [sub_resource type="Resource" id="Resource_hsou2"]
 script = ExtResource("1_bn713")

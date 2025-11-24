@@ -1,13 +1,13 @@
 [gd_resource type="SpriteFrames" load_steps=4 format=3 uid="uid://85w3h1wajacl"]
 
-[ext_resource type="Texture2D" uid="uid://df8dupng4k8mm" path="res://UI/Cursors/gattler_base.png" id="1_rde7l"]
+[ext_resource type="Texture2D" uid="uid://df8dupng4k8mm" path="res://Entities/Player/UI/Cursors/gattler_base.png" id="1_6q1pr"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_yr7kx"]
-atlas = ExtResource("1_rde7l")
+atlas = ExtResource("1_6q1pr")
 region = Rect2(0, 0, 9, 9)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_t1eaq"]
-atlas = ExtResource("1_rde7l")
+atlas = ExtResource("1_6q1pr")
 region = Rect2(9, 0, 9, 9)
 
 [resource]

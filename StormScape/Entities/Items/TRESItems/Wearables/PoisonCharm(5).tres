@@ -1,8 +1,8 @@
 [gd_resource type="Resource" script_class="Wearable" load_steps=8 format=3 uid="uid://dw5jtfoba6mwy"]
 
-[ext_resource type="Script" uid="uid://cowjdnic7xmkp" path="res://UI/Inventory/PlayerInventory/StatDetail.gd" id="1_y3gsb"]
+[ext_resource type="Script" uid="uid://cowjdnic7xmkp" path="res://Entities/Player/UI/Inventory/Panels/ItemDetailsPanel/StatDetail.gd" id="1_y3gsb"]
 [ext_resource type="Texture2D" uid="uid://cn5hqfioewj4j" path="res://Entities/Items/Wearables/PoisonCharm/PoisonCharmCT.tres" id="2_y3gsb"]
-[ext_resource type="Script" uid="uid://ctxa7i1mbt7ab" path="res://UI/Inventory/PlayerInventory/Crafting/CraftingIngredient.gd" id="3_kgxhl"]
+[ext_resource type="Script" uid="uid://ctxa7i1mbt7ab" path="res://Entities/Player/UI/Inventory/Panels/CraftingPanel/CraftingIngredient.gd" id="3_kgxhl"]
 [ext_resource type="Script" uid="uid://317ipeo41y3c" path="res://Entities/Items/Wearables/Wearable.gd" id="4_0uxcx"]
 [ext_resource type="Script" uid="uid://bcjwesiannbd0" path="res://Entities/Stats/StatMod/StatMod.gd" id="5_w23c4"]
 

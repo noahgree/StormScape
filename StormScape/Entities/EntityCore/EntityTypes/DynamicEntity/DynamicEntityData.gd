@@ -38,6 +38,6 @@ class_name DynamicEntityData
 # Player Core
 @export var is_player: bool = false
 
-# HotbarUI
+# HotbarHUD
 @export var active_slot_index: int
 #endregion

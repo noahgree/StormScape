@@ -1,7 +1,7 @@
 [gd_scene load_steps=7 format=3 uid="uid://cb5ofy3224fh2"]
 
 [ext_resource type="Script" uid="uid://jwnpvt4k2g7g" path="res://Entities/Items/Projectiles/ProjectileCore/AreaOfEffectVFX/AreaOfEffectVFX.gd" id="1_rc5wt"]
-[ext_resource type="Texture2D" uid="uid://c6ebk8sa1vvtq" path="res://UI/TemporaryElements/StatusEffects/flames.png" id="2_4ubxj"]
+[ext_resource type="Texture2D" uid="uid://c6ebk8sa1vvtq" path="res://Entities/EntityCore/UI/StatusEffects/Icons/flames.png" id="2_4ubxj"]
 [ext_resource type="Texture2D" uid="uid://b41ueq2htaju0" path="res://Utilities/Game/Particles/faint_light.png" id="3_8r7ys"]
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_pk1mm"]

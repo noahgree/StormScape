@@ -1,14 +1,14 @@
 [gd_scene load_steps=13 format=3 uid="uid://dnpwx3cn0i24s"]
 
-[ext_resource type="Script" uid="uid://33qr4tesqga3" path="res://UI/Inventory/PlayerInventory/SidePanel.gd" id="1_5t1bm"]
-[ext_resource type="Script" uid="uid://dt68k0tnwjvdl" path="res://UI/Inventory/InventoryCore/InvSlotManager.gd" id="2_6xvar"]
-[ext_resource type="Texture2D" uid="uid://lqg70q4wj55g" path="res://UI/Inventory/InventoryCore/Background/Wood/inv_background_wood.png" id="3_eaggr"]
-[ext_resource type="Texture2D" uid="uid://dj16xk01w22w1" path="res://UI/Inventory/InventoryCore/Background/Wood/inv_background_thin_no_stripes_wood.png" id="4_av3h4"]
-[ext_resource type="PackedScene" uid="uid://m4ur3n2hwsp8" path="res://UI/Inventory/InventoryCore/Slot/SlotCore/Slot.tscn" id="5_mjv4o"]
+[ext_resource type="Script" uid="uid://33qr4tesqga3" path="res://Entities/Player/UI/Inventory/Panels/SidePanels/SidePanelsCore/SidePanel.gd" id="1_5t1bm"]
+[ext_resource type="Script" uid="uid://dt68k0tnwjvdl" path="res://Entities/Player/UI/Inventory/InventoryCore/InvSlotManager.gd" id="2_6xvar"]
+[ext_resource type="Texture2D" uid="uid://lqg70q4wj55g" path="res://Entities/Player/UI/Inventory/Assets/Background/Wood/inv_background_wood.png" id="3_eaggr"]
+[ext_resource type="Texture2D" uid="uid://dj16xk01w22w1" path="res://Entities/Player/UI/Inventory/Assets/Background/Wood/inv_background_thin_no_stripes_wood.png" id="4_av3h4"]
+[ext_resource type="PackedScene" uid="uid://m4ur3n2hwsp8" path="res://Entities/Player/UI/Inventory/InventoryCore/Slot.tscn" id="5_mjv4o"]
 [ext_resource type="FontFile" uid="uid://bp2lgrlhj8cet" path="res://Assets/Theming/Fonts/Pixel/C&C Red Alert [INET].ttf" id="6_1nfa8"]
-[ext_resource type="Texture2D" uid="uid://cpgqebvnv0d0b" path="res://UI/Inventory/InventoryCore/Slot/Wood/normal_slot_wood_no_stripes.png" id="7_jjxgf"]
-[ext_resource type="Script" uid="uid://cy756xiw3ikj7" path="res://UI/Inventory/InventoryCore/Slot/SlotCore/ModSlot.gd" id="8_i0svs"]
-[ext_resource type="Texture2D" uid="uid://bhwg6ynp1bscr" path="res://UI/Inventory/InventoryCore/Slot/Universal/mod_slot_icon.png" id="9_7u3po"]
+[ext_resource type="Texture2D" uid="uid://cpgqebvnv0d0b" path="res://Entities/Player/UI/Inventory/Assets/Slot/Wood/normal_slot_wood_no_stripes.png" id="7_jjxgf"]
+[ext_resource type="Script" uid="uid://cy756xiw3ikj7" path="res://Entities/Player/UI/Inventory/InventoryCore/ModSlot.gd" id="8_i0svs"]
+[ext_resource type="Texture2D" uid="uid://bhwg6ynp1bscr" path="res://Entities/Player/UI/Inventory/Assets/Slot/Universal/mod_slot_icon.png" id="9_7u3po"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_xl3yw"]
 line_spacing = -1.0
@@ -44,6 +44,7 @@ inv_slot_mgr = NodePath("BackgroundMargin/InnerMargin/MainVBox/FuelSlotMgr")
 layout_mode = 2
 
 [node name="InventoryTexture" type="NinePatchRect" parent="BackgroundMargin" unique_id=773263026]
+modulate = Color(0.6436752, 0.5848187, 0.77914613, 1)
 layout_mode = 2
 size_flags_vertical = 3
 mouse_filter = 0
@@ -80,6 +81,7 @@ theme_override_constants/margin_right = -4
 theme_override_constants/margin_bottom = -4
 
 [node name="ElementsBackground" type="NinePatchRect" parent="BackgroundMargin/InnerMargin/MainVBox/ElementsMargin/ElementsBkrgdMargin" unique_id=762559776]
+modulate = Color(0.6436752, 0.5848187, 0.77914613, 1)
 layout_mode = 2
 texture = ExtResource("4_av3h4")
 patch_margin_left = 4
@@ -138,6 +140,7 @@ size_flags_vertical = 3
 theme_override_constants/margin_top = -1
 
 [node name="InfoBackground" type="NinePatchRect" parent="BackgroundMargin/InnerMargin/MainVBox/ElementsMargin/ElementsVBox/InfoMargin" unique_id=31654629]
+modulate = Color(0.6436752, 0.5848187, 0.77914613, 1)
 layout_mode = 2
 texture = ExtResource("7_jjxgf")
 patch_margin_left = 1
@@ -171,6 +174,7 @@ layout_mode = 2
 size_flags_vertical = 3
 
 [node name="DetailsBackground" type="NinePatchRect" parent="BackgroundMargin/InnerMargin/MainVBox/ElementsMargin/ElementsVBox/DetailsMargin" unique_id=805991716]
+modulate = Color(0.6436752, 0.5848187, 0.77914613, 1)
 layout_mode = 2
 texture = ExtResource("7_jjxgf")
 patch_margin_left = 1
@@ -267,6 +271,7 @@ size_flags_horizontal = 4
 size_flags_vertical = 0
 
 [node name="GridMarginsBackground" type="NinePatchRect" parent="BackgroundMargin/InnerMargin/MainVBox/FuelSlotMgr/GridMargins" unique_id=787628074]
+modulate = Color(0.6436752, 0.5848187, 0.77914613, 1)
 layout_mode = 2
 texture = ExtResource("4_av3h4")
 patch_margin_left = 4
@@ -292,6 +297,7 @@ text = "FUEL"
 label_settings = SubResource("LabelSettings_rlbd1")
 
 [node name="MarginContainer" type="MarginContainer" parent="BackgroundMargin/InnerMargin/MainVBox/FuelSlotMgr/GridMargins/TitleAndSlotVBox" unique_id=1704788412]
+modulate = Color(0.6436752, 0.5848187, 0.77914613, 1)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
