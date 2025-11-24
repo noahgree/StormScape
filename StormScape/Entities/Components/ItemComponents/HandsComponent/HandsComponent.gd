@@ -62,11 +62,11 @@ func _ready() -> void:
 	off_hand_sprite.visible = false
 	drawn_off_hand.visible = false
 
-	SignalBus.focused_ui_opened.connect(func() -> void: trigger_pressed = false)
+	SignalBus.ui_focus_opened.connect(func() -> void: trigger_pressed = false)
 
 	# Make sure to update item rotation on game resume
 	if entity is Player:
-		SignalBus.focused_ui_closed.connect(func() -> void: handle_aim(CursorManager.get_cursor_mouse_position()))
+		SignalBus.ui_focus_closed.connect(func() -> void: handle_aim(CursorManager.get_cursor_mouse_position()))
 
 	starting_hands_component_height = position.y
 	starting_off_hand_sprite_height = off_hand_sprite.position.y
@@ -107,7 +107,7 @@ func _unhandled_input(event: InputEvent) -> void:
 ## and the equipped item is enabled and not lerping. Also manages calling hand placement funcs for equipped items.
 func _process(delta: float) -> void:
 	# Player Inputs
-	if Globals.focused_ui_is_open or Globals.focused_ui_is_closing_debounce:
+	if Globals.ui_focus_open or Globals.ui_focus_is_closing_debounce:
 		return
 
 	if entity is Player:
@@ -423,7 +423,7 @@ func add_mod_to_weapon_by_id(mod_cache_id: StringName) -> void:
 	if not _check_is_holding_weapon():
 		return
 	var equipped_stats: ItemResource = Globals.player_node.hands.equipped_item.stats
-	var mod: ItemResource = CraftingManager.get_item_by_id(mod_cache_id, true)
+	var mod: ItemResource = Items.get_item_by_id(mod_cache_id, true)
 	if mod == null or mod is not WeaponMod:
 		printerr("The mod of id \"" + mod_cache_id + "\" does not exist.")
 		return
@@ -440,7 +440,7 @@ func toggle_hitscan() -> void:
 
 ## Tries to add xp to the current weapon.
 func add_weapon_xp(amount: int) -> void:
-	if not _check_is_holding_weapon() or Globals.player_inv_is_open:
+	if not _check_is_holding_weapon() or Globals.ui_focus_open:
 		printerr("Either the player is not holding a weapon or a focused UI is open, so no xp was added.")
 		return
 	Globals.player_node.hands.equipped_item.stats.add_xp(amount)

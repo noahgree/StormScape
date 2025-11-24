@@ -13,13 +13,13 @@ func _ready() -> void:
 	mag_ammo.text = ""
 	inv_ammo.text = ""
 
-	SignalBus.focused_ui_opened.connect(func() -> void: visible = not Globals.player_inv_is_open)
-	SignalBus.focused_ui_closed.connect(func() -> void: visible = not Globals.player_inv_is_open)
+	SignalBus.ui_focus_opened.connect(func() -> void: visible = not Globals.ui_focus_open)
+	SignalBus.ui_focus_closed.connect(func() -> void: visible = not Globals.ui_focus_open)
 
 	if not Globals.player_node:
 		await Globals.ready
 
-	SignalBus.focused_ui_closed.connect(calculate_inv_ammo)
+	SignalBus.ui_focus_closed.connect(calculate_inv_ammo)
 	Globals.player_node.stamina_component.max_stamina_changed.connect(func(_new_max_stamina: float) -> void: calculate_inv_ammo())
 
 ## Updates the magazine ammo portion of the current equipped item info.

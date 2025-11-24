@@ -1,0 +1,223 @@
+[gd_scene load_steps=7 format=3 uid="uid://batypmdxig7ic"]
+
+[ext_resource type="Script" uid="uid://dt68k0tnwjvdl" path="res://UI/Inventory/InventoryCore/InvSlotManager.gd" id="1_bu5kf"]
+[ext_resource type="Texture2D" uid="uid://lqg70q4wj55g" path="res://UI/Inventory/InventoryCore/Background/Wood/inv_background_wood.png" id="1_ey4is"]
+[ext_resource type="Script" uid="uid://33qr4tesqga3" path="res://UI/Inventory/PlayerInventory/SidePanel.gd" id="1_qmhnq"]
+[ext_resource type="Texture2D" uid="uid://dj16xk01w22w1" path="res://UI/Inventory/InventoryCore/Background/Wood/inv_background_thin_no_stripes_wood.png" id="2_16bgc"]
+[ext_resource type="PackedScene" uid="uid://m4ur3n2hwsp8" path="res://UI/Inventory/InventoryCore/Slot/SlotCore/Slot.tscn" id="3_v6v0p"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_6wv7y"]
+line_spacing = -1.0
+font_size = 9
+font_color = Color(0.913725, 0.768627, 0.741176, 1)
+outline_size = 2
+outline_color = Color(0.209, 0.114, 0.047, 0.565)
+shadow_size = 0
+shadow_color = Color(0, 0, 0, 0.3)
+shadow_offset = Vector2(0.3, 0.3)
+
+[node name="AlternateInvPanel" type="CenterContainer" unique_id=1177703373 node_paths=PackedStringArray("title_node", "inv_slot_mgr")]
+offset_right = 126.0
+offset_bottom = 203.0
+script = ExtResource("1_qmhnq")
+title_node = NodePath("AlternateInvSlotMgr/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/AlternateTitleMargin/AlternateInvTitle")
+inv_slot_mgr = NodePath("AlternateInvSlotMgr")
+
+[node name="AlternateInvSlotMgr" type="VBoxContainer" parent="." unique_id=259516527 node_paths=PackedStringArray("main_slot_grid")]
+layout_mode = 2
+mouse_filter = 2
+script = ExtResource("1_bu5kf")
+main_slot_grid = NodePath("AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/MarginContainer/AlternateInvSlotGrid")
+
+[node name="AlternateInvBkgrdMargin" type="MarginContainer" parent="AlternateInvSlotMgr" unique_id=721888513]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 0
+mouse_filter = 0
+theme_override_constants/margin_left = 0
+theme_override_constants/margin_top = 0
+theme_override_constants/margin_right = 0
+theme_override_constants/margin_bottom = 0
+metadata/_edit_use_anchors_ = true
+
+[node name="AlternateInvBackground" type="NinePatchRect" parent="AlternateInvSlotMgr/AlternateInvBkgrdMargin" unique_id=2137376773]
+layout_mode = 2
+texture = ExtResource("1_ey4is")
+patch_margin_left = 5
+patch_margin_top = 5
+patch_margin_right = 5
+patch_margin_bottom = 5
+axis_stretch_vertical = 1
+
+[node name="GridMargins" type="MarginContainer" parent="AlternateInvSlotMgr/AlternateInvBkgrdMargin" unique_id=12171882]
+editor_description = "THIS GRIDMARGIN MOUSE FILTER MUST STAY AS IGNORE TO MAKE SORT BUTTONS WORK!"
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 0
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="GridMarginsBackground" type="NinePatchRect" parent="AlternateInvSlotMgr/AlternateInvBkgrdMargin/GridMargins" unique_id=123200749]
+layout_mode = 2
+texture = ExtResource("2_16bgc")
+patch_margin_left = 4
+patch_margin_top = 4
+patch_margin_right = 4
+patch_margin_bottom = 4
+axis_stretch_vertical = 1
+
+[node name="TitleAndSlotVBox" type="VBoxContainer" parent="AlternateInvSlotMgr/AlternateInvBkgrdMargin/GridMargins" unique_id=1409688520]
+layout_mode = 2
+theme_override_constants/separation = 1
+
+[node name="AlternateTitleMargin" type="MarginContainer" parent="AlternateInvSlotMgr/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox" unique_id=1232764061]
+layout_mode = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 0
+theme_override_constants/margin_bottom = -4
+
+[node name="AlternateInvTitle" type="Label" parent="AlternateInvSlotMgr/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/AlternateTitleMargin" unique_id=1965511694]
+unique_name_in_owner = true
+layout_mode = 2
+text = "CONTAINER"
+label_settings = SubResource("LabelSettings_6wv7y")
+
+[node name="MarginContainer" type="MarginContainer" parent="AlternateInvSlotMgr/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox" unique_id=1009351474]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_constants/margin_left = 3
+theme_override_constants/margin_top = 3
+theme_override_constants/margin_right = 3
+theme_override_constants/margin_bottom = 3
+
+[node name="AlternateInvSlotGrid" type="GridContainer" parent="AlternateInvSlotMgr/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/MarginContainer" unique_id=679509520]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_constants/h_separation = 0
+theme_override_constants/v_separation = 0
+columns = 5
+
+[node name="Slot1" parent="AlternateInvSlotMgr/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/MarginContainer/AlternateInvSlotGrid" unique_id=282372225 instance=ExtResource("3_v6v0p")]
+layout_mode = 2
+
+[node name="Slot2" parent="AlternateInvSlotMgr/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/MarginContainer/AlternateInvSlotGrid" unique_id=654368587 instance=ExtResource("3_v6v0p")]
+layout_mode = 2
+
+[node name="Slot3" parent="AlternateInvSlotMgr/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/MarginContainer/AlternateInvSlotGrid" unique_id=285762329 instance=ExtResource("3_v6v0p")]
+layout_mode = 2
+
+[node name="Slot4" parent="AlternateInvSlotMgr/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/MarginContainer/AlternateInvSlotGrid" unique_id=225242150 instance=ExtResource("3_v6v0p")]
+layout_mode = 2
+
+[node name="Slot5" parent="AlternateInvSlotMgr/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/MarginContainer/AlternateInvSlotGrid" unique_id=710227044 instance=ExtResource("3_v6v0p")]
+layout_mode = 2
+
+[node name="Slot6" parent="AlternateInvSlotMgr/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/MarginContainer/AlternateInvSlotGrid" unique_id=1380602529 instance=ExtResource("3_v6v0p")]
+layout_mode = 2
+
+[node name="Slot7" parent="AlternateInvSlotMgr/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/MarginContainer/AlternateInvSlotGrid" unique_id=649535190 instance=ExtResource("3_v6v0p")]
+layout_mode = 2
+
+[node name="Slot8" parent="AlternateInvSlotMgr/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/MarginContainer/AlternateInvSlotGrid" unique_id=789931684 instance=ExtResource("3_v6v0p")]
+layout_mode = 2
+
+[node name="Slot9" parent="AlternateInvSlotMgr/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/MarginContainer/AlternateInvSlotGrid" unique_id=427001073 instance=ExtResource("3_v6v0p")]
+layout_mode = 2
+
+[node name="Slot10" parent="AlternateInvSlotMgr/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/MarginContainer/AlternateInvSlotGrid" unique_id=273178755 instance=ExtResource("3_v6v0p")]
+layout_mode = 2
+
+[node name="Slot11" parent="AlternateInvSlotMgr/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/MarginContainer/AlternateInvSlotGrid" unique_id=2000588110 instance=ExtResource("3_v6v0p")]
+layout_mode = 2
+
+[node name="Slot12" parent="AlternateInvSlotMgr/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/MarginContainer/AlternateInvSlotGrid" unique_id=130724281 instance=ExtResource("3_v6v0p")]
+layout_mode = 2
+
+[node name="Slot13" parent="AlternateInvSlotMgr/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/MarginContainer/AlternateInvSlotGrid" unique_id=704020825 instance=ExtResource("3_v6v0p")]
+layout_mode = 2
+
+[node name="Slot14" parent="AlternateInvSlotMgr/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/MarginContainer/AlternateInvSlotGrid" unique_id=2113735163 instance=ExtResource("3_v6v0p")]
+layout_mode = 2
+
+[node name="Slot15" parent="AlternateInvSlotMgr/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/MarginContainer/AlternateInvSlotGrid" unique_id=1074561903 instance=ExtResource("3_v6v0p")]
+layout_mode = 2
+
+[node name="Slot16" parent="AlternateInvSlotMgr/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/MarginContainer/AlternateInvSlotGrid" unique_id=1927989952 instance=ExtResource("3_v6v0p")]
+layout_mode = 2
+
+[node name="Slot17" parent="AlternateInvSlotMgr/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/MarginContainer/AlternateInvSlotGrid" unique_id=1938680996 instance=ExtResource("3_v6v0p")]
+layout_mode = 2
+
+[node name="Slot18" parent="AlternateInvSlotMgr/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/MarginContainer/AlternateInvSlotGrid" unique_id=44204614 instance=ExtResource("3_v6v0p")]
+layout_mode = 2
+
+[node name="Slot19" parent="AlternateInvSlotMgr/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/MarginContainer/AlternateInvSlotGrid" unique_id=1171523015 instance=ExtResource("3_v6v0p")]
+layout_mode = 2
+
+[node name="Slot20" parent="AlternateInvSlotMgr/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/MarginContainer/AlternateInvSlotGrid" unique_id=340651194 instance=ExtResource("3_v6v0p")]
+layout_mode = 2
+
+[node name="Slot21" parent="AlternateInvSlotMgr/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/MarginContainer/AlternateInvSlotGrid" unique_id=1577889080 instance=ExtResource("3_v6v0p")]
+layout_mode = 2
+
+[node name="Slot22" parent="AlternateInvSlotMgr/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/MarginContainer/AlternateInvSlotGrid" unique_id=1308816914 instance=ExtResource("3_v6v0p")]
+layout_mode = 2
+
+[node name="Slot23" parent="AlternateInvSlotMgr/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/MarginContainer/AlternateInvSlotGrid" unique_id=781415705 instance=ExtResource("3_v6v0p")]
+layout_mode = 2
+
+[node name="Slot24" parent="AlternateInvSlotMgr/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/MarginContainer/AlternateInvSlotGrid" unique_id=353716356 instance=ExtResource("3_v6v0p")]
+layout_mode = 2
+
+[node name="Slot25" parent="AlternateInvSlotMgr/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/MarginContainer/AlternateInvSlotGrid" unique_id=558622780 instance=ExtResource("3_v6v0p")]
+layout_mode = 2
+
+[node name="Slot26" parent="AlternateInvSlotMgr/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/MarginContainer/AlternateInvSlotGrid" unique_id=358213355 instance=ExtResource("3_v6v0p")]
+layout_mode = 2
+
+[node name="Slot27" parent="AlternateInvSlotMgr/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/MarginContainer/AlternateInvSlotGrid" unique_id=612235402 instance=ExtResource("3_v6v0p")]
+layout_mode = 2
+
+[node name="Slot28" parent="AlternateInvSlotMgr/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/MarginContainer/AlternateInvSlotGrid" unique_id=153051887 instance=ExtResource("3_v6v0p")]
+layout_mode = 2
+
+[node name="Slot29" parent="AlternateInvSlotMgr/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/MarginContainer/AlternateInvSlotGrid" unique_id=611845028 instance=ExtResource("3_v6v0p")]
+layout_mode = 2
+
+[node name="Slot30" parent="AlternateInvSlotMgr/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/MarginContainer/AlternateInvSlotGrid" unique_id=2100923764 instance=ExtResource("3_v6v0p")]
+layout_mode = 2
+
+[node name="Slot31" parent="AlternateInvSlotMgr/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/MarginContainer/AlternateInvSlotGrid" unique_id=1350398650 instance=ExtResource("3_v6v0p")]
+layout_mode = 2
+
+[node name="Slot32" parent="AlternateInvSlotMgr/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/MarginContainer/AlternateInvSlotGrid" unique_id=13300714 instance=ExtResource("3_v6v0p")]
+layout_mode = 2
+
+[node name="Slot33" parent="AlternateInvSlotMgr/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/MarginContainer/AlternateInvSlotGrid" unique_id=1520246825 instance=ExtResource("3_v6v0p")]
+layout_mode = 2
+
+[node name="Slot34" parent="AlternateInvSlotMgr/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/MarginContainer/AlternateInvSlotGrid" unique_id=711598204 instance=ExtResource("3_v6v0p")]
+layout_mode = 2
+
+[node name="Slot35" parent="AlternateInvSlotMgr/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/MarginContainer/AlternateInvSlotGrid" unique_id=100594250 instance=ExtResource("3_v6v0p")]
+layout_mode = 2
+
+[node name="Slot36" parent="AlternateInvSlotMgr/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/MarginContainer/AlternateInvSlotGrid" unique_id=997957328 instance=ExtResource("3_v6v0p")]
+layout_mode = 2
+
+[node name="Slot37" parent="AlternateInvSlotMgr/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/MarginContainer/AlternateInvSlotGrid" unique_id=1479699655 instance=ExtResource("3_v6v0p")]
+layout_mode = 2
+
+[node name="Slot38" parent="AlternateInvSlotMgr/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/MarginContainer/AlternateInvSlotGrid" unique_id=1590721351 instance=ExtResource("3_v6v0p")]
+layout_mode = 2
+
+[node name="Slot39" parent="AlternateInvSlotMgr/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/MarginContainer/AlternateInvSlotGrid" unique_id=198880692 instance=ExtResource("3_v6v0p")]
+layout_mode = 2
+
+[node name="Slot40" parent="AlternateInvSlotMgr/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/MarginContainer/AlternateInvSlotGrid" unique_id=26348187 instance=ExtResource("3_v6v0p")]
+layout_mode = 2

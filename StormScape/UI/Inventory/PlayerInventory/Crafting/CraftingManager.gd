@@ -2,10 +2,6 @@ extends VBoxContainer
 class_name CraftingManager
 ## Manages crafting actions like checking and caching recipes, consuming ingredients, and
 ## granting successful crafts.
-##
-## This also contains all the cached item resources that can be accessed by the item ID.
-
-static var cached_items: Dictionary[StringName, ItemResource] = {} ## All items keyed by their unique item id.
 
 @export var inventory_ui: PlayerInvUI ## The main controller for all inventory sub-UIs.
 
@@ -15,70 +11,19 @@ static var cached_items: Dictionary[StringName, ItemResource] = {} ## All items 
 @onready var craft_btn_v_box: VBoxContainer = %CraftButtonVBox ## The container for the entire craft button.
 @onready var craft_btn: Button = %CraftBtn ## The button to press when attempting a craft.
 
-var item_to_recipes: Dictionary[StringName, Array] = {} ## Maps items to the list of recipes that include them.
-var tag_to_recipes: Dictionary[StringName, Array] = {} ## Maps tags to the list of recipes that include them.
-var tag_to_items: Dictionary[StringName, Array] = {} ## Maps tags to the list of items that have that tag.
 var input_slots: Array[CraftingSlot] = [] ## The slots that are used as inputs to craft.
 var is_crafting: bool = false ## When true, we shouldn't update the output slot since a craft is in progress.
 var item_details_panel: ItemDetailsPanel ## The item viewer panel that shows item details.
 
 
-## Gets and returns an item resource by its id.
-static func get_item_by_id(item_cache_id: StringName, block_error_messages: bool = false) -> ItemResource:
-	var item_resource: ItemResource = CraftingManager.cached_items.get(item_cache_id, null)
-	if item_resource == null and not block_error_messages:
-		push_error("The CraftingManager did not have \"" + item_cache_id + "\" in its cache.")
-	return item_resource
-
 func _ready() -> void:
-	_cache_recipes(Globals.item_dir)
-
 	_on_output_slot_output_changed(false)
 	output_slot.output_changed.connect(_on_output_slot_output_changed)
-	SignalBus.focused_ui_closed.connect(_on_focused_ui_closed)
+	SignalBus.ui_focus_closed.connect(_on_ui_focus_closed)
 
 	_setup_crafting_input_slots()
 	_setup_crafting_output_slot()
 	_setup_item_viewer_signals()
-
-## This caches the items by their recipe ID at the start of the game.
-func _cache_recipes(folder: String) -> void:
-	var dir: DirAccess = DirAccess.open(folder)
-	if dir == null:
-		push_error("CraftingManager couldn't open the folder: " + folder)
-		return
-
-	dir.list_dir_begin()
-	var file_name: String = dir.get_next()
-
-	while file_name != "":
-		if dir.current_is_dir():
-			if file_name != "." and file_name != "..":
-				_cache_recipes(folder + "/" + file_name)
-		elif file_name.ends_with(".tres"):
-			var file_path: String = folder + "/" + file_name
-			var item_resource: ItemResource = load(file_path)
-			item_resource.session_uid = 0 # Trigger the setter to assign an suid
-			CraftingManager.cached_items[item_resource.get_cache_key()] = item_resource
-
-			for tag: StringName in item_resource.tags:
-				if not tag_to_items.has(tag):
-					tag_to_items[tag] = []
-				tag_to_items[tag].append(item_resource)
-
-			for ingredient: CraftingIngredient in item_resource.recipe:
-				if ingredient.type == "Item":
-					var ingredient_recipe_id: StringName = ingredient.item.get_cache_key()
-					if ingredient_recipe_id not in item_to_recipes:
-						item_to_recipes[ingredient_recipe_id] = []
-					item_to_recipes[ingredient_recipe_id].append(item_resource.get_cache_key())
-				elif ingredient.type == "Tags":
-					for tag: StringName in ingredient.tags:
-						if tag not in tag_to_recipes:
-							tag_to_recipes[tag] = []
-						tag_to_recipes[tag].append(item_resource.get_cache_key())
-		file_name = dir.get_next()
-	dir.list_dir_end()
 
 ## Sets up the input slots with their needed data.
 func _setup_crafting_input_slots() -> void:
@@ -97,9 +42,9 @@ func _setup_crafting_output_slot() -> void:
 
 ## Sets up the item viewer node reference and the signals needed to respond to changes.
 func _setup_item_viewer_signals() -> void:
+	if not get_parent().is_node_ready():
+		await get_parent().ready
 	item_details_panel = (get_parent() as PlayerInvUI).item_details_panel
-	if not item_details_panel.is_node_ready():
-		await item_details_panel.ready
 	item_details_panel.item_viewer_slot.item_changed.connect(_on_viewed_item_changed)
 
 ## Shows or hides the main craft button depending on whether a valid output is present.
@@ -211,13 +156,13 @@ func _get_candidate_recipes() -> Array:
 	var candidates: Dictionary[StringName, bool] = {}
 
 	for item_cache_id: StringName in quantities[&"items"].keys():
-		if item_to_recipes.has(item_cache_id):
-			for recipe_id: StringName in item_to_recipes[item_cache_id]:
+		if Items.item_to_recipes.has(item_cache_id):
+			for recipe_id: StringName in Items.item_to_recipes[item_cache_id]:
 				candidates[recipe_id] = true
 
 	for tag: StringName in quantities[&"tags"].keys():
-		if tag_to_recipes.has(tag):
-			for recipe_id: StringName in tag_to_recipes[tag]:
+		if Items.tag_to_recipes.has(tag):
+			for recipe_id: StringName in Items.tag_to_recipes[tag]:
 				candidates[recipe_id] = true
 
 	return candidates.keys()
@@ -236,7 +181,7 @@ func _update_crafting_result() -> void:
 
 	var candidates: Array[StringName] = _get_candidate_recipes()
 	for recipe_cache_id: StringName in candidates:
-		var item_resource: ItemResource = CraftingManager.get_item_by_id(recipe_cache_id)
+		var item_resource: ItemResource = Items.get_item_by_id(recipe_cache_id)
 		if _is_item_craftable(item_resource):
 			output_slot.set_item(InvItemResource.new(item_resource, item_resource.output_quantity).assign_unique_suid())
 			return
@@ -372,7 +317,7 @@ func _get_preview_array(item: InvItemResource) -> Array[Array]:
 		var items_to_preview: Array[Dictionary]
 		if ingredient.type == "Tags":
 			for tag: StringName in ingredient.tags:
-				var items_with_tag: Array = tag_to_items.get(tag, [])
+				var items_with_tag: Array = Items.tag_to_items.get(tag, [])
 				for item_with_tag: ItemResource in items_with_tag:
 					items_to_preview.append({ InvItemResource.new(item_with_tag, ingredient.quantity, true) : 0 })
 		elif ingredient.type == "Item":
@@ -508,7 +453,7 @@ func _populate_previews(item: InvItemResource) -> void:
 
 ## When the focused UI is closed, we should empty out the crafting input slots and drop them on the
 ## ground if the inventory is now full.
-func _on_focused_ui_closed() -> void:
+func _on_ui_focus_closed() -> void:
 	for slot: CraftingSlot in input_slots:
 		if slot.item != null:
 			Globals.player_node.inv.insert_from_inv_item(slot.item, false, false)

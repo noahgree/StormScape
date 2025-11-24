@@ -1,14 +1,15 @@
 @tool
-extends Node2D
+extends StaticEntity
 class_name StormBase
 
 
 @export var level: int = 1
 @export var default_transform: StormTransform
+@export var side_panel: PackedScene
 
-@onready var storm: Storm = Globals.storm
 @onready var interaction_area: InteractionArea = $InteractionArea
 
+var storm: Storm
 var level_progress: int = 0
 var fuel: int = 5: set = _set_fuel
 var max_fuel: int = 100
@@ -20,14 +21,17 @@ func _ready() -> void:
 	if Engine.is_editor_hint():
 		default_transform.new_location = global_position
 	else:
+		storm = Globals.storm
 		if global_position != default_transform.new_location:
 			push_error("The default transform of the storm base has not automatically updated to the correct position of the storm base.")
 
 		interaction_area.set_accept_callable(add_fuel)
+	super()
 
 ## Adds fuel to the available amount.
 func add_fuel() -> void:
 	fuel += 10
+	SignalBus.side_panel_open_request.emit(side_panel, self)
 
 
 func _set_fuel(new_fuel: int) -> void:

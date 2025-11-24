@@ -308,7 +308,7 @@ func get_more_ammo(max_amount_needed: int, take_from_inventory: bool,
 #region Debug
 ## Grants an amount of an item given the item's cache ID.
 func grant_from_item_id(item_cache_id: StringName, count: int = 1) -> void:
-	var item_resource: ItemResource = CraftingManager.get_item_by_id(item_cache_id, true)
+	var item_resource: ItemResource = Items.get_item_by_id(item_cache_id, true)
 	if item_resource == null:
 		printerr("The request to grant the item \"" + item_cache_id + "\" failed because it does not exist.")
 		return

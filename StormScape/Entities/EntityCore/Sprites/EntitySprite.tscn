@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://dh4ydl7l86ywq"]
+[gd_scene load_steps=9 format=3 uid="uid://dh4ydl7l86ywq"]
 
 [ext_resource type="Shader" uid="uid://cfbagv3hrtar2" path="res://Utilities/Game/Shaders/EntityEffectShader.gdshader" id="1_xxxwy"]
 [ext_resource type="Script" uid="uid://ripiioihhkbc" path="res://Entities/EntityCore/Sprites/EntitySprite.gd" id="2_yqofs"]
@@ -6,6 +6,8 @@
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_yb3gb"]
 shader = ExtResource("1_xxxwy")
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_m5i5k"]
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_h3vni"]
 light_mode = 1
@@ -19,13 +21,14 @@ colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 0.343)
 resource_local_to_scene = true
 gradient = SubResource("Gradient_tflsg")
 
-[node name="EntitySprite" type="AnimatedSprite2D"]
+[node name="EntitySprite" type="AnimatedSprite2D" unique_id=607345551]
 clip_children = 2
 light_mask = 2
 material = SubResource("ShaderMaterial_yb3gb")
+sprite_frames = SubResource("SpriteFrames_m5i5k")
 script = ExtResource("2_yqofs")
 
-[node name="Overlay" type="TextureRect" parent="."]
+[node name="Overlay" type="TextureRect" parent="." unique_id=915583870]
 modulate = Color(1, 1, 1, 0.5)
 self_modulate = Color(1, 1, 1, 0)
 light_mask = 2
@@ -39,7 +42,7 @@ rotation = -1.5708
 texture = SubResource("GradientTexture1D_avd8k")
 expand_mode = 1
 
-[node name="FloorLight" type="PointLight2D" parent="."]
+[node name="FloorLight" type="PointLight2D" parent="." unique_id=2002353093]
 light_mask = 0
 energy = 1.65
 range_item_cull_mask = 3

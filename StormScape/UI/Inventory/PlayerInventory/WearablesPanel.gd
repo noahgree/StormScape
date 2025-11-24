@@ -26,7 +26,7 @@ func _on_load_game() -> void:
 #endregion
 
 func _ready() -> void:
-	SignalBus.focused_ui_opened.connect(_on_focused_ui_opened)
+	SignalBus.ui_focus_opened.connect(_on_ui_focus_opened)
 
 	_setup_slots()
 
@@ -56,7 +56,7 @@ func _on_wearable_slot_changed(slot: WearableSlot, old_item: InvItemResource, ne
 
 ## When the focused ui is opened, make sure the wearables in the slots are up to date with the array
 ## in the entity's data.
-func _on_focused_ui_opened() -> void:
+func _on_ui_focus_opened() -> void:
 	_verify_latest_wearables()
 
 ## Verifies up to date wearables with the entity data.

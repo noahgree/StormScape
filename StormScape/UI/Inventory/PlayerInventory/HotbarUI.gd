@@ -19,8 +19,8 @@ func _ready() -> void:
 		await SignalBus.player_ready
 	player_inv = Globals.player_node.inv
 
-	SignalBus.focused_ui_opened.connect(func() -> void: visible = not Globals.player_inv_is_open)
-	SignalBus.focused_ui_closed.connect(func() -> void: visible = not Globals.player_inv_is_open)
+	SignalBus.ui_focus_opened.connect(func() -> void: visible = not Globals.ui_focus_open)
+	SignalBus.ui_focus_closed.connect(func() -> void: visible = not Globals.ui_focus_open)
 
 	_setup_slots()
 
@@ -76,7 +76,7 @@ func update_hotbar_tint_progresses() -> void:
 
 ## Handles input mainly relating to changing the active slot.
 func _unhandled_input(event: InputEvent) -> void:
-	if Globals.focused_ui_is_open:
+	if Globals.ui_focus_open:
 		return
 
 	if DebugFlags.use_scroll_debounce and not scroll_debounce_timer.is_stopped():

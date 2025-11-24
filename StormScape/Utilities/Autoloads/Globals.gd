@@ -9,10 +9,9 @@ var status_effects_dir: String = "res://Entities/Stats/EffectSystemResources/Sta
 
 var player_node: Player = null ## The reference to the player's node.
 var player_camera: PlayerCamera = null ## The reference to the player's main camera.
-var focused_ui_is_open: bool = false ## When true, the main UI that pauses the game is open.
-var player_inv_is_open: bool = false ## When true, the player's inventory is opened.
-var focused_ui_is_closing_debounce: bool = false ## When true, the focused ui is still just barely closing.
-var focused_ui_close_debounce_timer: Timer = TimerHelpers.create_one_shot_timer(self, 0.05, func() -> void: Globals.focused_ui_is_closing_debounce = false) ## Debounces turning off the flag so that any inputs like inventory clicks can finish first.
+var ui_focus_open: bool = false ## When true, a UI that pauses the game is open.
+var ui_focus_is_closing_debounce: bool = false ## When true, the focused ui is still just barely closing.
+var ui_focus_close_debounce_timer: Timer = TimerHelpers.create_one_shot_timer(self, 0.05, func() -> void: Globals.ui_focus_is_closing_debounce = false) ## Debounces turning off the flag so that any inputs like inventory clicks can finish first.
 
 
 func _ready() -> void:
@@ -21,14 +20,14 @@ func _ready() -> void:
 
 func change_focused_ui_state(open: bool) -> void:
 	get_tree().paused = open
-	focused_ui_is_open = open
-	focused_ui_is_closing_debounce = open
+	ui_focus_open = open
+	ui_focus_is_closing_debounce = open
 	if open:
-		focused_ui_close_debounce_timer.stop()
-		SignalBus.focused_ui_opened.emit()
+		ui_focus_close_debounce_timer.stop()
+		SignalBus.ui_focus_opened.emit()
 	else:
-		focused_ui_close_debounce_timer.start()
-		SignalBus.focused_ui_closed.emit()
+		ui_focus_close_debounce_timer.start()
+		SignalBus.ui_focus_closed.emit()
 
 # Player Inv Resource
 const HOTBAR_SIZE: int = 5

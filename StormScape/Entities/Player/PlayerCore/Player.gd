@@ -18,14 +18,14 @@ func _ready() -> void:
 	SignalBus.player_ready.emit(self)
 
 	interaction_handler.prompt_ui = interaction_prompt
-	SignalBus.focused_ui_closed.connect(interaction_handler.recheck_queue)
+	SignalBus.ui_focus_closed.connect(interaction_handler.recheck_queue)
 
 	_add_player_debug_commands()
 
 	collision_layer = 0b1
 
 func _unhandled_key_input(_event: InputEvent) -> void:
-	if Input.is_action_just_pressed("interact") and not Globals.focused_ui_is_open:
+	if Input.is_action_just_pressed("interact") and not Globals.ui_focus_open:
 		interaction_handler.accept_interaction()
 
 #region Debug

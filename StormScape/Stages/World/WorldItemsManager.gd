@@ -95,7 +95,7 @@ func _combine_items(item_1: Item, item_2: Item) -> void:
 
 #region Debug
 func spawn_on_ground_by_id(item_cache_id: StringName, count: int = 1) -> void:
-	var item: ItemResource = CraftingManager.get_item_by_id(item_cache_id, true)
+	var item: ItemResource = Items.get_item_by_id(item_cache_id, true)
 	if item == null:
 		printerr("The requested item \"" + item_cache_id + "\" does not exist.")
 		return

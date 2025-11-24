@@ -1,0 +1,321 @@
+[gd_scene load_steps=13 format=3 uid="uid://dnpwx3cn0i24s"]
+
+[ext_resource type="Script" uid="uid://33qr4tesqga3" path="res://UI/Inventory/PlayerInventory/SidePanel.gd" id="1_5t1bm"]
+[ext_resource type="Script" uid="uid://dt68k0tnwjvdl" path="res://UI/Inventory/InventoryCore/InvSlotManager.gd" id="2_6xvar"]
+[ext_resource type="Texture2D" uid="uid://lqg70q4wj55g" path="res://UI/Inventory/InventoryCore/Background/Wood/inv_background_wood.png" id="3_eaggr"]
+[ext_resource type="Texture2D" uid="uid://dj16xk01w22w1" path="res://UI/Inventory/InventoryCore/Background/Wood/inv_background_thin_no_stripes_wood.png" id="4_av3h4"]
+[ext_resource type="PackedScene" uid="uid://m4ur3n2hwsp8" path="res://UI/Inventory/InventoryCore/Slot/SlotCore/Slot.tscn" id="5_mjv4o"]
+[ext_resource type="FontFile" uid="uid://bp2lgrlhj8cet" path="res://Assets/Theming/Fonts/Pixel/C&C Red Alert [INET].ttf" id="6_1nfa8"]
+[ext_resource type="Texture2D" uid="uid://cpgqebvnv0d0b" path="res://UI/Inventory/InventoryCore/Slot/Wood/normal_slot_wood_no_stripes.png" id="7_jjxgf"]
+[ext_resource type="Script" uid="uid://cy756xiw3ikj7" path="res://UI/Inventory/InventoryCore/Slot/SlotCore/ModSlot.gd" id="8_i0svs"]
+[ext_resource type="Texture2D" uid="uid://bhwg6ynp1bscr" path="res://UI/Inventory/InventoryCore/Slot/Universal/mod_slot_icon.png" id="9_7u3po"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_xl3yw"]
+line_spacing = -1.0
+font_size = 6
+font_color = Color(0.913725, 0.768627, 0.741176, 1)
+outline_size = 2
+outline_color = Color(0.122, 0.035, 0, 0.4)
+shadow_size = 0
+
+[sub_resource type="FontVariation" id="FontVariation_b6g2i"]
+base_font = ExtResource("6_1nfa8")
+spacing_bottom = -1
+
+[sub_resource type="LabelSettings" id="LabelSettings_rlbd1"]
+line_spacing = -1.0
+font_size = 9
+font_color = Color(0.913725, 0.768627, 0.741176, 1)
+outline_size = 2
+outline_color = Color(0.209, 0.114, 0.047, 0.565)
+shadow_size = 0
+shadow_color = Color(0, 0, 0, 0.3)
+shadow_offset = Vector2(0.3, 0.3)
+
+[node name="StormBaseSidePanel" type="CenterContainer" unique_id=568115471 node_paths=PackedStringArray("title_node", "inv_slot_mgr")]
+offset_right = 40.0
+offset_bottom = 40.0
+size_flags_horizontal = 3
+script = ExtResource("1_5t1bm")
+title_node = NodePath("BackgroundMargin/InnerMargin/MainVBox/FuelSlotMgr/GridMargins/TitleAndSlotVBox/TitleMargin/StormBasePanelTitle")
+inv_slot_mgr = NodePath("BackgroundMargin/InnerMargin/MainVBox/FuelSlotMgr")
+
+[node name="BackgroundMargin" type="MarginContainer" parent="." unique_id=1913174567]
+layout_mode = 2
+
+[node name="InventoryTexture" type="NinePatchRect" parent="BackgroundMargin" unique_id=773263026]
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 0
+texture = ExtResource("3_eaggr")
+patch_margin_left = 5
+patch_margin_top = 5
+patch_margin_right = 5
+patch_margin_bottom = 5
+axis_stretch_vertical = 1
+
+[node name="InnerMargin" type="MarginContainer" parent="BackgroundMargin" unique_id=1551678228]
+editor_description = "THIS GRIDMARGIN MOUSE FILTER MUST STAY AS IGNORE TO MAKE SORT BUTTONS WORK!"
+layout_mode = 2
+size_flags_vertical = 0
+mouse_filter = 2
+theme_override_constants/margin_left = 9
+theme_override_constants/margin_top = 9
+theme_override_constants/margin_right = 9
+theme_override_constants/margin_bottom = 5
+
+[node name="MainVBox" type="VBoxContainer" parent="BackgroundMargin/InnerMargin" unique_id=1183252061]
+layout_mode = 2
+mouse_filter = 0
+theme_override_constants/separation = 4
+
+[node name="ElementsMargin" type="MarginContainer" parent="BackgroundMargin/InnerMargin/MainVBox" unique_id=430381758]
+layout_mode = 2
+
+[node name="ElementsBkrgdMargin" type="MarginContainer" parent="BackgroundMargin/InnerMargin/MainVBox/ElementsMargin" unique_id=664210181]
+layout_mode = 2
+theme_override_constants/margin_left = -4
+theme_override_constants/margin_top = -4
+theme_override_constants/margin_right = -4
+theme_override_constants/margin_bottom = -4
+
+[node name="ElementsBackground" type="NinePatchRect" parent="BackgroundMargin/InnerMargin/MainVBox/ElementsMargin/ElementsBkrgdMargin" unique_id=762559776]
+layout_mode = 2
+texture = ExtResource("4_av3h4")
+patch_margin_left = 4
+patch_margin_top = 4
+patch_margin_right = 4
+patch_margin_bottom = 4
+axis_stretch_vertical = 1
+
+[node name="ElementsVBox" type="VBoxContainer" parent="BackgroundMargin/InnerMargin/MainVBox/ElementsMargin" unique_id=338885097]
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="TitleMargin" type="MarginContainer" parent="BackgroundMargin/InnerMargin/MainVBox/ElementsMargin/ElementsVBox" unique_id=1441958291]
+layout_mode = 2
+theme_override_constants/margin_bottom = -1
+
+[node name="TitleLabel" type="RichTextLabel" parent="BackgroundMargin/InnerMargin/MainVBox/ElementsMargin/ElementsVBox/TitleMargin" unique_id=1039754954]
+layout_mode = 2
+theme_override_colors/default_color = Color(1.519925, 0.6162611, 2.3520112, 1)
+theme_override_colors/font_outline_color = Color(0.122, 0.035, 0, 0.67)
+theme_override_constants/outline_size = 2
+theme_override_fonts/normal_font = ExtResource("6_1nfa8")
+theme_override_font_sizes/normal_font_size = 9
+bbcode_enabled = true
+text = "[pulse freq=0.75 color=#e7bafd ease=-1.0]STORM BASE[/pulse]"
+fit_content = true
+scroll_active = false
+tab_size = 0
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="LevelMargin" type="MarginContainer" parent="BackgroundMargin/InnerMargin/MainVBox/ElementsMargin/ElementsVBox" unique_id=420351804]
+layout_mode = 2
+theme_override_constants/margin_top = -3
+theme_override_constants/margin_bottom = 0
+
+[node name="LevelLabel" type="RichTextLabel" parent="BackgroundMargin/InnerMargin/MainVBox/ElementsMargin/ElementsVBox/LevelMargin" unique_id=754578022]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/default_color = Color(0.913725, 0.768627, 0.741176, 1)
+theme_override_colors/font_outline_color = Color(0.122, 0.035, 0, 0.67)
+theme_override_constants/outline_size = 2
+theme_override_fonts/normal_font = ExtResource("6_1nfa8")
+theme_override_font_sizes/normal_font_size = 5
+bbcode_enabled = true
+text = "Level 1"
+fit_content = true
+scroll_active = false
+tab_size = 0
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="InfoMargin" type="MarginContainer" parent="BackgroundMargin/InnerMargin/MainVBox/ElementsMargin/ElementsVBox" unique_id=20634937]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/margin_top = -1
+
+[node name="InfoBackground" type="NinePatchRect" parent="BackgroundMargin/InnerMargin/MainVBox/ElementsMargin/ElementsVBox/InfoMargin" unique_id=31654629]
+layout_mode = 2
+texture = ExtResource("7_jjxgf")
+patch_margin_left = 1
+patch_margin_top = 1
+patch_margin_right = 1
+patch_margin_bottom = 1
+axis_stretch_vertical = 2
+
+[node name="InfoLabelMargin" type="MarginContainer" parent="BackgroundMargin/InnerMargin/MainVBox/ElementsMargin/ElementsVBox/InfoMargin" unique_id=1572154209]
+layout_mode = 2
+theme_override_constants/margin_left = 3
+theme_override_constants/margin_top = 2
+theme_override_constants/margin_right = 3
+theme_override_constants/margin_bottom = 2
+
+[node name="InfoLabel" type="Label" parent="BackgroundMargin/InnerMargin/MainVBox/ElementsMargin/ElementsVBox/InfoMargin/InfoLabelMargin" unique_id=1575176379]
+custom_minimum_size = Vector2(82, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 3
+theme_override_fonts/font = ExtResource("6_1nfa8")
+text = "Info will go here. "
+label_settings = SubResource("LabelSettings_xl3yw")
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+max_lines_visible = 4
+
+[node name="DetailsMargin" type="MarginContainer" parent="BackgroundMargin/InnerMargin/MainVBox/ElementsMargin/ElementsVBox" unique_id=1134374781]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="DetailsBackground" type="NinePatchRect" parent="BackgroundMargin/InnerMargin/MainVBox/ElementsMargin/ElementsVBox/DetailsMargin" unique_id=805991716]
+layout_mode = 2
+texture = ExtResource("7_jjxgf")
+patch_margin_left = 1
+patch_margin_top = 1
+patch_margin_right = 1
+patch_margin_bottom = 1
+axis_stretch_vertical = 2
+
+[node name="DetailsLabelMargin" type="MarginContainer" parent="BackgroundMargin/InnerMargin/MainVBox/ElementsMargin/ElementsVBox/DetailsMargin" unique_id=1728379619]
+layout_mode = 2
+theme_override_constants/margin_left = 3
+theme_override_constants/margin_top = 1
+theme_override_constants/margin_right = 3
+theme_override_constants/margin_bottom = 2
+
+[node name="DetailsLabel" type="RichTextLabel" parent="BackgroundMargin/InnerMargin/MainVBox/ElementsMargin/ElementsVBox/DetailsMargin/DetailsLabelMargin" unique_id=2102336710]
+clip_contents = false
+custom_minimum_size = Vector2(82, 8)
+layout_mode = 2
+theme_override_colors/default_color = Color(0.913725, 0.768627, 0.741176, 1)
+theme_override_colors/font_outline_color = Color(0.121569, 0.0352941, 0, 0.65098)
+theme_override_constants/line_separation = 0
+theme_override_constants/shadow_outline_size = 0
+theme_override_constants/shadow_offset_x = 0
+theme_override_constants/shadow_offset_y = 0
+theme_override_constants/outline_size = 2
+theme_override_constants/text_highlight_h_padding = 0
+theme_override_constants/text_highlight_v_padding = 0
+theme_override_constants/table_h_separation = 0
+theme_override_constants/table_v_separation = 0
+theme_override_fonts/normal_font = SubResource("FontVariation_b6g2i")
+theme_override_font_sizes/normal_font_size = 6
+bbcode_enabled = true
+text = "DETAIL ITEMS GO HERE:  Example"
+fit_content = true
+scroll_active = false
+tab_size = 0
+vertical_alignment = 1
+visible_characters_behavior = 2
+
+[node name="ModSlotsMargin" type="MarginContainer" parent="BackgroundMargin/InnerMargin/MainVBox/ElementsMargin/ElementsVBox" unique_id=2022143295]
+layout_mode = 2
+
+[node name="ModSlotsCenter" type="CenterContainer" parent="BackgroundMargin/InnerMargin/MainVBox/ElementsMargin/ElementsVBox/ModSlotsMargin" unique_id=700410965]
+layout_mode = 2
+
+[node name="ModSlots" type="GridContainer" parent="BackgroundMargin/InnerMargin/MainVBox/ElementsMargin/ElementsVBox/ModSlotsMargin/ModSlotsCenter" unique_id=310587715]
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_constants/h_separation = 0
+theme_override_constants/v_separation = 0
+columns = 4
+
+[node name="Slot1" parent="BackgroundMargin/InnerMargin/MainVBox/ElementsMargin/ElementsVBox/ModSlotsMargin/ModSlotsCenter/ModSlots" unique_id=775807593 instance=ExtResource("5_mjv4o")]
+layout_mode = 2
+script = ExtResource("8_i0svs")
+backing_texture = ExtResource("9_7u3po")
+
+[node name="Slot2" parent="BackgroundMargin/InnerMargin/MainVBox/ElementsMargin/ElementsVBox/ModSlotsMargin/ModSlotsCenter/ModSlots" unique_id=921264406 instance=ExtResource("5_mjv4o")]
+layout_mode = 2
+script = ExtResource("8_i0svs")
+backing_texture = ExtResource("9_7u3po")
+
+[node name="Slot3" parent="BackgroundMargin/InnerMargin/MainVBox/ElementsMargin/ElementsVBox/ModSlotsMargin/ModSlotsCenter/ModSlots" unique_id=637117517 instance=ExtResource("5_mjv4o")]
+layout_mode = 2
+script = ExtResource("8_i0svs")
+backing_texture = ExtResource("9_7u3po")
+
+[node name="Slot4" parent="BackgroundMargin/InnerMargin/MainVBox/ElementsMargin/ElementsVBox/ModSlotsMargin/ModSlotsCenter/ModSlots" unique_id=1795234212 instance=ExtResource("5_mjv4o")]
+layout_mode = 2
+script = ExtResource("8_i0svs")
+backing_texture = ExtResource("9_7u3po")
+
+[node name="Slot5" parent="BackgroundMargin/InnerMargin/MainVBox/ElementsMargin/ElementsVBox/ModSlotsMargin/ModSlotsCenter/ModSlots" unique_id=907227605 instance=ExtResource("5_mjv4o")]
+layout_mode = 2
+script = ExtResource("8_i0svs")
+backing_texture = ExtResource("9_7u3po")
+
+[node name="Slot6" parent="BackgroundMargin/InnerMargin/MainVBox/ElementsMargin/ElementsVBox/ModSlotsMargin/ModSlotsCenter/ModSlots" unique_id=611071426 instance=ExtResource("5_mjv4o")]
+layout_mode = 2
+script = ExtResource("8_i0svs")
+backing_texture = ExtResource("9_7u3po")
+
+[node name="FuelSlotMgr" type="VBoxContainer" parent="BackgroundMargin/InnerMargin/MainVBox" unique_id=865511966 node_paths=PackedStringArray("main_slot_grid")]
+layout_mode = 2
+mouse_filter = 2
+script = ExtResource("2_6xvar")
+main_slot_grid = NodePath("GridMargins/TitleAndSlotVBox/MarginContainer/FuelSlotGrid")
+
+[node name="GridMargins" type="MarginContainer" parent="BackgroundMargin/InnerMargin/MainVBox/FuelSlotMgr" unique_id=1113446177]
+editor_description = "THIS GRIDMARGIN MOUSE FILTER MUST STAY AS IGNORE TO MAKE SORT BUTTONS WORK!"
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 0
+
+[node name="GridMarginsBackground" type="NinePatchRect" parent="BackgroundMargin/InnerMargin/MainVBox/FuelSlotMgr/GridMargins" unique_id=787628074]
+layout_mode = 2
+texture = ExtResource("4_av3h4")
+patch_margin_left = 4
+patch_margin_top = 4
+patch_margin_right = 4
+patch_margin_bottom = 4
+axis_stretch_vertical = 1
+
+[node name="TitleAndSlotVBox" type="VBoxContainer" parent="BackgroundMargin/InnerMargin/MainVBox/FuelSlotMgr/GridMargins" unique_id=367357243]
+layout_mode = 2
+theme_override_constants/separation = 1
+
+[node name="TitleMargin" type="MarginContainer" parent="BackgroundMargin/InnerMargin/MainVBox/FuelSlotMgr/GridMargins/TitleAndSlotVBox" unique_id=2021163108]
+layout_mode = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 0
+theme_override_constants/margin_bottom = -4
+
+[node name="StormBasePanelTitle" type="Label" parent="BackgroundMargin/InnerMargin/MainVBox/FuelSlotMgr/GridMargins/TitleAndSlotVBox/TitleMargin" unique_id=1797334196]
+layout_mode = 2
+text = "FUEL"
+label_settings = SubResource("LabelSettings_rlbd1")
+
+[node name="MarginContainer" type="MarginContainer" parent="BackgroundMargin/InnerMargin/MainVBox/FuelSlotMgr/GridMargins/TitleAndSlotVBox" unique_id=1704788412]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_constants/margin_left = 3
+theme_override_constants/margin_top = 3
+theme_override_constants/margin_right = 3
+theme_override_constants/margin_bottom = 3
+
+[node name="FuelSlotGrid" type="GridContainer" parent="BackgroundMargin/InnerMargin/MainVBox/FuelSlotMgr/GridMargins/TitleAndSlotVBox/MarginContainer" unique_id=1189984650]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_constants/h_separation = 0
+theme_override_constants/v_separation = 0
+columns = 5
+
+[node name="Slot1" parent="BackgroundMargin/InnerMargin/MainVBox/FuelSlotMgr/GridMargins/TitleAndSlotVBox/MarginContainer/FuelSlotGrid" unique_id=891321605 instance=ExtResource("5_mjv4o")]
+layout_mode = 2
+
+[node name="Slot2" parent="BackgroundMargin/InnerMargin/MainVBox/FuelSlotMgr/GridMargins/TitleAndSlotVBox/MarginContainer/FuelSlotGrid" unique_id=2023004314 instance=ExtResource("5_mjv4o")]
+layout_mode = 2
+
+[node name="Slot3" parent="BackgroundMargin/InnerMargin/MainVBox/FuelSlotMgr/GridMargins/TitleAndSlotVBox/MarginContainer/FuelSlotGrid" unique_id=1260068364 instance=ExtResource("5_mjv4o")]
+layout_mode = 2
+
+[node name="Slot4" parent="BackgroundMargin/InnerMargin/MainVBox/FuelSlotMgr/GridMargins/TitleAndSlotVBox/MarginContainer/FuelSlotGrid" unique_id=1034288397 instance=ExtResource("5_mjv4o")]
+layout_mode = 2

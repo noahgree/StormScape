@@ -34,7 +34,7 @@ func _draw() -> void:
 func update_facing_dir(method: Method) -> void:
 	if DebugFlags.show_facing_dir:
 		queue_redraw()
-	if Globals.focused_ui_is_open:
+	if Globals.ui_focus_open:
 		return
 
 	var entity_pos_with_sprite_offset: Vector2 = (entity.sprite.position / 2.0) + entity.global_position

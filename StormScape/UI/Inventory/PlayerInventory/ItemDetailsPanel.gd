@@ -7,8 +7,6 @@ class_name ItemDetailsPanel
 
 @export_group("Connections")
 @export var inventory_ui: PlayerInvUI ## The main controller for all inventory sub-UIs.
-@export_group("Textures")
-@export var stamina_ammo_icon: Texture2D ## The icon used for stamina when displaying ammo type of viewed weapon.
 
 @onready var item_viewer_slot: Slot = %ItemViewerSlot ## The slot that holds the item under review.
 @onready var mod_slots_container: GridContainer = %ModSlots ## The container whose children are mod slots.
@@ -34,7 +32,7 @@ var is_still_setting_up: bool = true ## When true, don't try and populate the st
 
 
 func _ready() -> void:
-	SignalBus.focused_ui_closed.connect(_on_focused_ui_closed)
+	SignalBus.ui_focus_closed.connect(_on_ui_focus_closed)
 	SignalBus.slot_hovered.connect(_on_slot_hovered)
 	SignalBus.slot_not_hovered.connect(_on_slot_not_hovered)
 
@@ -116,7 +114,7 @@ func _on_slot_not_hovered() -> void:
 
 ## When the focused UI is closed, we should empty out the crafting input slots and drop them on the
 ## ground if the inventory is now full.
-func _on_focused_ui_closed() -> void:
+func _on_ui_focus_closed() -> void:
 	if item_viewer_slot.item != null:
 		Globals.player_node.inv.insert_from_inv_item(item_viewer_slot.item, false, true)
 		item_viewer_slot.set_item(null)

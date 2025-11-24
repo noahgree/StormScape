@@ -26,7 +26,7 @@ func _process(delta: float) -> void:
 	if Globals.player_node.hands.equipped_item:
 		max_promity = max(max_promity, abs(local_hands_pos.x))
 
-	if (to_mouse_vector.length() < max_promity) and not Globals.focused_ui_is_open:
+	if (to_mouse_vector.length() < max_promity) and not Globals.ui_focus_open:
 		var target_angle: float = to_mouse_vector.angle()
 		var new_angle: float = lerp_angle(previous_angle, target_angle, 0.15)
 

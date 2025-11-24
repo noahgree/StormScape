@@ -10,7 +10,7 @@ class_name InteractionPrompt
 
 func _ready() -> void:
 	hide()
-	SignalBus.focused_ui_opened.connect(hide)
+	SignalBus.ui_focus_opened.connect(hide)
 
 ## Updates the prompt text labels and changes visibilities & margins accordingly.
 func _update_text(interaction_offer: InteractionOffer) -> void:
