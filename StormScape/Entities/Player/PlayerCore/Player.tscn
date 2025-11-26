@@ -1,7 +1,7 @@
 [gd_scene load_steps=243 format=3 uid="uid://dba8mrurjlekp"]
 
 [ext_resource type="Script" uid="uid://c3rpxq8pnbdje" path="res://Entities/Player/PlayerCore/Player.gd" id="1_m33tt"]
-[ext_resource type="Script" uid="uid://dwmur0cosbbwh" path="res://Entities/Player/UI/Inventory/InventoryCore/InventoryResource.gd" id="2_l1kq4"]
+[ext_resource type="Script" uid="uid://bdd0xujg1bgm0" path="res://Entities/Player/UI/Inventory/InventoryCore/PlayerInvResource.gd" id="2_8hbs2"]
 [ext_resource type="PackedScene" uid="uid://cj2wy5f05cos4" path="res://Entities/EntityCore/Shadow/EntityShadow.tscn" id="3_05f62"]
 [ext_resource type="PackedScene" uid="uid://cdfdy8m6ki3oq" path="res://Entities/Components/HealthComponent/HealthComponent.tscn" id="3_ojev3"]
 [ext_resource type="PackedScene" uid="uid://dh4ydl7l86ywq" path="res://Entities/EntityCore/Sprites/EntitySprite.tscn" id="4_fmbcv"]
@@ -321,11 +321,12 @@ stats = ExtResource("15_hxjay")
 quantity = 5
 metadata/_custom_type_script = "uid://dp8osf7r6xkkt"
 
-[sub_resource type="Resource" id="Resource_5npt6"]
-script = ExtResource("2_l1kq4")
-main_inv_size = 32
+[sub_resource type="Resource" id="Resource_bjgul"]
+script = ExtResource("2_8hbs2")
+title = ""
+drop_on_death = true
 starting_inv = Array[ExtResource("32_ixmb3")]([SubResource("Resource_82yts"), null, SubResource("Resource_0t1mv"), SubResource("Resource_h1ges"), SubResource("Resource_4awmn"), SubResource("Resource_25xrm"), SubResource("Resource_mc6is"), SubResource("Resource_w0i1c"), SubResource("Resource_fcswf"), SubResource("Resource_ve7vt"), SubResource("Resource_hdwgy"), SubResource("Resource_ou5t4"), SubResource("Resource_ar238"), SubResource("Resource_xjdir"), SubResource("Resource_bmpdm"), SubResource("Resource_eufsu"), SubResource("Resource_8hbs2"), SubResource("Resource_f5l7i"), SubResource("Resource_co77f"), SubResource("Resource_a5af3"), null, SubResource("Resource_gdihr"), SubResource("Resource_g5u5n"), SubResource("Resource_r7bkl"), SubResource("Resource_thmqm"), SubResource("Resource_r5dvw"), SubResource("Resource_bvo3j"), SubResource("Resource_gb65f"), SubResource("Resource_5qckj"), SubResource("Resource_1go7j"), SubResource("Resource_32jvf"), SubResource("Resource_jgqai"), SubResource("Resource_xsics"), SubResource("Resource_inle7"), SubResource("Resource_da65a"), SubResource("Resource_6f5us"), SubResource("Resource_s4yud")])
-metadata/_custom_type_script = "uid://dwmur0cosbbwh"
+metadata/_custom_type_script = "uid://bdd0xujg1bgm0"
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_3f130"]
 radius = 2.0
@@ -348,47 +349,47 @@ colors = PackedColorArray(1, 0.907, 0.834, 0.5, 1, 0.752, 0.46, 0.4, 1, 1, 1, 0)
 _data = [Vector2(0, 0), 0.0, 1.0, 0, 1, Vector2(1, 1), 1.0, 0.0, 1, 0]
 point_count = 2
 
-[sub_resource type="Resource" id="Resource_bjgul"]
+[sub_resource type="Resource" id="Resource_ivc81"]
 resource_local_to_scene = true
 script = ExtResource("52_f5l7i")
 metadata/_custom_type_script = "uid://bv40a7n5sorxe"
 
-[sub_resource type="Resource" id="Resource_223lv"]
+[sub_resource type="Resource" id="Resource_omhig"]
 resource_local_to_scene = true
 script = ExtResource("53_co77f")
 metadata/_custom_type_script = "uid://dk6uef3uxmeev"
 
-[sub_resource type="Resource" id="Resource_14mu6"]
+[sub_resource type="Resource" id="Resource_2v4q2"]
 resource_local_to_scene = true
 script = ExtResource("54_bmpdm")
 metadata/_custom_type_script = "uid://b21sy1r0nxgpv"
 
-[sub_resource type="Resource" id="Resource_botqa"]
+[sub_resource type="Resource" id="Resource_invht"]
 resource_local_to_scene = true
 script = ExtResource("55_8hbs2")
 metadata/_custom_type_script = "uid://5krnqdrdbey1"
 
-[sub_resource type="Resource" id="Resource_b6nlp"]
+[sub_resource type="Resource" id="Resource_gevai"]
 resource_local_to_scene = true
 script = ExtResource("52_eufsu")
 metadata/_custom_type_script = "uid://bqw1ufs6jb7cf"
 
-[sub_resource type="Resource" id="Resource_erwji"]
+[sub_resource type="Resource" id="Resource_oe7wn"]
 resource_local_to_scene = true
 script = ExtResource("57_h1ges")
 metadata/_custom_type_script = "uid://b1lo2mdb3otax"
 
-[sub_resource type="Resource" id="Resource_r17bj"]
+[sub_resource type="Resource" id="Resource_qvtc6"]
 resource_local_to_scene = true
 script = ExtResource("58_32jvf")
 metadata/_custom_type_script = "uid://dubq8xgav66ue"
 
-[sub_resource type="Resource" id="Resource_1i2dj"]
+[sub_resource type="Resource" id="Resource_14ixx"]
 resource_local_to_scene = true
 script = ExtResource("59_82yts")
 metadata/_custom_type_script = "uid://5w234psf0oln"
 
-[sub_resource type="Resource" id="Resource_1lcq3"]
+[sub_resource type="Resource" id="Resource_lo25j"]
 resource_local_to_scene = true
 script = ExtResource("60_uu4sw")
 metadata/_custom_type_script = "uid://ckiyd2nbdcofr"
@@ -1375,7 +1376,7 @@ collision_layer = 0
 collision_mask = 0
 motion_mode = 1
 script = ExtResource("1_m33tt")
-inv = SubResource("Resource_5npt6")
+inv = SubResource("Resource_bjgul")
 
 [node name="Collision" type="CollisionShape2D" parent="." unique_id=384312795]
 position = Vector2(0, -2)
@@ -1456,15 +1457,15 @@ allowed_source_types = Array[int]([0])
 affected_entity = NodePath("..")
 dmg_handler = NodePath("DmgHandler")
 heal_handler = NodePath("HealHandler")
-storm_syndrome_handler = SubResource("Resource_bjgul")
-knockback_handler = SubResource("Resource_223lv")
-stun_handler = SubResource("Resource_14mu6")
-poison_handler = SubResource("Resource_botqa")
-regen_handler = SubResource("Resource_b6nlp")
-frostbite_handler = SubResource("Resource_erwji")
-burning_handler = SubResource("Resource_r17bj")
-time_snare_handler = SubResource("Resource_1i2dj")
-life_steal_handler = SubResource("Resource_1lcq3")
+storm_syndrome_handler = SubResource("Resource_ivc81")
+knockback_handler = SubResource("Resource_omhig")
+stun_handler = SubResource("Resource_2v4q2")
+poison_handler = SubResource("Resource_invht")
+regen_handler = SubResource("Resource_gevai")
+frostbite_handler = SubResource("Resource_oe7wn")
+burning_handler = SubResource("Resource_qvtc6")
+time_snare_handler = SubResource("Resource_14ixx")
+life_steal_handler = SubResource("Resource_lo25j")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="EffectReceiverComponent" unique_id=825144666]
 position = Vector2(0, -7.5)
@@ -2173,7 +2174,7 @@ storm_tint_color = Color(0.530741, 0.0017714, 0.740423, 1)
 damage_color = Color(0.738, 0, 0.205, 1)
 heal_color = Color(0, 0.579, 0.249, 1)
 
-[node name="PlayerInvUI" type="ColorRect" parent="OverlayUI" unique_id=43151155 node_paths=PackedStringArray("synced_inv_source_node", "main_slot_grid")]
+[node name="PlayerInvUI" type="ColorRect" parent="OverlayUI" unique_id=43151155 node_paths=PackedStringArray("synced_inv_src_node", "main_slot_grid")]
 process_mode = 3
 visible = false
 material = SubResource("ShaderMaterial_2q23q")
@@ -2187,7 +2188,7 @@ color = Color(0.109341, 0.109341, 0.109341, 0.976471)
 script = ExtResource("32_3a185")
 btn_up_texture = ExtResource("106_0313k")
 btn_down_texture = ExtResource("107_32jvf")
-synced_inv_source_node = NodePath("../..")
+synced_inv_src_node = NodePath("../..")
 main_slot_grid = NodePath("MainGridBackground/GridMargins/GridMarginsBackground/MainSlotGrid")
 
 [node name="MainGridBackground" type="NinePatchRect" parent="OverlayUI/PlayerInvUI" unique_id=98000998]
@@ -3132,7 +3133,7 @@ theme_override_constants/margin_bottom = -1
 [node name="ItemNameLabel" type="RichTextLabel" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/ItemDetailsPanelVBox/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox/ElementsMargin/ElementsVBox/ItemNameMargin" unique_id=396778299]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_colors/default_color = Color(0.961254, 0.893995, 0.881106, 1)
+theme_override_colors/default_color = Color(1, 0.92941177, 0.91764706, 1)
 theme_override_colors/font_outline_color = Color(0.122, 0.035, 0, 0.67)
 theme_override_constants/outline_size = 2
 theme_override_fonts/normal_font = ExtResource("85_7xlwj")

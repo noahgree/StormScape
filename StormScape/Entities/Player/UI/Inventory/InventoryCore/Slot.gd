@@ -32,7 +32,7 @@ static var last_hovered_slot_size: float = 22.0 ## The most recently hovered ove
 @onready var level_background: ColorRect = %LevelBackground ## The color rect behind the level icons.
 
 var index: int ## The index that this slot represents inside the inventory.
-var synced_inv: InventoryResource ## The synced inventory that this slot is a part of.
+var synced_inv: InvResource ## The synced inventory that this slot is a part of.
 var drag_preview: PackedScene = preload("uid://bacsel0a5l2iu") ## The control preview for a dragged slot.
 var dragging_only_one: bool = false ## Whether this slot is carrying only a quantity of 1 when in drag data.
 var dragging_half_stack: bool = false ## Whether this slot is carrying only half of its quantity when in drag data.
@@ -553,13 +553,14 @@ func _fill_slot_to_stack_size() -> void:
 	if item == null:
 		return
 
+	var max_index_to_check: int = synced_inv.total_inv_size if synced_inv.source_node is not Player else Globals.MAIN_PLAYER_INV_SIZE
 	var full_stack_size: int = item.stats.stack_size
 	var needed_quantity: int = full_stack_size - item.quantity
 	if needed_quantity <= 0:
 		return
 
 	# First pass: pull items from slots that are not full
-	for i: int in range(synced_inv.main_inv_size):
+	for i: int in range(max_index_to_check):
 		if i == index:
 			continue
 
@@ -582,7 +583,7 @@ func _fill_slot_to_stack_size() -> void:
 
 	# Second pass: if more items are needed, pull from all matching slots (even from full stacks)
 	if needed_quantity > 0:
-		for i: int in range(synced_inv.main_inv_size):
+		for i: int in range(max_index_to_check):
 			if i == index:
 				continue
 

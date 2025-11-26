@@ -368,7 +368,7 @@ func _get_mod_stats(stats: WeaponMod) -> Array[String]:
 				"/":
 					value_string += StringHelpers.remove_trailing_zero(str(snapped((1 / stat_mod.value) * 100, 0.01))) + "%" + stat_mod.panel_suffix
 				"=":
-					value_string += "set to " + stat_value + stat_mod.panel_suffix
+					value_string += stat_value + stat_mod.panel_suffix
 
 			strings.append(stat_title + value_string + "[/color]")
 

@@ -27,7 +27,6 @@ func _on_load_game() -> void:
 
 func _ready() -> void:
 	SignalBus.ui_focus_opened.connect(_on_ui_focus_opened)
-
 	_setup_slots()
 
 ## Sets up the wearables slots their needed data.
@@ -36,7 +35,7 @@ func _setup_slots() -> void:
 	for slot: WearableSlot in wearables_grid.get_children():
 		slot.name = "Wearable_Slot_" + str(i)
 		slot.wearable_slot_index = i
-		slot.synced_inv = inventory_ui.synced_inv_source_node.inv
+		slot.synced_inv = inventory_ui.synced_inv_src_node.inv
 		slot.item_changed.connect(_on_wearable_slot_changed)
 		slot.index = inventory_ui.assign_next_slot_index()
 		wearables_slots.append(slot)

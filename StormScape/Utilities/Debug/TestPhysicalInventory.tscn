@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://06pt5wan8jg1" path="res://Entities/EntityCore/EntityTypes/StaticEntity/PhysicalInventory/PhysicalInventory.gd" id="1_ggkuf"]
 [ext_resource type="PackedScene" uid="uid://batypmdxig7ic" path="res://Entities/Player/UI/Inventory/Panels/SidePanels/AlternateInvPanel.tscn" id="2_f6uiu"]
-[ext_resource type="Script" uid="uid://dwmur0cosbbwh" path="res://Entities/Player/UI/Inventory/InventoryCore/InventoryResource.gd" id="2_hjkvw"]
+[ext_resource type="Script" uid="uid://dwmur0cosbbwh" path="res://Entities/Player/UI/Inventory/InventoryCore/InvResource.gd" id="2_hjkvw"]
 [ext_resource type="Script" uid="uid://dp8osf7r6xkkt" path="res://Entities/Items/ItemCore/InvItemResource.gd" id="3_s3b18"]
 [ext_resource type="PackedScene" uid="uid://di7vcyrki71nm" path="res://Entities/Components/DetectionComponent/DetectionComponent.tscn" id="6_c3jxm"]
 [ext_resource type="Texture2D" uid="uid://wlfo5p8d28va" path="res://Entities/Environment/Inventories/SimpleChestCT.tres" id="6_hjkvw"]

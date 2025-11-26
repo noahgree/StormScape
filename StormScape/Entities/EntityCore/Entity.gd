@@ -4,7 +4,7 @@ class_name Entity
 
 @export var team: Globals.Teams = Globals.Teams.PLAYER ## What the effects received by this entity should consider as this entity's team.
 @export var is_object: bool = false ## When true, this entity's collision logic will follow that of a world object, regardless of team.
-@export var inv: InventoryResource ## The inventory data resource for this entity.
+@export var inv: InvResource ## The inventory data resource for this entity.
 @export var loot: LootTableResource ## The loot table resource for this entity.
 
 @onready var sprite: EntitySprite = %EntitySprite ## The visual representation of the entity. Needs to have the EntityEffectShader applied.

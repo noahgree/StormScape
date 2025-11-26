@@ -7,7 +7,7 @@ class_name HotbarHUD
 
 @onready var hotbar_hud_grid: HBoxContainer = %HotbarHUDGrid ## The container that holds the hotbar slots.
 
-var player_inv: InventoryResource ## The connected player inventory to reflect as a UI.
+var player_inv: InvResource ## The connected player inventory to reflect as a UI.
 var scroll_debounce_timer: Timer = TimerHelpers.create_one_shot_timer(self, 0.1) ## A timer used in debug that restricts scrolling speed of the slots.
 var hotbar_slots: Array[Slot] = [] ## Local representation of the hotbar slots, updated when changed externally.
 var active_slot: Slot ## The slot that is currently selected in the hotbar and potentially contains an equipped item.
@@ -31,7 +31,7 @@ func _setup_slots() -> void:
 		slot.name = "Hotbar_HUD_Slot_" + str(i)
 		slot.is_hud_ui_preview_slot = true
 		slot.synced_inv = player_inv
-		slot.index = player_inv.main_inv_size + i
+		slot.index = Globals.MAIN_PLAYER_INV_SIZE + i
 		slot.item_changed.connect(_on_hotbar_slot_item_changed)
 		hotbar_slots.append(slot)
 		i += 1
@@ -103,7 +103,7 @@ func _unhandled_input(event: InputEvent) -> void:
 
 ## Changes the active hotbar slot by the passed in count. Handles wrapping values to the number of slots.
 func _change_active_slot_by_count(index_count: int) -> void:
-	var non_hotbar_size: int = player_inv.main_inv_size
+	var non_hotbar_size: int = Globals.MAIN_PLAYER_INV_SIZE
 	var new_index: int = ((active_slot.index - non_hotbar_size) + index_count) % hotbar_slots.size()
 	if new_index < 0:
 		new_index += hotbar_slots.size()
@@ -131,7 +131,7 @@ func change_active_slot_to_index_relative_to_full_inventory_size(new_index: int)
 	await get_tree().process_frame # Need to wait for the slots to be updated with the items before signaling the hands component
 
 	_remove_selected_slot_fx()
-	active_slot = hotbar_slots[new_index - (player_inv.main_inv_size)]
+	active_slot = hotbar_slots[new_index - (Globals.MAIN_PLAYER_INV_SIZE)]
 	_setup_after_active_slot_change()
 
 ## Performs the needed work after the active slot has changed, such as applying the slot FX and updating the

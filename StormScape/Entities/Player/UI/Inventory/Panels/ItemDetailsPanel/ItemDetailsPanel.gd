@@ -55,13 +55,13 @@ func _setup_slots() -> void:
 		slot.name = "Mods_Input_Slot_" + str(i)
 		slot.mod_slot_index = i
 		slot.item_viewer_slot = item_viewer_slot
-		slot.synced_inv = inventory_ui.synced_inv_source_node.inv
+		slot.synced_inv = inventory_ui.synced_inv_src_node.inv
 		slot.index = inventory_ui.assign_next_slot_index()
 		slot.item_changed.connect(_on_mod_slot_changed)
 		mod_slots.append(slot)
 		i += 1
 
-	item_viewer_slot.synced_inv = inventory_ui.synced_inv_source_node.inv
+	item_viewer_slot.synced_inv = inventory_ui.synced_inv_src_node.inv
 	item_viewer_slot.index = inventory_ui.assign_next_slot_index()
 	item_viewer_slot.item_changed.connect(_on_item_viewer_slot_changed)
 
@@ -203,7 +203,7 @@ func _change_mod_slot_visibilities(shown: bool, stats: WeaponResource = null) ->
 ## Show the panel and update the new title.
 func _show_and_update_item_title(title: String) -> void:
 	visible = true
-	item_name_label.text = Globals.invis_char + title + Globals.invis_char
+	item_name_label.text = Globals.invis_char + title.to_upper() + Globals.invis_char
 
 ## Gets the details for the currently viewed item stats.
 func _assign_item_details(stats: ItemResource) -> void:

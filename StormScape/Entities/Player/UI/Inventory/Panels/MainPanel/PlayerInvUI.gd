@@ -22,19 +22,28 @@ class_name PlayerInvUI
 @onready var craft_btn: NinePatchRect = %CraftBackground ## The craft button.
 
 var is_open: bool = false: set = _toggle_inventory_ui ## True when the inventory is open and showing.
+var core_index_counter: int = 0 ## A separate counter to track the core slots (main grid, hotbar, trash slot).
 var side_panel_active: bool = false: set = _toggle_side_panel ## When true, the alternate inv is open and the wearable & crafting panels should be hidden.
 
 
 func _ready() -> void:
 	if not Globals.player_node:
 		await SignalBus.player_ready
-
-	super()
-
 	gui_input.connect(_on_blank_space_input_event)
+
+	core_index_counter = 0
+	super()
 
 	_setup_hotbar_slots()
 	_setup_trash_slot()
+	index_counter = Globals.MAIN_PLAYER_INV_SIZE + Globals.HOTBAR_SIZE + 1 # Extra 1 is for trash slot
+
+## Returns the current index counter and then increments it to prepare for the next slot.
+func assign_next_slot_index(use_core_slots: bool = false) -> int:
+	var index: int = core_index_counter if use_core_slots else index_counter
+	core_index_counter += 1 if use_core_slots else 0
+	index_counter += 1
+	return index
 
 ## Sets up the in-inventory hotbar slots with their needed data. They are considered core slots
 ## and tracked by the inventory resource.
@@ -43,7 +52,7 @@ func _setup_hotbar_slots() -> void:
 	for slot: Slot in hotbar_grid.get_children():
 		slot.name = "HotSlot_" + str(index_counter)
 		slot.index = assign_next_slot_index(true)
-		slot.synced_inv = synced_inv_source_node.inv
+		slot.synced_inv = synced_inv_src_node.inv
 		slot.mirrored_hud_slot = hotbar_hud_grid.get_child(i)
 		slots.append(slot)
 		i += 1
@@ -53,7 +62,7 @@ func _setup_hotbar_slots() -> void:
 func _setup_trash_slot() -> void:
 	trash_slot.name = "Trash_Slot"
 	trash_slot.index = assign_next_slot_index(true)
-	trash_slot.synced_inv = synced_inv_source_node.inv
+	trash_slot.synced_inv = synced_inv_src_node.inv
 	trash_slot.is_trash_slot = true
 	slots.append(trash_slot)
 
@@ -138,7 +147,7 @@ func _drop_data(_at_position: Vector2, data: Variant) -> void:
 		Item.spawn_on_ground(ground_item_res, ground_item_quantity, Globals.player_node.global_position, 15, true, false, true)
 
 		if ground_item_res is ProjAmmoResource:
-			synced_inv_source_node.hands.active_slot_info.calculate_inv_ammo()
+			synced_inv_src_node.hands.active_slot_info.calculate_inv_ammo()
 
 	data._on_mouse_exited()
 #endregion

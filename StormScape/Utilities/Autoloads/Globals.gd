@@ -30,6 +30,7 @@ func change_focused_ui_state(open: bool) -> void:
 		SignalBus.ui_focus_closed.emit()
 
 # Player Inv Resource
+const MAIN_PLAYER_INV_SIZE: int = 32
 const HOTBAR_SIZE: int = 5
 
 # EffectReceiver & StatModManager

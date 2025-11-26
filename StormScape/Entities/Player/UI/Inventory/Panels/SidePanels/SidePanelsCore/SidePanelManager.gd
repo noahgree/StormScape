@@ -24,14 +24,14 @@ func _setup(new_panel: PackedScene, side_panel_src: Node) -> void:
 	active_panel = new_panel.instantiate()
 	add_child(active_panel)
 
-	_link_potential_inv(side_panel_src)
+	_link_inv(side_panel_src)
+	active_panel.setup()
+	active_panel.fill_slots_with_items()
 
 	player_inv_ui.open_with_side_panel()
 
-## Links the inventory in the side panel to its source node, given that it has an inventory slot manager.
-func _link_potential_inv(side_panel_src: Node) -> void:
-	if not active_panel.inv_slot_mgr:
-		return
-
-	active_panel.inv_slot_mgr.link_new_inventory_source_node(side_panel_src)
-	active_panel.title_node.text = side_panel_src.inv.title
+## Links the inventory in the side panel to its source node. Does nothing if the side panel has no inventory.
+func _link_inv(side_panel_src: Node) -> void:
+	active_panel.link_new_inventory_source_node(side_panel_src, false)
+	if active_panel.title_node:
+		active_panel.title_node.text = side_panel_src.inv.title

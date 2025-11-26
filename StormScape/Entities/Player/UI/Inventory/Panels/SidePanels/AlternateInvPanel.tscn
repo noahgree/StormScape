@@ -16,12 +16,12 @@ shadow_size = 0
 shadow_color = Color(0, 0, 0, 0.3)
 shadow_offset = Vector2(0.3, 0.3)
 
-[node name="AlternateInvPanel" type="CenterContainer" unique_id=1177703373 node_paths=PackedStringArray("title_node", "inv_slot_mgr")]
+[node name="AlternateInvPanel" type="CenterContainer" unique_id=1177703373 node_paths=PackedStringArray("title_node", "main_slot_grid")]
 offset_right = 126.0
 offset_bottom = 203.0
 script = ExtResource("1_qmhnq")
 title_node = NodePath("AlternateInvSlotMgr/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/AlternateTitleMargin/AlternateInvTitle")
-inv_slot_mgr = NodePath("AlternateInvSlotMgr")
+main_slot_grid = NodePath("AlternateInvSlotMgr/AlternateInvBkgrdMargin/GridMargins/TitleAndSlotVBox/MarginContainer/AlternateInvSlotGrid")
 
 [node name="AlternateInvSlotMgr" type="VBoxContainer" parent="." unique_id=259516527 node_paths=PackedStringArray("main_slot_grid")]
 layout_mode = 2

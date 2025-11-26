@@ -13,7 +13,7 @@ class_name ItemReceiverComponent
 @onready var collision_shape: CollisionShape2D = $CollisionShape2D
 
 var items_in_range: Array[Item] = [] ## The items in range of being picked up.
-var synced_inv: InventoryResource ## The inventory to add to.
+var synced_inv: InvResource ## The inventory to add to.
 const PICKUP_PROMPT_UI_OFFSET: Vector2i = Vector2i(0, -30)
 
 
