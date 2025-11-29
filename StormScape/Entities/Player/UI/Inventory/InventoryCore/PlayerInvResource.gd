@@ -12,6 +12,7 @@ func initialize_inventory(source: Node2D) -> void:
 		source_node.tree_exiting.connect(drop_entire_inventory)
 
 	total_inv_size = Globals.MAIN_PLAYER_INV_SIZE + (1 + Globals.HOTBAR_SIZE) # Extra 1 is for trash
+	max_fill_index = total_inv_size - 1
 	inv.resize(total_inv_size)
 	clear_inventory()
 

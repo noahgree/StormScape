@@ -1,10 +1,11 @@
-[gd_scene load_steps=9 format=3 uid="uid://dnpwx3cn0i24s"]
+[gd_scene load_steps=10 format=3 uid="uid://dnpwx3cn0i24s"]
 
 [ext_resource type="Script" uid="uid://cdenu075tv71w" path="res://Entities/Player/UI/Inventory/Panels/SidePanels/StormBaseSidePanel.gd" id="1_4d6ny"]
 [ext_resource type="Texture2D" uid="uid://lqg70q4wj55g" path="res://Entities/Player/UI/Inventory/Assets/Background/Wood/inv_background_wood.png" id="3_eaggr"]
 [ext_resource type="Texture2D" uid="uid://dj16xk01w22w1" path="res://Entities/Player/UI/Inventory/Assets/Background/Wood/inv_background_thin_no_stripes_wood.png" id="4_av3h4"]
 [ext_resource type="PackedScene" uid="uid://m4ur3n2hwsp8" path="res://Entities/Player/UI/Inventory/InventoryCore/Slot.tscn" id="5_mjv4o"]
 [ext_resource type="FontFile" uid="uid://bp2lgrlhj8cet" path="res://Assets/Theming/Fonts/Pixel/C&C Red Alert [INET].ttf" id="6_1nfa8"]
+[ext_resource type="Texture2D" uid="uid://c7gb4yo7qwfql" path="res://Entities/Player/UI/Inventory/Assets/Slot/Universal/upgrade_slot_icon.png" id="7_hduyg"]
 [ext_resource type="Texture2D" uid="uid://cpgqebvnv0d0b" path="res://Entities/Player/UI/Inventory/Assets/Slot/Wood/normal_slot_wood_no_stripes.png" id="7_jjxgf"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_xl3yw"]
@@ -199,6 +200,37 @@ tab_size = 0
 vertical_alignment = 1
 visible_characters_behavior = 2
 
+[node name="BaseUpgradesMargin" type="MarginContainer" parent="InnerMargin/MainVBox/ElementsMargin/ElementsVBox" unique_id=132296762]
+modulate = Color(0.6436752, 0.5848187, 0.77914613, 1)
+layout_mode = 2
+
+[node name="BaseUpgradesCenter" type="CenterContainer" parent="InnerMargin/MainVBox/ElementsMargin/ElementsVBox/BaseUpgradesMargin" unique_id=1571296551]
+layout_mode = 2
+
+[node name="BaseUpgradeSlots" type="GridContainer" parent="InnerMargin/MainVBox/ElementsMargin/ElementsVBox/BaseUpgradesMargin/BaseUpgradesCenter" unique_id=1868852986]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_constants/h_separation = 0
+theme_override_constants/v_separation = 0
+columns = 4
+
+[node name="UpgradeSlot1" parent="InnerMargin/MainVBox/ElementsMargin/ElementsVBox/BaseUpgradesMargin/BaseUpgradesCenter/BaseUpgradeSlots" unique_id=225750667 instance=ExtResource("5_mjv4o")]
+layout_mode = 2
+backing_texture = ExtResource("7_hduyg")
+
+[node name="UpgradeSlot2" parent="InnerMargin/MainVBox/ElementsMargin/ElementsVBox/BaseUpgradesMargin/BaseUpgradesCenter/BaseUpgradeSlots" unique_id=1660504451 instance=ExtResource("5_mjv4o")]
+layout_mode = 2
+backing_texture = ExtResource("7_hduyg")
+
+[node name="UpgradeSlot3" parent="InnerMargin/MainVBox/ElementsMargin/ElementsVBox/BaseUpgradesMargin/BaseUpgradesCenter/BaseUpgradeSlots" unique_id=270813223 instance=ExtResource("5_mjv4o")]
+layout_mode = 2
+backing_texture = ExtResource("7_hduyg")
+
+[node name="UpgradeSlot4" parent="InnerMargin/MainVBox/ElementsMargin/ElementsVBox/BaseUpgradesMargin/BaseUpgradesCenter/BaseUpgradeSlots" unique_id=250441009 instance=ExtResource("5_mjv4o")]
+layout_mode = 2
+backing_texture = ExtResource("7_hduyg")
+
 [node name="FuelSlotBorderMargin" type="MarginContainer" parent="InnerMargin/MainVBox" unique_id=1113446177]
 editor_description = "THIS GRIDMARGIN MOUSE FILTER MUST STAY AS IGNORE TO MAKE SORT BUTTONS WORK!"
 layout_mode = 2
@@ -227,6 +259,7 @@ theme_override_constants/margin_bottom = 3
 
 [node name="FuelSlot" parent="InnerMargin/MainVBox/FuelSlotBorderMargin/FuelSlotMargin" unique_id=891321605 instance=ExtResource("5_mjv4o")]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(40, 40)
 layout_mode = 2
 hide_corner_level = true
 hide_corner_info = true

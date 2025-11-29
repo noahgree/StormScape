@@ -36,7 +36,11 @@ func _ready() -> void:
 
 	_setup_hotbar_slots()
 	_setup_trash_slot()
-	index_counter = Globals.MAIN_PLAYER_INV_SIZE + Globals.HOTBAR_SIZE + 1 # Extra 1 is for trash slot
+
+## Overrides the parent function to specify that the main slot grid for the player has a Global value to use.
+func fill_slots_from_synced_inv() -> void:
+	_setup_main_slot_grid(Globals.MAIN_PLAYER_INV_SIZE)
+	call_deferred("fill_slots_with_items")
 
 ## Returns the current index counter and then increments it to prepare for the next slot.
 func assign_next_slot_index(use_core_slots: bool = false) -> int:

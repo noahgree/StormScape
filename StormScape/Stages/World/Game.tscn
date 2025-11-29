@@ -224,7 +224,7 @@ metadata/_custom_type_script = "uid://dp8osf7r6xkkt"
 [sub_resource type="Resource" id="Resource_27u15"]
 script = ExtResource("20_om42l")
 drop_on_death = true
-starting_inv = Array[ExtResource("21_fx52i")]([null, SubResource("Resource_340rl"), null, null, SubResource("Resource_jb7gg"), null, SubResource("Resource_8jild"), SubResource("Resource_yng6w")])
+starting_inv = Array[ExtResource("21_fx52i")]([null, SubResource("Resource_340rl"), null, null, SubResource("Resource_jb7gg"), null, SubResource("Resource_8jild"), SubResource("Resource_yng6w"), null, null])
 metadata/_custom_type_script = "uid://dwmur0cosbbwh"
 
 [sub_resource type="Resource" id="Resource_yw2f7"]
@@ -257,7 +257,7 @@ metadata/_custom_type_script = "uid://dp8osf7r6xkkt"
 script = ExtResource("20_om42l")
 title = "CHEST 2"
 drop_on_death = true
-starting_inv = Array[ExtResource("21_fx52i")]([SubResource("Resource_yw2f7"), null, null, SubResource("Resource_ed1p2"), SubResource("Resource_e5rpg"), null, SubResource("Resource_1606r"), null, SubResource("Resource_w76bj")])
+starting_inv = Array[ExtResource("21_fx52i")]([SubResource("Resource_yw2f7"), null, null, SubResource("Resource_ed1p2"), SubResource("Resource_e5rpg"), null, SubResource("Resource_1606r"), null, SubResource("Resource_w76bj"), null])
 metadata/_custom_type_script = "uid://dwmur0cosbbwh"
 
 [sub_resource type="Resource" id="Resource_3156l"]
@@ -291,7 +291,7 @@ metadata/_custom_type_script = "uid://dp8osf7r6xkkt"
 script = ExtResource("20_om42l")
 title = ""
 drop_on_death = true
-starting_inv = Array[ExtResource("21_fx52i")]([SubResource("Resource_4psjl")])
+starting_inv = Array[ExtResource("21_fx52i")]([SubResource("Resource_4psjl"), null, null, null, null])
 metadata/_custom_type_script = "uid://dwmur0cosbbwh"
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_f5fhq"]

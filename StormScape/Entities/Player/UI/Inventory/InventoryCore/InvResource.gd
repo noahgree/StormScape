@@ -7,10 +7,12 @@ signal inv_data_updated(index: int, item: InvItemResource) ## Emitted anytime th
 @export var title: String = "CHEST" ## The title to be used if opened in an alternate inv.
 @export var drop_on_death: bool = false ## When true, this entity will drop everything in its inventory when it dies.
 @export var starting_inv: Array[InvItemResource] = [] ## The inventory that should be loaded when this scene is instantiated.
+@export var inv_size_override: int = -1 ## When anything besides -1, this will override the inv size, regardless of the number of elements in starting_inv. Does not affect the main Player inventory. If the number of manually added slots added outside of any main slot grid exceed this value (or the size of the starting_inv), those indices in the source of truth inventory data will never be shown and live on forever in the array.
 
 var inv: Array[InvItemResource] = [] ## The current inventory. Main source of truth.
 var source_node: Node2D ## The node that this inventory is owned by. Could be a physics entity or a chest of sorts.
 var total_inv_size: int ## Number of all slots, including main slots, hotbar slots, and the potential trash slot.
+var max_fill_index: int ## The max index the inv can fill to.
 var auto_decrementer: AutoDecrementer = AutoDecrementer.new() ## The script controlling the cooldowns, warmups, overheats, and recharges for this entity's inventory items.
 
 
@@ -21,7 +23,8 @@ func initialize_inventory(source: Node2D) -> void:
 	if drop_on_death:
 		source_node.tree_exiting.connect(drop_entire_inventory)
 
-	total_inv_size = starting_inv.size()
+	total_inv_size = inv_size_override if inv_size_override > -1 else starting_inv.size()
+	max_fill_index = total_inv_size
 	inv.resize(total_inv_size)
 	clear_inventory()
 
@@ -32,12 +35,18 @@ func clear_inventory() -> void:
 	inv.fill(null)
 	_emit_changes_for_all_indices()
 
+## Changes the core inv size by the passed in amount and returns the new size.
+func change_size(change_amount: int) -> int:
+	total_inv_size += change_amount
+	inv.resize(total_inv_size)
+	return total_inv_size
+
 ## Fills the inventory from an array of inventory items. If an item exceeds stack size, the
 ## quantity that does not fit into one slot is instantiated on the ground as a physical item.
 ## This method respects null spots in the list.
 func fill_inventory(inv_to_fill_from: Array[InvItemResource]) -> void:
 	inv.fill(null)
-	for i: int in range(inv_to_fill_from.size()):
+	for i: int in range(min(inv_to_fill_from.size(), max_fill_index)):
 		if inv_to_fill_from[i] != null:
 			var inv_item: InvItemResource = InvItemResource.new(
 				inv_to_fill_from[i].stats.duplicate_deep(Resource.DEEP_DUPLICATE_INTERNAL), inv_to_fill_from[i].quantity,
@@ -57,7 +66,7 @@ func fill_inventory(inv_to_fill_from: Array[InvItemResource]) -> void:
 ## and anything that does not fit will be ignored.
 func fill_inventory_with_checks(inv_to_fill_from: Array[InvItemResource]) -> void:
 	inv.fill(null)
-	for i: int in range(inv_to_fill_from.size()):
+	for i: int in range(min(inv_to_fill_from.size(), max_fill_index)):
 		if inv_to_fill_from[i] != null:
 			insert_from_inv_item(InvItemResource.new(
 				inv_to_fill_from[i].stats.duplicate_deep(Resource.DEEP_DUPLICATE_INTERNAL), inv_to_fill_from[i].quantity,
@@ -85,7 +94,7 @@ func insert_from_inv_item(original_item: InvItemResource, delete_extra: bool = t
 ## Attempts to fill the main inventory with the item passed in. Can either be an Item or an InvItemResource.
 ## Returns any leftover quantity that did not fit.
 func _fill_all_slots_in_order(original_item: Variant) -> int:
-	return _do_add_item_checks(original_item, 0, total_inv_size)
+	return _do_add_item_checks(original_item, 0, max_fill_index)
 
 ## Wrapper function to let child functions check whether to add quantity to an item slot.
 ## Checks between the indices give by the start index and the stop index.
