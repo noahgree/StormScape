@@ -1489,9 +1489,7 @@ footstep_texture = ExtResource("27_0t1mv")
 step_sound = "player_run_base"
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=983093600]
-libraries = {
-&"": SubResource("AnimationLibrary_xrucm")
-}
+libraries/ = SubResource("AnimationLibrary_xrucm")
 
 [node name="AnimationTree" type="AnimationTree" parent="." unique_id=846042321]
 callback_mode_process = 2

@@ -135,7 +135,8 @@ func _add_what_fits_to_occupied_index_and_continue(index: int, inv_item: InvItem
 	original_item.quantity -= amount_that_fits
 	inv_data_updated.emit(index, inv[index])
 
-## Puts the entire quantity of the given item into an empty slot. This means it was less than or equal to stack size.
+## Puts the entire quantity of the given item into an empty slot. This means it was less than or equal
+## to stack size.
 func _put_entire_quantity_in_empty_index(index: int, inv_item: InvItemResource, original_item: Variant) -> void:
 	inv[index] = inv_item
 	if original_item is Item:

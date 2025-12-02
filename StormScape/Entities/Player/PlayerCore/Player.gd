@@ -31,7 +31,7 @@ func _unhandled_key_input(_event: InputEvent) -> void:
 func _add_player_debug_commands() -> void:
 	DebugConsole.add_command("give", inv.grant_from_item_id)
 	DebugConsole.add_command("remove", inv.remove_item)
-	DebugConsole.add_command("print_inv", inv.print_inv)
+	DebugConsole.add_command("print_inv", inv.print_inv.bind(true))
 	DebugConsole.add_command("effect", effect_receiver.apply_effect_by_id)
 	DebugConsole.add_command("remove_effect", effect_receiver.remove_effect_by_id)
 	DebugConsole.add_command("tp", teleport_relative)

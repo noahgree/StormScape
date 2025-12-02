@@ -44,6 +44,8 @@ func fill_slots_from_synced_inv() -> void:
 
 ## Returns the current index counter and then increments it to prepare for the next slot.
 func assign_next_slot_index(use_core_slots: bool = false) -> int:
+	if index_counter == 0:
+		index_counter = Globals.MAIN_PLAYER_INV_SIZE
 	var index: int = core_index_counter if use_core_slots else index_counter
 	core_index_counter += 1 if use_core_slots else 0
 	index_counter += 1

@@ -67,6 +67,8 @@ func set_item(new_item: InvItemResource) -> void:
 	if not preview_items.is_empty():
 		if new_item != null:
 			preview_items = []
+	#if synced_inv.source_node is Player and not "mod_slot_index" in self and not hide_corner_info:
+		#print(index, ":  ", new_item)
 
 	var old_item: InvItemResource = item
 	item = new_item

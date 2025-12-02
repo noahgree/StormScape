@@ -1,4 +1,4 @@
-[gd_scene load_steps=105 format=4 uid="uid://bscnr6a23l10m"]
+[gd_scene load_steps=106 format=4 uid="uid://bscnr6a23l10m"]
 
 [ext_resource type="Script" uid="uid://mdtvdhu78iqm" path="res://Utilities/Game/WorldRoot/WorldRoot.gd" id="1_q0i4n"]
 [ext_resource type="Script" uid="uid://dpbgynf55anlv" path="res://Stages/World/BackgroundMusicManager.gd" id="1_q5pr2"]
@@ -43,6 +43,7 @@
 [ext_resource type="Texture2D" uid="uid://daa6casude472" path="res://Utilities/Game/Particles/light_ray.png" id="31_melxk"]
 [ext_resource type="PackedScene" uid="uid://jdi552emuah8" path="res://Utilities/Debug/TestRock1.tscn" id="32_melxk"]
 [ext_resource type="Texture2D" uid="uid://cx7u0pbdtc6eb" path="res://Utilities/Game/Particles/grunge_light.png" id="32_s5gqv"]
+[ext_resource type="Script" uid="uid://d1xfue3du3eyu" path="res://Utilities/Debug/DebugCanvasLayer.gd" id="34_01d0t"]
 [ext_resource type="Script" uid="uid://by6ifp7vltc41" path="res://Entities/StormBase/StormBase.gd" id="34_w76bj"]
 [ext_resource type="Texture2D" uid="uid://blb7ahx7xq5dq" path="res://icon.png" id="35_e5rpg"]
 [ext_resource type="PackedScene" uid="uid://dh4ydl7l86ywq" path="res://Entities/EntityCore/Sprites/EntitySprite.tscn" id="35_vi22v"]
@@ -166,13 +167,13 @@ physics_layer_1/collision_layer = 128
 physics_layer_1/collision_mask = 0
 sources/1 = SubResource("TileSetAtlasSource_lb4xb")
 
-[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_yng6w"]
-rough = true
-
-[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_01d0t"]
-rough = true
-
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_h3uly"]
+rough = true
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_4ti61"]
+rough = true
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_4psjl"]
 rough = true
 
 [sub_resource type="Resource" id="Resource_t15sm"]
@@ -435,15 +436,15 @@ y_sort_enabled = true
 
 [node name="TestRigidEntity" parent="WorldRoot/Testing" unique_id=120789680 instance=ExtResource("9_37jga")]
 position = Vector2(127, 27)
-physics_material_override = SubResource("PhysicsMaterial_yng6w")
+physics_material_override = SubResource("PhysicsMaterial_h3uly")
 
 [node name="TestRigidEntity2" parent="WorldRoot/Testing" unique_id=294390776 instance=ExtResource("9_37jga")]
 position = Vector2(129, 87)
-physics_material_override = SubResource("PhysicsMaterial_01d0t")
+physics_material_override = SubResource("PhysicsMaterial_4ti61")
 
 [node name="TestRigidEntity3" parent="WorldRoot/Testing" unique_id=941546994 instance=ExtResource("9_37jga")]
 position = Vector2(65, 118)
-physics_material_override = SubResource("PhysicsMaterial_h3uly")
+physics_material_override = SubResource("PhysicsMaterial_4psjl")
 freeze = true
 immovable = true
 
@@ -597,6 +598,9 @@ player = NodePath("../Player")
 smoothing_enabled = true
 
 [node name="DebugCanvasLayer" type="CanvasLayer" parent="WorldRoot" unique_id=428514888]
+process_mode = 3
+layer = 2
+script = ExtResource("34_01d0t")
 
 [node name="FPS" type="Label" parent="WorldRoot/DebugCanvasLayer" unique_id=945863991 groups=["core"]]
 offset_left = 3.0
