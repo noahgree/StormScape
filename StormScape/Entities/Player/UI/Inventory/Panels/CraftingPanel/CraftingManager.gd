@@ -3,8 +3,6 @@ class_name CraftingManager
 ## Manages crafting actions like checking and caching recipes, consuming ingredients, and
 ## granting successful crafts.
 
-@export var inventory_ui: PlayerInvUI ## The main controller for all inventory sub-UIs.
-
 @onready var output_slot: CraftingSlot = %OutputSlot ## The slot where the result will appear in.
 @onready var input_slots_container: GridContainer = %InputSlots ## The container holding the input slots as children.
 @onready var crafting_down_arrow: TextureRect = %CraftingDownArrow ## The arrow symbol.
@@ -21,12 +19,13 @@ func _ready() -> void:
 	output_slot.output_changed.connect(_on_output_slot_output_changed)
 	SignalBus.ui_focus_closed.connect(_on_ui_focus_closed)
 
-	_setup_crafting_input_slots()
-	_setup_crafting_output_slot()
-	_setup_item_viewer_signals()
+func setup_slots_and_signals(inventory_ui: PlayerInvUI) -> void:
+	_setup_crafting_input_slots(inventory_ui)
+	_setup_crafting_output_slot(inventory_ui)
+	_setup_item_viewer_signals(inventory_ui)
 
 ## Sets up the input slots with their needed data.
-func _setup_crafting_input_slots() -> void:
+func _setup_crafting_input_slots(inventory_ui: PlayerInvUI) -> void:
 	for input_slot: CraftingSlot in input_slots_container.get_children():
 		input_slot.name = "Input_Slot_" + str(inventory_ui.index_counter)
 		input_slot.synced_inv = inventory_ui.synced_inv_src_node.inv
@@ -35,16 +34,14 @@ func _setup_crafting_input_slots() -> void:
 		input_slots.append(input_slot)
 
 ## Sets up the crafting output slot with its needed data.
-func _setup_crafting_output_slot() -> void:
+func _setup_crafting_output_slot(inventory_ui: PlayerInvUI) -> void:
 	output_slot.name = "Output_Slot"
 	output_slot.synced_inv = inventory_ui.synced_inv_src_node.inv
 	output_slot.index = inventory_ui.assign_next_slot_index()
 
 ## Sets up the item viewer node reference and the signals needed to respond to changes.
-func _setup_item_viewer_signals() -> void:
-	if not get_parent().is_node_ready():
-		await get_parent().ready
-	item_details_panel = (get_parent() as PlayerInvUI).item_details_panel
+func _setup_item_viewer_signals(inventory_ui: PlayerInvUI) -> void:
+	item_details_panel = inventory_ui.item_details_panel
 	item_details_panel.item_viewer_slot.item_changed.connect(_on_viewed_item_changed)
 
 ## Shows or hides the main craft button depending on whether a valid output is present.

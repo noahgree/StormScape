@@ -22,7 +22,6 @@ class_name PlayerInvUI
 @onready var craft_btn: NinePatchRect = %CraftBackground ## The craft button.
 
 var is_open: bool = false: set = _toggle_inventory_ui ## True when the inventory is open and showing.
-var core_index_counter: int = 0 ## A separate counter to track the core slots (main grid, hotbar, trash slot).
 var side_panel_active: bool = false: set = _toggle_side_panel ## When true, the alternate inv is open and the wearable & crafting panels should be hidden.
 
 
@@ -31,25 +30,18 @@ func _ready() -> void:
 		await SignalBus.player_ready
 	gui_input.connect(_on_blank_space_input_event)
 
-	core_index_counter = 0
-	super()
+	super() # Assigns first indices to main backpack grid.
 
-	_setup_hotbar_slots()
-	_setup_trash_slot()
+	_setup_hotbar_slots() # Assigns hotbar slots next
+	_setup_trash_slot() # Then trash slot
+	item_details_panel.setup_slots(self) # Then item details panel (mod slots and item viewer slot)
+	crafting_manager.setup_slots_and_signals(self) # Then crafting panel (input slots and output slot)
+	wearables_panel.setup_slots(self) # Then wearables slots
 
 ## Overrides the parent function to specify that the main slot grid for the player has a Global value to use.
 func fill_slots_from_synced_inv() -> void:
 	_setup_main_slot_grid(Globals.MAIN_PLAYER_INV_SIZE)
 	call_deferred("fill_slots_with_items")
-
-## Returns the current index counter and then increments it to prepare for the next slot.
-func assign_next_slot_index(use_core_slots: bool = false) -> int:
-	if index_counter == 0:
-		index_counter = Globals.MAIN_PLAYER_INV_SIZE
-	var index: int = core_index_counter if use_core_slots else index_counter
-	core_index_counter += 1 if use_core_slots else 0
-	index_counter += 1
-	return index
 
 ## Sets up the in-inventory hotbar slots with their needed data. They are considered core slots
 ## and tracked by the inventory resource.
@@ -57,7 +49,7 @@ func _setup_hotbar_slots() -> void:
 	var i: int = 0
 	for slot: Slot in hotbar_grid.get_children():
 		slot.name = "HotSlot_" + str(index_counter)
-		slot.index = assign_next_slot_index(true)
+		slot.index = assign_next_slot_index()
 		slot.synced_inv = synced_inv_src_node.inv
 		slot.mirrored_hud_slot = hotbar_hud_grid.get_child(i)
 		slots.append(slot)
@@ -67,7 +59,7 @@ func _setup_hotbar_slots() -> void:
 ## inventory resource.
 func _setup_trash_slot() -> void:
 	trash_slot.name = "Trash_Slot"
-	trash_slot.index = assign_next_slot_index(true)
+	trash_slot.index = assign_next_slot_index()
 	trash_slot.synced_inv = synced_inv_src_node.inv
 	trash_slot.is_trash_slot = true
 	slots.append(trash_slot)

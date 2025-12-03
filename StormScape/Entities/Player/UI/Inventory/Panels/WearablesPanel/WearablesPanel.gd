@@ -2,7 +2,6 @@ extends VBoxContainer
 class_name WearablesPanel
 ## Controls populating and syncing the wearable slots in the player inventory.
 
-@export var inventory_ui: PlayerInvUI ## The main controller for all inventory sub-UIs.
 @onready var wearables_grid: GridContainer = %WearablesGrid ## The grid container for all wearables slots.
 @onready var item_details_panel: ItemDetailsPanel = get_parent().get_node("%ItemDetailsPanel")
 
@@ -26,11 +25,10 @@ func _on_load_game() -> void:
 #endregion
 
 func _ready() -> void:
-	SignalBus.ui_focus_opened.connect(_on_ui_focus_opened)
-	_setup_slots()
+	SignalBus.ui_focus_opened.connect(_verify_latest_wearables)
 
 ## Sets up the wearables slots their needed data.
-func _setup_slots() -> void:
+func setup_slots(inventory_ui: PlayerInvUI) -> void:
 	var i: int = 0
 	for slot: WearableSlot in wearables_grid.get_children():
 		slot.name = "Wearable_Slot_" + str(i)
@@ -53,12 +51,8 @@ func _on_wearable_slot_changed(slot: WearableSlot, old_item: InvItemResource, ne
 		await get_tree().process_frame # Let the drag and drop finish and the removal happen before re-adding
 		WearablesManager.handle_wearable(Globals.player_node, new_item.stats, slot.wearable_slot_index)
 
-## When the focused ui is opened, make sure the wearables in the slots are up to date with the array
-## in the entity's data.
-func _on_ui_focus_opened() -> void:
-	_verify_latest_wearables()
-
-## Verifies up to date wearables with the entity data.
+## When the focused ui is opened (or otherwise), make sure the wearables in the slots are up to date with
+## the array in the entity's data.
 func _verify_latest_wearables() -> void:
 	var i: int = 0
 	for wearable_dict: Dictionary in Globals.player_node.wearables:

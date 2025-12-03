@@ -2174,7 +2174,6 @@ heal_color = Color(0, 0.579, 0.249, 1)
 
 [node name="PlayerInvUI" type="ColorRect" parent="OverlayUI" unique_id=43151155 node_paths=PackedStringArray("synced_inv_src_node", "main_slot_grid")]
 process_mode = 3
-visible = false
 material = SubResource("ShaderMaterial_2q23q")
 use_parent_material = true
 anchors_preset = 15
@@ -2187,7 +2186,7 @@ script = ExtResource("32_3a185")
 btn_up_texture = ExtResource("106_0313k")
 btn_down_texture = ExtResource("107_32jvf")
 synced_inv_src_node = NodePath("../..")
-main_slot_grid = NodePath("MainGridBackground/GridMargins/GridMarginsBackground/MainSlotGrid")
+main_slot_grid = NodePath("MainGridBackground/BackpackGridMargins/BackpackMarginsBkgrd/MainSlotGrid")
 
 [node name="MainGridBackground" type="NinePatchRect" parent="OverlayUI/PlayerInvUI" unique_id=98000998]
 layout_mode = 1
@@ -2211,7 +2210,7 @@ patch_margin_right = 5
 patch_margin_bottom = 5
 axis_stretch_vertical = 1
 
-[node name="GridMargins" type="MarginContainer" parent="OverlayUI/PlayerInvUI/MainGridBackground" unique_id=1281711311]
+[node name="BackpackGridMargins" type="MarginContainer" parent="OverlayUI/PlayerInvUI/MainGridBackground" unique_id=1281711311]
 editor_description = "THIS GRIDMARGIN MOUSE FILTER MUST STAY AS IGNORE TO MAKE SORT BUTTONS WORK!"
 layout_mode = 1
 anchors_preset = 15
@@ -2226,7 +2225,7 @@ theme_override_constants/margin_right = 0
 theme_override_constants/margin_bottom = 0
 metadata/_edit_lock_ = true
 
-[node name="GridMarginsBackground" type="NinePatchRect" parent="OverlayUI/PlayerInvUI/MainGridBackground/GridMargins" unique_id=757698560]
+[node name="BackpackMarginsBkgrd" type="NinePatchRect" parent="OverlayUI/PlayerInvUI/MainGridBackground/BackpackGridMargins" unique_id=757698560]
 custom_minimum_size = Vector2(182, 107)
 layout_mode = 2
 size_flags_horizontal = 4
@@ -2238,7 +2237,7 @@ patch_margin_right = 4
 patch_margin_bottom = 4
 axis_stretch_vertical = 1
 
-[node name="MainSlotGrid" type="GridContainer" parent="OverlayUI/PlayerInvUI/MainGridBackground/GridMargins/GridMarginsBackground" unique_id=2044105717]
+[node name="MainSlotGrid" type="GridContainer" parent="OverlayUI/PlayerInvUI/MainGridBackground/BackpackGridMargins/BackpackMarginsBkgrd" unique_id=2044105717]
 unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = -1
@@ -2258,100 +2257,100 @@ theme_override_constants/h_separation = 0
 theme_override_constants/v_separation = 0
 columns = 8
 
-[node name="Slot1" parent="OverlayUI/PlayerInvUI/MainGridBackground/GridMargins/GridMarginsBackground/MainSlotGrid" unique_id=1286240536 instance=ExtResource("42_r422n")]
+[node name="Slot1" parent="OverlayUI/PlayerInvUI/MainGridBackground/BackpackGridMargins/BackpackMarginsBkgrd/MainSlotGrid" unique_id=1286240536 instance=ExtResource("42_r422n")]
 layout_mode = 2
 
-[node name="Slot2" parent="OverlayUI/PlayerInvUI/MainGridBackground/GridMargins/GridMarginsBackground/MainSlotGrid" unique_id=1080720444 instance=ExtResource("42_r422n")]
+[node name="Slot2" parent="OverlayUI/PlayerInvUI/MainGridBackground/BackpackGridMargins/BackpackMarginsBkgrd/MainSlotGrid" unique_id=1080720444 instance=ExtResource("42_r422n")]
 layout_mode = 2
 
-[node name="Slot3" parent="OverlayUI/PlayerInvUI/MainGridBackground/GridMargins/GridMarginsBackground/MainSlotGrid" unique_id=650799886 instance=ExtResource("42_r422n")]
+[node name="Slot3" parent="OverlayUI/PlayerInvUI/MainGridBackground/BackpackGridMargins/BackpackMarginsBkgrd/MainSlotGrid" unique_id=650799886 instance=ExtResource("42_r422n")]
 layout_mode = 2
 
-[node name="Slot4" parent="OverlayUI/PlayerInvUI/MainGridBackground/GridMargins/GridMarginsBackground/MainSlotGrid" unique_id=1127310648 instance=ExtResource("42_r422n")]
+[node name="Slot4" parent="OverlayUI/PlayerInvUI/MainGridBackground/BackpackGridMargins/BackpackMarginsBkgrd/MainSlotGrid" unique_id=1127310648 instance=ExtResource("42_r422n")]
 layout_mode = 2
 
-[node name="Slot5" parent="OverlayUI/PlayerInvUI/MainGridBackground/GridMargins/GridMarginsBackground/MainSlotGrid" unique_id=1366133961 instance=ExtResource("42_r422n")]
+[node name="Slot5" parent="OverlayUI/PlayerInvUI/MainGridBackground/BackpackGridMargins/BackpackMarginsBkgrd/MainSlotGrid" unique_id=1366133961 instance=ExtResource("42_r422n")]
 layout_mode = 2
 
-[node name="Slot6" parent="OverlayUI/PlayerInvUI/MainGridBackground/GridMargins/GridMarginsBackground/MainSlotGrid" unique_id=393782019 instance=ExtResource("42_r422n")]
+[node name="Slot6" parent="OverlayUI/PlayerInvUI/MainGridBackground/BackpackGridMargins/BackpackMarginsBkgrd/MainSlotGrid" unique_id=393782019 instance=ExtResource("42_r422n")]
 layout_mode = 2
 
-[node name="Slot7" parent="OverlayUI/PlayerInvUI/MainGridBackground/GridMargins/GridMarginsBackground/MainSlotGrid" unique_id=1574381205 instance=ExtResource("42_r422n")]
+[node name="Slot7" parent="OverlayUI/PlayerInvUI/MainGridBackground/BackpackGridMargins/BackpackMarginsBkgrd/MainSlotGrid" unique_id=1574381205 instance=ExtResource("42_r422n")]
 layout_mode = 2
 
-[node name="Slot8" parent="OverlayUI/PlayerInvUI/MainGridBackground/GridMargins/GridMarginsBackground/MainSlotGrid" unique_id=160768503 instance=ExtResource("42_r422n")]
+[node name="Slot8" parent="OverlayUI/PlayerInvUI/MainGridBackground/BackpackGridMargins/BackpackMarginsBkgrd/MainSlotGrid" unique_id=160768503 instance=ExtResource("42_r422n")]
 layout_mode = 2
 
-[node name="Slot9" parent="OverlayUI/PlayerInvUI/MainGridBackground/GridMargins/GridMarginsBackground/MainSlotGrid" unique_id=948996091 instance=ExtResource("42_r422n")]
+[node name="Slot9" parent="OverlayUI/PlayerInvUI/MainGridBackground/BackpackGridMargins/BackpackMarginsBkgrd/MainSlotGrid" unique_id=948996091 instance=ExtResource("42_r422n")]
 layout_mode = 2
 
-[node name="Slot10" parent="OverlayUI/PlayerInvUI/MainGridBackground/GridMargins/GridMarginsBackground/MainSlotGrid" unique_id=1484980430 instance=ExtResource("42_r422n")]
+[node name="Slot10" parent="OverlayUI/PlayerInvUI/MainGridBackground/BackpackGridMargins/BackpackMarginsBkgrd/MainSlotGrid" unique_id=1484980430 instance=ExtResource("42_r422n")]
 layout_mode = 2
 
-[node name="Slot11" parent="OverlayUI/PlayerInvUI/MainGridBackground/GridMargins/GridMarginsBackground/MainSlotGrid" unique_id=1024203358 instance=ExtResource("42_r422n")]
+[node name="Slot11" parent="OverlayUI/PlayerInvUI/MainGridBackground/BackpackGridMargins/BackpackMarginsBkgrd/MainSlotGrid" unique_id=1024203358 instance=ExtResource("42_r422n")]
 layout_mode = 2
 
-[node name="Slot12" parent="OverlayUI/PlayerInvUI/MainGridBackground/GridMargins/GridMarginsBackground/MainSlotGrid" unique_id=444760026 instance=ExtResource("42_r422n")]
+[node name="Slot12" parent="OverlayUI/PlayerInvUI/MainGridBackground/BackpackGridMargins/BackpackMarginsBkgrd/MainSlotGrid" unique_id=444760026 instance=ExtResource("42_r422n")]
 layout_mode = 2
 
-[node name="Slot13" parent="OverlayUI/PlayerInvUI/MainGridBackground/GridMargins/GridMarginsBackground/MainSlotGrid" unique_id=1709395024 instance=ExtResource("42_r422n")]
+[node name="Slot13" parent="OverlayUI/PlayerInvUI/MainGridBackground/BackpackGridMargins/BackpackMarginsBkgrd/MainSlotGrid" unique_id=1709395024 instance=ExtResource("42_r422n")]
 layout_mode = 2
 
-[node name="Slot14" parent="OverlayUI/PlayerInvUI/MainGridBackground/GridMargins/GridMarginsBackground/MainSlotGrid" unique_id=1625733587 instance=ExtResource("42_r422n")]
+[node name="Slot14" parent="OverlayUI/PlayerInvUI/MainGridBackground/BackpackGridMargins/BackpackMarginsBkgrd/MainSlotGrid" unique_id=1625733587 instance=ExtResource("42_r422n")]
 layout_mode = 2
 
-[node name="Slot15" parent="OverlayUI/PlayerInvUI/MainGridBackground/GridMargins/GridMarginsBackground/MainSlotGrid" unique_id=545313958 instance=ExtResource("42_r422n")]
+[node name="Slot15" parent="OverlayUI/PlayerInvUI/MainGridBackground/BackpackGridMargins/BackpackMarginsBkgrd/MainSlotGrid" unique_id=545313958 instance=ExtResource("42_r422n")]
 layout_mode = 2
 
-[node name="Slot16" parent="OverlayUI/PlayerInvUI/MainGridBackground/GridMargins/GridMarginsBackground/MainSlotGrid" unique_id=839072975 instance=ExtResource("42_r422n")]
+[node name="Slot16" parent="OverlayUI/PlayerInvUI/MainGridBackground/BackpackGridMargins/BackpackMarginsBkgrd/MainSlotGrid" unique_id=839072975 instance=ExtResource("42_r422n")]
 layout_mode = 2
 
-[node name="Slot17" parent="OverlayUI/PlayerInvUI/MainGridBackground/GridMargins/GridMarginsBackground/MainSlotGrid" unique_id=863824619 instance=ExtResource("42_r422n")]
+[node name="Slot17" parent="OverlayUI/PlayerInvUI/MainGridBackground/BackpackGridMargins/BackpackMarginsBkgrd/MainSlotGrid" unique_id=863824619 instance=ExtResource("42_r422n")]
 layout_mode = 2
 
-[node name="Slot18" parent="OverlayUI/PlayerInvUI/MainGridBackground/GridMargins/GridMarginsBackground/MainSlotGrid" unique_id=1834338805 instance=ExtResource("42_r422n")]
+[node name="Slot18" parent="OverlayUI/PlayerInvUI/MainGridBackground/BackpackGridMargins/BackpackMarginsBkgrd/MainSlotGrid" unique_id=1834338805 instance=ExtResource("42_r422n")]
 layout_mode = 2
 
-[node name="Slot19" parent="OverlayUI/PlayerInvUI/MainGridBackground/GridMargins/GridMarginsBackground/MainSlotGrid" unique_id=378839538 instance=ExtResource("42_r422n")]
+[node name="Slot19" parent="OverlayUI/PlayerInvUI/MainGridBackground/BackpackGridMargins/BackpackMarginsBkgrd/MainSlotGrid" unique_id=378839538 instance=ExtResource("42_r422n")]
 layout_mode = 2
 
-[node name="Slot20" parent="OverlayUI/PlayerInvUI/MainGridBackground/GridMargins/GridMarginsBackground/MainSlotGrid" unique_id=126967897 instance=ExtResource("42_r422n")]
+[node name="Slot20" parent="OverlayUI/PlayerInvUI/MainGridBackground/BackpackGridMargins/BackpackMarginsBkgrd/MainSlotGrid" unique_id=126967897 instance=ExtResource("42_r422n")]
 layout_mode = 2
 
-[node name="Slot21" parent="OverlayUI/PlayerInvUI/MainGridBackground/GridMargins/GridMarginsBackground/MainSlotGrid" unique_id=1708965950 instance=ExtResource("42_r422n")]
+[node name="Slot21" parent="OverlayUI/PlayerInvUI/MainGridBackground/BackpackGridMargins/BackpackMarginsBkgrd/MainSlotGrid" unique_id=1708965950 instance=ExtResource("42_r422n")]
 layout_mode = 2
 
-[node name="Slot22" parent="OverlayUI/PlayerInvUI/MainGridBackground/GridMargins/GridMarginsBackground/MainSlotGrid" unique_id=145337089 instance=ExtResource("42_r422n")]
+[node name="Slot22" parent="OverlayUI/PlayerInvUI/MainGridBackground/BackpackGridMargins/BackpackMarginsBkgrd/MainSlotGrid" unique_id=145337089 instance=ExtResource("42_r422n")]
 layout_mode = 2
 
-[node name="Slot23" parent="OverlayUI/PlayerInvUI/MainGridBackground/GridMargins/GridMarginsBackground/MainSlotGrid" unique_id=1320817897 instance=ExtResource("42_r422n")]
+[node name="Slot23" parent="OverlayUI/PlayerInvUI/MainGridBackground/BackpackGridMargins/BackpackMarginsBkgrd/MainSlotGrid" unique_id=1320817897 instance=ExtResource("42_r422n")]
 layout_mode = 2
 
-[node name="Slot24" parent="OverlayUI/PlayerInvUI/MainGridBackground/GridMargins/GridMarginsBackground/MainSlotGrid" unique_id=1762736326 instance=ExtResource("42_r422n")]
+[node name="Slot24" parent="OverlayUI/PlayerInvUI/MainGridBackground/BackpackGridMargins/BackpackMarginsBkgrd/MainSlotGrid" unique_id=1762736326 instance=ExtResource("42_r422n")]
 layout_mode = 2
 
-[node name="Slot25" parent="OverlayUI/PlayerInvUI/MainGridBackground/GridMargins/GridMarginsBackground/MainSlotGrid" unique_id=804215327 instance=ExtResource("42_r422n")]
+[node name="Slot25" parent="OverlayUI/PlayerInvUI/MainGridBackground/BackpackGridMargins/BackpackMarginsBkgrd/MainSlotGrid" unique_id=804215327 instance=ExtResource("42_r422n")]
 layout_mode = 2
 
-[node name="Slot26" parent="OverlayUI/PlayerInvUI/MainGridBackground/GridMargins/GridMarginsBackground/MainSlotGrid" unique_id=2015969844 instance=ExtResource("42_r422n")]
+[node name="Slot26" parent="OverlayUI/PlayerInvUI/MainGridBackground/BackpackGridMargins/BackpackMarginsBkgrd/MainSlotGrid" unique_id=2015969844 instance=ExtResource("42_r422n")]
 layout_mode = 2
 
-[node name="Slot27" parent="OverlayUI/PlayerInvUI/MainGridBackground/GridMargins/GridMarginsBackground/MainSlotGrid" unique_id=1722016614 instance=ExtResource("42_r422n")]
+[node name="Slot27" parent="OverlayUI/PlayerInvUI/MainGridBackground/BackpackGridMargins/BackpackMarginsBkgrd/MainSlotGrid" unique_id=1722016614 instance=ExtResource("42_r422n")]
 layout_mode = 2
 
-[node name="Slot28" parent="OverlayUI/PlayerInvUI/MainGridBackground/GridMargins/GridMarginsBackground/MainSlotGrid" unique_id=258649640 instance=ExtResource("42_r422n")]
+[node name="Slot28" parent="OverlayUI/PlayerInvUI/MainGridBackground/BackpackGridMargins/BackpackMarginsBkgrd/MainSlotGrid" unique_id=258649640 instance=ExtResource("42_r422n")]
 layout_mode = 2
 
-[node name="Slot29" parent="OverlayUI/PlayerInvUI/MainGridBackground/GridMargins/GridMarginsBackground/MainSlotGrid" unique_id=714891770 instance=ExtResource("42_r422n")]
+[node name="Slot29" parent="OverlayUI/PlayerInvUI/MainGridBackground/BackpackGridMargins/BackpackMarginsBkgrd/MainSlotGrid" unique_id=714891770 instance=ExtResource("42_r422n")]
 layout_mode = 2
 
-[node name="Slot30" parent="OverlayUI/PlayerInvUI/MainGridBackground/GridMargins/GridMarginsBackground/MainSlotGrid" unique_id=1925938792 instance=ExtResource("42_r422n")]
+[node name="Slot30" parent="OverlayUI/PlayerInvUI/MainGridBackground/BackpackGridMargins/BackpackMarginsBkgrd/MainSlotGrid" unique_id=1925938792 instance=ExtResource("42_r422n")]
 layout_mode = 2
 
-[node name="Slot31" parent="OverlayUI/PlayerInvUI/MainGridBackground/GridMargins/GridMarginsBackground/MainSlotGrid" unique_id=181077610 instance=ExtResource("42_r422n")]
+[node name="Slot31" parent="OverlayUI/PlayerInvUI/MainGridBackground/BackpackGridMargins/BackpackMarginsBkgrd/MainSlotGrid" unique_id=181077610 instance=ExtResource("42_r422n")]
 layout_mode = 2
 
-[node name="Slot32" parent="OverlayUI/PlayerInvUI/MainGridBackground/GridMargins/GridMarginsBackground/MainSlotGrid" unique_id=2048545048 instance=ExtResource("42_r422n")]
+[node name="Slot32" parent="OverlayUI/PlayerInvUI/MainGridBackground/BackpackGridMargins/BackpackMarginsBkgrd/MainSlotGrid" unique_id=2048545048 instance=ExtResource("42_r422n")]
 layout_mode = 2
 
 [node name="MarginContainer" type="VBoxContainer" parent="OverlayUI/PlayerInvUI/MainGridBackground" unique_id=1288780440]
@@ -2611,7 +2610,7 @@ backing_texture = ExtResource("94_0313k")
 layout_mode = 2
 backing_texture = ExtResource("94_0313k")
 
-[node name="CraftingManager" type="VBoxContainer" parent="OverlayUI/PlayerInvUI" unique_id=1393459903 node_paths=PackedStringArray("inventory_ui")]
+[node name="CraftingManager" type="VBoxContainer" parent="OverlayUI/PlayerInvUI" unique_id=1393459903]
 unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = -1
@@ -2629,7 +2628,6 @@ mouse_filter = 0
 theme_override_constants/separation = 8
 alignment = 1
 script = ExtResource("118_thmqm")
-inventory_ui = NodePath("..")
 
 [node name="InventoryTexture" type="NinePatchRect" parent="OverlayUI/PlayerInvUI/CraftingManager" unique_id=1430942804]
 layout_mode = 2
@@ -2823,7 +2821,7 @@ mouse_filter = 2
 texture = ExtResource("119_bmpdm")
 stretch_mode = 5
 
-[node name="WearablesPanel" type="VBoxContainer" parent="OverlayUI/PlayerInvUI" unique_id=1151794790 node_paths=PackedStringArray("inventory_ui") groups=["has_save_logic"]]
+[node name="WearablesPanel" type="VBoxContainer" parent="OverlayUI/PlayerInvUI" unique_id=1151794790 groups=["has_save_logic"]]
 unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = -1
@@ -2837,7 +2835,6 @@ grow_horizontal = 2
 mouse_filter = 0
 alignment = 1
 script = ExtResource("109_bvo3j")
-inventory_ui = NodePath("..")
 
 [node name="WearablesPanelBackground" type="NinePatchRect" parent="OverlayUI/PlayerInvUI/WearablesPanel" unique_id=1220195744]
 layout_mode = 2
@@ -2966,7 +2963,7 @@ layout_mode = 2
 script = ExtResource("113_bvo3j")
 backing_texture = ExtResource("103_g5u5n")
 
-[node name="ItemDetailsPanel" type="CenterContainer" parent="OverlayUI/PlayerInvUI" unique_id=211883855 node_paths=PackedStringArray("inventory_ui")]
+[node name="ItemDetailsPanel" type="CenterContainer" parent="OverlayUI/PlayerInvUI" unique_id=211883855]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(106, 0)
 layout_mode = 1
@@ -2979,7 +2976,6 @@ offset_right = 141.0
 offset_bottom = 98.0
 grow_vertical = 2
 script = ExtResource("116_g5u5n")
-inventory_ui = NodePath("..")
 
 [node name="ItemDetailsPanelVBox" type="VBoxContainer" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel" unique_id=1660534208]
 custom_minimum_size = Vector2(106, 0)

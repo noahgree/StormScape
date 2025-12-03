@@ -5,9 +5,6 @@ class_name ItemDetailsPanel
 ## You can drag and drop an item into the main slot to edit its mods and view more information about it.
 ## Every item is viewable, but only weapons with moddability have mod spots displayed.
 
-@export_group("Connections")
-@export var inventory_ui: PlayerInvUI ## The main controller for all inventory sub-UIs.
-
 @onready var item_viewer_slot: Slot = %ItemViewerSlot ## The slot that holds the item under review.
 @onready var mod_slots_container: GridContainer = %ModSlots ## The container whose children are mod slots.
 @onready var mod_slots_margin: MarginContainer = %ModSlotsMargin ## The margin container for the mod slots.
@@ -28,7 +25,6 @@ var item_details_creator: ItemDetailsCreator = ItemDetailsCreator.new() ## The h
 var item_hover_delay_timer: Timer = TimerHelpers.create_one_shot_timer(self, 0.38, _on_hover_delay_ended) ## The delay timer for showing what is hovered over when something is not pinned.
 var pinned: bool = false ## When true, an item is pinned in the view slot and the slot should not populate with the item underneath the mouse.
 var is_updating_via_hover: bool = false ## Flagged to true when the hovered slots are dictating what populates the item viewer.
-var is_still_setting_up: bool = true ## When true, don't try and populate the stats panel, as we are waiting for nodes to finish setting up.
 
 
 func _ready() -> void:
@@ -42,14 +38,8 @@ func _ready() -> void:
 	details_margin.visible = false
 	changing_item_viewer_slot = false
 
-	if Globals.player_node == null:
-		await SignalBus.player_ready
-	is_still_setting_up = false
-
-	_setup_slots()
-
 ## Sets up the mod slots and the item viewer slot with their needed data.
-func _setup_slots() -> void:
+func setup_slots(inventory_ui: PlayerInvUI) -> void:
 	var i: int = 0
 	for slot: ModSlot in mod_slots_container.get_children():
 		slot.name = "Mods_Input_Slot_" + str(i)
@@ -207,15 +197,11 @@ func _show_and_update_item_title(title: String) -> void:
 
 ## Gets the details for the currently viewed item stats.
 func _assign_item_details(stats: ItemResource) -> void:
-	if is_still_setting_up:
-		return
 	var details: Array[String] = item_details_creator.parse_item(stats)
 	_format_and_update_details(details)
 
 ## Gets the details for the player.
 func _assign_player_details() -> void:
-	if is_still_setting_up:
-		return
 	var details: Array[String] = item_details_creator.parse_player()
 	_format_and_update_details(details)
 

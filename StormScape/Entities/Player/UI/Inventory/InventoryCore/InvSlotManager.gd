@@ -37,7 +37,7 @@ func fill_slots_from_synced_inv() -> void:
 	call_deferred("fill_slots_with_items")
 
 ## Returns the current index counter and then increments it to prepare for the next slot.
-func assign_next_slot_index(_use_core_slots: bool = false) -> int:
+func assign_next_slot_index() -> int:
 	var index: int = index_counter
 	index_counter += 1
 	return index
@@ -57,7 +57,7 @@ func _setup_main_slot_grid(main_slot_grid_size: int) -> void:
 	for i: int in range(main_slot_grid_size):
 		var slot: Slot = slot_scene.instantiate()
 		slot.name = "MainSlot_" + str(index_counter)
-		slot.index = assign_next_slot_index(true)
+		slot.index = assign_next_slot_index()
 		slot.synced_inv = synced_inv_src_node.inv
 		slots.append(slot)
 		main_slot_grid.add_child(slot)
