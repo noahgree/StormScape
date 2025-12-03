@@ -82,8 +82,10 @@ func update_vertical_tint_progress(value: float) -> void:
 	cursor.set_instance_shader_parameter("progress", clampf(value, 0.0, 100.0))
 
 ## Updates the mouse tooltip with a title and info string.
-func update_tooltip(title_str: String, info_str: String = "", info_str_color: Color = Color.TRANSPARENT) -> void:
+func update_tooltip(title_str: String, title_str_color: Color = Globals.ui_colors.ui_light_tan,
+					info_str: String = "", info_str_color: Color = Color.TRANSPARENT) -> void:
 	tooltip_title.text = title_str + Globals.invis_char
+	tooltip_title.add_theme_color_override("default_color", title_str_color)
 	tooltip_info.text = (info_str + Globals.invis_char) if info_str != "" else ""
 	if info_str_color != Color.TRANSPARENT:
 		tooltip_info.add_theme_color_override("default_color", info_str_color)

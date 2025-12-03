@@ -1,4 +1,4 @@
-[gd_scene load_steps=45 format=3 uid="uid://xsq1q0fffsin"]
+[gd_scene load_steps=47 format=3 uid="uid://xsq1q0fffsin"]
 
 [ext_resource type="Script" uid="uid://nup3um166s32" path="res://Entities/EntityCore/EntityTypes/RigidEntity/RigidEntity.gd" id="1_6tnit"]
 [ext_resource type="Script" uid="uid://dwmur0cosbbwh" path="res://Entities/Player/UI/Inventory/InventoryCore/InvResource.gd" id="2_mdi77"]
@@ -10,6 +10,7 @@
 [ext_resource type="PackedScene" uid="uid://bhcqtorpyerc3" path="res://Utilities/Debug/ParticleEmissionComponent.tscn" id="6_ljryo"]
 [ext_resource type="PackedScene" uid="uid://btba0jmsow1mx" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectReceiverComponent.tscn" id="7_ftqus"]
 [ext_resource type="Texture2D" uid="uid://v1rdlj54siql" path="res://Entities/Environment/Objects/SimpleBoxCT.tres" id="7_mdi77"]
+[ext_resource type="Resource" uid="uid://dsylig1px18qv" path="res://Entities/Items/TRESItems/Ammo/Boompowder(0).tres" id="8_2xjsy"]
 [ext_resource type="Resource" uid="uid://bper7kxtsf7f1" path="res://Entities/Items/TRESItems/MeleeWeapons/Axe(1).tres" id="8_iirwy"]
 [ext_resource type="Script" uid="uid://baglarh3m4c8o" path="res://Entities/Components/ItemComponents/LootTableComponent/LootTableResource.gd" id="9_2xjsy"]
 [ext_resource type="PackedScene" uid="uid://4gl24qwdyti3" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/DmgHandler.tscn" id="9_23lbg"]
@@ -28,7 +29,7 @@
 [ext_resource type="PackedScene" uid="uid://jpq0ij8wwlhy" path="res://Entities/Components/FacingComponent/FacingComponent.tscn" id="24_i2rwd"]
 [ext_resource type="PackedScene" uid="uid://2yy4xfm5g74l" path="res://Entities/Components/ItemComponents/ClippingComponent/ClippingArea.tscn" id="28_2xjsy"]
 
-[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_iirwy"]
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_mdi77"]
 rough = true
 
 [sub_resource type="Resource" id="Resource_arbka"]
@@ -53,15 +54,21 @@ script = ExtResource("16_fkdnf")
 item = ExtResource("8_iirwy")
 metadata/_custom_type_script = "uid://1qq7eo7lm8j6"
 
+[sub_resource type="Resource" id="Resource_3nojt"]
+script = ExtResource("16_fkdnf")
+item = ExtResource("8_2xjsy")
+weighting = 2.0
+metadata/_custom_type_script = "uid://1qq7eo7lm8j6"
+
 [sub_resource type="Resource" id="Resource_wbmts"]
 script = ExtResource("9_2xjsy")
-die_loot_table = Array[ExtResource("16_fkdnf")]([SubResource("Resource_mdi77"), SubResource("Resource_ccp8j"), SubResource("Resource_ssl24")])
+die_loot_table = Array[ExtResource("16_fkdnf")]([SubResource("Resource_mdi77"), SubResource("Resource_ccp8j"), SubResource("Resource_ssl24"), SubResource("Resource_3nojt")])
 metadata/_custom_type_script = "uid://baglarh3m4c8o"
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_sbju2"]
 size = Vector2(18, 18)
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_2xjsy"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ssl24"]
 resource_local_to_scene = true
 shader = ExtResource("4_l6rwf")
 
@@ -80,32 +87,32 @@ animations = [{
 "speed": 5.0
 }]
 
-[sub_resource type="Resource" id="Resource_3nojt"]
+[sub_resource type="Resource" id="Resource_mou4w"]
 resource_local_to_scene = true
 script = ExtResource("11_ccp8j")
 metadata/_custom_type_script = "uid://dk6uef3uxmeev"
 
-[sub_resource type="Resource" id="Resource_mou4w"]
+[sub_resource type="Resource" id="Resource_uv3nk"]
 resource_local_to_scene = true
 script = ExtResource("12_arbka")
 metadata/_custom_type_script = "uid://5krnqdrdbey1"
 
-[sub_resource type="Resource" id="Resource_uv3nk"]
+[sub_resource type="Resource" id="Resource_v6eom"]
 resource_local_to_scene = true
 script = ExtResource("13_3nojt")
 metadata/_custom_type_script = "uid://bqw1ufs6jb7cf"
 
-[sub_resource type="Resource" id="Resource_v6eom"]
+[sub_resource type="Resource" id="Resource_p34sx"]
 resource_local_to_scene = true
 script = ExtResource("14_ssl24")
 metadata/_custom_type_script = "uid://b1lo2mdb3otax"
 
-[sub_resource type="Resource" id="Resource_p34sx"]
+[sub_resource type="Resource" id="Resource_3advh"]
 resource_local_to_scene = true
 script = ExtResource("15_wbmts")
 metadata/_custom_type_script = "uid://dubq8xgav66ue"
 
-[sub_resource type="Resource" id="Resource_3advh"]
+[sub_resource type="Resource" id="Resource_o8v38"]
 resource_local_to_scene = true
 script = ExtResource("12_mnmab")
 metadata/_custom_type_script = "uid://ckiyd2nbdcofr"
@@ -113,11 +120,11 @@ metadata/_custom_type_script = "uid://ckiyd2nbdcofr"
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_wpovd"]
 size = Vector2(18, 18)
 
-[node name="TestRigidEntity" type="RigidBody2D"]
+[node name="TestRigidEntity" type="RigidBody2D" unique_id=1427217190]
 collision_layer = 32
 collision_mask = 245
 mass = 3.0
-physics_material_override = SubResource("PhysicsMaterial_iirwy")
+physics_material_override = SubResource("PhysicsMaterial_mdi77")
 gravity_scale = 0.0
 lock_rotation = true
 linear_damp = 4.5
@@ -127,16 +134,16 @@ is_object = true
 inv = SubResource("Resource_arbka")
 loot = SubResource("Resource_wbmts")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=602265290]
 position = Vector2(0, -9)
 shape = SubResource("RectangleShape2D_sbju2")
 debug_color = Color(1.44392e-06, 0.568839, 0.851513, 0.42)
 
-[node name="DetectionComponent" parent="." instance=ExtResource("3_fg1br")]
+[node name="DetectionComponent" parent="." unique_id=1435926029 instance=ExtResource("3_fg1br")]
 
-[node name="EntitySprite" parent="." instance=ExtResource("3_nv7a0")]
+[node name="EntitySprite" parent="." unique_id=213399511 instance=ExtResource("3_nv7a0")]
 unique_name_in_owner = true
-material = SubResource("ShaderMaterial_2xjsy")
+material = SubResource("ShaderMaterial_ssl24")
 instance_shader_parameters/brightness_mult = 1.0
 instance_shader_parameters/crack_color = Color(0.246, 0.109, 0.01, 0.85)
 instance_shader_parameters/crack_intensity = 1.0
@@ -149,52 +156,52 @@ instance_shader_parameters/use_override_color = false
 position = Vector2(0, -9)
 sprite_frames = SubResource("SpriteFrames_fg1br")
 
-[node name="EntityShadow" parent="." instance=ExtResource("14_2xjsy")]
+[node name="EntityShadow" parent="." unique_id=378322282 instance=ExtResource("14_2xjsy")]
 offset_left = -11.0
 offset_top = -14.0
 offset_right = 11.0
 offset_bottom = 2.0
 
-[node name="ParticleEmissionComponent" parent="." instance=ExtResource("6_ljryo")]
+[node name="ParticleEmissionComponent" parent="." unique_id=1796230279 instance=ExtResource("6_ljryo")]
 
-[node name="HealthComponent" parent="." instance=ExtResource("6_1wa26")]
+[node name="HealthComponent" parent="." unique_id=2105530722 instance=ExtResource("6_1wa26")]
 
-[node name="EffectReceiverComponent" parent="." node_paths=PackedStringArray("affected_entity", "dmg_handler", "heal_handler") instance=ExtResource("7_ftqus")]
+[node name="EffectReceiverComponent" parent="." unique_id=1427875003 node_paths=PackedStringArray("affected_entity", "dmg_handler", "heal_handler") instance=ExtResource("7_ftqus")]
 position = Vector2(0, -9)
 affected_entity = NodePath("..")
 dmg_handler = NodePath("DmgHandler")
 heal_handler = NodePath("HealHandler")
-knockback_handler = SubResource("Resource_3nojt")
-poison_handler = SubResource("Resource_mou4w")
-regen_handler = SubResource("Resource_uv3nk")
-frostbite_handler = SubResource("Resource_v6eom")
-burning_handler = SubResource("Resource_p34sx")
-life_steal_handler = SubResource("Resource_3advh")
+knockback_handler = SubResource("Resource_mou4w")
+poison_handler = SubResource("Resource_uv3nk")
+regen_handler = SubResource("Resource_v6eom")
+frostbite_handler = SubResource("Resource_p34sx")
+burning_handler = SubResource("Resource_3advh")
+life_steal_handler = SubResource("Resource_o8v38")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="EffectReceiverComponent"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="EffectReceiverComponent" unique_id=1659667704]
 shape = SubResource("RectangleShape2D_wpovd")
 debug_color = Color(0.941042, 1.32841e-05, 0.612344, 0.42)
 
-[node name="DmgHandler" parent="EffectReceiverComponent" instance=ExtResource("9_23lbg")]
+[node name="DmgHandler" parent="EffectReceiverComponent" unique_id=1677913204 instance=ExtResource("9_23lbg")]
 
-[node name="HealHandler" parent="EffectReceiverComponent" instance=ExtResource("11_e8ceb")]
+[node name="HealHandler" parent="EffectReceiverComponent" unique_id=74864457 instance=ExtResource("11_e8ceb")]
 
-[node name="StatusEffectsComponent" parent="." node_paths=PackedStringArray("effect_receiver") instance=ExtResource("14_20kf8")]
+[node name="StatusEffectsComponent" parent="." unique_id=907488759 node_paths=PackedStringArray("effect_receiver") instance=ExtResource("14_20kf8")]
 unique_name_in_owner = true
 effect_receiver = NodePath("../EffectReceiverComponent")
 print_effect_updates = true
 
-[node name="FacingComponent" parent="." instance=ExtResource("24_i2rwd")]
+[node name="FacingComponent" parent="." unique_id=1985141125 instance=ExtResource("24_i2rwd")]
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1161641908]
 
-[node name="AnimationTree" type="AnimationTree" parent="."]
+[node name="AnimationTree" type="AnimationTree" parent="." unique_id=740881062]
 anim_player = NodePath("../AnimationPlayer")
 
-[node name="ClippingArea" parent="." instance=ExtResource("28_2xjsy")]
+[node name="ClippingArea" parent="." unique_id=13236385 instance=ExtResource("28_2xjsy")]
 visible = false
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="ClippingArea"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ClippingArea" unique_id=694151697]
 position = Vector2(0, -9)
 shape = SubResource("RectangleShape2D_wpovd")
 debug_color = Color(1, 0.013803, 0.00528418, 0.42)

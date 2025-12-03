@@ -7,7 +7,7 @@ enum ProjWeaponType { ## The kinds of projectile weapons.
 	PISTOL, SHOTGUN, SUBMACHINE, SNIPER, RIFLE, EXPLOSIVE, PRIMITIVE_WEAPON, MAGIC, THROWABLE, SPECIAL_WEAPON
 }
 enum ProjAmmoType { ## The types of projectile ammo.
-	NONE, SELF, BULLETS, SHELLS, ROCKETS, MAGIC, ION_CHARGES, STAMINA, CHARGES
+	NONE, SELF, BULLETS, SHELLS, BOOMPOWDER, MAGIC, ION_CHARGES, STAMINA, CHARGES
 }
 enum FiringType { ## The kinds of firing modes the weapon can have.
 	SEMI_AUTO, AUTO, CHARGE

@@ -139,6 +139,11 @@ const invis_char: String = "[color=#AAAAAA00][char=21A5][/color]"
 
 const ui_colors: Dictionary[StringName, Color] = {
 	"ui_tan" : Color(0.914, 0.769, 0.741),
-	"ui_light_tan" : Color(0.953, 0.871, 0.855),
-	"ui_text_outline" : Color(0.0, 0.0, 0.0, 0.565)
+	"ui_light_tan" : Color(0.961, 0.894, 0.881),
+	"ui_text_outline" : Color(0.0, 0.0, 0.0, 0.565),
+	"ui_glow_light_tan" : Color(1.825, 1.699, 1.678),
+	"ui_glow_success" : Color(0, 1.825, 0.805),
+	"ui_glow_fail" : Color(1.825, 0.546, 0.686),
+	"ui_glow_storm" : Color(1.52, 0.616, 2.352),
+	"ui_glow_gold" : Color(1.995, 1.138, 0.736)
 }

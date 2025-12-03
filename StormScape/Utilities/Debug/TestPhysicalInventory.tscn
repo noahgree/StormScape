@@ -48,7 +48,7 @@ animations = [{
 "speed": 5.0
 }]
 
-[sub_resource type="Resource" id="Resource_ux5b0"]
+[sub_resource type="Resource" id="Resource_f6uiu"]
 resource_local_to_scene = true
 script = ExtResource("11_w3nan")
 metadata/_custom_type_script = "uid://dubq8xgav66ue"
@@ -59,10 +59,11 @@ size = Vector2(18, 14)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_1mmyp"]
 size = Vector2(18, 14)
 
-[sub_resource type="Resource" id="Resource_e5jpa"]
+[sub_resource type="Resource" id="Resource_ux5b0"]
 resource_local_to_scene = true
 script = ExtResource("17_f6uiu")
 title = "Search"
+title_color = Color(1.995, 1.138, 0.736, 1)
 info = "Lvl 1 Chest"
 metadata/_custom_type_script = "uid://dgibl37gudpj1"
 
@@ -104,7 +105,7 @@ effect_receiver = NodePath("../EffectReceiverComponent")
 [node name="EffectReceiverComponent" parent="." unique_id=1762623481 node_paths=PackedStringArray("affected_entity", "dmg_handler") instance=ExtResource("11_5wq56")]
 affected_entity = NodePath("..")
 dmg_handler = NodePath("DmgHandler")
-burning_handler = SubResource("Resource_ux5b0")
+burning_handler = SubResource("Resource_f6uiu")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="EffectReceiverComponent" unique_id=2051548302]
 position = Vector2(0, -7)
@@ -125,5 +126,5 @@ debug_color = Color(1, 0, 0.092, 0.109)
 unique_name_in_owner = true
 prompt_radius = 18.0
 radius_offset = Vector2(0, -6)
-interaction_offer = SubResource("Resource_e5jpa")
+interaction_offer = SubResource("Resource_ux5b0")
 prompt_offset = Vector2(0, -16)

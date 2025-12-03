@@ -114,6 +114,7 @@ func _on_blank_space_input_event(event: InputEvent) -> void:
 ## Determines if this control node can have item slot data dropped into it.
 func _can_drop_data(_at_position: Vector2, data: Variant) -> bool:
 	if (data != null) and ("item" in data) and (data.item != null):
+		CursorManager.update_tooltip("Drop", Globals.ui_colors.ui_light_tan)
 		return true
 	else:
 		return false
@@ -148,6 +149,10 @@ func _drop_data(_at_position: Vector2, data: Variant) -> void:
 			synced_inv_src_node.hands.active_slot_info.calculate_inv_ammo()
 
 	data._on_mouse_exited()
+
+## When mouse stops hovering over drop zone, hide the tooltip.
+func _on_mouse_exited() -> void:
+	_hide_tooltip()
 #endregion
 
 #region Buttons
@@ -193,11 +198,16 @@ func _on_craft_btn_button_up() -> void:
 
 ## Showing and hiding sort & stack tooltips.
 func _on_sort_btn_mouse_entered(sort_method: String) -> void:
-	CursorManager.update_tooltip("Sort by " + sort_method)
+	if not get_viewport().gui_is_dragging():
+		CursorManager.update_tooltip("Sort by " + sort_method)
 func _on_autostack_btn_mouse_entered() -> void:
-	CursorManager.update_tooltip("Autostack Items")
+	if not get_viewport().gui_is_dragging():
+		CursorManager.update_tooltip("Autostack Items")
 func _on_craft_btn_mouse_entered() -> void:
-	CursorManager.update_tooltip("Craft")
+	if not get_viewport().gui_is_dragging():
+		var success: bool = crafting_manager.can_output
+		var color: Color = Globals.ui_colors.ui_glow_success if success else Globals.ui_colors.ui_light_tan
+		CursorManager.update_tooltip("Craft" if success else "Nothing to Craft", color)
 func _hide_tooltip() -> void:
 	CursorManager.hide_tooltip()
 #endregion

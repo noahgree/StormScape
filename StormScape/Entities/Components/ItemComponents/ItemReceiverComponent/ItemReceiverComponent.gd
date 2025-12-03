@@ -56,6 +56,7 @@ func _update_player_item_interact_hud() -> void:
 			interaction_offer.title = ("(" + str(item.quantity) + ") " + item.stats.name).to_upper()
 		else:
 			interaction_offer.title = item.stats.name.to_upper()
+		interaction_offer.title_color = Globals.ui_colors.ui_glow_light_tan
 		interaction_offer.info = item.stats.get_rarity_string() + " " + item.stats.get_item_type_string()
 		if item.stats is WeaponResource and not item.stats.no_levels:
 			interaction_offer.info += " (LVL " + str(item.stats.level) + ")"

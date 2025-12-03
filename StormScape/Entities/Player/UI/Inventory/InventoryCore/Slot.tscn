@@ -44,7 +44,7 @@ outline_color = Color(0.219608, 0.137255, 0.113725, 1)
 shadow_size = 0
 shadow_offset = Vector2(0, 0)
 
-[node name="Slot" type="NinePatchRect"]
+[node name="Slot" type="NinePatchRect" unique_id=1667727181]
 clip_contents = true
 custom_minimum_size = Vector2(22, 22)
 offset_right = 14.0
@@ -63,7 +63,7 @@ script = ExtResource("2_ywtjc")
 default_slot_texture = ExtResource("1_tu6a1")
 no_item_slot_texture = ExtResource("4_ylk5m")
 
-[node name="BackColorMargin" type="MarginContainer" parent="."]
+[node name="BackColorMargin" type="MarginContainer" parent="." unique_id=1910145826]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -75,13 +75,13 @@ theme_override_constants/margin_top = 1
 theme_override_constants/margin_right = 1
 theme_override_constants/margin_bottom = 1
 
-[node name="BackColor" type="ColorRect" parent="BackColorMargin"]
+[node name="BackColor" type="ColorRect" parent="BackColorMargin" unique_id=1106729018]
 material = SubResource("ShaderMaterial_me41j")
 instance_shader_parameters/main_color = Color(0, 0, 0, 0)
 instance_shader_parameters/progress = 100.0
 layout_mode = 2
 
-[node name="RarityGlowMargin" type="MarginContainer" parent="."]
+[node name="RarityGlowMargin" type="MarginContainer" parent="." unique_id=895334514]
 clip_contents = true
 layout_mode = 1
 anchors_preset = 15
@@ -94,7 +94,7 @@ theme_override_constants/margin_top = -1
 theme_override_constants/margin_right = -1
 theme_override_constants/margin_bottom = -1
 
-[node name="RarityGlow" type="TextureRect" parent="RarityGlowMargin"]
+[node name="RarityGlow" type="TextureRect" parent="RarityGlowMargin" unique_id=1958634153]
 visible = false
 material = SubResource("CanvasItemMaterial_raets")
 layout_mode = 2
@@ -102,25 +102,25 @@ texture = ExtResource("5_dhreg")
 expand_mode = 1
 stretch_mode = 6
 
-[node name="BackingTextureMargin" type="MarginContainer" parent="."]
+[node name="BackingTextureMargin" type="MarginContainer" parent="." unique_id=1099328322]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/margin_left = 2
-theme_override_constants/margin_top = 2
-theme_override_constants/margin_right = 2
-theme_override_constants/margin_bottom = 2
+theme_override_constants/margin_left = 3
+theme_override_constants/margin_top = 3
+theme_override_constants/margin_right = 3
+theme_override_constants/margin_bottom = 3
 
-[node name="BackingTexture" type="TextureRect" parent="BackingTextureMargin"]
+[node name="BackingTexture" type="TextureRect" parent="BackingTextureMargin" unique_id=116848529]
 self_modulate = Color(0, 0, 0, 0.18)
 layout_mode = 2
 expand_mode = 3
 stretch_mode = 5
 
-[node name="TextureMargins" type="MarginContainer" parent="."]
+[node name="TextureMargins" type="MarginContainer" parent="." unique_id=1436324179]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -133,14 +133,14 @@ theme_override_constants/margin_top = 3
 theme_override_constants/margin_right = 3
 theme_override_constants/margin_bottom = 3
 
-[node name="ItemTexture" type="TextureRect" parent="TextureMargins"]
+[node name="ItemTexture" type="TextureRect" parent="TextureMargins" unique_id=2061156382]
 material = SubResource("ShaderMaterial_h48ps")
 instance_shader_parameters/final_alpha = 1.0
 layout_mode = 2
 expand_mode = 1
 stretch_mode = 5
 
-[node name="QuantityMargins" type="MarginContainer" parent="."]
+[node name="QuantityMargins" type="MarginContainer" parent="." unique_id=1028329814]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -150,7 +150,7 @@ grow_vertical = 2
 theme_override_constants/margin_right = 2
 theme_override_constants/margin_bottom = 2
 
-[node name="Quantity" type="Label" parent="QuantityMargins"]
+[node name="Quantity" type="Label" parent="QuantityMargins" unique_id=1686324007]
 layout_mode = 2
 size_flags_horizontal = 8
 size_flags_vertical = 8
@@ -158,7 +158,7 @@ label_settings = SubResource("LabelSettings_kd5f7")
 horizontal_alignment = 2
 vertical_alignment = 1
 
-[node name="CornerInfoIconsMargin" type="MarginContainer" parent="."]
+[node name="CornerInfoIconsMargin" type="MarginContainer" parent="." unique_id=1935987545]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -170,14 +170,14 @@ theme_override_constants/margin_top = 2
 theme_override_constants/margin_right = 2
 theme_override_constants/margin_bottom = 2
 
-[node name="BackgroundMargin" type="MarginContainer" parent="CornerInfoIconsMargin"]
+[node name="BackgroundMargin" type="MarginContainer" parent="CornerInfoIconsMargin" unique_id=741672059]
 layout_mode = 2
 theme_override_constants/margin_left = -1
 theme_override_constants/margin_top = -1
 theme_override_constants/margin_right = -1
 theme_override_constants/margin_bottom = -1
 
-[node name="LevelBackground" type="ColorRect" parent="CornerInfoIconsMargin/BackgroundMargin"]
+[node name="LevelBackground" type="ColorRect" parent="CornerInfoIconsMargin/BackgroundMargin" unique_id=1784625316]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(5, 3)
 layout_mode = 2
@@ -185,7 +185,7 @@ size_flags_horizontal = 8
 size_flags_vertical = 0
 color = Color(0, 0, 0, 0.6)
 
-[node name="CornerIconsBackground" type="ColorRect" parent="CornerInfoIconsMargin/BackgroundMargin"]
+[node name="CornerIconsBackground" type="ColorRect" parent="CornerInfoIconsMargin/BackgroundMargin" unique_id=570227360]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(6, 6)
 layout_mode = 2
@@ -193,56 +193,56 @@ size_flags_horizontal = 0
 size_flags_vertical = 0
 color = Color(0, 0, 0, 0.6)
 
-[node name="CornerInfoIconsHBox" type="HBoxContainer" parent="CornerInfoIconsMargin"]
+[node name="CornerInfoIconsHBox" type="HBoxContainer" parent="CornerInfoIconsMargin" unique_id=216269672]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 0
 theme_override_constants/separation = 1
 
-[node name="ModdedIcon" type="TextureRect" parent="CornerInfoIconsMargin/CornerInfoIconsHBox"]
+[node name="ModdedIcon" type="TextureRect" parent="CornerInfoIconsMargin/CornerInfoIconsHBox" unique_id=123872026]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(4, 4)
 layout_mode = 2
 texture = ExtResource("8_shf12")
 expand_mode = 1
 
-[node name="CornerLevelIconsHBox" type="HBoxContainer" parent="CornerInfoIconsMargin"]
+[node name="CornerLevelIconsHBox" type="HBoxContainer" parent="CornerInfoIconsMargin" unique_id=1308308567]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 8
 size_flags_vertical = 0
 theme_override_constants/separation = 1
 
-[node name="LevelDot4" type="TextureRect" parent="CornerInfoIconsMargin/CornerLevelIconsHBox"]
+[node name="LevelDot4" type="TextureRect" parent="CornerInfoIconsMargin/CornerLevelIconsHBox" unique_id=744569214]
 visible = false
 custom_minimum_size = Vector2(1, 1)
 layout_mode = 2
 texture = ExtResource("9_p5lyr")
 expand_mode = 1
 
-[node name="LevelDot3" type="TextureRect" parent="CornerInfoIconsMargin/CornerLevelIconsHBox"]
+[node name="LevelDot3" type="TextureRect" parent="CornerInfoIconsMargin/CornerLevelIconsHBox" unique_id=951080228]
 visible = false
 custom_minimum_size = Vector2(1, 1)
 layout_mode = 2
 texture = ExtResource("9_p5lyr")
 expand_mode = 1
 
-[node name="LevelDot2" type="TextureRect" parent="CornerInfoIconsMargin/CornerLevelIconsHBox"]
+[node name="LevelDot2" type="TextureRect" parent="CornerInfoIconsMargin/CornerLevelIconsHBox" unique_id=258067672]
 visible = false
 custom_minimum_size = Vector2(1, 1)
 layout_mode = 2
 texture = ExtResource("9_p5lyr")
 expand_mode = 1
 
-[node name="LevelDot1" type="TextureRect" parent="CornerInfoIconsMargin/CornerLevelIconsHBox"]
+[node name="LevelDot1" type="TextureRect" parent="CornerInfoIconsMargin/CornerLevelIconsHBox" unique_id=1374899456]
 visible = false
 custom_minimum_size = Vector2(1, 1)
 layout_mode = 2
 texture = ExtResource("9_p5lyr")
 expand_mode = 1
 
-[node name="SelectedTexture" type="NinePatchRect" parent="."]
+[node name="SelectedTexture" type="NinePatchRect" parent="." unique_id=742846092]
 visible = false
 custom_minimum_size = Vector2(22, 22)
 layout_mode = 1

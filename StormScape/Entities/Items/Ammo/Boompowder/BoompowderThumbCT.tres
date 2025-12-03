@@ -1,0 +1,8 @@
+[gd_resource type="CanvasTexture" load_steps=3 format=3 uid="uid://cepsvnuehxcog"]
+
+[ext_resource type="Texture2D" uid="uid://vw5mtm6j2eis" path="res://Entities/Items/Ammo/Boompowder/boompowder_thumb.png" id="1_p3bsx"]
+[ext_resource type="Texture2D" uid="uid://clb610j087dc6" path="res://Entities/Items/Ammo/Boompowder/boompowder_thumb_n.png" id="2_ishml"]
+
+[resource]
+diffuse_texture = ExtResource("1_p3bsx")
+normal_texture = ExtResource("2_ishml")

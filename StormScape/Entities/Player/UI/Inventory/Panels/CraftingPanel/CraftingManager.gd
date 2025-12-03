@@ -9,6 +9,7 @@ class_name CraftingManager
 @onready var craft_btn_v_box: VBoxContainer = %CraftButtonVBox ## The container for the entire craft button.
 @onready var craft_btn: Button = %CraftBtn ## The button to press when attempting a craft.
 
+var can_output: bool = false ## When true, there is an outputtable item in the output slot from a valid recipe.
 var input_slots: Array[CraftingSlot] = [] ## The slots that are used as inputs to craft.
 var is_crafting: bool = false ## When true, we shouldn't update the output slot since a craft is in progress.
 var item_details_panel: ItemDetailsPanel ## The item viewer panel that shows item details.
@@ -46,6 +47,7 @@ func _setup_item_viewer_signals(inventory_ui: PlayerInvUI) -> void:
 
 ## Shows or hides the main craft button depending on whether a valid output is present.
 func _on_output_slot_output_changed(is_craftable: bool) -> void:
+	can_output = is_craftable
 	if is_craftable:
 		craft_btn_v_box.modulate = Color.WHITE
 		craft_btn_v_box.modulate.a = 1.0

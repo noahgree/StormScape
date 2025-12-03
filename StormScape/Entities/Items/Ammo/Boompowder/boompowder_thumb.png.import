@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bptqv05di5d2o"
-path="res://.godot/imported/oak_log.png-9b9423477e4b5ffe47d3f9968c7d59ed.ctex"
+uid="uid://vw5mtm6j2eis"
+path="res://.godot/imported/boompowder_thumb.png-f831717852cba8b2e97141ff27f079a1.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Entities/Items/WorldResources/OakLog/oak_log.png"
-dest_files=["res://.godot/imported/oak_log.png-9b9423477e4b5ffe47d3f9968c7d59ed.ctex"]
+source_file="res://Entities/Items/Ammo/Boompowder/boompowder_thumb.png"
+dest_files=["res://.godot/imported/boompowder_thumb.png-f831717852cba8b2e97141ff27f079a1.ctex"]
 
 [params]
 

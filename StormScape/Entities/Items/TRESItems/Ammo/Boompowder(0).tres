@@ -1,0 +1,25 @@
+[gd_resource type="Resource" script_class="ProjAmmoResource" load_steps=6 format=3 uid="uid://dsylig1px18qv"]
+
+[ext_resource type="Script" uid="uid://cowjdnic7xmkp" path="res://Entities/Player/UI/Inventory/Panels/ItemDetailsPanel/StatDetail.gd" id="1_uogpn"]
+[ext_resource type="Texture2D" uid="uid://cepsvnuehxcog" path="res://Entities/Items/Ammo/Boompowder/BoompowderThumbCT.tres" id="2_sfwph"]
+[ext_resource type="Texture2D" uid="uid://bdu8wnpqnlkdi" path="res://Entities/Items/Ammo/Boompowder/boompowder.png" id="3_7eytm"]
+[ext_resource type="Script" uid="uid://bpc1cwr4a6lgo" path="res://Entities/Items/Ammo/ProjAmmoResource.gd" id="3_sfwph"]
+[ext_resource type="Script" uid="uid://ctxa7i1mbt7ab" path="res://Entities/Player/UI/Inventory/Panels/CraftingPanel/CraftingIngredient.gd" id="4_sfwph"]
+
+[resource]
+script = ExtResource("3_sfwph")
+ammo_type = 4
+id = "boompowder_ammo"
+name = "Boompowder"
+item_type = 2
+stack_size = 30
+auto_pickup = true
+pickup_radius = 3
+info = "Ammo used in explosive weapons."
+ground_icon = ExtResource("2_sfwph")
+in_hand_icon = ExtResource("2_sfwph")
+inv_icon = ExtResource("3_7eytm")
+cooldowns_per_suid = null
+shown_cooldown_fills = null
+show_cursor_cooldown = null
+session_uid = null

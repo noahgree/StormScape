@@ -83,7 +83,7 @@ theme_override_constants/margin_bottom = -1
 
 [node name="TitleLabel" type="RichTextLabel" parent="InnerMargin/MainVBox/ElementsMargin/ElementsVBox/TitleMargin" unique_id=1039754954]
 layout_mode = 2
-theme_override_colors/default_color = Color(1.519925, 0.6162611, 2.3520112, 1)
+theme_override_colors/default_color = Color(1.52, 0.616, 2.352, 1)
 theme_override_colors/font_outline_color = Color(0.122, 0.035, 0, 0.67)
 theme_override_constants/outline_size = 2
 theme_override_fonts/normal_font = ExtResource("6_1nfa8")

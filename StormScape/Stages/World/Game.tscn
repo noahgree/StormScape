@@ -63,7 +63,7 @@
 
 [sub_resource type="Environment" id="Environment_2wouv"]
 background_mode = 3
-background_canvas_max_layer = 2
+background_canvas_max_layer = 100
 tonemap_white = 0.0
 glow_enabled = true
 glow_normalized = true
@@ -167,13 +167,13 @@ physics_layer_1/collision_layer = 128
 physics_layer_1/collision_mask = 0
 sources/1 = SubResource("TileSetAtlasSource_lb4xb")
 
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_01d0t"]
+rough = true
+
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_h3uly"]
 rough = true
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_4ti61"]
-rough = true
-
-[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_4psjl"]
 rough = true
 
 [sub_resource type="Resource" id="Resource_t15sm"]
@@ -317,7 +317,7 @@ animations = [{
 resource_local_to_scene = true
 script = ExtResource("19_04pgg")
 title = "Storm Base"
-title_color = Color(0.91065544, 0.8698037, 0.9772052, 1)
+title_color = Color(1.52, 0.616, 2.352, 1)
 info_color = Color(0.9050975, 0.7290963, 0.9920781, 1)
 metadata/_custom_type_script = "uid://dgibl37gudpj1"
 
@@ -436,15 +436,15 @@ y_sort_enabled = true
 
 [node name="TestRigidEntity" parent="WorldRoot/Testing" unique_id=120789680 instance=ExtResource("9_37jga")]
 position = Vector2(127, 27)
-physics_material_override = SubResource("PhysicsMaterial_h3uly")
+physics_material_override = SubResource("PhysicsMaterial_01d0t")
 
 [node name="TestRigidEntity2" parent="WorldRoot/Testing" unique_id=294390776 instance=ExtResource("9_37jga")]
 position = Vector2(129, 87)
-physics_material_override = SubResource("PhysicsMaterial_4ti61")
+physics_material_override = SubResource("PhysicsMaterial_h3uly")
 
 [node name="TestRigidEntity3" parent="WorldRoot/Testing" unique_id=941546994 instance=ExtResource("9_37jga")]
 position = Vector2(65, 118)
-physics_material_override = SubResource("PhysicsMaterial_4psjl")
+physics_material_override = SubResource("PhysicsMaterial_4ti61")
 freeze = true
 immovable = true
 
@@ -661,6 +661,7 @@ z_index = -2
 z_as_relative = false
 position = Vector2(189, 143)
 script = ExtResource("22_0op7h")
+auto_start = false
 transform_queue = Array[ExtResource("40_27u15")]([SubResource("Resource_h3uly")])
 default_storm_effect = ExtResource("23_5x8gm")
 default_storm_visuals = ExtResource("27_5uvpk")

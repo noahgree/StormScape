@@ -342,8 +342,8 @@ func _input(event: InputEvent) -> void:
 				event = event.duplicate()
 				event.button_index = MOUSE_BUTTON_LEFT
 				Input.parse_input_event(event)
-	elif event.is_action_pressed("dash") and hovered_slot == self:
-		if not get_viewport().gui_is_dragging() and item != null and not ("is_output_slot" in self and get("is_output_slot")):
+	elif not get_viewport().gui_is_dragging() and item != null and not ("is_output_slot" in self and get("is_output_slot")):
+		if event.is_action_pressed("dash") and hovered_slot == self:
 			var item_viewer_slot: Slot = Globals.player_node.get_node("%ItemViewerSlot")
 			var item_details_panel: ItemDetailsPanel = Globals.player_node.get_node("%ItemDetailsPanel")
 			if item_viewer_slot._can_drop_data(Vector2.ZERO, self):
@@ -358,7 +358,6 @@ func _input(event: InputEvent) -> void:
 ## Runs single quantity and half quantity logic.
 func _gui_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton:
-
 		# Don't allow splitting of stacked weapons
 		if item != null and item.stats is WeaponResource and item.quantity > 1:
 			return
@@ -394,12 +393,20 @@ func _gui_input(event: InputEvent) -> void:
 
 ## Determines if the slot we are hovering over during a drag can accept drag data on mouse release.
 func _can_drop_data(_at_position: Vector2, data: Variant) -> bool:
-	if data.item == null or not synced_inv or is_same_slot_as(data) or is_hud_ui_preview_slot:
+	if data.item == null or not synced_inv or is_hud_ui_preview_slot:
+		CursorManager.update_tooltip("Invalid!", Globals.ui_colors.ui_glow_fail)
+		return false
+	elif is_same_slot_as(data):
 		return false
 	elif data is WearableSlot or data is ModSlot:
 		if item != null and not (item.stats.is_same_as(data.item.stats) and item.quantity < item.stats.stack_size):
 			if not is_trash_slot:
+				CursorManager.update_tooltip("Invalid!", Globals.ui_colors.ui_glow_fail)
 				return false
+	elif name == "ItemViewerSlot":
+		CursorManager.update_tooltip("Pin Item", Globals.ui_colors.ui_glow_success)
+	elif name == "Trash_Slot":
+		CursorManager.update_tooltip("Trash Item", Globals.ui_colors.ui_light_tan)
 	return true
 
 ## Drops item slot drag data into the hovered slot, updating the current and source
@@ -666,6 +673,7 @@ func _on_mouse_exited() -> void:
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_DRAG_END:
 		_reset_post_drag_mods()
+		CursorManager.hide_tooltip()
 
 ## Returns true if this slot and the passed in slot have the same index and the same synced inventory.
 func is_same_slot_as(other_slot: Slot) -> bool:
