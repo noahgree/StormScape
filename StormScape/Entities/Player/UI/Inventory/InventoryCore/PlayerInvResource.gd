@@ -2,6 +2,9 @@ extends InvResource
 class_name PlayerInvResource
 ## A subclass of InvResource that defines Player inventory specifics.
 
+var ammo_slot_manager: AmmoSlotManager ## A reference to the ammo slot manager in the player's inv UI.
+var currency_slot_manager: CurrencySlotManager ## A reference to the currency slot manager in the player's inv UI.
+
 
 ## Must be called after this inventory resource is created to set it up.
 func initialize_inventory(source: Node2D) -> void:
@@ -11,7 +14,7 @@ func initialize_inventory(source: Node2D) -> void:
 	if drop_on_death:
 		source_node.tree_exiting.connect(drop_entire_inventory)
 
-	total_inv_size = Globals.MAIN_PLAYER_INV_SIZE + (1 + Globals.HOTBAR_SIZE) # Extra 1 is for trash
+	total_inv_size = Globals.MAIN_PLAYER_INV_SIZE + (1 + Globals.HOTBAR_SIZE) + Globals.AMMO_BAR_SIZE + Globals.CURRENCY_BAR_SIZE
 	max_fill_index = total_inv_size - 1
 	inv.resize(total_inv_size)
 	clear_inventory()
@@ -21,11 +24,17 @@ func initialize_inventory(source: Node2D) -> void:
 ## Handles the logic needed for adding an item to the inventory when picked up from the ground. Respects stack size.
 ## Any extra quantity that does not fit will be left on the ground as a physical item.
 func add_item_from_world(original_item: Item) -> void:
-	var remaining: int = _fill_hotbar(original_item)
-	if remaining != 0:
-		remaining = _fill_main_inventory(original_item)
+	var remaining: int = 0
+	if original_item.stats is ProjAmmoResource:
+		remaining = _fill_ammo(original_item)
+	elif original_item.stats is CurrencyResource:
+		remaining = _fill_currency(original_item)
+	else:
+		remaining = _fill_hotbar(original_item)
 		if remaining != 0:
-			original_item.respawn_item_after_quantity_change()
+			remaining = _fill_main_inventory(original_item)
+	if remaining != 0:
+		original_item.respawn_item_after_quantity_change()
 
 ## Handles the logic needed for adding an item to the inventory from a given inventory item resource.
 ## Respects stack size. By default, any extra quantity that does not fit will be ignored and deleted.
@@ -57,6 +66,20 @@ func _fill_hotbar(original_item: Variant) -> int:
 ## Returns any leftover quantity that did not fit.
 func _fill_main_inventory(original_item: Variant) -> int:
 	return _do_add_item_checks(original_item, 0, Globals.MAIN_PLAYER_INV_SIZE)
+
+## Attempts to fill the ammo slots in the inventory with the passed in ammo. Can either be an Item or
+## an InvItemResource. Returns any leftover quantity that did not fit.
+func _fill_ammo(original_item: Variant) -> int:
+	var relative_index: int = ammo_slot_manager.type_order.find(original_item.stats.ammo_type)
+	var placement_index: int = ammo_slot_manager.starting_index + relative_index
+	return _do_add_item_checks(original_item, placement_index, placement_index + 1)
+
+## Attempts to fill the currency slots in the inventory with the passed in currency. Can either be an Item or
+## an InvItemResource. Returns any leftover quantity that did not fit.
+func _fill_currency(original_item: Variant) -> int:
+	var relative_index: int = currency_slot_manager.type_order.find(original_item.stats.currency_type)
+	var placement_index: int = currency_slot_manager.starting_index + relative_index
+	return _do_add_item_checks(original_item, placement_index, placement_index + 1)
 
 #region Sorting
 ## This auto stacks and compacts items into their stack sizes.
@@ -145,13 +168,13 @@ func _name_sort_logic(a: InvItemResource, b: InvItemResource) -> bool:
 #endregion
 
 #region Weapon Helpers
-## Consumes ammo from this inventory and returns the amount back to the caller.
+## Consumes ammo from this inventory and returns the amount back to the caller. Only for player inv.
 func get_more_ammo(max_amount_needed: int, take_from_inventory: bool,
 					ammo_type: ProjWeaponResource.ProjAmmoType) -> int:
 	var ammount_collected: int = 0
-	var count: int = Globals.MAIN_PLAYER_INV_SIZE + Globals.HOTBAR_SIZE
+	var starting_index: int = ammo_slot_manager.starting_index
 
-	for i: int in range(count):
+	for i: int in range(starting_index, starting_index + Globals.AMMO_BAR_SIZE):
 		var item: InvItemResource = inv[i]
 		if item != null and (item.stats is ProjAmmoResource) and (item.stats.ammo_type == ammo_type):
 			var amount_in_slot: int = item.quantity

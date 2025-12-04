@@ -140,7 +140,7 @@ func _set_rarity_colors() -> void:
 	gradient_texture.gradient.add_point(0, Globals.rarity_colors.glint_color.get(stats.rarity))
 	icon.material.set_shader_parameter("color_gradient", gradient_texture)
 
-	if stats.rarity in [Globals.ItemRarity.EPIC, Globals.ItemRarity.LEGENDARY, Globals.ItemRarity.SINGULAR]:
+	if stats.rarity in [Globals.ItemRarity.LEGENDARY, Globals.ItemRarity.SINGULAR]:
 		particles.color = Globals.rarity_colors.ground_glow.get(stats.rarity)
 		particles.emitting = true
 	if stats.rarity == Globals.ItemRarity.SINGULAR:

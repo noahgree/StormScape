@@ -53,7 +53,7 @@ func _update_player_item_interact_hud() -> void:
 		interaction_offer.ui_offset = PICKUP_PROMPT_UI_OFFSET
 		interaction_offer.ui_anchor_node = item
 		if item.quantity > 1:
-			interaction_offer.title = ("(" + str(item.quantity) + ") " + item.stats.name).to_upper()
+			interaction_offer.title = (item.stats.name + " (" + str(item.quantity) + ")").to_upper()
 		else:
 			interaction_offer.title = item.stats.name.to_upper()
 		interaction_offer.title_color = Globals.ui_colors.ui_glow_light_tan

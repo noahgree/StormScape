@@ -13,7 +13,9 @@ class_name PlayerInvUI
 @onready var item_details_panel: ItemDetailsPanel = %ItemDetailsPanel ## The item viewer in the inventory.
 @onready var crafting_manager: CraftingManager = %CraftingManager ## The crafting manager panel.
 @onready var wearables_panel: WearablesPanel = %WearablesPanel ## The wearables panel.
-@onready var side_panel_mgr: SidePanelManager = %SidePanelManager ## The side panel that fills with alternate UIs like chests.
+@onready var side_panel_mgr: SidePanelManager = %SidePanelManager ## The side panel manager.
+@onready var ammo_slot_manager: AmmoSlotManager = %AmmoSlotManager ## The manager handling ammo slots.
+@onready var currency_slot_manager: CurrencySlotManager = %CurrencySlotManager ## The manager handling currency slots.
 
 @onready var sort_by_name_btn: NinePatchRect = %SortByName ## The sort by name button.
 @onready var sort_by_type_btn: NinePatchRect = %SortByType ## The sort by type button.
@@ -26,13 +28,15 @@ var side_panel_active: bool = false: set = _toggle_side_panel ## When true, the 
 
 
 func _ready() -> void:
+	hide()
 	if not Globals.player_node:
 		await SignalBus.player_ready
 	gui_input.connect(_on_blank_space_input_event)
 
 	super() # Assigns first indices to main backpack grid.
-
 	_setup_hotbar_slots() # Assigns hotbar slots next
+	ammo_slot_manager.setup_slots(self) # Then ammo slots
+	currency_slot_manager.setup_slots(self) # Then currency slots
 	_setup_trash_slot() # Then trash slot
 	item_details_panel.setup_slots(self) # Then item details panel (mod slots and item viewer slot)
 	crafting_manager.setup_slots_and_signals(self) # Then crafting panel (input slots and output slot)

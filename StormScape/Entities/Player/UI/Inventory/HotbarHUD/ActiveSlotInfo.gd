@@ -69,7 +69,8 @@ func calculate_inv_ammo() -> void:
 	if current_item_stats is ProjWeaponResource:
 		if current_item_stats.ammo_type not in [ProjWeaponResource.ProjAmmoType.NONE, ProjWeaponResource.ProjAmmoType.STAMINA, ProjWeaponResource.ProjAmmoType.SELF, ProjWeaponResource.ProjAmmoType.CHARGES]:
 			count = 0
-			for i: int in range(Globals.MAIN_PLAYER_INV_SIZE + Globals.HOTBAR_SIZE):
+			var start_index: int = Globals.player_node.inv.ammo_slot_manager.starting_index
+			for i: int in range(start_index, start_index + Globals.AMMO_BAR_SIZE):
 				var item: InvItemResource = Globals.player_node.inv.inv[i]
 				if item != null and (item.stats is ProjAmmoResource) and (item.stats.ammo_type == current_item_stats.ammo_type):
 					count += item.quantity

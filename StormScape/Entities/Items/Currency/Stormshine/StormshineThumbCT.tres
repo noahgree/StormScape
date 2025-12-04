@@ -1,0 +1,8 @@
+[gd_resource type="CanvasTexture" load_steps=3 format=3 uid="uid://crvukuxg13b6"]
+
+[ext_resource type="Texture2D" uid="uid://dqxpegnvkh874" path="res://Entities/Items/Currency/Stormshine/stormshine_thumb.png" id="1_uf8c1"]
+[ext_resource type="Texture2D" uid="uid://dvynmwc8w0gc4" path="res://Entities/Items/Currency/Stormshine/stormshine_thumb_n.png" id="2_4mex3"]
+
+[resource]
+diffuse_texture = ExtResource("1_uf8c1")
+normal_texture = ExtResource("2_4mex3")

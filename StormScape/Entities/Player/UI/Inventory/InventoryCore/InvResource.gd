@@ -184,7 +184,8 @@ func _emit_changes_for_all_indices() -> void:
 		inv_data_updated.emit(i, inv[i])
 
 #region Weapon Helpers
-## Consumes ammo from this inventory and returns the amount back to the caller.
+## Consumes ammo from this inventory and returns the amount back to the caller. Only for non-players, as the
+## player has special ammo slots.
 func get_more_ammo(max_amount_needed: int, take_from_inventory: bool,
 					ammo_type: ProjWeaponResource.ProjAmmoType) -> int:
 	var ammount_collected: int = 0

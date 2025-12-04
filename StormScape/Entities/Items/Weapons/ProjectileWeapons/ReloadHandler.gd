@@ -203,7 +203,8 @@ func _get_more_reload_ammo(max_amount_needed: int, take_from_inventory: bool = t
 	else:
 		return weapon.source_entity.inv.get_more_ammo(max_amount_needed, take_from_inventory, weapon.stats.ammo_type)
 
-## When we have recently fired, we should not instantly keep recharging ammo, so we send a cooldown to the recharger.
+## When we have recently fired, we should not instantly keep recharging ammo, so we send a cooldown
+## to the recharger.
 func restart_ammo_recharge_delay() -> void:
 	auto_decrementer.update_recharge_delay(str(weapon.stats.session_uid), weapon.stats.auto_ammo_delay)
 

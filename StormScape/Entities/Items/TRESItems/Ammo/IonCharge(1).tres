@@ -1,0 +1,25 @@
+[gd_resource type="Resource" script_class="ProjAmmoResource" load_steps=6 format=3 uid="uid://c5jim46mul7ex"]
+
+[ext_resource type="Script" uid="uid://cowjdnic7xmkp" path="res://Entities/Player/UI/Inventory/Panels/ItemDetailsPanel/StatDetail.gd" id="1_ciwha"]
+[ext_resource type="Texture2D" uid="uid://damxkqnfy7nie" path="res://Entities/Items/Ammo/IonCharge/IonChargeThumbCT.tres" id="2_yd2v3"]
+[ext_resource type="Texture2D" uid="uid://egdmabwj4ceh" path="res://Entities/Items/Ammo/IonCharge/ion_charge.png" id="3_hscok"]
+[ext_resource type="Script" uid="uid://ctxa7i1mbt7ab" path="res://Entities/Player/UI/Inventory/Panels/CraftingPanel/CraftingIngredient.gd" id="4_c6nce"]
+[ext_resource type="Script" uid="uid://bpc1cwr4a6lgo" path="res://Entities/Items/Ammo/ProjAmmoResource.gd" id="5_a1l1j"]
+
+[resource]
+script = ExtResource("5_a1l1j")
+ammo_type = 6
+id = "ion_charge_ammo"
+name = "Ion Charge"
+item_type = 2
+rarity = 1
+stack_size = 99
+auto_pickup = true
+pickup_radius = 3
+info = "Like a battery, but better. Specially designed to power electric weapons."
+ground_icon = ExtResource("2_yd2v3")
+in_hand_icon = ExtResource("2_yd2v3")
+inv_icon = ExtResource("3_hscok")
+cooldowns_per_suid = null
+session_uid = null
+metadata/_custom_type_script = "uid://bpc1cwr4a6lgo"

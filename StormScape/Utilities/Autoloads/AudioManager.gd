@@ -39,12 +39,17 @@ func _setup_output_device() -> void:
 		return
 
 	var devices: PackedStringArray = AudioServer.get_output_device_list()
-	var mb_index: int = devices.find("MacBook Pro Speakers (119)")
+	var mb_index: int = -1
+
+	for i: int in range(devices.size()):
+		if "MacBook Pro" in devices[i]:
+			mb_index = i
+			break
 	if mb_index == -1:
-		var available: PackedStringArray = AudioServer.get_output_device_list()
-		print_rich("[color=gray]Warning! MacBook Pro Speakers device could not be set as output! Choose from " + str(available) + " instead.")
-	var macbook_device: String = ArrayHelpers.get_or_default(devices, mb_index, "Default")
-	AudioServer.output_device = macbook_device
+		print_rich("[color=gray]Warning! No MacBook Pro device found. Choose from " + str(devices) + " instead.[/color]")
+	else:
+		var macbook_device: String = devices[mb_index]
+		AudioServer.output_device = macbook_device
 
 ## Stores a key-value pair in the appropriate cache dict using the id specified in the sound resource as the key.
 ## Given a key, the cache created by this method will return a file path to the specified audio id.

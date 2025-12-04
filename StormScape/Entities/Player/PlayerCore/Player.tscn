@@ -1,4 +1,4 @@
-[gd_scene load_steps=247 format=3 uid="uid://dba8mrurjlekp"]
+[gd_scene load_steps=255 format=3 uid="uid://dba8mrurjlekp"]
 
 [ext_resource type="Script" uid="uid://c3rpxq8pnbdje" path="res://Entities/Player/PlayerCore/Player.gd" id="1_m33tt"]
 [ext_resource type="Script" uid="uid://bdd0xujg1bgm0" path="res://Entities/Player/UI/Inventory/InventoryCore/PlayerInvResource.gd" id="2_8hbs2"]
@@ -17,8 +17,8 @@
 [ext_resource type="Resource" uid="uid://8uj8fwadqlk0" path="res://Entities/Items/TRESItems/WorldResources/Stick(0).tres" id="6_hxjay"]
 [ext_resource type="PackedScene" uid="uid://co3n6m7efg8pd" path="res://Entities/Components/EffectComponents/StatusEffectsComponent/StatusEffectsComponent.tscn" id="6_n0x5k"]
 [ext_resource type="Resource" uid="uid://bx2nl7cqe7odq" path="res://Entities/Items/TRESItems/WeaponMods/AdvancedScope(3).tres" id="7_14ixx"]
-[ext_resource type="Resource" uid="uid://c5jim46mul7ex" path="res://Entities/Items/TRESItems/Ammo/IonCharge(0).tres" id="7_o382h"]
-[ext_resource type="Resource" uid="uid://dsylig1px18qv" path="res://Entities/Items/TRESItems/Ammo/Boompowder(0).tres" id="7_uu4sw"]
+[ext_resource type="Resource" uid="uid://c5jim46mul7ex" path="res://Entities/Items/TRESItems/Ammo/IonCharge(1).tres" id="7_o382h"]
+[ext_resource type="Resource" uid="uid://dsylig1px18qv" path="res://Entities/Items/TRESItems/Ammo/Boompowder(3).tres" id="7_uu4sw"]
 [ext_resource type="Resource" uid="uid://3avt5jvd3dye" path="res://Entities/Items/TRESItems/ProjectileWeapons/BottleOFire(3).tres" id="8_lo25j"]
 [ext_resource type="Resource" uid="uid://caw1yglbt2nf6" path="res://Entities/Items/TRESItems/Wearables/FrostCharm(5).tres" id="8_o382h"]
 [ext_resource type="Resource" uid="uid://bdjhfsluk53lc" path="res://Entities/Items/TRESItems/Ammo/Bullet(0).tres" id="8_s4yud"]
@@ -53,6 +53,7 @@
 [ext_resource type="Script" uid="uid://dp8osf7r6xkkt" path="res://Entities/Items/ItemCore/InvItemResource.gd" id="32_ixmb3"]
 [ext_resource type="Resource" uid="uid://h1xp0w2wx18e" path="res://Entities/Items/TRESItems/ProjectileWeapons/Grizzly(3).tres" id="33_8hbs2"]
 [ext_resource type="Script" uid="uid://di5hu6fk5mbfe" path="res://Entities/Player/UI/Vitals/PlayerVitalsHUD.gd" id="35_yln51"]
+[ext_resource type="Resource" uid="uid://cqqpudayew03k" path="res://Entities/Items/TRESItems/Currency/Stormshine(4).tres" id="39_jgqai"]
 [ext_resource type="PackedScene" uid="uid://b7gdy01q8wsjx" path="res://Entities/Components/ItemComponents/HandsComponent/HandsComponent.tscn" id="39_ngono"]
 [ext_resource type="Shader" uid="uid://c0de04pgeen76" path="res://Utilities/Game/Shaders/BlurBehind.gdshader" id="39_r4tgk"]
 [ext_resource type="PackedScene" uid="uid://m4ur3n2hwsp8" path="res://Entities/Player/UI/Inventory/InventoryCore/Slot.tscn" id="42_r422n"]
@@ -120,13 +121,19 @@
 [ext_resource type="PackedScene" uid="uid://di7vcyrki71nm" path="res://Entities/Components/DetectionComponent/DetectionComponent.tscn" id="114_hxjay"]
 [ext_resource type="Texture2D" uid="uid://bqxdg28d1twy1" path="res://Entities/Player/UI/Inventory/Assets/Background/Wood/inv_background_thin_wood.png" id="115_gdihr"]
 [ext_resource type="Script" uid="uid://g7648i4hb0q8" path="res://Entities/Player/UI/Inventory/Panels/ItemDetailsPanel/ItemDetailsPanel.gd" id="116_g5u5n"]
+[ext_resource type="Script" uid="uid://ck0er3q7xbbda" path="res://Entities/Player/UI/Inventory/InventoryCore/AmmoSlotManager.gd" id="116_ve7vt"]
+[ext_resource type="Script" uid="uid://gvhds0ge26fd" path="res://Entities/Player/UI/Inventory/InventoryCore/AmmoSlot.gd" id="117_82yts"]
 [ext_resource type="Texture2D" uid="uid://b6oke8chd1otq" path="res://Entities/Player/UI/Inventory/Assets/Slot/Universal/item_viewer_slot_icon.png" id="117_gb65f"]
 [ext_resource type="Texture2D" uid="uid://ttewd1cvitt0" path="res://Entities/Player/Sprites/Base/player_base_frame.png" id="117_thmqm"]
 [ext_resource type="Texture2D" uid="uid://bhwg6ynp1bscr" path="res://Entities/Player/UI/Inventory/Assets/Slot/Universal/mod_slot_icon.png" id="118_r5dvw"]
 [ext_resource type="Script" uid="uid://djsaegsb00xsu" path="res://Entities/Player/UI/Inventory/Panels/CraftingPanel/CraftingManager.gd" id="118_thmqm"]
 [ext_resource type="Texture2D" uid="uid://dcmskq1jefam" path="res://Entities/Player/UI/Inventory/Assets/Button/craft_confirm_icon.png" id="119_bmpdm"]
 [ext_resource type="Texture2D" uid="uid://0qokvcd3ucop" path="res://Entities/Player/UI/Inventory/Assets/Background/Universal/arrow_icon.png" id="119_bvo3j"]
+[ext_resource type="Texture2D" uid="uid://86j53yxewgat" path="res://Entities/Player/UI/Inventory/Assets/Slot/Universal/Overlays/glass_pane_overlay.png" id="119_r7bkl"]
+[ext_resource type="Script" uid="uid://cdtuuf6lu11lo" path="res://Entities/Player/UI/Inventory/InventoryCore/CurrencySlotManager.gd" id="123_4awmn"]
+[ext_resource type="Script" uid="uid://biurx0kj5kj88" path="res://Entities/Player/UI/Inventory/InventoryCore/CurrencySlot.gd" id="124_1go7j"]
 [ext_resource type="Texture2D" uid="uid://cpgqebvnv0d0b" path="res://Entities/Player/UI/Inventory/Assets/Slot/Wood/normal_slot_wood_no_stripes.png" id="125_ar238"]
+[ext_resource type="Texture2D" uid="uid://b5x8pxiqi07f7" path="res://Entities/Player/UI/Inventory/Assets/Slot/Universal/stormshine_slot_icon.png" id="125_inle7"]
 [ext_resource type="Resource" uid="uid://dm4eq3xm13a38" path="res://Assets/Audio/Sfx/SfxResources/PlayerRunBase.tres" id="127_ou5t4"]
 [ext_resource type="Resource" uid="uid://cjv5d4cwpj1l8" path="res://Assets/Audio/Sfx/SfxResources/PlayerSprintWind.tres" id="128_ar238"]
 [ext_resource type="Resource" uid="uid://dalv82plgsllj" path="res://Assets/Audio/Sfx/SfxResources/PlayerDash.tres" id="129_bmpdm"]
@@ -143,39 +150,15 @@ script = ExtResource("32_ixmb3")
 stats = ExtResource("4_g5u5n")
 metadata/_custom_type_script = "uid://dp8osf7r6xkkt"
 
-[sub_resource type="Resource" id="Resource_0t1mv"]
-script = ExtResource("32_ixmb3")
-stats = ExtResource("5_rdrbb")
-quantity = 500
-metadata/_custom_type_script = "uid://dp8osf7r6xkkt"
-
 [sub_resource type="Resource" id="Resource_h1ges"]
 script = ExtResource("32_ixmb3")
 stats = ExtResource("6_hxjay")
 quantity = 8
 metadata/_custom_type_script = "uid://dp8osf7r6xkkt"
 
-[sub_resource type="Resource" id="Resource_4awmn"]
-script = ExtResource("32_ixmb3")
-stats = ExtResource("7_uu4sw")
-quantity = 30
-metadata/_custom_type_script = "uid://dp8osf7r6xkkt"
-
-[sub_resource type="Resource" id="Resource_25xrm"]
-script = ExtResource("32_ixmb3")
-stats = ExtResource("8_s4yud")
-quantity = 899
-metadata/_custom_type_script = "uid://dp8osf7r6xkkt"
-
 [sub_resource type="Resource" id="Resource_mc6is"]
 script = ExtResource("32_ixmb3")
 stats = ExtResource("10_co77f")
-metadata/_custom_type_script = "uid://dp8osf7r6xkkt"
-
-[sub_resource type="Resource" id="Resource_w0i1c"]
-script = ExtResource("32_ixmb3")
-stats = ExtResource("7_o382h")
-quantity = 100
 metadata/_custom_type_script = "uid://dp8osf7r6xkkt"
 
 [sub_resource type="Resource" id="Resource_fcswf"]
@@ -326,11 +309,41 @@ stats = ExtResource("15_hxjay")
 quantity = 5
 metadata/_custom_type_script = "uid://dp8osf7r6xkkt"
 
+[sub_resource type="Resource" id="Resource_4awmn"]
+script = ExtResource("32_ixmb3")
+stats = ExtResource("8_s4yud")
+quantity = 899
+metadata/_custom_type_script = "uid://dp8osf7r6xkkt"
+
+[sub_resource type="Resource" id="Resource_25xrm"]
+script = ExtResource("32_ixmb3")
+stats = ExtResource("5_rdrbb")
+quantity = 899
+metadata/_custom_type_script = "uid://dp8osf7r6xkkt"
+
+[sub_resource type="Resource" id="Resource_mjkti"]
+script = ExtResource("32_ixmb3")
+stats = ExtResource("7_o382h")
+quantity = 75
+metadata/_custom_type_script = "uid://dp8osf7r6xkkt"
+
+[sub_resource type="Resource" id="Resource_82sho"]
+script = ExtResource("32_ixmb3")
+stats = ExtResource("7_uu4sw")
+quantity = 75
+metadata/_custom_type_script = "uid://dp8osf7r6xkkt"
+
+[sub_resource type="Resource" id="Resource_sobds"]
+script = ExtResource("32_ixmb3")
+stats = ExtResource("39_jgqai")
+quantity = 100
+metadata/_custom_type_script = "uid://dp8osf7r6xkkt"
+
 [sub_resource type="Resource" id="Resource_bjgul"]
 script = ExtResource("2_8hbs2")
 title = ""
 drop_on_death = true
-starting_inv = Array[ExtResource("32_ixmb3")]([SubResource("Resource_82yts"), null, SubResource("Resource_0t1mv"), SubResource("Resource_h1ges"), SubResource("Resource_4awmn"), SubResource("Resource_25xrm"), SubResource("Resource_mc6is"), SubResource("Resource_w0i1c"), SubResource("Resource_fcswf"), SubResource("Resource_ve7vt"), SubResource("Resource_hdwgy"), SubResource("Resource_ou5t4"), SubResource("Resource_ar238"), SubResource("Resource_xjdir"), SubResource("Resource_bmpdm"), SubResource("Resource_eufsu"), SubResource("Resource_8hbs2"), SubResource("Resource_f5l7i"), SubResource("Resource_co77f"), SubResource("Resource_a5af3"), null, SubResource("Resource_gdihr"), SubResource("Resource_g5u5n"), SubResource("Resource_r7bkl"), SubResource("Resource_thmqm"), SubResource("Resource_r5dvw"), SubResource("Resource_bvo3j"), SubResource("Resource_gb65f"), SubResource("Resource_5qckj"), SubResource("Resource_1go7j"), SubResource("Resource_32jvf"), SubResource("Resource_jgqai"), SubResource("Resource_xsics"), SubResource("Resource_inle7"), SubResource("Resource_da65a"), SubResource("Resource_6f5us"), SubResource("Resource_s4yud")])
+starting_inv = Array[ExtResource("32_ixmb3")]([SubResource("Resource_82yts"), null, null, SubResource("Resource_h1ges"), null, null, SubResource("Resource_mc6is"), null, SubResource("Resource_fcswf"), SubResource("Resource_ve7vt"), SubResource("Resource_hdwgy"), SubResource("Resource_ou5t4"), SubResource("Resource_ar238"), SubResource("Resource_xjdir"), SubResource("Resource_bmpdm"), SubResource("Resource_eufsu"), SubResource("Resource_8hbs2"), SubResource("Resource_f5l7i"), SubResource("Resource_co77f"), SubResource("Resource_a5af3"), null, SubResource("Resource_gdihr"), SubResource("Resource_g5u5n"), SubResource("Resource_r7bkl"), SubResource("Resource_thmqm"), SubResource("Resource_r5dvw"), SubResource("Resource_bvo3j"), SubResource("Resource_gb65f"), SubResource("Resource_5qckj"), SubResource("Resource_1go7j"), SubResource("Resource_32jvf"), SubResource("Resource_jgqai"), SubResource("Resource_xsics"), SubResource("Resource_inle7"), SubResource("Resource_da65a"), SubResource("Resource_6f5us"), SubResource("Resource_s4yud"), SubResource("Resource_4awmn"), SubResource("Resource_25xrm"), SubResource("Resource_mjkti"), SubResource("Resource_82sho"), SubResource("Resource_sobds"), null, null])
 metadata/_custom_type_script = "uid://bdd0xujg1bgm0"
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_3f130"]
@@ -2179,7 +2192,6 @@ heal_color = Color(0, 0.579, 0.249, 1)
 
 [node name="PlayerInvUI" type="ColorRect" parent="OverlayUI" unique_id=43151155 node_paths=PackedStringArray("synced_inv_src_node", "main_slot_grid")]
 process_mode = 3
-visible = false
 material = SubResource("ShaderMaterial_2q23q")
 use_parent_material = true
 anchors_preset = 15
@@ -2605,7 +2617,8 @@ grow_vertical = 2
 region_rect = Rect2(0, 0, 20, 20)
 backing_texture = ExtResource("69_4ao77")
 
-[node name="AmmoSlotMargins" type="MarginContainer" parent="OverlayUI/PlayerInvUI" unique_id=777810693]
+[node name="AmmoSlotManager" type="MarginContainer" parent="OverlayUI/PlayerInvUI" unique_id=777810693]
+unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -2623,8 +2636,10 @@ theme_override_constants/margin_left = 0
 theme_override_constants/margin_top = 0
 theme_override_constants/margin_right = 0
 theme_override_constants/margin_bottom = 0
+script = ExtResource("116_ve7vt")
+type_order = Array[int]([2, 3, 6, 4])
 
-[node name="AmmoSlotsTexture" type="NinePatchRect" parent="OverlayUI/PlayerInvUI/AmmoSlotMargins" unique_id=846458641]
+[node name="AmmoSlotsTexture" type="NinePatchRect" parent="OverlayUI/PlayerInvUI/AmmoSlotManager" unique_id=846458641]
 layout_mode = 2
 texture = ExtResource("109_0313k")
 patch_margin_left = 4
@@ -2632,51 +2647,121 @@ patch_margin_top = 4
 patch_margin_right = 4
 patch_margin_bottom = 4
 
-[node name="AmmoSlotsGridMargins" type="MarginContainer" parent="OverlayUI/PlayerInvUI/AmmoSlotMargins" unique_id=1900049602]
+[node name="AmmoSlotsGridMargins" type="MarginContainer" parent="OverlayUI/PlayerInvUI/AmmoSlotManager" unique_id=1900049602]
 layout_mode = 2
 theme_override_constants/margin_left = 3
 theme_override_constants/margin_top = 3
 theme_override_constants/margin_right = 3
 theme_override_constants/margin_bottom = 3
 
-[node name="AmmoSlotsGrid" type="HBoxContainer" parent="OverlayUI/PlayerInvUI/AmmoSlotMargins/AmmoSlotsGridMargins" unique_id=2131026982]
+[node name="AmmoSlotsGrid" type="HBoxContainer" parent="OverlayUI/PlayerInvUI/AmmoSlotManager/AmmoSlotsGridMargins" unique_id=2131026982]
+unique_name_in_owner = true
 layout_mode = 2
 theme_override_constants/separation = 0
 alignment = 1
 
-[node name="AmmoSlot1" parent="OverlayUI/PlayerInvUI/AmmoSlotMargins/AmmoSlotsGridMargins/AmmoSlotsGrid" unique_id=1092850766 instance=ExtResource("42_r422n")]
+[node name="AmmoSlot1" parent="OverlayUI/PlayerInvUI/AmmoSlotManager/AmmoSlotsGridMargins/AmmoSlotsGrid" unique_id=1092850766 instance=ExtResource("42_r422n")]
 layout_mode = 2
+script = ExtResource("117_82yts")
 backing_texture = ExtResource("135_uu4sw")
-preview_only = true
 hide_corner_level = true
 hide_corner_info = true
 hide_tint_progress = true
+hide_back_color = true
 
-[node name="AmmoSlot2" parent="OverlayUI/PlayerInvUI/AmmoSlotMargins/AmmoSlotsGridMargins/AmmoSlotsGrid" unique_id=663524373 instance=ExtResource("42_r422n")]
+[node name="OverlayMargins" type="MarginContainer" parent="OverlayUI/PlayerInvUI/AmmoSlotManager/AmmoSlotsGridMargins/AmmoSlotsGrid/AmmoSlot1" unique_id=507851375]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 1
+theme_override_constants/margin_top = 1
+theme_override_constants/margin_right = 1
+theme_override_constants/margin_bottom = 1
+
+[node name="OverlayTexture" type="TextureRect" parent="OverlayUI/PlayerInvUI/AmmoSlotManager/AmmoSlotsGridMargins/AmmoSlotsGrid/AmmoSlot1/OverlayMargins" unique_id=959711109]
 layout_mode = 2
+texture = ExtResource("119_r7bkl")
+
+[node name="AmmoSlot2" parent="OverlayUI/PlayerInvUI/AmmoSlotManager/AmmoSlotsGridMargins/AmmoSlotsGrid" unique_id=1667727181 instance=ExtResource("42_r422n")]
+layout_mode = 2
+script = ExtResource("117_82yts")
 backing_texture = ExtResource("135_ve7vt")
-preview_only = true
 hide_corner_level = true
 hide_corner_info = true
 hide_tint_progress = true
+hide_back_color = true
 
-[node name="AmmoSlot3" parent="OverlayUI/PlayerInvUI/AmmoSlotMargins/AmmoSlotsGridMargins/AmmoSlotsGrid" unique_id=1868586346 instance=ExtResource("42_r422n")]
+[node name="OverlayMargins" type="MarginContainer" parent="OverlayUI/PlayerInvUI/AmmoSlotManager/AmmoSlotsGridMargins/AmmoSlotsGrid/AmmoSlot2" unique_id=1009182146]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 1
+theme_override_constants/margin_top = 1
+theme_override_constants/margin_right = 1
+theme_override_constants/margin_bottom = 1
+
+[node name="OverlayTexture" type="TextureRect" parent="OverlayUI/PlayerInvUI/AmmoSlotManager/AmmoSlotsGridMargins/AmmoSlotsGrid/AmmoSlot2/OverlayMargins" unique_id=805330384]
 layout_mode = 2
+texture = ExtResource("119_r7bkl")
+
+[node name="AmmoSlot3" parent="OverlayUI/PlayerInvUI/AmmoSlotManager/AmmoSlotsGridMargins/AmmoSlotsGrid" unique_id=959464345 instance=ExtResource("42_r422n")]
+layout_mode = 2
+script = ExtResource("117_82yts")
 backing_texture = ExtResource("136_uu4sw")
-preview_only = true
 hide_corner_level = true
 hide_corner_info = true
 hide_tint_progress = true
+hide_back_color = true
 
-[node name="AmmoSlot4" parent="OverlayUI/PlayerInvUI/AmmoSlotMargins/AmmoSlotsGridMargins/AmmoSlotsGrid" unique_id=1720744242 instance=ExtResource("42_r422n")]
+[node name="OverlayMargins" type="MarginContainer" parent="OverlayUI/PlayerInvUI/AmmoSlotManager/AmmoSlotsGridMargins/AmmoSlotsGrid/AmmoSlot3" unique_id=193593068]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 1
+theme_override_constants/margin_top = 1
+theme_override_constants/margin_right = 1
+theme_override_constants/margin_bottom = 1
+
+[node name="OverlayTexture" type="TextureRect" parent="OverlayUI/PlayerInvUI/AmmoSlotManager/AmmoSlotsGridMargins/AmmoSlotsGrid/AmmoSlot3/OverlayMargins" unique_id=900634476]
 layout_mode = 2
+texture = ExtResource("119_r7bkl")
+
+[node name="AmmoSlot4" parent="OverlayUI/PlayerInvUI/AmmoSlotManager/AmmoSlotsGridMargins/AmmoSlotsGrid" unique_id=1832697606 instance=ExtResource("42_r422n")]
+layout_mode = 2
+script = ExtResource("117_82yts")
 backing_texture = ExtResource("137_uu4sw")
-preview_only = true
 hide_corner_level = true
 hide_corner_info = true
 hide_tint_progress = true
+hide_back_color = true
 
-[node name="MatsSlotMargins" type="MarginContainer" parent="OverlayUI/PlayerInvUI" unique_id=313841679]
+[node name="OverlayMargins" type="MarginContainer" parent="OverlayUI/PlayerInvUI/AmmoSlotManager/AmmoSlotsGridMargins/AmmoSlotsGrid/AmmoSlot4" unique_id=1158039339]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 1
+theme_override_constants/margin_top = 1
+theme_override_constants/margin_right = 1
+theme_override_constants/margin_bottom = 1
+
+[node name="OverlayTexture" type="TextureRect" parent="OverlayUI/PlayerInvUI/AmmoSlotManager/AmmoSlotsGridMargins/AmmoSlotsGrid/AmmoSlot4/OverlayMargins" unique_id=273618986]
+layout_mode = 2
+texture = ExtResource("119_r7bkl")
+
+[node name="CurrencySlotManager" type="MarginContainer" parent="OverlayUI/PlayerInvUI" unique_id=313841679]
+unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -2694,8 +2779,10 @@ theme_override_constants/margin_left = 0
 theme_override_constants/margin_top = 0
 theme_override_constants/margin_right = 0
 theme_override_constants/margin_bottom = 0
+script = ExtResource("123_4awmn")
+type_order = Array[int]([0])
 
-[node name="MatsSlotTexture" type="NinePatchRect" parent="OverlayUI/PlayerInvUI/MatsSlotMargins" unique_id=83447645]
+[node name="CurrencySlotsTexture" type="NinePatchRect" parent="OverlayUI/PlayerInvUI/CurrencySlotManager" unique_id=83447645]
 layout_mode = 2
 texture = ExtResource("109_0313k")
 patch_margin_left = 4
@@ -2703,38 +2790,91 @@ patch_margin_top = 4
 patch_margin_right = 4
 patch_margin_bottom = 4
 
-[node name="MatsSlotGridMargins" type="MarginContainer" parent="OverlayUI/PlayerInvUI/MatsSlotMargins" unique_id=8768389]
+[node name="CurrencySlotsGridMargins" type="MarginContainer" parent="OverlayUI/PlayerInvUI/CurrencySlotManager" unique_id=8768389]
 layout_mode = 2
 theme_override_constants/margin_left = 3
 theme_override_constants/margin_top = 3
 theme_override_constants/margin_right = 3
 theme_override_constants/margin_bottom = 3
 
-[node name="MatsSlotsGrid" type="HBoxContainer" parent="OverlayUI/PlayerInvUI/MatsSlotMargins/MatsSlotGridMargins" unique_id=415616843]
+[node name="CurrencySlotsGrid" type="HBoxContainer" parent="OverlayUI/PlayerInvUI/CurrencySlotManager/CurrencySlotsGridMargins" unique_id=415616843]
+unique_name_in_owner = true
 layout_mode = 2
 theme_override_constants/separation = 0
 alignment = 1
 
-[node name="MatsSlot1" parent="OverlayUI/PlayerInvUI/MatsSlotMargins/MatsSlotGridMargins/MatsSlotsGrid" unique_id=621628073 instance=ExtResource("42_r422n")]
+[node name="CurrencySlot1" parent="OverlayUI/PlayerInvUI/CurrencySlotManager/CurrencySlotsGridMargins/CurrencySlotsGrid" unique_id=621628073 instance=ExtResource("42_r422n")]
 layout_mode = 2
-preview_only = true
+script = ExtResource("124_1go7j")
+backing_texture = ExtResource("125_inle7")
 hide_corner_level = true
 hide_corner_info = true
 hide_tint_progress = true
+hide_back_color = true
 
-[node name="MatsSlot2" parent="OverlayUI/PlayerInvUI/MatsSlotMargins/MatsSlotGridMargins/MatsSlotsGrid" unique_id=761626972 instance=ExtResource("42_r422n")]
-layout_mode = 2
-preview_only = true
-hide_corner_level = true
-hide_corner_info = true
-hide_tint_progress = true
+[node name="OverlayMargins" type="MarginContainer" parent="OverlayUI/PlayerInvUI/CurrencySlotManager/CurrencySlotsGridMargins/CurrencySlotsGrid/CurrencySlot1" unique_id=1181024977]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 1
+theme_override_constants/margin_top = 1
+theme_override_constants/margin_right = 1
+theme_override_constants/margin_bottom = 1
 
-[node name="MatsSlot3" parent="OverlayUI/PlayerInvUI/MatsSlotMargins/MatsSlotGridMargins/MatsSlotsGrid" unique_id=2043228280 instance=ExtResource("42_r422n")]
+[node name="OverlayTexture" type="TextureRect" parent="OverlayUI/PlayerInvUI/CurrencySlotManager/CurrencySlotsGridMargins/CurrencySlotsGrid/CurrencySlot1/OverlayMargins" unique_id=714627348]
 layout_mode = 2
-preview_only = true
+texture = ExtResource("119_r7bkl")
+
+[node name="CurrencySlot2" parent="OverlayUI/PlayerInvUI/CurrencySlotManager/CurrencySlotsGridMargins/CurrencySlotsGrid" unique_id=1208610677 instance=ExtResource("42_r422n")]
+layout_mode = 2
+script = ExtResource("124_1go7j")
 hide_corner_level = true
 hide_corner_info = true
 hide_tint_progress = true
+hide_back_color = true
+
+[node name="OverlayMargins" type="MarginContainer" parent="OverlayUI/PlayerInvUI/CurrencySlotManager/CurrencySlotsGridMargins/CurrencySlotsGrid/CurrencySlot2" unique_id=581322881]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 1
+theme_override_constants/margin_top = 1
+theme_override_constants/margin_right = 1
+theme_override_constants/margin_bottom = 1
+
+[node name="OverlayTexture" type="TextureRect" parent="OverlayUI/PlayerInvUI/CurrencySlotManager/CurrencySlotsGridMargins/CurrencySlotsGrid/CurrencySlot2/OverlayMargins" unique_id=1161606264]
+layout_mode = 2
+texture = ExtResource("119_r7bkl")
+
+[node name="CurrencySlot3" parent="OverlayUI/PlayerInvUI/CurrencySlotManager/CurrencySlotsGridMargins/CurrencySlotsGrid" unique_id=1744015114 instance=ExtResource("42_r422n")]
+layout_mode = 2
+script = ExtResource("124_1go7j")
+hide_corner_level = true
+hide_corner_info = true
+hide_tint_progress = true
+hide_back_color = true
+
+[node name="OverlayMargins" type="MarginContainer" parent="OverlayUI/PlayerInvUI/CurrencySlotManager/CurrencySlotsGridMargins/CurrencySlotsGrid/CurrencySlot3" unique_id=428777715]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 1
+theme_override_constants/margin_top = 1
+theme_override_constants/margin_right = 1
+theme_override_constants/margin_bottom = 1
+
+[node name="OverlayTexture" type="TextureRect" parent="OverlayUI/PlayerInvUI/CurrencySlotManager/CurrencySlotsGridMargins/CurrencySlotsGrid/CurrencySlot3/OverlayMargins" unique_id=162043378]
+layout_mode = 2
+texture = ExtResource("119_r7bkl")
 
 [node name="ItemDetailsPanel" type="CenterContainer" parent="OverlayUI/PlayerInvUI" unique_id=211883855]
 unique_name_in_owner = true
@@ -3222,15 +3362,21 @@ hide_corner_level = true
 hide_corner_info = true
 hide_tint_progress = true
 
-[node name="MouseBlockGlass" type="ColorRect" parent="OverlayUI/PlayerInvUI/CraftingManager/InventoryTexture/GridMargins/SlotsVBox/NinePatchRect2/VBoxContainer/OutputSlot" unique_id=1287987739]
-self_modulate = Color(0.245, 0.245, 0.245, 0.4)
+[node name="OverlayMargins" type="MarginContainer" parent="OverlayUI/PlayerInvUI/CraftingManager/InventoryTexture/GridMargins/SlotsVBox/NinePatchRect2/VBoxContainer/OutputSlot" unique_id=57210302]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-mouse_filter = 1
+theme_override_constants/margin_left = 1
+theme_override_constants/margin_top = 1
+theme_override_constants/margin_right = 1
+theme_override_constants/margin_bottom = 1
+
+[node name="OverlayTexture" type="TextureRect" parent="OverlayUI/PlayerInvUI/CraftingManager/InventoryTexture/GridMargins/SlotsVBox/NinePatchRect2/VBoxContainer/OutputSlot/OverlayMargins" unique_id=826033171]
+layout_mode = 2
+texture = ExtResource("119_r7bkl")
 
 [node name="CraftButtonVBox" type="VBoxContainer" parent="OverlayUI/PlayerInvUI/CraftingManager/InventoryTexture/GridMargins/SlotsVBox/NinePatchRect2/VBoxContainer" unique_id=1304292142]
 unique_name_in_owner = true

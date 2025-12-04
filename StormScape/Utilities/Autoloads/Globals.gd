@@ -32,6 +32,8 @@ func change_focused_ui_state(open: bool) -> void:
 # Player Inv Resource
 const MAIN_PLAYER_INV_SIZE: int = 32
 const HOTBAR_SIZE: int = 5
+const AMMO_BAR_SIZE: int = 4
+const CURRENCY_BAR_SIZE: int = 3
 
 # EffectReceiver & StatModManager
 enum Teams {
@@ -63,7 +65,10 @@ enum StatusEffectSourceType {
 
 # Items
 enum ItemType {
-	CONSUMABLE, WEAPON, AMMO, WEARABLE, WORLD_RESOURCE, SPECIAL, WEAPON_MOD
+	CONSUMABLE, WEAPON, AMMO, WEARABLE, WORLD_RESOURCE, SPECIAL, WEAPON_MOD, CURRENCY
+}
+enum CurrencyType {
+	STORMSHINE
 }
 const all_proj_weapons: Array[ProjWeaponResource.ProjWeaponType] = [ProjWeaponResource.ProjWeaponType.PISTOL, ProjWeaponResource.ProjWeaponType.SHOTGUN, ProjWeaponResource.ProjWeaponType.SUBMACHINE, ProjWeaponResource.ProjWeaponType.SNIPER, ProjWeaponResource.ProjWeaponType.RIFLE, ProjWeaponResource.ProjWeaponType.EXPLOSIVE, ProjWeaponResource.ProjWeaponType.PRIMITIVE_WEAPON, ProjWeaponResource.ProjWeaponType.MAGIC, ProjWeaponResource.ProjWeaponType.THROWABLE, ProjWeaponResource.ProjWeaponType.SPECIAL_WEAPON]
 const all_melee_wpns: Array[MeleeWeaponResource.MeleeWeaponType] = [MeleeWeaponResource.MeleeWeaponType.TOOL, MeleeWeaponResource.MeleeWeaponType.PHYSICAL, MeleeWeaponResource.MeleeWeaponType.COMBAT]

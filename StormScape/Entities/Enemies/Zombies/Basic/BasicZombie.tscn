@@ -17,7 +17,7 @@
 [ext_resource type="Resource" uid="uid://cpxev3kvt74vw" path="res://Entities/Items/TRESItems/Ammo/Shell(0).tres" id="6_oqrkc"]
 [ext_resource type="PackedScene" uid="uid://cdfdy8m6ki3oq" path="res://Entities/Components/HealthComponent/HealthComponent.tscn" id="7_gh5xt"]
 [ext_resource type="Script" uid="uid://baglarh3m4c8o" path="res://Entities/Components/ItemComponents/LootTableComponent/LootTableResource.gd" id="7_qrtn1"]
-[ext_resource type="Resource" uid="uid://c5jim46mul7ex" path="res://Entities/Items/TRESItems/Ammo/IonCharge(0).tres" id="7_s1u3v"]
+[ext_resource type="Resource" uid="uid://c5jim46mul7ex" path="res://Entities/Items/TRESItems/Ammo/IonCharge(1).tres" id="7_s1u3v"]
 [ext_resource type="PackedScene" uid="uid://btba0jmsow1mx" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectReceiverComponent.tscn" id="8_u4xth"]
 [ext_resource type="PackedScene" uid="uid://4gl24qwdyti3" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/DmgHandler.tscn" id="9_eigs2"]
 [ext_resource type="PackedScene" uid="uid://cxpv7l7rcaq1o" path="res://Entities/Components/StaminaComponent/StaminaComponent.tscn" id="10_kc883"]
@@ -70,7 +70,7 @@ metadata/_custom_type_script = "uid://dp8osf7r6xkkt"
 [sub_resource type="Resource" id="Resource_2qaea"]
 script = ExtResource("3_hj6es")
 stats = ExtResource("7_s1u3v")
-quantity = 999
+quantity = 99
 metadata/_custom_type_script = "uid://dp8osf7r6xkkt"
 
 [sub_resource type="Resource" id="Resource_yrrsd"]
@@ -1066,7 +1066,7 @@ light_mode = 1
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_6tbo3"]
 light_mode = 1
 
-[node name="BasicZombie" type="CharacterBody2D" groups=["has_save_logic"]]
+[node name="BasicZombie" type="CharacterBody2D" unique_id=1772565743 groups=["has_save_logic"]]
 collision_layer = 0
 collision_mask = 0
 motion_mode = 1
@@ -1075,13 +1075,13 @@ team = 2
 inv = SubResource("Resource_yrrsd")
 loot = SubResource("Resource_oqrkc")
 
-[node name="Collision" type="CollisionShape2D" parent="."]
+[node name="Collision" type="CollisionShape2D" parent="." unique_id=838499590]
 position = Vector2(0, -3)
 rotation = -1.5708
 shape = SubResource("CapsuleShape2D_2h2fy")
 debug_color = Color(0.66339, 0.512878, 0, 0.251)
 
-[node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
+[node name="NavigationAgent2D" type="NavigationAgent2D" parent="." unique_id=263086562]
 avoidance_enabled = true
 max_neighbors = 8
 debug_use_custom = true
@@ -1089,21 +1089,21 @@ debug_path_custom_color = Color(1, 0.523276, 0.90389, 1)
 debug_path_custom_point_size = 2.0
 debug_path_custom_line_width = 0.5
 
-[node name="DetectionComponent" parent="." instance=ExtResource("3_tsyff")]
+[node name="DetectionComponent" parent="." unique_id=1732292411 instance=ExtResource("3_tsyff")]
 
-[node name="LightOccluder2D" type="LightOccluder2D" parent="."]
+[node name="LightOccluder2D" type="LightOccluder2D" parent="." unique_id=1438746662]
 scale = Vector2(1, 1.00514)
 occluder = SubResource("OccluderPolygon2D_6bt22")
 
-[node name="YSorter" type="Node2D" parent="."]
+[node name="YSorter" type="Node2D" parent="." unique_id=1558898999]
 editor_description = "MUST TURN ON Y SORTING ON THIS NODE!"
 y_sort_enabled = true
 
-[node name="EntityShadow" parent="YSorter" instance=ExtResource("1_ko3ep")]
+[node name="EntityShadow" parent="YSorter" unique_id=1127282146 instance=ExtResource("1_ko3ep")]
 offset_left = -8.0
 offset_right = 8.0
 
-[node name="EntitySprite" parent="YSorter" instance=ExtResource("2_8a5el")]
+[node name="EntitySprite" parent="YSorter" unique_id=1487079216 instance=ExtResource("2_8a5el")]
 unique_name_in_owner = true
 position = Vector2(0, -14.5105)
 scale = Vector2(1.01285, 0.906908)
@@ -1113,18 +1113,18 @@ autoplay = "idle"
 disable_floor_light = true
 time_brightness_min_max = Vector2(1, 2.35)
 
-[node name="HandsComponent" parent="YSorter" instance=ExtResource("6_j2ytj")]
+[node name="HandsComponent" parent="YSorter" unique_id=952461488 instance=ExtResource("6_j2ytj")]
 unique_name_in_owner = true
 position = Vector2(0, -8.16217)
 scale = Vector2(1.01285, 0.906908)
 hand_texture = ExtResource("15_cw5if")
 time_brightness_min_max = Vector2(1, 1.15)
 
-[node name="StatusEffectsComponent" parent="YSorter" node_paths=PackedStringArray("effect_receiver") instance=ExtResource("5_g4fx3")]
+[node name="StatusEffectsComponent" parent="YSorter" unique_id=1714134769 node_paths=PackedStringArray("effect_receiver") instance=ExtResource("5_g4fx3")]
 unique_name_in_owner = true
 effect_receiver = NodePath("../../EffectReceiverComponent")
 
-[node name="StepDustParticles" type="CPUParticles2D" parent="."]
+[node name="StepDustParticles" type="CPUParticles2D" parent="." unique_id=1433694971]
 z_index = -1
 material = SubResource("CanvasItemMaterial_6vrim")
 emitting = false
@@ -1144,14 +1144,14 @@ anim_speed_max = 1.05
 anim_offset_max = 1.0
 anim_offset_curve = SubResource("Curve_kq2k7")
 
-[node name="ParticleEmissionComponent" parent="." instance=ExtResource("3_6bt22")]
+[node name="ParticleEmissionComponent" parent="." unique_id=1225411636 instance=ExtResource("3_6bt22")]
 below_extents = Vector2(8, 1)
 
-[node name="HealthComponent" parent="." instance=ExtResource("7_gh5xt")]
+[node name="HealthComponent" parent="." unique_id=1844147677 instance=ExtResource("7_gh5xt")]
 
-[node name="StaminaComponent" parent="." instance=ExtResource("10_kc883")]
+[node name="StaminaComponent" parent="." unique_id=659536841 instance=ExtResource("10_kc883")]
 
-[node name="EffectReceiverComponent" parent="." node_paths=PackedStringArray("affected_entity", "dmg_handler", "heal_handler") instance=ExtResource("8_u4xth")]
+[node name="EffectReceiverComponent" parent="." unique_id=992535422 node_paths=PackedStringArray("affected_entity", "dmg_handler", "heal_handler") instance=ExtResource("8_u4xth")]
 affected_entity = NodePath("..")
 dmg_handler = NodePath("DmgHandler")
 heal_handler = NodePath("HealHandler")
@@ -1164,39 +1164,36 @@ burning_handler = SubResource("Resource_wtw5m")
 time_snare_handler = SubResource("Resource_gvtqy")
 life_steal_handler = SubResource("Resource_3q24o")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="EffectReceiverComponent"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="EffectReceiverComponent" unique_id=825246500]
 position = Vector2(0, -13)
 scale = Vector2(1, 0.998166)
 shape = SubResource("RectangleShape2D_2ks4g")
 debug_color = Color(0.932, 0, 0.649, 0.122)
 
-[node name="DmgHandler" parent="EffectReceiverComponent" instance=ExtResource("9_eigs2")]
+[node name="DmgHandler" parent="EffectReceiverComponent" unique_id=123745709 instance=ExtResource("9_eigs2")]
 
-[node name="HealHandler" parent="EffectReceiverComponent" instance=ExtResource("10_mbh3n")]
+[node name="HealHandler" parent="EffectReceiverComponent" unique_id=906852148 instance=ExtResource("10_mbh3n")]
 
-[node name="FacingComponent" parent="." instance=ExtResource("27_pfgxp")]
+[node name="FacingComponent" parent="." unique_id=911102665 instance=ExtResource("27_pfgxp")]
 
-[node name="StateMachine" type="Node" parent="."]
+[node name="StateMachine" type="Node" parent="." unique_id=942533268]
 script = ExtResource("27_5gwv1")
 states = Array[ExtResource("33_qrtn1")]([SubResource("Resource_i4r08"), SubResource("Resource_kq2k7"), SubResource("Resource_175e0"), SubResource("Resource_1uee3"), SubResource("Resource_gtdxm"), SubResource("Resource_6hj0o")])
 print_state_changes = true
 
-[node name="Controller" type="Node2D" parent="StateMachine"]
+[node name="Controller" type="Node2D" parent="StateMachine" unique_id=638817075]
 script = ExtResource("30_tsyff")
 ray_start_offset = Vector2(0, -2)
 behavior = SubResource("Resource_86drt")
 footstep_texture = ExtResource("25_kc883")
-step_sound = "player_run_base"
 _max_speed = 60.0
 _acceleration = 1000.0
 _friction = 1300.0
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-libraries = {
-&"": SubResource("AnimationLibrary_3l4yw")
-}
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1336718066]
+libraries/ = SubResource("AnimationLibrary_3l4yw")
 
-[node name="AnimationTree" type="AnimationTree" parent="."]
+[node name="AnimationTree" type="AnimationTree" parent="." unique_id=1060475014]
 callback_mode_process = 2
 tree_root = SubResource("AnimationNodeStateMachine_eigs2")
 anim_player = NodePath("../AnimationPlayer")
@@ -1205,7 +1202,7 @@ parameters/idle/blendspace2d/blend_position = Vector2(0, 0)
 parameters/run/TimeScale/scale = 1.0
 parameters/run/blendspace2d/blend_position = Vector2(0, 0)
 
-[node name="OverheadUI" type="Control" parent="." node_paths=PackedStringArray("health_component")]
+[node name="OverheadUI" type="Control" parent="." unique_id=1675948781 node_paths=PackedStringArray("health_component")]
 unique_name_in_owner = true
 layout_mode = 3
 anchors_preset = 8
@@ -1222,7 +1219,7 @@ grow_vertical = 2
 script = ExtResource("45_ylj7g")
 health_component = NodePath("../HealthComponent")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="OverheadUI"]
+[node name="VBoxContainer" type="VBoxContainer" parent="OverheadUI" unique_id=178700523]
 custom_minimum_size = Vector2(21, 3)
 layout_mode = 0
 offset_right = 21.0
@@ -1230,12 +1227,12 @@ offset_bottom = 3.0
 theme_override_constants/separation = 1
 alignment = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="OverheadUI/VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="OverheadUI/VBoxContainer" unique_id=1857708836]
 layout_mode = 2
 theme_override_constants/separation = -1
 alignment = 1
 
-[node name="OverheadHealthBar" type="TextureProgressBar" parent="OverheadUI/VBoxContainer/HBoxContainer"]
+[node name="OverheadHealthBar" type="TextureProgressBar" parent="OverheadUI/VBoxContainer/HBoxContainer" unique_id=253092993]
 unique_name_in_owner = true
 material = SubResource("CanvasItemMaterial_anuam")
 custom_minimum_size = Vector2(0, 3)
@@ -1253,7 +1250,7 @@ texture_progress = ExtResource("49_nonw0")
 tint_under = Color(0, 0.16263, 0.0741151, 1)
 tint_progress = Color(7.55653e-06, 0.637396, 0.357541, 1)
 
-[node name="OverheadShieldBar" type="TextureProgressBar" parent="OverheadUI/VBoxContainer/HBoxContainer"]
+[node name="OverheadShieldBar" type="TextureProgressBar" parent="OverheadUI/VBoxContainer/HBoxContainer" unique_id=1488719227]
 unique_name_in_owner = true
 material = SubResource("CanvasItemMaterial_6tbo3")
 custom_minimum_size = Vector2(0, 3)

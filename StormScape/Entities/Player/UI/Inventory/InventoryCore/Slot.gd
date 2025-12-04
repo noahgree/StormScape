@@ -11,11 +11,12 @@ static var last_hovered_slot_size: float = 22.0 ## The most recently hovered ove
 @export var default_slot_texture: Texture2D ## The default texture of the slot with an item in it.
 @export var no_item_slot_texture: Texture2D ## The texture of the slot with no item when it is selected or active.
 @export var backing_texture: Texture2D ## The texture of the slot that appears behind everything else.
-@export var preview_only: bool = false ## When true, this slot will not react to drags or hovers.
+@export var preview_only: bool = false ## When true, this slot will not react to hovers.
 @export var hide_corner_level: bool = false ## When true, the corner level icons for the item will not show.
 @export var hide_corner_info: bool = false ## When true, the corner info icons for the item will not show.
 @export var hide_tint_progress: bool = false ## When true, the tint progress for the item will not show.
 @export var hide_hover_tooltip: bool = false ## When true, the hover tooltip will never show over this slot.
+@export var hide_back_color: bool = false ## When true, the backing solid color will never show under the item.
 
 @onready var texture_margins: MarginContainer = $TextureMargins ## The item texture margins node for this slot.
 @onready var back_color: ColorRect = $BackColorMargin/BackColor ## The color behind the item.
@@ -67,8 +68,6 @@ func set_item(new_item: InvItemResource) -> void:
 	if not preview_items.is_empty():
 		if new_item != null:
 			preview_items = []
-	#if synced_inv.source_node is Player and not "mod_slot_index" in self and not hide_corner_info:
-		#print(index, ":  ", new_item)
 
 	var old_item: InvItemResource = item
 	item = new_item
@@ -93,6 +92,7 @@ func _ready() -> void:
 		backing_texture_rect.texture = backing_texture
 	rarity_glow.hide()
 	selected_texture.hide()
+	back_color.hide()
 	item_texture.material.set_shader_parameter("highlight_strength", 0.0)
 	texture_margins.pivot_offset = texture_margins.size / 2
 
@@ -141,7 +141,7 @@ func _update_visuals(new_item_dict: Dictionary) -> void:
 
 		back_color.set_instance_shader_parameter("main_color", Globals.rarity_colors.slot_fill.get(new_item_rarity))
 
-		if new_item_rarity in [Globals.ItemRarity.EPIC, Globals.ItemRarity.LEGENDARY, Globals.ItemRarity.SINGULAR]:
+		if new_item_rarity in [Globals.ItemRarity.LEGENDARY, Globals.ItemRarity.SINGULAR]:
 			var gradient_texture: GradientTexture1D = GradientTexture1D.new()
 			gradient_texture.gradient = Gradient.new()
 			gradient_texture.gradient.add_point(0, Globals.rarity_colors.glint_color.get(new_item_rarity))
@@ -170,7 +170,8 @@ func _update_visuals(new_item_dict: Dictionary) -> void:
 				quantity.text = ""
 
 			item_texture.material.set_shader_parameter("width", 0.0)
-			back_color.show()
+			if not hide_back_color:
+				back_color.show()
 			quantity.self_modulate.a = 1.0
 			item_texture.set_instance_shader_parameter("final_alpha", 1.0)
 	else:
