@@ -17,7 +17,7 @@ func _ready() -> void:
 	SignalBus.player_ready.emit(self)
 
 	interaction_handler.prompt_ui = interaction_prompt
-	SignalBus.ui_focus_closed.connect(interaction_handler.recheck_queue)
+	SignalBus.ui_focus_closed.connect(func(_node: Node) -> void: interaction_handler.recheck_queue())
 
 	_add_player_debug_commands()
 

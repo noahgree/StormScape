@@ -1,6 +1,6 @@
 [gd_scene load_steps=8 format=3 uid="uid://cfojnp56c5051"]
 
-[ext_resource type="Script" uid="uid://dtuvd8m258l6d" path="res://Utilities/Autoloads/DebugConsole.gd" id="1_qnif3"]
+[ext_resource type="Script" uid="uid://dtuvd8m258l6d" path="res://Utilities/Autoloads/DebugConsole/DebugConsole.gd" id="1_qnif3"]
 [ext_resource type="FontVariation" uid="uid://by478cplv5w4n" path="res://Assets/Theming/Fonts/GameFontResources/pixel_font_less_margin.tres" id="2_8ir4q"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_qnif3"]

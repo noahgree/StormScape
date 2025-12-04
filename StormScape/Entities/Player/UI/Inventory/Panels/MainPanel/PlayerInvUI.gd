@@ -88,13 +88,13 @@ func _unhandled_key_input(event: InputEvent) -> void:
 		Input.parse_input_event(drag_end_event)
 
 ## Handles the opening and closing of the entire player inventory based on the is_open var.
-func _toggle_inventory_ui(new_value: bool) -> void:
-	is_open = new_value
-	visible = new_value
+func _toggle_inventory_ui(open: bool) -> void:
+	is_open = open
+	visible = open
 	Globals.ui_focus_open = is_open
 	if not is_open:
 		side_panel_active = false
-	Globals.change_focused_ui_state(is_open)
+	Globals.change_focused_ui_state(is_open, self)
 
 ## Handles the opening and closing of the side panel based on the value of the side_panel_active var.
 func _toggle_side_panel(new_value: bool) -> void:
@@ -148,6 +148,7 @@ func _drop_data(_at_position: Vector2, data: Variant) -> void:
 			data.set_item(null)
 
 		Item.spawn_on_ground(ground_item_res, ground_item_quantity, Globals.player_node.global_position, 15, true, false, true)
+		MessageManager.add_msg("[color=white]Dropped " + str(ground_item_quantity) + "[/color] " + ground_item_res.name + ("s" if ground_item_quantity > 1 else ""), Globals.rarity_colors.ui_text.get(ground_item_res.rarity))
 
 		if ground_item_res is ProjAmmoResource:
 			synced_inv_src_node.hands.active_slot_info.calculate_inv_ammo()
@@ -163,6 +164,7 @@ func _on_mouse_exited() -> void:
 ## Activates sorting this inventory by name.
 func _on_sort_by_name_btn_pressed() -> void:
 	Globals.player_node.inv.activate_sort_by_name()
+	MessageManager.add_msg_preset("Items Sorted By Name", MessageManager.Presets.NEUTRAL, 2.0)
 func _on_sort_by_name_btn_button_down() -> void:
 	sort_by_name_btn.texture = btn_down_texture
 func _on_sort_by_name_btn_button_up() -> void:
@@ -171,6 +173,7 @@ func _on_sort_by_name_btn_button_up() -> void:
 ## Activates sorting this inventory by rarity.
 func _on_sort_by_rarity_btn_pressed() -> void:
 	Globals.player_node.inv.activate_sort_by_rarity()
+	MessageManager.add_msg_preset("Items Sorted By Rarity", MessageManager.Presets.NEUTRAL, 2.0)
 func _on_sort_by_rarity_btn_button_down() -> void:
 	sort_by_rarity_btn.texture = btn_down_texture
 func _on_sort_by_rarity_btn_button_up() -> void:
@@ -179,6 +182,7 @@ func _on_sort_by_rarity_btn_button_up() -> void:
 ## Activates sorting this inventory by count.
 func _on_sort_by_type_btn_pressed() -> void:
 	Globals.player_node.inv.activate_sort_by_type()
+	MessageManager.add_msg_preset("Items Sorted By Type", MessageManager.Presets.NEUTRAL, 2.0)
 func _on_sort_by_type_btn_button_down() -> void:
 	sort_by_type_btn.texture = btn_down_texture
 func _on_sort_by_type_btn_button_up() -> void:
@@ -187,6 +191,7 @@ func _on_sort_by_type_btn_button_up() -> void:
 ## Activates auto-stacking this inventory.
 func _on_auto_stack_btn_pressed() -> void:
 	Globals.player_node.inv.activate_auto_stack()
+	MessageManager.add_msg_preset("Items Autostacked", MessageManager.Presets.NEUTRAL, 2.0)
 func _on_auto_stack_btn_button_down() -> void:
 	auto_stack_btn.texture = btn_down_texture
 func _on_auto_stack_btn_button_up() -> void:
@@ -210,7 +215,7 @@ func _on_autostack_btn_mouse_entered() -> void:
 func _on_craft_btn_mouse_entered() -> void:
 	if not get_viewport().gui_is_dragging():
 		var success: bool = crafting_manager.can_output
-		var color: Color = Globals.ui_colors.ui_glow_success if success else Globals.ui_colors.ui_light_tan
+		var color: Color = Globals.ui_colors.ui_glow_strong_success if success else Globals.ui_colors.ui_light_tan
 		CursorManager.update_tooltip("Craft" if success else "Nothing to Craft", color)
 func _hide_tooltip() -> void:
 	CursorManager.hide_tooltip()

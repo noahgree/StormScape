@@ -29,7 +29,6 @@ func parse_item(stats: ItemResource) -> Array[String]:
 			strings.append(_get_healing(stats))
 			strings.append(_get_use_speed(stats))
 		Globals.ItemType.WEAPON:
-			strings.append(_get_ammo_type(stats))
 			strings.append(_get_damage(stats))
 			strings.append(_get_charge_damage(stats))
 			strings.append(_get_healing(stats))
@@ -215,17 +214,6 @@ func _get_use_speed(stats: ItemResource) -> String:
 		string = _get_title("CONSUMPTION SPEED")
 		string += _get_item_sums(stats, ["consumption_time", "consumption_cooldown"], false, "s")
 
-	return string
-
-## Gets the ammo type string used by the weapon.
-func _get_ammo_type(stats: WeaponResource) -> String:
-	var string: String = _get_title("AMMO TYPE")
-	if stats is ProjWeaponResource:
-		if stats.ammo_type in [ProjWeaponResource.ProjAmmoType.NONE, ProjWeaponResource.ProjAmmoType.SELF, ProjWeaponResource.ProjAmmoType.CHARGES]:
-			return ""
-		string += stats.get_ammo_string()
-	else:
-		return ""
 	return string
 
 ## Gets the magazine ammo and reload time details. Gets stamina use for melee weapons.

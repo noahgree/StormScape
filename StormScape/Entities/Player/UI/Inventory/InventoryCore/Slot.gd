@@ -361,6 +361,8 @@ func _gui_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton:
 		# Don't allow splitting of stacked weapons
 		if item != null and item.stats is WeaponResource and item.quantity > 1:
+			if event.button_index == MOUSE_BUTTON_RIGHT:
+				MessageManager.add_msg_preset("Cannot Split Weapon Stacks", MessageManager.Presets.FAIL, 3.0)
 			return
 		if event.button_index == MOUSE_BUTTON_RIGHT:
 			if item != null:
@@ -395,17 +397,17 @@ func _gui_input(event: InputEvent) -> void:
 ## Determines if the slot we are hovering over during a drag can accept drag data on mouse release.
 func _can_drop_data(_at_position: Vector2, data: Variant) -> bool:
 	if data.item == null or not synced_inv or is_hud_ui_preview_slot:
-		CursorManager.update_tooltip("Invalid!", Globals.ui_colors.ui_glow_fail)
+		CursorManager.update_tooltip("Invalid!", Globals.ui_colors.ui_glow_strong_fail)
 		return false
 	elif is_same_slot_as(data):
 		return false
 	elif data is WearableSlot or data is ModSlot:
 		if item != null and not (item.stats.is_same_as(data.item.stats) and item.quantity < item.stats.stack_size):
 			if not is_trash_slot:
-				CursorManager.update_tooltip("Invalid!", Globals.ui_colors.ui_glow_fail)
+				CursorManager.update_tooltip("Invalid!", Globals.ui_colors.ui_glow_strong_fail)
 				return false
 	elif name == "ItemViewerSlot":
-		CursorManager.update_tooltip("Pin Item", Globals.ui_colors.ui_glow_success)
+		CursorManager.update_tooltip("Pin Item", Globals.ui_colors.ui_glow_strong_success)
 	elif name == "Trash_Slot":
 		CursorManager.update_tooltip("Trash Item", Globals.ui_colors.ui_light_tan)
 	return true

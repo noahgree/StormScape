@@ -2,9 +2,9 @@ extends ItemResource
 class_name WeaponResource
 ## The base resource for all weapons.
 
-const BASE_XP_FOR_LVL: int = 100
-const LVL_SCALING_EXPONENT: float = 1.025
-const RARITY_LEVELING_FACTOR: float = 0.2
+const BASE_XP_FOR_LVL: int = 500
+const LVL_SCALING_EXPONENT: float = 1.005
+const RARITY_LEVELING_FACTOR: float = 0.1
 const MAX_LEVEL: int = 40
 const TINY_XP: int = 2
 const SMALL_XP: int = 5
@@ -40,6 +40,11 @@ static func xp_needed_for_lvl(weapon_stats: WeaponResource, lvl: int) -> int:
 
 	# Subtract one iteration at the end since we start at level 1
 	return int(BASE_XP_FOR_LVL * pow(lvl, LVL_SCALING_EXPONENT) * rarity_mult) - int(BASE_XP_FOR_LVL * rarity_mult)
+
+## Returns the percent progress to the next level, 0 - 1.
+static func percent_of_lvl_progress(weapon_stats: WeaponResource) -> float:
+	var xp_needed: int = xp_needed_for_lvl(weapon_stats, weapon_stats.level + 1)
+	return float(weapon_stats.lvl_progress) / float(xp_needed)
 
 ## Whether the weapon is the same as another weapon when called externally to compare.
 ## Overrides base method to also compare weapon mods.
@@ -89,6 +94,12 @@ func add_xp(amount: int) -> bool:
 
 	if level == MAX_LEVEL:
 		lvl_progress = 0
+
+	if leveled_up:
+		if level == MAX_LEVEL:
+			MessageManager.add_msg("[color=white]" + name + " is now[/color] MAX LVL[color=white]!", Globals.ui_colors.ui_glow_strong_success, inv_icon)
+		else:
+			MessageManager.add_msg("[color=white]" + name + " is now[/color] LVL " + str(level), Globals.ui_colors.ui_glow_strong_success, inv_icon)
 
 	if Globals.player_node.hands.do_these_stats_match_equipped_item(self):
 		var idx: int = Globals.player_node.hands.equipped_item.inv_index

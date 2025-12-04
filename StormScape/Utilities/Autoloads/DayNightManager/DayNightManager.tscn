@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://47hqyo37ph5r"]
 
-[ext_resource type="Script" uid="uid://d1x8jidv08n84" path="res://Utilities/Autoloads/DayNightManager.gd" id="1_ool0t"]
-[ext_resource type="Texture2D" uid="uid://bkpc1kjm4t2xn" path="res://Utilities/Autoloads/daynight_gradient.tres" id="2_i82t2"]
+[ext_resource type="Script" uid="uid://d1x8jidv08n84" path="res://Utilities/Autoloads/DayNightManager/DayNightManager.gd" id="1_ool0t"]
+[ext_resource type="Texture2D" uid="uid://bkpc1kjm4t2xn" path="res://Utilities/Autoloads/DayNightManager/daynight_gradient.tres" id="2_i82t2"]
 
 [node name="DayNightManager" type="Node"]
 script = ExtResource("1_ool0t")

@@ -39,13 +39,14 @@ buses/default_bus_layout="uid://rtoqyra5i4ve"
 
 DebugFlags="*res://Utilities/Autoloads/DebugFlags.gd"
 SignalBus="*res://Utilities/Autoloads/SignalBus.gd"
-AudioManager="*res://Utilities/Autoloads/AudioManager.tscn"
+AudioManager="*res://Utilities/Autoloads/AudioManager/AudioManager.tscn"
 SaverLoader="*res://Utilities/Autoloads/SaverLoader.gd"
-CursorManager="*res://Utilities/Autoloads/CursorManager.tscn"
-DayNightManager="*res://Utilities/Autoloads/DayNightManager.tscn"
-DebugConsole="*res://Utilities/Autoloads/DebugConsole.tscn"
+CursorManager="*res://Utilities/Autoloads/CursorManager/CursorManager.tscn"
+DayNightManager="*res://Utilities/Autoloads/DayNightManager/DayNightManager.tscn"
+DebugConsole="*res://Utilities/Autoloads/DebugConsole/DebugConsole.tscn"
 Globals="*res://Utilities/Autoloads/Globals.gd"
 Items="*uid://m0vksxthdyko"
+MessageManager="*uid://bgu7t40v4mtmh"
 
 [debug]
 

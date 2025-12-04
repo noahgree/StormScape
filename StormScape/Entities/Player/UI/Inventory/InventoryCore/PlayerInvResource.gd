@@ -24,17 +24,30 @@ func initialize_inventory(source: Node2D) -> void:
 ## Handles the logic needed for adding an item to the inventory when picked up from the ground. Respects stack size.
 ## Any extra quantity that does not fit will be left on the ground as a physical item.
 func add_item_from_world(original_item: Item) -> void:
+	var original_quantity: int = original_item.quantity
 	var remaining: int = 0
 	if original_item.stats is ProjAmmoResource:
 		remaining = _fill_ammo(original_item)
+		if remaining != 0:
+			original_item.respawn_item_after_quantity_change()
+			MessageManager.add_msg_preset(original_item.stats.name + " Storage Full", MessageManager.Presets.FAIL, 3.0)
 	elif original_item.stats is CurrencyResource:
 		remaining = _fill_currency(original_item)
+		if remaining != 0:
+			original_item.respawn_item_after_quantity_change()
+			MessageManager.add_msg_preset(original_item.stats.name + " Storage Full", MessageManager.Presets.FAIL, 3.0)
 	else:
 		remaining = _fill_hotbar(original_item)
 		if remaining != 0:
 			remaining = _fill_main_inventory(original_item)
-	if remaining != 0:
-		original_item.respawn_item_after_quantity_change()
+		if remaining != 0:
+			original_item.respawn_item_after_quantity_change()
+			MessageManager.add_msg_preset("Inventory Full", MessageManager.Presets.FAIL, 3.0)
+
+	var picked_up_quantity: int = original_quantity - remaining
+	if picked_up_quantity > 0:
+
+		MessageManager.add_msg("[color=white]+" + str(picked_up_quantity) + "[/color] " + original_item.stats.name, Globals.rarity_colors.ui_text.get(original_item.stats.rarity), original_item.stats.inv_icon)
 
 ## Handles the logic needed for adding an item to the inventory from a given inventory item resource.
 ## Respects stack size. By default, any extra quantity that does not fit will be ignored and deleted.
@@ -42,17 +55,21 @@ func add_item_from_world(original_item: Item) -> void:
 func insert_from_inv_item(original_item: InvItemResource, delete_extra: bool = true,
 							hotbar_first: bool = false) -> void:
 	var remaining: int = 0
-
-	if hotbar_first:
-		remaining = _fill_hotbar(original_item)
+	if original_item.stats is ProjAmmoResource:
+		remaining = _fill_ammo(original_item)
+	elif original_item.stats is CurrencyResource:
+		remaining = _fill_currency(original_item)
 	else:
-		remaining = _fill_main_inventory(original_item)
-
-	if remaining != 0:
 		if hotbar_first:
-			remaining = _fill_main_inventory(original_item)
-		else:
 			remaining = _fill_hotbar(original_item)
+		else:
+			remaining = _fill_main_inventory(original_item)
+
+		if remaining != 0:
+			if hotbar_first:
+				remaining = _fill_main_inventory(original_item)
+			else:
+				remaining = _fill_hotbar(original_item)
 
 	if not delete_extra and remaining != 0:
 		Item.spawn_on_ground(original_item.stats, original_item.quantity, Globals.player_node.global_position, 8, false, false, true)

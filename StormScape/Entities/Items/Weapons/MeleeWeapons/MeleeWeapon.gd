@@ -68,6 +68,7 @@ func _can_activate_at_all(for_charged: bool) -> bool:
 					return false
 			if source_entity.stamina_component.has_enough_stamina(cost):
 				return true
+			MessageManager.add_msg_preset("Not Enough Stamina", MessageManager.Presets.FAIL)
 			return false
 		_:
 			return false

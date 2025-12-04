@@ -18,6 +18,7 @@ class_name ItemDetailsPanel
 @onready var item_rarity_label: RichTextLabel = %ItemRarityLabel ## Displays the item's rarity and type.
 @onready var player_icon_margin: MarginContainer = %PlayerIconMargin
 @onready var main_item_viewer_margin: MarginContainer = %ItemViewerBkgrdMargin
+@onready var item_lvl_progress_margin: MarginContainer = %ItemLvlProgressMargin
 
 var mod_slots: Array[ModSlot] = [] ## The mod slots that display and modify the mods for the item under review.
 var changing_item_viewer_slot: bool = false ## When true, the item under review is changing and we shouldn't respond to mod slot item changes.
@@ -54,6 +55,7 @@ func setup_slots(inventory_ui: PlayerInvUI) -> void:
 	item_viewer_slot.synced_inv = inventory_ui.synced_inv_src_node.inv
 	item_viewer_slot.index = inventory_ui.assign_next_slot_index()
 	item_viewer_slot.item_changed.connect(_on_item_viewer_slot_changed)
+	item_viewer_slot.item_changed.connect(inventory_ui.ammo_slot_manager.pulse_ammo_type)
 
 	mod_slots_margin.visible = false
 
@@ -104,7 +106,7 @@ func _on_slot_not_hovered() -> void:
 
 ## When the focused UI is closed, we should empty out the crafting input slots and drop them on the
 ## ground if the inventory is now full.
-func _on_ui_focus_closed() -> void:
+func _on_ui_focus_closed(_node: Node) -> void:
 	if item_viewer_slot.item != null:
 		Globals.player_node.inv.insert_from_inv_item(item_viewer_slot.item, false, true)
 		item_viewer_slot.set_item(null)
@@ -133,6 +135,7 @@ func _on_item_viewer_slot_changed(_slot: Slot, _old_item: InvItemResource, new_i
 	changing_item_viewer_slot = true
 
 	player_icon_margin.visible = false
+	item_lvl_progress_margin.visible = false
 
 	if new_item == null:
 		_change_mod_slot_visibilities(false)
@@ -176,6 +179,9 @@ func _on_item_viewer_slot_changed(_slot: Slot, _old_item: InvItemResource, new_i
 		if not new_item.stats.no_levels:
 			var level_string: String = "• [color=Cyan] LVL " + str(new_item.stats.level) + "[/color][color=AAAAAA00][char=02D9][/color]" + "[color=AAAAAA00][char=02D9][/color]"
 			item_rarity_label.text += level_string
+			if not (new_item.stats.level == 1 and new_item.stats.lvl_progress == 0) and not (new_item.stats.level == WeaponResource.MAX_LEVEL):
+				item_lvl_progress_margin.get_node("%ItemLvlProgressBar").value = WeaponResource.percent_of_lvl_progress(new_item.stats) * 100.0
+				item_lvl_progress_margin.visible = true
 
 	changing_item_viewer_slot = false
 

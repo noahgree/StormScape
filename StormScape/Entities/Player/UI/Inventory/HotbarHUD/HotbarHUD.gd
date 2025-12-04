@@ -19,8 +19,8 @@ func _ready() -> void:
 		await SignalBus.player_ready
 	player_inv = Globals.player_node.inv
 
-	SignalBus.ui_focus_opened.connect(func() -> void: visible = not Globals.ui_focus_open)
-	SignalBus.ui_focus_closed.connect(func() -> void: visible = not Globals.ui_focus_open)
+	SignalBus.ui_focus_opened.connect(func(_node: Node) -> void: visible = not Globals.ui_focus_open)
+	SignalBus.ui_focus_closed.connect(func(_node: Node) -> void: visible = not Globals.ui_focus_open)
 
 	_setup_slots()
 

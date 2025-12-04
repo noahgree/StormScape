@@ -40,7 +40,7 @@ func _input(event: InputEvent) -> void:
 func _toggle_usage() -> void:
 	console_input.accept_event()
 	console_input.editable = !console_input.editable
-	Globals.change_focused_ui_state(console_input.editable)
+	Globals.change_focused_ui_state(console_input.editable, self)
 	if console_input.editable:
 		console_input.grab_focus()
 	else:

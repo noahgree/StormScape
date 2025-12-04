@@ -62,11 +62,11 @@ func _ready() -> void:
 	off_hand_sprite.visible = false
 	drawn_off_hand.visible = false
 
-	SignalBus.ui_focus_opened.connect(func() -> void: trigger_pressed = false)
+	SignalBus.ui_focus_opened.connect(func(_node: Node) -> void: trigger_pressed = false)
 
 	# Make sure to update item rotation on game resume
 	if entity is Player:
-		SignalBus.ui_focus_closed.connect(func() -> void: handle_aim(CursorManager.get_cursor_mouse_position()))
+		SignalBus.ui_focus_closed.connect(func(_node: Node) -> void: handle_aim(CursorManager.get_cursor_mouse_position()))
 
 	starting_hands_component_height = position.y
 	starting_off_hand_sprite_height = off_hand_sprite.position.y
@@ -95,6 +95,8 @@ func _unhandled_input(event: InputEvent) -> void:
 		return
 
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
+		if equipped_item != null and equipped_item is ProjectileWeapon and not equipped_item.enabled:
+			MessageManager.add_msg_preset("Weapon is Blocked", MessageManager.Presets.FAIL, 2.0)
 		if event.is_pressed():
 			handle_trigger_pressed()
 		else:
@@ -440,7 +442,7 @@ func toggle_hitscan() -> void:
 
 ## Tries to add xp to the current weapon.
 func add_weapon_xp(amount: int) -> void:
-	if not _check_is_holding_weapon() or Globals.ui_focus_open:
+	if not _check_is_holding_weapon() or Globals.player_node.get_node("%PlayerInvUI").is_open:
 		printerr("Either the player is not holding a weapon or a focused UI is open, so no xp was added.")
 		return
 	Globals.player_node.hands.equipped_item.stats.add_xp(amount)

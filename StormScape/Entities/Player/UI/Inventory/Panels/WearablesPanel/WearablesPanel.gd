@@ -25,7 +25,7 @@ func _on_load_game() -> void:
 #endregion
 
 func _ready() -> void:
-	SignalBus.ui_focus_opened.connect(_verify_latest_wearables)
+	SignalBus.ui_focus_opened.connect(func(_node: Node) -> void: _verify_latest_wearables())
 
 ## Sets up the wearables slots their needed data.
 func setup_slots(inventory_ui: PlayerInvUI) -> void:

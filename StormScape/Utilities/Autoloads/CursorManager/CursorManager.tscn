@@ -1,6 +1,6 @@
 [gd_scene load_steps=18 format=3 uid="uid://6kn3nwojv4l1"]
 
-[ext_resource type="Script" uid="uid://bl8i118soy6a5" path="res://Utilities/Autoloads/CursorManager.gd" id="1_it73m"]
+[ext_resource type="Script" uid="uid://bl8i118soy6a5" path="res://Utilities/Autoloads/CursorManager/CursorManager.gd" id="1_it73m"]
 [ext_resource type="Shader" uid="uid://bhox1e3shq3iq" path="res://Utilities/Game/Shaders/ProgressAlpha.gdshader" id="2_7re0i"]
 [ext_resource type="Texture2D" uid="uid://ftbtsdurncq" path="res://Entities/Player/UI/Cursors/default.png" id="2_g8fuh"]
 [ext_resource type="Texture2D" uid="uid://nh5iuev5n8e8" path="res://Entities/Player/UI/Cursors/default_cursor_HIT.png" id="4_43v78"]

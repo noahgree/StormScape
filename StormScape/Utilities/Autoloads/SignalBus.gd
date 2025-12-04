@@ -6,8 +6,8 @@ extends Node
 ## depend on the value, you connect to this script and not all the enemies individually.
 
 @warning_ignore("unused_signal") signal player_ready(player: Player)
-@warning_ignore("unused_signal") signal ui_focus_opened
-@warning_ignore("unused_signal") signal ui_focus_closed
+@warning_ignore("unused_signal") signal ui_focus_opened(node: Node)
+@warning_ignore("unused_signal") signal ui_focus_closed(node: Node)
 @warning_ignore("unused_signal") signal slot_hovered(slot: Slot)
 @warning_ignore("unused_signal") signal slot_not_hovered
 @warning_ignore("unused_signal") signal side_panel_open_request(panel_scene: PackedScene, src_node: Node2D)

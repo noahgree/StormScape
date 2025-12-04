@@ -1,0 +1,71 @@
+[gd_scene load_steps=5 format=3 uid="uid://emm1c404rb6y"]
+
+[ext_resource type="Script" uid="uid://i3gkiyoux0ut" path="res://Utilities/Autoloads/MessageManager/HUDMessage.gd" id="1_mtm3v"]
+[ext_resource type="Texture2D" uid="uid://bbcajkbyc0c6y" path="res://Entities/Player/UI/Inventory/Assets/Background/Universal/inv_background_simple_tintable.png" id="2_ms3o2"]
+[ext_resource type="Texture2D" uid="uid://cjfmlylpqc505" path="res://Entities/Player/UI/Messages/exclamation_icon.png" id="3_gi2ov"]
+[ext_resource type="FontVariation" uid="uid://by478cplv5w4n" path="res://Assets/Theming/Fonts/GameFontResources/pixel_font_less_margin.tres" id="3_ms3o2"]
+
+[node name="HUDMessage" type="MarginContainer" unique_id=849776937]
+offset_right = 30.0
+offset_bottom = 7.0
+size_flags_horizontal = 8
+script = ExtResource("1_mtm3v")
+
+[node name="ContentRoot" type="MarginContainer" parent="." unique_id=862655423]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Background" type="NinePatchRect" parent="ContentRoot" unique_id=697765580]
+self_modulate = Color(0.06666667, 0.019607844, 0.003921569, 0.37254903)
+layout_mode = 2
+texture = ExtResource("2_ms3o2")
+patch_margin_left = 2
+patch_margin_top = 2
+patch_margin_right = 2
+patch_margin_bottom = 2
+axis_stretch_vertical = 1
+
+[node name="ElementsMargins" type="MarginContainer" parent="ContentRoot" unique_id=500475795]
+layout_mode = 2
+theme_override_constants/margin_left = 2
+theme_override_constants/margin_top = 1
+theme_override_constants/margin_right = 2
+theme_override_constants/margin_bottom = 1
+
+[node name="ElementsHBox" type="HBoxContainer" parent="ContentRoot/ElementsMargins" unique_id=2091607128]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="MessageIconMargins" type="MarginContainer" parent="ContentRoot/ElementsMargins/ElementsHBox" unique_id=179064352]
+layout_mode = 2
+theme_override_constants/margin_left = 1
+theme_override_constants/margin_right = 1
+
+[node name="MessageIcon" type="TextureRect" parent="ContentRoot/ElementsMargins/ElementsHBox/MessageIconMargins" unique_id=1394843256]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(5, 5)
+layout_mode = 2
+texture = ExtResource("3_gi2ov")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="TextLabelMargins" type="MarginContainer" parent="ContentRoot/ElementsMargins/ElementsHBox" unique_id=1994174291]
+layout_mode = 2
+theme_override_constants/margin_left = 1
+
+[node name="TextLabel" type="RichTextLabel" parent="ContentRoot/ElementsMargins/ElementsHBox/TextLabelMargins" unique_id=1662220207]
+unique_name_in_owner = true
+clip_contents = false
+layout_mode = 2
+theme_override_colors/default_color = Color(0.961254, 0.893995, 0.881106, 1)
+theme_override_colors/font_outline_color = Color(0.122, 0.035, 0, 0.67)
+theme_override_constants/outline_size = 2
+theme_override_fonts/normal_font = ExtResource("3_ms3o2")
+theme_override_font_sizes/normal_font_size = 5
+bbcode_enabled = true
+text = "Test Text"
+fit_content = true
+scroll_active = false
+autowrap_mode = 0
+horizontal_alignment = 2
+vertical_alignment = 1

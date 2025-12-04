@@ -656,6 +656,7 @@ shape = SubResource("RectangleShape2D_1606r")
 [node name="HealthComponent" parent="WorldRoot/StormBase" unique_id=1652722790 instance=ExtResource("43_hkn5b")]
 
 [node name="Storm" type="Node2D" parent="WorldRoot" unique_id=1746738981 groups=["core", "has_save_logic"]]
+unique_name_in_owner = true
 visible = false
 z_index = -2
 z_as_relative = false

@@ -295,6 +295,9 @@ func attempt_craft() -> void:
 	var output_quant_per_craft: int = output_slot.item.stats.output_quantity
 	if successful_crafts > 0:
 		output_slot.set_item(InvItemResource.new(output_slot.item.stats, successful_crafts * output_quant_per_craft))
+
+		MessageManager.add_msg_preset(str(output_slot.item.quantity) + " " + output_slot.item.stats.name + ("s" if output_slot.item.quantity > 1 else "") + " Crafted", MessageManager.Presets.SUCCESS)
+
 		Globals.player_node.inv.insert_from_inv_item(output_slot.item, false, false)
 
 	is_crafting = false
@@ -452,7 +455,7 @@ func _populate_previews(item: InvItemResource) -> void:
 
 ## When the focused UI is closed, we should empty out the crafting input slots and drop them on the
 ## ground if the inventory is now full.
-func _on_ui_focus_closed() -> void:
+func _on_ui_focus_closed(_node: Node) -> void:
 	for slot: CraftingSlot in input_slots:
 		if slot.item != null:
 			Globals.player_node.inv.insert_from_inv_item(slot.item, false, false)

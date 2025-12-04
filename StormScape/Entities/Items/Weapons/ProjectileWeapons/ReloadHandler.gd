@@ -201,7 +201,10 @@ func _get_more_reload_ammo(max_amount_needed: int, take_from_inventory: bool = t
 	if weapon.stats.ammo_type == ProjWeaponResource.ProjAmmoType.NONE:
 		return max_amount_needed
 	else:
-		return weapon.source_entity.inv.get_more_ammo(max_amount_needed, take_from_inventory, weapon.stats.ammo_type)
+		var amount_found: int = weapon.source_entity.inv.get_more_ammo(max_amount_needed, take_from_inventory, weapon.stats.ammo_type)
+		if amount_found == 0:
+			MessageManager.add_msg_preset("Ammo Depleted", MessageManager.Presets.FAIL, 2.0)
+		return amount_found
 
 ## When we have recently fired, we should not instantly keep recharging ammo, so we send a cooldown
 ## to the recharger.

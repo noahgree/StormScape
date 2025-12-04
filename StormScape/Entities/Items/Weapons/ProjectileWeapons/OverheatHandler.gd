@@ -37,7 +37,8 @@ func add_overheat() -> void:
 		weapon.stats.overheat_dec_delay
 	)
 
-## Checks if the overheat level is at or above 1.0, then adds the cooldown and starts the max overheat visuals if so.
+## Checks if the overheat level is at or above 1.0, then adds the cooldown and starts the max overheat
+## visuals if so.
 func check_is_overheated() -> bool:
 	if _get_overheat() >= 1.0:
 		weapon.add_cooldown(weapon.stats.s_mods.get_stat("overheat_penalty"), "overheat_penalty")
@@ -49,7 +50,8 @@ func check_is_overheated() -> bool:
 func _get_overheat() -> float:
 	return auto_decrementer.get_overheat(str(weapon.stats.session_uid))
 
-## When an overheat ends that matches this item's id and we aren't still on max overheat penalty, stop the visuals.
+## When an overheat ends that matches this item's id and we aren't still on max overheat penalty,
+## stop the visuals.
 func _on_overheat_emptied(item_id: StringName) -> void:
 	if item_id != str(weapon.stats.session_uid):
 		return
@@ -60,10 +62,12 @@ func _on_overheat_emptied(item_id: StringName) -> void:
 			weapon.overhead_ui.overheat_bar.hide()
 			CursorManager.change_cursor_tint(Color.WHITE)
 
-## When we hit max overheat, these visuals are started to update overlays, the mouse cursor, smoke particles, etc.
+## When we hit max overheat, these visuals are started to update overlays, the mouse cursor,
+## smoke particles, etc.
 func start_max_overheat_visuals(just_equipped: bool) -> void:
 	if source_entity is Player:
 		weapon.overhead_ui.update_visuals_for_max_overheat(true)
+		MessageManager.add_msg_preset(weapon.stats.name + " Overheated", MessageManager.Presets.FAIL, weapon.get_cooldown())
 	AudioManager.play_2d(weapon.stats.overheated_sound, weapon.global_position)
 
 	# Activate overlays and tint the mouse cursor

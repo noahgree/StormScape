@@ -1,4 +1,4 @@
-[gd_scene load_steps=255 format=3 uid="uid://dba8mrurjlekp"]
+[gd_scene load_steps=257 format=3 uid="uid://dba8mrurjlekp"]
 
 [ext_resource type="Script" uid="uid://c3rpxq8pnbdje" path="res://Entities/Player/PlayerCore/Player.gd" id="1_m33tt"]
 [ext_resource type="Script" uid="uid://bdd0xujg1bgm0" path="res://Entities/Player/UI/Inventory/InventoryCore/PlayerInvResource.gd" id="2_8hbs2"]
@@ -95,6 +95,7 @@
 [ext_resource type="Texture2D" uid="uid://cd22xh5jduxd6" path="res://Entities/Player/UI/Interactions/Assets/e_prompt.png" id="87_8hbs2"]
 [ext_resource type="FontVariation" uid="uid://by478cplv5w4n" path="res://Assets/Theming/Fonts/GameFontResources/pixel_font_less_margin.tres" id="90_hxjay"]
 [ext_resource type="Script" uid="uid://dbc2ecb1mkugh" path="res://Entities/Player/UI/Inventory/HotbarHUD/ActiveSlotInfo.gd" id="91_qr476"]
+[ext_resource type="PackedScene" uid="uid://bgu7t40v4mtmh" path="res://Utilities/Autoloads/MessageManager/MessageManager.tscn" id="91_xsics"]
 [ext_resource type="Texture2D" uid="uid://jx4y3elkn7rq" path="res://Entities/Player/UI/Inventory/Assets/Slot/Universal/empty_slot_icon.png" id="94_0313k"]
 [ext_resource type="Texture2D" uid="uid://wsv6cyckepdw" path="res://Entities/Player/UI/Inventory/Assets/Background/Wood/inv_background_medium_wood.png" id="98_s4yud"]
 [ext_resource type="Texture2D" uid="uid://dlecwbci6aggo" path="res://Entities/Player/UI/Vitals/Assets/ProgressBars/progress_white.png" id="100_5qckj"]
@@ -140,6 +141,7 @@
 [ext_resource type="Texture2D" uid="uid://dftsjhii43mgr" path="res://Entities/Player/UI/Overlays/CornerTint/tintable_corner_overlay.png" id="132_bmpdm"]
 [ext_resource type="Script" uid="uid://pmmj51awratp" path="res://Entities/Player/UI/Overlays/CornerTint/CornerFeedbackTint.gd" id="133_8hbs2"]
 [ext_resource type="Script" uid="uid://cq30nail2rqmt" path="res://Entities/Player/UI/Inventory/Panels/SidePanels/SidePanelsCore/SidePanelManager.gd" id="133_h1ges"]
+[ext_resource type="Texture2D" uid="uid://bckcwc1xslu54" path="res://Entities/Player/UI/Inventory/Assets/Slot/Wood/clear_slot_wood.png" id="133_xjdir"]
 [ext_resource type="Texture2D" uid="uid://bvu2b8dfhtl8j" path="res://Entities/Player/UI/Inventory/Assets/Slot/Universal/bullet_slot_icon.png" id="135_uu4sw"]
 [ext_resource type="Texture2D" uid="uid://cis4i6ap8qfpb" path="res://Entities/Player/UI/Inventory/Assets/Slot/Universal/shell_slot_icon.png" id="135_ve7vt"]
 [ext_resource type="Texture2D" uid="uid://b5t26j33yq3b" path="res://Entities/Player/UI/Inventory/Assets/Slot/Universal/ion_charge_slot_icon.png" id="136_uu4sw"]
@@ -1681,6 +1683,8 @@ vertical_alignment = 1
 
 [node name="OverlayUI" type="CanvasLayer" parent="." unique_id=1029568050]
 
+[node name="MessageManager" parent="OverlayUI" unique_id=1637142411 instance=ExtResource("91_xsics")]
+
 [node name="PlayerStatsHUD" type="Control" parent="OverlayUI" unique_id=1619251607 node_paths=PackedStringArray("health_component", "stamina_component")]
 unique_name_in_owner = true
 layout_mode = 3
@@ -2191,6 +2195,7 @@ damage_color = Color(0.738, 0, 0.205, 1)
 heal_color = Color(0, 0.579, 0.249, 1)
 
 [node name="PlayerInvUI" type="ColorRect" parent="OverlayUI" unique_id=43151155 node_paths=PackedStringArray("synced_inv_src_node", "main_slot_grid")]
+unique_name_in_owner = true
 process_mode = 3
 material = SubResource("ShaderMaterial_2q23q")
 use_parent_material = true
@@ -2682,6 +2687,7 @@ theme_override_constants/margin_right = 1
 theme_override_constants/margin_bottom = 1
 
 [node name="OverlayTexture" type="TextureRect" parent="OverlayUI/PlayerInvUI/AmmoSlotManager/AmmoSlotsGridMargins/AmmoSlotsGrid/AmmoSlot1/OverlayMargins" unique_id=959711109]
+modulate = Color(2.454227, 2.454227, 2.454227, 1)
 layout_mode = 2
 texture = ExtResource("119_r7bkl")
 
@@ -2780,7 +2786,7 @@ theme_override_constants/margin_top = 0
 theme_override_constants/margin_right = 0
 theme_override_constants/margin_bottom = 0
 script = ExtResource("123_4awmn")
-type_order = Array[int]([0])
+type_order = Array[int]([0, 1, 2])
 
 [node name="CurrencySlotsTexture" type="NinePatchRect" parent="OverlayUI/PlayerInvUI/CurrencySlotManager" unique_id=83447645]
 layout_mode = 2
@@ -2831,6 +2837,7 @@ texture = ExtResource("119_r7bkl")
 [node name="CurrencySlot2" parent="OverlayUI/PlayerInvUI/CurrencySlotManager/CurrencySlotsGridMargins/CurrencySlotsGrid" unique_id=1208610677 instance=ExtResource("42_r422n")]
 layout_mode = 2
 script = ExtResource("124_1go7j")
+backing_texture = ExtResource("125_inle7")
 hide_corner_level = true
 hide_corner_info = true
 hide_tint_progress = true
@@ -2855,6 +2862,7 @@ texture = ExtResource("119_r7bkl")
 [node name="CurrencySlot3" parent="OverlayUI/PlayerInvUI/CurrencySlotManager/CurrencySlotsGridMargins/CurrencySlotsGrid" unique_id=1744015114 instance=ExtResource("42_r422n")]
 layout_mode = 2
 script = ExtResource("124_1go7j")
+backing_texture = ExtResource("125_inle7")
 hide_corner_level = true
 hide_corner_info = true
 hide_tint_progress = true
@@ -3074,6 +3082,38 @@ scroll_active = false
 tab_size = 0
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="ItemLvlProgressMargin" type="MarginContainer" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/ItemDetailsPanelVBox/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox/ElementsMargin/ElementsVBox" unique_id=1639601317]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/margin_left = 22
+theme_override_constants/margin_top = -1
+theme_override_constants/margin_right = 22
+theme_override_constants/margin_bottom = 1
+
+[node name="ItemBackground" type="NinePatchRect" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/ItemDetailsPanelVBox/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox/ElementsMargin/ElementsVBox/ItemLvlProgressMargin" unique_id=901218219]
+layout_mode = 2
+texture = ExtResource("133_xjdir")
+patch_margin_left = 2
+patch_margin_top = 1
+patch_margin_right = 2
+patch_margin_bottom = 2
+axis_stretch_vertical = 1
+
+[node name="MarginContainer" type="MarginContainer" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/ItemDetailsPanelVBox/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox/ElementsMargin/ElementsVBox/ItemLvlProgressMargin" unique_id=1787631517]
+layout_mode = 2
+theme_override_constants/margin_left = 1
+theme_override_constants/margin_top = 1
+theme_override_constants/margin_right = 1
+theme_override_constants/margin_bottom = 1
+
+[node name="ItemLvlProgressBar" type="TextureProgressBar" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/ItemDetailsPanelVBox/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox/ElementsMargin/ElementsVBox/ItemLvlProgressMargin/MarginContainer" unique_id=1906206901]
+unique_name_in_owner = true
+layout_mode = 2
+value = 50.0
+nine_patch_stretch = true
+texture_progress = ExtResource("100_5qckj")
+tint_progress = Color(0, 1, 1, 1)
 
 [node name="InfoMargin" type="MarginContainer" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/ItemDetailsPanelVBox/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox/ElementsMargin/ElementsVBox" unique_id=2001211545]
 unique_name_in_owner = true

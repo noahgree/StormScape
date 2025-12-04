@@ -18,16 +18,16 @@ func _ready() -> void:
 	player_node = await SignalBus.player_ready
 	player_camera = get_parent().get_node("Game/WorldRoot/PlayerCamera")
 
-func change_focused_ui_state(open: bool) -> void:
+func change_focused_ui_state(open: bool, node: Node) -> void:
 	get_tree().paused = open
 	ui_focus_open = open
 	ui_focus_is_closing_debounce = open
 	if open:
 		ui_focus_close_debounce_timer.stop()
-		SignalBus.ui_focus_opened.emit()
+		SignalBus.ui_focus_opened.emit(node)
 	else:
 		ui_focus_close_debounce_timer.start()
-		SignalBus.ui_focus_closed.emit()
+		SignalBus.ui_focus_closed.emit(node)
 
 # Player Inv Resource
 const MAIN_PLAYER_INV_SIZE: int = 32
@@ -68,7 +68,7 @@ enum ItemType {
 	CONSUMABLE, WEAPON, AMMO, WEARABLE, WORLD_RESOURCE, SPECIAL, WEAPON_MOD, CURRENCY
 }
 enum CurrencyType {
-	STORMSHINE
+	STORMSHINE, SCRAP, TOKEN
 }
 const all_proj_weapons: Array[ProjWeaponResource.ProjWeaponType] = [ProjWeaponResource.ProjWeaponType.PISTOL, ProjWeaponResource.ProjWeaponType.SHOTGUN, ProjWeaponResource.ProjWeaponType.SUBMACHINE, ProjWeaponResource.ProjWeaponType.SNIPER, ProjWeaponResource.ProjWeaponType.RIFLE, ProjWeaponResource.ProjWeaponType.EXPLOSIVE, ProjWeaponResource.ProjWeaponType.PRIMITIVE_WEAPON, ProjWeaponResource.ProjWeaponType.MAGIC, ProjWeaponResource.ProjWeaponType.THROWABLE, ProjWeaponResource.ProjWeaponType.SPECIAL_WEAPON]
 const all_melee_wpns: Array[MeleeWeaponResource.MeleeWeaponType] = [MeleeWeaponResource.MeleeWeaponType.TOOL, MeleeWeaponResource.MeleeWeaponType.PHYSICAL, MeleeWeaponResource.MeleeWeaponType.COMBAT]
@@ -146,9 +146,13 @@ const ui_colors: Dictionary[StringName, Color] = {
 	"ui_tan" : Color(0.914, 0.769, 0.741),
 	"ui_light_tan" : Color(0.961, 0.894, 0.881),
 	"ui_text_outline" : Color(0.0, 0.0, 0.0, 0.565),
+	"ui_fail" : Color(1.0, 0.282, 0.361),
+	"ui_success" : Color(0.0, 1.0, 0.427),
 	"ui_glow_light_tan" : Color(1.825, 1.699, 1.678),
-	"ui_glow_success" : Color(0, 1.825, 0.805),
-	"ui_glow_fail" : Color(1.825, 0.546, 0.686),
+	"ui_glow_success" : Color(0.0, 1.572, 0.689, 1.0),
+	"ui_glow_strong_success" : Color(0.0, 1.825, 0.805),
+	"ui_glow_fail" : Color(1.572, 0.465, 0.586, 1.0),
+	"ui_glow_strong_fail" : Color(1.825, 0.546, 0.686),
 	"ui_glow_storm" : Color(1.52, 0.616, 2.352),
 	"ui_glow_gold" : Color(1.995, 1.138, 0.736)
 }

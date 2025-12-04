@@ -32,8 +32,8 @@ func _ready() -> void:
 	stamina_component.hunger_bars_changed.connect(on_hunger_bars_changed)
 	stamina_component.max_hunger_bars_changed.connect(on_max_hunger_bars_changed)
 
-	SignalBus.ui_focus_opened.connect(func() -> void: visible = not Globals.ui_focus_open)
-	SignalBus.ui_focus_closed.connect(func() -> void: visible = not Globals.ui_focus_open)
+	SignalBus.ui_focus_opened.connect(func(_node: Node) -> void: visible = not Globals.ui_focus_open)
+	SignalBus.ui_focus_closed.connect(func(_node: Node) -> void: visible = not Globals.ui_focus_open)
 
 ## When health changes, update the bar and tween the change bar after a delay.
 ## Only activate the delay timer that triggers the tween if we are decreasing the amount.
