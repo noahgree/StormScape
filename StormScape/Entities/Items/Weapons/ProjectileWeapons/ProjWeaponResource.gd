@@ -57,7 +57,7 @@ enum ReloadType { ## The kinds of reloads the weapon can have.
 @export var effect_source: EffectSource ## The resource that defines what happens to the entity that is hit by this weapon. Includes things like damage and status effects.
 
 @export_group("Ammo & Reloading")
-@export var ammo_type: ProjWeaponResource.ProjAmmoType = ProjAmmoType.NONE ## The kind of ammo to consume on use. Leave empty to consider the ammo type to be "None" (or "Self" when the toggle is checked below as well).
+@export var ammo_type: ProjWeaponResource.ProjAmmoType = ProjAmmoType.NONE ## The kind of ammo to consume on use.
 @export var mag_size: int = 30  ## Number of normal attack executions that can happen before a reload is needed.
 @export var reload_type: ReloadType = ReloadType.MAGAZINE ## Whether to reload over time or all at once at the end.
 @export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var reload_delay: float ## An additional delay that occurs before the reload begins. This determines the runtime of the "before_single_reload" animation.

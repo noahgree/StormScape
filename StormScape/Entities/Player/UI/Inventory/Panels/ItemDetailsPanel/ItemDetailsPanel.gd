@@ -18,8 +18,9 @@ class_name ItemDetailsPanel
 @onready var item_rarity_label: RichTextLabel = %ItemRarityLabel ## Displays the item's rarity and type.
 @onready var player_icon_margin: MarginContainer = %PlayerIconMargin
 @onready var main_item_viewer_margin: MarginContainer = %ItemViewerBkgrdMargin
-@onready var item_lvl_progress_margin: MarginContainer = %ItemLvlProgressMargin
+@onready var item_lvl_margin: MarginContainer = %ItemLvlMargin
 @onready var item_level_label: RichTextLabel = %ItemLevelLabel
+@onready var lvl_progress_margins: MarginContainer = %LvlProgressMargins
 
 var mod_slots: Array[ModSlot] = [] ## The mod slots that display and modify the mods for the item under review.
 var changing_item_viewer_slot: bool = false ## When true, the item under review is changing and we shouldn't respond to mod slot item changes.
@@ -40,7 +41,7 @@ func _ready() -> void:
 	info_margin.visible = false
 	details_margin.visible = false
 	changing_item_viewer_slot = false
-	item_lvl_progress_margin.visible = false
+	item_lvl_margin.visible = false
 
 ## Sets up the mod slots and the item viewer slot with their needed data.
 func setup_slots(inventory_ui: PlayerInvUI) -> void:
@@ -113,7 +114,7 @@ func _on_ui_focus_opened(node: Node) -> void:
 		return
 	var hotbar_hud: HotbarHUD = Globals.player_node.get_node("%HotbarHUD")
 	if hotbar_hud.active_slot:
-		var index: int = hotbar_hud.hotbar_slots.find(hotbar_hud.active_slot)
+		var index: int = hotbar_hud.get_active_hotbar_index()
 		manually_set_item_viewer_slot(Globals.player_node.get_node("%HotbarGrid").get_child(index))
 
 ## When the focused UI is closed, we should empty out the crafting input slots and drop them on the
@@ -164,7 +165,7 @@ func _on_item_viewer_slot_changed(_slot: Slot, _old_item: InvItemResource, new_i
 	changing_item_viewer_slot = true
 
 	player_icon_margin.visible = false
-	item_lvl_progress_margin.visible = false
+	item_lvl_margin.visible = false
 
 	if new_item == null:
 		_change_mod_slot_visibilities(false)
@@ -206,9 +207,14 @@ func _on_item_viewer_slot_changed(_slot: Slot, _old_item: InvItemResource, new_i
 
 	if new_item.stats is WeaponResource:
 		if not new_item.stats.no_levels:
-			item_level_label.text = str(new_item.stats.level)
-			item_lvl_progress_margin.get_node("%ItemLvlProgressBar").value = WeaponResource.percent_of_lvl_progress(new_item.stats) * 100.0
-			item_lvl_progress_margin.visible = true
+			var level: int = new_item.stats.level
+			item_level_label.text = str(level) if level != WeaponResource.MAX_LEVEL else "MAX LEVEL"
+			if level < WeaponResource.MAX_LEVEL:
+				lvl_progress_margins.show()
+				item_lvl_margin.get_node("%ItemLvlProgressBar").value = WeaponResource.percent_of_lvl_progress(new_item.stats) * 100.0
+			else:
+				lvl_progress_margins.hide()
+			item_lvl_margin.visible = true
 
 	changing_item_viewer_slot = false
 

@@ -20,15 +20,15 @@ point_count = 2
 offsets = PackedFloat32Array(0, 0.0411523, 0.780992, 1)
 colors = PackedColorArray(1, 1, 1, 0, 2, 2, 2, 0.5, 1.25, 1.25, 1.25, 0.5, 1, 1, 1, 0)
 
-[node name="FlamingAOEVFX" type="Node2D" node_paths=PackedStringArray("particles_nodes")]
+[node name="FlamingAOEVFX" type="Node2D" unique_id=1408199760 node_paths=PackedStringArray("particles_nodes")]
 z_index = -1
 script = ExtResource("1_rc5wt")
 particles_nodes = [NodePath("GroundFireParticles")]
 
-[node name="GroundFireParticles" type="CPUParticles2D" parent="."]
+[node name="GroundFireParticles" type="CPUParticles2D" parent="." unique_id=1661918361]
 light_mask = 2
 material = SubResource("CanvasItemMaterial_pk1mm")
-amount = 55
+amount = 30
 texture = ExtResource("2_4ubxj")
 lifetime = 8.0
 preprocess = 3.0
@@ -46,7 +46,7 @@ anim_speed_min = 20.0
 anim_speed_max = 24.0
 anim_offset_max = 1.0
 
-[node name="FloorLight" type="PointLight2D" parent="."]
+[node name="FloorLight" type="PointLight2D" parent="." unique_id=1951179102]
 light_mask = 0
 energy = 1.75
 range_item_cull_mask = 3

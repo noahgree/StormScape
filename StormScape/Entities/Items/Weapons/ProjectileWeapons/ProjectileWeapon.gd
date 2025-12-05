@@ -369,19 +369,20 @@ func update_ammo_ui() -> void:
 	if ammo_ui == null or stats.hide_ammo_ui:
 		return
 
-	var count: int = -1
+	var count_str: String
 	match stats.ammo_type:
 		ProjWeaponResource.ProjAmmoType.SELF:
 			if source_entity.inv.inv[inv_index] == null or source_entity.inv.inv[inv_index].stats == null:
-				count = -1
+				count_str = ""
 			else:
-				count = source_entity.inv.inv[inv_index].quantity
+				count_str = str(source_entity.inv.inv[inv_index].quantity)
 		ProjWeaponResource.ProjAmmoType.STAMINA:
-			count = source_entity.stamina_component.stamina
+			count_str = str(floori(source_entity.stamina_component.stamina))
+		ProjWeaponResource.ProjAmmoType.NONE when stats.dont_consume_ammo:
+			count_str = "∞"
 		_:
-			count = stats.ammo_in_mag
-
-	ammo_ui.update_mag_ammo(count)
+			count_str = str(stats.ammo_in_mag)
+	ammo_ui.update_mag_ammo_ui(count_str)
 	ammo_ui.calculate_inv_ammo()
 
 ## Updates the mouse cursor's cooldown progress and coloration based on active cooldowns and/or overheats.

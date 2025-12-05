@@ -93,7 +93,7 @@ unique_name_in_owner = true
 layout_mode = 2
 theme_override_colors/default_color = Color(1.52, 0.616, 2.352, 1)
 theme_override_colors/font_outline_color = Color(0.122, 0.035, 0, 0.67)
-theme_override_constants/outline_size = 2
+theme_override_constants/outline_size = 3
 theme_override_fonts/normal_font = ExtResource("6_1nfa8")
 theme_override_font_sizes/normal_font_size = 10
 bbcode_enabled = true
@@ -121,7 +121,7 @@ unique_name_in_owner = true
 clip_contents = false
 layout_mode = 2
 size_flags_horizontal = 0
-theme_override_colors/default_color = Color(0, 1, 1, 1)
+theme_override_colors/default_color = Color(0, 2.2129827, 2.2129827, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 0.565)
 theme_override_constants/outline_size = 2
 theme_override_fonts/normal_font = ExtResource("6_1nfa8")
@@ -140,7 +140,7 @@ size_flags_horizontal = 3
 size_flags_vertical = 4
 theme_override_constants/margin_left = 1
 theme_override_constants/margin_top = 0
-theme_override_constants/margin_right = 1
+theme_override_constants/margin_right = 3
 
 [node name="BorderBackground" type="NinePatchRect" parent="InnerMargin/MainVBox/ElementsMargin/ElementsVBox/LvlProgressMargin/HBoxContainer/LvlProgressMargins" unique_id=1343031650]
 modulate = Color(0.6436752, 0.5848187, 0.77914613, 1)
@@ -168,7 +168,7 @@ nine_patch_stretch = true
 texture_under = ExtResource("6_c1nxg")
 texture_progress = ExtResource("6_c1nxg")
 tint_under = Color(0, 0.20476225, 0.22225901, 1)
-tint_progress = Color(0, 1, 1, 1)
+tint_progress = Color(0, 2.2129827, 2.2129827, 1)
 
 [node name="InfoMargin" type="MarginContainer" parent="InnerMargin/MainVBox/ElementsMargin/ElementsVBox" unique_id=364463236]
 unique_name_in_owner = true

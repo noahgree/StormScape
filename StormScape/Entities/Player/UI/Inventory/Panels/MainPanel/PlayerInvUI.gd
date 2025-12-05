@@ -109,6 +109,8 @@ func _toggle_inventory_ui(open: bool) -> void:
 	if not is_open:
 		side_panel_active = false
 	Globals.change_focused_ui_state(is_open, self)
+	var index: int = get_node("%HotbarHUD").get_active_hotbar_index()
+	hotbar_grid.get_child(index).selected_texture.visible = open
 
 ## Handles the opening and closing of the side panel based on the value of the side_panel_active var.
 func _toggle_side_panel(new_value: bool) -> void:

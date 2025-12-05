@@ -47,6 +47,7 @@ func _ready() -> void:
 	SignalBus.ui_focus_opened.connect(_move_for_inventory.bind(true))
 	SignalBus.ui_focus_closed.connect(_move_for_inventory.bind(false))
 
+## Moves the message stack to the bottom when the inventory is open.
 func _move_for_inventory(node: Node, shown: bool) -> void:
 	if node is PlayerInvUI:
 		if shown:

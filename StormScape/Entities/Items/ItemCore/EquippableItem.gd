@@ -13,7 +13,7 @@ class_name EquippableItem
 var stats_already_duplicated: bool = false ## Whether the stats have already been duplicated when they were first created in the slot.
 var inv_index: int ## The slot this equippable item is in whilst equipped.
 var source_entity: Entity ## The entity that is holding the equippable item.
-var ammo_ui: MarginContainer ## The ui assigned by the hands component that displays the ammo. Only for the player.
+var ammo_ui: Control ## The ui assigned by the hands component that displays the ammo. Only for the player.
 var overlaps: Array[Area2D]
 var enabled: bool = true: ## When false, any activation or reload actions are blocked.
 	set(new_value):

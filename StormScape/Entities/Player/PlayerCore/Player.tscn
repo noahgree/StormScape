@@ -1348,30 +1348,29 @@ light_mode = 1
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_n4o3n"]
 light_mode = 1
 
-[sub_resource type="LabelSettings" id="LabelSettings_ye7qx"]
-line_spacing = 0.0
-font = ExtResource("90_hxjay")
-font_size = 10
-font_color = Color(0.961254, 0.893995, 0.881106, 1)
-outline_size = 2
-outline_color = Color(0.122, 0.035, 0, 0.82)
-shadow_size = 0
-
 [sub_resource type="LabelSettings" id="LabelSettings_32mf4"]
 line_spacing = 0.0
 font = ExtResource("90_hxjay")
 font_size = 12
-font_color = Color(0.961254, 0.893995, 0.881106, 1)
-outline_size = 2
-outline_color = Color(0.122, 0.035, 0, 0.67)
+outline_size = 3
+outline_color = Color(0.12156863, 0.03529412, 0, 0.7607843)
 shadow_size = 0
 
 [sub_resource type="LabelSettings" id="LabelSettings_rybwt"]
 line_spacing = 0.0
-font_size = 8
-font_color = Color(0.961254, 0.893995, 0.881106, 1)
+font_size = 6
+font_color = Color(0.9411765, 0.9411765, 0.9411765, 0.7490196)
 outline_size = 2
-outline_color = Color(0, 0, 0, 0.564706)
+outline_color = Color(0.12156863, 0.03529412, 0, 0.48235294)
+shadow_size = 0
+
+[sub_resource type="LabelSettings" id="LabelSettings_xjdir"]
+line_spacing = 0.0
+font = ExtResource("90_hxjay")
+font_size = 8
+font_color = Color(0.95686275, 0.9529412, 0.9490196, 1)
+outline_size = 2
+outline_color = Color(0.12156863, 0.03529412, 0, 0.7607843)
 shadow_size = 0
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_2q23q"]
@@ -2005,6 +2004,116 @@ nine_patch_stretch = true
 texture_progress = ExtResource("100_5qckj")
 tint_progress = Color(0, 0.499807, 0.273035, 1)
 
+[node name="ActiveSlotInfo" type="Control" parent="OverlayUI" unique_id=29091397]
+unique_name_in_owner = true
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("91_qr476")
+
+[node name="MarginContainer" type="MarginContainer" parent="OverlayUI/ActiveSlotInfo" unique_id=1941349977]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -137.0
+offset_top = -30.0
+offset_right = -111.0
+offset_bottom = -10.0
+grow_horizontal = 0
+grow_vertical = 0
+
+[node name="OuterBorderBackground" type="NinePatchRect" parent="OverlayUI/ActiveSlotInfo/MarginContainer" unique_id=79059621]
+visible = false
+layout_mode = 2
+texture = ExtResource("98_s4yud")
+patch_margin_left = 3
+patch_margin_top = 3
+patch_margin_right = 3
+patch_margin_bottom = 3
+axis_stretch_vertical = 1
+
+[node name="InnerBorderMargins" type="MarginContainer" parent="OverlayUI/ActiveSlotInfo/MarginContainer" unique_id=26899175]
+layout_mode = 2
+theme_override_constants/margin_left = 3
+theme_override_constants/margin_top = 3
+theme_override_constants/margin_right = 3
+theme_override_constants/margin_bottom = 3
+
+[node name="InnerBorderBackground" type="NinePatchRect" parent="OverlayUI/ActiveSlotInfo/MarginContainer/InnerBorderMargins" unique_id=1827423641]
+visible = false
+layout_mode = 2
+texture = ExtResource("113_5qckj")
+patch_margin_left = 2
+patch_margin_top = 2
+patch_margin_right = 2
+patch_margin_bottom = 2
+
+[node name="ActiveSlotInfoMargins" type="MarginContainer" parent="OverlayUI/ActiveSlotInfo/MarginContainer/InnerBorderMargins" unique_id=1201829121]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/margin_left = 3
+theme_override_constants/margin_top = 2
+theme_override_constants/margin_right = 2
+theme_override_constants/margin_bottom = 1
+
+[node name="AmmoInfoVBox" type="HBoxContainer" parent="OverlayUI/ActiveSlotInfo/MarginContainer/InnerBorderMargins/ActiveSlotInfoMargins" unique_id=868273650]
+layout_mode = 2
+theme_override_constants/separation = 2
+alignment = 2
+
+[node name="MagAmmoMargin" type="MarginContainer" parent="OverlayUI/ActiveSlotInfo/MarginContainer/InnerBorderMargins/ActiveSlotInfoMargins/AmmoInfoVBox" unique_id=1995814747]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="MagAmmo" type="Label" parent="OverlayUI/ActiveSlotInfo/MarginContainer/InnerBorderMargins/ActiveSlotInfoMargins/AmmoInfoVBox/MagAmmoMargin" unique_id=1128183273]
+unique_name_in_owner = true
+layout_mode = 2
+text = "1"
+label_settings = SubResource("LabelSettings_32mf4")
+horizontal_alignment = 2
+vertical_alignment = 2
+uppercase = true
+
+[node name="MarginContainer" type="MarginContainer" parent="OverlayUI/ActiveSlotInfo/MarginContainer/InnerBorderMargins/ActiveSlotInfoMargins/AmmoInfoVBox" unique_id=1168507054]
+layout_mode = 2
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 0
+
+[node name="InvAmmo" type="Label" parent="OverlayUI/ActiveSlotInfo/MarginContainer/InnerBorderMargins/ActiveSlotInfoMargins/AmmoInfoVBox/MarginContainer" unique_id=298861351]
+unique_name_in_owner = true
+layout_mode = 2
+text = "965"
+label_settings = SubResource("LabelSettings_rybwt")
+horizontal_alignment = 2
+vertical_alignment = 2
+uppercase = true
+
+[node name="MarginContainer2" type="MarginContainer" parent="OverlayUI/ActiveSlotInfo" unique_id=843356910]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -117.0
+offset_top = -16.0
+offset_right = -116.0
+offset_bottom = -5.0
+grow_horizontal = 0
+grow_vertical = 0
+
+[node name="ItemName" type="Label" parent="OverlayUI/ActiveSlotInfo/MarginContainer2" unique_id=2145318987]
+unique_name_in_owner = true
+layout_mode = 2
+label_settings = SubResource("LabelSettings_xjdir")
+horizontal_alignment = 2
+
 [node name="HotbarHUD" type="MarginContainer" parent="OverlayUI" unique_id=1861635980 node_paths=PackedStringArray("active_slot_info") groups=["has_save_logic"]]
 unique_name_in_owner = true
 anchors_preset = 7
@@ -2087,105 +2196,6 @@ hide_corner_info = true
 layout_mode = 2
 hide_corner_info = true
 
-[node name="ActiveSlotInfo" type="MarginContainer" parent="OverlayUI" unique_id=375761469]
-unique_name_in_owner = true
-anchors_preset = 3
-anchor_left = 1.0
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -134.0
-offset_top = -14.0
-offset_right = -124.0
-offset_bottom = -4.0
-grow_horizontal = 0
-grow_vertical = 0
-pivot_offset = Vector2(10, 10)
-size_flags_horizontal = 8
-size_flags_vertical = 8
-script = ExtResource("91_qr476")
-
-[node name="HBoxContainer" type="HBoxContainer" parent="OverlayUI/ActiveSlotInfo" unique_id=1717578231]
-layout_mode = 2
-
-[node name="ItemName" type="Label" parent="OverlayUI/ActiveSlotInfo/HBoxContainer" unique_id=2036152487]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_horizontal = 8
-size_flags_vertical = 8
-text = "Item"
-label_settings = SubResource("LabelSettings_ye7qx")
-horizontal_alignment = 2
-vertical_alignment = 2
-uppercase = true
-
-[node name="MarginContainer" type="MarginContainer" parent="OverlayUI/ActiveSlotInfo/HBoxContainer" unique_id=1941349977]
-layout_mode = 2
-
-[node name="OuterBorderBackground" type="NinePatchRect" parent="OverlayUI/ActiveSlotInfo/HBoxContainer/MarginContainer" unique_id=79059621]
-layout_mode = 2
-texture = ExtResource("98_s4yud")
-patch_margin_left = 3
-patch_margin_top = 3
-patch_margin_right = 3
-patch_margin_bottom = 3
-
-[node name="InnerBorderMargins" type="MarginContainer" parent="OverlayUI/ActiveSlotInfo/HBoxContainer/MarginContainer" unique_id=26899175]
-layout_mode = 2
-theme_override_constants/margin_left = 3
-theme_override_constants/margin_top = 3
-theme_override_constants/margin_right = 3
-theme_override_constants/margin_bottom = 3
-
-[node name="InnerBorderBackground" type="NinePatchRect" parent="OverlayUI/ActiveSlotInfo/HBoxContainer/MarginContainer/InnerBorderMargins" unique_id=1827423641]
-layout_mode = 2
-texture = ExtResource("125_ar238")
-patch_margin_left = 2
-patch_margin_top = 2
-patch_margin_right = 2
-patch_margin_bottom = 2
-
-[node name="ActiveSlotInfoMargins" type="MarginContainer" parent="OverlayUI/ActiveSlotInfo/HBoxContainer/MarginContainer/InnerBorderMargins" unique_id=1201829121]
-unique_name_in_owner = true
-layout_mode = 2
-theme_override_constants/margin_left = 3
-theme_override_constants/margin_top = 0
-theme_override_constants/margin_right = 2
-theme_override_constants/margin_bottom = 1
-
-[node name="ActiveSlotInfoVBox" type="VBoxContainer" parent="OverlayUI/ActiveSlotInfo/HBoxContainer/MarginContainer/InnerBorderMargins/ActiveSlotInfoMargins" unique_id=2010818682]
-layout_mode = 2
-theme_override_constants/separation = 0
-alignment = 2
-
-[node name="AmmoInfoHBox" type="HBoxContainer" parent="OverlayUI/ActiveSlotInfo/HBoxContainer/MarginContainer/InnerBorderMargins/ActiveSlotInfoMargins/ActiveSlotInfoVBox" unique_id=172196394]
-unique_name_in_owner = true
-layout_mode = 2
-theme_override_constants/separation = 3
-alignment = 2
-
-[node name="MagAmmo" type="Label" parent="OverlayUI/ActiveSlotInfo/HBoxContainer/MarginContainer/InnerBorderMargins/ActiveSlotInfoMargins/ActiveSlotInfoVBox/AmmoInfoHBox" unique_id=1128183273]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_horizontal = 0
-size_flags_vertical = 8
-text = "1"
-label_settings = SubResource("LabelSettings_32mf4")
-horizontal_alignment = 2
-vertical_alignment = 2
-uppercase = true
-
-[node name="InvAmmo" type="Label" parent="OverlayUI/ActiveSlotInfo/HBoxContainer/MarginContainer/InnerBorderMargins/ActiveSlotInfoMargins/ActiveSlotInfoVBox/AmmoInfoHBox" unique_id=298861351]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_horizontal = 8
-size_flags_vertical = 8
-text = "/ 64"
-label_settings = SubResource("LabelSettings_rybwt")
-horizontal_alignment = 2
-vertical_alignment = 2
-uppercase = true
-
 [node name="CornerFeedbackTint" type="TextureRect" parent="OverlayUI" unique_id=1003704630]
 visible = false
 material = ExtResource("78_da65a")
@@ -2205,6 +2215,7 @@ heal_color = Color(0, 0.579, 0.249, 1)
 [node name="PlayerInvUI" type="ColorRect" parent="OverlayUI" unique_id=1913908715 node_paths=PackedStringArray("synced_inv_src_node", "main_slot_grid")]
 unique_name_in_owner = true
 process_mode = 3
+visible = false
 material = SubResource("ShaderMaterial_2q23q")
 use_parent_material = true
 anchors_preset = 15
@@ -3041,7 +3052,7 @@ unique_name_in_owner = true
 layout_mode = 2
 theme_override_colors/default_color = Color(1, 0.92941177, 0.91764706, 1)
 theme_override_colors/font_outline_color = Color(0.122, 0.035, 0, 0.67)
-theme_override_constants/outline_size = 2
+theme_override_constants/outline_size = 3
 theme_override_fonts/normal_font = ExtResource("85_7xlwj")
 theme_override_font_sizes/normal_font_size = 10
 bbcode_enabled = true
@@ -3074,7 +3085,7 @@ tab_size = 0
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="ItemLvlProgressMargin" type="MarginContainer" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox/ElementsMargin/MarginContainer/ElementsVBox" unique_id=1639601317]
+[node name="ItemLvlMargin" type="MarginContainer" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox/ElementsMargin/MarginContainer/ElementsVBox" unique_id=1639601317]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_constants/margin_left = 2
@@ -3082,16 +3093,16 @@ theme_override_constants/margin_top = -2
 theme_override_constants/margin_right = -1
 theme_override_constants/margin_bottom = -1
 
-[node name="HBoxContainer" type="HBoxContainer" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox/ElementsMargin/MarginContainer/ElementsVBox/ItemLvlProgressMargin" unique_id=179855114]
+[node name="HBoxContainer" type="HBoxContainer" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox/ElementsMargin/MarginContainer/ElementsVBox/ItemLvlMargin" unique_id=179855114]
 layout_mode = 2
 theme_override_constants/separation = 1
+alignment = 1
 
-[node name="ItemLevelLabel" type="RichTextLabel" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox/ElementsMargin/MarginContainer/ElementsVBox/ItemLvlProgressMargin/HBoxContainer" unique_id=1667877410]
+[node name="ItemLevelLabel" type="RichTextLabel" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox/ElementsMargin/MarginContainer/ElementsVBox/ItemLvlMargin/HBoxContainer" unique_id=1667877410]
 unique_name_in_owner = true
 clip_contents = false
 layout_mode = 2
-size_flags_horizontal = 0
-theme_override_colors/default_color = Color(0, 1, 1, 1)
+theme_override_colors/default_color = Color(0, 2.2129827, 2.2129827, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 0.565)
 theme_override_constants/outline_size = 2
 theme_override_fonts/normal_font = ExtResource("85_7xlwj")
@@ -3104,15 +3115,16 @@ autowrap_mode = 0
 tab_size = 0
 vertical_alignment = 1
 
-[node name="LvlProgressMargins" type="MarginContainer" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox/ElementsMargin/MarginContainer/ElementsVBox/ItemLvlProgressMargin/HBoxContainer" unique_id=1611467997]
+[node name="LvlProgressMargins" type="MarginContainer" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox/ElementsMargin/MarginContainer/ElementsVBox/ItemLvlMargin/HBoxContainer" unique_id=1611467997]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 4
 theme_override_constants/margin_left = 1
 theme_override_constants/margin_top = 0
-theme_override_constants/margin_right = 1
+theme_override_constants/margin_right = 3
 
-[node name="ItemBackground" type="NinePatchRect" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox/ElementsMargin/MarginContainer/ElementsVBox/ItemLvlProgressMargin/HBoxContainer/LvlProgressMargins" unique_id=901218219]
+[node name="ItemBackground" type="NinePatchRect" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox/ElementsMargin/MarginContainer/ElementsVBox/ItemLvlMargin/HBoxContainer/LvlProgressMargins" unique_id=901218219]
 layout_mode = 2
 texture = ExtResource("133_xjdir")
 draw_center = false
@@ -3122,14 +3134,14 @@ patch_margin_right = 2
 patch_margin_bottom = 2
 axis_stretch_vertical = 1
 
-[node name="LvlProgressInnerMargins" type="MarginContainer" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox/ElementsMargin/MarginContainer/ElementsVBox/ItemLvlProgressMargin/HBoxContainer/LvlProgressMargins" unique_id=1787631517]
+[node name="LvlProgressInnerMargins" type="MarginContainer" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox/ElementsMargin/MarginContainer/ElementsVBox/ItemLvlMargin/HBoxContainer/LvlProgressMargins" unique_id=1787631517]
 layout_mode = 2
 theme_override_constants/margin_left = 1
 theme_override_constants/margin_top = 1
 theme_override_constants/margin_right = 1
 theme_override_constants/margin_bottom = 1
 
-[node name="ItemLvlProgressBar" type="TextureProgressBar" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox/ElementsMargin/MarginContainer/ElementsVBox/ItemLvlProgressMargin/HBoxContainer/LvlProgressMargins/LvlProgressInnerMargins" unique_id=1906206901]
+[node name="ItemLvlProgressBar" type="TextureProgressBar" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox/ElementsMargin/MarginContainer/ElementsVBox/ItemLvlMargin/HBoxContainer/LvlProgressMargins/LvlProgressInnerMargins" unique_id=1906206901]
 unique_name_in_owner = true
 layout_mode = 2
 value = 50.0
@@ -3137,7 +3149,7 @@ nine_patch_stretch = true
 texture_under = ExtResource("100_5qckj")
 texture_progress = ExtResource("100_5qckj")
 tint_under = Color(0, 0.20476225, 0.22225901, 1)
-tint_progress = Color(0, 1, 1, 1)
+tint_progress = Color(0, 1.8247963, 1.8247963, 1)
 
 [node name="InfoMargin" type="MarginContainer" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox/ElementsMargin/MarginContainer/ElementsVBox" unique_id=2001211545]
 unique_name_in_owner = true

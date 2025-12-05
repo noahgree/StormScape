@@ -62,7 +62,7 @@ func _default_ammo_update_method() -> void:
 			return
 
 		if not equipped_item.has_method("update_ammo_ui"):
-			active_slot_info.update_mag_ammo(active_slot.item.quantity)
+			active_slot_info.update_mag_ammo_ui(str(active_slot.item.quantity))
 
 ## Updates all tint progresses for cooldowns on the hotbar slots.
 func update_hotbar_tint_progresses() -> void:
@@ -111,13 +111,19 @@ func _unhandled_input(event: InputEvent) -> void:
 			KEY_0:
 				_change_active_slot_to_hotbar_index(9)
 
+## Returns an index that represents the hotbar slot that is active.
+func get_active_hotbar_index() -> int:
+	if not active_slot:
+		return 0
+	return hotbar_slots.find(active_slot)
+
 ## Changes the active hotbar slot by the passed in count. Handles wrapping values to the number of slots.
 func _change_active_slot_by_count(index_count: int) -> void:
 	var non_hotbar_size: int = Globals.MAIN_PLAYER_INV_SIZE
 	var new_index: int = ((active_slot.index - non_hotbar_size) + index_count) % hotbar_slots.size()
 	if new_index < 0:
 		new_index += hotbar_slots.size()
-	if new_index == hotbar_slots.find(active_slot):
+	if new_index == get_active_hotbar_index():
 		return
 
 	_remove_selected_slot_fx()
@@ -127,7 +133,7 @@ func _change_active_slot_by_count(index_count: int) -> void:
 ## Changes the active slot to the exact index within the hotbar that is passed in. If you want the leftmost
 ## hotbar slot, pass in 0, and so on.rd
 func _change_active_slot_to_hotbar_index(new_index: int) -> void:
-	if new_index == hotbar_slots.find(active_slot):
+	if new_index == get_active_hotbar_index():
 		return
 	new_index = min(new_index, Globals.HOTBAR_SIZE)
 
@@ -160,8 +166,6 @@ func _update_hands_about_new_active_item() -> void:
 	Globals.player_node.hands.on_equipped_item_change(stats_to_send, active_slot.index)
 	if active_slot.item != null:
 		active_slot_info.update_item_name(active_slot.item.stats.name)
-	else:
-		active_slot_info.update_item_name("Empty")
 
 ## Removes the scaling and texture changes of the active slot to prep for adding them to the new one.
 func _remove_selected_slot_fx() -> void:
@@ -174,7 +178,6 @@ func _remove_selected_slot_fx() -> void:
 func _apply_selected_slot_fx() -> void:
 	active_slot.selected_texture.show()
 	active_slot.texture = null if active_slot.item != null else active_slot.no_item_slot_texture
-	active_slot.scale = Vector2(1.15, 1.15)
 	active_slot.z_index = 1
 
 ## When the visibility of the hotbar changes, make sure to reapply the texture and scaling fx to the

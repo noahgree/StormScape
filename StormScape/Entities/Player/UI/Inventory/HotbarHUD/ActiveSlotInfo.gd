@@ -5,8 +5,7 @@ extends Control
 @onready var item_name: Label = %ItemName ## The label that shows the item name.
 @onready var mag_ammo: Label = %MagAmmo ## The label that shows the mag ammo.
 @onready var inv_ammo: Label = %InvAmmo ## The label that shows the inventory ammo.
-@onready var ammo_info_hbox: HBoxContainer = %AmmoInfoHBox ## The HBox that determines ammo label separation.
-@onready var info_margins: MarginContainer = %ActiveSlotInfoMargins ## The margins for the active slot info labels.
+@onready var mag_ammo_margin: MarginContainer = %MagAmmoMargin
 
 func _ready() -> void:
 	item_name.text = ""
@@ -22,60 +21,58 @@ func _ready() -> void:
 	SignalBus.ui_focus_closed.connect(func(_node: Node) -> void: calculate_inv_ammo())
 	Globals.player_node.stamina_component.max_stamina_changed.connect(func(_new_max_stamina: float) -> void: calculate_inv_ammo())
 
-## Updates the magazine ammo portion of the current equipped item info.
-func update_mag_ammo(mag_count: int) -> void:
-	if mag_count == -1:
-		mag_ammo.text = ""
-		mag_ammo.hide()
-	else:
-		mag_ammo.text = str(mag_count)
-		mag_ammo.show()
-	_check_both_ammo_labels_visibility()
-
-## Updates the inventory ammo portion of the current equipped item info.
-func update_inv_ammo(inv_count: int) -> void:
-	if inv_count == -1:
-		inv_ammo.text = ""
-		ammo_info_hbox.add_theme_constant_override("separation", 0)
-		inv_ammo.hide()
-	else:
-		inv_ammo.text = "/ " + str(inv_count)
-		ammo_info_hbox.add_theme_constant_override("separation", 2)
-		inv_ammo.show()
-	_check_both_ammo_labels_visibility()
-
 ## Updates the name portion of the current equipped item info.
 func update_item_name(item_name_string: String) -> void:
-	item_name.text = item_name_string
+	await get_tree().process_frame
+	item_name.text = item_name_string.to_upper()
 
-## Alter the label margins depending on which ones are showing.
-func _check_both_ammo_labels_visibility() -> void:
-	if not mag_ammo.visible and not inv_ammo.visible:
-		info_margins.add_theme_constant_override("margin_top", 1)
+## Updates the magazine ammo portion of the current equipped item info.
+func update_mag_ammo_ui(mag_count: String) -> void:
+	await get_tree().process_frame
+	mag_ammo.text = mag_count
+
+## Updates the inventory ammo portion of the current equipped item info.
+func update_inv_ammo_ui(inv_count: String) -> void:
+	await get_tree().process_frame
+	inv_ammo.text = inv_count
+	if inv_count == "":
+		mag_ammo_margin.add_theme_constant_override("margin_right", -9)
 	else:
-		info_margins.add_theme_constant_override("margin_top", 0)
+		mag_ammo_margin.remove_theme_constant_override("margin_right")
 
 ## Gets the cumulative total of the ammo that corresponds to the currently equipped item.
 func calculate_inv_ammo() -> void:
 	if Globals.player_node.hands.equipped_item == null:
-		update_inv_ammo(-1)
+		update_inv_ammo_ui("")
 		return
 	var current_item_stats: ItemResource = Globals.player_node.hands.equipped_item.stats
 	if current_item_stats is WeaponResource and current_item_stats.hide_ammo_ui:
-		update_inv_ammo(-1)
+		update_inv_ammo_ui("")
 		return
 
-	var count: int = -1
+	var count_str: String
 	if current_item_stats is ProjWeaponResource:
 		if current_item_stats.ammo_type not in [ProjWeaponResource.ProjAmmoType.NONE, ProjWeaponResource.ProjAmmoType.STAMINA, ProjWeaponResource.ProjAmmoType.SELF, ProjWeaponResource.ProjAmmoType.CHARGES]:
-			count = 0
+			var count: int = 0
 			var start_index: int = Globals.player_node.inv.ammo_slot_manager.starting_index
 			for i: int in range(start_index, start_index + Globals.AMMO_BAR_SIZE):
 				var item: InvItemResource = Globals.player_node.inv.inv[i]
 				if item != null and (item.stats is ProjAmmoResource) and (item.stats.ammo_type == current_item_stats.ammo_type):
 					count += item.quantity
+			count_str = str(count)
 		elif current_item_stats.ammo_type == ProjWeaponResource.ProjAmmoType.STAMINA:
-			count = int(floor(Globals.player_node.stats.get_stat("max_stamina")))
+			count_str = str(floori(Globals.player_node.stats.get_stat("max_stamina")))
+		elif current_item_stats.ammo_type in [ProjWeaponResource.ProjAmmoType.NONE, ProjWeaponResource.ProjAmmoType.CHARGES]:
+			count_str = "∞"
+		elif current_item_stats.ammo_type == ProjWeaponResource.ProjAmmoType.SELF:
+			var count: int = 0
+			for i: int in range(0, Globals.MAIN_PLAYER_INV_SIZE + Globals.HOTBAR_SIZE):
+				var item: InvItemResource = Globals.player_node.inv.inv[i]
+				if item != null and (item.stats.is_same_as(current_item_stats)):
+					count += item.quantity
+			var equipped_inv_item: InvItemResource = Globals.player_node.inv.inv[Globals.player_node.hands.equipped_item.inv_index]
+			count -= equipped_inv_item.quantity if equipped_inv_item else 0
+			count_str = str(count)
 	elif current_item_stats is MeleeWeaponResource:
-			count = int(floor(Globals.player_node.stats.get_stat("max_stamina")))
-	update_inv_ammo(count)
+			count_str = str(floori(Globals.player_node.stats.get_stat("max_stamina")))
+	update_inv_ammo_ui(count_str)

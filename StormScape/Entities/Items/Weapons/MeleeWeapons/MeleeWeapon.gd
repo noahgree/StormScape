@@ -213,7 +213,7 @@ func _apply_post_use_effect(was_charge_fire: bool = false) -> void:
 func update_ammo_ui() -> void:
 	if ammo_ui == null or stats.hide_ammo_ui:
 		return
-	ammo_ui.update_mag_ammo(source_entity.stamina_component.stamina)
+	ammo_ui.update_mag_ammo_ui(str(floori(source_entity.stamina_component.stamina)))
 
 ## Updates the mouse cursor's cooldown progress based on active cooldowns.
 func _update_cursor_cooldown_ui() -> void:

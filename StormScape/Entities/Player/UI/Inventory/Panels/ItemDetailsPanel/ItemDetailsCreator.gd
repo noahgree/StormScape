@@ -124,7 +124,7 @@ func _get_damage(stats: ItemResource) -> String:
 	elif stats.effect_source.crit_chance > 0:
 		string += " (" + crit_mult + " crit)"
 
-	if dmg == "0":
+	if dmg[0] == "0":
 		string = ""
 
 	return string
@@ -145,6 +145,9 @@ func _get_charge_damage(stats: ItemResource) -> String:
 	if stats.s_mods.get_stat("charge_crit_chance") > 0:
 		string += " (" + crit_mult + " crit)"
 
+	if dmg[0] == "0":
+		string = ""
+
 	return string
 
 ## Gets the healing details.
@@ -162,7 +165,7 @@ func _get_healing(stats: ItemResource) -> String:
 
 	string += heal
 
-	if heal == "0":
+	if heal[0] == "0":
 		string = ""
 
 	return string
@@ -180,7 +183,7 @@ func _get_charge_healing(stats: ItemResource) -> String:
 
 	string += heal
 
-	if heal == "0":
+	if heal[0] == "0":
 		string = ""
 
 	return string

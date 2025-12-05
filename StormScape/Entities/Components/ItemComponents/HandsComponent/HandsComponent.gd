@@ -4,7 +4,7 @@ class_name HandsComponent
 ## This component allows the entity to hold an item and interact with it.
 
 @export var hand_texture: Texture2D ## The hand texture that will be used for all EntityHandSprites on this entity.
-@export var active_slot_info: MarginContainer ## UI for displaying information about the active slot's item. Only for the player.
+@export var active_slot_info: Control ## UI for displaying information about the active slot's item. Only for the player.
 @export var main_hand_with_held_item_pos: Vector2 = Vector2(6, 1) ## The position the main hand would be while doing nothing.
 @export var main_hand_with_proj_weapon_pos: Vector2 = Vector2(11, 0) ## The position the main hand would start at while holding a projectile weapon. This will most likely be farther out in the x-direction to give more rotational room for the weapon.
 @export var main_hand_with_melee_weapon_pos: Vector2 = Vector2(8, 0) ## The position the main hand would start at while holding a melee weapon. This will most likely be farther out in the x-direction to give more rotational room for the weapon.
@@ -139,8 +139,8 @@ func _process(delta: float) -> void:
 ## Removes the currently equipped item after letting it clean itself up.
 func unequip_current_item() -> void:
 	if active_slot_info:
-		active_slot_info.update_mag_ammo(-1)
-		active_slot_info.update_inv_ammo(-1)
+		active_slot_info.update_mag_ammo_ui("")
+		active_slot_info.update_inv_ammo_ui("")
 		active_slot_info.update_item_name("")
 
 	if entity is Player:
