@@ -16,6 +16,7 @@ class_name PlayerInvUI
 @onready var side_panel_mgr: SidePanelManager = %SidePanelManager ## The side panel manager.
 @onready var ammo_slot_manager: AmmoSlotManager = %AmmoSlotManager ## The manager handling ammo slots.
 @onready var currency_slot_manager: CurrencySlotManager = %CurrencySlotManager ## The manager handling currency slots.
+@onready var trash_slot_container: MarginContainer = %TrashSlotPanelMargins ## The trash slot's margin container.
 
 @onready var sort_by_name_btn: NinePatchRect = %SortByName ## The sort by name button.
 @onready var sort_by_type_btn: NinePatchRect = %SortByType ## The sort by type button.
@@ -25,6 +26,17 @@ class_name PlayerInvUI
 
 var is_open: bool = false: set = _toggle_inventory_ui ## True when the inventory is open and showing.
 var side_panel_active: bool = false: set = _toggle_side_panel ## When true, the alternate inv is open and the wearable & crafting panels should be hidden.
+
+
+## Returns true or false based on whether a slot is being dragged at the moment.
+static func is_dragging_slot(viewport: Viewport) -> bool:
+	var drag_data: Variant
+	if viewport.gui_is_dragging():
+		drag_data = viewport.gui_get_drag_data()
+
+	if drag_data != null and drag_data is Slot:
+		return true
+	return false
 
 
 func _ready() -> void:
@@ -67,6 +79,8 @@ func _setup_trash_slot() -> void:
 	trash_slot.synced_inv = synced_inv_src_node.inv
 	trash_slot.is_trash_slot = true
 	slots.append(trash_slot)
+	trash_slot_container.hide()
+	trash_slot.item_changed.connect(_on_trash_slot_item_changed)
 
 ## Checks when we open and close the player inventory based on certain key inputs.
 func _unhandled_key_input(event: InputEvent) -> void:
@@ -148,7 +162,7 @@ func _drop_data(_at_position: Vector2, data: Variant) -> void:
 			data.set_item(null)
 
 		Item.spawn_on_ground(ground_item_res, ground_item_quantity, Globals.player_node.global_position, 15, true, false, true)
-		MessageManager.add_msg("[color=white]Dropped " + str(ground_item_quantity) + "[/color] " + ground_item_res.name + ("s" if ground_item_quantity > 1 else ""), Globals.rarity_colors.ui_text.get(ground_item_res.rarity))
+		MessageManager.add_msg("[color=white]Dropped " + str(ground_item_quantity) + "[/color] " + ground_item_res.name, Globals.rarity_colors.ui_text.get(ground_item_res.rarity), MessageManager.default_icon, Color.WHITE, MessageManager.default_display_time, true)
 
 		if ground_item_res is ProjAmmoResource:
 			synced_inv_src_node.hands.active_slot_info.calculate_inv_ammo()
@@ -159,6 +173,18 @@ func _drop_data(_at_position: Vector2, data: Variant) -> void:
 func _on_mouse_exited() -> void:
 	_hide_tooltip()
 #endregion
+
+## Received when any drag starts and ends to show and hide the trash slot.
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_DRAG_END and trash_slot.item == null:
+		trash_slot_container.hide()
+	if what == NOTIFICATION_DRAG_BEGIN and PlayerInvUI.is_dragging_slot(get_viewport()):
+		trash_slot_container.show()
+
+## When the item in the trash slot changes, if we detect that it holds something now, re-show it.
+func _on_trash_slot_item_changed(_slot: Slot, _old_item: InvItemResource, new_item: InvItemResource) -> void:
+	if new_item != null:
+		trash_slot_container.show()
 
 #region Buttons
 ## Activates sorting this inventory by name.

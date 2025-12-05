@@ -1,4 +1,4 @@
-extends VBoxContainer
+extends CenterContainer
 class_name WearablesPanel
 ## Controls populating and syncing the wearable slots in the player inventory.
 

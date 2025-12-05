@@ -47,7 +47,7 @@ func add_item_from_world(original_item: Item) -> void:
 	var picked_up_quantity: int = original_quantity - remaining
 	if picked_up_quantity > 0:
 
-		MessageManager.add_msg("[color=white]+" + str(picked_up_quantity) + "[/color] " + original_item.stats.name, Globals.rarity_colors.ui_text.get(original_item.stats.rarity), original_item.stats.inv_icon)
+		MessageManager.add_msg("[color=white]+" + str(picked_up_quantity) + "[/color] " + original_item.stats.name, Globals.rarity_colors.ui_text.get(original_item.stats.rarity), original_item.stats.inv_icon, Color.WHITE, MessageManager.default_display_time, true)
 
 ## Handles the logic needed for adding an item to the inventory from a given inventory item resource.
 ## Respects stack size. By default, any extra quantity that does not fit will be ignored and deleted.

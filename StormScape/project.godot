@@ -27,7 +27,6 @@ config/name="StormScape"
 config/version="0.1"
 run/main_scene="res://Stages/World/Game.tscn"
 config/features=PackedStringArray("4.6", "Forward Plus")
-run/max_fps=120
 boot_splash/bg_color=Color(0.104389, 0.121748, 0.27417, 1)
 config/macos_native_icon="uid://2xf1pqc78iin"
 
@@ -56,8 +55,8 @@ shapes/collision/shape_color=Color(0, 0.6, 0.7, 0.251)
 
 [display]
 
-window/size/viewport_width=480
-window/size/viewport_height=270
+window/size/viewport_width=640
+window/size/viewport_height=360
 window/size/window_width_override=4800
 window/size/window_height_override=2700
 window/stretch/mode="canvas_items"

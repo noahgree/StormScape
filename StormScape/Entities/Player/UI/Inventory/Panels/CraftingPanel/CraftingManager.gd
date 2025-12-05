@@ -1,4 +1,4 @@
-extends VBoxContainer
+extends CenterContainer
 class_name CraftingManager
 ## Manages crafting actions like checking and caching recipes, consuming ingredients, and
 ## granting successful crafts.
@@ -6,7 +6,7 @@ class_name CraftingManager
 @onready var output_slot: CraftingSlot = %OutputSlot ## The slot where the result will appear in.
 @onready var input_slots_container: GridContainer = %InputSlots ## The container holding the input slots as children.
 @onready var crafting_down_arrow: TextureRect = %CraftingDownArrow ## The arrow symbol.
-@onready var craft_btn_v_box: VBoxContainer = %CraftButtonVBox ## The container for the entire craft button.
+@onready var craft_btn_margins: MarginContainer = %CraftBtnMargins ## The container for the entire craft button.
 @onready var craft_btn: Button = %CraftBtn ## The button to press when attempting a craft.
 
 var can_output: bool = false ## When true, there is an outputtable item in the output slot from a valid recipe.
@@ -49,13 +49,13 @@ func _setup_item_viewer_signals(inventory_ui: PlayerInvUI) -> void:
 func _on_output_slot_output_changed(is_craftable: bool) -> void:
 	can_output = is_craftable
 	if is_craftable:
-		craft_btn_v_box.modulate = Color.WHITE
-		craft_btn_v_box.modulate.a = 1.0
+		craft_btn_margins.modulate = Color.WHITE
+		craft_btn_margins.modulate.a = 1.0
 		craft_btn.disabled = false
 		crafting_down_arrow.modulate.a = 0.65
 	else:
-		craft_btn_v_box.modulate = Color.LIGHT_GRAY
-		craft_btn_v_box.modulate.a = 0.5
+		craft_btn_margins.modulate = Color.LIGHT_GRAY
+		craft_btn_margins.modulate.a = 0.5
 		craft_btn.disabled = true
 		crafting_down_arrow.modulate.a = 0.2
 
@@ -296,7 +296,7 @@ func attempt_craft() -> void:
 	if successful_crafts > 0:
 		output_slot.set_item(InvItemResource.new(output_slot.item.stats, successful_crafts * output_quant_per_craft))
 
-		MessageManager.add_msg_preset(str(output_slot.item.quantity) + " " + output_slot.item.stats.name + ("s" if output_slot.item.quantity > 1 else "") + " Crafted", MessageManager.Presets.SUCCESS)
+		MessageManager.add_msg_preset(output_slot.item.get_pretty_string() + " Crafted", MessageManager.Presets.SUCCESS, 3.0, true)
 
 		Globals.player_node.inv.insert_from_inv_item(output_slot.item, false, false)
 

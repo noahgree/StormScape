@@ -1,9 +1,10 @@
 @tool
 extends PhysicsBody2D
 class_name Entity
+## Base class for all entities in the game.
 
 @export var team: Globals.Teams = Globals.Teams.PLAYER ## What the effects received by this entity should consider as this entity's team.
-@export var is_object: bool = false ## When true, this entity's collision logic will follow that of a world object, regardless of team.
+@export var is_object: bool = false ## When true, this entity's collision logic will follow that of a world object, regardless of team. It will also not have an auto_decrementer in its inv, as it shouldn't be holding things that need one.
 @export var inv: InvResource ## The inventory data resource for this entity.
 @export var loot: LootTableResource ## The loot table resource for this entity.
 
@@ -64,5 +65,5 @@ func _ready() -> void:
 		loot.initialize(self)
 
 func _process(delta: float) -> void:
-	if not Engine.is_editor_hint() and inv:
+	if not Engine.is_editor_hint() and inv and not is_object:
 		inv.auto_decrementer.process(delta)

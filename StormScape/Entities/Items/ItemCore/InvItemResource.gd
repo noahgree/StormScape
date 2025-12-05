@@ -33,3 +33,7 @@ func assign_unique_suid() -> InvItemResource:
 ## Custom print logic for determining more about the item that just a randomly assigned ID.
 func _to_string() -> String:
 	return "(" + str(quantity) + ") " + str(Globals.ItemRarity.keys()[stats.rarity]) + "_" + stats.name
+
+## Returns the quantity and the name for display purposes.
+func get_pretty_string() -> String:
+	return str(quantity) + " " + stats.name

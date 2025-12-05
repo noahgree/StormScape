@@ -300,15 +300,15 @@ script = ExtResource("32_ixmb3")
 stats = ExtResource("12_6wv7y")
 metadata/_custom_type_script = "uid://dp8osf7r6xkkt"
 
-[sub_resource type="Resource" id="Resource_6f5us"]
-script = ExtResource("32_ixmb3")
-stats = ExtResource("13_n4o3n")
-metadata/_custom_type_script = "uid://dp8osf7r6xkkt"
-
 [sub_resource type="Resource" id="Resource_s4yud"]
 script = ExtResource("32_ixmb3")
 stats = ExtResource("15_hxjay")
 quantity = 5
+metadata/_custom_type_script = "uid://dp8osf7r6xkkt"
+
+[sub_resource type="Resource" id="Resource_6f5us"]
+script = ExtResource("32_ixmb3")
+stats = ExtResource("13_n4o3n")
 metadata/_custom_type_script = "uid://dp8osf7r6xkkt"
 
 [sub_resource type="Resource" id="Resource_4awmn"]
@@ -317,16 +317,16 @@ stats = ExtResource("8_s4yud")
 quantity = 899
 metadata/_custom_type_script = "uid://dp8osf7r6xkkt"
 
-[sub_resource type="Resource" id="Resource_25xrm"]
-script = ExtResource("32_ixmb3")
-stats = ExtResource("5_rdrbb")
-quantity = 899
-metadata/_custom_type_script = "uid://dp8osf7r6xkkt"
-
 [sub_resource type="Resource" id="Resource_mjkti"]
 script = ExtResource("32_ixmb3")
 stats = ExtResource("7_o382h")
 quantity = 75
+metadata/_custom_type_script = "uid://dp8osf7r6xkkt"
+
+[sub_resource type="Resource" id="Resource_25xrm"]
+script = ExtResource("32_ixmb3")
+stats = ExtResource("5_rdrbb")
+quantity = 899
 metadata/_custom_type_script = "uid://dp8osf7r6xkkt"
 
 [sub_resource type="Resource" id="Resource_82sho"]
@@ -345,7 +345,7 @@ metadata/_custom_type_script = "uid://dp8osf7r6xkkt"
 script = ExtResource("2_8hbs2")
 title = ""
 drop_on_death = true
-starting_inv = Array[ExtResource("32_ixmb3")]([SubResource("Resource_82yts"), null, null, SubResource("Resource_h1ges"), null, null, SubResource("Resource_mc6is"), null, SubResource("Resource_fcswf"), SubResource("Resource_ve7vt"), SubResource("Resource_hdwgy"), SubResource("Resource_ou5t4"), SubResource("Resource_ar238"), SubResource("Resource_xjdir"), SubResource("Resource_bmpdm"), SubResource("Resource_eufsu"), SubResource("Resource_8hbs2"), SubResource("Resource_f5l7i"), SubResource("Resource_co77f"), SubResource("Resource_a5af3"), null, SubResource("Resource_gdihr"), SubResource("Resource_g5u5n"), SubResource("Resource_r7bkl"), SubResource("Resource_thmqm"), SubResource("Resource_r5dvw"), SubResource("Resource_bvo3j"), SubResource("Resource_gb65f"), SubResource("Resource_5qckj"), SubResource("Resource_1go7j"), SubResource("Resource_32jvf"), SubResource("Resource_jgqai"), SubResource("Resource_xsics"), SubResource("Resource_inle7"), SubResource("Resource_da65a"), SubResource("Resource_6f5us"), SubResource("Resource_s4yud"), SubResource("Resource_4awmn"), SubResource("Resource_25xrm"), SubResource("Resource_mjkti"), SubResource("Resource_82sho"), SubResource("Resource_sobds"), null, null])
+starting_inv = Array[ExtResource("32_ixmb3")]([SubResource("Resource_82yts"), null, null, SubResource("Resource_h1ges"), null, null, SubResource("Resource_mc6is"), null, SubResource("Resource_fcswf"), SubResource("Resource_ve7vt"), SubResource("Resource_hdwgy"), SubResource("Resource_ou5t4"), SubResource("Resource_ar238"), SubResource("Resource_xjdir"), SubResource("Resource_bmpdm"), SubResource("Resource_eufsu"), SubResource("Resource_8hbs2"), SubResource("Resource_f5l7i"), SubResource("Resource_co77f"), SubResource("Resource_a5af3"), null, SubResource("Resource_gdihr"), SubResource("Resource_g5u5n"), SubResource("Resource_r7bkl"), SubResource("Resource_thmqm"), SubResource("Resource_r5dvw"), SubResource("Resource_bvo3j"), SubResource("Resource_gb65f"), SubResource("Resource_5qckj"), SubResource("Resource_1go7j"), SubResource("Resource_32jvf"), SubResource("Resource_jgqai"), SubResource("Resource_xsics"), SubResource("Resource_inle7"), SubResource("Resource_da65a"), SubResource("Resource_s4yud"), null, null, null, null, SubResource("Resource_6f5us"), null, null, null, null, null, null, null, null, null, SubResource("Resource_4awmn"), SubResource("Resource_mjkti"), SubResource("Resource_25xrm"), SubResource("Resource_82sho"), SubResource("Resource_sobds"), null, null])
 metadata/_custom_type_script = "uid://bdd0xujg1bgm0"
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_3f130"]
@@ -1685,23 +1685,31 @@ vertical_alignment = 1
 
 [node name="MessageManager" parent="OverlayUI" unique_id=1637142411 instance=ExtResource("91_xsics")]
 
-[node name="PlayerStatsHUD" type="Control" parent="OverlayUI" unique_id=1619251607 node_paths=PackedStringArray("health_component", "stamina_component")]
+[node name="PlayerStatsHUD" type="MarginContainer" parent="OverlayUI" unique_id=296119598 node_paths=PackedStringArray("health_component", "stamina_component")]
 unique_name_in_owner = true
-layout_mode = 3
-anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
-mouse_filter = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -31.0
+offset_right = 90.0
+grow_vertical = 0
+theme_override_constants/margin_left = 3
+theme_override_constants/margin_top = 3
+theme_override_constants/margin_right = 3
+theme_override_constants/margin_bottom = 3
 script = ExtResource("35_yln51")
 health_component = NodePath("../../HealthComponent")
 stamina_component = NodePath("../../StaminaComponent")
 
-[node name="StaminaHungerStatsHUD" type="NinePatchRect" parent="OverlayUI/PlayerStatsHUD" unique_id=1449095635]
-layout_mode = 0
-offset_left = 4.0
-offset_top = 231.0
-offset_right = 92.0
-offset_bottom = 242.0
+[node name="BarsVBox" type="VBoxContainer" parent="OverlayUI/PlayerStatsHUD" unique_id=304411261]
+layout_mode = 2
+theme_override_constants/separation = 1
+
+[node name="StaminaHungerOuterMargin" type="MarginContainer" parent="OverlayUI/PlayerStatsHUD/BarsVBox" unique_id=350650844]
+layout_mode = 2
+
+[node name="StaminaHungerStatsHUD" type="NinePatchRect" parent="OverlayUI/PlayerStatsHUD/BarsVBox/StaminaHungerOuterMargin" unique_id=1449095635]
+layout_mode = 2
 texture = ExtResource("98_s4yud")
 patch_margin_left = 3
 patch_margin_top = 3
@@ -1709,50 +1717,45 @@ patch_margin_right = 3
 patch_margin_bottom = 3
 axis_stretch_vertical = 1
 
-[node name="StaminaHungerMargins" type="MarginContainer" parent="OverlayUI/PlayerStatsHUD/StaminaHungerStatsHUD" unique_id=643178383]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+[node name="StaminaHungerMargins" type="MarginContainer" parent="OverlayUI/PlayerStatsHUD/BarsVBox/StaminaHungerOuterMargin" unique_id=643178383]
+layout_mode = 2
 theme_override_constants/margin_left = 2
-theme_override_constants/margin_top = 2
+theme_override_constants/margin_top = 1
 theme_override_constants/margin_right = 4
-theme_override_constants/margin_bottom = 2
+theme_override_constants/margin_bottom = 1
 
-[node name="StaminaAndHungerHBox" type="HBoxContainer" parent="OverlayUI/PlayerStatsHUD/StaminaHungerStatsHUD/StaminaHungerMargins" unique_id=1288566187]
+[node name="StaminaAndHungerHBox" type="HBoxContainer" parent="OverlayUI/PlayerStatsHUD/BarsVBox/StaminaHungerOuterMargin/StaminaHungerMargins" unique_id=1288566187]
 layout_mode = 2
 size_flags_vertical = 3
 size_flags_stretch_ratio = 0.5
 theme_override_constants/separation = 1
 
-[node name="StaminaHBox" type="HBoxContainer" parent="OverlayUI/PlayerStatsHUD/StaminaHungerStatsHUD/StaminaHungerMargins/StaminaAndHungerHBox" unique_id=726785121]
+[node name="StaminaHBox" type="HBoxContainer" parent="OverlayUI/PlayerStatsHUD/BarsVBox/StaminaHungerOuterMargin/StaminaHungerMargins/StaminaAndHungerHBox" unique_id=726785121]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/separation = 0
 
-[node name="StaminaIconMargins" type="MarginContainer" parent="OverlayUI/PlayerStatsHUD/StaminaHungerStatsHUD/StaminaHungerMargins/StaminaAndHungerHBox/StaminaHBox" unique_id=847201004]
+[node name="StaminaIconMargins" type="MarginContainer" parent="OverlayUI/PlayerStatsHUD/BarsVBox/StaminaHungerOuterMargin/StaminaHungerMargins/StaminaAndHungerHBox/StaminaHBox" unique_id=847201004]
 layout_mode = 2
 theme_override_constants/margin_left = 1
 theme_override_constants/margin_top = 1
 theme_override_constants/margin_right = 1
 theme_override_constants/margin_bottom = 1
 
-[node name="StaminaIcon" type="TextureRect" parent="OverlayUI/PlayerStatsHUD/StaminaHungerStatsHUD/StaminaHungerMargins/StaminaAndHungerHBox/StaminaHBox/StaminaIconMargins" unique_id=1029218923]
+[node name="StaminaIcon" type="TextureRect" parent="OverlayUI/PlayerStatsHUD/BarsVBox/StaminaHungerOuterMargin/StaminaHungerMargins/StaminaAndHungerHBox/StaminaHBox/StaminaIconMargins" unique_id=1029218923]
 modulate = Color(0.305882, 0.196078, 0.168627, 1)
 layout_mode = 2
 texture = ExtResource("108_n4o3n")
 expand_mode = 3
 stretch_mode = 5
 
-[node name="MarginContainer" type="MarginContainer" parent="OverlayUI/PlayerStatsHUD/StaminaHungerStatsHUD/StaminaHungerMargins/StaminaAndHungerHBox/StaminaHBox" unique_id=141412291]
+[node name="MarginContainer" type="MarginContainer" parent="OverlayUI/PlayerStatsHUD/BarsVBox/StaminaHungerOuterMargin/StaminaHungerMargins/StaminaAndHungerHBox/StaminaHBox" unique_id=141412291]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/margin_top = 1
 theme_override_constants/margin_bottom = 1
 
-[node name="StaminaNinePatch" type="NinePatchRect" parent="OverlayUI/PlayerStatsHUD/StaminaHungerStatsHUD/StaminaHungerMargins/StaminaAndHungerHBox/StaminaHBox/MarginContainer" unique_id=1247867772]
+[node name="StaminaNinePatch" type="NinePatchRect" parent="OverlayUI/PlayerStatsHUD/BarsVBox/StaminaHungerOuterMargin/StaminaHungerMargins/StaminaAndHungerHBox/StaminaHBox/MarginContainer" unique_id=1247867772]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -1763,7 +1766,7 @@ patch_margin_right = 2
 patch_margin_bottom = 2
 axis_stretch_vertical = 1
 
-[node name="StaminaBarMargins" type="MarginContainer" parent="OverlayUI/PlayerStatsHUD/StaminaHungerStatsHUD/StaminaHungerMargins/StaminaAndHungerHBox/StaminaHBox/MarginContainer/StaminaNinePatch" unique_id=181083635]
+[node name="StaminaBarMargins" type="MarginContainer" parent="OverlayUI/PlayerStatsHUD/BarsVBox/StaminaHungerOuterMargin/StaminaHungerMargins/StaminaAndHungerHBox/StaminaHBox/MarginContainer/StaminaNinePatch" unique_id=181083635]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -1775,7 +1778,7 @@ theme_override_constants/margin_top = 1
 theme_override_constants/margin_right = 1
 theme_override_constants/margin_bottom = 1
 
-[node name="StaminaChangeBar" type="TextureProgressBar" parent="OverlayUI/PlayerStatsHUD/StaminaHungerStatsHUD/StaminaHungerMargins/StaminaAndHungerHBox/StaminaHBox/MarginContainer/StaminaNinePatch/StaminaBarMargins" unique_id=647002281]
+[node name="StaminaChangeBar" type="TextureProgressBar" parent="OverlayUI/PlayerStatsHUD/BarsVBox/StaminaHungerOuterMargin/StaminaHungerMargins/StaminaAndHungerHBox/StaminaHBox/MarginContainer/StaminaNinePatch/StaminaBarMargins" unique_id=647002281]
 unique_name_in_owner = true
 layout_mode = 2
 value = 100.0
@@ -1783,7 +1786,7 @@ nine_patch_stretch = true
 texture_progress = ExtResource("100_5qckj")
 tint_progress = Color(0.664538, 0.856362, 1, 1)
 
-[node name="StaminaBar" type="TextureProgressBar" parent="OverlayUI/PlayerStatsHUD/StaminaHungerStatsHUD/StaminaHungerMargins/StaminaAndHungerHBox/StaminaHBox/MarginContainer/StaminaNinePatch/StaminaBarMargins" unique_id=2010207821]
+[node name="StaminaBar" type="TextureProgressBar" parent="OverlayUI/PlayerStatsHUD/BarsVBox/StaminaHungerOuterMargin/StaminaHungerMargins/StaminaAndHungerHBox/StaminaHBox/MarginContainer/StaminaNinePatch/StaminaBarMargins" unique_id=2010207821]
 unique_name_in_owner = true
 layout_mode = 2
 value = 50.0
@@ -1791,32 +1794,32 @@ nine_patch_stretch = true
 texture_progress = ExtResource("100_5qckj")
 tint_progress = Color(0, 0.478457, 0.715125, 1)
 
-[node name="HungerHBox" type="HBoxContainer" parent="OverlayUI/PlayerStatsHUD/StaminaHungerStatsHUD/StaminaHungerMargins/StaminaAndHungerHBox" unique_id=1330622019]
+[node name="HungerHBox" type="HBoxContainer" parent="OverlayUI/PlayerStatsHUD/BarsVBox/StaminaHungerOuterMargin/StaminaHungerMargins/StaminaAndHungerHBox" unique_id=1330622019]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/separation = 0
 
-[node name="HungerIconMargins" type="MarginContainer" parent="OverlayUI/PlayerStatsHUD/StaminaHungerStatsHUD/StaminaHungerMargins/StaminaAndHungerHBox/HungerHBox" unique_id=903344783]
+[node name="HungerIconMargins" type="MarginContainer" parent="OverlayUI/PlayerStatsHUD/BarsVBox/StaminaHungerOuterMargin/StaminaHungerMargins/StaminaAndHungerHBox/HungerHBox" unique_id=903344783]
 layout_mode = 2
 theme_override_constants/margin_left = 2
 theme_override_constants/margin_top = 1
 theme_override_constants/margin_right = 1
 theme_override_constants/margin_bottom = 1
 
-[node name="HungerIcon" type="TextureRect" parent="OverlayUI/PlayerStatsHUD/StaminaHungerStatsHUD/StaminaHungerMargins/StaminaAndHungerHBox/HungerHBox/HungerIconMargins" unique_id=511724510]
+[node name="HungerIcon" type="TextureRect" parent="OverlayUI/PlayerStatsHUD/BarsVBox/StaminaHungerOuterMargin/StaminaHungerMargins/StaminaAndHungerHBox/HungerHBox/HungerIconMargins" unique_id=511724510]
 modulate = Color(0.305882, 0.196078, 0.168627, 1)
 layout_mode = 2
 texture = ExtResource("111_0t1mv")
 expand_mode = 3
 stretch_mode = 5
 
-[node name="MarginContainer" type="MarginContainer" parent="OverlayUI/PlayerStatsHUD/StaminaHungerStatsHUD/StaminaHungerMargins/StaminaAndHungerHBox/HungerHBox" unique_id=1611690318]
+[node name="MarginContainer" type="MarginContainer" parent="OverlayUI/PlayerStatsHUD/BarsVBox/StaminaHungerOuterMargin/StaminaHungerMargins/StaminaAndHungerHBox/HungerHBox" unique_id=1611690318]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/margin_top = 1
 theme_override_constants/margin_bottom = 1
 
-[node name="HungerNinePatch" type="NinePatchRect" parent="OverlayUI/PlayerStatsHUD/StaminaHungerStatsHUD/StaminaHungerMargins/StaminaAndHungerHBox/HungerHBox/MarginContainer" unique_id=151540402]
+[node name="HungerNinePatch" type="NinePatchRect" parent="OverlayUI/PlayerStatsHUD/BarsVBox/StaminaHungerOuterMargin/StaminaHungerMargins/StaminaAndHungerHBox/HungerHBox/MarginContainer" unique_id=151540402]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -1827,7 +1830,7 @@ patch_margin_right = 2
 patch_margin_bottom = 2
 axis_stretch_vertical = 1
 
-[node name="HungerBarMargins" type="MarginContainer" parent="OverlayUI/PlayerStatsHUD/StaminaHungerStatsHUD/StaminaHungerMargins/StaminaAndHungerHBox/HungerHBox/MarginContainer/HungerNinePatch" unique_id=1815368310]
+[node name="HungerBarMargins" type="MarginContainer" parent="OverlayUI/PlayerStatsHUD/BarsVBox/StaminaHungerOuterMargin/StaminaHungerMargins/StaminaAndHungerHBox/HungerHBox/MarginContainer/HungerNinePatch" unique_id=1815368310]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -1839,7 +1842,7 @@ theme_override_constants/margin_top = 1
 theme_override_constants/margin_right = 1
 theme_override_constants/margin_bottom = 1
 
-[node name="HungerChangeBar" type="TextureProgressBar" parent="OverlayUI/PlayerStatsHUD/StaminaHungerStatsHUD/StaminaHungerMargins/StaminaAndHungerHBox/HungerHBox/MarginContainer/HungerNinePatch/HungerBarMargins" unique_id=844932330]
+[node name="HungerChangeBar" type="TextureProgressBar" parent="OverlayUI/PlayerStatsHUD/BarsVBox/StaminaHungerOuterMargin/StaminaHungerMargins/StaminaAndHungerHBox/HungerHBox/MarginContainer/HungerNinePatch/HungerBarMargins" unique_id=844932330]
 unique_name_in_owner = true
 layout_mode = 2
 value = 100.0
@@ -1847,7 +1850,7 @@ nine_patch_stretch = true
 texture_progress = ExtResource("100_5qckj")
 tint_progress = Color(1, 0.7759, 0.683053, 1)
 
-[node name="HungerBar" type="TextureProgressBar" parent="OverlayUI/PlayerStatsHUD/StaminaHungerStatsHUD/StaminaHungerMargins/StaminaAndHungerHBox/HungerHBox/MarginContainer/HungerNinePatch/HungerBarMargins" unique_id=226783961]
+[node name="HungerBar" type="TextureProgressBar" parent="OverlayUI/PlayerStatsHUD/BarsVBox/StaminaHungerOuterMargin/StaminaHungerMargins/StaminaAndHungerHBox/HungerHBox/MarginContainer/HungerNinePatch/HungerBarMargins" unique_id=226783961]
 unique_name_in_owner = true
 layout_mode = 2
 value = 50.0
@@ -1855,12 +1858,11 @@ nine_patch_stretch = true
 texture_progress = ExtResource("100_5qckj")
 tint_progress = Color(0.716089, 0.245615, 0.157689, 1)
 
-[node name="HealthShieldStatsHUD" type="NinePatchRect" parent="OverlayUI/PlayerStatsHUD" unique_id=883487646]
-layout_mode = 0
-offset_left = 4.0
-offset_top = 244.0
-offset_right = 92.0
-offset_bottom = 266.0
+[node name="HealthShieldOuterMargin" type="MarginContainer" parent="OverlayUI/PlayerStatsHUD/BarsVBox" unique_id=698027566]
+layout_mode = 2
+
+[node name="HealthShieldStatsHUD" type="NinePatchRect" parent="OverlayUI/PlayerStatsHUD/BarsVBox/HealthShieldOuterMargin" unique_id=883487646]
+layout_mode = 2
 texture = ExtResource("98_s4yud")
 patch_margin_left = 3
 patch_margin_top = 3
@@ -1868,48 +1870,41 @@ patch_margin_right = 3
 patch_margin_bottom = 3
 axis_stretch_vertical = 1
 
-[node name="HealthShieldMargins" type="MarginContainer" parent="OverlayUI/PlayerStatsHUD/HealthShieldStatsHUD" unique_id=1622006886]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_constants/margin_left = 3
-theme_override_constants/margin_top = 4
-theme_override_constants/margin_right = 4
-theme_override_constants/margin_bottom = 4
+[node name="HealthShieldMargins" type="MarginContainer" parent="OverlayUI/PlayerStatsHUD/BarsVBox/HealthShieldOuterMargin" unique_id=1622006886]
+layout_mode = 2
+theme_override_constants/margin_left = 2
+theme_override_constants/margin_top = 3
+theme_override_constants/margin_right = 3
+theme_override_constants/margin_bottom = 3
 
-[node name="HealthShieldVBox" type="VBoxContainer" parent="OverlayUI/PlayerStatsHUD/HealthShieldStatsHUD/HealthShieldMargins" unique_id=607929875]
+[node name="HealthShieldVBox" type="VBoxContainer" parent="OverlayUI/PlayerStatsHUD/BarsVBox/HealthShieldOuterMargin/HealthShieldMargins" unique_id=607929875]
 layout_mode = 2
 theme_override_constants/separation = 2
 
-[node name="ShieldHBox" type="HBoxContainer" parent="OverlayUI/PlayerStatsHUD/HealthShieldStatsHUD/HealthShieldMargins/HealthShieldVBox" unique_id=97012888]
+[node name="ShieldHBox" type="HBoxContainer" parent="OverlayUI/PlayerStatsHUD/BarsVBox/HealthShieldOuterMargin/HealthShieldMargins/HealthShieldVBox" unique_id=97012888]
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_constants/separation = 0
 
-[node name="ShieldIconMargins" type="MarginContainer" parent="OverlayUI/PlayerStatsHUD/HealthShieldStatsHUD/HealthShieldMargins/HealthShieldVBox/ShieldHBox" unique_id=965726570]
+[node name="ShieldIconMargins" type="MarginContainer" parent="OverlayUI/PlayerStatsHUD/BarsVBox/HealthShieldOuterMargin/HealthShieldMargins/HealthShieldVBox/ShieldHBox" unique_id=965726570]
 layout_mode = 2
 theme_override_constants/margin_left = 1
 theme_override_constants/margin_top = 0
 theme_override_constants/margin_right = 2
 theme_override_constants/margin_bottom = 0
 
-[node name="ShieldIcon" type="TextureRect" parent="OverlayUI/PlayerStatsHUD/HealthShieldStatsHUD/HealthShieldMargins/HealthShieldVBox/ShieldHBox/ShieldIconMargins" unique_id=414455251]
+[node name="ShieldIcon" type="TextureRect" parent="OverlayUI/PlayerStatsHUD/BarsVBox/HealthShieldOuterMargin/HealthShieldMargins/HealthShieldVBox/ShieldHBox/ShieldIconMargins" unique_id=414455251]
 modulate = Color(0.305882, 0.196078, 0.168627, 1)
 layout_mode = 2
 texture = ExtResource("110_6wv7y")
 expand_mode = 3
 stretch_mode = 5
 
-[node name="MarginContainer" type="MarginContainer" parent="OverlayUI/PlayerStatsHUD/HealthShieldStatsHUD/HealthShieldMargins/HealthShieldVBox/ShieldHBox" unique_id=1592274008]
+[node name="MarginContainer" type="MarginContainer" parent="OverlayUI/PlayerStatsHUD/BarsVBox/HealthShieldOuterMargin/HealthShieldMargins/HealthShieldVBox/ShieldHBox" unique_id=1592274008]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_constants/margin_top = 0
-theme_override_constants/margin_bottom = 0
 
-[node name="ShieldNinePatch" type="NinePatchRect" parent="OverlayUI/PlayerStatsHUD/HealthShieldStatsHUD/HealthShieldMargins/HealthShieldVBox/ShieldHBox/MarginContainer" unique_id=622278900]
+[node name="ShieldNinePatch" type="NinePatchRect" parent="OverlayUI/PlayerStatsHUD/BarsVBox/HealthShieldOuterMargin/HealthShieldMargins/HealthShieldVBox/ShieldHBox/MarginContainer" unique_id=622278900]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -1920,7 +1915,7 @@ patch_margin_right = 2
 patch_margin_bottom = 2
 axis_stretch_vertical = 1
 
-[node name="ShieldBarMargins" type="MarginContainer" parent="OverlayUI/PlayerStatsHUD/HealthShieldStatsHUD/HealthShieldMargins/HealthShieldVBox/ShieldHBox/MarginContainer/ShieldNinePatch" unique_id=1736061630]
+[node name="ShieldBarMargins" type="MarginContainer" parent="OverlayUI/PlayerStatsHUD/BarsVBox/HealthShieldOuterMargin/HealthShieldMargins/HealthShieldVBox/ShieldHBox/MarginContainer/ShieldNinePatch" unique_id=1736061630]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -1932,7 +1927,7 @@ theme_override_constants/margin_top = 1
 theme_override_constants/margin_right = 1
 theme_override_constants/margin_bottom = 1
 
-[node name="ShieldChangeBar" type="TextureProgressBar" parent="OverlayUI/PlayerStatsHUD/HealthShieldStatsHUD/HealthShieldMargins/HealthShieldVBox/ShieldHBox/MarginContainer/ShieldNinePatch/ShieldBarMargins" unique_id=1543328992]
+[node name="ShieldChangeBar" type="TextureProgressBar" parent="OverlayUI/PlayerStatsHUD/BarsVBox/HealthShieldOuterMargin/HealthShieldMargins/HealthShieldVBox/ShieldHBox/MarginContainer/ShieldNinePatch/ShieldBarMargins" unique_id=1543328992]
 unique_name_in_owner = true
 layout_mode = 2
 value = 100.0
@@ -1940,7 +1935,7 @@ nine_patch_stretch = true
 texture_progress = ExtResource("100_5qckj")
 tint_progress = Color(0.990264, 0.524333, 0.569, 1)
 
-[node name="ShieldBar" type="TextureProgressBar" parent="OverlayUI/PlayerStatsHUD/HealthShieldStatsHUD/HealthShieldMargins/HealthShieldVBox/ShieldHBox/MarginContainer/ShieldNinePatch/ShieldBarMargins" unique_id=1243858379]
+[node name="ShieldBar" type="TextureProgressBar" parent="OverlayUI/PlayerStatsHUD/BarsVBox/HealthShieldOuterMargin/HealthShieldMargins/HealthShieldVBox/ShieldHBox/MarginContainer/ShieldNinePatch/ShieldBarMargins" unique_id=1243858379]
 unique_name_in_owner = true
 layout_mode = 2
 value = 50.0
@@ -1948,30 +1943,30 @@ nine_patch_stretch = true
 texture_progress = ExtResource("100_5qckj")
 tint_progress = Color(0.646002, 0.00153922, 0.809269, 1)
 
-[node name="HealthHBox" type="HBoxContainer" parent="OverlayUI/PlayerStatsHUD/HealthShieldStatsHUD/HealthShieldMargins/HealthShieldVBox" unique_id=1522731154]
+[node name="HealthHBox" type="HBoxContainer" parent="OverlayUI/PlayerStatsHUD/BarsVBox/HealthShieldOuterMargin/HealthShieldMargins/HealthShieldVBox" unique_id=1522731154]
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_constants/separation = 0
 
-[node name="HealthIconMargins" type="MarginContainer" parent="OverlayUI/PlayerStatsHUD/HealthShieldStatsHUD/HealthShieldMargins/HealthShieldVBox/HealthHBox" unique_id=1503848751]
+[node name="HealthIconMargins" type="MarginContainer" parent="OverlayUI/PlayerStatsHUD/BarsVBox/HealthShieldOuterMargin/HealthShieldMargins/HealthShieldVBox/HealthHBox" unique_id=1503848751]
 layout_mode = 2
 theme_override_constants/margin_left = 1
 theme_override_constants/margin_top = 0
 theme_override_constants/margin_right = 2
 theme_override_constants/margin_bottom = 0
 
-[node name="HealthIcon" type="TextureRect" parent="OverlayUI/PlayerStatsHUD/HealthShieldStatsHUD/HealthShieldMargins/HealthShieldVBox/HealthHBox/HealthIconMargins" unique_id=1304177568]
+[node name="HealthIcon" type="TextureRect" parent="OverlayUI/PlayerStatsHUD/BarsVBox/HealthShieldOuterMargin/HealthShieldMargins/HealthShieldVBox/HealthHBox/HealthIconMargins" unique_id=1304177568]
 modulate = Color(0.305882, 0.196078, 0.168627, 1)
 layout_mode = 2
 texture = ExtResource("111_n4o3n")
 expand_mode = 3
 stretch_mode = 5
 
-[node name="MarginContainer" type="MarginContainer" parent="OverlayUI/PlayerStatsHUD/HealthShieldStatsHUD/HealthShieldMargins/HealthShieldVBox/HealthHBox" unique_id=1787277820]
+[node name="MarginContainer" type="MarginContainer" parent="OverlayUI/PlayerStatsHUD/BarsVBox/HealthShieldOuterMargin/HealthShieldMargins/HealthShieldVBox/HealthHBox" unique_id=1787277820]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="HealthNinePatch" type="NinePatchRect" parent="OverlayUI/PlayerStatsHUD/HealthShieldStatsHUD/HealthShieldMargins/HealthShieldVBox/HealthHBox/MarginContainer" unique_id=1978397416]
+[node name="HealthNinePatch" type="NinePatchRect" parent="OverlayUI/PlayerStatsHUD/BarsVBox/HealthShieldOuterMargin/HealthShieldMargins/HealthShieldVBox/HealthHBox/MarginContainer" unique_id=1978397416]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -1982,7 +1977,7 @@ patch_margin_right = 2
 patch_margin_bottom = 2
 axis_stretch_vertical = 1
 
-[node name="HealthBarMargins" type="MarginContainer" parent="OverlayUI/PlayerStatsHUD/HealthShieldStatsHUD/HealthShieldMargins/HealthShieldVBox/HealthHBox/MarginContainer/HealthNinePatch" unique_id=597345388]
+[node name="HealthBarMargins" type="MarginContainer" parent="OverlayUI/PlayerStatsHUD/BarsVBox/HealthShieldOuterMargin/HealthShieldMargins/HealthShieldVBox/HealthHBox/MarginContainer/HealthNinePatch" unique_id=597345388]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -1994,7 +1989,7 @@ theme_override_constants/margin_top = 1
 theme_override_constants/margin_right = 1
 theme_override_constants/margin_bottom = 1
 
-[node name="HealthChangeBar" type="TextureProgressBar" parent="OverlayUI/PlayerStatsHUD/HealthShieldStatsHUD/HealthShieldMargins/HealthShieldVBox/HealthHBox/MarginContainer/HealthNinePatch/HealthBarMargins" unique_id=1187298539]
+[node name="HealthChangeBar" type="TextureProgressBar" parent="OverlayUI/PlayerStatsHUD/BarsVBox/HealthShieldOuterMargin/HealthShieldMargins/HealthShieldVBox/HealthHBox/MarginContainer/HealthNinePatch/HealthBarMargins" unique_id=1187298539]
 unique_name_in_owner = true
 layout_mode = 2
 value = 100.0
@@ -2002,7 +1997,7 @@ nine_patch_stretch = true
 texture_progress = ExtResource("100_5qckj")
 tint_progress = Color(0.990264, 0.524333, 0.569, 1)
 
-[node name="HealthBar" type="TextureProgressBar" parent="OverlayUI/PlayerStatsHUD/HealthShieldStatsHUD/HealthShieldMargins/HealthShieldVBox/HealthHBox/MarginContainer/HealthNinePatch/HealthBarMargins" unique_id=622834077]
+[node name="HealthBar" type="TextureProgressBar" parent="OverlayUI/PlayerStatsHUD/BarsVBox/HealthShieldOuterMargin/HealthShieldMargins/HealthShieldVBox/HealthHBox/MarginContainer/HealthNinePatch/HealthBarMargins" unique_id=622834077]
 unique_name_in_owner = true
 layout_mode = 2
 value = 50.0
@@ -2010,19 +2005,22 @@ nine_patch_stretch = true
 texture_progress = ExtResource("100_5qckj")
 tint_progress = Color(0, 0.499807, 0.273035, 1)
 
-[node name="HotbarHUD" type="MarginContainer" parent="OverlayUI" unique_id=1914499256 node_paths=PackedStringArray("active_slot_info") groups=["has_save_logic"]]
+[node name="HotbarHUD" type="MarginContainer" parent="OverlayUI" unique_id=1861635980 node_paths=PackedStringArray("active_slot_info") groups=["has_save_logic"]]
 unique_name_in_owner = true
-anchors_preset = 3
-anchor_left = 1.0
+anchors_preset = 7
+anchor_left = 0.5
 anchor_top = 1.0
-anchor_right = 1.0
+anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = -122.0
+offset_left = -116.0
 offset_top = -34.0
-offset_right = -4.0
-offset_bottom = -4.0
-grow_horizontal = 0
+offset_right = 116.0
+grow_horizontal = 2
 grow_vertical = 0
+theme_override_constants/margin_left = 3
+theme_override_constants/margin_top = 3
+theme_override_constants/margin_right = 3
+theme_override_constants/margin_bottom = 3
 script = ExtResource("58_i567i")
 active_slot_info = NodePath("../ActiveSlotInfo")
 
@@ -2036,48 +2034,58 @@ patch_margin_right = 3
 patch_margin_bottom = 3
 axis_stretch_vertical = 1
 
-[node name="HotbarHUDGrid" type="HBoxContainer" parent="OverlayUI/HotbarHUD/HotbarNinePatch" unique_id=273450644]
+[node name="MarginContainer" type="MarginContainer" parent="OverlayUI/HotbarHUD" unique_id=1707052151]
+layout_mode = 2
+theme_override_constants/margin_left = 3
+theme_override_constants/margin_top = 3
+theme_override_constants/margin_right = 3
+theme_override_constants/margin_bottom = 3
+
+[node name="HotbarHUDGrid" type="HBoxContainer" parent="OverlayUI/HotbarHUD/MarginContainer" unique_id=273450644]
 unique_name_in_owner = true
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -57.0
-offset_top = -11.0
-offset_right = 57.0
-offset_bottom = 11.0
-grow_horizontal = 2
-grow_vertical = 2
+layout_mode = 2
 theme_override_constants/separation = 0
 alignment = 1
-metadata/_edit_lock_ = true
 
-[node name="Slot1" parent="OverlayUI/HotbarHUD/HotbarNinePatch/HotbarHUDGrid" unique_id=895905780 instance=ExtResource("42_r422n")]
+[node name="Slot1" parent="OverlayUI/HotbarHUD/MarginContainer/HotbarHUDGrid" unique_id=895905780 instance=ExtResource("42_r422n")]
 layout_mode = 2
 hide_corner_info = true
-metadata/_edit_lock_ = true
 
-[node name="Slot2" parent="OverlayUI/HotbarHUD/HotbarNinePatch/HotbarHUDGrid" unique_id=1707829914 instance=ExtResource("42_r422n")]
+[node name="Slot2" parent="OverlayUI/HotbarHUD/MarginContainer/HotbarHUDGrid" unique_id=1707829914 instance=ExtResource("42_r422n")]
 layout_mode = 2
 hide_corner_info = true
-metadata/_edit_lock_ = true
 
-[node name="Slot3" parent="OverlayUI/HotbarHUD/HotbarNinePatch/HotbarHUDGrid" unique_id=1621737549 instance=ExtResource("42_r422n")]
+[node name="Slot3" parent="OverlayUI/HotbarHUD/MarginContainer/HotbarHUDGrid" unique_id=1621737549 instance=ExtResource("42_r422n")]
 layout_mode = 2
 hide_corner_info = true
-metadata/_edit_lock_ = true
 
-[node name="Slot4" parent="OverlayUI/HotbarHUD/HotbarNinePatch/HotbarHUDGrid" unique_id=684966083 instance=ExtResource("42_r422n")]
+[node name="Slot4" parent="OverlayUI/HotbarHUD/MarginContainer/HotbarHUDGrid" unique_id=684966083 instance=ExtResource("42_r422n")]
 layout_mode = 2
 hide_corner_info = true
-metadata/_edit_lock_ = true
 
-[node name="Slot5" parent="OverlayUI/HotbarHUD/HotbarNinePatch/HotbarHUDGrid" unique_id=212085547 instance=ExtResource("42_r422n")]
+[node name="Slot5" parent="OverlayUI/HotbarHUD/MarginContainer/HotbarHUDGrid" unique_id=212085547 instance=ExtResource("42_r422n")]
 layout_mode = 2
 hide_corner_info = true
-metadata/_edit_lock_ = true
+
+[node name="Slot6" parent="OverlayUI/HotbarHUD/MarginContainer/HotbarHUDGrid" unique_id=1667727181 instance=ExtResource("42_r422n")]
+layout_mode = 2
+hide_corner_info = true
+
+[node name="Slot7" parent="OverlayUI/HotbarHUD/MarginContainer/HotbarHUDGrid" unique_id=1529790671 instance=ExtResource("42_r422n")]
+layout_mode = 2
+hide_corner_info = true
+
+[node name="Slot8" parent="OverlayUI/HotbarHUD/MarginContainer/HotbarHUDGrid" unique_id=440769184 instance=ExtResource("42_r422n")]
+layout_mode = 2
+hide_corner_info = true
+
+[node name="Slot9" parent="OverlayUI/HotbarHUD/MarginContainer/HotbarHUDGrid" unique_id=1889183360 instance=ExtResource("42_r422n")]
+layout_mode = 2
+hide_corner_info = true
+
+[node name="Slot10" parent="OverlayUI/HotbarHUD/MarginContainer/HotbarHUDGrid" unique_id=417807652 instance=ExtResource("42_r422n")]
+layout_mode = 2
+hide_corner_info = true
 
 [node name="ActiveSlotInfo" type="MarginContainer" parent="OverlayUI" unique_id=375761469]
 unique_name_in_owner = true
@@ -2194,7 +2202,7 @@ storm_tint_color = Color(0.530741, 0.0017714, 0.740423, 1)
 damage_color = Color(0.738, 0, 0.205, 1)
 heal_color = Color(0, 0.579, 0.249, 1)
 
-[node name="PlayerInvUI" type="ColorRect" parent="OverlayUI" unique_id=43151155 node_paths=PackedStringArray("synced_inv_src_node", "main_slot_grid")]
+[node name="PlayerInvUI" type="ColorRect" parent="OverlayUI" unique_id=1913908715 node_paths=PackedStringArray("synced_inv_src_node", "main_slot_grid")]
 unique_name_in_owner = true
 process_mode = 3
 material = SubResource("ShaderMaterial_2q23q")
@@ -2204,28 +2212,30 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0.109341, 0.109341, 0.109341, 0.976471)
 script = ExtResource("32_3a185")
 btn_up_texture = ExtResource("106_0313k")
 btn_down_texture = ExtResource("107_32jvf")
 synced_inv_src_node = NodePath("../..")
-main_slot_grid = NodePath("MainGridBackground/BackpackGridMargins/BackpackMarginsBkgrd/MainSlotGrid")
+main_slot_grid = NodePath("MainGridBkgrdMargins/MarginContainer/VBoxContainer/BackpackGridMargins/VBoxContainer/MainSlotGridMargins/MainSlotGrid")
 
-[node name="MainGridBackground" type="NinePatchRect" parent="OverlayUI/PlayerInvUI" unique_id=98000998]
+[node name="MainGridBkgrdMargins" type="MarginContainer" parent="OverlayUI/PlayerInvUI" unique_id=157549952]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -96.0
-offset_top = -88.0
-offset_right = 96.0
-offset_bottom = 87.0
+offset_left = -117.0
+offset_top = -84.0
+offset_right = 117.0
+offset_bottom = 84.0
 grow_horizontal = 2
 grow_vertical = 2
-size_flags_vertical = 3
 mouse_filter = 0
+
+[node name="MainGridBackground" type="NinePatchRect" parent="OverlayUI/PlayerInvUI/MainGridBkgrdMargins" unique_id=98000998]
+layout_mode = 2
+size_flags_vertical = 3
 texture = ExtResource("78_jlc36")
 patch_margin_left = 5
 patch_margin_top = 5
@@ -2233,409 +2243,23 @@ patch_margin_right = 5
 patch_margin_bottom = 5
 axis_stretch_vertical = 1
 
-[node name="BackpackGridMargins" type="MarginContainer" parent="OverlayUI/PlayerInvUI/MainGridBackground" unique_id=1281711311]
-editor_description = "THIS GRIDMARGIN MOUSE FILTER MUST STAY AS IGNORE TO MAKE SORT BUTTONS WORK!"
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_bottom = -64.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-theme_override_constants/margin_left = 0
-theme_override_constants/margin_top = 64
-theme_override_constants/margin_right = 0
-theme_override_constants/margin_bottom = 0
-metadata/_edit_lock_ = true
-
-[node name="BackpackMarginsBkgrd" type="NinePatchRect" parent="OverlayUI/PlayerInvUI/MainGridBackground/BackpackGridMargins" unique_id=757698560]
-custom_minimum_size = Vector2(182, 107)
+[node name="MarginContainer" type="MarginContainer" parent="OverlayUI/PlayerInvUI/MainGridBkgrdMargins" unique_id=1410306645]
 layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 4
-texture = ExtResource("109_0313k")
-patch_margin_left = 4
-patch_margin_top = 4
-patch_margin_right = 4
-patch_margin_bottom = 4
-axis_stretch_vertical = 1
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 4
+theme_override_constants/margin_bottom = 4
 
-[node name="MainSlotGrid" type="GridContainer" parent="OverlayUI/PlayerInvUI/MainGridBackground/BackpackGridMargins/BackpackMarginsBkgrd" unique_id=2044105717]
-unique_name_in_owner = true
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -88.0
-offset_top = -91.0
-offset_right = 88.0
-offset_bottom = -3.0
-grow_horizontal = 2
-grow_vertical = 0
-size_flags_horizontal = 4
-size_flags_vertical = 0
-theme_override_constants/h_separation = 0
-theme_override_constants/v_separation = 0
-columns = 8
+[node name="VBoxContainer" type="VBoxContainer" parent="OverlayUI/PlayerInvUI/MainGridBkgrdMargins/MarginContainer" unique_id=809232712]
+layout_mode = 2
+theme_override_constants/separation = -1
 
-[node name="Slot1" parent="OverlayUI/PlayerInvUI/MainGridBackground/BackpackGridMargins/BackpackMarginsBkgrd/MainSlotGrid" unique_id=1286240536 instance=ExtResource("42_r422n")]
+[node name="TopBarHBox" type="HBoxContainer" parent="OverlayUI/PlayerInvUI/MainGridBkgrdMargins/MarginContainer/VBoxContainer" unique_id=1269871203]
 layout_mode = 2
 
-[node name="Slot2" parent="OverlayUI/PlayerInvUI/MainGridBackground/BackpackGridMargins/BackpackMarginsBkgrd/MainSlotGrid" unique_id=1080720444 instance=ExtResource("42_r422n")]
-layout_mode = 2
-
-[node name="Slot3" parent="OverlayUI/PlayerInvUI/MainGridBackground/BackpackGridMargins/BackpackMarginsBkgrd/MainSlotGrid" unique_id=650799886 instance=ExtResource("42_r422n")]
-layout_mode = 2
-
-[node name="Slot4" parent="OverlayUI/PlayerInvUI/MainGridBackground/BackpackGridMargins/BackpackMarginsBkgrd/MainSlotGrid" unique_id=1127310648 instance=ExtResource("42_r422n")]
-layout_mode = 2
-
-[node name="Slot5" parent="OverlayUI/PlayerInvUI/MainGridBackground/BackpackGridMargins/BackpackMarginsBkgrd/MainSlotGrid" unique_id=1366133961 instance=ExtResource("42_r422n")]
-layout_mode = 2
-
-[node name="Slot6" parent="OverlayUI/PlayerInvUI/MainGridBackground/BackpackGridMargins/BackpackMarginsBkgrd/MainSlotGrid" unique_id=393782019 instance=ExtResource("42_r422n")]
-layout_mode = 2
-
-[node name="Slot7" parent="OverlayUI/PlayerInvUI/MainGridBackground/BackpackGridMargins/BackpackMarginsBkgrd/MainSlotGrid" unique_id=1574381205 instance=ExtResource("42_r422n")]
-layout_mode = 2
-
-[node name="Slot8" parent="OverlayUI/PlayerInvUI/MainGridBackground/BackpackGridMargins/BackpackMarginsBkgrd/MainSlotGrid" unique_id=160768503 instance=ExtResource("42_r422n")]
-layout_mode = 2
-
-[node name="Slot9" parent="OverlayUI/PlayerInvUI/MainGridBackground/BackpackGridMargins/BackpackMarginsBkgrd/MainSlotGrid" unique_id=948996091 instance=ExtResource("42_r422n")]
-layout_mode = 2
-
-[node name="Slot10" parent="OverlayUI/PlayerInvUI/MainGridBackground/BackpackGridMargins/BackpackMarginsBkgrd/MainSlotGrid" unique_id=1484980430 instance=ExtResource("42_r422n")]
-layout_mode = 2
-
-[node name="Slot11" parent="OverlayUI/PlayerInvUI/MainGridBackground/BackpackGridMargins/BackpackMarginsBkgrd/MainSlotGrid" unique_id=1024203358 instance=ExtResource("42_r422n")]
-layout_mode = 2
-
-[node name="Slot12" parent="OverlayUI/PlayerInvUI/MainGridBackground/BackpackGridMargins/BackpackMarginsBkgrd/MainSlotGrid" unique_id=444760026 instance=ExtResource("42_r422n")]
-layout_mode = 2
-
-[node name="Slot13" parent="OverlayUI/PlayerInvUI/MainGridBackground/BackpackGridMargins/BackpackMarginsBkgrd/MainSlotGrid" unique_id=1709395024 instance=ExtResource("42_r422n")]
-layout_mode = 2
-
-[node name="Slot14" parent="OverlayUI/PlayerInvUI/MainGridBackground/BackpackGridMargins/BackpackMarginsBkgrd/MainSlotGrid" unique_id=1625733587 instance=ExtResource("42_r422n")]
-layout_mode = 2
-
-[node name="Slot15" parent="OverlayUI/PlayerInvUI/MainGridBackground/BackpackGridMargins/BackpackMarginsBkgrd/MainSlotGrid" unique_id=545313958 instance=ExtResource("42_r422n")]
-layout_mode = 2
-
-[node name="Slot16" parent="OverlayUI/PlayerInvUI/MainGridBackground/BackpackGridMargins/BackpackMarginsBkgrd/MainSlotGrid" unique_id=839072975 instance=ExtResource("42_r422n")]
-layout_mode = 2
-
-[node name="Slot17" parent="OverlayUI/PlayerInvUI/MainGridBackground/BackpackGridMargins/BackpackMarginsBkgrd/MainSlotGrid" unique_id=863824619 instance=ExtResource("42_r422n")]
-layout_mode = 2
-
-[node name="Slot18" parent="OverlayUI/PlayerInvUI/MainGridBackground/BackpackGridMargins/BackpackMarginsBkgrd/MainSlotGrid" unique_id=1834338805 instance=ExtResource("42_r422n")]
-layout_mode = 2
-
-[node name="Slot19" parent="OverlayUI/PlayerInvUI/MainGridBackground/BackpackGridMargins/BackpackMarginsBkgrd/MainSlotGrid" unique_id=378839538 instance=ExtResource("42_r422n")]
-layout_mode = 2
-
-[node name="Slot20" parent="OverlayUI/PlayerInvUI/MainGridBackground/BackpackGridMargins/BackpackMarginsBkgrd/MainSlotGrid" unique_id=126967897 instance=ExtResource("42_r422n")]
-layout_mode = 2
-
-[node name="Slot21" parent="OverlayUI/PlayerInvUI/MainGridBackground/BackpackGridMargins/BackpackMarginsBkgrd/MainSlotGrid" unique_id=1708965950 instance=ExtResource("42_r422n")]
-layout_mode = 2
-
-[node name="Slot22" parent="OverlayUI/PlayerInvUI/MainGridBackground/BackpackGridMargins/BackpackMarginsBkgrd/MainSlotGrid" unique_id=145337089 instance=ExtResource("42_r422n")]
-layout_mode = 2
-
-[node name="Slot23" parent="OverlayUI/PlayerInvUI/MainGridBackground/BackpackGridMargins/BackpackMarginsBkgrd/MainSlotGrid" unique_id=1320817897 instance=ExtResource("42_r422n")]
-layout_mode = 2
-
-[node name="Slot24" parent="OverlayUI/PlayerInvUI/MainGridBackground/BackpackGridMargins/BackpackMarginsBkgrd/MainSlotGrid" unique_id=1762736326 instance=ExtResource("42_r422n")]
-layout_mode = 2
-
-[node name="Slot25" parent="OverlayUI/PlayerInvUI/MainGridBackground/BackpackGridMargins/BackpackMarginsBkgrd/MainSlotGrid" unique_id=804215327 instance=ExtResource("42_r422n")]
-layout_mode = 2
-
-[node name="Slot26" parent="OverlayUI/PlayerInvUI/MainGridBackground/BackpackGridMargins/BackpackMarginsBkgrd/MainSlotGrid" unique_id=2015969844 instance=ExtResource("42_r422n")]
-layout_mode = 2
-
-[node name="Slot27" parent="OverlayUI/PlayerInvUI/MainGridBackground/BackpackGridMargins/BackpackMarginsBkgrd/MainSlotGrid" unique_id=1722016614 instance=ExtResource("42_r422n")]
-layout_mode = 2
-
-[node name="Slot28" parent="OverlayUI/PlayerInvUI/MainGridBackground/BackpackGridMargins/BackpackMarginsBkgrd/MainSlotGrid" unique_id=258649640 instance=ExtResource("42_r422n")]
-layout_mode = 2
-
-[node name="Slot29" parent="OverlayUI/PlayerInvUI/MainGridBackground/BackpackGridMargins/BackpackMarginsBkgrd/MainSlotGrid" unique_id=714891770 instance=ExtResource("42_r422n")]
-layout_mode = 2
-
-[node name="Slot30" parent="OverlayUI/PlayerInvUI/MainGridBackground/BackpackGridMargins/BackpackMarginsBkgrd/MainSlotGrid" unique_id=1925938792 instance=ExtResource("42_r422n")]
-layout_mode = 2
-
-[node name="Slot31" parent="OverlayUI/PlayerInvUI/MainGridBackground/BackpackGridMargins/BackpackMarginsBkgrd/MainSlotGrid" unique_id=181077610 instance=ExtResource("42_r422n")]
-layout_mode = 2
-
-[node name="Slot32" parent="OverlayUI/PlayerInvUI/MainGridBackground/BackpackGridMargins/BackpackMarginsBkgrd/MainSlotGrid" unique_id=2048545048 instance=ExtResource("42_r422n")]
-layout_mode = 2
-
-[node name="AutoStackMargins" type="MarginContainer" parent="OverlayUI/PlayerInvUI/MainGridBackground" unique_id=560084113]
-layout_mode = 0
-offset_left = 9.0
-offset_top = 38.0
-offset_right = 22.0
-offset_bottom = 49.0
-
-[node name="AutoStack" type="NinePatchRect" parent="OverlayUI/PlayerInvUI/MainGridBackground/AutoStackMargins" unique_id=950730512]
+[node name="AmmoSlotManager" type="MarginContainer" parent="OverlayUI/PlayerInvUI/MainGridBkgrdMargins/MarginContainer/VBoxContainer/TopBarHBox" unique_id=777810693]
 unique_name_in_owner = true
 layout_mode = 2
-texture = ExtResource("106_0313k")
-patch_margin_left = 2
-patch_margin_top = 2
-patch_margin_right = 2
-patch_margin_bottom = 2
-
-[node name="AutoStackBtn" type="Button" parent="OverlayUI/PlayerInvUI/MainGridBackground/AutoStackMargins" unique_id=470636141]
-layout_mode = 2
-focus_mode = 0
-flat = true
-metadata/_edit_lock_ = true
-
-[node name="MarginContainer" type="MarginContainer" parent="OverlayUI/PlayerInvUI/MainGridBackground/AutoStackMargins" unique_id=5547542]
-layout_mode = 2
-mouse_filter = 2
-theme_override_constants/margin_left = 3
-theme_override_constants/margin_top = 3
-theme_override_constants/margin_right = 3
-theme_override_constants/margin_bottom = 3
-
-[node name="Label" type="TextureRect" parent="OverlayUI/PlayerInvUI/MainGridBackground/AutoStackMargins/MarginContainer" unique_id=1453307205]
-modulate = Color(0.122, 0.035, 0, 0.67)
-layout_mode = 2
-mouse_filter = 2
-texture = ExtResource("108_f5l7i")
-stretch_mode = 5
-
-[node name="SortByRarityMargins" type="MarginContainer" parent="OverlayUI/PlayerInvUI/MainGridBackground" unique_id=183795102]
-layout_mode = 0
-offset_left = 120.0
-offset_top = 38.0
-offset_right = 139.0
-offset_bottom = 49.0
-
-[node name="SortByRarity" type="NinePatchRect" parent="OverlayUI/PlayerInvUI/MainGridBackground/SortByRarityMargins" unique_id=1088976304]
-unique_name_in_owner = true
-layout_mode = 2
-texture = ExtResource("106_0313k")
-patch_margin_left = 2
-patch_margin_top = 2
-patch_margin_right = 2
-patch_margin_bottom = 2
-
-[node name="SortByRarityBtn" type="Button" parent="OverlayUI/PlayerInvUI/MainGridBackground/SortByRarityMargins" unique_id=1997801171]
-layout_mode = 2
-focus_mode = 0
-flat = true
-metadata/_edit_lock_ = true
-
-[node name="MarginContainer" type="MarginContainer" parent="OverlayUI/PlayerInvUI/MainGridBackground/SortByRarityMargins" unique_id=1637771744]
-layout_mode = 2
-mouse_filter = 2
-theme_override_constants/margin_left = 3
-theme_override_constants/margin_top = 3
-theme_override_constants/margin_right = 3
-theme_override_constants/margin_bottom = 3
-
-[node name="Label" type="TextureRect" parent="OverlayUI/PlayerInvUI/MainGridBackground/SortByRarityMargins/MarginContainer" unique_id=428038312]
-modulate = Color(0.122, 0.035, 0, 0.67)
-layout_mode = 2
-mouse_filter = 2
-texture = ExtResource("109_co77f")
-stretch_mode = 5
-
-[node name="SortByTypeMargins" type="MarginContainer" parent="OverlayUI/PlayerInvUI/MainGridBackground" unique_id=1921658728]
-layout_mode = 0
-offset_left = 142.0
-offset_top = 38.0
-offset_right = 161.0
-offset_bottom = 49.0
-
-[node name="SortByType" type="NinePatchRect" parent="OverlayUI/PlayerInvUI/MainGridBackground/SortByTypeMargins" unique_id=1794393447]
-unique_name_in_owner = true
-layout_mode = 2
-texture = ExtResource("106_0313k")
-patch_margin_left = 2
-patch_margin_top = 2
-patch_margin_right = 2
-patch_margin_bottom = 2
-
-[node name="SortByTypeBtn" type="Button" parent="OverlayUI/PlayerInvUI/MainGridBackground/SortByTypeMargins" unique_id=453449803]
-layout_mode = 2
-focus_mode = 0
-flat = true
-metadata/_edit_lock_ = true
-
-[node name="MarginContainer" type="MarginContainer" parent="OverlayUI/PlayerInvUI/MainGridBackground/SortByTypeMargins" unique_id=936065188]
-layout_mode = 2
-mouse_filter = 2
-theme_override_constants/margin_left = 3
-theme_override_constants/margin_top = 3
-theme_override_constants/margin_right = 3
-theme_override_constants/margin_bottom = 3
-
-[node name="Label" type="TextureRect" parent="OverlayUI/PlayerInvUI/MainGridBackground/SortByTypeMargins/MarginContainer" unique_id=826454448]
-modulate = Color(0.122, 0.035, 0, 0.67)
-layout_mode = 2
-mouse_filter = 2
-texture = ExtResource("110_bmpdm")
-stretch_mode = 5
-
-[node name="SortByNameMargins" type="MarginContainer" parent="OverlayUI/PlayerInvUI/MainGridBackground" unique_id=887645306]
-layout_mode = 0
-offset_left = 164.0
-offset_top = 38.0
-offset_right = 183.0
-offset_bottom = 49.0
-
-[node name="SortByName" type="NinePatchRect" parent="OverlayUI/PlayerInvUI/MainGridBackground/SortByNameMargins" unique_id=2031972521]
-unique_name_in_owner = true
-layout_mode = 2
-texture = ExtResource("106_0313k")
-patch_margin_left = 2
-patch_margin_top = 2
-patch_margin_right = 2
-patch_margin_bottom = 2
-
-[node name="SortByNameBtn" type="Button" parent="OverlayUI/PlayerInvUI/MainGridBackground/SortByNameMargins" unique_id=481700560]
-layout_mode = 2
-focus_mode = 0
-flat = true
-metadata/_edit_lock_ = true
-
-[node name="MarginContainer" type="MarginContainer" parent="OverlayUI/PlayerInvUI/MainGridBackground/SortByNameMargins" unique_id=2093585938]
-layout_mode = 2
-mouse_filter = 2
-theme_override_constants/margin_left = 3
-theme_override_constants/margin_top = 3
-theme_override_constants/margin_right = 3
-theme_override_constants/margin_bottom = 3
-
-[node name="Label" type="TextureRect" parent="OverlayUI/PlayerInvUI/MainGridBackground/SortByNameMargins/MarginContainer" unique_id=2066966262]
-modulate = Color(0.122, 0.035, 0, 0.67)
-layout_mode = 2
-mouse_filter = 2
-texture = ExtResource("111_co77f")
-stretch_mode = 5
-
-[node name="HotbarSlotMargins" type="MarginContainer" parent="OverlayUI/PlayerInvUI" unique_id=811556124]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -58.0
-offset_top = 54.0
-offset_right = 58.0
-offset_bottom = 82.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 0
-theme_override_constants/margin_left = 0
-theme_override_constants/margin_top = 0
-theme_override_constants/margin_right = 0
-theme_override_constants/margin_bottom = 0
-
-[node name="HotbarTexture" type="NinePatchRect" parent="OverlayUI/PlayerInvUI/HotbarSlotMargins" unique_id=608554240]
-layout_mode = 2
-texture = ExtResource("109_0313k")
-patch_margin_left = 4
-patch_margin_top = 4
-patch_margin_right = 4
-patch_margin_bottom = 4
-
-[node name="HotbarGrid" type="HBoxContainer" parent="OverlayUI/PlayerInvUI/HotbarSlotMargins/HotbarTexture" unique_id=155042174]
-unique_name_in_owner = true
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -55.0
-offset_top = -11.0
-offset_right = 55.0
-offset_bottom = 11.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_constants/separation = 0
-alignment = 1
-
-[node name="Slot1" parent="OverlayUI/PlayerInvUI/HotbarSlotMargins/HotbarTexture/HotbarGrid" unique_id=1978233170 instance=ExtResource("42_r422n")]
-layout_mode = 2
-backing_texture = ExtResource("94_0313k")
-
-[node name="Slot2" parent="OverlayUI/PlayerInvUI/HotbarSlotMargins/HotbarTexture/HotbarGrid" unique_id=1484831732 instance=ExtResource("42_r422n")]
-layout_mode = 2
-backing_texture = ExtResource("94_0313k")
-
-[node name="Slot3" parent="OverlayUI/PlayerInvUI/HotbarSlotMargins/HotbarTexture/HotbarGrid" unique_id=1545113754 instance=ExtResource("42_r422n")]
-layout_mode = 2
-backing_texture = ExtResource("94_0313k")
-
-[node name="Slot4" parent="OverlayUI/PlayerInvUI/HotbarSlotMargins/HotbarTexture/HotbarGrid" unique_id=2061116301 instance=ExtResource("42_r422n")]
-layout_mode = 2
-backing_texture = ExtResource("94_0313k")
-
-[node name="Slot5" parent="OverlayUI/PlayerInvUI/HotbarSlotMargins/HotbarTexture/HotbarGrid" unique_id=1360650448 instance=ExtResource("42_r422n")]
-layout_mode = 2
-backing_texture = ExtResource("94_0313k")
-
-[node name="TrashSlotPanel" type="NinePatchRect" parent="OverlayUI/PlayerInvUI" unique_id=539767948]
-layout_mode = 0
-offset_left = 303.0
-offset_top = 189.0
-offset_right = 331.0
-offset_bottom = 217.0
-size_flags_horizontal = 8
-size_flags_vertical = 8
-mouse_filter = 0
-texture = ExtResource("109_0313k")
-patch_margin_left = 4
-patch_margin_top = 4
-patch_margin_right = 4
-patch_margin_bottom = 4
-metadata/_edit_group_ = true
-
-[node name="TrashSlot" parent="OverlayUI/PlayerInvUI/TrashSlotPanel" unique_id=1460542354 instance=ExtResource("42_r422n")]
-unique_name_in_owner = true
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -11.0
-offset_top = -11.0
-offset_right = 11.0
-offset_bottom = 11.0
-grow_horizontal = 2
-grow_vertical = 2
-region_rect = Rect2(0, 0, 20, 20)
-backing_texture = ExtResource("69_4ao77")
-
-[node name="AmmoSlotManager" type="MarginContainer" parent="OverlayUI/PlayerInvUI" unique_id=777810693]
-unique_name_in_owner = true
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -91.0
-offset_top = -83.0
-offset_right = 3.0
-offset_bottom = -55.0
-grow_horizontal = 2
-grow_vertical = 2
 mouse_filter = 0
 theme_override_constants/margin_left = 0
 theme_override_constants/margin_top = 0
@@ -2644,7 +2268,7 @@ theme_override_constants/margin_bottom = 0
 script = ExtResource("116_ve7vt")
 type_order = Array[int]([2, 3, 6, 4])
 
-[node name="AmmoSlotsTexture" type="NinePatchRect" parent="OverlayUI/PlayerInvUI/AmmoSlotManager" unique_id=846458641]
+[node name="AmmoSlotsTexture" type="NinePatchRect" parent="OverlayUI/PlayerInvUI/MainGridBkgrdMargins/MarginContainer/VBoxContainer/TopBarHBox/AmmoSlotManager" unique_id=846458641]
 layout_mode = 2
 texture = ExtResource("109_0313k")
 patch_margin_left = 4
@@ -2652,20 +2276,20 @@ patch_margin_top = 4
 patch_margin_right = 4
 patch_margin_bottom = 4
 
-[node name="AmmoSlotsGridMargins" type="MarginContainer" parent="OverlayUI/PlayerInvUI/AmmoSlotManager" unique_id=1900049602]
+[node name="AmmoSlotsGridMargins" type="MarginContainer" parent="OverlayUI/PlayerInvUI/MainGridBkgrdMargins/MarginContainer/VBoxContainer/TopBarHBox/AmmoSlotManager" unique_id=1900049602]
 layout_mode = 2
 theme_override_constants/margin_left = 3
 theme_override_constants/margin_top = 3
 theme_override_constants/margin_right = 3
 theme_override_constants/margin_bottom = 3
 
-[node name="AmmoSlotsGrid" type="HBoxContainer" parent="OverlayUI/PlayerInvUI/AmmoSlotManager/AmmoSlotsGridMargins" unique_id=2131026982]
+[node name="AmmoSlotsGrid" type="HBoxContainer" parent="OverlayUI/PlayerInvUI/MainGridBkgrdMargins/MarginContainer/VBoxContainer/TopBarHBox/AmmoSlotManager/AmmoSlotsGridMargins" unique_id=2131026982]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_constants/separation = 0
 alignment = 1
 
-[node name="AmmoSlot1" parent="OverlayUI/PlayerInvUI/AmmoSlotManager/AmmoSlotsGridMargins/AmmoSlotsGrid" unique_id=1092850766 instance=ExtResource("42_r422n")]
+[node name="AmmoSlot1" parent="OverlayUI/PlayerInvUI/MainGridBkgrdMargins/MarginContainer/VBoxContainer/TopBarHBox/AmmoSlotManager/AmmoSlotsGridMargins/AmmoSlotsGrid" unique_id=1092850766 instance=ExtResource("42_r422n")]
 layout_mode = 2
 script = ExtResource("117_82yts")
 backing_texture = ExtResource("135_uu4sw")
@@ -2674,7 +2298,7 @@ hide_corner_info = true
 hide_tint_progress = true
 hide_back_color = true
 
-[node name="OverlayMargins" type="MarginContainer" parent="OverlayUI/PlayerInvUI/AmmoSlotManager/AmmoSlotsGridMargins/AmmoSlotsGrid/AmmoSlot1" unique_id=507851375]
+[node name="OverlayMargins" type="MarginContainer" parent="OverlayUI/PlayerInvUI/MainGridBkgrdMargins/MarginContainer/VBoxContainer/TopBarHBox/AmmoSlotManager/AmmoSlotsGridMargins/AmmoSlotsGrid/AmmoSlot1" unique_id=507851375]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -2686,12 +2310,12 @@ theme_override_constants/margin_top = 1
 theme_override_constants/margin_right = 1
 theme_override_constants/margin_bottom = 1
 
-[node name="OverlayTexture" type="TextureRect" parent="OverlayUI/PlayerInvUI/AmmoSlotManager/AmmoSlotsGridMargins/AmmoSlotsGrid/AmmoSlot1/OverlayMargins" unique_id=959711109]
+[node name="OverlayTexture" type="TextureRect" parent="OverlayUI/PlayerInvUI/MainGridBkgrdMargins/MarginContainer/VBoxContainer/TopBarHBox/AmmoSlotManager/AmmoSlotsGridMargins/AmmoSlotsGrid/AmmoSlot1/OverlayMargins" unique_id=959711109]
 modulate = Color(2.454227, 2.454227, 2.454227, 1)
 layout_mode = 2
 texture = ExtResource("119_r7bkl")
 
-[node name="AmmoSlot2" parent="OverlayUI/PlayerInvUI/AmmoSlotManager/AmmoSlotsGridMargins/AmmoSlotsGrid" unique_id=1667727181 instance=ExtResource("42_r422n")]
+[node name="AmmoSlot2" parent="OverlayUI/PlayerInvUI/MainGridBkgrdMargins/MarginContainer/VBoxContainer/TopBarHBox/AmmoSlotManager/AmmoSlotsGridMargins/AmmoSlotsGrid" unique_id=1708626390 instance=ExtResource("42_r422n")]
 layout_mode = 2
 script = ExtResource("117_82yts")
 backing_texture = ExtResource("135_ve7vt")
@@ -2700,7 +2324,7 @@ hide_corner_info = true
 hide_tint_progress = true
 hide_back_color = true
 
-[node name="OverlayMargins" type="MarginContainer" parent="OverlayUI/PlayerInvUI/AmmoSlotManager/AmmoSlotsGridMargins/AmmoSlotsGrid/AmmoSlot2" unique_id=1009182146]
+[node name="OverlayMargins" type="MarginContainer" parent="OverlayUI/PlayerInvUI/MainGridBkgrdMargins/MarginContainer/VBoxContainer/TopBarHBox/AmmoSlotManager/AmmoSlotsGridMargins/AmmoSlotsGrid/AmmoSlot2" unique_id=1009182146]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -2712,11 +2336,11 @@ theme_override_constants/margin_top = 1
 theme_override_constants/margin_right = 1
 theme_override_constants/margin_bottom = 1
 
-[node name="OverlayTexture" type="TextureRect" parent="OverlayUI/PlayerInvUI/AmmoSlotManager/AmmoSlotsGridMargins/AmmoSlotsGrid/AmmoSlot2/OverlayMargins" unique_id=805330384]
+[node name="OverlayTexture" type="TextureRect" parent="OverlayUI/PlayerInvUI/MainGridBkgrdMargins/MarginContainer/VBoxContainer/TopBarHBox/AmmoSlotManager/AmmoSlotsGridMargins/AmmoSlotsGrid/AmmoSlot2/OverlayMargins" unique_id=805330384]
 layout_mode = 2
 texture = ExtResource("119_r7bkl")
 
-[node name="AmmoSlot3" parent="OverlayUI/PlayerInvUI/AmmoSlotManager/AmmoSlotsGridMargins/AmmoSlotsGrid" unique_id=959464345 instance=ExtResource("42_r422n")]
+[node name="AmmoSlot3" parent="OverlayUI/PlayerInvUI/MainGridBkgrdMargins/MarginContainer/VBoxContainer/TopBarHBox/AmmoSlotManager/AmmoSlotsGridMargins/AmmoSlotsGrid" unique_id=959464345 instance=ExtResource("42_r422n")]
 layout_mode = 2
 script = ExtResource("117_82yts")
 backing_texture = ExtResource("136_uu4sw")
@@ -2725,7 +2349,7 @@ hide_corner_info = true
 hide_tint_progress = true
 hide_back_color = true
 
-[node name="OverlayMargins" type="MarginContainer" parent="OverlayUI/PlayerInvUI/AmmoSlotManager/AmmoSlotsGridMargins/AmmoSlotsGrid/AmmoSlot3" unique_id=193593068]
+[node name="OverlayMargins" type="MarginContainer" parent="OverlayUI/PlayerInvUI/MainGridBkgrdMargins/MarginContainer/VBoxContainer/TopBarHBox/AmmoSlotManager/AmmoSlotsGridMargins/AmmoSlotsGrid/AmmoSlot3" unique_id=193593068]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -2737,11 +2361,11 @@ theme_override_constants/margin_top = 1
 theme_override_constants/margin_right = 1
 theme_override_constants/margin_bottom = 1
 
-[node name="OverlayTexture" type="TextureRect" parent="OverlayUI/PlayerInvUI/AmmoSlotManager/AmmoSlotsGridMargins/AmmoSlotsGrid/AmmoSlot3/OverlayMargins" unique_id=900634476]
+[node name="OverlayTexture" type="TextureRect" parent="OverlayUI/PlayerInvUI/MainGridBkgrdMargins/MarginContainer/VBoxContainer/TopBarHBox/AmmoSlotManager/AmmoSlotsGridMargins/AmmoSlotsGrid/AmmoSlot3/OverlayMargins" unique_id=900634476]
 layout_mode = 2
 texture = ExtResource("119_r7bkl")
 
-[node name="AmmoSlot4" parent="OverlayUI/PlayerInvUI/AmmoSlotManager/AmmoSlotsGridMargins/AmmoSlotsGrid" unique_id=1832697606 instance=ExtResource("42_r422n")]
+[node name="AmmoSlot4" parent="OverlayUI/PlayerInvUI/MainGridBkgrdMargins/MarginContainer/VBoxContainer/TopBarHBox/AmmoSlotManager/AmmoSlotsGridMargins/AmmoSlotsGrid" unique_id=1832697606 instance=ExtResource("42_r422n")]
 layout_mode = 2
 script = ExtResource("117_82yts")
 backing_texture = ExtResource("137_uu4sw")
@@ -2750,7 +2374,7 @@ hide_corner_info = true
 hide_tint_progress = true
 hide_back_color = true
 
-[node name="OverlayMargins" type="MarginContainer" parent="OverlayUI/PlayerInvUI/AmmoSlotManager/AmmoSlotsGridMargins/AmmoSlotsGrid/AmmoSlot4" unique_id=1158039339]
+[node name="OverlayMargins" type="MarginContainer" parent="OverlayUI/PlayerInvUI/MainGridBkgrdMargins/MarginContainer/VBoxContainer/TopBarHBox/AmmoSlotManager/AmmoSlotsGridMargins/AmmoSlotsGrid/AmmoSlot4" unique_id=1158039339]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -2762,24 +2386,17 @@ theme_override_constants/margin_top = 1
 theme_override_constants/margin_right = 1
 theme_override_constants/margin_bottom = 1
 
-[node name="OverlayTexture" type="TextureRect" parent="OverlayUI/PlayerInvUI/AmmoSlotManager/AmmoSlotsGridMargins/AmmoSlotsGrid/AmmoSlot4/OverlayMargins" unique_id=273618986]
+[node name="OverlayTexture" type="TextureRect" parent="OverlayUI/PlayerInvUI/MainGridBkgrdMargins/MarginContainer/VBoxContainer/TopBarHBox/AmmoSlotManager/AmmoSlotsGridMargins/AmmoSlotsGrid/AmmoSlot4/OverlayMargins" unique_id=273618986]
 layout_mode = 2
 texture = ExtResource("119_r7bkl")
 
-[node name="CurrencySlotManager" type="MarginContainer" parent="OverlayUI/PlayerInvUI" unique_id=313841679]
+[node name="Spacer" type="MarginContainer" parent="OverlayUI/PlayerInvUI/MainGridBkgrdMargins/MarginContainer/VBoxContainer/TopBarHBox" unique_id=2040011256]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="CurrencySlotManager" type="MarginContainer" parent="OverlayUI/PlayerInvUI/MainGridBkgrdMargins/MarginContainer/VBoxContainer/TopBarHBox" unique_id=313841679]
 unique_name_in_owner = true
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = 19.0
-offset_top = -83.0
-offset_right = 91.0
-offset_bottom = -55.0
-grow_horizontal = 2
-grow_vertical = 2
+layout_mode = 2
 mouse_filter = 0
 theme_override_constants/margin_left = 0
 theme_override_constants/margin_top = 0
@@ -2788,7 +2405,7 @@ theme_override_constants/margin_bottom = 0
 script = ExtResource("123_4awmn")
 type_order = Array[int]([0, 1, 2])
 
-[node name="CurrencySlotsTexture" type="NinePatchRect" parent="OverlayUI/PlayerInvUI/CurrencySlotManager" unique_id=83447645]
+[node name="CurrencySlotsTexture" type="NinePatchRect" parent="OverlayUI/PlayerInvUI/MainGridBkgrdMargins/MarginContainer/VBoxContainer/TopBarHBox/CurrencySlotManager" unique_id=83447645]
 layout_mode = 2
 texture = ExtResource("109_0313k")
 patch_margin_left = 4
@@ -2796,20 +2413,20 @@ patch_margin_top = 4
 patch_margin_right = 4
 patch_margin_bottom = 4
 
-[node name="CurrencySlotsGridMargins" type="MarginContainer" parent="OverlayUI/PlayerInvUI/CurrencySlotManager" unique_id=8768389]
+[node name="CurrencySlotsGridMargins" type="MarginContainer" parent="OverlayUI/PlayerInvUI/MainGridBkgrdMargins/MarginContainer/VBoxContainer/TopBarHBox/CurrencySlotManager" unique_id=8768389]
 layout_mode = 2
 theme_override_constants/margin_left = 3
 theme_override_constants/margin_top = 3
 theme_override_constants/margin_right = 3
 theme_override_constants/margin_bottom = 3
 
-[node name="CurrencySlotsGrid" type="HBoxContainer" parent="OverlayUI/PlayerInvUI/CurrencySlotManager/CurrencySlotsGridMargins" unique_id=415616843]
+[node name="CurrencySlotsGrid" type="HBoxContainer" parent="OverlayUI/PlayerInvUI/MainGridBkgrdMargins/MarginContainer/VBoxContainer/TopBarHBox/CurrencySlotManager/CurrencySlotsGridMargins" unique_id=415616843]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_constants/separation = 0
 alignment = 1
 
-[node name="CurrencySlot1" parent="OverlayUI/PlayerInvUI/CurrencySlotManager/CurrencySlotsGridMargins/CurrencySlotsGrid" unique_id=621628073 instance=ExtResource("42_r422n")]
+[node name="CurrencySlot1" parent="OverlayUI/PlayerInvUI/MainGridBkgrdMargins/MarginContainer/VBoxContainer/TopBarHBox/CurrencySlotManager/CurrencySlotsGridMargins/CurrencySlotsGrid" unique_id=621628073 instance=ExtResource("42_r422n")]
 layout_mode = 2
 script = ExtResource("124_1go7j")
 backing_texture = ExtResource("125_inle7")
@@ -2818,7 +2435,7 @@ hide_corner_info = true
 hide_tint_progress = true
 hide_back_color = true
 
-[node name="OverlayMargins" type="MarginContainer" parent="OverlayUI/PlayerInvUI/CurrencySlotManager/CurrencySlotsGridMargins/CurrencySlotsGrid/CurrencySlot1" unique_id=1181024977]
+[node name="OverlayMargins" type="MarginContainer" parent="OverlayUI/PlayerInvUI/MainGridBkgrdMargins/MarginContainer/VBoxContainer/TopBarHBox/CurrencySlotManager/CurrencySlotsGridMargins/CurrencySlotsGrid/CurrencySlot1" unique_id=1181024977]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -2830,11 +2447,11 @@ theme_override_constants/margin_top = 1
 theme_override_constants/margin_right = 1
 theme_override_constants/margin_bottom = 1
 
-[node name="OverlayTexture" type="TextureRect" parent="OverlayUI/PlayerInvUI/CurrencySlotManager/CurrencySlotsGridMargins/CurrencySlotsGrid/CurrencySlot1/OverlayMargins" unique_id=714627348]
+[node name="OverlayTexture" type="TextureRect" parent="OverlayUI/PlayerInvUI/MainGridBkgrdMargins/MarginContainer/VBoxContainer/TopBarHBox/CurrencySlotManager/CurrencySlotsGridMargins/CurrencySlotsGrid/CurrencySlot1/OverlayMargins" unique_id=714627348]
 layout_mode = 2
 texture = ExtResource("119_r7bkl")
 
-[node name="CurrencySlot2" parent="OverlayUI/PlayerInvUI/CurrencySlotManager/CurrencySlotsGridMargins/CurrencySlotsGrid" unique_id=1208610677 instance=ExtResource("42_r422n")]
+[node name="CurrencySlot2" parent="OverlayUI/PlayerInvUI/MainGridBkgrdMargins/MarginContainer/VBoxContainer/TopBarHBox/CurrencySlotManager/CurrencySlotsGridMargins/CurrencySlotsGrid" unique_id=1208610677 instance=ExtResource("42_r422n")]
 layout_mode = 2
 script = ExtResource("124_1go7j")
 backing_texture = ExtResource("125_inle7")
@@ -2843,7 +2460,7 @@ hide_corner_info = true
 hide_tint_progress = true
 hide_back_color = true
 
-[node name="OverlayMargins" type="MarginContainer" parent="OverlayUI/PlayerInvUI/CurrencySlotManager/CurrencySlotsGridMargins/CurrencySlotsGrid/CurrencySlot2" unique_id=581322881]
+[node name="OverlayMargins" type="MarginContainer" parent="OverlayUI/PlayerInvUI/MainGridBkgrdMargins/MarginContainer/VBoxContainer/TopBarHBox/CurrencySlotManager/CurrencySlotsGridMargins/CurrencySlotsGrid/CurrencySlot2" unique_id=581322881]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -2855,11 +2472,11 @@ theme_override_constants/margin_top = 1
 theme_override_constants/margin_right = 1
 theme_override_constants/margin_bottom = 1
 
-[node name="OverlayTexture" type="TextureRect" parent="OverlayUI/PlayerInvUI/CurrencySlotManager/CurrencySlotsGridMargins/CurrencySlotsGrid/CurrencySlot2/OverlayMargins" unique_id=1161606264]
+[node name="OverlayTexture" type="TextureRect" parent="OverlayUI/PlayerInvUI/MainGridBkgrdMargins/MarginContainer/VBoxContainer/TopBarHBox/CurrencySlotManager/CurrencySlotsGridMargins/CurrencySlotsGrid/CurrencySlot2/OverlayMargins" unique_id=1161606264]
 layout_mode = 2
 texture = ExtResource("119_r7bkl")
 
-[node name="CurrencySlot3" parent="OverlayUI/PlayerInvUI/CurrencySlotManager/CurrencySlotsGridMargins/CurrencySlotsGrid" unique_id=1744015114 instance=ExtResource("42_r422n")]
+[node name="CurrencySlot3" parent="OverlayUI/PlayerInvUI/MainGridBkgrdMargins/MarginContainer/VBoxContainer/TopBarHBox/CurrencySlotManager/CurrencySlotsGridMargins/CurrencySlotsGrid" unique_id=1744015114 instance=ExtResource("42_r422n")]
 layout_mode = 2
 script = ExtResource("124_1go7j")
 backing_texture = ExtResource("125_inle7")
@@ -2868,7 +2485,7 @@ hide_corner_info = true
 hide_tint_progress = true
 hide_back_color = true
 
-[node name="OverlayMargins" type="MarginContainer" parent="OverlayUI/PlayerInvUI/CurrencySlotManager/CurrencySlotsGridMargins/CurrencySlotsGrid/CurrencySlot3" unique_id=428777715]
+[node name="OverlayMargins" type="MarginContainer" parent="OverlayUI/PlayerInvUI/MainGridBkgrdMargins/MarginContainer/VBoxContainer/TopBarHBox/CurrencySlotManager/CurrencySlotsGridMargins/CurrencySlotsGrid/CurrencySlot3" unique_id=428777715]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -2880,35 +2497,412 @@ theme_override_constants/margin_top = 1
 theme_override_constants/margin_right = 1
 theme_override_constants/margin_bottom = 1
 
-[node name="OverlayTexture" type="TextureRect" parent="OverlayUI/PlayerInvUI/CurrencySlotManager/CurrencySlotsGridMargins/CurrencySlotsGrid/CurrencySlot3/OverlayMargins" unique_id=162043378]
+[node name="OverlayTexture" type="TextureRect" parent="OverlayUI/PlayerInvUI/MainGridBkgrdMargins/MarginContainer/VBoxContainer/TopBarHBox/CurrencySlotManager/CurrencySlotsGridMargins/CurrencySlotsGrid/CurrencySlot3/OverlayMargins" unique_id=162043378]
 layout_mode = 2
 texture = ExtResource("119_r7bkl")
+
+[node name="BackpackGridMargins" type="MarginContainer" parent="OverlayUI/PlayerInvUI/MainGridBkgrdMargins/MarginContainer/VBoxContainer" unique_id=1281711311]
+editor_description = "THIS GRIDMARGIN MOUSE FILTER MUST STAY AS IGNORE TO MAKE SORT BUTTONS WORK!"
+layout_mode = 2
+mouse_filter = 2
+
+[node name="BackpackMarginsBkgrd" type="NinePatchRect" parent="OverlayUI/PlayerInvUI/MainGridBkgrdMargins/MarginContainer/VBoxContainer/BackpackGridMargins" unique_id=757698560]
+layout_mode = 2
+texture = ExtResource("109_0313k")
+patch_margin_left = 4
+patch_margin_top = 4
+patch_margin_right = 4
+patch_margin_bottom = 4
+axis_stretch_vertical = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="OverlayUI/PlayerInvUI/MainGridBkgrdMargins/MarginContainer/VBoxContainer/BackpackGridMargins" unique_id=1262108984]
+layout_mode = 2
+theme_override_constants/separation = 1
+
+[node name="ButtonHBoxMargins" type="MarginContainer" parent="OverlayUI/PlayerInvUI/MainGridBkgrdMargins/MarginContainer/VBoxContainer/BackpackGridMargins/VBoxContainer" unique_id=1977162084]
+layout_mode = 2
+theme_override_constants/margin_left = 3
+theme_override_constants/margin_top = 3
+theme_override_constants/margin_right = 3
+theme_override_constants/margin_bottom = 0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="OverlayUI/PlayerInvUI/MainGridBkgrdMargins/MarginContainer/VBoxContainer/BackpackGridMargins/VBoxContainer/ButtonHBoxMargins" unique_id=1582266260]
+layout_mode = 2
+theme_override_constants/separation = 2
+alignment = 2
+
+[node name="BackpackTitleMargins" type="MarginContainer" parent="OverlayUI/PlayerInvUI/MainGridBkgrdMargins/MarginContainer/VBoxContainer/BackpackGridMargins/VBoxContainer/ButtonHBoxMargins/HBoxContainer" unique_id=186633218]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/margin_left = 1
+theme_override_constants/margin_top = -1
+theme_override_constants/margin_bottom = -1
+
+[node name="BackpackTitle" type="RichTextLabel" parent="OverlayUI/PlayerInvUI/MainGridBkgrdMargins/MarginContainer/VBoxContainer/BackpackGridMargins/VBoxContainer/ButtonHBoxMargins/HBoxContainer/BackpackTitleMargins" unique_id=2082656605]
+clip_contents = false
+layout_mode = 2
+theme_override_colors/default_color = Color(1, 0.92941177, 0.91764706, 1)
+theme_override_colors/font_outline_color = Color(0.122, 0.035, 0, 0.67)
+theme_override_constants/outline_size = 3
+theme_override_fonts/normal_font = ExtResource("85_7xlwj")
+theme_override_font_sizes/normal_font_size = 11
+bbcode_enabled = true
+text = "BACKPACK"
+fit_content = true
+scroll_active = false
+tab_size = 0
+vertical_alignment = 1
+
+[node name="Spacer" type="MarginContainer" parent="OverlayUI/PlayerInvUI/MainGridBkgrdMargins/MarginContainer/VBoxContainer/BackpackGridMargins/VBoxContainer/ButtonHBoxMargins/HBoxContainer" unique_id=949453234]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="AutoStackMargins" type="MarginContainer" parent="OverlayUI/PlayerInvUI/MainGridBkgrdMargins/MarginContainer/VBoxContainer/BackpackGridMargins/VBoxContainer/ButtonHBoxMargins/HBoxContainer" unique_id=560084113]
+layout_mode = 2
+
+[node name="AutoStack" type="NinePatchRect" parent="OverlayUI/PlayerInvUI/MainGridBkgrdMargins/MarginContainer/VBoxContainer/BackpackGridMargins/VBoxContainer/ButtonHBoxMargins/HBoxContainer/AutoStackMargins" unique_id=950730512]
+unique_name_in_owner = true
+layout_mode = 2
+texture = ExtResource("106_0313k")
+patch_margin_left = 2
+patch_margin_top = 2
+patch_margin_right = 2
+patch_margin_bottom = 2
+
+[node name="AutoStackBtn" type="Button" parent="OverlayUI/PlayerInvUI/MainGridBkgrdMargins/MarginContainer/VBoxContainer/BackpackGridMargins/VBoxContainer/ButtonHBoxMargins/HBoxContainer/AutoStackMargins" unique_id=470636141]
+layout_mode = 2
+focus_mode = 0
+flat = true
+
+[node name="MarginContainer" type="MarginContainer" parent="OverlayUI/PlayerInvUI/MainGridBkgrdMargins/MarginContainer/VBoxContainer/BackpackGridMargins/VBoxContainer/ButtonHBoxMargins/HBoxContainer/AutoStackMargins" unique_id=5547542]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 3
+theme_override_constants/margin_top = 3
+theme_override_constants/margin_right = 3
+theme_override_constants/margin_bottom = 3
+
+[node name="Label" type="TextureRect" parent="OverlayUI/PlayerInvUI/MainGridBkgrdMargins/MarginContainer/VBoxContainer/BackpackGridMargins/VBoxContainer/ButtonHBoxMargins/HBoxContainer/AutoStackMargins/MarginContainer" unique_id=1453307205]
+modulate = Color(0.122, 0.035, 0, 0.67)
+layout_mode = 2
+mouse_filter = 2
+texture = ExtResource("108_f5l7i")
+stretch_mode = 5
+
+[node name="SortByRarityMargins" type="MarginContainer" parent="OverlayUI/PlayerInvUI/MainGridBkgrdMargins/MarginContainer/VBoxContainer/BackpackGridMargins/VBoxContainer/ButtonHBoxMargins/HBoxContainer" unique_id=183795102]
+layout_mode = 2
+
+[node name="SortByRarity" type="NinePatchRect" parent="OverlayUI/PlayerInvUI/MainGridBkgrdMargins/MarginContainer/VBoxContainer/BackpackGridMargins/VBoxContainer/ButtonHBoxMargins/HBoxContainer/SortByRarityMargins" unique_id=1088976304]
+unique_name_in_owner = true
+layout_mode = 2
+texture = ExtResource("106_0313k")
+patch_margin_left = 2
+patch_margin_top = 2
+patch_margin_right = 2
+patch_margin_bottom = 2
+
+[node name="SortByRarityBtn" type="Button" parent="OverlayUI/PlayerInvUI/MainGridBkgrdMargins/MarginContainer/VBoxContainer/BackpackGridMargins/VBoxContainer/ButtonHBoxMargins/HBoxContainer/SortByRarityMargins" unique_id=1997801171]
+layout_mode = 2
+focus_mode = 0
+flat = true
+
+[node name="MarginContainer" type="MarginContainer" parent="OverlayUI/PlayerInvUI/MainGridBkgrdMargins/MarginContainer/VBoxContainer/BackpackGridMargins/VBoxContainer/ButtonHBoxMargins/HBoxContainer/SortByRarityMargins" unique_id=1637771744]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 3
+theme_override_constants/margin_top = 3
+theme_override_constants/margin_right = 3
+theme_override_constants/margin_bottom = 3
+
+[node name="Label" type="TextureRect" parent="OverlayUI/PlayerInvUI/MainGridBkgrdMargins/MarginContainer/VBoxContainer/BackpackGridMargins/VBoxContainer/ButtonHBoxMargins/HBoxContainer/SortByRarityMargins/MarginContainer" unique_id=428038312]
+modulate = Color(0.122, 0.035, 0, 0.67)
+layout_mode = 2
+mouse_filter = 2
+texture = ExtResource("109_co77f")
+stretch_mode = 5
+
+[node name="SortByTypeMargins" type="MarginContainer" parent="OverlayUI/PlayerInvUI/MainGridBkgrdMargins/MarginContainer/VBoxContainer/BackpackGridMargins/VBoxContainer/ButtonHBoxMargins/HBoxContainer" unique_id=1921658728]
+layout_mode = 2
+
+[node name="SortByType" type="NinePatchRect" parent="OverlayUI/PlayerInvUI/MainGridBkgrdMargins/MarginContainer/VBoxContainer/BackpackGridMargins/VBoxContainer/ButtonHBoxMargins/HBoxContainer/SortByTypeMargins" unique_id=1794393447]
+unique_name_in_owner = true
+layout_mode = 2
+texture = ExtResource("106_0313k")
+patch_margin_left = 2
+patch_margin_top = 2
+patch_margin_right = 2
+patch_margin_bottom = 2
+
+[node name="SortByTypeBtn" type="Button" parent="OverlayUI/PlayerInvUI/MainGridBkgrdMargins/MarginContainer/VBoxContainer/BackpackGridMargins/VBoxContainer/ButtonHBoxMargins/HBoxContainer/SortByTypeMargins" unique_id=453449803]
+layout_mode = 2
+focus_mode = 0
+flat = true
+
+[node name="MarginContainer" type="MarginContainer" parent="OverlayUI/PlayerInvUI/MainGridBkgrdMargins/MarginContainer/VBoxContainer/BackpackGridMargins/VBoxContainer/ButtonHBoxMargins/HBoxContainer/SortByTypeMargins" unique_id=936065188]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 3
+theme_override_constants/margin_top = 3
+theme_override_constants/margin_right = 3
+theme_override_constants/margin_bottom = 3
+
+[node name="Label" type="TextureRect" parent="OverlayUI/PlayerInvUI/MainGridBkgrdMargins/MarginContainer/VBoxContainer/BackpackGridMargins/VBoxContainer/ButtonHBoxMargins/HBoxContainer/SortByTypeMargins/MarginContainer" unique_id=826454448]
+modulate = Color(0.122, 0.035, 0, 0.67)
+layout_mode = 2
+mouse_filter = 2
+texture = ExtResource("110_bmpdm")
+stretch_mode = 5
+
+[node name="SortByNameMargins" type="MarginContainer" parent="OverlayUI/PlayerInvUI/MainGridBkgrdMargins/MarginContainer/VBoxContainer/BackpackGridMargins/VBoxContainer/ButtonHBoxMargins/HBoxContainer" unique_id=887645306]
+layout_mode = 2
+
+[node name="SortByName" type="NinePatchRect" parent="OverlayUI/PlayerInvUI/MainGridBkgrdMargins/MarginContainer/VBoxContainer/BackpackGridMargins/VBoxContainer/ButtonHBoxMargins/HBoxContainer/SortByNameMargins" unique_id=2031972521]
+unique_name_in_owner = true
+layout_mode = 2
+texture = ExtResource("106_0313k")
+patch_margin_left = 2
+patch_margin_top = 2
+patch_margin_right = 2
+patch_margin_bottom = 2
+
+[node name="SortByNameBtn" type="Button" parent="OverlayUI/PlayerInvUI/MainGridBkgrdMargins/MarginContainer/VBoxContainer/BackpackGridMargins/VBoxContainer/ButtonHBoxMargins/HBoxContainer/SortByNameMargins" unique_id=481700560]
+layout_mode = 2
+focus_mode = 0
+flat = true
+
+[node name="MarginContainer" type="MarginContainer" parent="OverlayUI/PlayerInvUI/MainGridBkgrdMargins/MarginContainer/VBoxContainer/BackpackGridMargins/VBoxContainer/ButtonHBoxMargins/HBoxContainer/SortByNameMargins" unique_id=2093585938]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 3
+theme_override_constants/margin_top = 3
+theme_override_constants/margin_right = 3
+theme_override_constants/margin_bottom = 3
+
+[node name="Label" type="TextureRect" parent="OverlayUI/PlayerInvUI/MainGridBkgrdMargins/MarginContainer/VBoxContainer/BackpackGridMargins/VBoxContainer/ButtonHBoxMargins/HBoxContainer/SortByNameMargins/MarginContainer" unique_id=2066966262]
+modulate = Color(0.122, 0.035, 0, 0.67)
+layout_mode = 2
+mouse_filter = 2
+texture = ExtResource("111_co77f")
+stretch_mode = 5
+
+[node name="MainSlotGridMargins" type="MarginContainer" parent="OverlayUI/PlayerInvUI/MainGridBkgrdMargins/MarginContainer/VBoxContainer/BackpackGridMargins/VBoxContainer" unique_id=1240755283]
+layout_mode = 2
+theme_override_constants/margin_left = 3
+theme_override_constants/margin_right = 3
+theme_override_constants/margin_bottom = 3
+
+[node name="MainSlotGrid" type="GridContainer" parent="OverlayUI/PlayerInvUI/MainGridBkgrdMargins/MarginContainer/VBoxContainer/BackpackGridMargins/VBoxContainer/MainSlotGridMargins" unique_id=2044105717]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 0
+theme_override_constants/h_separation = 0
+theme_override_constants/v_separation = 0
+columns = 10
+
+[node name="Slot1" parent="OverlayUI/PlayerInvUI/MainGridBkgrdMargins/MarginContainer/VBoxContainer/BackpackGridMargins/VBoxContainer/MainSlotGridMargins/MainSlotGrid" unique_id=1286240536 instance=ExtResource("42_r422n")]
+layout_mode = 2
+
+[node name="Slot2" parent="OverlayUI/PlayerInvUI/MainGridBkgrdMargins/MarginContainer/VBoxContainer/BackpackGridMargins/VBoxContainer/MainSlotGridMargins/MainSlotGrid" unique_id=1080720444 instance=ExtResource("42_r422n")]
+layout_mode = 2
+
+[node name="Slot3" parent="OverlayUI/PlayerInvUI/MainGridBkgrdMargins/MarginContainer/VBoxContainer/BackpackGridMargins/VBoxContainer/MainSlotGridMargins/MainSlotGrid" unique_id=650799886 instance=ExtResource("42_r422n")]
+layout_mode = 2
+
+[node name="Slot4" parent="OverlayUI/PlayerInvUI/MainGridBkgrdMargins/MarginContainer/VBoxContainer/BackpackGridMargins/VBoxContainer/MainSlotGridMargins/MainSlotGrid" unique_id=1127310648 instance=ExtResource("42_r422n")]
+layout_mode = 2
+
+[node name="Slot5" parent="OverlayUI/PlayerInvUI/MainGridBkgrdMargins/MarginContainer/VBoxContainer/BackpackGridMargins/VBoxContainer/MainSlotGridMargins/MainSlotGrid" unique_id=1366133961 instance=ExtResource("42_r422n")]
+layout_mode = 2
+
+[node name="Slot6" parent="OverlayUI/PlayerInvUI/MainGridBkgrdMargins/MarginContainer/VBoxContainer/BackpackGridMargins/VBoxContainer/MainSlotGridMargins/MainSlotGrid" unique_id=393782019 instance=ExtResource("42_r422n")]
+layout_mode = 2
+
+[node name="Slot7" parent="OverlayUI/PlayerInvUI/MainGridBkgrdMargins/MarginContainer/VBoxContainer/BackpackGridMargins/VBoxContainer/MainSlotGridMargins/MainSlotGrid" unique_id=1574381205 instance=ExtResource("42_r422n")]
+layout_mode = 2
+
+[node name="Slot8" parent="OverlayUI/PlayerInvUI/MainGridBkgrdMargins/MarginContainer/VBoxContainer/BackpackGridMargins/VBoxContainer/MainSlotGridMargins/MainSlotGrid" unique_id=160768503 instance=ExtResource("42_r422n")]
+layout_mode = 2
+
+[node name="Slot9" parent="OverlayUI/PlayerInvUI/MainGridBkgrdMargins/MarginContainer/VBoxContainer/BackpackGridMargins/VBoxContainer/MainSlotGridMargins/MainSlotGrid" unique_id=948996091 instance=ExtResource("42_r422n")]
+layout_mode = 2
+
+[node name="Slot10" parent="OverlayUI/PlayerInvUI/MainGridBkgrdMargins/MarginContainer/VBoxContainer/BackpackGridMargins/VBoxContainer/MainSlotGridMargins/MainSlotGrid" unique_id=1484980430 instance=ExtResource("42_r422n")]
+layout_mode = 2
+
+[node name="Slot11" parent="OverlayUI/PlayerInvUI/MainGridBkgrdMargins/MarginContainer/VBoxContainer/BackpackGridMargins/VBoxContainer/MainSlotGridMargins/MainSlotGrid" unique_id=1024203358 instance=ExtResource("42_r422n")]
+layout_mode = 2
+
+[node name="Slot12" parent="OverlayUI/PlayerInvUI/MainGridBkgrdMargins/MarginContainer/VBoxContainer/BackpackGridMargins/VBoxContainer/MainSlotGridMargins/MainSlotGrid" unique_id=444760026 instance=ExtResource("42_r422n")]
+layout_mode = 2
+
+[node name="Slot13" parent="OverlayUI/PlayerInvUI/MainGridBkgrdMargins/MarginContainer/VBoxContainer/BackpackGridMargins/VBoxContainer/MainSlotGridMargins/MainSlotGrid" unique_id=1709395024 instance=ExtResource("42_r422n")]
+layout_mode = 2
+
+[node name="Slot14" parent="OverlayUI/PlayerInvUI/MainGridBkgrdMargins/MarginContainer/VBoxContainer/BackpackGridMargins/VBoxContainer/MainSlotGridMargins/MainSlotGrid" unique_id=1625733587 instance=ExtResource("42_r422n")]
+layout_mode = 2
+
+[node name="Slot15" parent="OverlayUI/PlayerInvUI/MainGridBkgrdMargins/MarginContainer/VBoxContainer/BackpackGridMargins/VBoxContainer/MainSlotGridMargins/MainSlotGrid" unique_id=545313958 instance=ExtResource("42_r422n")]
+layout_mode = 2
+
+[node name="Slot16" parent="OverlayUI/PlayerInvUI/MainGridBkgrdMargins/MarginContainer/VBoxContainer/BackpackGridMargins/VBoxContainer/MainSlotGridMargins/MainSlotGrid" unique_id=839072975 instance=ExtResource("42_r422n")]
+layout_mode = 2
+
+[node name="Slot17" parent="OverlayUI/PlayerInvUI/MainGridBkgrdMargins/MarginContainer/VBoxContainer/BackpackGridMargins/VBoxContainer/MainSlotGridMargins/MainSlotGrid" unique_id=863824619 instance=ExtResource("42_r422n")]
+layout_mode = 2
+
+[node name="Slot18" parent="OverlayUI/PlayerInvUI/MainGridBkgrdMargins/MarginContainer/VBoxContainer/BackpackGridMargins/VBoxContainer/MainSlotGridMargins/MainSlotGrid" unique_id=1834338805 instance=ExtResource("42_r422n")]
+layout_mode = 2
+
+[node name="Slot19" parent="OverlayUI/PlayerInvUI/MainGridBkgrdMargins/MarginContainer/VBoxContainer/BackpackGridMargins/VBoxContainer/MainSlotGridMargins/MainSlotGrid" unique_id=378839538 instance=ExtResource("42_r422n")]
+layout_mode = 2
+
+[node name="Slot20" parent="OverlayUI/PlayerInvUI/MainGridBkgrdMargins/MarginContainer/VBoxContainer/BackpackGridMargins/VBoxContainer/MainSlotGridMargins/MainSlotGrid" unique_id=126967897 instance=ExtResource("42_r422n")]
+layout_mode = 2
+
+[node name="Slot21" parent="OverlayUI/PlayerInvUI/MainGridBkgrdMargins/MarginContainer/VBoxContainer/BackpackGridMargins/VBoxContainer/MainSlotGridMargins/MainSlotGrid" unique_id=1708965950 instance=ExtResource("42_r422n")]
+layout_mode = 2
+
+[node name="Slot22" parent="OverlayUI/PlayerInvUI/MainGridBkgrdMargins/MarginContainer/VBoxContainer/BackpackGridMargins/VBoxContainer/MainSlotGridMargins/MainSlotGrid" unique_id=145337089 instance=ExtResource("42_r422n")]
+layout_mode = 2
+
+[node name="Slot23" parent="OverlayUI/PlayerInvUI/MainGridBkgrdMargins/MarginContainer/VBoxContainer/BackpackGridMargins/VBoxContainer/MainSlotGridMargins/MainSlotGrid" unique_id=1320817897 instance=ExtResource("42_r422n")]
+layout_mode = 2
+
+[node name="Slot24" parent="OverlayUI/PlayerInvUI/MainGridBkgrdMargins/MarginContainer/VBoxContainer/BackpackGridMargins/VBoxContainer/MainSlotGridMargins/MainSlotGrid" unique_id=1762736326 instance=ExtResource("42_r422n")]
+layout_mode = 2
+
+[node name="Slot25" parent="OverlayUI/PlayerInvUI/MainGridBkgrdMargins/MarginContainer/VBoxContainer/BackpackGridMargins/VBoxContainer/MainSlotGridMargins/MainSlotGrid" unique_id=804215327 instance=ExtResource("42_r422n")]
+layout_mode = 2
+
+[node name="Slot26" parent="OverlayUI/PlayerInvUI/MainGridBkgrdMargins/MarginContainer/VBoxContainer/BackpackGridMargins/VBoxContainer/MainSlotGridMargins/MainSlotGrid" unique_id=2015969844 instance=ExtResource("42_r422n")]
+layout_mode = 2
+
+[node name="Slot27" parent="OverlayUI/PlayerInvUI/MainGridBkgrdMargins/MarginContainer/VBoxContainer/BackpackGridMargins/VBoxContainer/MainSlotGridMargins/MainSlotGrid" unique_id=1722016614 instance=ExtResource("42_r422n")]
+layout_mode = 2
+
+[node name="Slot28" parent="OverlayUI/PlayerInvUI/MainGridBkgrdMargins/MarginContainer/VBoxContainer/BackpackGridMargins/VBoxContainer/MainSlotGridMargins/MainSlotGrid" unique_id=258649640 instance=ExtResource("42_r422n")]
+layout_mode = 2
+
+[node name="Slot29" parent="OverlayUI/PlayerInvUI/MainGridBkgrdMargins/MarginContainer/VBoxContainer/BackpackGridMargins/VBoxContainer/MainSlotGridMargins/MainSlotGrid" unique_id=714891770 instance=ExtResource("42_r422n")]
+layout_mode = 2
+
+[node name="Slot30" parent="OverlayUI/PlayerInvUI/MainGridBkgrdMargins/MarginContainer/VBoxContainer/BackpackGridMargins/VBoxContainer/MainSlotGridMargins/MainSlotGrid" unique_id=1925938792 instance=ExtResource("42_r422n")]
+layout_mode = 2
+
+[node name="Slot31" parent="OverlayUI/PlayerInvUI/MainGridBkgrdMargins/MarginContainer/VBoxContainer/BackpackGridMargins/VBoxContainer/MainSlotGridMargins/MainSlotGrid" unique_id=181077610 instance=ExtResource("42_r422n")]
+layout_mode = 2
+
+[node name="Slot32" parent="OverlayUI/PlayerInvUI/MainGridBkgrdMargins/MarginContainer/VBoxContainer/BackpackGridMargins/VBoxContainer/MainSlotGridMargins/MainSlotGrid" unique_id=2048545048 instance=ExtResource("42_r422n")]
+layout_mode = 2
+
+[node name="Slot33" parent="OverlayUI/PlayerInvUI/MainGridBkgrdMargins/MarginContainer/VBoxContainer/BackpackGridMargins/VBoxContainer/MainSlotGridMargins/MainSlotGrid" unique_id=1537109265 instance=ExtResource("42_r422n")]
+layout_mode = 2
+
+[node name="Slot34" parent="OverlayUI/PlayerInvUI/MainGridBkgrdMargins/MarginContainer/VBoxContainer/BackpackGridMargins/VBoxContainer/MainSlotGridMargins/MainSlotGrid" unique_id=2103951886 instance=ExtResource("42_r422n")]
+layout_mode = 2
+
+[node name="Slot35" parent="OverlayUI/PlayerInvUI/MainGridBkgrdMargins/MarginContainer/VBoxContainer/BackpackGridMargins/VBoxContainer/MainSlotGridMargins/MainSlotGrid" unique_id=891373165 instance=ExtResource("42_r422n")]
+layout_mode = 2
+
+[node name="Slot36" parent="OverlayUI/PlayerInvUI/MainGridBkgrdMargins/MarginContainer/VBoxContainer/BackpackGridMargins/VBoxContainer/MainSlotGridMargins/MainSlotGrid" unique_id=1059938539 instance=ExtResource("42_r422n")]
+layout_mode = 2
+
+[node name="Slot37" parent="OverlayUI/PlayerInvUI/MainGridBkgrdMargins/MarginContainer/VBoxContainer/BackpackGridMargins/VBoxContainer/MainSlotGridMargins/MainSlotGrid" unique_id=884740496 instance=ExtResource("42_r422n")]
+layout_mode = 2
+
+[node name="Slot38" parent="OverlayUI/PlayerInvUI/MainGridBkgrdMargins/MarginContainer/VBoxContainer/BackpackGridMargins/VBoxContainer/MainSlotGridMargins/MainSlotGrid" unique_id=473883564 instance=ExtResource("42_r422n")]
+layout_mode = 2
+
+[node name="Slot39" parent="OverlayUI/PlayerInvUI/MainGridBkgrdMargins/MarginContainer/VBoxContainer/BackpackGridMargins/VBoxContainer/MainSlotGridMargins/MainSlotGrid" unique_id=1704114140 instance=ExtResource("42_r422n")]
+layout_mode = 2
+
+[node name="Slot40" parent="OverlayUI/PlayerInvUI/MainGridBkgrdMargins/MarginContainer/VBoxContainer/BackpackGridMargins/VBoxContainer/MainSlotGridMargins/MainSlotGrid" unique_id=1038506317 instance=ExtResource("42_r422n")]
+layout_mode = 2
+
+[node name="HotbarSlotMargins" type="MarginContainer" parent="OverlayUI/PlayerInvUI/MainGridBkgrdMargins/MarginContainer/VBoxContainer" unique_id=811556124]
+layout_mode = 2
+mouse_filter = 0
+
+[node name="HotbarTexture" type="NinePatchRect" parent="OverlayUI/PlayerInvUI/MainGridBkgrdMargins/MarginContainer/VBoxContainer/HotbarSlotMargins" unique_id=608554240]
+layout_mode = 2
+texture = ExtResource("109_0313k")
+patch_margin_left = 4
+patch_margin_top = 4
+patch_margin_right = 4
+patch_margin_bottom = 4
+
+[node name="MarginContainer" type="MarginContainer" parent="OverlayUI/PlayerInvUI/MainGridBkgrdMargins/MarginContainer/VBoxContainer/HotbarSlotMargins" unique_id=274604311]
+layout_mode = 2
+theme_override_constants/margin_left = 3
+theme_override_constants/margin_top = 3
+theme_override_constants/margin_right = 3
+theme_override_constants/margin_bottom = 3
+
+[node name="HotbarGrid" type="HBoxContainer" parent="OverlayUI/PlayerInvUI/MainGridBkgrdMargins/MarginContainer/VBoxContainer/HotbarSlotMargins/MarginContainer" unique_id=155042174]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 0
+alignment = 1
+
+[node name="Slot1" parent="OverlayUI/PlayerInvUI/MainGridBkgrdMargins/MarginContainer/VBoxContainer/HotbarSlotMargins/MarginContainer/HotbarGrid" unique_id=1978233170 instance=ExtResource("42_r422n")]
+layout_mode = 2
+backing_texture = ExtResource("94_0313k")
+
+[node name="Slot2" parent="OverlayUI/PlayerInvUI/MainGridBkgrdMargins/MarginContainer/VBoxContainer/HotbarSlotMargins/MarginContainer/HotbarGrid" unique_id=1484831732 instance=ExtResource("42_r422n")]
+layout_mode = 2
+backing_texture = ExtResource("94_0313k")
+
+[node name="Slot3" parent="OverlayUI/PlayerInvUI/MainGridBkgrdMargins/MarginContainer/VBoxContainer/HotbarSlotMargins/MarginContainer/HotbarGrid" unique_id=1545113754 instance=ExtResource("42_r422n")]
+layout_mode = 2
+backing_texture = ExtResource("94_0313k")
+
+[node name="Slot4" parent="OverlayUI/PlayerInvUI/MainGridBkgrdMargins/MarginContainer/VBoxContainer/HotbarSlotMargins/MarginContainer/HotbarGrid" unique_id=2061116301 instance=ExtResource("42_r422n")]
+layout_mode = 2
+backing_texture = ExtResource("94_0313k")
+
+[node name="Slot5" parent="OverlayUI/PlayerInvUI/MainGridBkgrdMargins/MarginContainer/VBoxContainer/HotbarSlotMargins/MarginContainer/HotbarGrid" unique_id=1360650448 instance=ExtResource("42_r422n")]
+layout_mode = 2
+backing_texture = ExtResource("94_0313k")
+
+[node name="Slot6" parent="OverlayUI/PlayerInvUI/MainGridBkgrdMargins/MarginContainer/VBoxContainer/HotbarSlotMargins/MarginContainer/HotbarGrid" unique_id=2043186230 instance=ExtResource("42_r422n")]
+layout_mode = 2
+backing_texture = ExtResource("94_0313k")
+
+[node name="Slot7" parent="OverlayUI/PlayerInvUI/MainGridBkgrdMargins/MarginContainer/VBoxContainer/HotbarSlotMargins/MarginContainer/HotbarGrid" unique_id=180741609 instance=ExtResource("42_r422n")]
+layout_mode = 2
+backing_texture = ExtResource("94_0313k")
+
+[node name="Slot8" parent="OverlayUI/PlayerInvUI/MainGridBkgrdMargins/MarginContainer/VBoxContainer/HotbarSlotMargins/MarginContainer/HotbarGrid" unique_id=307135358 instance=ExtResource("42_r422n")]
+layout_mode = 2
+backing_texture = ExtResource("94_0313k")
+
+[node name="Slot9" parent="OverlayUI/PlayerInvUI/MainGridBkgrdMargins/MarginContainer/VBoxContainer/HotbarSlotMargins/MarginContainer/HotbarGrid" unique_id=2096267174 instance=ExtResource("42_r422n")]
+layout_mode = 2
+backing_texture = ExtResource("94_0313k")
+
+[node name="Slot10" parent="OverlayUI/PlayerInvUI/MainGridBkgrdMargins/MarginContainer/VBoxContainer/HotbarSlotMargins/MarginContainer/HotbarGrid" unique_id=1255037430 instance=ExtResource("42_r422n")]
+layout_mode = 2
+backing_texture = ExtResource("94_0313k")
 
 [node name="ItemDetailsPanel" type="CenterContainer" parent="OverlayUI/PlayerInvUI" unique_id=211883855]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(106, 0)
 layout_mode = 1
 anchors_preset = 4
 anchor_top = 0.5
 anchor_bottom = 0.5
-offset_left = 35.0
-offset_top = -98.0
-offset_right = 141.0
-offset_bottom = 98.0
+offset_left = 98.0
+offset_top = -102.0
+offset_right = 203.0
+offset_bottom = 102.0
 grow_vertical = 2
 script = ExtResource("116_g5u5n")
 
-[node name="ItemDetailsPanelVBox" type="VBoxContainer" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel" unique_id=1660534208]
-custom_minimum_size = Vector2(106, 0)
-layout_mode = 2
-metadata/_edit_use_anchors_ = true
-
-[node name="BackgroundMargin" type="MarginContainer" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/ItemDetailsPanelVBox" unique_id=1849261916]
+[node name="BackgroundMargin" type="MarginContainer" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel" unique_id=1849261916]
 layout_mode = 2
 
-[node name="InventoryTexture" type="NinePatchRect" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/ItemDetailsPanelVBox/BackgroundMargin" unique_id=677025178]
+[node name="InventoryTexture" type="NinePatchRect" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/BackgroundMargin" unique_id=677025178]
 layout_mode = 2
-size_flags_vertical = 3
 mouse_filter = 0
 texture = ExtResource("78_jlc36")
 patch_margin_left = 5
@@ -2917,34 +2911,30 @@ patch_margin_right = 5
 patch_margin_bottom = 5
 axis_stretch_vertical = 1
 
-[node name="DetailsInnerMargin" type="MarginContainer" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/ItemDetailsPanelVBox/BackgroundMargin" unique_id=1808189211]
+[node name="DetailsInnerMargin" type="MarginContainer" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/BackgroundMargin" unique_id=1808189211]
 unique_name_in_owner = true
 editor_description = "THIS GRIDMARGIN MOUSE FILTER MUST STAY AS IGNORE TO MAKE SORT BUTTONS WORK!"
 layout_mode = 2
 size_flags_vertical = 0
 mouse_filter = 2
-theme_override_constants/margin_left = 9
-theme_override_constants/margin_top = 5
-theme_override_constants/margin_right = 9
-theme_override_constants/margin_bottom = 9
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 4
+theme_override_constants/margin_bottom = 4
 
-[node name="ItemViewerVBox" type="VBoxContainer" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/ItemDetailsPanelVBox/BackgroundMargin/DetailsInnerMargin" unique_id=640266781]
+[node name="ItemViewerVBox" type="VBoxContainer" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/BackgroundMargin/DetailsInnerMargin" unique_id=640266781]
 layout_mode = 2
 mouse_filter = 0
-theme_override_constants/separation = 4
+theme_override_constants/separation = 0
 
-[node name="PlayerIconMargin" type="MarginContainer" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/ItemDetailsPanelVBox/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox" unique_id=1286436248]
+[node name="PlayerIconMargin" type="MarginContainer" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox" unique_id=1286436248]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(46, 46)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
-theme_override_constants/margin_left = 0
-theme_override_constants/margin_top = 0
-theme_override_constants/margin_right = 0
-theme_override_constants/margin_bottom = 0
 
-[node name="PlayerIconBackground" type="NinePatchRect" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/ItemDetailsPanelVBox/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox/PlayerIconMargin" unique_id=518034470]
+[node name="PlayerIconBackground" type="NinePatchRect" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox/PlayerIconMargin" unique_id=518034470]
 layout_mode = 2
 size_flags_vertical = 3
 texture = ExtResource("109_0313k")
@@ -2953,14 +2943,14 @@ patch_margin_top = 3
 patch_margin_right = 3
 patch_margin_bottom = 3
 
-[node name="PlayerIconFrameMargin" type="MarginContainer" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/ItemDetailsPanelVBox/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox/PlayerIconMargin" unique_id=879201549]
+[node name="PlayerIconFrameMargin" type="MarginContainer" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox/PlayerIconMargin" unique_id=879201549]
 layout_mode = 2
 theme_override_constants/margin_left = 3
 theme_override_constants/margin_top = 3
 theme_override_constants/margin_right = 3
 theme_override_constants/margin_bottom = 3
 
-[node name="PlayerIconFrameBgrd" type="NinePatchRect" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/ItemDetailsPanelVBox/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox/PlayerIconMargin/PlayerIconFrameMargin" unique_id=1517012730]
+[node name="PlayerIconFrameBgrd" type="NinePatchRect" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox/PlayerIconMargin/PlayerIconFrameMargin" unique_id=1517012730]
 layout_mode = 2
 texture = ExtResource("113_5qckj")
 patch_margin_left = 2
@@ -2968,26 +2958,26 @@ patch_margin_top = 2
 patch_margin_right = 2
 patch_margin_bottom = 2
 
-[node name="PlayerIconMargin" type="MarginContainer" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/ItemDetailsPanelVBox/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox/PlayerIconMargin/PlayerIconFrameMargin" unique_id=1344990686]
+[node name="PlayerIconMargin" type="MarginContainer" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox/PlayerIconMargin/PlayerIconFrameMargin" unique_id=1344990686]
 layout_mode = 2
 theme_override_constants/margin_left = 1
 theme_override_constants/margin_top = 0
 theme_override_constants/margin_right = 1
 theme_override_constants/margin_bottom = 2
 
-[node name="PlayerIcon" type="TextureRect" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/ItemDetailsPanelVBox/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox/PlayerIconMargin/PlayerIconFrameMargin/PlayerIconMargin" unique_id=276199154]
+[node name="PlayerIcon" type="TextureRect" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox/PlayerIconMargin/PlayerIconFrameMargin/PlayerIconMargin" unique_id=276199154]
 layout_mode = 2
 texture = ExtResource("117_thmqm")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="ItemViewerBkgrdMargin" type="MarginContainer" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/ItemDetailsPanelVBox/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox" unique_id=1388643659]
+[node name="ItemViewerBkgrdMargin" type="MarginContainer" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox" unique_id=1388643659]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 
-[node name="ItemBackground" type="NinePatchRect" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/ItemDetailsPanelVBox/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox/ItemViewerBkgrdMargin" unique_id=1224416475]
+[node name="ItemBackground" type="NinePatchRect" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox/ItemViewerBkgrdMargin" unique_id=1224416475]
 layout_mode = 2
 texture = ExtResource("109_0313k")
 patch_margin_left = 4
@@ -2996,14 +2986,14 @@ patch_margin_right = 4
 patch_margin_bottom = 4
 axis_stretch_vertical = 1
 
-[node name="ItemViewerSlotMargin" type="MarginContainer" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/ItemDetailsPanelVBox/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox/ItemViewerBkgrdMargin" unique_id=303220056]
+[node name="ItemViewerSlotMargin" type="MarginContainer" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox/ItemViewerBkgrdMargin" unique_id=303220056]
 layout_mode = 2
 theme_override_constants/margin_left = 3
 theme_override_constants/margin_top = 3
 theme_override_constants/margin_right = 3
 theme_override_constants/margin_bottom = 3
 
-[node name="ItemViewerSlot" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/ItemDetailsPanelVBox/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox/ItemViewerBkgrdMargin/ItemViewerSlotMargin" unique_id=1540755566 instance=ExtResource("42_r422n")]
+[node name="ItemViewerSlot" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox/ItemViewerBkgrdMargin/ItemViewerSlotMargin" unique_id=1540755566 instance=ExtResource("42_r422n")]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(40, 40)
 layout_mode = 2
@@ -3015,18 +3005,11 @@ hide_corner_info = true
 hide_tint_progress = true
 hide_hover_tooltip = true
 
-[node name="ElementsMargin" type="MarginContainer" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/ItemDetailsPanelVBox/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox" unique_id=24180694]
+[node name="ElementsMargin" type="MarginContainer" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox" unique_id=24180694]
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="ElementsBkrgdMargin" type="MarginContainer" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/ItemDetailsPanelVBox/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox/ElementsMargin" unique_id=548856559]
-layout_mode = 2
-theme_override_constants/margin_left = -4
-theme_override_constants/margin_top = -4
-theme_override_constants/margin_right = -4
-theme_override_constants/margin_bottom = -4
-
-[node name="ElementsBackground" type="NinePatchRect" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/ItemDetailsPanelVBox/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox/ElementsMargin/ElementsBkrgdMargin" unique_id=1932022466]
+[node name="ElementsBackground" type="NinePatchRect" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox/ElementsMargin" unique_id=1932022466]
 layout_mode = 2
 texture = ExtResource("109_0313k")
 patch_margin_left = 4
@@ -3035,24 +3018,32 @@ patch_margin_right = 4
 patch_margin_bottom = 4
 axis_stretch_vertical = 1
 
-[node name="ElementsVBox" type="VBoxContainer" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/ItemDetailsPanelVBox/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox/ElementsMargin" unique_id=758700297]
+[node name="MarginContainer" type="MarginContainer" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox/ElementsMargin" unique_id=1690242526]
 layout_mode = 2
-theme_override_constants/separation = 2
+theme_override_constants/margin_left = 3
+theme_override_constants/margin_top = 3
+theme_override_constants/margin_right = 3
+theme_override_constants/margin_bottom = 3
 
-[node name="ItemNameMargin" type="MarginContainer" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/ItemDetailsPanelVBox/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox/ElementsMargin/ElementsVBox" unique_id=1467484066]
-unique_name_in_owner = true
+[node name="ElementsVBox" type="VBoxContainer" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox/ElementsMargin/MarginContainer" unique_id=758700297]
 layout_mode = 2
-theme_override_constants/margin_top = -3
+theme_override_constants/separation = 1
+
+[node name="ItemNameMargin" type="MarginContainer" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox/ElementsMargin/MarginContainer/ElementsVBox" unique_id=1467484066]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(88, 0)
+layout_mode = 2
+theme_override_constants/margin_top = -2
 theme_override_constants/margin_bottom = -1
 
-[node name="ItemNameLabel" type="RichTextLabel" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/ItemDetailsPanelVBox/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox/ElementsMargin/ElementsVBox/ItemNameMargin" unique_id=396778299]
+[node name="ItemNameLabel" type="RichTextLabel" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox/ElementsMargin/MarginContainer/ElementsVBox/ItemNameMargin" unique_id=396778299]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_colors/default_color = Color(1, 0.92941177, 0.91764706, 1)
 theme_override_colors/font_outline_color = Color(0.122, 0.035, 0, 0.67)
 theme_override_constants/outline_size = 2
 theme_override_fonts/normal_font = ExtResource("85_7xlwj")
-theme_override_font_sizes/normal_font_size = 9
+theme_override_font_sizes/normal_font_size = 10
 bbcode_enabled = true
 text = "(COMMON)"
 fit_content = true
@@ -3061,20 +3052,20 @@ tab_size = 0
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="ItemRarityMargin" type="MarginContainer" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/ItemDetailsPanelVBox/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox/ElementsMargin/ElementsVBox" unique_id=539473377]
+[node name="ItemRarityMargin" type="MarginContainer" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox/ElementsMargin/MarginContainer/ElementsVBox" unique_id=539473377]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_constants/margin_top = -3
+theme_override_constants/margin_top = -2
 theme_override_constants/margin_bottom = 0
 
-[node name="ItemRarityLabel" type="RichTextLabel" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/ItemDetailsPanelVBox/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox/ElementsMargin/ElementsVBox/ItemRarityMargin" unique_id=884444454]
+[node name="ItemRarityLabel" type="RichTextLabel" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox/ElementsMargin/MarginContainer/ElementsVBox/ItemRarityMargin" unique_id=884444454]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_colors/default_color = Color(0.913725, 0.768627, 0.741176, 1)
 theme_override_colors/font_outline_color = Color(0.122, 0.035, 0, 0.67)
 theme_override_constants/outline_size = 2
 theme_override_fonts/normal_font = ExtResource("85_7xlwj")
-theme_override_font_sizes/normal_font_size = 5
+theme_override_font_sizes/normal_font_size = 6
 bbcode_enabled = true
 text = "(COMMON)"
 fit_content = true
@@ -3083,45 +3074,76 @@ tab_size = 0
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="ItemLvlProgressMargin" type="MarginContainer" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/ItemDetailsPanelVBox/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox/ElementsMargin/ElementsVBox" unique_id=1639601317]
+[node name="ItemLvlProgressMargin" type="MarginContainer" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox/ElementsMargin/MarginContainer/ElementsVBox" unique_id=1639601317]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_constants/margin_left = 22
-theme_override_constants/margin_top = -1
-theme_override_constants/margin_right = 22
-theme_override_constants/margin_bottom = 1
+theme_override_constants/margin_left = 2
+theme_override_constants/margin_top = -2
+theme_override_constants/margin_right = -1
+theme_override_constants/margin_bottom = -1
 
-[node name="ItemBackground" type="NinePatchRect" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/ItemDetailsPanelVBox/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox/ElementsMargin/ElementsVBox/ItemLvlProgressMargin" unique_id=901218219]
+[node name="HBoxContainer" type="HBoxContainer" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox/ElementsMargin/MarginContainer/ElementsVBox/ItemLvlProgressMargin" unique_id=179855114]
+layout_mode = 2
+theme_override_constants/separation = 1
+
+[node name="ItemLevelLabel" type="RichTextLabel" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox/ElementsMargin/MarginContainer/ElementsVBox/ItemLvlProgressMargin/HBoxContainer" unique_id=1667877410]
+unique_name_in_owner = true
+clip_contents = false
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_colors/default_color = Color(0, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 0.565)
+theme_override_constants/outline_size = 2
+theme_override_fonts/normal_font = ExtResource("85_7xlwj")
+theme_override_font_sizes/normal_font_size = 6
+bbcode_enabled = true
+text = "1"
+fit_content = true
+scroll_active = false
+autowrap_mode = 0
+tab_size = 0
+vertical_alignment = 1
+
+[node name="LvlProgressMargins" type="MarginContainer" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox/ElementsMargin/MarginContainer/ElementsVBox/ItemLvlProgressMargin/HBoxContainer" unique_id=1611467997]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+theme_override_constants/margin_left = 1
+theme_override_constants/margin_top = 0
+theme_override_constants/margin_right = 1
+
+[node name="ItemBackground" type="NinePatchRect" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox/ElementsMargin/MarginContainer/ElementsVBox/ItemLvlProgressMargin/HBoxContainer/LvlProgressMargins" unique_id=901218219]
 layout_mode = 2
 texture = ExtResource("133_xjdir")
+draw_center = false
 patch_margin_left = 2
 patch_margin_top = 1
 patch_margin_right = 2
 patch_margin_bottom = 2
 axis_stretch_vertical = 1
 
-[node name="MarginContainer" type="MarginContainer" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/ItemDetailsPanelVBox/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox/ElementsMargin/ElementsVBox/ItemLvlProgressMargin" unique_id=1787631517]
+[node name="LvlProgressInnerMargins" type="MarginContainer" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox/ElementsMargin/MarginContainer/ElementsVBox/ItemLvlProgressMargin/HBoxContainer/LvlProgressMargins" unique_id=1787631517]
 layout_mode = 2
 theme_override_constants/margin_left = 1
 theme_override_constants/margin_top = 1
 theme_override_constants/margin_right = 1
 theme_override_constants/margin_bottom = 1
 
-[node name="ItemLvlProgressBar" type="TextureProgressBar" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/ItemDetailsPanelVBox/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox/ElementsMargin/ElementsVBox/ItemLvlProgressMargin/MarginContainer" unique_id=1906206901]
+[node name="ItemLvlProgressBar" type="TextureProgressBar" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox/ElementsMargin/MarginContainer/ElementsVBox/ItemLvlProgressMargin/HBoxContainer/LvlProgressMargins/LvlProgressInnerMargins" unique_id=1906206901]
 unique_name_in_owner = true
 layout_mode = 2
 value = 50.0
 nine_patch_stretch = true
+texture_under = ExtResource("100_5qckj")
 texture_progress = ExtResource("100_5qckj")
+tint_under = Color(0, 0.20476225, 0.22225901, 1)
 tint_progress = Color(0, 1, 1, 1)
 
-[node name="InfoMargin" type="MarginContainer" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/ItemDetailsPanelVBox/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox/ElementsMargin/ElementsVBox" unique_id=2001211545]
+[node name="InfoMargin" type="MarginContainer" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox/ElementsMargin/MarginContainer/ElementsVBox" unique_id=2001211545]
 unique_name_in_owner = true
 layout_mode = 2
-size_flags_vertical = 3
-theme_override_constants/margin_top = -1
 
-[node name="InfoBackground" type="NinePatchRect" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/ItemDetailsPanelVBox/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox/ElementsMargin/ElementsVBox/InfoMargin" unique_id=1686387333]
+[node name="InfoBackground" type="NinePatchRect" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox/ElementsMargin/MarginContainer/ElementsVBox/InfoMargin" unique_id=1686387333]
 layout_mode = 2
 texture = ExtResource("125_ar238")
 patch_margin_left = 1
@@ -3130,14 +3152,14 @@ patch_margin_right = 1
 patch_margin_bottom = 1
 axis_stretch_vertical = 2
 
-[node name="InfoLabelMargin" type="MarginContainer" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/ItemDetailsPanelVBox/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox/ElementsMargin/ElementsVBox/InfoMargin" unique_id=1291034237]
+[node name="InfoLabelMargin" type="MarginContainer" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox/ElementsMargin/MarginContainer/ElementsVBox/InfoMargin" unique_id=1291034237]
 layout_mode = 2
 theme_override_constants/margin_left = 3
-theme_override_constants/margin_top = 2
+theme_override_constants/margin_top = 1
 theme_override_constants/margin_right = 3
-theme_override_constants/margin_bottom = 2
+theme_override_constants/margin_bottom = 1
 
-[node name="InfoLabel" type="Label" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/ItemDetailsPanelVBox/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox/ElementsMargin/ElementsVBox/InfoMargin/InfoLabelMargin" unique_id=1306971407]
+[node name="InfoLabel" type="Label" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox/ElementsMargin/MarginContainer/ElementsVBox/InfoMargin/InfoLabelMargin" unique_id=1306971407]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(82, 0)
 layout_mode = 2
@@ -3151,12 +3173,11 @@ vertical_alignment = 1
 autowrap_mode = 3
 max_lines_visible = 4
 
-[node name="DetailsMargin" type="MarginContainer" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/ItemDetailsPanelVBox/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox/ElementsMargin/ElementsVBox" unique_id=1652508845]
+[node name="DetailsMargin" type="MarginContainer" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox/ElementsMargin/MarginContainer/ElementsVBox" unique_id=1652508845]
 unique_name_in_owner = true
 layout_mode = 2
-size_flags_vertical = 3
 
-[node name="DetailsBackground" type="NinePatchRect" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/ItemDetailsPanelVBox/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox/ElementsMargin/ElementsVBox/DetailsMargin" unique_id=820616877]
+[node name="DetailsBackground" type="NinePatchRect" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox/ElementsMargin/MarginContainer/ElementsVBox/DetailsMargin" unique_id=820616877]
 layout_mode = 2
 texture = ExtResource("125_ar238")
 patch_margin_left = 1
@@ -3165,15 +3186,14 @@ patch_margin_right = 1
 patch_margin_bottom = 1
 axis_stretch_vertical = 2
 
-[node name="DetailsLabelMargin" type="MarginContainer" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/ItemDetailsPanelVBox/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox/ElementsMargin/ElementsVBox/DetailsMargin" unique_id=253184766]
+[node name="DetailsLabelMargin" type="MarginContainer" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox/ElementsMargin/MarginContainer/ElementsVBox/DetailsMargin" unique_id=253184766]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_constants/margin_left = 3
-theme_override_constants/margin_top = 1
+theme_override_constants/margin_top = 0
 theme_override_constants/margin_right = 3
-theme_override_constants/margin_bottom = 2
 
-[node name="DetailsLabel" type="RichTextLabel" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/ItemDetailsPanelVBox/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox/ElementsMargin/ElementsVBox/DetailsMargin/DetailsLabelMargin" unique_id=414475642]
+[node name="DetailsLabel" type="RichTextLabel" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox/ElementsMargin/MarginContainer/ElementsVBox/DetailsMargin/DetailsLabelMargin" unique_id=414475642]
 unique_name_in_owner = true
 clip_contents = false
 custom_minimum_size = Vector2(82, 8)
@@ -3199,14 +3219,14 @@ tab_size = 0
 vertical_alignment = 1
 visible_characters_behavior = 2
 
-[node name="ModSlotsMargin" type="MarginContainer" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/ItemDetailsPanelVBox/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox/ElementsMargin/ElementsVBox" unique_id=1231319259]
+[node name="ModSlotsMargin" type="MarginContainer" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox/ElementsMargin/MarginContainer/ElementsVBox" unique_id=1231319259]
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="ModSlotsCenter" type="CenterContainer" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/ItemDetailsPanelVBox/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox/ElementsMargin/ElementsVBox/ModSlotsMargin" unique_id=606979056]
+[node name="ModSlotsCenter" type="CenterContainer" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox/ElementsMargin/MarginContainer/ElementsVBox/ModSlotsMargin" unique_id=606979056]
 layout_mode = 2
 
-[node name="ModSlots" type="GridContainer" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/ItemDetailsPanelVBox/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox/ElementsMargin/ElementsVBox/ModSlotsMargin/ModSlotsCenter" unique_id=2127012517]
+[node name="ModSlots" type="GridContainer" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox/ElementsMargin/MarginContainer/ElementsVBox/ModSlotsMargin/ModSlotsCenter" unique_id=2127012517]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 4
@@ -3214,59 +3234,59 @@ theme_override_constants/h_separation = 0
 theme_override_constants/v_separation = 0
 columns = 4
 
-[node name="Slot1" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/ItemDetailsPanelVBox/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox/ElementsMargin/ElementsVBox/ModSlotsMargin/ModSlotsCenter/ModSlots" unique_id=78042473 instance=ExtResource("42_r422n")]
+[node name="Slot1" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox/ElementsMargin/MarginContainer/ElementsVBox/ModSlotsMargin/ModSlotsCenter/ModSlots" unique_id=78042473 instance=ExtResource("42_r422n")]
 layout_mode = 2
 script = ExtResource("114_gdihr")
 backing_texture = ExtResource("118_r5dvw")
 
-[node name="Slot2" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/ItemDetailsPanelVBox/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox/ElementsMargin/ElementsVBox/ModSlotsMargin/ModSlotsCenter/ModSlots" unique_id=659604951 instance=ExtResource("42_r422n")]
+[node name="Slot2" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox/ElementsMargin/MarginContainer/ElementsVBox/ModSlotsMargin/ModSlotsCenter/ModSlots" unique_id=659604951 instance=ExtResource("42_r422n")]
 layout_mode = 2
 script = ExtResource("114_gdihr")
 backing_texture = ExtResource("118_r5dvw")
 
-[node name="Slot3" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/ItemDetailsPanelVBox/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox/ElementsMargin/ElementsVBox/ModSlotsMargin/ModSlotsCenter/ModSlots" unique_id=844224106 instance=ExtResource("42_r422n")]
+[node name="Slot3" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox/ElementsMargin/MarginContainer/ElementsVBox/ModSlotsMargin/ModSlotsCenter/ModSlots" unique_id=844224106 instance=ExtResource("42_r422n")]
 layout_mode = 2
 script = ExtResource("114_gdihr")
 backing_texture = ExtResource("118_r5dvw")
 
-[node name="Slot4" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/ItemDetailsPanelVBox/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox/ElementsMargin/ElementsVBox/ModSlotsMargin/ModSlotsCenter/ModSlots" unique_id=41959268 instance=ExtResource("42_r422n")]
+[node name="Slot4" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox/ElementsMargin/MarginContainer/ElementsVBox/ModSlotsMargin/ModSlotsCenter/ModSlots" unique_id=41959268 instance=ExtResource("42_r422n")]
 layout_mode = 2
 script = ExtResource("114_gdihr")
 backing_texture = ExtResource("118_r5dvw")
 
-[node name="Slot5" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/ItemDetailsPanelVBox/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox/ElementsMargin/ElementsVBox/ModSlotsMargin/ModSlotsCenter/ModSlots" unique_id=1194305943 instance=ExtResource("42_r422n")]
+[node name="Slot5" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox/ElementsMargin/MarginContainer/ElementsVBox/ModSlotsMargin/ModSlotsCenter/ModSlots" unique_id=1194305943 instance=ExtResource("42_r422n")]
 layout_mode = 2
 script = ExtResource("114_gdihr")
 backing_texture = ExtResource("118_r5dvw")
 
-[node name="Slot6" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/ItemDetailsPanelVBox/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox/ElementsMargin/ElementsVBox/ModSlotsMargin/ModSlotsCenter/ModSlots" unique_id=208104444 instance=ExtResource("42_r422n")]
+[node name="Slot6" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox/ElementsMargin/MarginContainer/ElementsVBox/ModSlotsMargin/ModSlotsCenter/ModSlots" unique_id=208104444 instance=ExtResource("42_r422n")]
 layout_mode = 2
 script = ExtResource("114_gdihr")
 backing_texture = ExtResource("118_r5dvw")
 
-[node name="CraftingManager" type="VBoxContainer" parent="OverlayUI/PlayerInvUI" unique_id=1393459903]
+[node name="CraftingManager" type="CenterContainer" parent="OverlayUI/PlayerInvUI" unique_id=1801189233]
 unique_name_in_owner = true
 layout_mode = 1
-anchors_preset = -1
+anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = 99.0
-offset_top = -79.0
-offset_right = 137.0
+offset_left = 119.0
+offset_top = -78.0
+offset_right = 155.0
 offset_bottom = 79.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 0
-theme_override_constants/separation = 8
-alignment = 1
 script = ExtResource("118_thmqm")
 
-[node name="InventoryTexture" type="NinePatchRect" parent="OverlayUI/PlayerInvUI/CraftingManager" unique_id=1430942804]
+[node name="InnerMargins" type="MarginContainer" parent="OverlayUI/PlayerInvUI/CraftingManager" unique_id=1206966735]
+layout_mode = 2
+
+[node name="InventoryTexture" type="NinePatchRect" parent="OverlayUI/PlayerInvUI/CraftingManager/InnerMargins" unique_id=1430942804]
 layout_mode = 2
 size_flags_vertical = 3
-mouse_filter = 0
 texture = ExtResource("78_jlc36")
 patch_margin_left = 5
 patch_margin_top = 5
@@ -3274,28 +3294,20 @@ patch_margin_right = 5
 patch_margin_bottom = 5
 axis_stretch_vertical = 1
 
-[node name="GridMargins" type="MarginContainer" parent="OverlayUI/PlayerInvUI/CraftingManager/InventoryTexture" unique_id=1230580879]
+[node name="GridMargins" type="MarginContainer" parent="OverlayUI/PlayerInvUI/CraftingManager/InnerMargins" unique_id=1230580879]
 editor_description = "THIS GRIDMARGIN MOUSE FILTER MUST STAY AS IGNORE TO MAKE SORT BUTTONS WORK!"
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = -17.0
-offset_right = 17.0
-offset_bottom = 155.0
-grow_horizontal = 2
+layout_mode = 2
 mouse_filter = 2
-theme_override_constants/margin_left = 0
-theme_override_constants/margin_top = 5
-theme_override_constants/margin_right = 0
-theme_override_constants/margin_bottom = 0
-metadata/_edit_lock_ = true
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 4
+theme_override_constants/margin_bottom = 4
 
-[node name="SlotsVBox" type="VBoxContainer" parent="OverlayUI/PlayerInvUI/CraftingManager/InventoryTexture/GridMargins" unique_id=701970208]
+[node name="SlotsVBox" type="VBoxContainer" parent="OverlayUI/PlayerInvUI/CraftingManager/InnerMargins/GridMargins" unique_id=701970208]
 layout_mode = 2
 theme_override_constants/separation = -1
 
-[node name="NinePatchRect" type="NinePatchRect" parent="OverlayUI/PlayerInvUI/CraftingManager/InventoryTexture/GridMargins/SlotsVBox" unique_id=1176648875]
+[node name="InputSlotsBackground" type="NinePatchRect" parent="OverlayUI/PlayerInvUI/CraftingManager/InnerMargins/GridMargins/SlotsVBox" unique_id=1176648875]
 custom_minimum_size = Vector2(28, 94)
 layout_mode = 2
 size_flags_horizontal = 4
@@ -3307,7 +3319,7 @@ patch_margin_right = 4
 patch_margin_bottom = 4
 axis_stretch_vertical = 1
 
-[node name="InputSlots" type="GridContainer" parent="OverlayUI/PlayerInvUI/CraftingManager/InventoryTexture/GridMargins/SlotsVBox/NinePatchRect" unique_id=1357322327]
+[node name="InputSlots" type="GridContainer" parent="OverlayUI/PlayerInvUI/CraftingManager/InnerMargins/GridMargins/SlotsVBox/InputSlotsBackground" unique_id=1357322327]
 unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = -1
@@ -3326,7 +3338,7 @@ size_flags_vertical = 4
 theme_override_constants/h_separation = 0
 theme_override_constants/v_separation = 0
 
-[node name="Slot1" parent="OverlayUI/PlayerInvUI/CraftingManager/InventoryTexture/GridMargins/SlotsVBox/NinePatchRect/InputSlots" unique_id=1335481290 instance=ExtResource("42_r422n")]
+[node name="Slot1" parent="OverlayUI/PlayerInvUI/CraftingManager/InnerMargins/GridMargins/SlotsVBox/InputSlotsBackground/InputSlots" unique_id=1335481290 instance=ExtResource("42_r422n")]
 layout_mode = 2
 script = ExtResource("111_hxjay")
 is_output_slot = false
@@ -3335,7 +3347,7 @@ hide_corner_level = true
 hide_corner_info = true
 hide_tint_progress = true
 
-[node name="Slot2" parent="OverlayUI/PlayerInvUI/CraftingManager/InventoryTexture/GridMargins/SlotsVBox/NinePatchRect/InputSlots" unique_id=1341443420 instance=ExtResource("42_r422n")]
+[node name="Slot2" parent="OverlayUI/PlayerInvUI/CraftingManager/InnerMargins/GridMargins/SlotsVBox/InputSlotsBackground/InputSlots" unique_id=1341443420 instance=ExtResource("42_r422n")]
 layout_mode = 2
 script = ExtResource("111_hxjay")
 is_output_slot = false
@@ -3344,7 +3356,7 @@ hide_corner_level = true
 hide_corner_info = true
 hide_tint_progress = true
 
-[node name="Slot3" parent="OverlayUI/PlayerInvUI/CraftingManager/InventoryTexture/GridMargins/SlotsVBox/NinePatchRect/InputSlots" unique_id=1635046795 instance=ExtResource("42_r422n")]
+[node name="Slot3" parent="OverlayUI/PlayerInvUI/CraftingManager/InnerMargins/GridMargins/SlotsVBox/InputSlotsBackground/InputSlots" unique_id=1635046795 instance=ExtResource("42_r422n")]
 layout_mode = 2
 script = ExtResource("111_hxjay")
 is_output_slot = false
@@ -3353,7 +3365,7 @@ hide_corner_level = true
 hide_corner_info = true
 hide_tint_progress = true
 
-[node name="Slot4" parent="OverlayUI/PlayerInvUI/CraftingManager/InventoryTexture/GridMargins/SlotsVBox/NinePatchRect/InputSlots" unique_id=716310961 instance=ExtResource("42_r422n")]
+[node name="Slot4" parent="OverlayUI/PlayerInvUI/CraftingManager/InnerMargins/GridMargins/SlotsVBox/InputSlotsBackground/InputSlots" unique_id=716310961 instance=ExtResource("42_r422n")]
 layout_mode = 2
 script = ExtResource("111_hxjay")
 is_output_slot = false
@@ -3362,18 +3374,18 @@ hide_corner_level = true
 hide_corner_info = true
 hide_tint_progress = true
 
-[node name="CraftingDownArrow" type="TextureRect" parent="OverlayUI/PlayerInvUI/CraftingManager/InventoryTexture/GridMargins/SlotsVBox" unique_id=568625537]
+[node name="CraftingDownArrow" type="TextureRect" parent="OverlayUI/PlayerInvUI/CraftingManager/InnerMargins/GridMargins/SlotsVBox" unique_id=568625537]
 unique_name_in_owner = true
 modulate = Color(0.182, 0.049, 0, 0.2)
 layout_mode = 2
 texture = ExtResource("119_bvo3j")
 stretch_mode = 3
 
-[node name="NinePatchRect2" type="NinePatchRect" parent="OverlayUI/PlayerInvUI/CraftingManager/InventoryTexture/GridMargins/SlotsVBox" unique_id=2136302056]
-custom_minimum_size = Vector2(28, 41)
+[node name="MarginContainer" type="MarginContainer" parent="OverlayUI/PlayerInvUI/CraftingManager/InnerMargins/GridMargins/SlotsVBox" unique_id=2004047085]
 layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 0
+
+[node name="CraftButtonBackground" type="NinePatchRect" parent="OverlayUI/PlayerInvUI/CraftingManager/InnerMargins/GridMargins/SlotsVBox/MarginContainer" unique_id=2136302056]
+layout_mode = 2
 texture = ExtResource("109_0313k")
 patch_margin_left = 4
 patch_margin_top = 4
@@ -3381,18 +3393,18 @@ patch_margin_right = 4
 patch_margin_bottom = 4
 axis_stretch_vertical = 1
 
-[node name="VBoxContainer" type="VBoxContainer" parent="OverlayUI/PlayerInvUI/CraftingManager/InventoryTexture/GridMargins/SlotsVBox/NinePatchRect2" unique_id=154283592]
-layout_mode = 1
-anchors_preset = -1
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_right = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_constants/separation = 0
-alignment = 1
+[node name="MarginContainer" type="MarginContainer" parent="OverlayUI/PlayerInvUI/CraftingManager/InnerMargins/GridMargins/SlotsVBox/MarginContainer" unique_id=2064935860]
+layout_mode = 2
+theme_override_constants/margin_left = 3
+theme_override_constants/margin_top = 3
+theme_override_constants/margin_right = 3
+theme_override_constants/margin_bottom = 3
 
-[node name="OutputSlot" parent="OverlayUI/PlayerInvUI/CraftingManager/InventoryTexture/GridMargins/SlotsVBox/NinePatchRect2/VBoxContainer" unique_id=2109387920 instance=ExtResource("42_r422n")]
+[node name="VBoxContainer" type="VBoxContainer" parent="OverlayUI/PlayerInvUI/CraftingManager/InnerMargins/GridMargins/SlotsVBox/MarginContainer/MarginContainer" unique_id=2013196026]
+layout_mode = 2
+theme_override_constants/separation = 1
+
+[node name="OutputSlot" parent="OverlayUI/PlayerInvUI/CraftingManager/InnerMargins/GridMargins/SlotsVBox/MarginContainer/MarginContainer/VBoxContainer" unique_id=2109387920 instance=ExtResource("42_r422n")]
 unique_name_in_owner = true
 layout_mode = 2
 script = ExtResource("111_hxjay")
@@ -3402,7 +3414,7 @@ hide_corner_level = true
 hide_corner_info = true
 hide_tint_progress = true
 
-[node name="OverlayMargins" type="MarginContainer" parent="OverlayUI/PlayerInvUI/CraftingManager/InventoryTexture/GridMargins/SlotsVBox/NinePatchRect2/VBoxContainer/OutputSlot" unique_id=57210302]
+[node name="OverlayMargins" type="MarginContainer" parent="OverlayUI/PlayerInvUI/CraftingManager/InnerMargins/GridMargins/SlotsVBox/MarginContainer/MarginContainer/VBoxContainer/OutputSlot" unique_id=57210302]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -3414,22 +3426,19 @@ theme_override_constants/margin_top = 1
 theme_override_constants/margin_right = 1
 theme_override_constants/margin_bottom = 1
 
-[node name="OverlayTexture" type="TextureRect" parent="OverlayUI/PlayerInvUI/CraftingManager/InventoryTexture/GridMargins/SlotsVBox/NinePatchRect2/VBoxContainer/OutputSlot/OverlayMargins" unique_id=826033171]
+[node name="OverlayTexture" type="TextureRect" parent="OverlayUI/PlayerInvUI/CraftingManager/InnerMargins/GridMargins/SlotsVBox/MarginContainer/MarginContainer/VBoxContainer/OutputSlot/OverlayMargins" unique_id=826033171]
 layout_mode = 2
 texture = ExtResource("119_r7bkl")
 
-[node name="CraftButtonVBox" type="VBoxContainer" parent="OverlayUI/PlayerInvUI/CraftingManager/InventoryTexture/GridMargins/SlotsVBox/NinePatchRect2/VBoxContainer" unique_id=1304292142]
+[node name="CraftBtnMargins" type="MarginContainer" parent="OverlayUI/PlayerInvUI/CraftingManager/InnerMargins/GridMargins/SlotsVBox/MarginContainer/MarginContainer/VBoxContainer" unique_id=1052004378]
 unique_name_in_owner = true
 layout_mode = 2
-
-[node name="MarginContainer" type="MarginContainer" parent="OverlayUI/PlayerInvUI/CraftingManager/InventoryTexture/GridMargins/SlotsVBox/NinePatchRect2/VBoxContainer/CraftButtonVBox" unique_id=1052004378]
-layout_mode = 2
-theme_override_constants/margin_left = 5
+theme_override_constants/margin_left = 1
 theme_override_constants/margin_top = 1
-theme_override_constants/margin_right = 6
+theme_override_constants/margin_right = 1
 theme_override_constants/margin_bottom = 1
 
-[node name="CraftBackground" type="NinePatchRect" parent="OverlayUI/PlayerInvUI/CraftingManager/InventoryTexture/GridMargins/SlotsVBox/NinePatchRect2/VBoxContainer/CraftButtonVBox/MarginContainer" unique_id=954415460]
+[node name="CraftBackground" type="NinePatchRect" parent="OverlayUI/PlayerInvUI/CraftingManager/InnerMargins/GridMargins/SlotsVBox/MarginContainer/MarginContainer/VBoxContainer/CraftBtnMargins" unique_id=954415460]
 unique_name_in_owner = true
 layout_mode = 2
 texture = ExtResource("106_0313k")
@@ -3438,15 +3447,14 @@ patch_margin_top = 2
 patch_margin_right = 2
 patch_margin_bottom = 2
 
-[node name="CraftBtn" type="Button" parent="OverlayUI/PlayerInvUI/CraftingManager/InventoryTexture/GridMargins/SlotsVBox/NinePatchRect2/VBoxContainer/CraftButtonVBox/MarginContainer" unique_id=266159903]
+[node name="CraftBtn" type="Button" parent="OverlayUI/PlayerInvUI/CraftingManager/InnerMargins/GridMargins/SlotsVBox/MarginContainer/MarginContainer/VBoxContainer/CraftBtnMargins" unique_id=266159903]
 unique_name_in_owner = true
 layout_mode = 2
 focus_mode = 0
 disabled = true
 flat = true
-metadata/_edit_lock_ = true
 
-[node name="MarginContainer" type="MarginContainer" parent="OverlayUI/PlayerInvUI/CraftingManager/InventoryTexture/GridMargins/SlotsVBox/NinePatchRect2/VBoxContainer/CraftButtonVBox/MarginContainer" unique_id=420099895]
+[node name="CraftBtnLabelMargins" type="MarginContainer" parent="OverlayUI/PlayerInvUI/CraftingManager/InnerMargins/GridMargins/SlotsVBox/MarginContainer/MarginContainer/VBoxContainer/CraftBtnMargins" unique_id=420099895]
 layout_mode = 2
 mouse_filter = 2
 theme_override_constants/margin_left = 3
@@ -3454,29 +3462,34 @@ theme_override_constants/margin_top = 3
 theme_override_constants/margin_right = 3
 theme_override_constants/margin_bottom = 3
 
-[node name="Label" type="TextureRect" parent="OverlayUI/PlayerInvUI/CraftingManager/InventoryTexture/GridMargins/SlotsVBox/NinePatchRect2/VBoxContainer/CraftButtonVBox/MarginContainer/MarginContainer" unique_id=2053660897]
+[node name="Label" type="TextureRect" parent="OverlayUI/PlayerInvUI/CraftingManager/InnerMargins/GridMargins/SlotsVBox/MarginContainer/MarginContainer/VBoxContainer/CraftBtnMargins/CraftBtnLabelMargins" unique_id=2053660897]
 modulate = Color(0.122, 0.035, 0, 0.67)
 layout_mode = 2
 mouse_filter = 2
 texture = ExtResource("119_bmpdm")
 stretch_mode = 5
 
-[node name="WearablesPanel" type="VBoxContainer" parent="OverlayUI/PlayerInvUI" unique_id=1151794790 groups=["has_save_logic"]]
+[node name="WearablesPanel" type="CenterContainer" parent="OverlayUI/PlayerInvUI" unique_id=1110576808 groups=["has_save_logic"]]
 unique_name_in_owner = true
 layout_mode = 1
-anchors_preset = -1
+anchors_preset = 8
 anchor_left = 0.5
+anchor_top = 0.5
 anchor_right = 0.5
-offset_left = 140.0
-offset_top = 56.0
-offset_right = 178.0
-offset_bottom = 214.0
+anchor_bottom = 0.5
+offset_left = 157.0
+offset_top = -76.0
+offset_right = 193.0
+offset_bottom = 76.0
 grow_horizontal = 2
+grow_vertical = 2
 mouse_filter = 0
-alignment = 1
 script = ExtResource("109_bvo3j")
 
-[node name="WearablesPanelBackground" type="NinePatchRect" parent="OverlayUI/PlayerInvUI/WearablesPanel" unique_id=1220195744]
+[node name="MarginContainer" type="MarginContainer" parent="OverlayUI/PlayerInvUI/WearablesPanel" unique_id=1665982714]
+layout_mode = 2
+
+[node name="WearablesPanelBackground" type="NinePatchRect" parent="OverlayUI/PlayerInvUI/WearablesPanel/MarginContainer" unique_id=1220195744]
 layout_mode = 2
 size_flags_vertical = 3
 texture = ExtResource("78_jlc36")
@@ -3486,40 +3499,37 @@ patch_margin_right = 5
 patch_margin_bottom = 5
 axis_stretch_vertical = 1
 
-[node name="VBoxContainer" type="VBoxContainer" parent="OverlayUI/PlayerInvUI/WearablesPanel/WearablesPanelBackground" unique_id=1713797272]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_constants/separation = 5
-
-[node name="PlayerIconMargin" type="MarginContainer" parent="OverlayUI/PlayerInvUI/WearablesPanel/WearablesPanelBackground/VBoxContainer" unique_id=1917843876]
-custom_minimum_size = Vector2(32, 32)
+[node name="VBoxMargins" type="MarginContainer" parent="OverlayUI/PlayerInvUI/WearablesPanel/MarginContainer" unique_id=1171996829]
 layout_mode = 2
-theme_override_constants/margin_left = 5
-theme_override_constants/margin_top = 5
-theme_override_constants/margin_right = 5
-theme_override_constants/margin_bottom = 0
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 4
+theme_override_constants/margin_bottom = 4
 
-[node name="PlayerIconBackground" type="NinePatchRect" parent="OverlayUI/PlayerInvUI/WearablesPanel/WearablesPanelBackground/VBoxContainer/PlayerIconMargin" unique_id=2056350461]
+[node name="VBoxContainer" type="VBoxContainer" parent="OverlayUI/PlayerInvUI/WearablesPanel/MarginContainer/VBoxMargins" unique_id=1713797272]
 layout_mode = 2
-size_flags_vertical = 3
+theme_override_constants/separation = 0
+
+[node name="PlayerIconMargin" type="MarginContainer" parent="OverlayUI/PlayerInvUI/WearablesPanel/MarginContainer/VBoxMargins/VBoxContainer" unique_id=1917843876]
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 2
+
+[node name="PlayerIconBackground" type="NinePatchRect" parent="OverlayUI/PlayerInvUI/WearablesPanel/MarginContainer/VBoxMargins/VBoxContainer/PlayerIconMargin" unique_id=2056350461]
+layout_mode = 2
 texture = ExtResource("109_0313k")
 patch_margin_left = 3
 patch_margin_top = 3
 patch_margin_right = 3
 patch_margin_bottom = 3
 
-[node name="PlayerIconFrameMargin" type="MarginContainer" parent="OverlayUI/PlayerInvUI/WearablesPanel/WearablesPanelBackground/VBoxContainer/PlayerIconMargin" unique_id=1626503568]
+[node name="PlayerIconFrameMargin" type="MarginContainer" parent="OverlayUI/PlayerInvUI/WearablesPanel/MarginContainer/VBoxMargins/VBoxContainer/PlayerIconMargin" unique_id=1626503568]
 layout_mode = 2
 theme_override_constants/margin_left = 3
 theme_override_constants/margin_top = 3
 theme_override_constants/margin_right = 3
 theme_override_constants/margin_bottom = 3
 
-[node name="PlayerIconFrameBgrd" type="NinePatchRect" parent="OverlayUI/PlayerInvUI/WearablesPanel/WearablesPanelBackground/VBoxContainer/PlayerIconMargin/PlayerIconFrameMargin" unique_id=1968257520]
+[node name="PlayerIconFrameBgrd" type="NinePatchRect" parent="OverlayUI/PlayerInvUI/WearablesPanel/MarginContainer/VBoxMargins/VBoxContainer/PlayerIconMargin/PlayerIconFrameMargin" unique_id=1968257520]
 layout_mode = 2
 texture = ExtResource("113_5qckj")
 patch_margin_left = 2
@@ -3527,7 +3537,7 @@ patch_margin_top = 2
 patch_margin_right = 2
 patch_margin_bottom = 2
 
-[node name="PlayerIconTriggerMargin" type="MarginContainer" parent="OverlayUI/PlayerInvUI/WearablesPanel/WearablesPanelBackground/VBoxContainer/PlayerIconMargin/PlayerIconFrameMargin" unique_id=1989837486]
+[node name="PlayerIconTriggerMargin" type="MarginContainer" parent="OverlayUI/PlayerInvUI/WearablesPanel/MarginContainer/VBoxMargins/VBoxContainer/PlayerIconMargin/PlayerIconFrameMargin" unique_id=1989837486]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_constants/margin_left = 1
@@ -3535,21 +3545,17 @@ theme_override_constants/margin_top = 0
 theme_override_constants/margin_right = 1
 theme_override_constants/margin_bottom = 2
 
-[node name="PlayerIcon" type="TextureRect" parent="OverlayUI/PlayerInvUI/WearablesPanel/WearablesPanelBackground/VBoxContainer/PlayerIconMargin/PlayerIconFrameMargin/PlayerIconTriggerMargin" unique_id=1753094463]
+[node name="PlayerIcon" type="TextureRect" parent="OverlayUI/PlayerInvUI/WearablesPanel/MarginContainer/VBoxMargins/VBoxContainer/PlayerIconMargin/PlayerIconFrameMargin/PlayerIconTriggerMargin" unique_id=1753094463]
 layout_mode = 2
 texture = ExtResource("117_thmqm")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="InnerMargin" type="MarginContainer" parent="OverlayUI/PlayerInvUI/WearablesPanel/WearablesPanelBackground/VBoxContainer" unique_id=1059078231]
+[node name="InnerMargin" type="MarginContainer" parent="OverlayUI/PlayerInvUI/WearablesPanel/MarginContainer/VBoxMargins/VBoxContainer" unique_id=1059078231]
 layout_mode = 2
-size_flags_vertical = 3
-theme_override_constants/margin_left = 5
-theme_override_constants/margin_top = 0
-theme_override_constants/margin_right = 5
-theme_override_constants/margin_bottom = 5
+size_flags_horizontal = 4
 
-[node name="WearablesGridBackground" type="NinePatchRect" parent="OverlayUI/PlayerInvUI/WearablesPanel/WearablesPanelBackground/VBoxContainer/InnerMargin" unique_id=905055334]
+[node name="WearablesGridBackground" type="NinePatchRect" parent="OverlayUI/PlayerInvUI/WearablesPanel/MarginContainer/VBoxMargins/VBoxContainer/InnerMargin" unique_id=905055334]
 layout_mode = 2
 size_flags_vertical = 3
 texture = ExtResource("115_gdihr")
@@ -3558,19 +3564,14 @@ patch_margin_top = 3
 patch_margin_right = 3
 patch_margin_bottom = 3
 
-[node name="WearablesGridMargins" type="MarginContainer" parent="OverlayUI/PlayerInvUI/WearablesPanel/WearablesPanelBackground/VBoxContainer/InnerMargin/WearablesGridBackground" unique_id=1621929130]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+[node name="WearablesGridMargins" type="MarginContainer" parent="OverlayUI/PlayerInvUI/WearablesPanel/MarginContainer/VBoxMargins/VBoxContainer/InnerMargin" unique_id=1621929130]
+layout_mode = 2
 theme_override_constants/margin_left = 3
 theme_override_constants/margin_top = 3
 theme_override_constants/margin_right = 3
 theme_override_constants/margin_bottom = 3
 
-[node name="WearablesGrid" type="GridContainer" parent="OverlayUI/PlayerInvUI/WearablesPanel/WearablesPanelBackground/VBoxContainer/InnerMargin/WearablesGridBackground/WearablesGridMargins" unique_id=1940772303]
+[node name="WearablesGrid" type="GridContainer" parent="OverlayUI/PlayerInvUI/WearablesPanel/MarginContainer/VBoxMargins/VBoxContainer/InnerMargin/WearablesGridMargins" unique_id=1940772303]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
@@ -3578,73 +3579,102 @@ size_flags_vertical = 4
 theme_override_constants/h_separation = 0
 theme_override_constants/v_separation = 0
 
-[node name="Slot" parent="OverlayUI/PlayerInvUI/WearablesPanel/WearablesPanelBackground/VBoxContainer/InnerMargin/WearablesGridBackground/WearablesGridMargins/WearablesGrid" unique_id=1093032134 instance=ExtResource("42_r422n")]
+[node name="Slot" parent="OverlayUI/PlayerInvUI/WearablesPanel/MarginContainer/VBoxMargins/VBoxContainer/InnerMargin/WearablesGridMargins/WearablesGrid" unique_id=1093032134 instance=ExtResource("42_r422n")]
 layout_mode = 2
 script = ExtResource("113_bvo3j")
 backing_texture = ExtResource("103_g5u5n")
 
-[node name="Slot2" parent="OverlayUI/PlayerInvUI/WearablesPanel/WearablesPanelBackground/VBoxContainer/InnerMargin/WearablesGridBackground/WearablesGridMargins/WearablesGrid" unique_id=458760256 instance=ExtResource("42_r422n")]
+[node name="Slot2" parent="OverlayUI/PlayerInvUI/WearablesPanel/MarginContainer/VBoxMargins/VBoxContainer/InnerMargin/WearablesGridMargins/WearablesGrid" unique_id=458760256 instance=ExtResource("42_r422n")]
 layout_mode = 2
 script = ExtResource("113_bvo3j")
 backing_texture = ExtResource("103_g5u5n")
 
-[node name="Slot3" parent="OverlayUI/PlayerInvUI/WearablesPanel/WearablesPanelBackground/VBoxContainer/InnerMargin/WearablesGridBackground/WearablesGridMargins/WearablesGrid" unique_id=172324023 instance=ExtResource("42_r422n")]
+[node name="Slot3" parent="OverlayUI/PlayerInvUI/WearablesPanel/MarginContainer/VBoxMargins/VBoxContainer/InnerMargin/WearablesGridMargins/WearablesGrid" unique_id=172324023 instance=ExtResource("42_r422n")]
 layout_mode = 2
 script = ExtResource("113_bvo3j")
 backing_texture = ExtResource("103_g5u5n")
 
-[node name="Slot4" parent="OverlayUI/PlayerInvUI/WearablesPanel/WearablesPanelBackground/VBoxContainer/InnerMargin/WearablesGridBackground/WearablesGridMargins/WearablesGrid" unique_id=1908511723 instance=ExtResource("42_r422n")]
+[node name="Slot4" parent="OverlayUI/PlayerInvUI/WearablesPanel/MarginContainer/VBoxMargins/VBoxContainer/InnerMargin/WearablesGridMargins/WearablesGrid" unique_id=1908511723 instance=ExtResource("42_r422n")]
 layout_mode = 2
 script = ExtResource("113_bvo3j")
 backing_texture = ExtResource("103_g5u5n")
 
-[node name="Slot5" parent="OverlayUI/PlayerInvUI/WearablesPanel/WearablesPanelBackground/VBoxContainer/InnerMargin/WearablesGridBackground/WearablesGridMargins/WearablesGrid" unique_id=1246120047 instance=ExtResource("42_r422n")]
+[node name="Slot5" parent="OverlayUI/PlayerInvUI/WearablesPanel/MarginContainer/VBoxMargins/VBoxContainer/InnerMargin/WearablesGridMargins/WearablesGrid" unique_id=1246120047 instance=ExtResource("42_r422n")]
 layout_mode = 2
 script = ExtResource("113_bvo3j")
 backing_texture = ExtResource("103_g5u5n")
+
+[node name="TrashSlotPanelMargins" type="MarginContainer" parent="OverlayUI/PlayerInvUI" unique_id=90326320]
+unique_name_in_owner = true
+layout_mode = 1
+offset_left = 405.0
+offset_top = 266.0
+offset_right = 437.0
+offset_bottom = 298.0
+mouse_filter = 0
+
+[node name="TrashSlotPanel" type="NinePatchRect" parent="OverlayUI/PlayerInvUI/TrashSlotPanelMargins" unique_id=539767948]
+layout_mode = 2
+texture = ExtResource("78_jlc36")
+patch_margin_left = 5
+patch_margin_top = 5
+patch_margin_right = 5
+patch_margin_bottom = 5
+metadata/_edit_group_ = true
+
+[node name="TrashSlotMargins" type="MarginContainer" parent="OverlayUI/PlayerInvUI/TrashSlotPanelMargins" unique_id=790903490]
+layout_mode = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="TrashSlot" parent="OverlayUI/PlayerInvUI/TrashSlotPanelMargins/TrashSlotMargins" unique_id=1460542354 instance=ExtResource("42_r422n")]
+unique_name_in_owner = true
+layout_mode = 2
+region_rect = Rect2(0, 0, 20, 20)
+backing_texture = ExtResource("69_4ao77")
 
 [node name="SidePanelManager" type="CenterContainer" parent="OverlayUI/PlayerInvUI" unique_id=1408240360]
 unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = -1
-anchor_left = 1.0
+anchor_left = 0.5
 anchor_top = 0.5
-anchor_right = 1.0
+anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -141.0
-offset_top = -101.0
-offset_right = -141.0
-offset_bottom = 102.0
+offset_left = 119.0
+offset_right = 119.0
 grow_vertical = 2
 script = ExtResource("133_h1ges")
 
 [connection signal="visibility_changed" from="OverlayUI/HotbarHUD" to="OverlayUI/HotbarHUD" method="_on_visibility_changed"]
 [connection signal="visibility_changed" from="OverlayUI/HotbarHUD/HotbarNinePatch" to="OverlayUI/HotbarHUD/HotbarNinePatch" method="_on_visibility_changed"]
 [connection signal="mouse_exited" from="OverlayUI/PlayerInvUI" to="OverlayUI/PlayerInvUI" method="_on_mouse_exited"]
-[connection signal="button_down" from="OverlayUI/PlayerInvUI/MainGridBackground/AutoStackMargins/AutoStackBtn" to="OverlayUI/PlayerInvUI" method="_on_auto_stack_btn_button_down"]
-[connection signal="button_up" from="OverlayUI/PlayerInvUI/MainGridBackground/AutoStackMargins/AutoStackBtn" to="OverlayUI/PlayerInvUI" method="_on_auto_stack_btn_button_up"]
-[connection signal="mouse_entered" from="OverlayUI/PlayerInvUI/MainGridBackground/AutoStackMargins/AutoStackBtn" to="OverlayUI/PlayerInvUI" method="_on_autostack_btn_mouse_entered"]
-[connection signal="mouse_exited" from="OverlayUI/PlayerInvUI/MainGridBackground/AutoStackMargins/AutoStackBtn" to="OverlayUI/PlayerInvUI" method="_hide_tooltip"]
-[connection signal="pressed" from="OverlayUI/PlayerInvUI/MainGridBackground/AutoStackMargins/AutoStackBtn" to="OverlayUI/PlayerInvUI" method="_on_auto_stack_btn_pressed"]
-[connection signal="button_down" from="OverlayUI/PlayerInvUI/MainGridBackground/SortByRarityMargins/SortByRarityBtn" to="OverlayUI/PlayerInvUI" method="_on_sort_by_rarity_btn_button_down"]
-[connection signal="button_up" from="OverlayUI/PlayerInvUI/MainGridBackground/SortByRarityMargins/SortByRarityBtn" to="OverlayUI/PlayerInvUI" method="_on_sort_by_rarity_btn_button_up"]
-[connection signal="mouse_entered" from="OverlayUI/PlayerInvUI/MainGridBackground/SortByRarityMargins/SortByRarityBtn" to="OverlayUI/PlayerInvUI" method="_on_sort_btn_mouse_entered" binds= ["Rarity"]]
-[connection signal="mouse_exited" from="OverlayUI/PlayerInvUI/MainGridBackground/SortByRarityMargins/SortByRarityBtn" to="OverlayUI/PlayerInvUI" method="_hide_tooltip"]
-[connection signal="pressed" from="OverlayUI/PlayerInvUI/MainGridBackground/SortByRarityMargins/SortByRarityBtn" to="OverlayUI/PlayerInvUI" method="_on_sort_by_rarity_btn_pressed"]
-[connection signal="button_down" from="OverlayUI/PlayerInvUI/MainGridBackground/SortByTypeMargins/SortByTypeBtn" to="OverlayUI/PlayerInvUI" method="_on_sort_by_type_btn_button_down"]
-[connection signal="button_up" from="OverlayUI/PlayerInvUI/MainGridBackground/SortByTypeMargins/SortByTypeBtn" to="OverlayUI/PlayerInvUI" method="_on_sort_by_type_btn_button_up"]
-[connection signal="mouse_entered" from="OverlayUI/PlayerInvUI/MainGridBackground/SortByTypeMargins/SortByTypeBtn" to="OverlayUI/PlayerInvUI" method="_on_sort_btn_mouse_entered" binds= ["Type"]]
-[connection signal="mouse_exited" from="OverlayUI/PlayerInvUI/MainGridBackground/SortByTypeMargins/SortByTypeBtn" to="OverlayUI/PlayerInvUI" method="_hide_tooltip"]
-[connection signal="pressed" from="OverlayUI/PlayerInvUI/MainGridBackground/SortByTypeMargins/SortByTypeBtn" to="OverlayUI/PlayerInvUI" method="_on_sort_by_type_btn_pressed"]
-[connection signal="button_down" from="OverlayUI/PlayerInvUI/MainGridBackground/SortByNameMargins/SortByNameBtn" to="OverlayUI/PlayerInvUI" method="_on_sort_by_name_btn_button_down"]
-[connection signal="button_up" from="OverlayUI/PlayerInvUI/MainGridBackground/SortByNameMargins/SortByNameBtn" to="OverlayUI/PlayerInvUI" method="_on_sort_by_name_btn_button_up"]
-[connection signal="mouse_entered" from="OverlayUI/PlayerInvUI/MainGridBackground/SortByNameMargins/SortByNameBtn" to="OverlayUI/PlayerInvUI" method="_on_sort_btn_mouse_entered" binds= ["Name"]]
-[connection signal="mouse_exited" from="OverlayUI/PlayerInvUI/MainGridBackground/SortByNameMargins/SortByNameBtn" to="OverlayUI/PlayerInvUI" method="_hide_tooltip"]
-[connection signal="pressed" from="OverlayUI/PlayerInvUI/MainGridBackground/SortByNameMargins/SortByNameBtn" to="OverlayUI/PlayerInvUI" method="_on_sort_by_name_btn_pressed"]
-[connection signal="button_down" from="OverlayUI/PlayerInvUI/CraftingManager/InventoryTexture/GridMargins/SlotsVBox/NinePatchRect2/VBoxContainer/CraftButtonVBox/MarginContainer/CraftBtn" to="OverlayUI/PlayerInvUI" method="_on_craft_btn_button_down"]
-[connection signal="button_up" from="OverlayUI/PlayerInvUI/CraftingManager/InventoryTexture/GridMargins/SlotsVBox/NinePatchRect2/VBoxContainer/CraftButtonVBox/MarginContainer/CraftBtn" to="OverlayUI/PlayerInvUI" method="_on_craft_btn_button_up"]
-[connection signal="mouse_entered" from="OverlayUI/PlayerInvUI/CraftingManager/InventoryTexture/GridMargins/SlotsVBox/NinePatchRect2/VBoxContainer/CraftButtonVBox/MarginContainer/CraftBtn" to="OverlayUI/PlayerInvUI" method="_on_craft_btn_mouse_entered"]
-[connection signal="mouse_exited" from="OverlayUI/PlayerInvUI/CraftingManager/InventoryTexture/GridMargins/SlotsVBox/NinePatchRect2/VBoxContainer/CraftButtonVBox/MarginContainer/CraftBtn" to="OverlayUI/PlayerInvUI" method="_hide_tooltip"]
-[connection signal="pressed" from="OverlayUI/PlayerInvUI/CraftingManager/InventoryTexture/GridMargins/SlotsVBox/NinePatchRect2/VBoxContainer/CraftButtonVBox/MarginContainer/CraftBtn" to="OverlayUI/PlayerInvUI" method="_on_craft_btn_pressed"]
-[connection signal="mouse_entered" from="OverlayUI/PlayerInvUI/WearablesPanel/WearablesPanelBackground/VBoxContainer/PlayerIconMargin/PlayerIconFrameMargin/PlayerIconTriggerMargin" to="OverlayUI/PlayerInvUI/WearablesPanel" method="_on_player_icon_trigger_margin_mouse_entered"]
-[connection signal="mouse_exited" from="OverlayUI/PlayerInvUI/WearablesPanel/WearablesPanelBackground/VBoxContainer/PlayerIconMargin/PlayerIconFrameMargin/PlayerIconTriggerMargin" to="OverlayUI/PlayerInvUI/WearablesPanel" method="_on_player_icon_trigger_margin_mouse_exited"]
+[connection signal="button_down" from="OverlayUI/PlayerInvUI/MainGridBkgrdMargins/MarginContainer/VBoxContainer/BackpackGridMargins/VBoxContainer/ButtonHBoxMargins/HBoxContainer/AutoStackMargins/AutoStackBtn" to="OverlayUI/PlayerInvUI" method="_on_auto_stack_btn_button_down"]
+[connection signal="button_up" from="OverlayUI/PlayerInvUI/MainGridBkgrdMargins/MarginContainer/VBoxContainer/BackpackGridMargins/VBoxContainer/ButtonHBoxMargins/HBoxContainer/AutoStackMargins/AutoStackBtn" to="OverlayUI/PlayerInvUI" method="_on_auto_stack_btn_button_up"]
+[connection signal="mouse_entered" from="OverlayUI/PlayerInvUI/MainGridBkgrdMargins/MarginContainer/VBoxContainer/BackpackGridMargins/VBoxContainer/ButtonHBoxMargins/HBoxContainer/AutoStackMargins/AutoStackBtn" to="OverlayUI/PlayerInvUI" method="_on_autostack_btn_mouse_entered"]
+[connection signal="mouse_exited" from="OverlayUI/PlayerInvUI/MainGridBkgrdMargins/MarginContainer/VBoxContainer/BackpackGridMargins/VBoxContainer/ButtonHBoxMargins/HBoxContainer/AutoStackMargins/AutoStackBtn" to="OverlayUI/PlayerInvUI" method="_hide_tooltip"]
+[connection signal="pressed" from="OverlayUI/PlayerInvUI/MainGridBkgrdMargins/MarginContainer/VBoxContainer/BackpackGridMargins/VBoxContainer/ButtonHBoxMargins/HBoxContainer/AutoStackMargins/AutoStackBtn" to="OverlayUI/PlayerInvUI" method="_on_auto_stack_btn_pressed"]
+[connection signal="button_down" from="OverlayUI/PlayerInvUI/MainGridBkgrdMargins/MarginContainer/VBoxContainer/BackpackGridMargins/VBoxContainer/ButtonHBoxMargins/HBoxContainer/SortByRarityMargins/SortByRarityBtn" to="OverlayUI/PlayerInvUI" method="_on_sort_by_rarity_btn_button_down"]
+[connection signal="button_up" from="OverlayUI/PlayerInvUI/MainGridBkgrdMargins/MarginContainer/VBoxContainer/BackpackGridMargins/VBoxContainer/ButtonHBoxMargins/HBoxContainer/SortByRarityMargins/SortByRarityBtn" to="OverlayUI/PlayerInvUI" method="_on_sort_by_rarity_btn_button_up"]
+[connection signal="mouse_entered" from="OverlayUI/PlayerInvUI/MainGridBkgrdMargins/MarginContainer/VBoxContainer/BackpackGridMargins/VBoxContainer/ButtonHBoxMargins/HBoxContainer/SortByRarityMargins/SortByRarityBtn" to="OverlayUI/PlayerInvUI" method="_on_sort_btn_mouse_entered" binds= ["Rarity"]]
+[connection signal="mouse_exited" from="OverlayUI/PlayerInvUI/MainGridBkgrdMargins/MarginContainer/VBoxContainer/BackpackGridMargins/VBoxContainer/ButtonHBoxMargins/HBoxContainer/SortByRarityMargins/SortByRarityBtn" to="OverlayUI/PlayerInvUI" method="_hide_tooltip"]
+[connection signal="pressed" from="OverlayUI/PlayerInvUI/MainGridBkgrdMargins/MarginContainer/VBoxContainer/BackpackGridMargins/VBoxContainer/ButtonHBoxMargins/HBoxContainer/SortByRarityMargins/SortByRarityBtn" to="OverlayUI/PlayerInvUI" method="_on_sort_by_rarity_btn_pressed"]
+[connection signal="button_down" from="OverlayUI/PlayerInvUI/MainGridBkgrdMargins/MarginContainer/VBoxContainer/BackpackGridMargins/VBoxContainer/ButtonHBoxMargins/HBoxContainer/SortByTypeMargins/SortByTypeBtn" to="OverlayUI/PlayerInvUI" method="_on_sort_by_type_btn_button_down"]
+[connection signal="button_up" from="OverlayUI/PlayerInvUI/MainGridBkgrdMargins/MarginContainer/VBoxContainer/BackpackGridMargins/VBoxContainer/ButtonHBoxMargins/HBoxContainer/SortByTypeMargins/SortByTypeBtn" to="OverlayUI/PlayerInvUI" method="_on_sort_by_type_btn_button_up"]
+[connection signal="mouse_entered" from="OverlayUI/PlayerInvUI/MainGridBkgrdMargins/MarginContainer/VBoxContainer/BackpackGridMargins/VBoxContainer/ButtonHBoxMargins/HBoxContainer/SortByTypeMargins/SortByTypeBtn" to="OverlayUI/PlayerInvUI" method="_on_sort_btn_mouse_entered" binds= ["Type"]]
+[connection signal="mouse_exited" from="OverlayUI/PlayerInvUI/MainGridBkgrdMargins/MarginContainer/VBoxContainer/BackpackGridMargins/VBoxContainer/ButtonHBoxMargins/HBoxContainer/SortByTypeMargins/SortByTypeBtn" to="OverlayUI/PlayerInvUI" method="_hide_tooltip"]
+[connection signal="pressed" from="OverlayUI/PlayerInvUI/MainGridBkgrdMargins/MarginContainer/VBoxContainer/BackpackGridMargins/VBoxContainer/ButtonHBoxMargins/HBoxContainer/SortByTypeMargins/SortByTypeBtn" to="OverlayUI/PlayerInvUI" method="_on_sort_by_type_btn_pressed"]
+[connection signal="button_down" from="OverlayUI/PlayerInvUI/MainGridBkgrdMargins/MarginContainer/VBoxContainer/BackpackGridMargins/VBoxContainer/ButtonHBoxMargins/HBoxContainer/SortByNameMargins/SortByNameBtn" to="OverlayUI/PlayerInvUI" method="_on_sort_by_name_btn_button_down"]
+[connection signal="button_up" from="OverlayUI/PlayerInvUI/MainGridBkgrdMargins/MarginContainer/VBoxContainer/BackpackGridMargins/VBoxContainer/ButtonHBoxMargins/HBoxContainer/SortByNameMargins/SortByNameBtn" to="OverlayUI/PlayerInvUI" method="_on_sort_by_name_btn_button_up"]
+[connection signal="mouse_entered" from="OverlayUI/PlayerInvUI/MainGridBkgrdMargins/MarginContainer/VBoxContainer/BackpackGridMargins/VBoxContainer/ButtonHBoxMargins/HBoxContainer/SortByNameMargins/SortByNameBtn" to="OverlayUI/PlayerInvUI" method="_on_sort_btn_mouse_entered" binds= ["Name"]]
+[connection signal="mouse_exited" from="OverlayUI/PlayerInvUI/MainGridBkgrdMargins/MarginContainer/VBoxContainer/BackpackGridMargins/VBoxContainer/ButtonHBoxMargins/HBoxContainer/SortByNameMargins/SortByNameBtn" to="OverlayUI/PlayerInvUI" method="_hide_tooltip"]
+[connection signal="pressed" from="OverlayUI/PlayerInvUI/MainGridBkgrdMargins/MarginContainer/VBoxContainer/BackpackGridMargins/VBoxContainer/ButtonHBoxMargins/HBoxContainer/SortByNameMargins/SortByNameBtn" to="OverlayUI/PlayerInvUI" method="_on_sort_by_name_btn_pressed"]
+[connection signal="button_down" from="OverlayUI/PlayerInvUI/CraftingManager/InnerMargins/GridMargins/SlotsVBox/MarginContainer/MarginContainer/VBoxContainer/CraftBtnMargins/CraftBtn" to="OverlayUI/PlayerInvUI" method="_on_craft_btn_button_down"]
+[connection signal="button_up" from="OverlayUI/PlayerInvUI/CraftingManager/InnerMargins/GridMargins/SlotsVBox/MarginContainer/MarginContainer/VBoxContainer/CraftBtnMargins/CraftBtn" to="OverlayUI/PlayerInvUI" method="_on_craft_btn_button_up"]
+[connection signal="mouse_entered" from="OverlayUI/PlayerInvUI/CraftingManager/InnerMargins/GridMargins/SlotsVBox/MarginContainer/MarginContainer/VBoxContainer/CraftBtnMargins/CraftBtn" to="OverlayUI/PlayerInvUI" method="_on_craft_btn_mouse_entered"]
+[connection signal="mouse_exited" from="OverlayUI/PlayerInvUI/CraftingManager/InnerMargins/GridMargins/SlotsVBox/MarginContainer/MarginContainer/VBoxContainer/CraftBtnMargins/CraftBtn" to="OverlayUI/PlayerInvUI" method="_hide_tooltip"]
+[connection signal="pressed" from="OverlayUI/PlayerInvUI/CraftingManager/InnerMargins/GridMargins/SlotsVBox/MarginContainer/MarginContainer/VBoxContainer/CraftBtnMargins/CraftBtn" to="OverlayUI/PlayerInvUI" method="_on_craft_btn_pressed"]
+[connection signal="mouse_entered" from="OverlayUI/PlayerInvUI/WearablesPanel/MarginContainer/VBoxMargins/VBoxContainer/PlayerIconMargin/PlayerIconFrameMargin/PlayerIconTriggerMargin" to="OverlayUI/PlayerInvUI/WearablesPanel" method="_on_player_icon_trigger_margin_mouse_entered"]
+[connection signal="mouse_exited" from="OverlayUI/PlayerInvUI/WearablesPanel/MarginContainer/VBoxMargins/VBoxContainer/PlayerIconMargin/PlayerIconFrameMargin/PlayerIconTriggerMargin" to="OverlayUI/PlayerInvUI/WearablesPanel" method="_on_player_icon_trigger_margin_mouse_exited"]

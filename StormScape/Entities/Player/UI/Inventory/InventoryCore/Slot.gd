@@ -345,13 +345,8 @@ func _input(event: InputEvent) -> void:
 				Input.parse_input_event(event)
 	elif not get_viewport().gui_is_dragging() and item != null and not ("is_output_slot" in self and get("is_output_slot")):
 		if event.is_action_pressed("dash") and hovered_slot == self:
-			var item_viewer_slot: Slot = Globals.player_node.get_node("%ItemViewerSlot")
 			var item_details_panel: ItemDetailsPanel = Globals.player_node.get_node("%ItemDetailsPanel")
-			if item_viewer_slot._can_drop_data(Vector2.ZERO, self):
-				if not item_details_panel.pinned:
-					item_viewer_slot.set_item(null)
-				item_viewer_slot._drop_data(Vector2.ZERO, self)
-				CursorManager.hide_tooltip()
+			if item_details_panel.manually_set_item_viewer_slot(self):
 				await get_tree().process_frame
 				hovered_slot = self
 
@@ -359,7 +354,6 @@ func _input(event: InputEvent) -> void:
 ## Runs single quantity and half quantity logic.
 func _gui_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton:
-		# Don't allow splitting of stacked weapons
 		if item != null and item.stats is WeaponResource and item.quantity > 1:
 			if event.button_index == MOUSE_BUTTON_RIGHT:
 				MessageManager.add_msg_preset("Cannot Split Weapon Stacks", MessageManager.Presets.FAIL, 3.0)

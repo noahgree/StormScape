@@ -30,8 +30,8 @@ func change_focused_ui_state(open: bool, node: Node) -> void:
 		SignalBus.ui_focus_closed.emit(node)
 
 # Player Inv Resource
-const MAIN_PLAYER_INV_SIZE: int = 32
-const HOTBAR_SIZE: int = 5
+const MAIN_PLAYER_INV_SIZE: int = 40
+const HOTBAR_SIZE: int = 10
 const AMMO_BAR_SIZE: int = 4
 const CURRENCY_BAR_SIZE: int = 3
 

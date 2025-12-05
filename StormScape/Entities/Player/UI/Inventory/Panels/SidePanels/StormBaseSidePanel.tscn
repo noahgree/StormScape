@@ -1,14 +1,15 @@
-[gd_scene load_steps=10 format=3 uid="uid://dnpwx3cn0i24s"]
+[gd_scene load_steps=11 format=3 uid="uid://dnpwx3cn0i24s"]
 
 [ext_resource type="Script" uid="uid://cdenu075tv71w" path="res://Entities/Player/UI/Inventory/Panels/SidePanels/StormBaseSidePanel.gd" id="1_4d6ny"]
-[ext_resource type="Texture2D" uid="uid://lqg70q4wj55g" path="res://Entities/Player/UI/Inventory/Assets/Background/Wood/inv_background_wood.png" id="3_eaggr"]
-[ext_resource type="Texture2D" uid="uid://dj16xk01w22w1" path="res://Entities/Player/UI/Inventory/Assets/Background/Wood/inv_background_thin_no_stripes_wood.png" id="4_av3h4"]
+[ext_resource type="Texture2D" uid="uid://byr74ri0yypu2" path="res://Entities/Player/UI/Inventory/Assets/Background/Metal/inv_background_metal.png" id="2_d7qg0"]
+[ext_resource type="Texture2D" uid="uid://b7wg7jft8vunb" path="res://Entities/Player/UI/Inventory/Assets/Background/Metal/inv_background_thin_metal.png" id="3_6leub"]
 [ext_resource type="PackedScene" uid="uid://m4ur3n2hwsp8" path="res://Entities/Player/UI/Inventory/InventoryCore/Slot.tscn" id="5_mjv4o"]
 [ext_resource type="FontFile" uid="uid://bp2lgrlhj8cet" path="res://Assets/Theming/Fonts/Pixel/C&C Red Alert [INET].ttf" id="6_1nfa8"]
+[ext_resource type="Texture2D" uid="uid://dlecwbci6aggo" path="res://Entities/Player/UI/Vitals/Assets/ProgressBars/progress_white.png" id="6_c1nxg"]
 [ext_resource type="Texture2D" uid="uid://c7gb4yo7qwfql" path="res://Entities/Player/UI/Inventory/Assets/Slot/Universal/upgrade_slot_icon.png" id="7_hduyg"]
-[ext_resource type="Texture2D" uid="uid://cpgqebvnv0d0b" path="res://Entities/Player/UI/Inventory/Assets/Slot/Wood/normal_slot_wood_no_stripes.png" id="7_jjxgf"]
+[ext_resource type="Texture2D" uid="uid://cxfwst8bqg5kx" path="res://Entities/Player/UI/Inventory/Assets/Slot/Metal/normal_slot_metal.png" id="11_tfhut"]
 
-[sub_resource type="LabelSettings" id="LabelSettings_xl3yw"]
+[sub_resource type="LabelSettings" id="LabelSettings_6leub"]
 line_spacing = -1.0
 font_size = 6
 font_color = Color(0.913725, 0.768627, 0.741176, 1)
@@ -16,7 +17,7 @@ outline_size = 2
 outline_color = Color(0.122, 0.035, 0, 0.4)
 shadow_size = 0
 
-[sub_resource type="FontVariation" id="FontVariation_b6g2i"]
+[sub_resource type="FontVariation" id="FontVariation_tfhut"]
 base_font = ExtResource("6_1nfa8")
 spacing_bottom = -1
 
@@ -31,7 +32,7 @@ modulate = Color(0.6436752, 0.5848187, 0.77914613, 1)
 layout_mode = 2
 size_flags_vertical = 3
 mouse_filter = 0
-texture = ExtResource("3_eaggr")
+texture = ExtResource("2_d7qg0")
 patch_margin_left = 5
 patch_margin_top = 5
 patch_margin_right = 5
@@ -41,20 +42,23 @@ axis_stretch_vertical = 1
 [node name="InnerMargin" type="MarginContainer" parent="." unique_id=1551678228]
 editor_description = "THIS GRIDMARGIN MOUSE FILTER MUST STAY AS IGNORE TO MAKE BUTTONS WORK!"
 layout_mode = 2
-size_flags_vertical = 0
 mouse_filter = 2
-theme_override_constants/margin_left = 9
-theme_override_constants/margin_top = 9
-theme_override_constants/margin_right = 9
-theme_override_constants/margin_bottom = 5
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 4
 
 [node name="MainVBox" type="VBoxContainer" parent="InnerMargin" unique_id=1183252061]
 layout_mode = 2
 mouse_filter = 0
-theme_override_constants/separation = 4
+theme_override_constants/separation = 1
 
 [node name="ElementsMargin" type="MarginContainer" parent="InnerMargin/MainVBox" unique_id=430381758]
 layout_mode = 2
+theme_override_constants/margin_left = 3
+theme_override_constants/margin_top = 3
+theme_override_constants/margin_right = 3
+theme_override_constants/margin_bottom = 3
 
 [node name="ElementsBkrgdMargin" type="MarginContainer" parent="InnerMargin/MainVBox/ElementsMargin" unique_id=664210181]
 layout_mode = 2
@@ -66,7 +70,7 @@ theme_override_constants/margin_bottom = -4
 [node name="ElementsBackground" type="NinePatchRect" parent="InnerMargin/MainVBox/ElementsMargin/ElementsBkrgdMargin" unique_id=762559776]
 modulate = Color(0.6436752, 0.5848187, 0.77914613, 1)
 layout_mode = 2
-texture = ExtResource("4_av3h4")
+texture = ExtResource("3_6leub")
 patch_margin_left = 4
 patch_margin_top = 4
 patch_margin_right = 4
@@ -77,69 +81,117 @@ axis_stretch_vertical = 1
 layout_mode = 2
 theme_override_constants/separation = 2
 
-[node name="TitleMargin" type="MarginContainer" parent="InnerMargin/MainVBox/ElementsMargin/ElementsVBox" unique_id=1441958291]
+[node name="TitleMargin" type="MarginContainer" parent="InnerMargin/MainVBox/ElementsMargin/ElementsVBox" unique_id=2100461347]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(88, 0)
 layout_mode = 2
+theme_override_constants/margin_top = -2
 theme_override_constants/margin_bottom = -1
 
-[node name="TitleLabel" type="RichTextLabel" parent="InnerMargin/MainVBox/ElementsMargin/ElementsVBox/TitleMargin" unique_id=1039754954]
+[node name="TitleLabel" type="RichTextLabel" parent="InnerMargin/MainVBox/ElementsMargin/ElementsVBox/TitleMargin" unique_id=1175084117]
+unique_name_in_owner = true
 layout_mode = 2
 theme_override_colors/default_color = Color(1.52, 0.616, 2.352, 1)
 theme_override_colors/font_outline_color = Color(0.122, 0.035, 0, 0.67)
 theme_override_constants/outline_size = 2
 theme_override_fonts/normal_font = ExtResource("6_1nfa8")
-theme_override_font_sizes/normal_font_size = 9
+theme_override_font_sizes/normal_font_size = 10
 bbcode_enabled = true
-text = "[pulse freq=0.75 color=#e7bafd ease=-1.0]STORM BASE[/pulse]"
+text = "STORM BASE"
 fit_content = true
 scroll_active = false
 tab_size = 0
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="LevelMargin" type="MarginContainer" parent="InnerMargin/MainVBox/ElementsMargin/ElementsVBox" unique_id=420351804]
-layout_mode = 2
-theme_override_constants/margin_top = -3
-theme_override_constants/margin_bottom = 0
-
-[node name="LevelLabel" type="RichTextLabel" parent="InnerMargin/MainVBox/ElementsMargin/ElementsVBox/LevelMargin" unique_id=754578022]
+[node name="LvlProgressMargin" type="MarginContainer" parent="InnerMargin/MainVBox/ElementsMargin/ElementsVBox" unique_id=790930264]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_colors/default_color = Color(1.4439952, 0.86186117, 1.7450991, 1)
-theme_override_colors/font_outline_color = Color(0.122, 0.035, 0, 0.67)
+theme_override_constants/margin_left = 2
+theme_override_constants/margin_top = -2
+theme_override_constants/margin_right = -1
+theme_override_constants/margin_bottom = -1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="InnerMargin/MainVBox/ElementsMargin/ElementsVBox/LvlProgressMargin" unique_id=439500952]
+layout_mode = 2
+theme_override_constants/separation = 1
+
+[node name="LevelLabel" type="RichTextLabel" parent="InnerMargin/MainVBox/ElementsMargin/ElementsVBox/LvlProgressMargin/HBoxContainer" unique_id=306360671]
+unique_name_in_owner = true
+clip_contents = false
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_colors/default_color = Color(0, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 0.565)
 theme_override_constants/outline_size = 2
 theme_override_fonts/normal_font = ExtResource("6_1nfa8")
-theme_override_font_sizes/normal_font_size = 5
+theme_override_font_sizes/normal_font_size = 6
 bbcode_enabled = true
-text = "Level 1"
+text = "1"
 fit_content = true
 scroll_active = false
+autowrap_mode = 0
 tab_size = 0
-horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="InfoMargin" type="MarginContainer" parent="InnerMargin/MainVBox/ElementsMargin/ElementsVBox" unique_id=20634937]
+[node name="LvlProgressMargins" type="MarginContainer" parent="InnerMargin/MainVBox/ElementsMargin/ElementsVBox/LvlProgressMargin/HBoxContainer" unique_id=776142968]
 layout_mode = 2
-size_flags_vertical = 3
-theme_override_constants/margin_top = -1
+size_flags_horizontal = 3
+size_flags_vertical = 4
+theme_override_constants/margin_left = 1
+theme_override_constants/margin_top = 0
+theme_override_constants/margin_right = 1
 
-[node name="InfoBackground" type="NinePatchRect" parent="InnerMargin/MainVBox/ElementsMargin/ElementsVBox/InfoMargin" unique_id=31654629]
+[node name="BorderBackground" type="NinePatchRect" parent="InnerMargin/MainVBox/ElementsMargin/ElementsVBox/LvlProgressMargin/HBoxContainer/LvlProgressMargins" unique_id=1343031650]
 modulate = Color(0.6436752, 0.5848187, 0.77914613, 1)
 layout_mode = 2
-texture = ExtResource("7_jjxgf")
+texture = ExtResource("11_tfhut")
+draw_center = false
+patch_margin_left = 2
+patch_margin_top = 1
+patch_margin_right = 2
+patch_margin_bottom = 2
+axis_stretch_vertical = 1
+
+[node name="LvlProgressInnerMargins" type="MarginContainer" parent="InnerMargin/MainVBox/ElementsMargin/ElementsVBox/LvlProgressMargin/HBoxContainer/LvlProgressMargins" unique_id=1097511978]
+layout_mode = 2
+theme_override_constants/margin_left = 1
+theme_override_constants/margin_top = 1
+theme_override_constants/margin_right = 1
+theme_override_constants/margin_bottom = 1
+
+[node name="LvlProgressBar" type="TextureProgressBar" parent="InnerMargin/MainVBox/ElementsMargin/ElementsVBox/LvlProgressMargin/HBoxContainer/LvlProgressMargins/LvlProgressInnerMargins" unique_id=880172005]
+unique_name_in_owner = true
+layout_mode = 2
+value = 50.0
+nine_patch_stretch = true
+texture_under = ExtResource("6_c1nxg")
+texture_progress = ExtResource("6_c1nxg")
+tint_under = Color(0, 0.20476225, 0.22225901, 1)
+tint_progress = Color(0, 1, 1, 1)
+
+[node name="InfoMargin" type="MarginContainer" parent="InnerMargin/MainVBox/ElementsMargin/ElementsVBox" unique_id=364463236]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="InfoBackground" type="NinePatchRect" parent="InnerMargin/MainVBox/ElementsMargin/ElementsVBox/InfoMargin" unique_id=1483114610]
+modulate = Color(0.6436752, 0.5848187, 0.77914613, 1)
+layout_mode = 2
+texture = ExtResource("11_tfhut")
 patch_margin_left = 1
 patch_margin_top = 1
 patch_margin_right = 1
 patch_margin_bottom = 1
 axis_stretch_vertical = 2
 
-[node name="InfoLabelMargin" type="MarginContainer" parent="InnerMargin/MainVBox/ElementsMargin/ElementsVBox/InfoMargin" unique_id=1572154209]
+[node name="InfoLabelMargin" type="MarginContainer" parent="InnerMargin/MainVBox/ElementsMargin/ElementsVBox/InfoMargin" unique_id=1459001896]
 layout_mode = 2
 theme_override_constants/margin_left = 3
-theme_override_constants/margin_top = 2
+theme_override_constants/margin_top = 1
 theme_override_constants/margin_right = 3
-theme_override_constants/margin_bottom = 2
+theme_override_constants/margin_bottom = 1
 
-[node name="InfoLabel" type="Label" parent="InnerMargin/MainVBox/ElementsMargin/ElementsVBox/InfoMargin/InfoLabelMargin" unique_id=1575176379]
+[node name="InfoLabel" type="Label" parent="InnerMargin/MainVBox/ElementsMargin/ElementsVBox/InfoMargin/InfoLabelMargin" unique_id=770374420]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(82, 0)
 layout_mode = 2
@@ -147,34 +199,35 @@ size_flags_horizontal = 4
 size_flags_vertical = 3
 theme_override_fonts/font = ExtResource("6_1nfa8")
 text = "Info will go here. "
-label_settings = SubResource("LabelSettings_xl3yw")
+label_settings = SubResource("LabelSettings_6leub")
 horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 3
 max_lines_visible = 4
 
-[node name="DetailsMargin" type="MarginContainer" parent="InnerMargin/MainVBox/ElementsMargin/ElementsVBox" unique_id=1134374781]
+[node name="DetailsMargin" type="MarginContainer" parent="InnerMargin/MainVBox/ElementsMargin/ElementsVBox" unique_id=343827353]
+unique_name_in_owner = true
 layout_mode = 2
-size_flags_vertical = 3
 
-[node name="DetailsBackground" type="NinePatchRect" parent="InnerMargin/MainVBox/ElementsMargin/ElementsVBox/DetailsMargin" unique_id=805991716]
+[node name="DetailsBackground" type="NinePatchRect" parent="InnerMargin/MainVBox/ElementsMargin/ElementsVBox/DetailsMargin" unique_id=691702716]
 modulate = Color(0.6436752, 0.5848187, 0.77914613, 1)
 layout_mode = 2
-texture = ExtResource("7_jjxgf")
+texture = ExtResource("11_tfhut")
 patch_margin_left = 1
 patch_margin_top = 1
 patch_margin_right = 1
 patch_margin_bottom = 1
 axis_stretch_vertical = 2
 
-[node name="DetailsLabelMargin" type="MarginContainer" parent="InnerMargin/MainVBox/ElementsMargin/ElementsVBox/DetailsMargin" unique_id=1728379619]
+[node name="DetailsLabelMargin" type="MarginContainer" parent="InnerMargin/MainVBox/ElementsMargin/ElementsVBox/DetailsMargin" unique_id=1089400138]
+unique_name_in_owner = true
 layout_mode = 2
 theme_override_constants/margin_left = 3
-theme_override_constants/margin_top = 1
+theme_override_constants/margin_top = 0
 theme_override_constants/margin_right = 3
-theme_override_constants/margin_bottom = 2
+theme_override_constants/margin_bottom = 1
 
-[node name="DetailsLabel" type="RichTextLabel" parent="InnerMargin/MainVBox/ElementsMargin/ElementsVBox/DetailsMargin/DetailsLabelMargin" unique_id=2102336710]
+[node name="DetailsLabel" type="RichTextLabel" parent="InnerMargin/MainVBox/ElementsMargin/ElementsVBox/DetailsMargin/DetailsLabelMargin" unique_id=1486402483]
 unique_name_in_owner = true
 clip_contents = false
 custom_minimum_size = Vector2(82, 8)
@@ -190,7 +243,7 @@ theme_override_constants/text_highlight_h_padding = 0
 theme_override_constants/text_highlight_v_padding = 0
 theme_override_constants/table_h_separation = 0
 theme_override_constants/table_v_separation = 0
-theme_override_fonts/normal_font = SubResource("FontVariation_b6g2i")
+theme_override_fonts/normal_font = SubResource("FontVariation_tfhut")
 theme_override_font_sizes/normal_font_size = 6
 bbcode_enabled = true
 text = "DETAIL ITEMS GO HERE:  Example"
@@ -217,18 +270,26 @@ columns = 4
 
 [node name="UpgradeSlot1" parent="InnerMargin/MainVBox/ElementsMargin/ElementsVBox/BaseUpgradesMargin/BaseUpgradesCenter/BaseUpgradeSlots" unique_id=225750667 instance=ExtResource("5_mjv4o")]
 layout_mode = 2
+texture = ExtResource("11_tfhut")
+default_slot_texture = ExtResource("11_tfhut")
 backing_texture = ExtResource("7_hduyg")
 
 [node name="UpgradeSlot2" parent="InnerMargin/MainVBox/ElementsMargin/ElementsVBox/BaseUpgradesMargin/BaseUpgradesCenter/BaseUpgradeSlots" unique_id=1660504451 instance=ExtResource("5_mjv4o")]
 layout_mode = 2
+texture = ExtResource("11_tfhut")
+default_slot_texture = ExtResource("11_tfhut")
 backing_texture = ExtResource("7_hduyg")
 
 [node name="UpgradeSlot3" parent="InnerMargin/MainVBox/ElementsMargin/ElementsVBox/BaseUpgradesMargin/BaseUpgradesCenter/BaseUpgradeSlots" unique_id=270813223 instance=ExtResource("5_mjv4o")]
 layout_mode = 2
+texture = ExtResource("11_tfhut")
+default_slot_texture = ExtResource("11_tfhut")
 backing_texture = ExtResource("7_hduyg")
 
 [node name="UpgradeSlot4" parent="InnerMargin/MainVBox/ElementsMargin/ElementsVBox/BaseUpgradesMargin/BaseUpgradesCenter/BaseUpgradeSlots" unique_id=250441009 instance=ExtResource("5_mjv4o")]
 layout_mode = 2
+texture = ExtResource("11_tfhut")
+default_slot_texture = ExtResource("11_tfhut")
 backing_texture = ExtResource("7_hduyg")
 
 [node name="FuelSlotBorderMargin" type="MarginContainer" parent="InnerMargin/MainVBox" unique_id=1113446177]
@@ -240,7 +301,7 @@ size_flags_vertical = 0
 [node name="GridMarginsBackground" type="NinePatchRect" parent="InnerMargin/MainVBox/FuelSlotBorderMargin" unique_id=787628074]
 modulate = Color(0.6436752, 0.5848187, 0.77914613, 1)
 layout_mode = 2
-texture = ExtResource("4_av3h4")
+texture = ExtResource("3_6leub")
 patch_margin_left = 4
 patch_margin_top = 4
 patch_margin_right = 4
@@ -261,5 +322,7 @@ theme_override_constants/margin_bottom = 3
 unique_name_in_owner = true
 custom_minimum_size = Vector2(40, 40)
 layout_mode = 2
+texture = ExtResource("11_tfhut")
+default_slot_texture = ExtResource("11_tfhut")
 hide_corner_level = true
 hide_corner_info = true

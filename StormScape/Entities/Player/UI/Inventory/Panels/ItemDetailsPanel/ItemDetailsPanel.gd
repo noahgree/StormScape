@@ -19,6 +19,7 @@ class_name ItemDetailsPanel
 @onready var player_icon_margin: MarginContainer = %PlayerIconMargin
 @onready var main_item_viewer_margin: MarginContainer = %ItemViewerBkgrdMargin
 @onready var item_lvl_progress_margin: MarginContainer = %ItemLvlProgressMargin
+@onready var item_level_label: RichTextLabel = %ItemLevelLabel
 
 var mod_slots: Array[ModSlot] = [] ## The mod slots that display and modify the mods for the item under review.
 var changing_item_viewer_slot: bool = false ## When true, the item under review is changing and we shouldn't respond to mod slot item changes.
@@ -29,6 +30,7 @@ var is_updating_via_hover: bool = false ## Flagged to true when the hovered slot
 
 
 func _ready() -> void:
+	SignalBus.ui_focus_opened.connect(_on_ui_focus_opened)
 	SignalBus.ui_focus_closed.connect(_on_ui_focus_closed)
 	SignalBus.slot_hovered.connect(_on_slot_hovered)
 	SignalBus.slot_not_hovered.connect(_on_slot_not_hovered)
@@ -38,6 +40,7 @@ func _ready() -> void:
 	info_margin.visible = false
 	details_margin.visible = false
 	changing_item_viewer_slot = false
+	item_lvl_progress_margin.visible = false
 
 ## Sets up the mod slots and the item viewer slot with their needed data.
 func setup_slots(inventory_ui: PlayerInvUI) -> void:
@@ -79,7 +82,7 @@ func hide_player_stats() -> void:
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_DRAG_END and item_viewer_slot.item == null:
 		visible = false
-	if what == NOTIFICATION_DRAG_BEGIN and _is_dragging_slot():
+	if what == NOTIFICATION_DRAG_BEGIN and PlayerInvUI.is_dragging_slot(get_viewport()):
 		if not pinned:
 			_show_and_update_item_title("Drop Above to Pin")
 			player_icon_margin.visible = false
@@ -89,7 +92,7 @@ func _notification(what: int) -> void:
 ## When the slot is hovered over, potentially start a delay for showing stats of the underneath item.
 ## If something is instead pinned, return and do nothing.
 func _on_slot_hovered(slot: Slot) -> void:
-	if not _is_dragging_slot():
+	if not PlayerInvUI.is_dragging_slot(get_viewport()):
 		item_hover_delay_timer.set_meta("slot", slot)
 		item_hover_delay_timer.start()
 
@@ -103,6 +106,15 @@ func _on_slot_not_hovered() -> void:
 		if item_viewer_slot.item != null: # Don't want to trigger a clearing of crafting previews otherwise
 			item_viewer_slot.set_item(null)
 		is_updating_via_hover = false
+
+## When the player inv UI opens, automatically put the currently equipped item into the viewer slot.
+func _on_ui_focus_opened(node: Node) -> void:
+	if not node is PlayerInvUI:
+		return
+	var hotbar_hud: HotbarHUD = Globals.player_node.get_node("%HotbarHUD")
+	if hotbar_hud.active_slot:
+		var index: int = hotbar_hud.hotbar_slots.find(hotbar_hud.active_slot)
+		manually_set_item_viewer_slot(Globals.player_node.get_node("%HotbarGrid").get_child(index))
 
 ## When the focused UI is closed, we should empty out the crafting input slots and drop them on the
 ## ground if the inventory is now full.
@@ -130,6 +142,23 @@ func _on_mod_slot_changed(slot: ModSlot, old_item: InvItemResource, new_item: In
 
 		item_viewer_slot.update_corner_icons(item_viewer_slot.item)
 
+## Manually sets the item viewer slot. If the slot to set it to is the item viewer slot itself, remove the item
+## in it if there is one. Returns if the slot was set to the item viewer or not.
+func manually_set_item_viewer_slot(slot: Slot) -> bool:
+	if slot == item_viewer_slot and slot.item != null:
+		slot.synced_inv.insert_from_inv_item(slot.item, false, true)
+		slot.set_item(null)
+		CursorManager.hide_tooltip()
+		return false
+	if item_viewer_slot._can_drop_data(Vector2.ZERO, slot):
+		if not pinned:
+			item_viewer_slot.set_item(null)
+		item_viewer_slot._drop_data(Vector2.ZERO, slot)
+		CursorManager.hide_tooltip()
+		return true
+	CursorManager.hide_tooltip()
+	return false
+
 ## When the item under review changes, we need to conditionally enable the mod slots and update the stats view.
 func _on_item_viewer_slot_changed(_slot: Slot, _old_item: InvItemResource, new_item: InvItemResource) -> void:
 	changing_item_viewer_slot = true
@@ -144,7 +173,7 @@ func _on_item_viewer_slot_changed(_slot: Slot, _old_item: InvItemResource, new_i
 		details_margin.visible = false
 		pinned = false
 
-		if not _is_dragging_slot():
+		if not PlayerInvUI.is_dragging_slot(get_viewport()):
 			visible = false
 		else:
 			main_item_viewer_margin.visible = true
@@ -177,11 +206,9 @@ func _on_item_viewer_slot_changed(_slot: Slot, _old_item: InvItemResource, new_i
 
 	if new_item.stats is WeaponResource:
 		if not new_item.stats.no_levels:
-			var level_string: String = "• [color=Cyan] LVL " + str(new_item.stats.level) + "[/color][color=AAAAAA00][char=02D9][/color]" + "[color=AAAAAA00][char=02D9][/color]"
-			item_rarity_label.text += level_string
-			if not (new_item.stats.level == 1 and new_item.stats.lvl_progress == 0) and not (new_item.stats.level == WeaponResource.MAX_LEVEL):
-				item_lvl_progress_margin.get_node("%ItemLvlProgressBar").value = WeaponResource.percent_of_lvl_progress(new_item.stats) * 100.0
-				item_lvl_progress_margin.visible = true
+			item_level_label.text = str(new_item.stats.level)
+			item_lvl_progress_margin.get_node("%ItemLvlProgressBar").value = WeaponResource.percent_of_lvl_progress(new_item.stats) * 100.0
+			item_lvl_progress_margin.visible = true
 
 	changing_item_viewer_slot = false
 
@@ -236,16 +263,6 @@ func _format_and_update_details(details: Array[String]) -> void:
 			details_label_margin.add_theme_constant_override("margin_bottom", 3 - final_detail_line_count)
 
 	details_margin.visible = details_label.text != ""
-
-## Returns true or false based on whether a slot is being dragged at the moment.
-func _is_dragging_slot() -> bool:
-	var drag_data: Variant
-	if get_viewport().gui_is_dragging():
-		drag_data = get_viewport().gui_get_drag_data()
-
-	if drag_data != null and drag_data is Slot:
-		return true
-	return false
 
 ## When the delay for showing the details when something is not pinned is up, show the viewer panel.
 func _on_hover_delay_ended() -> void:

@@ -17,11 +17,13 @@ var auto_decrementer: AutoDecrementer = AutoDecrementer.new() ## The script cont
 
 
 ## Must be called after this inventory resource is created to set it up.
-func initialize_inventory(source: Node2D) -> void:
+func initialize_inventory(source: Entity) -> void:
 	source_node = source
 	auto_decrementer.inv = self
 	if drop_on_death:
 		source_node.tree_exiting.connect(drop_entire_inventory)
+	if source.is_object:
+		auto_decrementer = null
 
 	total_inv_size = inv_size_override if inv_size_override > -1 else starting_inv.size()
 	max_fill_index = total_inv_size

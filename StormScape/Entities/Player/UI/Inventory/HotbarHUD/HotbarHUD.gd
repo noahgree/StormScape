@@ -100,6 +100,16 @@ func _unhandled_input(event: InputEvent) -> void:
 				_change_active_slot_to_hotbar_index(3)
 			KEY_5:
 				_change_active_slot_to_hotbar_index(4)
+			KEY_6:
+				_change_active_slot_to_hotbar_index(5)
+			KEY_7:
+				_change_active_slot_to_hotbar_index(6)
+			KEY_8:
+				_change_active_slot_to_hotbar_index(7)
+			KEY_9:
+				_change_active_slot_to_hotbar_index(8)
+			KEY_0:
+				_change_active_slot_to_hotbar_index(9)
 
 ## Changes the active hotbar slot by the passed in count. Handles wrapping values to the number of slots.
 func _change_active_slot_by_count(index_count: int) -> void:
