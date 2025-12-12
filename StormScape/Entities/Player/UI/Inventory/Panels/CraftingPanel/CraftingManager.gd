@@ -297,6 +297,7 @@ func attempt_craft() -> void:
 		output_slot.set_item(InvItemResource.new(output_slot.item.stats, successful_crafts * output_quant_per_craft))
 
 		MessageManager.add_msg_preset(output_slot.item.get_pretty_string() + " Crafted", MessageManager.Presets.SUCCESS, 3.0, true)
+		AudioManager.play_ui_sound(&"craft_button")
 
 		Globals.player_node.inv.insert_from_inv_item(output_slot.item, false, false)
 

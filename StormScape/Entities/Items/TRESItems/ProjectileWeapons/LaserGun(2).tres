@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="ProjWeaponResource" load_steps=32 format=3 uid="uid://ciel2rrqq4dvv"]
+[gd_resource type="Resource" script_class="ProjWeaponResource" format=3 uid="uid://ciel2rrqq4dvv"]
 
 [ext_resource type="Script" uid="uid://boo31eu083dqd" path="res://Entities/Stats/EffectSystemResources/StatusEffects/StatusEffect.gd" id="2_gdqw7"]
 [ext_resource type="Script" uid="uid://dkfssottmsrch" path="res://Entities/Stats/EffectSystemResources/EffectSources/EffectSource.gd" id="2_v1b1g"]
@@ -118,6 +118,7 @@ firing_cam_fx = ExtResource("7_j8kuh")
 projectile_logic = SubResource("Resource_nhr3k")
 hitscan_logic = SubResource("Resource_k6g4e")
 effect_source = SubResource("Resource_nt47o")
+ammo_type = 2
 mag_size = 50
 mag_reload_time = 1.65
 auto_ammo_interval = 0.065

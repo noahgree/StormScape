@@ -1,4 +1,4 @@
-[gd_scene load_steps=164 format=3 uid="uid://bl2igmtwo1a3v"]
+[gd_scene format=3 uid="uid://bl2igmtwo1a3v"]
 
 [ext_resource type="Script" uid="uid://db4npghrxc6u" path="res://Entities/Enemies/Zombies/Basic/BasicZombie.gd" id="1_8bt15"]
 [ext_resource type="PackedScene" uid="uid://cj2wy5f05cos4" path="res://Entities/EntityCore/Shadow/EntityShadow.tscn" id="1_ko3ep"]
@@ -8,7 +8,7 @@
 [ext_resource type="Script" uid="uid://dp8osf7r6xkkt" path="res://Entities/Items/ItemCore/InvItemResource.gd" id="3_hj6es"]
 [ext_resource type="PackedScene" uid="uid://di7vcyrki71nm" path="res://Entities/Components/DetectionComponent/DetectionComponent.tscn" id="3_tsyff"]
 [ext_resource type="Texture2D" uid="uid://yypje8l5ouqy" path="res://Entities/Enemies/Zombies/Basic/BasicZombieBaseFramesCT.tres" id="4_8a5el"]
-[ext_resource type="Resource" uid="uid://xuswqfh3rvdy" path="res://Entities/Items/TRESItems/MeleeWeapons/ZombieHands(0).tres" id="4_naanu"]
+[ext_resource type="Resource" uid="uid://bnc4tbhdxpauy" path="res://Entities/Items/TRESItems/ProjectileWeapons/Musket(0).tres" id="4_nonw0"]
 [ext_resource type="PackedScene" uid="uid://co3n6m7efg8pd" path="res://Entities/Components/EffectComponents/StatusEffectsComponent/StatusEffectsComponent.tscn" id="5_g4fx3"]
 [ext_resource type="Resource" uid="uid://dk3vlbvu2b7eq" path="res://Entities/Items/TRESItems/MeleeWeapons/Sword(4).tres" id="5_oiiqe"]
 [ext_resource type="Resource" uid="uid://bdjhfsluk53lc" path="res://Entities/Items/TRESItems/Ammo/Bullet(0).tres" id="5_oqrkc"]
@@ -52,7 +52,7 @@
 
 [sub_resource type="Resource" id="Resource_jfdci"]
 script = ExtResource("3_hj6es")
-stats = ExtResource("4_naanu")
+stats = ExtResource("4_nonw0")
 metadata/_custom_type_script = "uid://dp8osf7r6xkkt"
 
 [sub_resource type="Resource" id="Resource_bijca"]

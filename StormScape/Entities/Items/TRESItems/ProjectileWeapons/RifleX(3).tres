@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="ProjWeaponResource" load_steps=23 format=3 uid="uid://fmf7upx7tsln"]
+[gd_resource type="Resource" script_class="ProjWeaponResource" format=3 uid="uid://fmf7upx7tsln"]
 
 [ext_resource type="Texture2D" uid="uid://bm570hawaupxe" path="res://Entities/Items/Weapons/WeaponVFX/Casings/small_casing.png" id="1_mc2hw"]
 [ext_resource type="Script" uid="uid://dkfssottmsrch" path="res://Entities/Stats/EffectSystemResources/EffectSources/EffectSource.gd" id="2_gwjg5"]
@@ -55,7 +55,7 @@ point_count = 2
 script = ExtResource("13_gtex7")
 speed = 500
 speed_curve = SubResource("Curve_5vwnl")
-max_distance = 300
+max_distance = 450
 height_override = 6
 effect_falloff_curve = SubResource("Curve_8hnue")
 point_of_max_falloff = 250.0
@@ -84,7 +84,7 @@ mag_almost_empty_sound = "bullet_low_ammo"
 empty_mag_sound = "bullet_dry_fire"
 projectile_logic = SubResource("Resource_h8wvb")
 effect_source = SubResource("Resource_55n34")
-ammo_type = 2
+ammo_type = 3
 mag_size = 24
 mag_reload_time = 2.8
 mag_reload_anim_delay = 0.5

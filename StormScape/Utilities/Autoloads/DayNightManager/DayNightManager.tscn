@@ -1,12 +1,12 @@
-[gd_scene load_steps=3 format=3 uid="uid://47hqyo37ph5r"]
+[gd_scene format=3 uid="uid://47hqyo37ph5r"]
 
 [ext_resource type="Script" uid="uid://d1x8jidv08n84" path="res://Utilities/Autoloads/DayNightManager/DayNightManager.gd" id="1_ool0t"]
 [ext_resource type="Texture2D" uid="uid://bkpc1kjm4t2xn" path="res://Utilities/Autoloads/DayNightManager/daynight_gradient.tres" id="2_i82t2"]
 
-[node name="DayNightManager" type="Node"]
+[node name="DayNightManager" type="Node" unique_id=775880514]
 script = ExtResource("1_ool0t")
 color_gradient = ExtResource("2_i82t2")
 current_hour = 7
 
-[node name="CanvasModulate" type="CanvasModulate" parent="."]
+[node name="CanvasModulate" type="CanvasModulate" parent="." unique_id=406934325]
 color = Color(0.263639, 0.246502, 0.472484, 1)

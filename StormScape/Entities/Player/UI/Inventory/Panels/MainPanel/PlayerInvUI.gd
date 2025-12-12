@@ -103,6 +103,7 @@ func _unhandled_key_input(event: InputEvent) -> void:
 
 ## Handles the opening and closing of the entire player inventory based on the is_open var.
 func _toggle_inventory_ui(open: bool) -> void:
+	AudioManager.block_sound(&"slot_drop")
 	is_open = open
 	visible = open
 	Globals.ui_focus_open = is_open
@@ -111,6 +112,7 @@ func _toggle_inventory_ui(open: bool) -> void:
 	Globals.change_focused_ui_state(is_open, self)
 	var index: int = get_node("%HotbarHUD").get_active_hotbar_index()
 	hotbar_grid.get_child(index).selected_texture.visible = open
+	AudioManager.unblock_sound(&"slot_drop")
 
 ## Handles the opening and closing of the side panel based on the value of the side_panel_active var.
 func _toggle_side_panel(new_value: bool) -> void:

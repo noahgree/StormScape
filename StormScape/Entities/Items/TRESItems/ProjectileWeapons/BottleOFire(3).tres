@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="ProjWeaponResource" load_steps=26 format=3 uid="uid://3avt5jvd3dye"]
+[gd_resource type="Resource" script_class="ProjWeaponResource" format=3 uid="uid://3avt5jvd3dye"]
 
 [ext_resource type="Script" uid="uid://boo31eu083dqd" path="res://Entities/Stats/EffectSystemResources/StatusEffects/StatusEffect.gd" id="1_fshhe"]
 [ext_resource type="Script" uid="uid://cje5bobi6o8bo" path="res://Entities/Items/Hitscans/HitscanResource.gd" id="1_kxj7m"]

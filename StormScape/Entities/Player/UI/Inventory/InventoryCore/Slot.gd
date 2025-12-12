@@ -17,6 +17,7 @@ static var last_hovered_slot_size: float = 22.0 ## The most recently hovered ove
 @export var hide_tint_progress: bool = false ## When true, the tint progress for the item will not show.
 @export var hide_hover_tooltip: bool = false ## When true, the hover tooltip will never show over this slot.
 @export var hide_back_color: bool = false ## When true, the backing solid color will never show under the item.
+@export var item_deposited_sound: StringName = &"slot_drop" ## The sound to play when an item is deposited in this slot. Leave blank for no sound.
 
 @onready var texture_margins: MarginContainer = $TextureMargins ## The item texture margins node for this slot.
 @onready var back_color: ColorRect = $BackColorMargin/BackColor ## The color behind the item.
@@ -454,6 +455,7 @@ func _drop_data(_at_position: Vector2, data: Variant) -> void:
 				var source_remainder: int = data.item.quantity - total_quantity
 				_replace_with_half_stack_and_find_available_slot_for_previous_stuff(data, source_remainder, total_quantity)
 
+	AudioManager.play_ui_sound(item_deposited_sound)
 	await get_tree().process_frame
 	_on_mouse_entered()
 

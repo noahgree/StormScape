@@ -1,6 +1,8 @@
 extends Node
-class_name BackgroundMusicManager
-## Manages playlist and transitioning logic for the background music of the game based on things like current biome.
+class_name PersistentAudioManager
+## Manages audio that plays peristently, regardless of the game being paused.
+##
+## Good for UI audio and background music.
 
 
 func _ready() -> void:

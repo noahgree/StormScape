@@ -7,7 +7,16 @@ enum ProjWeaponType { ## The kinds of projectile weapons.
 	PISTOL, SHOTGUN, SUBMACHINE, SNIPER, RIFLE, EXPLOSIVE, PRIMITIVE_WEAPON, MAGIC, THROWABLE, SPECIAL_WEAPON
 }
 enum ProjAmmoType { ## The types of projectile ammo.
-	NONE, SELF, BULLETS, SHELLS, BOOMPOWDER, MAGIC, ION_CHARGES, STAMINA, CHARGES
+	NONE, ## Does not have any required ammo. Useful for arbitrary special weapons that may only have one mag of usage. In combination with "dont_consume_ammo", this essentially gives any weapon infinite arbitrary uses.
+	SELF, ## Used for consumable weapon uses like throwables, where one use deletes one quantity of the item.
+	CHARGES, ## Does not have an associated ammo item, but rather uses recharging mags that fill over time.
+	BULLETS, ## Normal bullet ammo.
+	SHELLS, ## Normal shell ammo.
+	ARROWS, ## Normal arrow ammo.
+	ION_CHARGES, ## Normal ion charge ammo.
+	BOOMPOWDER, ## Normal boompowder ammo.
+	STAMINA, ## Drains stamina on usage. Not enough stamina left means this weapon cannot fire.
+	MAGIC ## Drains magic on usage. Not enough magic left means this weapon cannot fire.
 }
 enum FiringType { ## The kinds of firing modes the weapon can have.
 	SEMI_AUTO, AUTO, CHARGE

@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="ProjWeaponResource" load_steps=30 format=3 uid="uid://1q7rlned2r23"]
+[gd_resource type="Resource" script_class="ProjWeaponResource" format=3 uid="uid://1q7rlned2r23"]
 
 [ext_resource type="Script" uid="uid://dkfssottmsrch" path="res://Entities/Stats/EffectSystemResources/EffectSources/EffectSource.gd" id="1_lbh37"]
 [ext_resource type="Texture2D" uid="uid://bm570hawaupxe" path="res://Entities/Items/Weapons/WeaponVFX/Casings/small_casing.png" id="1_pxe5r"]
@@ -104,7 +104,7 @@ mag_almost_empty_sound = "bullet_low_ammo"
 projectile_logic = SubResource("Resource_h0q16")
 hitscan_logic = SubResource("Resource_vt4jh")
 effect_source = SubResource("Resource_3vie0")
-ammo_type = 2
+ammo_type = 3
 mag_size = 100
 mag_reload_time = 4.25
 max_bloom = 8.0

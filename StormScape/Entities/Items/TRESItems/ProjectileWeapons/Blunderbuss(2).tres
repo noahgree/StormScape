@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="ProjWeaponResource" load_steps=19 format=3 uid="uid://c05ujhrdtx4r5"]
+[gd_resource type="Resource" script_class="ProjWeaponResource" format=3 uid="uid://c05ujhrdtx4r5"]
 
 [ext_resource type="Texture2D" uid="uid://bm570hawaupxe" path="res://Entities/Items/Weapons/WeaponVFX/Casings/small_casing.png" id="1_wvxhv"]
 [ext_resource type="Script" uid="uid://dkfssottmsrch" path="res://Entities/Stats/EffectSystemResources/EffectSources/EffectSource.gd" id="3_iqgpm"]
@@ -60,7 +60,7 @@ casing_texture = ExtResource("1_wvxhv")
 casing_tint = Color(0.718546, 0, 0.0739379, 1)
 projectile_logic = SubResource("Resource_wluh4")
 effect_source = SubResource("Resource_3mxcx")
-ammo_type = 3
+ammo_type = 4
 mag_size = 1
 reload_type = 1
 reload_delay = 0.9

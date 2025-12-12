@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="ProjWeaponResource" load_steps=21 format=3 uid="uid://4nvp28pvjtk3"]
+[gd_resource type="Resource" script_class="ProjWeaponResource" format=3 uid="uid://4nvp28pvjtk3"]
 
 [ext_resource type="Texture2D" uid="uid://c7i0hkkoanp61" path="res://Entities/Items/Weapons/ProjectileWeapons/Boomerang/boomerang_wood.png" id="1_83uvj"]
 [ext_resource type="Script" uid="uid://dkfssottmsrch" path="res://Entities/Stats/EffectSystemResources/EffectSources/EffectSource.gd" id="1_rpmcv"]
@@ -77,7 +77,7 @@ spawn_after_fire_anim = true
 projectile_logic = SubResource("Resource_6jh23")
 hitscan_logic = SubResource("Resource_2m5jx")
 effect_source = SubResource("Resource_3tpeu")
-ammo_type = 7
+ammo_type = 8
 mag_size = -1
 stamina_use_per_proj = 4.0
 pullout_delay = 0.3

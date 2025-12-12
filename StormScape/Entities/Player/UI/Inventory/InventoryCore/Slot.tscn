@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://m4ur3n2hwsp8"]
+[gd_scene format=3 uid="uid://m4ur3n2hwsp8"]
 
 [ext_resource type="Texture2D" uid="uid://ces4hq54n2lxc" path="res://Entities/Player/UI/Inventory/Assets/Slot/Wood/normal_slot_wood.png" id="1_tu6a1"]
 [ext_resource type="Script" uid="uid://bh1a5w0hw0r0s" path="res://Entities/Player/UI/Inventory/InventoryCore/Slot.gd" id="2_ywtjc"]

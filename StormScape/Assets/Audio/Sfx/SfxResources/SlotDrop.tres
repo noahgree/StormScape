@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="AudioResource" format=3 uid="uid://debph5al5glut"]
+
+[ext_resource type="Script" uid="uid://dwic8harmmplg" path="res://Utilities/Game/Audio/AudioResource.gd" id="1_wfvfk"]
+
+[resource]
+script = ExtResource("1_wfvfk")
+id = &"slot_drop"
+sound_files_folder = "res://Assets/Audio/Sfx/SfxRawAudio/UI/Inventory/SlotDrop/Default"
+pitch_scale = 1.1
+pitch_randomness = 0.02
+metadata/_custom_type_script = "uid://dwic8harmmplg"

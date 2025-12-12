@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="ProjWeaponResource" load_steps=28 format=3 uid="uid://dpmwqsai6gxsr"]
+[gd_resource type="Resource" script_class="ProjWeaponResource" format=3 uid="uid://dpmwqsai6gxsr"]
 
 [ext_resource type="Script" uid="uid://dkfssottmsrch" path="res://Entities/Stats/EffectSystemResources/EffectSources/EffectSource.gd" id="2_hrsx2"]
 [ext_resource type="Resource" uid="uid://c8reitxej77jy" path="res://Entities/Stats/EffectSystemResources/StatusEffects/BadEffects/Burning/Burning1FlameBlower.tres" id="3_cibnu"]
@@ -113,7 +113,6 @@ overheat_anim_dur = 3.0
 barrage_count = 5
 angular_spread = 20.0
 do_cluster_barrage = true
-hide_ammo_ui = true
 s_mods = SubResource("Resource_7cfgi")
 id = "flame_blower"
 name = "Flame Blower"

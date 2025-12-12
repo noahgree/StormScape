@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="MeleeWeaponResource" load_steps=14 format=3 uid="uid://bper7kxtsf7f1"]
+[gd_resource type="Resource" script_class="MeleeWeaponResource" format=3 uid="uid://bper7kxtsf7f1"]
 
 [ext_resource type="Script" uid="uid://djlk3y511igng" path="res://Entities/Items/Weapons/MeleeWeapons/MeleeWeaponResource.gd" id="1_0xu6s"]
 [ext_resource type="Resource" uid="uid://b5dad578bsduf" path="res://Entities/Player/PlayerCore/PlayerCamera/CamFXPresets/3(NoFreeze).tres" id="1_8vcks"]

@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="StormSyndromeEffect" load_steps=5 format=3 uid="uid://cucuggowaf55y"]
+[gd_resource type="Resource" script_class="StormSyndromeEffect" format=3 uid="uid://cucuggowaf55y"]
 
 [ext_resource type="Script" uid="uid://20acrt2hb6y" path="res://Entities/Stats/EffectSystemResources/EffectOverTimeResources/DOTResource.gd" id="1_byjya"]
 [ext_resource type="Script" uid="uid://bq0632kqw53el" path="res://Entities/Stats/EffectSystemResources/StatusEffects/BadEffects/StormSyndrome/StormSyndromeEffect.gd" id="1_lgscn"]

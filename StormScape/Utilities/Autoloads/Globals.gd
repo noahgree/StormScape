@@ -6,12 +6,14 @@ var status_effects_dir: String = "res://Entities/Stats/EffectSystemResources/Sta
 
 @onready var world_root: WorldRoot = get_parent().get_node("Game/WorldRoot") ## A reference to the root of the game world.
 @onready var storm: Storm = get_parent().get_node("Game/WorldRoot/Storm") ## A reference to the main storm node.
+@onready var persistent_audio_manager: PersistentAudioManager = get_parent().get_node("Game/PersistentAudioManager") ## A reference to the persistent audio manager.
 
 var player_node: Player = null ## The reference to the player's node.
 var player_camera: PlayerCamera = null ## The reference to the player's main camera.
 var ui_focus_open: bool = false ## When true, a UI that pauses the game is open.
 var ui_focus_is_closing_debounce: bool = false ## When true, the focused ui is still just barely closing.
 var ui_focus_close_debounce_timer: Timer = TimerHelpers.create_one_shot_timer(self, 0.05, func() -> void: Globals.ui_focus_is_closing_debounce = false) ## Debounces turning off the flag so that any inputs like inventory clicks can finish first.
+var ui_focus_stack: Dictionary[Node, bool] ## Collection of nodes holding focus on the UI.
 
 
 func _ready() -> void:
@@ -23,11 +25,14 @@ func change_focused_ui_state(open: bool, node: Node) -> void:
 	ui_focus_open = open
 	ui_focus_is_closing_debounce = open
 	if open:
+		ui_focus_stack[node] = true
 		ui_focus_close_debounce_timer.stop()
 		SignalBus.ui_focus_opened.emit(node)
 	else:
-		ui_focus_close_debounce_timer.start()
-		SignalBus.ui_focus_closed.emit(node)
+		ui_focus_stack.erase(node)
+		if ui_focus_stack.is_empty():
+			ui_focus_close_debounce_timer.start()
+			SignalBus.ui_focus_closed.emit(node)
 
 # Player Inv Resource
 const MAIN_PLAYER_INV_SIZE: int = 40

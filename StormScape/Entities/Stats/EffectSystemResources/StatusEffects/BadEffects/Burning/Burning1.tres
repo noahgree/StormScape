@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="BurningEffect" load_steps=6 format=3 uid="uid://dvew5cy3k7s48"]
+[gd_resource type="Resource" script_class="BurningEffect" format=3 uid="uid://dvew5cy3k7s48"]
 
 [ext_resource type="Script" uid="uid://20acrt2hb6y" path="res://Entities/Stats/EffectSystemResources/EffectOverTimeResources/DOTResource.gd" id="1_v0anb"]
 [ext_resource type="Script" uid="uid://dr3ei6ur2bsdu" path="res://Entities/Stats/EffectSystemResources/StatusEffects/BadEffects/Burning/BurningEffect.gd" id="2_ihl6m"]

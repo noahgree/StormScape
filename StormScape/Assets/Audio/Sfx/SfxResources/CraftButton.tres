@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="AudioResource" format=3 uid="uid://bmaxrwsw5ugbl"]
+
+[ext_resource type="Script" uid="uid://dwic8harmmplg" path="res://Utilities/Game/Audio/AudioResource.gd" id="1_q6je1"]
+
+[resource]
+script = ExtResource("1_q6je1")
+id = &"craft_button"
+sound_files_folder = "res://Assets/Audio/Sfx/SfxRawAudio/UI/Inventory/Buttons/Craft"
+volume = -3.0
+pitch_randomness = 0.05
+metadata/_custom_type_script = "uid://dwic8harmmplg"

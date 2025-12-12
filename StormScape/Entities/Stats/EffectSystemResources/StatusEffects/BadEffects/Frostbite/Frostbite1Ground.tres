@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="FrostbiteEffect" load_steps=7 format=3 uid="uid://mj7sofyhdcaj"]
+[gd_resource type="Resource" script_class="FrostbiteEffect" format=3 uid="uid://mj7sofyhdcaj"]
 
 [ext_resource type="Script" uid="uid://20acrt2hb6y" path="res://Entities/Stats/EffectSystemResources/EffectOverTimeResources/DOTResource.gd" id="1_3x1ys"]
 [ext_resource type="Script" uid="uid://0lch4wyxor28" path="res://Entities/Stats/EffectSystemResources/StatusEffects/BadEffects/Frostbite/FrostbiteEffect.gd" id="2_ig58d"]

@@ -21,6 +21,7 @@ func set_details(text: String, text_color: Color, icon: Texture2D, icon_color: C
 func _ready() -> void:
 	content_root.modulate.a = 0
 	await get_tree().process_frame
+	await get_tree().process_frame
 	var final_pos: float = content_root.position.x
 
 	content_root.position.x += 50

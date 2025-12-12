@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="ProjWeaponResource" load_steps=28 format=3 uid="uid://bnc4tbhdxpauy"]
+[gd_resource type="Resource" script_class="ProjWeaponResource" format=3 uid="uid://bnc4tbhdxpauy"]
 
 [ext_resource type="Texture2D" uid="uid://bm570hawaupxe" path="res://Entities/Items/Weapons/WeaponVFX/Casings/small_casing.png" id="1_hjiec"]
 [ext_resource type="Script" uid="uid://boo31eu083dqd" path="res://Entities/Stats/EffectSystemResources/StatusEffects/StatusEffect.gd" id="3_o52iq"]
@@ -90,7 +90,7 @@ casing_sound = "bullet_casing"
 projectile_logic = SubResource("Resource_qacbk")
 hitscan_logic = SubResource("Resource_4epke")
 effect_source = SubResource("Resource_78vf2")
-ammo_type = 2
+ammo_type = 3
 mag_size = 1
 reload_type = 1
 single_proj_reload_time = 1.0

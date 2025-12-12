@@ -1,4 +1,4 @@
-[gd_resource type="SpriteFrames" load_steps=74 format=3 uid="uid://cl72xrd8yy3d"]
+[gd_resource type="SpriteFrames" format=3 uid="uid://cl72xrd8yy3d"]
 
 [ext_resource type="Texture2D" uid="uid://b1u5ju5rhciug" path="res://Entities/Player/Sprites/Base/PlayerBaseFramesCT.tres" id="1_1hwek"]
 

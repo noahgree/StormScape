@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="ProjWeaponResource" load_steps=19 format=3 uid="uid://dy8rwyeyusim7"]
+[gd_resource type="Resource" script_class="ProjWeaponResource" format=3 uid="uid://dy8rwyeyusim7"]
 
 [ext_resource type="Texture2D" uid="uid://bm570hawaupxe" path="res://Entities/Items/Weapons/WeaponVFX/Casings/small_casing.png" id="1_iu0as"]
 [ext_resource type="Script" uid="uid://boo31eu083dqd" path="res://Entities/Stats/EffectSystemResources/StatusEffects/StatusEffect.gd" id="3_qaa2o"]
@@ -57,9 +57,10 @@ fire_cooldown = 0.11
 firing_cam_fx = ExtResource("5_qaa2o")
 casing_texture = ExtResource("1_iu0as")
 casing_tint = Color(0.77622, 0, 0.0846659, 1)
+firing_sound = "twin_shot"
 projectile_logic = SubResource("Resource_f2brx")
 effect_source = SubResource("Resource_m86me")
-ammo_type = 3
+ammo_type = 4
 mag_size = 2
 reload_type = 1
 reload_delay = 0.65

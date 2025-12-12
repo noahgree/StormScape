@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="RegenEffect" load_steps=5 format=3 uid="uid://b8yo5kmjiwnca"]
+[gd_resource type="Resource" script_class="RegenEffect" format=3 uid="uid://b8yo5kmjiwnca"]
 
 [ext_resource type="Script" uid="uid://wiuddhq7fwce" path="res://Entities/Stats/EffectSystemResources/StatusEffects/GoodEffects/Regen/RegenEffect.gd" id="1_ryq06"]
 [ext_resource type="Script" uid="uid://bron26bukkbdd" path="res://Entities/Stats/EffectSystemResources/EffectOverTimeResources/HOTResource.gd" id="1_vgior"]

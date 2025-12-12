@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="ExtendedMagMod" load_steps=10 format=3 uid="uid://cwgqj8klx4b3x"]
+[gd_resource type="Resource" script_class="ExtendedMagMod" format=3 uid="uid://cwgqj8klx4b3x"]
 
 [ext_resource type="Script" uid="uid://boo31eu083dqd" path="res://Entities/Stats/EffectSystemResources/StatusEffects/StatusEffect.gd" id="1_d44er"]
 [ext_resource type="Script" uid="uid://cowjdnic7xmkp" path="res://Entities/Player/UI/Inventory/Panels/ItemDetailsPanel/StatDetail.gd" id="2_hs1lr"]

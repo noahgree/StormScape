@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="ProjAmmoResource" load_steps=6 format=3 uid="uid://cpxev3kvt74vw"]
+[gd_resource type="Resource" script_class="ProjAmmoResource" format=3 uid="uid://cpxev3kvt74vw"]
 
 [ext_resource type="Script" uid="uid://cowjdnic7xmkp" path="res://Entities/Player/UI/Inventory/Panels/ItemDetailsPanel/StatDetail.gd" id="1_8b6tu"]
 [ext_resource type="Texture2D" uid="uid://1t1qwr4iklu0" path="res://Entities/Items/Ammo/Shell/ShellAmmoThumbCT.tres" id="1_kme5u"]
@@ -8,7 +8,7 @@
 
 [resource]
 script = ExtResource("4_j07wo")
-ammo_type = 3
+ammo_type = 4
 id = "shell_ammo"
 name = "Shell Ammo"
 item_type = 2

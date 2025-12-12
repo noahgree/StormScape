@@ -11,10 +11,11 @@ enum SoundSpace { GLOBAL, SPATIAL } ## A specifier for determining global vs spa
 const DISTANCE_FROM_PLAYER_BUFFER: int = 100 ## How far beyond max_distance the player can from the sound origin for a 2d sound to still get created.
 const MAX_SPATIAL_POOL_SIZE: int = 16 ## How many 2d audio player nodes can be waiting around in the pool.
 const MAX_GLOBAL_POOL_SIZE: int = 16 ## How many global audio player nodes can be waiting around in the pool.
-var sound_cache: Dictionary[StringName, AudioResource] = {} ## The dict of the file paths to all sound resources, using the id as the key.
-var scene_ref_counts: Dictionary[StringName, int] = {} ## The number of scenes needing access to certain sound ids.
+var sound_cache: Dictionary[StringName, AudioResource] ## The dict of the file paths to all sound resources, using the id as the key.
+var scene_ref_counts: Dictionary[StringName, int] ## The number of scenes needing access to certain sound ids.
 var spatial_pool: Array[PooledAudioPlayer2D] ## The 2d audio players current waiting around in memory.
 var global_pool: Array[PooledAudioPlayer] ## The global audio players current waiting around in memory.
+var blocked_sounds: Dictionary[StringName, int] ## Entries in this dict are blocked for the next "n" amount of requests to play, where "n" is the value.
 
 #region Setup & Cache
 func _ready() -> void:
@@ -128,6 +129,23 @@ func unregister_scene_audio_resource_use(sound_id: StringName) -> void:
 	if DebugFlags.sound_refcount_changes:
 		_debug_print_single_ref_count(sound_id)
 
+## Registers a sound_i to be blocked for the next "n" number of requests to play it.
+func block_sound(sound_id: StringName, number_of_times: int = 1) -> void:
+	blocked_sounds[sound_id] = number_of_times
+
+## Checks if a sound is blocked and decrements its block counter by 1. Erases it at 0.
+func _check_sound_is_blocked(sound_id: StringName) -> bool:
+	if sound_id in blocked_sounds:
+		blocked_sounds[sound_id] -= 1
+		if blocked_sounds[sound_id] <= 0:
+			blocked_sounds.erase(sound_id)
+		return true
+	return false
+
+## Unblocks a sound by removing it from the dictionary.
+func unblock_sound(sound_id: StringName) -> void:
+	blocked_sounds.erase(sound_id)
+
 ## Attempts to retrive a PooledAudioPlayer or PooledAudioPlayer2D from the list of active nodes.
 ## If there is no active stream under the given id, the function returns null.
 func _get_active_audio_players_by_sound_id(sound_id: StringName) -> Array:
@@ -182,7 +200,7 @@ func _trim_pools() -> void:
 ## The resulting audio player is returned if successful.
 func play_2d(sound_id: StringName, location: Vector2 = Vector2.ZERO, fade_in_time: float = 0,
 				use_reverb: bool = false, stream_index: int = -1, parent_node: Node = self) -> Variant:
-	if sound_id == "":
+	if sound_id == "" or _check_sound_is_blocked(sound_id):
 		return null
 	var audio_player: Variant = _create_audio_player(sound_id, SoundSpace.SPATIAL, location, fade_in_time, use_reverb, stream_index, parent_node)
 	return AudioPlayerInstance.new(audio_player, audio_player.name) if audio_player else null
@@ -192,10 +210,15 @@ func play_2d(sound_id: StringName, location: Vector2 = Vector2.ZERO, fade_in_tim
 ## The resulting audio player is returned if successful.
 func play_global(sound_id: StringName, fade_in_time: float = 0, use_reverb: bool = false,
 					stream_index: int = -1, parent_node: Node = self) -> Variant:
-	if sound_id == "":
+	if sound_id == "" or _check_sound_is_blocked(sound_id):
 		return null
 	var audio_player: Variant = _create_audio_player(sound_id, SoundSpace.GLOBAL, Vector2.ZERO, fade_in_time, use_reverb, stream_index, parent_node)
 	return AudioPlayerInstance.new(audio_player, audio_player.name) if audio_player else null
+
+## Shortcut for playing a UI sound that plays globally and persists in the paused state.
+func play_ui_sound(sound_id: StringName, fade_in_time: float = 0, use_reverb: bool = false,
+					stream_index: int = -1) -> Variant:
+	return play_global(sound_id, fade_in_time, use_reverb, stream_index, Globals.persistent_audio_manager)
 
 ## Pulls a sound resource from one of the caches and sends it to be setup if it exists.
 func _create_audio_player(sound_id: StringName, space: SoundSpace, location: Vector2,

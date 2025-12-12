@@ -57,6 +57,7 @@ shapes/collision/shape_color=Color(0, 0.6, 0.7, 0.251)
 
 window/size/viewport_width=640
 window/size/viewport_height=360
+window/size/mode=3
 window/size/window_width_override=4800
 window/size/window_height_override=2700
 window/stretch/mode="canvas_items"

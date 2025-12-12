@@ -36,7 +36,7 @@ func update_inv_ammo_ui(inv_count: String) -> void:
 	await get_tree().process_frame
 	inv_ammo.text = inv_count
 	if inv_count == "":
-		mag_ammo_margin.add_theme_constant_override("margin_right", -9)
+		mag_ammo_margin.add_theme_constant_override("margin_right", -3)
 	else:
 		mag_ammo_margin.remove_theme_constant_override("margin_right")
 
@@ -60,8 +60,6 @@ func calculate_inv_ammo() -> void:
 				if item != null and (item.stats is ProjAmmoResource) and (item.stats.ammo_type == current_item_stats.ammo_type):
 					count += item.quantity
 			count_str = str(count)
-		elif current_item_stats.ammo_type == ProjWeaponResource.ProjAmmoType.STAMINA:
-			count_str = str(floori(Globals.player_node.stats.get_stat("max_stamina")))
 		elif current_item_stats.ammo_type in [ProjWeaponResource.ProjAmmoType.NONE, ProjWeaponResource.ProjAmmoType.CHARGES]:
 			count_str = "∞"
 		elif current_item_stats.ammo_type == ProjWeaponResource.ProjAmmoType.SELF:
@@ -72,7 +70,5 @@ func calculate_inv_ammo() -> void:
 					count += item.quantity
 			var equipped_inv_item: InvItemResource = Globals.player_node.inv.inv[Globals.player_node.hands.equipped_item.inv_index]
 			count -= equipped_inv_item.quantity if equipped_inv_item else 0
-			count_str = str(count)
-	elif current_item_stats is MeleeWeaponResource:
-			count_str = str(floori(Globals.player_node.stats.get_stat("max_stamina")))
+			count_str = str(count) if count != 0 else ""
 	update_inv_ammo_ui(count_str)

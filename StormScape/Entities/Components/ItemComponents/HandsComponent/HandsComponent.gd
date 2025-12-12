@@ -4,7 +4,6 @@ class_name HandsComponent
 ## This component allows the entity to hold an item and interact with it.
 
 @export var hand_texture: Texture2D ## The hand texture that will be used for all EntityHandSprites on this entity.
-@export var active_slot_info: Control ## UI for displaying information about the active slot's item. Only for the player.
 @export var main_hand_with_held_item_pos: Vector2 = Vector2(6, 1) ## The position the main hand would be while doing nothing.
 @export var main_hand_with_proj_weapon_pos: Vector2 = Vector2(11, 0) ## The position the main hand would start at while holding a projectile weapon. This will most likely be farther out in the x-direction to give more rotational room for the weapon.
 @export var main_hand_with_melee_weapon_pos: Vector2 = Vector2(8, 0) ## The position the main hand would start at while holding a melee weapon. This will most likely be farther out in the x-direction to give more rotational room for the weapon.
@@ -20,6 +19,7 @@ class_name HandsComponent
 @onready var smoke_particles: CPUParticles2D = $HandsAnchor/SmokeParticles ## The smoke particles used when an item has overheated.
 
 var equipped_item: EquippableItem = null ## The currently equipped equippable item that the entity is holding.
+var active_slot_info: Control ## UI for displaying information about the active slot's item. Only for the player.
 var current_x_direction: int = 1 ## A pos or neg toggle for which direction the anim vector has us facing. Used to flip the x-scale.
 var scale_is_lerping: bool = false ## Whether or not the scale is currently lerping between being negative or positive.
 var trigger_pressed: bool = false ## If we are currently considering the trigger button to be held down.
@@ -67,6 +67,7 @@ func _ready() -> void:
 	# Make sure to update item rotation on game resume
 	if entity is Player:
 		SignalBus.ui_focus_closed.connect(func(_node: Node) -> void: handle_aim(CursorManager.get_cursor_mouse_position()))
+		active_slot_info = entity.get_node("%ActiveSlotInfo")
 
 	starting_hands_component_height = position.y
 	starting_off_hand_sprite_height = off_hand_sprite.position.y
@@ -138,13 +139,11 @@ func _process(delta: float) -> void:
 
 ## Removes the currently equipped item after letting it clean itself up.
 func unequip_current_item() -> void:
-	if active_slot_info:
+	if entity is Player:
+		entity.overhead_ui.reset_all()
 		active_slot_info.update_mag_ammo_ui("")
 		active_slot_info.update_inv_ammo_ui("")
 		active_slot_info.update_item_name("")
-
-	if entity is Player:
-		entity.overhead_ui.reset_all()
 
 	if equipped_item != null:
 		trigger_pressed = false

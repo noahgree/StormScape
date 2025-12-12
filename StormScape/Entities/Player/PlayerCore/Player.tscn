@@ -1,4 +1,4 @@
-[gd_scene load_steps=257 format=3 uid="uid://dba8mrurjlekp"]
+[gd_scene format=3 uid="uid://dba8mrurjlekp"]
 
 [ext_resource type="Script" uid="uid://c3rpxq8pnbdje" path="res://Entities/Player/PlayerCore/Player.gd" id="1_m33tt"]
 [ext_resource type="Script" uid="uid://bdd0xujg1bgm0" path="res://Entities/Player/UI/Inventory/InventoryCore/PlayerInvResource.gd" id="2_8hbs2"]
@@ -52,6 +52,7 @@
 [ext_resource type="Resource" uid="uid://dk3vlbvu2b7eq" path="res://Entities/Items/TRESItems/MeleeWeapons/Sword(4).tres" id="32_ar238"]
 [ext_resource type="Script" uid="uid://dp8osf7r6xkkt" path="res://Entities/Items/ItemCore/InvItemResource.gd" id="32_ixmb3"]
 [ext_resource type="Resource" uid="uid://h1xp0w2wx18e" path="res://Entities/Items/TRESItems/ProjectileWeapons/Grizzly(3).tres" id="33_8hbs2"]
+[ext_resource type="Resource" uid="uid://cuwmealupx71f" path="res://Entities/Items/TRESItems/ProjectileWeapons/RifleX(0).tres" id="35_bjgul"]
 [ext_resource type="Script" uid="uid://di5hu6fk5mbfe" path="res://Entities/Player/UI/Vitals/PlayerVitalsHUD.gd" id="35_yln51"]
 [ext_resource type="Resource" uid="uid://cqqpudayew03k" path="res://Entities/Items/TRESItems/Currency/Stormshine(4).tres" id="39_jgqai"]
 [ext_resource type="PackedScene" uid="uid://b7gdy01q8wsjx" path="res://Entities/Components/ItemComponents/HandsComponent/HandsComponent.tscn" id="39_ngono"]
@@ -311,9 +312,20 @@ script = ExtResource("32_ixmb3")
 stats = ExtResource("13_n4o3n")
 metadata/_custom_type_script = "uid://dp8osf7r6xkkt"
 
+[sub_resource type="Resource" id="Resource_pu7hq"]
+script = ExtResource("32_ixmb3")
+stats = ExtResource("35_bjgul")
+metadata/_custom_type_script = "uid://dp8osf7r6xkkt"
+
 [sub_resource type="Resource" id="Resource_4awmn"]
 script = ExtResource("32_ixmb3")
 stats = ExtResource("8_s4yud")
+quantity = 899
+metadata/_custom_type_script = "uid://dp8osf7r6xkkt"
+
+[sub_resource type="Resource" id="Resource_25xrm"]
+script = ExtResource("32_ixmb3")
+stats = ExtResource("5_rdrbb")
 quantity = 899
 metadata/_custom_type_script = "uid://dp8osf7r6xkkt"
 
@@ -321,12 +333,6 @@ metadata/_custom_type_script = "uid://dp8osf7r6xkkt"
 script = ExtResource("32_ixmb3")
 stats = ExtResource("7_o382h")
 quantity = 75
-metadata/_custom_type_script = "uid://dp8osf7r6xkkt"
-
-[sub_resource type="Resource" id="Resource_25xrm"]
-script = ExtResource("32_ixmb3")
-stats = ExtResource("5_rdrbb")
-quantity = 899
 metadata/_custom_type_script = "uid://dp8osf7r6xkkt"
 
 [sub_resource type="Resource" id="Resource_82sho"]
@@ -345,7 +351,7 @@ metadata/_custom_type_script = "uid://dp8osf7r6xkkt"
 script = ExtResource("2_8hbs2")
 title = ""
 drop_on_death = true
-starting_inv = Array[ExtResource("32_ixmb3")]([SubResource("Resource_82yts"), null, null, SubResource("Resource_h1ges"), null, null, SubResource("Resource_mc6is"), null, SubResource("Resource_fcswf"), SubResource("Resource_ve7vt"), SubResource("Resource_hdwgy"), SubResource("Resource_ou5t4"), SubResource("Resource_ar238"), SubResource("Resource_xjdir"), SubResource("Resource_bmpdm"), SubResource("Resource_eufsu"), SubResource("Resource_8hbs2"), SubResource("Resource_f5l7i"), SubResource("Resource_co77f"), SubResource("Resource_a5af3"), null, SubResource("Resource_gdihr"), SubResource("Resource_g5u5n"), SubResource("Resource_r7bkl"), SubResource("Resource_thmqm"), SubResource("Resource_r5dvw"), SubResource("Resource_bvo3j"), SubResource("Resource_gb65f"), SubResource("Resource_5qckj"), SubResource("Resource_1go7j"), SubResource("Resource_32jvf"), SubResource("Resource_jgqai"), SubResource("Resource_xsics"), SubResource("Resource_inle7"), SubResource("Resource_da65a"), SubResource("Resource_s4yud"), null, null, null, null, SubResource("Resource_6f5us"), null, null, null, null, null, null, null, null, null, SubResource("Resource_4awmn"), SubResource("Resource_mjkti"), SubResource("Resource_25xrm"), SubResource("Resource_82sho"), SubResource("Resource_sobds"), null, null])
+starting_inv = Array[ExtResource("32_ixmb3")]([SubResource("Resource_82yts"), null, null, SubResource("Resource_h1ges"), null, null, SubResource("Resource_mc6is"), null, SubResource("Resource_fcswf"), SubResource("Resource_ve7vt"), SubResource("Resource_hdwgy"), SubResource("Resource_ou5t4"), SubResource("Resource_ar238"), SubResource("Resource_xjdir"), SubResource("Resource_bmpdm"), SubResource("Resource_eufsu"), SubResource("Resource_8hbs2"), SubResource("Resource_f5l7i"), SubResource("Resource_co77f"), SubResource("Resource_a5af3"), null, SubResource("Resource_gdihr"), SubResource("Resource_g5u5n"), SubResource("Resource_r7bkl"), SubResource("Resource_thmqm"), SubResource("Resource_r5dvw"), SubResource("Resource_bvo3j"), SubResource("Resource_gb65f"), SubResource("Resource_5qckj"), SubResource("Resource_1go7j"), SubResource("Resource_32jvf"), SubResource("Resource_jgqai"), SubResource("Resource_xsics"), SubResource("Resource_inle7"), SubResource("Resource_da65a"), SubResource("Resource_s4yud"), null, null, null, null, SubResource("Resource_6f5us"), SubResource("Resource_pu7hq"), null, null, null, null, null, null, null, null, SubResource("Resource_4awmn"), SubResource("Resource_25xrm"), SubResource("Resource_mjkti"), SubResource("Resource_82sho"), SubResource("Resource_sobds"), null, null])
 metadata/_custom_type_script = "uid://bdd0xujg1bgm0"
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_3f130"]
@@ -1352,7 +1358,7 @@ light_mode = 1
 line_spacing = 0.0
 font = ExtResource("90_hxjay")
 font_size = 12
-outline_size = 3
+outline_size = 4
 outline_color = Color(0.12156863, 0.03529412, 0, 0.7607843)
 shadow_size = 0
 
@@ -1360,7 +1366,7 @@ shadow_size = 0
 line_spacing = 0.0
 font_size = 6
 font_color = Color(0.9411765, 0.9411765, 0.9411765, 0.7490196)
-outline_size = 2
+outline_size = 3
 outline_color = Color(0.12156863, 0.03529412, 0, 0.48235294)
 shadow_size = 0
 
@@ -1369,7 +1375,7 @@ line_spacing = 0.0
 font = ExtResource("90_hxjay")
 font_size = 8
 font_color = Color(0.95686275, 0.9529412, 0.9490196, 1)
-outline_size = 2
+outline_size = 3
 outline_color = Color(0.12156863, 0.03529412, 0, 0.7607843)
 shadow_size = 0
 
@@ -1434,10 +1440,9 @@ sprite_frames = ExtResource("5_vy6lk")
 animation = &"idle"
 time_brightness_min_max = Vector2(1, 2)
 
-[node name="HandsComponent" parent="YSorter" unique_id=1524370217 node_paths=PackedStringArray("active_slot_info") instance=ExtResource("39_ngono")]
+[node name="HandsComponent" parent="YSorter" unique_id=1524370217 instance=ExtResource("39_ngono")]
 unique_name_in_owner = true
 hand_texture = ExtResource("48_ou5t4")
-active_slot_info = NodePath("../../OverlayUI/ActiveSlotInfo")
 time_brightness_min_max = Vector2(1, 1.15)
 
 [node name="StatusEffectsComponent" parent="YSorter" unique_id=1452723470 node_paths=PackedStringArray("effect_receiver") instance=ExtResource("6_n0x5k")]
@@ -2004,115 +2009,71 @@ nine_patch_stretch = true
 texture_progress = ExtResource("100_5qckj")
 tint_progress = Color(0, 0.499807, 0.273035, 1)
 
-[node name="ActiveSlotInfo" type="Control" parent="OverlayUI" unique_id=29091397]
+[node name="ActiveSlotInfo" type="MarginContainer" parent="OverlayUI" unique_id=796995236]
 unique_name_in_owner = true
-layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-script = ExtResource("91_qr476")
-
-[node name="MarginContainer" type="MarginContainer" parent="OverlayUI/ActiveSlotInfo" unique_id=1941349977]
-layout_mode = 1
-anchors_preset = -1
+anchors_preset = 7
 anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = -137.0
-offset_top = -30.0
-offset_right = -111.0
-offset_bottom = -10.0
+offset_left = -147.0
+offset_top = -24.0
+offset_right = -115.0
+offset_bottom = -6.0
 grow_horizontal = 0
 grow_vertical = 0
+script = ExtResource("91_qr476")
 
-[node name="OuterBorderBackground" type="NinePatchRect" parent="OverlayUI/ActiveSlotInfo/MarginContainer" unique_id=79059621]
-visible = false
+[node name="VBoxContainer" type="VBoxContainer" parent="OverlayUI/ActiveSlotInfo" unique_id=1854607728]
 layout_mode = 2
-texture = ExtResource("98_s4yud")
-patch_margin_left = 3
-patch_margin_top = 3
-patch_margin_right = 3
-patch_margin_bottom = 3
-axis_stretch_vertical = 1
+theme_override_constants/separation = 0
+alignment = 2
 
-[node name="InnerBorderMargins" type="MarginContainer" parent="OverlayUI/ActiveSlotInfo/MarginContainer" unique_id=26899175]
+[node name="AmmoInfoMargins" type="MarginContainer" parent="OverlayUI/ActiveSlotInfo/VBoxContainer" unique_id=1941349977]
 layout_mode = 2
-theme_override_constants/margin_left = 3
-theme_override_constants/margin_top = 3
-theme_override_constants/margin_right = 3
-theme_override_constants/margin_bottom = 3
 
-[node name="InnerBorderBackground" type="NinePatchRect" parent="OverlayUI/ActiveSlotInfo/MarginContainer/InnerBorderMargins" unique_id=1827423641]
-visible = false
-layout_mode = 2
-texture = ExtResource("113_5qckj")
-patch_margin_left = 2
-patch_margin_top = 2
-patch_margin_right = 2
-patch_margin_bottom = 2
-
-[node name="ActiveSlotInfoMargins" type="MarginContainer" parent="OverlayUI/ActiveSlotInfo/MarginContainer/InnerBorderMargins" unique_id=1201829121]
-unique_name_in_owner = true
-layout_mode = 2
-theme_override_constants/margin_left = 3
-theme_override_constants/margin_top = 2
-theme_override_constants/margin_right = 2
-theme_override_constants/margin_bottom = 1
-
-[node name="AmmoInfoVBox" type="HBoxContainer" parent="OverlayUI/ActiveSlotInfo/MarginContainer/InnerBorderMargins/ActiveSlotInfoMargins" unique_id=868273650]
+[node name="AmmoInfoHBox" type="HBoxContainer" parent="OverlayUI/ActiveSlotInfo/VBoxContainer/AmmoInfoMargins" unique_id=868273650]
 layout_mode = 2
 theme_override_constants/separation = 2
 alignment = 2
 
-[node name="MagAmmoMargin" type="MarginContainer" parent="OverlayUI/ActiveSlotInfo/MarginContainer/InnerBorderMargins/ActiveSlotInfoMargins/AmmoInfoVBox" unique_id=1995814747]
+[node name="MagAmmoMargin" type="MarginContainer" parent="OverlayUI/ActiveSlotInfo/VBoxContainer/AmmoInfoMargins/AmmoInfoHBox" unique_id=1995814747]
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="MagAmmo" type="Label" parent="OverlayUI/ActiveSlotInfo/MarginContainer/InnerBorderMargins/ActiveSlotInfoMargins/AmmoInfoVBox/MagAmmoMargin" unique_id=1128183273]
+[node name="MagAmmo" type="Label" parent="OverlayUI/ActiveSlotInfo/VBoxContainer/AmmoInfoMargins/AmmoInfoHBox/MagAmmoMargin" unique_id=1128183273]
 unique_name_in_owner = true
 layout_mode = 2
-text = "1"
+text = "100"
 label_settings = SubResource("LabelSettings_32mf4")
 horizontal_alignment = 2
 vertical_alignment = 2
 uppercase = true
 
-[node name="MarginContainer" type="MarginContainer" parent="OverlayUI/ActiveSlotInfo/MarginContainer/InnerBorderMargins/ActiveSlotInfoMargins/AmmoInfoVBox" unique_id=1168507054]
+[node name="InvAmmoMargin" type="MarginContainer" parent="OverlayUI/ActiveSlotInfo/VBoxContainer/AmmoInfoMargins/AmmoInfoHBox" unique_id=1168507054]
 layout_mode = 2
 theme_override_constants/margin_top = 4
 theme_override_constants/margin_right = 0
 
-[node name="InvAmmo" type="Label" parent="OverlayUI/ActiveSlotInfo/MarginContainer/InnerBorderMargins/ActiveSlotInfoMargins/AmmoInfoVBox/MarginContainer" unique_id=298861351]
+[node name="InvAmmo" type="Label" parent="OverlayUI/ActiveSlotInfo/VBoxContainer/AmmoInfoMargins/AmmoInfoHBox/InvAmmoMargin" unique_id=298861351]
 unique_name_in_owner = true
 layout_mode = 2
-text = "965"
+text = "899"
 label_settings = SubResource("LabelSettings_rybwt")
 horizontal_alignment = 2
 vertical_alignment = 2
 uppercase = true
 
-[node name="MarginContainer2" type="MarginContainer" parent="OverlayUI/ActiveSlotInfo" unique_id=843356910]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -117.0
-offset_top = -16.0
-offset_right = -116.0
-offset_bottom = -5.0
-grow_horizontal = 0
-grow_vertical = 0
+[node name="ItemNameMargins" type="MarginContainer" parent="OverlayUI/ActiveSlotInfo/VBoxContainer" unique_id=843356910]
+layout_mode = 2
 
-[node name="ItemName" type="Label" parent="OverlayUI/ActiveSlotInfo/MarginContainer2" unique_id=2145318987]
+[node name="ItemName" type="Label" parent="OverlayUI/ActiveSlotInfo/VBoxContainer/ItemNameMargins" unique_id=2145318987]
 unique_name_in_owner = true
 layout_mode = 2
+text = "ITEM NAME"
 label_settings = SubResource("LabelSettings_xjdir")
 horizontal_alignment = 2
+uppercase = true
 
 [node name="HotbarHUD" type="MarginContainer" parent="OverlayUI" unique_id=1861635980 node_paths=PackedStringArray("active_slot_info") groups=["has_save_logic"]]
 unique_name_in_owner = true
@@ -2209,7 +2170,7 @@ texture = ExtResource("132_bmpdm")
 expand_mode = 1
 script = ExtResource("133_8hbs2")
 storm_tint_color = Color(0.530741, 0.0017714, 0.740423, 1)
-damage_color = Color(0.738, 0, 0.205, 1)
+damage_color = Color(0.93708235, 0, 0.21649957, 1)
 heal_color = Color(0, 0.579, 0.249, 1)
 
 [node name="PlayerInvUI" type="ColorRect" parent="OverlayUI" unique_id=1913908715 node_paths=PackedStringArray("synced_inv_src_node", "main_slot_grid")]
@@ -2217,7 +2178,6 @@ unique_name_in_owner = true
 process_mode = 3
 visible = false
 material = SubResource("ShaderMaterial_2q23q")
-use_parent_material = true
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -2277,7 +2237,7 @@ theme_override_constants/margin_top = 0
 theme_override_constants/margin_right = 0
 theme_override_constants/margin_bottom = 0
 script = ExtResource("116_ve7vt")
-type_order = Array[int]([2, 3, 6, 4])
+type_order = Array[int]([3, 4, 6, 7])
 
 [node name="AmmoSlotsTexture" type="NinePatchRect" parent="OverlayUI/PlayerInvUI/MainGridBkgrdMargins/MarginContainer/VBoxContainer/TopBarHBox/AmmoSlotManager" unique_id=846458641]
 layout_mode = 2
@@ -3250,31 +3210,37 @@ columns = 4
 layout_mode = 2
 script = ExtResource("114_gdihr")
 backing_texture = ExtResource("118_r5dvw")
+item_deposited_sound = &"wpn_mod_slot_drop"
 
 [node name="Slot2" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox/ElementsMargin/MarginContainer/ElementsVBox/ModSlotsMargin/ModSlotsCenter/ModSlots" unique_id=659604951 instance=ExtResource("42_r422n")]
 layout_mode = 2
 script = ExtResource("114_gdihr")
 backing_texture = ExtResource("118_r5dvw")
+item_deposited_sound = &"wpn_mod_slot_drop"
 
 [node name="Slot3" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox/ElementsMargin/MarginContainer/ElementsVBox/ModSlotsMargin/ModSlotsCenter/ModSlots" unique_id=844224106 instance=ExtResource("42_r422n")]
 layout_mode = 2
 script = ExtResource("114_gdihr")
 backing_texture = ExtResource("118_r5dvw")
+item_deposited_sound = &"wpn_mod_slot_drop"
 
 [node name="Slot4" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox/ElementsMargin/MarginContainer/ElementsVBox/ModSlotsMargin/ModSlotsCenter/ModSlots" unique_id=41959268 instance=ExtResource("42_r422n")]
 layout_mode = 2
 script = ExtResource("114_gdihr")
 backing_texture = ExtResource("118_r5dvw")
+item_deposited_sound = &"wpn_mod_slot_drop"
 
 [node name="Slot5" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox/ElementsMargin/MarginContainer/ElementsVBox/ModSlotsMargin/ModSlotsCenter/ModSlots" unique_id=1194305943 instance=ExtResource("42_r422n")]
 layout_mode = 2
 script = ExtResource("114_gdihr")
 backing_texture = ExtResource("118_r5dvw")
+item_deposited_sound = &"wpn_mod_slot_drop"
 
 [node name="Slot6" parent="OverlayUI/PlayerInvUI/ItemDetailsPanel/BackgroundMargin/DetailsInnerMargin/ItemViewerVBox/ElementsMargin/MarginContainer/ElementsVBox/ModSlotsMargin/ModSlotsCenter/ModSlots" unique_id=208104444 instance=ExtResource("42_r422n")]
 layout_mode = 2
 script = ExtResource("114_gdihr")
 backing_texture = ExtResource("118_r5dvw")
+item_deposited_sound = &"wpn_mod_slot_drop"
 
 [node name="CraftingManager" type="CenterContainer" parent="OverlayUI/PlayerInvUI" unique_id=1801189233]
 unique_name_in_owner = true
@@ -3358,6 +3324,7 @@ backing_texture = ExtResource("101_g5u5n")
 hide_corner_level = true
 hide_corner_info = true
 hide_tint_progress = true
+item_deposited_sound = &"crafting_slot_drop"
 
 [node name="Slot2" parent="OverlayUI/PlayerInvUI/CraftingManager/InnerMargins/GridMargins/SlotsVBox/InputSlotsBackground/InputSlots" unique_id=1341443420 instance=ExtResource("42_r422n")]
 layout_mode = 2
@@ -3367,6 +3334,7 @@ backing_texture = ExtResource("101_g5u5n")
 hide_corner_level = true
 hide_corner_info = true
 hide_tint_progress = true
+item_deposited_sound = &"crafting_slot_drop"
 
 [node name="Slot3" parent="OverlayUI/PlayerInvUI/CraftingManager/InnerMargins/GridMargins/SlotsVBox/InputSlotsBackground/InputSlots" unique_id=1635046795 instance=ExtResource("42_r422n")]
 layout_mode = 2
@@ -3376,6 +3344,7 @@ backing_texture = ExtResource("101_g5u5n")
 hide_corner_level = true
 hide_corner_info = true
 hide_tint_progress = true
+item_deposited_sound = &"crafting_slot_drop"
 
 [node name="Slot4" parent="OverlayUI/PlayerInvUI/CraftingManager/InnerMargins/GridMargins/SlotsVBox/InputSlotsBackground/InputSlots" unique_id=716310961 instance=ExtResource("42_r422n")]
 layout_mode = 2
@@ -3385,6 +3354,7 @@ backing_texture = ExtResource("101_g5u5n")
 hide_corner_level = true
 hide_corner_info = true
 hide_tint_progress = true
+item_deposited_sound = &"crafting_slot_drop"
 
 [node name="CraftingDownArrow" type="TextureRect" parent="OverlayUI/PlayerInvUI/CraftingManager/InnerMargins/GridMargins/SlotsVBox" unique_id=568625537]
 unique_name_in_owner = true
@@ -3595,26 +3565,31 @@ theme_override_constants/v_separation = 0
 layout_mode = 2
 script = ExtResource("113_bvo3j")
 backing_texture = ExtResource("103_g5u5n")
+item_deposited_sound = &"wearable_slot_drop"
 
 [node name="Slot2" parent="OverlayUI/PlayerInvUI/WearablesPanel/MarginContainer/VBoxMargins/VBoxContainer/InnerMargin/WearablesGridMargins/WearablesGrid" unique_id=458760256 instance=ExtResource("42_r422n")]
 layout_mode = 2
 script = ExtResource("113_bvo3j")
 backing_texture = ExtResource("103_g5u5n")
+item_deposited_sound = &"wearable_slot_drop"
 
 [node name="Slot3" parent="OverlayUI/PlayerInvUI/WearablesPanel/MarginContainer/VBoxMargins/VBoxContainer/InnerMargin/WearablesGridMargins/WearablesGrid" unique_id=172324023 instance=ExtResource("42_r422n")]
 layout_mode = 2
 script = ExtResource("113_bvo3j")
 backing_texture = ExtResource("103_g5u5n")
+item_deposited_sound = &"wearable_slot_drop"
 
 [node name="Slot4" parent="OverlayUI/PlayerInvUI/WearablesPanel/MarginContainer/VBoxMargins/VBoxContainer/InnerMargin/WearablesGridMargins/WearablesGrid" unique_id=1908511723 instance=ExtResource("42_r422n")]
 layout_mode = 2
 script = ExtResource("113_bvo3j")
 backing_texture = ExtResource("103_g5u5n")
+item_deposited_sound = &"wearable_slot_drop"
 
 [node name="Slot5" parent="OverlayUI/PlayerInvUI/WearablesPanel/MarginContainer/VBoxMargins/VBoxContainer/InnerMargin/WearablesGridMargins/WearablesGrid" unique_id=1246120047 instance=ExtResource("42_r422n")]
 layout_mode = 2
 script = ExtResource("113_bvo3j")
 backing_texture = ExtResource("103_g5u5n")
+item_deposited_sound = &"wearable_slot_drop"
 
 [node name="TrashSlotPanelMargins" type="MarginContainer" parent="OverlayUI/PlayerInvUI" unique_id=90326320]
 unique_name_in_owner = true
@@ -3646,6 +3621,7 @@ unique_name_in_owner = true
 layout_mode = 2
 region_rect = Rect2(0, 0, 20, 20)
 backing_texture = ExtResource("69_4ao77")
+item_deposited_sound = &"trash_slot_drop"
 
 [node name="SidePanelManager" type="CenterContainer" parent="OverlayUI/PlayerInvUI" unique_id=1408240360]
 unique_name_in_owner = true

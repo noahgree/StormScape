@@ -1,4 +1,4 @@
-[gd_resource type="SpriteFrames" load_steps=4 format=3 uid="uid://cyfl1jof4do4a"]
+[gd_resource type="SpriteFrames" format=3 uid="uid://cyfl1jof4do4a"]
 
 [ext_resource type="Texture2D" uid="uid://df8dupng4k8mm" path="res://Entities/Player/UI/Cursors/gattler_base.png" id="1_31rqh"]
 
