@@ -19,8 +19,7 @@ var blocked_sounds: Dictionary[StringName, int] ## Entries in this dict are bloc
 
 #region Setup & Cache
 func _ready() -> void:
-	if OS.get_unique_id() == "W1RHWL2KQ6":
-		_setup_output_device()
+	_setup_output_device()
 
 	_cache_audio_resources(music_resources_folder, sound_cache)
 	_cache_audio_resources(sfx_resources_folder, sound_cache)
@@ -33,7 +32,8 @@ func _ready() -> void:
 	DebugConsole.add_command("sound_volume", change_volume_by_sound_name)
 	DebugConsole.add_command("sound_group", _debug_print_active_nodes_in_group)
 
-## Debug setup for Noah's macbook audio output. Only affects him.
+## Debug setup for original dev's macbook audio output. Only affects him. This function and all calls to it
+## can safely be deleted.
 func _setup_output_device() -> void:
 	if not DebugFlags.set_debug_output_device:
 		AudioServer.output_device = "Default"

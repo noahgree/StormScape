@@ -76,7 +76,7 @@ func handle_effect_source(effect_source: EffectSource, source_entity: Entity, so
 			return
 
 	# --- Checking if Sender is Passive or Receiver Can't Receive Effect Sources ---
-	if (source_entity and source_entity.team == Globals.Teams.PASSIVE) or ((affected_entity is DynamicEntity) and not affected_entity.fsm.controller.can_receive_effect_srcs):
+	if (source_entity and source_entity.team == Globals.Teams.PASSIVE) or not _check_if_can_receive_effect_sources_and_status_effects():
 		if affected_entity.loot:
 			affected_entity.loot.handle_hit()
 		return
@@ -154,7 +154,7 @@ func _check_status_effect_team_logic(effect_source: EffectSource, source_entity:
 ## Checks for untouchability and handles the stat mods in the status effect.
 ## Then it passes the effect to have its main logic handled if it needs a handler.
 func handle_status_effect(status_effect: StatusEffect) -> void:
-	if not _check_if_applicable_entity_type_for_status_effect(status_effect):
+	if not _check_if_applicable_entity_type_for_status_effect(status_effect) or not _check_if_can_receive_effect_sources_and_status_effects():
 		return
 	if (affected_entity.effects.is_untouchable()) and (status_effect.is_bad_effect):
 		return
@@ -232,6 +232,15 @@ func _check_if_applicable_entity_type_for_status_effect(status_effect: StatusEff
 		return false
 	else:
 		return true
+
+## Checks if the affected entity is Dynamic and has been flagged to not receieve effect sources (and therefore
+## not status effects, either).
+func _check_if_can_receive_effect_sources_and_status_effects() -> bool:
+	if (affected_entity is DynamicEntity) and not affected_entity.fsm.controller.can_receive_effect_srcs:
+		return false
+	elif not can_receive_status_effects:
+		return false
+	return true
 
 ## Only plays the impact sound if one exists and one is not already playing for a matching multishot id.
 func _handle_impact_sound(effect_source: EffectSource) -> void:
