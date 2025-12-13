@@ -1,4 +1,4 @@
-[gd_scene load_steps=27 format=3 uid="uid://bond8rty1ljh"]
+[gd_scene format=3 uid="uid://bond8rty1ljh"]
 
 [ext_resource type="Script" uid="uid://cn2gulskgn7k3" path="res://Entities/EntityCore/EntityTypes/StaticEntity/StaticEntity.gd" id="1_uvrwn"]
 [ext_resource type="Script" uid="uid://dwmur0cosbbwh" path="res://Entities/Player/UI/Inventory/InventoryCore/InvResource.gd" id="2_oq3a2"]
@@ -8,8 +8,8 @@
 [ext_resource type="Shader" uid="uid://cfbagv3hrtar2" path="res://Utilities/Game/Shaders/EntityEffectShader.gdshader" id="3_xscca"]
 [ext_resource type="Script" uid="uid://baglarh3m4c8o" path="res://Entities/Components/ItemComponents/LootTableComponent/LootTableResource.gd" id="6_3mtfl"]
 [ext_resource type="PackedScene" uid="uid://bhcqtorpyerc3" path="res://Utilities/Debug/ParticleEmissionComponent.tscn" id="6_5h6dj"]
-[ext_resource type="Texture2D" uid="uid://2xf1pqc78iin" path="res://Assets/Icon/icon.svg" id="7_7nbuj"]
 [ext_resource type="PackedScene" uid="uid://cdfdy8m6ki3oq" path="res://Entities/Components/HealthComponent/HealthComponent.tscn" id="7_pas02"]
+[ext_resource type="Texture2D" uid="uid://b16ywn0u2djhd" path="res://Assets/Icon/icon_light.png" id="9_3mtfl"]
 [ext_resource type="PackedScene" uid="uid://4gl24qwdyti3" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/DmgHandler.tscn" id="10_b3858"]
 [ext_resource type="PackedScene" uid="uid://btba0jmsow1mx" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectReceiverComponent.tscn" id="10_o35vp"]
 [ext_resource type="PackedScene" uid="uid://cj2wy5f05cos4" path="res://Entities/EntityCore/Shadow/EntityShadow.tscn" id="11_axhmd"]
@@ -20,29 +20,10 @@
 
 [sub_resource type="Resource" id="Resource_tmtom"]
 script = ExtResource("2_oq3a2")
-title = "CHEST"
-main_inv_size = 10
-drop_on_death = false
-starting_inv = Array[ExtResource("3_4hy3y")]([])
 
 [sub_resource type="Resource" id="Resource_g1258"]
 script = ExtResource("6_3mtfl")
-hit_loot_table = Array[ExtResource("14_h0qkk")]([])
 hit_spawn_chance = 1.0
-hit_chance_scale = 1
-remove_when_dropped = false
-require_dmg_on_hit = true
-hp_percent_hit_checks = 15
-die_loot_table = Array[ExtResource("14_h0qkk")]([])
-die_spawn_chance = 100.0
-rarity_scaling_factors = Dictionary[int, float]({
-0: 0.5,
-1: 0.4,
-2: 0.3,
-3: 0.1,
-4: 0.05,
-5: 0.005
-})
 metadata/_custom_type_script = "uid://baglarh3m4c8o"
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ur1i4"]
@@ -52,15 +33,15 @@ size = Vector2(12, 12)
 resource_local_to_scene = true
 shader = ExtResource("3_xscca")
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_c4qls"]
-atlas = ExtResource("7_7nbuj")
-region = Rect2(0, 0, 128, 128)
+[sub_resource type="AtlasTexture" id="AtlasTexture_g1258"]
+atlas = ExtResource("9_3mtfl")
+region = Rect2(0, 0, 1024, 1024)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_rk4ta"]
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_c4qls")
+"texture": SubResource("AtlasTexture_g1258")
 }],
 "loop": true,
 "name": &"default",
@@ -78,7 +59,7 @@ size = Vector2(14, 14)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_3rk2w"]
 size = Vector2(14, 14)
 
-[node name="TestStaticEntity" type="StaticBody2D"]
+[node name="TestStaticEntity" type="StaticBody2D" unique_id=2078041475]
 collision_layer = 0
 collision_mask = 0
 script = ExtResource("1_uvrwn")
@@ -87,48 +68,48 @@ is_object = true
 inv = SubResource("Resource_tmtom")
 loot = SubResource("Resource_g1258")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1211578651]
 position = Vector2(0, -7)
 shape = SubResource("RectangleShape2D_ur1i4")
 
-[node name="DetectionComponent" parent="." instance=ExtResource("3_c4qls")]
+[node name="DetectionComponent" parent="." unique_id=7720521 instance=ExtResource("3_c4qls")]
 
-[node name="EntitySprite" parent="." instance=ExtResource("3_kbhyj")]
+[node name="EntitySprite" parent="." unique_id=1711748734 instance=ExtResource("3_kbhyj")]
 unique_name_in_owner = true
 material = SubResource("ShaderMaterial_3mtfl")
 position = Vector2(0, -7)
-scale = Vector2(0.11, 0.11)
+scale = Vector2(0.017, 0.017)
 sprite_frames = SubResource("SpriteFrames_rk4ta")
 
-[node name="EntityShadow" parent="." instance=ExtResource("11_axhmd")]
+[node name="EntityShadow" parent="." unique_id=1836761938 instance=ExtResource("11_axhmd")]
 offset_left = -9.0
 offset_top = -10.0
 offset_right = 9.0
 offset_bottom = 2.0
 
-[node name="HealthComponent" parent="." instance=ExtResource("7_pas02")]
+[node name="HealthComponent" parent="." unique_id=1940569359 instance=ExtResource("7_pas02")]
 infinte_hp = true
 
-[node name="ParticleEmissionComponent" parent="." instance=ExtResource("6_5h6dj")]
+[node name="ParticleEmissionComponent" parent="." unique_id=2083625814 instance=ExtResource("6_5h6dj")]
 
-[node name="EffectReceiverComponent" parent="." node_paths=PackedStringArray("affected_entity", "dmg_handler") instance=ExtResource("10_o35vp")]
+[node name="EffectReceiverComponent" parent="." unique_id=1081717184 node_paths=PackedStringArray("affected_entity", "dmg_handler") instance=ExtResource("10_o35vp")]
 affected_entity = NodePath("..")
 dmg_handler = NodePath("DmgHandler")
 life_steal_handler = SubResource("Resource_axhmd")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="EffectReceiverComponent"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="EffectReceiverComponent" unique_id=947968318]
 position = Vector2(0, -7)
 shape = SubResource("RectangleShape2D_opl06")
 
-[node name="DmgHandler" parent="EffectReceiverComponent" instance=ExtResource("10_b3858")]
+[node name="DmgHandler" parent="EffectReceiverComponent" unique_id=1053109451 instance=ExtResource("10_b3858")]
 
-[node name="StatusEffectsComponent" parent="." node_paths=PackedStringArray("effect_receiver") instance=ExtResource("11_swclu")]
+[node name="StatusEffectsComponent" parent="." unique_id=1858307203 node_paths=PackedStringArray("effect_receiver") instance=ExtResource("11_swclu")]
 unique_name_in_owner = true
 effect_receiver = NodePath("../EffectReceiverComponent")
 
-[node name="ClippingArea" parent="." instance=ExtResource("22_h0qkk")]
+[node name="ClippingArea" parent="." unique_id=421497682 instance=ExtResource("22_h0qkk")]
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="ClippingArea"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ClippingArea" unique_id=376462569]
 position = Vector2(0, -7)
 shape = SubResource("RectangleShape2D_3rk2w")
 debug_color = Color(1, 0, 0.0917963, 0.251)

@@ -45,11 +45,11 @@
 [ext_resource type="Texture2D" uid="uid://cx7u0pbdtc6eb" path="res://Utilities/Game/Particles/grunge_light.png" id="32_s5gqv"]
 [ext_resource type="Script" uid="uid://d1xfue3du3eyu" path="res://Utilities/Debug/DebugCanvasLayer.gd" id="34_01d0t"]
 [ext_resource type="Script" uid="uid://by6ifp7vltc41" path="res://Entities/StormBase/StormBase.gd" id="34_w76bj"]
-[ext_resource type="Texture2D" uid="uid://blb7ahx7xq5dq" path="res://icon.png" id="35_e5rpg"]
 [ext_resource type="PackedScene" uid="uid://dh4ydl7l86ywq" path="res://Entities/EntityCore/Sprites/EntitySprite.tscn" id="35_vi22v"]
 [ext_resource type="Resource" uid="uid://bs4rqdt46yav7" path="res://Entities/Items/TRESItems/WorldResources/OakLog(0).tres" id="36_8jild"]
 [ext_resource type="PackedScene" uid="uid://bj7vw8d6oqv0m" path="res://Entities/Player/UI/Interactions/InteractionsCore/InteractionArea.tscn" id="36_e5rpg"]
 [ext_resource type="PackedScene" uid="uid://dnpwx3cn0i24s" path="res://Entities/Player/UI/Inventory/Panels/SidePanels/StormBaseSidePanel.tscn" id="36_yng6w"]
+[ext_resource type="Texture2D" uid="uid://dlk243e5b6tys" path="res://Assets/Icon/icon_dark.png" id="40_01d0t"]
 [ext_resource type="Script" uid="uid://cbiskerf2stk6" path="res://Stages/World/Storm/StormTransform.gd" id="40_27u15"]
 [ext_resource type="PackedScene" uid="uid://bhcqtorpyerc3" path="res://Utilities/Debug/ParticleEmissionComponent.tscn" id="41_f5fhq"]
 [ext_resource type="PackedScene" uid="uid://di7vcyrki71nm" path="res://Entities/Components/DetectionComponent/DetectionComponent.tscn" id="42_1606r"]
@@ -298,15 +298,15 @@ metadata/_custom_type_script = "uid://dwmur0cosbbwh"
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_f5fhq"]
 size = Vector2(40, 40)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_1606r"]
-atlas = ExtResource("35_e5rpg")
-region = Rect2(0, 0, 400, 400)
+[sub_resource type="AtlasTexture" id="AtlasTexture_xm2up"]
+atlas = ExtResource("40_01d0t")
+region = Rect2(0, 0, 1024, 1024)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_hkn5b"]
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_1606r")
+"texture": SubResource("AtlasTexture_xm2up")
 }],
 "loop": true,
 "name": &"default",
@@ -622,7 +622,7 @@ debug_color = Color(0.6905431, 0.28825647, 1, 0.2509804)
 
 [node name="EntitySprite" parent="WorldRoot/StormBase" unique_id=210877695 instance=ExtResource("35_vi22v")]
 unique_name_in_owner = true
-scale = Vector2(0.1, 0.1)
+scale = Vector2(0.049, 0.049)
 sprite_frames = SubResource("SpriteFrames_hkn5b")
 
 [node name="InteractionArea" parent="WorldRoot/StormBase" unique_id=897230405 instance=ExtResource("36_e5rpg")]
