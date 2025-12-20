@@ -1,21 +1,23 @@
 *.DS_Store
 
 # Godot 4+ specific ignores
-StormScape/.godot/
-StormScape/android/
+Stormscape/.godot/
+Stormscape/android/
 
-StormScape/.import/
-StormScape/export.cfg
-StormScape/export_presets.cfg
+Stormscape/.import/
+Stormscape/export.cfg
+Stormscape/export_presets.cfg
 
 # Imported translations (automatically generated from CSV files)
 *.translation
 
 # Mono-specific ignores
-StormScape/.mono/
-StormScape/data_*/
-StormScape/mono_crash.*.json
+Stormscape/.mono/
+Stormscape/data_*/
+Stormscape/mono_crash.*.json
+Stormscape/.vscode
 
 FL Studio Files/
 Aseprite Files/
 Progress Media/
+Assets Alias/

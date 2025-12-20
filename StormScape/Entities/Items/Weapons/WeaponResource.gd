@@ -26,6 +26,7 @@ const EFFECT_AMOUNT_XP_MULT: float = 0.35 ## Multiplies effect src amounts (dmg,
 
 # Unique Properties #
 @export_custom(PROPERTY_HINT_RANGE, "1,40,1", PROPERTY_USAGE_STORAGE) var level: int = 1 ## The level for this weapon.
+@export_storage var allowed_lvl: int = 1 ## The level that the xp gain has allowed this weapon to achieve, potentially pending an upgrade confirmation from the player.
 @export_storage var lvl_progress: int ## Any xp gained towards the progress of the next level is stored here.
 @export_storage var s_mods: StatModsCacheResource = StatModsCacheResource.new() ## The cache of all up to date stats for this weapon with mods factored in.
 @export_storage var weapon_mods_need_to_be_readded_after_save: bool = false ## When the weapons are loaded from a save, the weapon mods end up getting added to the old stats reference and not the new duplicated one after load. But since these properties transfer over, we check this each time the weapon is readied to see if we should readd all weapon mods.
@@ -41,9 +42,11 @@ static func xp_needed_for_lvl(weapon_stats: WeaponResource, lvl: int) -> int:
 	# Subtract one iteration at the end since we start at level 1
 	return int(BASE_XP_FOR_LVL * pow(lvl, LVL_SCALING_EXPONENT) * rarity_mult) - int(BASE_XP_FOR_LVL * rarity_mult)
 
-## Returns the percent progress to the next level, 0 - 1.
-static func percent_of_lvl_progress(weapon_stats: WeaponResource) -> float:
-	var xp_needed: int = xp_needed_for_lvl(weapon_stats, weapon_stats.level + 1)
+## Returns the percent progress to the next allowed level, 0 - 1.
+static func visual_percent_of_lvl_progress(weapon_stats: WeaponResource) -> float:
+	if weapon_stats.level < weapon_stats.allowed_lvl:
+		return 1.0
+	var xp_needed: int = xp_needed_for_lvl(weapon_stats, weapon_stats.allowed_lvl + 1)
 	return float(weapon_stats.lvl_progress) / float(xp_needed)
 
 ## Whether the weapon is the same as another weapon when called externally to compare.
@@ -80,37 +83,50 @@ func add_xp(amount: int) -> bool:
 	if no_levels:
 		return false
 
-	var leveled_up: bool = false
+	var allowed_leveled_up: bool = false
 
 	lvl_progress += amount
-	while level < MAX_LEVEL:
-		var xp_needed: int = xp_needed_for_lvl(self, level + 1)
+	while allowed_lvl < MAX_LEVEL:
+		var xp_needed: int = xp_needed_for_lvl(self, allowed_lvl + 1)
 		if lvl_progress >= xp_needed and xp_needed > 0:
 			lvl_progress -= xp_needed
-			level += 1
-			leveled_up = true
+			allowed_lvl += 1
+			allowed_leveled_up = true
 		else:
 			break
 
-	if level == MAX_LEVEL:
+	if allowed_lvl == MAX_LEVEL:
 		lvl_progress = 0
 
-	if leveled_up:
-		if level == MAX_LEVEL:
-			MessageManager.add_msg("[color=white]" + name + " is now[/color] MAX LVL[color=white]!", Globals.ui_colors.ui_glow_strong_success, inv_icon)
+	if allowed_leveled_up:
+		if allowed_lvl == MAX_LEVEL:
+			MessageManager.add_msg("[color=white]" + name + "[/color] Can Now Become[color=white] MAX LEVEL[/color]!", Globals.ui_colors.ui_glow_strong_success, inv_icon)
 		else:
-			MessageManager.add_msg("[color=white]" + name + " is now[/color] LVL " + str(level), Globals.ui_colors.ui_glow_strong_success, inv_icon)
+			MessageManager.add_msg("[color=white]" + name + "[/color] Upgrade Available!", Globals.ui_colors.ui_glow_strong_success, inv_icon)
 
 	if Globals.player_node.hands.do_these_stats_match_equipped_item(self):
 		var idx: int = Globals.player_node.hands.equipped_item.inv_index
 		Globals.player_node.inv.inv_data_updated.emit(idx, Globals.player_node.inv.inv[idx])
 
 	if DebugFlags.weapon_xp_updates:
-		var xp_needed_now: int = xp_needed_for_lvl(self, level + 1)
-		print("AMOUNT: ", amount, " | PROGRESS: ", lvl_progress, " | LEVEL: ", level, " | REMAINING_NEEDED: ", xp_needed_now - lvl_progress)
+		var xp_needed_now: int = xp_needed_for_lvl(self, allowed_lvl + 1)
+		print("AMOUNT: ", amount, " | PROGRESS: ", lvl_progress, " | LEVEL: ", level, " | ALLOWED LEVEL: ", allowed_lvl, " | REMAINING_NEEDED: ", xp_needed_now - lvl_progress)
 
-	return leveled_up
+	return allowed_leveled_up
 
+## Returns if the item can level up.
+func can_level_up() -> bool:
+	return (allowed_lvl > level)
+
+## Levels up the weapon and returns the new level.
+func level_up() -> int:
+	level += 1
+	var max_lvl_msg: String = "MAX LEVEL" if level == MAX_LEVEL else ("Level " + str(level))
+	var stats_msg: String = ". Stats Increased!" if level % 10 == 0 else ""
+	MessageManager.add_msg(name + " is now [color=white]" + max_lvl_msg  + "[/color]" + stats_msg, Globals.ui_colors.ui_glow_strong_success, inv_icon)
+	return level
+
+#region DEBUG
 ## prints the total needed xp for each level up to the requested level.
 func print_total_needed(for_level: int) -> void:
 	print("-------------------------------------------------------------------------")
@@ -119,3 +135,4 @@ func print_total_needed(for_level: int) -> void:
 		var xp: int = xp_needed_for_lvl(self, lvl)
 		total += xp
 		print("LVL: ", lvl, " | LVL_XP: ", xp, " | TOTAL: ", total)
+#endregion

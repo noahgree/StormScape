@@ -17,12 +17,14 @@ class_name PlayerInvUI
 @onready var ammo_slot_manager: AmmoSlotManager = %AmmoSlotManager ## The manager handling ammo slots.
 @onready var currency_slot_manager: CurrencySlotManager = %CurrencySlotManager ## The manager handling currency slots.
 @onready var trash_slot_container: MarginContainer = %TrashSlotPanelMargins ## The trash slot's margin container.
+@onready var lvl_up_inner_margin: MarginContainer = %LvlUpInnerMargin ## The lvl up button's inner margin container.
 
 @onready var sort_by_name_btn: NinePatchRect = %SortByName ## The sort by name button.
 @onready var sort_by_type_btn: NinePatchRect = %SortByType ## The sort by type button.
 @onready var sort_by_rarity_btn: NinePatchRect = %SortByRarity ## The sort by rarity button.
 @onready var auto_stack_btn: NinePatchRect = %AutoStack ## The autostacking button.
 @onready var craft_btn: NinePatchRect = %CraftBackground ## The craft button.
+@onready var lvl_up_btn: NinePatchRect = %LvlUpBackground ## The lvl up button.
 
 var is_open: bool = false: set = _toggle_inventory_ui ## True when the inventory is open and showing.
 var side_panel_active: bool = false: set = _toggle_side_panel ## When true, the alternate inv is open and the wearable & crafting panels should be hidden.
@@ -230,16 +232,33 @@ func _on_auto_stack_btn_button_up() -> void:
 ## Attempts to craft whatever is shown in the output slot of the crafting UI.
 func _on_craft_btn_pressed() -> void:
 	get_node("%CraftingManager").attempt_craft()
+	var new_lvl: String = str(item_details_panel.item_viewer_slot.item.stats.level_up())
+	MessageManager.add_msg_preset(item_details_panel.item_viewer_slot.item.stats.name + " is now Level " + new_lvl, MessageManager.Presets.SUCCESS)
 func _on_craft_btn_button_down() -> void:
 	craft_btn.texture = btn_down_texture
 func _on_craft_btn_button_up() -> void:
 	craft_btn.texture = btn_up_texture
 
+## Handling the tooltip and button pressing of the level up button.
+func _on_lvl_up_btn_pressed() -> void:
+	var item_stats: WeaponResource = item_details_panel.item_viewer_slot.item.stats
+	if item_stats.level_up() >= item_stats.allowed_lvl:
+		lvl_up_inner_margin.hide()
+	item_details_panel.manually_set_item_viewer_slot(item_details_panel.item_viewer_slot, true)
+func _on_lvl_up_btn_mouse_entered() -> void:
+	if not get_viewport().gui_is_dragging():
+		CursorManager.update_tooltip("Level Up (" + str(item_details_panel.item_viewer_slot.item.stats.level + 1) + ")")
+func _on_lvl_up_btn_button_down() -> void:
+	lvl_up_btn.texture = btn_down_texture
+func _on_lvl_up_btn_button_up() -> void:
+	lvl_up_btn.texture = btn_up_texture
+
+
 ## Showing and hiding sort & stack tooltips.
 func _on_sort_btn_mouse_entered(sort_method: String) -> void:
 	if not get_viewport().gui_is_dragging():
 		CursorManager.update_tooltip("Sort by " + sort_method)
-func _on_autostack_btn_mouse_entered() -> void:
+func _on_auto_stack_btn_mouse_entered() -> void:
 	if not get_viewport().gui_is_dragging():
 		CursorManager.update_tooltip("Autostack Items")
 func _on_craft_btn_mouse_entered() -> void:

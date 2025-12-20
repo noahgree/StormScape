@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cp7uxam0b4khc"
-path="res://.godot/imported/craft_input_slot_icon.png-53b0fc29171ddd1fa4c31e1499cb95de.ctex"
+uid="uid://cn54g3yxn4t4e"
+path="res://.godot/imported/output_slot_icon_left.png-42dcef26cd1cb2ed0c41b02a0214e09c.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Entities/Player/UI/Inventory/Assets/Slot/Universal/craft_input_slot_icon.png"
-dest_files=["res://.godot/imported/craft_input_slot_icon.png-53b0fc29171ddd1fa4c31e1499cb95de.ctex"]
+source_file="res://Entities/Player/UI/Inventory/Assets/Slot/Universal/BackgroundIcons/output_slot_icon_left.png"
+dest_files=["res://.godot/imported/output_slot_icon_left.png-42dcef26cd1cb2ed0c41b02a0214e09c.ctex"]
 
 [params]
 

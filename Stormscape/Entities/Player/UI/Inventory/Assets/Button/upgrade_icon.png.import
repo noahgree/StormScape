@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://b5t26j33yq3b"
-path="res://.godot/imported/ion_charge_slot_icon.png-f2ff21fedd2a91d2b5a98eac02cbfbbe.ctex"
+uid="uid://mydn7q2rsxj4"
+path="res://.godot/imported/upgrade_icon.png-578195353d2326d22163118f098324d4.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Entities/Player/UI/Inventory/Assets/Slot/Universal/ion_charge_slot_icon.png"
-dest_files=["res://.godot/imported/ion_charge_slot_icon.png-f2ff21fedd2a91d2b5a98eac02cbfbbe.ctex"]
+source_file="res://Entities/Player/UI/Inventory/Assets/Button/upgrade_icon.png"
+dest_files=["res://.godot/imported/upgrade_icon.png-578195353d2326d22163118f098324d4.ctex"]
 
 [params]
 

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cn54g3yxn4t4e"
-path="res://.godot/imported/output_slot_icon_left.png-cf8fe7e9fba0b4dd4bb74b92c5118769.ctex"
+uid="uid://cis4i6ap8qfpb"
+path="res://.godot/imported/shell_slot_icon.png-888b4dde6198c890031f33f575737266.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Entities/Player/UI/Inventory/Assets/Slot/Universal/output_slot_icon_left.png"
-dest_files=["res://.godot/imported/output_slot_icon_left.png-cf8fe7e9fba0b4dd4bb74b92c5118769.ctex"]
+source_file="res://Entities/Player/UI/Inventory/Assets/Slot/Universal/BackgroundIcons/shell_slot_icon.png"
+dest_files=["res://.godot/imported/shell_slot_icon.png-888b4dde6198c890031f33f575737266.ctex"]
 
 [params]
 

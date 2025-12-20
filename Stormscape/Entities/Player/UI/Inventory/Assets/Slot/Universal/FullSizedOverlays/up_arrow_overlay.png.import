@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c7gb4yo7qwfql"
-path="res://.godot/imported/upgrade_slot_icon.png-057dfe29dc4a8094f45e12f01d2881bf.ctex"
+uid="uid://b6k282g0r321f"
+path="res://.godot/imported/up_arrow_overlay.png-2ea3a2f4b8a311f5cc9f5662fe23eff0.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Entities/Player/UI/Inventory/Assets/Slot/Universal/upgrade_slot_icon.png"
-dest_files=["res://.godot/imported/upgrade_slot_icon.png-057dfe29dc4a8094f45e12f01d2881bf.ctex"]
+source_file="res://Entities/Player/UI/Inventory/Assets/Slot/Universal/FullSizedOverlays/up_arrow_overlay.png"
+dest_files=["res://.godot/imported/up_arrow_overlay.png-2ea3a2f4b8a311f5cc9f5662fe23eff0.ctex"]
 
 [params]
 

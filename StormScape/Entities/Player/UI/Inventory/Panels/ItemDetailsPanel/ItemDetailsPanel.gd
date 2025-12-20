@@ -21,6 +21,7 @@ class_name ItemDetailsPanel
 @onready var item_lvl_margin: MarginContainer = %ItemLvlMargin
 @onready var item_level_label: RichTextLabel = %ItemLevelLabel
 @onready var lvl_progress_margins: MarginContainer = %LvlProgressMargins
+@onready var lvl_up_inner_margin: MarginContainer = %LvlUpInnerMargin
 
 var mod_slots: Array[ModSlot] = [] ## The mod slots that display and modify the mods for the item under review.
 var changing_item_viewer_slot: bool = false ## When true, the item under review is changing and we shouldn't respond to mod slot item changes.
@@ -42,6 +43,7 @@ func _ready() -> void:
 	details_margin.visible = false
 	changing_item_viewer_slot = false
 	item_lvl_margin.visible = false
+	lvl_up_inner_margin.visible = false
 
 ## Sets up the mod slots and the item viewer slot with their needed data.
 func setup_slots(inventory_ui: PlayerInvUI) -> void:
@@ -145,12 +147,15 @@ func _on_mod_slot_changed(slot: ModSlot, old_item: InvItemResource, new_item: In
 
 ## Manually sets the item viewer slot. If the slot to set it to is the item viewer slot itself, remove the item
 ## in it if there is one. Returns if the slot was set to the item viewer or not.
-func manually_set_item_viewer_slot(slot: Slot) -> bool:
+func manually_set_item_viewer_slot(slot: Slot, reload_already_viewed_item: bool = false) -> bool:
 	if slot == item_viewer_slot and slot.item != null:
-		slot.synced_inv.insert_from_inv_item(slot.item, false, true)
-		slot.set_item(null)
-		CursorManager.hide_tooltip()
-		return false
+		if not reload_already_viewed_item:
+			slot.synced_inv.insert_from_inv_item(slot.item, false, true)
+			slot.set_item(null)
+			CursorManager.hide_tooltip()
+			return false
+		else:
+			item_viewer_slot.set_item(slot.item)
 	if item_viewer_slot._can_drop_data(Vector2.ZERO, slot):
 		if not pinned:
 			item_viewer_slot.set_item(null)
@@ -166,6 +171,7 @@ func _on_item_viewer_slot_changed(_slot: Slot, _old_item: InvItemResource, new_i
 
 	player_icon_margin.visible = false
 	item_lvl_margin.visible = false
+	lvl_up_inner_margin.visible = false
 
 	if new_item == null:
 		_change_mod_slot_visibilities(false)
@@ -211,7 +217,9 @@ func _on_item_viewer_slot_changed(_slot: Slot, _old_item: InvItemResource, new_i
 			item_level_label.text = str(level) if level != WeaponResource.MAX_LEVEL else "MAX LEVEL"
 			if level < WeaponResource.MAX_LEVEL:
 				lvl_progress_margins.show()
-				item_lvl_margin.get_node("%ItemLvlProgressBar").value = WeaponResource.percent_of_lvl_progress(new_item.stats) * 100.0
+				item_lvl_margin.get_node("%ItemLvlProgressBar").value = WeaponResource.visual_percent_of_lvl_progress(new_item.stats) * 100.0
+				if new_item.stats.allowed_lvl > level:
+					lvl_up_inner_margin.show()
 			else:
 				lvl_progress_margins.hide()
 			item_lvl_margin.visible = true
@@ -281,7 +289,7 @@ func _on_hover_delay_ended() -> void:
 		if slot.item != null:
 			var info: String = slot.item.stats.get_item_type_string(true)
 			if slot.item.stats is WeaponResource and not slot.item.stats.no_levels:
-				info += " (LVL " + str(slot.item.stats.level) + ")"
+				info += " (Lvl. " + str(slot.item.stats.level) + ")"
 			CursorManager.update_tooltip(slot.item.stats.name, Globals.ui_colors.ui_light_tan, info, Globals.rarity_colors.ui_text.get(slot.item.stats.rarity))
 	elif slot.item != null:
 		is_updating_via_hover = true

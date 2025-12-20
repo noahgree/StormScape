@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://b5x8pxiqi07f7"
-path="res://.godot/imported/stormshine_slot_icon.png-fcc68b2e144096e47a65f55ca2995559.ctex"
+uid="uid://bvu2b8dfhtl8j"
+path="res://.godot/imported/bullet_slot_icon.png-f868a33111846634a71476eb68153af6.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Entities/Player/UI/Inventory/Assets/Slot/Universal/stormshine_slot_icon.png"
-dest_files=["res://.godot/imported/stormshine_slot_icon.png-fcc68b2e144096e47a65f55ca2995559.ctex"]
+source_file="res://Entities/Player/UI/Inventory/Assets/Slot/Universal/BackgroundIcons/bullet_slot_icon.png"
+dest_files=["res://.godot/imported/bullet_slot_icon.png-f868a33111846634a71476eb68153af6.ctex"]
 
 [params]
 

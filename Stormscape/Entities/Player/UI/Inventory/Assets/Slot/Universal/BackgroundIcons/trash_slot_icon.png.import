@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bhwg6ynp1bscr"
-path="res://.godot/imported/mod_slot_icon.png-9c8bfd31634086c8f8e9af201888f36b.ctex"
+uid="uid://dtft3mljs2y5s"
+path="res://.godot/imported/trash_slot_icon.png-c6e002de4b290b02e04ac6578253b756.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Entities/Player/UI/Inventory/Assets/Slot/Universal/mod_slot_icon.png"
-dest_files=["res://.godot/imported/mod_slot_icon.png-9c8bfd31634086c8f8e9af201888f36b.ctex"]
+source_file="res://Entities/Player/UI/Inventory/Assets/Slot/Universal/BackgroundIcons/trash_slot_icon.png"
+dest_files=["res://.godot/imported/trash_slot_icon.png-c6e002de4b290b02e04ac6578253b756.ctex"]
 
 [params]
 

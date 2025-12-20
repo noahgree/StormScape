@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://f57uc17bmui6"
-path="res://.godot/imported/output_slot_icon_right.png-77cbf231ed75160a7db8bc99a2ac38eb.ctex"
+path="res://.godot/imported/output_slot_icon_right.png-cf68cc7db56bf1df3e97cdbedb4edaad.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Entities/Player/UI/Inventory/Assets/Slot/Universal/output_slot_icon_right.png"
-dest_files=["res://.godot/imported/output_slot_icon_right.png-77cbf231ed75160a7db8bc99a2ac38eb.ctex"]
+source_file="res://Entities/Player/UI/Inventory/Assets/Slot/Universal/BackgroundIcons/output_slot_icon_right.png"
+dest_files=["res://.godot/imported/output_slot_icon_right.png-cf68cc7db56bf1df3e97cdbedb4edaad.ctex"]
 
 [params]
 

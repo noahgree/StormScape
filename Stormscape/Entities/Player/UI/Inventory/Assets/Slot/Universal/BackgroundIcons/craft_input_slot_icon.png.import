@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://3kkpkmyi20wj"
-path="res://.godot/imported/wearable_slot_icon.png-d504316a271ada3e78c2c1ca611535aa.ctex"
+uid="uid://cp7uxam0b4khc"
+path="res://.godot/imported/craft_input_slot_icon.png-f156aaad07c98ed56d81a504aeb85c7a.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Entities/Player/UI/Inventory/Assets/Slot/Universal/wearable_slot_icon.png"
-dest_files=["res://.godot/imported/wearable_slot_icon.png-d504316a271ada3e78c2c1ca611535aa.ctex"]
+source_file="res://Entities/Player/UI/Inventory/Assets/Slot/Universal/BackgroundIcons/craft_input_slot_icon.png"
+dest_files=["res://.godot/imported/craft_input_slot_icon.png-f156aaad07c98ed56d81a504aeb85c7a.ctex"]
 
 [params]
 

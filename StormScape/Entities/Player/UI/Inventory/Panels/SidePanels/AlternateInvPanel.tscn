@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://batypmdxig7ic"]
+[gd_scene format=3 uid="uid://batypmdxig7ic"]
 
 [ext_resource type="Script" uid="uid://dt68k0tnwjvdl" path="res://Entities/Player/UI/Inventory/InventoryCore/InvSlotManager.gd" id="1_bu5kf"]
 [ext_resource type="Texture2D" uid="uid://lqg70q4wj55g" path="res://Entities/Player/UI/Inventory/Assets/Background/Wood/inv_background_wood.png" id="1_ey4is"]
@@ -9,8 +9,8 @@
 [sub_resource type="LabelSettings" id="LabelSettings_6wv7y"]
 line_spacing = -1.0
 font_size = 9
-font_color = Color(0.913725, 0.768627, 0.741176, 1)
-outline_size = 2
+font_color = Color(0.961254, 0.893995, 0.881106, 1)
+outline_size = 3
 outline_color = Color(0.209, 0.114, 0.047, 0.565)
 shadow_size = 0
 shadow_color = Color(0, 0, 0, 0.3)

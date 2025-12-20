@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://86j53yxewgat"
-path="res://.godot/imported/glass_pane_overlay.png-942fc902fe0bbc968cd991ef42119e1b.ctex"
+uid="uid://3kkpkmyi20wj"
+path="res://.godot/imported/wearable_slot_icon.png-e5e0dbe1b58db9f46f03561dfe268bfd.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Entities/Player/UI/Inventory/Assets/Slot/Universal/Overlays/glass_pane_overlay.png"
-dest_files=["res://.godot/imported/glass_pane_overlay.png-942fc902fe0bbc968cd991ef42119e1b.ctex"]
+source_file="res://Entities/Player/UI/Inventory/Assets/Slot/Universal/BackgroundIcons/wearable_slot_icon.png"
+dest_files=["res://.godot/imported/wearable_slot_icon.png-e5e0dbe1b58db9f46f03561dfe268bfd.ctex"]
 
 [params]
 

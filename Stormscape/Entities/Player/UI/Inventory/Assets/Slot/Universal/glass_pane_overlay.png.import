@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bvu2b8dfhtl8j"
-path="res://.godot/imported/bullet_slot_icon.png-5d3870a3edbaafd8423373fe53928a9c.ctex"
+uid="uid://86j53yxewgat"
+path="res://.godot/imported/glass_pane_overlay.png-2ac4771e36109bb2acee92617cd3eefa.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Entities/Player/UI/Inventory/Assets/Slot/Universal/bullet_slot_icon.png"
-dest_files=["res://.godot/imported/bullet_slot_icon.png-5d3870a3edbaafd8423373fe53928a9c.ctex"]
+source_file="res://Entities/Player/UI/Inventory/Assets/Slot/Universal/glass_pane_overlay.png"
+dest_files=["res://.godot/imported/glass_pane_overlay.png-2ac4771e36109bb2acee92617cd3eefa.ctex"]
 
 [params]
 

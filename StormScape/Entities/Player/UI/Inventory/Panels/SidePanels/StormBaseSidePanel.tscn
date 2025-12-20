@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://dnpwx3cn0i24s"]
+[gd_scene format=3 uid="uid://dnpwx3cn0i24s"]
 
 [ext_resource type="Script" uid="uid://cdenu075tv71w" path="res://Entities/Player/UI/Inventory/Panels/SidePanels/StormBaseSidePanel.gd" id="1_4d6ny"]
 [ext_resource type="Texture2D" uid="uid://byr74ri0yypu2" path="res://Entities/Player/UI/Inventory/Assets/Background/Metal/inv_background_metal.png" id="2_d7qg0"]
@@ -6,7 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://m4ur3n2hwsp8" path="res://Entities/Player/UI/Inventory/InventoryCore/Slot.tscn" id="5_mjv4o"]
 [ext_resource type="FontFile" uid="uid://bp2lgrlhj8cet" path="res://Assets/Theming/Fonts/Pixel/C&C Red Alert [INET].ttf" id="6_1nfa8"]
 [ext_resource type="Texture2D" uid="uid://dlecwbci6aggo" path="res://Entities/Player/UI/Vitals/Assets/ProgressBars/progress_white.png" id="6_c1nxg"]
-[ext_resource type="Texture2D" uid="uid://c7gb4yo7qwfql" path="res://Entities/Player/UI/Inventory/Assets/Slot/Universal/upgrade_slot_icon.png" id="7_hduyg"]
+[ext_resource type="Texture2D" uid="uid://c7gb4yo7qwfql" path="res://Entities/Player/UI/Inventory/Assets/Slot/Universal/BackgroundIcons/upgrade_slot_icon.png" id="7_hduyg"]
 [ext_resource type="Texture2D" uid="uid://cxfwst8bqg5kx" path="res://Entities/Player/UI/Inventory/Assets/Slot/Metal/normal_slot_metal.png" id="11_tfhut"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_6leub"]

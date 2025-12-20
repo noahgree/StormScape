@@ -11,3 +11,5 @@ func setup() -> void:
 
 	for slot: Slot in base_upgrade_slots.get_children():
 		assign_preexitsing_slot(slot)
+
+	synced_inv_src_node.link_fuel_slot(fuel_slot)

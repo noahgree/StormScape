@@ -34,6 +34,12 @@ func _open_ui() -> void:
 	fuel += 10
 	SignalBus.side_panel_open_request.emit(side_panel, self)
 
+func link_fuel_slot(fuel_slot: Slot) -> void:
+	fuel_slot.item_changed.connect(_on_fuel_slot_item_changed)
+
+func _on_fuel_slot_item_changed(slot: Slot, old_item: InvItemResource, new_item: InvItemResource) -> void:
+
+
 
 func _set_fuel(new_fuel: int) -> void:
 	fuel = mini(new_fuel, max_fuel)

@@ -14,6 +14,7 @@ static var last_hovered_slot_size: float = 22.0 ## The most recently hovered ove
 @export var preview_only: bool = false ## When true, this slot will not react to hovers.
 @export var hide_corner_level: bool = false ## When true, the corner level icons for the item will not show.
 @export var hide_corner_info: bool = false ## When true, the corner info icons for the item will not show.
+@export var hide_overlay_icons: bool = false ## When true, overlay icons like upgrade indicators will not show.
 @export var hide_tint_progress: bool = false ## When true, the tint progress for the item will not show.
 @export var hide_hover_tooltip: bool = false ## When true, the hover tooltip will never show over this slot.
 @export var hide_back_color: bool = false ## When true, the backing solid color will never show under the item.
@@ -26,12 +27,12 @@ static var last_hovered_slot_size: float = 22.0 ## The most recently hovered ove
 @onready var rarity_glow: TextureRect = $RarityGlowMargin/RarityGlow ## The glow behind the weapon in the slot.
 @onready var selected_texture: NinePatchRect = $SelectedTexture ## The texture that appears when this slot is selected or active.
 @onready var backing_texture_rect: TextureRect = $BackingTextureMargin/BackingTexture ## The texture rect that appears behind everything as an icon.
-@onready var corner_info_icons_margin: MarginContainer = $CornerInfoIconsMargin ## The margins for the corner info.
 @onready var corner_info_icons_grid: HBoxContainer = %CornerInfoIconsHBox ## The grid holding the corner info icons.
 @onready var corner_level_icons_h_box: HBoxContainer = %CornerLevelIconsHBox ## The grid holding the corner level icons.
 @onready var modded_icon: TextureRect = %ModdedIcon ## The icon that shows up on a weapon if it is modded.
 @onready var corner_icons_background: ColorRect = %CornerIconsBackground ## The color rect behind the corner icons.
 @onready var level_background: ColorRect = %LevelBackground ## The color rect behind the level icons.
+@onready var overlay_texture: TextureRect = %OverlayTexture ## The texture used for slot overlays.
 
 var index: int ## The index that this slot represents inside the inventory.
 var synced_inv: InvResource ## The synced inventory that this slot is a part of.
@@ -62,6 +63,8 @@ var preview_items: Array[Dictionary] = []: ## When this isn't null, this items w
 			_update_visuals({ item : -1 })
 var preview_cycle_timer: Timer = TimerHelpers.create_repeating_timer(self, 2.25, _on_preview_cycle_timer_timeout)
 var mirrored_hud_slot: Slot ## When not null, any item changes to this slot will also send changes to this HUD slot. Useful for the hotbar where there are two sets of distinct slots that need to stay connected. This doesn't mirror preview arrays.
+var overlay_tween: Tween ## The tween operating the overlay opacity pulse.
+const CORNER_ICON_LIGHTEN_FACTOR: float = 0.87 ## From 0 -> 1, how much lighter the corner icons will be tinted.
 
 
 ## Setter function for the item represented by this slot. Updates texture and quantity label.
@@ -115,14 +118,14 @@ func _ready() -> void:
 		mouse_exited.connect(_on_mouse_exited)
 		visibility_changed.connect(_on_visibility_changed)
 
-	_reset_corner_icons()
+	_reset_info_icons()
 
 #region Visuals
 ## Updates the slot visuals according to the new item.
 func _update_visuals(new_item_dict: Dictionary) -> void:
 	var new_item: InvItemResource = new_item_dict.keys()[0]
 
-	_reset_corner_icons()
+	_reset_info_icons()
 	update_corner_icons(new_item)
 
 	if new_item and new_item.quantity > 0:
@@ -198,13 +201,16 @@ func _on_preview_cycle_timer_timeout() -> void:
 	_update_visuals(preview_items[0])
 
 ## Hides all corner icons for this slot.
-func _reset_corner_icons() -> void:
+func _reset_info_icons() -> void:
 	for icon: TextureRect in corner_info_icons_grid.get_children():
 		icon.hide()
 	for icon: TextureRect in corner_level_icons_h_box.get_children():
 		icon.hide()
 	level_background.hide()
 	corner_icons_background.hide()
+	overlay_texture.hide()
+	if overlay_tween:
+		overlay_tween.kill()
 
 ## Conditionally shows the needed corner icons for things like the modded indicator icon and the weapon lvl.
 func update_corner_icons(new_item: InvItemResource) -> void:
@@ -215,23 +221,29 @@ func update_corner_icons(new_item: InvItemResource) -> void:
 		if new_item.stats.has_any_mods() and not hide_corner_info:
 			modded_icon.show()
 			corner_icons_background.show()
-			corner_info_icons_grid.modulate = Globals.rarity_colors.slot_fill.get(new_item.stats.rarity).lightened(0.6)
+			corner_info_icons_grid.modulate = Globals.rarity_colors.slot_fill.get(new_item.stats.rarity).lightened(CORNER_ICON_LIGHTEN_FACTOR)
 		else:
 			modded_icon.hide()
 
-		if hide_corner_level:
-			return
+# TODO: when active slot isnt first, on close it sends equipped item to first hotbar slot
+		if not hide_corner_level:
+			var icons_to_show: int = clampi(floori(float(new_item.stats.level) / 10.0), 0, 4)
+			var i: int = 0
+			for icon: TextureRect in corner_level_icons_h_box.get_children():
+				icon.visible = (i < icons_to_show)
+				i += 1
+			if icons_to_show > 0:
+				level_background.show()
+				corner_level_icons_h_box.modulate = Globals.rarity_colors.slot_fill.get(new_item.stats.rarity).lightened(CORNER_ICON_LIGHTEN_FACTOR)
 
-		var lvl: int = new_item.stats.level
-		var icons_to_show: int = clampi(floori(float(lvl) / 10.0), 0, 4)
-		var i: int = 0
-		for icon: TextureRect in corner_level_icons_h_box.get_children():
-			icon.visible = i < icons_to_show
-			i += 1
-		if icons_to_show > 0:
-			level_background.show()
-			level_background.custom_minimum_size.x = 1 + (icons_to_show * 2)
-			corner_level_icons_h_box.modulate = Globals.rarity_colors.slot_fill.get(new_item.stats.rarity).lightened(0.6)
+		if not hide_overlay_icons:
+			if new_item.stats.allowed_lvl > new_item.stats.level:
+				overlay_texture.show()
+				overlay_tween = create_tween().set_ease(Tween.EASE_IN_OUT).set_loops()
+				overlay_tween.tween_property(overlay_texture, "modulate:a", 0.75, 1.0)
+				overlay_tween.tween_interval(0.25)
+				overlay_tween.tween_property(overlay_texture, "modulate:a", 0.15, 1.0)
+				overlay_tween.tween_interval(0.05)
 
 ## When this is shown or hidden and different slots are displayed, update the local tint progress
 ## with the current item.
