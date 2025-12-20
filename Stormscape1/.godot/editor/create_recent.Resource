@@ -1,0 +1,12 @@
+res://Utilities/Game/Audio/AudioResource.gd
+CanvasTexture
+AudioResource
+MoveBehaviorResource
+ColorPalette
+Wearable
+FontVariation
+WeaponMod
+ExtendedMagMod
+MeleeWeaponResource
+CamFXResource
+SpriteFrames
