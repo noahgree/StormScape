@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="WorldResourceResource" load_steps=7 format=3 uid="uid://bs4rqdt46yav7"]
+[gd_resource type="Resource" script_class="WorldResourceResource" format=3 uid="uid://bs4rqdt46yav7"]
 
 [ext_resource type="Texture2D" uid="uid://dwu1ysi53om1u" path="res://Entities/Items/WorldResources/OakLog/OakLogCT.tres" id="1_m3y15"]
 [ext_resource type="Script" uid="uid://cowjdnic7xmkp" path="res://Entities/Player/UI/Inventory/Panels/ItemDetailsPanel/StatDetail.gd" id="1_tox3f"]
@@ -9,40 +9,19 @@
 
 [resource]
 script = ExtResource("1_xl3qb")
+fuel_amount = 4
 id = "oak_log"
 name = "Oak Log"
 tags = Array[StringName]([&"log"])
 item_type = 4
-rarity = 0
 stack_size = 64
-auto_pickup = false
-pickup_radius = 4
 info = "Logs from an oak tree. Useful in crafting."
-extra_details = Array[ExtResource("1_tox3f")]([])
 ground_icon = ExtResource("1_m3y15")
 in_hand_icon = ExtResource("1_m3y15")
 inv_icon = ExtResource("2_tox3f")
-flip_inv_icon_h = false
-inv_icon_offset = Vector2(0, 0)
-inv_icon_scale = Vector2(1, 1)
-inv_icon_rotation = 0.0
-recipe = Array[ExtResource("2_7glxp")]([])
-output_quantity = 1
-recipe_unlocked = true
 item_scene = ExtResource("2_ud1xk")
-rotation_lerping = 0.1
 holding_offset = Vector2(-7, -3)
 holding_degrees = 45.0
-stay_flat_on_rotate = false
 is_gripped_by_one_hand = false
 draw_off_hand = true
-draw_off_hand_offset = Vector2(0, 0)
-main_hand_offset = Vector2(0, 0)
-cooldowns_per_suid = true
-shown_cooldown_fills = Array[String]([])
-show_cursor_cooldown = false
-equip_audio = ""
-pickup_audio = ""
-drop_audio = ""
-session_uid = 0
 metadata/_custom_type_script = "uid://crlmvnjkf7c3g"

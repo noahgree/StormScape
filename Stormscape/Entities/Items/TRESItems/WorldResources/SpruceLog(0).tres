@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="WorldResourceResource" load_steps=7 format=3 uid="uid://dbnhbsphiw4oe"]
+[gd_resource type="Resource" script_class="WorldResourceResource" format=3 uid="uid://dbnhbsphiw4oe"]
 
 [ext_resource type="Script" uid="uid://cowjdnic7xmkp" path="res://Entities/Player/UI/Inventory/Panels/ItemDetailsPanel/StatDetail.gd" id="1_hnhwf"]
 [ext_resource type="Texture2D" uid="uid://cvuqjp8xvpr3i" path="res://Entities/Items/WorldResources/SpruceLog/SpruceLogCT.tres" id="1_hnjw2"]
@@ -9,40 +9,19 @@
 
 [resource]
 script = ExtResource("3_iauve")
+fuel_amount = 4
 id = "spruce_log"
 name = "Spruce Log"
 tags = Array[StringName]([&"log"])
 item_type = 4
-rarity = 0
 stack_size = 64
-auto_pickup = false
-pickup_radius = 4
 info = "Logs from a spruce tree. Useful in crafting."
-extra_details = Array[ExtResource("1_hnhwf")]([])
 ground_icon = ExtResource("1_hnjw2")
 in_hand_icon = ExtResource("1_hnjw2")
 inv_icon = ExtResource("2_hnhwf")
-flip_inv_icon_h = false
-inv_icon_offset = Vector2(0, 0)
-inv_icon_scale = Vector2(1, 1)
-inv_icon_rotation = 0.0
-recipe = Array[ExtResource("4_ryo35")]([])
-output_quantity = 1
-recipe_unlocked = true
 item_scene = ExtResource("2_a84rt")
-rotation_lerping = 0.1
 holding_offset = Vector2(-7, -3)
 holding_degrees = 45.0
-stay_flat_on_rotate = false
 is_gripped_by_one_hand = false
 draw_off_hand = true
-draw_off_hand_offset = Vector2(0, 0)
-main_hand_offset = Vector2(0, 0)
-cooldowns_per_suid = true
-shown_cooldown_fills = Array[String]([])
-show_cursor_cooldown = false
-equip_audio = ""
-pickup_audio = ""
-drop_audio = ""
-session_uid = 0
 metadata/_custom_type_script = "uid://crlmvnjkf7c3g"

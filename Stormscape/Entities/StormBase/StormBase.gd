@@ -12,7 +12,7 @@ class_name StormBase
 
 var storm: Storm ## A reference to the storm node.
 var level_progress: int = 0 ## The progress leading up to the next level.
-var fuel: int = 5: set = _set_fuel ## The current amount of fuel left.
+var fuel: int: set = _set_fuel ## The current amount of fuel left.
 var max_fuel: int = 100 ## The max fuel the base can have.
 var fuel_change_resize_factor: float = 15.0 ## The greater the value, the faster the zone will change size.
 var fuel_change_move_factor: float = 40.0 ## The greater the value, the faster the zone will move locations.
@@ -26,20 +26,26 @@ func _ready() -> void:
 		if global_position != default_transform.new_location:
 			push_error("The default transform of the storm base has not automatically updated to the correct position of the storm base.")
 
-		interaction_area.set_accept_callable(_open_ui)
+		interaction_area.set_accept_callable(func() -> void: SignalBus.side_panel_open_request.emit(side_panel, self))
+
 	super()
-
-
-func _open_ui() -> void:
-	fuel += 10
-	SignalBus.side_panel_open_request.emit(side_panel, self)
 
 func link_fuel_slot(fuel_slot: Slot) -> void:
 	fuel_slot.item_changed.connect(_on_fuel_slot_item_changed)
 
-func _on_fuel_slot_item_changed(slot: Slot, old_item: InvItemResource, new_item: InvItemResource) -> void:
+func _on_fuel_slot_item_changed(slot: Slot, _old_item: InvItemResource, new_item: InvItemResource) -> void:
+	if new_item:
+		var total_new_fuel: int = new_item.quantity * new_item.stats.fuel_amount
+		var fuel_space: int = max_fuel - fuel
+		var extra_fuel: int = total_new_fuel - fuel_space
+		if extra_fuel > 0:
+			var extra_item_quant: int = floori(extra_fuel / new_item.stats.fuel_amount)
+			var extra_items: InvItemResource = InvItemResource.new(new_item.stats, extra_item_quant)
+			Globals.player_node.inv.insert_from_inv_item(extra_items, false, false)
+		fuel += total_new_fuel
 
-
+		# Otherwise it never deletes the item since the one just dropped is still being set
+		slot.call_deferred("set_item", null)
 
 func _set_fuel(new_fuel: int) -> void:
 	fuel = mini(new_fuel, max_fuel)

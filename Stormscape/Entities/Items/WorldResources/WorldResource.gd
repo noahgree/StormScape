@@ -1,6 +1,7 @@
 @icon("res://Utilities/Debug/EditorIcons/world_resource.png")
 extends EquippableItem
 class_name WorldResource
+## The EquippableItem definition for WorldResource.
 
 
 func _set_stats(new_stats: ItemResource) -> void:

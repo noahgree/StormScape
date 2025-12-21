@@ -44,7 +44,7 @@ func parse_item(stats: ItemResource) -> Array[String]:
 		Globals.ItemType.WEARABLE:
 			pass
 		Globals.ItemType.WORLD_RESOURCE:
-			pass
+			strings.append(_get_fuel_amount(stats))
 		Globals.ItemType.SPECIAL:
 			pass
 		Globals.ItemType.WEAPON_MOD:
@@ -364,6 +364,14 @@ func _get_mod_stats(stats: WeaponMod) -> Array[String]:
 			strings.append(stat_title + value_string + "[/color]")
 
 	return strings
+
+## Gets the fuel amount for the world resource.
+func _get_fuel_amount(stats: WorldResourceResource) -> String:
+	if stats.fuel_amount == 0:
+		return ""
+	var string: String = _get_title("FUEL VALUE")
+	string += str(stats.fuel_amount)
+	return string
 
 ## Formats the line title with the needed color and invisible char.
 func _get_title(title: String) -> String:

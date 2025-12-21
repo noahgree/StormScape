@@ -7,6 +7,7 @@
 [ext_resource type="FontFile" uid="uid://bp2lgrlhj8cet" path="res://Assets/Theming/Fonts/Pixel/C&C Red Alert [INET].ttf" id="6_1nfa8"]
 [ext_resource type="Texture2D" uid="uid://dlecwbci6aggo" path="res://Entities/Player/UI/Vitals/Assets/ProgressBars/progress_white.png" id="6_c1nxg"]
 [ext_resource type="Texture2D" uid="uid://c7gb4yo7qwfql" path="res://Entities/Player/UI/Inventory/Assets/Slot/Universal/BackgroundIcons/upgrade_slot_icon.png" id="7_hduyg"]
+[ext_resource type="Script" uid="uid://7dwa1k04c7mw" path="res://Entities/Player/UI/Inventory/InventoryCore/FuelSlot.gd" id="9_d7qg0"]
 [ext_resource type="Texture2D" uid="uid://cxfwst8bqg5kx" path="res://Entities/Player/UI/Inventory/Assets/Slot/Metal/normal_slot_metal.png" id="11_tfhut"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_6leub"]
@@ -293,10 +294,8 @@ default_slot_texture = ExtResource("11_tfhut")
 backing_texture = ExtResource("7_hduyg")
 
 [node name="FuelSlotBorderMargin" type="MarginContainer" parent="InnerMargin/MainVBox" unique_id=1113446177]
-editor_description = "THIS GRIDMARGIN MOUSE FILTER MUST STAY AS IGNORE TO MAKE SORT BUTTONS WORK!"
 layout_mode = 2
 size_flags_horizontal = 4
-size_flags_vertical = 0
 
 [node name="GridMarginsBackground" type="NinePatchRect" parent="InnerMargin/MainVBox/FuelSlotBorderMargin" unique_id=787628074]
 modulate = Color(0.6436752, 0.5848187, 0.77914613, 1)
@@ -323,6 +322,7 @@ unique_name_in_owner = true
 custom_minimum_size = Vector2(40, 40)
 layout_mode = 2
 texture = ExtResource("11_tfhut")
+script = ExtResource("9_d7qg0")
 default_slot_texture = ExtResource("11_tfhut")
 hide_corner_level = true
 hide_corner_info = true

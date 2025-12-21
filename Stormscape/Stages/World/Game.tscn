@@ -46,7 +46,6 @@
 [ext_resource type="Script" uid="uid://d1xfue3du3eyu" path="res://Utilities/Debug/DebugCanvasLayer.gd" id="34_01d0t"]
 [ext_resource type="Script" uid="uid://by6ifp7vltc41" path="res://Entities/StormBase/StormBase.gd" id="34_w76bj"]
 [ext_resource type="PackedScene" uid="uid://dh4ydl7l86ywq" path="res://Entities/EntityCore/Sprites/EntitySprite.tscn" id="35_vi22v"]
-[ext_resource type="Resource" uid="uid://bs4rqdt46yav7" path="res://Entities/Items/TRESItems/WorldResources/OakLog(0).tres" id="36_8jild"]
 [ext_resource type="PackedScene" uid="uid://bj7vw8d6oqv0m" path="res://Entities/Player/UI/Interactions/InteractionsCore/InteractionArea.tscn" id="36_e5rpg"]
 [ext_resource type="PackedScene" uid="uid://dnpwx3cn0i24s" path="res://Entities/Player/UI/Inventory/Panels/SidePanels/StormBaseSidePanel.tscn" id="36_yng6w"]
 [ext_resource type="Texture2D" uid="uid://dlk243e5b6tys" path="res://Assets/Icon/icon_dark.png" id="40_01d0t"]
@@ -282,17 +281,11 @@ new_location = Vector2(210, 105)
 new_radius = 200.0
 metadata/_custom_type_script = "uid://cbiskerf2stk6"
 
-[sub_resource type="Resource" id="Resource_4psjl"]
-script = ExtResource("21_fx52i")
-stats = ExtResource("36_8jild")
-quantity = 10
-metadata/_custom_type_script = "uid://dp8osf7r6xkkt"
-
 [sub_resource type="Resource" id="Resource_xm2up"]
 script = ExtResource("20_om42l")
 title = ""
 drop_on_death = true
-starting_inv = Array[ExtResource("21_fx52i")]([SubResource("Resource_4psjl"), null, null, null, null])
+starting_inv = Array[ExtResource("21_fx52i")]([null, null, null, null, null])
 metadata/_custom_type_script = "uid://dwmur0cosbbwh"
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_f5fhq"]
@@ -662,7 +655,6 @@ z_index = -2
 z_as_relative = false
 position = Vector2(189, 143)
 script = ExtResource("22_0op7h")
-auto_start = false
 transform_queue = Array[ExtResource("40_27u15")]([SubResource("Resource_h3uly")])
 default_storm_effect = ExtResource("23_5x8gm")
 default_storm_visuals = ExtResource("27_5uvpk")

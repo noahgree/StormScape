@@ -14,6 +14,7 @@ metadata/_custom_type_script = "uid://ctxa7i1mbt7ab"
 
 [resource]
 script = ExtResource("4_xv5sp")
+fuel_amount = 1
 id = "stick"
 name = "Stick"
 item_type = 4
