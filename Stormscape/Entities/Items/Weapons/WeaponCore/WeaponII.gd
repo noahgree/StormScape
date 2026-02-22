@@ -15,7 +15,7 @@ const ENORMOUS_XP: int = 500
 const EFFECT_AMOUNT_XP_MULT: float = 0.35 ## Multiplies effect src amounts (dmg, heal) before adding that amount as xp.
 
 @export_group("Weapon Specific")
-@export_custom(PROPERTY_HINT_RANGE, "1,40,1", PROPERTY_USAGE_EDITOR) var level: int = 1 ## The level for this weapon.
+@export_range(1, 40, 1) var level: int = 1 ## The level for this weapon.
 @export_storage var allowed_lvl: int = 1 ## The level that the xp gain has allowed this weapon to achieve, potentially pending an upgrade confirmation from the player.
 @export_storage var lvl_progress: int ## Any xp gained towards the progress of the next level is stored here.
 @export_storage var sc: StatModsCache = null ## The cache of all up to date stats for this weapon with mods factored in. Stands for "stat cache".

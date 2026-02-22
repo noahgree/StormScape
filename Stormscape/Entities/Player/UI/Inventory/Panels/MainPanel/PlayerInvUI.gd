@@ -242,13 +242,13 @@ func _on_craft_btn_button_up() -> void:
 
 ## Handling the tooltip and button pressing of the level up button.
 func _on_lvl_up_btn_pressed() -> void:
-	var item_stats: WeaponStats = item_details_panel.item_viewer_slot.item.stats
-	if item_stats.level_up() >= item_stats.allowed_lvl:
+	var weapon_ii: WeaponII = item_details_panel.item_viewer_slot.ii
+	if weapon_ii.level_up() >= weapon_ii.allowed_lvl:
 		lvl_up_inner_margin.hide()
 	item_details_panel.manually_set_item_viewer_slot(item_details_panel.item_viewer_slot, true)
 func _on_lvl_up_btn_mouse_entered() -> void:
 	if not get_viewport().gui_is_dragging():
-		CursorManager.update_tooltip("Level Up (" + str(item_details_panel.item_viewer_slot.item.stats.level + 1) + ")")
+		CursorManager.update_tooltip("Level Up (" + str(item_details_panel.item_viewer_slot.ii.level + 1) + ")")
 func _on_lvl_up_btn_button_down() -> void:
 	lvl_up_btn.texture = btn_down_texture
 func _on_lvl_up_btn_button_up() -> void:

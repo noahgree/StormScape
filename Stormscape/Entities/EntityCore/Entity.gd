@@ -7,6 +7,7 @@ class_name Entity
 @export var is_object: bool = false ## When true, this entity's collision logic will follow that of a world object, regardless of team. It will also not have an auto_decrementer in its inv, as it shouldn't be holding things that need one.
 @export var inv: InvResource ## The inventory data resource for this entity.
 @export var loot: LootTableResource ## The loot table resource for this entity.
+@export var current_wearables: Array[StringName] = [&"", &"", &"", &"", &""] ## The equipped wearables on this entity.
 
 @onready var sprite: EntitySprite = %EntitySprite ## The visual representation of the entity. Needs to have the EntityEffectShader applied.
 @onready var effect_receiver: EffectReceiverComponent = get_node_or_null("EffectReceiverComponent") ## The component that handles incoming effect sources.
@@ -18,7 +19,6 @@ class_name Entity
 @onready var hands: HandsComponent = get_node_or_null("%HandsComponent") ## The hands item component for the entity.
 
 var stats: StatModsCache = StatModsCache.new() ## The resource that will cache and work with all stat mods for this entity.
-var wearables: Array[Dictionary] = [{ &"1" : null }, { &"2" : null }, { &"3" : null }, { &"4" : null }, { &"5" : null }] ## The equipped wearables on this entity.
 
 
 #region Debug
@@ -67,3 +67,32 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	if not Engine.is_editor_hint() and inv and not is_object:
 		inv.auto_decrementer.process(delta)
+
+## Checks to see if the entity has the passed in wearable already.
+## Leaving index as -1 means check every slot, otherwise only check a certain slot index.
+func has_wearable(wearable_id: StringName, index: int = -1) -> bool:
+	var i: int = 0
+	for wearable_stats: WearableStats in get_all_wearables_as_stats(true):
+		if wearable_stats and wearable_stats.id == wearable_id:
+			if index != -1:
+				if i == index:
+					return true
+				else:
+					i += 1
+					continue
+			else:
+				return true
+		i += 1
+	return false
+
+## Returns an array of variable size containing all verified wearable stats in the current_wearables array.
+func get_all_wearables_as_stats(include_empty_slots: bool = false) -> Array[WearableStats]:
+	var results: Array[WearableStats] = []
+	for wearable_key: StringName in current_wearables:
+		if wearable_key != &"":
+			var wearable: WearableStats = Items.cached_items.get(wearable_key, null)
+			if wearable:
+				results.append(wearable)
+		elif include_empty_slots:
+			results.append(null)
+	return results

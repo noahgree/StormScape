@@ -17,7 +17,7 @@ func set_ii(new_item: II) -> void:
 
 ## Determines if the slot we are hovering over during a drag can accept drag data on mouse release.
 func _can_drop_data(_at_position: Vector2, data: Variant) -> bool:
-	if data.item == null or not synced_inv or is_output_slot:
+	if data.ii == null or not synced_inv or is_output_slot:
 		CursorManager.update_tooltip("Invalid!", Globals.ui_colors.ui_glow_strong_fail)
 		return false
 	if is_same_slot_as(data):

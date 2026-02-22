@@ -30,7 +30,7 @@ func _on_wearable_slot_changed(slot: WearableSlot, old_item: II, new_item: II) -
 		return
 
 	if old_item != null:
-		WearablesManager.remove_wearable(Globals.player_node, old_item.stats, slot.wearable_slot_index)
+		WearablesManager.remove_wearable(Globals.player_node, slot.wearable_slot_index)
 
 	if new_item != null:
 		await get_tree().process_frame # Let the drag and drop finish and the removal happen before re-adding
@@ -39,16 +39,16 @@ func _on_wearable_slot_changed(slot: WearableSlot, old_item: II, new_item: II) -
 ## When the focused ui is opened (or otherwise), make sure the wearables in the slots are up to date with
 ## the array in the entity's data.
 func _verify_latest_wearables() -> void:
-	var i: int = 0
-	for wearable_dict: Dictionary in Globals.player_node.wearables:
-		if wearable_dict.values()[0] != wearables_slots[i]:
-			updating_from_within = true
-			if wearable_dict.values()[0] == null:
-				wearables_slots[i].ii = null
-			else:
-				wearables_slots[i].ii = wearable_dict.values()[0].create_ii(1)
-			updating_from_within = false
-		i += 1
+	for wearable_index: int in range(Globals.player_node.current_wearables.size()):
+		var wearable_id: StringName = Globals.player_node.current_wearables[wearable_index]
+		updating_from_within = true
+		if wearable_id == &"":
+			wearables_slots[wearable_index].set_ii(null)
+		else:
+			var wearable_stats: WearableStats = Items.cached_items.get(wearable_id, null)
+			if wearable_stats:
+				wearables_slots[wearable_index].set_ii(wearable_stats.create_ii(1))
+		updating_from_within = false
 
 ## When the mouse enters the player icon margin, try and show the player stats.
 func _on_player_icon_trigger_margin_mouse_entered() -> void:

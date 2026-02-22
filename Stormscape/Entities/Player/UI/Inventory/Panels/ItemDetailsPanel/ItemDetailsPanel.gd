@@ -162,6 +162,7 @@ func manually_set_item_viewer_slot(slot: Slot, reload_already_viewed_item: bool 
 		item_viewer_slot._drop_data(Vector2.ZERO, slot)
 		CursorManager.hide_tooltip()
 		return true
+
 	CursorManager.hide_tooltip()
 	return false
 

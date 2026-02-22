@@ -13,10 +13,10 @@ func _can_drop_data(_at_position: Vector2, data: Variant) -> bool:
 		return false
 	if is_same_slot_as(data):
 		return false
-	if not WearablesManager.check_wearable_compatibility(Globals.player_node, data.item.stats):
+	if not WearablesManager.check_wearable_compatibility(Globals.player_node, data.ii.stats):
 		CursorManager.update_tooltip("Incompatible!", Globals.ui_colors.ui_glow_strong_fail)
 		return false
-	if WearablesManager.has_wearable(Globals.player_node, data.ii.stats.id):
+	if Globals.player_node.has_wearable(data.ii.stats.id):
 		if data is not WearableSlot:
 			CursorManager.update_tooltip("Already Used!", Globals.ui_colors.ui_glow_strong_fail)
 			return false

@@ -439,12 +439,11 @@ func add_weapon_xp(amount: int) -> void:
 	if not _check_is_holding_weapon() or Globals.player_node.get_node("%PlayerInvUI").is_open:
 		printerr("Either the player is not holding a weapon or a focused UI is open, so no xp was added.")
 		return
-	Globals.player_node.hands.equipped_item.stats.add_xp(amount)
+	Globals.player_node.hands.equipped_item.ii.add_xp(amount)
 
 ## Debug prints the total needed xp for each level up to the passed in level.
 func debug_print_xp_needed_for_lvl(lvl: int) -> void:
 	if not _check_is_holding_weapon():
 		return
-	var equipped_stats: ItemStats = Globals.player_node.hands.equipped_item.stats
-	equipped_stats.print_total_needed(lvl)
+	Globals.player_node.hands.equipped_item.ii.print_total_needed(lvl)
 #endregion

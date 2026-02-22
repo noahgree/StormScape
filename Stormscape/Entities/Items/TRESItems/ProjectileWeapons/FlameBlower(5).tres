@@ -125,5 +125,6 @@ item_scene = ExtResource("9_oeawo")
 rotation_lerping = 0.055
 holding_offset = Vector2(3, -1)
 is_gripped_by_one_hand = false
+cooldowns_shared = false
 shown_cooldown_fills = Array[String](["overheat_penalty"])
 show_cursor_cooldown = true

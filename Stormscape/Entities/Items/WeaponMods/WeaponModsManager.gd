@@ -12,7 +12,7 @@ static func check_mod_compatibility(weapon_ii: WeaponII, weapon_mod: WeaponModSt
 	elif weapon_stats is ProjWeaponStats and weapon_stats.proj_weapon_type not in weapon_mod.allowed_proj_wpns:
 		return false
 	for blocked_mutual_id: StringName in weapon_mod.blocked_mutuals:
-		if weapon_ii.has_mod_by_id(blocked_mutual_id):
+		if weapon_ii.has_mod(blocked_mutual_id):
 			return false
 
 	var failed: bool = false
