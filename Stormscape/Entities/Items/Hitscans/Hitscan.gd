@@ -2,7 +2,6 @@ extends Line2D
 class_name Hitscan
 ## The base class for all hitscan objects. These emit as beams or rays from the source weapon instead of traveling along a path.
 
-@export var effect_source: EffectSource ## The effect to be applied when this ray hits an effect receiver.
 @export var source_entity: Entity ## The entity that the effect was produced by.
 
 @onready var start_particles: CPUParticles2D = $StartParticles ## The particles emitting at the source point (at the weapon).
@@ -11,6 +10,7 @@ class_name Hitscan
 
 var stats: HitscanStats ## The stats driving this hitscan.
 var sc: StatModsCache ## The stat mods resource used to retrieve modified, updated stats for calculations and logic.
+var esi: ESI ## The effect source instance to use when this ray hits an effect receiver.
 var source_ii: ProjWeaponII ## The weapon item instance that produced this hitscan.
 var rotation_offset: float ## The offset to rotate the hitscan by, determined by the source weapon.
 var lifetime_timer: Timer = TimerHelpers.create_one_shot_timer(self, -1, queue_free) ## The timer tracking lifetime left before freeing.
@@ -30,7 +30,7 @@ static func create(source_wpn: ProjectileWeapon, rot_offset: float) -> Hitscan:
 	var hitscan: Hitscan = source_wpn.stats.hitscan_scn.instantiate()
 	hitscan.global_position = source_wpn.proj_origin_node.global_position
 	hitscan.rotation_offset = rot_offset
-	hitscan.effect_source = source_wpn.stats.effect_source
+	hitscan.esi = source_wpn.ii.normal_esi.copy()
 	hitscan.source_entity = source_wpn.source_entity
 	hitscan.stats = source_wpn.stats.hitscan_logic
 	hitscan.sc = source_wpn.ii.sc
@@ -132,7 +132,7 @@ func _find_target_receivers() -> void:
 		query.from = from_pos
 		query.to = to_pos
 		query.exclude = exclusion_list
-		query.collision_mask = effect_source.scanned_phys_layers
+		query.collision_mask = esi.es.scanned_phys_layers
 		query.collide_with_bodies = true
 		query.collide_with_areas = true
 		var result: Dictionary[Variant, Variant] = space_state.intersect_ray(query)
@@ -239,16 +239,14 @@ func _update_impact_particles(pierce_list: Dictionary) -> void:
 ## pass the effect source to that entity's handler. Note that the effect source is duplicated
 ## on hit so that we can include unique info like move dir.
 func _start_being_handled(handling_area: EffectReceiverComponent, contact_point: Vector2) -> void:
-	effect_source = effect_source.duplicate()
-	effect_source.multishot_id = multishot_id
-	var modified_effect_src: EffectSource = _get_effect_source_adjusted_for_falloff(effect_source, contact_point)
-	modified_effect_src.movement_direction = Vector2(cos(rotation), sin(rotation)).normalized()
-	effect_source.contact_position = contact_point
-	handling_area.handle_effect_source(modified_effect_src, source_entity, source_ii)
+	esi.multishot_id = multishot_id
+	_adjust_esi_for_falloff(esi, contact_point)
+	esi.movement_direction = Vector2(cos(rotation), sin(rotation)).normalized()
+	esi.contact_position = contact_point
+	handling_area.handle_esi(esi, source_entity, source_ii)
 
 ## When we hit a handling area during a hitscan, we apply falloff to the components of the effect source.
-func _get_effect_source_adjusted_for_falloff(effect_src: EffectSource, contact_point: Vector2) -> EffectSource:
-	var falloff_effect_src: EffectSource = effect_src.duplicate()
+func _adjust_esi_for_falloff(esi_to_adjust: ESI, contact_point: Vector2) -> void:
 	var apply_to_bad: bool = stats.bad_effects_falloff
 	var apply_to_good: bool = stats.good_effects_falloff
 
@@ -257,9 +255,9 @@ func _get_effect_source_adjusted_for_falloff(effect_src: EffectSource, contact_p
 	var falloff_mult: float = max(0.05, sampled_point)
 
 	if apply_to_bad:
-		falloff_effect_src.base_damage = int(min(falloff_effect_src.base_damage, ceil(falloff_effect_src.base_damage * falloff_mult)))
+		var base_damage: float = esi_to_adjust.get_stat(&"base_damage")
+		esi_to_adjust.es_stat_overrides[&"base_damage"] = int(min(base_damage, ceil(base_damage * falloff_mult)))
 
 	if apply_to_good:
-		falloff_effect_src.base_healing = int(min(falloff_effect_src.base_healing, ceil(falloff_effect_src.base_healing * falloff_mult)))
-
-	return falloff_effect_src
+		var base_healing: float = esi_to_adjust.get_stat(&"base_healing")
+		esi_to_adjust.es_stat_overrides[&"base_healing"] = int(min(base_healing, ceil(base_healing * falloff_mult)))

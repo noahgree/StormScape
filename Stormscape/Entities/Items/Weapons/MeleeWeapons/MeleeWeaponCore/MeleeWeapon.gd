@@ -22,7 +22,6 @@ func _ready() -> void:
 	super()
 
 	hitbox_component.source_entity = source_entity
-	hitbox_component.source_weapon = stats
 	reset_animation_state("MeleeWeaponAnimLibrary/RESET")
 
 	if source_entity is Player:
@@ -122,7 +121,7 @@ func _swing() -> void:
 	source_entity.fsm.controller.facing_method = FacingComponent.Method.NONE
 	source_entity.hands.snap_y_scale()
 
-	_set_hitbox_effect_source_and_collision(stats.effect_source)
+	_set_hitbox_effect_source_instance_and_collision(ii.normal_esi)
 	_apply_start_use_effect(false)
 	add_cooldown(ii.sc.get_stat("use_cooldown") + ii.sc.get_stat("use_speed"))
 
@@ -142,7 +141,7 @@ func _charge_swing() -> void:
 	source_entity.fsm.controller.facing_method = FacingComponent.Method.ITEM_ROT
 	source_entity.hands.snap_y_scale()
 
-	_set_hitbox_effect_source_and_collision(stats.charge_effect_source)
+	_set_hitbox_effect_source_instance_and_collision(ii.charge_esi)
 	_apply_start_use_effect(true)
 	add_cooldown(ii.sc.get_stat("charge_use_cooldown") + ii.sc.get_stat("charge_use_speed"))
 
@@ -152,10 +151,10 @@ func _charge_swing() -> void:
 	source_entity.fsm.controller.reset_facing_method()
 	_apply_post_use_effect(true)
 
-## Sets the hitbox's effect source and collision mask (what to hit) for the swing.
-func _set_hitbox_effect_source_and_collision(new_effect_source: EffectSource) -> void:
-	hitbox_component.effect_source = new_effect_source
-	hitbox_component.collision_mask = new_effect_source.scanned_phys_layers
+## Sets the hitbox's effect source instance and collision mask (what to hit) for the swing.
+func _set_hitbox_effect_source_instance_and_collision(new_esi: ESI) -> void:
+	hitbox_component.esi = new_esi.copy()
+	hitbox_component.collision_mask = new_esi.es.scanned_phys_layers
 
 ## Starts the swing animation and plays any associated fx. Awaits the animation ending and returns control
 ## to the caller.

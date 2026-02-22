@@ -18,6 +18,10 @@ func _set_stats(new_stats: ItemStats) -> void:
 	stats = new_stats
 	stats_changed.emit(stats)
 
+## Returns whether or not the stats of this item instance match the stats of the item instance passed in.
+func matches(ii_to_check: II) -> bool:
+	return stats.get_cache_key() == ii_to_check.stats.get_cache_key()
+
 ## Finds the place a stat is stored at within the resource and returns it. Can optionally get the unmodified stat
 ## if it exists in the stat mods cache.
 func get_nested_stat(stat: StringName, get_original: bool = false) -> float:

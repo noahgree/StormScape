@@ -18,11 +18,10 @@ func _ready() -> void:
 	assert(health_component, affected_entity.name + " has an effect receiver that is intended to handle healing, but no health component is connected.")
 
 ## Handles applying instant, one-shot healing to the affected entity. Returns the appropriate xp amount to apply.
-func handle_instant_heal(effect_source: EffectSource, heal_affected_stats: Globals.HealAffectedStats,
-							lvl: int) -> int:
-	var level_mult: float = ((floori(lvl / 10.0) * effect_source.lvl_heal_scalar) / 100.0) + 1
-	var heal_amount: int = ceili(effect_source.base_healing * level_mult)
-	_send_handled_healing("basic_healing", heal_affected_stats, heal_amount, effect_source.multishot_id)
+func handle_instant_heal(esi: ESI, lvl: int) -> int:
+	var level_mult: float = ((floori(lvl / 10.0) * esi.get_stat(&"lvl_heal_scalar")) / 100.0) + 1
+	var heal_amount: int = ceili(esi.get_stat(&"base_healing") * level_mult)
+	_send_handled_healing("basic_healing", esi.es.heal_affected_stats, heal_amount, esi.multishot_id)
 	return heal_amount
 
 ## Handles applying damage that is inflicted over time, whether with a delay, with burst intervals, or with both.

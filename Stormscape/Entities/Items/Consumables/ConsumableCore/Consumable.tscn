@@ -1,6 +1,6 @@
-[gd_scene load_steps=5 format=3 uid="uid://bdaogdtcus1ac"]
+[gd_scene format=3 uid="uid://bdaogdtcus1ac"]
 
-[ext_resource type="Script" uid="uid://ddlcihnqaj03s" path="res://Entities/Items/Consumables/Consumable.gd" id="1_uttff"]
+[ext_resource type="Script" uid="uid://ddlcihnqaj03s" path="res://Entities/Items/Consumables/ConsumableCore/Consumable.gd" id="1_uttff"]
 
 [sub_resource type="Animation" id="Animation_uwhct"]
 resource_name = "consume"

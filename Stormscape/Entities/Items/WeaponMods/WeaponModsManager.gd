@@ -147,13 +147,13 @@ static func remove_all_mods_from_weapon(weapon_ii: WeaponII, source_entity: Enti
 ## When mods are added or removed that affect the effect source stats, we use this to recalculate them.
 static func _update_es_overrides(weapon_ii: WeaponII, stat_id: StringName) -> void:
 	if stat_id in [&"base_damage", &"base_healing", &"crit_chance", &"armor_penetration", &"object_damage_mult"]:
-			weapon_ii.stat_overrides[stat_id] = weapon_ii.sc.get_stat(stat_id)
-	elif weapon_ii.stats is MeleeWeaponStats:
+			weapon_ii.normal_esi.es_stat_overrides[stat_id] = weapon_ii.sc.get_stat(stat_id)
+	if weapon_ii.charge_esi.es:
 		if stat_id in [&"charge_base_damage", &"charge_base_healing", &"charge_crit_chance", &"charge_armor_penetration", &"charge_object_damage_mult"]:
-			weapon_ii.stat_overrides[stat_id] = weapon_ii.sc.get_stat(stat_id)
-	elif weapon_ii.stats is ProjWeaponStats:
+			weapon_ii.charge_esi.es_stat_overrides[stat_id] = weapon_ii.sc.get_stat(stat_id)
+	if weapon_ii.charge_esi.es:
 		if stat_id in [&"proj_aoe_base_damage", &"proj_aoe_base_healing"]:
-			weapon_ii.stat_overrides[stat_id] = weapon_ii.sc.get_stat(stat_id)
+			weapon_ii.aoe_esi.es_stat_overrides[stat_id] = weapon_ii.sc.get_stat(stat_id)
 
 ## Resyncs the status effect lists for all effect source instances on a weapon instance after mods were
 ## removed. Must be done to restore any status effects from the original effect source that were
@@ -162,7 +162,7 @@ static func _resync_esi_status_effects(weapon_ii: WeaponII) -> void:
 	weapon_ii.normal_esi.reset_status_effects()
 	if weapon_ii.charge_esi.es:
 		weapon_ii.charge_esi.reset_status_effects()
-	if weapon_ii.aoe_esi.es:
+	if weapon_ii.charge_esi.es:
 		weapon_ii.aoe_esi.reset_status_effects()
 
 	for wpn_mod: WeaponModStats in weapon_ii.get_all_mods_as_stats():

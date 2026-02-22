@@ -13,3 +13,13 @@ class_name ConsumableStats
 @export var particles_color: Color = Color(1, 1, 1) ## The color of the particles during consumption.
 @export var consumption_sound: String = "" ## The sound to play during consumption.
 @export var post_consumption_sound: String = "" ## The sound to play once consumption ends.
+
+
+## Creates a new item instance with a new UID.
+func create_ii(quantity: int) -> II:
+	var new: ConsumableII = ConsumableII.new()
+	new.stats = self
+	new.q = quantity
+
+	new.initialize_esis()
+	return new

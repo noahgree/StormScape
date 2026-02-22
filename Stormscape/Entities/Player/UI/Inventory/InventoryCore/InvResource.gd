@@ -99,7 +99,7 @@ func _do_add_item_checks(original_ii: II, start_i: int, stop_i: int) -> int:
 	var ii: II = original_ii.stats.copy_ii(original_ii)
 
 	for index: int in range(start_i, stop_i):
-		if inv[index] != null and inv[index].stats.is_same_as(ii.stats):
+		if inv[index] != null and inv[index].matches(ii):
 			if (ii.q + inv[index].q) <= ii.stats.stack_size:
 				_combine_item_count_in_occupied_index(index, ii)
 				return 0

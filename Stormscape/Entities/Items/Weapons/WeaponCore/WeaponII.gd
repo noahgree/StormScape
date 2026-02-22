@@ -20,9 +20,9 @@ const EFFECT_AMOUNT_XP_MULT: float = 0.35 ## Multiplies effect src amounts (dmg,
 @export_storage var lvl_progress: int ## Any xp gained towards the progress of the next level is stored here.
 @export_storage var sc: StatModsCache = null ## The cache of all up to date stats for this weapon with mods factored in. Stands for "stat cache".
 @export var current_mods: Array[StringName] = [&"", &"", &"", &"", &"", &""] ## The current mods applied to this weapon in order, with the StringName mod ids as the values.
-@export_storage var normal_esi: ESI = ESI.new() ## The normal effect source instance.
-@export_storage var charge_esi: ESI = ESI.new() ## The charge effect source instance.
-@export_storage var aoe_esi: ESI = ESI.new() ## The aoe effect source instance.
+@export_storage var normal_esi: ESI ## The normal effect source instance.
+@export_storage var charge_esi: ESI ## The charge effect source instance.
+@export_storage var aoe_esi: ESI ## The aoe effect source instance.
 
 
 ## Sets up the base values for the stat cache so that weapon mods can be added and managed properly.
@@ -115,18 +115,24 @@ func initialize_sc() -> void:
 
 ## Sets up the effect source instances to copy the effect sources from the stats.
 func initialize_esis() -> void:
+	normal_esi = ESI.new()
+	charge_esi = ESI.new()
+	aoe_esi = ESI.new()
+
 	normal_esi.es = stats.effect_source
 	if stats is MeleeWeaponStats:
 		charge_esi.es = stats.charge_effect_source
 	elif stats is ProjWeaponStats:
 		aoe_esi.es = stats.projectile_logic.aoe_effect_source
+		if stats.projectile_logic.aoe_effect_source == null and sc.get_stat("proj_aoe_radius") > 0:
+			aoe_esi.es = stats.effect_source
 
-## Whether the weapon is the same as another weapon when called externally to compare.
+## Returns whether or not the stats of this item instance match the stats of the item instance passed in.
 ## Overrides base method to also compare weapon mods and UID if cooldowns are based on it.
-func is_same_as(other_item: ItemStats) -> bool:
-	var initial_checks: bool = (str(self) == str(other_item)) and (self.current_mods == other_item.current_mods)
+func matches(ii_to_check: II) -> bool:
+	var initial_checks: bool = super.matches(ii_to_check) and (get_all_mods_as_stats() == ii_to_check.get_all_mods_as_stats())
 	if not stats.cooldowns_shared:
-		return (self.session_uid == other_item.session_uid) and initial_checks
+		return (uid == ii_to_check.uid) and initial_checks
 	return initial_checks
 
 #region Level & XP System

@@ -44,7 +44,7 @@ func _setup_slots() -> void:
 ## When any item in the hotbar changes, potentially update the hands about a new active item.
 ## This also triggers the full setup for active item changes including vfx and hotbar tint progresses.
 func _on_hotbar_slot_item_changed(slot: Slot, old_ii: II, new_ii: II) -> void:
-	if (old_ii != null and new_ii != null) and new_ii.stats.is_same_as(old_ii.stats):
+	if (old_ii != null and new_ii != null) and new_ii.matches(old_ii):
 		_default_ammo_update_method()
 		return # Returning if all we did was change the quantity, since we don't need to tell the hands about that
 

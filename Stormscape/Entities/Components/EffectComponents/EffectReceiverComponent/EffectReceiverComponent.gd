@@ -54,22 +54,21 @@ func _ready() -> void:
 
 ## Handles an incoming effect source, passing it to present receivers for further processing before changing
 ## entity stats.
-func handle_effect_source(effect_source: EffectSource, source_entity: Entity, source_ii: WeaponII,
-							process_status_effects: bool = true) -> void:
+func handle_esi(esi: ESI, source_entity: Entity, source_ii: WeaponII, process_status_effects: bool = true) -> void:
 	# --- Applying Cam FX & Hit Sound ----
-	_handle_cam_fx(effect_source)
-	_handle_impact_sound(effect_source)
+	_handle_cam_fx(esi)
+	_handle_impact_sound(esi)
 
 	# --- Changing Cursor to Reflect Hit ---
 	if source_entity and source_entity is Player and not affected_entity is Player:
 		CursorManager.change_cursor(null, "hit")
 
 	# --- Filtering Source Types & Tags ---
-	if filter_source_types and (effect_source.source_type not in allowed_source_types):
+	if filter_source_types and (esi.es.source_type not in allowed_source_types):
 		return
 	if filter_source_tags:
 		var match_found: bool = false
-		for tag: String in effect_source.source_tags:
+		for tag: String in esi.es.source_tags:
 			if tag in allowed_source_tags:
 				match_found = true
 		if not match_found:
@@ -82,8 +81,8 @@ func handle_effect_source(effect_source: EffectSource, source_entity: Entity, so
 		return
 
 	# --- Spawning Impact VFX ---
-	if effect_source.impact_vfx != null:
-		var vfx: Node2D = effect_source.impact_vfx.instantiate()
+	if esi.es.impact_vfx != null:
+		var vfx: Node2D = esi.es.impact_vfx.instantiate()
 		vfx.global_position = affected_entity.global_position
 		add_child(vfx)
 
@@ -99,24 +98,24 @@ func handle_effect_source(effect_source: EffectSource, source_entity: Entity, so
 	var xp: int = 0
 	var do_hitflash: bool = false
 	var source_level: int = source_ii.level if source_ii else 1
-	if effect_source.base_damage > 0 and dmg_handler != null:
-		if _check_same_team(source_entity) and _check_if_bad_effects_apply_to_allies(effect_source):
-			dmg_handler.handle_instant_damage(effect_source, source_level, _get_life_steal(effect_source, source_entity))
+	if esi.get_stat(&"base_damage") > 0 and dmg_handler != null:
+		if _check_same_team(source_entity) and _check_if_bad_effects_apply_to_allies(esi.es):
+			dmg_handler.handle_instant_damage(esi, source_level, _get_life_steal(esi, source_entity))
 			do_hitflash = true
-		elif not _check_same_team(source_entity) and _check_if_bad_effects_apply_to_enemies(effect_source):
-			xp = dmg_handler.handle_instant_damage(effect_source, source_level, _get_life_steal(effect_source, source_entity))
+		elif not _check_same_team(source_entity) and _check_if_bad_effects_apply_to_enemies(esi.es):
+			xp = dmg_handler.handle_instant_damage(esi, source_level, _get_life_steal(esi, source_entity))
 			do_hitflash = true
 
-	if effect_source.base_healing > 0 and heal_handler != null:
-		if _check_same_team(source_entity) and _check_if_good_effects_apply_to_allies(effect_source):
-			xp = heal_handler.handle_instant_heal(effect_source, effect_source.heal_affected_stats, source_level)
+	if esi.get_stat(&"base_healing") > 0 and heal_handler != null:
+		if _check_same_team(source_entity) and _check_if_good_effects_apply_to_allies(esi.es):
+			xp = heal_handler.handle_instant_heal(esi, source_level)
 			do_hitflash = true
-		elif not _check_same_team(source_entity) and _check_if_good_effects_apply_to_enemies(effect_source):
-			heal_handler.handle_instant_heal(effect_source, effect_source.heal_affected_stats, source_level)
+		elif not _check_same_team(source_entity) and _check_if_good_effects_apply_to_enemies(esi.es):
+			heal_handler.handle_instant_heal(esi, source_level)
 			do_hitflash = true
 
 	if do_hitflash:
-		affected_entity.sprite.start_hitflash(effect_source.hit_flash_color, false)
+		affected_entity.sprite.start_hitflash(esi.es.hit_flash_color, false)
 
 	# --- Applying Resulting Weapon XP ---
 	if source_entity is Player and source_ii and is_instance_valid(source_ii):
@@ -126,25 +125,25 @@ func handle_effect_source(effect_source: EffectSource, source_entity: Entity, so
 	# --- Start of Status Effect Processing Chain ---
 	if process_status_effects:
 		if can_receive_status_effects:
-			if (effect_source.multishot_id == -1) or (effect_source.multishot_id != most_recent_multishot_id):
-				most_recent_multishot_id = effect_source.multishot_id
+			if (esi.multishot_id == -1) or (esi.multishot_id != most_recent_multishot_id):
+				most_recent_multishot_id = esi.multishot_id
 
 				if knockback_handler:
-					knockback_handler.contact_position = effect_source.contact_position
-					knockback_handler.effect_movement_direction = effect_source.movement_direction
-					knockback_handler.is_source_moving_type = (effect_source.source_type == Globals.EffectSourceSourceType.FROM_PROJECTILE)
+					knockback_handler.contact_position = esi.contact_position
+					knockback_handler.effect_movement_direction = esi.movement_direction
+					knockback_handler.is_source_moving_type = (esi.es.source_type == Globals.EffectSourceSourceType.FROM_PROJECTILE)
 
-				_check_status_effect_team_logic(effect_source, source_entity)
+				_check_status_effect_team_logic(esi, source_entity)
 
 ## Checks if each status effect in the array applies to this entity via team logic, then passes it to be unpacked.
-func _check_status_effect_team_logic(effect_source: EffectSource, source_entity: Entity) -> void:
+func _check_status_effect_team_logic(esi: ESI, source_entity: Entity) -> void:
 	var is_same_team: bool = _check_same_team(source_entity)
-	var bad_effects_to_enemies: bool = not is_same_team and _check_if_bad_effects_apply_to_enemies(effect_source)
-	var good_effects_to_enemies: bool = not is_same_team and _check_if_good_effects_apply_to_enemies(effect_source)
-	var bad_effects_to_allies: bool = is_same_team and _check_if_bad_effects_apply_to_allies(effect_source)
-	var good_effects_to_allies: bool = is_same_team and _check_if_good_effects_apply_to_allies(effect_source)
+	var bad_effects_to_enemies: bool = not is_same_team and _check_if_bad_effects_apply_to_enemies(esi.es)
+	var good_effects_to_enemies: bool = not is_same_team and _check_if_good_effects_apply_to_enemies(esi.es)
+	var bad_effects_to_allies: bool = is_same_team and _check_if_bad_effects_apply_to_allies(esi.es)
+	var good_effects_to_allies: bool = is_same_team and _check_if_good_effects_apply_to_allies(esi.es)
 
-	for status_effect: StatusEffect in effect_source.status_effects:
+	for status_effect: StatusEffect in esi.status_effects:
 		if status_effect:
 			var applies_to_target: bool = (status_effect.is_bad_effect and (bad_effects_to_enemies or bad_effects_to_allies)) or (not status_effect.is_bad_effect and (good_effects_to_enemies or good_effects_to_allies))
 
@@ -243,29 +242,29 @@ func _check_if_can_receive_effect_sources_and_status_effects() -> bool:
 	return true
 
 ## Only plays the impact sound if one exists and one is not already playing for a matching multishot id.
-func _handle_impact_sound(effect_source: EffectSource) -> void:
-	var multishot_id: int = effect_source.multishot_id
+func _handle_impact_sound(esi: ESI) -> void:
+	var multishot_id: int = esi.multishot_id
 	if multishot_id != -1:
 		if multishot_id not in current_impact_sounds:
-			var player_inst: AudioPlayerInstance = AudioManager.play_2d(effect_source.impact_sound, affected_entity.global_position, 0, true, -1, Globals.world_root)
+			var player_inst: AudioPlayerInstance = AudioManager.play_2d(esi.es.impact_sound, affected_entity.global_position, 0, true, -1, Globals.world_root)
 			if player_inst:
 				current_impact_sounds.append(multishot_id)
 
 				var callable: Callable = Callable(func() -> void: current_impact_sounds.erase(multishot_id))
 				AudioManager.add_finish_callable_to_player(player_inst.player, callable)
 	else:
-		AudioManager.play_2d(effect_source.impact_sound, affected_entity.global_position, 0, true)
+		AudioManager.play_2d(esi.es.impact_sound, affected_entity.global_position, 0, true)
 
 ## Starts the player camera fx from the effect source details.
-func _handle_cam_fx(effect_source: EffectSource) -> void:
-	if effect_source.impact_cam_fx == null:
+func _handle_cam_fx(esi: ESI) -> void:
+	if esi.es.impact_cam_fx == null:
 		return
-	effect_source.impact_cam_fx.apply_falloffs_and_activate_all(affected_entity)
+	esi.es.impact_cam_fx.apply_falloffs_and_activate_all(affected_entity)
 
 ## Checks if there is a life steal effect in the status effects and returns the percent to steal if so.
-func _get_life_steal(effect_source: EffectSource, source_entity: Entity) -> float:
+func _get_life_steal(esi: ESI, source_entity: Entity) -> float:
 	if can_receive_status_effects and life_steal_handler:
-		for status_effect: StatusEffect in effect_source.status_effects:
+		for status_effect: StatusEffect in esi.status_effects:
 			if status_effect is LifeStealEffect:
 				life_steal_handler.source_entity = source_entity
 				return status_effect.dmg_steal

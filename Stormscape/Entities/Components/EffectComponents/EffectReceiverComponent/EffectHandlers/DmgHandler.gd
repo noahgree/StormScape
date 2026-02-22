@@ -27,31 +27,31 @@ func _ready() -> void:
 	affected_entity.stats.add_moddable_stats(moddable_stats)
 
 ## Calculates the final damage to apply after considering whether the crit hit and also how much the armor blocks.
-func _get_dmg_after_crit_then_armor(effect_source: EffectSource, is_crit: bool, lvl: int) -> int:
-	var level_mult: float = ((floori(lvl / 10.0) * effect_source.lvl_dmg_scalar) / 100.0) + 1
-	var dmg_after_crit: int = ceili(effect_source.base_damage * level_mult)
+func _get_dmg_after_crit_then_armor(esi: ESI, is_crit: bool, lvl: int) -> int:
+	var level_mult: float = ((floori(lvl / 10.0) * esi.get_stat(&"lvl_dmg_scalar")) / 100.0) + 1
+	var dmg_after_crit: int = ceili(esi.get_stat(&"base_damage") * level_mult)
 	if is_crit:
-		dmg_after_crit = round(dmg_after_crit * effect_source.crit_multiplier)
+		dmg_after_crit = round(dmg_after_crit * esi.get_stat(&"crit_multiplier"))
 
-	var armor_block_percent: int = max(0, health_component.armor - effect_source.armor_penetration)
+	var armor_block_percent: int = max(0, health_component.armor - esi.get_stat(&"armor_penetration"))
 	var new_damage: int = max(0, round(dmg_after_crit * (1 - (float(armor_block_percent) / 100))))
 	return new_damage
 
 ## Handles instantaneous damage that will be affected by armor. Returns the appropriate xp amount to apply.
-func handle_instant_damage(effect_source: EffectSource, lvl: int, life_steal_percent: float = 0.0) -> int:
-	var is_crit: bool = (randf_range(0, 100) <= effect_source.crit_chance) and can_be_crit
-	var dmg_after_crit_then_armor: int = _get_dmg_after_crit_then_armor(effect_source, is_crit, lvl)
+func handle_instant_damage(esi: ESI, lvl: int, life_steal_percent: float = 0.0) -> int:
+	var is_crit: bool = (randf_range(0, 100) <= esi.get_stat(&"crit_chance")) and can_be_crit
+	var dmg_after_crit_then_armor: int = _get_dmg_after_crit_then_armor(esi, is_crit, lvl)
 
 	var object_dmg_mult: float = 1.0
 	if affected_entity.is_object:
-		object_dmg_mult = effect_source.object_damage_mult
+		object_dmg_mult = esi.get_stat(&"object_damage_mult")
 	var final_damage: int = int(dmg_after_crit_then_armor * object_dmg_mult)
 
 	var final_xp: int = final_damage
 	if final_damage >= affected_entity.health_component.health + affected_entity.health_component.shield:
 		final_xp += WeaponII.LARGE_XP
 
-	_send_handled_dmg("basic_damage", effect_source.dmg_affected_stats, final_damage, effect_source.multishot_id, life_steal_percent, is_crit)
+	_send_handled_dmg("basic_damage", esi.es.dmg_affected_stats, final_damage, esi.multishot_id, life_steal_percent, is_crit)
 	return final_xp
 
 ## Handles applying damage that is inflicted over time, whether with a delay, with burst intervals, or with both.

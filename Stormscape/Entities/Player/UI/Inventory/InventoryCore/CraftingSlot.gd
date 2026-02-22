@@ -23,7 +23,7 @@ func _can_drop_data(_at_position: Vector2, data: Variant) -> bool:
 	if is_same_slot_as(data):
 		return false
 	if data is ModSlot:
-		if ii != null and not (ii.stats.is_same_as(data.ii.stats) and ii.q < ii.stats.stack_size):
+		if ii != null and not (ii.matches(data.ii) and ii.q < ii.stats.stack_size):
 			CursorManager.update_tooltip("Invalid!", Globals.ui_colors.ui_glow_strong_fail)
 			return false
 	CursorManager.update_tooltip("Add Ingredient", Globals.ui_colors.ui_glow_strong_success)

@@ -375,7 +375,7 @@ func update_ammo_ui() -> void:
 			if source_entity.inv.inv[inv_index] == null or source_entity.inv.inv[inv_index].stats == null:
 				count_str = ""
 			else:
-				count_str = str(source_entity.inv.inv[inv_index].quantity)
+				count_str = str(source_entity.inv.inv[inv_index].q)
 		ProjWeaponStats.ProjAmmoType.STAMINA:
 			count_str = str(floori(source_entity.stamina_component.stamina))
 		ProjWeaponStats.ProjAmmoType.NONE when stats.dont_consume_ammo:

@@ -107,7 +107,8 @@ func _handle_barraging() -> void:
 ## Spawns a projectile with the given multishot id and applied rotation.
 func _spawn_projectile(proj_rot: float, multishot_id: int) -> void:
 	var total_proj_rot: float = proj_rot + _get_bloom_to_add_radians()
-	var proj: Projectile = Projectile.create(weapon.ii, weapon.source_entity, weapon.proj_origin_node.global_position, total_proj_rot)
+	var proj_transform: Transform2D = Transform2D(total_proj_rot, weapon.proj_origin_node.global_position)
+	var proj: Projectile = Projectile.create(weapon.ii, weapon.source_entity, proj_transform)
 	proj.multishot_id = multishot_id
 
 	if weapon is UniqueProjWeapon:

@@ -409,7 +409,7 @@ func _can_drop_data(_at_position: Vector2, data: Variant) -> bool:
 	elif is_same_slot_as(data):
 		return false
 	elif data is WearableSlot or data is ModSlot:
-		if ii != null and not (ii.stats.is_same_as(data.ii.stats) and ii.q < ii.stats.stack_size):
+		if ii != null and not (ii.matches(data.ii) and ii.q < ii.stats.stack_size):
 			if not is_trash_slot:
 				CursorManager.update_tooltip("Invalid!", Globals.ui_colors.ui_glow_strong_fail)
 				return false
@@ -437,7 +437,7 @@ func _drop_data(_at_position: Vector2, data: Variant) -> void:
 		else:
 			_move_items_to_other_empty_slot(data)
 	else:
-		if ii.stats.is_same_as(data.ii.stats):
+		if ii.matches(data.ii):
 			if data.dragging_only_one:
 				var total_quantity: int = ii.q + 1
 				if total_quantity <= ii.stats.stack_size:
@@ -585,7 +585,7 @@ func _fill_slot_to_stack_size() -> void:
 			continue
 
 		var donor: II = synced_inv.inv[i]
-		if donor != null and donor.stats.is_same_as(ii.stats) and donor.q < donor.stats.stack_size:
+		if donor != null and donor.matches(ii) and donor.q < donor.stats.stack_size:
 			var transfer_amount: int = min(needed_quantity, donor.q)
 			ii.q += transfer_amount
 			donor.q -= transfer_amount
@@ -608,7 +608,7 @@ func _fill_slot_to_stack_size() -> void:
 				continue
 
 			var donor: II = synced_inv.inv[i]
-			if donor != null and donor.stats.is_same_as(ii.stats):
+			if donor != null and donor.matches(ii):
 				var transfer_amount: int = min(needed_quantity, donor.q)
 				ii.q += transfer_amount
 				donor.q -= transfer_amount

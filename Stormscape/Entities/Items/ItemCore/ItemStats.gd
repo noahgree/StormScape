@@ -82,7 +82,3 @@ func get_cache_key() -> String:
 ## Returns the string title of the item type rather than just the enum integer value.
 func get_item_type_string(_exact_weapon_type: bool = false) -> String:
 	return str(Globals.ItemType.keys()[item_type]).capitalize()
-
-## Whether the item is the same as another item when called externally to compare.
-func is_same_as(other_item: ItemStats) -> bool:
-	return (str(self) == str(other_item))

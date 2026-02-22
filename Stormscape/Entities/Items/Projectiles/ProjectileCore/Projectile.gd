@@ -15,6 +15,7 @@ class_name Projectile
 const MAX_AOE_RADIUS: float = 85.0
 var stats: ProjStats ## The logic for how to operate this projectile.
 var sc: StatModsCache ## The cache containing the current numerical values for firing metrics.
+var aoe_esi: ESI ## The esi to use for aoe.
 var lifetime_timer: Timer = TimerHelpers.create_one_shot_timer(self, -1, _on_lifetime_timer_timeout_or_reached_max_distance) ## The timer tracking how long the projectile has left to exist.
 var aoe_delay_timer: Timer = TimerHelpers.create_one_shot_timer(self) ## The timer tracking how long after starting an AOE do we wait before enabling damage again.
 var initial_boost_timer: Timer = TimerHelpers.create_one_shot_timer(self, -1, func() -> void: current_initial_boost = 1.0) ## The timer that tracks how long we have left in an initial boost.
@@ -30,7 +31,6 @@ var resettable_starting_dir: Vector2 ## Reset upon movement change after ricoche
 var resettable_starting_pos: Vector2 ## Reset upon movement change after ricochet and bounce. Used in calculations.
 var pierce_count: int = 0 ## The number of times we have pierced so far.
 var ricochet_count: int = 0 ## The number of times we have ricocheted so far.
-var split_proj_scene: PackedScene ## The packed scene containing this projectile's scene for when we split and need to copy.
 var splits_so_far: int = 0 ## The number of times this has been split so far.
 var split_delay_counter: float = 0 ## The incremented delta counter for how long to wait before splitting.
 var spin_dir: int = 1 ## The spin direction. -1 is left, 1 is right.
@@ -55,22 +55,19 @@ func _on_before_load_game() -> void:
 
 #region Core
 ## Creates a projectile and assigns its needed variables in a specific order. Then it returns it.
-static func create(wpn_ii: WeaponII, src_entity: Entity, pos: Vector2, rot: float) -> Projectile:
-	var proj_scene: PackedScene = wpn_ii.stats.projectile_scn
-	var proj: Projectile = proj_scene.instantiate()
-	proj.split_proj_scene = proj_scene
-	proj.global_position = pos
-	proj.rotation = rot
+static func create(wpn_ii: WeaponII, src_entity: Entity, proj_transform: Transform2D) -> Projectile:
+	var proj: Projectile = wpn_ii.stats.projectile_scn.instantiate()
+	proj.transform = proj_transform
 
 	proj.stats = wpn_ii.stats.projectile_logic
 	proj.sc = wpn_ii.sc
 	if proj.stats.speed_curve.point_count == 0:
 		push_error("\"" + src_entity.name + "\" has a weapon attempting to fire projectiles, but the projectile resource within the weapon has a blank speed curve.")
-	proj.max_distance_random_offset = randf_range(0, 15)
+	proj.esi = wpn_ii.normal_esi.copy()
+	proj.aoe_esi = wpn_ii.aoe_esi.copy()
 
-	var effect_src: EffectSource = wpn_ii.stats.effect_source
-	proj.effect_source = effect_src
-	proj.collision_mask = effect_src.scanned_phys_layers
+	proj.collision_mask = wpn_ii.normal_esi.es.scanned_phys_layers
+
 	proj.source_entity = src_entity
 	proj.source_ii = wpn_ii
 	return proj
@@ -113,6 +110,7 @@ func _ready() -> void:
 	sprite.self_modulate = stats.glow_color * (1.0 + (stats.glow_strength / 100.0))
 
 	lifetime_timer.start(stats.lifetime)
+	max_distance_random_offset = randf_range(0, 15)
 
 	homing_handler.set_up_potential_homing_delay()
 
@@ -294,7 +292,8 @@ func _split_self() -> void:
 
 	for i: int in range(split_into_count_offset_by_one):
 		var angle: float = start_angle + (i * step_angle)
-		var new_proj: Projectile = Projectile.create(source_ii, source_entity, position, angle)
+		var new_transform: Transform2D = Transform2D(angle, position)
+		var new_proj: Projectile = Projectile.create(source_ii, source_entity, new_transform)
 		new_proj.splits_so_far = splits_so_far
 		new_proj.spin_dir = spin_dir
 		new_proj.multishot_id = new_multishot_id
@@ -528,35 +527,30 @@ func _kill_projectile_on_hit() -> void:
 func _start_being_handled(handling_area: EffectReceiverComponent) -> void:
 	if about_to_free:
 		return
+	var dist_to_center: float = handling_area.get_parent().global_position.distance_to(global_position)
 
 	if not is_in_aoe_phase:
-		effect_source = effect_source.duplicate()
-		var modified_effect_src: EffectSource = _get_effect_source_adjusted_for_falloff(effect_source, handling_area, false)
-		modified_effect_src.multishot_id = multishot_id
-		modified_effect_src.movement_direction = movement_direction
-		modified_effect_src.contact_position = global_position
-		handling_area.handle_effect_source(modified_effect_src, source_entity, source_ii)
+		_adjust_esi_for_falloff(esi, dist_to_center, false)
+		esi.multishot_id = multishot_id
+		esi.movement_direction = movement_direction
+		esi.contact_position = global_position
+		handling_area.handle_esi(esi, source_entity, source_ii)
 	else:
-		if stats.aoe_effect_source == null:
-			stats.aoe_effect_source = effect_source
-		var modified_effect_src: EffectSource = _get_effect_source_adjusted_for_falloff(stats.aoe_effect_source, handling_area, true)
-		modified_effect_src.contact_position = global_position
-		handling_area.handle_effect_source(modified_effect_src, source_entity, source_ii, false) # Don't reapply status effects.
+		_adjust_esi_for_falloff(aoe_esi, dist_to_center, true)
+		aoe_esi.contact_position = global_position
+		handling_area.handle_esi(aoe_esi, source_entity, source_ii, false) # Don't reapply status effects.
 
 ## When we hit a handling area during an AOE, we need to apply falloff based on distance from the center of the AOE.
-func _get_effect_source_adjusted_for_falloff(effect_src: EffectSource, handling_area: EffectReceiverComponent,
-												is_aoe: bool = false) -> EffectSource:
-	var dist_to_center: float = handling_area.get_parent().global_position.distance_to(global_position)
-	var falloff_effect_src: EffectSource = effect_src.duplicate()
-	var falloff_mult: float
+func _adjust_esi_for_falloff(esi_to_adjust: ESI, dist: float, is_aoe: bool = false) -> void:
 	var apply_to_bad: bool
 	var apply_to_good: bool
+	var falloff_mult: float
 
 	if is_aoe:
 		apply_to_bad = stats.bad_effects_aoe_falloff
 		apply_to_good = stats.good_effects_aoe_falloff
 		var radius: float = min(MAX_AOE_RADIUS, sc.get_stat("proj_aoe_radius"))
-		falloff_mult = max(0.05, stats.aoe_effect_falloff_curve.sample_baked(dist_to_center / radius))
+		falloff_mult = max(0.05, stats.aoe_effect_falloff_curve.sample_baked(dist / radius))
 	else:
 		apply_to_bad = stats.bad_effects_falloff
 		apply_to_good = stats.good_effects_falloff
@@ -565,10 +559,10 @@ func _get_effect_source_adjusted_for_falloff(effect_src: EffectSource, handling_
 		falloff_mult = max(0.05, sampled_point)
 
 	if apply_to_bad:
-		falloff_effect_src.base_damage = int(min(falloff_effect_src.base_damage, ceil(falloff_effect_src.base_damage * falloff_mult)))
+		var base_damage: float = esi_to_adjust.get_stat(&"base_damage")
+		esi_to_adjust.es_stat_overrides[&"base_damage"] = int(min(base_damage, ceil(base_damage * falloff_mult)))
 
 	if apply_to_good:
-		falloff_effect_src.base_healing = int(min(falloff_effect_src.base_healing, ceil(falloff_effect_src.base_healing * falloff_mult)))
-
-	return falloff_effect_src
+		var base_healing: float = esi_to_adjust.get_stat(&"base_healing")
+		esi_to_adjust.es_stat_overrides[&"base_healing"] = int(min(base_healing, ceil(base_healing * falloff_mult)))
 #endregion

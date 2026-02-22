@@ -117,7 +117,7 @@ func activate_auto_stack() -> void:
 		for j: int in range(i + 1, Globals.MAIN_PLAYER_INV_SIZE):
 			if inv[j] == null:
 				continue
-			elif inv[i].stats.is_same_as(inv[j].stats):
+			elif inv[i].matches(inv[j]):
 				var total_quantity: int = inv[i].q + inv[j].q
 				if total_quantity <= inv[i].stats.stack_size:
 					inv[i].q = total_quantity

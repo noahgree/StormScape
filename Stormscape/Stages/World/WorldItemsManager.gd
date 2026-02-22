@@ -63,7 +63,7 @@ func _find_and_combine_neighbors(item: WorldItem, processed_items: Dictionary[Wo
 					neighbors.append(neighbor as WorldItem)
 
 	for neighbor: WorldItem in neighbors:
-		if neighbor != item and item.ii.stats.is_same_as(neighbor.ii.stats):
+		if neighbor != item and item.ii.matches(neighbor.ii):
 			_combine_items(item, neighbor)
 			processed_items[neighbor] = true
 

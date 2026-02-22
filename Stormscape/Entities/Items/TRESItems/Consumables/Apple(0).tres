@@ -1,8 +1,8 @@
 [gd_resource type="Resource" script_class="ConsumableStats" format=3 uid="uid://cx1ydw2jde1y8"]
 
 [ext_resource type="Script" uid="uid://dkfssottmsrch" path="res://Entities/Stats/EffectSystemResources/EffectSourceCore/EffectSource.gd" id="1_bn713"]
-[ext_resource type="Script" uid="uid://5qg77uqxh5yw" path="res://Entities/Items/Consumables/ConsumableStats.gd" id="1_jepoi"]
-[ext_resource type="PackedScene" uid="uid://bdaogdtcus1ac" path="res://Entities/Items/Consumables/Consumable.tscn" id="2_1oeu8"]
+[ext_resource type="Script" uid="uid://5qg77uqxh5yw" path="res://Entities/Items/Consumables/ConsumableCore/ConsumableStats.gd" id="1_jepoi"]
+[ext_resource type="PackedScene" uid="uid://bdaogdtcus1ac" path="res://Entities/Items/Consumables/ConsumableCore/Consumable.tscn" id="2_1oeu8"]
 [ext_resource type="Script" uid="uid://boo31eu083dqd" path="res://Entities/Stats/EffectSystemResources/StatusEffects/StatusEffect.gd" id="2_2c2ph"]
 [ext_resource type="Texture2D" uid="uid://bibinc8ql8wl1" path="res://Entities/Items/Consumables/Apple/AppleThumbCT.tres" id="3_7kd7o"]
 [ext_resource type="Script" uid="uid://cowjdnic7xmkp" path="res://Entities/Player/UI/Inventory/Panels/ItemDetailsPanel/StatDetail.gd" id="3_awbqi"]
@@ -27,7 +27,7 @@ consumption_cooldown = 0.75
 particles_color = Color(0.52847, 0, 0.0533954, 1)
 id = "apple"
 name = "Apple"
-stack_size = 5
+stack_size = 10
 auto_pickup = true
 info = "A simple snack."
 ground_icon = ExtResource("3_7kd7o")
