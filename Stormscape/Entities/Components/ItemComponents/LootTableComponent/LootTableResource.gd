@@ -58,8 +58,8 @@ func _on_hp_changed(new_value: int, old_value: int) -> void:
 
 	hp_change_counter += (old_value - new_value)
 
-	var max_health: int = int(source_entity.stats.get_stat("max_health"))
-	var max_shield: int = int(source_entity.stats.get_stat("max_shield"))
+	var max_health: int = int(source_entity.sc.get_stat("max_health"))
+	var max_shield: int = int(source_entity.sc.get_stat("max_shield"))
 	var needed_change: float = (max_health + max_shield) * (hp_percent_hit_checks / 100.0)
 	if hp_change_counter >= needed_change:
 		hp_change_counter = floori(hp_change_counter - needed_change)

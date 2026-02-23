@@ -197,7 +197,7 @@ func _name_sort_logic(a: II, b: II) -> bool:
 #region Weapon Helpers
 ## Consumes ammo from this inventory and returns the amount back to the caller. Only for player inv.
 func get_more_ammo(max_amount_needed: int, take_from_inventory: bool,
-					ammo_type: ProjWeaponStats.ProjAmmoType) -> int:
+					ammo_type: ProjWeaponStats.AmmoTypes) -> int:
 	var ammount_collected: int = 0
 	var starting_index: int = ammo_slot_manager.starting_index
 

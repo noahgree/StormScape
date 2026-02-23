@@ -18,7 +18,7 @@ static func handle_run_logic(delta: float, entity: Entity, controller: DynamicCo
 			entity.velocity = Vector2.ZERO
 			controller.notify_stopped_moving()
 	elif controller.knockback_vector.length() == 0: # We have input and there is no knockback
-		if controller.get_should_sprint() and entity.stamina_component.use_stamina(entity.stats.get_stat("sprint_stamina_usage") * delta):
+		if controller.get_should_sprint() and entity.stamina_component.use_stamina(entity.sc.get_stat("sprint_stamina_usage") * delta):
 			apply_sprint_movement(delta, entity, controller, stats, max_anim_scale, default_anim_scale, extra_sprint_mult)
 		else:
 			apply_non_sprint_movement(delta, entity, controller, stats, max_anim_scale, default_anim_scale, extra_run_mult)
@@ -60,7 +60,7 @@ static func handle_rigid_entity_collisions(entity: Entity, controller: DynamicCo
 		var c: KinematicCollision2D = entity.get_slide_collision(i)
 		var collider: Object = c.get_collider()
 		if collider is RigidEntity:
-			collider.apply_central_impulse(-c.get_normal().normalized() * entity.velocity.length() / (10 / (entity.stats.get_stat("run_collision_impulse_factor"))))
+			collider.apply_central_impulse(-c.get_normal().normalized() * entity.velocity.length() / (10 / (entity.sc.get_stat("run_collision_impulse_factor"))))
 			hit_rigid_entity = true
 
 		# End any knockback if we ran into something

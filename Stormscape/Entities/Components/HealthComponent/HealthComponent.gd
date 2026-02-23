@@ -34,7 +34,7 @@ func _ready() -> void:
 	var moddable_stats: Dictionary[StringName, Array] = {
 		&"max_health" : [_max_health, on_max_health_changed], &"max_shield" : [_max_shield, on_max_shield_changed]
 	}
-	entity.stats.add_moddable_stats_with_associated_callables(moddable_stats)
+	entity.sc.add_moddable_stats_with_associated_callables(moddable_stats)
 	call_deferred("_emit_initial_values")
 
 ## Called from a deferred method caller in order to let any associated ui ready up first.
@@ -45,8 +45,8 @@ func _emit_initial_values() -> void:
 		_set_shield(shield)
 		_set_armor(armor)
 	else:
-		health = int(entity.stats.get_stat("max_health"))
-		shield = int(entity.stats.get_stat("max_shield"))
+		health = int(entity.sc.get_stat("max_health"))
+		shield = int(entity.sc.get_stat("max_shield"))
 		armor = base_armor
 #endregion
 
@@ -116,8 +116,8 @@ func update_armor(new_armor: int) -> void:
 ## Heals to both health and shield, starting with health then applying any remaining amount to shield.
 func heal_health_then_shield(amount: int, source_type: String, _multishot_id: int) -> void:
 	if not is_dying:
-		var max_health: int = int(entity.stats.get_stat("max_health"))
-		var max_shield: int = int(entity.stats.get_stat("max_shield"))
+		var max_health: int = int(entity.sc.get_stat("max_health"))
+		var max_shield: int = int(entity.sc.get_stat("max_shield"))
 
 		if health < max_health:
 			var src_type: String = source_type if source_type != "basic_healing" else "health_healing"
@@ -137,7 +137,7 @@ func heal_health_then_shield(amount: int, source_type: String, _multishot_id: in
 ## Heals only health.
 func heal_health(amount: int, source_type: String, _multishot_id: int) -> void:
 	if not is_dying:
-		var max_health: int = int(entity.stats.get_stat("max_health"))
+		var max_health: int = int(entity.sc.get_stat("max_health"))
 		var src_type: String = source_type if source_type != "basic_healing" else "health_healing"
 		_create_or_update_popup_for_src_type(src_type, true, false, min(max_health - health, amount))
 
@@ -146,7 +146,7 @@ func heal_health(amount: int, source_type: String, _multishot_id: int) -> void:
 ## Heals only shield.
 func heal_shield(amount: int, source_type: String, _multishot_id: int) -> void:
 	if not is_dying:
-		var max_shield: int = int(entity.stats.get_stat("max_shield"))
+		var max_shield: int = int(entity.sc.get_stat("max_shield"))
 		var src_type: String = source_type if source_type != "basic_healing" else "shield_healing"
 		_create_or_update_popup_for_src_type(src_type, true, false, min(max_shield - shield, amount))
 
@@ -157,13 +157,13 @@ func heal_shield(amount: int, source_type: String, _multishot_id: int) -> void:
 ## Setter for the current health. Clamps the new value to the allowed range and updates any connected UI.
 func _set_health(new_value: int) -> void:
 	var old_health: int = health
-	health = clampi(new_value, 0, int(entity.stats.get_stat("max_health")))
+	health = clampi(new_value, 0, int(entity.sc.get_stat("max_health")))
 	health_changed.emit(health, old_health)
 
 ## Setter for the current shield. Clamps the new value to the allowed range and updates any connected UI.
 func _set_shield(new_value: int) -> void:
 	var old_shield: int = shield
-	shield = clampi(new_value, 0, int(entity.stats.get_stat("max_shield")))
+	shield = clampi(new_value, 0, int(entity.sc.get_stat("max_shield")))
 	shield_changed.emit(shield, old_shield)
 
 ## Setter for the current armor. Clamps the new value to the allowed range.

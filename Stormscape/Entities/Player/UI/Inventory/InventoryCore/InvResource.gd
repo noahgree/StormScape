@@ -180,7 +180,7 @@ func _emit_changes_for_all_indices() -> void:
 ## Consumes ammo from this inventory and returns the amount back to the caller. Only for non-players, as the
 ## player has special ammo slots.
 func get_more_ammo(max_amount_needed: int, take_from_inventory: bool,
-					ammo_type: ProjWeaponStats.ProjAmmoType) -> int:
+					ammo_type: ProjWeaponStats.AmmoTypes) -> int:
 	var ammount_collected: int = 0
 	var count: int = total_inv_size
 

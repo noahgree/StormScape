@@ -46,8 +46,7 @@ enum Teams {
 	ENEMY = 1 << 1, ## The enemy team (against the player).
 	PASSIVE = 1 << 2 ## Does not heal or damage anything. Just exists.
 }
-enum DmgAffectedStats { HEALTH_ONLY, SHIELD_ONLY, SHIELD_THEN_HEALTH, SIMULTANEOUS }
-enum HealAffectedStats { HEALTH_ONLY, SHIELD_ONLY, HEALTH_THEN_SHIELD, SIMULTANEOUS }
+enum EOTTypes { HEALTH_ONLY, SHIELD_ONLY, SHIELD_THEN_HEALTH, HEALTH_THEN_SHIELD, SIMULTANEOUS }
 enum BadEffectAffectedTeams { ENEMIES = 1 << 0, ALLIES = 1 << 1 }
 enum GoodEffectAffectedTeams { ENEMIES = 1 << 0, ALLIES = 1 << 1 }
 enum EffectSourceSourceType {
@@ -61,21 +60,11 @@ enum EffectSourceSourceType {
 	FROM_COMBAT_MELEE, ## For melee weapons that are primarily damaging weapons like a sword (not tools like the pickaxe).
 	FROM_CONSUMABLE ## For receiving effects from consuming consumables.
 }
-enum StatusEffectSourceType {
-	FROM_WEAPON, ## For any status effect that is the result of being hit by a weapon's hitbox (like projectiles).
-	FROM_GROUND_AOE, ## For any status effect that gets applied by walking into a ground AOE like after an explosion.
-	FROM_ENVIRONMENT, ## For any status effect coming from the environment, like the cold weather, etc.
-	FROM_SELF ## For self effects like when weapons apply effects to the entity while being charged up.
-}
 
 # Items
-enum ItemType {
-	CONSUMABLE, WEAPON, AMMO, WEARABLE, WORLD_RESOURCE, SPECIAL, WEAPON_MOD, CURRENCY
-}
-enum CurrencyType {
-	STORMSHINE, SCRAP, TOKEN
-}
-const all_proj_weapons: Array[ProjWeaponStats.ProjWeaponType] = [ProjWeaponStats.ProjWeaponType.PISTOL, ProjWeaponStats.ProjWeaponType.SHOTGUN, ProjWeaponStats.ProjWeaponType.SUBMACHINE, ProjWeaponStats.ProjWeaponType.SNIPER, ProjWeaponStats.ProjWeaponType.RIFLE, ProjWeaponStats.ProjWeaponType.EXPLOSIVE, ProjWeaponStats.ProjWeaponType.PRIMITIVE_WEAPON, ProjWeaponStats.ProjWeaponType.MAGIC, ProjWeaponStats.ProjWeaponType.THROWABLE, ProjWeaponStats.ProjWeaponType.SPECIAL_WEAPON]
+enum ItemType { CONSUMABLE, WEAPON, AMMO, WEARABLE, WORLD_RESOURCE, SPECIAL, WEAPON_MOD, CURRENCY }
+enum CurrencyType { STORMSHINE, SCRAP, TOKEN }
+const all_proj_weapons: Array[ProjWeaponStats.Types] = [ProjWeaponStats.Types.PISTOL, ProjWeaponStats.Types.SHOTGUN, ProjWeaponStats.Types.SUBMACHINE, ProjWeaponStats.Types.SNIPER, ProjWeaponStats.Types.RIFLE, ProjWeaponStats.Types.EXPLOSIVE, ProjWeaponStats.Types.PRIMITIVE_WEAPON, ProjWeaponStats.Types.MAGIC, ProjWeaponStats.Types.THROWABLE, ProjWeaponStats.Types.SPECIAL_WEAPON]
 const all_melee_wpns: Array[MeleeWeaponStats.MeleeWeaponType] = [MeleeWeaponStats.MeleeWeaponType.TOOL, MeleeWeaponStats.MeleeWeaponType.PHYSICAL, MeleeWeaponStats.MeleeWeaponType.COMBAT]
 
 enum ItemRarity {

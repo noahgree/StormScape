@@ -158,7 +158,7 @@ func handle_status_effect(status_effect: StatusEffect) -> void:
 	if (affected_entity.effects.is_untouchable()) and (status_effect.is_bad_effect):
 		return
 
-	for effect_to_stop: String in status_effect.effects_to_stop:
+	for effect_to_stop: StatusEffect.ID in status_effect.effects_to_stop:
 		affected_entity.effects.request_effect_removal_for_all_sources(effect_to_stop)
 
 	affected_entity.effects.handle_status_effect(status_effect)
@@ -290,7 +290,7 @@ func _get_configuration_warnings() -> PackedStringArray:
 
 ## Attempts to apply an effect based on its file name turned into snake case. "poison_1", for example.
 func apply_effect_by_id(effect_key: StringName) -> void:
-	var status_effect: StatusEffect = StatusEffectsComponent.cached_status_effects.get(effect_key, null)
+	var status_effect: StatusEffect = StatusEffectsComponent.cache.get(effect_key, null)
 	if status_effect == null:
 		printerr("The request to apply the effect \"" + effect_key + "\" failed because it does not exist.")
 		return

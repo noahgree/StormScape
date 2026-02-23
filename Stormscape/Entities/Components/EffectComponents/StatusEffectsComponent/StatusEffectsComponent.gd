@@ -5,7 +5,7 @@ class_name StatusEffectsComponent
 ##
 ## This handles things like fire & poison damage not taking into account armor, etc.
 
-static var cached_status_effects: Dictionary[StringName, StatusEffect] = {} ## A cache of all status effects, keyed by their file names turned into snake case.
+static var cache: Dictionary[Array, StatusEffect] = {} ## A cache of all status effects, keyed by [id, source, level].
 
 @export var effect_receiver: EffectReceiverComponent ## The effect receiver that sends status effects to this manager to be cached and handled.
 @export_subgroup("Debug")
@@ -13,9 +13,10 @@ static var cached_status_effects: Dictionary[StringName, StatusEffect] = {} ## A
 
 @onready var affected_entity: Entity = owner ## The entity affected by these status effects.
 
-var current_effects: Dictionary[StringName, StatusEffect] = {} ## Keys are general status effect ids and values are the effect resources themselves.
-var effect_timers: Dictionary[StringName, Timer] = {} ## Holds references to all timers currently tracking active status effects.
-var particle_fade_tweens: Dictionary[StringName, Tween] = {} ## Holds references to all particle fade out tweens so if that effect is started again while fading out, we can cancel it.
+var active: Dictionary[Array, int] = {} ## Keys are [id, source] and values are the associated levels.
+var active_by_id: Dictionary[StatusEffect.ID, Dictionary] = {} ## Keys are status effect IDs and values are { StatusEffect.SourceType : effect_level }.
+var effect_timers: Dictionary[Array, Timer] = {} ## Holds references to all timers currently tracking active status effects. Keys are [id, source], values are the timer associated with that key.
+var particle_fade_tweens: Dictionary[StatusEffect.ID, Tween] = {} ## Holds references to all particle fade out tweens so if that effect is started again while fading out, we can cancel it.
 
 
 #region Debug
@@ -35,7 +36,7 @@ func _draw() -> void:
 func _ready() -> void:
 	assert(effect_receiver != null, owner.name + " has a StatusEffectsComponent without a connected EffectReceiverComponent.")
 
-	if StatusEffectsComponent.cached_status_effects.is_empty():
+	if StatusEffectsComponent.cache.is_empty():
 		_cache_status_effects(Globals.status_effects_dir)
 
 ## Searches through the given top level folder and recursively finds all status effect resources for caching.
@@ -50,12 +51,12 @@ func _cache_status_effects(folder: String) -> void:
 
 	while file_name != "":
 		if dir.current_is_dir():
-			if file_name != "." and file_name != "..":
+			if (file_name != ".") and (file_name != ".."):
 				_cache_status_effects(folder + "/" + file_name)
 		elif file_name.ends_with(".tres"):
 			var file_path: String = folder + "/" + file_name
 			var status_effect: StatusEffect = load(file_path)
-			StatusEffectsComponent.cached_status_effects[file_name.trim_suffix(".tres").to_snake_case()] = status_effect
+			StatusEffectsComponent.cache[[status_effect.id, status_effect.source_type, status_effect.level]] = status_effect
 		file_name = dir.get_next()
 	dir.list_dir_end()
 #endregion
@@ -63,61 +64,59 @@ func _cache_status_effects(folder: String) -> void:
 ## Handles an incoming status effect. It starts by adding any stat mods provided by the status effect, and then
 ## it passes the effect logic to the relevant handler if it exists.
 func handle_status_effect(status_effect: StatusEffect) -> void:
-	var effect_key: String = status_effect.get_full_effect_key()
-
 	if DebugFlags.current_effect_changes and print_effect_updates:
 		if status_effect is StormSyndromeEffect:
-			print_rich("-------[color=green]Adding[/color][b] [color=pink]" + effect_key + " " + str(status_effect.effect_lvl) + "[/color][/b][color=gray] to " + affected_entity.name + "-------")
+			print_rich("-------[color=green]Adding[/color][b] [color=pink]" + str(status_effect) + "[/color][/b][color=gray] to " + affected_entity.name + "-------")
 		else:
-			print_rich("-------[color=green]Adding[/color][b] " + effect_key + " " + str(status_effect.effect_lvl) + "[/b][color=gray] to " + affected_entity.name + "-------")
+			print_rich("-------[color=green]Adding[/color][b] " + str(status_effect) + "[/b][color=gray] to " + affected_entity.name + "-------")
 
 	_handle_status_effect_mods(status_effect)
 
 ## Checks if we already have a status effect of the same name and decides what to do depending on the level.
 func _handle_status_effect_mods(status_effect: StatusEffect) -> void:
-	var effect_key: String = status_effect.get_full_effect_key()
+	var key: Array = status_effect.get_key()
 
-	if effect_key in current_effects:
-		var existing_lvl: int = current_effects[effect_key].effect_lvl
-
-		if existing_lvl > status_effect.effect_lvl: # New effect is lower lvl
-			var time_to_add: float = status_effect.mod_time * (float(status_effect.effect_lvl) / float(existing_lvl))
-			_extend_effect_duration(effect_key, time_to_add)
+	if key in active:
+		var existing_lvl: int = active[key]
+		if existing_lvl > status_effect.level: # New effect is lower lvl
+			_extend_effect_duration(status_effect, existing_lvl)
 		elif existing_lvl < status_effect.effect_lvl: # New effect is higher lvl
-			_remove_status_effect(current_effects[effect_key])
+			_remove_status_effect(status_effect)
 			_add_status_effect(status_effect)
 		else: # New effect is same lvl
-			_restart_effect_duration(effect_key)
+			_restart_effect_duration(status_effect)
 	else:
 		_add_status_effect(status_effect)
 
 ## Adds a status effect to the current effects dict, starts its timer, stores its timer, and applies its mods.
 func _add_status_effect(status_effect: StatusEffect) -> void:
-	if status_effect.id == "untouchable":
+	if status_effect.id == StatusEffect.ID.UNTOUCHABLE:
 		remove_all_bad_status_effects()
 
-	var effect_key: String = status_effect.get_full_effect_key()
-	current_effects[effect_key] = status_effect
+	var key: Array = status_effect.get_key()
+	active[key] = status_effect.level
+	if active_by_id[status_effect.id].is_empty():
+		active_by_id[status_effect.id] = { status_effect.source_type : status_effect.level }
+	else:
+		active_by_id[status_effect.id][status_effect.source_type] = status_effect.level
 
-	var mod_timer: Timer = TimerHelpers.create_one_shot_timer(self, max(0.01, status_effect.mod_time))
-
+	var mod_timer: Timer = TimerHelpers.create_one_shot_timer(
+			self, max(0.01, status_effect.mod_time), Callable(), str(status_effect) + "_timer"
+		)
 	if not status_effect.apply_until_removed:
-		var removing_callable: Callable = Callable(self, "_remove_status_effect").bind(status_effect)
-		mod_timer.timeout.connect(removing_callable)
-		mod_timer.set_meta("callable", removing_callable)
+		var timeout_func: Callable = Callable(self, "_remove_status_effect").bind(status_effect)
+		mod_timer.timeout.connect(timeout_func)
+		mod_timer.set_meta("on_removal", timeout_func)
 	else:
 		mod_timer.timeout.connect(func() -> void: mod_timer.start(status_effect.mod_time))
 
-	mod_timer.name = effect_key + str(status_effect.effect_lvl) + "_timer"
-	if mod_timer.is_inside_tree():
-		mod_timer.start()
-
-	effect_timers[effect_key] = mod_timer
+	effect_timers[key] = mod_timer
+	mod_timer.start()
 
 	_start_effect_fx(status_effect)
 
 	for mod_resource: StatMod in status_effect.stat_mods:
-		affected_entity.stats.add_mods([mod_resource] as Array[StatMod])
+		affected_entity.sc.add_mods([mod_resource] as Array[StatMod])
 
 ## Starts the status effects' associated visual FX like particles. Checks if the receiver has the
 ## matching handler node first.
@@ -165,17 +164,17 @@ func _start_effect_fx(status_effect: StatusEffect) -> void:
 		queue_redraw()
 
 ## Extends the duration of the timer associated with some current effect.
-func _extend_effect_duration(effect_key: String, time_to_add: float) -> void:
-	var timer: Timer = effect_timers.get(effect_key, null)
+func _extend_effect_duration(new_status_effect: StatusEffect, existing_lvl: float) -> void:
+	var time_to_add: float = new_status_effect.mod_time * (float(new_status_effect.level) / float(existing_lvl))
+	var timer: Timer = effect_timers.get(new_status_effect.get_key(), null)
 	if timer != null:
 		var new_time: float = timer.get_time_left() + time_to_add
 		timer.stop()
-		timer.wait_time = new_time
-		timer.start()
+		timer.start(new_time)
 
 ## Restarts the timer associated with some current effect.
-func _restart_effect_duration(effect_key: String) -> void:
-	var timer: Timer = effect_timers.get(effect_key, null)
+func _restart_effect_duration(status_effect: StatusEffect) -> void:
+	var timer: Timer = effect_timers.get(status_effect.get_key(), null)
 	if timer != null:
 		timer.stop()
 		timer.start()
@@ -183,28 +182,30 @@ func _restart_effect_duration(effect_key: String) -> void:
 ## Removes the status effect from the current effects dict and removes all its mods. Additionally removes its
 ## associated timer from the timer dict.
 func _remove_status_effect(status_effect: StatusEffect) -> void:
-	var effect_key: String = status_effect.get_full_effect_key()
-
 	if DebugFlags.current_effect_changes and print_effect_updates:
-		if status_effect is StormSyndromeEffect:
-			print_rich("-------[color=red]Removed[/color][b] [color=pink]" + effect_key + " " + str(status_effect.effect_lvl) + "[/color][/b][color=gray] from " + affected_entity.name + "-------")
+		if status_effect.id == StatusEffect.ID.STORM_SYNDROME:
+			print_rich("-------[color=red]Removed[/color][b] [color=pink]" + str(status_effect) + "[/color][/b][color=gray] from " + affected_entity.name + "-------")
 		else:
-			print_rich("-------[color=red]Removed[/color][b] " + effect_key + " " + str(status_effect.effect_lvl) + "[/b][color=gray] from " + affected_entity.name + "-------")
+			print_rich("-------[color=red]Removed[/color][b] " + str(status_effect) + "[/b][color=gray] from " + affected_entity.name + "-------")
 
 	for mod_resource: StatMod in status_effect.stat_mods:
-		affected_entity.stats.remove_mod(mod_resource.stat_id, mod_resource.mod_id)
+		affected_entity.sc.remove_mod(mod_resource.stat_id, mod_resource.mod_id)
 
-	current_effects.erase(effect_key)
+	var key: Array = status_effect.get_key()
+	active.erase(key)
+	active_by_id[status_effect.id].erase(status_effect.source_type)
+	if active_by_id[status_effect.id].is_empty():
+		active_by_id.erase(status_effect.id)
 
-	var timer: Timer = effect_timers.get(effect_key, null)
+	var timer: Timer = effect_timers.get(key, null)
 	if timer != null:
-		if timer.has_meta("callable"): # So we can cancel any pending callables before freeing
-			var callable: Callable = timer.get_meta("callable")
+		if timer.has_meta("on_removal"): # So we can cancel any pending callables before freeing
+			var callable: Callable = timer.get_meta("on_removal")
 			timer.timeout.disconnect(callable)
-			timer.set_meta("callable", null)
+			timer.remove_meta("on_removal")
 		timer.stop()
 		timer.queue_free()
-		effect_timers.erase(effect_key)
+		effect_timers.erase(key)
 
 	_stop_effect_fx(status_effect.id, false)
 
@@ -233,9 +234,9 @@ func _stop_effect_fx(effect_id: String, force: bool = false) -> void:
 ## Returns if any effect (no matter the level) of the passed in name is active. Can optionally check only for
 ## a single source type.
 @warning_ignore("int_as_enum_without_match", "int_as_enum_without_cast")
-func check_if_has_effect(id: String, source_type: Globals.StatusEffectSourceType = -1) -> bool:
+func check_if_has_effect(id: String, source_type: StatusEffect.SourceType = -1) -> bool:
 	if source_type != -1:
-		return current_effects.has(id + ":" + str(Globals.StatusEffectSourceType.keys()[source_type]).to_lower())
+		return current_effects.has(id + ":" + str(StatusEffect.SourceType.keys()[source_type]).to_lower())
 	else:
 		for effect_key: StringName in current_effects:
 			if effect_key.begins_with(id + ":"):
@@ -244,8 +245,8 @@ func check_if_has_effect(id: String, source_type: Globals.StatusEffectSourceType
 
 ## Attempts to remove any effect of the matching id and source type (which is given as an Enum value).
 ## It also cancels any active DOTs and HOTs for it.
-func request_effect_removal_by_source(id: StringName, source_type: Globals.StatusEffectSourceType) -> void:
-	var source_string: StringName = StringName((Globals.StatusEffectSourceType.keys()[source_type]).to_lower())
+func request_effect_removal_by_source(id: StringName, source_type: StatusEffect.SourceType) -> void:
+	var source_string: StringName = StringName((StatusEffect.SourceType.keys()[source_type]).to_lower())
 	request_effect_removal_by_source_string(id, source_string)
 
 ## Attempts to remove any effect of the matching id and source type (which is given as a StringName).
@@ -259,7 +260,7 @@ func request_effect_removal_by_source_string(id: StringName, source_string: Stri
 
 ## Attempts to remove all effects of the matching id, regardless of source type.
 ## It also cancels all active DOTs and HOTs for each of them.
-func request_effect_removal_for_all_sources(id: String) -> void:
+func request_effect_removal_for_all_sources(id: StatusEffect.ID) -> void:
 	var to_erase: Array[StatusEffect] = []
 	for effect_key: StringName in current_effects:
 		if effect_key.begins_with(id + ":"):

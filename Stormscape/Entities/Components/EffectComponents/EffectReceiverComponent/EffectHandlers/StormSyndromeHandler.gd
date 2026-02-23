@@ -17,13 +17,13 @@ func initialize(receiver: EffectReceiverComponent) -> void:
 	var moddable_stats: Dictionary[StringName, float] = {
 		&"storm_weakness" : _storm_weakness, &"storm_resistance" : _storm_resistance
 	}
-	effect_receiver.affected_entity.stats.add_moddable_stats(moddable_stats)
+	effect_receiver.affected_entity.sc.add_moddable_stats(moddable_stats)
 
 func handle_storm_syndrome(storm_syndrome_effect: StormSyndromeEffect) -> void:
 	if storm_syndrome_effect.dot_resource != null: # needed for when we nullify on game load
 		var local_dot_resource: DOTResource = storm_syndrome_effect.dot_resource.duplicate()
-		var storm_weakness: float = effect_receiver.affected_entity.stats.get_stat("storm_weakness")
-		var storm_resistance: float = effect_receiver.affected_entity.stats.get_stat("storm_resistance")
+		var storm_weakness: float = effect_receiver.affected_entity.sc.get_stat("storm_weakness")
+		var storm_resistance: float = effect_receiver.affected_entity.sc.get_stat("storm_resistance")
 
 		var multiplier: float = 1.0 + (storm_weakness / 100.0) - (storm_resistance / 100.0)
 		multiplier = clamp(multiplier, 0.0, 2.0)

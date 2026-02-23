@@ -7,7 +7,7 @@ class_name HOTResource
 @export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var delay_time: float = 0 ## The delay before this effect starts.
 @export var heal_affected_stats: Globals.HealAffectedStats = Globals.HealAffectedStats.HEALTH_THEN_SHIELD ## The stats to apply the healing to.
 
-@export_subgroup("Perpetual")
+@export_group("Perpetual")
 @export var run_until_removed: bool = false ## When true, the healing from the first element in the heal array will continue to be applied until the source effect is removed.
 @export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var time_between_ticks: float = 1.0 ## The time between applying the same healing amount when run_until_removed is true.
 

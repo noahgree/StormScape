@@ -52,7 +52,7 @@ func calculate_inv_ammo() -> void:
 
 	var count_str: String
 	if current_item_stats is ProjWeaponStats:
-		if current_item_stats.ammo_type not in [ProjWeaponStats.ProjAmmoType.NONE, ProjWeaponStats.ProjAmmoType.STAMINA, ProjWeaponStats.ProjAmmoType.SELF, ProjWeaponStats.ProjAmmoType.CHARGES]:
+		if current_item_stats.ammo_type not in [ProjWeaponStats.AmmoTypes.NONE, ProjWeaponStats.AmmoTypes.STAMINA, ProjWeaponStats.AmmoTypes.SELF, ProjWeaponStats.AmmoTypes.CHARGES]:
 			var count: int = 0
 			var start_index: int = Globals.player_node.inv.ammo_slot_manager.starting_index
 			for index: int in range(start_index, start_index + Globals.AMMO_BAR_SIZE):
@@ -60,9 +60,9 @@ func calculate_inv_ammo() -> void:
 				if ii != null and (ii.stats is ProjAmmoStats) and (ii.stats.ammo_type == current_item_stats.ammo_type):
 					count += ii.q
 			count_str = str(count)
-		elif current_item_stats.ammo_type in [ProjWeaponStats.ProjAmmoType.NONE, ProjWeaponStats.ProjAmmoType.CHARGES]:
+		elif current_item_stats.ammo_type in [ProjWeaponStats.AmmoTypes.NONE, ProjWeaponStats.AmmoTypes.CHARGES]:
 			count_str = "∞"
-		elif current_item_stats.ammo_type == ProjWeaponStats.ProjAmmoType.SELF:
+		elif current_item_stats.ammo_type == ProjWeaponStats.AmmoTypes.SELF:
 			var count: int = 0
 			for index: int in range(0, Globals.MAIN_PLAYER_INV_SIZE + Globals.HOTBAR_SIZE):
 				var ii: II = Globals.player_node.inv.inv[index]

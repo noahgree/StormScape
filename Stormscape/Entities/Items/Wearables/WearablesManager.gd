@@ -35,7 +35,7 @@ static func add_wearable(entity: Entity, wearable: WearableStats, index: int) ->
 
 	# ----- Updating the stat cache on the entity -----
 	for mod_resource: StatMod in wearable.stat_mods:
-		entity.stats.add_mods([mod_resource] as Array[StatMod])
+		entity.sc.add_mods([mod_resource] as Array[StatMod])
 
 	AudioManager.play_global(wearable.equipping_audio)
 
@@ -53,7 +53,7 @@ static func remove_wearable(entity: Entity, index: int) -> void:
 
 	# ----- Updating the stat cache on the entity -----
 	for mod_resource: StatMod in wearable_to_remove.stat_mods:
-		entity.stats.remove_mod(mod_resource.stat_id, mod_resource.mod_id)
+		entity.sc.remove_mod(mod_resource.stat_id, mod_resource.mod_id)
 
 	# ----- Removing from the current wearables array -----
 	entity.current_wearables[index] = &""

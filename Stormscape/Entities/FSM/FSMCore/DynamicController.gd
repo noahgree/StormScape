@@ -44,7 +44,7 @@ var knockback_streak_nodes: Array[FootStreak] = [] ## The current foot streak in
 #region Inputs
 ## Returns the direction to move in.
 func get_movement_vector() -> Vector2:
-	return (Vector2.ZERO.rotated(entity.stats.get_stat("confusion_amount")))
+	return (Vector2.ZERO.rotated(entity.sc.get_stat("confusion_amount")))
 
 ## Determines if the state controlling the movement should use sprinting.
 func get_should_sprint() -> bool:
@@ -77,7 +77,7 @@ func setup() -> void:
 		&"dash_cooldown" : _dash_cooldown,
 		&"dash_collision_impulse_factor" : _dash_collision_impulse_factor
 	}
-	entity.stats.add_moddable_stats(moddable_stats)
+	entity.sc.add_moddable_stats(moddable_stats)
 
 ## Checks if knockback needs to be lerped to 0 and passes the physics process to the active state.
 ## Advances animation tree manually so that it respects time snares. Overrides parent state machine class.
@@ -191,7 +191,7 @@ func notify_requested_dash() -> void:
 			if get_movement_vector().length() == 0:
 				return
 
-			var dash_stamina_usage: float = entity.stats.get_stat("dash_stamina_usage")
+			var dash_stamina_usage: float = entity.sc.get_stat("dash_stamina_usage")
 			if dash_cooldown_timer.is_stopped() and entity.stamina_component.use_stamina(dash_stamina_usage):
 				fsm.change_state("dash")
 

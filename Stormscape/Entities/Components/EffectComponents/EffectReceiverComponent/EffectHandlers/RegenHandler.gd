@@ -16,13 +16,13 @@ func initialize(receiver: EffectReceiverComponent) -> void:
 	var moddable_stats: Dictionary[StringName, float] = {
 		&"regen_boost" : _regen_boost, &"regen_penalty" : _regen_penalty
 	}
-	effect_receiver.affected_entity.stats.add_moddable_stats(moddable_stats)
+	effect_receiver.affected_entity.sc.add_moddable_stats(moddable_stats)
 
 func handle_regen(regen_effect: RegenEffect) -> void:
 	if regen_effect.hot_resource != null: # Needed for when we nullify on game load
 		var local_hot_resource: HOTResource = regen_effect.hot_resource.duplicate()
-		var regen_boost: float = effect_receiver.affected_entity.stats.get_stat("regen_boost")
-		var regen_penalty: float = effect_receiver.affected_entity.stats.get_stat("regen_penalty")
+		var regen_boost: float = effect_receiver.affected_entity.sc.get_stat("regen_boost")
+		var regen_penalty: float = effect_receiver.affected_entity.sc.get_stat("regen_penalty")
 
 		var multiplier: float = 1.0 + (regen_boost / 100.0) - (regen_penalty / 100.0)
 		multiplier = clamp(multiplier, 0.0, 2.0)

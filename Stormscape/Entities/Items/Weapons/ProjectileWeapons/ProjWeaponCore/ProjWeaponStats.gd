@@ -3,10 +3,10 @@ extends WeaponStats
 class_name ProjWeaponStats
 ## The resource that defines all stats for a projectile weapon. Passing this around essentially passes the weapon around.
 
-enum ProjWeaponType { ## The kinds of projectile weapons.
+enum Types { ## The kinds of projectile weapons.
 	PISTOL, SHOTGUN, SUBMACHINE, SNIPER, RIFLE, EXPLOSIVE, PRIMITIVE_WEAPON, MAGIC, THROWABLE, SPECIAL_WEAPON
 }
-enum ProjAmmoType { ## The types of projectile ammo.
+enum AmmoTypes { ## The types of projectile ammo.
 	NONE, ## Does not have any required ammo. Useful for arbitrary special weapons that may only have one mag of usage. In combination with "dont_consume_ammo", this essentially gives any weapon infinite arbitrary uses.
 	SELF, ## Used for consumable weapon uses like throwables, where one use deletes one quantity of the item.
 	CHARGES, ## Does not have an associated ammo item, but rather uses recharging mags that fill over time.
@@ -25,7 +25,7 @@ enum ReloadType { ## The kinds of reloads the weapon can have.
 	MAGAZINE, SINGLE
 }
 
-@export var proj_weapon_type: ProjWeaponType = ProjWeaponType.PISTOL ## The kind of projectile weapon this is.
+@export var proj_weapon_type: Types = Types.PISTOL ## The kind of projectile weapon this is.
 @export var firing_mode: FiringType = FiringType.SEMI_AUTO ## Whether the weapon should fire projectiles once per click or allow holding down for auto firing logic.
 @export var is_hitscan: bool = false ## When true, this weapon will become a hitscan weapon.
 @export var projectile_scn: PackedScene ## The projectile scene to spawn on firing.
@@ -66,7 +66,7 @@ enum ReloadType { ## The kinds of reloads the weapon can have.
 @export var effect_source: EffectSource ## The resource that defines what happens to the entity that is hit by this weapon. Includes things like damage and status effects.
 
 @export_group("Ammo & Reloading")
-@export var ammo_type: ProjWeaponStats.ProjAmmoType = ProjAmmoType.NONE ## The kind of ammo to consume on use.
+@export var ammo_type: ProjWeaponStats.AmmoTypes = AmmoTypes.NONE ## The kind of ammo to consume on use.
 @export var mag_size: int = 30  ## Number of normal attack executions that can happen before a reload is needed.
 @export var reload_type: ReloadType = ReloadType.MAGAZINE ## Whether to reload over time or all at once at the end.
 @export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var reload_delay: float ## An additional delay that occurs before the reload begins. This determines the runtime of the "before_single_reload" animation.
@@ -136,11 +136,11 @@ func create_ii(quantity: int) -> II:
 
 ## Returns a nicely formatted string of the ammo type.
 func get_ammo_string() -> String:
-	var main_string: String = ProjAmmoType.keys()[ammo_type]
+	var main_string: String = AmmoTypes.keys()[ammo_type]
 	return main_string.to_pascal_case()
 
 ## An override to return the string title of the item type rather than just the enum integer value.
 func get_item_type_string(exact_weapon_type: bool = false) -> String:
 	if exact_weapon_type:
-		return str(ProjWeaponType.keys()[proj_weapon_type]).capitalize()
+		return str(Types.keys()[proj_weapon_type]).capitalize()
 	return str(Globals.ItemType.keys()[item_type]).capitalize()

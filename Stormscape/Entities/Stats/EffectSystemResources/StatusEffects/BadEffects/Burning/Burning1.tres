@@ -1,28 +1,26 @@
-[gd_resource type="Resource" script_class="BurningEffect" format=3 uid="uid://dvew5cy3k7s48"]
+[gd_resource type="Resource" format=3 uid="uid://dvew5cy3k7s48"]
 
-[ext_resource type="Script" uid="uid://20acrt2hb6y" path="res://Entities/Stats/EffectSystemResources/EffectOverTimeResources/DOTResource.gd" id="1_v0anb"]
-[ext_resource type="Script" uid="uid://dr3ei6ur2bsdu" path="res://Entities/Stats/EffectSystemResources/StatusEffects/BadEffects/Burning/BurningEffect.gd" id="2_ihl6m"]
+[ext_resource type="Script" uid="uid://boo31eu083dqd" path="res://Entities/Stats/EffectSystemResources/StatusEffects/StatusEffect.gd" id="1_06i48"]
+[ext_resource type="Script" uid="uid://20acrt2hb6y" path="res://Entities/Stats/EffectSystemResources/EffectOverTimeResources/EOTStats.gd" id="1_gx4dt"]
 [ext_resource type="Script" uid="uid://bcjwesiannbd0" path="res://Entities/Stats/StatMod/StatMod.gd" id="3_85854"]
 
-[sub_resource type="Resource" id="Resource_1q46y"]
-script = ExtResource("1_v0anb")
-damaging_time = 8.0
-dmg_ticks_array = Array[int]([3, 3, 3, 3])
-delay_time = 2.0
-dmg_affected_stats = 0
-hit_flash_color = Color(1, 0.517681, 0.336621, 0.6)
-
-[sub_resource type="Resource" id="Resource_xigmb"]
+[sub_resource type="Resource" id="Resource_gx4dt"]
 script = ExtResource("3_85854")
+stat_id = &"max_speed"
+mod_id = &"burning"
 operation = "-%"
-value = 25.0
-max_stack_count = 3
+value = 20.0
+metadata/_custom_type_script = "uid://bcjwesiannbd0"
+
+[sub_resource type="Resource" id="Resource_m80av"]
+script = ExtResource("1_gx4dt")
+stat_mods = Array[ExtResource("3_85854")]([SubResource("Resource_gx4dt")])
+hit_flash_color = Color(1, 0.45123452, 0.39383775, 0.6)
+metadata/_custom_type_script = "uid://20acrt2hb6y"
 
 [resource]
-script = ExtResource("2_ihl6m")
-dot_resource = SubResource("Resource_1q46y")
-id = "burning"
-effects_to_stop = Array[String](["frostbite"])
-mod_time = 10.0
-stat_mods = Array[ExtResource("3_85854")]([SubResource("Resource_xigmb")])
+script = ExtResource("1_06i48")
+eot = SubResource("Resource_m80av")
+effects_to_stop = Array[int]([1])
 particle_hander_req = "Burning"
+metadata/_custom_type_script = "uid://boo31eu083dqd"

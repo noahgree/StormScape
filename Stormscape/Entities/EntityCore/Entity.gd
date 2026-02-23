@@ -18,7 +18,7 @@ class_name Entity
 @onready var item_receiver: ItemReceiverComponent = get_node_or_null("ItemReceiverComponent") ## The item receiver for this entity.
 @onready var hands: HandsComponent = get_node_or_null("%HandsComponent") ## The hands item component for the entity.
 
-var stats: StatModsCache = StatModsCache.new() ## The resource that will cache and work with all stat mods for this entity.
+@export_storage var sc: StatModsCache = StatModsCache.new() ## The resource that will cache and work with all stat mods for this entity. Stands for "stat cache".
 
 
 #region Debug
@@ -55,7 +55,7 @@ func _ready() -> void:
 
 	collision_mask = 0b1101111
 
-	stats.affected_entity = self
+	sc.affected_entity = self
 	sprite.entity = self
 	if inv:
 		inv = inv.duplicate()

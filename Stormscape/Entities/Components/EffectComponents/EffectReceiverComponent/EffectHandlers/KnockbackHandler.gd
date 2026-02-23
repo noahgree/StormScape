@@ -19,7 +19,7 @@ func initialize(receiver: EffectReceiverComponent) -> void:
 	var moddable_stats: Dictionary[StringName, float] = {
 		&"knockback_weakness" : _knockback_weakness, &"knockback_resistance" : _knockback_resistance
 	}
-	effect_receiver.affected_entity.stats.add_moddable_stats(moddable_stats)
+	effect_receiver.affected_entity.sc.add_moddable_stats(moddable_stats)
 
 ## Handles applying knockback to a dynamic entity when they hit something that provides knockback.
 func handle_knockback(knockback_effect: KnockbackEffect) -> void:
@@ -85,8 +85,8 @@ func handle_self_knockback(knockback_effect: SelfKnockbackEffect) -> void:
 func _send_handled_knockback(knockback_dir: Vector2, force: int) -> void:
 	if knockback_dir == Vector2.ZERO:
 		return
-	var knockback_weakness: float = effect_receiver.affected_entity.stats.get_stat("knockback_weakness")
-	var knockback_resistance: float = effect_receiver.affected_entity.stats.get_stat("knockback_resistance")
+	var knockback_weakness: float = effect_receiver.affected_entity.sc.get_stat("knockback_weakness")
+	var knockback_resistance: float = effect_receiver.affected_entity.sc.get_stat("knockback_resistance")
 
 	var multiplier: float = 1.0 + (knockback_weakness / 100.0) - (knockback_resistance / 100.0)
 	multiplier = clamp(multiplier, 0.0, 2.0)

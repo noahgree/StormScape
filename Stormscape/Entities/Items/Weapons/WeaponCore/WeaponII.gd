@@ -79,7 +79,7 @@ func initialize_sc() -> void:
 			}
 			sc.add_moddable_stats(aoe_effect_source_moddable_stats)
 
-		if (get("ammo_in_mag") == -1) and (stats.ammo_type != ProjWeaponStats.ProjAmmoType.STAMINA):
+		if (get("ammo_in_mag") == -1) and (stats.ammo_type != ProjWeaponStats.AmmoTypes.STAMINA):
 			set("ammo_in_mag", int(sc.get_stat("mag_size")))
 	else:
 		var normal_moddable_stats: Dictionary[StringName, float] = {

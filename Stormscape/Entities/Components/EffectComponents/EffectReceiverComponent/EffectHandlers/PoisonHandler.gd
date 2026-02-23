@@ -16,13 +16,13 @@ func initialize(receiver: EffectReceiverComponent) -> void:
 	var moddable_stats: Dictionary[StringName, float] = {
 		&"poison_weakness" : _poison_weakness, &"poison_resistance" : _poison_resistance
 	}
-	effect_receiver.affected_entity.stats.add_moddable_stats(moddable_stats)
+	effect_receiver.affected_entity.sc.add_moddable_stats(moddable_stats)
 
 func handle_poison(poison_effect: PoisonEffect) -> void:
 	if poison_effect.dot_resource != null: # Needed for when we nullify on game load
 		var local_dot_resource: DOTResource = poison_effect.dot_resource.duplicate()
-		var poison_weakness: float = effect_receiver.affected_entity.stats.get_stat("poison_weakness")
-		var poison_resistance: float = effect_receiver.affected_entity.stats.get_stat("poison_resistance")
+		var poison_weakness: float = effect_receiver.affected_entity.sc.get_stat("poison_weakness")
+		var poison_resistance: float = effect_receiver.affected_entity.sc.get_stat("poison_resistance")
 
 		var multiplier: float = 1.0 + (poison_weakness / 100.0) - (poison_resistance / 100.0)
 		multiplier = clamp(multiplier, 0.0, 2.0)

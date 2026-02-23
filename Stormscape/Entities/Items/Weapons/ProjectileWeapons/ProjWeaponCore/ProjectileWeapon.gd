@@ -48,7 +48,7 @@ func _ready() -> void:
 
 	if source_entity is Player:
 		# Update the ammo UI when stamina changes
-		if (stats.ammo_type == ProjWeaponStats.ProjAmmoType.STAMINA) and (not stats.hide_ammo_ui):
+		if (stats.ammo_type == ProjWeaponStats.AmmoTypes.STAMINA) and (not stats.hide_ammo_ui):
 				source_entity.stamina_component.stamina_changed.connect(
 					func(_new_stamina: float, _old_stamina: float) -> void: update_ammo_ui()
 					)
@@ -72,7 +72,7 @@ func enable() -> void:
 func disable() -> void:
 	source_entity.hands.should_rotate = true
 	if stats.charging_stat_effect != null:
-		source_entity.effects.request_effect_removal_by_source(stats.charging_stat_effect.id, Globals.StatusEffectSourceType.FROM_SELF)
+		source_entity.effects.request_effect_removal_by_source(stats.charging_stat_effect.id, StatusEffect.SourceType.FROM_SELF)
 	is_charging = false
 	_delay_clean_up_hitscans()
 
@@ -103,7 +103,7 @@ func exit() -> void:
 		mouse_area.queue_free()
 
 	if stats.charging_stat_effect != null:
-		source_entity.effects.request_effect_removal_by_source(stats.charging_stat_effect.id, Globals.StatusEffectSourceType.FROM_SELF)
+		source_entity.effects.request_effect_removal_by_source(stats.charging_stat_effect.id, StatusEffect.SourceType.FROM_SELF)
 
 	source_entity.hands.smoke_particles.emitting = false
 	source_entity.hands.smoke_particles.visible = false
@@ -277,7 +277,7 @@ func release_hold_activate() -> void:
 
 	if stats.firing_mode == ProjWeaponStats.FiringType.CHARGE:
 		if stats.charging_stat_effect != null:
-			source_entity.effects.request_effect_removal_by_source(stats.charging_stat_effect.id, Globals.StatusEffectSourceType.FROM_SELF)
+			source_entity.effects.request_effect_removal_by_source(stats.charging_stat_effect.id, StatusEffect.SourceType.FROM_SELF)
 		is_charging = false
 
 		if hold_time >=  ii.sc.get_stat("min_charge_time"):
@@ -347,10 +347,10 @@ func ensure_enough_ammo() -> bool:
 		ammo_needed = 1
 
 	match stats.ammo_type:
-		ProjWeaponStats.ProjAmmoType.STAMINA:
+		ProjWeaponStats.AmmoTypes.STAMINA:
 			var stamina_needed: float = ammo_needed * stats.stamina_use_per_proj
 			has_needed_ammo = source_entity.stamina_component.has_enough_stamina(stamina_needed)
-		ProjWeaponStats.ProjAmmoType.SELF:
+		ProjWeaponStats.AmmoTypes.SELF:
 			has_needed_ammo = true
 		_:
 			has_needed_ammo = (ii.ammo_in_mag >= ammo_needed)
@@ -371,14 +371,14 @@ func update_ammo_ui() -> void:
 
 	var count_str: String
 	match stats.ammo_type:
-		ProjWeaponStats.ProjAmmoType.SELF:
+		ProjWeaponStats.AmmoTypes.SELF:
 			if source_entity.inv.inv[inv_index] == null or source_entity.inv.inv[inv_index].stats == null:
 				count_str = ""
 			else:
 				count_str = str(source_entity.inv.inv[inv_index].q)
-		ProjWeaponStats.ProjAmmoType.STAMINA:
+		ProjWeaponStats.AmmoTypes.STAMINA:
 			count_str = str(floori(source_entity.stamina_component.stamina))
-		ProjWeaponStats.ProjAmmoType.NONE when stats.dont_consume_ammo:
+		ProjWeaponStats.AmmoTypes.NONE when stats.dont_consume_ammo:
 			count_str = "∞"
 		_:
 			count_str = str(ii.ammo_in_mag)

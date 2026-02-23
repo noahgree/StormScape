@@ -16,12 +16,12 @@ func initialize(receiver: EffectReceiverComponent) -> void:
 	var moddable_stats: Dictionary[StringName, float] = {
 		&"burning_weakness" : _burning_weakness, &"burning_resistance" : _burning_resistance
 	}
-	effect_receiver.affected_entity.stats.add_moddable_stats(moddable_stats)
+	effect_receiver.affected_entity.sc.add_moddable_stats(moddable_stats)
 
 func handle_burning(burning_effect: BurningEffect) -> void:
 	var local_dot_resource: DOTResource = burning_effect.dot_resource.duplicate()
-	var burning_weakness: float = effect_receiver.affected_entity.stats.get_stat("burning_weakness")
-	var burning_resistance: float = effect_receiver.affected_entity.stats.get_stat("burning_resistance")
+	var burning_weakness: float = effect_receiver.affected_entity.sc.get_stat("burning_weakness")
+	var burning_resistance: float = effect_receiver.affected_entity.sc.get_stat("burning_resistance")
 
 	var multiplier: float = 1.0 + (burning_weakness / 100.0) - (burning_resistance / 100.0)
 	multiplier = clamp(multiplier, 0.0, 2.0)

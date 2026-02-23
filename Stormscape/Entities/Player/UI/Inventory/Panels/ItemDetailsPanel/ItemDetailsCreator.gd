@@ -248,9 +248,9 @@ func _get_mag_and_reload(ii: II) -> String:
 	else:
 		reload = _get_item_sums(ii, ["mag_reload_time", "reload_delay"], false, "s")
 
-	if ii.stats.mag_size == -1 and ii.stats.ammo_type != ProjWeaponStats.ProjAmmoType.STAMINA:
+	if ii.stats.mag_size == -1 and ii.stats.ammo_type != ProjWeaponStats.AmmoTypes.STAMINA:
 		return _get_title("RELOAD") + reload
-	elif ii.stats.ammo_type == ProjWeaponStats.ProjAmmoType.STAMINA:
+	elif ii.stats.ammo_type == ProjWeaponStats.AmmoTypes.STAMINA:
 		return _get_title("STAMINA USE") + _get_item_sums(ii, ["stamina_use_per_proj"], false)
 
 	return string + ammo + " (" + reload + " [char=21BA])"

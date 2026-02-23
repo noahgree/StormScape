@@ -203,7 +203,7 @@ func start_hitflash(flash_color: Color = Color(1, 1, 1, 0.6), tween_in: bool = f
 func _update_cracking(new_health: int, _old_health: int) -> void:
 	if new_health == 0:
 		return
-	var max_health: int = int(entity.stats.get_stat("max_health"))
+	var max_health: int = int(entity.sc.get_stat("max_health"))
 	var percent_health: float = float(new_health) / float(max_health)
 	var crack_depth: float = 0.0
 

@@ -2,7 +2,7 @@ extends MarginContainer
 class_name AmmoSlotManager
 ## Handles the storing and displaying of ammo for the player inside the player's inv UI.
 
-@export var type_order: Array[ProjWeaponStats.ProjAmmoType] ## Defines ordering of ammo slots by type.
+@export var type_order: Array[ProjWeaponStats.AmmoTypes] ## Defines ordering of ammo slots by type.
 
 @onready var ammo_slots_grid: HBoxContainer = %AmmoSlotsGrid ## Reference to the grid of slots.
 

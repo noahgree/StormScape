@@ -4,7 +4,7 @@ class_name WeaponModStats
 ## Class for all weapon mods in the game.
 
 @export_group("Whitelist")
-@export var allowed_proj_wpns: Array[ProjWeaponStats.ProjWeaponType] = Globals.all_proj_weapons ## The allowed types of projectile weapons that can have this mod attached. Has all types allowed by default.
+@export var allowed_proj_wpns: Array[ProjWeaponStats.Types] = Globals.all_proj_weapons ## The allowed types of projectile weapons that can have this mod attached. Has all types allowed by default.
 @export var allowed_melee_wpns: Array[MeleeWeaponStats.MeleeWeaponType] = Globals.all_melee_wpns ## The allowed types of melee weapons that can have this mod attached. Has all types allowed by default.
 
 @export_group("Blacklist")

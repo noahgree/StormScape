@@ -225,7 +225,7 @@ func _update_recharges(delta: float) -> void:
 				ammo_needed = min(ammo_needed, auto_ammo_count)
 
 				if current.ii.stats.recharge_uses_inv:
-					if current.ii.stats.ammo_type == ProjWeaponStats.ProjAmmoType.CHARGES:
+					if current.ii.stats.ammo_type == ProjWeaponStats.AmmoTypes.CHARGES:
 						current.ii.ammo_in_mag += ammo_needed
 					else:
 						var retrieved_ammo: int = inv.get_more_ammo(ammo_needed, true, current.ii.stats.ammo_type)

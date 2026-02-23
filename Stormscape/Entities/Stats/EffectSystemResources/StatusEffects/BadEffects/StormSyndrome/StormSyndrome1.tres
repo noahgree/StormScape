@@ -1,15 +1,11 @@
 [gd_resource type="Resource" script_class="StormSyndromeEffect" format=3 uid="uid://cucuggowaf55y"]
 
-[ext_resource type="Script" uid="uid://20acrt2hb6y" path="res://Entities/Stats/EffectSystemResources/EffectOverTimeResources/DOTResource.gd" id="1_byjya"]
+[ext_resource type="Script" uid="uid://20acrt2hb6y" path="res://Entities/Stats/EffectSystemResources/EffectOverTimeResources/EOTStats.gd" id="1_byjya"]
 [ext_resource type="Script" uid="uid://bq0632kqw53el" path="res://Entities/Stats/EffectSystemResources/StatusEffects/BadEffects/StormSyndrome/StormSyndromeEffect.gd" id="1_lgscn"]
-[ext_resource type="Script" uid="uid://bcjwesiannbd0" path="res://Entities/Stats/StatMod/StatMod.gd" id="3_rsqf7"]
+[ext_resource type="Script" uid="uid://bcjwesiannbd0" path="res://Entities/Stats/StatMod/StatMod.gd" id="2_rsqf7"]
 
 [sub_resource type="Resource" id="Resource_dega7"]
 script = ExtResource("1_byjya")
-dmg_ticks_array = Array[int]([2])
-delay_time = 1.0
-dmg_affected_stats = 0
-run_until_removed = true
 hit_flash_color = Color(0.769133, 0.615398, 1, 0.6)
 
 [resource]

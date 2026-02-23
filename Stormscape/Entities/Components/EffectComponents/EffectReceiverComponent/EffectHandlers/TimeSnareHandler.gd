@@ -15,10 +15,10 @@ func initialize(receiver: EffectReceiverComponent) -> void:
 	var moddable_stats: Dictionary[StringName, float] = {
 		&"time_snare_immunity" : _time_snare_immunity
 	}
-	effect_receiver.affected_entity.stats.add_moddable_stats(moddable_stats)
+	effect_receiver.affected_entity.sc.add_moddable_stats(moddable_stats)
 
 func handle_time_snare(time_snare_effect: TimeSnareEffect) -> void:
-	if effect_receiver.affected_entity.stats.get_stat("time_snare_immunity") > 0:
+	if effect_receiver.affected_entity.sc.get_stat("time_snare_immunity") > 0:
 		effect_receiver.status_effect_manager.request_effect_removal_for_all_sources("time_snare")
 		return
 

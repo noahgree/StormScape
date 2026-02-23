@@ -28,7 +28,7 @@ func _init(parent_weapon: ProjectileWeapon) -> void:
 ## The main starting point for reloads, checks for the necessary conditions and then potentially proceeds.
 ## This function waits for the "reload_ended" signal before returning (unless the initial checks fail).
 func attempt_reload() -> void:
-	if weapon.stats.ammo_type in [ProjWeaponStats.ProjAmmoType.STAMINA, ProjWeaponStats.ProjAmmoType.SELF, ProjWeaponStats.ProjAmmoType.CHARGES]:
+	if weapon.stats.ammo_type in [ProjWeaponStats.AmmoTypes.STAMINA, ProjWeaponStats.AmmoTypes.SELF, ProjWeaponStats.AmmoTypes.CHARGES]:
 		return
 	if _get_more_reload_ammo(1, false) == 0:
 		return
@@ -198,7 +198,7 @@ func _on_ammo_recharge_delay_completed(item_id: StringName) -> void:
 ## Searches through the source entity's inventory for more ammo to fill the magazine.
 ## Can optionally be used to only check for ammo when told not to take from the inventory when found.
 func _get_more_reload_ammo(max_amount_needed: int, take_from_inventory: bool = true) -> int:
-	if weapon.stats.ammo_type == ProjWeaponStats.ProjAmmoType.NONE:
+	if weapon.stats.ammo_type == ProjWeaponStats.AmmoTypes.NONE:
 		return max_amount_needed
 	else:
 		var amount_found: int = weapon.source_entity.inv.get_more_ammo(max_amount_needed, take_from_inventory, weapon.stats.ammo_type)
@@ -213,7 +213,7 @@ func restart_ammo_recharge_delay() -> void:
 
 ## This is called (usually after firing) to request a new ammo recharge instance.
 func request_ammo_recharge() -> void:
-	if weapon.stats.ammo_type in [ProjWeaponStats.ProjAmmoType.SELF, ProjWeaponStats.ProjAmmoType.STAMINA]:
+	if weapon.stats.ammo_type in [ProjWeaponStats.AmmoTypes.SELF, ProjWeaponStats.AmmoTypes.STAMINA]:
 		return
 	if weapon.ii.ammo_in_mag >= weapon.ii.sc.get_stat("mag_size"):
 		return

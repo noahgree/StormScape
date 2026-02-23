@@ -25,24 +25,24 @@ func state_physics_process(delta: float) -> void:
 
 func _do_character_sneak(delta: float) -> void:
 	if controller.get_movement_vector() == Vector2.ZERO:
-		if entity.velocity.length() > (entity.stats.get_stat("friction") * delta): # No input, still slowing
-			entity.velocity -= entity.velocity.normalized() * (entity.stats.get_stat("friction") * delta)
+		if entity.velocity.length() > (entity.sc.get_stat("friction") * delta): # No input, still slowing
+			entity.velocity -= entity.velocity.normalized() * (entity.sc.get_stat("friction") * delta)
 		else: # No input, stopped
 			controller.knockback_vector = Vector2.ZERO
 			entity.velocity = Vector2.ZERO
 	else:
-		var anim_time_scale: float = DEFAULT_SNEAK_ANIM_TIME_SCALE * (entity.stats.get_stat("max_sneak_speed") / entity.stats.get_original_stat("max_sneak_speed"))
+		var anim_time_scale: float = DEFAULT_SNEAK_ANIM_TIME_SCALE * (entity.sc.get_stat("max_sneak_speed") / entity.sc.get_original_stat("max_sneak_speed"))
 		entity.facing_component.update_time_scale("run", anim_time_scale)
 
-		entity.velocity += (controller.get_movement_vector() * entity.stats.get_stat("sneak_acceleration") * delta)
-		entity.velocity = entity.velocity.limit_length(entity.stats.get_stat("max_sneak_speed"))
+		entity.velocity += (controller.get_movement_vector() * entity.sc.get_stat("sneak_acceleration") * delta)
+		entity.velocity = entity.velocity.limit_length(entity.sc.get_stat("max_sneak_speed"))
 
 	entity.move_and_slide()
 	StateFunctions.handle_rigid_entity_collisions(entity, controller)
 
 ## Updates the dynamic entity with the amount of stealth we currently have.
 func _send_parent_entity_stealth_value() -> void:
-	entity.detection_component.update_stealth(int(entity.stats.get_stat("max_stealth")))
+	entity.detection_component.update_stealth(int(entity.sc.get_stat("max_stealth")))
 
 ## If the sneak button is still pressed, continue in this state. Otherwise, transition out based on movement vector.
 func _check_if_stopped_sneaking() -> void:

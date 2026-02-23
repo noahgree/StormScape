@@ -18,7 +18,7 @@ func _unhandled_input(event: InputEvent) -> void:
 
 func get_movement_vector() -> Vector2:
 	var input_vector: Vector2 = Input.get_vector("move_left", "move_right", "move_up", "move_down").normalized()
-	last_movement_direction = (input_vector.rotated(entity.stats.get_stat("confusion_amount")))
+	last_movement_direction = (input_vector.rotated(entity.sc.get_stat("confusion_amount")))
 	return last_movement_direction
 
 func get_should_sprint() -> bool:

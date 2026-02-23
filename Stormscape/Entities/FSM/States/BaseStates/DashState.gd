@@ -31,8 +31,8 @@ func enter() -> void:
 
 	_play_dash_sound()
 
-	controller.dash_timer.start(entity.stats.get_stat("dash_duration"))
-	controller.dash_cooldown_timer.start(entity.stats.get_stat("dash_duration") + entity.stats.get_stat("dash_cooldown"))
+	controller.dash_timer.start(entity.sc.get_stat("dash_duration"))
+	controller.dash_cooldown_timer.start(entity.sc.get_stat("dash_duration") + entity.sc.get_stat("dash_cooldown"))
 	controller.facing_method = FacingComponent.Method.NONE
 
 	ghosts_spawned = 0
@@ -61,7 +61,7 @@ func state_physics_process(_delta: float)  -> void:
 
 ## Overrides the dynamic entity's velocity to be a simple dash in the direction currently faced.
 func _do_character_dash() -> void:
-	entity.velocity = controller.get_movement_vector() * entity.stats.get_stat("dash_speed")
+	entity.velocity = controller.get_movement_vector() * entity.sc.get_stat("dash_speed")
 	entity.move_and_slide()
 
 	if StateFunctions.handle_rigid_entity_collisions(entity, controller):
@@ -81,7 +81,7 @@ func _animate() -> void:
 ## Checks if we have spent enough time since the last ghost and if we haven't spawned enough yet,
 ## then spawns one.
 func _update_ghost_spawns() -> void:
-	if (ghosts_spawned < ghost_count) and (time_since_ghost >= (entity.stats.get_stat("dash_duration") / ghost_count)):
+	if (ghosts_spawned < ghost_count) and (time_since_ghost >= (entity.sc.get_stat("dash_duration") / ghost_count)):
 		_create_ghost()
 		time_since_ghost = 0.0
 

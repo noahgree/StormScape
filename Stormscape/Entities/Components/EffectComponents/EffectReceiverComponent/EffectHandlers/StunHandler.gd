@@ -16,12 +16,12 @@ func initialize(receiver: EffectReceiverComponent) -> void:
 	var moddable_stats: Dictionary[StringName, float] = {
 		&"stun_weakness" : _stun_weakness, &"stun_resistance" : _stun_resistance
 	}
-	effect_receiver.affected_entity.stats.add_moddable_stats(moddable_stats)
+	effect_receiver.affected_entity.sc.add_moddable_stats(moddable_stats)
 
 ## Handles performing a stun effect on the affected entity.
 func handle_stun(stun_effect: StunEffect) -> void:
-	var stun_weakness: float = effect_receiver.affected_entity.stats.get_stat("stun_weakness")
-	var stun_resistance: float = effect_receiver.affected_entity.stats.get_stat("stun_resistance")
+	var stun_weakness: float = effect_receiver.affected_entity.sc.get_stat("stun_weakness")
+	var stun_resistance: float = effect_receiver.affected_entity.sc.get_stat("stun_resistance")
 
 	var multiplier: float = 1.0 + (stun_weakness / 100.0) - (stun_resistance / 100.0)
 	multiplier = clamp(multiplier, 0.0, 2.0)

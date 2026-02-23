@@ -62,7 +62,7 @@ func get_movement_vector() -> Vector2:
 
 	var preliminary_dir: Vector2 = _apply_movement_behaviors()
 
-	controller.last_movement_direction = _steer_direction(preliminary_dir).rotated(controller.entity.stats.get_stat("confusion_amount"))
+	controller.last_movement_direction = _steer_direction(preliminary_dir).rotated(controller.entity.sc.get_stat("confusion_amount"))
 
 	return controller.last_movement_direction
 

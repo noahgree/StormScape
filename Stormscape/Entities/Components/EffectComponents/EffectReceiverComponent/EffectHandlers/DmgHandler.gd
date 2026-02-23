@@ -10,7 +10,7 @@ class_name DmgHandler
 @onready var affected_entity: Entity = get_parent().affected_entity ## The entity affected by this dmg handler.
 
 var health_component: HealthComponent ## The health component to be affected by the damage.
-var dot_timers: Dictionary[String, Array] = {} ## Holds references to all timers currently tracking active DOT. Keys are source type ids and values are an array of all matching timers of that type.
+var eot_timers: Dictionary[String, Array] = {} ## Holds references to all timers currently tracking active EOT. Keys are source type ids and values are an array of all matching timers of that type.
 var dot_delay_timers: Dictionary[String, Array] = {} ## Holds references to all timers current tracking delays for active DOT.
 
 
@@ -24,7 +24,7 @@ func _ready() -> void:
 	var moddable_stats: Dictionary[StringName, float] = {
 		&"dmg_weakness" : _dmg_weakness, &"dmg_resistance" : _dmg_resistance
 	}
-	affected_entity.stats.add_moddable_stats(moddable_stats)
+	affected_entity.sc.add_moddable_stats(moddable_stats)
 
 ## Calculates the final damage to apply after considering whether the crit hit and also how much the armor blocks.
 func _get_dmg_after_crit_then_armor(esi: ESI, is_crit: bool, lvl: int) -> int:
@@ -145,8 +145,8 @@ func _on_dot_timer_timeout(dot_timer: Timer, source_type: String) -> void:
 ## allowed to affect.
 func _send_handled_dmg(source_type: String, dmg_affected_stats: Globals.DmgAffectedStats, handled_amount: int,
 						multishot_id: int, life_steal_percent: float = 0.0, was_crit: bool = false) -> void:
-	var dmg_weakness: float = affected_entity.stats.get_stat("dmg_weakness")
-	var dmg_resistance: float = affected_entity.stats.get_stat("dmg_resistance")
+	var dmg_weakness: float = affected_entity.sc.get_stat("dmg_weakness")
+	var dmg_resistance: float = affected_entity.sc.get_stat("dmg_resistance")
 	var multiplier: float = 1.0 + (dmg_weakness / 100.0) - (dmg_resistance / 100.0)
 	multiplier = clamp(multiplier, 0.0, 2.0)
 	var positive_dmg: int = max(0, handled_amount * multiplier)

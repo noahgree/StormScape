@@ -33,8 +33,8 @@ func _do_character_stun(delta: float) -> void:
 	if knockback.length() > 0:
 		entity.velocity = knockback
 
-	if entity.velocity.length() > (entity.stats.get_stat("friction") * delta): # Still slowing
-		entity.velocity -= entity.velocity.normalized() * (entity.stats.get_stat("friction") * delta)
+	if entity.velocity.length() > (entity.sc.get_stat("friction") * delta): # Still slowing
+		entity.velocity -= entity.velocity.normalized() * (entity.sc.get_stat("friction") * delta)
 	else:
 		entity.velocity = Vector2.ZERO
 	entity.move_and_slide()
