@@ -1,11 +1,11 @@
 extends Node2D
 class_name Storm
-## The base class for the moving storm's functionalities. Controls the shader parameters and effect
+## The base class for the moving storm's functionalities. Controls the shader parameters and condition
 ## application logic.
 
 @export var auto_start: bool = true ## Whether to immediately use the first transform in the queue at game load.
 @export var transform_queue: Array[StormTransform] = [] ## The queue of upcoming transforms to apply to the zone.
-@export var default_storm_effect: StatusEffect ## The default effect to apply when a dynamic entity leaves the safe zone.
+@export var default_storm_condition: Condition ## The default condition to apply when a dynamic entity leaves the safe zone.
 @export var default_storm_visuals: StormVisuals ## The default storm visuals to apply at start.
 
 @onready var collision_shape: CollisionShape2D = $SafeZone/CollisionShape2D ## The collider that detects when something is in the safe zone.
@@ -32,11 +32,11 @@ var current_storm_transform_time_timer: Timer = TimerHelpers.create_one_shot_tim
 var see_through_distance: float = 20.0 ## The radius of the see-thru circle for the player.
 var see_through_target_distance: float ## The radius of the see-thru circle for the player.
 var pulse_up: bool = true ## Tracking the changing pulse direction of the player's see thru effect.
-var see_through_pulse_mult: float = 1.0 ## The current multiplier for the pulsing amount on the player's see thru effect.
+var see_through_pulse_mult: float = 1.0 ## The current multiplier for the pulsing amount on the player's see thru condition.
 var see_through_distance_mult: float = 1.0 ## The current distance multiplier for the player's see thru effect.
 var using_default_visuals: bool = false ## Whether we are currently using default visuals for the storm FX.
 var current_visuals: StormVisuals ## The current visuals being used.
-var current_effect: StatusEffect ##  The up-to-date effect to apply to entities leaving the safe area while the zone is active.
+var current_condition: Condition ##  The up-to-date condition to apply to entities leaving the safe area while the zone is active.
 var zone_count: int = 0 ## The number of zones we have popped off the transform queue.
 var just_replaced_queue: bool = false ## Whether we just replaced the old queue with a new one and should not pop the next phase.
 #endregion
@@ -51,7 +51,7 @@ func _ready() -> void:
 	visible = true
 
 	current_radius = collision_shape.shape.radius
-	current_effect = default_storm_effect
+	current_condition = default_storm_condition
 	current_visuals = default_storm_visuals
 
 	see_through_target_distance = see_through_distance
@@ -66,7 +66,7 @@ func _ready() -> void:
 	DebugConsole.add_command("storm", func() -> void: call("enable_storm" if not is_enabled else "disable_storm"))
 	DebugConsole.add_command("next_phase", force_start_next_phase)
 
-## Enables the storm to pick up where it left off. Re-enables all fx and the effect for current phase.
+## Enables the storm to pick up where it left off. Re-enables all fx and the condition for current phase.
 func enable_storm(from_save: bool = false) -> void:
 	if changing_enabled_status:
 		return
@@ -108,11 +108,11 @@ func enable_storm(from_save: bool = false) -> void:
 	if not from_save:
 		for i: int in range(4):
 			await get_tree().physics_frame
-		var entities_with_effect: Array[Node] = get_tree().get_nodes_in_group("entities_out_of_safe_area")
-		for entity: Node in entities_with_effect:
-			_add_effect_to_entity(entity, current_effect)
+		var entities_with_condition: Array[Node] = get_tree().get_nodes_in_group("entities_out_of_safe_area")
+		for entity: Node in entities_with_condition:
+			_add_condition_to_entity(entity, current_condition)
 
-## Stops storm in its tracks and removes the current effect from entities out of the safe area.
+## Stops storm in its tracks and removes the current condition from entities out of the safe area.
 func disable_storm(from_save: bool = false) -> void:
 	if changing_enabled_status:
 		return
@@ -150,21 +150,21 @@ func disable_storm(from_save: bool = false) -> void:
 	if storm_distortion_tween: storm_distortion_tween.pause()
 
 	collision_shape.set_deferred("disabled", true)
-	var entities_with_effect: Array[Node] = get_tree().get_nodes_in_group("entities_out_of_safe_area")
-	for entity: Node in entities_with_effect:
+	var entities_with_condition: Array[Node] = get_tree().get_nodes_in_group("entities_out_of_safe_area")
+	for entity: Node in entities_with_condition:
 		entity.remove_from_group("entities_out_of_safe_area")
-		_remove_current_effect_from_entity(entity)
+		_remove_current_condition_from_entity(entity)
 	SignalBus.player_in_safe_zone_changed.emit()
 	is_enabled = false
 
-## Reverts the storm visuals and storm entity effect to the defaults. Typically called when the queue
+## Reverts the storm visuals and storm entity condition to the defaults. Typically called when the queue
 ## is empty and auto-advance was on for the previous final zone.
 func _revert_to_default_zone() -> void:
 	if DebugFlags.storm_phases:
 		print_rich("[color=pink]*******[/color][color=purple] [b]Starting[/b] Storm Phase [/color][b]0[/b]" + " [color=gray][i](default)[/i][/color] [color=pink]*******[/color]")
 
 	_apply_visual_overrides(default_storm_visuals)
-	_swap_effect_applied_to_entities_out_of_safe_area(default_storm_effect)
+	_swap_condition_applied_to_entities_out_of_safe_area(default_storm_condition)
 
 ## Called externally to forcefully transition to the next phase no matter what.
 ## If we haven't started any zones before, don't pop off the queue, just use the first in the queue.
@@ -259,7 +259,7 @@ func add_storm_transform_to_queue(new_transform: StormTransform) -> void:
 
 ## Pops the current zone transform off the queue. If it was successful, it calls to process
 ## the next transform in the queue, regardless of whether the queue is now empty.
-## If it was unsuccessful, it reverts fx and the entity effect to the default zone.
+## If it was unsuccessful, it reverts fx and the entity condition to the default zone.
 ## This should really only be called at the end of the last phase by the timer's timeout or when we
 ## force advance the zone from an external request.
 func _pop_current_transform_and_check_for_next_phase() -> void:
@@ -303,12 +303,12 @@ func _kill_current_motion_tweens_and_timers() -> void:
 func _check_for_transform_delay(new_transform: StormTransform) -> void:
 	if DebugFlags.storm_phases:
 		var dur: float = max(new_transform.time_to_resize, new_transform.time_to_move)
-		var effect: String = "Keep Previous"
-		if new_transform.effect_setting == StormTransform.UpdateTypes.OVERRIDE:
-			effect = new_transform.status_effect.get_full_effect_key() + " " + str(new_transform.status_effect.effect_lvl)
-		elif new_transform.effect_setting == StormTransform.UpdateTypes.REVERT_TO_DEFAULT:
-			effect = "Reverted to Default: " + default_storm_effect.get_full_effect_key() + " " + str(default_storm_effect.effect_lvl)
-		print_rich("[color=pink]*******[/color][color=purple] [b]Starting[/b] Storm Phase [/color][b]" + str(zone_count) + "[/b][i] [delay = " + str(new_transform.delay) + "] [duration = " + str(dur) + "] " + "[effect = " + effect + "] [/i] [color=pink]*******[/color]")
+		var condition_str: String = "Keep Previous"
+		if new_transform.condition_setting == StormTransform.UpdateTypes.OVERRIDE:
+			condition_str = str(new_transform.condition)
+		elif new_transform.condition_setting == StormTransform.UpdateTypes.REVERT_TO_DEFAULT:
+			condition_str = "Reverted to Default: " + str(default_storm_condition)
+		print_rich("[color=pink]*******[/color][color=purple] [b]Starting[/b] Storm Phase [/color][b]" + str(zone_count) + "[/b][i] [delay = " + str(new_transform.delay) + "] [duration = " + str(dur) + "] " + "[condition = " + condition_str + "] [/i] [color=pink]*******[/color]")
 
 	# Starting delay timer if we have any delay. Otherwise start applying the new zone transform.
 	if new_transform.delay > 0:
@@ -333,13 +333,14 @@ func _start_zone(new_transform: StormTransform) -> void:
 	# Start the actual zone movement and resize
 	_tween_to_new_zone_position_and_radius(new_transform)
 
-	# Check if we need to override the status effect or reset it to default
-	if new_transform.effect_setting == StormTransform.UpdateTypes.OVERRIDE:
-		_swap_effect_applied_to_entities_out_of_safe_area(new_transform.status_effect)
-	elif new_transform.effect_setting == StormTransform.UpdateTypes.REVERT_TO_DEFAULT:
-		_swap_effect_applied_to_entities_out_of_safe_area(default_storm_effect)
+	# Check if we need to override the condition or reset it to default
+	if new_transform.condition_setting == StormTransform.UpdateTypes.OVERRIDE:
+		_swap_condition_applied_to_entities_out_of_safe_area(new_transform.condition)
+	elif new_transform.condition_setting == StormTransform.UpdateTypes.REVERT_TO_DEFAULT:
+		_swap_condition_applied_to_entities_out_of_safe_area(default_storm_condition)
 
-	# Giving the transform timer the data it needs to determine what to do on timeout, then starting the transform timer.
+	# Giving the transform timer the data it needs to determine what to do on timeout,
+	# then starting the transform timer.
 	current_storm_transform_time_timer.set_meta("auto_advance", new_transform.auto_advance)
 	current_storm_transform_time_timer.start()
 
@@ -537,16 +538,16 @@ func _update_see_thru_on_time_change(_day: int, hour: int, minute: int) -> void:
 	storm_circle.material.set_shader_parameter("see_through_opacity", result / 100.0)
 #endregion
 
-#region Current Effect & Cam Shake
-## When a dynamic entity enters the inner circle, we remove the current storm effect.
+#region Current Condition & Cam Shake
+## When a dynamic entity enters the inner circle, we remove the current storm condition.
 func _on_safe_zone_body_entered(body: Node2D) -> void:
 	if body is DynamicEntity:
-		_remove_current_effect_from_entity(body)
+		_remove_current_condition_from_entity(body)
 		body.remove_from_group("entities_out_of_safe_area")
 	if body is Player:
 		SignalBus.player_in_safe_zone_changed.emit()
 
-## When a dynamic entity exits the inner safe circle, we apply the current storm effect.
+## When a dynamic entity exits the inner safe circle, we apply the current storm condition.
 func _on_safe_zone_body_exited(body: Node2D) -> void:
 	if body is DynamicEntity:
 		var health_component: HealthComponent = body.get_node_or_null("HealthComponent")
@@ -554,29 +555,28 @@ func _on_safe_zone_body_exited(body: Node2D) -> void:
 			return
 
 		if is_enabled:
-			_add_effect_to_entity(body, current_effect)
+			_add_condition_to_entity(body, current_condition)
 		body.add_to_group("entities_out_of_safe_area")
 	if body is Player:
 		SignalBus.player_in_safe_zone_changed.emit()
 
-## Removes the current effect from entities out of the safe area and applies the new one.
-## The new one will be the default effect if we have no upcoming zone, otherwise it will be the effect
+## Removes the current condition from entities out of the safe area and applies the new one.
+## The new one will be the default condition if we have no upcoming zone, otherwise it will be the condition
 ## for the new transform.
-func _swap_effect_applied_to_entities_out_of_safe_area(new_effect: StatusEffect) -> void:
+func _swap_condition_applied_to_entities_out_of_safe_area(new_condition: Condition) -> void:
 	for entity: Node in get_tree().get_nodes_in_group("entities_out_of_safe_area"):
-		_remove_current_effect_from_entity(entity)
-		_add_effect_to_entity(entity, new_effect)
-	current_effect = new_effect
+		_remove_current_condition_from_entity(entity)
+		_add_condition_to_entity(entity, new_condition)
+	current_condition = new_condition
 
-## Removes the effect held in the current effect variable from all affected entities.
-func _remove_current_effect_from_entity(body: DynamicEntity) -> void:
-	var effects_manager: StatusEffectsComponent = body.effects
-	if effects_manager != null:
-		effects_manager.request_effect_removal_by_source(current_effect.id, current_effect.source_type)
+## Removes the condition held in the current condition variable from all affected entities.
+func _remove_current_condition_from_entity(body: DynamicEntity) -> void:
+	if body.conditions_component != null:
+		body.conditions_component.request_condition_removal_by_source(current_condition.id, current_condition.source_type)
 
-## Adds the passed in effect to the passed in entity.
-func _add_effect_to_entity(body: DynamicEntity, effect_to_add: StatusEffect) -> void:
-	var receiver: EffectReceiverComponent = body.get_node_or_null("EffectReceiverComponent")
-	if receiver != null and not body.effects.check_if_has_effect(effect_to_add.id, effect_to_add.source_type):
-		receiver.handle_status_effect(effect_to_add)
+## Adds the passed in condition to the passed in entity.
+func _add_condition_to_entity(body: DynamicEntity, condition_to_add: Condition) -> void:
+	var receiver: ESIReceiverComponent = body.get_node_or_null("ESIReceiverComponent")
+	if receiver != null and not body.conditions_component.check_if_has_condition(condition_to_add.id, condition_to_add.source_type):
+		receiver.handle_condition(condition_to_add)
 #endregion

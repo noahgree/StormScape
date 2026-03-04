@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="WeaponModStats" format=3 uid="uid://cfaje12siuo0b"]
 
-[ext_resource type="Script" uid="uid://boo31eu083dqd" path="res://Entities/Stats/EffectSystemResources/StatusEffects/StatusEffect.gd" id="1_qarro"]
+[ext_resource type="Script" uid="uid://boo31eu083dqd" path="res://Entities/Stats/EffectSystemResources/Condition.gd" id="1_qarro"]
 [ext_resource type="Texture2D" uid="uid://b2y1dxk81lvcv" path="res://Entities/Items/WeaponMods/Compensator/CompensatorBaseCT.tres" id="2_xjtij"]
 [ext_resource type="Script" uid="uid://cowjdnic7xmkp" path="res://Entities/Player/UI/Inventory/Panels/ItemDetailsPanel/StatDetail.gd" id="2_yomsf"]
 [ext_resource type="Script" uid="uid://ct7n8wo1p3b20" path="res://Entities/Items/WeaponMods/WeaponModStats.gd" id="3_xjtij"]

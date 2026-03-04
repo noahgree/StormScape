@@ -78,16 +78,16 @@ static func _add_weapon_mod(weapon_ii: WeaponII, weapon_mod: WeaponModStats, ind
 		weapon_ii.sc.add_mods([mod_resource] as Array[StatMod])
 		_update_es_overrides(weapon_ii, mod_resource.stat_id)
 
-	# ----- Updating effect source instances with new status effects -----
-	weapon_ii.normal_esi.replace_or_add_status_effects(weapon_mod.status_effects)
+	# ----- Updating effect source instances with new conditions -----
+	weapon_ii.normal_esi.replace_or_add_conditions(weapon_mod.conditions)
 	if weapon_ii.charge_esi.es:
-		weapon_ii.charge_esi.replace_or_add_status_effects(weapon_mod.charge_status_effects)
+		weapon_ii.charge_esi.replace_or_add_conditions(weapon_mod.charge_conditions)
 	if weapon_ii.aoe_esi.es:
-		weapon_ii.aoe_esi.replace_or_add_status_effects(weapon_mod.aoe_status_effects)
+		weapon_ii.aoe_esi.replace_or_add_conditions(weapon_mod.aoe_conditions)
 
 	# ----- Debug printouts after the fact -----
 	if DebugFlags.weapon_mod_changes and not add_silently:
-		_debug_print_status_effect_lists(weapon_ii)
+		_debug_print_condition_lists(weapon_ii)
 
 	# ----- Callbacks and resulting audio -----
 	weapon_mod.on_added(weapon_ii, source_entity.hands.equipped_item if source_entity != null else null)
@@ -116,11 +116,11 @@ static func remove_weapon_mod(weapon_ii: WeaponII, index: int, source_entity: En
 	weapon_ii.current_mods[index] = &""
 
 	# ----- Resyncing effect source instances -----
-	_resync_esi_status_effects(weapon_ii)
+	_resync_esi_conditions(weapon_ii)
 
 	# ----- Debug printouts after the fact -----
 	if DebugFlags.weapon_mod_changes and not remove_silently:
-		_debug_print_status_effect_lists(weapon_ii)
+		_debug_print_condition_lists(weapon_ii)
 
 	# ----- Callbacks and resulting audio -----
 	mod_to_remove.on_removal(weapon_ii, source_entity.hands.equipped_item if source_entity != null else null)
@@ -155,32 +155,32 @@ static func _update_es_overrides(weapon_ii: WeaponII, stat_id: StringName) -> vo
 		if stat_id in [&"proj_aoe_base_damage", &"proj_aoe_base_healing"]:
 			weapon_ii.aoe_esi.es_stat_overrides[stat_id] = weapon_ii.sc.get_stat(stat_id)
 
-## Resyncs the status effect lists for all effect source instances on a weapon instance after mods were
-## removed. Must be done to restore any status effects from the original effect source that were
+## Resyncs the condition lists for all effect source instances on a weapon instance after mods were
+## removed. Must be done to restore any conditions from the original effect source that were
 ## previously replaced.
-static func _resync_esi_status_effects(weapon_ii: WeaponII) -> void:
-	weapon_ii.normal_esi.reset_status_effects()
+static func _resync_esi_conditions(weapon_ii: WeaponII) -> void:
+	weapon_ii.normal_esi.reset_conditions()
 	if weapon_ii.charge_esi.es:
-		weapon_ii.charge_esi.reset_status_effects()
+		weapon_ii.charge_esi.reset_conditions()
 	if weapon_ii.charge_esi.es:
-		weapon_ii.aoe_esi.reset_status_effects()
+		weapon_ii.aoe_esi.reset_conditions()
 
 	for wpn_mod: WeaponModStats in weapon_ii.get_all_mods_as_stats():
-		weapon_ii.normal_esi.replace_or_add_status_effects(wpn_mod.status_effects)
+		weapon_ii.normal_esi.replace_or_add_conditions(wpn_mod.conditions)
 		if weapon_ii.charge_esi.es:
-			weapon_ii.charge_esi.replace_or_add_status_effects(wpn_mod.charge_status_effects)
+			weapon_ii.charge_esi.replace_or_add_conditions(wpn_mod.charge_conditions)
 		if weapon_ii.aoe_esi.es:
-			weapon_ii.aoe_esi.replace_or_add_status_effects(wpn_mod.aoe_status_effects)
+			weapon_ii.aoe_esi.replace_or_add_conditions(wpn_mod.aoe_conditions)
 
 #region Debug
-## Formats the updated lists of status effects and prints them out.
-static func _debug_print_status_effect_lists(weapon_ii: WeaponII) -> void:
-	var is_normal_base: bool = true if weapon_ii.normal_esi.status_effects == weapon_ii.normal_esi.es.status_effects else false
-	print_rich("[color=cyan]Normal Effects[/color]" + ("[color=gray][i](base)[/i][/color]" if is_normal_base else "") + ": [b]"+ str(weapon_ii.normal_esi.status_effects) + "[/b]")
+## Formats the updated lists of conditions and prints them out.
+static func _debug_print_condition_lists(weapon_ii: WeaponII) -> void:
+	var is_normal_base: bool = true if weapon_ii.normal_esi.conditions == weapon_ii.normal_esi.es.conditions else false
+	print_rich("[color=cyan]Normal Effects[/color]" + ("[color=gray][i](base)[/i][/color]" if is_normal_base else "") + ": [b]"+ str(weapon_ii.normal_esi.conditions) + "[/b]")
 	if weapon_ii.stats is MeleeWeaponStats:
-		var is_normal_charge: bool = true if weapon_ii.charge_esi.status_effects == weapon_ii.charge_esi.es.status_effects else false
-		print_rich("[color=cyan]Charge Effects[/color]" + ("[color=gray][i](base)[/i][/color]" if is_normal_charge else "") + ": [b]"+ str(weapon_ii.charge_esi.status_effects) + "[/b]")
+		var is_normal_charge: bool = true if weapon_ii.charge_esi.conditions == weapon_ii.charge_esi.es.conditions else false
+		print_rich("[color=cyan]Charge Effects[/color]" + ("[color=gray][i](base)[/i][/color]" if is_normal_charge else "") + ": [b]"+ str(weapon_ii.charge_esi.conditions) + "[/b]")
 	if weapon_ii.stats is ProjWeaponStats and weapon_ii.stats.projectile_logic.aoe_radius > 0:
-		var is_normal_aoe: bool = true if weapon_ii.aoe_esi.status_effects == weapon_ii.aoe_esi.es.status_effects else false
-		print_rich("[color=cyan]AOE Effects[/color]" + ("[color=gray][i](base)[/i][/color]" if is_normal_aoe else "") + ": [b]"+ str(weapon_ii.aoe_esi.status_effects) + "[/b]")
+		var is_normal_aoe: bool = true if weapon_ii.aoe_esi.conditions == weapon_ii.aoe_esi.es.conditions else false
+		print_rich("[color=cyan]AOE Effects[/color]" + ("[color=gray][i](base)[/i][/color]" if is_normal_aoe else "") + ": [b]"+ str(weapon_ii.aoe_esi.conditions) + "[/b]")
 #endregion

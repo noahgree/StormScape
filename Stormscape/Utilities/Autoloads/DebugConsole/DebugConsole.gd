@@ -199,9 +199,9 @@ func _on_console_input_text_changed(new_text: String, from_history_scroll: bool 
 					current_matches = StringHelpers.get_matching_in_dict(AudioManager.sound_cache, arg_1, MAX_AUTOCOMPLETES)
 				"stop_sound":
 					current_matches = StringHelpers.get_matching_in_dict(AudioManager.get_all_active_sounds(), arg_1, MAX_AUTOCOMPLETES, true)
-				"effect":
-					current_matches = StringHelpers.get_matching_in_dict(StatusEffectsComponent.cache, arg_1, MAX_AUTOCOMPLETES)
-				"remove_effect_by_source":
+				"condition":
+					current_matches = StringHelpers.get_matching_in_dict(ConditionsComponent.cache, arg_1, MAX_AUTOCOMPLETES)
+				"remove_condition_by_source":
 					current_matches = StringHelpers.get_matching_in_dict(Globals.player_node.effects.current_effects, arg_1, MAX_AUTOCOMPLETES, true)
 				"remove_effect_by_id":
 					current_matches = StringHelpers.get_matching_in_dict(Globals.player_node.effects.get_current_effects_grouped_by_id(), arg_1, MAX_AUTOCOMPLETES, true)

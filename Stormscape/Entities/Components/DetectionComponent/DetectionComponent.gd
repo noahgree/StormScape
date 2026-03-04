@@ -6,7 +6,7 @@ class_name DetectionComponent
 ## will be alerted of the presence of this entity.
 ##
 ## This component goes on the entity being detected so that it can work with the stealth factor system
-## to scale up and down. Note that the effect receiver of the entity detecting this component is what
+## to scale up and down. Note that the esi receiver of the entity detecting this component is what
 ## determines the collision shape for what interacts with this zone.
 
 signal enemies_in_range_changed(enemies_in_range: Array[Entity]) ## Emitted when the enemies in range array is altered.
@@ -49,11 +49,11 @@ func update_stealth(new_value: int) -> void:
 	radius = max(10, original_radius * (1 - stealth_percent))
 
 func _on_area_entered(area: Area2D) -> void:
-	if area is EffectReceiverComponent:
+	if area is ESIReceiverComponent:
 		area.affected_entity.detection_component.enemy_entered(entity)
 
 func _on_area_exited(area: Area2D) -> void:
-	if area is EffectReceiverComponent:
+	if area is ESIReceiverComponent:
 		area.affected_entity.detection_component.enemy_exited(entity)
 
 func enemy_entered(body: Entity) -> void:

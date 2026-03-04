@@ -10,7 +10,7 @@ class_name Hitscan
 
 var stats: HitscanStats ## The stats driving this hitscan.
 var sc: StatModsCache ## The stat mods resource used to retrieve modified, updated stats for calculations and logic.
-var esi: ESI ## The effect source instance to use when this ray hits an effect receiver.
+var esi: ESI ## The effect source instance to use when this ray hits an esi receiver.
 var source_ii: ProjWeaponII ## The weapon item instance that produced this hitscan.
 var rotation_offset: float ## The offset to rotate the hitscan by, determined by the source weapon.
 var lifetime_timer: Timer = TimerHelpers.create_one_shot_timer(self, -1, queue_free) ## The timer tracking lifetime left before freeing.
@@ -152,7 +152,7 @@ func _find_target_receivers() -> void:
 			impact_particles.position = to_local(collision_point)
 			impact_particles.global_rotation = result.normal.angle()
 
-			if obj and obj is EffectReceiverComponent:
+			if obj and obj is ESIReceiverComponent:
 				candidates.append(obj)
 				contact_positions.append(collision_point)
 
@@ -238,7 +238,7 @@ func _update_impact_particles(pierce_list: Dictionary) -> void:
 ## Overrides parent method. When we overlap with an entity who can accept effect sources,
 ## pass the effect source to that entity's handler. Note that the effect source is duplicated
 ## on hit so that we can include unique info like move dir.
-func _start_being_handled(handling_area: EffectReceiverComponent, contact_point: Vector2) -> void:
+func _start_being_handled(handling_area: ESIReceiverComponent, contact_point: Vector2) -> void:
 	esi.multishot_id = multishot_id
 	_adjust_esi_for_falloff(esi, contact_point)
 	esi.movement_direction = Vector2(cos(rotation), sin(rotation)).normalized()

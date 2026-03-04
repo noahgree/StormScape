@@ -36,8 +36,8 @@ func parse_item(ii: II) -> Array[String]:
 			strings.append(_get_use_speed(ii))
 			strings.append(_get_mag_and_reload(ii))
 			strings.append(_get_bloom(ii))
-			strings.append(_get_status_effects(ii))
-			strings.append(_get_charge_status_effects(ii))
+			strings.append(_get_conditions(ii))
+			strings.append(_get_charge_conditions(ii))
 			strings.append_array(_get_aoe_stats(ii))
 		Globals.ItemType.AMMO:
 			pass
@@ -49,8 +49,8 @@ func parse_item(ii: II) -> Array[String]:
 			pass
 		Globals.ItemType.WEAPON_MOD:
 			strings.append_array(_get_mod_stats(ii))
-			strings.append(_get_status_effects(ii))
-			strings.append(_get_charge_status_effects(ii))
+			strings.append(_get_conditions(ii))
+			strings.append(_get_charge_conditions(ii))
 
 	strings.append_array(_get_extra_details(ii, ii.stats.extra_details, false, false))
 	if ii is WeaponII:
@@ -262,20 +262,20 @@ func _get_bloom(ii: II) -> String:
 
 	return _get_title("MAX BLOOM") + _get_item_sums(ii, ["max_bloom"], false, "[char=00B0]")
 
-## Gets the status effects from the normal effect source.
-func _get_status_effects(ii: II) -> String:
+## Gets the conditions from the normal effect source.
+func _get_conditions(ii: II) -> String:
 	var string: String = _get_title("EFFECTS")
-	var effect_array: Array[StatusEffect]
+	var effect_array: Array[Condition]
 	if ii is WeaponII:
-		effect_array = ii.normal_esi.status_effects
+		effect_array = ii.normal_esi.conditions
 	elif ii.stats is WeaponModStats:
-		effect_array = ii.stats.status_effects
+		effect_array = ii.stats.conditions
 
 	if effect_array.is_empty():
 		return ""
 
-	for effect: StatusEffect in effect_array:
-		if ii is WeaponII and effect not in ii.normal_esi.es.status_effects:
+	for effect: Condition in effect_array:
+		if ii is WeaponII and effect not in ii.normal_esi.es.conditions:
 			string += "[color=Lawngreen]" + effect.get_pretty_string() + "[/color], "
 		else:
 			string += effect.get_pretty_string() + ", "
@@ -283,24 +283,24 @@ func _get_status_effects(ii: II) -> String:
 	string = string.trim_suffix(", ")
 	return string
 
-## Gets the status effects from the charged effect source.
-func _get_charge_status_effects(ii: II) -> String:
+## Gets the conditions from the charged effect source.
+func _get_charge_conditions(ii: II) -> String:
 	var string: String = _get_title("CHRG EFFECTS")
-	var effect_array: Array[StatusEffect]
+	var effect_array: Array[Condition]
 	if ii.stats is MeleeWeaponStats:
-		effect_array = ii.charge_esi.status_effects
+		effect_array = ii.charge_esi.conditions
 		if not ii.stats.can_do_charge_use:
 			return ""
 	elif ii.stats is WeaponModStats:
-		effect_array = ii.stats.status_effects
+		effect_array = ii.stats.conditions
 	else:
 		return ""
 
 	if effect_array.is_empty():
 		return ""
 
-	for effect: StatusEffect in effect_array:
-		if ii.stats is MeleeWeaponStats and effect not in ii.charge_esi.es.status_effects:
+	for effect: Condition in effect_array:
+		if ii.stats is MeleeWeaponStats and effect not in ii.charge_esi.es.conditions:
 			string += "[color=Lawngreen]" + effect.get_pretty_string() + "[/color], "
 		else:
 			string += effect.get_pretty_string() + ", "
@@ -314,7 +314,7 @@ func _get_aoe_stats(ii: II) -> Array[String]:
 		return [""]
 	elif ii.sc.get_stat("proj_aoe_radius") == 0:
 		return [""]
-	elif ii.aoe_esi.status_effects.is_empty():
+	elif ii.aoe_esi.conditions.is_empty():
 		return[""]
 
 	var strings: Array[String] = [_get_title("AOE RADIUS") + _get_item_sums(ii, ["proj_aoe_radius"], true, " px")]
@@ -330,8 +330,8 @@ func _get_aoe_stats(ii: II) -> Array[String]:
 		strings.append(healing)
 
 	var effects: String = _get_title("AOE EFFECTS")
-	for effect: StatusEffect in ii.aoe_esi.status_effects:
-		if effect not in ii.aoe_esi.es.status_effects:
+	for effect: Condition in ii.aoe_esi.conditions:
+		if effect not in ii.aoe_esi.es.conditions:
 			effects += "[color=Lawngreen]" + effect.get_pretty_string() + "[/color], "
 		else:
 			effects += effect.get_pretty_string() + ", "
@@ -414,7 +414,7 @@ func _get_item_sums(ii: II, list: Array[String], up_is_good: bool, suffix: Strin
 	return _get_formatted_sum_result(sum, original_sum, up_is_good, suffix, mults, additions, fraction_of_original)
 
 ## Gets a sum of an array of stat ids and compares it to the original sum. Stat changers (like wearables
-## and status effects) that lower or raise sums will result in an arrow at the end in the direction
+## and conditions) that lower or raise sums will result in an arrow at the end in the direction
 ## of change, colored based on whether higher is better or not.
 func _get_player_sum(list: Array[String], up_is_good: bool, suffix: String = "", mults: Array[Factor] = [],
 				additions: Array[Factor] = [], fraction_of_original: bool = false) -> String:

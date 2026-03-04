@@ -3,7 +3,7 @@ extends Node2D
 class_name EntitySprite
 ## The main sprite node that is attached to any game entity.
 
-@export var disable_floor_light: bool = false ## When true, the light that shines at the base of the sprite in response to status effects will be disabled.
+@export var disable_floor_light: bool = false ## When true, the light that shines at the base of the sprite in response to conditions will be disabled.
 @export var cracks_with_damage: bool = true ## When true, the shader will simulate cracking based on the percentage of health left (note that shield changing does nothing, this only updates with health changes). This only applies to non-dynamic entities.
 @export var time_brightness_min_max: Vector2 = Vector2(1.0, 1.0) ## How the brightness of the sprite should change in response to time of day. Anything besides (1, 1) activates this.
 
@@ -22,7 +22,7 @@ class_name EntitySprite
 	&"crack_scale" : 3.838,
 }
 
-@export_storage var floor_colors: Dictionary[StringName, Color] = { ## The status effect names that have associated colors to change the floor light to.
+@export_storage var floor_colors: Dictionary[StringName, Color] = { ## The condition names that have associated colors to change the floor light to.
 	&"frostbite" : Color(0.435, 0.826, 1),
 	&"burning" : Color(1, 0.582, 0.484),
 	&"poison" : Color(0, 0.933, 0.469),
@@ -35,7 +35,7 @@ class_name EntitySprite
 	&"stun" : Color(1, 0.909, 0.544),
 	&"time_snare": Color(1, 0.4, 0.463)
 }
-@export_storage var overlay_colors: Dictionary[StringName, Color] = { ## The status effect names that have associated colors to change the overlay to.
+@export_storage var overlay_colors: Dictionary[StringName, Color] = { ## The condition names that have associated colors to change the overlay to.
 	&"frostbite" : Color(0.435, 0.826, 1),
 	&"burning" : Color(1, 0.582, 0.484),
 	&"poison" : Color(0, 0.933, 0.469),
@@ -50,7 +50,7 @@ class_name EntitySprite
 }
 
 @onready var floor_light: PointLight2D = $FloorLight ## The light with the effect color that is shining up on the entity.
-@onready var overlay: TextureRect = $Overlay ## The color overlay that shows when a status effect triggers it.
+@onready var overlay: TextureRect = $Overlay ## The color overlay that shows when a condition triggers it.
 
 var entity: Entity ## The entity this sprite is attached to.
 var floor_light_tween: Tween = null ## The tween controlling the floor light's self-modulate.

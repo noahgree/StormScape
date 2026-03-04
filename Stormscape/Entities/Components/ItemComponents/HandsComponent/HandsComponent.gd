@@ -359,7 +359,7 @@ func _change_y_sort(facing_dir: Vector2) -> void:
 		off_hand_sprite.position.y = starting_off_hand_sprite_height + starting_hands_component_height - position.y
 	else:
 		if entity.effects != null:
-			# Needed to place held items over the status effect particles on the entity when facing down
+			# Needed to place held items over the condition particles on the entity when facing down
 			position = entity.effects.position + Vector2(0, 1)
 			hands_anchor.position.y = starting_hands_component_height - position.y
 			off_hand_sprite.position.y = starting_off_hand_sprite_height + starting_hands_component_height - position.y

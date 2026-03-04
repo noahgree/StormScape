@@ -1,7 +1,7 @@
 @icon("res://Utilities/Debug/EditorIcons/wearable.svg")
 extends ItemStats
 class_name WearableStats
-## The class for all wearable gear and items that provide status effects or stat modifications to the wearer.
+## The class for all wearable gear and items that provide conditions or stat modifications to the wearer.
 
 
 @export var stat_mods: Array[StatMod] ## The stat modifiers applied by this wearable. Do not have duplicates in this array.

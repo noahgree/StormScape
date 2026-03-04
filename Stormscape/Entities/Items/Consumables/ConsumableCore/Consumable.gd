@@ -42,7 +42,7 @@ func consume() -> void:
 			stamina_component.gain_hunger_bars(stats.hunger_bar_gain)
 			stamina_component.use_hunger_bars(stats.hunger_bar_deduction)
 
-		source_entity.effect_receiver.handle_esi(ii.esi, source_entity, null)
+		source_entity.effect_src_receiver.handle_esi(ii.esi, source_entity, null)
 
 		source_entity.inv.remove_item(inv_index, 1)
 

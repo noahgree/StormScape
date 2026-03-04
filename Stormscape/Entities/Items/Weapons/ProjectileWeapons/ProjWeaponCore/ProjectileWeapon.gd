@@ -72,7 +72,7 @@ func enable() -> void:
 func disable() -> void:
 	source_entity.hands.should_rotate = true
 	if stats.charging_stat_effect != null:
-		source_entity.effects.request_effect_removal_by_source(stats.charging_stat_effect.id, StatusEffect.SourceType.FROM_SELF)
+		source_entity.effects.request_effect_removal_by_source(stats.charging_stat_effect.id, Condition.SourceType.FROM_SELF)
 	is_charging = false
 	_delay_clean_up_hitscans()
 
@@ -103,7 +103,7 @@ func exit() -> void:
 		mouse_area.queue_free()
 
 	if stats.charging_stat_effect != null:
-		source_entity.effects.request_effect_removal_by_source(stats.charging_stat_effect.id, StatusEffect.SourceType.FROM_SELF)
+		source_entity.effects.request_effect_removal_by_source(stats.charging_stat_effect.id, Condition.SourceType.FROM_SELF)
 
 	source_entity.hands.smoke_particles.emitting = false
 	source_entity.hands.smoke_particles.visible = false
@@ -258,9 +258,9 @@ func hold_activate(delta: float) -> void:
 			start_firing_sequence()
 		ProjWeaponStats.FiringType.CHARGE:
 			if (not is_charging) and (stats.charging_stat_effect != null):
-				var effect: StatusEffect = stats.charging_stat_effect.duplicate()
+				var effect: Condition = stats.charging_stat_effect.duplicate()
 				effect.mod_time = 100000000
-				source_entity.effect_receiver.handle_status_effect(effect)
+				source_entity.effect_src_receiver.handle_condition(effect)
 			is_charging = true
 
 			if stats.auto_do_charge_use and hold_time >= ii.sc.get_stat("min_charge_time"):
@@ -277,7 +277,7 @@ func release_hold_activate() -> void:
 
 	if stats.firing_mode == ProjWeaponStats.FiringType.CHARGE:
 		if stats.charging_stat_effect != null:
-			source_entity.effects.request_effect_removal_by_source(stats.charging_stat_effect.id, StatusEffect.SourceType.FROM_SELF)
+			source_entity.effects.request_effect_removal_by_source(stats.charging_stat_effect.id, Condition.SourceType.FROM_SELF)
 		is_charging = false
 
 		if hold_time >=  ii.sc.get_stat("min_charge_time"):

@@ -392,7 +392,7 @@ func _hide_sprite_after_aoe_anim_ends() -> void:
 ## Assigns the collider to a new shape and re-enables it. Takes into account scaling of the projectile itself
 ## to preserve aoe radius.
 ## This also applies the initial hit of the aoe effect source to entities in range. The handling
-## function won't apply status effects as a result of this hit.
+## function won't apply conditions as a result of this hit.
 func _assign_new_collider_shape_and_aoe_entities(new_shape: Shape2D) -> void:
 	var radius: float = min(MAX_AOE_RADIUS, sc.get_stat("proj_aoe_radius"))
 	new_shape.radius = (radius / scale.x)
@@ -406,8 +406,8 @@ func _assign_new_collider_shape_and_aoe_entities(new_shape: Shape2D) -> void:
 	for area: Area2D in get_overlapping_areas():
 		if (area.get_parent() == source_entity) and not stats.aoe_effect_source.can_hit_self:
 			return
-		elif area is EffectReceiverComponent:
-			_start_being_handled(area as EffectReceiverComponent)
+		elif area is ESIReceiverComponent:
+			_start_being_handled(area as ESIReceiverComponent)
 	for body: Node2D in get_overlapping_bodies():
 		_on_body_entered(body)
 #endregion
@@ -422,7 +422,7 @@ func _on_lifetime_timer_timeout_or_reached_max_distance() -> void:
 		queue_free()
 
 ## Overrides parent hitbox. When in AOE, we add new entities to a dictionary with an associated timer
-## that applies the status effects on an interval.
+## that applies the conditions on an interval.
 func _on_area_entered(area: Area2D) -> void:
 	if not is_in_aoe_phase:
 		super._on_area_entered(area)
@@ -431,7 +431,7 @@ func _on_area_entered(area: Area2D) -> void:
 	if (area.get_parent() == source_entity) and not stats.aoe_effect_source.can_hit_self:
 		return
 
-	if area is EffectReceiverComponent:
+	if area is ESIReceiverComponent:
 		var timer: Timer = Timer.new()
 		timer.set_meta("area", area)
 		timer.timeout.connect(_on_aoe_interval_timer_timeout.bind(timer))
@@ -443,13 +443,13 @@ func _on_area_entered(area: Area2D) -> void:
 				return
 
 		if area in aoe_overlapped_receivers:
-			for status_effect: StatusEffect in stats.aoe_effect_source.status_effects:
-				area.handle_status_effect(status_effect)
+			for condition: Condition in stats.aoe_effect_source.conditions:
+				area.handle_condition(condition)
 
 			add_child(timer)
 			timer.start(stats.aoe_effect_interval)
 
-## When the status effect interval timer ends, check if the area still exists, then apply the effects again.
+## When the condition interval timer ends, check if the area still exists, then apply the effects again.
 func _on_aoe_interval_timer_timeout(timer: Timer) -> void:
 	var area: Area2D = timer.get_meta("area")
 	if area not in aoe_overlapped_receivers:
@@ -460,15 +460,15 @@ func _on_aoe_interval_timer_timeout(timer: Timer) -> void:
 		timer.queue_free()
 		return
 
-	for status_effect: StatusEffect in stats.aoe_effect_source.status_effects:
-		area.handle_status_effect(status_effect)
+	for condition: Condition in stats.aoe_effect_source.conditions:
+		area.handle_condition(condition)
 
 ## When in AOE, remove the area from the dictionary and free its associated timer on exiting the AOE zone.
 func _on_area_exited(area: Area2D) -> void:
 	if not is_in_aoe_phase or is_disabling_monitoring:
 		return
 
-	if area is EffectReceiverComponent:
+	if area is ESIReceiverComponent:
 		var timer: Timer = aoe_overlapped_receivers.get(area, null)
 		if timer:
 			timer.queue_free()
@@ -490,7 +490,7 @@ func _process_hit(object: Node2D) -> void:
 
 		var pierce_stat: int = int(sc.get_stat("proj_max_pierce"))
 		if pierce_count < pierce_stat:
-			if object is Entity or object is EffectReceiverComponent:
+			if object is Entity or object is ESIReceiverComponent:
 				_handle_pierce()
 				return
 
@@ -524,7 +524,7 @@ func _kill_projectile_on_hit() -> void:
 ## Overrides parent method. When we overlap with an entity who can accept effect sources, pass the
 ## effect source to that entity's handler. Note that the effect source is duplicated on hit so that
 ## we can include unique info like move dir.
-func _start_being_handled(handling_area: EffectReceiverComponent) -> void:
+func _start_being_handled(handling_area: ESIReceiverComponent) -> void:
 	if about_to_free:
 		return
 	var dist_to_center: float = handling_area.get_parent().global_position.distance_to(global_position)
@@ -538,7 +538,7 @@ func _start_being_handled(handling_area: EffectReceiverComponent) -> void:
 	else:
 		_adjust_esi_for_falloff(aoe_esi, dist_to_center, true)
 		aoe_esi.contact_position = global_position
-		handling_area.handle_esi(aoe_esi, source_entity, source_ii, false) # Don't reapply status effects.
+		handling_area.handle_esi(aoe_esi, source_entity, source_ii, false) # Don't reapply conditions.
 
 ## When we hit a handling area during an AOE, we need to apply falloff based on distance from the center of the AOE.
 func _adjust_esi_for_falloff(esi_to_adjust: ESI, dist: float, is_aoe: bool = false) -> void:

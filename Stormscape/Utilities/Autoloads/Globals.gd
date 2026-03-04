@@ -2,7 +2,7 @@ extends Node
 ## A singleton containing all data needed globally.
 
 var item_dir: String = "res://Entities/Items/TRESItems/" ## The top level folder holding all item resources.
-var status_effects_dir: String = "res://Entities/Stats/EffectSystemResources/StatusEffects/" ## The top level folder holding all status effects.
+var conditions_dir: String = "res://Entities/Stats/EffectSystemResources/Conditions/" ## The top level folder holding all conditions.
 
 @onready var world_root: WorldRoot = get_parent().get_node("Game/WorldRoot") ## A reference to the root of the game world.
 @onready var storm: Storm = get_parent().get_node("Game/WorldRoot/Storm") ## A reference to the main storm node.
@@ -46,10 +46,10 @@ enum Teams {
 	ENEMY = 1 << 1, ## The enemy team (against the player).
 	PASSIVE = 1 << 2 ## Does not heal or damage anything. Just exists.
 }
-enum EOTTypes { HEALTH_ONLY, SHIELD_ONLY, SHIELD_THEN_HEALTH, HEALTH_THEN_SHIELD, SIMULTANEOUS }
+enum DHTypes { HEALTH_ONLY, SHIELD_ONLY, SHIELD_THEN_HEALTH, HEALTH_THEN_SHIELD, SIMULTANEOUS }
 enum BadEffectAffectedTeams { ENEMIES = 1 << 0, ALLIES = 1 << 1 }
 enum GoodEffectAffectedTeams { ENEMIES = 1 << 0, ALLIES = 1 << 1 }
-enum EffectSourceSourceType {
+enum ESISourceType {
 	FROM_DEFAULT, ## For any effect source that does not come from any of the below types.
 	FROM_PROJECTILE, ## For damage coming from any normal projectile like a bullet from a sniper or pistol.
 	FROM_EXPLOSION, ## For damage coming from AOEs that explode.
@@ -58,7 +58,8 @@ enum EffectSourceSourceType {
 	FROM_TOOL, ## For melee weapons like pickaxes and axes that exist primary to interact with the world resources.
 	FROM_PHYSICAL_CONTACT, ## For physcial interactions like a punch or running into something with a hitbox attached to the body.
 	FROM_COMBAT_MELEE, ## For melee weapons that are primarily damaging weapons like a sword (not tools like the pickaxe).
-	FROM_CONSUMABLE ## For receiving effects from consuming consumables.
+	FROM_CONSUMABLE, ## For receiving effects from consuming consumables.
+	FROM_EOTI ## For receiving effects from effect over time instances.
 }
 
 # Items

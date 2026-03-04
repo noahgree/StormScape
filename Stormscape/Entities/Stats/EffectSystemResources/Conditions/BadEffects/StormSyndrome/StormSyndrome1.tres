@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="StormSyndromeEffect" format=3 uid="uid://cucuggowaf55y"]
+
+[ext_resource type="Script" uid="uid://bq0632kqw53el" path="res://Entities/Stats/EffectSystemResources/Conditions/BadEffects/StormSyndrome/StormSyndromeEffect.gd" id="1_lgscn"]
+[ext_resource type="Script" uid="uid://20acrt2hb6y" path="res://Entities/Stats/EOTStats.gd" id="1_rsqf7"]
+[ext_resource type="Script" uid="uid://bcjwesiannbd0" path="res://Entities/Stats/StatMod/StatMod.gd" id="2_rsqf7"]
+
+[sub_resource type="Resource" id="Resource_dega7"]
+script = ExtResource("1_rsqf7")
+hit_flash_color = Color(0.769133, 0.615398, 1, 0.6)
+
+[resource]
+script = ExtResource("1_lgscn")
+dot_resource = SubResource("Resource_dega7")
+id = "storm_syndrome"
+source_type = 2
+mod_time = 0.0
+apply_until_removed = true
+only_cue_on_player_hit = true
+particle_hander_req = "StormSyndrome"

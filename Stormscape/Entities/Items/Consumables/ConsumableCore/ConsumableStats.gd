@@ -3,7 +3,7 @@ extends ItemStats
 class_name ConsumableStats
 
 @export_group("General Consumable Details")
-@export var effect_source: EffectSource = EffectSource.new() ## The resource that defines what happens to the entity that consumes this consumable. Includes things like damage and status effects.
+@export var effect_source: EffectSource = EffectSource.new() ## The resource that defines what happens to the entity that consumes this consumable. Includes things like damage and conditions.
 @export var hunger_bar_gain: int = 1 ## How many hunger bars this consumable grants.
 @export var hunger_bar_deduction: int = 0 ## How many hunger bars this consumable takes away.
 @export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var consumption_time: float = 1.0 ## How long this takes to consume.

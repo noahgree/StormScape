@@ -1,0 +1,34 @@
+[gd_resource type="Resource" script_class="FrostbiteEffect" format=3 uid="uid://b2ekcx7kndqjb"]
+
+[ext_resource type="Script" uid="uid://0lch4wyxor28" path="res://Entities/Stats/EffectSystemResources/Conditions/BadEffects/Frostbite/FrostbiteEffect.gd" id="1_apbmx"]
+[ext_resource type="Script" uid="uid://20acrt2hb6y" path="res://Entities/Stats/EOTStats.gd" id="1_u6sjg"]
+[ext_resource type="Script" uid="uid://bcjwesiannbd0" path="res://Entities/Stats/StatMod/StatMod.gd" id="2_27v06"]
+
+[sub_resource type="Resource" id="Resource_ge1fd"]
+script = ExtResource("1_u6sjg")
+hit_flash_color = Color(0.501001, 0.670876, 1, 0.6)
+
+[sub_resource type="Resource" id="Resource_xefcn"]
+script = ExtResource("2_27v06")
+stat_id = &"friction"
+mod_id = &"frostbite1"
+operation = "-%"
+value = 75.0
+max_stack_count = 3
+
+[sub_resource type="Resource" id="Resource_4k2h3"]
+script = ExtResource("2_27v06")
+stat_id = &"acceleration"
+mod_id = &"frostbite1"
+operation = "-%"
+value = 75.0
+max_stack_count = 3
+
+[resource]
+script = ExtResource("1_apbmx")
+dot_resource = SubResource("Resource_ge1fd")
+id = 1
+effects_to_stop = Array[String](["burning"])
+mod_time = 10.0
+stat_mods = Array[ExtResource("2_27v06")]([SubResource("Resource_xefcn"), SubResource("Resource_4k2h3")])
+particle_hander_req = "Frostbite"

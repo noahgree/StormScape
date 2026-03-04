@@ -41,8 +41,8 @@ enum ReloadType { ## The kinds of reloads the weapon can have.
 @export var dec_charge_on_cooldown: bool = false ## If true, the charge will decrease according to the rate above while on default firing cooldown as well as when idling. It will never decrease during firing, though.
 @export var reset_charge_on_fire: bool = false ## When true, charge progress will reset to 0 upon successfully firing the weapon.
 @export_subgroup("Firing Stat Effects")
-@export var firing_stat_effect: StatusEffect ## The status effect to apply to the source entity when firing.
-@export var charging_stat_effect: StatusEffect ## A status effect to apply to the entity while charging. Typically to slow them.
+@export var firing_stat_effect: Condition ## The condition to apply to the source entity when firing.
+@export var charging_stat_effect: Condition ## A condition to apply to the entity while charging. Typically to slow them.
 @export_subgroup("Firing Animations")
 @export var one_frame_per_fire: bool = false ## When true, the sprite frames will only advance one frame when firing normally.
 @export var fire_anim_dur: float ## When greater than 0, the fire animation will run for this override time.
@@ -63,7 +63,7 @@ enum ReloadType { ## The kinds of reloads the weapon can have.
 @export_group("Effect & Logic Resources")
 @export var projectile_logic: ProjStats ## The logic for each spawned projectile determining how it behaves.
 @export var hitscan_logic: HitscanStats = HitscanStats.new() ## The resource containing information on how to fire and operate the hitscan.
-@export var effect_source: EffectSource ## The resource that defines what happens to the entity that is hit by this weapon. Includes things like damage and status effects.
+@export var effect_source: EffectSource ## The resource that defines what happens to the entity that is hit by this weapon. Includes things like damage and conditions.
 
 @export_group("Ammo & Reloading")
 @export var ammo_type: ProjWeaponStats.AmmoTypes = AmmoTypes.NONE ## The kind of ammo to consume on use.

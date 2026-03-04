@@ -4,13 +4,13 @@ class_name HitboxComponent
 ## The area2d that defines where an effect source comes from.
 
 @export_group("Standalone Hitbox Properties") # Only set these manually if using this as a standalone hitbox and not attached to a projectile or other weapon
-@export var effect_source: EffectSource ## The effect source to be applied when this hitbox hits an effect receiver.
+@export var effect_source: EffectSource ## The effect source to be applied when this hitbox hits an esi receiver.
 @export var source_entity: Entity ## The entity that the effect was produced by.
 @export var use_self_position: bool = false ## When using the hitbox as a standalone area2d, make this property true so that it uses its own position to handle effects like knockback.
 
 @onready var collider: CollisionShape2D = $CollisionShape2D ## The collision shape for this hitbox.
 
-var esi: ESI ## The effect source instance to be use when this hitbox hits an effect receiver.
+var esi: ESI ## The effect source instance to be use when this hitbox hits an esi receiver.
 var source_ii: WeaponII ## The reference to the weapon item instance that produced this effect source, if any.
 var movement_direction: Vector2 = Vector2.ZERO ## The current movement direction for this hitbox.
 
@@ -33,8 +33,8 @@ func _on_area_entered(area: Area2D) -> void:
 		if not esi.es or not esi.es.can_hit_self:
 			return
 
-	if area is EffectReceiverComponent:
-		_start_being_handled(area as EffectReceiverComponent)
+	if area is ESIReceiverComponent:
+		_start_being_handled(area as ESIReceiverComponent)
 
 	_process_hit(area)
 
@@ -46,14 +46,14 @@ func _on_body_entered(body: Node2D) -> void:
 
 	# If the body is an entity that doesn't receive effect sources, it still has collision and
 	# should stop projectiles
-	if (body is Entity) and (body.effect_receiver == null):
+	if (body is Entity) and (body.effect_src_receiver == null):
 		_process_hit(body)
 
-## Meant to interact with an EffectReceiverComponent that can handle effects supplied by this instance.
+## Meant to interact with an ESIReceiverComponent that can handle effects supplied by this instance.
 ## This version of the method handles the general case, but specific behaviors defined in certain
 ## weapon hitboxes may want to override it.
-func _start_being_handled(handling_area: EffectReceiverComponent) -> void:
-	if esi.es.source_type == Globals.EffectSourceSourceType.FROM_PROJECTILE:
+func _start_being_handled(handling_area: ESIReceiverComponent) -> void:
+	if esi.es.source_type == Globals.ESISourceType.FROM_PROJECTILE:
 		esi.movement_direction = movement_direction
 	if not use_self_position:
 		esi.contact_position = get_parent().global_position

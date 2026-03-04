@@ -91,8 +91,8 @@ class_name ProjStats
 @export_subgroup("Timing")
 @export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var aoe_delay: float ## How long after triggering the AOE does the projectile sit in wait before re-enabling the larger collider.
 @export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var aoe_effect_dur: float = 0.05 ## How long the larger collider will be enabled for once an aoe is triggered.
-@export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var aoe_effect_interval: float = 1 ## How long between applications of the status effects of the AOE to each entity inside it.
-@export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var aoe_effects_delay: float = 0.5 ## How long after an entity enters the AOE effect area before applying the first status effect pulse.
+@export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var aoe_effect_interval: float = 1 ## How long between applications of the conditions of the AOE to each entity inside it.
+@export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var aoe_effects_delay: float = 0.5 ## How long after an entity enters the AOE effect area before applying the first condition pulse.
 @export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var aoe_anim_dur: float = 0.2 ## How long the sprite frames' "aoe" animation should take to complete.
 @export_subgroup("AOE FX")
 @export var aoe_hide_sprite: bool = true ## When true, the main proj sprite will be hidden once AOE starts. If there is an "aoe" animation to play, the sprite will hide after it is done.

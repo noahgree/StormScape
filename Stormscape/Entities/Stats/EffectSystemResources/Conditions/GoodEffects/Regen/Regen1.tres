@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="RegenEffect" format=3 uid="uid://b8yo5kmjiwnca"]
+
+[ext_resource type="Script" uid="uid://wiuddhq7fwce" path="res://Entities/Stats/EffectSystemResources/Conditions/GoodEffects/Regen/RegenEffect.gd" id="1_ryq06"]
+[ext_resource type="Script" uid="uid://bron26bukkbdd" path="res://Entities/Stats/HOTResource.gd" id="1_vrujh"]
+
+[sub_resource type="Resource" id="Resource_m7vw8"]
+script = ExtResource("1_vrujh")
+healing_time = 8.0
+heal_ticks_array = Array[int]([10, 10, 10])
+delay_time = 2.0
+
+[resource]
+script = ExtResource("1_ryq06")
+hot_resource = SubResource("Resource_m7vw8")
+is_bad_effect = false
+particle_hander_req = "Regen"

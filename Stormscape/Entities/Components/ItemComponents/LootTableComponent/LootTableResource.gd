@@ -65,7 +65,7 @@ func _on_hp_changed(new_value: int, old_value: int) -> void:
 		hp_change_counter = floori(hp_change_counter - needed_change)
 		handle_hit()
 
-## This is either called from the _on_hp_changed method or directly from the effect receiver when it gets hit by
+## This is either called from the _on_hp_changed method or directly from the esi receiver when it gets hit by
 ## something that did not damage and we don't require damage on hit.
 func handle_hit() -> void:
 	if is_dying or not _roll_to_check_if_should_drop(true):

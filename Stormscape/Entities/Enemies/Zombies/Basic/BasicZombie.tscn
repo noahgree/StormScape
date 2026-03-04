@@ -8,25 +8,26 @@
 [ext_resource type="Script" uid="uid://cv7ha7muvg5qu" path="res://Entities/Items/ItemCore/II.gd" id="3_oqrkc"]
 [ext_resource type="PackedScene" uid="uid://di7vcyrki71nm" path="res://Entities/Components/DetectionComponent/DetectionComponent.tscn" id="3_tsyff"]
 [ext_resource type="Texture2D" uid="uid://yypje8l5ouqy" path="res://Entities/Enemies/Zombies/Basic/BasicZombieBaseFramesCT.tres" id="4_8a5el"]
-[ext_resource type="PackedScene" uid="uid://co3n6m7efg8pd" path="res://Entities/Components/EffectComponents/StatusEffectsComponent/StatusEffectsComponent.tscn" id="5_g4fx3"]
+[ext_resource type="PackedScene" uid="uid://co3n6m7efg8pd" path="res://Entities/Components/EffectComponents/ConditionsComponent/ConditionsComponent.tscn" id="5_g4fx3"]
 [ext_resource type="PackedScene" uid="uid://b7gdy01q8wsjx" path="res://Entities/Components/ItemComponents/HandsComponent/HandsComponent.tscn" id="6_j2ytj"]
+[ext_resource type="Script" uid="uid://c2gdoebfp12dq" path="res://Entities/Stats/StatMod/StatModsCache.gd" id="6_s1u3v"]
 [ext_resource type="PackedScene" uid="uid://cdfdy8m6ki3oq" path="res://Entities/Components/HealthComponent/HealthComponent.tscn" id="7_gh5xt"]
 [ext_resource type="Script" uid="uid://baglarh3m4c8o" path="res://Entities/Components/ItemComponents/LootTableComponent/LootTableResource.gd" id="7_qrtn1"]
-[ext_resource type="PackedScene" uid="uid://btba0jmsow1mx" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectReceiverComponent.tscn" id="8_u4xth"]
-[ext_resource type="PackedScene" uid="uid://4gl24qwdyti3" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/DmgHandler.tscn" id="9_eigs2"]
+[ext_resource type="PackedScene" uid="uid://btba0jmsow1mx" path="res://Entities/Components/EffectComponents/ESIReceiverComponent/ESIReceiverComponent.tscn" id="8_u4xth"]
+[ext_resource type="PackedScene" uid="uid://4gl24qwdyti3" path="res://Entities/Components/EffectComponents/ESIReceiverComponent/EffectHandlers/DHHandler.tscn" id="9_eigs2"]
 [ext_resource type="PackedScene" uid="uid://cxpv7l7rcaq1o" path="res://Entities/Components/StaminaComponent/StaminaComponent.tscn" id="10_kc883"]
-[ext_resource type="PackedScene" uid="uid://ddj5ippwwkvop" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/HealHandler.tscn" id="10_mbh3n"]
+[ext_resource type="PackedScene" uid="uid://ddj5ippwwkvop" path="res://Entities/Components/EffectComponents/ESIReceiverComponent/EffectHandlers/HealHandler.tscn" id="10_mbh3n"]
 [ext_resource type="Texture2D" uid="uid://qn73m3tiw42f" path="res://Entities/Enemies/Zombies/BasicZombieHandCT.tres" id="15_cw5if"]
-[ext_resource type="Script" uid="uid://dk6uef3uxmeev" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/KnockbackHandler.gd" id="16_yrrsd"]
-[ext_resource type="Script" uid="uid://b21sy1r0nxgpv" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/StunHandler.gd" id="17_oiiqe"]
-[ext_resource type="Script" uid="uid://5krnqdrdbey1" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/PoisonHandler.gd" id="18_qrtn1"]
+[ext_resource type="Script" uid="uid://dk6uef3uxmeev" path="res://Entities/Components/EffectComponents/ESIReceiverComponent/EffectHandlers/KnockbackHandler.gd" id="16_yrrsd"]
+[ext_resource type="Script" uid="uid://b21sy1r0nxgpv" path="res://Entities/Components/EffectComponents/ESIReceiverComponent/EffectHandlers/StunHandler.gd" id="17_oiiqe"]
+[ext_resource type="Script" uid="uid://5krnqdrdbey1" path="res://Entities/Components/EffectComponents/ESIReceiverComponent/EffectHandlers/PoisonHandler.gd" id="18_qrtn1"]
 [ext_resource type="Script" uid="uid://1qq7eo7lm8j6" path="res://Entities/Components/ItemComponents/LootTableComponent/LootTableEntry.gd" id="19_8bt15"]
-[ext_resource type="Script" uid="uid://bqw1ufs6jb7cf" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/RegenHandler.gd" id="19_lal78"]
+[ext_resource type="Script" uid="uid://bqw1ufs6jb7cf" path="res://Entities/Components/EffectComponents/ESIReceiverComponent/EffectHandlers/RegenHandler.gd" id="19_lal78"]
 [ext_resource type="Texture2D" uid="uid://baj6slyni0t6u" path="res://Entities/Player/PlayerCore/walking_dust.png" id="19_nonw0"]
-[ext_resource type="Script" uid="uid://b1lo2mdb3otax" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/FrostbiteHandler.gd" id="20_cw5if"]
-[ext_resource type="Script" uid="uid://dubq8xgav66ue" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/BurningHandler.gd" id="21_oqrkc"]
-[ext_resource type="Script" uid="uid://5w234psf0oln" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/TimeSnareHandler.gd" id="22_s1u3v"]
-[ext_resource type="Script" uid="uid://ckiyd2nbdcofr" path="res://Entities/Components/EffectComponents/EffectReceiverComponent/EffectHandlers/LifeStealHandler.gd" id="23_n5xoq"]
+[ext_resource type="Script" uid="uid://b1lo2mdb3otax" path="res://Entities/Components/EffectComponents/ESIReceiverComponent/EffectHandlers/FrostbiteHandler.gd" id="20_cw5if"]
+[ext_resource type="Script" uid="uid://dubq8xgav66ue" path="res://Entities/Components/EffectComponents/ESIReceiverComponent/EffectHandlers/BurningHandler.gd" id="21_oqrkc"]
+[ext_resource type="Script" uid="uid://5w234psf0oln" path="res://Entities/Components/EffectComponents/ESIReceiverComponent/EffectHandlers/TimeSnareHandler.gd" id="22_s1u3v"]
+[ext_resource type="Script" uid="uid://ckiyd2nbdcofr" path="res://Entities/Components/EffectComponents/ESIReceiverComponent/EffectHandlers/LifeStealHandler.gd" id="23_n5xoq"]
 [ext_resource type="Texture2D" uid="uid://crawnbhc5weqf" path="res://Entities/EntityCore/EntityTypes/DynamicEntity/entity_footstep.png" id="25_kc883"]
 [ext_resource type="Script" uid="uid://c28itqxmeqbq0" path="res://Entities/FSM/FSMCore/StateMachine.gd" id="27_5gwv1"]
 [ext_resource type="PackedScene" uid="uid://jpq0ij8wwlhy" path="res://Entities/Components/FacingComponent/FacingComponent.tscn" id="27_pfgxp"]
@@ -52,6 +53,9 @@ script = ExtResource("7_qrtn1")
 hit_spawn_chance = 2.0
 die_spawn_chance = 15.0
 metadata/_custom_type_script = "uid://baglarh3m4c8o"
+
+[sub_resource type="Resource" id="Resource_n5xoq"]
+script = ExtResource("6_s1u3v")
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_2h2fy"]
 radius = 3.0
@@ -428,37 +432,37 @@ resource_local_to_scene = true
 script = ExtResource("16_yrrsd")
 metadata/_custom_type_script = "uid://dk6uef3uxmeev"
 
-[sub_resource type="Resource" id="Resource_n5xoq"]
+[sub_resource type="Resource" id="Resource_3s3sr"]
 resource_local_to_scene = true
 script = ExtResource("17_oiiqe")
 metadata/_custom_type_script = "uid://b21sy1r0nxgpv"
 
-[sub_resource type="Resource" id="Resource_3s3sr"]
+[sub_resource type="Resource" id="Resource_ylj7g"]
 resource_local_to_scene = true
 script = ExtResource("18_qrtn1")
 metadata/_custom_type_script = "uid://5krnqdrdbey1"
 
-[sub_resource type="Resource" id="Resource_ylj7g"]
+[sub_resource type="Resource" id="Resource_naanu"]
 resource_local_to_scene = true
 script = ExtResource("19_lal78")
 metadata/_custom_type_script = "uid://bqw1ufs6jb7cf"
 
-[sub_resource type="Resource" id="Resource_naanu"]
+[sub_resource type="Resource" id="Resource_nonw0"]
 resource_local_to_scene = true
 script = ExtResource("20_cw5if")
 metadata/_custom_type_script = "uid://b1lo2mdb3otax"
 
-[sub_resource type="Resource" id="Resource_nonw0"]
+[sub_resource type="Resource" id="Resource_6vrim"]
 resource_local_to_scene = true
 script = ExtResource("21_oqrkc")
 metadata/_custom_type_script = "uid://dubq8xgav66ue"
 
-[sub_resource type="Resource" id="Resource_6vrim"]
+[sub_resource type="Resource" id="Resource_jfdci"]
 resource_local_to_scene = true
 script = ExtResource("22_s1u3v")
 metadata/_custom_type_script = "uid://5w234psf0oln"
 
-[sub_resource type="Resource" id="Resource_jfdci"]
+[sub_resource type="Resource" id="Resource_bijca"]
 resource_local_to_scene = true
 script = ExtResource("23_n5xoq")
 metadata/_custom_type_script = "uid://ckiyd2nbdcofr"
@@ -1030,6 +1034,7 @@ script = ExtResource("1_8bt15")
 team = 2
 inv = SubResource("Resource_yrrsd")
 loot = SubResource("Resource_oqrkc")
+sc = SubResource("Resource_n5xoq")
 
 [node name="Collision" type="CollisionShape2D" parent="." unique_id=838499590]
 position = Vector2(0, -3)
@@ -1076,9 +1081,9 @@ scale = Vector2(1.01285, 0.906908)
 hand_texture = ExtResource("15_cw5if")
 time_brightness_min_max = Vector2(1, 1.15)
 
-[node name="StatusEffectsComponent" parent="YSorter" unique_id=1714134769 node_paths=PackedStringArray("effect_receiver") instance=ExtResource("5_g4fx3")]
+[node name="ConditionsComponent" parent="YSorter" unique_id=1714134769 node_paths=PackedStringArray("effect_receiver") instance=ExtResource("5_g4fx3")]
 unique_name_in_owner = true
-effect_receiver = NodePath("../../EffectReceiverComponent")
+effect_receiver = NodePath("../../ESIReceiverComponent")
 
 [node name="StepDustParticles" type="CPUParticles2D" parent="." unique_id=1433694971]
 z_index = -1
@@ -1107,28 +1112,28 @@ below_extents = Vector2(8, 1)
 
 [node name="StaminaComponent" parent="." unique_id=659536841 instance=ExtResource("10_kc883")]
 
-[node name="EffectReceiverComponent" parent="." unique_id=992535422 node_paths=PackedStringArray("affected_entity", "dmg_handler", "heal_handler") instance=ExtResource("8_u4xth")]
+[node name="ESIReceiverComponent" parent="." unique_id=992535422 node_paths=PackedStringArray("affected_entity", "dmg_handler", "heal_handler") instance=ExtResource("8_u4xth")]
 affected_entity = NodePath("..")
 dmg_handler = NodePath("DmgHandler")
 heal_handler = NodePath("HealHandler")
 knockback_handler = SubResource("Resource_s1u3v")
-stun_handler = SubResource("Resource_n5xoq")
-poison_handler = SubResource("Resource_3s3sr")
-regen_handler = SubResource("Resource_ylj7g")
-frostbite_handler = SubResource("Resource_naanu")
-burning_handler = SubResource("Resource_nonw0")
-time_snare_handler = SubResource("Resource_6vrim")
-life_steal_handler = SubResource("Resource_jfdci")
+stun_handler = SubResource("Resource_3s3sr")
+poison_handler = SubResource("Resource_ylj7g")
+regen_handler = SubResource("Resource_naanu")
+frostbite_handler = SubResource("Resource_nonw0")
+burning_handler = SubResource("Resource_6vrim")
+time_snare_handler = SubResource("Resource_jfdci")
+life_steal_handler = SubResource("Resource_bijca")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="EffectReceiverComponent" unique_id=825246500]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ESIReceiverComponent" unique_id=825246500]
 position = Vector2(0, -13)
 scale = Vector2(1, 0.998166)
 shape = SubResource("RectangleShape2D_2ks4g")
 debug_color = Color(0.932, 0, 0.649, 0.122)
 
-[node name="DmgHandler" parent="EffectReceiverComponent" unique_id=123745709 instance=ExtResource("9_eigs2")]
+[node name="DmgHandler" parent="ESIReceiverComponent" unique_id=123745709 instance=ExtResource("9_eigs2")]
 
-[node name="HealHandler" parent="EffectReceiverComponent" unique_id=906852148 instance=ExtResource("10_mbh3n")]
+[node name="HealHandler" parent="ESIReceiverComponent" unique_id=906852148 instance=ExtResource("10_mbh3n")]
 
 [node name="FacingComponent" parent="." unique_id=911102665 instance=ExtResource("27_pfgxp")]
 

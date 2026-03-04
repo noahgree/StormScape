@@ -195,17 +195,17 @@ func _spawn_ghost() -> void:
 
 	Globals.world_root.add_child(ghost_instance)
 
-## Applies a status effect to the source entity at the start of use.
+## Applies a condition to the source entity at the start of use.
 func _apply_start_use_effect(was_charge_fire: bool = false) -> void:
-	var effect: StatusEffect = stats.use_start_effect if not was_charge_fire else stats.chg_use_start_effect
+	var effect: Condition = stats.use_start_effect if not was_charge_fire else stats.chg_use_start_effect
 	if effect != null:
-		source_entity.effect_receiver.handle_status_effect(effect)
+		source_entity.effect_src_receiver.handle_condition(effect)
 
-## Applies a status effect to the source entity after use.
+## Applies a condition to the source entity after use.
 func _apply_post_use_effect(was_charge_fire: bool = false) -> void:
-	var effect: StatusEffect = stats.post_use_effect if not was_charge_fire else stats.post_chg_use_effect
+	var effect: Condition = stats.post_use_effect if not was_charge_fire else stats.post_chg_use_effect
 	if effect != null:
-		source_entity.effect_receiver.handle_status_effect(effect)
+		source_entity.effect_src_receiver.handle_condition(effect)
 
 ## If a connected ammo UI exists (i.e. for a player), update it with the new ammo available.
 ## Typically just reflects the stamina.

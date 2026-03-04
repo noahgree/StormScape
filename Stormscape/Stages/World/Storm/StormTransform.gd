@@ -13,9 +13,9 @@ enum UpdateTypes { OVERRIDE, REVERT_TO_DEFAULT, KEEP_PREVIOUS } ## The methods f
 @export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var time_to_resize: float = 10.0 ## The time it takes for the resizing to complete.
 @export var auto_advance: bool = true ## When false, the storm queue will not advance past the end of this phase until manually called upon to do so.
 
-@export_subgroup("Status Effect")
-@export var effect_setting: UpdateTypes = UpdateTypes.KEEP_PREVIOUS ## Determines how to change the status effect for this incoming phase.
-@export var status_effect: StatusEffect = null ## The new status effect to apply. Leave null to keep the old one. [b]MUST NOT REQUIRE AN EFFECT SOURCE[/b] because no source entity or movement direction information will be passed (Knockback, LifeSteal).
+@export_subgroup("Condition")
+@export var condition_setting: UpdateTypes = UpdateTypes.KEEP_PREVIOUS ## Determines how to change the condition for this incoming phase.
+@export var condition: Condition = null ## The new condition to apply. Leave null to keep the old one. [b]MUST NOT REQUIRE AN EFFECT SOURCE[/b] because no source entity or movement direction information will be passed (Knockback, LifeSteal).
 
 @export_subgroup("Visuals")
 @export var visuals_setting: UpdateTypes = UpdateTypes.KEEP_PREVIOUS ## Determines how to apply visuals for this incoming phase.
@@ -25,7 +25,7 @@ enum UpdateTypes { OVERRIDE, REVERT_TO_DEFAULT, KEEP_PREVIOUS } ## The methods f
 ## Init for creating new transforms in code.
 static func create(loc: Vector2, offset_loc: bool, rad: float, offset_rad: bool, del: float, move_time: float,
 			resize_time: float, advance_after: bool = true, effect_type: UpdateTypes = UpdateTypes.KEEP_PREVIOUS,
-			effect: StatusEffect = null, visuals_type: UpdateTypes = UpdateTypes.KEEP_PREVIOUS,
+			condition_to_apply: Condition = null, visuals_type: UpdateTypes = UpdateTypes.KEEP_PREVIOUS,
 			visuals: StormVisuals = null) -> StormTransform:
 	var st: StormTransform = StormTransform.new()
 	st.new_location = loc
@@ -37,7 +37,7 @@ static func create(loc: Vector2, offset_loc: bool, rad: float, offset_rad: bool,
 	st.time_to_resize = resize_time
 	st.auto_advance = advance_after
 	st.effect_setting = effect_type
-	st.status_effect = effect
+	st.condition = condition_to_apply
 	st.visuals_setting = visuals_type
 	st.storm_visuals = visuals
 	return st

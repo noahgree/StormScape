@@ -269,7 +269,7 @@ func _show_off_hand_after_post_fire_animation(anim_name: StringName) -> void:
 	if anim_name == "post_fire":
 		weapon.source_entity.hands.off_hand_sprite.self_modulate.a = 1.0
 
-## Applies a status effect to the source entity when firing starts.
+## Applies a condition to the source entity when firing starts.
 func _apply_firing_effect_to_entity() -> void:
 	if weapon.stats.firing_stat_effect != null:
-		weapon.source_entity.effect_receiver.handle_status_effect(weapon.stats.firing_stat_effect)
+		weapon.source_entity.effect_src_receiver.handle_condition(weapon.stats.firing_stat_effect)

@@ -1,0 +1,23 @@
+[gd_resource type="Resource" script_class="KnockbackEffect" format=3 uid="uid://b0it5xmpw16sd"]
+
+[ext_resource type="Script" uid="uid://yepywua50vc1" path="res://Entities/Stats/EffectSystemResources/Conditions/BadEffects/Knockback/KnockbackEffect.gd" id="1_ofqhb"]
+[ext_resource type="Script" uid="uid://bcjwesiannbd0" path="res://Entities/Stats/StatMod/StatMod.gd" id="2_rysxw"]
+
+[resource]
+script = ExtResource("1_ofqhb")
+knockback_force = 350
+custom_knockback_direction = Vector2(0, 0)
+id = "knockback"
+source_type = 0
+effect_lvl = 1
+is_bad_effect = true
+affected_entities = 7
+effects_to_stop = Array[String]([])
+mod_time = 0.5
+apply_until_removed = false
+stat_mods = Array[ExtResource("2_rysxw")]([])
+audio_to_play = "knockback"
+only_cue_on_player_hit = false
+spawn_particles = false
+particle_hander_req = ""
+make_entity_glow = true

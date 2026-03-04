@@ -1,0 +1,34 @@
+[gd_resource type="Resource" script_class="SlownessEffect" format=3 uid="uid://dmu8bxbas5wug"]
+
+[ext_resource type="Script" uid="uid://bi2pojxmm61xg" path="res://Entities/Stats/EffectSystemResources/Conditions/BadEffects/Slowness/SlownessEffect.gd" id="1_nv8fq"]
+[ext_resource type="Script" uid="uid://bcjwesiannbd0" path="res://Entities/Stats/StatMod/StatMod.gd" id="2_fd4bu"]
+
+[sub_resource type="Resource" id="Resource_h2ekn"]
+script = ExtResource("2_fd4bu")
+stat_id = "max_speed"
+mod_id = "slowness_1"
+operation = "-%"
+value = 20.0
+rounding = "Exact"
+priority = 1
+max_stack_count = 3
+override_all = false
+metadata/_custom_type_script = ExtResource("2_fd4bu")
+
+[resource]
+script = ExtResource("1_nv8fq")
+id = "slowness"
+source_type = 0
+effect_lvl = 1
+is_bad_effect = true
+affected_entities = 1
+effects_to_stop = Array[String]([])
+mod_time = 5.0
+apply_until_removed = false
+stat_mods = Array[ExtResource("2_fd4bu")]([SubResource("Resource_h2ekn")])
+audio_to_play = ""
+only_cue_on_player_hit = false
+spawn_particles = true
+particle_hander_req = ""
+make_entity_glow = true
+metadata/_custom_type_script = "uid://bi2pojxmm61xg"

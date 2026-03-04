@@ -24,7 +24,7 @@ class_name CamFXResource
 # This section regards variables that only matter when the cam FX are activated as a result of an impact (and included in an effect transform)
 @export_group("Impact Logic")
 @export_subgroup("Transforms")
-@export var trans_player_only: bool = false ## When true and this is activated by an effect receiver, the shake and zoom will only play when the effect source is received by the player.
+@export var trans_player_only: bool = false ## When true and this is activated by an esi receiver, the shake and zoom will only play when the effect source is received by the player.
 @export_range(1, 1000, 1, "hide_slider", "or_greater") var trans_max_dist: int = 125 ## How close the player must be from the site of the effect source application to start to feel the cam shake and zoom.
 @export var trans_use_falloff: bool = true ## When true, the camera shake and zoom falls off up to the transform_max_dist.
 @export_subgroup("Freeze")

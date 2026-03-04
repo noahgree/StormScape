@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="ConfusionEffect" format=3 uid="uid://g2e32s8xlp2q"]
+
+[ext_resource type="Script" uid="uid://dowo7vjco2b7c" path="res://Entities/Stats/EffectSystemResources/Conditions/BadEffects/Confusion/ConfusionEffect.gd" id="1_7xxcl"]
+[ext_resource type="Script" uid="uid://bcjwesiannbd0" path="res://Entities/Stats/StatMod/StatMod.gd" id="2_c5w3g"]
+
+[sub_resource type="Resource" id="Resource_7xxcl"]
+script = ExtResource("2_c5w3g")
+stat_id = "confusion_amount"
+mod_id = "Confusion"
+operation = "="
+value = 40.0
+max_stack_count = 3
+metadata/_custom_type_script = "uid://bcjwesiannbd0"
+
+[resource]
+script = ExtResource("1_7xxcl")
+mod_time = 3.0
+stat_mods = Array[ExtResource("2_c5w3g")]([SubResource("Resource_7xxcl")])
+metadata/_custom_type_script = "uid://dowo7vjco2b7c"
