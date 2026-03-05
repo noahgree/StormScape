@@ -4,7 +4,7 @@ class_name EffectPopup
 
 static var popup_scene: PackedScene = preload("uid://28ry06t64e8p") ## The popup scene to be instantiated when a popup is created above something.
 
-@export var text_colors: Dictionary[String, GradientTexture1D] ## The strings that have associated colors to change the text color to.
+@export var txt_color_dict: Dictionary[HealthComponent.CHANGE_TYPE, GradientTexture1D] ## The change types that have associated colors to change the text color to.
 
 @onready var number_label: Label = $CenterContainer/NumberLabel ## The popup's numbers.
 @onready var number_outline: Label = $CenterContainer/NumberOutline ## The outline of the popup's numbers.
@@ -18,32 +18,32 @@ var tween: Tween ## The tween animating the motion and scale of the popup.
 var was_healing_before: bool = false ## Whether or not we were healing the last time the popup was updated.
 
 ## Creates and adds an effect popup to the entity that requested it.
-static func create_popup(src_type: String, was_healing: bool,
-						was_crit: bool, popup_value: int, node: Entity) -> EffectPopup:
+static func create_popup(change_type: HealthComponent.CHANGE_TYPE, popup_value: int, node: Entity) -> EffectPopup:
 	var popup: EffectPopup = popup_scene.instantiate()
 
 	popup.parent_node = node
 	popup.global_position = node.global_position - Vector2(0, SpriteHelpers.SpriteDetails.get_frame_rect(node.sprite).y)
 
 	Globals.world_root.add_child(popup)
-	popup.update_popup(popup_value, src_type, was_crit, was_healing)
+	popup.update_popup(change_type, popup_value)
 
 	return popup
 
 ## Updates or sets up the popup displaying an effect's values above the entity's head.
-func update_popup(new_value: int, src_type: String, is_crit: bool, is_healing: bool) -> void:
-	if (was_healing_before and not is_healing) or (not was_healing_before and is_healing):
+func update_popup(change_type: HealthComponent.CHANGE_TYPE, new_value: int) -> void:
+	var is_heal: bool = (change_type in HealthComponent.HEAL_CHANGE_TYPES)
+	if (was_healing_before and not is_heal) or (not was_healing_before and is_heal):
 		value = new_value
 	else:
 		value += new_value
-	was_healing_before = is_healing
+	was_healing_before = is_heal
 
 	number_label.text = str(value)
 	global_position = parent_node.global_position - Vector2(0, SpriteHelpers.SpriteDetails.get_frame_rect(parent_node.sprite).y)
 
-	gradient_tex.texture = text_colors.get(src_type if not is_crit else "crit_damage", GradientTexture1D.new())
+	gradient_tex.texture = txt_color_dict.get(change_type, GradientTexture1D.new())
 
-	if is_healing:
+	if is_heal:
 		glow.modulate = Color(0, 0.859, 0.18, 0.9)
 		number_label.text = "+" + number_label.text
 	else:
@@ -54,7 +54,7 @@ func update_popup(new_value: int, src_type: String, is_crit: bool, is_healing: b
 	skew = -deg_to_rad(15)
 	number_outline.text = number_label.text
 
-	if is_crit:
+	if change_type == HealthComponent.CHANGE_TYPE.CRIT_DAMAGE:
 		scale = starting_scale * 1.15
 	else:
 		scale = starting_scale

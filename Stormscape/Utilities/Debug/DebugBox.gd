@@ -35,9 +35,9 @@ func update_debug_box_with_corners(top_left: Vector2, bottom_right: Vector2) -> 
 
 ## Determines if we can show the debug box in editor.
 func _check_if_can_show_debug_boxes() -> bool:
-	if is_zero:
+	if (is_zero) or (get_parent() == null):
 		return false
-	if (not Engine.is_editor_hint()) or (get_parent() == null):
+	if (not Engine.is_editor_hint()) and (not DebugFlags.show_condition_particle_emission_areas):
 		return false
 	if (not "show_debug_boxes" in get_parent()) or (get_parent().show_debug_boxes == false):
 		return false

@@ -38,7 +38,7 @@ var show_hitscan_rays: bool = false
 var show_aiming_direction: bool = false
 
 # Particle Flags
-var show_condition_particle_emission_area: bool = false
+var show_condition_particle_emission_areas: bool = false
 
 # On Screen Debug Flags
 var show_fps: bool = true

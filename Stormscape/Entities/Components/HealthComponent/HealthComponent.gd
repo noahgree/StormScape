@@ -12,6 +12,25 @@ signal shield_changed(new_shield: int, old_shield: int)
 signal max_shield_changed(new_max_shield: int)
 signal armor_changed(new_armor: int)
 
+enum POPUP_CATEGORY { HEALTH, SHIELD } ## The two kinds of popups that this node hosts.
+
+enum CHANGE_TYPE { ## The kinds of ways that health and shield values can change.
+	SHIELD_DAMAGE,
+	HEALTH_DAMAGE,
+	SHIELD_HEALING,
+	HEALTH_HEALING,
+	CRIT_DAMAGE,
+	BURNING,
+	FROSTBITE,
+	LIFE_STEAL,
+	POISON,
+	REGEN,
+	STORM_SYNDROME,
+	NULL ## For basic changes that get determined by the sign of the amount.
+}
+
+const HEAL_CHANGE_TYPES: Array[CHANGE_TYPE] = [CHANGE_TYPE.SHIELD_HEALING, CHANGE_TYPE.HEALTH_HEALING, CHANGE_TYPE.REGEN, CHANGE_TYPE.LIFE_STEAL] ## Types in this array indicate that the change was positive.
+
 @export var _max_health: int = 100 ## The maximum amount of health the entity can have.
 @export var _max_shield: int = 100 ## The maximum amount of shield the entity can have.
 @export_range(0, 100, 1) var base_armor: int = 0 ## The initial percentage of damage deflected.
@@ -19,14 +38,19 @@ signal armor_changed(new_armor: int)
 
 @onready var entity: Entity = get_parent() ## The entity this health component operates on.
 
+const MAX_ARMOR: int = 100 ## The maximum amount of armor the entity can have.
 var health: int: set = _set_health ## The current health of the entity.
 var shield: int: set = _set_shield ## The current shield of the entity.
 var armor: int = 0: set = _set_armor ## The current armor of the entity. This is the percent of dmg that is blocked.
 var is_dying: bool = false ## Whether the entity is actively dying or not.
-var current_popup: EffectPopup ## The current effect popup display that is active and can be updated.
+var health_popup: EffectPopup ## The current health popup display that is active and can be updated.
+var shield_popup: EffectPopup ## The current shield popup display that is active and can be updated.
 var current_sounds: Dictionary[StringName, Array] = {} ## The current sounds being played by this component.
-var just_loaded: bool = false ## When true, we shouldn't emit initial values.
-const MAX_ARMOR: int = 100 ## The maximum amount of armor the entity can have.
+
+var max_health: int: ## Getter for max_health.
+	get: return int(entity.sc.get_stat(&"max_health"))
+var max_shield: int: ## Getter for max_shield.
+	get: return int(entity.sc.get_stat(&"max_shield"))
 
 
 #region Setup
@@ -40,58 +64,80 @@ func _ready() -> void:
 ## Called from a deferred method caller in order to let any associated ui ready up first.
 ## Then it emits the initially loaded values.
 func _emit_initial_values() -> void:
-	if just_loaded:
-		_set_health(health)
-		_set_shield(shield)
-		_set_armor(armor)
-	else:
-		health = int(entity.sc.get_stat("max_health"))
-		shield = int(entity.sc.get_stat("max_shield"))
-		armor = base_armor
+	health = max_health
+	shield = max_shield
+	armor = base_armor
 #endregion
 
-#region Utils: Taking Damage
-## Takes damage to both health and shield, starting with available shield then applying any remaining
-## amount to health.
-func damage_shield_then_health(amount: int, source_type: String, was_crit: bool, multishot_id: int) -> void:
-	if amount > 0 and not is_dying:
-		if shield > 0:
-			var src_type: String = source_type if source_type != "basic_damage" else "shield_damage"
-			_create_or_update_popup_for_src_type(src_type, false, was_crit, min(shield, amount))
-			_play_sound("shield_hit", multishot_id)
-		if amount - shield > 0:
-			var src_type: String = source_type if source_type != "basic_damage" else "health_damage"
-			_create_or_update_popup_for_src_type(src_type, false, was_crit, (amount - shield))
+#region Taking Damage
+## Helper class for returning the resulting new values and how much change was actually used.
+class ChangeResult:
+	var new_val: int
+	var applied: int
 
-	if infinte_hp:
+	func _init(new_value: int, applied_value: int) -> void:
+		new_val = new_value
+		applied = applied_value
+
+## Main entry for changing health and shield via damage and healing. Multishot as -1 means it wasn't a multishot.
+func change_by_dh_type(amount: int, change_type: CHANGE_TYPE, dh_type: Globals.DHTypes,
+							multishot_id: int = -1) -> void:
+	if is_dying or amount == 0:
 		return
 
-	var spillover_damage: int = max(0, amount - shield)
-	shield = int(max(0, shield - amount))
+	var remaining: int = amount
+	match dh_type:
+		Globals.DHTypes.HEALTH_ONLY:
+			remaining = _change_health(remaining, change_type, multishot_id)
+		Globals.DHTypes.SHIELD_ONLY:
+			remaining = _change_shield(remaining, change_type, multishot_id)
+		Globals.DHTypes.HEALTH_THEN_SHIELD:
+			remaining = _change_health(remaining, change_type, multishot_id)
+			remaining = _change_shield(remaining, change_type, multishot_id)
+		Globals.DHTypes.SHIELD_THEN_HEALTH:
+			remaining = _change_shield(remaining, change_type, multishot_id)
+			remaining = _change_health(remaining, change_type, multishot_id)
+		Globals.DHTypes.SIMULTANEOUS:
+			_change_health(amount, change_type, multishot_id)
+			_change_shield(amount, change_type, multishot_id)
 
-	if spillover_damage > 0:
-		health = int(max(0, health - spillover_damage))
-	_check_for_death()
-
-## Decrements only the health value by the passed in amount.
-func damage_health(amount: int, source_type: String, was_crit: bool, _multishot_id: int) -> void:
-	if not is_dying:
-		var src_type: String = source_type if source_type != "basic_damage" else "health_damage"
-		_create_or_update_popup_for_src_type(src_type, false, was_crit, min(health, amount))
-		if not infinte_hp:
-			health = max(0, health - amount)
+	if amount < 0:
 		_check_for_death()
 
-## Decrements only the shield value by the passed in amount.
-func damage_shield(amount: int, source_type: String, was_crit: bool, multishot_id: int) -> void:
-	if not is_dying:
-		var src_type: String = source_type if source_type != "basic_damage" else "shield_damage"
-		_create_or_update_popup_for_src_type(src_type, false, was_crit, min(shield, amount))
-		if not infinte_hp:
-			shield = max(0, shield - amount)
-		if amount > 0:
-			_play_sound("shield_hit", multishot_id)
+## Changes the health and spawns the popup, returning how much leftover change there is.
+func _change_health(amount: int, change_type: CHANGE_TYPE, _multishot_id: int) -> int:
+	var health_result: ChangeResult = _get_result_of_change(health, max_health, amount)
+	health = health_result.new_val
+	if change_type == CHANGE_TYPE.NULL:
+		change_type = CHANGE_TYPE.HEALTH_DAMAGE if (amount < 0) else CHANGE_TYPE.HEALTH_HEALING
+	_create_or_update_popup(change_type, POPUP_CATEGORY.HEALTH, health_result.applied)
+	return amount - health_result.applied
 
+## Changes the shield and spawns the popup, returning how much leftover change there is.
+func _change_shield(amount: int, change_type: CHANGE_TYPE, multishot_id: int) -> int:
+	var shield_result: ChangeResult = _get_result_of_change(shield, max_shield, amount)
+	shield = shield_result.new_val
+	if change_type == CHANGE_TYPE.NULL:
+		change_type = CHANGE_TYPE.SHIELD_DAMAGE if (amount < 0) else CHANGE_TYPE.SHIELD_HEALING
+	_create_or_update_popup(change_type, POPUP_CATEGORY.SHIELD, shield_result.applied)
+
+	if amount < 0:
+		_play_sound("shield_hit", multishot_id)
+
+	return amount - shield_result.applied
+
+## Gets the result of applying a numerical change to a current value, returning the same value if
+## infinite_hp is on.
+func _get_result_of_change(current: int, max_val: int, change: int) -> ChangeResult:
+	var new_val: int = clampi(current + change, 0, max_val)
+	var change_amount: int = new_val - current
+
+	if infinte_hp:
+		new_val = current
+
+	return ChangeResult.new(new_val, change_amount)
+
+#region Death
 ## Handles what happens when health reaches 0 for the entity.
 func _check_for_death() -> void:
 	if health <= 0 and not is_dying:
@@ -106,70 +152,18 @@ func _check_for_death() -> void:
 			entity.queue_free()
 #endregion
 
-#region Changing Armor
-## Called externally to update the current armor value.
-func update_armor(new_armor: int) -> void:
-	armor = new_armor
-#endregion
-
-#region Utils: Applying Healing
-## Heals to both health and shield, starting with health then applying any remaining amount to shield.
-func heal_health_then_shield(amount: int, source_type: String, _multishot_id: int) -> void:
-	if not is_dying:
-		var max_health: int = int(entity.sc.get_stat("max_health"))
-		var max_shield: int = int(entity.sc.get_stat("max_shield"))
-
-		if health < max_health:
-			var src_type: String = source_type if source_type != "basic_healing" else "health_healing"
-			var current_total: int = health + shield
-			var max_total: int = max_health + max_shield
-			_create_or_update_popup_for_src_type(src_type, true, false, min((max_total - current_total), amount))
-		else:
-			var src_type: String = source_type if source_type != "basic_healing" else "shield_healing"
-			_create_or_update_popup_for_src_type(src_type, true, false, min(max_shield - shield, amount))
-
-		var spillover_health: int = max(0, (amount + health) - max_health)
-		health = clampi(health + amount, 0, max_health)
-
-		if spillover_health > 0:
-			shield = clampi(shield + spillover_health, 0, max_shield)
-
-## Heals only health.
-func heal_health(amount: int, source_type: String, _multishot_id: int) -> void:
-	if not is_dying:
-		var max_health: int = int(entity.sc.get_stat("max_health"))
-		var src_type: String = source_type if source_type != "basic_healing" else "health_healing"
-		_create_or_update_popup_for_src_type(src_type, true, false, min(max_health - health, amount))
-
-		health = min(health + amount, max_health)
-
-## Heals only shield.
-func heal_shield(amount: int, source_type: String, _multishot_id: int) -> void:
-	if not is_dying:
-		var max_shield: int = int(entity.sc.get_stat("max_shield"))
-		var src_type: String = source_type if source_type != "basic_healing" else "shield_healing"
-		_create_or_update_popup_for_src_type(src_type, true, false, min(max_shield - shield, amount))
-
-		shield = min(shield + amount, max_shield)
-#endregion
-
 #region Setters & On-Change Funcs
 ## Setter for the current health. Clamps the new value to the allowed range and updates any connected UI.
 func _set_health(new_value: int) -> void:
 	var old_health: int = health
-	health = clampi(new_value, 0, int(entity.sc.get_stat("max_health")))
+	health = clampi(new_value, 0, max_health)
 	health_changed.emit(health, old_health)
 
 ## Setter for the current shield. Clamps the new value to the allowed range and updates any connected UI.
 func _set_shield(new_value: int) -> void:
 	var old_shield: int = shield
-	shield = clampi(new_value, 0, int(entity.sc.get_stat("max_shield")))
+	shield = clampi(new_value, 0, max_shield)
 	shield_changed.emit(shield, old_shield)
-
-## Setter for the current armor. Clamps the new value to the allowed range.
-func _set_armor(new_value: int) -> void:
-	armor = clampi(new_value, 0, MAX_ARMOR)
-	armor_changed.emit(armor)
 
 ## When max health changes, we need to limit the current health value. Usually called by stat mod caches.
 func on_max_health_changed(new_max_health: int) -> void:
@@ -181,6 +175,17 @@ func on_max_shield_changed(new_max_shield: int) -> void:
 	shield = min(shield, new_max_shield)
 	max_shield_changed.emit(new_max_shield)
 
+## Called externally to update the current armor value.
+func update_armor(new_armor: int) -> void:
+	armor = new_armor
+
+## Setter for the current armor. Clamps the new value to the allowed range.
+func _set_armor(new_value: int) -> void:
+	armor = clampi(new_value, 0, MAX_ARMOR)
+	armor_changed.emit(armor)
+#endregion
+
+#region Sound
 ## Handles playing sounds for this class and respects the fact that multishots should all share a sound.
 func _play_sound(sound_name: String, multishot_id: int) -> void:
 	var string_name_sound_name: StringName = StringName(sound_name)
@@ -209,24 +214,36 @@ func _play_sound(sound_name: String, multishot_id: int) -> void:
 #endregion
 
 #region Popups
-func _create_or_update_popup_for_src_type(src_type: String, was_healing: bool, was_crit: bool, amount: int) -> void:
+## Creates a popup or updates it if it is already created.
+func _create_or_update_popup(change_type: CHANGE_TYPE, category: POPUP_CATEGORY, amount: int) -> void:
 	if amount == 0:
 		return
-
-	var source_id_only: String = StringHelpers.get_before_colon(src_type)
-	if current_popup:
-		current_popup.update_popup(amount, source_id_only, was_crit, was_healing)
+	if category == POPUP_CATEGORY.HEALTH:
+		if health_popup:
+			health_popup.update_popup(change_type, amount)
+			health_popup.global_position.x -= 3
+			return
 	else:
-		var new_popup: EffectPopup = EffectPopup.create_popup(source_id_only, was_healing, was_crit, amount, entity)
-		new_popup.tree_exiting.connect(func() -> void: new_popup.queue_free())
-		current_popup = new_popup
+		if shield_popup:
+			shield_popup.update_popup(change_type, amount)
+			shield_popup.global_position.x += 3
+			return
+
+	var new_popup: EffectPopup = EffectPopup.create_popup(change_type, amount, entity)
+	new_popup.tree_exiting.connect(func() -> void: new_popup.queue_free())
+	if category == POPUP_CATEGORY.HEALTH:
+		health_popup = new_popup
+		health_popup.global_position.x -= 3
+	else:
+		shield_popup = new_popup
+		shield_popup.global_position.x += 3
 #endregion
 
 #region Debug
 ## Increases or decreases hp based on the amount.
 func change_hp_by_amount(amount: int) -> void:
 	if amount >= 0:
-		heal_health_then_shield(amount, "basic_healing", 0)
+		change_by_dh_type(amount, CHANGE_TYPE.NULL, Globals.DHTypes.HEALTH_THEN_SHIELD)
 	else:
-		damage_shield_then_health(-amount, "basic_damage", false, 0)
+		change_by_dh_type(amount, CHANGE_TYPE.NULL, Globals.DHTypes.SHIELD_THEN_HEALTH)
 #endregion

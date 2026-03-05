@@ -18,21 +18,13 @@ class_name ESIReceiverComponent
 @export var filter_source_tags: bool = false ## When true, only allow matching source tags as specified in the below array.
 @export var allowed_source_tags: Array[String] = [] ## Effect sources must have a tag that matches something in this array in order to be handled when the filter_source_tags is set to true.
 @export_group("Connected Nodes")
-@export var entity: Entity  ## The connected entity to be affected by the effects be received.
 @export var dh_handler: DHHandler ## The dmg handler of the affected entity.
 @export var heal_handler: HealHandler ## The heal handler of the affected entity.
-@export_group("Effect Handlers")
-@export var storm_syndrome_handler: StormSyndromeHandler ## The storm syndrome of the affected entity.
-@export var knockback_handler: KnockbackHandler ## The knockback of the affected entity.
-@export var stun_handler: StunHandler ## The stun handler of the affected entity.
-@export var poison_handler: PoisonHandler ## The poison handler of the affected entity.
-@export var regen_handler: RegenHandler ## The regen handler of the affected entity.
-@export var frostbite_handler: FrostbiteHandler ## The frostbite handler of the affected entity.
-@export var burning_handler: BurningHandler ## The burning handler of the affected entity.
-@export var time_snare_handler: TimeSnareHandler ## The time snare handler of the affected entity.
-@export var life_steal_handler: LifeStealHandler ## The life steal handler of the affected entity.
+@export_group("Entity Stat Modifiers")
+@export var stat_modifiers: EntityStatModifiers = EntityStatModifiers.new()
 
 @onready var tool_script: RefCounted = load("res://Entities/Components/EffectComponents/ESIReceiverComponent/ESIReceiverTool.gd").new(self) ## The tool script node that helps auto-assign export nodes relative to this receiver.
+@onready var entity: Entity = owner ## The owning entity to be affected by the ESIs being received.
 
 var current_impact_sounds: Array[int] = [] ## The current impact sounds being played and held onto by this esi receiver.
 var most_recent_multishot_id: int = 0 ## The most recent multishot id to be received. Prevents multishots from stacking conditions.
@@ -74,8 +66,8 @@ func handle_esi(esi: ESI, source_entity: Entity, source_ii: WeaponII, process_co
 		if not match_found:
 			return
 
-	# --- Checking if Sender is Passive or Receiver Can't Receive Effect Sources ---
-	if (source_entity and source_entity.team == Globals.Teams.PASSIVE) or not _check_if_can_receive_effect_sources_and_conditions():
+	# --- Checking if Sender is Passive or Receiver Can't Receive ESIs ---
+	if (source_entity and source_entity.team == Globals.Teams.PASSIVE) or (not _can_receive_ESIs()):
 		if entity.loot:
 			entity.loot.handle_hit()
 		return
@@ -123,17 +115,16 @@ func handle_esi(esi: ESI, source_entity: Entity, source_ii: WeaponII, process_co
 		source_ii.add_xp(xp_to_add)
 
 	# --- Start of Status Effect Processing Chain ---
-	if process_conditions:
-		if can_receive_conditions:
-			if (esi.multishot_id == -1) or (esi.multishot_id != most_recent_multishot_id):
-				most_recent_multishot_id = esi.multishot_id
+	if process_conditions and can_receive_conditions:
+		if (esi.multishot_id == -1) or (esi.multishot_id != most_recent_multishot_id):
+			most_recent_multishot_id = esi.multishot_id
 
-				if knockback_handler:
-					knockback_handler.contact_position = esi.contact_position
-					knockback_handler.effect_movement_direction = esi.movement_direction
-					knockback_handler.is_source_moving_type = (esi.es.source_type == Globals.ESISourceType.FROM_PROJECTILE)
+			if knockback_handler:
+				knockback_handler.contact_position = esi.contact_position
+				knockback_handler.effect_movement_direction = esi.movement_direction
+				knockback_handler.is_source_moving_type = (esi.es.source_type == Globals.ESISourceType.FROM_PROJECTILE)
 
-				_check_condition_team_logic(esi, source_entity)
+			_check_condition_team_logic(esi, source_entity)
 
 ## Checks if each condition in the array applies to this entity via team logic, then passes it to be unpacked.
 func _check_condition_team_logic(esi: ESI, source_entity: Entity) -> void:
@@ -153,7 +144,7 @@ func _check_condition_team_logic(esi: ESI, source_entity: Entity) -> void:
 ## Checks for untouchability and handles the stat mods in the condition.
 ## Then it passes the effect to have its main logic handled if it needs a handler.
 func handle_condition(condition: Condition) -> void:
-	if not _check_if_applicable_entity_type_for_condition(condition) or not _check_if_can_receive_effect_sources_and_conditions():
+	if not _check_if_applicable_entity_type_for_condition(condition) or not _can_receive_ESIs() or not can_receive_conditions:
 		return
 	if (entity.effects.is_untouchable()) and (condition.is_bad_effect):
 		return
@@ -232,14 +223,10 @@ func _check_if_applicable_entity_type_for_condition(condition: Condition) -> boo
 	else:
 		return true
 
-## Checks if the affected entity is Dynamic and has been flagged to not receieve effect sources (and therefore
+## Checks if the affected entity is Dynamic and has been flagged to not receieve ESIs (and therefore
 ## not conditions, either).
-func _check_if_can_receive_effect_sources_and_conditions() -> bool:
-	if (entity is DynamicEntity) and not entity.fsm.controller.can_receive_effect_srcs:
-		return false
-	elif not can_receive_conditions:
-		return false
-	return true
+func _can_receive_ESIs() -> bool:
+	return not ((entity is DynamicEntity) and (not entity.fsm.controller.can_receive_effect_srcs))
 
 ## Only plays the impact sound if one exists and one is not already playing for a matching multishot id.
 func _handle_impact_sound(esi: ESI) -> void:
@@ -265,7 +252,7 @@ func _handle_cam_fx(esi: ESI) -> void:
 func _get_life_steal(esi: ESI, source_entity: Entity) -> float:
 	if can_receive_conditions and life_steal_handler:
 		for condition: Condition in esi.conditions:
-			if condition is LifeStealEffect:
+			if condition.id == Condition.ID.LIFE_STEAL:
 				life_steal_handler.source_entity = source_entity
 				return condition.dmg_steal
 	return 0.0
@@ -283,9 +270,7 @@ func _notification(what: int) -> void:
 ## Edits editor warnings for easier debugging.
 func _get_configuration_warnings() -> PackedStringArray:
 	if can_receive_conditions and not get_parent().has_node("%ConditionsComponent"):
-		return [
-			"Entities with ESI receievers marked as being able to receive conditions must have a ConditionsComponent. Make sure it has a unique name (%)."
-			]
+		return ["Entities with ESI receivers marked as being able to receive conditions must have a ConditionsComponent. Make sure it has a unique name (%)."]
 	return []
 
 ## Attempts to apply a condition based on its file name turned into snake case. "poison_1", for example.

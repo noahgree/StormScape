@@ -1302,7 +1302,6 @@ anim_offset_curve = SubResource("Curve_f5l7i")
 [node name="StaminaComponent" parent="." unique_id=262197673 instance=ExtResource("5_k4fu6")]
 
 [node name="ESIReceiverComponent" parent="." unique_id=1472741103 node_paths=PackedStringArray("dh_handler", "heal_handler") instance=ExtResource("4_hhm8x")]
-allowed_source_types = Array[int]([0])
 dh_handler = NodePath("DHHandler")
 heal_handler = NodePath("HealHandler")
 storm_syndrome_handler = SubResource("Resource_0313k")

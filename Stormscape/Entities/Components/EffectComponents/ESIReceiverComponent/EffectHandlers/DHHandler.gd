@@ -4,10 +4,8 @@ class_name DHHandler
 ## DH stands for "damage and healing". This handles applying damage and healing in different ways.
 
 @export var can_be_crit: bool = true ## When false, critical hits are impossible on this entity.
-@export_range(0, 100, 1.0, "hide_slider", "suffix:%") var _dmg_weakness: float = 0.0 ## Multiplier for increasing ALL incoming damage.
-@export_range(0, 100, 1.0, "hide_slider", "suffix:%") var _dmg_resistance: float = 0.0 ## Multiplier for decreasing ALL incoming damage.
 
-@onready var affected_entity: Entity = get_parent().affected_entity ## The entity affected by this dmg handler.
+@onready var affected_entity: Entity = get_parent().affected_entity ## The entity affected by this dh handler.
 
 var health_component: HealthComponent ## The health component to be affected by the damage.
 var eot_timers: Dictionary[String, Array] = {} ## Holds references to all timers currently tracking active EOT. Keys are source type ids and values are an array of all matching timers of that type.
@@ -51,7 +49,7 @@ func handle_instant_damage(esi: ESI, lvl: int, life_steal_percent: float = 0.0) 
 	if final_damage >= affected_entity.health_component.health + affected_entity.health_component.shield:
 		final_xp += WeaponII.LARGE_XP
 
-	_send_handled_dmg("basic_damage", esi.es.dmg_affected_stats, final_damage, esi.multishot_id, life_steal_percent, is_crit)
+	send_handled_amount("basic_damage", esi.es.dmg_affected_stats, final_damage, esi.multishot_id, life_steal_percent, is_crit)
 	return final_xp
 
 ## Handles applying damage that is inflicted over time, whether with a delay, with burst intervals, or with both.
@@ -85,7 +83,7 @@ func handle_over_time_dmg(dot_resource: DOTResource, source_type: String) -> voi
 		else:
 			dot_timer.wait_time = max(0.01, dot_resource.time_between_ticks)
 
-		_send_handled_dmg(source_type, dot_resource.dmg_affected_stats, dot_resource.dmg_ticks_array[0], -1, 0.0, false)
+		send_handled_amount(source_type, dot_resource.dmg_affected_stats, dot_resource.dmg_ticks_array[0], -1, 0.0, false)
 		affected_entity.sprite.start_hitflash(dot_resource.hit_flash_color, false)
 
 		TimerHelpers.add_timer_to_cache(source_type, dot_timer, dot_timers)
