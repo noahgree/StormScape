@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="Registry" format=3 uid="uid://dhkha2nw83aae"]
+
+[ext_resource type="Script" uid="uid://dqtv77mng5dyh" path="res://addons/yard/registry.gd" id="1_id06d"]
+
+[resource]
+script = ExtResource("1_id06d")
+_class_restriction = &"ConsumableStats"
+_scan_directory = "res://Entities/Items/TRESItems"
+_recursive_scan = true
+_uids_to_string_ids = Dictionary[StringName, StringName]({
+&"uid://cx1ydw2jde1y8": &"Apple(0)"
+})
+_string_ids_to_uids = Dictionary[StringName, StringName]({
+&"Apple(0)": &"uid://cx1ydw2jde1y8"
+})

@@ -55,18 +55,12 @@ class_name EntitySprite
 var entity: Entity ## The entity this sprite is attached to.
 var floor_light_tween: Tween = null ## The tween controlling the floor light's self-modulate.
 var overlay_color_tween: Tween = null ## The tween controlling the overlay color.
-var current_floor_light_names: Array[String] = [] ## The queue for the next colors to show when the previous ones finish.
-var current_sprite_glow_names: Array[String] = [] ## The queue for the next colors to show when the previous ones finish.
+var current_floor_light_names: Array[Condition.ID] = [] ## The queue for the next colors to show when the previous ones finish.
+var current_sprite_glow_names: Array[Condition.ID] = [] ## The queue for the next colors to show when the previous ones finish.
 var hitflash_tween: Tween ## The tween that animates the hitflash effect.
 var shader_node: Node2D = self
 const HITFLASH_DURATION: float = 0.05 ## The duration of the hitflash effect.
 
-
-#region Saving & Loading
-func _on_before_load_game() -> void:
-	current_floor_light_names = []
-	current_sprite_glow_names = []
-#endregion
 
 func _ready() -> void:
 	add_to_group("has_save_logic")
@@ -118,20 +112,20 @@ func _setup_cracks_with_damage(sprite_size: Vector2) -> void:
 	_update_cracking(health_component.health, -1)
 
 ## Updates the floor light using tweening.
-func update_floor_light(effect_id: String, kill: bool = false) -> void:
+func update_floor_light(condition_id: Condition.ID, kill: bool = false) -> void:
 	if disable_floor_light:
 		return
 
 	if floor_light_tween:
 		floor_light_tween.kill()
 
-	var change_time_start: float = 0.3 if effect_id != "stun" else 0.1
-	var change_time_end: float = 0.35 if effect_id != "stun" else 0.1
+	var change_time_start: float = 0.3 if condition_id != Condition.ID.STUN else 0.1
+	var change_time_end: float = 0.35 if condition_id != Condition.ID.STUN else 0.1
 
 	if not kill:
-		current_floor_light_names.append(effect_id)
+		current_floor_light_names.append(condition_id)
 	else:
-		var removal_index: int = current_floor_light_names.find(effect_id)
+		var removal_index: int = current_floor_light_names.find(condition_id)
 		if removal_index != -1:
 			current_floor_light_names.remove_at(removal_index)
 
@@ -140,31 +134,31 @@ func update_floor_light(effect_id: String, kill: bool = false) -> void:
 		floor_light_tween.tween_property(floor_light, "energy", 0, change_time_end)
 		floor_light_tween.tween_callback(func() -> void: floor_light.hide())
 	else:
-		var effect: String = current_floor_light_names[0]
+		var condition: Condition.ID = current_floor_light_names[0]
 		floor_light.show()
 
 		floor_light_tween = create_tween()
-		if effect_id != "stun":
+		if condition_id != Condition.ID.STUN:
 			floor_light_tween.set_loops()
 		if current_floor_light_names.size() == 1:
-			floor_light.color = floor_colors.get(effect, Color.WHITE)
+			floor_light.color = floor_colors.get(condition, Color.WHITE)
 
-		floor_light_tween.tween_property(floor_light, "color", floor_colors.get(effect, Color.WHITE), change_time_start).set_delay(0.01 if effect != "Stun" else 0.05)
-		floor_light_tween.chain().tween_property(floor_light, "energy", 1.65, change_time_start).set_delay(0.01 if effect != "stun" else 0.05)
+		floor_light_tween.tween_property(floor_light, "color", floor_colors.get(condition, Color.WHITE), change_time_start).set_delay(0.01 if condition != Condition.ID.STUN else 0.05)
+		floor_light_tween.chain().tween_property(floor_light, "energy", 1.65, change_time_start).set_delay(0.01 if condition != Condition.ID.STUN else 0.05)
 		floor_light_tween.tween_property(floor_light, "energy", 1.4, 0.3).set_delay(1.0)
 
 ## Updates the overlay using tweening.
-func update_overlay_color(effect_id: String, kill: bool = false) -> void:
+func update_overlay_color(condition_id: Condition.ID, kill: bool = false) -> void:
 	if overlay_color_tween:
 		overlay_color_tween.kill()
 
-	var change_time_start: float = 0.2 if effect_id != "stun" else 0.05
-	var change_time_end: float = 0.2 if effect_id != "stun" else 0.05
+	var change_time_start: float = 0.2 if condition_id != Condition.ID.STUN else 0.05
+	var change_time_end: float = 0.2 if condition_id != Condition.ID.STUN else 0.05
 
 	if not kill:
-		current_sprite_glow_names.append(effect_id)
+		current_sprite_glow_names.append(condition_id)
 	else:
-		var removal_index: int = current_sprite_glow_names.find(effect_id)
+		var removal_index: int = current_sprite_glow_names.find(condition_id)
 		if removal_index != -1:
 			current_sprite_glow_names.remove_at(removal_index)
 
@@ -173,8 +167,8 @@ func update_overlay_color(effect_id: String, kill: bool = false) -> void:
 		overlay_color_tween.tween_property(overlay, "self_modulate:a", 0, change_time_end)
 	else:
 		overlay_color_tween = create_tween()
-		var effect: String = current_sprite_glow_names[0]
-		var new_color: Color = overlay_colors.get(effect, Color.WHITE)
+		var condition: Condition.ID = current_sprite_glow_names[0]
+		var new_color: Color = overlay_colors.get(condition, Color.WHITE)
 
 		overlay.texture.gradient.set_color(0, new_color)
 		overlay_color_tween.tween_property(overlay, "self_modulate:a", 1.0, change_time_start)

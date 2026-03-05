@@ -45,6 +45,7 @@ DebugConsole="*res://Utilities/Autoloads/DebugConsole/DebugConsole.tscn"
 Globals="*res://Utilities/Autoloads/Globals.gd"
 Items="*uid://m0vksxthdyko"
 MessageManager="*uid://bgu7t40v4mtmh"
+FXLibrary="*uid://bc7rcymfjsddx"
 
 [debug]
 

@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="Registry" format=3 uid="uid://bqjuyp7hx5r1n"]
+
+[ext_resource type="Script" uid="uid://dqtv77mng5dyh" path="res://addons/yard/registry.gd" id="1_giipq"]
+
+[resource]
+script = ExtResource("1_giipq")
+_class_restriction = &"ProjAmmoStats"
+_scan_directory = "res://Entities/Items/TRESItems"
+_recursive_scan = true
+_uids_to_string_ids = Dictionary[StringName, StringName]({
+&"uid://bdjhfsluk53lc": &"Bullet(0)",
+&"uid://c5jim46mul7ex": &"IonCharge(1)",
+&"uid://cpxev3kvt74vw": &"Shell(0)",
+&"uid://dsylig1px18qv": &"Boompowder(3)"
+})
+_string_ids_to_uids = Dictionary[StringName, StringName]({
+&"Boompowder(3)": &"uid://dsylig1px18qv",
+&"Bullet(0)": &"uid://bdjhfsluk53lc",
+&"IonCharge(1)": &"uid://c5jim46mul7ex",
+&"Shell(0)": &"uid://cpxev3kvt74vw"
+})

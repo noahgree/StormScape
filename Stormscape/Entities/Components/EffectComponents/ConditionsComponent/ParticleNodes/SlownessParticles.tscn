@@ -1,0 +1,47 @@
+[gd_scene format=3 uid="uid://dubha745om4ng"]
+
+[ext_resource type="Texture2D" uid="uid://pcfm1w4oe8wi" path="res://Entities/EntityCore/UI/StatusEffects/Icons/snail.png" id="1_qf80y"]
+[ext_resource type="Script" uid="uid://bebyq3wopqkdd" path="res://Entities/Components/EffectComponents/ConditionsComponent/ParticleEffect.gd" id="2_qi7r6"]
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_qrigd"]
+light_mode = 1
+particles_animation = true
+particles_anim_h_frames = 6
+particles_anim_v_frames = 1
+particles_anim_loop = true
+
+[sub_resource type="Curve" id="Curve_27pcc"]
+_data = [Vector2(0.00342466, 0.359578), 0.0, 0.0, 0, 0, Vector2(0.136986, 0.904218), 0.0, 0.0, 0, 0, Vector2(0.758562, 0.842242), 0.0, 0.0, 0, 0, Vector2(0.941781, 0.77651), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 5
+
+[sub_resource type="Gradient" id="Gradient_88l5w"]
+offsets = PackedFloat32Array(0, 0.138783, 0.830799, 1)
+colors = PackedColorArray(0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0)
+
+[node name="SlownessParticles" type="CPUParticles2D" unique_id=157668274]
+light_mask = 2
+material = SubResource("CanvasItemMaterial_qrigd")
+emitting = false
+amount = 4
+texture = ExtResource("1_qf80y")
+lifetime = 1.2
+lifetime_randomness = 0.1
+local_coords = true
+emission_shape = 3
+emission_rect_extents = Vector2(1, 1)
+direction = Vector2(0, -1)
+spread = 25.0
+gravity = Vector2(0, 0)
+initial_velocity_max = 3.0
+orbit_velocity_min = -0.05
+orbit_velocity_max = 0.05
+scale_amount_min = 0.38
+scale_amount_max = 0.62
+scale_amount_curve = SubResource("Curve_27pcc")
+color = Color(2, 2, 2, 1)
+color_ramp = SubResource("Gradient_88l5w")
+anim_speed_min = 1.6
+anim_speed_max = 1.6
+anim_offset_max = 1.0
+script = ExtResource("2_qi7r6")
+condition_id = 3

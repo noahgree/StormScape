@@ -1,0 +1,33 @@
+[gd_resource type="Resource" script_class="Registry" format=3 uid="uid://bifopjjsbn8rg"]
+
+[ext_resource type="Script" uid="uid://dqtv77mng5dyh" path="res://addons/yard/registry.gd" id="1_wucqm"]
+
+[resource]
+script = ExtResource("1_wucqm")
+_class_restriction = &"WeaponModStats"
+_scan_directory = "res://Entities/Items/TRESItems"
+_recursive_scan = true
+_uids_to_string_ids = Dictionary[StringName, StringName]({
+&"uid://b8gvf7ta6a2rj": &"Foregrip(1)",
+&"uid://bsq8lhqy8j1i7": &"SimpleScope(1)",
+&"uid://bta1hncad1hd2": &"ExtendedMag(1)",
+&"uid://bx2nl7cqe7odq": &"AdvancedScope(3)",
+&"uid://caxftf2aer6g4": &"Igniter(4)",
+&"uid://cfaje12siuo0b": &"Compensator(2)",
+&"uid://cmyuoxk4c1mx6": &"RapidTrigger(3)",
+&"uid://cwgqj8klx4b3x": &"ExtendedMag(0)",
+&"uid://de6d4b7xfr4am": &"ClusterRig(4)",
+&"uid://hchaonec5px1": &"CoolingAparatus(2)"
+})
+_string_ids_to_uids = Dictionary[StringName, StringName]({
+&"AdvancedScope(3)": &"uid://bx2nl7cqe7odq",
+&"ClusterRig(4)": &"uid://de6d4b7xfr4am",
+&"Compensator(2)": &"uid://cfaje12siuo0b",
+&"CoolingAparatus(2)": &"uid://hchaonec5px1",
+&"ExtendedMag(0)": &"uid://cwgqj8klx4b3x",
+&"ExtendedMag(1)": &"uid://bta1hncad1hd2",
+&"Foregrip(1)": &"uid://b8gvf7ta6a2rj",
+&"Igniter(4)": &"uid://caxftf2aer6g4",
+&"RapidTrigger(3)": &"uid://cmyuoxk4c1mx6",
+&"SimpleScope(1)": &"uid://bsq8lhqy8j1i7"
+})

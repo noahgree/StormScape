@@ -1,3 +1,4 @@
+## Button that is used as a custom tab implementation for the multiline tab bar.
 @tool
 extends Button
 
@@ -9,7 +10,6 @@ signal dropped(source_index: int, target_index: int)
 var close_button: Button
 
 func _ready() -> void:
-	icon_alignment = HORIZONTAL_ALIGNMENT_LEFT
 	alignment = HORIZONTAL_ALIGNMENT_LEFT
 	action_mode = ACTION_MODE_BUTTON_PRESS
 	auto_translate_mode = Node.AUTO_TRANSLATE_MODE_DISABLED
@@ -20,6 +20,7 @@ func show_close_button():
 		close_button = create_close_button()
 
 	add_child(close_button)
+	close_button.set_anchors_and_offsets_preset(Control.PRESET_CENTER_RIGHT)
 
 func hide_close_button():
 	if (close_button != null):
@@ -31,7 +32,6 @@ func create_close_button() -> Button:
 	close_button.flat = true
 	close_button.focus_mode = Control.FOCUS_NONE
 	close_button.pressed.connect(on_close_pressed)
-	close_button.set_anchors_and_offsets_preset(Control.PRESET_CENTER_RIGHT)
 
 	return close_button
 
@@ -53,7 +53,6 @@ func _get_drag_data(at_position: Vector2) -> Variant:
 	var preview: Button = Button.new()
 	preview.text = text
 	preview.icon = icon
-	preview.icon_alignment = HORIZONTAL_ALIGNMENT_LEFT
 	preview.alignment = HORIZONTAL_ALIGNMENT_LEFT
 	preview.auto_translate_mode = Node.AUTO_TRANSLATE_MODE_DISABLED
 	preview.add_theme_stylebox_override(&"normal", get_theme_stylebox(&"normal"))

@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="Registry" format=3 uid="uid://dc744h76i10wf"]
+
+[ext_resource type="Script" uid="uid://dqtv77mng5dyh" path="res://addons/yard/registry.gd" id="1_wm1m7"]
+
+[resource]
+script = ExtResource("1_wm1m7")
+_class_restriction = &"WearableStats"
+_scan_directory = "res://Entities/Items/TRESItems"
+_recursive_scan = true
+_uids_to_string_ids = Dictionary[StringName, StringName]({
+&"uid://caw1yglbt2nf6": &"FrostCharm(5)",
+&"uid://dw5jtfoba6mwy": &"PoisonCharm(5)",
+&"uid://m8ws6ct8yu3b": &"FireCharm(5)",
+&"uid://nbgi8l36xcgl": &"WeightedBoots(3)"
+})
+_string_ids_to_uids = Dictionary[StringName, StringName]({
+&"FireCharm(5)": &"uid://m8ws6ct8yu3b",
+&"FrostCharm(5)": &"uid://caw1yglbt2nf6",
+&"PoisonCharm(5)": &"uid://dw5jtfoba6mwy",
+&"WeightedBoots(3)": &"uid://nbgi8l36xcgl"
+})

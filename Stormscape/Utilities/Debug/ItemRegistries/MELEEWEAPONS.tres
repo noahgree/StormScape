@@ -1,0 +1,25 @@
+[gd_resource type="Resource" script_class="Registry" format=3 uid="uid://burihq7xeirp3"]
+
+[ext_resource type="Script" uid="uid://dqtv77mng5dyh" path="res://addons/yard/registry.gd" id="1_nxw2c"]
+
+[resource]
+script = ExtResource("1_nxw2c")
+_class_restriction = &"MeleeWeaponStats"
+_scan_directory = "res://Entities/Items/TRESItems"
+_recursive_scan = true
+_uids_to_string_ids = Dictionary[StringName, StringName]({
+&"uid://beg3ck82pbju2": &"Axe(2)",
+&"uid://bh18kqp2up3oe": &"Pickaxe(3)",
+&"uid://bper7kxtsf7f1": &"Axe(1)",
+&"uid://dk3vlbvu2b7eq": &"Sword(4)",
+&"uid://o4jrwlfkertl": &"Axe(0)",
+&"uid://xuswqfh3rvdy": &"ZombieHands(0)"
+})
+_string_ids_to_uids = Dictionary[StringName, StringName]({
+&"Axe(0)": &"uid://o4jrwlfkertl",
+&"Axe(1)": &"uid://bper7kxtsf7f1",
+&"Axe(2)": &"uid://beg3ck82pbju2",
+&"Pickaxe(3)": &"uid://bh18kqp2up3oe",
+&"Sword(4)": &"uid://dk3vlbvu2b7eq",
+&"ZombieHands(0)": &"uid://xuswqfh3rvdy"
+})

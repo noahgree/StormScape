@@ -17,7 +17,8 @@ enum ID { ## The unique ids that represent the types of conditions that can be a
 	SELF_KNOCKBACK,
 	SPEED,
 	KINETIC_IMPACT,
-	UNTOUCHABLE
+	UNTOUCHABLE,
+	NULL ## Value corresponding to no condition. Used in certain handling functions.
 }
 
 enum SourceType { ## The different kind of sources that the condition can come from.

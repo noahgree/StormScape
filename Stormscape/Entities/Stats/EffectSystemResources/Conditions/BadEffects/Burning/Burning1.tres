@@ -1,6 +1,7 @@
 [gd_resource type="Resource" script_class="StatusEffect" format=3 uid="uid://dvew5cy3k7s48"]
 
 [ext_resource type="Script" uid="uid://20acrt2hb6y" path="res://Entities/Stats/EOTStats.gd" id="1_gx4dt"]
+[ext_resource type="Script" uid="uid://ckvq5b7qxmh13" path="res://Entities/Stats/EffectSystemResources/ESI.gd" id="1_gxu0c"]
 [ext_resource type="Script" uid="uid://bcjwesiannbd0" path="res://Entities/Stats/StatMod/StatMod.gd" id="3_85854"]
 
 [sub_resource type="Resource" id="Resource_gx4dt"]

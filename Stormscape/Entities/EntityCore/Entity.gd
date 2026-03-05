@@ -12,7 +12,7 @@ class_name Entity
 @onready var sprite: EntitySprite = %EntitySprite ## The visual representation of the entity. Needs to have the EntityEffectShader applied.
 @onready var esi_receiver: ESIReceiverComponent = get_node_or_null("ESIReceiverComponent") ## The component that handles incoming effect source instances.
 @onready var conditions_component: ConditionsComponent = get_node_or_null("ConditionsComponent") ## The node that will cache and manage all conditions for this entity.
-@onready var emission_mgr: ParticleEmissionComponent = $ParticleEmissionComponent ## The component responsible for determining the extents and origins of different particle placements.
+@onready var particle_mgr: ParticleEmissionComponent = $ParticleEmissionComponent ## The component responsible for determining the extents and origins of different particle placements.
 @onready var detection_component: DetectionComponent = $DetectionComponent ## The component that defines the radius around this entity that an enemy must enter for that enemy to be alerted.
 @onready var health_component: HealthComponent = $HealthComponent ## The component in charge of entity health and shield.
 @onready var item_receiver: ItemReceiverComponent = get_node_or_null("ItemReceiverComponent") ## The item receiver for this entity.

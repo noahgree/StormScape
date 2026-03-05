@@ -7,8 +7,8 @@ class_name ConditionsComponent
 
 static var cache: Dictionary[Array, Condition] = {} ## A cache of all conditions. { [id, source, level] : condition }
 
-@export_subgroup("Debug")
-@export var print_condition_updates: bool = false ## Whether to print when this entity has conditions added and removed.
+@export var allowed_conditions: Dictionary[Condition.ID, bool] ## The conditions the owning entity can have.
+@export var debug_updates: bool = false ## Whether to print when this entity has conditions added and removed.
 
 @onready var entity: Entity = owner ## The entity affected by these conditions.
 @onready var esi_receiver: ESIReceiverComponent = entity.esi_receiver ## The ESI receiver that sends conditions to this manager to be cached and handled.
@@ -16,7 +16,6 @@ static var cache: Dictionary[Array, Condition] = {} ## A cache of all conditions
 var active: Dictionary[Array, int] = {} ## { [id, source] : level }
 var active_by_id: Dictionary[Condition.ID, Dictionary] = {} ## { id : { Condition.SourceType : level } }
 var condition_timers: Dictionary[Array, Timer] = {} ## Holds references to all timers currently tracking active conditions. { [id, source] : timer }
-var particle_fade_tweens: Dictionary[Condition.ID, Tween] = {} ## Holds references to all particle fade out tweens so if that condition is started again while fading out, we can cancel it. { id : tween }
 
 
 #region Core
@@ -97,51 +96,6 @@ func _add_condition(condition: Condition) -> void:
 	for mod_resource: StatMod in condition.stat_mods:
 		entity.sc.add_mods([mod_resource] as Array[StatMod])
 
-## Starts the conditions' associated visual FX like particles. Checks if the receiver has the
-## matching handler node first.
-func _start_condition_fx(condition: Condition) -> void:
-	var effect_name: String = condition.particle_hander_req if condition.particle_hander_req != "" else condition.id.to_pascal_case()
-	var particle_node: CPUParticles2D = get_node_or_null(effect_name + "Particles")
-	if particle_node == null:
-		return
-
-	var handler_check: bool = condition.particle_hander_req == "" or esi_receiver.get(effect_name.to_snake_case() + "_handler") != null
-	if not (condition.spawn_particles and handler_check):
-		return
-
-	if condition.make_entity_glow and handler_check:
-		entity.sprite.update_floor_light(condition.id, false)
-		entity.sprite.update_overlay_color(condition.id, false)
-
-	var emission_shape: CPUParticles2D.EmissionShape = particle_node.get_emission_shape()
-	var emission_mgr: ParticleEmissionComponent = entity.emission_mgr
-
-	if emission_shape == CPUParticles2D.EmissionShape.EMISSION_SHAPE_SPHERE_SURFACE:
-		particle_node.emission_sphere_radius = emission_mgr.get_extents(ParticleEmissionComponent.Boxes.COVER).x
-		particle_node.position = emission_mgr.get_origin(ParticleEmissionComponent.Boxes.COVER)
-	elif emission_shape == CPUParticles2D.EmissionShape.EMISSION_SHAPE_RECTANGLE and condition.id not in ["burning", "frostbite", "slowness"]:
-		particle_node.emission_rect_extents = emission_mgr.get_extents(ParticleEmissionComponent.Boxes.COVER)
-		particle_node.position = emission_mgr.get_origin(ParticleEmissionComponent.Boxes.COVER)
-	elif condition.id in ["burning", "slowness"]: # Because it needs to be at the floor only
-		particle_node.emission_rect_extents = emission_mgr.get_extents(ParticleEmissionComponent.Boxes.BELOW)
-		particle_node.position = emission_mgr.get_origin(ParticleEmissionComponent.Boxes.BELOW)
-	elif condition.id == "frostbite": # Because it needs to be above it only
-		particle_node.emission_rect_extents = emission_mgr.get_extents(ParticleEmissionComponent.Boxes.ABOVE)
-		particle_node.position = emission_mgr.get_origin(ParticleEmissionComponent.Boxes.ABOVE)
-	else:
-		return
-
-	var particle_fade_tween: Tween = particle_fade_tweens.get(condition.id, null)
-	if particle_fade_tween != null:
-		particle_fade_tween.kill()
-		particle_fade_tweens.erase(condition.id)
-
-	particle_node.modulate.a = 1.0
-	particle_node.emitting = true
-
-	if DebugFlags.show_condition_particle_emission_area:
-		queue_redraw()
-
 ## Extends the duration of the timer associated with some current condition.
 func _extend_condition_duration(new_condition: Condition, existing_lvl: float) -> void:
 	var time_to_add: float = new_condition.mod_time * (float(new_condition.level) / float(existing_lvl))
@@ -157,6 +111,18 @@ func _restart_condition_duration(condition: Condition) -> void:
 	if timer != null:
 		timer.stop()
 		timer.start()
+
+## Starts the conditions' associated visual FX like particles. Checks if the receiver has the
+## matching handler node first.
+func _start_condition_fx(condition: Condition) -> void:
+	if not condition.spawn_particles:
+		return
+
+	if condition.make_entity_glow:
+		entity.sprite.update_floor_light(condition.id, false)
+		entity.sprite.update_overlay_color(condition.id, false)
+
+	entity.particle_mgr.start_particles(condition.id)
 
 ## Removes the condition from the current conditions dict and removes all its mods. Additionally removes its
 ## associated timer from the timer dict.
@@ -182,40 +148,30 @@ func _remove_condition(condition: Condition) -> void:
 		timer.queue_free()
 		condition_timers.erase(key)
 
-	_stop_condition_fx(condition.id, false)
+	_stop_condition_fx(condition)
 
-## Stops the conditions' associated visual FX like particles. Pass in only the effect id, not its source type.
-func _stop_effect_fx(effect_id: String, force: bool = false) -> void:
-	entity.sprite.update_floor_light(effect_id, true)
-	entity.sprite.update_overlay_color(effect_id, true)
+## Stops the conditions' associated visual FX like particles.
+func _stop_condition_fx(condition: Condition) -> void:
+	entity.sprite.update_floor_light(condition.id, true)
+	entity.sprite.update_overlay_color(condition.id, true)
 
-	if not force:
-		var count: int = 0
-		for effect_key: String in active:
-			if effect_key.begins_with(effect_id + ":"):
-				count += 1
-		if count >= 1:
-			return
+	var actives: Dictionary[Condition.SourceType, int] = active_by_id.get(condition.id, null)
+	if (actives == null) or (actives.keys().size() > 1):
+		return
 
-	var particle_node: CPUParticles2D = get_node_or_null(effect_id.to_pascal_case() + "Particles")
-	if particle_node != null:
-		particle_node.emitting = false
+	entity.particle_mgr.stop_particles(condition.id)
 
-		var tween: Tween = create_tween()
-		particle_fade_tweens[effect_id] = tween
-		tween.tween_property(particle_node, "modulate:a", 0.0, 0.35)
-		tween.tween_callback(func() -> void: particle_fade_tweens.erase(effect_id))
+## Returns if any condition (no matter the source type or level) of the passed in id is active.
+func check_if_has_condition(condition_id: Condition.ID) -> bool:
+	if active_by_id.has(condition_id):
+		return true
+	return false
 
-## Returns if any condition (no matter the level) of the passed in name is active. Can optionally check
-## only for a single source type.
-func check_if_has_condition(id: String, source_type: Condition.SourceType = -1) -> bool:
-	if source_type != -1:
-		return active.has(id + ":" + str(Condition.SourceType.keys()[source_type]).to_lower())
-	else:
-		for effect_key: StringName in active:
-			if effect_key.begins_with(id + ":"):
-				return true
-		return false
+## Returns if the condition and associated source type (no matter the level) is active.
+func check_if_has_condition_by_source_type(condition_id: Condition.ID, source_type: Condition.SourceType) -> bool:
+	if active.has([condition_id, source_type]):
+		return true
+	return false
 
 ## Attempts to remove any effect of the matching id and source type (which is given as an Enum value).
 ## It also cancels any active DOTs and HOTs for it.
@@ -232,28 +188,33 @@ func request_condition_removal_by_source_string(id: StringName, source_string: S
 		_remove_condition(existing_effect)
 	_cancel_over_time_effects(key_to_remove)
 
-## Attempts to remove all effects of the matching id, regardless of source type.
-## It also cancels all active DOTs and HOTs for each of them.
-func request_condition_removal_for_all_sources(id: Condition.ID) -> void:
+## Attempts to remove all conditions of the matching id, regardless of source type.
+func request_condition_removal_for_all_sources(condition_id: Condition.ID) -> void:
+	var conditions_of_id: Dictionary[Condition.SourceType, int] = active_by_id.get(condition_id, null)
+	if conditions_of_id == null:
+		return
+
 	var to_erase: Array[Condition] = []
-	for effect_key: StringName in active:
-		if effect_key.begins_with(id + ":"):
-			to_erase.append(active[effect_key])
-			_cancel_over_time_effects(effect_key)
+	for source_type: Condition.SourceType in conditions_of_id:
+		var condition: Condition = cache.get([condition_id, source_type], null)
+		if condition == null:
+			continue
+		to_erase.append(condition)
+		_cancel_over_time_effects([condition_id, source_type])
 
 	for effect: Condition in to_erase:
 		_remove_condition(effect)
 
-## Sends the cancellation requests for a composite effect key to the damage and heal handlers if they exist.
-func _cancel_over_time_effects(key_to_cancel: String) -> void:
+## Sends the cancellation requests for a composite condition key.
+func _cancel_over_time_effects(condition_key: Array) -> void:
 	if esi_receiver.dh_handler != null:
 		esi_receiver.dh_handler.cancel_over_time_dmg(key_to_cancel)
 	if esi_receiver.heal_handler != null:
 		esi_receiver.heal_handler.cancel_over_time_heal(key_to_cancel)
 
-## Removes all bad conditions except for an optional exception effect that may be specified.
-## The optional kept effect should be given only as its effect id, not including its source type.
-func remove_all_bad_conditions(effect_to_keep_id: String = "") -> void:
+## Removes all bad conditions except for an optional exception condition that may be specified.
+## The optional kept condition should be given only as its id, not including its source type.
+func remove_all_bad_conditions(effect_to_keep_id: Condition.ID = Condition.ID.NULL) -> void:
 	for condition_key: StringName in active:
 		if effect_to_keep_id == StringHelpers.get_before_colon(condition_key):
 			continue
@@ -274,43 +235,20 @@ func remove_all_conditions() -> void:
 	for condition: Condition in active.values():
 		_remove_condition(condition)
 
-## Returns true if there is an "untouchable" effect in the current effects.
+## Returns true if there is an "untouchable" condition in the current conditions.
 func is_untouchable() -> bool:
-	for condition: Condition in active.values():
-		if condition.id == Condition.ID.UNTOUCHABLE:
-			return true
-	return false
-
-## Returns a dictionary of arrays, grouped by the effect id. This abstracts out the source types.
-func get_current_effects_grouped_by_id() -> Dictionary[StringName, Array]:
-	var results: Dictionary[StringName, Array]
-	for condition: StringName in active:
-		var effect_id: StringName = condition.split(":")[0]
-		if effect_id in results:
-			results[effect_id].append(active[effect])
-		else:
-			results[effect_id] = [active[effect]]
-	return results
+	return active_by_id.has(Condition.ID.UNTOUCHABLE)
 
 #region Debug
-func _draw() -> void:
-	if not Engine.is_editor_hint() and DebugFlags.show_condition_particle_emission_area:
-		var emission_mgr: ParticleEmissionComponent = owner.emission_mgr
-		var extents: Vector2 = emission_mgr.get_extents(ParticleEmissionComponent.Boxes.BELOW)
-		var origin: Vector2 = emission_mgr.get_origin(ParticleEmissionComponent.Boxes.BELOW)
-
-		var rect: Rect2 = Rect2(origin - extents, extents * 2)
-		draw_rect(rect, Color(1, 0, 0, 0.5), false, 1)
-
 func _debug_print_adding_condition(condition: Condition) -> void:
-	if DebugFlags.current_condition_changes and print_condition_updates:
-		if condition is StormSyndromeEffect:
+	if DebugFlags.current_condition_changes and debug_updates:
+		if condition.id == Condition.ID.STORM_SYNDROME:
 			print_rich("-------[color=green]Adding[/color][b] [color=pink]" + str(condition) + "[/color][/b][color=gray] to " + entity.name + "-------")
 		else:
 			print_rich("-------[color=green]Adding[/color][b] " + str(condition) + "[/b][color=gray] to " + entity.name + "-------")
 
 func _debug_print_removing_condition(condition: Condition) -> void:
-	if DebugFlags.current_condition_changes and print_condition_updates:
+	if DebugFlags.current_condition_changes and debug_updates:
 		if condition.id == Condition.ID.STORM_SYNDROME:
 			print_rich("-------[color=red]Removed[/color][b] [color=pink]" + str(condition) + "[/color][/b][color=gray] from " + entity.name + "-------")
 		else:

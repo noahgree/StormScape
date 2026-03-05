@@ -1,0 +1,27 @@
+[gd_resource type="Resource" script_class="Registry" format=3 uid="uid://bjjemtty57gvh"]
+
+[ext_resource type="Script" uid="uid://dqtv77mng5dyh" path="res://addons/yard/registry.gd" id="1_jvb0g"]
+
+[resource]
+script = ExtResource("1_jvb0g")
+_class_restriction = &"WorldResourceStats"
+_scan_directory = "res://Entities/Items/TRESItems"
+_recursive_scan = true
+_uids_to_string_ids = Dictionary[StringName, StringName]({
+&"uid://8uj8fwadqlk0": &"Stick(0)",
+&"uid://bs4rqdt46yav7": &"OakLog(0)",
+&"uid://buk4r8balgqup": &"UpgradeTemplate(1)",
+&"uid://cljdjbul1tfde": &"Sandstone(0)",
+&"uid://dbnhbsphiw4oe": &"SpruceLog(0)",
+&"uid://ddtvqrt702vcs": &"Twine(0)",
+&"uid://dkx627k2ek8ew": &"Graystone(0)"
+})
+_string_ids_to_uids = Dictionary[StringName, StringName]({
+&"Graystone(0)": &"uid://dkx627k2ek8ew",
+&"OakLog(0)": &"uid://bs4rqdt46yav7",
+&"Sandstone(0)": &"uid://cljdjbul1tfde",
+&"SpruceLog(0)": &"uid://dbnhbsphiw4oe",
+&"Stick(0)": &"uid://8uj8fwadqlk0",
+&"Twine(0)": &"uid://ddtvqrt702vcs",
+&"UpgradeTemplate(1)": &"uid://buk4r8balgqup"
+})

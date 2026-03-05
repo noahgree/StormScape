@@ -1,0 +1,49 @@
+[gd_resource type="Resource" script_class="Registry" format=3 uid="uid://g1vra5egtluk"]
+
+[ext_resource type="Script" uid="uid://dqtv77mng5dyh" path="res://addons/yard/registry.gd" id="1_70bhd"]
+
+[resource]
+script = ExtResource("1_70bhd")
+_class_restriction = &"ProjWeaponStats"
+_scan_directory = "res://Entities/Items/TRESItems"
+_recursive_scan = true
+_uids_to_string_ids = Dictionary[StringName, StringName]({
+&"uid://14gw464h13vv": &"Cratershot(1)",
+&"uid://1q7rlned2r23": &"Gattler(3)",
+&"uid://3avt5jvd3dye": &"BottleOFire(3)",
+&"uid://4nvp28pvjtk3": &"Boomerang(1)",
+&"uid://bnc4tbhdxpauy": &"Musket(0)",
+&"uid://c05ujhrdtx4r5": &"Blunderbuss(2)",
+&"uid://ciel2rrqq4dvv": &"LaserGun(2)",
+&"uid://cuwmealupx71f": &"RifleX(0)",
+&"uid://cviqn410iux45": &"Revolver(1)",
+&"uid://dh8kily8s3nxw": &"Flintlock(1)",
+&"uid://dlfmjgnfk6nqj": &"Revolver(0)",
+&"uid://dpmwqsai6gxsr": &"FlameBlower(5)",
+&"uid://duc0xfejpfs1": &"EagleEye(3)",
+&"uid://dvnlojpwqoojv": &"BottleOFrost(3)",
+&"uid://dy8rwyeyusim7": &"Twin(2)",
+&"uid://fmf7upx7tsln": &"RifleX(3)",
+&"uid://h1xp0w2wx18e": &"Grizzly(3)",
+&"uid://kmidnuyti5xi": &"Boomerang(2)"
+})
+_string_ids_to_uids = Dictionary[StringName, StringName]({
+&"Blunderbuss(2)": &"uid://c05ujhrdtx4r5",
+&"Boomerang(1)": &"uid://4nvp28pvjtk3",
+&"Boomerang(2)": &"uid://kmidnuyti5xi",
+&"BottleOFire(3)": &"uid://3avt5jvd3dye",
+&"BottleOFrost(3)": &"uid://dvnlojpwqoojv",
+&"Cratershot(1)": &"uid://14gw464h13vv",
+&"EagleEye(3)": &"uid://duc0xfejpfs1",
+&"FlameBlower(5)": &"uid://dpmwqsai6gxsr",
+&"Flintlock(1)": &"uid://dh8kily8s3nxw",
+&"Gattler(3)": &"uid://1q7rlned2r23",
+&"Grizzly(3)": &"uid://h1xp0w2wx18e",
+&"LaserGun(2)": &"uid://ciel2rrqq4dvv",
+&"Musket(0)": &"uid://bnc4tbhdxpauy",
+&"Revolver(0)": &"uid://dlfmjgnfk6nqj",
+&"Revolver(1)": &"uid://cviqn410iux45",
+&"RifleX(0)": &"uid://cuwmealupx71f",
+&"RifleX(3)": &"uid://fmf7upx7tsln",
+&"Twin(2)": &"uid://dy8rwyeyusim7"
+})

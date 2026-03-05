@@ -539,7 +539,7 @@ shape = SubResource("RectangleShape2D_yng6w")
 
 [node name="EffectReceiverComponent" parent="WorldRoot/StormBase" unique_id=1334489604 node_paths=PackedStringArray("dh_handler", "heal_handler") instance=ExtResource("43_1606r")]
 absorb_full_hit = true
-dh_handler = NodePath("HealHandler")
+dh_handler = NodePath("DmgHandler")
 heal_handler = NodePath("HealHandler")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="WorldRoot/StormBase/EffectReceiverComponent" unique_id=1132405210]

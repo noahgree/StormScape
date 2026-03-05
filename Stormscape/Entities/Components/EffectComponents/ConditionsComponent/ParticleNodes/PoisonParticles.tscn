@@ -1,0 +1,51 @@
+[gd_scene format=3 uid="uid://cymnm25p2dq5e"]
+
+[ext_resource type="Texture2D" uid="uid://ben7f106xwdu2" path="res://Entities/EntityCore/UI/StatusEffects/Icons/bubble.png" id="1_nkcgo"]
+[ext_resource type="Script" uid="uid://bebyq3wopqkdd" path="res://Entities/Components/EffectComponents/ConditionsComponent/ParticleEffect.gd" id="2_a4uvd"]
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_d6xoa"]
+blend_mode = 1
+light_mode = 1
+
+[sub_resource type="Curve" id="Curve_fbkmh"]
+_limits = [-360.0, 360.0, 0.0, 1.0]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.506849, 19.243), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="Curve" id="Curve_r0t3x"]
+_data = [Vector2(0.00342466, 0.359578), 0.0, 0.0, 0, 0, Vector2(0.131849, 0.725802), 0.0, 0.0, 0, 0, Vector2(0.758562, 0.733314), 0.0, 0.0, 0, 0, Vector2(0.979452, 0.740826), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 5
+
+[sub_resource type="Gradient" id="Gradient_nwe1e"]
+offsets = PackedFloat32Array(0, 0.121673, 1)
+colors = PackedColorArray(0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1)
+
+[node name="PoisonParticles" type="CPUParticles2D" unique_id=1404431390]
+light_mask = 2
+material = SubResource("CanvasItemMaterial_d6xoa")
+emitting = false
+amount = 12
+texture = ExtResource("1_nkcgo")
+lifetime = 1.75
+lifetime_randomness = 0.15
+local_coords = true
+emission_shape = 3
+emission_rect_extents = Vector2(8, 16)
+direction = Vector2(0, -1)
+spread = 25.0
+gravity = Vector2(0, 0)
+initial_velocity_min = 2.0
+initial_velocity_max = 3.0
+orbit_velocity_min = -0.05
+orbit_velocity_max = 0.05
+angle_min = -10.0
+angle_max = 10.0
+angle_curve = SubResource("Curve_fbkmh")
+scale_amount_min = 0.13
+scale_amount_max = 0.3
+scale_amount_curve = SubResource("Curve_r0t3x")
+color = Color(3, 3, 3, 1)
+color_ramp = SubResource("Gradient_nwe1e")
+script = ExtResource("2_a4uvd")
+condition_id = 2
+emission_area = 2
