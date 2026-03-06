@@ -534,11 +534,13 @@ func _start_being_handled(handling_area: ESIReceiverComponent) -> void:
 		esi.multishot_id = multishot_id
 		esi.movement_direction = movement_direction
 		esi.contact_position = global_position
-		handling_area.handle_esi(esi, source_entity, source_ii)
+		esi.set_source_info(source_entity, source_ii)
+		handling_area.handle_esi(esi)
 	else:
 		_adjust_esi_for_falloff(aoe_esi, dist_to_center, true)
 		aoe_esi.contact_position = global_position
-		handling_area.handle_esi(aoe_esi, source_entity, source_ii, false) # Don't reapply conditions.
+		aoe_esi.set_source_info(source_entity, source_ii)
+		handling_area.handle_esi(aoe_esi, false) # Don't reapply conditions.
 
 ## When we hit a handling area during an AOE, we need to apply falloff based on distance from the center of the AOE.
 func _adjust_esi_for_falloff(esi_to_adjust: ESI, dist: float, is_aoe: bool = false) -> void:

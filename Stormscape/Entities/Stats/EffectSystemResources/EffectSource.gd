@@ -22,7 +22,8 @@ enum ESType { NORMAL, CHARGE, AOE } ## The kinds of effect sources that can be m
 	set(new_value):
 		base_damage = max(0, new_value)
 @export var object_damage_mult: float = 1.0 ## A multiplier for doing more damage to Static & Rigid entities marked as objects.
-@export var dmg_affected_stats: Globals.DmgAffectedStats = Globals.DmgAffectedStats.SHIELD_THEN_HEALTH ## Which entity stats are affected by this damage source.
+@export var dmg_affected_stats: Globals.DHTypes = Globals.DHTypes.SHIELD_THEN_HEALTH ## Which entity stats are affected by this damage source.
+@export var dmg_popup_type: HPComponent.POPUP_TYPE = HPComponent.POPUP_TYPE.AUTO ## What the popup that results from an entity being hit by this damage should look like it came from.
 @export_range(0, 100, 1, "suffix:%") var crit_chance: int = 0 ## The chance the application of damage will be a critial hit.
 @export var crit_multiplier: float = 1.5 ## How much stronger critical hits are than normal hits.
 @export_range(0, 100, 1, "suffix:%") var armor_penetration: int = 0 ## The percent of armor ignored.
@@ -32,14 +33,15 @@ enum ESType { NORMAL, CHARGE, AOE } ## The kinds of effect sources that can be m
 @export var base_healing: int: ## The base numerical amount of health associated with this effect source.
 	set(new_value):
 		base_healing = max(0, new_value)
-@export var heal_affected_stats: Globals.HealAffectedStats = Globals.HealAffectedStats.HEALTH_THEN_SHIELD ## Which entity stats are affected by this healing source.
+@export var heal_affected_stats: Globals.DHTypes = Globals.DHTypes.HEALTH_THEN_SHIELD ## Which entity stats are affected by this healing source.
+@export var heal_popup_type: HPComponent.POPUP_TYPE = HPComponent.POPUP_TYPE.AUTO ## What the popup that results from an entity being hit by this healing should look like it came from.
 @export_range(0, 100, 1, "suffix:%") var lvl_heal_scalar: int = 8 ## The percent of base healing that gets added on for every 10 levels, calculated as [codeblock](((floor(current_lvl / 10) * lvl_heal_scalar) + 1.0) / 100.0) * base_healing[/codeblock].
 
-@export_group("Impact FX")
+@export_group("FX")
 @export var impact_cam_fx: CamFXResource ## The resource defining how the camera should react to firing.
 @export var impact_vfx: PackedScene = null ## The vfx to spawn when impacting something.
 @export var impact_sound: String = "" ## The sound to play when impacting something.
 @export var hit_flash_color: Color = Color(1, 1, 1, 0.6) ## The color to flash the hit entity to on being hit.
 
-@export_group("Status Effects")
+@export_group("Conditions")
 @export var conditions: Array[Condition] ## The array of conditions that can be applied to the receiving entity.

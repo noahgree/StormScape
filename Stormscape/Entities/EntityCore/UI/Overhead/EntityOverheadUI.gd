@@ -2,7 +2,7 @@ extends Control
 class_name EntityOverheadUI
 ## Handles overhead displays for entities other than the player.
 
-@export var health_component: HealthComponent
+@export var hp_component: HPComponent
 
 @onready var health_bar: TextureProgressBar = %OverheadHealthBar
 @onready var shield_bar: TextureProgressBar = %OverheadShieldBar
@@ -10,8 +10,8 @@ class_name EntityOverheadUI
 
 
 func _ready() -> void:
-	health_component.health_changed.connect(update_health_bar)
-	health_component.shield_changed.connect(update_shield_bar)
+	hp_component.health_changed.connect(update_health_bar)
+	hp_component.shield_changed.connect(update_shield_bar)
 
 ## Provides the health progress bar with a new value.
 func update_health_bar(value: int, _old_value: int) -> void:

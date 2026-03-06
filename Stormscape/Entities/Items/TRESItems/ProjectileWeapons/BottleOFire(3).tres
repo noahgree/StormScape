@@ -9,8 +9,10 @@
 [ext_resource type="Script" uid="uid://dkfssottmsrch" path="res://Entities/Stats/EffectSystemResources/EffectSource.gd" id="5_jastm"]
 [ext_resource type="Texture2D" uid="uid://dy66m5u8svl8h" path="res://Entities/Items/Weapons/ProjectileWeapons/BottleOFire/bottle_o_fire_base.png" id="6_14vfc"]
 [ext_resource type="Texture2D" uid="uid://b4bumm88u2qmw" path="res://Entities/Items/Weapons/ProjectileWeapons/BottleOFire/BottleOFireThrowableCT.tres" id="7_am00s"]
-[ext_resource type="Resource" uid="uid://blryd3h2c6dsl" path="res://Entities/Stats/EffectSystemResources/Conditions/BadEffects/Burning/Burning1Ground.tres" id="10_xiftk"]
+[ext_resource type="Script" uid="uid://20acrt2hb6y" path="res://Entities/Stats/EOTStats.gd" id="10_a15gh"]
 [ext_resource type="PackedScene" uid="uid://cb5ofy3224fh2" path="res://Entities/Items/Projectiles/ProjectileCore/AreaOfEffectVFX/FlamingAOEVFX.tscn" id="11_am00s"]
+[ext_resource type="Script" uid="uid://bcjwesiannbd0" path="res://Entities/Stats/StatMod/StatMod.gd" id="11_t03in"]
+[ext_resource type="Script" uid="uid://dr3ei6ur2bsdu" path="res://Entities/Stats/EffectSystemResources/Conditions/BadEffects/Burning/BurningEffect.gd" id="12_o12kb"]
 [ext_resource type="Script" uid="uid://bj3r5oopspj6l" path="res://Entities/Items/Projectiles/ProjectileCore/ProjStats.gd" id="12_ps56o"]
 [ext_resource type="PackedScene" uid="uid://b26uwbeam6drq" path="res://Entities/Items/Projectiles/Explosives/FireBottle/FireBottle.tscn" id="13_xiftk"]
 [ext_resource type="Script" uid="uid://ctxa7i1mbt7ab" path="res://Entities/Player/UI/Inventory/Panels/CraftingPanel/CraftingIngredient.gd" id="14_a15gh"]
@@ -35,13 +37,22 @@ impact_particle_color = Color(1, 0.752941, 0.796078, 1)
 _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
 point_count = 2
 
+[sub_resource type="Resource" id="Resource_je7a3"]
+script = ExtResource("10_a15gh")
+metadata/_custom_type_script = "uid://20acrt2hb6y"
+
+[sub_resource type="Resource" id="Resource_uxaud"]
+script = ExtResource("12_o12kb")
+eot_stats = SubResource("Resource_je7a3")
+metadata/_custom_type_script = "uid://dr3ei6ur2bsdu"
+
 [sub_resource type="Resource" id="Resource_cfkuc"]
 script = ExtResource("5_jastm")
 source_type = 3
 bad_effect_affected_teams = 3
 good_effect_affected_teams = 3
 base_damage = 10
-status_effects = Array[ExtResource("1_fshhe")]([ExtResource("10_xiftk")])
+conditions = Array[ExtResource("1_fshhe")]([SubResource("Resource_uxaud")])
 
 [sub_resource type="Curve" id="Curve_hfy8v"]
 _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]

@@ -3,55 +3,75 @@ extends Node
 class_name DHHandler
 ## DH stands for "damage and healing". This handles applying damage and healing in different ways.
 
-@export var can_be_crit: bool = true ## When false, critical hits are impossible on this entity.
+enum Type { DAMAGE, HEALING } ## For differentiating which we are working on when passing values around methods.
 
-@onready var affected_entity: Entity = get_parent().affected_entity ## The entity affected by this dh handler.
+@onready var affected_entity: Entity = owner ## The entity affected by this dh handler.
+@onready var hp_component: HPComponent = owner.hp_component ## The hp component to be affected by the incoming amounts.
 
-var health_component: HealthComponent ## The health component to be affected by the damage.
 var eot_timers: Dictionary[String, Array] = {} ## Holds references to all timers currently tracking active EOT. Keys are source type ids and values are an array of all matching timers of that type.
 var dot_delay_timers: Dictionary[String, Array] = {} ## Holds references to all timers current tracking delays for active DOT.
 
 
-## Asserts that there is a valid health component on the affected entity before trying to handle damage.
-func _ready() -> void:
-	if not affected_entity.is_node_ready():
-		await affected_entity.ready
-	health_component = affected_entity.health_component
-	assert(health_component, affected_entity.name + " has an esi receiver that is intended to handle damage, but no health component is connected.")
+#region Instant Amounts
+func handle_instant_amount(type: Type, popup_type: HPComponent.POPUP_TYPE, esi: ESI) -> int:
+	var amount: int = 0
+	var is_crit: bool = false
+	if type == Type.DAMAGE:
+		var base_damage: int = ceili(esi.get_stat(&"base_damage"))
+		if base_damage == 0:
+			return 0
 
-	var moddable_stats: Dictionary[StringName, float] = {
-		&"dmg_weakness" : _dmg_weakness, &"dmg_resistance" : _dmg_resistance
-	}
-	affected_entity.sc.add_moddable_stats(moddable_stats)
+		var crit_results: Array = _apply_crit_calculations(base_damage, esi)
+		is_crit = crit_results[1]
+		amount = crit_results[0]
+		amount = _apply_level_scaling(amount, esi, Type.DAMAGE)
+		amount = _apply_armor_blocking(amount, esi)
+		amount = _apply_object_scaling(amount, esi)
+	else:
+		var base_healing: int = ceili(esi.get_stat(&"base_healing"))
+		if base_healing == 0:
+			return 0
 
-## Calculates the final damage to apply after considering whether the crit hit and also how much the armor blocks.
-func _get_dmg_after_crit_then_armor(esi: ESI, is_crit: bool, lvl: int) -> int:
-	var level_mult: float = ((floori(lvl / 10.0) * esi.get_stat(&"lvl_dmg_scalar")) / 100.0) + 1
-	var dmg_after_crit: int = ceili(esi.get_stat(&"base_damage") * level_mult)
-	if is_crit:
-		dmg_after_crit = round(dmg_after_crit * esi.get_stat(&"crit_multiplier"))
+		amount = _apply_level_scaling(base_healing, esi, Type.HEALING)
 
-	var armor_block_percent: int = max(0, health_component.armor - esi.get_stat(&"armor_penetration"))
-	var new_damage: int = max(0, round(dmg_after_crit * (1 - (float(armor_block_percent) / 100))))
-	return new_damage
+	var xp_gain: int = _calculate_resulting_xp(amount)
+	popup_type = popup_type if not is_crit else HPComponent.POPUP_TYPE.CRIT_DAMAGE
 
-## Handles instantaneous damage that will be affected by armor. Returns the appropriate xp amount to apply.
-func handle_instant_damage(esi: ESI, lvl: int, life_steal_percent: float = 0.0) -> int:
-	var is_crit: bool = (randf_range(0, 100) <= esi.get_stat(&"crit_chance")) and can_be_crit
-	var dmg_after_crit_then_armor: int = _get_dmg_after_crit_then_armor(esi, is_crit, lvl)
+	send_handled_amount(type, amount, popup_type, esi)
 
-	var object_dmg_mult: float = 1.0
-	if affected_entity.is_object:
-		object_dmg_mult = esi.get_stat(&"object_damage_mult")
-	var final_damage: int = int(dmg_after_crit_then_armor * object_dmg_mult)
+	return xp_gain
 
-	var final_xp: int = final_damage
-	if final_damage >= affected_entity.health_component.health + affected_entity.health_component.shield:
-		final_xp += WeaponII.LARGE_XP
+func _apply_crit_calculations(base_damage: int, esi: ESI) -> Array:
+	var is_crit: bool = (randf_range(0, 100) <= esi.get_stat(&"crit_chance")) and affected_entity.esi_receiver.can_be_crit
+	if not is_crit:
+		return [base_damage, false]
+	return [round(base_damage * esi.get_stat(&"crit_multiplier")), true]
 
-	send_handled_amount("basic_damage", esi.es.dmg_affected_stats, final_damage, esi.multishot_id, life_steal_percent, is_crit)
-	return final_xp
+func _apply_level_scaling(amount: int, esi: ESI, type: Type) -> int:
+	var level_mult: float = 1.0
+	if type == Type.DAMAGE:
+		level_mult = ((floori(esi.source_ii_lvl / 10.0) * esi.get_stat(&"lvl_dmg_scalar")) / 100.0) + 1
+	else:
+		level_mult = ((floori(esi.source_ii_lvl / 10.0) * esi.get_stat(&"lvl_heal_scalar")) / 100.0) + 1
+	return ceili(amount * level_mult)
 
+func _apply_armor_blocking(amount: int, esi: ESI) -> int:
+	var armor_block_percent: int = max(0, hp_component.armor - esi.get_stat(&"armor_penetration"))
+	return max(0, round(amount * (1 - (float(armor_block_percent) / 100))))
+
+func _apply_object_scaling(amount: int, esi: ESI) -> int:
+	if not affected_entity.is_object:
+		return amount
+	return int(amount * esi.get_stat(&"object_damage_mult"))
+
+func _calculate_resulting_xp(amount: int) -> int:
+	if amount >= (affected_entity.hp_component.health + affected_entity.hp_component.shield):
+		return (amount + WeaponII.LARGE_XP)
+	return amount
+#endregion
+
+
+#region Amounts Over Time
 ## Handles applying damage that is inflicted over time, whether with a delay, with burst intervals, or with both.
 func handle_over_time_dmg(dot_resource: DOTResource, source_type: String) -> void:
 	var dot_timer: Timer = TimerHelpers.create_repeating_timer(self)
@@ -138,32 +158,53 @@ func _on_dot_timer_timeout(dot_timer: Timer, source_type: String) -> void:
 				_cancel_dot_timers(source_type, dot_timer)
 		else:
 			_cancel_dot_timers(source_type, dot_timer)
+#endregion
 
-## Sends the affected entity's health component the final amount values based on what stats the amount was
+
+## Sends the affected entity's hp component the final amount values based on what stats the amount was
 ## allowed to affect.
-func send_handled_amount(source_type: String, affected_stats: Globals.DHTypes, handled_amount: int,
-						multishot_id: int, life_steal_percent: float = 0.0, was_crit: bool = false) -> void:
-	var dmg_weakness: float = affected_entity.sc.get_stat("dmg_weakness")
-	var dmg_resistance: float = affected_entity.sc.get_stat("dmg_resistance")
-	var multiplier: float = 1.0 + (dmg_weakness / 100.0) - (dmg_resistance / 100.0)
+func send_handled_amount(type: Type, amount: int, popup_type: HPComponent.POPUP_TYPE, esi: ESI) -> void:
+	if type == Type.DAMAGE:
+		var dmg_weakness: float = affected_entity.sc.get_stat(&"dmg_weakness")
+		var dmg_resistance: float = affected_entity.sc.get_stat(&"dmg_resistance")
+		var multiplier: float = 1.0 + (dmg_weakness / 100.0) - (dmg_resistance / 100.0)
+		multiplier = clamp(multiplier, 0.0, 2.0)
+		var clamped_amount: int = max(0, amount * multiplier)
+
+		_handle_life_steal(clamped_amount, esi)
+		hp_component.change_by_dh_type(-clamped_amount, popup_type, esi.es.dmg_affected_stats, esi.multishot_id)
+	else:
+		var heal_affinity: float = affected_entity.sc.get_stat(&"heal_affinity")
+		var heal_reduction: float = affected_entity.sc.get_stat(&"heal_reduction")
+		var multiplier: float = 1.0 + (heal_affinity / 100.0) - (heal_reduction / 100.0)
+		multiplier = clamp(multiplier, 0.0, 2.0)
+		var clamped_amount: int = max(0, amount * multiplier)
+
+		hp_component.change_by_dh_type(clamped_amount, popup_type, esi.es.heal_affected_stats, esi.multishot_id)
+
+	affected_entity.sprite.start_hitflash(esi.es.hit_flash_color, false)
+
+## Handles a life steal interaction, passing the specified percentage of damage dealt back to the source
+## entity as healing. Adjusts for life steal weakness and resistance.
+func _handle_life_steal(damage_amount: int, esi: ESI) -> void:
+	# Skip if source no longer exists and don't allow life steal on something that has infinite HP
+	if (esi.source_entity == null) or (affected_entity.hp_component.infinte_hp):
+		return
+
+	var ls_condition_index: int = esi.conditions.find(LifeStealStats)
+	if ls_condition_index == -1:
+		return
+	var ls_condition: LifeStealStats = esi.conditions.get(ls_condition_index)
+
+	var self_hp_total: int = affected_entity.hp_component.health + affected_entity.hp_component.shield
+	var steal_amount: int = int(floor(min(self_hp_total, damage_amount) * (ls_condition.dmg_steal_pct / 100.0)))
+
+	var ls_weakness: float = affected_entity.sc.get_stat(&"life_steal_weakness")
+	var ls_resistance: float = affected_entity.sc.get_stat(&"life_steal_resistance")
+
+	var multiplier: float = 1.0 + (ls_weakness / 100.0) - (ls_resistance / 100.0)
 	multiplier = clamp(multiplier, 0.0, 2.0)
-	var positive_dmg: int = max(0, handled_amount * multiplier)
 
-	_pass_damage_to_potential_life_steal_handler(positive_dmg, life_steal_percent)
+	var clamped_steal_amount: int = max(1, roundi(steal_amount * multiplier))
 
-	match affected_stats:
-		Globals.DmgAffectedStats.HEALTH_ONLY:
-			health_component.damage_health(positive_dmg, source_type, was_crit, multishot_id)
-		Globals.DmgAffectedStats.SHIELD_ONLY:
-			health_component.damage_shield(positive_dmg, source_type, was_crit, multishot_id)
-		Globals.DmgAffectedStats.SHIELD_THEN_HEALTH:
-			health_component.damage_shield_then_health(positive_dmg, source_type, was_crit, multishot_id)
-		Globals.DmgAffectedStats.SIMULTANEOUS:
-			health_component.damage_shield(positive_dmg, source_type, was_crit, multishot_id)
-			health_component.damage_health(positive_dmg, source_type, was_crit, multishot_id)
-
-## If we should do life steal, pass that information on to the potential life steal handler.
-func _pass_damage_to_potential_life_steal_handler(amount: int, percent_to_steal: float) -> void:
-	if percent_to_steal > 0:
-		var handler: LifeStealHandler = get_parent().life_steal_handler
-		handler.handle_life_steal(amount, percent_to_steal)
+	esi.source_entity.hp_component.change_by_dh_type(clamped_steal_amount, HPComponent.POPUP_TYPE.LIFE_STEAL, Globals.DHTypes.HEALTH_THEN_SHIELD)

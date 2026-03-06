@@ -6,7 +6,7 @@
 [ext_resource type="Script" uid="uid://cv7ha7muvg5qu" path="res://Entities/Items/ItemCore/II.gd" id="3_i2rwd"]
 [ext_resource type="PackedScene" uid="uid://dh4ydl7l86ywq" path="res://Entities/EntityCore/Sprites/EntitySprite.tscn" id="3_nv7a0"]
 [ext_resource type="Shader" uid="uid://cfbagv3hrtar2" path="res://Utilities/Game/Shaders/EntityEffectShader.gdshader" id="4_l6rwf"]
-[ext_resource type="PackedScene" uid="uid://cdfdy8m6ki3oq" path="res://Entities/Components/HealthComponent/HealthComponent.tscn" id="6_1wa26"]
+[ext_resource type="PackedScene" uid="uid://cdfdy8m6ki3oq" path="res://Entities/Components/HPComponent/HPComponent.tscn" id="6_1wa26"]
 [ext_resource type="Script" uid="uid://c2gdoebfp12dq" path="res://Entities/Stats/StatMod/StatModsCache.gd" id="6_fg1br"]
 [ext_resource type="PackedScene" uid="uid://bhcqtorpyerc3" path="res://Utilities/Debug/ParticleEmissionComponent.tscn" id="6_ljryo"]
 [ext_resource type="PackedScene" uid="uid://btba0jmsow1mx" path="res://Entities/Components/EffectComponents/ESIReceiverComponent/ESIReceiverComponent.tscn" id="7_ftqus"]
@@ -139,19 +139,19 @@ offset_bottom = 2.0
 
 [node name="ParticleEmissionComponent" parent="." unique_id=1796230279 instance=ExtResource("6_ljryo")]
 
-[node name="HealthComponent" parent="." unique_id=2105530722 instance=ExtResource("6_1wa26")]
+[node name="HPComponent" parent="." unique_id=2105530722 instance=ExtResource("6_1wa26")]
 
 [node name="ESIReceiverComponent" parent="." unique_id=1427875003 node_paths=PackedStringArray("affected_entity", "dmg_handler", "heal_handler") instance=ExtResource("7_ftqus")]
 position = Vector2(0, -9)
-affected_entity = NodePath("..")
-dmg_handler = NodePath("DmgHandler")
-heal_handler = NodePath("HealHandler")
 knockback_handler = SubResource("Resource_2xjsy")
 poison_handler = SubResource("Resource_mdi77")
 regen_handler = SubResource("Resource_ccp8j")
 frostbite_handler = SubResource("Resource_3nojt")
 burning_handler = SubResource("Resource_ssl24")
 life_steal_handler = SubResource("Resource_mou4w")
+affected_entity = NodePath("..")
+dmg_handler = NodePath("DmgHandler")
+heal_handler = NodePath("HealHandler")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="ESIReceiverComponent" unique_id=1659667704]
 shape = SubResource("RectangleShape2D_wpovd")

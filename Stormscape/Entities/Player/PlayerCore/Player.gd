@@ -37,7 +37,7 @@ func _add_player_debug_commands() -> void:
 	DebugConsole.add_command("remove_condition_by_id", effect_src_receiver.remove_all_effects_of_id)
 	DebugConsole.add_command("tp", teleport_relative)
 	DebugConsole.add_command("tp_set", teleport)
-	DebugConsole.add_command("hp", health_component.change_hp_by_amount)
+	DebugConsole.add_command("hp", hp_component.change_hp_by_amount)
 	DebugConsole.add_command("stamina", stamina_component.change_stamina_by_amount)
 	DebugConsole.add_command("hunger_bars", stamina_component.change_hunger_bars_by_amount)
 	DebugConsole.add_command("wpn_mod", hands.add_mod_to_weapon_by_id)

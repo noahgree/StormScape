@@ -100,16 +100,16 @@ func _setup_cracks_with_damage(sprite_size: Vector2) -> void:
 	if not cracks_with_damage or entity is DynamicEntity:
 		return
 
-	var health_component: HealthComponent = entity.health_component
-	health_component.health_changed.connect(_update_cracking)
-	health_component.max_health_changed.connect(_on_max_health_of_entity_changed)
+	var hp_component: HPComponent = entity.hp_component
+	hp_component.health_changed.connect(_update_cracking)
+	hp_component.max_health_changed.connect(_on_max_health_of_entity_changed)
 
 	shader_node.set_instance_shader_parameter("crack_pixelate", sprite_size)
 	var scale_scaler: float = max(30.0, maxf(sprite_size.x, sprite_size.y)) / 30.0
 	min_crack_stats["crack_scale"] = min_crack_stats["crack_scale"] * scale_scaler
 	max_crack_stats["crack_scale"] = max_crack_stats["crack_scale"] * scale_scaler
 
-	_update_cracking(health_component.health, -1)
+	_update_cracking(hp_component.health, -1)
 
 ## Updates the floor light using tweening.
 func update_floor_light(condition_id: Condition.ID, kill: bool = false) -> void:
@@ -218,4 +218,4 @@ func _update_cracking(new_health: int, _old_health: int) -> void:
 
 ## Potentially updates the cracking when the max health changes since it would be at a different level of damage.
 func _on_max_health_of_entity_changed(_new_max_health: int) -> void:
-	_update_cracking(entity.health_component.health, -1)
+	_update_cracking(entity.hp_component.health, -1)

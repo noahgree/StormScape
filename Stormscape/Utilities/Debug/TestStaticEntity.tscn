@@ -9,7 +9,7 @@
 [ext_resource type="Script" uid="uid://baglarh3m4c8o" path="res://Entities/Components/ItemComponents/LootTableComponent/LootTableResource.gd" id="6_3mtfl"]
 [ext_resource type="PackedScene" uid="uid://bhcqtorpyerc3" path="res://Utilities/Debug/ParticleEmissionComponent.tscn" id="6_5h6dj"]
 [ext_resource type="Script" uid="uid://c2gdoebfp12dq" path="res://Entities/Stats/StatMod/StatModsCache.gd" id="6_axhmd"]
-[ext_resource type="PackedScene" uid="uid://cdfdy8m6ki3oq" path="res://Entities/Components/HealthComponent/HealthComponent.tscn" id="7_pas02"]
+[ext_resource type="PackedScene" uid="uid://cdfdy8m6ki3oq" path="res://Entities/Components/HPComponent/HPComponent.tscn" id="7_pas02"]
 [ext_resource type="Texture2D" uid="uid://b16ywn0u2djhd" path="res://Assets/Icon/icon_light.png" id="9_3mtfl"]
 [ext_resource type="PackedScene" uid="uid://4gl24qwdyti3" path="res://Entities/Components/EffectComponents/ESIReceiverComponent/EffectHandlers/DHHandler.tscn" id="10_b3858"]
 [ext_resource type="PackedScene" uid="uid://btba0jmsow1mx" path="res://Entities/Components/EffectComponents/ESIReceiverComponent/ESIReceiverComponent.tscn" id="10_o35vp"]
@@ -92,15 +92,15 @@ offset_top = -10.0
 offset_right = 9.0
 offset_bottom = 2.0
 
-[node name="HealthComponent" parent="." unique_id=1940569359 instance=ExtResource("7_pas02")]
+[node name="HPComponent" parent="." unique_id=1940569359 instance=ExtResource("7_pas02")]
 infinte_hp = true
 
 [node name="ParticleEmissionComponent" parent="." unique_id=2083625814 instance=ExtResource("6_5h6dj")]
 
 [node name="ESIReceiverComponent" parent="." unique_id=1081717184 node_paths=PackedStringArray("affected_entity", "dmg_handler") instance=ExtResource("10_o35vp")]
+life_steal_handler = SubResource("Resource_gf8n0")
 affected_entity = NodePath("..")
 dmg_handler = NodePath("DmgHandler")
-life_steal_handler = SubResource("Resource_gf8n0")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="ESIReceiverComponent" unique_id=947968318]
 position = Vector2(0, -7)

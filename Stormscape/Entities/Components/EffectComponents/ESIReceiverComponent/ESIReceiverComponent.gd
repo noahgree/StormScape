@@ -10,21 +10,20 @@ class_name ESIReceiverComponent
 ## Add specific effect handlers as children of this node to be able to receive those effects on the entity.
 ## For all intensive purposes, this is acting as a hurtbox component via its receiver area.
 
-@export var can_receive_conditions: bool = true ## Whether the affected entity can have conditions applied at all. This does not include base damage and base healing. This also determines if the entity can have its stats modded.
+@export var can_be_crit: bool = true ## When false, critical hits are impossible on this entity.
 @export var absorb_full_hit: bool = false ## When true, any weapon's hitbox that sends an effect to this receiver will be disabled for the remainder of the attack afterwards. Useful for when you want something like a tree to take the full hit and not let an axe keep swinging through to hit enemies behind it.
 @export_group("Source Filtering")
 @export var filter_source_types: bool = false ## When true, only allow matching source types as specified in the below array.
 @export var allowed_source_types: Array[Globals.ESISourceType] = [] ## The list of sources an effect source can come from in order to affect this esi receiver (only when filter_source_types is true).
 @export var filter_source_tags: bool = false ## When true, only allow matching source tags as specified in the below array.
 @export var allowed_source_tags: Array[String] = [] ## Effect sources must have a tag that matches something in this array in order to be handled when the filter_source_tags is set to true.
-@export_group("Connected Nodes")
-@export var dh_handler: DHHandler ## The dmg handler of the affected entity.
-@export var heal_handler: HealHandler ## The heal handler of the affected entity.
+
 @export_group("Entity Stat Modifiers")
 @export var stat_modifiers: EntityStatModifiers = EntityStatModifiers.new()
 
 @onready var tool_script: RefCounted = load("res://Entities/Components/EffectComponents/ESIReceiverComponent/ESIReceiverTool.gd").new(self) ## The tool script node that helps auto-assign export nodes relative to this receiver.
 @onready var entity: Entity = owner ## The owning entity to be affected by the ESIs being received.
+@onready var dh_handler: DHHandler = %DHHandler ## The dh handler child.
 
 var current_impact_sounds: Array[int] = [] ## The current impact sounds being played and held onto by this esi receiver.
 var most_recent_multishot_id: int = 0 ## The most recent multishot id to be received. Prevents multishots from stacking conditions.
@@ -46,13 +45,13 @@ func _ready() -> void:
 
 ## Handles an incoming effect source, passing it to present receivers for further processing before changing
 ## entity stats.
-func handle_esi(esi: ESI, source_entity: Entity, source_ii: WeaponII, process_conditions: bool = true) -> void:
-	# --- Applying Cam FX & Hit Sound ----
+func handle_esi(esi: ESI, process_conditions: bool = true) -> void:
+	# --- Applying Cam FX & Hit Sound ---
 	_handle_cam_fx(esi)
 	_handle_impact_sound(esi)
 
 	# --- Changing Cursor to Reflect Hit ---
-	if source_entity and source_entity is Player and not entity is Player:
+	if (esi.source_entity) and (esi.source_entity is Player) and (not entity is Player):
 		CursorManager.change_cursor(null, "hit")
 
 	# --- Filtering Source Types & Tags ---
@@ -66,9 +65,9 @@ func handle_esi(esi: ESI, source_entity: Entity, source_ii: WeaponII, process_co
 		if not match_found:
 			return
 
-	# --- Checking if Sender is Passive or Receiver Can't Receive ESIs ---
-	if (source_entity and source_entity.team == Globals.Teams.PASSIVE) or (not _can_receive_ESIs()):
-		if entity.loot:
+	# --- Checking if We Should Drop Loot on Hit Early and Return ---
+	if (esi.source_entity and esi.source_entity_team == Globals.Teams.PASSIVE) or (not _can_receive_ESIs()):
+		if (esi.es.source_type != Globals.ESISourceType.FROM_EOTI) and (entity.loot):
 			entity.loot.handle_hit()
 		return
 
@@ -78,41 +77,26 @@ func handle_esi(esi: ESI, source_entity: Entity, source_ii: WeaponII, process_co
 		vfx.global_position = entity.global_position
 		add_child(vfx)
 
-	# --- Validating Source Entity ---
-	if not source_entity:
-		return
-
-	# --- Triggering Loot Component ---
-	if entity.loot and not entity.loot.require_dmg_on_hit:
-		entity.loot.handle_hit()
+	# --- Triggering Loot Component if not from EOTI ---
+	if (entity.loot) and (not entity.loot.require_dmg_on_hit):
+		if esi.es.source_type != Globals.ESISourceType.FROM_EOTI:
+			entity.loot.handle_hit()
 
 	# --- Applying Base Damage & Base Healing ---
 	var xp: int = 0
-	var do_hitflash: bool = false
-	var source_level: int = source_ii.level if source_ii else 1
-	if esi.get_stat(&"base_damage") > 0 and dh_handler != null:
-		if _check_same_team(source_entity) and _check_if_bad_effects_apply_to_allies(esi.es):
-			dh_handler.handle_instant_damage(esi, source_level, _get_life_steal(esi, source_entity))
-			do_hitflash = true
-		elif not _check_same_team(source_entity) and _check_if_bad_effects_apply_to_enemies(esi.es):
-			xp = dh_handler.handle_instant_damage(esi, source_level, _get_life_steal(esi, source_entity))
-			do_hitflash = true
+	if _check_same_team(esi.source_entity_team) and _check_if_bad_effects_apply_to_allies(esi.es):
+		dh_handler.handle_instant_amount(DHHandler.Type.DAMAGE, HPComponent.POPUP_TYPE.AUTO, esi)
+	elif not _check_same_team(esi.source_entity_team) and _check_if_bad_effects_apply_to_enemies(esi.es):
+		xp = dh_handler.handle_instant_amount(DHHandler.Type.DAMAGE, HPComponent.POPUP_TYPE.AUTO, esi)
 
-	if esi.get_stat(&"base_healing") > 0 and heal_handler != null:
-		if _check_same_team(source_entity) and _check_if_good_effects_apply_to_allies(esi.es):
-			xp = heal_handler.handle_instant_heal(esi, source_level)
-			do_hitflash = true
-		elif not _check_same_team(source_entity) and _check_if_good_effects_apply_to_enemies(esi.es):
-			heal_handler.handle_instant_heal(esi, source_level)
-			do_hitflash = true
-
-	if do_hitflash:
-		entity.sprite.start_hitflash(esi.es.hit_flash_color, false)
+	if _check_same_team(esi.source_entity_team) and _check_if_good_effects_apply_to_allies(esi.es):
+		xp = dh_handler.handle_instant_amount(DHHandler.Type.HEALING, HPComponent.POPUP_TYPE.AUTO, esi)
+	elif not _check_same_team(esi.source_entity_team) and _check_if_good_effects_apply_to_enemies(esi.es):
+		dh_handler.handle_instant_amount(DHHandler.Type.HEALING, HPComponent.POPUP_TYPE.AUTO, esi)
 
 	# --- Applying Resulting Weapon XP ---
-	if source_entity is Player and source_ii and is_instance_valid(source_ii):
-		var xp_to_add: int = ceili(WeaponII.EFFECT_AMOUNT_XP_MULT * xp)
-		source_ii.add_xp(xp_to_add)
+	if (esi.source_entity) and (esi.source_entity is Player) and (esi.source_ii):
+		esi.source_ii.add_xp(ceili(WeaponII.EFFECT_AMOUNT_XP_MULT * xp))
 
 	# --- Start of Status Effect Processing Chain ---
 	if process_conditions and can_receive_conditions:
@@ -124,11 +108,11 @@ func handle_esi(esi: ESI, source_entity: Entity, source_ii: WeaponII, process_co
 				knockback_handler.effect_movement_direction = esi.movement_direction
 				knockback_handler.is_source_moving_type = (esi.es.source_type == Globals.ESISourceType.FROM_PROJECTILE)
 
-			_check_condition_team_logic(esi, source_entity)
+			_check_condition_team_logic(esi)
 
 ## Checks if each condition in the array applies to this entity via team logic, then passes it to be unpacked.
-func _check_condition_team_logic(esi: ESI, source_entity: Entity) -> void:
-	var is_same_team: bool = _check_same_team(source_entity)
+func _check_condition_team_logic(esi: ESI) -> void:
+	var is_same_team: bool = _check_same_team(esi.source_entity_team)
 	var bad_effects_to_enemies: bool = not is_same_team and _check_if_bad_effects_apply_to_enemies(esi.es)
 	var good_effects_to_enemies: bool = not is_same_team and _check_if_good_effects_apply_to_enemies(esi.es)
 	var bad_effects_to_allies: bool = is_same_team and _check_if_bad_effects_apply_to_allies(esi.es)
@@ -160,37 +144,37 @@ func handle_condition(condition: Condition) -> void:
 
 ## Passes the condition to a handler if one is needed for additional logic handling.
 func _pass_effect_to_handler(condition: Condition) -> void:
-	if condition is StormSyndromeEffect:
-		if storm_syndrome_handler: storm_syndrome_handler.handle_storm_syndrome(condition)
-		else: return
-	if condition is KnockbackEffect:
-		if knockback_handler: knockback_handler.handle_knockback(condition)
-		else: return
-	if condition is StunEffect:
-		if stun_handler: stun_handler.handle_stun(condition)
-		else: return
-	if condition is PoisonEffect:
-		if poison_handler: poison_handler.handle_poison(condition)
-		else: return
-	if condition is RegenEffect:
-		if regen_handler: regen_handler.handle_regen(condition)
-		else: return
-	if condition is FrostbiteEffect:
-		if frostbite_handler: frostbite_handler.handle_frostbite(condition)
-		else: return
-	if condition is BurningEffect:
-		if burning_handler: burning_handler.handle_burning(condition)
-		else: return
-	if condition is TimeSnareEffect:
-		if time_snare_handler: time_snare_handler.handle_time_snare(condition)
-		else: return
+	#if condition is StormSyndromeEffect:
+		#if storm_syndrome_handler: storm_syndrome_handler.handle_storm_syndrome(condition)
+		#else: return
+	#if condition is KnockbackStats:
+		#if knockback_handler: knockback_handler.handle_knockback(condition)
+		#else: return
+	#if condition is StunEffect:
+		#if stun_handler: stun_handler.handle_stun(condition)
+		#else: return
+	#if condition is PoisonEffect:
+		#if poison_handler: poison_handler.handle_poison(condition)
+		#else: return
+	#if condition is RegenEffect:
+		#if regen_handler: regen_handler.handle_regen(condition)
+		#else: return
+	#if condition is FrostbiteEffect:
+		#if frostbite_handler: frostbite_handler.handle_frostbite(condition)
+		#else: return
+	#if condition is BurningEffect:
+		#if burning_handler: burning_handler.handle_burning(condition)
+		#else: return
+	#if condition is TimeSnareEffect:
+		#if time_snare_handler: time_snare_handler.handle_time_snare(condition)
+		#else: return
 
 	if not ((entity is not Player) and condition.only_cue_on_player_hit):
 		AudioManager.play_2d(condition.audio_to_play, entity.global_position)
 
 ## Checks if the affected entity is on the same team as the producer of the effect source.
-func _check_same_team(source_entity: Entity) -> bool:
-	return entity.team & source_entity.team != 0
+func _check_same_team(source_entity_team: Globals.Teams) -> bool:
+	return entity.team & source_entity_team != 0
 
 ## Checks if the effect source should do bad effects to allies.
 func _check_if_bad_effects_apply_to_allies(effect_source: EffectSource) -> bool:
@@ -248,15 +232,6 @@ func _handle_cam_fx(esi: ESI) -> void:
 		return
 	esi.es.impact_cam_fx.apply_falloffs_and_activate_all(entity)
 
-## Checks if there is a life steal effect in the conditions and returns the percent to steal if so.
-func _get_life_steal(esi: ESI, source_entity: Entity) -> float:
-	if can_receive_conditions and life_steal_handler:
-		for condition: Condition in esi.conditions:
-			if condition.id == Condition.ID.LIFE_STEAL:
-				life_steal_handler.source_entity = source_entity
-				return condition.dmg_steal
-	return 0.0
-
 #region Debug
 ## This works with the tool script defined above to assign export vars automatically in-editor once added
 ## to the tree.
@@ -266,12 +241,6 @@ func _notification(what: int) -> void:
 			tool_script.update_editor_children_exports(self, get_children())
 			tool_script.update_editor_parent_export(self, get_parent())
 			tool_script.ensure_effect_handler_resource_unique_to_scene(self)
-
-## Edits editor warnings for easier debugging.
-func _get_configuration_warnings() -> PackedStringArray:
-	if can_receive_conditions and not get_parent().has_node("%ConditionsComponent"):
-		return ["Entities with ESI receivers marked as being able to receive conditions must have a ConditionsComponent. Make sure it has a unique name (%)."]
-	return []
 
 ## Attempts to apply a condition based on its file name turned into snake case. "poison_1", for example.
 func apply_condition_by_id(effect_key: StringName) -> void:

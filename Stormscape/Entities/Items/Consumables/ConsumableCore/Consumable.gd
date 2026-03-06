@@ -6,10 +6,12 @@ class_name Consumable
 
 @onready var consumption_timer: Timer = $ConsumptionTimer ## The time it takes to consume the consumable and trigger its effects.
 @onready var food_particles: CPUParticles2D = $FoodParticles ## The particles that fire off when the consumable is consumed.
+var esi: ESI ## The effect source instance to be use when this consumable is consumed.
 
 
 func _set_ii(new_ii: II) -> void:
 	super._set_ii(new_ii)
+	esi = new_ii.esi
 
 	if sprite:
 		sprite.texture = stats.in_hand_icon
@@ -42,7 +44,9 @@ func consume() -> void:
 			stamina_component.gain_hunger_bars(stats.hunger_bar_gain)
 			stamina_component.use_hunger_bars(stats.hunger_bar_deduction)
 
-		source_entity.effect_src_receiver.handle_esi(ii.esi, source_entity, null)
+		esi = esi.copy()
+		esi.set_source_info(source_entity, null)
+		source_entity.effect_src_receiver.handle_esi(esi)
 
 		source_entity.inv.remove_item(inv_index, 1)
 

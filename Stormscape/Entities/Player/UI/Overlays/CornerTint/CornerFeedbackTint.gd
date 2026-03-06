@@ -19,8 +19,8 @@ func _ready() -> void:
 
 	if not Globals.player_node:
 		await SignalBus.player_ready
-	Globals.player_node.health_component.health_changed.connect(_show_hp_change_fx)
-	Globals.player_node.health_component.shield_changed.connect(_show_hp_change_fx)
+	Globals.player_node.hp_component.health_changed.connect(_show_hp_change_fx)
+	Globals.player_node.hp_component.shield_changed.connect(_show_hp_change_fx)
 
 	_change_storm_fx()
 

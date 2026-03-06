@@ -243,7 +243,8 @@ func _start_being_handled(handling_area: ESIReceiverComponent, contact_point: Ve
 	_adjust_esi_for_falloff(esi, contact_point)
 	esi.movement_direction = Vector2(cos(rotation), sin(rotation)).normalized()
 	esi.contact_position = contact_point
-	handling_area.handle_esi(esi, source_entity, source_ii)
+	esi.set_source_info(source_entity, source_ii)
+	handling_area.handle_esi(esi)
 
 ## When we hit a handling area during a hitscan, we apply falloff to the components of the effect source.
 func _adjust_esi_for_falloff(esi_to_adjust: ESI, contact_point: Vector2) -> void:

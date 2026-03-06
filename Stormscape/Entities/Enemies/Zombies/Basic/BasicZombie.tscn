@@ -11,7 +11,7 @@
 [ext_resource type="PackedScene" uid="uid://co3n6m7efg8pd" path="res://Entities/Components/EffectComponents/ConditionsComponent/ConditionsComponent.tscn" id="5_g4fx3"]
 [ext_resource type="PackedScene" uid="uid://b7gdy01q8wsjx" path="res://Entities/Components/ItemComponents/HandsComponent/HandsComponent.tscn" id="6_j2ytj"]
 [ext_resource type="Script" uid="uid://c2gdoebfp12dq" path="res://Entities/Stats/StatMod/StatModsCache.gd" id="6_s1u3v"]
-[ext_resource type="PackedScene" uid="uid://cdfdy8m6ki3oq" path="res://Entities/Components/HealthComponent/HealthComponent.tscn" id="7_gh5xt"]
+[ext_resource type="PackedScene" uid="uid://cdfdy8m6ki3oq" path="res://Entities/Components/HPComponent/HPComponent.tscn" id="7_gh5xt"]
 [ext_resource type="Script" uid="uid://baglarh3m4c8o" path="res://Entities/Components/ItemComponents/LootTableComponent/LootTableResource.gd" id="7_qrtn1"]
 [ext_resource type="PackedScene" uid="uid://btba0jmsow1mx" path="res://Entities/Components/EffectComponents/ESIReceiverComponent/ESIReceiverComponent.tscn" id="8_u4xth"]
 [ext_resource type="PackedScene" uid="uid://4gl24qwdyti3" path="res://Entities/Components/EffectComponents/ESIReceiverComponent/EffectHandlers/DHHandler.tscn" id="9_eigs2"]
@@ -1108,14 +1108,11 @@ anim_offset_curve = SubResource("Curve_kq2k7")
 [node name="ParticleEmissionComponent" parent="." unique_id=1225411636 instance=ExtResource("3_6bt22")]
 below_extents = Vector2(8, 1)
 
-[node name="HealthComponent" parent="." unique_id=1844147677 instance=ExtResource("7_gh5xt")]
+[node name="HPComponent" parent="." unique_id=1844147677 instance=ExtResource("7_gh5xt")]
 
 [node name="StaminaComponent" parent="." unique_id=659536841 instance=ExtResource("10_kc883")]
 
 [node name="ESIReceiverComponent" parent="." unique_id=992535422 node_paths=PackedStringArray("affected_entity", "dmg_handler", "heal_handler") instance=ExtResource("8_u4xth")]
-affected_entity = NodePath("..")
-dmg_handler = NodePath("DmgHandler")
-heal_handler = NodePath("HealHandler")
 knockback_handler = SubResource("Resource_s1u3v")
 stun_handler = SubResource("Resource_3s3sr")
 poison_handler = SubResource("Resource_ylj7g")
@@ -1124,6 +1121,9 @@ frostbite_handler = SubResource("Resource_nonw0")
 burning_handler = SubResource("Resource_6vrim")
 time_snare_handler = SubResource("Resource_jfdci")
 life_steal_handler = SubResource("Resource_bijca")
+affected_entity = NodePath("..")
+dmg_handler = NodePath("DmgHandler")
+heal_handler = NodePath("HealHandler")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="ESIReceiverComponent" unique_id=825246500]
 position = Vector2(0, -13)
@@ -1163,7 +1163,7 @@ parameters/idle/blendspace2d/blend_position = Vector2(0, 0)
 parameters/run/TimeScale/scale = 1.0
 parameters/run/blendspace2d/blend_position = Vector2(0, 0)
 
-[node name="OverheadUI" type="Control" parent="." unique_id=1675948781 node_paths=PackedStringArray("health_component")]
+[node name="OverheadUI" type="Control" parent="." unique_id=1675948781]
 unique_name_in_owner = true
 layout_mode = 3
 anchors_preset = 8
@@ -1178,7 +1178,6 @@ offset_bottom = -32.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("45_ylj7g")
-health_component = NodePath("../HealthComponent")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="OverheadUI" unique_id=178700523]
 custom_minimum_size = Vector2(21, 3)

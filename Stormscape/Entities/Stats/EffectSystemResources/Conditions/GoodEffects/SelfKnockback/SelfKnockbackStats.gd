@@ -1,6 +1,6 @@
 @icon("res://Utilities/Debug/EditorIcons/self_knockback_effect.png")
-extends KnockbackEffect
-class_name SelfKnockbackEffect
+extends KnockbackStats
+class_name SelfKnockbackStats
 ## A special kind of knockback that applies directly to the source entity. Uses either its hands rotation or
 ## the direction it is facing, as specified.
 

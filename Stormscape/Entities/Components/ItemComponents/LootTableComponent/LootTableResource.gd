@@ -37,8 +37,8 @@ var hp_change_counter: int
 func initialize(entity: Entity) -> void:
 	source_entity = entity
 	if require_dmg_on_hit:
-		source_entity.health_component.health_changed.connect(_on_hp_changed)
-		source_entity.health_component.shield_changed.connect(_on_hp_changed)
+		source_entity.hp_component.health_changed.connect(_on_hp_changed)
+		source_entity.hp_component.shield_changed.connect(_on_hp_changed)
 
 	hit_loot_table = hit_loot_table.filter(func(element: LootTableEntry) -> bool: return element != null)
 	die_loot_table = die_loot_table.filter(func(element: LootTableEntry) -> bool: return element != null)

@@ -550,8 +550,8 @@ func _on_safe_zone_body_entered(body: Node2D) -> void:
 ## When a dynamic entity exits the inner safe circle, we apply the current storm condition.
 func _on_safe_zone_body_exited(body: Node2D) -> void:
 	if body is DynamicEntity:
-		var health_component: HealthComponent = body.get_node_or_null("HealthComponent")
-		if health_component and health_component.is_dying:
+		var hp_component: HPComponent = body.get_node_or_null("HPComponent")
+		if hp_component and hp_component.is_dying:
 			return
 
 		if is_enabled:

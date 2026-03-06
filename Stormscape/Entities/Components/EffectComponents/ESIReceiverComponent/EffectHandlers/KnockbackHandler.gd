@@ -3,10 +3,8 @@ extends Resource
 class_name KnockbackHandler
 ## A handler for using the data provided in the effect source to apply knockback in different ways.
 
-@export_range(0, 100, 1.0, "hide_slider", "suffix:%") var _knockback_weakness: float = 0.0 ## A multiplier for knockback on an entity.
-@export_range(0, 100, 1.0, "hide_slider", "suffix:%") var _knockback_resistance: float = 0.0 ## A multiplier for redudcing knockback on an entity.
-@export_subgroup("Other")
-@export_range(0.0, 0.5, 0.01) var entity_dir_influence: float = 0.25 ## How strong of an influence the entity's movement direction should have on the knockback vector.
+
+const ENTITY_DIR_INFLUENCE: float = 0.25 ## How strong of an influence the entity's movement direction should have on the knockback vector.
 
 var effect_src_receiver: ESIReceiverComponent ## The receiver that passes the effect to this handler node.
 var contact_position: Vector2 = Vector2.ZERO ## Set by the condition component for incoming knockback.
@@ -16,18 +14,14 @@ var is_source_moving_type: bool = false ## Set by the condition component for in
 
 func initialize(receiver: ESIReceiverComponent) -> void:
 	effect_src_receiver = receiver
-	var moddable_stats: Dictionary[StringName, float] = {
-		&"knockback_weakness" : _knockback_weakness, &"knockback_resistance" : _knockback_resistance
-	}
-	effect_src_receiver.affected_entity.sc.add_moddable_stats(moddable_stats)
 
 ## Handles applying knockback to a dynamic entity when they hit something that provides knockback.
-func handle_knockback(knockback_effect: KnockbackEffect) -> void:
+func handle_knockback(knockback_effect: KnockbackStats) -> void:
 	if knockback_effect.custom_knockback_direction != Vector2.ZERO:
 		_send_handled_knockback(knockback_effect.custom_knockback_direction, knockback_effect.knockback_force)
 		return
 
-	if knockback_effect is SelfKnockbackEffect:
+	if knockback_effect is SelfKnockbackStats:
 		handle_self_knockback(knockback_effect)
 		return
 
@@ -36,7 +30,7 @@ func handle_knockback(knockback_effect: KnockbackEffect) -> void:
 	elif effect_src_receiver.affected_entity is RigidEntity:
 		handle_rigid_entity_knockback(knockback_effect)
 
-func handle_dynamic_entity_knockback(knockback_effect: KnockbackEffect) -> void:
+func handle_dynamic_entity_knockback(knockback_effect: KnockbackStats) -> void:
 	var entity_move_dir: Vector2 = effect_src_receiver.affected_entity.velocity.normalized()
 	var effect_dir: Vector2
 
@@ -45,18 +39,18 @@ func handle_dynamic_entity_knockback(knockback_effect: KnockbackEffect) -> void:
 			effect_dir = effect_movement_direction
 		else:
 			effect_dir = effect_movement_direction
-			effect_dir = effect_dir.lerp(entity_move_dir, entity_dir_influence).normalized()
+			effect_dir = effect_dir.lerp(entity_move_dir, ENTITY_DIR_INFLUENCE).normalized()
 	else:
 		if entity_move_dir == Vector2.ZERO:
 			effect_dir = (effect_src_receiver.global_position - contact_position).normalized()
 		else:
 			effect_dir = (effect_src_receiver.global_position - contact_position).normalized()
-			effect_dir = effect_dir.lerp(entity_move_dir, entity_dir_influence).normalized()
+			effect_dir = effect_dir.lerp(entity_move_dir, ENTITY_DIR_INFLUENCE).normalized()
 
 	_send_handled_knockback(effect_dir, knockback_effect.knockback_force)
 
 ## Handles applying knockback to a rigid entity when it hits something that provides knockback.
-func handle_rigid_entity_knockback(knockback_effect: KnockbackEffect) -> void:
+func handle_rigid_entity_knockback(knockback_effect: KnockbackStats) -> void:
 	var effect_dir: Vector2
 
 	if is_source_moving_type:
@@ -66,14 +60,14 @@ func handle_rigid_entity_knockback(knockback_effect: KnockbackEffect) -> void:
 
 	_send_handled_knockback(effect_dir, knockback_effect.knockback_force * 2)
 
-func handle_self_knockback(knockback_effect: SelfKnockbackEffect) -> void:
+func handle_self_knockback(knockback_effect: SelfKnockbackStats) -> void:
 	if effect_src_receiver.affected_entity is not DynamicEntity:
-		push_error("SelfKnockbackEffect was attempted to be used on a non-DynamicEntity.")
+		push_error("SelfKnockbackStats was attempted to be used on a non-DynamicEntity.")
 		return
 
 	var effect_dir: Vector2
 
-	if knockback_effect.direction_method == SelfKnockbackEffect.DIRECTION_METHOD.FACING:
+	if knockback_effect.direction_method == SelfKnockbackStats.DIRECTION_METHOD.FACING:
 		effect_dir = -effect_src_receiver.affected_entity.facing_component.facing_dir.normalized()
 	else:
 		var hands_rotation: float = effect_src_receiver.affected_entity.hands.hands_anchor.global_rotation

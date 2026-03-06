@@ -9,7 +9,7 @@
 [ext_resource type="Script" uid="uid://c2gdoebfp12dq" path="res://Entities/Stats/StatMod/StatModsCache.gd" id="6_7qjvm"]
 [ext_resource type="Script" uid="uid://baglarh3m4c8o" path="res://Entities/Components/ItemComponents/LootTableComponent/LootTableResource.gd" id="6_ymdvb"]
 [ext_resource type="Texture2D" uid="uid://y4h3ce1ifonf" path="res://Entities/Environment/Rocks/Rock1CT.tres" id="7_7qjvm"]
-[ext_resource type="PackedScene" uid="uid://cdfdy8m6ki3oq" path="res://Entities/Components/HealthComponent/HealthComponent.tscn" id="8_c8cii"]
+[ext_resource type="PackedScene" uid="uid://cdfdy8m6ki3oq" path="res://Entities/Components/HPComponent/HPComponent.tscn" id="8_c8cii"]
 [ext_resource type="Texture2D" uid="uid://tt44u2wmer3n" path="res://Entities/EntityCore/Shadow/shadow_large.png" id="9_7qjvm"]
 [ext_resource type="PackedScene" uid="uid://btba0jmsow1mx" path="res://Entities/Components/EffectComponents/ESIReceiverComponent/ESIReceiverComponent.tscn" id="9_wje6d"]
 [ext_resource type="PackedScene" uid="uid://jpq0ij8wwlhy" path="res://Entities/Components/FacingComponent/FacingComponent.tscn" id="12_1nxg5"]
@@ -109,7 +109,7 @@ rotation = -1.5708
 shape = SubResource("CapsuleShape2D_l7ldg")
 debug_color = Color(0, 0.632808, 0.44745, 0.251)
 
-[node name="HealthComponent" parent="." unique_id=1194561221 instance=ExtResource("8_c8cii")]
+[node name="HPComponent" parent="." unique_id=1194561221 instance=ExtResource("8_c8cii")]
 _max_health = 500
 _max_shield = 0
 

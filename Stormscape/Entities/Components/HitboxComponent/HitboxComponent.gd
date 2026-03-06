@@ -62,7 +62,8 @@ func _start_being_handled(handling_area: ESIReceiverComponent) -> void:
 
 	if handling_area.absorb_full_hit:
 		collider.set_deferred("disabled", true) # Does not apply to hitscans
-	handling_area.handle_esi(esi, source_entity, source_ii)
+	esi.set_source_info(source_entity, source_ii)
+	handling_area.handle_esi(esi)
 
 ## Meant to be overridden by subclasses to determine what to do after hitting an object.
 func _process_hit(_object: Node2D) -> void:

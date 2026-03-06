@@ -12,7 +12,7 @@
 [ext_resource type="PackedScene" uid="uid://dh4ydl7l86ywq" path="res://Entities/EntityCore/Sprites/EntitySprite.tscn" id="10_kkd23"]
 [ext_resource type="Shader" uid="uid://cfbagv3hrtar2" path="res://Utilities/Game/Shaders/EntityEffectShader.gdshader" id="11_pg7ae"]
 [ext_resource type="Texture2D" uid="uid://vyww0ruffm15" path="res://Entities/Environment/Rocks/Rock2CT.tres" id="12_b403c"]
-[ext_resource type="PackedScene" uid="uid://cdfdy8m6ki3oq" path="res://Entities/Components/HealthComponent/HealthComponent.tscn" id="13_3mtpp"]
+[ext_resource type="PackedScene" uid="uid://cdfdy8m6ki3oq" path="res://Entities/Components/HPComponent/HPComponent.tscn" id="13_3mtpp"]
 [ext_resource type="PackedScene" uid="uid://jpq0ij8wwlhy" path="res://Entities/Components/FacingComponent/FacingComponent.tscn" id="14_d40yk"]
 [ext_resource type="PackedScene" uid="uid://btba0jmsow1mx" path="res://Entities/Components/EffectComponents/ESIReceiverComponent/ESIReceiverComponent.tscn" id="15_8664o"]
 [ext_resource type="PackedScene" uid="uid://4gl24qwdyti3" path="res://Entities/Components/EffectComponents/ESIReceiverComponent/EffectHandlers/DHHandler.tscn" id="16_11n4a"]
@@ -114,7 +114,7 @@ rotation = -1.5708
 shape = SubResource("CapsuleShape2D_l7ldg")
 debug_color = Color(0, 0.632808, 0.44745, 0.251)
 
-[node name="HealthComponent" parent="." unique_id=1485921896 instance=ExtResource("13_3mtpp")]
+[node name="HPComponent" parent="." unique_id=1485921896 instance=ExtResource("13_3mtpp")]
 _max_health = 500
 _max_shield = 0
 

@@ -10,8 +10,9 @@ class_name EOTStats
 @export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var perpetual_interval: float = 1.0 ## The time between applying the same effect amount when perpetual is true.
 
 @export_group("Ticks")
-@export var esi_array: Array[ESI]: set = _set_esi_array ## The effect source instance to apply at each tick. Using only one is recommended, but if more than one are used, the amount used should match the tick count.
+@export var ticks_array: Array[EffectSource]: set = _set_ticks_array ## The effect sources to apply at each tick. Using only one is recommended, but if more than one are used, the amount used should match the tick count.
 @export var affected_stats: Globals.DHTypes = Globals.DHTypes.HEALTH_ONLY ## The stats to apply the amounts to.
+@export var popup_type: HPComponent.POPUP_TYPE = HPComponent.POPUP_TYPE.BURNING ## What the amount popup and colorations should look like they came from at each tick.
 
 @export_group("Stat Mods")
 @export var stat_mods: Array[StatMod] ## The mods applied by this effect. Do not have duplicates in this array.
@@ -21,9 +22,9 @@ class_name EOTStats
 @export var hit_flash_color: Color = Color(1, 1, 1, 0.6) ## The color to update the hitflash with every time the effect amount from this resource hits.
 
 
-## Setter for the esi array to make sure each ESI uses the right source type.
-func _set_esi_array(new_esi_array: Array[ESI]) -> void:
-	esi_array = new_esi_array
-	for esi: ESI in esi_array:
-		if esi.es.source_type != Globals.ESISourceType.FROM_EOTI:
+## Setter for the ticks array to make sure each Effect Source uses the right source type.
+func _set_ticks_array(new_ticks_array: Array[EffectSource]) -> void:
+	ticks_array = new_ticks_array
+	for effect_source: EffectSource in ticks_array:
+		if effect_source.source_type != Globals.ESISourceType.FROM_EOTI:
 			push_error(resource_name + " has EOTIs that don't identify their source as FROM_EOTI. This will cause issues.")

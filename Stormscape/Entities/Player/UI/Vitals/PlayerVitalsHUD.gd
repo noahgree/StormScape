@@ -4,7 +4,7 @@ extends Control
 ##
 ## Recieves signals from the global signal bus for when to update and what to update to.
 
-@export var health_component: HealthComponent
+@export var hp_component: HPComponent
 @export var stamina_component: StaminaComponent
 
 @onready var hunger_bar: TextureProgressBar = %HungerBar
@@ -23,10 +23,10 @@ var hunger_changed_timer: Timer = TimerHelpers.create_one_shot_timer(self, 0.5, 
 
 
 func _ready() -> void:
-	health_component.health_changed.connect(on_health_changed)
-	health_component.max_health_changed.connect(on_max_health_changed)
-	health_component.shield_changed.connect(on_shield_changed)
-	health_component.max_shield_changed.connect(on_max_shield_changed)
+	hp_component.health_changed.connect(on_health_changed)
+	hp_component.max_health_changed.connect(on_max_health_changed)
+	hp_component.shield_changed.connect(on_shield_changed)
+	hp_component.max_shield_changed.connect(on_max_shield_changed)
 	stamina_component.stamina_changed.connect(on_stamina_changed)
 	stamina_component.max_stamina_changed.connect(on_max_stamina_changed)
 	stamina_component.hunger_bars_changed.connect(on_hunger_bars_changed)

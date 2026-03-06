@@ -14,7 +14,7 @@ class_name Entity
 @onready var conditions_component: ConditionsComponent = get_node_or_null("ConditionsComponent") ## The node that will cache and manage all conditions for this entity.
 @onready var particle_mgr: ParticleEmissionComponent = $ParticleEmissionComponent ## The component responsible for determining the extents and origins of different particle placements.
 @onready var detection_component: DetectionComponent = $DetectionComponent ## The component that defines the radius around this entity that an enemy must enter for that enemy to be alerted.
-@onready var health_component: HealthComponent = $HealthComponent ## The component in charge of entity health and shield.
+@onready var hp_component: HPComponent = $HPComponent ## The component in charge of entity health and shield.
 @onready var item_receiver: ItemReceiverComponent = get_node_or_null("ItemReceiverComponent") ## The item receiver for this entity.
 @onready var hands: HandsComponent = get_node_or_null("%HandsComponent") ## The hands item component for the entity.
 

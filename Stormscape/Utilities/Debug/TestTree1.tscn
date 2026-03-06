@@ -12,7 +12,7 @@
 [ext_resource type="PackedScene" uid="uid://btba0jmsow1mx" path="res://Entities/Components/EffectComponents/ESIReceiverComponent/ESIReceiverComponent.tscn" id="6_bxml6"]
 [ext_resource type="Script" uid="uid://c2gdoebfp12dq" path="res://Entities/Stats/StatMod/StatModsCache.gd" id="6_r6tnu"]
 [ext_resource type="PackedScene" uid="uid://co3n6m7efg8pd" path="res://Entities/Components/EffectComponents/ConditionsComponent/ConditionsComponent.tscn" id="7_7lx3c"]
-[ext_resource type="PackedScene" uid="uid://cdfdy8m6ki3oq" path="res://Entities/Components/HealthComponent/HealthComponent.tscn" id="7_umo0g"]
+[ext_resource type="PackedScene" uid="uid://cdfdy8m6ki3oq" path="res://Entities/Components/HPComponent/HPComponent.tscn" id="7_umo0g"]
 [ext_resource type="PackedScene" uid="uid://4gl24qwdyti3" path="res://Entities/Components/EffectComponents/ESIReceiverComponent/EffectHandlers/DHHandler.tscn" id="8_4pw5b"]
 [ext_resource type="Script" uid="uid://1qq7eo7lm8j6" path="res://Entities/Components/ItemComponents/LootTableComponent/LootTableEntry.gd" id="8_v4qb0"]
 [ext_resource type="Texture2D" uid="uid://c3e5rxu6csi7p" path="res://Entities/EntityCore/Shadow/shadow_extra_large.png" id="9_r6tnu"]
@@ -117,7 +117,7 @@ instance_shader_parameters/crack_scale = 12.282
 position = Vector2(12, -48)
 sprite_frames = SubResource("SpriteFrames_o33n8")
 
-[node name="HealthComponent" parent="." unique_id=1766028215 instance=ExtResource("7_umo0g")]
+[node name="HPComponent" parent="." unique_id=1766028215 instance=ExtResource("7_umo0g")]
 _max_health = 1000
 _max_shield = 0
 
@@ -125,10 +125,10 @@ _max_shield = 0
 absorb_full_hit = true
 filter_source_tags = true
 allowed_source_tags = Array[String](["chops_wood"])
-affected_entity = NodePath("..")
-dmg_handler = NodePath("DmgHandler")
 frostbite_handler = SubResource("Resource_ill5l")
 burning_handler = SubResource("Resource_8swan")
+affected_entity = NodePath("..")
+dmg_handler = NodePath("DmgHandler")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="ESIReceiverComponent" unique_id=1630318295]
 position = Vector2(0, -7)

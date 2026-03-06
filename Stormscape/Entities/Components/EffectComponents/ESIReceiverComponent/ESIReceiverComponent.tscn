@@ -1,9 +1,13 @@
 [gd_scene format=3 uid="uid://btba0jmsow1mx"]
 
 [ext_resource type="Script" uid="uid://37olborml64n" path="res://Entities/Components/EffectComponents/ESIReceiverComponent/ESIReceiverComponent.gd" id="1_x67rl"]
+[ext_resource type="PackedScene" uid="uid://4gl24qwdyti3" path="res://Entities/Components/EffectComponents/ESIReceiverComponent/EffectHandlers/DHHandler.tscn" id="2_m7oey"]
 
 [node name="ESIReceiverComponent" type="Area2D" unique_id=1890609378]
 collision_layer = 0
 collision_mask = 0
 monitoring = false
 script = ExtResource("1_x67rl")
+
+[node name="DHHandler" parent="." unique_id=607926966 instance=ExtResource("2_m7oey")]
+unique_name_in_owner = true
