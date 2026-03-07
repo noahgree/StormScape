@@ -12,9 +12,7 @@
 [ext_resource type="PackedScene" uid="uid://cdfdy8m6ki3oq" path="res://Entities/Components/HPComponent/HPComponent.tscn" id="9_4jcvl"]
 [ext_resource type="PackedScene" uid="uid://co3n6m7efg8pd" path="res://Entities/Components/EffectComponents/ConditionsComponent/ConditionsComponent.tscn" id="9_w3nan"]
 [ext_resource type="PackedScene" uid="uid://bhcqtorpyerc3" path="res://Utilities/Debug/ParticleEmissionComponent.tscn" id="10_l1cdp"]
-[ext_resource type="PackedScene" uid="uid://4gl24qwdyti3" path="res://Entities/Components/EffectComponents/ESIReceiverComponent/EffectHandlers/DHHandler.tscn" id="10_tnmyf"]
 [ext_resource type="PackedScene" uid="uid://btba0jmsow1mx" path="res://Entities/Components/EffectComponents/ESIReceiverComponent/ESIReceiverComponent.tscn" id="11_5wq56"]
-[ext_resource type="Script" uid="uid://dubq8xgav66ue" path="res://Entities/Components/EffectComponents/ESIReceiverComponent/EffectHandlers/BurningHandler.gd" id="11_w3nan"]
 [ext_resource type="PackedScene" uid="uid://2yy4xfm5g74l" path="res://Entities/Components/ItemComponents/ClippingComponent/ClippingArea.tscn" id="11_ypx5n"]
 [ext_resource type="PackedScene" uid="uid://bj7vw8d6oqv0m" path="res://Entities/Player/UI/Interactions/InteractionsCore/InteractionArea.tscn" id="15_h35lp"]
 [ext_resource type="Texture2D" uid="uid://cd22xh5jduxd6" path="res://Entities/Player/UI/Interactions/Assets/e_prompt.png" id="16_c5a4i"]
@@ -52,9 +50,8 @@ animations = [{
 "speed": 5.0
 }]
 
-[sub_resource type="Resource" id="Resource_ux5b0"]
+[sub_resource type="Resource" id="Resource_c5a4i"]
 resource_local_to_scene = true
-script = ExtResource("11_w3nan")
 metadata/_custom_type_script = "uid://dubq8xgav66ue"
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_tnmyf"]
@@ -63,7 +60,7 @@ size = Vector2(18, 14)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_1mmyp"]
 size = Vector2(18, 14)
 
-[sub_resource type="Resource" id="Resource_ct00g"]
+[sub_resource type="Resource" id="Resource_f6uiu"]
 resource_local_to_scene = true
 script = ExtResource("17_f6uiu")
 title = "Search"
@@ -109,15 +106,13 @@ effect_receiver = NodePath("../ESIReceiverComponent")
 effect_src_receiver = NodePath("../ESIReceiverComponent")
 
 [node name="ESIReceiverComponent" parent="." unique_id=1762623481 node_paths=PackedStringArray("affected_entity", "dmg_handler") instance=ExtResource("11_5wq56")]
-burning_handler = SubResource("Resource_ux5b0")
+burning_handler = SubResource("Resource_c5a4i")
 affected_entity = NodePath("..")
-dmg_handler = NodePath("DmgHandler")
+dmg_handler = NodePath("")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="ESIReceiverComponent" unique_id=2051548302]
 position = Vector2(0, -7)
 shape = SubResource("RectangleShape2D_tnmyf")
-
-[node name="DmgHandler" parent="ESIReceiverComponent" unique_id=514916372 instance=ExtResource("10_tnmyf")]
 
 [node name="ParticleEmissionComponent" parent="." unique_id=1005076344 instance=ExtResource("10_l1cdp")]
 
@@ -132,5 +127,5 @@ debug_color = Color(1, 0, 0.092, 0.109)
 unique_name_in_owner = true
 prompt_radius = 18.0
 radius_offset = Vector2(0, -6)
-interaction_offer = SubResource("Resource_ct00g")
+interaction_offer = SubResource("Resource_f6uiu")
 prompt_offset = Vector2(0, -16)

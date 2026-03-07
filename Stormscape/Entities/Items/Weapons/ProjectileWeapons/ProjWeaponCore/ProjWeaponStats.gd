@@ -40,9 +40,9 @@ enum ReloadType { ## The kinds of reloads the weapon can have.
 @export_range(0, 10.0, 0.01, "suffix:x", "hide_slider") var charge_loss_mult: float = 1.0 ## How much faster or slower charge progress is lost when firing is not available (but not during firing itself). Set to 0 to disable charge progress loss on anything other than successfully firing (assuming that flag is true below).
 @export var dec_charge_on_cooldown: bool = false ## If true, the charge will decrease according to the rate above while on default firing cooldown as well as when idling. It will never decrease during firing, though.
 @export var reset_charge_on_fire: bool = false ## When true, charge progress will reset to 0 upon successfully firing the weapon.
-@export_subgroup("Firing Stat Effects")
-@export var firing_stat_effect: Condition ## The condition to apply to the source entity when firing.
-@export var charging_stat_effect: Condition ## A condition to apply to the entity while charging. Typically to slow them.
+@export_subgroup("Applied Firing Conditions")
+@export var firing_condition: Condition ## The condition to apply to the source entity when firing.
+@export var charging_condition: Condition ## A condition to apply to the entity while charging. Typically to slow them.
 @export_subgroup("Firing Animations")
 @export var one_frame_per_fire: bool = false ## When true, the sprite frames will only advance one frame when firing normally.
 @export var fire_anim_dur: float ## When greater than 0, the fire animation will run for this override time.

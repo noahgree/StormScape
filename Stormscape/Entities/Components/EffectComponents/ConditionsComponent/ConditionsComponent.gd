@@ -5,24 +5,29 @@ class_name ConditionsComponent
 ##
 ## This handles things like fire & poison damage not taking into account armor, etc.
 
+enum Filter { ## The different ways to filter out incoming conditions.
+	AUTO, ## Only allow conditions this entity can receive based on entity type.
+	MANUAL, ## Follows entity type restrictions like AUTO, but the incoming condition must also be part of the "manual filter" array.
+	NONE ## For when this entity cannot receive any conditions.
+}
+
 static var cache: Dictionary[Array, Condition] = {} ## A cache of all conditions. { [id, source, level] : condition }
 
-@export var allowed_conditions: Dictionary[Condition.ID, bool] ## The conditions the owning entity can have.
 @export var debug_updates: bool = false ## Whether to print when this entity has conditions added and removed.
+@export var filter: Filter = Filter.AUTO ## The way we should filter out incoming conditions.
+@export var manual_filter: Array[Condition.ID] ## The conditions the owning entity can have.
 
 @onready var entity: Entity = owner ## The entity affected by these conditions.
 @onready var esi_receiver: ESIReceiverComponent = entity.esi_receiver ## The ESI receiver that sends conditions to this manager to be cached and handled.
 
-var active: Dictionary[Array, int] = {} ## { [id, source] : level }
-var active_by_id: Dictionary[Condition.ID, Dictionary] = {} ## { id : { Condition.SourceType : level } }
+var actives: Dictionary[Array, int] = {} ## { [id, source] : level }
+var actives_by_id: Dictionary[Condition.ID, Dictionary] = {} ## { id : { Condition.SourceType : level } }
 var condition_timers: Dictionary[Array, Timer] = {} ## Holds references to all timers currently tracking active conditions. { [id, source] : timer }
 
 
 #region Core
 ## Assert that this node has a connected esi receiver from which it can receive conditions.
 func _ready() -> void:
-	assert(esi_receiver != null, owner.name + " has a ConditionsComponent without a connected ESIReceiverComponent.")
-
 	if ConditionsComponent.cache.is_empty():
 		_cache_conditions(Globals.conditions_dir)
 
@@ -51,11 +56,14 @@ func _cache_conditions(folder: String) -> void:
 ## Handles an incoming condition. It starts by adding any stat mods provided by the condition, and then
 ## it passes the condition logic to the relevant handler if it exists.
 func handle_condition(condition: Condition) -> void:
+	if (not _check_filter(condition)) or (entity.invulnerable):
+		return
+
 	_debug_print_adding_condition(condition)
 
 	var key: Array = condition.get_key()
-	if key in active:
-		var existing_lvl: int = active[key]
+	if key in actives:
+		var existing_lvl: int = actives[key]
 		if existing_lvl > condition.level: # New condition is lower lvl
 			_extend_condition_duration(condition, existing_lvl)
 		elif existing_lvl < condition.effect_lvl: # New condition is higher lvl
@@ -66,17 +74,31 @@ func handle_condition(condition: Condition) -> void:
 	else:
 		_add_condition(condition)
 
+	if (entity is Player) or (not condition.only_cue_on_player_hit):
+		AudioManager.play_2d(condition.audio_to_play, entity.global_position)
+
+func _check_filter(condition: Condition) -> bool:
+	match filter:
+		Filter.NONE:
+			return false
+		Filter.AUTO:
+			return condition.affected_entities & entity.class_type != 0
+		Filter.MANUAL:
+			var affected: bool = condition.affected_entities & entity.class_type != 0
+			return (affected) and (condition.id in manual_filter)
+	return false
+
 ## Adds a condition to the current effects dict, starts its timer, stores its timer, and applies its mods.
 func _add_condition(condition: Condition) -> void:
 	if condition.id == Condition.ID.UNTOUCHABLE:
 		remove_all_bad_conditions()
 
 	var key: Array = condition.get_key()
-	active[key] = condition.level
-	if active_by_id[condition.id].is_empty():
-		active_by_id[condition.id] = { condition.source_type : condition.level }
+	actives[key] = condition.level
+	if actives_by_id[condition.id].is_empty():
+		actives_by_id[condition.id] = { condition.source_type : condition.level }
 	else:
-		active_by_id[condition.id][condition.source_type] = condition.level
+		actives_by_id[condition.id][condition.source_type] = condition.level
 
 	var mod_timer: Timer = TimerHelpers.create_one_shot_timer(
 			self, max(0.01, condition.mod_time), Callable(), str(condition) + "_timer"
@@ -133,10 +155,10 @@ func _remove_condition(condition: Condition) -> void:
 		entity.sc.remove_mod(mod_resource.stat_id, mod_resource.mod_id)
 
 	var key: Array = condition.get_key()
-	active.erase(key)
-	active_by_id[condition.id].erase(condition.source_type)
-	if active_by_id[condition.id].is_empty():
-		active_by_id.erase(condition.id)
+	actives.erase(key)
+	actives_by_id[condition.id].erase(condition.source_type)
+	if actives_by_id[condition.id].is_empty():
+		actives_by_id.erase(condition.id)
 
 	var timer: Timer = condition_timers.get(key, null)
 	if timer != null:
@@ -148,6 +170,8 @@ func _remove_condition(condition: Condition) -> void:
 		timer.queue_free()
 		condition_timers.erase(key)
 
+	_stop_associated_eotis(condition)
+
 	_stop_condition_fx(condition)
 
 ## Stops the conditions' associated visual FX like particles.
@@ -155,42 +179,34 @@ func _stop_condition_fx(condition: Condition) -> void:
 	entity.sprite.update_floor_light(condition.id, true)
 	entity.sprite.update_overlay_color(condition.id, true)
 
-	var actives: Dictionary[Condition.SourceType, int] = active_by_id.get(condition.id, null)
-	if (actives == null) or (actives.keys().size() > 1):
+	# Only remove all FX if there are no more instances of the same condition ID
+	var conditions: Dictionary[Condition.SourceType, int] = actives_by_id.get(condition.id, null)
+	if (conditions == null) or (conditions.keys().size() > 1):
 		return
 
 	entity.particle_mgr.stop_particles(condition.id)
 
 ## Returns if any condition (no matter the source type or level) of the passed in id is active.
 func check_if_has_condition(condition_id: Condition.ID) -> bool:
-	if active_by_id.has(condition_id):
+	if actives_by_id.has(condition_id):
 		return true
 	return false
 
 ## Returns if the condition and associated source type (no matter the level) is active.
 func check_if_has_condition_by_source_type(condition_id: Condition.ID, source_type: Condition.SourceType) -> bool:
-	if active.has([condition_id, source_type]):
+	if actives.has([condition_id, source_type]):
 		return true
 	return false
 
-## Attempts to remove any effect of the matching id and source type (which is given as an Enum value).
-## It also cancels any active DOTs and HOTs for it.
-func request_condition_removal_by_source(id: StringName, source_type: Condition.SourceType) -> void:
-	var source_string: StringName = StringName((Condition.SourceType.keys()[source_type]).to_lower())
-	request_condition_removal_by_source_string(id, source_string)
-
-## Attempts to remove any effect of the matching id and source type (which is given as a StringName).
-## It also cancels any active DOTs and HOTs for it.
-func request_condition_removal_by_source_string(id: StringName, source_string: StringName) -> void:
-	var key_to_remove: String = id + ":" + source_string
-	var existing_effect: Condition = active.get(key_to_remove, null)
-	if existing_effect:
-		_remove_condition(existing_effect)
-	_cancel_over_time_effects(key_to_remove)
+func remove_condition_by_source_type(condition_id: Condition.ID, source_type: Condition.SourceType) -> void:
+	var condition_level: int = actives.get([condition_id, source_type], -1)
+	if condition_level != -1:
+		var condition: Condition = cache.get([condition_id, source_type, condition_level])
+		_remove_condition(condition)
 
 ## Attempts to remove all conditions of the matching id, regardless of source type.
-func request_condition_removal_for_all_sources(condition_id: Condition.ID) -> void:
-	var conditions_of_id: Dictionary[Condition.SourceType, int] = active_by_id.get(condition_id, null)
+func remove_condition_for_all_sources(condition_id: Condition.ID) -> void:
+	var conditions_of_id: Dictionary[Condition.SourceType, int] = actives_by_id.get(condition_id, null)
 	if conditions_of_id == null:
 		return
 
@@ -200,44 +216,41 @@ func request_condition_removal_for_all_sources(condition_id: Condition.ID) -> vo
 		if condition == null:
 			continue
 		to_erase.append(condition)
-		_cancel_over_time_effects([condition_id, source_type])
 
 	for effect: Condition in to_erase:
 		_remove_condition(effect)
 
-## Sends the cancellation requests for a composite condition key.
-func _cancel_over_time_effects(condition_key: Array) -> void:
-	if esi_receiver.dh_handler != null:
-		esi_receiver.dh_handler.cancel_over_time_dmg(key_to_cancel)
-	if esi_receiver.heal_handler != null:
-		esi_receiver.heal_handler.cancel_over_time_heal(key_to_cancel)
+func _stop_associated_eotis(condition: Condition) -> void:
+	esi_receiver.dh_handler.stop_eotis_by_source_type(condition.id, condition.source_type)
 
 ## Removes all bad conditions except for an optional exception condition that may be specified.
 ## The optional kept condition should be given only as its id, not including its source type.
-func remove_all_bad_conditions(effect_to_keep_id: Condition.ID = Condition.ID.NULL) -> void:
-	for condition_key: StringName in active:
-		if effect_to_keep_id == StringHelpers.get_before_colon(condition_key):
-			continue
-		elif active[condition_key].is_bad_effect:
-			request_condition_removal_for_all_sources(StringHelpers.get_before_colon(condition_key))
+func remove_all_bad_conditions(condition_id_to_keep: Condition.ID = Condition.ID.NULL) -> void:
+	_remove_all_of_certain_goodness(condition_id_to_keep, Condition.Goodness.BAD)
 
-## Removes all good conditions except for an optional exception effect that may be specified.
-## The optional kept effect should be given only as its effect id, not including its source type.
-func remove_all_good_conditions(effect_to_keep_id: String = "") -> void:
-	for condition_key: StringName in active:
-		if effect_to_keep_id == StringHelpers.get_before_colon(condition_key):
+## Removes all good conditions except for an optional exception condition that may be specified.
+## The optional kept condition should be given only as its id, not including its source type.
+func remove_all_good_conditions(condition_id_to_keep: Condition.ID = Condition.ID.NULL) -> void:
+	_remove_all_of_certain_goodness(condition_id_to_keep, Condition.Goodness.GOOD)
+
+func _remove_all_of_certain_goodness(id_to_keep: Condition.ID, goodness: Condition.Goodness) -> void:
+	for condition_id: Condition.ID in actives_by_id:
+		if condition_id == id_to_keep:
 			continue
-		elif not active[condition_key].is_bad_effect:
-			request_condition_removal_for_all_sources(StringHelpers.get_before_colon(condition_key))
+		var source_type: Condition.SourceType = actives_by_id[condition_id].keys().front()
+		var key_to_check: Array = [condition_id, source_type, actives[[condition_id, source_type]]]
+		var condition_to_check: Condition = cache.get(key_to_check, null)
+		if (condition_to_check) and (condition_to_check.goodness == goodness):
+			remove_condition_by_source_type(condition_id, source_type)
 
 ## Removes all conditions.
 func remove_all_conditions() -> void:
-	for condition: Condition in active.values():
+	for condition: Condition in actives.values():
 		_remove_condition(condition)
 
 ## Returns true if there is an "untouchable" condition in the current conditions.
 func is_untouchable() -> bool:
-	return active_by_id.has(Condition.ID.UNTOUCHABLE)
+	return actives_by_id.has(Condition.ID.UNTOUCHABLE)
 
 #region Debug
 func _debug_print_adding_condition(condition: Condition) -> void:

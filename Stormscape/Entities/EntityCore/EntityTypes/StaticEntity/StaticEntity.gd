@@ -5,3 +5,7 @@ class_name StaticEntity
 ## stamina and hunger.
 ##
 ## This would be used for things like trees or blocks or buildings that need collision and also potential health.
+
+func _ready() -> void:
+	super()
+	class_type = ClassType.STATIC

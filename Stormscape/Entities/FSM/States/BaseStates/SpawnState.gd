@@ -7,12 +7,12 @@ func _init() -> void:
 	state_id = "spawn"
 
 func enter() -> void:
-	controller.can_receive_effect_srcs = false
+	entity.invulnerable = true
 	entity.anim_tree.animation_finished.connect(_on_spawn_anim_ended, CONNECT_ONE_SHOT)
 	entity.facing_component.travel_anim_tree("spawn")
 
 func exit() -> void:
-	controller.can_receive_effect_srcs = true
+	entity.invulnerable = false
 	if entity.anim_tree.animation_finished.is_connected(_on_spawn_anim_ended):
 		entity.anim_tree.animation_finished.disconnect(_on_spawn_anim_ended)
 

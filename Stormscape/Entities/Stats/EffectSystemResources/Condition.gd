@@ -1,3 +1,4 @@
+@tool
 extends Resource
 class_name Condition
 ## Defines parameters that can be applied to an entity's stats and health/shield when applied to them.
@@ -25,15 +26,17 @@ enum SourceType { ## The different kind of sources that the condition can come f
 	FROM_WEAPON, ## For any condition that is the result of being hit by a weapon's hitbox (like projectiles).
 	FROM_GROUND_AOE, ## For any condition that gets applied by walking into a ground AOE like after an explosion.
 	FROM_ENVIRONMENT, ## For any condition coming from the environment, like the cold weather, etc.
-	FROM_SELF ## For self effects like when weapons apply effects to the entity while being charged up.
+	FROM_SELF ## For self conditions like when weapons apply conditions to the entity while being charged up.
 }
+
+enum Goodness { GOOD, BAD } ## Splits up what is considered good and bad conditions.
 
 @export var id: ID ## What the effect is identified by (doesn't include the level).
 @export var source_type: Condition.SourceType ## The source of this condition to differentiate it and control how its timing may get reset if another of the same effect with a matching source_id comes in.
 @export_range(1, 10, 1) var level: int = 1 ## The level of the effect, 1 is the lowest.
-@export var is_bad_effect: bool = true ## Whether this should be considered a negative effect. If unchecked, this is considered a good effect. This is used when handling which teams should receive which types of effects related to who sent them.
+@export var goodness: Goodness = Goodness.GOOD ## Whether this should be considered a negative condition. This is used when handling which teams should receive which types of conditions related to who sent them.
 @export_flags("DynamicEntity:1", "RigidEntity:2", "StaticEntity:4") var affected_entities: int = 0b111
-@export var eot: EOTStats ## The effect over time stats used when this applies damage, healing, or stat mods over time.
+@export var eot_stats: EOTStats: set = _check_ticks_array ## The effect over time stats used when this applies damage, healing, or stat mods over time.
 @export var effects_to_stop: Array[ID] ## The names of other conditions that this condition should stop and remove from the entity upon being applied.
 
 @export_group("FX")
@@ -56,7 +59,15 @@ func get_key() -> Array:
 	return [id, source_type]
 
 ## Creates and returns a new EOTI using the EOT stats provided by this condition.
-func create_eoti() -> EOTI:
-	var new_eoti: EOTI = EOTI.new(eot)
-	new_eoti.from_condition = self
+func create_eoti(from_source_entity: Entity, from_source_ii: II) -> EOTI:
+	var new_eoti: EOTI = EOTI.new(eot_stats, from_source_entity, from_source_ii, self)
 	return new_eoti
+
+#region Debug
+## Setter for the ticks array to make sure each Effect Source uses the right source type.
+func _check_ticks_array(new_eot_stats: EOTStats) -> void:
+	eot_stats = new_eot_stats
+	for effect_source: EffectSource in eot_stats.ticks_array:
+		if effect_source.source_type != Globals.ESISourceType.FROM_EOTI:
+			push_error(str(self) + " has an effect source in its eot_stats that don't identify their source as FROM_EOTI. This will cause issues.")
+#endregion

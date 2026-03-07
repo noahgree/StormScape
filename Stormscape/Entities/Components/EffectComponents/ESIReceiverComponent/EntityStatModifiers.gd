@@ -20,8 +20,32 @@ class_name EntityStatModifiers
 @export_range(0, 100, 1.0, "hide_slider", "suffix:%") var poison_resistance: float = 0.0 ## A multiplier for poison damage on an entity.
 @export_range(0, 100, 1.0, "hide_slider", "suffix:%") var regen_affinity: float = 0.0 ## A multiplier for regen boosting on an entity.
 @export_range(0, 100, 1.0, "hide_slider", "suffix:%") var regen_reduction: float = 0.0 ## A multiplier for regen reduction on an entity.
-@export_range(0, 100, 1.0, "hide_slider", "suffix:%") var storm_weakness: float = 0.0 ## A multiplier for increasing storm damage on an entity.
-@export_range(0, 100, 1.0, "hide_slider", "suffix:%") var storm_resistance: float = 0.0 ## A multiplier for reducing storm damage on an entity.
+@export_range(0, 100, 1.0, "hide_slider", "suffix:%") var storm_syndrome_weakness: float = 0.0 ## A multiplier for increasing storm damage on an entity.
+@export_range(0, 100, 1.0, "hide_slider", "suffix:%") var storm_syndrome_resistance: float = 0.0 ## A multiplier for reducing storm damage on an entity.
 @export_range(0, 100, 1.0, "hide_slider", "suffix:%") var stun_weakness: float = 0.0 ## A multiplier for increasing stun time applied to an entity.
 @export_range(0, 100, 1.0, "hide_slider", "suffix:%") var stun_resistance: float = 0.0 ## A multiplier for decreasing stun time applied to an entity.
-@export_range(0, 1, 1, "hide_slider", "suffix:(1 = on | 0 = off)") var time_snare_immunity: float = 0 ## If aything besides 0, the time snare effect is nullified.
+
+@export_range(0, 1, 1, "hide_slider", "suffix:(1 = on | 0 = off)") var time_snare_immunity: float = 0 ## If aything besides 0, the time snare condition is nullified.
+@export_range(0, 1, 1, "hide_slider", "suffix:(1 = on | 0 = off)") var confusion_immunity: float = 0 ## If aything besides 0, the confusion condition is nullified.
+
+
+func initialize_stat_cache(entity: Entity) -> void:
+	var moddable_stats: Dictionary[StringName, float] = {
+		&"dmg_weakness": dmg_weakness, &"dmg_resistance": dmg_resistance,
+		&"heal_affinity": heal_affinity, &"heal_reduction": heal_reduction,
+
+		&"burning_weakness": burning_weakness, &"burning_resistance": burning_resistance,
+		&"frostbite_weakness": frostbite_weakness, &"frostbite_resistance": frostbite_resistance,
+		&"knockback_weakness": knockback_weakness, &"knockback_resistance": knockback_resistance,
+		&"life_steal_weakness": life_steal_weakness, &"life_steal_resistance": life_steal_resistance,
+		&"poison_weakness": poison_weakness, &"poison_resistance": poison_resistance,
+		&"regen_affinity": regen_affinity, &"regen_reduction": regen_reduction,
+		&"storm_syndrome_weakness": storm_syndrome_weakness,
+		&"storm_syndrome_resistance": storm_syndrome_resistance,
+		&"stun_weakness": stun_weakness, &"stun_resistance": stun_resistance,
+
+		&"time_snare_immunity": time_snare_immunity,
+		&"confusion_immunity": confusion_immunity
+	}
+
+	entity.sc.add_moddable_stats(moddable_stats)

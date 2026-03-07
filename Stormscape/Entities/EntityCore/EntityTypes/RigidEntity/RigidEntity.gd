@@ -13,16 +13,9 @@ class_name RigidEntity
 @onready var facing_component: FacingComponent = $FacingComponent ## The component in charge of choosing the entity animation directions.
 
 
-## Edits editor warnings for easier debugging.
-func _get_configuration_warnings() -> PackedStringArray:
-	if get_node_or_null("%EntitySprite") == null or not %EntitySprite is EntitySprite:
-		return [
-			"This entity must have an EntitySprite typed sprite node. Make sure its name is unique with a %."
-			]
-	return []
-
 func _ready() -> void:
 	super()
+	class_type = ClassType.RIGID
 
 	self.mass = 3
 	self.linear_damp = 4.5

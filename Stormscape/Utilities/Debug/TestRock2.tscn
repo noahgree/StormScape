@@ -15,7 +15,6 @@
 [ext_resource type="PackedScene" uid="uid://cdfdy8m6ki3oq" path="res://Entities/Components/HPComponent/HPComponent.tscn" id="13_3mtpp"]
 [ext_resource type="PackedScene" uid="uid://jpq0ij8wwlhy" path="res://Entities/Components/FacingComponent/FacingComponent.tscn" id="14_d40yk"]
 [ext_resource type="PackedScene" uid="uid://btba0jmsow1mx" path="res://Entities/Components/EffectComponents/ESIReceiverComponent/ESIReceiverComponent.tscn" id="15_8664o"]
-[ext_resource type="PackedScene" uid="uid://4gl24qwdyti3" path="res://Entities/Components/EffectComponents/ESIReceiverComponent/EffectHandlers/DHHandler.tscn" id="16_11n4a"]
 [ext_resource type="PackedScene" uid="uid://co3n6m7efg8pd" path="res://Entities/Components/EffectComponents/ConditionsComponent/ConditionsComponent.tscn" id="17_3r7ao"]
 [ext_resource type="PackedScene" uid="uid://bhcqtorpyerc3" path="res://Utilities/Debug/ParticleEmissionComponent.tscn" id="18_6nkmp"]
 [ext_resource type="PackedScene" uid="uid://2yy4xfm5g74l" path="res://Entities/Components/ItemComponents/ClippingComponent/ClippingArea.tscn" id="19_jf6jy"]
@@ -34,7 +33,7 @@ script = ExtResource("6_b403c")
 [sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_2kecs"]
 polygon = PackedVector2Array(-9, -15, -9, -6, 9, -6, 9, -15)
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_b403c"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_3aoki"]
 resource_local_to_scene = true
 shader = ExtResource("11_pg7ae")
 
@@ -91,7 +90,7 @@ type = 3
 
 [node name="EntitySprite" parent="." unique_id=33604155 instance=ExtResource("10_kkd23")]
 unique_name_in_owner = true
-material = SubResource("ShaderMaterial_b403c")
+material = SubResource("ShaderMaterial_3aoki")
 instance_shader_parameters/crack_color = Color(0.132138, 0.153553, 0.183094, 0.85)
 instance_shader_parameters/crack_depth = 0.4
 instance_shader_parameters/crack_intensity = 0.0
@@ -122,14 +121,12 @@ _max_shield = 0
 
 [node name="ESIReceiverComponent" parent="." unique_id=863158917 node_paths=PackedStringArray("affected_entity", "dmg_handler") instance=ExtResource("15_8664o")]
 affected_entity = NodePath("..")
-dmg_handler = NodePath("DmgHandler")
+dmg_handler = NodePath("")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="ESIReceiverComponent" unique_id=588511646]
 position = Vector2(0, -12)
 rotation = -1.5708
 shape = SubResource("CapsuleShape2D_b403c")
-
-[node name="DmgHandler" parent="ESIReceiverComponent" unique_id=2012634728 instance=ExtResource("16_11n4a")]
 
 [node name="ConditionsComponent" parent="." unique_id=1056684977 node_paths=PackedStringArray("effect_receiver", "effect_src_receiver") instance=ExtResource("17_3r7ao")]
 unique_name_in_owner = true

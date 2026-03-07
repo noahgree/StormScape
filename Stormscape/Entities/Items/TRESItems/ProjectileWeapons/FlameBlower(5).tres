@@ -1,7 +1,7 @@
 [gd_resource type="Resource" script_class="ProjWeaponStats" format=3 uid="uid://dpmwqsai6gxsr"]
 
+[ext_resource type="Script" uid="uid://boo31eu083dqd" path="res://Entities/Stats/EffectSystemResources/Condition.gd" id="1_ul7rv"]
 [ext_resource type="Script" uid="uid://dkfssottmsrch" path="res://Entities/Stats/EffectSystemResources/EffectSource.gd" id="2_hrsx2"]
-[ext_resource type="Resource" uid="uid://c8reitxej77jy" path="res://Entities/Stats/EffectSystemResources/Conditions/BadEffects/Burning/Burning1FlameBlower.tres" id="3_cibnu"]
 [ext_resource type="Script" uid="uid://cowjdnic7xmkp" path="res://Entities/Player/UI/Inventory/Panels/ItemDetailsPanel/StatDetail.gd" id="3_ul7rv"]
 [ext_resource type="Resource" uid="uid://cl4lqk1b8bquo" path="res://Entities/Player/PlayerCore/PlayerCamera/CamFXPresets/0(NoFreeze).tres" id="5_cibnu"]
 [ext_resource type="Texture2D" uid="uid://bhse86b50y7vx" path="res://Entities/Items/Weapons/ProjectileWeapons/FlameBlower/FlameBlowerBaseFrameCT.tres" id="6_1teer"]
@@ -18,7 +18,6 @@ script = ExtResource("2_hrsx2")
 source_type = 1
 can_hit_self = false
 base_damage = 2
-status_effects = [ExtResource("3_cibnu")]
 
 [sub_resource type="Resource" id="Resource_awnew"]
 script = ExtResource("7_8pg8v")

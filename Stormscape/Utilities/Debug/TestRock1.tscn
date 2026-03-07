@@ -13,7 +13,6 @@
 [ext_resource type="Texture2D" uid="uid://tt44u2wmer3n" path="res://Entities/EntityCore/Shadow/shadow_large.png" id="9_7qjvm"]
 [ext_resource type="PackedScene" uid="uid://btba0jmsow1mx" path="res://Entities/Components/EffectComponents/ESIReceiverComponent/ESIReceiverComponent.tscn" id="9_wje6d"]
 [ext_resource type="PackedScene" uid="uid://jpq0ij8wwlhy" path="res://Entities/Components/FacingComponent/FacingComponent.tscn" id="12_1nxg5"]
-[ext_resource type="PackedScene" uid="uid://4gl24qwdyti3" path="res://Entities/Components/EffectComponents/ESIReceiverComponent/EffectHandlers/DHHandler.tscn" id="12_ymdvb"]
 [ext_resource type="Script" uid="uid://1qq7eo7lm8j6" path="res://Entities/Components/ItemComponents/LootTableComponent/LootTableEntry.gd" id="14_v0818"]
 [ext_resource type="PackedScene" uid="uid://co3n6m7efg8pd" path="res://Entities/Components/EffectComponents/ConditionsComponent/ConditionsComponent.tscn" id="17_hg3w7"]
 [ext_resource type="PackedScene" uid="uid://2yy4xfm5g74l" path="res://Entities/Components/ItemComponents/ClippingComponent/ClippingArea.tscn" id="18_7qjvm"]
@@ -117,14 +116,12 @@ _max_shield = 0
 
 [node name="ESIReceiverComponent" parent="." unique_id=2048222273 node_paths=PackedStringArray("affected_entity", "dmg_handler") instance=ExtResource("9_wje6d")]
 affected_entity = NodePath("..")
-dmg_handler = NodePath("DmgHandler")
+dmg_handler = NodePath("")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="ESIReceiverComponent" unique_id=1572845017]
 position = Vector2(0, -12)
 rotation = -1.5708
 shape = SubResource("CapsuleShape2D_mc2cg")
-
-[node name="DmgHandler" parent="ESIReceiverComponent" unique_id=1036023572 instance=ExtResource("12_ymdvb")]
 
 [node name="ConditionsComponent" parent="." unique_id=1861356536 node_paths=PackedStringArray("effect_receiver", "effect_src_receiver") instance=ExtResource("17_hg3w7")]
 unique_name_in_owner = true

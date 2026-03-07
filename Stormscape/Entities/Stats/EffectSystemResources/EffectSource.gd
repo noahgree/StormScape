@@ -14,8 +14,8 @@ enum ESType { NORMAL, CHARGE, AOE } ## The kinds of effect sources that can be m
 @export_flags_2d_physics var scanned_phys_layers: int = 0b1101111 ## The collision mask that this source scans in order to apply affects to.
 @export_subgroup("Team Logic")
 @export var can_hit_self: bool = true ## Whether or not this effect source can be applied to what created it.
-@export_flags("Enemies", "Allies") var bad_effect_affected_teams: int = Globals.BadEffectAffectedTeams.ENEMIES ## Which entity teams in relation to who produced this source are affected by this damage.
-@export_flags("Enemies", "Allies") var good_effect_affected_teams: int = Globals.GoodEffectAffectedTeams.ALLIES ## Which entity teams in relation to who produced this source are affected by this healing.
+@export_flags("Enemies", "Allies") var teams_hit_by_bad: int = Globals.BadAffectedTeams.ENEMIES ## Which entity teams in relation to who produced this source are affected by this damage.
+@export_flags("Enemies", "Allies") var teams_hit_by_good: int = Globals.GoodAffectedTeams.ALLIES ## Which entity teams in relation to who produced this source are affected by this healing.
 
 @export_group("Base Damage")
 @export var base_damage: int: ## The base numerical amount of damage associated with this effect source.
@@ -45,3 +45,24 @@ enum ESType { NORMAL, CHARGE, AOE } ## The kinds of effect sources that can be m
 
 @export_group("Conditions")
 @export var conditions: Array[Condition] ## The array of conditions that can be applied to the receiving entity.
+
+
+## Checks if the effect source should do bad conditions and values to allies.
+static func can_hit_ally_with_bad(self_team: Globals.Teams, source_team: Globals.Teams,
+									effect_source: EffectSource) -> bool:
+	return (self_team == source_team) and (effect_source.teams_hit_by_bad & Globals.BadAffectedTeams.ALLIES != 0)
+
+## Checks if the effect source should do bad conditions and values to enemies.
+static func can_hit_enemy_with_bad(self_team: Globals.Teams, source_team: Globals.Teams,
+									effect_source: EffectSource) -> bool:
+	return (self_team != source_team) and (effect_source.teams_hit_by_bad & Globals.BadAffectedTeams.ENEMIES != 0)
+
+## Checks if the effect source should do good conditions and values to allies.
+static func can_hit_ally_with_good(self_team: Globals.Teams, source_team: Globals.Teams,
+									effect_source: EffectSource) -> bool:
+	return (self_team == source_team) and (effect_source.teams_hit_by_good & Globals.GoodAffectedTeams.ALLIES != 0)
+
+## Checks if the effect source should do good conditions and values to enemies.
+static func can_hit_enemy_with_good(self_team: Globals.Teams, source_team: Globals.Teams,
+									effect_source: EffectSource) -> bool:
+	return (self_team != source_team) and (effect_source.teams_hit_by_good & Globals.GoodAffectedTeams.ENEMIES != 0)

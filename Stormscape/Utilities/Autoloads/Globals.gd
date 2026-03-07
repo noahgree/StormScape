@@ -47,8 +47,8 @@ enum Teams {
 	PASSIVE = 1 << 2 ## Does not heal or damage anything. Just exists.
 }
 enum DHTypes { HEALTH_ONLY, SHIELD_ONLY, SHIELD_THEN_HEALTH, HEALTH_THEN_SHIELD, SIMULTANEOUS }
-enum BadEffectAffectedTeams { ENEMIES = 1 << 0, ALLIES = 1 << 1 }
-enum GoodEffectAffectedTeams { ENEMIES = 1 << 0, ALLIES = 1 << 1 }
+enum BadAffectedTeams { ENEMIES = 1 << 0, ALLIES = 1 << 1 }
+enum GoodAffectedTeams { ENEMIES = 1 << 0, ALLIES = 1 << 1 }
 enum ESISourceType {
 	FROM_DEFAULT, ## For any effect source that does not come from any of the below types.
 	FROM_PROJECTILE, ## For damage coming from any normal projectile like a bullet from a sniper or pistol.

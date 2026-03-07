@@ -10,6 +10,7 @@ var source_entity: Entity: set = _set_source_entity, get = _get_source_entity ##
 var source_entity_team: Globals.Teams = Globals.Teams.PLAYER ## A local copy of the last known source entity's team. Stored in case the source entity is freed but we still need the team it was on.
 var source_ii: II: set = _set_source_ii, get = _get_source_ii ## The item instance that produced this ESI.
 var source_ii_lvl: int = 1 ## A local copy of the last known source II's level. Stored in case the source II is freed but we still need the level it was at. Always set to 1 if the source II was not a weapon.
+var source_condition: Condition ## The condition that sent out this ESI, usually originating from an EOTI.
 var contact_position: Vector2 ## The position of what the effect source is attached to when it makes contact with a receiver.
 var movement_direction: Vector2 ## The direction vector of this effect source at contact used for knockback.
 var multishot_id: int = -1 ## The id used to relate multishot projectiles with each other. -1 means it did not come from a multishot.
@@ -35,9 +36,10 @@ func copy() -> ESI:
 	return new
 
 ## Called externally to set both at the same time.
-func set_source_info(src_entity: Entity, src_ii: II) -> void:
+func set_source_info(src_entity: Entity, src_ii: II, src_condition: Condition = null) -> void:
 	source_entity = src_entity
 	source_ii = src_ii
+	source_condition = src_condition
 
 ## Sets the last known source entity team when the source entity gets set.
 func _set_source_entity(new_source_entity: Entity) -> void:

@@ -17,11 +17,9 @@ var snare_factor: float = 0 ## Multiplier for delta time during time snares.
 var snare_timer: Timer ## A reference to a timer that might currently be tracking a time snare instance.
 
 
-## Edits editor warnings for easier debugging.
-func _get_configuration_warnings() -> PackedStringArray:
-	if get_node_or_null("%EntitySprite") == null or not %EntitySprite is EntitySprite:
-		return ["This entity must have an EntitySprite typed sprite node. Make sure its name is unique with a %."]
-	return []
+func _ready() -> void:
+	super()
+	class_type = ClassType.DYNAMIC
 
 func _process(delta: float) -> void:
 	if Engine.is_editor_hint():

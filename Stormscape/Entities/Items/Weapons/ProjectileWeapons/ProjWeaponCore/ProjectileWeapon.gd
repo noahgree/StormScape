@@ -71,8 +71,8 @@ func enable() -> void:
 ## Called when the weapon is disabled, usually because it started clipping with an object.
 func disable() -> void:
 	source_entity.hands.should_rotate = true
-	if stats.charging_stat_effect != null:
-		source_entity.effects.request_effect_removal_by_source(stats.charging_stat_effect.id, Condition.SourceType.FROM_SELF)
+	if stats.charging_condition != null:
+		source_entity.conditions_component.request_effect_removal_by_source(stats.charging_condition.id, Condition.SourceType.FROM_SELF)
 	is_charging = false
 	_delay_clean_up_hitscans()
 
@@ -102,8 +102,8 @@ func exit() -> void:
 	if mouse_area:
 		mouse_area.queue_free()
 
-	if stats.charging_stat_effect != null:
-		source_entity.effects.request_effect_removal_by_source(stats.charging_stat_effect.id, Condition.SourceType.FROM_SELF)
+	if stats.charging_condition != null:
+		source_entity.conditions_component.request_effect_removal_by_source(stats.charging_condition.id, Condition.SourceType.FROM_SELF)
 
 	source_entity.hands.smoke_particles.emitting = false
 	source_entity.hands.smoke_particles.visible = false
@@ -257,8 +257,8 @@ func hold_activate(delta: float) -> void:
 			hold_time = 0
 			start_firing_sequence()
 		ProjWeaponStats.FiringType.CHARGE:
-			if (not is_charging) and (stats.charging_stat_effect != null):
-				var effect: Condition = stats.charging_stat_effect.duplicate()
+			if (not is_charging) and (stats.charging_condition != null):
+				var effect: Condition = stats.charging_condition.duplicate()
 				effect.mod_time = 100000000
 				source_entity.effect_src_receiver.handle_condition(effect)
 			is_charging = true
@@ -276,8 +276,8 @@ func release_hold_activate() -> void:
 		return
 
 	if stats.firing_mode == ProjWeaponStats.FiringType.CHARGE:
-		if stats.charging_stat_effect != null:
-			source_entity.effects.request_effect_removal_by_source(stats.charging_stat_effect.id, Condition.SourceType.FROM_SELF)
+		if stats.charging_condition != null:
+			source_entity.conditions_component.request_effect_removal_by_source(stats.charging_condition.id, Condition.SourceType.FROM_SELF)
 		is_charging = false
 
 		if hold_time >=  ii.sc.get_stat("min_charge_time"):

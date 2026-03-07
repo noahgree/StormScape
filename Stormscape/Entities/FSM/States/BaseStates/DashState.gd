@@ -26,7 +26,7 @@ func enter() -> void:
 	entity.facing_component.travel_anim_tree("run")
 
 	controller.knockback_vector = Vector2.ZERO
-	controller.can_receive_effect_srcs = false
+	entity.invulnerable = true
 	collision_shake_complete = false
 
 	_play_dash_sound()
@@ -42,7 +42,7 @@ func exit() -> void:
 	if entity is Player:
 		entity.collision_mask = initial_collision_mask
 
-	controller.can_receive_effect_srcs = true
+	entity.invulnerable = false
 	controller.dash_timer.stop()
 	entity.velocity = Vector2.ZERO
 	controller.knockback_vector = Vector2.ZERO

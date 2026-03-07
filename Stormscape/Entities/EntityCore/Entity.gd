@@ -3,6 +3,8 @@ extends PhysicsBody2D
 class_name Entity
 ## Base class for all entities in the game.
 
+enum ClassType { DYNAMIC = 1, RIGID = 2, STATIC = 4 } ## The kinds of subclasses, used for comparisons and matches.
+
 @export var team: Globals.Teams = Globals.Teams.PLAYER ## What the effects received by this entity should consider as this entity's team.
 @export var is_object: bool = false ## When true, this entity's collision logic will follow that of a world object, regardless of team. It will also not have an auto_decrementer in its inv, as it shouldn't be holding things that need one.
 @export var inv: InvResource ## The inventory data resource for this entity.
@@ -20,22 +22,13 @@ class_name Entity
 
 @export_storage var sc: StatModsCache = StatModsCache.new() ## The resource that will cache and work with all stat mods for this entity. Stands for "stat cache".
 
+var class_type: ClassType = ClassType.STATIC ## Used for comparisons and match statements.
+var invulnerable: bool = false ## When true, this entity cannot receive ESIs or conditions.
 
-#region Debug
-## Edits editor warnings for easier debugging.
-func _get_configuration_warnings() -> PackedStringArray:
-	if get_node_or_null("%EntitySprite") == null or not %EntitySprite is EntitySprite:
-		return [
-			"This entity must have an EntitySprite typed sprite node. Make sure its name is unique with a %."
-			]
-	return []
-#endregion
 
 func _ready() -> void:
 	if Engine.is_editor_hint():
 		return
-
-	add_to_group("has_save_logic")
 
 	if is_object:
 		collision_layer = 0b100000
@@ -96,3 +89,10 @@ func get_all_wearables_as_stats(include_empty_slots: bool = false) -> Array[Wear
 		elif include_empty_slots:
 			results.append(null)
 	return results
+
+#region Debug
+func _get_configuration_warnings() -> PackedStringArray:
+	if (not get_node_or_null("%EntitySprite")) or (not %EntitySprite is EntitySprite):
+		return ["This entity must have an EntitySprite typed sprite node. Make sure its name is unique with a %."]
+	return []
+#endregion

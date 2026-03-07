@@ -17,11 +17,9 @@ class_name ESIReceiverComponent
 @export var allowed_source_types: Array[Globals.ESISourceType] = [] ## The list of sources an effect source can come from in order to affect this esi receiver (only when filter_source_types is true).
 @export var filter_source_tags: bool = false ## When true, only allow matching source tags as specified in the below array.
 @export var allowed_source_tags: Array[String] = [] ## Effect sources must have a tag that matches something in this array in order to be handled when the filter_source_tags is set to true.
-
 @export_group("Entity Stat Modifiers")
 @export var stat_modifiers: EntityStatModifiers = EntityStatModifiers.new()
 
-@onready var tool_script: RefCounted = load("res://Entities/Components/EffectComponents/ESIReceiverComponent/ESIReceiverTool.gd").new(self) ## The tool script node that helps auto-assign export nodes relative to this receiver.
 @onready var entity: Entity = owner ## The owning entity to be affected by the ESIs being received.
 @onready var dh_handler: DHHandler = %DHHandler ## The dh handler child.
 
@@ -42,6 +40,8 @@ func _ready() -> void:
 	collision_layer = entity.collision_layer
 	collision_mask = 0
 	monitoring = false
+
+	stat_modifiers.initialize_stat_cache(entity)
 
 ## Handles an incoming effect source, passing it to present receivers for further processing before changing
 ## entity stats.
@@ -65,17 +65,21 @@ func handle_esi(esi: ESI, process_conditions: bool = true) -> void:
 		if not match_found:
 			return
 
-	# --- Checking if We Should Drop Loot on Hit Early and Return ---
-	if (esi.source_entity and esi.source_entity_team == Globals.Teams.PASSIVE) or (not _can_receive_ESIs()):
-		if (esi.es.source_type != Globals.ESISourceType.FROM_EOTI) and (entity.loot):
-			entity.loot.handle_hit()
-		return
-
 	# --- Spawning Impact VFX ---
 	if esi.es.impact_vfx != null:
 		var vfx: Node2D = esi.es.impact_vfx.instantiate()
 		vfx.global_position = entity.global_position
 		add_child(vfx)
+
+	# --- Checking Invulnerability ---
+	if entity.invulnerable:
+		return
+
+	# --- Checking if We Should Drop Loot on Hit Early and Return ---
+	if (esi.source_entity) and (esi.source_entity_team == Globals.Teams.PASSIVE):
+		if (esi.es.source_type != Globals.ESISourceType.FROM_EOTI) and (entity.loot):
+			entity.loot.handle_hit()
+		return
 
 	# --- Triggering Loot Component if not from EOTI ---
 	if (entity.loot) and (not entity.loot.require_dmg_on_hit):
@@ -84,14 +88,15 @@ func handle_esi(esi: ESI, process_conditions: bool = true) -> void:
 
 	# --- Applying Base Damage & Base Healing ---
 	var xp: int = 0
-	if _check_same_team(esi.source_entity_team) and _check_if_bad_effects_apply_to_allies(esi.es):
+
+	if EffectSource.can_hit_ally_with_bad(entity.team, esi.source_entity_team, esi.es):
 		dh_handler.handle_instant_amount(DHHandler.Type.DAMAGE, HPComponent.POPUP_TYPE.AUTO, esi)
-	elif not _check_same_team(esi.source_entity_team) and _check_if_bad_effects_apply_to_enemies(esi.es):
+	elif EffectSource.can_hit_enemy_with_bad(entity.team, esi.source_entity_team, esi.es):
 		xp = dh_handler.handle_instant_amount(DHHandler.Type.DAMAGE, HPComponent.POPUP_TYPE.AUTO, esi)
 
-	if _check_same_team(esi.source_entity_team) and _check_if_good_effects_apply_to_allies(esi.es):
+	if EffectSource.can_hit_ally_with_good(entity.team, esi.source_entity_team, esi.es):
 		xp = dh_handler.handle_instant_amount(DHHandler.Type.HEALING, HPComponent.POPUP_TYPE.AUTO, esi)
-	elif not _check_same_team(esi.source_entity_team) and _check_if_good_effects_apply_to_enemies(esi.es):
+	elif EffectSource.can_hit_enemy_with_good(entity.team, esi.source_entity_team, esi.es):
 		dh_handler.handle_instant_amount(DHHandler.Type.HEALING, HPComponent.POPUP_TYPE.AUTO, esi)
 
 	# --- Applying Resulting Weapon XP ---
@@ -128,7 +133,7 @@ func _check_condition_team_logic(esi: ESI) -> void:
 ## Checks for untouchability and handles the stat mods in the condition.
 ## Then it passes the effect to have its main logic handled if it needs a handler.
 func handle_condition(condition: Condition) -> void:
-	if not _check_if_applicable_entity_type_for_condition(condition) or not _can_receive_ESIs() or not can_receive_conditions:
+	if not _check_if_applicable_entity_type_for_condition(condition) or entity.invulnerable:
 		return
 	if (entity.effects.is_untouchable()) and (condition.is_bad_effect):
 		return
@@ -139,78 +144,20 @@ func handle_condition(condition: Condition) -> void:
 	entity.effects.handle_condition(condition)
 	_pass_effect_to_handler(condition)
 
-	if entity.effects.is_untouchable():
-		entity.effects.remove_all_bad_conditions()
+	if entity.conditions_component.is_untouchable():
+		entity.conditions_component.remove_all_bad_conditions()
 
 ## Passes the condition to a handler if one is needed for additional logic handling.
 func _pass_effect_to_handler(condition: Condition) -> void:
-	#if condition is StormSyndromeEffect:
-		#if storm_syndrome_handler: storm_syndrome_handler.handle_storm_syndrome(condition)
-		#else: return
 	#if condition is KnockbackStats:
 		#if knockback_handler: knockback_handler.handle_knockback(condition)
 		#else: return
 	#if condition is StunEffect:
 		#if stun_handler: stun_handler.handle_stun(condition)
 		#else: return
-	#if condition is PoisonEffect:
-		#if poison_handler: poison_handler.handle_poison(condition)
-		#else: return
-	#if condition is RegenEffect:
-		#if regen_handler: regen_handler.handle_regen(condition)
-		#else: return
-	#if condition is FrostbiteEffect:
-		#if frostbite_handler: frostbite_handler.handle_frostbite(condition)
-		#else: return
-	#if condition is BurningEffect:
-		#if burning_handler: burning_handler.handle_burning(condition)
-		#else: return
 	#if condition is TimeSnareEffect:
 		#if time_snare_handler: time_snare_handler.handle_time_snare(condition)
 		#else: return
-
-	if not ((entity is not Player) and condition.only_cue_on_player_hit):
-		AudioManager.play_2d(condition.audio_to_play, entity.global_position)
-
-## Checks if the affected entity is on the same team as the producer of the effect source.
-func _check_same_team(source_entity_team: Globals.Teams) -> bool:
-	return entity.team & source_entity_team != 0
-
-## Checks if the effect source should do bad effects to allies.
-func _check_if_bad_effects_apply_to_allies(effect_source: EffectSource) -> bool:
-	return effect_source.bad_effect_affected_teams & Globals.BadEffectAffectedTeams.ALLIES != 0
-
-## Checks if the effect source should do bad effects to enemies.
-func _check_if_bad_effects_apply_to_enemies(effect_source: EffectSource) -> bool:
-	return effect_source.bad_effect_affected_teams & Globals.BadEffectAffectedTeams.ENEMIES != 0
-
-## Checks if the effect source should do good effects to allies.
-func _check_if_good_effects_apply_to_allies(effect_source: EffectSource) -> bool:
-	return effect_source.good_effect_affected_teams & Globals.GoodEffectAffectedTeams.ALLIES != 0
-
-## Checks if the effect source should do good effects to enemies.
-func _check_if_good_effects_apply_to_enemies(effect_source: EffectSource) -> bool:
-	return effect_source.good_effect_affected_teams & Globals.GoodEffectAffectedTeams.ENEMIES != 0
-
-## Compares the flagged affected entities in the condition to the type of entity
-## this node is a child of to see if it applies.
-func _check_if_applicable_entity_type_for_condition(condition: Condition) -> bool:
-	var class_int: int = 0
-	if entity is DynamicEntity:
-		class_int = 1
-	elif entity is RigidEntity:
-		class_int = 2
-	elif entity is StaticEntity:
-		class_int = 4
-	if class_int & condition.affected_entities == 0:
-		return false
-	else:
-		return true
-
-## Checks if the affected entity is Dynamic and has been flagged to not receieve ESIs (and therefore
-## not conditions, either).
-func _can_receive_ESIs() -> bool:
-	return not ((entity is DynamicEntity) and (not entity.fsm.controller.can_receive_effect_srcs))
 
 ## Only plays the impact sound if one exists and one is not already playing for a matching multishot id.
 func _handle_impact_sound(esi: ESI) -> void:
@@ -233,37 +180,28 @@ func _handle_cam_fx(esi: ESI) -> void:
 	esi.es.impact_cam_fx.apply_falloffs_and_activate_all(entity)
 
 #region Debug
-## This works with the tool script defined above to assign export vars automatically in-editor once added
-## to the tree.
-func _notification(what: int) -> void:
-	if Engine.is_editor_hint():
-		if tool_script and what == NOTIFICATION_EDITOR_PRE_SAVE:
-			tool_script.update_editor_children_exports(self, get_children())
-			tool_script.update_editor_parent_export(self, get_parent())
-			tool_script.ensure_effect_handler_resource_unique_to_scene(self)
-
-## Attempts to apply a condition based on its file name turned into snake case. "poison_1", for example.
-func apply_condition_by_id(effect_key: StringName) -> void:
-	var condition: Condition = ConditionsComponent.cache.get(effect_key, null)
-	if condition == null:
-		printerr("The request to apply the condition \"" + effect_key + "\" failed because it does not exist.")
-		return
-
-	handle_condition(condition)
-
-## Attempts to remove a condition based on its condition id. "poison", for example.
-func remove_all_conditions_of_id(effect_id: StringName) -> void:
-	entity.effects.request_condition_removal_for_all_sources(effect_id)
-
-## Attempts to remove a condition based on its condition id case plus its source.
-## "poison:from_weapon", for example.
-func remove_condition_by_id_and_source(effect_key: StringName) -> void:
-	if effect_key not in entity.effects.current_effects:
-		printerr("The request to remove \"" + effect_key + "\" failed because it does not exist as a currently applied condition.")
-		return
-
-	var effect_pieces: PackedStringArray = effect_key.split(":")
-	if effect_pieces.size() < 2:
-		return
-	entity.effects.request_effect_removal_by_source_string(effect_pieces[0], effect_pieces[1])
+### Attempts to apply a condition based on its file name turned into snake case. "poison_1", for example.
+#func apply_condition_by_id(effect_key: StringName) -> void:
+	#var condition: Condition = ConditionsComponent.cache.get(effect_key, null)
+	#if condition == null:
+		#printerr("The request to apply the condition \"" + effect_key + "\" failed because it does not exist.")
+		#return
+#
+	#handle_condition(condition)
+#
+### Attempts to remove a condition based on its condition id. "poison", for example.
+#func remove_all_conditions_of_id(effect_id: StringName) -> void:
+	#entity.effects.request_condition_removal_for_all_sources(effect_id)
+#
+### Attempts to remove a condition based on its condition id case plus its source.
+### "poison:from_weapon", for example.
+#func remove_condition_by_id_and_source(effect_key: StringName) -> void:
+	#if effect_key not in entity.effects.current_effects:
+		#printerr("The request to remove \"" + effect_key + "\" failed because it does not exist as a currently applied condition.")
+		#return
+#
+	#var effect_pieces: PackedStringArray = effect_key.split(":")
+	#if effect_pieces.size() < 2:
+		#return
+	#entity.effects.request_effect_removal_by_source_string(effect_pieces[0], effect_pieces[1])
 #endregion
