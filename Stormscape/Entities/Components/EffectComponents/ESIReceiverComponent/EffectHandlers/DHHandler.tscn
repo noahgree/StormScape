@@ -1,6 +1,0 @@
-[gd_scene format=3 uid="uid://4gl24qwdyti3"]
-
-[ext_resource type="Script" uid="uid://bw0eikycib8lj" path="res://Entities/Components/EffectComponents/ESIReceiverComponent/EffectHandlers/DHHandler.gd" id="1_quvcq"]
-
-[node name="DHHandler" type="Node" unique_id=607926966 groups=["has_save_logic"]]
-script = ExtResource("1_quvcq")

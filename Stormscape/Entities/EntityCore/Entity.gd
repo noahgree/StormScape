@@ -22,8 +22,11 @@ enum ClassType { DYNAMIC = 1, RIGID = 2, STATIC = 4 } ## The kinds of subclasses
 
 @export_storage var sc: StatModsCache = StatModsCache.new() ## The resource that will cache and work with all stat mods for this entity. Stands for "stat cache".
 
+const AUTO_DEC_PROCESS_INTERVAL: float = 0.1 ## How often we should process the auto decrementer. Helps with perf.
+
 var class_type: ClassType = ClassType.STATIC ## Used for comparisons and match statements.
 var invulnerable: bool = false ## When true, this entity cannot receive ESIs or conditions.
+var auto_dec_tick_accumulator: float ## Tracks how long since we have processed the auto decrementer.
 
 
 func _ready() -> void:
@@ -59,7 +62,11 @@ func _ready() -> void:
 
 func _process(delta: float) -> void:
 	if not Engine.is_editor_hint() and inv and not is_object:
-		inv.auto_decrementer.process(delta)
+		auto_dec_tick_accumulator += delta
+
+		while auto_dec_tick_accumulator >= AUTO_DEC_PROCESS_INTERVAL:
+			auto_dec_tick_accumulator -= AUTO_DEC_PROCESS_INTERVAL
+			inv.auto_decrementer.process(delta)
 
 ## Checks to see if the entity has the passed in wearable already.
 ## Leaving index as -1 means check every slot, otherwise only check a certain slot index.

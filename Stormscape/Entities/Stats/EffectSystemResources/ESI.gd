@@ -3,6 +3,19 @@ class_name ESI
 ## ESI stands for Effect Source Instance, and it acts as a wrapper over instances of effect sources
 ## that originate from entities and items.
 
+enum ESISourceType {
+	FROM_DEFAULT, ## For any effect source that does not come from any of the below types.
+	FROM_PROJECTILE, ## For damage coming from any normal projectile like a bullet from a sniper or pistol.
+	FROM_EXPLOSION, ## For damage coming from AOEs that explode.
+	FROM_GROUND_AOE, ## For damage coming from AOEs that exist on the ground like a poison puddle or aftermath of a molotov.
+	FROM_MAGIC, ## For magic weapons.
+	FROM_TOOL, ## For melee weapons like pickaxes and axes that exist primary to interact with the world resources.
+	FROM_PHYSICAL_CONTACT, ## For physcial interactions like a punch or running into something with a hitbox attached to the body.
+	FROM_COMBAT_MELEE, ## For melee weapons that are primarily damaging weapons like a sword (not tools like the pickaxe).
+	FROM_CONSUMABLE, ## For receiving effects from consuming consumables.
+	FROM_EOTI ## For receiving effects from effect over time instances.
+}
+
 @export var es: EffectSource: set = _set_es ## The effect source that this wraps.
 var es_stat_overrides: Dictionary[StringName, float] ## The overrides to use instead when accessing stats from the es.
 var conditions: Array[Condition] ## The modifiable list of conditions for the effect source.
@@ -10,11 +23,27 @@ var source_entity: Entity: set = _set_source_entity, get = _get_source_entity ##
 var source_entity_team: Globals.Teams = Globals.Teams.PLAYER ## A local copy of the last known source entity's team. Stored in case the source entity is freed but we still need the team it was on.
 var source_ii: II: set = _set_source_ii, get = _get_source_ii ## The item instance that produced this ESI.
 var source_ii_lvl: int = 1 ## A local copy of the last known source II's level. Stored in case the source II is freed but we still need the level it was at. Always set to 1 if the source II was not a weapon.
-var source_condition: Condition ## The condition that sent out this ESI, usually originating from an EOTI.
+var source_condition: Condition ## The condition that sent out this ESI, usually originating from an EOTI. Will be null if this ESI does not come from a condition.
 var contact_position: Vector2 ## The position of what the effect source is attached to when it makes contact with a receiver.
 var movement_direction: Vector2 ## The direction vector of this effect source at contact used for knockback.
 var multishot_id: int = -1 ## The id used to relate multishot projectiles with each other. -1 means it did not come from a multishot.
 
+
+## Checks if the effect source should do bad conditions and values to allies.
+static func can_hit_ally_with_bad(self_team: Globals.Teams, esi: ESI) -> bool:
+	return (self_team == esi.source_entity_team) and (esi.es.teams_hit_by_bad & Globals.BadAffectedTeams.ALLIES != 0)
+
+## Checks if the effect source should do bad conditions and values to enemies.
+static func can_hit_enemy_with_bad(self_team: Globals.Teams, esi: ESI) -> bool:
+	return (self_team != esi.source_entity_team) and (esi.es.teams_hit_by_bad & Globals.BadAffectedTeams.ENEMIES != 0)
+
+## Checks if the effect source should do good conditions and values to allies.
+static func can_hit_ally_with_good(self_team: Globals.Teams, esi: ESI) -> bool:
+	return (self_team == esi.source_entity_team) and (esi.es.teams_hit_by_good & Globals.GoodAffectedTeams.ALLIES != 0)
+
+## Checks if the effect source should do good conditions and values to enemies.
+static func can_hit_enemy_with_good(self_team: Globals.Teams, esi: ESI) -> bool:
+	return (self_team != esi.source_entity_team) and (esi.es.teams_hit_by_good & Globals.GoodAffectedTeams.ENEMIES != 0)
 
 ## Sets the new effect source by clearing the old local conditions array and copying all new status
 ## effects into it.
@@ -78,22 +107,22 @@ func get_stat(stat_id: StringName) -> float:
 func get_original_stat(stat_id: StringName) -> float:
 	return es.get(stat_id)
 
-## Gets an existing effect index that matches the full effect key (type and source), regardless of level.
+## Gets an existing condition index that matches the full condition key [id, source_type], regardless of level.
 ## Does not handle duplicates.
-func get_existing_effect_index(full_effect_key: StringName) -> int:
+func get_existing_condition_index(full_condition_key: Array) -> int:
 	var i: int = 0
 	for condition: Condition in conditions:
-		if condition.get_full_effect_key() == full_effect_key:
+		if condition.get_key() == full_condition_key:
 			return i
 		i += 1
 	return -1
 
 ## Replaces or adds all incoming conditions depending on whether they already exist.
-func replace_or_add_conditions(new_effects: Array[Condition]) -> void:
-	for new_effect: Condition in new_effects:
-		var existing_index: int = get_existing_effect_index(new_effect.get_full_effect_key())
+func replace_or_add_conditions(new_conditions: Array[Condition]) -> void:
+	for new_condition: Condition in new_conditions:
+		var existing_index: int = get_existing_condition_index(new_condition.get_key())
 		if existing_index > -1:
-			if (new_effect.effect_lvl > conditions[existing_index].effect_lvl):
-				conditions[existing_index] = new_effect
+			if (new_condition.effect_lvl > conditions[existing_index].effect_lvl):
+				conditions[existing_index] = new_condition
 		else:
-			conditions.append(new_effect)
+			conditions.append(new_condition)

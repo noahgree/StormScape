@@ -178,9 +178,8 @@ func notify_spawn_ended() -> void:
 func notify_requested_stun(duration: float) -> void:
 	match fsm.current_state.state_id:
 		"run", "idle", "stunned", "sneak":
-			stunned_timer.wait_time = duration
 			fsm.change_state("stunned")
-			stunned_timer.start()
+			stunned_timer.start(duration)
 
 ## Called to request starting a dash.
 func notify_requested_dash() -> void:

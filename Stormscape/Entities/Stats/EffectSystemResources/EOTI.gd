@@ -15,6 +15,7 @@ var esi_receiver: ESIReceiverComponent ## The esi receiver this instance is send
 var tick_timer: float ## Decremented as the timer between ticks. At each timeout we tick and restart if there are more ticks to work through.
 var delay_time_left: float ## Decremented as the delay time for this instance. Acts like a timer.
 var uid: int = -1 ## The unique identifier assigned to this EOTI when handled by the DHHandler.
+var expiring: bool = false ## Marked true after we emit the all ticks completed signal to prevent it from firing twice.
 
 
 func _init(eot_stats_resource: EOTStats, src_entity: Entity, src_ii: II, src_condition: Condition) -> void:
@@ -26,8 +27,15 @@ func _init(eot_stats_resource: EOTStats, src_entity: Entity, src_ii: II, src_con
 ## Setter for the eot stats.
 func _set_eot_stats(new_eot_stats: EOTStats) -> void:
 	eot_stats = new_eot_stats
+	delay_time_left = eot_stats.start_delay
+	tick_timer = _get_tick_interval()
 	reset_overrides()
 	copy_in_esi_ticks()
+
+func _get_tick_interval() -> float:
+	if eot_stats.perpetual:
+		return eot_stats.perpetual_interval
+	return eot_stats.duration / eot_stats.tick_count
 
 ## Resets the modifiable overrides back to the original ones in the eot stats.
 func reset_overrides() -> void:
@@ -77,18 +85,24 @@ func process(delta: float) -> void:
 		if delay_time_left <= 0:
 			delay_time_left = 0
 			tick()
-	else:
+	elif tick_timer > 0:
 		tick_timer -= delta
 
 		if tick_timer <= 0:
-			tick_timer = 0
 			tick()
+			tick_timer = _get_tick_interval()
 
 ## Sends out an ESI tick according to whether we are in perpetual mode or not. Signals if all ticks are done.
 func tick() -> void:
 	if not eot_stats.perpetual:
 		esi_receiver.handle_esi(esi_ticks.pop_back(), false)
 		if esi_ticks.is_empty():
-			all_ticks_completed.emit(source_condition.id, source_condition.source_type, uid)
+			_emit_all_ticks_completed_signal()
 	else:
 		esi_receiver.handle_esi(esi_ticks.front().copy(), false)
+
+## Emits the signal that this EOTI has expired, but only if it is not already currently expiring.
+func _emit_all_ticks_completed_signal() -> void:
+	if not expiring:
+		expiring = true
+		all_ticks_completed.emit(source_condition.id, source_condition.source_type, uid)

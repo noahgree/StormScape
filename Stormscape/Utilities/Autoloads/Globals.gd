@@ -49,18 +49,6 @@ enum Teams {
 enum DHTypes { HEALTH_ONLY, SHIELD_ONLY, SHIELD_THEN_HEALTH, HEALTH_THEN_SHIELD, SIMULTANEOUS }
 enum BadAffectedTeams { ENEMIES = 1 << 0, ALLIES = 1 << 1 }
 enum GoodAffectedTeams { ENEMIES = 1 << 0, ALLIES = 1 << 1 }
-enum ESISourceType {
-	FROM_DEFAULT, ## For any effect source that does not come from any of the below types.
-	FROM_PROJECTILE, ## For damage coming from any normal projectile like a bullet from a sniper or pistol.
-	FROM_EXPLOSION, ## For damage coming from AOEs that explode.
-	FROM_GROUND_AOE, ## For damage coming from AOEs that exist on the ground like a poison puddle or aftermath of a molotov.
-	FROM_MAGIC, ## For magic weapons.
-	FROM_TOOL, ## For melee weapons like pickaxes and axes that exist primary to interact with the world resources.
-	FROM_PHYSICAL_CONTACT, ## For physcial interactions like a punch or running into something with a hitbox attached to the body.
-	FROM_COMBAT_MELEE, ## For melee weapons that are primarily damaging weapons like a sword (not tools like the pickaxe).
-	FROM_CONSUMABLE, ## For receiving effects from consuming consumables.
-	FROM_EOTI ## For receiving effects from effect over time instances.
-}
 
 # Items
 enum ItemType { CONSUMABLE, WEAPON, AMMO, WEARABLE, WORLD_RESOURCE, SPECIAL, WEAPON_MOD, CURRENCY }

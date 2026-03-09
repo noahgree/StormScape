@@ -8,12 +8,15 @@ enum Type { DAMAGE, HEALING } ## For differentiating which we are working on whe
 @onready var affected_entity: Entity = owner ## The entity affected by this dh handler.
 @onready var hp_component: HPComponent = owner.hp_component ## The hp component to be affected by the incoming amounts.
 
+const PROCESS_INTERVAL: float = 0.1 ##  ## How often we should process the EOTIs. Helps with performance.
+
 var actives: Dictionary[Array, Dictionary] = {} ## The active effect over time instances running on this node. { [condition_id, source_type] : { eoti_uid : eoti } }.
 var actives_by_id: Dictionary[Condition.ID, Dictionary] ## Another way of storing the active effect over time instances. { condition_id : { source_type : [eoti_uid] } }.
+var tick_accumulator: float ## Tracks time since last tick.
 
 
 func _ready() -> void:
-	set_process(false) # Wait until we have an active EOTI to start processing.
+	set_process(false) # Wait until we have an active EOTI to start processing
 
 #region Instant Amounts
 func handle_instant_amount(type: Type, popup_type: HPComponent.POPUP_TYPE, esi: ESI) -> int:
@@ -130,6 +133,9 @@ func _apply_final_adjustments(amount: int, type: Type) -> int:
 
 #region Amounts Over Time
 func handle_eoti(eoti: EOTI) -> void:
+	if eoti.esi_ticks.is_empty():
+		return
+
 	eoti.uid = UIDHelper.generate_eoti_uid()
 	eoti.all_ticks_completed.connect(_remove_eoti_from_actives)
 
@@ -175,9 +181,13 @@ func stop_eotis_by_source_type(condition_id: Condition.ID, source_type: Conditio
 		_remove_eoti_from_actives(condition_id, source_type, eoti_uid)
 
 func _process(delta: float) -> void:
-	for eoti_key: Array in actives:
-		for eoti_uid: int in actives[eoti_key]:
-			actives[eoti_key][eoti_uid].process(delta)
+	tick_accumulator += delta
+
+	while tick_accumulator >= PROCESS_INTERVAL:
+		tick_accumulator -= PROCESS_INTERVAL
+		for eoti_key: Array in actives:
+			for eoti_uid: int in actives[eoti_key]:
+				actives[eoti_key][eoti_uid].process(delta)
 #endregion
 
 

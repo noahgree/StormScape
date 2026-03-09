@@ -24,9 +24,10 @@ class_name EntityStatModifiers
 @export_range(0, 100, 1.0, "hide_slider", "suffix:%") var storm_syndrome_resistance: float = 0.0 ## A multiplier for reducing storm damage on an entity.
 @export_range(0, 100, 1.0, "hide_slider", "suffix:%") var stun_weakness: float = 0.0 ## A multiplier for increasing stun time applied to an entity.
 @export_range(0, 100, 1.0, "hide_slider", "suffix:%") var stun_resistance: float = 0.0 ## A multiplier for decreasing stun time applied to an entity.
-
-@export_range(0, 1, 1, "hide_slider", "suffix:(1 = on | 0 = off)") var time_snare_immunity: float = 0 ## If aything besides 0, the time snare condition is nullified.
-@export_range(0, 1, 1, "hide_slider", "suffix:(1 = on | 0 = off)") var confusion_immunity: float = 0 ## If aything besides 0, the confusion condition is nullified.
+@export_range(0, 100, 1.0, "hide_slider", "suffix:%") var time_snare_weakness: float = 0.0 ## A multiplier for increasing time snare time applied to an entity.
+@export_range(0, 100, 1.0, "hide_slider", "suffix:%") var time_snare_resistance: float = 0.0 ## A multiplier for decreasing time snare time applied to an entity.
+@export_range(0, 100, 1.0, "hide_slider", "suffix:%") var confusion_weakness: float = 0.0 ## A multiplier for increasing confusion time applied to an entity.
+@export_range(0, 100, 1.0, "hide_slider", "suffix:%") var confusion_resistance: float = 0.0 ## A multiplier for decreasing confusion time applied to an entity.
 
 
 func initialize_stat_cache(entity: Entity) -> void:
@@ -43,9 +44,8 @@ func initialize_stat_cache(entity: Entity) -> void:
 		&"storm_syndrome_weakness": storm_syndrome_weakness,
 		&"storm_syndrome_resistance": storm_syndrome_resistance,
 		&"stun_weakness": stun_weakness, &"stun_resistance": stun_resistance,
-
-		&"time_snare_immunity": time_snare_immunity,
-		&"confusion_immunity": confusion_immunity
+		&"time_snare_weakness": time_snare_weakness, &"time_snare_resistance": time_snare_resistance,
+		&"confusion_weakness": confusion_weakness, &"confusion_resistance": confusion_resistance
 	}
 
 	entity.sc.add_moddable_stats(moddable_stats)

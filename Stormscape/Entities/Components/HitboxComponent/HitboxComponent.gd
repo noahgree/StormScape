@@ -53,7 +53,7 @@ func _on_body_entered(body: Node2D) -> void:
 ## This version of the method handles the general case, but specific behaviors defined in certain
 ## weapon hitboxes may want to override it.
 func _start_being_handled(handling_area: ESIReceiverComponent) -> void:
-	if esi.es.source_type == Globals.ESISourceType.FROM_PROJECTILE:
+	if esi.es.source_type == ESI.ESISourceType.FROM_PROJECTILE:
 		esi.movement_direction = movement_direction
 	if not use_self_position:
 		esi.contact_position = get_parent().global_position

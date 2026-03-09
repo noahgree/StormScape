@@ -1,0 +1,29 @@
+[gd_resource type="Resource" script_class="ConfusionStats" format=3 uid="uid://dmygindmnh21r"]
+
+[ext_resource type="Script" uid="uid://20acrt2hb6y" path="res://Entities/Stats/EOTStats.gd" id="1_g1c1n"]
+[ext_resource type="Script" uid="uid://blgbx1nri5jsy" path="res://Entities/Stats/EffectSystemResources/Conditions/BadEffects/Confusion/ConfusionStats.gd" id="1_ul5t5"]
+[ext_resource type="Script" uid="uid://bcjwesiannbd0" path="res://Entities/Stats/StatMod/StatMod.gd" id="2_jfsak"]
+[ext_resource type="Script" uid="uid://dkfssottmsrch" path="res://Entities/Stats/EffectSystemResources/EffectSource.gd" id="3_jn00y"]
+
+[sub_resource type="Resource" id="Resource_g1c1n"]
+script = ExtResource("2_jfsak")
+stat_id = &"confusion_amount"
+mod_id = &"confusion"
+operation = "="
+value = 100.0
+is_good_mod = false
+metadata/_custom_type_script = "uid://bcjwesiannbd0"
+
+[sub_resource type="Resource" id="Resource_8wd3t"]
+script = ExtResource("1_g1c1n")
+stat_mods = Array[ExtResource("2_jfsak")]([SubResource("Resource_g1c1n")])
+metadata/_custom_type_script = "uid://20acrt2hb6y"
+
+[resource]
+script = ExtResource("1_ul5t5")
+id = 6
+goodness = 1
+affected_entities = 3
+eot_stats = SubResource("Resource_8wd3t")
+only_cue_on_player_hit = true
+metadata/_custom_type_script = "uid://blgbx1nri5jsy"

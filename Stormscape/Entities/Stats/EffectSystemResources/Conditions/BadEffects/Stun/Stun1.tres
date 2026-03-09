@@ -1,22 +1,9 @@
-[gd_resource type="Resource" script_class="StunEffect" format=3 uid="uid://3e6mdax7u2av"]
+[gd_resource type="Resource" script_class="StunStats" format=3 uid="uid://3e6mdax7u2av"]
 
 [ext_resource type="Script" uid="uid://ca7lkl817kaqk" path="res://Entities/Stats/EffectSystemResources/Conditions/BadEffects/Stun/StunStats.gd" id="1_sdbli"]
-[ext_resource type="Script" uid="uid://bcjwesiannbd0" path="res://Entities/Stats/StatMod/StatMod.gd" id="2_vysiy"]
 
 [resource]
 script = ExtResource("1_sdbli")
 stun_time = 0.5
-id = "stun"
-source_type = 0
-effect_lvl = 1
-is_bad_effect = true
+goodness = 1
 affected_entities = 1
-effects_to_stop = Array[String]([])
-mod_time = 0.5
-apply_until_removed = false
-stat_mods = Array[ExtResource("2_vysiy")]([])
-audio_to_play = ""
-only_cue_on_player_hit = false
-spawn_particles = true
-particle_hander_req = "Stun"
-make_entity_glow = true

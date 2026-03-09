@@ -28,18 +28,15 @@
 [ext_resource type="Script" uid="uid://evdilpt7dh6f" path="res://Entities/Player/PlayerCore/PlayerController.gd" id="27_n4o3n"]
 [ext_resource type="PackedScene" uid="uid://c4n604w30gx8m" path="res://Entities/Components/ItemComponents/ItemReceiverComponent/ItemReceiverComponent.tscn" id="30_qgyag"]
 [ext_resource type="Script" uid="uid://dq62ojsc43p8o" path="res://Entities/Player/UI/Inventory/Panels/MainPanel/PlayerInvUI.gd" id="32_3a185"]
+[ext_resource type="Script" uid="uid://dm8m7mr8if1pr" path="res://Entities/Components/EffectComponents/ESIReceiverComponent/EntityStatModifiers.gd" id="32_lo25j"]
 [ext_resource type="Script" uid="uid://di5hu6fk5mbfe" path="res://Entities/Player/UI/Vitals/PlayerVitalsHUD.gd" id="35_yln51"]
 [ext_resource type="PackedScene" uid="uid://b7gdy01q8wsjx" path="res://Entities/Components/ItemComponents/HandsComponent/HandsComponent.tscn" id="39_ngono"]
 [ext_resource type="Shader" uid="uid://c0de04pgeen76" path="res://Utilities/Game/Shaders/BlurBehind.gdshader" id="39_r4tgk"]
 [ext_resource type="PackedScene" uid="uid://m4ur3n2hwsp8" path="res://Entities/Player/UI/Inventory/InventoryCore/Slot.tscn" id="42_r422n"]
 [ext_resource type="Texture2D" uid="uid://bli0i6fkxi43o" path="res://Entities/Player/PlayerCore/PlayerHandCT.tres" id="48_ou5t4"]
 [ext_resource type="Texture2D" uid="uid://baj6slyni0t6u" path="res://Entities/Player/PlayerCore/walking_dust.png" id="50_ar238"]
-[ext_resource type="Script" uid="uid://bv40a7n5sorxe" path="res://Entities/Components/EffectComponents/ESIReceiverComponent/EffectHandlers/StormSyndromeHandler.gd" id="52_f5l7i"]
-[ext_resource type="Script" uid="uid://dk6uef3uxmeev" path="res://Entities/Components/EffectComponents/ESIReceiverComponent/EffectHandlers/KnockbackHandler.gd" id="53_co77f"]
-[ext_resource type="Script" uid="uid://b21sy1r0nxgpv" path="res://Entities/Components/EffectComponents/ESIReceiverComponent/EffectHandlers/StunHandler.gd" id="54_bmpdm"]
 [ext_resource type="Script" uid="uid://dih45lqhjg0xx" path="res://Entities/Player/UI/Overhead/PlayerOverheadUI.gd" id="57_n8srl"]
 [ext_resource type="Script" uid="uid://c0n0ja8tkrnkf" path="res://Entities/Player/UI/Inventory/HotbarHUD/HotbarHUD.gd" id="58_i567i"]
-[ext_resource type="Script" uid="uid://5w234psf0oln" path="res://Entities/Components/EffectComponents/ESIReceiverComponent/EffectHandlers/TimeSnareHandler.gd" id="59_82yts"]
 [ext_resource type="Texture2D" uid="uid://bq3d1uclexvcm" path="res://Entities/EntityCore/UI/Overhead/Assets/progress_tintable.png" id="61_6wv7y"]
 [ext_resource type="Texture2D" uid="uid://barp24qvngy0m" path="res://Entities/Player/UI/Overhead/Assets/Overheat/overheat_back.png" id="63_3uq13"]
 [ext_resource type="Texture2D" uid="uid://7wf7omw2r50u" path="res://Entities/Player/UI/Overhead/Assets/Overheat/overheat_progress.png" id="64_o382h"]
@@ -192,199 +189,12 @@ colors = PackedColorArray(1, 0.907, 0.834, 0.5, 1, 0.752, 0.46, 0.4, 1, 1, 1, 0)
 _data = [Vector2(0, 0), 0.0, 1.0, 0, 1, Vector2(1, 1), 1.0, 0.0, 1, 0]
 point_count = 2
 
-[sub_resource type="Resource" id="Resource_gdihr"]
-resource_local_to_scene = true
-script = ExtResource("52_f5l7i")
-metadata/_custom_type_script = "uid://bv40a7n5sorxe"
-
-[sub_resource type="Resource" id="Resource_g5u5n"]
-resource_local_to_scene = true
-script = ExtResource("53_co77f")
-metadata/_custom_type_script = "uid://dk6uef3uxmeev"
-
-[sub_resource type="Resource" id="Resource_0313k"]
-resource_local_to_scene = true
-script = ExtResource("54_bmpdm")
-metadata/_custom_type_script = "uid://b21sy1r0nxgpv"
-
-[sub_resource type="GDScript" id="GDScript_o382h"]
-script/source = "@icon(\"res://Utilities/Debug/EditorIcons/poison_handler.svg\")
-extends Resource
-class_name PoisonHandler
-## A handler for using the data provided in the effect source to apply poison in different ways.
-
-@export_range(0, 100, 1.0, \"hide_slider\", \"suffix:%\") var _poison_weakness: float = 0.0 ## A multiplier for poison damage on an entity.
-@export_range(0, 100, 1.0, \"hide_slider\", \"suffix:%\") var _poison_resistance: float = 0.0 ## A multiplier for poison damage on an entity.
-
-var effect_src_receiver: ESIReceiverComponent ## The receiver that passes the effect to this handler node.
-
-
-func initialize(receiver: ESIReceiverComponent) -> void:
-	effect_src_receiver = receiver
-	assert(effect_src_receiver.dh_handler, effect_src_receiver.get_parent().name + \" has a PoisonHandler but no DHHandler.\")
-
-	var moddable_stats: Dictionary[StringName, float] = {
-		&\"poison_weakness\" : _poison_weakness, &\"poison_resistance\" : _poison_resistance
-	}
-	effect_src_receiver.affected_entity.sc.add_moddable_stats(moddable_stats)
-
-func handle_poison(poison_effect: PoisonEffect) -> void:
-	if poison_effect.dot_resource != null: # Needed for when we nullify on game load
-		var local_dot_resource: DOTResource = poison_effect.dot_resource.duplicate()
-		var poison_weakness: float = effect_src_receiver.affected_entity.sc.get_stat(\"poison_weakness\")
-		var poison_resistance: float = effect_src_receiver.affected_entity.sc.get_stat(\"poison_resistance\")
-
-		var multiplier: float = 1.0 + (poison_weakness / 100.0) - (poison_resistance / 100.0)
-		multiplier = clamp(multiplier, 0.0, 2.0)
-
-		for i: int in range(local_dot_resource.dmg_ticks_array.size()):
-			local_dot_resource.dmg_ticks_array[i] = int(roundf(local_dot_resource.dmg_ticks_array[i] * multiplier))
-
-		(effect_src_receiver.get_node(\"DHHandler\") as DHHandler).handle_over_time_dmg(local_dot_resource, poison_effect.get_full_effect_key())
-"
-
-[sub_resource type="Resource" id="Resource_bvo3j"]
-resource_local_to_scene = true
-script = SubResource("GDScript_o382h")
-metadata/_custom_type_script = "uid://5krnqdrdbey1"
-
-[sub_resource type="GDScript" id="GDScript_6wv7y"]
-script/source = "@icon(\"res://Utilities/Debug/EditorIcons/regen_handler.svg\")
-extends Resource
-class_name RegenHandler
-## A handler for using the data provided in the effect source to apply regeneration in different ways.
-
-@export_range(0, 100, 1.0, \"hide_slider\", \"suffix:%\") var _regen_boost: float = 0.0 ## A multiplier for regen boosting on an entity.
-@export_range(0, 100, 1.0, \"hide_slider\", \"suffix:%\") var _regen_penalty: float = 0.0 ## A multiplier for regen reduction on an entity.
-
-var effect_src_receiver: ESIReceiverComponent ## The receiver that passes the effect to this handler node.
-
-
-func initialize(receiver: ESIReceiverComponent) -> void:
-	effect_src_receiver = receiver
-	assert(effect_src_receiver.heal_handler, effect_src_receiver.get_parent().name + \" has a RegenHandler but no HealHandler.\")
-
-	var moddable_stats: Dictionary[StringName, float] = {
-		&\"regen_boost\" : _regen_boost, &\"regen_penalty\" : _regen_penalty
-	}
-	effect_src_receiver.affected_entity.sc.add_moddable_stats(moddable_stats)
-
-func handle_regen(regen_effect: RegenEffect) -> void:
-	if regen_effect.hot_resource != null: # Needed for when we nullify on game load
-		var local_hot_resource: HOTResource = regen_effect.hot_resource.duplicate()
-		var regen_boost: float = effect_src_receiver.affected_entity.sc.get_stat(\"regen_boost\")
-		var regen_penalty: float = effect_src_receiver.affected_entity.sc.get_stat(\"regen_penalty\")
-
-		var multiplier: float = 1.0 + (regen_boost / 100.0) - (regen_penalty / 100.0)
-		multiplier = clamp(multiplier, 0.0, 2.0)
-
-		for i: int in range(local_hot_resource.heal_ticks_array.size()):
-			local_hot_resource.heal_ticks_array[i] = int(roundf(local_hot_resource.heal_ticks_array[i] * multiplier))
-
-		effect_src_receiver.heal_handler.handle_over_time_heal(local_hot_resource, regen_effect.get_full_effect_key())
-"
-
-[sub_resource type="Resource" id="Resource_gb65f"]
-resource_local_to_scene = true
-script = SubResource("GDScript_6wv7y")
-metadata/_custom_type_script = "uid://bqw1ufs6jb7cf"
-
-[sub_resource type="GDScript" id="GDScript_n4o3n"]
-script/source = "@icon(\"res://Utilities/Debug/EditorIcons/frostbite_handler.svg\")
-extends Resource
-class_name FrostbiteHandler
-## A handler for using the data provided in the effect source to apply frostbite in different ways.
-
-@export_range(0, 100, 1.0, \"hide_slider\", \"suffix:%\") var _frostbite_weakness: float = 0.0 ## A multiplier for frostbite damage on an entity.
-@export_range(0, 100, 1.0, \"hide_slider\", \"suffix:%\") var _frostbite_resistance: float = 0.0 ## A multiplier for frostbite reduction on an entity.
-
-var effect_src_receiver: ESIReceiverComponent ## The receiver that passes the effect to this handler node.
-
-
-func initialize(receiver: ESIReceiverComponent) -> void:
-	effect_src_receiver = receiver
-	assert(effect_src_receiver.dh_handler, effect_src_receiver.get_parent().name + \" has a FrostbiteHandler but no DHHandler.\")
-
-	var moddable_stats: Dictionary[StringName, float] = {
-		&\"frostbite_weakness\" : _frostbite_weakness, &\"frostbite_resistance\" : _frostbite_resistance
-	}
-	effect_src_receiver.affected_entity.sc.add_moddable_stats(moddable_stats)
-
-func handle_frostbite(frostbite_effect: FrostbiteEffect) -> void:
-	var local_dot_resource: DOTResource = frostbite_effect.dot_resource.duplicate()
-	var frostbite_weakness: float = effect_src_receiver.affected_entity.sc.get_stat(\"frostbite_weakness\")
-	var frostbite_resistance: float = effect_src_receiver.affected_entity.sc.get_stat(\"frostbite_resistance\")
-
-	var multiplier: float = 1.0 + (frostbite_weakness / 100.0) - (frostbite_resistance / 100.0)
-	multiplier = clamp(multiplier, 0.0, 2.0)
-
-	for i: int in range(local_dot_resource.dmg_ticks_array.size()):
-		local_dot_resource.dmg_ticks_array[i] = int(roundf(local_dot_resource.dmg_ticks_array[i] * multiplier))
-
-	(effect_src_receiver.get_node(\"DHHandler\") as DHHandler).handle_over_time_dmg(local_dot_resource, frostbite_effect.get_full_effect_key())
-"
-
-[sub_resource type="Resource" id="Resource_eufsu"]
-resource_local_to_scene = true
-script = SubResource("GDScript_n4o3n")
-metadata/_custom_type_script = "uid://b1lo2mdb3otax"
-
-[sub_resource type="GDScript" id="GDScript_0t1mv"]
-script/source = "@icon(\"res://Utilities/Debug/EditorIcons/burning_handler.svg\")
-extends Resource
-class_name BurningHandler
-## A handler for using the data provided in the effect source to apply burning in different ways.
-
-@export_range(0, 100, 1.0, \"hide_slider\", \"suffix:%\") var _burning_weakness: float = 0.0 ## A multiplier for burning damage on an entity.
-@export_range(0, 100, 1.0, \"hide_slider\", \"suffix:%\") var _burning_resistance: float = 0.0 ## A multiplier for burning reduction on an entity.
-
-var effect_src_receiver: ESIReceiverComponent ## The receiver that passes the effect to this handler node.
-
-
-func initialize(receiver: ESIReceiverComponent) -> void:
-	effect_src_receiver = receiver
-	assert(effect_src_receiver.dh_handler, effect_src_receiver.get_parent().name + \" has a BurningHandler but no DHHandler.\")
-
-	var moddable_stats: Dictionary[StringName, float] = {
-		&\"burning_weakness\" : _burning_weakness, &\"burning_resistance\" : _burning_resistance
-	}
-	effect_src_receiver.affected_entity.sc.add_moddable_stats(moddable_stats)
-
-func handle_burning(burning_effect: BurningEffect) -> void:
-	var local_dot_resource: DOTResource = burning_effect.dot_resource.duplicate()
-	var burning_weakness: float = effect_src_receiver.affected_entity.sc.get_stat(\"burning_weakness\")
-	var burning_resistance: float = effect_src_receiver.affected_entity.sc.get_stat(\"burning_resistance\")
-
-	var multiplier: float = 1.0 + (burning_weakness / 100.0) - (burning_resistance / 100.0)
-	multiplier = clamp(multiplier, 0.0, 2.0)
-
-	for i: int in range(local_dot_resource.dmg_ticks_array.size()):
-		local_dot_resource.dmg_ticks_array[i] = int(roundf(local_dot_resource.dmg_ticks_array[i] * multiplier))
-
-	(effect_src_receiver.get_node(\"DHHandler\") as DHHandler).handle_over_time_dmg(local_dot_resource, burning_effect.get_full_effect_key())
-"
-
-[sub_resource type="Resource" id="Resource_w0i1c"]
-resource_local_to_scene = true
-script = SubResource("GDScript_0t1mv")
-metadata/_custom_type_script = "uid://dubq8xgav66ue"
-
-[sub_resource type="Resource" id="Resource_ou5t4"]
-resource_local_to_scene = true
-script = ExtResource("59_82yts")
-metadata/_custom_type_script = "uid://5w234psf0oln"
-
-[sub_resource type="GDScript" id="GDScript_gdihr"]
-script/source = "@icon(\"res://Utilities/Debug/EditorIcons/life_steal_handler.svg\")
-extends Resource
-class_name LifeStealHandler
-## A handler for using the data provided in the effect source to apply life steal in different ways.
-"
-
-[sub_resource type="Resource" id="Resource_ar238"]
-resource_local_to_scene = true
-script = SubResource("GDScript_gdihr")
-metadata/_custom_type_script = "uid://ckiyd2nbdcofr"
+[sub_resource type="Resource" id="Resource_rdrbb"]
+script = ExtResource("32_lo25j")
+time_snare_weakness = null
+time_snare_resistance = null
+confusion_weakness = null
+confusion_resistance = null
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_7dc0v"]
 size = Vector2(14, 15)
@@ -1443,18 +1253,8 @@ anim_offset_curve = SubResource("Curve_f5l7i")
 
 [node name="StaminaComponent" parent="." unique_id=262197673 instance=ExtResource("5_k4fu6")]
 
-[node name="ESIReceiverComponent" parent="." unique_id=1472741103 node_paths=PackedStringArray("dh_handler") instance=ExtResource("4_hhm8x")]
-storm_syndrome_handler = SubResource("Resource_gdihr")
-knockback_handler = SubResource("Resource_g5u5n")
-stun_handler = SubResource("Resource_0313k")
-poison_handler = SubResource("Resource_bvo3j")
-regen_handler = SubResource("Resource_gb65f")
-frostbite_handler = SubResource("Resource_eufsu")
-burning_handler = SubResource("Resource_w0i1c")
-time_snare_handler = SubResource("Resource_ou5t4")
-life_steal_handler = SubResource("Resource_ar238")
-dh_handler = NodePath("DHHandler")
-heal_handler = null
+[node name="ESIReceiverComponent" parent="." unique_id=1472741103 instance=ExtResource("4_hhm8x")]
+stat_modifiers = SubResource("Resource_rdrbb")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="ESIReceiverComponent" unique_id=825144666]
 position = Vector2(0, -7.5)

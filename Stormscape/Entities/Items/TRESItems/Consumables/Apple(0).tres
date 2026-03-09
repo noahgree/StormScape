@@ -13,8 +13,6 @@
 script = ExtResource("1_bn713")
 source_type = 8
 scanned_phys_layers = 0
-bad_effect_affected_teams = 3
-good_effect_affected_teams = 3
 base_healing = 10
 heal_affected_stats = 0
 hit_flash_color = Color(1, 1, 1, 0)

@@ -9,7 +9,7 @@ class_name EffectSource
 enum ESType { NORMAL, CHARGE, AOE } ## The kinds of effect sources that can be modified.
 
 @export_group("General")
-@export var source_type: Globals.ESISourceType ## A tag used to determine the source of the effect source. See Globals class for details on the tags.
+@export var source_type: ESI.ESISourceType ## A tag used to determine the source of the effect source. See Globals class for details on the tags.
 @export var source_tags: Array[String] = [] ## Additional information to pass to whatever receieves this effect source to make sure it should apply.
 @export_flags_2d_physics var scanned_phys_layers: int = 0b1101111 ## The collision mask that this source scans in order to apply affects to.
 @export_subgroup("Team Logic")
@@ -45,24 +45,3 @@ enum ESType { NORMAL, CHARGE, AOE } ## The kinds of effect sources that can be m
 
 @export_group("Conditions")
 @export var conditions: Array[Condition] ## The array of conditions that can be applied to the receiving entity.
-
-
-## Checks if the effect source should do bad conditions and values to allies.
-static func can_hit_ally_with_bad(self_team: Globals.Teams, source_team: Globals.Teams,
-									effect_source: EffectSource) -> bool:
-	return (self_team == source_team) and (effect_source.teams_hit_by_bad & Globals.BadAffectedTeams.ALLIES != 0)
-
-## Checks if the effect source should do bad conditions and values to enemies.
-static func can_hit_enemy_with_bad(self_team: Globals.Teams, source_team: Globals.Teams,
-									effect_source: EffectSource) -> bool:
-	return (self_team != source_team) and (effect_source.teams_hit_by_bad & Globals.BadAffectedTeams.ENEMIES != 0)
-
-## Checks if the effect source should do good conditions and values to allies.
-static func can_hit_ally_with_good(self_team: Globals.Teams, source_team: Globals.Teams,
-									effect_source: EffectSource) -> bool:
-	return (self_team == source_team) and (effect_source.teams_hit_by_good & Globals.GoodAffectedTeams.ALLIES != 0)
-
-## Checks if the effect source should do good conditions and values to enemies.
-static func can_hit_enemy_with_good(self_team: Globals.Teams, source_team: Globals.Teams,
-									effect_source: EffectSource) -> bool:
-	return (self_team != source_team) and (effect_source.teams_hit_by_good & Globals.GoodAffectedTeams.ENEMIES != 0)
