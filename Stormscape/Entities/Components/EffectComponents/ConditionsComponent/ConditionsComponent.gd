@@ -146,9 +146,6 @@ func _add_ci(condition: Condition) -> void:
 
 ## Passes the condition to a handler if one is needed for additional logic handling.
 func _handle_dynamic_condition(condition: Condition, esi: ESI) -> void:
-	if condition is StunEffect:
-		if stun_handler: stun_handler.handle_stun(condition)
-		else: return
 	if condition is TimeSnareEffect:
 		if time_snare_handler: time_snare_handler.handle_time_snare(condition)
 		else: return

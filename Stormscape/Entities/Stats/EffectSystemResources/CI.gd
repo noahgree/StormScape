@@ -18,7 +18,7 @@ func _init(condition_source: Condition) -> void:
 		return
 	if condition.eot_stats.delay_stats_too:
 		delay_time_left = condition.eot_stats.start_delay
-	time_left = condition.eot_stats.interval * condition.eot_stats.tick_count
+	time_left = condition.eot_stats.duration
 
 ## Called externally to process the internal lifetime timer and delay timer.
 func process(delta: float) -> void:
@@ -43,13 +43,12 @@ func _emit_condition_expired_signal() -> void:
 ## Restarts the lifetime timer and updates the condition reference. Assumes the new condition is the same level.
 func restart_time_left(new_condition: Condition) -> void:
 	condition = new_condition
-	time_left = condition.eot_stats.interval * condition.eot_stats.tick_count
+	time_left = condition.eot_stats.duration
 
 ## Extends the lifetime timer and updates the condition reference. Assumes the new condition is of lower level.
 func extend_time_left(new_condition: Condition) -> void:
 	var old_level: int = condition.level
 	condition = new_condition
-	var new_condition_dur: float = condition.eot_stats.interval * condition.eot_stats.tick_count
 
-	var time_to_add: float = new_condition_dur * (float(condition.level) / float(old_level))
+	var time_to_add: float = condition.eot_stats.duration * (float(condition.level) / float(old_level))
 	time_left += time_to_add
