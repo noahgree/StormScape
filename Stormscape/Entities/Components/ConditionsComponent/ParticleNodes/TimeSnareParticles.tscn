@@ -1,0 +1,58 @@
+[gd_scene format=3 uid="uid://biy8u12asiyue"]
+
+[ext_resource type="Texture2D" uid="uid://dp618rrm5wywy" path="res://Entities/EntityCore/UI/StatusEffects/Icons/clocks.png" id="1_adkn3"]
+[ext_resource type="Script" uid="uid://bebyq3wopqkdd" path="res://Entities/Components/ConditionsComponent/ParticleNodes/ParticleEffect.gd" id="2_3seie"]
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_ob67e"]
+light_mode = 1
+particles_animation = true
+particles_anim_h_frames = 8
+particles_anim_v_frames = 1
+particles_anim_loop = true
+
+[sub_resource type="Curve" id="Curve_uca4e"]
+_limits = [-500.0, 500.0, 0.0, 1.0]
+_data = [Vector2(0, -1), 0.0, 0.0, 0, 0, Vector2(1, 0.5), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Curve" id="Curve_i141l"]
+_data = [Vector2(0.00342466, 0.359578), 0.0, 0.0, 0, 0, Vector2(0.131849, 0.725802), 0.0, 0.0, 0, 0, Vector2(0.758562, 0.733314), 0.0, 0.0, 0, 0, Vector2(0.941781, 0.77651), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 5
+
+[sub_resource type="Gradient" id="Gradient_ifrph"]
+offsets = PackedFloat32Array(0, 0.138783, 0.792776, 1)
+colors = PackedColorArray(0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="Curve" id="Curve_tovas"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.501712, 0.861023), 0.0, 0.0, 0, 0, Vector2(1, 0.603727), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[node name="TimeSnareParticles" type="CPUParticles2D" unique_id=2098660589]
+light_mask = 2
+material = SubResource("CanvasItemMaterial_ob67e")
+emitting = false
+amount = 10
+texture = ExtResource("1_adkn3")
+lifetime = 1.5
+lifetime_randomness = 0.15
+local_coords = true
+emission_shape = 2
+emission_sphere_radius = 1.0
+direction = Vector2(0, 0)
+spread = 0.0
+gravity = Vector2(0, 0)
+orbit_velocity_min = 0.25
+orbit_velocity_max = 0.25
+orbit_velocity_curve = SubResource("Curve_uca4e")
+scale_amount_min = 0.25
+scale_amount_max = 0.45
+scale_amount_curve = SubResource("Curve_i141l")
+color = Color(4, 4, 4, 1)
+color_ramp = SubResource("Gradient_ifrph")
+anim_speed_min = -8.0
+anim_speed_max = -4.0
+anim_speed_curve = SubResource("Curve_tovas")
+anim_offset_max = 1.0
+script = ExtResource("2_3seie")
+condition_id = 5
+emission_area = 2

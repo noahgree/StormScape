@@ -22,31 +22,31 @@ class_name EntitySprite
 	&"crack_scale" : 3.838,
 }
 
-@export_storage var floor_colors: Dictionary[StringName, Color] = { ## The condition names that have associated colors to change the floor light to.
-	&"frostbite" : Color(0.435, 0.826, 1),
-	&"burning" : Color(1, 0.582, 0.484),
-	&"poison" : Color(0, 0.933, 0.469),
-	&"slowness" : Color(1, 0.568, 0.56),
-	&"storm_syndrome" : Color(0.861, 0.573, 1),
-	&"confusion" : Color(0.73, 0.703, 0.701),
-	&"regen" : Color(0, 0.85, 0.393),
-	&"speed" : Color(0.692, 0.76, 0),
-	&"untouchable" : Color(0.29, 0.713, 0.75),
-	&"stun" : Color(1, 0.909, 0.544),
-	&"time_snare": Color(1, 0.4, 0.463)
+@export_storage var floor_colors: Dictionary[Condition.ID, Color] = { ## The condition names that have associated colors to change the floor light to.
+	Condition.ID.FROSTBITE : Color(0.435, 0.826, 1),
+	Condition.ID.BURNING : Color(1, 0.582, 0.484),
+	Condition.ID.POISON : Color(0, 0.933, 0.469),
+	Condition.ID.SLOWNESS : Color(1, 0.568, 0.56),
+	Condition.ID.STORM_SYNDROME : Color(0.861, 0.573, 1),
+	Condition.ID.CONFUSION : Color(0.73, 0.703, 0.701),
+	Condition.ID.REGEN : Color(0, 0.85, 0.393),
+	Condition.ID.SPEED : Color(0.692, 0.76, 0),
+	Condition.ID.UNTOUCHABLE : Color(0.29, 0.713, 0.75),
+	Condition.ID.STUN : Color(1, 0.909, 0.544),
+	Condition.ID.TIME_SNARE: Color(1, 0.4, 0.463)
 }
-@export_storage var overlay_colors: Dictionary[StringName, Color] = { ## The condition names that have associated colors to change the overlay to.
-	&"frostbite" : Color(0.435, 0.826, 1),
-	&"burning" : Color(1, 0.582, 0.484),
-	&"poison" : Color(0, 0.933, 0.469),
-	&"slowness" : Color(1, 0.568, 0.56),
-	&"storm_syndrome" : Color(0.861, 0.573, 1),
-	&"confusion" : Color(0.73, 0.703, 0.701),
-	&"regen" : Color(0, 0.8, 0.3),
-	&"speed" : Color(0.692, 0.76, 0),
-	&"sntouchable" : Color(0.29, 0.713, 0.75),
-	&"Stun" : Color(1, 0.909, 0.544),
-	&"time_snare": Color(1, 0.4, 0.463)
+@export_storage var overlay_colors: Dictionary[Condition.ID, Color] = { ## The condition names that have associated colors to change the overlay to.
+	Condition.ID.FROSTBITE : Color(0.435, 0.826, 1),
+	Condition.ID.BURNING : Color(1, 0.582, 0.484),
+	Condition.ID.POISON : Color(0, 0.933, 0.469),
+	Condition.ID.SLOWNESS : Color(1, 0.568, 0.56),
+	Condition.ID.STORM_SYNDROME : Color(0.861, 0.573, 1),
+	Condition.ID.CONFUSION : Color(0.73, 0.703, 0.701),
+	Condition.ID.REGEN : Color(0, 0.8, 0.3),
+	Condition.ID.SPEED : Color(0.692, 0.76, 0),
+	Condition.ID.UNTOUCHABLE : Color(0.29, 0.713, 0.75),
+	Condition.ID.STUN : Color(1, 0.909, 0.544),
+	Condition.ID.TIME_SNARE : Color(1, 0.4, 0.463)
 }
 
 @onready var floor_light: PointLight2D = $FloorLight ## The light with the effect color that is shining up on the entity.

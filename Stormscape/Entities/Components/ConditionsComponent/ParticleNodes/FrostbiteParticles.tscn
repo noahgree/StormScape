@@ -1,0 +1,58 @@
+[gd_scene format=3 uid="uid://l5o46rukviji"]
+
+[ext_resource type="Texture2D" uid="uid://cidg3ea0fltr" path="res://Entities/EntityCore/UI/StatusEffects/Icons/snowflake.png" id="1_i8qvj"]
+[ext_resource type="Script" uid="uid://bebyq3wopqkdd" path="res://Entities/Components/ConditionsComponent/ParticleNodes/ParticleEffect.gd" id="2_gobpe"]
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_w7ucw"]
+blend_mode = 1
+light_mode = 1
+
+[sub_resource type="Curve" id="Curve_y8p6g"]
+_limits = [-200.0, 200.0, 0.0, 1.0]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Curve" id="Curve_vnkh2"]
+_limits = [-360.0, 360.0, 0.0, 1.0]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 11.1297), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Curve" id="Curve_xhbdq"]
+_data = [Vector2(0.00342466, 0.359578), 0.0, 0.0, 0, 0, Vector2(0.121575, 0.707021), 0.0, 0.0, 0, 0, Vector2(0.756849, 0.842242), 0.0, 0.0, 0, 0, Vector2(0.941781, 0.77651), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 5
+
+[sub_resource type="Gradient" id="Gradient_dhvb1"]
+offsets = PackedFloat32Array(0, 0.138783, 0.857414, 1)
+colors = PackedColorArray(0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0)
+
+[node name="FrostbiteParticles" type="CPUParticles2D" unique_id=1387169975]
+light_mask = 2
+material = SubResource("CanvasItemMaterial_w7ucw")
+emitting = false
+amount = 14
+texture = ExtResource("1_i8qvj")
+lifetime = 1.85
+lifetime_randomness = 0.15
+local_coords = true
+emission_shape = 3
+emission_rect_extents = Vector2(8, 16)
+direction = Vector2(0, 1)
+spread = 20.0
+gravity = Vector2(0, 11)
+initial_velocity_max = 1.0
+orbit_velocity_min = -0.05
+orbit_velocity_max = 0.05
+tangential_accel_min = -10.0
+tangential_accel_max = 10.0
+tangential_accel_curve = SubResource("Curve_y8p6g")
+angle_min = -10.0
+angle_max = 10.0
+angle_curve = SubResource("Curve_vnkh2")
+scale_amount_min = 0.12
+scale_amount_max = 0.3
+scale_amount_curve = SubResource("Curve_xhbdq")
+color = Color(0, 1.9, 2.3, 1)
+color_ramp = SubResource("Gradient_dhvb1")
+script = ExtResource("2_gobpe")
+condition_id = 1
+emission_area = 1

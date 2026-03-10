@@ -1,6 +1,0 @@
-[gd_scene format=3 uid="uid://co3n6m7efg8pd"]
-
-[ext_resource type="Script" uid="uid://dk6lp736t53ls" path="res://Entities/Components/EffectComponents/ConditionsComponent/ConditionsComponent.gd" id="1_3tl8i"]
-
-[node name="ConditionsComponent" type="Node2D" unique_id=1623508437 groups=["has_save_logic"]]
-script = ExtResource("1_3tl8i")

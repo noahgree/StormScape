@@ -8,21 +8,25 @@
 [ext_resource type="Texture2D" uid="uid://crqa3kb7ndjr5" path="res://Stages/Tilemaps/SwampDirt/swamp_texture_repeating.png" id="5_g65la"]
 [ext_resource type="Script" uid="uid://cncnc3v2hpov8" path="res://Stages/World/WorldItemsManager.gd" id="8_g8y4o"]
 [ext_resource type="PackedScene" uid="uid://xsq1q0fffsin" path="res://Utilities/Debug/TestRigidEntity.tscn" id="9_37jga"]
-[ext_resource type="Script" uid="uid://c2gdoebfp12dq" path="res://Entities/Stats/StatMod/StatModsCache.gd" id="9_s2x07"]
-[ext_resource type="Script" uid="uid://boo31eu083dqd" path="res://Entities/Stats/EffectSystemResources/Condition.gd" id="10_fx52i"]
+[ext_resource type="Script" uid="uid://c2gdoebfp12dq" path="res://Entities/Components/StatMod/StatModsCache.gd" id="9_s2x07"]
+[ext_resource type="Script" uid="uid://boo31eu083dqd" path="res://Entities/Components/ConditionsComponent/Conditions/Condition.gd" id="10_fx52i"]
 [ext_resource type="PackedScene" uid="uid://bond8rty1ljh" path="res://Utilities/Debug/TestStaticEntity.tscn" id="11_6kn41"]
 [ext_resource type="Script" uid="uid://c2dtyfq8k2oj2" path="res://Entities/Components/HitboxComponent/HitboxComponent.gd" id="11_j4dgk"]
-[ext_resource type="Script" uid="uid://dkfssottmsrch" path="res://Entities/Stats/EffectSystemResources/EffectSource.gd" id="11_s2x07"]
-[ext_resource type="Resource" uid="uid://1b0tsbvrwtcw" path="res://Entities/Stats/EffectSystemResources/Conditions/BadEffects/Burning/Burning:1.tres" id="12_iotvt"]
+[ext_resource type="Script" uid="uid://dkfssottmsrch" path="res://Entities/Components/ESComponent/EffectSource.gd" id="11_s2x07"]
+[ext_resource type="Resource" uid="uid://1b0tsbvrwtcw" path="res://Entities/Components/ConditionsComponent/Conditions/BadEffects/Burning/Burning:1.tres" id="12_1llel"]
+[ext_resource type="Resource" uid="uid://b4vl2ed8tnjxu" path="res://Entities/Components/ConditionsComponent/Conditions/BadEffects/Frostbite/Frostbite:1.tres" id="14_nton5"]
 [ext_resource type="PackedScene" uid="uid://b52c5c7hj2vd" path="res://Utilities/Debug/TestTree1.tscn" id="17_45bjv"]
 [ext_resource type="PackedScene" uid="uid://bq12ugc7lnirg" path="res://Utilities/Debug/TestPhysicalInventory.tscn" id="17_om42l"]
+[ext_resource type="Script" uid="uid://by6ifp7vltc41" path="res://Entities/StormBase/StormBase.gd" id="21_rhtsc"]
 [ext_resource type="PackedScene" uid="uid://cxxeyt7s0e4u2" path="res://Entities/StormBase/StormBase.tscn" id="21_yw1c5"]
 [ext_resource type="Script" uid="uid://c2f01r3cincl0" path="res://Stages/World/Storm/Storm.gd" id="22_0op7h"]
 [ext_resource type="Script" uid="uid://b8kfccspu3jx8" path="res://Stages/Tilemaps/TileMapDual.gd" id="22_47ykm"]
+[ext_resource type="Script" uid="uid://cbiskerf2stk6" path="res://Stages/World/Storm/StormTransform.gd" id="22_63ihc"]
+[ext_resource type="Resource" uid="uid://b37e5gsi7vmwu" path="res://Entities/Components/ConditionsComponent/Conditions/BadEffects/StormSyndrome/StormSyndrome:1.tres" id="22_daxbq"]
+[ext_resource type="PackedScene" uid="uid://dnpwx3cn0i24s" path="res://Entities/Player/UI/Inventory/Panels/SidePanels/StormBaseSidePanel.tscn" id="22_melxk"]
 [ext_resource type="Texture2D" uid="uid://6saycs5sisdk" path="res://Stages/Tilemaps/ReplacementTextures/dirt_replacement_RED.png" id="22_tnvqm"]
 [ext_resource type="Shader" uid="uid://cxi5alvvj1rv2" path="res://Utilities/Game/Shaders/StormShader.gdshader" id="23_05otm"]
-[ext_resource type="Script" uid="uid://20acrt2hb6y" path="res://Entities/Stats/EOTStats.gd" id="23_rhtsc"]
-[ext_resource type="Script" uid="uid://bcjwesiannbd0" path="res://Entities/Stats/StatMod/StatMod.gd" id="24_melxk"]
+[ext_resource type="Resource" uid="uid://cx6t5cil24ca3" path="res://Stages/World/Storm/StormVisuals/DefaultStormVisuals.tres" id="23_rhtsc"]
 [ext_resource type="Shader" uid="uid://bilestavf27wc" path="res://Utilities/Game/Shaders/ScreenFog.gdshader" id="30_rhtsc"]
 [ext_resource type="PackedScene" uid="uid://clf1njlp4stbn" path="res://Utilities/Debug/TestRock2.tscn" id="30_yw2f7"]
 [ext_resource type="Texture2D" uid="uid://daa6casude472" path="res://Utilities/Game/Particles/light_ray.png" id="31_melxk"]
@@ -138,19 +142,19 @@ physics_layer_1/collision_layer = 128
 physics_layer_1/collision_mask = 0
 sources/1 = SubResource("TileSetAtlasSource_lb4xb")
 
-[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_fx52i"]
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_1llel"]
 rough = true
 
 [sub_resource type="Resource" id="Resource_fx52i"]
 script = ExtResource("9_s2x07")
 
-[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_s2x07"]
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_nton5"]
 rough = true
 
 [sub_resource type="Resource" id="Resource_h3uly"]
 script = ExtResource("9_s2x07")
 
-[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_iotvt"]
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_dgobw"]
 rough = true
 
 [sub_resource type="Resource" id="Resource_xm2up"]
@@ -165,7 +169,7 @@ source_type = 6
 can_hit_self = false
 teams_hit_by_bad = 3
 teams_hit_by_good = 3
-conditions = Array[ExtResource("10_fx52i")]([ExtResource("12_iotvt")])
+conditions = Array[ExtResource("10_fx52i")]([ExtResource("12_1llel")])
 metadata/_custom_type_script = "uid://dkfssottmsrch"
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_rk2ia"]
@@ -176,6 +180,11 @@ script = ExtResource("9_s2x07")
 
 [sub_resource type="Resource" id="Resource_8lm63"]
 script = ExtResource("11_s2x07")
+source_type = 6
+can_hit_self = false
+teams_hit_by_bad = 3
+teams_hit_by_good = 3
+conditions = Array[ExtResource("10_fx52i")]([ExtResource("14_nton5")])
 metadata/_custom_type_script = "uid://dkfssottmsrch"
 
 [sub_resource type="Resource" id="Resource_ed1p2"]
@@ -234,22 +243,10 @@ script = ExtResource("9_s2x07")
 outline_size = 3
 outline_color = Color(0, 0, 0, 1)
 
-[sub_resource type="Resource" id="Resource_63ihc"]
-script = ExtResource("11_s2x07")
-source_type = 9
-metadata/_custom_type_script = "uid://dkfssottmsrch"
-
 [sub_resource type="Resource" id="Resource_1llel"]
-script = ExtResource("23_rhtsc")
-perpetual = true
-ticks_array = Array[ExtResource("11_s2x07")]([SubResource("Resource_63ihc")])
-metadata/_custom_type_script = "uid://20acrt2hb6y"
-
-[sub_resource type="Resource" id="Resource_nton5"]
-script = ExtResource("10_fx52i")
-id = 9
-eot_stats = SubResource("Resource_1llel")
-metadata/_custom_type_script = "uid://boo31eu083dqd"
+script = ExtResource("22_63ihc")
+new_location = Vector2(215, 109)
+metadata/_custom_type_script = "uid://cbiskerf2stk6"
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_7o6b3"]
 radius = 615.0
@@ -352,17 +349,17 @@ y_sort_enabled = true
 
 [node name="TestRigidEntity" parent="WorldRoot/Testing" unique_id=120789680 instance=ExtResource("9_37jga")]
 position = Vector2(127, 27)
-physics_material_override = SubResource("PhysicsMaterial_fx52i")
+physics_material_override = SubResource("PhysicsMaterial_1llel")
 sc = SubResource("Resource_fx52i")
 
 [node name="TestRigidEntity2" parent="WorldRoot/Testing" unique_id=294390776 instance=ExtResource("9_37jga")]
 position = Vector2(129, 87)
-physics_material_override = SubResource("PhysicsMaterial_s2x07")
+physics_material_override = SubResource("PhysicsMaterial_nton5")
 sc = SubResource("Resource_h3uly")
 
 [node name="TestRigidEntity3" parent="WorldRoot/Testing" unique_id=941546994 instance=ExtResource("9_37jga")]
 position = Vector2(65, 118)
-physics_material_override = SubResource("PhysicsMaterial_iotvt")
+physics_material_override = SubResource("PhysicsMaterial_dgobw")
 freeze = true
 sc = SubResource("Resource_xm2up")
 
@@ -382,7 +379,6 @@ shape = SubResource("RectangleShape2D_rk2ia")
 debug_color = Color(0.994, 0, 0.227, 0.225)
 
 [node name="TestStaticEntity2" parent="WorldRoot/Testing" unique_id=436724822 instance=ExtResource("11_6kn41")]
-visible = false
 position = Vector2(283, 217)
 sc = SubResource("Resource_yw2f7")
 
@@ -398,7 +394,6 @@ shape = SubResource("RectangleShape2D_rk2ia")
 debug_color = Color(0.994, 0, 0.227, 0.225)
 
 [node name="TestStaticEntity3" parent="WorldRoot/Testing" unique_id=948274904 instance=ExtResource("11_6kn41")]
-visible = false
 position = Vector2(343, 191)
 sc = SubResource("Resource_ed1p2")
 
@@ -496,7 +491,11 @@ offset_bottom = 12.0
 label_settings = SubResource("LabelSettings_lfc2v")
 
 [node name="StormBase" parent="WorldRoot" unique_id=179645369 instance=ExtResource("21_yw1c5")]
-position = Vector2(210, 105)
+position = Vector2(215, 109)
+script = ExtResource("21_rhtsc")
+level = 1
+default_transform = SubResource("Resource_1llel")
+side_panel = ExtResource("22_melxk")
 
 [node name="Storm" type="Node2D" parent="WorldRoot" unique_id=1746738981 groups=["core", "has_save_logic"]]
 unique_name_in_owner = true
@@ -505,7 +504,8 @@ z_index = -2
 z_as_relative = false
 position = Vector2(189, 143)
 script = ExtResource("22_0op7h")
-default_storm_condition = SubResource("Resource_nton5")
+default_storm_condition = ExtResource("22_daxbq")
+default_storm_visuals = ExtResource("23_rhtsc")
 metadata/_edit_group_ = true
 
 [node name="SafeZone" type="Area2D" parent="WorldRoot/Storm" unique_id=208631793]

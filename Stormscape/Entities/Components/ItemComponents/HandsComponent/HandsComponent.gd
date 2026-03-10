@@ -358,12 +358,12 @@ func _change_y_sort(facing_dir: Vector2) -> void:
 		hands_anchor.position.y = starting_hands_component_height - position.y
 		off_hand_sprite.position.y = starting_off_hand_sprite_height + starting_hands_component_height - position.y
 	else:
-		if entity.effects != null:
+		if entity.conditions_component != null:
 			# Needed to place held items over the condition particles on the entity when facing down
-			position = entity.effects.position + Vector2(0, 1)
+			position = entity.conditions_component.position + Vector2(0, 1)
 			hands_anchor.position.y = starting_hands_component_height - position.y
 			off_hand_sprite.position.y = starting_off_hand_sprite_height + starting_hands_component_height - position.y
-		else: # If no effects node, this handles facing down normally
+		else: # If no conditions_component node, this handles facing down normally
 			position = Vector2(0, starting_hands_component_height)
 			hands_anchor.position.y = 0
 			off_hand_sprite.position.y = starting_off_hand_sprite_height

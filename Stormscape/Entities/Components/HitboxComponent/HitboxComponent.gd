@@ -46,7 +46,7 @@ func _on_body_entered(body: Node2D) -> void:
 
 	# If the body is an entity that doesn't receive effect sources, it still has collision and
 	# should stop projectiles
-	if (body is Entity) and (body.effect_src_receiver == null):
+	if (body is Entity) and (body.esi_receiver == null):
 		_process_hit(body)
 
 ## Meant to interact with an ESIReceiverComponent that can handle effects supplied by this instance.

@@ -1,9 +1,0 @@
-[gd_resource type="Resource" script_class="StunStats" format=3 uid="uid://3e6mdax7u2av"]
-
-[ext_resource type="Script" uid="uid://ca7lkl817kaqk" path="res://Entities/Stats/EffectSystemResources/Conditions/BadEffects/Stun/StunStats.gd" id="1_sdbli"]
-
-[resource]
-script = ExtResource("1_sdbli")
-stun_time = 0.5
-goodness = 1
-affected_entities = 1

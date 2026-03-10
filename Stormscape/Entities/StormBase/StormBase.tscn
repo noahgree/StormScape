@@ -1,18 +1,32 @@
 [gd_scene format=3 uid="uid://cxxeyt7s0e4u2"]
 
 [ext_resource type="Script" uid="uid://cn2gulskgn7k3" path="res://Entities/EntityCore/EntityTypes/StaticEntity/StaticEntity.gd" id="1_vnxdf"]
-[ext_resource type="Script" uid="uid://c2gdoebfp12dq" path="res://Entities/Stats/StatMod/StatModsCache.gd" id="2_au4tw"]
+[ext_resource type="Script" uid="uid://dwmur0cosbbwh" path="res://Entities/Player/UI/Inventory/InventoryCore/InvResource.gd" id="2_4ticl"]
+[ext_resource type="Script" uid="uid://c2gdoebfp12dq" path="res://Entities/Components/StatMod/StatModsCache.gd" id="2_au4tw"]
+[ext_resource type="Script" uid="uid://cv7ha7muvg5qu" path="res://Entities/Items/ItemCore/II.gd" id="3_l3b7a"]
 [ext_resource type="PackedScene" uid="uid://dh4ydl7l86ywq" path="res://Entities/EntityCore/Sprites/EntitySprite.tscn" id="3_yktvl"]
+[ext_resource type="Script" uid="uid://1qq7eo7lm8j6" path="res://Entities/Components/ItemComponents/LootTableComponent/LootTableEntry.gd" id="4_c4v6l"]
 [ext_resource type="Texture2D" uid="uid://dlk243e5b6tys" path="res://Assets/Icon/icon_dark.png" id="4_jpk2f"]
+[ext_resource type="Script" uid="uid://baglarh3m4c8o" path="res://Entities/Components/ItemComponents/LootTableComponent/LootTableResource.gd" id="5_0mah8"]
 [ext_resource type="PackedScene" uid="uid://bj7vw8d6oqv0m" path="res://Entities/Player/UI/Interactions/InteractionsCore/InteractionArea.tscn" id="5_4ticl"]
 [ext_resource type="Texture2D" uid="uid://cd22xh5jduxd6" path="res://Entities/Player/UI/Interactions/Assets/e_prompt.png" id="6_l3b7a"]
 [ext_resource type="Script" uid="uid://dgibl37gudpj1" path="res://Entities/Player/UI/Interactions/InteractionsCore/InteractionOffer.gd" id="7_c4v6l"]
 [ext_resource type="PackedScene" uid="uid://2yy4xfm5g74l" path="res://Entities/Components/ItemComponents/ClippingComponent/ClippingArea.tscn" id="8_0mah8"]
 [ext_resource type="PackedScene" uid="uid://bhcqtorpyerc3" path="res://Utilities/Debug/ParticleEmissionComponent.tscn" id="9_7ccbt"]
 [ext_resource type="PackedScene" uid="uid://di7vcyrki71nm" path="res://Entities/Components/DetectionComponent/DetectionComponent.tscn" id="10_sj27e"]
-[ext_resource type="PackedScene" uid="uid://btba0jmsow1mx" path="res://Entities/Components/EffectComponents/ESIReceiverComponent/ESIReceiverComponent.tscn" id="11_o7dcf"]
-[ext_resource type="Script" uid="uid://dm8m7mr8if1pr" path="res://Entities/Components/EffectComponents/ESIReceiverComponent/EntityStatModifiers.gd" id="12_nbjxe"]
+[ext_resource type="PackedScene" uid="uid://btba0jmsow1mx" path="res://Entities/Components/ESComponent/ESIReceiverComponent.tscn" id="11_o7dcf"]
+[ext_resource type="Script" uid="uid://dm8m7mr8if1pr" path="res://Entities/Components/ESComponent/EntityStatModifiers.gd" id="12_nbjxe"]
 [ext_resource type="PackedScene" uid="uid://cdfdy8m6ki3oq" path="res://Entities/Components/HPComponent/HPComponent.tscn" id="13_7sxjv"]
+[ext_resource type="PackedScene" uid="uid://co3n6m7efg8pd" path="res://Entities/Components/ConditionsComponent/ConditionsComponent.tscn" id="18_l3b7a"]
+
+[sub_resource type="Resource" id="Resource_7ccbt"]
+script = ExtResource("2_4ticl")
+starting_inv = Array[ExtResource("3_l3b7a")]([null, null, null, null, null])
+metadata/_custom_type_script = "uid://dwmur0cosbbwh"
+
+[sub_resource type="Resource" id="Resource_sj27e"]
+script = ExtResource("5_0mah8")
+metadata/_custom_type_script = "uid://baglarh3m4c8o"
 
 [sub_resource type="Resource" id="Resource_vblrk"]
 script = ExtResource("2_au4tw")
@@ -35,7 +49,7 @@ animations = [{
 "speed": 5.0
 }]
 
-[sub_resource type="Resource" id="Resource_s5gqv"]
+[sub_resource type="Resource" id="Resource_l3b7a"]
 resource_local_to_scene = true
 script = ExtResource("7_c4v6l")
 title = "Storm Base"
@@ -54,6 +68,8 @@ size = Vector2(40, 40)
 
 [node name="StormBase" type="StaticBody2D" unique_id=179645369]
 script = ExtResource("1_vnxdf")
+inv = SubResource("Resource_7ccbt")
+loot = SubResource("Resource_sj27e")
 sc = SubResource("Resource_vblrk")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=295419995]
@@ -67,7 +83,7 @@ sprite_frames = SubResource("SpriteFrames_hkn5b")
 
 [node name="InteractionArea" parent="." unique_id=897230405 instance=ExtResource("5_4ticl")]
 prompt_radius = 36.0
-interaction_offer = SubResource("Resource_s5gqv")
+interaction_offer = SubResource("Resource_l3b7a")
 prompt_offset = Vector2(0, -23)
 
 [node name="ClippingArea" parent="." unique_id=222141319 instance=ExtResource("8_0mah8")]
@@ -79,11 +95,16 @@ shape = SubResource("RectangleShape2D_yng6w")
 
 [node name="DetectionComponent" parent="." unique_id=678579272 instance=ExtResource("10_sj27e")]
 
-[node name="EffectReceiverComponent" parent="." unique_id=1890609378 instance=ExtResource("11_o7dcf")]
+[node name="ESIReceiverComponent" parent="." unique_id=1890609378 instance=ExtResource("11_o7dcf")]
 absorb_full_hit = true
 stat_modifiers = SubResource("Resource_s2x07")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="EffectReceiverComponent" unique_id=739613903]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ESIReceiverComponent" unique_id=739613903]
 shape = SubResource("RectangleShape2D_1606r")
 
-[node name="HealthComponent" parent="." unique_id=656864664 instance=ExtResource("13_7sxjv")]
+[node name="HPComponent" parent="." unique_id=656864664 instance=ExtResource("13_7sxjv")]
+infinte_hp = true
+
+[node name="ConditionsComponent" parent="." unique_id=1623508437 instance=ExtResource("18_l3b7a")]
+unique_name_in_owner = true
+filter = 2

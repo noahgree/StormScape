@@ -1,0 +1,8 @@
+[gd_resource type="Resource" script_class="SelfKnockbackStats" format=3 uid="uid://budyhbdyh7yme"]
+
+[ext_resource type="Script" uid="uid://ig4jcnxaphcg" path="res://Entities/Components/ConditionsComponent/Conditions/GoodEffects/SelfKnockback/SelfKnockbackStats.gd" id="1_77pio"]
+
+[resource]
+script = ExtResource("1_77pio")
+knockback_force = 350
+spawn_particles = false

@@ -38,7 +38,7 @@ func update_popup(popup_type: HPComponent.POPUP_TYPE, new_value: int) -> void:
 		value += new_value
 	was_healing_before = is_heal
 
-	number_label.text = str(value)
+	number_label.text = str(abs(value))
 	global_position = parent_node.global_position - Vector2(0, SpriteHelpers.SpriteDetails.get_frame_rect(parent_node.sprite).y)
 
 	gradient_tex.texture = txt_color_dict.get(popup_type, GradientTexture1D.new())

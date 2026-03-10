@@ -50,11 +50,11 @@ func update_stealth(new_value: int) -> void:
 
 func _on_area_entered(area: Area2D) -> void:
 	if area is ESIReceiverComponent:
-		area.affected_entity.detection_component.enemy_entered(entity)
+		area.entity.detection_component.enemy_entered(entity)
 
 func _on_area_exited(area: Area2D) -> void:
 	if area is ESIReceiverComponent:
-		area.affected_entity.detection_component.enemy_exited(entity)
+		area.entity.detection_component.enemy_exited(entity)
 
 func enemy_entered(body: Entity) -> void:
 	enemies_in_range.append(body)

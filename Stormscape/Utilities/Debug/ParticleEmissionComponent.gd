@@ -1,6 +1,6 @@
 @tool
 @icon("res://Utilities/Debug/EditorIcons/particle_emission_component.svg")
-extends Node
+extends Node2D
 class_name ParticleEmissionComponent
 ## Manages the positioning and extents of particle applications to this entity. Leave all extent vectors
 ## as (0, 0) to use default placement.
@@ -96,7 +96,10 @@ func start_particles(condition_id: Condition.ID) -> void:
 	var packed_scene: PackedScene = FXLibrary.get_condition_fx(condition_id)
 	if packed_scene == null:
 		return
+
 	var particle_node: ParticleEffect = packed_scene.instantiate()
+	add_child(particle_node)
+	active_nodes[condition_id] = particle_node
 
 	particle_node.fade_out_complete.connect(_remove_active_node)
 	var area: Area = particle_node.emission_area

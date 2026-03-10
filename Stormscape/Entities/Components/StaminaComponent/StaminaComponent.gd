@@ -20,6 +20,7 @@ signal stamina_use_per_hunger_deduction_changed(new_stamina_use_per_hunger_deduc
 @export_custom(PROPERTY_HINT_NONE, "suffix:hunger") var _hunger_cost_per_stamina_bar: int = 5 ## The amount of hunger to deduct per _stamina_use_per_hunger_deduction amount of stamina.
 
 @onready var stamina_wait_timer: Timer = TimerHelpers.create_one_shot_timer(self, 5.0, _on_stamina_wait_timer_timeout) ## The wait between using stamina and when it starts recharging.
+@onready var entity: DynamicEntity = owner if owner is DynamicEntity else null ## A reference to the owning entity.
 
 var stamina: float: set = _set_stamina ## The current stamina remaining for the entity.
 var can_use_stamina: bool = true ## Whether the entity can currently use its stamina.
@@ -31,7 +32,7 @@ var stamina_recharge_tween: Tween ## A tween for slowly incrementing the stamina
 
 ## Asserts that the parent is a DynamicEntity and then sets up modifiable var dictionary for the stat mod handler.
 func _ready() -> void:
-	assert(get_parent() is DynamicEntity, get_parent().name + " has a StaminaComponent but is not a DynamicEntity.")
+	assert(entity is DynamicEntity, entity.name + " has a StaminaComponent but is not a DynamicEntity.")
 
 	var moddable_stats_with_callables: Dictionary[StringName, Array] = {
 		&"max_stamina" : [_max_stamina, on_max_stamina_changed],
@@ -43,8 +44,8 @@ func _ready() -> void:
 		&"hunger_cost_per_stamina_bar" : _hunger_cost_per_stamina_bar,
 		&"stamina_recharge_delay" : _stamina_recharge_delay
 	}
-	get_parent().sc.add_moddable_stats_with_associated_callables(moddable_stats_with_callables)
-	get_parent().sc.add_moddable_stats(moddable_stats)
+	entity.sc.add_moddable_stats_with_associated_callables(moddable_stats_with_callables)
+	entity.sc.add_moddable_stats(moddable_stats)
 	call_deferred("_emit_initial_values")
 
 ## Checks whether stamina use is allowed, deducts the amount if so, and returns whether or not the amount was used.
@@ -61,18 +62,18 @@ func use_stamina(amount: float) -> bool:
 		if stamina_recharge_tween:
 			stamina_recharge_tween.kill()
 		stamina_wait_timer.stop()
-		stamina_wait_timer.start(get_parent().stats.get_stat("stamina_recharge_delay"))
+		stamina_wait_timer.start(entity.sc.get_stat("stamina_recharge_delay"))
 
 		stamina_to_hunger_count += amount
-		if stamina_to_hunger_count / get_parent().stats.get_stat("stamina_use_per_hunger_deduction") >= 0.99:
+		if stamina_to_hunger_count / entity.sc.get_stat("stamina_use_per_hunger_deduction") >= 0.99:
 			stamina_to_hunger_count = 0
-			hunger_bars = max(0, hunger_bars - get_parent().stats.get_stat("hunger_cost_per_stamina_bar"))
+			hunger_bars = max(0, hunger_bars - entity.sc.get_stat("hunger_cost_per_stamina_bar"))
 
 		return true
 
 ## Increases the current stamina value by a passed in amount.
 func gain_stamina(amount: float) -> void:
-	stamina = min(stamina + amount, get_parent().stats.get_stat("max_stamina"))
+	stamina = min(stamina + amount, entity.sc.get_stat("max_stamina"))
 
 ## Checks whether hunger is allowed to be used and deducts the amount if so.
 func use_hunger_bars(amount: int) -> bool:
@@ -87,18 +88,18 @@ func use_hunger_bars(amount: int) -> bool:
 
 ## Increases current number of hunger bars based on a passed in amount.
 func gain_hunger_bars(amount: int) -> void:
-	hunger_bars = min(get_parent().stats.get_stat("max_hunger_bars"), hunger_bars + amount)
+	hunger_bars = min(entity.sc.get_stat("max_hunger_bars"), hunger_bars + amount)
 
 ## Setter for stamina. Clamps the new value to the allowed range.
 func _set_stamina(new_value: float) -> void:
 	var old_stamina: float = stamina
-	stamina = clampf(new_value, 0, get_parent().stats.get_stat("max_stamina"))
+	stamina = clampf(new_value, 0, entity.sc.get_stat("max_stamina"))
 	stamina_changed.emit(stamina, old_stamina)
 
 ## Setter for hunger. Clamps the new value to the allowed range.
 func _set_hunger_bars(new_value: int) -> void:
 	var old_hunger_bars: int = hunger_bars
-	hunger_bars = clampi(new_value, 0, int(get_parent().stats.get_stat("max_hunger_bars")))
+	hunger_bars = clampi(new_value, 0, int(entity.sc.get_stat("max_hunger_bars")))
 	hunger_bars_changed.emit(hunger_bars, old_hunger_bars)
 
 ## Setter for stamina_to_hunger_count. Clamps the new value to the allowed range.
@@ -112,7 +113,7 @@ func on_max_stamina_changed(new_max_stamina: float) -> void:
 	stamina = min(stamina, new_max_stamina)
 	if stamina < new_max_stamina and stamina_wait_timer.is_stopped():
 		stamina_wait_timer.stop()
-		stamina_wait_timer.start(get_parent().stats.get_stat("stamina_recharge_delay"))
+		stamina_wait_timer.start(entity.sc.get_stat("stamina_recharge_delay"))
 	max_stamina_changed.emit(new_max_stamina)
 
 ## We need to make sure the curret hunger bars get limited to the new max value. Usually called by stat mod caches.
@@ -127,12 +128,13 @@ func on_stamina_use_per_hunger_deduction_changed(new_stamina_use_per_hunger_dedu
 ## Called from a deferred method caller in order to let any associated ui ready up first.
 ## Then it emits the initially loaded values.
 func _emit_initial_values() -> void:
-	stamina = get_parent().stats.get_stat("max_stamina")
-	hunger_bars = int(get_parent().stats.get_stat("max_hunger_bars"))
+	stamina = entity.sc.get_stat("max_stamina")
+	hunger_bars = int(entity.sc.get_stat("max_hunger_bars"))
 	stamina_to_hunger_count = 0
-	stamina_wait_timer.start(get_parent().stats.get_stat("stamina_recharge_delay"))
+	stamina_wait_timer.start(entity.sc.get_stat("stamina_recharge_delay"))
 
-## When the stamina recharge wait timer ends, this handles creating a tweener that slowly increments the new stamina.
+## When the stamina recharge wait timer ends, this handles creating a tweener that slowly increments the
+## new stamina.
 func _on_stamina_wait_timer_timeout() -> void:
 	if stamina_recharge_tween:
 		if stamina_recharge_tween.is_running():
@@ -140,7 +142,7 @@ func _on_stamina_wait_timer_timeout() -> void:
 		else:
 			stamina_recharge_tween.kill()
 	stamina_recharge_tween = create_tween()
-	stamina_recharge_tween.tween_method(_set_stamina, stamina, get_parent().stats.get_stat("max_stamina"), (get_parent().stats.get_stat("max_stamina") - stamina) / get_parent().stats.get_stat("stamina_recharge_rate"))
+	stamina_recharge_tween.tween_method(_set_stamina, stamina, entity.sc.get_stat("max_stamina"), (entity.sc.get_stat("max_stamina") - stamina) / entity.sc.get_stat("stamina_recharge_rate"))
 
 ## Returns if the current stamina is greater than or equal to the needed stamina.
 func has_enough_stamina(needed: float) -> bool:

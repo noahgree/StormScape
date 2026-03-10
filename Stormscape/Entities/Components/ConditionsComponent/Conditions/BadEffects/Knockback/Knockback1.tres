@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="KnockbackStats" format=3 uid="uid://b0it5xmpw16sd"]
+
+[ext_resource type="Script" uid="uid://yepywua50vc1" path="res://Entities/Components/ConditionsComponent/Conditions/BadEffects/Knockback/KnockbackStats.gd" id="1_ofqhb"]
+
+[resource]
+script = ExtResource("1_ofqhb")
+knockback_force = 350
+audio_to_play = "knockback"
+spawn_particles = false

@@ -1,0 +1,40 @@
+[gd_resource type="Resource" script_class="Condition" format=3 uid="uid://b37e5gsi7vmwu"]
+
+[ext_resource type="Script" uid="uid://boo31eu083dqd" path="res://Entities/Components/ConditionsComponent/Conditions/Condition.gd" id="1_7dp6j"]
+[ext_resource type="Script" uid="uid://20acrt2hb6y" path="res://Entities/Components/ConditionsComponent/Conditions/EOTStats.gd" id="1_u5d2w"]
+[ext_resource type="Script" uid="uid://bcjwesiannbd0" path="res://Entities/Components/StatMod/StatMod.gd" id="2_qqjda"]
+[ext_resource type="Script" uid="uid://dkfssottmsrch" path="res://Entities/Components/ESComponent/EffectSource.gd" id="3_h8s8y"]
+
+[sub_resource type="Resource" id="Resource_u5d2w"]
+script = ExtResource("2_qqjda")
+stat_id = &"max_speed"
+mod_id = &"storm_syndrome"
+operation = "-%"
+value = 10.0
+is_good_mod = false
+metadata/_custom_type_script = "uid://bcjwesiannbd0"
+
+[sub_resource type="Resource" id="Resource_t28lc"]
+script = ExtResource("3_h8s8y")
+source_type = 9
+base_damage = 1
+dmg_affected_stats = 0
+dmg_popup_type = 10
+hit_flash_color = Color(0.65882355, 0.40392157, 1, 0.6)
+metadata/_custom_type_script = "uid://dkfssottmsrch"
+
+[sub_resource type="Resource" id="Resource_3hyjv"]
+script = ExtResource("1_u5d2w")
+perpetual = true
+ticks_array = Array[ExtResource("3_h8s8y")]([SubResource("Resource_t28lc")])
+stat_mods = Array[ExtResource("2_qqjda")]([SubResource("Resource_u5d2w")])
+metadata/_custom_type_script = "uid://20acrt2hb6y"
+
+[resource]
+script = ExtResource("1_7dp6j")
+id = 9
+source_type = 2
+goodness = 1
+affected_entities = 1
+eot_stats = SubResource("Resource_3hyjv")
+metadata/_custom_type_script = "uid://boo31eu083dqd"

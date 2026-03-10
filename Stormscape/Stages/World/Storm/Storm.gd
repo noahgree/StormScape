@@ -571,12 +571,14 @@ func _swap_condition_applied_to_entities_out_of_safe_area(new_condition: Conditi
 
 ## Removes the condition held in the current condition variable from all affected entities.
 func _remove_current_condition_from_entity(body: DynamicEntity) -> void:
-	if body.conditions_component != null:
-		body.conditions_component.request_condition_removal_by_source(current_condition.id, current_condition.source_type)
+	pass
+	#if body.conditions_component != null:
+		#body.conditions_component.request_condition_removal_by_source(current_condition.id, current_condition.source_type)
 
 ## Adds the passed in condition to the passed in entity.
 func _add_condition_to_entity(body: DynamicEntity, condition_to_add: Condition) -> void:
-	var receiver: ESIReceiverComponent = body.get_node_or_null("ESIReceiverComponent")
-	if receiver != null:
-		receiver.handle_condition(condition_to_add)
+	pass
+	#var receiver: ESIReceiverComponent = body.get_node_or_null("ESIReceiverComponent")
+	#if receiver != null:
+		#receiver.handle_condition(condition_to_add)
 #endregion

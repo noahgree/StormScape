@@ -4,15 +4,15 @@
 [ext_resource type="PackedScene" uid="uid://batypmdxig7ic" path="res://Entities/Player/UI/Inventory/Panels/SidePanels/AlternateInvPanel.tscn" id="2_f6uiu"]
 [ext_resource type="Script" uid="uid://dwmur0cosbbwh" path="res://Entities/Player/UI/Inventory/InventoryCore/InvResource.gd" id="2_hjkvw"]
 [ext_resource type="Script" uid="uid://cv7ha7muvg5qu" path="res://Entities/Items/ItemCore/II.gd" id="4_f6uiu"]
-[ext_resource type="Script" uid="uid://c2gdoebfp12dq" path="res://Entities/Stats/StatMod/StatModsCache.gd" id="5_ux5b0"]
+[ext_resource type="Script" uid="uid://c2gdoebfp12dq" path="res://Entities/Components/StatMod/StatModsCache.gd" id="5_ux5b0"]
 [ext_resource type="PackedScene" uid="uid://di7vcyrki71nm" path="res://Entities/Components/DetectionComponent/DetectionComponent.tscn" id="6_c3jxm"]
 [ext_resource type="Texture2D" uid="uid://wlfo5p8d28va" path="res://Entities/Environment/Inventories/SimpleChestCT.tres" id="6_hjkvw"]
 [ext_resource type="PackedScene" uid="uid://dh4ydl7l86ywq" path="res://Entities/EntityCore/Sprites/EntitySprite.tscn" id="7_li1wa"]
 [ext_resource type="PackedScene" uid="uid://cj2wy5f05cos4" path="res://Entities/EntityCore/Shadow/EntityShadow.tscn" id="7_s3b18"]
 [ext_resource type="PackedScene" uid="uid://cdfdy8m6ki3oq" path="res://Entities/Components/HPComponent/HPComponent.tscn" id="9_4jcvl"]
-[ext_resource type="PackedScene" uid="uid://co3n6m7efg8pd" path="res://Entities/Components/EffectComponents/ConditionsComponent/ConditionsComponent.tscn" id="9_w3nan"]
+[ext_resource type="PackedScene" uid="uid://co3n6m7efg8pd" path="res://Entities/Components/ConditionsComponent/ConditionsComponent.tscn" id="9_w3nan"]
 [ext_resource type="PackedScene" uid="uid://bhcqtorpyerc3" path="res://Utilities/Debug/ParticleEmissionComponent.tscn" id="10_l1cdp"]
-[ext_resource type="PackedScene" uid="uid://btba0jmsow1mx" path="res://Entities/Components/EffectComponents/ESIReceiverComponent/ESIReceiverComponent.tscn" id="11_5wq56"]
+[ext_resource type="PackedScene" uid="uid://btba0jmsow1mx" path="res://Entities/Components/ESComponent/ESIReceiverComponent.tscn" id="11_5wq56"]
 [ext_resource type="PackedScene" uid="uid://2yy4xfm5g74l" path="res://Entities/Components/ItemComponents/ClippingComponent/ClippingArea.tscn" id="11_ypx5n"]
 [ext_resource type="PackedScene" uid="uid://bj7vw8d6oqv0m" path="res://Entities/Player/UI/Interactions/InteractionsCore/InteractionArea.tscn" id="15_h35lp"]
 [ext_resource type="Texture2D" uid="uid://cd22xh5jduxd6" path="res://Entities/Player/UI/Interactions/Assets/e_prompt.png" id="16_c5a4i"]
@@ -50,17 +50,13 @@ animations = [{
 "speed": 5.0
 }]
 
-[sub_resource type="Resource" id="Resource_c5a4i"]
-resource_local_to_scene = true
-metadata/_custom_type_script = "uid://dubq8xgav66ue"
-
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_tnmyf"]
 size = Vector2(18, 14)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_1mmyp"]
 size = Vector2(18, 14)
 
-[sub_resource type="Resource" id="Resource_f6uiu"]
+[sub_resource type="Resource" id="Resource_c5a4i"]
 resource_local_to_scene = true
 script = ExtResource("17_f6uiu")
 title = "Search"
@@ -100,15 +96,10 @@ offset_bottom = 2.0
 _max_health = 1000
 _max_shield = 0
 
-[node name="ConditionsComponent" parent="." unique_id=1885960744 node_paths=PackedStringArray("effect_receiver", "effect_src_receiver") instance=ExtResource("9_w3nan")]
+[node name="ConditionsComponent" parent="." unique_id=1885960744 instance=ExtResource("9_w3nan")]
 unique_name_in_owner = true
-effect_receiver = NodePath("../ESIReceiverComponent")
-effect_src_receiver = NodePath("../ESIReceiverComponent")
 
-[node name="ESIReceiverComponent" parent="." unique_id=1762623481 node_paths=PackedStringArray("affected_entity", "dmg_handler") instance=ExtResource("11_5wq56")]
-burning_handler = SubResource("Resource_c5a4i")
-affected_entity = NodePath("..")
-dmg_handler = NodePath("")
+[node name="ESIReceiverComponent" parent="." unique_id=1762623481 instance=ExtResource("11_5wq56")]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="ESIReceiverComponent" unique_id=2051548302]
 position = Vector2(0, -7)
@@ -127,5 +118,5 @@ debug_color = Color(1, 0, 0.092, 0.109)
 unique_name_in_owner = true
 prompt_radius = 18.0
 radius_offset = Vector2(0, -6)
-interaction_offer = SubResource("Resource_f6uiu")
+interaction_offer = SubResource("Resource_c5a4i")
 prompt_offset = Vector2(0, -16)

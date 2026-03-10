@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://d0uup1yuxf4yc" path="res://Utilities/Debug/ParticleEmissionComponent.gd" id="1_pvsxh"]
 [ext_resource type="PackedScene" uid="uid://cqb0f242y4m2j" path="res://Utilities/Debug/DebugBox.tscn" id="2_u3k0j"]
 
-[node name="ParticleEmissionComponent" type="Node" unique_id=705775101]
+[node name="ParticleEmissionComponent" type="Node2D" unique_id=1883844366]
 script = ExtResource("1_pvsxh")
 
 [node name="BelowBox" parent="." unique_id=14057754 instance=ExtResource("2_u3k0j")]

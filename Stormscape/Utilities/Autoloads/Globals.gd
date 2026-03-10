@@ -2,7 +2,6 @@ extends Node
 ## A singleton containing all data needed globally.
 
 var item_dir: String = "res://Entities/Items/TRESItems/" ## The top level folder holding all item resources.
-var conditions_dir: String = "res://Entities/Stats/EffectSystemResources/Conditions/" ## The top level folder holding all conditions.
 
 @onready var world_root: WorldRoot = get_parent().get_node("Game/WorldRoot") ## A reference to the root of the game world.
 @onready var storm: Storm = get_parent().get_node("Game/WorldRoot/Storm") ## A reference to the main storm node.

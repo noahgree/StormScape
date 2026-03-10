@@ -13,7 +13,7 @@ enum ClassType { DYNAMIC = 1, RIGID = 2, STATIC = 4 } ## The kinds of subclasses
 
 @onready var sprite: EntitySprite = %EntitySprite ## The visual representation of the entity. Needs to have the EntityEffectShader applied.
 @onready var esi_receiver: ESIReceiverComponent = get_node_or_null("ESIReceiverComponent") ## The component that handles incoming effect source instances.
-@onready var conditions_component: ConditionsComponent = get_node_or_null("ConditionsComponent") ## The node that will cache and manage all conditions for this entity.
+@onready var conditions_component: ConditionsComponent = get_node_or_null("%ConditionsComponent") ## The node that will cache and manage all conditions for this entity.
 @onready var particle_mgr: ParticleEmissionComponent = $ParticleEmissionComponent ## The component responsible for determining the extents and origins of different particle placements.
 @onready var detection_component: DetectionComponent = $DetectionComponent ## The component that defines the radius around this entity that an enemy must enter for that enemy to be alerted.
 @onready var hp_component: HPComponent = $HPComponent ## The component in charge of entity health and shield.
@@ -21,8 +21,6 @@ enum ClassType { DYNAMIC = 1, RIGID = 2, STATIC = 4 } ## The kinds of subclasses
 @onready var hands: HandsComponent = get_node_or_null("%HandsComponent") ## The hands item component for the entity.
 
 @export_storage var sc: StatModsCache = StatModsCache.new() ## The resource that will cache and work with all stat mods for this entity. Stands for "stat cache".
-
-const AUTO_DEC_PROCESS_INTERVAL: float = 0.1 ## How often we should process the auto decrementer. Helps with perf.
 
 var class_type: ClassType = ClassType.STATIC ## Used for comparisons and match statements.
 var invulnerable: bool = false ## When true, this entity cannot receive ESIs or conditions.
@@ -62,11 +60,7 @@ func _ready() -> void:
 
 func _process(delta: float) -> void:
 	if not Engine.is_editor_hint() and inv and not is_object:
-		auto_dec_tick_accumulator += delta
-
-		while auto_dec_tick_accumulator >= AUTO_DEC_PROCESS_INTERVAL:
-			auto_dec_tick_accumulator -= AUTO_DEC_PROCESS_INTERVAL
-			inv.auto_decrementer.process(delta)
+		inv.auto_decrementer.process(delta)
 
 ## Checks to see if the entity has the passed in wearable already.
 ## Leaving index as -1 means check every slot, otherwise only check a certain slot index.

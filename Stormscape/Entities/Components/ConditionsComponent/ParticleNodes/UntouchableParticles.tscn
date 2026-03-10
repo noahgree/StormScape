@@ -1,0 +1,47 @@
+[gd_scene format=3 uid="uid://clje5sct3up6j"]
+
+[ext_resource type="Texture2D" uid="uid://dngm6pnhj25hq" path="res://Entities/EntityCore/UI/StatusEffects/Icons/shield.png" id="1_qveqv"]
+[ext_resource type="Script" uid="uid://bebyq3wopqkdd" path="res://Entities/Components/ConditionsComponent/ParticleNodes/ParticleEffect.gd" id="2_7np0i"]
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_jmsdf"]
+light_mode = 1
+
+[sub_resource type="Curve" id="Curve_1je30"]
+_limits = [0.0, 1.25, 0.0, 1.0]
+_data = [Vector2(0, 1.00116), 0.0, 0.0, 0, 0, Vector2(0.503425, 1.2007), 0.0, 0.0, 0, 0, Vector2(1, 1.0035), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="Gradient" id="Gradient_7f0sj"]
+offsets = PackedFloat32Array(0, 0.095057, 0.91635, 1)
+colors = PackedColorArray(1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="Curve" id="Curve_r4b6y"]
+_limits = [-1.0, 1.0, 0.0, 1.0]
+_data = [Vector2(0, -0.319833), 0.0, 0.0, 0, 0, Vector2(1, 0.195839), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[node name="UntouchableParticles" type="CPUParticles2D" unique_id=921740988]
+light_mask = 2
+material = SubResource("CanvasItemMaterial_jmsdf")
+emitting = false
+amount = 7
+texture = ExtResource("1_qveqv")
+lifetime = 1.75
+lifetime_randomness = 0.15
+local_coords = true
+emission_shape = 2
+emission_sphere_radius = 32.0
+direction = Vector2(0, 0)
+spread = 0.0
+gravity = Vector2(0, 0)
+orbit_velocity_min = 0.5
+orbit_velocity_max = 0.5
+scale_amount_min = 0.5
+scale_amount_max = 0.5
+scale_amount_curve = SubResource("Curve_1je30")
+color = Color(5, 5, 5, 1)
+color_ramp = SubResource("Gradient_7f0sj")
+hue_variation_curve = SubResource("Curve_r4b6y")
+script = ExtResource("2_7np0i")
+condition_id = 14
+emission_area = 2
