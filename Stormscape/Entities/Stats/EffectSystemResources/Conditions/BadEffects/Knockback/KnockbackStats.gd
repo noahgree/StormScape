@@ -12,7 +12,7 @@ const RIGID_ENTITY_FORCE_MULT: float = 2.0
 
 
 func on_received_regardless_of_level(esi: ESI, entity: Entity) -> void:
-	var from_moving_source: bool = (esi.es.source_type == ESI.ESISourceType.FROM_PROJECTILE)
+	var from_moving_source: bool = (esi.es.source_type == EffectSource.SourceType.FROM_PROJECTILE)
 	if entity.class_type == Entity.ClassType.DYNAMIC:
 		var dir: Vector2 = _get_dynamic_direction(esi, entity, from_moving_source)
 		var force: int = _get_force_adjustment(entity)

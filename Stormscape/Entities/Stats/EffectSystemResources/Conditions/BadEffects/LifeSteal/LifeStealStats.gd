@@ -1,3 +1,4 @@
+@tool
 @icon("res://Utilities/Debug/EditorIcons/life_steal_effect.png")
 extends Condition
 class_name LifeStealStats

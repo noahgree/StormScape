@@ -14,6 +14,7 @@
 [ext_resource type="PackedScene" uid="uid://btba0jmsow1mx" path="res://Entities/Components/EffectComponents/ESIReceiverComponent/ESIReceiverComponent.tscn" id="9_wje6d"]
 [ext_resource type="PackedScene" uid="uid://jpq0ij8wwlhy" path="res://Entities/Components/FacingComponent/FacingComponent.tscn" id="12_1nxg5"]
 [ext_resource type="Script" uid="uid://1qq7eo7lm8j6" path="res://Entities/Components/ItemComponents/LootTableComponent/LootTableEntry.gd" id="14_v0818"]
+[ext_resource type="Script" uid="uid://dm8m7mr8if1pr" path="res://Entities/Components/EffectComponents/ESIReceiverComponent/EntityStatModifiers.gd" id="15_7qjvm"]
 [ext_resource type="PackedScene" uid="uid://co3n6m7efg8pd" path="res://Entities/Components/EffectComponents/ConditionsComponent/ConditionsComponent.tscn" id="17_hg3w7"]
 [ext_resource type="PackedScene" uid="uid://2yy4xfm5g74l" path="res://Entities/Components/ItemComponents/ClippingComponent/ClippingArea.tscn" id="18_7qjvm"]
 [ext_resource type="PackedScene" uid="uid://bhcqtorpyerc3" path="res://Utilities/Debug/ParticleEmissionComponent.tscn" id="18_m60nn"]
@@ -50,6 +51,9 @@ animations = [{
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_l7ldg"]
 radius = 8.0
 height = 28.0
+
+[sub_resource type="Resource" id="Resource_ke02d"]
+script = ExtResource("15_7qjvm")
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_mc2cg"]
 height = 28.0
@@ -114,19 +118,16 @@ _max_shield = 0
 
 [node name="FacingComponent" parent="." unique_id=1607086446 instance=ExtResource("12_1nxg5")]
 
-[node name="ESIReceiverComponent" parent="." unique_id=2048222273 node_paths=PackedStringArray("affected_entity", "dmg_handler") instance=ExtResource("9_wje6d")]
-affected_entity = NodePath("..")
-dmg_handler = NodePath("")
+[node name="ESIReceiverComponent" parent="." unique_id=2048222273 instance=ExtResource("9_wje6d")]
+stat_modifiers = SubResource("Resource_ke02d")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="ESIReceiverComponent" unique_id=1572845017]
 position = Vector2(0, -12)
 rotation = -1.5708
 shape = SubResource("CapsuleShape2D_mc2cg")
 
-[node name="ConditionsComponent" parent="." unique_id=1861356536 node_paths=PackedStringArray("effect_receiver", "effect_src_receiver") instance=ExtResource("17_hg3w7")]
+[node name="ConditionsComponent" parent="." unique_id=1861356536 instance=ExtResource("17_hg3w7")]
 unique_name_in_owner = true
-effect_receiver = NodePath("../ESIReceiverComponent")
-effect_src_receiver = NodePath("../ESIReceiverComponent")
 
 [node name="ParticleEmissionComponent" parent="." unique_id=437844945 instance=ExtResource("18_m60nn")]
 below_extents = Vector2(16, 2)

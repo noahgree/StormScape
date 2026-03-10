@@ -22,8 +22,8 @@ static var cache: Dictionary[Array, Condition] = {} ## A cache of all conditions
 
 const PROCESS_INTERVAL: float = 0.1 ## How often we should process the CIs. Helps with performance.
 
-var actives: Dictionary[Array, CI] = {} ## { [id, source] : CI }
-var actives_by_id: Dictionary[Condition.ID, Dictionary] = {} ## { id : { Condition.SourceType : CI } }
+var actives: Dictionary[Array, Array] = {} ## { [id, source] : [CI] } Higher indices are higher levels.
+var actives_by_id: Dictionary[Condition.ID, Dictionary] = {} ## { id : { Condition.SourceType : [CI] } } CIs not ordered.
 var tick_accumulator: float ## Tracks time since last tick.
 
 
@@ -60,8 +60,9 @@ func _process(delta: float) -> void:
 
 	while tick_accumulator >= PROCESS_INTERVAL:
 		tick_accumulator -= PROCESS_INTERVAL
-		for ci: CI in actives.values():
-			ci.process(PROCESS_INTERVAL)
+		for ci_array: Array[CI] in actives:
+			for ci: CI in ci_array:
+				ci.process(PROCESS_INTERVAL)
 
 #region Adding Conditions
 func handle_conditions_in_esi(esi: ESI) -> void:
@@ -81,37 +82,26 @@ func handle_conditions_in_esi(esi: ESI) -> void:
 ## Handles an incoming condition. It starts by adding any stat mods provided by the condition, and then
 ## it passes the condition logic to the relevant handler if it exists.
 func _process_condition(condition: Condition, esi: ESI) -> void:
+	# --- Checking Filter & Entity Invulnerability & Untouchability ---
 	if (not _check_filter(condition)) or (entity.invulnerable):
 		return
 	if (condition.goodness == Condition.Goodness.BAD) and (is_untouchable()):
 		return
 
+	# --- Stopping Conditions The New Condition Stops ---
 	for condition_id_to_stop: Condition.ID in condition.conditions_to_stop:
 		remove_condition_for_all_sources(condition_id_to_stop)
 
+	# --- Debug Print the Addition ---
 	_debug_print_adding_condition(condition)
 
+	# --- Calling the On Received Regardless Function ---
 	condition.on_received_regardless_of_level(esi, entity)
 
-	var key: Array = condition.get_key()
-	if key in actives:
-		var existing_ci: CI = actives[key]
-		if existing_ci.condition.level > condition.level: # New condition is lower lvl
-			if (condition.eot_stats.perpetual) and (not existing_ci.condition.eot_stats.perpetual):
-				_remove_ci(existing_ci)
-				_add_ci(condition)
-			elif not existing_ci.condition.eot_stats.perpetual:
-				existing_ci.extend_time_left(condition)
-		elif existing_ci.condition.level < condition.level: # New condition is higher lvl
-			if (existing_ci.condition.eot_stats.perpetual) and (not condition.eot_stats.perpetual):
-				return
-			_remove_ci(existing_ci)
-			_add_ci(condition)
-		else: # New condition is same lvl (so the exact same condition resource)
-			existing_ci.restart_time_left(condition)
-	else:
-		_add_ci(condition)
+	# --- Adding the CI ---
+	_add_ci(condition, esi)
 
+	# --- Playing Hit Sound ---
 	if (entity is Player) or (not condition.only_cue_on_player_hit):
 		AudioManager.play_2d(condition.audio_to_play, entity.global_position)
 
@@ -126,40 +116,46 @@ func _check_filter(condition: Condition) -> bool:
 			return (affected) and (condition.id in manual_filter)
 	return false
 
-func _add_ci(condition: Condition) -> void:
-	if condition.id == Condition.ID.UNTOUCHABLE:
-		remove_all_bad_conditions()
-
-	var ci: CI = CI.new(condition)
-	actives[condition.get_key()] = ci
-	if actives_by_id[condition.id].is_empty():
-		actives_by_id[condition.id] = { condition.source_type : condition.level }
-	else:
-		actives_by_id[condition.id][condition.source_type] = ci
-
+func _add_ci(condition: Condition, esi: ESI) -> void:
+	var ci: CI = CI.new(condition, entity, esi.source_ii)
+	ci.affected_entity = entity
 	ci.condition_expired.connect(_remove_ci)
 
-	_start_condition_fx(ci)
+	var condition_key: Array = condition.get_key()
+	if actives.has(condition_key):
+		_remove_mods_added_by_condition(actives[condition_key].back())
 
-	for mod_resource: StatMod in ci.condition.stat_mods:
+		actives[condition_key].push_back(ci)
+		actives[condition_key].sort_custom(func(a: CI, b: CI) -> bool: return a.condition.level < b.condition.level)
+	else:
+		actives[condition_key] = [ci]
+
+	_add_mods_added_by_condition(actives[condition_key].back())
+	_start_condition_fx(actives[condition_key].back().condition)
+
+	if actives_by_id.has(condition.id):
+		if actives_by_id[condition.id].has(condition.source_type):
+			actives_by_id[condition.id][condition.source_type].append(ci)
+		else:
+			actives_by_id[condition.id][condition.source_type] = [ci]
+	else:
+		actives_by_id[condition.id] = { condition.source_type : [ci] }
+
+	set_process(true)
+
+func _add_mods_added_by_condition(condition: Condition) -> void:
+	if condition == null:
+		return
+	for mod_resource: StatMod in condition.stat_mods:
 		entity.sc.add_mods([mod_resource] as Array[StatMod])
 
-## Passes the condition to a handler if one is needed for additional logic handling.
-func _handle_dynamic_condition(condition: Condition, esi: ESI) -> void:
-	if condition is TimeSnareEffect:
-		if time_snare_handler: time_snare_handler.handle_time_snare(condition)
-		else: return
-
-## Starts the conditions' associated visual FX like particles.
-func _start_condition_fx(ci: CI) -> void:
-	if not ci.condition.spawn_particles:
-		return
-
-	if ci.condition.make_entity_glow:
-		entity.sprite.update_floor_light(ci.condition.id, false)
-		entity.sprite.update_overlay_color(ci.condition.id, false)
-
-	entity.particle_mgr.start_particles(ci.condition.id)
+## Starts the condition's associated visual FX like particles.
+func _start_condition_fx(condition: Condition) -> void:
+	if condition.make_entity_glow:
+		entity.sprite.update_floor_light(condition.id, false)
+		entity.sprite.update_overlay_color(condition.id, false)
+	if condition.spawn_particles:
+		entity.particle_mgr.start_particles(condition.id)
 #endregion
 
 
@@ -167,32 +163,38 @@ func _start_condition_fx(ci: CI) -> void:
 func _remove_ci(ci: CI) -> void:
 	_debug_print_removing_condition(ci.condition)
 
-	for mod_resource: StatMod in ci.condition.stat_mods:
+	var condition_key: Array = ci.condition.get_key()
+	_remove_mods_added_by_condition(actives[condition_key].back())
+	actives[condition_key].erase(ci)
+	_add_mods_added_by_condition(actives[condition_key].back())
+	if actives[condition_key].is_empty():
+		actives.erase(condition_key)
+
+	actives_by_id[ci.condition.id][ci.condition.source_type].erase(ci)
+	if actives_by_id[ci.condition.id][ci.condition.source_type].is_empty():
+		actives_by_id[ci.condition.id].erase(ci.condition.source_type)
+		if actives_by_id[ci.condition.id].is_empty():
+			actives_by_id.erase(ci.condition.id)
+			_stop_condition_fx(ci.condition)
+
+	if actives.is_empty():
+		set_process(false)
+
+func _remove_mods_added_by_condition(condition: Condition) -> void:
+	if condition == null:
+		return
+	for mod_resource: StatMod in condition.stat_mods:
 		entity.sc.remove_mod(mod_resource.stat_id, mod_resource.mod_id)
 
-	var key: Array = ci.condition.get_key()
-	actives.erase(key)
-	actives_by_id[ci.condition.id].erase(ci.condition.source_type)
-	if actives_by_id[ci.condition.id].is_empty():
-		actives_by_id.erase(ci.condition.id)
-
-	_stop_associated_eotis(ci.condition)
-	_stop_condition_fx(ci.condition)
-
-## Stops the conditions' associated visual FX like particles.
+## Stops the condition's associated visual FX like particles.
 func _stop_condition_fx(condition: Condition) -> void:
 	entity.sprite.update_floor_light(condition.id, true)
 	entity.sprite.update_overlay_color(condition.id, true)
-
-	# Only remove all FX if there are no more instances of the same condition ID
-	var conditions: Dictionary[Condition.SourceType, int] = actives_by_id.get(condition.id, null)
-	if (conditions == null) or (conditions.keys().size() > 1):
-		return
 	entity.particle_mgr.stop_particles(condition.id)
 
 func remove_condition_by_source_type(condition_id: Condition.ID, source_type: Condition.SourceType) -> void:
-	var existing_ci: CI = actives.get([condition_id, source_type], null)
-	if existing_ci != null:
+	var existing_cis: Array[CI] = actives.get([condition_id, source_type], [])
+	for existing_ci: CI in existing_cis:
 		_remove_ci(existing_ci)
 
 ## Attempts to remove all CIs of the matching condition id, regardless of source type.
@@ -202,38 +204,29 @@ func remove_condition_for_all_sources(condition_id: Condition.ID) -> void:
 
 	var to_erase: Array[CI] = []
 	for source_type: Condition.SourceType in actives_by_id[condition_id]:
-		var ci: CI = actives_by_id[condition_id][source_type]
-		to_erase.append(ci)
+		var ci_array: Array[CI] = actives_by_id[condition_id][source_type]
+		for ci: CI in ci_array:
+			to_erase.append(ci)
 
 	for ci: CI in to_erase:
 		_remove_ci(ci)
 
-func _stop_associated_eotis(condition: Condition) -> void:
-	esi_receiver.dh_handler.stop_eotis_by_source_type(condition.id, condition.source_type)
-
-## Removes all bad conditions except for an optional exception condition that may be specified.
+## Removes all conditions of a certain goodness except for an optional exception id that may be specified.
 ## The optional kept condition should be given only as its id, not including its source type.
-func remove_all_bad_conditions(condition_id_to_keep: Condition.ID = Condition.ID.NULL) -> void:
-	_remove_all_of_certain_goodness(condition_id_to_keep, Condition.Goodness.BAD)
-
-## Removes all good conditions except for an optional exception condition that may be specified.
-## The optional kept condition should be given only as its id, not including its source type.
-func remove_all_good_conditions(condition_id_to_keep: Condition.ID = Condition.ID.NULL) -> void:
-	_remove_all_of_certain_goodness(condition_id_to_keep, Condition.Goodness.GOOD)
-
-func _remove_all_of_certain_goodness(id_to_keep: Condition.ID, goodness: Condition.Goodness) -> void:
+func remove_all_of_certain_goodness(id_to_keep: Condition.ID, goodness: Condition.Goodness) -> void:
 	for condition_id: Condition.ID in actives_by_id:
 		if condition_id == id_to_keep:
 			continue
 		var source_type: Condition.SourceType = actives_by_id[condition_id].keys().front()
-		var ci_to_check: CI = actives_by_id[condition_id][source_type]
+		var ci_to_check: CI = actives_by_id[condition_id][source_type].back()
 		if ci_to_check.condition.goodness == goodness:
 			remove_condition_by_source_type(condition_id, source_type)
 
 ## Removes all conditions.
 func remove_all_conditions() -> void:
-	for ci: CI in actives.values():
-		_remove_ci(ci)
+	for ci_array: Array[CI] in actives.values():
+		for ci: CI in ci_array:
+			_remove_ci(ci)
 #endregion
 
 

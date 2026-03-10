@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="Condition" format=3 uid="uid://ddofj1pig48hv"]
+
+[ext_resource type="Script" uid="uid://boo31eu083dqd" path="res://Entities/Stats/EffectSystemResources/Condition.gd" id="1_r7uaq"]
+
+[resource]
+script = ExtResource("1_r7uaq")
+id = 14
+conditions_to_stop = Array[int]([0, 1, 2, 3, 4, 5, 6, 7, 8, 9])
+metadata/_custom_type_script = "uid://boo31eu083dqd"

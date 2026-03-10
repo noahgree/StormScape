@@ -55,14 +55,6 @@ animations = [{
 "speed": 5.0
 }]
 
-[sub_resource type="Resource" id="Resource_o33n8"]
-resource_local_to_scene = true
-metadata/_custom_type_script = "uid://b1lo2mdb3otax"
-
-[sub_resource type="Resource" id="Resource_7biur"]
-resource_local_to_scene = true
-metadata/_custom_type_script = "uid://dubq8xgav66ue"
-
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ij8lb"]
 size = Vector2(14, 19)
 
@@ -116,24 +108,18 @@ sprite_frames = SubResource("SpriteFrames_o33n8")
 _max_health = 1000
 _max_shield = 0
 
-[node name="ESIReceiverComponent" parent="." unique_id=2005474103 node_paths=PackedStringArray("affected_entity", "dmg_handler") instance=ExtResource("6_bxml6")]
+[node name="ESIReceiverComponent" parent="." unique_id=2005474103 instance=ExtResource("6_bxml6")]
 absorb_full_hit = true
 filter_source_tags = true
 allowed_source_tags = Array[String](["chops_wood"])
-frostbite_handler = SubResource("Resource_o33n8")
-burning_handler = SubResource("Resource_7biur")
-affected_entity = NodePath("..")
-dmg_handler = NodePath("")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="ESIReceiverComponent" unique_id=1630318295]
 position = Vector2(0, -7)
 rotation = -1.5708
 shape = SubResource("RectangleShape2D_ij8lb")
 
-[node name="ConditionsComponent" parent="." unique_id=640107887 node_paths=PackedStringArray("effect_receiver", "effect_src_receiver") instance=ExtResource("7_7lx3c")]
+[node name="ConditionsComponent" parent="." unique_id=640107887 instance=ExtResource("7_7lx3c")]
 unique_name_in_owner = true
-effect_receiver = NodePath("../ESIReceiverComponent")
-effect_src_receiver = NodePath("../ESIReceiverComponent")
 
 [node name="ParticleEmissionComponent" parent="." unique_id=1806509778 instance=ExtResource("17_2kecs")]
 below_extents = Vector2(20, 2)

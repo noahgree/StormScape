@@ -5,7 +5,7 @@ extends Node
 var state_machine_swaps: bool = false
 var stat_mod_changes_during_game: bool = true
 var stat_mod_changes_on_load: bool = false
-var current_condition_changes: bool = false
+var current_condition_changes: bool = true
 var weapon_mod_changes: bool = true
 var wearable_changes: bool = true
 var saver_loader_status_changes: bool = true

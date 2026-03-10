@@ -1,0 +1,89 @@
+[gd_scene format=3 uid="uid://cxxeyt7s0e4u2"]
+
+[ext_resource type="Script" uid="uid://cn2gulskgn7k3" path="res://Entities/EntityCore/EntityTypes/StaticEntity/StaticEntity.gd" id="1_vnxdf"]
+[ext_resource type="Script" uid="uid://c2gdoebfp12dq" path="res://Entities/Stats/StatMod/StatModsCache.gd" id="2_au4tw"]
+[ext_resource type="PackedScene" uid="uid://dh4ydl7l86ywq" path="res://Entities/EntityCore/Sprites/EntitySprite.tscn" id="3_yktvl"]
+[ext_resource type="Texture2D" uid="uid://dlk243e5b6tys" path="res://Assets/Icon/icon_dark.png" id="4_jpk2f"]
+[ext_resource type="PackedScene" uid="uid://bj7vw8d6oqv0m" path="res://Entities/Player/UI/Interactions/InteractionsCore/InteractionArea.tscn" id="5_4ticl"]
+[ext_resource type="Texture2D" uid="uid://cd22xh5jduxd6" path="res://Entities/Player/UI/Interactions/Assets/e_prompt.png" id="6_l3b7a"]
+[ext_resource type="Script" uid="uid://dgibl37gudpj1" path="res://Entities/Player/UI/Interactions/InteractionsCore/InteractionOffer.gd" id="7_c4v6l"]
+[ext_resource type="PackedScene" uid="uid://2yy4xfm5g74l" path="res://Entities/Components/ItemComponents/ClippingComponent/ClippingArea.tscn" id="8_0mah8"]
+[ext_resource type="PackedScene" uid="uid://bhcqtorpyerc3" path="res://Utilities/Debug/ParticleEmissionComponent.tscn" id="9_7ccbt"]
+[ext_resource type="PackedScene" uid="uid://di7vcyrki71nm" path="res://Entities/Components/DetectionComponent/DetectionComponent.tscn" id="10_sj27e"]
+[ext_resource type="PackedScene" uid="uid://btba0jmsow1mx" path="res://Entities/Components/EffectComponents/ESIReceiverComponent/ESIReceiverComponent.tscn" id="11_o7dcf"]
+[ext_resource type="Script" uid="uid://dm8m7mr8if1pr" path="res://Entities/Components/EffectComponents/ESIReceiverComponent/EntityStatModifiers.gd" id="12_nbjxe"]
+[ext_resource type="PackedScene" uid="uid://cdfdy8m6ki3oq" path="res://Entities/Components/HPComponent/HPComponent.tscn" id="13_7sxjv"]
+
+[sub_resource type="Resource" id="Resource_vblrk"]
+script = ExtResource("2_au4tw")
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_f5fhq"]
+size = Vector2(40, 40)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xm2up"]
+atlas = ExtResource("4_jpk2f")
+region = Rect2(0, 0, 1024, 1024)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_hkn5b"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xm2up")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="Resource" id="Resource_s5gqv"]
+resource_local_to_scene = true
+script = ExtResource("7_c4v6l")
+title = "Storm Base"
+title_color = Color(1.52, 0.616, 2.352, 1)
+info_color = Color(0.9050975, 0.7290963, 0.9920781, 1)
+metadata/_custom_type_script = "uid://dgibl37gudpj1"
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_yng6w"]
+size = Vector2(40, 40)
+
+[sub_resource type="Resource" id="Resource_s2x07"]
+script = ExtResource("12_nbjxe")
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_1606r"]
+size = Vector2(40, 40)
+
+[node name="StormBase" type="StaticBody2D" unique_id=179645369]
+script = ExtResource("1_vnxdf")
+sc = SubResource("Resource_vblrk")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=295419995]
+shape = SubResource("RectangleShape2D_f5fhq")
+debug_color = Color(0.6905431, 0.28825647, 1, 0.2509804)
+
+[node name="EntitySprite" parent="." unique_id=607345551 instance=ExtResource("3_yktvl")]
+unique_name_in_owner = true
+scale = Vector2(0.049, 0.049)
+sprite_frames = SubResource("SpriteFrames_hkn5b")
+
+[node name="InteractionArea" parent="." unique_id=897230405 instance=ExtResource("5_4ticl")]
+prompt_radius = 36.0
+interaction_offer = SubResource("Resource_s5gqv")
+prompt_offset = Vector2(0, -23)
+
+[node name="ClippingArea" parent="." unique_id=222141319 instance=ExtResource("8_0mah8")]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ClippingArea" unique_id=718504616]
+shape = SubResource("RectangleShape2D_yng6w")
+
+[node name="ParticleEmissionComponent" parent="." unique_id=705775101 instance=ExtResource("9_7ccbt")]
+
+[node name="DetectionComponent" parent="." unique_id=678579272 instance=ExtResource("10_sj27e")]
+
+[node name="EffectReceiverComponent" parent="." unique_id=1890609378 instance=ExtResource("11_o7dcf")]
+absorb_full_hit = true
+stat_modifiers = SubResource("Resource_s2x07")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="EffectReceiverComponent" unique_id=739613903]
+shape = SubResource("RectangleShape2D_1606r")
+
+[node name="HealthComponent" parent="." unique_id=656864664 instance=ExtResource("13_7sxjv")]

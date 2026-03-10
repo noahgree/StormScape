@@ -67,6 +67,7 @@ func setup() -> void:
 		&"run_collision_impulse_factor" : _run_collision_impulse_factor,
 		&"friction" : _friction,
 		&"confusion_amount" : 0.0,
+		&"time_snare_multiplier" : 1.0,
 		&"max_stealth" : _max_stealth,
 		&"max_sneak_speed" : _max_sneak_speed,
 		&"sneak_acceleration" : _sneak_acceleration,

@@ -577,6 +577,6 @@ func _remove_current_condition_from_entity(body: DynamicEntity) -> void:
 ## Adds the passed in condition to the passed in entity.
 func _add_condition_to_entity(body: DynamicEntity, condition_to_add: Condition) -> void:
 	var receiver: ESIReceiverComponent = body.get_node_or_null("ESIReceiverComponent")
-	if receiver != null and not body.conditions_component.check_if_has_condition(condition_to_add.id, condition_to_add.source_type):
+	if receiver != null:
 		receiver.handle_condition(condition_to_add)
 #endregion

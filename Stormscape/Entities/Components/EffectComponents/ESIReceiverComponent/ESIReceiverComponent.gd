@@ -14,13 +14,13 @@ class_name ESIReceiverComponent
 @export var absorb_full_hit: bool = false ## When true, any weapon's hitbox that sends an effect to this receiver will be disabled for the remainder of the attack afterwards. Useful for when you want something like a tree to take the full hit and not let an axe keep swinging through to hit enemies behind it.
 @export_group("Source Filtering")
 @export var filter_source_types: bool = false ## When true, only allow matching source types as specified in the below array.
-@export var allowed_source_types: Array[ESI.ESISourceType] = [] ## The list of sources an effect source can come from in order to affect this esi receiver (only when filter_source_types is true).
+@export var allowed_source_types: Array[EffectSource.SourceType] = [] ## The list of sources an effect source can come from in order to affect this esi receiver (only when filter_source_types is true).
 @export var filter_source_tags: bool = false ## When true, only allow matching source tags as specified in the below array.
 @export var allowed_source_tags: Array[String] = [] ## Effect sources must have a tag that matches something in this array in order to be handled when the filter_source_tags is set to true.
 @export_group("Entity Stat Modifiers")
 @export var stat_modifiers: EntityStatModifiers = EntityStatModifiers.new()
 
-@onready var entity: Entity = owner ## The owning entity to be affected by the ESIs being received.
+@onready var entity: Entity = owner if owner is Entity else null ## The owning entity to be affected by the ESIs being received.
 @onready var dh_handler: DHHandler = %DHHandler ## The dh handler child.
 
 var current_impact_sounds: Array[int] = [] ## The current impact sounds being played and held onto by this esi receiver.
@@ -77,13 +77,13 @@ func handle_esi(esi: ESI, process_conditions: bool = true) -> void:
 
 	# --- Checking if We Should Drop Loot on Hit Early and Return ---
 	if (esi.source_entity) and (esi.source_entity_team == Globals.Teams.PASSIVE):
-		if (esi.es.source_type != ESI.ESISourceType.FROM_EOTI) and (entity.loot):
+		if (esi.es.source_type != EffectSource.SourceType.FROM_EOTI) and (entity.loot):
 			entity.loot.handle_hit()
 		return
 
 	# --- Triggering Loot Component if not from EOTI ---
 	if (entity.loot) and (not entity.loot.require_dmg_on_hit):
-		if esi.es.source_type != ESI.ESISourceType.FROM_EOTI:
+		if esi.es.source_type != EffectSource.SourceType.FROM_EOTI:
 			entity.loot.handle_hit()
 
 	# --- Applying Base Damage & Base Healing ---

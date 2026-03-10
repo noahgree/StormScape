@@ -3,19 +3,6 @@ class_name ESI
 ## ESI stands for Effect Source Instance, and it acts as a wrapper over instances of effect sources
 ## that originate from entities and items.
 
-enum ESISourceType {
-	FROM_DEFAULT, ## For any effect source that does not come from any of the below types.
-	FROM_PROJECTILE, ## For damage coming from any normal projectile like a bullet from a sniper or pistol.
-	FROM_EXPLOSION, ## For damage coming from AOEs that explode.
-	FROM_GROUND_AOE, ## For damage coming from AOEs that exist on the ground like a poison puddle or aftermath of a molotov.
-	FROM_MAGIC, ## For magic weapons.
-	FROM_TOOL, ## For melee weapons like pickaxes and axes that exist primary to interact with the world resources.
-	FROM_PHYSICAL_CONTACT, ## For physcial interactions like a punch or running into something with a hitbox attached to the body.
-	FROM_COMBAT_MELEE, ## For melee weapons that are primarily damaging weapons like a sword (not tools like the pickaxe).
-	FROM_CONSUMABLE, ## For receiving effects from consuming consumables.
-	FROM_EOTI ## For receiving effects from effect over time instances.
-}
-
 @export var es: EffectSource: set = _set_es ## The effect source that this wraps.
 var es_stat_overrides: Dictionary[StringName, float] ## The overrides to use instead when accessing stats from the es.
 var conditions: Array[Condition] ## The modifiable list of conditions for the effect source.

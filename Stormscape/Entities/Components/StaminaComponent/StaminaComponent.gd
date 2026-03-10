@@ -43,8 +43,8 @@ func _ready() -> void:
 		&"hunger_cost_per_stamina_bar" : _hunger_cost_per_stamina_bar,
 		&"stamina_recharge_delay" : _stamina_recharge_delay
 	}
-	get_parent().stats.add_moddable_stats_with_associated_callables(moddable_stats_with_callables)
-	get_parent().stats.add_moddable_stats(moddable_stats)
+	get_parent().sc.add_moddable_stats_with_associated_callables(moddable_stats_with_callables)
+	get_parent().sc.add_moddable_stats(moddable_stats)
 	call_deferred("_emit_initial_values")
 
 ## Checks whether stamina use is allowed, deducts the amount if so, and returns whether or not the amount was used.

@@ -8,37 +8,29 @@
 [ext_resource type="Texture2D" uid="uid://crqa3kb7ndjr5" path="res://Stages/Tilemaps/SwampDirt/swamp_texture_repeating.png" id="5_g65la"]
 [ext_resource type="Script" uid="uid://cncnc3v2hpov8" path="res://Stages/World/WorldItemsManager.gd" id="8_g8y4o"]
 [ext_resource type="PackedScene" uid="uid://xsq1q0fffsin" path="res://Utilities/Debug/TestRigidEntity.tscn" id="9_37jga"]
+[ext_resource type="Script" uid="uid://c2gdoebfp12dq" path="res://Entities/Stats/StatMod/StatModsCache.gd" id="9_s2x07"]
+[ext_resource type="Script" uid="uid://boo31eu083dqd" path="res://Entities/Stats/EffectSystemResources/Condition.gd" id="10_fx52i"]
 [ext_resource type="PackedScene" uid="uid://bond8rty1ljh" path="res://Utilities/Debug/TestStaticEntity.tscn" id="11_6kn41"]
 [ext_resource type="Script" uid="uid://c2dtyfq8k2oj2" path="res://Entities/Components/HitboxComponent/HitboxComponent.gd" id="11_j4dgk"]
-[ext_resource type="Resource" uid="uid://dvew5cy3k7s48" path="res://Entities/Stats/EffectSystemResources/Conditions/BadEffects/Burning/Burning1.tres" id="16_s5gqv"]
+[ext_resource type="Script" uid="uid://dkfssottmsrch" path="res://Entities/Stats/EffectSystemResources/EffectSource.gd" id="11_s2x07"]
+[ext_resource type="Resource" uid="uid://1b0tsbvrwtcw" path="res://Entities/Stats/EffectSystemResources/Conditions/BadEffects/Burning/Burning:1.tres" id="12_iotvt"]
 [ext_resource type="PackedScene" uid="uid://b52c5c7hj2vd" path="res://Utilities/Debug/TestTree1.tscn" id="17_45bjv"]
 [ext_resource type="PackedScene" uid="uid://bq12ugc7lnirg" path="res://Utilities/Debug/TestPhysicalInventory.tscn" id="17_om42l"]
-[ext_resource type="Texture2D" uid="uid://cd22xh5jduxd6" path="res://Entities/Player/UI/Interactions/Assets/e_prompt.png" id="18_yw2f7"]
-[ext_resource type="Script" uid="uid://dgibl37gudpj1" path="res://Entities/Player/UI/Interactions/InteractionsCore/InteractionOffer.gd" id="19_04pgg"]
+[ext_resource type="PackedScene" uid="uid://cxxeyt7s0e4u2" path="res://Entities/StormBase/StormBase.tscn" id="21_yw1c5"]
 [ext_resource type="Script" uid="uid://c2f01r3cincl0" path="res://Stages/World/Storm/Storm.gd" id="22_0op7h"]
 [ext_resource type="Script" uid="uid://b8kfccspu3jx8" path="res://Stages/Tilemaps/TileMapDual.gd" id="22_47ykm"]
 [ext_resource type="Texture2D" uid="uid://6saycs5sisdk" path="res://Stages/Tilemaps/ReplacementTextures/dirt_replacement_RED.png" id="22_tnvqm"]
 [ext_resource type="Shader" uid="uid://cxi5alvvj1rv2" path="res://Utilities/Game/Shaders/StormShader.gdshader" id="23_05otm"]
-[ext_resource type="Resource" uid="uid://cx6t5cil24ca3" path="res://Stages/World/Storm/StormVisuals/DefaultStormVisuals.tres" id="27_5uvpk"]
+[ext_resource type="Script" uid="uid://20acrt2hb6y" path="res://Entities/Stats/EOTStats.gd" id="23_rhtsc"]
+[ext_resource type="Script" uid="uid://bcjwesiannbd0" path="res://Entities/Stats/StatMod/StatMod.gd" id="24_melxk"]
 [ext_resource type="Shader" uid="uid://bilestavf27wc" path="res://Utilities/Game/Shaders/ScreenFog.gdshader" id="30_rhtsc"]
 [ext_resource type="PackedScene" uid="uid://clf1njlp4stbn" path="res://Utilities/Debug/TestRock2.tscn" id="30_yw2f7"]
 [ext_resource type="Texture2D" uid="uid://daa6casude472" path="res://Utilities/Game/Particles/light_ray.png" id="31_melxk"]
 [ext_resource type="PackedScene" uid="uid://jdi552emuah8" path="res://Utilities/Debug/TestRock1.tscn" id="32_melxk"]
 [ext_resource type="Texture2D" uid="uid://cx7u0pbdtc6eb" path="res://Utilities/Game/Particles/grunge_light.png" id="32_s5gqv"]
 [ext_resource type="Script" uid="uid://d1xfue3du3eyu" path="res://Utilities/Debug/DebugCanvasLayer.gd" id="34_01d0t"]
-[ext_resource type="PackedScene" uid="uid://dh4ydl7l86ywq" path="res://Entities/EntityCore/Sprites/EntitySprite.tscn" id="35_vi22v"]
-[ext_resource type="PackedScene" uid="uid://bj7vw8d6oqv0m" path="res://Entities/Player/UI/Interactions/InteractionsCore/InteractionArea.tscn" id="36_e5rpg"]
-[ext_resource type="Texture2D" uid="uid://dlk243e5b6tys" path="res://Assets/Icon/icon_dark.png" id="40_01d0t"]
-[ext_resource type="Script" uid="uid://cbiskerf2stk6" path="res://Stages/World/Storm/StormTransform.gd" id="40_27u15"]
-[ext_resource type="PackedScene" uid="uid://bhcqtorpyerc3" path="res://Utilities/Debug/ParticleEmissionComponent.tscn" id="41_f5fhq"]
-[ext_resource type="PackedScene" uid="uid://di7vcyrki71nm" path="res://Entities/Components/DetectionComponent/DetectionComponent.tscn" id="42_1606r"]
 [ext_resource type="Texture2D" uid="uid://dsago31sb51b0" path="res://Stages/World/Storm/StormNoise1.tres" id="42_s5gqv"]
 [ext_resource type="Texture2D" uid="uid://d2utxp2le0rkm" path="res://Stages/World/Storm/StormNoise2.tres" id="43_6gn56"]
-[ext_resource type="PackedScene" uid="uid://btba0jmsow1mx" path="res://Entities/Components/EffectComponents/ESIReceiverComponent/ESIReceiverComponent.tscn" id="43_1606r"]
-[ext_resource type="PackedScene" uid="uid://cdfdy8m6ki3oq" path="res://Entities/Components/HPComponent/HPComponent.tscn" id="43_hkn5b"]
-[ext_resource type="PackedScene" uid="uid://4gl24qwdyti3" path="res://Entities/Components/EffectComponents/ESIReceiverComponent/EffectHandlers/DHHandler.tscn" id="44_hkn5b"]
-[ext_resource type="PackedScene" uid="uid://ddj5ippwwkvop" path="res://Entities/Components/EffectComponents/ESIReceiverComponent/EffectHandlers/HealHandler.tscn" id="45_340rl"]
-[ext_resource type="PackedScene" uid="uid://2yy4xfm5g74l" path="res://Entities/Components/ItemComponents/ClippingComponent/ClippingArea.tscn" id="48_8jild"]
 
 [sub_resource type="Environment" id="Environment_2wouv"]
 background_mode = 3
@@ -146,128 +138,118 @@ physics_layer_1/collision_layer = 128
 physics_layer_1/collision_mask = 0
 sources/1 = SubResource("TileSetAtlasSource_lb4xb")
 
-[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_yw2f7"]
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_fx52i"]
 rough = true
 
-[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_ed1p2"]
+[sub_resource type="Resource" id="Resource_fx52i"]
+script = ExtResource("9_s2x07")
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_s2x07"]
 rough = true
 
-[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_e5rpg"]
+[sub_resource type="Resource" id="Resource_h3uly"]
+script = ExtResource("9_s2x07")
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_iotvt"]
 rough = true
 
-[sub_resource type="GDScript" id="GDScript_vi22v"]
-script/source = "extends Resource
-class_name EffectSource
-## A base class for all instances in the game that can apply effects like damage and knockback.
-##
-## Should be the superclass for all effect sources.
-## This contains all the data needed by an effect receiver, and nothing more. Textures, animations, hitboxes, etc.
-## should be handled by the producer of this effect source. This is purely data.
+[sub_resource type="Resource" id="Resource_xm2up"]
+script = ExtResource("9_s2x07")
 
-enum ESType { NORMAL, CHARGE, AOE } ## The kinds of effect sources that can be modified.
+[sub_resource type="Resource" id="Resource_6gn56"]
+script = ExtResource("9_s2x07")
 
-@export_group(\"General\")
-@export var source_type: Globals.EffectSourceSourceType ## A tag used to determine the source of the effect source. See Globals class for details on the tags.
-@export var source_tags: Array[String] = [] ## Additional information to pass to whatever receieves this effect source to make sure it should apply.
-@export_flags_2d_physics var scanned_phys_layers: int = 0b1101111 ## The collision mask that this source scans in order to apply affects to.
-@export_subgroup(\"Team Logic\")
-@export var can_hit_self: bool = true ## Whether or not this effect source can be applied to what created it.
-@export_flags(\"Enemies\", \"Allies\") var bad_effect_affected_teams: int = Globals.BadEffectAffectedTeams.ENEMIES ## Which entity teams in relation to who produced this source are affected by this damage.
-@export_flags(\"Enemies\", \"Allies\") var good_effect_affected_teams: int = Globals.GoodEffectAffectedTeams.ALLIES ## Which entity teams in relation to who produced this source are affected by this healing.
-
-@export_group(\"Base Damage\")
-@export var base_damage: int: ## The base numerical amount of damage associated with this effect source.
-	set(new_value):
-		base_damage = max(0, new_value)
-@export var object_damage_mult: float = 1.0 ## A multiplier for doing more damage to Static & Rigid entities marked as objects.
-@export var dmg_affected_stats: Globals.DmgAffectedStats = Globals.DmgAffectedStats.SHIELD_THEN_HEALTH ## Which entity stats are affected by this damage source.
-@export_range(0, 100, 1, \"suffix:%\") var crit_chance: int = 0 ## The chance the application of damage will be a critial hit.
-@export var crit_multiplier: float = 1.5 ## How much stronger critical hits are than normal hits.
-@export_range(0, 100, 1, \"suffix:%\") var armor_penetration: int = 0 ## The percent of armor ignored.
-@export_range(0, 100, 1, \"suffix:%\") var lvl_dmg_scalar: int = 8 ## The percent of base damage that gets added on for every 10 levels, calculated as (((floor(current_lvl / 10) * lvl_dmg_scalar) + 1.0) / 100.0) * base_damage.
-
-@export_group(\"Base Healing\")
-@export var base_healing: int: ## The base numerical amount of health associated with this effect source.
-	set(new_value):
-		base_healing = max(0, new_value)
-@export var heal_affected_stats: Globals.HealAffectedStats = Globals.HealAffectedStats.HEALTH_THEN_SHIELD ## Which entity stats are affected by this healing source.
-@export_range(0, 100, 1, \"suffix:%\") var lvl_heal_scalar: int = 8 ## The percent of base healing that gets added on for every 10 levels, calculated as [codeblock](((floor(current_lvl / 10) * lvl_heal_scalar) + 1.0) / 100.0) * base_healing[/codeblock].
-
-@export_group(\"Impact FX\")
-@export var impact_cam_fx: CamFXResource ## The resource defining how the camera should react to firing.
-@export var impact_vfx: PackedScene = null ## The vfx to spawn when impacting something.
-@export var impact_sound: String = \"\" ## The sound to play when impacting something.
-@export var hit_flash_color: Color = Color(1, 1, 1, 0.6) ## The color to flash the hit entity to on being hit.
-
-@export_group(\"Conditions\")
-@export var conditions: Array[Condition] ## The array of status effects that can be applied to the receiving entity.
-"
-
-[sub_resource type="Resource" id="Resource_e5rpg"]
-script = SubResource("GDScript_vi22v")
+[sub_resource type="Resource" id="Resource_iotvt"]
+script = ExtResource("11_s2x07")
 source_type = 6
-status_effects = []
+can_hit_self = false
+teams_hit_by_bad = 3
+teams_hit_by_good = 3
+conditions = Array[ExtResource("10_fx52i")]([ExtResource("12_iotvt")])
 metadata/_custom_type_script = "uid://dkfssottmsrch"
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_rk2ia"]
 size = Vector2(14, 14)
 
-[sub_resource type="Resource" id="Resource_ed1p2"]
-script = SubResource("GDScript_vi22v")
-source_type = 6
-good_effect_affected_teams = 3
-status_effects = []
+[sub_resource type="Resource" id="Resource_yw2f7"]
+script = ExtResource("9_s2x07")
+
+[sub_resource type="Resource" id="Resource_8lm63"]
+script = ExtResource("11_s2x07")
 metadata/_custom_type_script = "uid://dkfssottmsrch"
 
-[sub_resource type="Resource" id="Resource_w76bj"]
-script = SubResource("GDScript_vi22v")
-source_type = 6
-status_effects = [ExtResource("16_s5gqv")]
+[sub_resource type="Resource" id="Resource_ed1p2"]
+script = ExtResource("9_s2x07")
+
+[sub_resource type="Resource" id="Resource_a2una"]
+script = ExtResource("11_s2x07")
 metadata/_custom_type_script = "uid://dkfssottmsrch"
+
+[sub_resource type="Resource" id="Resource_e5rpg"]
+script = ExtResource("9_s2x07")
+
+[sub_resource type="Resource" id="Resource_27u15"]
+script = ExtResource("9_s2x07")
+
+[sub_resource type="Resource" id="Resource_w76bj"]
+script = ExtResource("9_s2x07")
+
+[sub_resource type="Resource" id="Resource_vi22v"]
+script = ExtResource("9_s2x07")
+
+[sub_resource type="Resource" id="Resource_jb7gg"]
+script = ExtResource("9_s2x07")
+
+[sub_resource type="Resource" id="Resource_3156l"]
+script = ExtResource("9_s2x07")
+
+[sub_resource type="Resource" id="Resource_f5fhq"]
+script = ExtResource("9_s2x07")
+
+[sub_resource type="Resource" id="Resource_1606r"]
+script = ExtResource("9_s2x07")
+
+[sub_resource type="Resource" id="Resource_hkn5b"]
+script = ExtResource("9_s2x07")
+
+[sub_resource type="Resource" id="Resource_340rl"]
+script = ExtResource("9_s2x07")
+
+[sub_resource type="Resource" id="Resource_8jild"]
+script = ExtResource("9_s2x07")
+
+[sub_resource type="Resource" id="Resource_yng6w"]
+script = ExtResource("9_s2x07")
+
+[sub_resource type="Resource" id="Resource_01d0t"]
+script = ExtResource("9_s2x07")
+
+[sub_resource type="Resource" id="Resource_4ti61"]
+script = ExtResource("9_s2x07")
+
+[sub_resource type="Resource" id="Resource_4psjl"]
+script = ExtResource("9_s2x07")
 
 [sub_resource type="LabelSettings" id="LabelSettings_lfc2v"]
 outline_size = 3
 outline_color = Color(0, 0, 0, 1)
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_f5fhq"]
-size = Vector2(40, 40)
+[sub_resource type="Resource" id="Resource_63ihc"]
+script = ExtResource("11_s2x07")
+source_type = 9
+metadata/_custom_type_script = "uid://dkfssottmsrch"
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_xm2up"]
-atlas = ExtResource("40_01d0t")
-region = Rect2(0, 0, 1024, 1024)
+[sub_resource type="Resource" id="Resource_1llel"]
+script = ExtResource("23_rhtsc")
+perpetual = true
+ticks_array = Array[ExtResource("11_s2x07")]([SubResource("Resource_63ihc")])
+metadata/_custom_type_script = "uid://20acrt2hb6y"
 
-[sub_resource type="SpriteFrames" id="SpriteFrames_hkn5b"]
-animations = [{
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_xm2up")
-}],
-"loop": true,
-"name": &"default",
-"speed": 5.0
-}]
-
-[sub_resource type="Resource" id="Resource_fx52i"]
-resource_local_to_scene = true
-script = ExtResource("19_04pgg")
-title = "Storm Base"
-title_color = Color(1.52, 0.616, 2.352, 1)
-info_color = Color(0.9050975, 0.7290963, 0.9920781, 1)
-metadata/_custom_type_script = "uid://dgibl37gudpj1"
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_yng6w"]
-size = Vector2(40, 40)
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_1606r"]
-size = Vector2(40, 40)
-
-[sub_resource type="Resource" id="Resource_h3uly"]
-script = ExtResource("40_27u15")
-new_location = Vector2(225, 120)
-time_to_move = 5.0
-time_to_resize = 5.0
-auto_advance = false
-metadata/_custom_type_script = "uid://cbiskerf2stk6"
+[sub_resource type="Resource" id="Resource_nton5"]
+script = ExtResource("10_fx52i")
+id = 9
+eot_stats = SubResource("Resource_1llel")
+metadata/_custom_type_script = "uid://boo31eu083dqd"
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_7o6b3"]
 radius = 615.0
@@ -370,28 +352,28 @@ y_sort_enabled = true
 
 [node name="TestRigidEntity" parent="WorldRoot/Testing" unique_id=120789680 instance=ExtResource("9_37jga")]
 position = Vector2(127, 27)
-physics_material_override = SubResource("PhysicsMaterial_yw2f7")
-script = null
+physics_material_override = SubResource("PhysicsMaterial_fx52i")
+sc = SubResource("Resource_fx52i")
 
 [node name="TestRigidEntity2" parent="WorldRoot/Testing" unique_id=294390776 instance=ExtResource("9_37jga")]
 position = Vector2(129, 87)
-physics_material_override = SubResource("PhysicsMaterial_ed1p2")
-script = null
+physics_material_override = SubResource("PhysicsMaterial_s2x07")
+sc = SubResource("Resource_h3uly")
 
 [node name="TestRigidEntity3" parent="WorldRoot/Testing" unique_id=941546994 instance=ExtResource("9_37jga")]
 position = Vector2(65, 118)
-physics_material_override = SubResource("PhysicsMaterial_e5rpg")
+physics_material_override = SubResource("PhysicsMaterial_iotvt")
 freeze = true
-script = null
+sc = SubResource("Resource_xm2up")
 
 [node name="TestStaticEntity" parent="WorldRoot/Testing" unique_id=1581685794 instance=ExtResource("11_6kn41")]
 position = Vector2(221, 193)
-script = null
+sc = SubResource("Resource_6gn56")
 
 [node name="TestStaticEffectSource2" type="Area2D" parent="WorldRoot/Testing/TestStaticEntity" unique_id=1815516116 node_paths=PackedStringArray("source_entity")]
 position = Vector2(0, -7)
 script = ExtResource("11_j4dgk")
-effect_source = SubResource("Resource_e5rpg")
+effect_source = SubResource("Resource_iotvt")
 source_entity = NodePath("..")
 use_self_position = true
 
@@ -400,13 +382,14 @@ shape = SubResource("RectangleShape2D_rk2ia")
 debug_color = Color(0.994, 0, 0.227, 0.225)
 
 [node name="TestStaticEntity2" parent="WorldRoot/Testing" unique_id=436724822 instance=ExtResource("11_6kn41")]
+visible = false
 position = Vector2(283, 217)
-script = null
+sc = SubResource("Resource_yw2f7")
 
 [node name="TestStaticEffectSource2" type="Area2D" parent="WorldRoot/Testing/TestStaticEntity2" unique_id=224876673 node_paths=PackedStringArray("source_entity")]
 position = Vector2(0, -7)
 script = ExtResource("11_j4dgk")
-effect_source = SubResource("Resource_ed1p2")
+effect_source = SubResource("Resource_8lm63")
 source_entity = NodePath("..")
 use_self_position = true
 
@@ -415,13 +398,14 @@ shape = SubResource("RectangleShape2D_rk2ia")
 debug_color = Color(0.994, 0, 0.227, 0.225)
 
 [node name="TestStaticEntity3" parent="WorldRoot/Testing" unique_id=948274904 instance=ExtResource("11_6kn41")]
+visible = false
 position = Vector2(343, 191)
-script = null
+sc = SubResource("Resource_ed1p2")
 
 [node name="TestStaticEffectSource2" type="Area2D" parent="WorldRoot/Testing/TestStaticEntity3" unique_id=1245471775 node_paths=PackedStringArray("source_entity")]
 position = Vector2(0, -7)
 script = ExtResource("11_j4dgk")
-effect_source = SubResource("Resource_w76bj")
+effect_source = SubResource("Resource_a2una")
 source_entity = NodePath("..")
 use_self_position = true
 
@@ -431,63 +415,63 @@ debug_color = Color(0.994, 0, 0.227, 0.225)
 
 [node name="TestTree1" parent="WorldRoot/Testing" unique_id=1571042146 instance=ExtResource("17_45bjv")]
 position = Vector2(-41, 179)
-script = null
+sc = SubResource("Resource_e5rpg")
 
 [node name="TestTree2" parent="WorldRoot/Testing" unique_id=696748278 instance=ExtResource("17_45bjv")]
 position = Vector2(-92, 136)
-script = null
+sc = SubResource("Resource_27u15")
 
 [node name="TestTree3" parent="WorldRoot/Testing" unique_id=1498423483 instance=ExtResource("17_45bjv")]
 position = Vector2(-184, 157)
-script = null
+sc = SubResource("Resource_w76bj")
 
 [node name="TestTree4" parent="WorldRoot/Testing" unique_id=1074263384 instance=ExtResource("17_45bjv")]
 position = Vector2(-164, 114)
-script = null
+sc = SubResource("Resource_vi22v")
 
 [node name="TestTree5" parent="WorldRoot/Testing" unique_id=1042743910 instance=ExtResource("17_45bjv")]
 position = Vector2(-15, 218)
-script = null
+sc = SubResource("Resource_jb7gg")
 
 [node name="TestTree6" parent="WorldRoot/Testing" unique_id=1915801229 instance=ExtResource("17_45bjv")]
 position = Vector2(-242, 119)
-script = null
+sc = SubResource("Resource_3156l")
 
 [node name="TestRock1" parent="WorldRoot/Testing" unique_id=1045288249 instance=ExtResource("32_melxk")]
 position = Vector2(363, 71)
-script = null
+sc = SubResource("Resource_f5fhq")
 
 [node name="TestRock2" parent="WorldRoot/Testing" unique_id=83519000 instance=ExtResource("32_melxk")]
 position = Vector2(420, 43)
-script = null
+sc = SubResource("Resource_1606r")
 
 [node name="TestRock3" parent="WorldRoot/Testing" unique_id=2009562076 instance=ExtResource("32_melxk")]
 position = Vector2(443, 79)
-script = null
+sc = SubResource("Resource_hkn5b")
 
 [node name="TestRock4" parent="WorldRoot/Testing" unique_id=1982191976 instance=ExtResource("32_melxk")]
 position = Vector2(423, 116)
-script = null
+sc = SubResource("Resource_340rl")
 
 [node name="TestPhysicalInventory" parent="WorldRoot/Testing" unique_id=1371114887 instance=ExtResource("17_om42l")]
 position = Vector2(211, -25)
-script = null
+sc = SubResource("Resource_8jild")
 
 [node name="TestPhysicalInventory2" parent="WorldRoot/Testing" unique_id=1601414041 instance=ExtResource("17_om42l")]
 position = Vector2(295, 6)
-script = null
+sc = SubResource("Resource_yng6w")
 
 [node name="TestRock5" parent="WorldRoot/Testing" unique_id=57795637 instance=ExtResource("30_yw2f7")]
 position = Vector2(437, 158)
-script = null
+sc = SubResource("Resource_01d0t")
 
 [node name="TestRock6" parent="WorldRoot/Testing" unique_id=2035171885 instance=ExtResource("30_yw2f7")]
 position = Vector2(466, 144)
-script = null
+sc = SubResource("Resource_4ti61")
 
 [node name="TestRock7" parent="WorldRoot/Testing" unique_id=533817210 instance=ExtResource("30_yw2f7")]
 position = Vector2(476, 111)
-script = null
+sc = SubResource("Resource_4psjl")
 
 [node name="Player" parent="WorldRoot" unique_id=1397958159 instance=ExtResource("4_ptig0")]
 position = Vector2(278, 70)
@@ -511,45 +495,8 @@ offset_right = 43.0
 offset_bottom = 12.0
 label_settings = SubResource("LabelSettings_lfc2v")
 
-[node name="StormBase" type="StaticBody2D" parent="WorldRoot" unique_id=2006606270]
+[node name="StormBase" parent="WorldRoot" unique_id=179645369 instance=ExtResource("21_yw1c5")]
 position = Vector2(210, 105)
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="WorldRoot/StormBase" unique_id=764321826]
-shape = SubResource("RectangleShape2D_f5fhq")
-debug_color = Color(0.6905431, 0.28825647, 1, 0.2509804)
-
-[node name="EntitySprite" parent="WorldRoot/StormBase" unique_id=210877695 instance=ExtResource("35_vi22v")]
-unique_name_in_owner = true
-scale = Vector2(0.049, 0.049)
-sprite_frames = SubResource("SpriteFrames_hkn5b")
-
-[node name="InteractionArea" parent="WorldRoot/StormBase" unique_id=897230405 instance=ExtResource("36_e5rpg")]
-prompt_radius = 36.0
-interaction_offer = SubResource("Resource_fx52i")
-prompt_offset = Vector2(0, -23)
-
-[node name="ClippingArea" parent="WorldRoot/StormBase" unique_id=1945922444 instance=ExtResource("48_8jild")]
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="WorldRoot/StormBase/ClippingArea" unique_id=303179079]
-shape = SubResource("RectangleShape2D_yng6w")
-
-[node name="ParticleEmissionComponent" parent="WorldRoot/StormBase" unique_id=664148868 instance=ExtResource("41_f5fhq")]
-
-[node name="DetectionComponent" parent="WorldRoot/StormBase" unique_id=1117738263 instance=ExtResource("42_1606r")]
-
-[node name="EffectReceiverComponent" parent="WorldRoot/StormBase" unique_id=1334489604 node_paths=PackedStringArray("dh_handler", "heal_handler") instance=ExtResource("43_1606r")]
-absorb_full_hit = true
-dh_handler = NodePath("DmgHandler")
-heal_handler = NodePath("HealHandler")
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="WorldRoot/StormBase/EffectReceiverComponent" unique_id=1132405210]
-shape = SubResource("RectangleShape2D_1606r")
-
-[node name="DmgHandler" parent="WorldRoot/StormBase/EffectReceiverComponent" unique_id=1438880581 instance=ExtResource("44_hkn5b")]
-
-[node name="HealHandler" parent="WorldRoot/StormBase/EffectReceiverComponent" unique_id=1513805475 instance=ExtResource("45_340rl")]
-
-[node name="HealthComponent" parent="WorldRoot/StormBase" unique_id=1652722790 instance=ExtResource("43_hkn5b")]
 
 [node name="Storm" type="Node2D" parent="WorldRoot" unique_id=1746738981 groups=["core", "has_save_logic"]]
 unique_name_in_owner = true
@@ -558,9 +505,7 @@ z_index = -2
 z_as_relative = false
 position = Vector2(189, 143)
 script = ExtResource("22_0op7h")
-auto_start = null
-transform_queue = Array[ExtResource("40_27u15")]([SubResource("Resource_h3uly")])
-default_storm_visuals = ExtResource("27_5uvpk")
+default_storm_condition = SubResource("Resource_nton5")
 metadata/_edit_group_ = true
 
 [node name="SafeZone" type="Area2D" parent="WorldRoot/Storm" unique_id=208631793]

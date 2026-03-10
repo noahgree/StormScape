@@ -12,14 +12,13 @@
 [ext_resource type="PackedScene" uid="uid://btba0jmsow1mx" path="res://Entities/Components/EffectComponents/ESIReceiverComponent/ESIReceiverComponent.tscn" id="7_ftqus"]
 [ext_resource type="Texture2D" uid="uid://v1rdlj54siql" path="res://Entities/Environment/Objects/SimpleBoxCT.tres" id="7_mdi77"]
 [ext_resource type="Script" uid="uid://baglarh3m4c8o" path="res://Entities/Components/ItemComponents/LootTableComponent/LootTableResource.gd" id="9_2xjsy"]
-[ext_resource type="Script" uid="uid://dk6uef3uxmeev" path="res://Entities/Components/EffectComponents/ESIReceiverComponent/EffectHandlers/KnockbackHandler.gd" id="11_ccp8j"]
 [ext_resource type="PackedScene" uid="uid://cj2wy5f05cos4" path="res://Entities/EntityCore/Shadow/EntityShadow.tscn" id="14_2xjsy"]
 [ext_resource type="PackedScene" uid="uid://co3n6m7efg8pd" path="res://Entities/Components/EffectComponents/ConditionsComponent/ConditionsComponent.tscn" id="14_20kf8"]
 [ext_resource type="Script" uid="uid://1qq7eo7lm8j6" path="res://Entities/Components/ItemComponents/LootTableComponent/LootTableEntry.gd" id="16_fkdnf"]
 [ext_resource type="PackedScene" uid="uid://jpq0ij8wwlhy" path="res://Entities/Components/FacingComponent/FacingComponent.tscn" id="24_i2rwd"]
 [ext_resource type="PackedScene" uid="uid://2yy4xfm5g74l" path="res://Entities/Components/ItemComponents/ClippingComponent/ClippingArea.tscn" id="28_2xjsy"]
 
-[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_ysumm"]
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_xborh"]
 rough = true
 
 [sub_resource type="Resource" id="Resource_arbka"]
@@ -35,7 +34,7 @@ script = ExtResource("6_fg1br")
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_sbju2"]
 size = Vector2(18, 18)
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_ps53t"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ysumm"]
 resource_local_to_scene = true
 shader = ExtResource("4_l6rwf")
 
@@ -54,31 +53,6 @@ animations = [{
 "speed": 5.0
 }]
 
-[sub_resource type="Resource" id="Resource_7o0qb"]
-resource_local_to_scene = true
-script = ExtResource("11_ccp8j")
-metadata/_custom_type_script = "uid://dk6uef3uxmeev"
-
-[sub_resource type="Resource" id="Resource_8lyar"]
-resource_local_to_scene = true
-metadata/_custom_type_script = "uid://5krnqdrdbey1"
-
-[sub_resource type="Resource" id="Resource_nv7a0"]
-resource_local_to_scene = true
-metadata/_custom_type_script = "uid://bqw1ufs6jb7cf"
-
-[sub_resource type="Resource" id="Resource_ljryo"]
-resource_local_to_scene = true
-metadata/_custom_type_script = "uid://b1lo2mdb3otax"
-
-[sub_resource type="Resource" id="Resource_i2rwd"]
-resource_local_to_scene = true
-metadata/_custom_type_script = "uid://dubq8xgav66ue"
-
-[sub_resource type="Resource" id="Resource_fg1br"]
-resource_local_to_scene = true
-metadata/_custom_type_script = "uid://ckiyd2nbdcofr"
-
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_wpovd"]
 size = Vector2(18, 18)
 
@@ -86,7 +60,7 @@ size = Vector2(18, 18)
 collision_layer = 32
 collision_mask = 245
 mass = 3.0
-physics_material_override = SubResource("PhysicsMaterial_ysumm")
+physics_material_override = SubResource("PhysicsMaterial_xborh")
 gravity_scale = 0.0
 lock_rotation = true
 linear_damp = 4.5
@@ -106,7 +80,7 @@ debug_color = Color(1.44392e-06, 0.568839, 0.851513, 0.42)
 
 [node name="EntitySprite" parent="." unique_id=213399511 instance=ExtResource("3_nv7a0")]
 unique_name_in_owner = true
-material = SubResource("ShaderMaterial_ps53t")
+material = SubResource("ShaderMaterial_ysumm")
 instance_shader_parameters/brightness_mult = 1.0
 instance_shader_parameters/crack_color = Color(0.246, 0.109, 0.01, 0.85)
 instance_shader_parameters/crack_intensity = 1.0
@@ -129,27 +103,15 @@ offset_bottom = 2.0
 
 [node name="HPComponent" parent="." unique_id=2105530722 instance=ExtResource("6_1wa26")]
 
-[node name="ESIReceiverComponent" parent="." unique_id=1427875003 node_paths=PackedStringArray("affected_entity", "dmg_handler", "heal_handler") instance=ExtResource("7_ftqus")]
+[node name="ESIReceiverComponent" parent="." unique_id=1427875003 instance=ExtResource("7_ftqus")]
 position = Vector2(0, -9)
-knockback_handler = SubResource("Resource_7o0qb")
-poison_handler = SubResource("Resource_8lyar")
-regen_handler = SubResource("Resource_nv7a0")
-frostbite_handler = SubResource("Resource_ljryo")
-burning_handler = SubResource("Resource_i2rwd")
-life_steal_handler = SubResource("Resource_fg1br")
-affected_entity = NodePath("..")
-dmg_handler = NodePath("")
-heal_handler = NodePath("")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="ESIReceiverComponent" unique_id=1659667704]
 shape = SubResource("RectangleShape2D_wpovd")
 debug_color = Color(0.941042, 1.32841e-05, 0.612344, 0.42)
 
-[node name="ConditionsComponent" parent="." unique_id=907488759 node_paths=PackedStringArray("effect_receiver", "effect_src_receiver") instance=ExtResource("14_20kf8")]
+[node name="ConditionsComponent" parent="." unique_id=907488759 instance=ExtResource("14_20kf8")]
 unique_name_in_owner = true
-print_effect_updates = true
-effect_receiver = NodePath("../ESIReceiverComponent")
-effect_src_receiver = NodePath("../ESIReceiverComponent")
 
 [node name="FacingComponent" parent="." unique_id=1985141125 instance=ExtResource("24_i2rwd")]
 

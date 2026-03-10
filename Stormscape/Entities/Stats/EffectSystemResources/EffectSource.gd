@@ -6,10 +6,23 @@ class_name EffectSource
 ## This contains all the data needed by an esi receiver, and nothing more. Textures, animations, hitboxes, etc.
 ## should be handled by the producer of this effect source. This is purely data.
 
-enum ESType { NORMAL, CHARGE, AOE } ## The kinds of effect sources that can be modified.
+enum Type { NORMAL, CHARGE, AOE } ## The kinds of effect sources that can be modified.
+
+enum SourceType {
+	FROM_DEFAULT, ## For any effect source that does not come from any of the below types.
+	FROM_PROJECTILE, ## For damage coming from any normal projectile like a bullet from a sniper or pistol.
+	FROM_EXPLOSION, ## For damage coming from AOEs that explode.
+	FROM_GROUND_AOE, ## For damage coming from AOEs that exist on the ground like a poison puddle or aftermath of a molotov.
+	FROM_MAGIC, ## For magic weapons.
+	FROM_TOOL, ## For melee weapons like pickaxes and axes that exist primary to interact with the world resources.
+	FROM_PHYSICAL_CONTACT, ## For physcial interactions like a punch or running into something with a hitbox attached to the body.
+	FROM_COMBAT_MELEE, ## For melee weapons that are primarily damaging weapons like a sword (not tools like the pickaxe).
+	FROM_CONSUMABLE, ## For receiving effects from consuming consumables.
+	FROM_EOT ## For receiving effects from effect over time stats.
+}
 
 @export_group("General")
-@export var source_type: ESI.ESISourceType ## A tag used to determine the source of the effect source. See Globals class for details on the tags.
+@export var source_type: SourceType ## A tag used to determine the source of the effect source. See Globals class for details on the tags.
 @export var source_tags: Array[String] = [] ## Additional information to pass to whatever receieves this effect source to make sure it should apply.
 @export_flags_2d_physics var scanned_phys_layers: int = 0b1101111 ## The collision mask that this source scans in order to apply affects to.
 @export_subgroup("Team Logic")

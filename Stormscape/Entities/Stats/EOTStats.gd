@@ -4,7 +4,7 @@ class_name EOTStats
 
 @export_group("Timing")
 @export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var duration: float = 8.0 ## How long all ticks should take, in total.
-@export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var start_delay: float = 1.0 ## The delay before this effect starts.
+@export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var tick_delay: float = 1.0 ## The delay before the ticking starts.
 @export var perpetual: bool = false ## When true, the esi from the first element in the esi array will continue to be applied until the source condition is removed.
 @export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var perpetual_interval: float = 2.0 ## The time between applying the same effect amount when perpetual is true.
 
@@ -17,4 +17,3 @@ class_name EOTStats
 
 @export_group("Stat Mods")
 @export var stat_mods: Array[StatMod] ## The mods applied by this effect. Do not have duplicates in this array.
-@export var delay_stats_too: bool = false ## When true, these stat mods won't get applied until after the start delay.

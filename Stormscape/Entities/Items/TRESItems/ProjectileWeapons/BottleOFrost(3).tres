@@ -7,20 +7,16 @@
 [ext_resource type="Texture2D" uid="uid://ndv23me2pjpp" path="res://Entities/Items/Weapons/ProjectileWeapons/BottleOFrost/BottleOFrostBaseCT.tres" id="5_hqxuj"]
 [ext_resource type="Script" uid="uid://cje5bobi6o8bo" path="res://Entities/Items/Hitscans/HitscanStats.gd" id="6_36ar8"]
 [ext_resource type="Texture2D" uid="uid://bpeyfequ1my8c" path="res://Entities/Items/Weapons/ProjectileWeapons/BottleOFrost/BottleOFrostThrowableCT.tres" id="7_bgdcb"]
-[ext_resource type="Resource" uid="uid://mj7sofyhdcaj" path="res://Entities/Stats/EffectSystemResources/Conditions/BadEffects/Frostbite/Frostbite1Ground.tres" id="10_bgdcb"]
 [ext_resource type="PackedScene" uid="uid://b5rrhd6ano4sf" path="res://Entities/Items/Projectiles/ProjectileCore/AreaOfEffectVFX/FreezingAOEVFX.tscn" id="11_4q57q"]
 [ext_resource type="PackedScene" uid="uid://c6qs5fggipaja" path="res://Entities/Items/Weapons/ProjectileWeapons/BottleOFrost/BottleOFrost.tscn" id="12_hqxuj"]
 [ext_resource type="PackedScene" uid="uid://355ervipd44s" path="res://Entities/Items/Projectiles/Explosives/FrostBottle/FrostBottle.tscn" id="12_ns2jq"]
 [ext_resource type="Script" uid="uid://bj3r5oopspj6l" path="res://Entities/Items/Projectiles/ProjectileCore/ProjStats.gd" id="12_oiymh"]
 [ext_resource type="Script" uid="uid://ctxa7i1mbt7ab" path="res://Entities/Player/UI/Inventory/Panels/CraftingPanel/CraftingIngredient.gd" id="13_bx1py"]
-[ext_resource type="Script" uid="uid://c2gdoebfp12dq" path="res://Entities/Stats/StatMod/StatModsCache.gd" id="15_a3lcf"]
 [ext_resource type="Script" uid="uid://dvasncq3tgljs" path="res://Entities/Items/Weapons/ProjectileWeapons/ProjWeaponCore/ProjWeaponStats.gd" id="15_ns2jq"]
 
 [sub_resource type="Resource" id="Resource_bgdcb"]
 script = ExtResource("2_4q57q")
 source_type = 1
-bad_effect_affected_teams = 3
-good_effect_affected_teams = 3
 impact_cam_fx = ExtResource("1_bgdcb")
 
 [sub_resource type="Resource" id="Resource_4q57q"]
@@ -38,10 +34,7 @@ point_count = 2
 [sub_resource type="Resource" id="Resource_be5sn"]
 script = ExtResource("2_4q57q")
 source_type = 3
-bad_effect_affected_teams = 3
-good_effect_affected_teams = 3
 base_damage = 10
-status_effects = Array[ExtResource("3_be5sn")]([ExtResource("10_bgdcb")])
 
 [sub_resource type="Curve" id="Curve_4q57q"]
 _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
@@ -75,9 +68,6 @@ aoe_effect_dur = 5.0
 aoe_effects_delay = 0.0
 aoe_vfx = ExtResource("11_4q57q")
 
-[sub_resource type="Resource" id="Resource_xpvhm"]
-script = ExtResource("15_a3lcf")
-
 [resource]
 script = ExtResource("15_ns2jq")
 proj_weapon_type = 8
@@ -92,7 +82,6 @@ ammo_type = 1
 mag_size = -1
 no_levels = true
 max_mods_override = 0
-s_mods = SubResource("Resource_xpvhm")
 id = "bottle_o_frost"
 name = "Bottle O' Frost"
 item_type = 1
@@ -105,6 +94,5 @@ in_hand_icon = ExtResource("7_bgdcb")
 inv_icon = ExtResource("5_hqxuj")
 recipe_unlocked = false
 item_scene = ExtResource("12_hqxuj")
-cooldowns_per_suid = false
 shown_cooldown_fills = Array[String](["default"])
 show_cursor_cooldown = true

@@ -191,10 +191,6 @@ point_count = 2
 
 [sub_resource type="Resource" id="Resource_rdrbb"]
 script = ExtResource("32_lo25j")
-time_snare_weakness = null
-time_snare_resistance = null
-confusion_weakness = null
-confusion_resistance = null
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_7dc0v"]
 size = Vector2(14, 15)
@@ -1222,10 +1218,8 @@ unique_name_in_owner = true
 hand_texture = ExtResource("48_ou5t4")
 time_brightness_min_max = Vector2(1, 1.15)
 
-[node name="ConditionsComponent" parent="YSorter" unique_id=1452723470 node_paths=PackedStringArray("effect_receiver") instance=ExtResource("6_n0x5k")]
+[node name="ConditionsComponent" parent="YSorter" unique_id=1452723470 instance=ExtResource("6_n0x5k")]
 unique_name_in_owner = true
-print_effect_updates = true
-effect_receiver = NodePath("../../ESIReceiverComponent")
 
 [node name="StepDustParticles" type="CPUParticles2D" parent="." unique_id=1633712229]
 z_index = -1
@@ -1450,7 +1444,7 @@ vertical_alignment = 1
 
 [node name="MessageManager" parent="OverlayUI" unique_id=1637142411 instance=ExtResource("91_xsics")]
 
-[node name="PlayerStatsHUD" type="MarginContainer" parent="OverlayUI" unique_id=1841421673 node_paths=PackedStringArray("stamina_component")]
+[node name="PlayerStatsHUD" type="MarginContainer" parent="OverlayUI" unique_id=1841421673 node_paths=PackedStringArray("hp_component", "stamina_component")]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(140, 0)
 anchors_preset = 2
@@ -1464,6 +1458,7 @@ theme_override_constants/margin_top = 3
 theme_override_constants/margin_right = 3
 theme_override_constants/margin_bottom = 3
 script = ExtResource("35_yln51")
+hp_component = NodePath("../../HPComponent")
 stamina_component = NodePath("../../StaminaComponent")
 
 [node name="BarsHBox" type="HBoxContainer" parent="OverlayUI/PlayerStatsHUD" unique_id=989772940]

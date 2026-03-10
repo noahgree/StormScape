@@ -50,10 +50,6 @@ animations = [{
 "speed": 5.0
 }]
 
-[sub_resource type="Resource" id="Resource_3mtfl"]
-resource_local_to_scene = true
-metadata/_custom_type_script = "uid://ckiyd2nbdcofr"
-
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_opl06"]
 size = Vector2(14, 14)
 
@@ -94,19 +90,14 @@ infinte_hp = true
 
 [node name="ParticleEmissionComponent" parent="." unique_id=2083625814 instance=ExtResource("6_5h6dj")]
 
-[node name="ESIReceiverComponent" parent="." unique_id=1081717184 node_paths=PackedStringArray("affected_entity", "dmg_handler") instance=ExtResource("10_o35vp")]
-life_steal_handler = SubResource("Resource_3mtfl")
-affected_entity = NodePath("..")
-dmg_handler = NodePath("")
+[node name="ESIReceiverComponent" parent="." unique_id=1081717184 instance=ExtResource("10_o35vp")]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="ESIReceiverComponent" unique_id=947968318]
 position = Vector2(0, -7)
 shape = SubResource("RectangleShape2D_opl06")
 
-[node name="ConditionsComponent" parent="." unique_id=1858307203 node_paths=PackedStringArray("effect_receiver", "effect_src_receiver") instance=ExtResource("11_swclu")]
+[node name="ConditionsComponent" parent="." unique_id=1858307203 instance=ExtResource("11_swclu")]
 unique_name_in_owner = true
-effect_receiver = NodePath("../ESIReceiverComponent")
-effect_src_receiver = NodePath("../ESIReceiverComponent")
 
 [node name="ClippingArea" parent="." unique_id=421497682 instance=ExtResource("22_h0qkk")]
 

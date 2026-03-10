@@ -5,20 +5,10 @@ class_name DHHandler
 
 enum Type { DAMAGE, HEALING } ## For differentiating which we are working on when passing values around methods.
 
-@onready var affected_entity: Entity = owner ## The entity affected by this dh handler.
-@onready var hp_component: HPComponent = owner.hp_component ## The hp component to be affected by the incoming amounts.
-
-const PROCESS_INTERVAL: float = 0.1 ##  ## How often we should process the EOTIs. Helps with performance.
-
-var actives: Dictionary[Array, Dictionary] = {} ## The active effect over time instances running on this node. { [condition_id, source_type] : { eoti_uid : eoti } }.
-var actives_by_id: Dictionary[Condition.ID, Dictionary] ## Another way of storing the active effect over time instances. { condition_id : { source_type : [eoti_uid] } }.
-var tick_accumulator: float ## Tracks time since last tick.
+@onready var affected_entity: Entity = owner if owner is Entity else null ## The entity affected by this dh handler.
+@onready var hp_component: HPComponent = owner.hp_component if owner is Entity else null ## The hp component to be affected by the incoming amounts.
 
 
-func _ready() -> void:
-	set_process(false) # Wait until we have an active EOTI to start processing
-
-#region Instant Amounts
 func handle_instant_amount(type: Type, popup_type: HPComponent.POPUP_TYPE, esi: ESI) -> int:
 	var amount: int = 0
 	var is_crit: bool = false
@@ -128,68 +118,6 @@ func _apply_final_adjustments(amount: int, type: Type) -> int:
 		var multiplier: float = 1.0 + (heal_affinity / 100.0) - (heal_reduction / 100.0)
 		multiplier = clamp(multiplier, 0.0, 2.0)
 		return max(0, amount * multiplier)
-#endregion
-
-
-#region Amounts Over Time
-func handle_eoti(eoti: EOTI) -> void:
-	if eoti.esi_ticks.is_empty():
-		return
-
-	eoti.uid = UIDHelper.generate_eoti_uid()
-	eoti.all_ticks_completed.connect(_remove_eoti_from_actives)
-
-	var key: Array = eoti.get_key()
-	if eoti.source_condition.id in actives:
-		actives[key][eoti.uid] = eoti
-		if eoti.source_condition.source_type in actives_by_id[eoti.source_condition.id]:
-			actives_by_id[eoti.source_condition.id][eoti.source_condition.source_type].append(eoti.uid)
-		else:
-			actives_by_id[eoti.source_condition.id][eoti.source_condition.source_type] = [eoti.uid]
-	else:
-		actives[key] = { eoti.uid : eoti }
-		actives_by_id[eoti.source_condition.id] = { eoti.source_condition.source_type : [eoti.uid] }
-
-	set_process(true)
-
-func _remove_eoti_from_actives(condition_id: Condition.ID, source_type: Condition.SourceType,
-								eoti_uid: int) -> void:
-	var key: Array = [condition_id, source_type]
-	if key not in actives:
-		push_warning(affected_entity.name + " tried to remove an EOTI from the active EOTI tracker using a condition ID that was not even being tracked.")
-		return
-
-	actives[key].erase(eoti_uid)
-	if actives[key].is_empty():
-		actives.erase(key)
-	actives_by_id[condition_id][source_type].erase(eoti_uid)
-	if actives_by_id[condition_id][source_type].is_empty():
-		actives_by_id[condition_id].erase(source_type)
-	if actives_by_id[condition_id].is_empty():
-		actives_by_id.erase(condition_id)
-
-	if actives.is_empty():
-		set_process(false)
-
-func stop_eotis_for_condition_id(condition_id: Condition.ID) -> void:
-	for source_type: Condition.SourceType in actives_by_id[condition_id]:
-		for eoti_uid: int in actives_by_id[condition_id][source_type]:
-			_remove_eoti_from_actives(condition_id, source_type, eoti_uid)
-
-func stop_eotis_by_source_type(condition_id: Condition.ID, source_type: Condition.SourceType) -> void:
-	for eoti_uid: int in actives.get([condition_id, source_type]):
-		_remove_eoti_from_actives(condition_id, source_type, eoti_uid)
-
-func _process(delta: float) -> void:
-	tick_accumulator += delta
-
-	while tick_accumulator >= PROCESS_INTERVAL:
-		tick_accumulator -= PROCESS_INTERVAL
-		for eoti_key: Array in actives:
-			for eoti_uid: int in actives[eoti_key]:
-				actives[eoti_key][eoti_uid].process(delta)
-#endregion
-
 
 ## Sends the affected entity's hp component the final amount values based on what stats the amount was
 ## allowed to affect.
