@@ -32,6 +32,7 @@ script = ExtResource("2_gwjg5")
 source_type = 1
 can_hit_self = false
 base_damage = 24
+dmg_affected_stats = 4
 crit_chance = 5
 crit_multiplier = 1.25
 metadata/_custom_type_script = "uid://dkfssottmsrch"

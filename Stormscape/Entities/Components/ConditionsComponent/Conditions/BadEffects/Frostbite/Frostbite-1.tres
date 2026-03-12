@@ -28,7 +28,7 @@ source_type = 9
 base_damage = 2
 dmg_affected_stats = 0
 dmg_popup_type = 6
-hit_flash_color = Color(0.54509807, 0.91764706, 1, 0.6)
+hit_flash_color = Color(0.3882353, 1, 1, 0.6)
 metadata/_custom_type_script = "uid://dkfssottmsrch"
 
 [sub_resource type="Resource" id="Resource_i7ap4"]

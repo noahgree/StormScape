@@ -13,9 +13,9 @@ enum UpdateTypes { OVERRIDE, REVERT_TO_DEFAULT, KEEP_PREVIOUS } ## The methods f
 @export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var time_to_resize: float = 10.0 ## The time it takes for the resizing to complete.
 @export var auto_advance: bool = true ## When false, the storm queue will not advance past the end of this phase until manually called upon to do so.
 
-@export_subgroup("Condition")
-@export var condition_setting: UpdateTypes = UpdateTypes.KEEP_PREVIOUS ## Determines how to change the condition for this incoming phase.
-@export var condition: Condition = null ## The new condition to apply. Leave null to keep the old one. [b]MUST NOT REQUIRE AN EFFECT SOURCE[/b] because no source entity or movement direction information will be passed (Knockback, LifeSteal).
+@export_subgroup("Effect Source")
+@export var es_setting: UpdateTypes = UpdateTypes.KEEP_PREVIOUS ## Determines how to change the effect source (and by connection, the condition) for this incoming phase.
+@export var effect_source: EffectSource = null ## The new effect source to apply. Leave null to keep the old one.
 
 @export_subgroup("Visuals")
 @export var visuals_setting: UpdateTypes = UpdateTypes.KEEP_PREVIOUS ## Determines how to apply visuals for this incoming phase.

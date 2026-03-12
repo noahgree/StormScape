@@ -39,13 +39,12 @@ const HOTBAR_SIZE: int = 10
 const AMMO_BAR_SIZE: int = 4
 const CURRENCY_BAR_SIZE: int = 3
 
-# EffectReceiver & StatModManager
+# Teaming
 enum Teams {
 	PLAYER = 1 << 0, ## The player team (against the enemies).
 	ENEMY = 1 << 1, ## The enemy team (against the player).
 	PASSIVE = 1 << 2 ## Does not heal or damage anything. Just exists.
 }
-enum DHTypes { HEALTH_ONLY, SHIELD_ONLY, SHIELD_THEN_HEALTH, HEALTH_THEN_SHIELD, SIMULTANEOUS }
 enum BadAffectedTeams { ENEMIES = 1 << 0, ALLIES = 1 << 1 }
 enum GoodAffectedTeams { ENEMIES = 1 << 0, ALLIES = 1 << 1 }
 

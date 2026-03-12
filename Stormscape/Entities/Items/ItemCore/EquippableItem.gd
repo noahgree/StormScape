@@ -5,7 +5,7 @@ class_name EquippableItem
 ## In order to be equipped and shown on screen in some place other than the inventory,
 ## the item resource must have an associated equippable item scene.
 
-@export var ii: II: set = _set_ii ## The resource driving the stats and type of item.
+@export_storage var ii: II: set = _set_ii ## The resource driving the stats and type of item.
 @export var sprites_to_tint: Array[Node2D] ## All sprites that should be affected by tinting during events such as "disable".
 
 @onready var sprite: Node2D = $ItemSprite ## The main sprite for the equippable item. Should have the entity effect shader attached.

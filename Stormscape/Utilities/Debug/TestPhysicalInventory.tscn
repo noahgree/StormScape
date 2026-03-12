@@ -98,6 +98,8 @@ _max_shield = 0
 
 [node name="ConditionsComponent" parent="." unique_id=1885960744 instance=ExtResource("9_w3nan")]
 unique_name_in_owner = true
+filter = 1
+manual_filter = Array[int]([0, 10])
 
 [node name="ESIReceiverComponent" parent="." unique_id=1762623481 instance=ExtResource("11_5wq56")]
 

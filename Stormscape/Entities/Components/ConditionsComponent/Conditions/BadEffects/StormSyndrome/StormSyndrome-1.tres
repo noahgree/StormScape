@@ -20,12 +20,12 @@ source_type = 9
 base_damage = 1
 dmg_affected_stats = 0
 dmg_popup_type = 10
-hit_flash_color = Color(0.65882355, 0.40392157, 1, 0.6)
 metadata/_custom_type_script = "uid://dkfssottmsrch"
 
 [sub_resource type="Resource" id="Resource_3hyjv"]
 script = ExtResource("1_u5d2w")
 perpetual = true
+tick_count = 1
 ticks_array = Array[ExtResource("3_h8s8y")]([SubResource("Resource_t28lc")])
 stat_mods = Array[ExtResource("2_qqjda")]([SubResource("Resource_u5d2w")])
 metadata/_custom_type_script = "uid://20acrt2hb6y"

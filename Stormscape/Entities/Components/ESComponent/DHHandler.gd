@@ -5,13 +5,19 @@ class_name DHHandler
 
 enum Type { DAMAGE, HEALING } ## For differentiating which we are working on when passing values around methods.
 
+enum DHType { HEALTH_ONLY, SHIELD_ONLY, SHIELD_THEN_HEALTH, HEALTH_THEN_SHIELD, SIMULTANEOUS } ## The orders in which damage and healing can be applied to health, shield, or both.
+
 @onready var affected_entity: Entity = get_parent().owner if get_parent().owner is Entity else null ## The entity affected by this dh handler.
 
 
-func handle_instant_amount(type: Type, popup_type: HPComponent.POPUP_TYPE, esi: ESI) -> int:
+func handle_instant_amount(type: Type, esi: ESI) -> int:
 	var amount: int = 0
+	var popup_type: EffectPopup.POPUP_TYPE = EffectPopup.POPUP_TYPE.AUTO
 	var is_crit: bool = false
 	if type == Type.DAMAGE:
+		# --- Assigning Popup Type ---
+		popup_type = esi.es.dmg_popup_type
+
 		# --- Base Damage ---
 		var base_damage: int = ceili(esi.get_stat(&"base_damage"))
 		if base_damage == 0:
@@ -30,6 +36,9 @@ func handle_instant_amount(type: Type, popup_type: HPComponent.POPUP_TYPE, esi: 
 		amount = _apply_armor_blocking(amount, esi)
 		amount = _apply_object_scaling(amount, esi)
 	else:
+		# --- Assigning Popup Type ---
+		popup_type = esi.es.heal_popup_type
+
 		# --- Base Healing ---
 		var base_healing: int = ceili(esi.get_stat(&"base_healing"))
 		if base_healing == 0:
@@ -43,7 +52,7 @@ func handle_instant_amount(type: Type, popup_type: HPComponent.POPUP_TYPE, esi: 
 
 	# --- Get XP to Return ---
 	var xp_gain: int = _calculate_resulting_xp(amount)
-	popup_type = popup_type if not is_crit else HPComponent.POPUP_TYPE.CRIT_DAMAGE
+	popup_type = popup_type if not is_crit else EffectPopup.POPUP_TYPE.CRIT_DAMAGE
 
 	# --- Adjustments for Overall Dmg & Heal Resistance & Weakness ---
 	amount = _apply_final_adjustments(amount, type)
@@ -123,7 +132,7 @@ func _apply_final_adjustments(amount: int, type: Type) -> int:
 
 ## Sends the affected entity's hp component the final amount values based on what stats the amount was
 ## allowed to affect.
-func send_handled_amount(type: Type, amount: int, popup_type: HPComponent.POPUP_TYPE, esi: ESI) -> void:
+func send_handled_amount(type: Type, amount: int, popup_type: EffectPopup.POPUP_TYPE, esi: ESI) -> void:
 	if type == Type.DAMAGE:
 		_handle_life_steal(amount, esi)
 		affected_entity.hp_component.change_by_dh_type(-amount, popup_type, esi.es.dmg_affected_stats, esi.multishot_id)
@@ -139,7 +148,7 @@ func _handle_life_steal(damage_amount: int, esi: ESI) -> void:
 	if (esi.source_entity == null) or (affected_entity.hp_component.infinte_hp):
 		return
 
-	var ls_condition_index: int = esi.conditions.find(LifeStealStats)
+	var ls_condition_index: int = esi.get_condition_index_by_id(Condition.ID.LIFE_STEAL)
 	if ls_condition_index == -1:
 		return
 	var ls_condition: LifeStealStats = esi.conditions.get(ls_condition_index)
@@ -155,4 +164,4 @@ func _handle_life_steal(damage_amount: int, esi: ESI) -> void:
 
 	var clamped_steal_amount: int = max(1, roundi(steal_amount * multiplier))
 
-	esi.source_entity.hp_component.change_by_dh_type(clamped_steal_amount, HPComponent.POPUP_TYPE.LIFE_STEAL, Globals.DHTypes.HEALTH_THEN_SHIELD)
+	esi.source_entity.hp_component.change_by_dh_type(clamped_steal_amount, EffectPopup.POPUP_TYPE.LIFE_STEAL, DHHandler.DHType.HEALTH_THEN_SHIELD)

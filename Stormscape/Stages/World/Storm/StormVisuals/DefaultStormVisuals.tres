@@ -4,7 +4,3 @@
 
 [resource]
 script = ExtResource("1_a2p73")
-day_see_thru = 0.0
-night_see_thru = 100.0
-storm_gradient_colors = Array[Color]([Color(0.577785, 0.22228, 0.581005, 0.301), Color(0.503, 0.003, 0.914, 0.243), Color(0.373824, 0.00164145, 0.808406, 0.522), Color(0.291, 0.001, 0.71, 0.615)])
-final_color_distance = 500.0

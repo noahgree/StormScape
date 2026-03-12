@@ -128,6 +128,7 @@ shape = SubResource("CapsuleShape2D_mc2cg")
 
 [node name="ConditionsComponent" parent="." unique_id=1861356536 instance=ExtResource("17_hg3w7")]
 unique_name_in_owner = true
+filter = 3
 
 [node name="ParticleEmissionComponent" parent="." unique_id=437844945 instance=ExtResource("18_m60nn")]
 below_extents = Vector2(16, 2)

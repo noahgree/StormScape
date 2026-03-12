@@ -24,11 +24,16 @@ class_name StormVisuals
 @export var ripple_speed: float = 0.5 ## Controls the speed of how fast the ripples move away from the center.
 
 @export_group("Rain")
-@export var rain_amount: int = 0 ## WARNING: These are bad for performance. Avoid values over 35. Controls the amount of rain particles.
+@export var rain_amount: int = 0 ## WARNING: These are bad for performance. Avoid values over 200. Controls the amount of rain particles.
 @export_range(-1.5, 1.5, 0.01) var rain_slant: float = 0.15 ## Controls the angle at which the rain moves across the screen.
-@export_range(5.0, 100.0, 1) var rain_speed: float = 25.0 ## Controls how fast the rain moves across the screen.
-@export var rain_color: Color = Color(0.857, 0.903, 1, 0.417) ## Controls the color of the rain particles.
+@export_range(5.0, 100.0, 1) var rain_speed: float = 20.0 ## Controls how fast the rain moves across the screen.
+@export var rain_color: Color = Color(0.857, 0.903, 1, 0.35) ## Controls the color of the rain particles.
 @export var rain_size: Vector2 = Vector2(0.008, 0.19) ## Controls the sizing in the x and y direction of the rain particles.
+
+@export_group("Lightning")
+@export var lightning_frequency: float = 0 ## How much should we check the chance to see if we can trigger a flash. Higher values mean more checks. 0.65 is a good standard value when you want this on.
+@export var lightning_chance: float = 0.15 ## How high of a chance there is to actually trigger the lightning each time it is allowed to (which is dictated by the frequency).
+@export var lightning_intensity: float = 1.0 ## How bright the flashes are.
 
 @export_group("Wind")
 @export var wind_brightness: float = 1.25 ## Controls how dense and bright the windy cloud patterns are.

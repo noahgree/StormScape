@@ -7,7 +7,7 @@ class_name ESI
 var es_stat_overrides: Dictionary[StringName, float] ## The overrides to use instead when accessing stats from the es.
 var conditions: Array[Condition] ## The modifiable list of conditions for the effect source.
 var source_entity: Entity: set = _set_source_entity, get = _get_source_entity ## The entity that produced this ESI.
-var source_entity_team: Globals.Teams = Globals.Teams.PLAYER ## A local copy of the last known source entity's team. Stored in case the source entity is freed but we still need the team it was on.
+var source_entity_team: Globals.Teams = Globals.Teams.ENEMY ## A local copy of the last known source entity's team. Stored in case the source entity is freed but we still need the team it was on.
 var source_ii: II: set = _set_source_ii, get = _get_source_ii ## The item instance that produced this ESI.
 var source_ii_lvl: int = 0 ## A local copy of the last known source II's level. Stored in case the source II is freed but we still need the level it was at. Always set to 0 by default for if the source II was not a weapon.
 var source_condition: Condition ## The condition that sent out this ESI, usually originating from an EOTI. Will be null if this ESI does not come from a condition.
@@ -51,7 +51,7 @@ func copy() -> ESI:
 	new.conditions = conditions.duplicate()
 	return new
 
-## Called externally to set both at the same time.
+## Called externally to set all three properties at the same time.
 func set_source_info(src_entity: Entity, src_ii: II, src_condition: Condition = null) -> void:
 	source_entity = src_entity
 	source_ii = src_ii
@@ -94,9 +94,19 @@ func get_stat(stat_id: StringName) -> float:
 func get_original_stat(stat_id: StringName) -> float:
 	return es.get(stat_id)
 
+## Gets an existing condition index that matches the condition id, regardless of level.
+## Does not handle duplicates.
+func get_condition_index_by_id(condition_id: Condition.ID) -> int:
+	var i: int = 0
+	for condition: Condition in conditions:
+		if condition.id == condition_id:
+			return i
+		i += 1
+	return -1
+
 ## Gets an existing condition index that matches the full condition key [id, source_type], regardless of level.
 ## Does not handle duplicates.
-func get_existing_condition_index(full_condition_key: Array) -> int:
+func get_condition_index_by_source_type(full_condition_key: Array) -> int:
 	var i: int = 0
 	for condition: Condition in conditions:
 		if condition.get_key() == full_condition_key:
@@ -107,7 +117,7 @@ func get_existing_condition_index(full_condition_key: Array) -> int:
 ## Replaces or adds all incoming conditions depending on whether they already exist.
 func replace_or_add_conditions(new_conditions: Array[Condition]) -> void:
 	for new_condition: Condition in new_conditions:
-		var existing_index: int = get_existing_condition_index(new_condition.get_key())
+		var existing_index: int = get_condition_index_by_source_type(new_condition.get_key())
 		if existing_index > -1:
 			if (new_condition.effect_lvl > conditions[existing_index].effect_lvl):
 				conditions[existing_index] = new_condition

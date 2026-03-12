@@ -90,14 +90,14 @@ func handle_esi(esi: ESI, process_conditions: bool = true) -> void:
 	var xp: int = 0
 
 	if ESI.can_hit_ally_with_bad(entity.team, esi):
-		dh_handler.handle_instant_amount(DHHandler.Type.DAMAGE, HPComponent.POPUP_TYPE.AUTO, esi)
+		dh_handler.handle_instant_amount(DHHandler.Type.DAMAGE, esi)
 	elif ESI.can_hit_enemy_with_bad(entity.team, esi):
-		xp = dh_handler.handle_instant_amount(DHHandler.Type.DAMAGE, HPComponent.POPUP_TYPE.AUTO, esi)
+		xp = dh_handler.handle_instant_amount(DHHandler.Type.DAMAGE, esi)
 
 	if ESI.can_hit_ally_with_good(entity.team, esi):
-		xp = dh_handler.handle_instant_amount(DHHandler.Type.HEALING, HPComponent.POPUP_TYPE.AUTO, esi)
+		xp = dh_handler.handle_instant_amount(DHHandler.Type.HEALING, esi)
 	elif ESI.can_hit_enemy_with_good(entity.team, esi):
-		dh_handler.handle_instant_amount(DHHandler.Type.HEALING, HPComponent.POPUP_TYPE.AUTO, esi)
+		dh_handler.handle_instant_amount(DHHandler.Type.HEALING, esi)
 
 	# --- Applying Resulting Weapon XP ---
 	if (esi.source_entity) and (esi.source_entity is Player) and (esi.source_ii):

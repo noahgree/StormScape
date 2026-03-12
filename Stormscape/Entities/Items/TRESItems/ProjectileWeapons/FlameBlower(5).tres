@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://boo31eu083dqd" path="res://Entities/Components/ConditionsComponent/Conditions/Condition.gd" id="1_ul7rv"]
 [ext_resource type="Script" uid="uid://dkfssottmsrch" path="res://Entities/Components/ESComponent/EffectSource.gd" id="2_hrsx2"]
+[ext_resource type="Resource" uid="uid://c1x3qrepvhvn3" path="res://Entities/Components/ConditionsComponent/Conditions/BadEffects/Burning/Burning-1-FlameBlower.tres" id="2_iesk6"]
 [ext_resource type="Script" uid="uid://cowjdnic7xmkp" path="res://Entities/Player/UI/Inventory/Panels/ItemDetailsPanel/StatDetail.gd" id="3_ul7rv"]
 [ext_resource type="Resource" uid="uid://cl4lqk1b8bquo" path="res://Entities/Player/PlayerCore/PlayerCamera/CamFXPresets/0(NoFreeze).tres" id="5_cibnu"]
 [ext_resource type="Texture2D" uid="uid://bhse86b50y7vx" path="res://Entities/Items/Weapons/ProjectileWeapons/FlameBlower/FlameBlowerBaseFrameCT.tres" id="6_1teer"]
@@ -17,6 +18,7 @@
 script = ExtResource("2_hrsx2")
 source_type = 1
 can_hit_self = false
+conditions = Array[ExtResource("1_ul7rv")]([ExtResource("2_iesk6")])
 base_damage = 2
 
 [sub_resource type="Resource" id="Resource_awnew"]

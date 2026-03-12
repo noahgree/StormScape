@@ -31,8 +31,8 @@ func enter() -> void:
 
 	_play_dash_sound()
 
-	controller.dash_timer.start(entity.sc.get_stat("dash_duration"))
-	controller.dash_cooldown_timer.start(entity.sc.get_stat("dash_duration") + entity.sc.get_stat("dash_cooldown"))
+	controller.dash_timer.start(entity.sc.get_stat(&"dash_duration"))
+	controller.dash_cooldown_timer.start(entity.sc.get_stat(&"dash_duration") + entity.sc.get_stat(&"dash_cooldown"))
 	controller.facing_method = FacingComponent.Method.NONE
 
 	ghosts_spawned = 0
@@ -67,10 +67,10 @@ func _do_character_dash() -> void:
 	if StateFunctions.handle_rigid_entity_collisions(entity, controller):
 		if not collision_shake_complete:
 			dash_impact_cam_fx.apply_falloffs_and_activate_all(entity)
-			if entity.effects.check_if_has_effect("kinetic_impact"):
-				AudioManager.play_2d("kinetic_impact_hit", entity.global_position)
+			if entity.conditions_component.check_if_has_condition(Condition.ID.KINETIC_IMPACT):
+				AudioManager.play_2d(&"kinetic_impact_hit", entity.global_position)
 			else:
-				AudioManager.play_2d("player_dash_impact", entity.global_position)
+				AudioManager.play_2d(&"player_dash_impact", entity.global_position)
 			collision_shake_complete = true
 	if entity.get_slide_collision_count() > 0:
 		_stop_dash_sound()

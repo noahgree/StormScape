@@ -21,22 +21,21 @@ enum SourceType {
 	FROM_EOT ## For receiving effects from effect over time stats.
 }
 
-@export_group("General")
 @export var source_type: SourceType ## A tag used to determine the source of the effect source. See Globals class for details on the tags.
 @export var source_tags: Array[String] = [] ## Additional information to pass to whatever receieves this effect source to make sure it should apply.
 @export_flags_2d_physics var scanned_phys_layers: int = 0b1101111 ## The collision mask that this source scans in order to apply affects to.
-@export_subgroup("Team Logic")
 @export var can_hit_self: bool = true ## Whether or not this effect source can be applied to what created it.
 @export_flags("Enemies", "Allies") var teams_hit_by_bad: int = Globals.BadAffectedTeams.ENEMIES ## Which entity teams in relation to who produced this source are affected by this damage.
 @export_flags("Enemies", "Allies") var teams_hit_by_good: int = Globals.GoodAffectedTeams.ALLIES ## Which entity teams in relation to who produced this source are affected by this healing.
+@export var conditions: Array[Condition] ## The array of conditions that can be applied to the receiving entity. [color=salmon] If this is inside EOTStats, leave this array empty! [/color]
 
 @export_group("Base Damage")
 @export var base_damage: int: ## The base numerical amount of damage associated with this effect source.
 	set(new_value):
 		base_damage = max(0, new_value)
 @export var object_damage_mult: float = 1.0 ## A multiplier for doing more damage to Static & Rigid entities marked as objects.
-@export var dmg_affected_stats: Globals.DHTypes = Globals.DHTypes.SHIELD_THEN_HEALTH ## Which entity stats are affected by this damage source.
-@export var dmg_popup_type: HPComponent.POPUP_TYPE = HPComponent.POPUP_TYPE.AUTO ## What the popup that results from an entity being hit by this damage should look like it came from.
+@export var dmg_affected_stats: DHHandler.DHType = DHHandler.DHType.SHIELD_THEN_HEALTH ## Which entity stats are affected by this damage source.
+@export var dmg_popup_type: EffectPopup.POPUP_TYPE = EffectPopup.POPUP_TYPE.AUTO ## What the popup that results from an entity being hit by this damage should look like it came from.
 @export_range(0, 100, 1, "suffix:%") var crit_chance: int = 0 ## The chance the application of damage will be a critial hit.
 @export var crit_multiplier: float = 1.5 ## How much stronger critical hits are than normal hits.
 @export_range(0, 100, 1, "suffix:%") var armor_penetration: int = 0 ## The percent of armor ignored.
@@ -46,8 +45,8 @@ enum SourceType {
 @export var base_healing: int: ## The base numerical amount of health associated with this effect source.
 	set(new_value):
 		base_healing = max(0, new_value)
-@export var heal_affected_stats: Globals.DHTypes = Globals.DHTypes.HEALTH_THEN_SHIELD ## Which entity stats are affected by this healing source.
-@export var heal_popup_type: HPComponent.POPUP_TYPE = HPComponent.POPUP_TYPE.AUTO ## What the popup that results from an entity being hit by this healing should look like it came from.
+@export var heal_affected_stats: DHHandler.DHType = DHHandler.DHType.HEALTH_THEN_SHIELD ## Which entity stats are affected by this healing source.
+@export var heal_popup_type: EffectPopup.POPUP_TYPE = EffectPopup.POPUP_TYPE.AUTO ## What the popup that results from an entity being hit by this healing should look like it came from.
 @export_range(0, 100, 1, "suffix:%") var lvl_heal_scalar: int = 8 ## The percent of base healing that gets added on for every 10 levels, calculated as [codeblock](((floor(current_lvl / 10) * lvl_heal_scalar) + 1.0) / 100.0) * base_healing[/codeblock].
 
 @export_group("FX")
@@ -55,6 +54,3 @@ enum SourceType {
 @export var impact_vfx: PackedScene = null ## The vfx to spawn when impacting something.
 @export var impact_sound: String = "" ## The sound to play when impacting something.
 @export var hit_flash_color: Color = Color(1, 1, 1, 0.6) ## The color to flash the hit entity to on being hit.
-
-@export_group("Conditions")
-@export var conditions: Array[Condition] ## The array of conditions that can be applied to the receiving entity. [color=salmon] If this is inside EOTStats, leave this array empty! [/color]

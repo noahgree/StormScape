@@ -1,0 +1,37 @@
+[gd_resource type="Resource" script_class="Condition" format=3 uid="uid://c1x3qrepvhvn3"]
+
+[ext_resource type="Script" uid="uid://boo31eu083dqd" path="res://Entities/Components/ConditionsComponent/Conditions/Condition.gd" id="1_bxkbf"]
+[ext_resource type="Script" uid="uid://20acrt2hb6y" path="res://Entities/Components/ConditionsComponent/Conditions/EOTStats.gd" id="1_wdbkx"]
+[ext_resource type="Script" uid="uid://bcjwesiannbd0" path="res://Entities/Components/StatMod/StatMod.gd" id="2_sah37"]
+[ext_resource type="Script" uid="uid://dkfssottmsrch" path="res://Entities/Components/ESComponent/EffectSource.gd" id="3_pncsn"]
+
+[sub_resource type="Resource" id="Resource_4mw0v"]
+script = ExtResource("2_sah37")
+stat_id = &"max_speed"
+mod_id = &"burning"
+operation = "-%"
+value = 20.0
+metadata/_custom_type_script = "uid://bcjwesiannbd0"
+
+[sub_resource type="Resource" id="Resource_y1lxn"]
+script = ExtResource("3_pncsn")
+source_type = 9
+base_damage = 1
+dmg_affected_stats = 0
+hit_flash_color = Color(0.98402876, 0.2854099, 0.022971844, 0.6)
+metadata/_custom_type_script = "uid://dkfssottmsrch"
+
+[sub_resource type="Resource" id="Resource_wdbkx"]
+script = ExtResource("1_wdbkx")
+duration = 3.0
+tick_count = 3
+ticks_array = Array[ExtResource("3_pncsn")]([SubResource("Resource_y1lxn")])
+stat_mods = Array[ExtResource("2_sah37")]([SubResource("Resource_4mw0v")])
+metadata/_custom_type_script = "uid://20acrt2hb6y"
+
+[resource]
+script = ExtResource("1_bxkbf")
+goodness = 1
+conditions_to_stop = Array[int]([1])
+eot_stats = SubResource("Resource_wdbkx")
+metadata/_custom_type_script = "uid://boo31eu083dqd"

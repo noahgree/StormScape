@@ -120,6 +120,8 @@ shape = SubResource("RectangleShape2D_ij8lb")
 
 [node name="ConditionsComponent" parent="." unique_id=640107887 instance=ExtResource("7_7lx3c")]
 unique_name_in_owner = true
+filter = 1
+manual_filter = Array[int]([0, 10])
 
 [node name="ParticleEmissionComponent" parent="." unique_id=1806509778 instance=ExtResource("17_2kecs")]
 below_extents = Vector2(20, 2)

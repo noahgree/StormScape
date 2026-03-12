@@ -5,7 +5,7 @@ class_name Storm
 
 @export var auto_start: bool = true ## Whether to immediately use the first transform in the queue at game load.
 @export var transform_queue: Array[StormTransform] = [] ## The queue of upcoming transforms to apply to the zone.
-@export var default_storm_condition: Condition ## The default condition to apply when a dynamic entity leaves the safe zone.
+@export var default_storm_es: EffectSource ## The default effect source to apply when a dynamic entity leaves the safe zone.
 @export var default_storm_visuals: StormVisuals ## The default storm visuals to apply at start.
 
 @onready var collision_shape: CollisionShape2D = $SafeZone/CollisionShape2D ## The collider that detects when something is in the safe zone.
@@ -36,7 +36,7 @@ var see_through_pulse_mult: float = 1.0 ## The current multiplier for the pulsin
 var see_through_distance_mult: float = 1.0 ## The current distance multiplier for the player's see thru effect.
 var using_default_visuals: bool = false ## Whether we are currently using default visuals for the storm FX.
 var current_visuals: StormVisuals ## The current visuals being used.
-var current_condition: Condition ##  The up-to-date condition to apply to entities leaving the safe area while the zone is active.
+var current_es: EffectSource ##  The up-to-date effect source to apply to entities leaving the safe area while the zone is active.
 var zone_count: int = 0 ## The number of zones we have popped off the transform queue.
 var just_replaced_queue: bool = false ## Whether we just replaced the old queue with a new one and should not pop the next phase.
 #endregion
@@ -51,7 +51,7 @@ func _ready() -> void:
 	visible = true
 
 	current_radius = collision_shape.shape.radius
-	current_condition = default_storm_condition
+	current_es = default_storm_es
 	current_visuals = default_storm_visuals
 
 	see_through_target_distance = see_through_distance
@@ -110,7 +110,7 @@ func enable_storm(from_save: bool = false) -> void:
 			await get_tree().physics_frame
 		var entities_with_condition: Array[Node] = get_tree().get_nodes_in_group("entities_out_of_safe_area")
 		for entity: Node in entities_with_condition:
-			_add_condition_to_entity(entity, current_condition)
+			_hit_entity_with_current_effect_source(entity, default_storm_es)
 
 ## Stops storm in its tracks and removes the current condition from entities out of the safe area.
 func disable_storm(from_save: bool = false) -> void:
@@ -164,7 +164,7 @@ func _revert_to_default_zone() -> void:
 		print_rich("[color=pink]*******[/color][color=purple] [b]Starting[/b] Storm Phase [/color][b]0[/b]" + " [color=gray][i](default)[/i][/color] [color=pink]*******[/color]")
 
 	_apply_visual_overrides(default_storm_visuals)
-	_swap_condition_applied_to_entities_out_of_safe_area(default_storm_condition)
+	_swap_condition_applied_to_entities_out_of_safe_area(default_storm_es)
 
 ## Called externally to forcefully transition to the next phase no matter what.
 ## If we haven't started any zones before, don't pop off the queue, just use the first in the queue.
@@ -221,14 +221,7 @@ func _set_shader_transform_params() -> void:
 
 ## Converts the world coordinate to a screen position based on camera position, rotation, and zoom.
 func _get_screen_point_from_world_coord(world_point: Vector2) -> Vector2:
-	var camera: Camera2D = Globals.player_camera
-	var viewport_size: Vector2 = get_viewport().get_visible_rect().size
-	var relative_position: Vector2 = world_point - camera.global_position - camera.offset
-	var rotated_position: Vector2 = relative_position.rotated(-camera.rotation)
-	var zoomed_position: Vector2 = rotated_position * camera.zoom
-	var screen_position: Vector2 = (viewport_size / 2) + zoomed_position
-
-	return screen_position
+	return get_viewport().get_canvas_transform() * world_point
 
 ## Tweens the player's see through distance in a looping, pulsing, fashion.
 func _tween_player_see_through_distance() -> void:
@@ -304,10 +297,10 @@ func _check_for_transform_delay(new_transform: StormTransform) -> void:
 	if DebugFlags.storm_phases:
 		var dur: float = max(new_transform.time_to_resize, new_transform.time_to_move)
 		var condition_str: String = "Keep Previous"
-		if new_transform.condition_setting == StormTransform.UpdateTypes.OVERRIDE:
-			condition_str = str(new_transform.condition)
-		elif new_transform.condition_setting == StormTransform.UpdateTypes.REVERT_TO_DEFAULT:
-			condition_str = "Reverted to Default: " + str(default_storm_condition)
+		if new_transform.es_setting == StormTransform.UpdateTypes.OVERRIDE:
+			condition_str = str(new_transform.effect_source)
+		elif new_transform.es_setting == StormTransform.UpdateTypes.REVERT_TO_DEFAULT:
+			condition_str = "Reverted to Default: " + str(default_storm_es)
 		print_rich("[color=pink]*******[/color][color=purple] [b]Starting[/b] Storm Phase [/color][b]" + str(zone_count) + "[/b][i] [delay = " + str(new_transform.delay) + "] [duration = " + str(dur) + "] " + "[condition = " + condition_str + "] [/i] [color=pink]*******[/color]")
 
 	# Starting delay timer if we have any delay. Otherwise start applying the new zone transform.
@@ -334,10 +327,10 @@ func _start_zone(new_transform: StormTransform) -> void:
 	_tween_to_new_zone_position_and_radius(new_transform)
 
 	# Check if we need to override the condition or reset it to default
-	if new_transform.condition_setting == StormTransform.UpdateTypes.OVERRIDE:
-		_swap_condition_applied_to_entities_out_of_safe_area(new_transform.condition)
-	elif new_transform.condition_setting == StormTransform.UpdateTypes.REVERT_TO_DEFAULT:
-		_swap_condition_applied_to_entities_out_of_safe_area(default_storm_condition)
+	if new_transform.es_setting == StormTransform.UpdateTypes.OVERRIDE:
+		_swap_condition_applied_to_entities_out_of_safe_area(new_transform.effect_source)
+	elif new_transform.es_setting == StormTransform.UpdateTypes.REVERT_TO_DEFAULT:
+		_swap_condition_applied_to_entities_out_of_safe_area(default_storm_es)
 
 	# Giving the transform timer the data it needs to determine what to do on timeout,
 	# then starting the transform timer.
@@ -382,16 +375,19 @@ func _apply_visual_overrides(new_visuals: StormVisuals) -> void:
 	else:
 		using_default_visuals = false
 
-	for i: int in range(4):
-		_tween_storm_colors(new_visuals)
+	_tween_storm_colors(new_visuals)
 	_tween_storm_gradient_end(new_visuals)
 	_tween_glow_ring(new_visuals)
 	_tween_wind(new_visuals)
 	_tween_rain(new_visuals)
 	_tween_distortion(new_visuals)
 	storm_circle.material.set_shader_parameter("pulse_speed", new_visuals.ring_pulse_speed)
+	storm_circle.material.set_shader_parameter("lightning_frequency", new_visuals.lightning_frequency)
+	storm_circle.material.set_shader_parameter("lightning_chance", new_visuals.lightning_chance)
+	storm_circle.material.set_shader_parameter("lightning_intensity", new_visuals.lightning_intensity)
 	see_through_pulse_mult = new_visuals.see_through_pulse_mult
 	see_through_distance_mult = new_visuals.see_thru_dist_mult
+
 
 ## Tween all storm coloring parameters.
 func _tween_storm_colors(new_visuals: StormVisuals) -> void:
@@ -431,7 +427,7 @@ func _tween_glow_ring(new_visuals: StormVisuals) -> void:
 		)
 	glow_ring_tween.tween_property(
 		storm_circle.material,
-		"shader_parameter/ring_thickness",
+		"shader_parameter/ring_glow_intensity",
 		new_visuals.ring_glow_intensity,
 		new_visuals.viusal_change_time
 		)
@@ -555,7 +551,7 @@ func _on_safe_zone_body_exited(body: Node2D) -> void:
 			return
 
 		if is_enabled:
-			_add_condition_to_entity(body, current_condition)
+			_hit_entity_with_current_effect_source(body, current_es)
 		body.add_to_group("entities_out_of_safe_area")
 	if body is Player:
 		SignalBus.player_in_safe_zone_changed.emit()
@@ -563,22 +559,23 @@ func _on_safe_zone_body_exited(body: Node2D) -> void:
 ## Removes the current condition from entities out of the safe area and applies the new one.
 ## The new one will be the default condition if we have no upcoming zone, otherwise it will be the condition
 ## for the new transform.
-func _swap_condition_applied_to_entities_out_of_safe_area(new_condition: Condition) -> void:
+func _swap_condition_applied_to_entities_out_of_safe_area(new_es: EffectSource) -> void:
 	for entity: Node in get_tree().get_nodes_in_group("entities_out_of_safe_area"):
 		_remove_current_condition_from_entity(entity)
-		_add_condition_to_entity(entity, new_condition)
-	current_condition = new_condition
+		_hit_entity_with_current_effect_source(entity, new_es)
+	current_es = new_es
 
 ## Removes the condition held in the current condition variable from all affected entities.
-func _remove_current_condition_from_entity(body: DynamicEntity) -> void:
-	pass
-	#if body.conditions_component != null:
-		#body.conditions_component.request_condition_removal_by_source(current_condition.id, current_condition.source_type)
+func _remove_current_condition_from_entity(entity: DynamicEntity) -> void:
+	var condition: Condition = current_es.conditions.front()
+	if condition:
+		entity.conditions_component.remove_condition_by_source_type(condition.id, condition.source_type)
 
 ## Adds the passed in condition to the passed in entity.
-func _add_condition_to_entity(body: DynamicEntity, condition_to_add: Condition) -> void:
-	pass
-	#var receiver: ESIReceiverComponent = body.get_node_or_null("ESIReceiverComponent")
-	#if receiver != null:
-		#receiver.handle_condition(condition_to_add)
+func _hit_entity_with_current_effect_source(entity: DynamicEntity, effect_source: EffectSource) -> void:
+	var esi: ESI = ESI.new()
+	esi.es = effect_source
+	esi.set_source_info(null, null, null)
+	esi.source_entity_team = Globals.Teams.ENEMY # The storm is technically an enemy, although not an entity
+	entity.esi_receiver.handle_esi(esi)
 #endregion

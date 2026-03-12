@@ -473,9 +473,7 @@ sprite_frames = SubResource("SpriteFrames_a2dle")
 position = Vector2(-7, 2)
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1883711654]
-libraries = {
-&"": SubResource("AnimationLibrary_sen2k")
-}
+libraries/ = SubResource("AnimationLibrary_sen2k")
 
 [node name="ProjectileOrigin" type="Marker2D" parent="." unique_id=1267359582]
 position = Vector2(10, -4)

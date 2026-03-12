@@ -7,7 +7,8 @@ class_name ConditionsComponent
 
 enum Filter { ## The different ways to filter out incoming conditions.
 	AUTO, ## Only allow conditions this entity can receive based on entity type.
-	MANUAL, ## Follows entity type restrictions like AUTO, but the incoming condition must also be part of the "manual filter" array.
+	MANUAL_ALLOW, ## Follows entity type restrictions like AUTO, but the incoming condition must also be part of the "manual filter" array.
+	MANUAL_BLOCK, ## Follows entity type restrictions like AUTO, but the incoming condition must also not be part of the "manual filter" array.
 	NONE ## For when this entity cannot receive any conditions.
 }
 
@@ -112,9 +113,12 @@ func _check_filter(condition: Condition) -> bool:
 			return false
 		Filter.AUTO:
 			return condition.affected_entities & entity.class_type != 0
-		Filter.MANUAL:
+		Filter.MANUAL_ALLOW:
 			var affected: bool = condition.affected_entities & entity.class_type != 0
 			return (affected) and (condition.id in manual_filter)
+		Filter.MANUAL_BLOCK:
+			var affected: bool = condition.affected_entities & entity.class_type != 0
+			return (affected) and (condition.id not in manual_filter)
 	return false
 
 func _add_ci(condition: Condition, esi: ESI) -> void:
@@ -201,7 +205,7 @@ func _stop_particle_fx(ci: CI) -> void:
 	entity.particle_mgr.stop_particles(ci.condition.id)
 
 func remove_condition_by_source_type(condition_id: Condition.ID, source_type: Condition.SourceType) -> void:
-	var existing_cis: Array[CI] = actives.get([condition_id, source_type], [])
+	var existing_cis: Array = actives.get([condition_id, source_type], [])
 	for existing_ci: CI in existing_cis:
 		_remove_ci(existing_ci)
 

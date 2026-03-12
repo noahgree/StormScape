@@ -6,13 +6,11 @@ class_name Weapon
 @export var particle_emission_extents: Vector2:
 	set(new_value):
 		particle_emission_extents = new_value
-		if debug_emission_box:
-			_debug_update_particle_emission_box()
+		if debug_emission_box: _debug_update_particle_emission_box()
 @export var particle_emission_origin: Vector2:
 	set(new_value):
 		particle_emission_origin = new_value
-		if debug_emission_box:
-			_debug_update_particle_emission_box()
+		if debug_emission_box: _debug_update_particle_emission_box()
 
 @onready var anim_player: AnimationPlayer = $AnimationPlayer ## The animation controller for this weapon.
 @onready var debug_emission_box: Polygon2D = get_node_or_null("DebugEmissionBox")

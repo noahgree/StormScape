@@ -1,5 +1,0 @@
-[gd_scene format=3 uid="uid://jgqrrdsi1kxn"]
-
-[node name="TestEffectSource" type="Area2D"]
-collision_layer = 0
-monitorable = false
