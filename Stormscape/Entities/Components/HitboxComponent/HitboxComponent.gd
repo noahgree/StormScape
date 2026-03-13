@@ -29,12 +29,11 @@ func _ready() -> void:
 
 ## When detecting an area, start having it handled. This method can be overridden in subclasses.
 func _on_area_entered(area: Area2D) -> void:
-	if area.get_parent() == source_entity:
-		if not esi.es or not esi.es.can_hit_self:
-			return
+	if (area.get_parent() == source_entity) and (esi.es) and (not esi.es.can_hit_self):
+		return
 
 	if area is ESIReceiverComponent:
-		_start_being_handled(area as ESIReceiverComponent)
+		_start_being_handled(area)
 
 	_process_hit(area)
 
@@ -44,24 +43,16 @@ func _on_body_entered(body: Node2D) -> void:
 	if body is TileMapLayer:
 		_process_hit(body)
 
-	# If the body is an entity that doesn't receive effect sources, it still has collision and
-	# should stop projectiles
-	if (body is Entity) and (body.esi_receiver == null):
-		_process_hit(body)
-
-## Meant to interact with an ESIReceiverComponent that can handle effects supplied by this instance.
+## Meant to interact with an ESIReceiverComponent that can handle effect sources supplied by this instance.
 ## This version of the method handles the general case, but specific behaviors defined in certain
 ## weapon hitboxes may want to override it.
 func _start_being_handled(handling_area: ESIReceiverComponent) -> void:
-	if esi.es.source_type == EffectSource.SourceType.FROM_PROJECTILE:
-		esi.movement_direction = movement_direction
-	if not use_self_position:
-		esi.contact_position = get_parent().global_position
-	else:
-		esi.contact_position = global_position
-
 	if handling_area.absorb_full_hit:
 		collider.set_deferred("disabled", true) # Does not apply to hitscans
+
+	if esi.es.source_type == EffectSource.SourceType.FROM_PROJECTILE:
+		esi.movement_direction = movement_direction
+	esi.contact_position = get_parent().global_position if not use_self_position else global_position
 	esi.set_source_info(source_entity, source_ii)
 	handling_area.handle_esi(esi)
 

@@ -9,7 +9,7 @@ var currency_slot_manager: CurrencySlotManager ## A reference to the currency sl
 ## Must be called after this inventory resource is created to set it up.
 func initialize_inventory(source: Node2D) -> void:
 	source_node = source
-	auto_decrementer.inv = self
+	auto_decrementer.inv = weakref(self)
 	auto_decrementer.owning_entity_is_player = true
 	if drop_on_death:
 		source_node.tree_exiting.connect(drop_entire_inventory)

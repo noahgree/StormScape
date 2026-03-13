@@ -48,11 +48,6 @@ var shot_facing_direction: int = 1 ## When 1, the projectile was spawned on the 
 #endregion
 
 
-#region On Load
-func _on_before_load_game() -> void:
-	queue_free()
-#endregion
-
 #region Core
 ## Creates a projectile and assigns its needed variables in a specific order. Then it returns it.
 static func create(wpn_ii: WeaponII, src_entity: Entity, proj_transform: Transform2D) -> Projectile:
@@ -376,11 +371,10 @@ func _handle_aoe() -> void:
 
 	if stats.aoe_vfx != null:
 		var radius: float = min(MAX_AOE_RADIUS, sc.get_stat("proj_aoe_radius"))
-		var dur: float = stats.aoe_vfx_dur if stats.aoe_vfx_dur != 0.0 else max(0.05, stats.aoe_effect_dur)
-		AreaOfEffectVFX.create(stats.aoe_vfx, Globals.world_root, self, radius, dur)
+		AreaOfEffectVFX.create(stats.aoe_vfx, Globals.world_root, self, radius, stats.aoe_duration)
 	AudioManager.play_2d(stats.aoe_sound, global_position)
 
-	await get_tree().create_timer(max(0.05, stats.aoe_effect_dur), false, true, false).timeout
+	await get_tree().create_timer(stats.aoe_duration, false, true, false).timeout
 	queue_free()
 
 ## Hides the sprite and its shadow if need be.
@@ -399,17 +393,6 @@ func _assign_new_collider_shape_and_aoe_entities(new_shape: Shape2D) -> void:
 	collider.shape = new_shape
 	_enable_collider()
 	set_deferred("monitoring", true)
-
-	# Handling initial hit of the aoe source. This is like how an explosion hits once but the ground burning will be separate.
-	await get_tree().physics_frame
-	await get_tree().physics_frame
-	for area: Area2D in get_overlapping_areas():
-		if (area.get_parent() == source_entity) and not stats.aoe_effect_source.can_hit_self:
-			return
-		elif area is ESIReceiverComponent:
-			_start_being_handled(area as ESIReceiverComponent)
-	for body: Node2D in get_overlapping_bodies():
-		_on_body_entered(body)
 #endregion
 
 #region Lifetime & Handling
@@ -424,30 +407,16 @@ func _on_lifetime_timer_timeout_or_reached_max_distance() -> void:
 ## Overrides parent hitbox. When in AOE, we add new entities to a dictionary with an associated timer
 ## that applies the conditions on an interval.
 func _on_area_entered(area: Area2D) -> void:
+	# When not AOE, let the hitbox component handle what happens when we enter an area
 	if not is_in_aoe_phase:
 		super._on_area_entered(area)
 		return
 
-	if (area.get_parent() == source_entity) and not stats.aoe_effect_source.can_hit_self:
+	# When AOE, filter hitting self and then proceed to start being handled
+	if (area.get_parent() == source_entity) and (not aoe_esi.es.can_hit_self):
 		return
-
 	if area is ESIReceiverComponent:
-		var timer: Timer = Timer.new()
-		timer.set_meta("area", area)
-		timer.timeout.connect(_on_aoe_interval_timer_timeout.bind(timer))
-		aoe_overlapped_receivers[area] = timer
-
-		if stats.aoe_effects_delay > 0:
-			await get_tree().create_timer(stats.aoe_effects_delay, false, true, false).timeout
-			if not is_instance_valid(area) or not is_instance_valid(timer):
-				return
-
-		if area in aoe_overlapped_receivers:
-			for condition: Condition in stats.aoe_effect_source.conditions:
-				area.handle_condition(condition)
-
-			add_child(timer)
-			timer.start(stats.aoe_effect_interval)
+		_start_being_handled(area)
 
 ## When the condition interval timer ends, check if the area still exists, then apply the effects again.
 func _on_aoe_interval_timer_timeout(timer: Timer) -> void:
@@ -469,12 +438,12 @@ func _on_area_exited(area: Area2D) -> void:
 		return
 
 	if area is ESIReceiverComponent:
-		var timer: Timer = aoe_overlapped_receivers.get(area, null)
-		if timer:
-			timer.queue_free()
-			aoe_overlapped_receivers.erase(area)
+		area.entity.conditions_component.remove_conditions_by_esi_uid(aoe_esi.uid)
+		if tree_exiting.is_connected(area.entity.conditions_component.remove_conditions_by_esi_uid):
+			tree_exiting.disconnect(area.entity.conditions_component.remove_conditions_by_esi_uid)
 
 ## Overrides parent method. When we intersect with any kind of object, this processes what to do next.
+## Does not trigger when areas enter an AOE created by this projectile.
 func _process_hit(object: Node2D) -> void:
 	var sprite_rect: Vector2 = SpriteHelpers.SpriteDetails.get_frame_rect(sprite)
 	debug_recent_hit_location = global_position + Vector2(sprite_rect.x / 2, 0).rotated(rotation)
@@ -522,25 +491,32 @@ func _kill_projectile_on_hit() -> void:
 		queue_free()
 
 ## Overrides parent method. When we overlap with an entity who can accept effect sources, pass the
-## effect source to that entity's handler. Note that the effect source is duplicated on hit so that
-## we can include unique info like move dir.
+## ESI to that entity's handler.
 func _start_being_handled(handling_area: ESIReceiverComponent) -> void:
 	if about_to_free:
 		return
-	var dist_to_center: float = handling_area.get_parent().global_position.distance_to(global_position)
 
+	var dist_to_center: float = handling_area.get_parent().global_position.distance_to(global_position)
 	if not is_in_aoe_phase:
 		_adjust_esi_for_falloff(esi, dist_to_center, false)
+
 		esi.multishot_id = multishot_id
 		esi.movement_direction = movement_direction
 		esi.contact_position = global_position
 		esi.set_source_info(source_entity, source_ii)
+
 		handling_area.handle_esi(esi)
 	else:
 		_adjust_esi_for_falloff(aoe_esi, dist_to_center, true)
+
 		aoe_esi.contact_position = global_position
 		aoe_esi.set_source_info(source_entity, source_ii)
-		handling_area.handle_esi(aoe_esi, false) # Don't reapply conditions.
+
+		tree_exiting.connect(
+			handling_area.entity.conditions_component.remove_conditions_by_esi_uid.bind(aoe_esi.uid)
+		)
+
+		handling_area.handle_esi(aoe_esi)
 
 ## When we hit a handling area during an AOE, we need to apply falloff based on distance from the center of the AOE.
 func _adjust_esi_for_falloff(esi_to_adjust: ESI, dist: float, is_aoe: bool = false) -> void:
@@ -549,15 +525,15 @@ func _adjust_esi_for_falloff(esi_to_adjust: ESI, dist: float, is_aoe: bool = fal
 	var falloff_mult: float
 
 	if is_aoe:
-		apply_to_bad = stats.bad_effects_aoe_falloff
-		apply_to_good = stats.good_effects_aoe_falloff
+		apply_to_bad = stats.damage_falloff
+		apply_to_good = stats.healing_falloff
 		var radius: float = min(MAX_AOE_RADIUS, sc.get_stat("proj_aoe_radius"))
-		falloff_mult = max(0.05, stats.aoe_effect_falloff_curve.sample_baked(dist / radius))
+		falloff_mult = max(0.05, stats.aoe_falloff_curve.sample_baked(dist / radius))
 	else:
-		apply_to_bad = stats.bad_effects_falloff
-		apply_to_good = stats.good_effects_falloff
+		apply_to_bad = stats.aoe_hit_dmg_falloff
+		apply_to_good = stats.aoe_hit_heal_falloff
 		var point_to_sample: float = 1.0 - (max(0, float(stats.point_of_max_falloff) - cumulative_distance) / stats.point_of_max_falloff)
-		var sampled_point: float = stats.effect_falloff_curve.sample_baked(point_to_sample)
+		var sampled_point: float = stats.falloff_curve.sample_baked(point_to_sample)
 		falloff_mult = max(0.05, sampled_point)
 
 	if apply_to_bad:

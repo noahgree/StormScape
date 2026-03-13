@@ -4,7 +4,7 @@ class_name ProjStats
 
 @export_group("General")
 @export var speed: int = 350 ## The highest speed the projectile can travel in.
-@export var speed_curve: Curve ## How the speed changes based on time alive.
+@export var speed_curve: Curve = preload("uid://cqf52qxhwlf7j") ## How the speed changes based on time alive.
 @export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var initial_boost_time: float ## The duration of any initial boost we want to start with on.
 @export var initial_boost_mult: float = 2.0 ## The speed multiplier for the initial boost, if any.
 @export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var lifetime: float = 3 ## The max time this projectile can be in the air.
@@ -14,15 +14,13 @@ class_name ProjStats
 @export var disable_trail: bool = false ## When true, the projectile will not have a trail if it had one originally. Turn this on when spawning a lot of projectiles from one weapon, as trails can be expensive.
 @export var glow_color: Color = Color(1, 1, 1) ## The color of the glow.
 @export_range(0, 500, 0.1, "suffix:%") var glow_strength: float = 35 ## How strong the glow should be.
-@export var impact_vfx: PackedScene ## The VFX to spawn at the site of impact. Could be a decal or something.
-@export var impact_sound: String ## The sound to play at the site of impact.
 @export var rand_impact_rot: bool = false ## When true, the sprite will get a random rotation on impact to change how the impact animation looks for circular projectiles.
 
 @export_group("Falloff")
-@export var effect_falloff_curve: Curve ## The falloff curve for all effects in the effect source.
+@export var falloff_curve: Curve = preload("uid://omr2xxxhvdbq") ## The falloff curve for all values in the effect source.
 @export_custom(PROPERTY_HINT_NONE, "suffix:pixels") var point_of_max_falloff: float = 500 ## The cumulative distance travelled at which the projectile attains the minimum remaining stats due to falloff.
-@export var bad_effects_falloff: bool = true ## Whether to apply the falloff curve to bad effects.
-@export var good_effects_falloff: bool = false ## Whether to apply the falloff curve to good effects.
+@export var damage_falloff: bool = true ## Whether to apply the falloff curve to damage.
+@export var healing_falloff: bool = false ## Whether to apply the falloff curve to healing.
 
 @export_group("Curve Movement")
 @export_enum("Default", "Sine", "Sawtooth") var path_type: String = "Default" ## The potential wave-based movement method to use.
@@ -42,7 +40,7 @@ class_name ProjStats
 @export_enum("None", "FOV", "Closest", "Mouse Position", "Boomerang") var homing_method: String = "None" ## Whether this projectile should home-in on its target.
 @export var homing_speed_mult: float = 1.0 ## Multiplies the speed by a factor unique to the homing movement.
 @export_custom(PROPERTY_HINT_NONE, "suffix:º/sec") var max_turn_rate: float = 100 ## The max turn rate in degrees per second.
-@export var turn_rate_curve: Curve ## The change in turn rate as lifetime elapses.
+@export var turn_rate_curve: Curve = preload("uid://cx5xd3sk17ryv") ## The change in turn rate as lifetime elapses. This should increase if you want it to be more likely to hit the target near the end of its life.
 @export_range(0, 360, 1, "suffix:degrees") var homing_fov_angle: float = 180 ## The FOV for aquiring targets.
 @export var homing_max_range: int = 850 ## The max range for aquiring targets when using the "closest" method.
 @export var homing_duration: float = -1 ## The duration for which homing is active. -1 means 'always'.
@@ -67,7 +65,7 @@ class_name ProjStats
 @export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var grounding_free_delay: float ## How much time after we hit the ground do we wait before freeing the projectile. Note that this doesn't apply if we start an AOE after grounding.
 @export_subgroup("Bouncing")
 @export var bounce_count: int ## How many more times to bounce off the ground after landing from the first arc.
-@export var bounce_falloff_curve: Curve ## How the bounces simulate losing energy and travel less distance each time as a function of time alive.
+@export var bounce_falloff_curve: Curve = preload("uid://ddo8hn7smn666") ## How the bounces simulate losing energy and travel less distance each time as a function of time alive.
 @export var ping_pong_bounce: bool = false ## Whether to bounce back and forth instead of in the original direction.
 
 @export_group("Splitting Logic")
@@ -85,17 +83,14 @@ class_name ProjStats
 @export var do_aoe_on_arc_land: bool = true ## Whether to trigger an AOE when we land after an arc shot.
 @export var aoe_before_freeing: bool = false ## Whether to trigger the aoe once we reach end of lifetime if we haven't hit anything yet.
 @export_subgroup("Falloff")
-@export var aoe_effect_falloff_curve: Curve ## Changes damage and mod times for the effect source based on how far away from the origin of the aoe damage the receiver was hit.
-@export var bad_effects_aoe_falloff: bool = true ## Whether to apply the falloff curve to bad effects in an aoe hit.
-@export var good_effects_aoe_falloff: bool = false ## Whether to apply the falloff curve to good effects in an aoe hit.
+@export var aoe_falloff_curve: Curve = preload("uid://dcf3klshobqsh") ## Changes damage and mod times for the effect source based on how far away from the origin of the aoe damage the receiver was hit.
+@export var aoe_hit_dmg_falloff: bool = true ## Whether to apply the falloff curve to damage in an aoe hit.
+@export var aoe_hit_heal_falloff: bool = false ## Whether to apply the falloff curve to healing in an aoe hit.
 @export_subgroup("Timing")
 @export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var aoe_delay: float ## How long after triggering the AOE does the projectile sit in wait before re-enabling the larger collider.
-@export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var aoe_effect_dur: float = 0.05 ## How long the larger collider will be enabled for once an aoe is triggered.
-@export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var aoe_effect_interval: float = 1 ## How long between applications of the conditions of the AOE to each entity inside it.
-@export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var aoe_effects_delay: float = 0.5 ## How long after an entity enters the AOE effect area before applying the first condition pulse.
+@export_custom(PROPERTY_HINT_RANGE, "0.05, 100, 0.01, hide_slider, suffix:seconds") var aoe_duration: float = 0.05 ## How long the aoe collider will be enabled for once an aoe is triggered.
 @export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var aoe_anim_dur: float = 0.2 ## How long the sprite frames' "aoe" animation should take to complete.
 @export_subgroup("AOE FX")
 @export var aoe_hide_sprite: bool = true ## When true, the main proj sprite will be hidden once AOE starts. If there is an "aoe" animation to play, the sprite will hide after it is done.
 @export var aoe_vfx: PackedScene = null ## The scene to instance when activating the aoe.
-@export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var aoe_vfx_dur: float = 0.0 ## When anything besides 0, the vfx will stick around for this amount of seconds instead of immediately fading upon the projectile being freed.
 @export var aoe_sound: String ## The sound to play when activating the aoe.

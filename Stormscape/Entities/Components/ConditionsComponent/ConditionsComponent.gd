@@ -26,6 +26,7 @@ const PROCESS_INTERVAL: float = 0.1 ## How often we should process the CIs. Help
 
 var actives: Dictionary[Array, Array] = {} ## { [id, source] : [CI] } Higher indices are higher levels.
 var actives_by_id: Dictionary[Condition.ID, Dictionary] = {} ## { id : { Condition.SourceType : [CI] } } CIs not ordered.
+var actives_by_esi_uid: Dictionary[int, Array] = {} ## { esi_source_uid: [CI } CIs not ordered.
 var tick_accumulator: float ## Tracks time since last tick.
 
 
@@ -74,7 +75,7 @@ func handle_conditions_in_esi(esi: ESI) -> void:
 	var good_effects_to_allies: bool = ESI.can_hit_ally_with_good(entity.team, esi)
 
 	for condition: Condition in esi.conditions:
-		if condition.goodness == Condition.Goodness.BAD:
+		if condition.id not in Condition.GOOD_CONDITIONS:
 			if bad_effects_to_allies or bad_effects_to_enemies:
 				_process_condition(condition, esi)
 		else:
@@ -87,7 +88,7 @@ func _process_condition(condition: Condition, esi: ESI) -> void:
 	# --- Checking Filter & Entity Invulnerability & Untouchability ---
 	if (not _check_filter(condition)) or (entity.invulnerable):
 		return
-	if (condition.goodness == Condition.Goodness.BAD) and (is_untouchable()):
+	if (condition.id not in Condition.GOOD_CONDITIONS) and (is_untouchable()):
 		return
 
 	# --- Stopping Conditions The New Condition Stops ---
@@ -122,7 +123,7 @@ func _check_filter(condition: Condition) -> bool:
 	return false
 
 func _add_ci(condition: Condition, esi: ESI) -> void:
-	var ci: CI = CI.new(condition, esi.source_entity, esi.source_ii)
+	var ci: CI = CI.new(condition, esi.source_entity, esi.source_ii, esi.uid)
 	ci.affected_entity = entity
 	ci.condition_expired.connect(_remove_ci)
 
@@ -145,6 +146,11 @@ func _add_ci(condition: Condition, esi: ESI) -> void:
 			actives_by_id[condition.id][condition.source_type] = [ci]
 	else:
 		actives_by_id[condition.id] = { condition.source_type : [ci] }
+
+	if actives_by_esi_uid.has(esi.uid):
+		actives_by_esi_uid[esi.uid].append(ci)
+	else:
+		actives_by_esi_uid[esi.uid] = [ci]
 
 	set_process(true)
 
@@ -181,6 +187,10 @@ func _remove_ci(ci: CI) -> void:
 		if actives_by_id[ci.condition.id].is_empty():
 			actives_by_id.erase(ci.condition.id)
 			_stop_particle_fx(ci)
+
+	actives_by_esi_uid[ci.source_esi_uid].erase(ci)
+	if actives_by_esi_uid[ci.source_esi_uid].is_empty():
+		actives_by_esi_uid.erase(ci.source_esi_uid)
 
 	_stop_floor_light_fx(ci)
 
@@ -223,6 +233,14 @@ func remove_condition_for_all_sources(condition_id: Condition.ID) -> void:
 	for ci: CI in to_erase:
 		_remove_ci(ci)
 
+func remove_conditions_by_esi_uid(esi_uid: int) -> void:
+	var to_erase: Array[CI] = []
+	for ci: CI in actives_by_esi_uid.get(esi_uid, []):
+		to_erase.append(ci)
+
+	for ci: CI in to_erase:
+		_remove_ci(ci)
+
 ## Removes all conditions of a certain goodness except for an optional exception id that may be specified.
 ## The optional kept condition should be given only as its id, not including its source type.
 func remove_all_of_certain_goodness(id_to_keep: Condition.ID, goodness: Condition.Goodness) -> void:
@@ -231,8 +249,12 @@ func remove_all_of_certain_goodness(id_to_keep: Condition.ID, goodness: Conditio
 			continue
 		var source_type: Condition.SourceType = actives_by_id[condition_id].keys().front()
 		var ci_to_check: CI = actives_by_id[condition_id][source_type].back()
-		if ci_to_check.condition.goodness == goodness:
-			remove_condition_by_source_type(condition_id, source_type)
+		if goodness == Condition.Goodness.GOOD:
+			if ci_to_check.condition.id in Condition.GOOD_CONDITIONS:
+				remove_condition_by_source_type(condition_id, source_type)
+		else:
+			if ci_to_check.condition.id not in Condition.GOOD_CONDITIONS:
+				remove_condition_by_source_type(condition_id, source_type)
 
 ## Removes all conditions.
 func remove_all_conditions() -> void:

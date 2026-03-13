@@ -91,22 +91,22 @@ enum ReloadType { ## The kinds of reloads the weapon can have.
 
 @export_group("Blooming Logic")
 @export_custom(PROPERTY_HINT_NONE, "suffix:degrees") var max_bloom: float ## The max amount of bloom the weapon can have.
-@export var bloom_curve: Curve ## X value is bloom amount (0-1), Y value is multiplier on max_bloom.
-@export var bloom_increase_rate: Curve ## How much bloom to add per shot based on current bloom.
-@export var bloom_decrease_rate: Curve ## How much bloom to take away per second based on current bloom.
+@export var bloom_curve: Curve = preload("uid://b8lhpj4fuv50h") ## X value is bloom amount (0-1), Y value is multiplier on max_bloom.
+@export var bloom_increase_rate: Curve = preload("uid://cffshxd52otno") ## How much bloom to add per shot based on current bloom.
+@export var bloom_decrease_rate: Curve = preload("uid://cgmh8p2atrnb5") ## How much bloom to take away per second based on current bloom.
 @export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var bloom_decrease_delay: float = 1.0 ## How long after the last bloom increase must we wait before starting to decrease it.
 
 @export_group("Warmup Logic")
 @export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var initial_fire_rate_delay: float ## At the lowest warmup level, how long must we wait before a shot fires. This only works when the firing mode is set to AUTO.
-@export var warmup_delay_curve: Curve ## X value is warmup amount (0-1), Y value is multiplier on initial_fire_rate_delay.
-@export var warmup_increase_rate: Curve ## A curve for determining how much warmth to add per shot depending on current warmup.
-@export var warmup_decrease_rate: Curve ## How much warmup do we remove per second based on current warmup.
+@export var warmup_delay_curve: Curve = preload("uid://ck0fdly3k0i4d") ## X value is warmup amount (0-1), Y value is multiplier on initial_fire_rate_delay.
+@export var warmup_increase_rate: Curve = preload("uid://b8jnpwdqcgv41") ## A curve for determining how much warmth to add per shot depending on current warmup.
+@export var warmup_decrease_rate: Curve = preload("uid://8ywvmktc1aft") ## How much warmup do we remove per second based on current warmup.
 @export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var warmup_decrease_delay: float = 0.75 ## How long after the last warmup increase must we wait before starting to decrease it.
 
 @export_group("Overheating Logic")
 @export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var overheat_penalty: float ## When we reach max overheating, how long is the penalty before being able to use the weapon again. Anything above 0 activates this feature.
-@export var overheat_inc_rate: Curve ## X value is overheat amount (0-1), Y value is how much we add to overheat amount per shot.
-@export var overheat_dec_rate: Curve ## X value is overheat amount (0-1), Y value is how much we take away from overheat amount per second.
+@export var overheat_inc_rate: Curve = preload("uid://b6omqen77gwxv") ## X value is overheat amount (0-1), Y value is how much we add to overheat amount per shot.
+@export var overheat_dec_rate: Curve = preload("uid://rlvyvqmf4jeq") ## X value is overheat amount (0-1), Y value is how much we take away from overheat amount per second.
 @export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var overheat_dec_delay: float = 0.75 ## The time between the last overheat increase and when it will begin to decrease back down to 0.
 @export var overheated_sound: String ## The sound to play when the weapon reaches max overheat.
 @export_custom(PROPERTY_HINT_NONE, "suffix:seconds") var overheat_anim_dur: float = 0.5 ## How long one loop of the overheat animation should take (if one exists).

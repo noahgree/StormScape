@@ -77,9 +77,9 @@ occluder = SubResource("OccluderPolygon2D_2kecs")
 [node name="EntityShadow" parent="." unique_id=1546844488 instance=ExtResource("4_mc2cg")]
 self_modulate = Color(0, 0, 0, 0.164)
 offset_left = -16.0
-offset_top = -8.0
+offset_top = -13.0
 offset_right = 16.0
-offset_bottom = 8.0
+offset_bottom = 7.0
 texture = ExtResource("9_7qjvm")
 patch_margin_left = 8
 patch_margin_top = 8
@@ -103,7 +103,7 @@ instance_shader_parameters/final_alpha = 1.0
 instance_shader_parameters/outline_color = Color(1, 1, 1, 1)
 instance_shader_parameters/outline_thickness = 0.0
 instance_shader_parameters/use_override_color = false
-position = Vector2(0, -15)
+position = Vector2(0, -9)
 sprite_frames = SubResource("SpriteFrames_1mdei")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1376427589]

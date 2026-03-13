@@ -1,7 +1,8 @@
 [gd_resource type="Resource" script_class="ProjWeaponStats" format=3 uid="uid://c05ujhrdtx4r5"]
 
 [ext_resource type="Texture2D" uid="uid://bm570hawaupxe" path="res://Entities/Items/Weapons/WeaponVFX/Casings/small_casing.png" id="1_wvxhv"]
-[ext_resource type="Script" uid="uid://dkfssottmsrch" path="res://Entities/Components/ESComponent/EffectSource.gd" id="3_iqgpm"]
+[ext_resource type="Script" uid="uid://boo31eu083dqd" path="res://Entities/Components/ConditionsComponent/Conditions/Condition.gd" id="2_qwykp"]
+[ext_resource type="Script" uid="uid://dn82yybtu3o00" path="res://Entities/Components/ESComponent/NormalES.gd" id="3_msrdt"]
 [ext_resource type="Script" uid="uid://cowjdnic7xmkp" path="res://Entities/Player/UI/Inventory/Panels/ItemDetailsPanel/StatDetail.gd" id="5_d4m1d"]
 [ext_resource type="Texture2D" uid="uid://bmg1c4tf2t0wl" path="res://Entities/Items/Weapons/ProjectileWeapons/Blunderbuss/BlunderbussBaseFrameCT.tres" id="6_olcib"]
 [ext_resource type="Resource" uid="uid://obbfs1l3errg" path="res://Entities/Player/PlayerCore/PlayerCamera/CamFXPresets/8.tres" id="6_wvxhv"]
@@ -11,10 +12,12 @@
 [ext_resource type="Script" uid="uid://dvasncq3tgljs" path="res://Entities/Items/Weapons/ProjectileWeapons/ProjWeaponCore/ProjWeaponStats.gd" id="12_msrdt"]
 [ext_resource type="PackedScene" uid="uid://bqkyplubhsx43" path="res://Entities/Items/Projectiles/Bullets/SmallBullet/SmallBullet.tscn" id="13_icdbk"]
 
-[sub_resource type="Resource" id="Resource_3mxcx"]
-script = ExtResource("3_iqgpm")
+[sub_resource type="Resource" id="Resource_e6ffy"]
+script = ExtResource("3_msrdt")
 source_type = 1
-base_damage = 38
+base_damage = 80
+crit_chance = 5
+metadata/_custom_type_script = "uid://dn82yybtu3o00"
 
 [sub_resource type="Resource" id="Resource_wvxhv"]
 script = ExtResource("5_d4m1d")
@@ -54,7 +57,7 @@ firing_cam_fx = ExtResource("6_wvxhv")
 casing_texture = ExtResource("1_wvxhv")
 casing_tint = Color(0.718546, 0, 0.0739379, 1)
 projectile_logic = SubResource("Resource_wluh4")
-effect_source = SubResource("Resource_3mxcx")
+effect_source = SubResource("Resource_e6ffy")
 ammo_type = 4
 mag_size = 1
 reload_type = 1

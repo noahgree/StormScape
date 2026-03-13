@@ -112,6 +112,9 @@ func _apply_object_scaling(amount: int, esi: ESI) -> int:
 	return int(amount * esi.get_stat(&"object_damage_mult"))
 
 func _calculate_resulting_xp(amount: int) -> int:
+	if affected_entity.hp_component.infinte_hp:
+		if not DebugFlags.grant_xp_when_hitting_infinite_hp_entities:
+			return 0
 	if amount >= (affected_entity.hp_component.health + affected_entity.hp_component.shield):
 		return (amount + WeaponII.LARGE_XP)
 	return amount
@@ -135,9 +138,9 @@ func _apply_final_adjustments(amount: int, type: Type) -> int:
 func send_handled_amount(type: Type, amount: int, popup_type: EffectPopup.POPUP_TYPE, esi: ESI) -> void:
 	if type == Type.DAMAGE:
 		_handle_life_steal(amount, esi)
-		affected_entity.hp_component.change_by_dh_type(-amount, popup_type, esi.es.dmg_affected_stats, esi.multishot_id)
+		affected_entity.hp_component.change_by_dh_type(-amount, popup_type, esi, Type.DAMAGE)
 	else:
-		affected_entity.hp_component.change_by_dh_type(amount, popup_type, esi.es.heal_affected_stats, esi.multishot_id)
+		affected_entity.hp_component.change_by_dh_type(amount, popup_type, esi, Type.HEALING)
 
 	affected_entity.sprite.start_hitflash(esi.es.hit_flash_color, false)
 
@@ -164,4 +167,4 @@ func _handle_life_steal(damage_amount: int, esi: ESI) -> void:
 
 	var clamped_steal_amount: int = max(1, roundi(steal_amount * multiplier))
 
-	esi.source_entity.hp_component.change_by_dh_type(clamped_steal_amount, EffectPopup.POPUP_TYPE.LIFE_STEAL, DHHandler.DHType.HEALTH_THEN_SHIELD)
+	esi.source_entity.hp_component.change_by_dh_type(clamped_steal_amount, EffectPopup.POPUP_TYPE.LIFE_STEAL, esi, Type.HEALING)

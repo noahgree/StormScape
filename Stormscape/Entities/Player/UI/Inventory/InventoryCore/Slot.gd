@@ -414,9 +414,9 @@ func _can_drop_data(_at_position: Vector2, data: Variant) -> bool:
 				CursorManager.update_tooltip("Invalid!", Globals.ui_colors.ui_glow_strong_fail)
 				return false
 	elif name == "ItemViewerSlot":
-		CursorManager.update_tooltip("Pin WorldItem", Globals.ui_colors.ui_glow_strong_success)
+		CursorManager.update_tooltip("Pin Item", Globals.ui_colors.ui_glow_strong_success)
 	elif name == "Trash_Slot":
-		CursorManager.update_tooltip("Trash WorldItem", Globals.ui_colors.ui_light_tan)
+		CursorManager.update_tooltip("Trash Item", Globals.ui_colors.ui_light_tan)
 	return true
 
 ## Drops item slot drag data into the hovered slot, updating the current and source

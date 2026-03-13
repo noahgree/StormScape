@@ -10,6 +10,7 @@ colors = PackedColorArray(0.85786, 0.37047, 1, 1, 0.865745, 0.807902, 1, 1)
 
 [sub_resource type="GradientTexture1D" id="GradientTexture1D_sil7a"]
 gradient = SubResource("Gradient_hfly8")
+width = 20
 
 [sub_resource type="Gradient" id="Gradient_yb0hp"]
 offsets = PackedFloat32Array(0.00211864, 1)
@@ -17,12 +18,14 @@ colors = PackedColorArray(1, 0.30638, 0.340735, 1, 1, 0.654722, 0.576057, 1)
 
 [sub_resource type="GradientTexture1D" id="GradientTexture1D_i2s0b"]
 gradient = SubResource("Gradient_yb0hp")
+width = 20
 
 [sub_resource type="Gradient" id="Gradient_7oxr5"]
 colors = PackedColorArray(0, 0.879278, 0.23916, 1, 0.769116, 0.917191, 0.764514, 1)
 
 [sub_resource type="GradientTexture1D" id="GradientTexture1D_useu7"]
 gradient = SubResource("Gradient_7oxr5")
+width = 20
 
 [sub_resource type="Gradient" id="Gradient_u78qr"]
 offsets = PackedFloat32Array(0.00211864, 1)
@@ -30,12 +33,14 @@ colors = PackedColorArray(3.85046e-06, 0.943728, 0.356911, 1, 0.739044, 0.85956,
 
 [sub_resource type="GradientTexture1D" id="GradientTexture1D_lc6h2"]
 gradient = SubResource("Gradient_u78qr")
+width = 20
 
 [sub_resource type="Gradient" id="Gradient_r2y7f"]
 colors = PackedColorArray(1.8, 0.8, 0.1, 1, 1.5, 1.3, 1.1, 1)
 
 [sub_resource type="GradientTexture1D" id="GradientTexture1D_13s13"]
 gradient = SubResource("Gradient_r2y7f")
+width = 20
 
 [sub_resource type="Gradient" id="Gradient_kgs4e"]
 offsets = PackedFloat32Array(0.00211864, 1)
@@ -43,6 +48,7 @@ colors = PackedColorArray(1, 0.284774, 0.309141, 1, 0.870018, 0.794693, 0.302515
 
 [sub_resource type="GradientTexture1D" id="GradientTexture1D_c4uxi"]
 gradient = SubResource("Gradient_kgs4e")
+width = 20
 
 [sub_resource type="Gradient" id="Gradient_4srgi"]
 offsets = PackedFloat32Array(0.00211864, 1)
@@ -50,12 +56,14 @@ colors = PackedColorArray(3.27289e-06, 0.756997, 0.986952, 1, 0.883352, 0.918172
 
 [sub_resource type="GradientTexture1D" id="GradientTexture1D_wo58k"]
 gradient = SubResource("Gradient_4srgi")
+width = 20
 
 [sub_resource type="Gradient" id="Gradient_6iv0e"]
 colors = PackedColorArray(1, 0.381516, 0.37861, 1, 0.198984, 0.899097, 0, 1)
 
 [sub_resource type="GradientTexture1D" id="GradientTexture1D_g6ann"]
 gradient = SubResource("Gradient_6iv0e")
+width = 20
 
 [sub_resource type="Gradient" id="Gradient_sepbl"]
 offsets = PackedFloat32Array(0.00211864, 1)
@@ -63,6 +71,7 @@ colors = PackedColorArray(0.513464, 0.925662, 0, 1, 0.943756, 0.924392, 0.772243
 
 [sub_resource type="GradientTexture1D" id="GradientTexture1D_o6vwp"]
 gradient = SubResource("Gradient_sepbl")
+width = 20
 
 [sub_resource type="Gradient" id="Gradient_lscuo"]
 offsets = PackedFloat32Array(0.00211864, 1)
@@ -70,6 +79,7 @@ colors = PackedColorArray(0, 0.964477, 0.274126, 1, 0.365584, 0.927375, 1, 1)
 
 [sub_resource type="GradientTexture1D" id="GradientTexture1D_wahlm"]
 gradient = SubResource("Gradient_lscuo")
+width = 20
 
 [sub_resource type="Gradient" id="Gradient_rtwec"]
 offsets = PackedFloat32Array(0.00211864, 1)
@@ -77,6 +87,7 @@ colors = PackedColorArray(0.57503, 0.513959, 0.999994, 1, 0.901304, 0.580623, 1,
 
 [sub_resource type="GradientTexture1D" id="GradientTexture1D_qcsbq"]
 gradient = SubResource("Gradient_rtwec")
+width = 20
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_6iv0e"]
 light_mode = 1
@@ -90,8 +101,9 @@ colors = PackedColorArray(0.595, 0.193, 1, 1, 0.897065, 0.765342, 1, 1)
 
 [sub_resource type="GradientTexture1D" id="GradientTexture1D_b75pg"]
 gradient = SubResource("Gradient_v6ggj")
+width = 20
 
-[node name="EffectPopup" type="Marker2D" unique_id=218542877]
+[node name="EffectPopup" type="Node2D" unique_id=736620239]
 modulate = Color(1, 1, 1, 0.95)
 z_index = 10
 scale = Vector2(0.5, 0.5)
@@ -110,29 +122,32 @@ txt_color_dict = Dictionary[int, GradientTexture1D]({
 10: SubResource("GradientTexture1D_qcsbq")
 })
 
-[node name="CenterContainer" type="CenterContainer" parent="." unique_id=1854647881]
+[node name="MarginContainer" type="CenterContainer" parent="." unique_id=1300741318]
 material = SubResource("CanvasItemMaterial_6iv0e")
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -12.0
-offset_top = -15.0
-offset_right = 12.0
-offset_bottom = 15.0
-grow_horizontal = 2
-grow_vertical = 2
+use_top_left = true
 
-[node name="Glow" type="TextureRect" parent="CenterContainer" unique_id=2104090382]
-modulate = Color(6.49765e-07, 0.659353, 0.180057, 1)
+[node name="MarginContainer2" type="MarginContainer" parent="MarginContainer" unique_id=777372754]
+use_parent_material = true
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/MarginContainer2" unique_id=884736780]
+use_parent_material = true
+layout_mode = 2
+theme_override_constants/margin_left = -4
+theme_override_constants/margin_top = -3
+theme_override_constants/margin_right = -3
+theme_override_constants/margin_bottom = -3
+
+[node name="Glow" type="TextureRect" parent="MarginContainer/MarginContainer2/MarginContainer" unique_id=2104090382]
+unique_name_in_owner = true
+modulate = Color(0, 0.65882355, 0.18039216, 0.5019608)
 material = SubResource("CanvasItemMaterial_7bmg7")
-custom_minimum_size = Vector2(30, 30)
 layout_mode = 2
 texture = ExtResource("2_3y1nw")
 expand_mode = 1
 
-[node name="NumberOutline" type="Label" parent="CenterContainer" unique_id=1932129553]
+[node name="NumberOutline" type="Label" parent="MarginContainer/MarginContainer2" unique_id=1932129553]
+unique_name_in_owner = true
 use_parent_material = true
 layout_mode = 2
 size_flags_horizontal = 4
@@ -146,14 +161,14 @@ theme_override_constants/outline_size = 3
 theme_override_constants/shadow_outline_size = 0
 theme_override_fonts/font = ExtResource("4_dsjwj")
 theme_override_font_sizes/font_size = 15
-text = "99"
+text = "202"
 horizontal_alignment = 1
 
-[node name="NumberLabel" type="Label" parent="CenterContainer" unique_id=357316746]
+[node name="NumberLabel" type="Label" parent="MarginContainer/MarginContainer2" unique_id=357316746]
+unique_name_in_owner = true
 clip_children = 2
 use_parent_material = true
 layout_mode = 2
-size_flags_horizontal = 4
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
@@ -164,15 +179,17 @@ theme_override_constants/outline_size = 0
 theme_override_constants/shadow_outline_size = 0
 theme_override_fonts/font = ExtResource("4_dsjwj")
 theme_override_font_sizes/font_size = 15
-text = "99"
+text = "202"
 horizontal_alignment = 1
+vertical_alignment = 1
 
-[node name="GradientTex" type="TextureRect" parent="CenterContainer/NumberLabel" unique_id=1853136102]
+[node name="GradientTex" type="TextureRect" parent="MarginContainer/MarginContainer2/NumberLabel" unique_id=1853136102]
+unique_name_in_owner = true
 use_parent_material = true
-layout_mode = 0
-offset_left = -1.0
-offset_top = 1.33333
-offset_right = 555.0
-offset_bottom = 51.3333
-scale = Vector2(0.03, 0.28)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 texture = SubResource("GradientTexture1D_b75pg")

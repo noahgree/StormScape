@@ -47,6 +47,9 @@ var show_fps: bool = true
 var show_facing_dir: bool = false
 var show_nav: bool = false
 
+# XP Flags
+var grant_xp_when_hitting_infinite_hp_entities: bool = true
+
 
 func _ready() -> void:
 	DebugConsole.add_command("set", set_debug_flag)

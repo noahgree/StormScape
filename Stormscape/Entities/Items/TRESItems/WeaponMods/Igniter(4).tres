@@ -1,6 +1,7 @@
 [gd_resource type="Resource" script_class="WeaponModStats" format=3 uid="uid://caxftf2aer6g4"]
 
 [ext_resource type="Script" uid="uid://boo31eu083dqd" path="res://Entities/Components/ConditionsComponent/Conditions/Condition.gd" id="2_6c076"]
+[ext_resource type="Resource" uid="uid://1b0tsbvrwtcw" path="res://Entities/Components/ConditionsComponent/Conditions/BadEffects/Burning/Burning-1.tres" id="2_pt8k7"]
 [ext_resource type="Script" uid="uid://cowjdnic7xmkp" path="res://Entities/Player/UI/Inventory/Panels/ItemDetailsPanel/StatDetail.gd" id="3_j4oik"]
 [ext_resource type="Texture2D" uid="uid://uw5lhqydwiy3" path="res://Entities/Items/WeaponMods/Igniter/IgniterBaseCT.tres" id="4_61rvc"]
 [ext_resource type="Script" uid="uid://ctxa7i1mbt7ab" path="res://Entities/Player/UI/Inventory/Panels/CraftingPanel/CraftingIngredient.gd" id="6_5f6ra"]
@@ -37,6 +38,9 @@ metadata/_custom_type_script = "uid://bcjwesiannbd0"
 [resource]
 script = ExtResource("6_kyyv3")
 wpn_stat_mods = Array[ExtResource("7_agevf")]([SubResource("Resource_1tbmq"), SubResource("Resource_61rvc"), SubResource("Resource_6c076")])
+conditions = Array[ExtResource("2_6c076")]([ExtResource("2_pt8k7")])
+charge_conditions = Array[ExtResource("2_6c076")]([ExtResource("2_pt8k7")])
+aoe_conditions = Array[ExtResource("2_6c076")]([ExtResource("2_pt8k7")])
 id = "igniter"
 name = "Igniter"
 item_type = 6

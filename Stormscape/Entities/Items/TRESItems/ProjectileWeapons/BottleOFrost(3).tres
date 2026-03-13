@@ -1,23 +1,38 @@
 [gd_resource type="Resource" script_class="ProjWeaponStats" format=3 uid="uid://dvnlojpwqoojv"]
 
-[ext_resource type="Resource" uid="uid://cev0y0oe3igus" path="res://Entities/Player/PlayerCore/PlayerCamera/CamFXPresets/6.tres" id="1_bgdcb"]
-[ext_resource type="Script" uid="uid://dkfssottmsrch" path="res://Entities/Components/ESComponent/EffectSource.gd" id="2_4q57q"]
+[ext_resource type="Curve" uid="uid://b8lhpj4fuv50h" path="res://Utilities/Game/Curves/BASE_BLOOM.tres" id="1_lhiwp"]
+[ext_resource type="Curve" uid="uid://cgmh8p2atrnb5" path="res://Utilities/Game/Curves/BASE_BLOOM_DEC_RATE.tres" id="2_ay24n"]
+[ext_resource type="Script" uid="uid://dn82yybtu3o00" path="res://Entities/Components/ESComponent/NormalES.gd" id="2_nkymk"]
 [ext_resource type="Script" uid="uid://boo31eu083dqd" path="res://Entities/Components/ConditionsComponent/Conditions/Condition.gd" id="3_be5sn"]
+[ext_resource type="Curve" uid="uid://cffshxd52otno" path="res://Utilities/Game/Curves/BASE_BLOOM_INC_RATE.tres" id="3_r4w5h"]
 [ext_resource type="Script" uid="uid://cowjdnic7xmkp" path="res://Entities/Player/UI/Inventory/Panels/ItemDetailsPanel/StatDetail.gd" id="4_ns2jq"]
 [ext_resource type="Texture2D" uid="uid://ndv23me2pjpp" path="res://Entities/Items/Weapons/ProjectileWeapons/BottleOFrost/BottleOFrostBaseCT.tres" id="5_hqxuj"]
 [ext_resource type="Script" uid="uid://cje5bobi6o8bo" path="res://Entities/Items/Hitscans/HitscanStats.gd" id="6_36ar8"]
 [ext_resource type="Texture2D" uid="uid://bpeyfequ1my8c" path="res://Entities/Items/Weapons/ProjectileWeapons/BottleOFrost/BottleOFrostThrowableCT.tres" id="7_bgdcb"]
+[ext_resource type="Curve" uid="uid://bk3m2mnf6cwxc" path="res://Utilities/Game/Curves/BASE_HITSCAN_FALLOFF.tres" id="8_gimhy"]
+[ext_resource type="Curve" uid="uid://dcf3klshobqsh" path="res://Utilities/Game/Curves/0-1-MAX.tres" id="9_bjq1f"]
 [ext_resource type="PackedScene" uid="uid://b5rrhd6ano4sf" path="res://Entities/Items/Projectiles/ProjectileCore/AreaOfEffectVFX/FreezingAOEVFX.tscn" id="11_4q57q"]
 [ext_resource type="PackedScene" uid="uid://c6qs5fggipaja" path="res://Entities/Items/Weapons/ProjectileWeapons/BottleOFrost/BottleOFrost.tscn" id="12_hqxuj"]
 [ext_resource type="PackedScene" uid="uid://355ervipd44s" path="res://Entities/Items/Projectiles/Explosives/FrostBottle/FrostBottle.tscn" id="12_ns2jq"]
 [ext_resource type="Script" uid="uid://bj3r5oopspj6l" path="res://Entities/Items/Projectiles/ProjectileCore/ProjStats.gd" id="12_oiymh"]
 [ext_resource type="Script" uid="uid://ctxa7i1mbt7ab" path="res://Entities/Player/UI/Inventory/Panels/CraftingPanel/CraftingIngredient.gd" id="13_bx1py"]
+[ext_resource type="Curve" uid="uid://rlvyvqmf4jeq" path="res://Utilities/Game/Curves/BASE_OVERHEAT_DEC_RATE.tres" id="13_pw70j"]
+[ext_resource type="Curve" uid="uid://b6omqen77gwxv" path="res://Utilities/Game/Curves/BASE_OVERHEAT_INC_RATE.tres" id="14_k6ldv"]
+[ext_resource type="Resource" uid="uid://br7ukgnc66asu" path="res://Entities/Components/ConditionsComponent/Conditions/BadEffects/Frostbite/Frostbite-1-AOE.tres" id="15_ay24n"]
 [ext_resource type="Script" uid="uid://dvasncq3tgljs" path="res://Entities/Items/Weapons/ProjectileWeapons/ProjWeaponCore/ProjWeaponStats.gd" id="15_ns2jq"]
+[ext_resource type="Curve" uid="uid://cx5xd3sk17ryv" path="res://Utilities/Game/Curves/BASE_PROJ_HOMING_TURN_RATE.tres" id="17_g24yf"]
+[ext_resource type="Curve" uid="uid://8ywvmktc1aft" path="res://Utilities/Game/Curves/BASE_WARMUP_DEC_RATE.tres" id="21_neamn"]
+[ext_resource type="Curve" uid="uid://ck0fdly3k0i4d" path="res://Utilities/Game/Curves/BASE_WARMUP.tres" id="22_wvl4l"]
+[ext_resource type="Curve" uid="uid://b8jnpwdqcgv41" path="res://Utilities/Game/Curves/BASE_WARMUP_INC_RATE.tres" id="23_gb6m4"]
 
-[sub_resource type="Resource" id="Resource_bgdcb"]
-script = ExtResource("2_4q57q")
+[sub_resource type="Resource" id="Resource_8ls1p"]
+script = ExtResource("2_nkymk")
 source_type = 1
-impact_cam_fx = ExtResource("1_bgdcb")
+can_hit_self = false
+teams_hit_by_bad = 3
+teams_hit_by_good = 3
+base_damage = 10
+metadata/_custom_type_script = "uid://dn82yybtu3o00"
 
 [sub_resource type="Resource" id="Resource_4q57q"]
 script = ExtResource("6_36ar8")
@@ -27,20 +42,20 @@ beam_color = Color(1, 0.0784314, 0.576471, 1)
 start_particle_color = Color(1, 0.752941, 0.796078, 1)
 impact_particle_color = Color(1, 0.752941, 0.796078, 1)
 
-[sub_resource type="Curve" id="Curve_be5sn"]
-_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
-point_count = 2
-
-[sub_resource type="Resource" id="Resource_be5sn"]
-script = ExtResource("2_4q57q")
+[sub_resource type="Resource" id="Resource_rjkgw"]
+script = ExtResource("2_nkymk")
 source_type = 3
-base_damage = 10
+teams_hit_by_bad = 3
+teams_hit_by_good = 3
+conditions = Array[ExtResource("3_be5sn")]([ExtResource("15_ay24n")])
+base_damage = 15
+metadata/_custom_type_script = "uid://dn82yybtu3o00"
 
 [sub_resource type="Curve" id="Curve_4q57q"]
 _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
 point_count = 2
 
-[sub_resource type="Curve" id="Curve_3yptu"]
+[sub_resource type="Curve" id="Curve_nkymk"]
 _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
 point_count = 2
 
@@ -53,7 +68,8 @@ script = ExtResource("12_oiymh")
 speed_curve = SubResource("Curve_0ssqt")
 lifetime = 5.0
 height_override = 6
-effect_falloff_curve = SubResource("Curve_3yptu")
+falloff_curve = SubResource("Curve_nkymk")
+damage_falloff = false
 spin_speed = 200.0
 launch_angle = 70.0
 arc_travel_distance = 100
@@ -61,11 +77,9 @@ arc_speed = 750.0
 max_collision_height = -1
 bounce_falloff_curve = SubResource("Curve_4q57q")
 split_cam_fx = null
-aoe_effect_source = SubResource("Resource_be5sn")
+aoe_effect_source = SubResource("Resource_rjkgw")
 aoe_radius = 25
-aoe_effect_falloff_curve = SubResource("Curve_be5sn")
-aoe_effect_dur = 5.0
-aoe_effects_delay = 0.0
+aoe_duration = 6.0
 aoe_vfx = ExtResource("11_4q57q")
 
 [resource]
@@ -77,7 +91,7 @@ fire_cooldown = 1.0
 spawn_after_fire_anim = true
 projectile_logic = SubResource("Resource_36ar8")
 hitscan_logic = SubResource("Resource_4q57q")
-effect_source = SubResource("Resource_bgdcb")
+effect_source = SubResource("Resource_8ls1p")
 ammo_type = 1
 mag_size = -1
 no_levels = true

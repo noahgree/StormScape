@@ -1,0 +1,47 @@
+[gd_resource type="Resource" script_class="Condition" format=3 uid="uid://br7ukgnc66asu"]
+
+[ext_resource type="Script" uid="uid://boo31eu083dqd" path="res://Entities/Components/ConditionsComponent/Conditions/Condition.gd" id="1_5b8cu"]
+[ext_resource type="Script" uid="uid://20acrt2hb6y" path="res://Entities/Components/ConditionsComponent/Conditions/EOTStats.gd" id="1_q7wew"]
+[ext_resource type="Script" uid="uid://bcjwesiannbd0" path="res://Entities/Components/StatMod/StatMod.gd" id="2_0x0bd"]
+[ext_resource type="Script" uid="uid://cbcq3vjvdouts" path="res://Entities/Components/ESComponent/TickES.gd" id="3_okn05"]
+
+[sub_resource type="Resource" id="Resource_fs5cc"]
+script = ExtResource("2_0x0bd")
+stat_id = &"friction"
+mod_id = &"frostbite"
+operation = "-%"
+value = 80.0
+is_good_mod = false
+metadata/_custom_type_script = "uid://bcjwesiannbd0"
+
+[sub_resource type="Resource" id="Resource_jrdvf"]
+script = ExtResource("2_0x0bd")
+stat_id = &"acceleration"
+mod_id = &"frostbite"
+operation = "-%"
+value = 70.0
+metadata/_custom_type_script = "uid://bcjwesiannbd0"
+
+[sub_resource type="Resource" id="Resource_w1b2d"]
+script = ExtResource("3_okn05")
+base_damage = 3
+dmg_affected_stats = 0
+dmg_popup_type = 6
+hit_flash_color = 2
+metadata/_custom_type_script = "uid://cbcq3vjvdouts"
+
+[sub_resource type="Resource" id="Resource_plnmq"]
+script = ExtResource("1_q7wew")
+perpetual = true
+perpetual_interval = 1.0
+ticks_array = Array[ExtResource("3_okn05")]([SubResource("Resource_w1b2d")])
+stat_mods = Array[ExtResource("2_0x0bd")]([SubResource("Resource_fs5cc"), SubResource("Resource_jrdvf")])
+metadata/_custom_type_script = "uid://20acrt2hb6y"
+
+[resource]
+script = ExtResource("1_5b8cu")
+id = 1
+source_type = 1
+conditions_to_stop = Array[int]([0])
+eot_stats = SubResource("Resource_plnmq")
+metadata/_custom_type_script = "uid://boo31eu083dqd"

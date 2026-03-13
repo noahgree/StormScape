@@ -1,8 +1,8 @@
 [gd_resource type="Resource" script_class="ProjWeaponStats" format=3 uid="uid://4nvp28pvjtk3"]
 
 [ext_resource type="Texture2D" uid="uid://c7i0hkkoanp61" path="res://Entities/Items/Weapons/ProjectileWeapons/Boomerang/boomerang_wood.png" id="1_83uvj"]
-[ext_resource type="Script" uid="uid://dkfssottmsrch" path="res://Entities/Components/ESComponent/EffectSource.gd" id="1_rpmcv"]
-[ext_resource type="Resource" uid="uid://y5iqfraea8ry" path="res://Entities/Player/PlayerCore/PlayerCamera/CamFXPresets/2(NoFreeze).tres" id="2_8depf"]
+[ext_resource type="Script" uid="uid://boo31eu083dqd" path="res://Entities/Components/ConditionsComponent/Conditions/Condition.gd" id="1_f22wo"]
+[ext_resource type="Script" uid="uid://dn82yybtu3o00" path="res://Entities/Components/ESComponent/NormalES.gd" id="2_n6gbv"]
 [ext_resource type="Script" uid="uid://dvasncq3tgljs" path="res://Entities/Items/Weapons/ProjectileWeapons/ProjWeaponCore/ProjWeaponStats.gd" id="3_qvjon"]
 [ext_resource type="Script" uid="uid://cje5bobi6o8bo" path="res://Entities/Items/Hitscans/HitscanStats.gd" id="3_sx4mp"]
 [ext_resource type="Script" uid="uid://bj3r5oopspj6l" path="res://Entities/Items/Projectiles/ProjectileCore/ProjStats.gd" id="4_5tlmk"]
@@ -12,14 +12,12 @@
 [ext_resource type="PackedScene" uid="uid://b6v13q8eomso" path="res://Entities/Items/Weapons/ProjectileWeapons/Boomerang/BoomerangWood.tscn" id="7_f3xvq"]
 [ext_resource type="Script" uid="uid://ctxa7i1mbt7ab" path="res://Entities/Player/UI/Inventory/Panels/CraftingPanel/CraftingIngredient.gd" id="11_j3d0w"]
 
-[sub_resource type="Resource" id="Resource_3tpeu"]
-script = ExtResource("1_rpmcv")
+[sub_resource type="Resource" id="Resource_p3j4a"]
+script = ExtResource("2_n6gbv")
 source_type = 1
 can_hit_self = false
 base_damage = 35
-crit_chance = 2
-crit_multiplier = 1.25
-impact_cam_fx = ExtResource("2_8depf")
+metadata/_custom_type_script = "uid://dn82yybtu3o00"
 
 [sub_resource type="Resource" id="Resource_2m5jx"]
 script = ExtResource("3_sx4mp")
@@ -71,7 +69,7 @@ fire_cooldown = 0.75
 spawn_after_fire_anim = true
 projectile_logic = SubResource("Resource_6jh23")
 hitscan_logic = SubResource("Resource_2m5jx")
-effect_source = SubResource("Resource_3tpeu")
+effect_source = SubResource("Resource_p3j4a")
 ammo_type = 8
 mag_size = -1
 stamina_use_per_proj = 4.0

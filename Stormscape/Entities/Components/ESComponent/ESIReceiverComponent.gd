@@ -16,14 +16,15 @@ class_name ESIReceiverComponent
 @export var filter_source_types: bool = false ## When true, only allow matching source types as specified in the below array.
 @export var allowed_source_types: Array[EffectSource.SourceType] = [] ## The list of sources an effect source can come from in order to affect this esi receiver (only when filter_source_types is true).
 @export var filter_source_tags: bool = false ## When true, only allow matching source tags as specified in the below array.
-@export var allowed_source_tags: Array[String] = [] ## Effect sources must have a tag that matches something in this array in order to be handled when the filter_source_tags is set to true.
+@export var allowed_source_tags: Array[EffectSource.Tag] = [] ## Effect sources must have a tag that matches something in this array in order to be handled when the filter_source_tags is set to true.
+@export var always_do_conditions: bool = true ## Allow conditions from the ESIs, even if they don't pass the filters above.
 @export_group("Entity Stat Modifiers")
 @export var stat_modifiers: EntityStatModifiers = EntityStatModifiers.new()
 
 @onready var entity: Entity = owner if owner is Entity else null ## The owning entity to be affected by the ESIs being received.
 @onready var dh_handler: DHHandler = %DHHandler ## The dh handler child.
 
-var current_impact_sounds: Array[int] = [] ## The current impact sounds being played and held onto by this esi receiver.
+var current_hit_sounds: Array[int] = [] ## The current hit sounds being played and held onto by this esi receiver.
 var most_recent_multishot_id: int = 0 ## The most recent multishot id to be received. Prevents multishots from stacking conditions.
 
 
@@ -46,28 +47,36 @@ func _ready() -> void:
 ## Handles an incoming effect source, passing it to present receivers for further processing before changing
 ## entity stats.
 func handle_esi(esi: ESI, process_conditions: bool = true) -> void:
+	# --- Checking for Self-Hits ---
+	if (esi.source_entity) and (entity == esi.source_entity) and (not esi.es.can_hit_self):
+		return
+
 	# --- Applying Cam FX & Hit Sound ---
 	_handle_cam_fx(esi)
-	_handle_impact_sound(esi)
+	_handle_hit_sound(esi)
 
 	# --- Changing Cursor to Reflect Hit ---
 	if (esi.source_entity) and (esi.source_entity is Player) and (not entity is Player):
 		CursorManager.change_cursor(null, "hit")
 
 	# --- Filtering Source Types & Tags ---
-	if filter_source_types and (esi.es.source_type not in allowed_source_types):
+	if (esi.es is NormalES) and filter_source_types and (esi.es.source_type not in allowed_source_types):
+		if always_do_conditions:
+			_set_recent_multishot_id_and_send_conditions_in_esi(esi)
 		return
-	if filter_source_tags:
+	if (esi.es is NormalES) and filter_source_tags:
 		var match_found: bool = false
-		for tag: String in esi.es.source_tags:
+		for tag: EffectSource.Tag in esi.es.source_tags:
 			if tag in allowed_source_tags:
 				match_found = true
 		if not match_found:
+			if always_do_conditions:
+				_set_recent_multishot_id_and_send_conditions_in_esi(esi)
 			return
 
 	# --- Spawning Impact VFX ---
-	if esi.es.impact_vfx != null:
-		var vfx: Node2D = esi.es.impact_vfx.instantiate()
+	if esi.es.hit_vfx != null:
+		var vfx: Node2D = esi.es.hit_vfx.instantiate()
 		vfx.global_position = entity.global_position
 		add_child(vfx)
 
@@ -77,13 +86,13 @@ func handle_esi(esi: ESI, process_conditions: bool = true) -> void:
 
 	# --- Checking if We Should Drop Loot on Hit Early and Return ---
 	if (esi.source_entity) and (esi.source_entity_team == Globals.Teams.PASSIVE):
-		if (esi.es.source_type != EffectSource.SourceType.FROM_EOT) and (entity.loot):
+		if (esi.es.source_type != EffectSource.SourceType.FROM_CONDITION_TICK) and (entity.loot):
 			entity.loot.handle_hit()
 		return
 
-	# --- Triggering Loot Component if not from EOTI ---
+	# --- Triggering Loot Component if not from Condition Tick ---
 	if (entity.loot) and (not entity.loot.require_dmg_on_hit):
-		if esi.es.source_type != EffectSource.SourceType.FROM_EOT:
+		if esi.es.source_type != EffectSource.SourceType.FROM_CONDITION_TICK:
 			entity.loot.handle_hit()
 
 	# --- Applying Base Damage & Base Healing ---
@@ -109,29 +118,34 @@ func handle_esi(esi: ESI, process_conditions: bool = true) -> void:
 	if (esi.multishot_id != -1) and (esi.multishot_id == most_recent_multishot_id):
 		return
 
-	# --- Update Recent Multishot ID and Send Conditions to Handler ---
+	# --- Set Recent Multishot ID and Send Conditions Out ---
+	_set_recent_multishot_id_and_send_conditions_in_esi(esi)
+
+## Sends the conditions in the ESI to the entity conditions component.
+func _set_recent_multishot_id_and_send_conditions_in_esi(esi: ESI) -> void:
 	most_recent_multishot_id = esi.multishot_id
+
 	entity.conditions_component.handle_conditions_in_esi(esi)
 
 ## Only plays the impact sound if one exists and one is not already playing for a matching multishot id.
-func _handle_impact_sound(esi: ESI) -> void:
+func _handle_hit_sound(esi: ESI) -> void:
 	var multishot_id: int = esi.multishot_id
 	if multishot_id != -1:
-		if multishot_id not in current_impact_sounds:
-			var player_inst: AudioPlayerInstance = AudioManager.play_2d(esi.es.impact_sound, entity.global_position, 0, true, -1, Globals.world_root)
+		if multishot_id not in current_hit_sounds:
+			var player_inst: AudioPlayerInstance = AudioManager.play_2d(esi.es.hit_sound, entity.global_position, 0, true, -1, Globals.world_root)
 			if player_inst:
-				current_impact_sounds.append(multishot_id)
+				current_hit_sounds.append(multishot_id)
 
-				var callable: Callable = Callable(func() -> void: current_impact_sounds.erase(multishot_id))
+				var callable: Callable = Callable(func() -> void: current_hit_sounds.erase(multishot_id))
 				AudioManager.add_finish_callable_to_player(player_inst.player, callable)
 	else:
-		AudioManager.play_2d(esi.es.impact_sound, entity.global_position, 0, true)
+		AudioManager.play_2d(esi.es.hit_sound, entity.global_position, 0, true)
 
 ## Starts the player camera fx from the effect source details.
 func _handle_cam_fx(esi: ESI) -> void:
-	if esi.es.impact_cam_fx == null:
+	if esi.es.hit_cam_fx == null:
 		return
-	esi.es.impact_cam_fx.apply_falloffs_and_activate_all(entity)
+	esi.es.hit_cam_fx.apply_falloffs_and_activate_all(entity)
 
 #region Debug
 ### Attempts to apply a condition based on its file name turned into snake case. "poison_1", for example.

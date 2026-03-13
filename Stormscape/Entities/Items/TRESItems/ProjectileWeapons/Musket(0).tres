@@ -1,17 +1,27 @@
 [gd_resource type="Resource" script_class="ProjWeaponStats" format=3 uid="uid://bnc4tbhdxpauy"]
 
 [ext_resource type="Texture2D" uid="uid://bm570hawaupxe" path="res://Entities/Items/Weapons/WeaponVFX/Casings/small_casing.png" id="1_hjiec"]
+[ext_resource type="Script" uid="uid://dn82yybtu3o00" path="res://Entities/Components/ESComponent/NormalES.gd" id="3_kibxy"]
 [ext_resource type="Script" uid="uid://boo31eu083dqd" path="res://Entities/Components/ConditionsComponent/Conditions/Condition.gd" id="3_o52iq"]
-[ext_resource type="Script" uid="uid://dkfssottmsrch" path="res://Entities/Components/ESComponent/EffectSource.gd" id="4_78vf2"]
 [ext_resource type="Script" uid="uid://cowjdnic7xmkp" path="res://Entities/Player/UI/Inventory/Panels/ItemDetailsPanel/StatDetail.gd" id="4_bhfuw"]
 [ext_resource type="Resource" uid="uid://o8dc73c74md6" path="res://Entities/Player/PlayerCore/PlayerCamera/CamFXPresets/4(NoFreeze).tres" id="5_o52iq"]
 [ext_resource type="Texture2D" uid="uid://c2ul6ws6q5hxx" path="res://Entities/Items/Weapons/ProjectileWeapons/Musket/MusketBaseCT.tres" id="7_hjiec"]
+[ext_resource type="Curve" uid="uid://bk3m2mnf6cwxc" path="res://Utilities/Game/Curves/BASE_HITSCAN_FALLOFF.tres" id="7_nnau0"]
+[ext_resource type="Curve" uid="uid://dcf3klshobqsh" path="res://Utilities/Game/Curves/0-1-MAX.tres" id="8_r2v0w"]
 [ext_resource type="Script" uid="uid://cje5bobi6o8bo" path="res://Entities/Items/Hitscans/HitscanStats.gd" id="9_fhpo5"]
 [ext_resource type="PackedScene" uid="uid://dogs4tqif0u8h" path="res://Entities/Items/Weapons/ProjectileWeapons/Musket/Musket.tscn" id="11_hjiec"]
+[ext_resource type="Curve" uid="uid://rlvyvqmf4jeq" path="res://Utilities/Game/Curves/BASE_OVERHEAT_DEC_RATE.tres" id="11_ptnuh"]
+[ext_resource type="Curve" uid="uid://b6omqen77gwxv" path="res://Utilities/Game/Curves/BASE_OVERHEAT_INC_RATE.tres" id="12_0o38v"]
 [ext_resource type="Script" uid="uid://bj3r5oopspj6l" path="res://Entities/Items/Projectiles/ProjectileCore/ProjStats.gd" id="12_ma2xb"]
 [ext_resource type="PackedScene" uid="uid://bqkyplubhsx43" path="res://Entities/Items/Projectiles/Bullets/SmallBullet/SmallBullet.tscn" id="13_jo86x"]
+[ext_resource type="Curve" uid="uid://ddo8hn7smn666" path="res://Utilities/Game/Curves/BASE_PROJ_BOUNCE_FALLOFF.tres" id="13_prafv"]
+[ext_resource type="Curve" uid="uid://omr2xxxhvdbq" path="res://Utilities/Game/Curves/BASE_PROJ_FALLOFF.tres" id="14_0qmbq"]
 [ext_resource type="Script" uid="uid://ctxa7i1mbt7ab" path="res://Entities/Player/UI/Inventory/Panels/CraftingPanel/CraftingIngredient.gd" id="14_cya72"]
 [ext_resource type="Script" uid="uid://dvasncq3tgljs" path="res://Entities/Items/Weapons/ProjectileWeapons/ProjWeaponCore/ProjWeaponStats.gd" id="15_o52iq"]
+[ext_resource type="Curve" uid="uid://cx5xd3sk17ryv" path="res://Utilities/Game/Curves/BASE_PROJ_HOMING_TURN_RATE.tres" id="16_c1pn6"]
+[ext_resource type="Curve" uid="uid://8ywvmktc1aft" path="res://Utilities/Game/Curves/BASE_WARMUP_DEC_RATE.tres" id="20_bfqik"]
+[ext_resource type="Curve" uid="uid://ck0fdly3k0i4d" path="res://Utilities/Game/Curves/BASE_WARMUP.tres" id="21_0aagd"]
+[ext_resource type="Curve" uid="uid://b8jnpwdqcgv41" path="res://Utilities/Game/Curves/BASE_WARMUP_INC_RATE.tres" id="22_dm8oy"]
 
 [sub_resource type="Curve" id="Curve_hjiec"]
 _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
@@ -21,29 +31,21 @@ point_count = 2
 
 [sub_resource type="Curve" id="Curve_6grxy"]
 
-[sub_resource type="Resource" id="Resource_78vf2"]
-script = ExtResource("4_78vf2")
+[sub_resource type="Resource" id="Resource_554xs"]
+script = ExtResource("3_kibxy")
 source_type = 1
-base_damage = 55
-
-[sub_resource type="Curve" id="Curve_ks1up"]
-_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
-point_count = 2
+base_damage = 69
+metadata/_custom_type_script = "uid://dn82yybtu3o00"
 
 [sub_resource type="Resource" id="Resource_4epke"]
 script = ExtResource("9_fhpo5")
 hitscan_effect_interval = 0.1
 hitscan_max_distance = 250
 hitscan_pierce_count = 1
-hitscan_effect_falloff = SubResource("Curve_ks1up")
 hitscan_max_width = 0.5
 beam_color = Color(1, 0.0784314, 0.576471, 1)
 start_particle_color = Color(1, 0.752941, 0.796078, 1)
 impact_particle_color = Color(1, 0.752941, 0.796078, 1)
-
-[sub_resource type="Curve" id="Curve_thwau"]
-_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
-point_count = 2
 
 [sub_resource type="Curve" id="Curve_fhpo5"]
 _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.797205), 0.0, 0.0, 0, 0]
@@ -56,8 +58,6 @@ speed_curve = SubResource("Curve_fhpo5")
 lifetime = 2.0
 max_distance = 230
 height_override = 6
-effect_falloff_curve = SubResource("Curve_thwau")
-bad_effects_falloff = false
 arc_speed = 350.0
 split_cam_fx = null
 
@@ -72,7 +72,7 @@ casing_texture = ExtResource("1_hjiec")
 casing_sound = "bullet_casing"
 projectile_logic = SubResource("Resource_qacbk")
 hitscan_logic = SubResource("Resource_4epke")
-effect_source = SubResource("Resource_78vf2")
+effect_source = SubResource("Resource_554xs")
 ammo_type = 3
 mag_size = 1
 reload_type = 1

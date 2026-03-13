@@ -265,20 +265,20 @@ func _get_bloom(ii: II) -> String:
 ## Gets the conditions from the normal effect source.
 func _get_conditions(ii: II) -> String:
 	var string: String = _get_title("EFFECTS")
-	var effect_array: Array[Condition]
+	var condition_array: Array[Condition]
 	if ii is WeaponII:
-		effect_array = ii.normal_esi.conditions
+		condition_array = ii.normal_esi.conditions
 	elif ii.stats is WeaponModStats:
-		effect_array = ii.stats.conditions
+		condition_array = ii.stats.conditions
 
-	if effect_array.is_empty():
+	if condition_array.is_empty():
 		return ""
 
-	for effect: Condition in effect_array:
-		if ii is WeaponII and effect not in ii.normal_esi.es.conditions:
-			string += "[color=Lawngreen]" + effect.get_pretty_string() + "[/color], "
+	for condition: Condition in condition_array:
+		if ii is WeaponII and condition not in ii.normal_esi.es.conditions:
+			string += "[color=Lawngreen]" + condition.get_panel_string() + "[/color], "
 		else:
-			string += effect.get_pretty_string() + ", "
+			string += condition.get_panel_string() + ", "
 
 	string = string.trim_suffix(", ")
 	return string
@@ -329,14 +329,14 @@ func _get_aoe_stats(ii: II) -> Array[String]:
 		healing += _get_item_sums(ii, ["proj_aoe_base_healing"], true)
 		strings.append(healing)
 
-	var effects: String = _get_title("AOE EFFECTS")
-	for effect: Condition in ii.aoe_esi.conditions:
-		if effect not in ii.aoe_esi.es.conditions:
-			effects += "[color=Lawngreen]" + effect.get_pretty_string() + "[/color], "
+	var conditions: String = _get_title("AOE EFFECTS")
+	for condition: Condition in ii.aoe_esi.conditions:
+		if condition not in ii.aoe_esi.es.conditions:
+			conditions += "[color=Lawngreen]" + condition.get_panel_string() + "[/color], "
 		else:
-			effects += effect.get_pretty_string() + ", "
-	effects = effects.trim_suffix(", ")
-	strings.append(effects)
+			conditions += condition.get_panel_string() + ", "
+	conditions = conditions.trim_suffix(", ")
+	strings.append(conditions)
 
 	return strings
 

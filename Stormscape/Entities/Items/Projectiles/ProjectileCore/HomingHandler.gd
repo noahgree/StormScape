@@ -116,7 +116,6 @@ func _find_target_in_fov() -> void:
 
 ## Checks if the homing target is something we are even allowed to target.
 func _is_valid_homing_target(obj: Node) -> bool:
-	print(obj)
 	if obj is Entity:
 		if obj.team != proj.source_entity.team and obj.team != Globals.Teams.PASSIVE:
 			return true

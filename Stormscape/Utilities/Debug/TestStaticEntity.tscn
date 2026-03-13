@@ -12,7 +12,7 @@
 [ext_resource type="PackedScene" uid="uid://cdfdy8m6ki3oq" path="res://Entities/Components/HPComponent/HPComponent.tscn" id="7_pas02"]
 [ext_resource type="Texture2D" uid="uid://b16ywn0u2djhd" path="res://Assets/Icon/icon_light.png" id="9_3mtfl"]
 [ext_resource type="PackedScene" uid="uid://btba0jmsow1mx" path="res://Entities/Components/ESComponent/ESIReceiverComponent.tscn" id="10_o35vp"]
-[ext_resource type="PackedScene" uid="uid://cj2wy5f05cos4" path="res://Entities/EntityCore/Shadow/EntityShadow.tscn" id="11_axhmd"]
+[ext_resource type="PackedScene" uid="uid://digwuyppqnmsf" path="res://Entities/EntityCore/Shadow/EntityShadow.tscn" id="11_axhmd"]
 [ext_resource type="PackedScene" uid="uid://co3n6m7efg8pd" path="res://Entities/Components/ConditionsComponent/ConditionsComponent.tscn" id="11_swclu"]
 [ext_resource type="Script" uid="uid://1qq7eo7lm8j6" path="res://Entities/Components/ItemComponents/LootTableComponent/LootTableEntry.gd" id="14_h0qkk"]
 [ext_resource type="PackedScene" uid="uid://2yy4xfm5g74l" path="res://Entities/Components/ItemComponents/ClippingComponent/ClippingArea.tscn" id="22_h0qkk"]
@@ -31,13 +31,13 @@ script = ExtResource("6_axhmd")
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ur1i4"]
 size = Vector2(12, 12)
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_owoab"]
-resource_local_to_scene = true
-shader = ExtResource("3_xscca")
-
 [sub_resource type="AtlasTexture" id="AtlasTexture_g1258"]
 atlas = ExtResource("9_3mtfl")
 region = Rect2(0, 0, 1024, 1024)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_owoab"]
+resource_local_to_scene = true
+shader = ExtResource("3_xscca")
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_rk4ta"]
 animations = [{
@@ -72,18 +72,16 @@ shape = SubResource("RectangleShape2D_ur1i4")
 
 [node name="DetectionComponent" parent="." unique_id=7720521 instance=ExtResource("3_c4qls")]
 
+[node name="EntityShadow" parent="." unique_id=1836761938 instance=ExtResource("11_axhmd")]
+texture = SubResource("AtlasTexture_g1258")
+offset = Vector2(0, -7)
+
 [node name="EntitySprite" parent="." unique_id=1711748734 instance=ExtResource("3_kbhyj")]
 unique_name_in_owner = true
 material = SubResource("ShaderMaterial_owoab")
 position = Vector2(0, -7)
 scale = Vector2(0.017, 0.017)
 sprite_frames = SubResource("SpriteFrames_rk4ta")
-
-[node name="EntityShadow" parent="." unique_id=1836761938 instance=ExtResource("11_axhmd")]
-offset_left = -9.0
-offset_top = -10.0
-offset_right = 9.0
-offset_bottom = 2.0
 
 [node name="HPComponent" parent="." unique_id=1940569359 instance=ExtResource("7_pas02")]
 infinte_hp = true

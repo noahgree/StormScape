@@ -1,26 +1,35 @@
 [gd_resource type="Resource" script_class="ProjWeaponStats" format=3 uid="uid://dlfmjgnfk6nqj"]
 
 [ext_resource type="Texture2D" uid="uid://bm570hawaupxe" path="res://Entities/Items/Weapons/WeaponVFX/Casings/small_casing.png" id="1_80bso"]
-[ext_resource type="Script" uid="uid://dkfssottmsrch" path="res://Entities/Components/ESComponent/EffectSource.gd" id="1_f7ms2"]
+[ext_resource type="Curve" uid="uid://b8lhpj4fuv50h" path="res://Utilities/Game/Curves/BASE_BLOOM.tres" id="1_qioi6"]
+[ext_resource type="Curve" uid="uid://cgmh8p2atrnb5" path="res://Utilities/Game/Curves/BASE_BLOOM_DEC_RATE.tres" id="2_jh26u"]
+[ext_resource type="Curve" uid="uid://cffshxd52otno" path="res://Utilities/Game/Curves/BASE_BLOOM_INC_RATE.tres" id="3_fp83e"]
 [ext_resource type="Texture2D" uid="uid://bn15edu8bniii" path="res://Entities/Items/Weapons/ProjectileWeapons/Revolver/RevolverBaseFrameCT.tres" id="4_4xu4l"]
 [ext_resource type="PackedScene" uid="uid://ohg1k8yu1y3r" path="res://Entities/Items/Weapons/ProjectileWeapons/Revolver/Revolver.tscn" id="4_p3ec7"]
 [ext_resource type="Script" uid="uid://cowjdnic7xmkp" path="res://Entities/Player/UI/Inventory/Panels/ItemDetailsPanel/StatDetail.gd" id="4_pk4g4"]
 [ext_resource type="Texture2D" uid="uid://c5iikcmayrs4h" path="res://Entities/Items/Weapons/ProjectileWeapons/Revolver/revolver_base_frame.png" id="4_xnuh3"]
 [ext_resource type="Resource" uid="uid://o8dc73c74md6" path="res://Entities/Player/PlayerCore/PlayerCamera/CamFXPresets/4(NoFreeze).tres" id="5_6hpwe"]
+[ext_resource type="Script" uid="uid://boo31eu083dqd" path="res://Entities/Components/ConditionsComponent/Conditions/Condition.gd" id="5_do3ry"]
 [ext_resource type="Script" uid="uid://bj3r5oopspj6l" path="res://Entities/Items/Projectiles/ProjectileCore/ProjStats.gd" id="5_u6crx"]
+[ext_resource type="Script" uid="uid://dn82yybtu3o00" path="res://Entities/Components/ESComponent/NormalES.gd" id="6_27jly"]
 [ext_resource type="PackedScene" uid="uid://bqkyplubhsx43" path="res://Entities/Items/Projectiles/Bullets/SmallBullet/SmallBullet.tscn" id="11_6hpwe"]
 [ext_resource type="Script" uid="uid://ctxa7i1mbt7ab" path="res://Entities/Player/UI/Inventory/Panels/CraftingPanel/CraftingIngredient.gd" id="11_30tnm"]
+[ext_resource type="Curve" uid="uid://rlvyvqmf4jeq" path="res://Utilities/Game/Curves/BASE_OVERHEAT_DEC_RATE.tres" id="12_3fike"]
+[ext_resource type="Curve" uid="uid://b6omqen77gwxv" path="res://Utilities/Game/Curves/BASE_OVERHEAT_INC_RATE.tres" id="13_2ohny"]
 [ext_resource type="Script" uid="uid://dvasncq3tgljs" path="res://Entities/Items/Weapons/ProjectileWeapons/ProjWeaponCore/ProjWeaponStats.gd" id="13_7t0ho"]
+[ext_resource type="Curve" uid="uid://dcf3klshobqsh" path="res://Utilities/Game/Curves/0-1-MAX.tres" id="14_6e6wi"]
+[ext_resource type="Curve" uid="uid://ddo8hn7smn666" path="res://Utilities/Game/Curves/BASE_PROJ_BOUNCE_FALLOFF.tres" id="15_rubfm"]
+[ext_resource type="Curve" uid="uid://omr2xxxhvdbq" path="res://Utilities/Game/Curves/BASE_PROJ_FALLOFF.tres" id="16_lukcs"]
+[ext_resource type="Curve" uid="uid://cx5xd3sk17ryv" path="res://Utilities/Game/Curves/BASE_PROJ_HOMING_TURN_RATE.tres" id="18_c27mg"]
+[ext_resource type="Curve" uid="uid://8ywvmktc1aft" path="res://Utilities/Game/Curves/BASE_WARMUP_DEC_RATE.tres" id="22_4x46n"]
+[ext_resource type="Curve" uid="uid://ck0fdly3k0i4d" path="res://Utilities/Game/Curves/BASE_WARMUP.tres" id="23_yeoba"]
+[ext_resource type="Curve" uid="uid://b8jnpwdqcgv41" path="res://Utilities/Game/Curves/BASE_WARMUP_INC_RATE.tres" id="24_7xhnb"]
 
-[sub_resource type="Resource" id="Resource_41nj1"]
-script = ExtResource("1_f7ms2")
+[sub_resource type="Resource" id="Resource_nh4sq"]
+script = ExtResource("6_27jly")
 source_type = 1
 base_damage = 30
-crit_chance = 3
-
-[sub_resource type="Curve" id="Curve_iijqb"]
-_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.64763), 0.0, 0.0, 0, 0]
-point_count = 2
+metadata/_custom_type_script = "uid://dn82yybtu3o00"
 
 [sub_resource type="Curve" id="Curve_pabkw"]
 _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
@@ -31,7 +40,6 @@ script = ExtResource("5_u6crx")
 speed = 550
 speed_curve = SubResource("Curve_pabkw")
 max_distance = 300
-effect_falloff_curve = SubResource("Curve_iijqb")
 split_cam_fx = null
 
 [resource]
@@ -48,7 +56,7 @@ firing_sound = "revolver_shot"
 mag_almost_empty_sound = "bullet_low_ammo"
 empty_mag_sound = "bullet_dry_fire"
 projectile_logic = SubResource("Resource_ysh4t")
-effect_source = SubResource("Resource_41nj1")
+effect_source = SubResource("Resource_nh4sq")
 ammo_type = 3
 mag_size = 6
 reload_type = 1

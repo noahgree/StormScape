@@ -1,7 +1,5 @@
 [gd_resource type="Resource" script_class="ConsumableStats" format=3 uid="uid://cx1ydw2jde1y8"]
 
-[ext_resource type="Script" uid="uid://boo31eu083dqd" path="res://Entities/Components/ConditionsComponent/Conditions/Condition.gd" id="1_2c2ph"]
-[ext_resource type="Script" uid="uid://dkfssottmsrch" path="res://Entities/Components/ESComponent/EffectSource.gd" id="1_bn713"]
 [ext_resource type="Script" uid="uid://5qg77uqxh5yw" path="res://Entities/Items/Consumables/ConsumableCore/ConsumableStats.gd" id="1_jepoi"]
 [ext_resource type="PackedScene" uid="uid://bdaogdtcus1ac" path="res://Entities/Items/Consumables/ConsumableCore/Consumable.tscn" id="2_1oeu8"]
 [ext_resource type="Texture2D" uid="uid://bibinc8ql8wl1" path="res://Entities/Items/Consumables/Apple/AppleThumbCT.tres" id="3_7kd7o"]
@@ -10,12 +8,6 @@
 [ext_resource type="Script" uid="uid://ctxa7i1mbt7ab" path="res://Entities/Player/UI/Inventory/Panels/CraftingPanel/CraftingIngredient.gd" id="7_l0gb1"]
 
 [sub_resource type="Resource" id="Resource_hsou2"]
-script = ExtResource("1_bn713")
-source_type = 8
-scanned_phys_layers = 0
-base_healing = 10
-heal_affected_stats = 0
-hit_flash_color = Color(1, 1, 1, 0)
 
 [resource]
 script = ExtResource("1_jepoi")

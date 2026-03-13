@@ -423,7 +423,8 @@ func stop_sound_id(sound_id: StringName, fade_out_time: float = 0,
 
 ## Stops a single sound via stopping its audio player, optionally with a fade out.
 ## This is called to stop a saved reference to an audio player.
-func stop_audio_player(audio_player: Variant, fade_out_time: float = 0, open_spot_during_fade: bool = false) -> void:
+func stop_audio_player(audio_player: Variant, fade_out_time: float = 0,
+						open_spot_during_fade: bool = false) -> void:
 	if fade_out_time > 0:
 		_start_audio_player_fade_out(audio_player, fade_out_time, open_spot_during_fade)
 	else:
@@ -452,7 +453,8 @@ func _destroy_sounds_by_sound_name(sound_id: StringName, number_of_instances_to_
 ## Handles fading out the audio player and calling the pAroper deletion method once the fade out ends.
 ## If specified, it can choose to immediately tell the audio resource there is an open spot while fading instead of
 ## once the fade is over.
-func _start_audio_player_fade_out(audio_player: Variant, fade_out_time: float, open_spots_during_fade: bool) -> void:
+func _start_audio_player_fade_out(audio_player: Variant, fade_out_time: float,
+									open_spots_during_fade: bool) -> void:
 	audio_player.valid = false
 
 	var tween: Tween = create_tween()

@@ -1,17 +1,25 @@
 [gd_resource type="Resource" script_class="ProjWeaponStats" format=3 uid="uid://dh8kily8s3nxw"]
 
 [ext_resource type="Texture2D" uid="uid://bm570hawaupxe" path="res://Entities/Items/Weapons/WeaponVFX/Casings/small_casing.png" id="1_ax8g3"]
-[ext_resource type="Script" uid="uid://dkfssottmsrch" path="res://Entities/Components/ESComponent/EffectSource.gd" id="2_wgsi0"]
+[ext_resource type="Script" uid="uid://dn82yybtu3o00" path="res://Entities/Components/ESComponent/NormalES.gd" id="3_4lm4v"]
 [ext_resource type="Script" uid="uid://boo31eu083dqd" path="res://Entities/Components/ConditionsComponent/Conditions/Condition.gd" id="3_7t6st"]
 [ext_resource type="Script" uid="uid://cowjdnic7xmkp" path="res://Entities/Player/UI/Inventory/Panels/ItemDetailsPanel/StatDetail.gd" id="4_2hq8f"]
 [ext_resource type="Resource" uid="uid://cev0y0oe3igus" path="res://Entities/Player/PlayerCore/PlayerCamera/CamFXPresets/6.tres" id="5_ax8g3"]
 [ext_resource type="Texture2D" uid="uid://c7aiduird3lcp" path="res://Entities/Items/Weapons/ProjectileWeapons/Flintlock/FlintlockBaseFrameCT.tres" id="6_wgsi0"]
+[ext_resource type="Curve" uid="uid://rlvyvqmf4jeq" path="res://Utilities/Game/Curves/BASE_OVERHEAT_DEC_RATE.tres" id="8_6s7pc"]
 [ext_resource type="PackedScene" uid="uid://ciyhsebv1hjye" path="res://Entities/Items/Weapons/ProjectileWeapons/Flintlock/Flintlock.tscn" id="9_4womn"]
+[ext_resource type="Curve" uid="uid://b6omqen77gwxv" path="res://Utilities/Game/Curves/BASE_OVERHEAT_INC_RATE.tres" id="9_sky7l"]
+[ext_resource type="Curve" uid="uid://dcf3klshobqsh" path="res://Utilities/Game/Curves/0-1-MAX.tres" id="10_hadnj"]
 [ext_resource type="Script" uid="uid://bj3r5oopspj6l" path="res://Entities/Items/Projectiles/ProjectileCore/ProjStats.gd" id="10_kxkpn"]
 [ext_resource type="Script" uid="uid://ctxa7i1mbt7ab" path="res://Entities/Player/UI/Inventory/Panels/CraftingPanel/CraftingIngredient.gd" id="10_mb0to"]
 [ext_resource type="PackedScene" uid="uid://bqkyplubhsx43" path="res://Entities/Items/Projectiles/Bullets/SmallBullet/SmallBullet.tscn" id="11_6rgme"]
+[ext_resource type="Curve" uid="uid://ddo8hn7smn666" path="res://Utilities/Game/Curves/BASE_PROJ_BOUNCE_FALLOFF.tres" id="11_u0me2"]
+[ext_resource type="Curve" uid="uid://omr2xxxhvdbq" path="res://Utilities/Game/Curves/BASE_PROJ_FALLOFF.tres" id="12_7dtla"]
 [ext_resource type="Script" uid="uid://dvasncq3tgljs" path="res://Entities/Items/Weapons/ProjectileWeapons/ProjWeaponCore/ProjWeaponStats.gd" id="12_7t6st"]
-[ext_resource type="Script" uid="uid://c2gdoebfp12dq" path="res://Entities/Components/StatMod/StatModsCache.gd" id="13_cutf1"]
+[ext_resource type="Curve" uid="uid://cx5xd3sk17ryv" path="res://Utilities/Game/Curves/BASE_PROJ_HOMING_TURN_RATE.tres" id="14_bctlq"]
+[ext_resource type="Curve" uid="uid://8ywvmktc1aft" path="res://Utilities/Game/Curves/BASE_WARMUP_DEC_RATE.tres" id="18_erxoo"]
+[ext_resource type="Curve" uid="uid://ck0fdly3k0i4d" path="res://Utilities/Game/Curves/BASE_WARMUP.tres" id="19_uyq2x"]
+[ext_resource type="Curve" uid="uid://b8jnpwdqcgv41" path="res://Utilities/Game/Curves/BASE_WARMUP_INC_RATE.tres" id="20_4q5jy"]
 
 [sub_resource type="Curve" id="Curve_ax8g3"]
 _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
@@ -25,14 +33,11 @@ point_count = 2
 _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
 point_count = 2
 
-[sub_resource type="Resource" id="Resource_slitw"]
-script = ExtResource("2_wgsi0")
+[sub_resource type="Resource" id="Resource_gtejx"]
+script = ExtResource("3_4lm4v")
 source_type = 1
-base_damage = 110
-
-[sub_resource type="Curve" id="Curve_nyi5w"]
-_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.599362), 0.0, 0.0, 0, 0]
-point_count = 2
+base_damage = 79
+metadata/_custom_type_script = "uid://dn82yybtu3o00"
 
 [sub_resource type="Curve" id="Curve_x8kn4"]
 _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.797205), 0.0, 0.0, 0, 0]
@@ -44,12 +49,8 @@ speed = 650
 speed_curve = SubResource("Curve_x8kn4")
 max_distance = 275
 height_override = 6
-effect_falloff_curve = SubResource("Curve_nyi5w")
 point_of_max_falloff = 200.0
 split_cam_fx = null
-
-[sub_resource type="Resource" id="Resource_pm717"]
-script = ExtResource("13_cutf1")
 
 [resource]
 script = ExtResource("12_7t6st")
@@ -61,7 +62,7 @@ casing_texture = ExtResource("1_ax8g3")
 casing_sound = "bullet_casing"
 mag_almost_empty_sound = "bullet_low_ammo"
 projectile_logic = SubResource("Resource_iwwon")
-effect_source = SubResource("Resource_slitw")
+effect_source = SubResource("Resource_gtejx")
 ammo_type = 3
 mag_size = 1
 reload_type = 1
@@ -73,7 +74,6 @@ bloom_increase_rate = SubResource("Curve_4womn")
 bloom_decrease_rate = SubResource("Curve_wgsi0")
 pullout_delay = 0.3
 blocked_mods = Array[StringName]([&"compensator"])
-s_mods = SubResource("Resource_pm717")
 id = "flintlock"
 name = "Flintlock"
 item_type = 1

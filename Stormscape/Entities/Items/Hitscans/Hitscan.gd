@@ -236,29 +236,27 @@ func _update_impact_particles(pierce_list: Dictionary) -> void:
 			impacted_nodes.erase(node)
 
 ## Overrides parent method. When we overlap with an entity who can accept effect sources,
-## pass the effect source to that entity's handler. Note that the effect source is duplicated
-## on hit so that we can include unique info like move dir.
+## pass the ESI to that entity's handler.
 func _start_being_handled(handling_area: ESIReceiverComponent, contact_point: Vector2) -> void:
-	esi.multishot_id = multishot_id
 	_adjust_esi_for_falloff(esi, contact_point)
+
+	esi.multishot_id = multishot_id
 	esi.movement_direction = Vector2(cos(rotation), sin(rotation)).normalized()
 	esi.contact_position = contact_point
 	esi.set_source_info(source_entity, source_ii)
+
 	handling_area.handle_esi(esi)
 
 ## When we hit a handling area during a hitscan, we apply falloff to the components of the effect source.
 func _adjust_esi_for_falloff(esi_to_adjust: ESI, contact_point: Vector2) -> void:
-	var apply_to_bad: bool = stats.bad_effects_falloff
-	var apply_to_good: bool = stats.good_effects_falloff
-
 	var point_to_sample: float = float(global_position.distance_to(contact_point) / sc.get_stat("hitscan_max_distance"))
-	var sampled_point: float = stats.hitscan_effect_falloff.sample_baked(point_to_sample)
+	var sampled_point: float = stats.hitscan_falloff.sample_baked(point_to_sample)
 	var falloff_mult: float = max(0.05, sampled_point)
 
-	if apply_to_bad:
+	if stats.damage_falloff:
 		var base_damage: float = esi_to_adjust.get_stat(&"base_damage")
 		esi_to_adjust.es_stat_overrides[&"base_damage"] = int(min(base_damage, ceil(base_damage * falloff_mult)))
 
-	if apply_to_good:
+	if stats.healing_falloff:
 		var base_healing: float = esi_to_adjust.get_stat(&"base_healing")
 		esi_to_adjust.es_stat_overrides[&"base_healing"] = int(min(base_healing, ceil(base_healing * falloff_mult)))

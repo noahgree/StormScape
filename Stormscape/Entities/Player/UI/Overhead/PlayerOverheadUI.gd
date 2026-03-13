@@ -5,13 +5,12 @@ class_name PlayerOverheadUI
 @export var tintable_overheat_progress_texture: Texture2D
 @export var max_overheat_progress_tint_color: Color
 
-@onready var overheat_bar: TextureProgressBar = $VBoxContainer/OverheatBar
-@onready var charge_bar: TextureProgressBar = $VBoxContainer/ChargeBar
-@onready var reload_bar: TextureProgressBar = $VBoxContainer/ReloadBar
+@onready var overheat_bar: TextureProgressBar = %OverheatBar
+@onready var charge_bar: TextureProgressBar = %ChargeBar
+@onready var reload_bar: TextureProgressBar = %ReloadBar
 
 var default_overheat_progress_texture: Texture2D ## The default overheat progress texture used when not at max overheat.
 var overheat_tween: Tween = null ## The tween responsible for pulsing the overheat bar when at max overheat.
-
 
 func _ready() -> void:
 	default_overheat_progress_texture = overheat_bar.texture_progress

@@ -9,14 +9,14 @@ class_name HitscanStats
 @export var hitscan_pierce_count: int ## How many objects the hitscan can pierce through.
 
 @export_group("Falloff")
-@export var hitscan_effect_falloff: Curve ## The falloff for the effects applied to the receiver of the hitscan.
-@export var bad_effects_falloff: bool = true ## Whether the bad effects of the effect source falloff.
-@export var good_effects_falloff: bool = false ## Whether the good effects of the effect source falloff.
+@export var hitscan_falloff: Curve = preload("uid://bk3m2mnf6cwxc") ## The falloff for the values applied to the receiver of the hitscan.
+@export var damage_falloff: bool = true ## Whether the damage of the effect source falls off.
+@export var healing_falloff: bool = false ## Whether the healing of the effect source falls off.
 
 @export_group("Visual Override Options")
 @export var override_vfx_defaults: bool = false ## Whether to use these properties below or leave the defaults.
 @export_custom(PROPERTY_HINT_NONE, "suffix:pixels") var hitscan_max_width: float = 1.5 ## The max width the hitscan ray will be when affected by the width curve.
-@export var hitscan_width_curve: Curve ## The change in width of the hitscan ray over its distance.
+@export var hitscan_width_curve: Curve = preload("uid://dcf3klshobqsh") ## The change in width of the hitscan ray over its distance.
 @export var beam_color: Color = Color.DEEP_PINK ## The main color of the beam.
 @export_range(0, 6, 0.1) var glow_amount: float = 1.0 ## The multiplier for the colors to make them glow stronger.
 @export_subgroup("Particles")

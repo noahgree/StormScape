@@ -33,7 +33,7 @@ script = ExtResource("6_b403c")
 [sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_2kecs"]
 polygon = PackedVector2Array(-9, -15, -9, -6, 9, -6, 9, -15)
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_3aoki"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_b403c"]
 resource_local_to_scene = true
 shader = ExtResource("11_pg7ae")
 
@@ -77,10 +77,10 @@ occluder = SubResource("OccluderPolygon2D_2kecs")
 
 [node name="EntityShadow" parent="." unique_id=384959382 instance=ExtResource("9_kerkt")]
 self_modulate = Color(0, 0, 0, 0.164)
-offset_left = -16.0
-offset_top = -8.0
-offset_right = 16.0
-offset_bottom = 8.0
+offset_left = -14.0
+offset_top = -19.0
+offset_right = 14.0
+offset_bottom = 1.0
 texture = ExtResource("9_b403c")
 patch_margin_left = 8
 patch_margin_top = 8
@@ -90,7 +90,7 @@ type = 3
 
 [node name="EntitySprite" parent="." unique_id=33604155 instance=ExtResource("10_kkd23")]
 unique_name_in_owner = true
-material = SubResource("ShaderMaterial_3aoki")
+material = SubResource("ShaderMaterial_b403c")
 instance_shader_parameters/crack_color = Color(0.132138, 0.153553, 0.183094, 0.85)
 instance_shader_parameters/crack_depth = 0.4
 instance_shader_parameters/crack_intensity = 0.0
@@ -104,7 +104,7 @@ instance_shader_parameters/final_alpha = 1.0
 instance_shader_parameters/outline_color = Color(1, 1, 1, 1)
 instance_shader_parameters/outline_thickness = 0.0
 instance_shader_parameters/use_override_color = false
-position = Vector2(0, -12)
+position = Vector2(0, -11)
 sprite_frames = SubResource("SpriteFrames_1mdei")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=79754638]

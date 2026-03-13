@@ -1,56 +1,40 @@
-[gd_resource type="Resource" script_class="MeleeWeaponResource" format=3 uid="uid://xuswqfh3rvdy"]
+[gd_resource type="Resource" script_class="MeleeWeaponStats" format=3 uid="uid://xuswqfh3rvdy"]
 
-[ext_resource type="Resource" uid="uid://b5dad578bsduf" path="res://Entities/Player/PlayerCore/PlayerCamera/CamFXPresets/3(NoFreeze).tres" id="1_5erv1"]
-[ext_resource type="Script" uid="uid://dkfssottmsrch" path="res://Entities/Components/ESComponent/EffectSource.gd" id="2_lgq7u"]
+[ext_resource type="Script" uid="uid://dn82yybtu3o00" path="res://Entities/Components/ESComponent/NormalES.gd" id="2_utofb"]
 [ext_resource type="Script" uid="uid://boo31eu083dqd" path="res://Entities/Components/ConditionsComponent/Conditions/Condition.gd" id="3_45hyk"]
-[ext_resource type="Resource" uid="uid://y5iqfraea8ry" path="res://Entities/Player/PlayerCore/PlayerCamera/CamFXPresets/2(NoFreeze).tres" id="4_5erv1"]
 [ext_resource type="Script" uid="uid://cowjdnic7xmkp" path="res://Entities/Player/UI/Inventory/Panels/ItemDetailsPanel/StatDetail.gd" id="5_yw8i5"]
 [ext_resource type="Texture2D" uid="uid://df8efruyxa73h" path="res://Entities/Items/Weapons/MeleeWeapons/ZombieHands/ZombieHandsBaseFrameCT.tres" id="6_45hyk"]
 [ext_resource type="PackedScene" uid="uid://cdbf0tdqr3eww" path="res://Entities/Items/Weapons/MeleeWeapons/ZombieHands/ZombieHands.tscn" id="7_yw8i5"]
 [ext_resource type="Script" uid="uid://ctxa7i1mbt7ab" path="res://Entities/Player/UI/Inventory/Panels/CraftingPanel/CraftingIngredient.gd" id="8_5erv1"]
-[ext_resource type="Script" uid="uid://c2gdoebfp12dq" path="res://Entities/Components/StatMod/StatModsCache.gd" id="11_2j3bo"]
 [ext_resource type="Script" uid="uid://djlk3y511igng" path="res://Entities/Items/Weapons/MeleeWeapons/MeleeWeaponCore/MeleeWeaponStats.gd" id="12_8jcwo"]
 
-[sub_resource type="Resource" id="Resource_lgq7u"]
-script = ExtResource("2_lgq7u")
-source_type = 5
-source_tags = Array[String](["chops_wood"])
-can_hit_self = false
-base_damage = 25
-object_damage_mult = 5.0
-crit_chance = 5
-impact_cam_fx = ExtResource("1_5erv1")
-metadata/_custom_type_script = ExtResource("2_lgq7u")
+[sub_resource type="Resource" id="Resource_utofb"]
+script = ExtResource("2_utofb")
+source_type = 7
+base_damage = 20
+metadata/_custom_type_script = "uid://dn82yybtu3o00"
 
-[sub_resource type="Resource" id="Resource_h7gud"]
-script = ExtResource("2_lgq7u")
-source_type = 5
-source_tags = Array[String](["chops_wood"])
-can_hit_self = false
-base_damage = 12
-crit_chance = 5
-impact_cam_fx = ExtResource("4_5erv1")
-metadata/_custom_type_script = ExtResource("2_lgq7u")
-
-[sub_resource type="Resource" id="Resource_ieaky"]
-script = ExtResource("11_2j3bo")
+[sub_resource type="Resource" id="Resource_k6utv"]
+script = ExtResource("2_utofb")
+source_type = 7
+base_damage = 10
+metadata/_custom_type_script = "uid://dn82yybtu3o00"
 
 [resource]
 script = ExtResource("12_8jcwo")
 melee_weapon_type = 1
-effect_source = SubResource("Resource_h7gud")
+effect_source = SubResource("Resource_k6utv")
 stamina_cost = 1.0
 use_cooldown = 1.0
 swing_angle = 0
 use_anim = "punch"
-charge_effect_source = SubResource("Resource_lgq7u")
+charge_effect_source = SubResource("Resource_utofb")
 charge_use_speed = 1.0
 charge_swing_angle = 0
 charge_use_anim = "punch"
 snap_to_six_dirs = true
 no_levels = true
 hide_ammo_ui = true
-s_mods = SubResource("Resource_ieaky")
 id = "zombie_hands"
 name = "Zombie Hands"
 tags = Array[StringName]([&"tool"])

@@ -13,6 +13,7 @@ signal max_shield_changed(new_max_shield: int)
 signal armor_changed(new_armor: int)
 
 const HEAL_CHANGE_TYPES: Array[EffectPopup.POPUP_TYPE] = [EffectPopup.POPUP_TYPE.SHIELD_HEALING, EffectPopup.POPUP_TYPE.HEALTH_HEALING, EffectPopup.POPUP_TYPE.REGEN, EffectPopup.POPUP_TYPE.LIFE_STEAL] ## Types in this array indicate that the change was positive.
+const MAX_CURRENT_POPUPS: int = 5 ## The max number of shown popups on an entity at once.
 
 @export var _max_health: int = 100 ## The maximum amount of health the entity can have.
 @export var _max_shield: int = 100 ## The maximum amount of shield the entity can have.
@@ -27,7 +28,7 @@ var shield: int: set = _set_shield ## The current shield of the entity.
 var armor: int = 0: set = _set_armor ## The current armor of the entity. This is the percent of dmg that is blocked.
 var is_dying: bool = false ## Whether the entity is actively dying or not.
 var current_sounds: Dictionary[StringName, Array] = {} ## The current sounds being played by this component.
-var last_popup: EffectPopup ## A reference to the most recent popup created.
+var current_popups: Array[EffectPopup] ## A reference to the current shown popups.
 
 var max_health: int: ## Getter for max_health.
 	get: return int(entity.sc.get_stat(&"max_health"))
@@ -62,49 +63,49 @@ class ChangeResult:
 		applied = applied_value
 
 ## Main entry for changing health and shield via damage and healing. Multishot as -1 means it wasn't a multishot.
-func change_by_dh_type(amount: int, popup_type: EffectPopup.POPUP_TYPE, dh_type: DHHandler.DHType,
-							multishot_id: int = -1) -> void:
+func change_by_dh_type(amount: int, popup_type: EffectPopup.POPUP_TYPE, esi: ESI, type: DHHandler.Type) -> void:
 	if is_dying or amount == 0:
 		return
+	var order: DHHandler.DHType = esi.es.dmg_affected_stats if type == DHHandler.Type.DAMAGE else esi.es.heal_affected_stats
 
 	var remaining: int = amount
-	match dh_type:
+	match order:
 		DHHandler.DHType.HEALTH_ONLY:
-			remaining = _change_health(remaining, popup_type, multishot_id)
+			remaining = _change_health(remaining, popup_type, esi)
 		DHHandler.DHType.SHIELD_ONLY:
-			remaining = _change_shield(remaining, popup_type, multishot_id)
+			remaining = _change_shield(remaining, popup_type, esi)
 		DHHandler.DHType.HEALTH_THEN_SHIELD:
-			remaining = _change_health(remaining, popup_type, multishot_id)
-			remaining = _change_shield(remaining, popup_type, multishot_id)
+			remaining = _change_health(remaining, popup_type, esi)
+			remaining = _change_shield(remaining, popup_type, esi)
 		DHHandler.DHType.SHIELD_THEN_HEALTH:
-			remaining = _change_shield(remaining, popup_type, multishot_id)
-			remaining = _change_health(remaining, popup_type, multishot_id)
+			remaining = _change_shield(remaining, popup_type, esi)
+			remaining = _change_health(remaining, popup_type, esi)
 		DHHandler.DHType.SIMULTANEOUS:
-			_change_health(amount, popup_type, multishot_id)
-			_change_shield(amount, popup_type, multishot_id)
+			_change_health(amount, popup_type, esi)
+			_change_shield(amount, popup_type, esi)
 
 	if amount < 0:
 		_check_for_death()
 
 ## Changes the health and spawns the popup, returning how much leftover change there is.
-func _change_health(amount: int, popup_type: EffectPopup.POPUP_TYPE, multishot_id: int) -> int:
+func _change_health(amount: int, popup_type: EffectPopup.POPUP_TYPE, esi: ESI) -> int:
 	var health_result: ChangeResult = _get_result_of_change(health, max_health, amount)
 	health = health_result.new_val
 	if popup_type == EffectPopup.POPUP_TYPE.AUTO:
 		popup_type = EffectPopup.POPUP_TYPE.HEALTH_DAMAGE if (amount < 0) else EffectPopup.POPUP_TYPE.HEALTH_HEALING
-	_create_popup(popup_type, health_result.applied, multishot_id)
+	_create_popup(popup_type, health_result.applied, esi)
 	return amount - health_result.applied
 
 ## Changes the shield and spawns the popup, returning how much leftover change there is.
-func _change_shield(amount: int, popup_type: EffectPopup.POPUP_TYPE, multishot_id: int) -> int:
+func _change_shield(amount: int, popup_type: EffectPopup.POPUP_TYPE, esi: ESI) -> int:
 	var shield_result: ChangeResult = _get_result_of_change(shield, max_shield, amount)
 	shield = shield_result.new_val
 	if popup_type == EffectPopup.POPUP_TYPE.AUTO:
 		popup_type = EffectPopup.POPUP_TYPE.SHIELD_DAMAGE if (amount < 0) else EffectPopup.POPUP_TYPE.SHIELD_HEALING
-	_create_popup(popup_type, shield_result.applied, multishot_id)
+	_create_popup(popup_type, shield_result.applied, esi)
 
 	if amount < 0:
-		_play_sound("shield_hit", multishot_id)
+		_play_sound("shield_hit", esi.multishot_id)
 
 	return amount - shield_result.applied
 
@@ -197,24 +198,39 @@ func _play_sound(sound_name: String, multishot_id: int) -> void:
 
 #region Popups
 ## Creates a popup or updates it if it is already created.
-func _create_popup(popup_type: EffectPopup.POPUP_TYPE, amount: int, multishot_id: int) -> void:
+func _create_popup(popup_type: EffectPopup.POPUP_TYPE, amount: int, esi: ESI) -> void:
 	if amount == 0:
 		return
 
-	if (last_popup) and (multishot_id == last_popup.multishot_id):
-		last_popup.update_popup(popup_type, amount)
+	if not current_popups.is_empty():
+		var last_popup: EffectPopup = current_popups.back()
+		if (esi.multishot_id == last_popup.multishot_id) and (esi.multishot_id != -1):
+			last_popup.update_popup(popup_type, amount)
+			return
+
+	if current_popups.size() >= MAX_CURRENT_POPUPS:
+		var oldest_popup: EffectPopup = current_popups.pop_front()
+		oldest_popup.set_as_new(popup_type, amount, esi)
+		current_popups.push_back(oldest_popup)
 		return
 
-	var new_popup: EffectPopup = EffectPopup.create_popup(popup_type, amount, entity, multishot_id)
-	new_popup.tree_exiting.connect(func() -> void: new_popup.queue_free())
-	last_popup = new_popup
+	var new_popup: EffectPopup = EffectPopup.create_popup(popup_type, amount, entity, esi)
+	new_popup.tree_exiting.connect(func() -> void: current_popups.erase(new_popup))
+
+	current_popups.push_back(new_popup)
 #endregion
 
 #region Debug
 ## Increases or decreases hp based on the amount.
 func change_hp_by_amount(amount: int) -> void:
+	var esi: ESI = ESI.new()
+	var es: NormalES = NormalES.new()
+	esi.es = es
+
 	if amount >= 0:
-		change_by_dh_type(amount, EffectPopup.POPUP_TYPE.AUTO, DHHandler.DHType.HEALTH_THEN_SHIELD)
+		es.heal_affected_stats = DHHandler.DHType.HEALTH_THEN_SHIELD
+		change_by_dh_type(amount, EffectPopup.POPUP_TYPE.AUTO, esi, DHHandler.Type.HEALING)
 	else:
-		change_by_dh_type(amount, EffectPopup.POPUP_TYPE.AUTO, DHHandler.DHType.SHIELD_THEN_HEALTH)
+		es.dmg_affected_stats = DHHandler.DHType.SHIELD_THEN_HEALTH
+		change_by_dh_type(amount, EffectPopup.POPUP_TYPE.AUTO, esi, DHHandler.Type.DAMAGE)
 #endregion

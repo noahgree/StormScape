@@ -12,29 +12,33 @@
 [ext_resource type="Script" uid="uid://boo31eu083dqd" path="res://Entities/Components/ConditionsComponent/Conditions/Condition.gd" id="10_fx52i"]
 [ext_resource type="PackedScene" uid="uid://bond8rty1ljh" path="res://Utilities/Debug/TestStaticEntity.tscn" id="11_6kn41"]
 [ext_resource type="Script" uid="uid://c2dtyfq8k2oj2" path="res://Entities/Components/HitboxComponent/HitboxComponent.gd" id="11_j4dgk"]
-[ext_resource type="Script" uid="uid://dkfssottmsrch" path="res://Entities/Components/ESComponent/EffectSource.gd" id="11_s2x07"]
 [ext_resource type="Resource" uid="uid://1b0tsbvrwtcw" path="res://Entities/Components/ConditionsComponent/Conditions/BadEffects/Burning/Burning-1.tres" id="12_1llel"]
+[ext_resource type="Script" uid="uid://dn82yybtu3o00" path="res://Entities/Components/ESComponent/NormalES.gd" id="13_1llel"]
 [ext_resource type="Resource" uid="uid://b4vl2ed8tnjxu" path="res://Entities/Components/ConditionsComponent/Conditions/BadEffects/Frostbite/Frostbite-1.tres" id="14_nton5"]
+[ext_resource type="Resource" uid="uid://bkik4rm6mjsr" path="res://Entities/Components/ConditionsComponent/Conditions/GoodEffects/Regen/Regen-1.tres" id="15_fx52i"]
 [ext_resource type="PackedScene" uid="uid://b52c5c7hj2vd" path="res://Utilities/Debug/TestTree1.tscn" id="17_45bjv"]
 [ext_resource type="PackedScene" uid="uid://bq12ugc7lnirg" path="res://Utilities/Debug/TestPhysicalInventory.tscn" id="17_om42l"]
+[ext_resource type="Script" uid="uid://dwmur0cosbbwh" path="res://Entities/Player/UI/Inventory/InventoryCore/InvResource.gd" id="19_fx52i"]
+[ext_resource type="Script" uid="uid://cv7ha7muvg5qu" path="res://Entities/Items/ItemCore/II.gd" id="20_s2x07"]
+[ext_resource type="Script" uid="uid://cbw8j4ps8ii7p" path="res://Entities/Items/Weapons/ProjectileWeapons/ProjWeaponCore/ProjWeaponII.gd" id="21_iotvt"]
 [ext_resource type="Script" uid="uid://by6ifp7vltc41" path="res://Entities/StormBase/StormBase.gd" id="21_rhtsc"]
 [ext_resource type="PackedScene" uid="uid://cxxeyt7s0e4u2" path="res://Entities/StormBase/StormBase.tscn" id="21_yw1c5"]
 [ext_resource type="Script" uid="uid://c2f01r3cincl0" path="res://Stages/World/Storm/Storm.gd" id="22_0op7h"]
+[ext_resource type="Resource" uid="uid://dvnlojpwqoojv" path="res://Entities/Items/TRESItems/ProjectileWeapons/BottleOFrost(3).tres" id="22_8lm63"]
 [ext_resource type="Script" uid="uid://b8kfccspu3jx8" path="res://Stages/Tilemaps/TileMapDual.gd" id="22_47ykm"]
 [ext_resource type="Script" uid="uid://cbiskerf2stk6" path="res://Stages/World/Storm/StormTransform.gd" id="22_63ihc"]
-[ext_resource type="Resource" uid="uid://b37e5gsi7vmwu" path="res://Entities/Components/ConditionsComponent/Conditions/BadEffects/StormSyndrome/StormSyndrome-1.tres" id="22_daxbq"]
 [ext_resource type="PackedScene" uid="uid://dnpwx3cn0i24s" path="res://Entities/Player/UI/Inventory/Panels/SidePanels/StormBaseSidePanel.tscn" id="22_melxk"]
 [ext_resource type="Texture2D" uid="uid://6saycs5sisdk" path="res://Stages/Tilemaps/ReplacementTextures/dirt_replacement_RED.png" id="22_tnvqm"]
 [ext_resource type="Shader" uid="uid://cxi5alvvj1rv2" path="res://Utilities/Game/Shaders/StormShader.gdshader" id="23_05otm"]
+[ext_resource type="Resource" uid="uid://caw1yglbt2nf6" path="res://Entities/Items/TRESItems/Wearables/FrostCharm(5).tres" id="23_8lm63"]
 [ext_resource type="Resource" uid="uid://cx6t5cil24ca3" path="res://Stages/World/Storm/StormVisuals/DefaultStormVisuals.tres" id="23_rhtsc"]
 [ext_resource type="Script" uid="uid://cgese4xtht2od" path="res://Stages/World/Storm/StormVisuals/StormVisuals.gd" id="27_dgobw"]
-[ext_resource type="Script" uid="uid://20acrt2hb6y" path="res://Entities/Components/ConditionsComponent/Conditions/EOTStats.gd" id="27_om42l"]
-[ext_resource type="Script" uid="uid://bcjwesiannbd0" path="res://Entities/Components/StatMod/StatMod.gd" id="28_fx52i"]
+[ext_resource type="Resource" uid="uid://c1x3qrepvhvn3" path="res://Entities/Components/ConditionsComponent/Conditions/BadEffects/Burning/Burning-1-FlameBlower.tres" id="28_om42l"]
+[ext_resource type="Resource" uid="uid://b37e5gsi7vmwu" path="res://Entities/Components/ConditionsComponent/Conditions/BadEffects/StormSyndrome/StormSyndrome-1.tres" id="30_fx52i"]
 [ext_resource type="Shader" uid="uid://bilestavf27wc" path="res://Utilities/Game/Shaders/ScreenFog.gdshader" id="30_rhtsc"]
 [ext_resource type="PackedScene" uid="uid://clf1njlp4stbn" path="res://Utilities/Debug/TestRock2.tscn" id="30_yw2f7"]
 [ext_resource type="Texture2D" uid="uid://daa6casude472" path="res://Utilities/Game/Particles/light_ray.png" id="31_melxk"]
 [ext_resource type="PackedScene" uid="uid://jdi552emuah8" path="res://Utilities/Debug/TestRock1.tscn" id="32_melxk"]
-[ext_resource type="Texture2D" uid="uid://cx7u0pbdtc6eb" path="res://Utilities/Game/Particles/grunge_light.png" id="32_s5gqv"]
 [ext_resource type="Script" uid="uid://d1xfue3du3eyu" path="res://Utilities/Debug/DebugCanvasLayer.gd" id="34_01d0t"]
 [ext_resource type="Texture2D" uid="uid://dsago31sb51b0" path="res://Stages/World/Storm/StormNoise1.tres" id="42_s5gqv"]
 [ext_resource type="Texture2D" uid="uid://d2utxp2le0rkm" path="res://Stages/World/Storm/StormNoise2.tres" id="43_6gn56"]
@@ -145,19 +149,19 @@ physics_layer_1/collision_layer = 128
 physics_layer_1/collision_mask = 0
 sources/1 = SubResource("TileSetAtlasSource_lb4xb")
 
-[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_nton5"]
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_iotvt"]
 rough = true
 
 [sub_resource type="Resource" id="Resource_fx52i"]
 script = ExtResource("9_s2x07")
 
-[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_dgobw"]
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_8lm63"]
 rough = true
 
 [sub_resource type="Resource" id="Resource_h3uly"]
 script = ExtResource("9_s2x07")
 
-[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_04pgg"]
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_a2una"]
 rough = true
 
 [sub_resource type="Resource" id="Resource_xm2up"]
@@ -167,29 +171,13 @@ script = ExtResource("9_s2x07")
 script = ExtResource("9_s2x07")
 
 [sub_resource type="Resource" id="Resource_iotvt"]
-script = ExtResource("11_s2x07")
+script = ExtResource("13_1llel")
 source_type = 6
-source_tags = null
-scanned_phys_layers = null
 can_hit_self = false
 teams_hit_by_bad = 3
 teams_hit_by_good = 3
 conditions = Array[ExtResource("10_fx52i")]([ExtResource("12_1llel")])
-base_damage = null
-object_damage_mult = null
-dmg_affected_stats = null
-dmg_popup_type = null
-crit_chance = null
-crit_multiplier = null
-armor_penetration = null
-lvl_dmg_scalar = null
-base_healing = null
-heal_affected_stats = null
-heal_popup_type = null
-lvl_heal_scalar = null
-impact_sound = null
-hit_flash_color = null
-metadata/_custom_type_script = "uid://dkfssottmsrch"
+metadata/_custom_type_script = "uid://dn82yybtu3o00"
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_rk2ia"]
 size = Vector2(14, 14)
@@ -198,57 +186,25 @@ size = Vector2(14, 14)
 script = ExtResource("9_s2x07")
 
 [sub_resource type="Resource" id="Resource_8lm63"]
-script = ExtResource("11_s2x07")
+script = ExtResource("13_1llel")
 source_type = 6
-source_tags = null
-scanned_phys_layers = null
 can_hit_self = false
 teams_hit_by_bad = 3
 teams_hit_by_good = 3
 conditions = Array[ExtResource("10_fx52i")]([ExtResource("14_nton5")])
-base_damage = null
-object_damage_mult = null
-dmg_affected_stats = null
-dmg_popup_type = null
-crit_chance = null
-crit_multiplier = null
-armor_penetration = null
-lvl_dmg_scalar = null
-base_healing = null
-heal_affected_stats = null
-heal_popup_type = null
-lvl_heal_scalar = null
-impact_sound = null
-hit_flash_color = null
-metadata/_custom_type_script = "uid://dkfssottmsrch"
+metadata/_custom_type_script = "uid://dn82yybtu3o00"
 
 [sub_resource type="Resource" id="Resource_ed1p2"]
 script = ExtResource("9_s2x07")
 
-[sub_resource type="Resource" id="Resource_a2una"]
-script = ExtResource("11_s2x07")
-source_type = null
-source_tags = null
-scanned_phys_layers = null
-can_hit_self = null
-teams_hit_by_bad = null
-teams_hit_by_good = null
-conditions = null
-base_damage = null
-object_damage_mult = null
-dmg_affected_stats = null
-dmg_popup_type = null
-crit_chance = null
-crit_multiplier = null
-armor_penetration = null
-lvl_dmg_scalar = null
-base_healing = null
-heal_affected_stats = null
-heal_popup_type = null
-lvl_heal_scalar = null
-impact_sound = null
-hit_flash_color = null
-metadata/_custom_type_script = "uid://dkfssottmsrch"
+[sub_resource type="Resource" id="Resource_dgobw"]
+script = ExtResource("13_1llel")
+source_type = 6
+can_hit_self = false
+teams_hit_by_bad = 3
+teams_hit_by_good = 3
+conditions = Array[ExtResource("10_fx52i")]([ExtResource("15_fx52i")])
+metadata/_custom_type_script = "uid://dn82yybtu3o00"
 
 [sub_resource type="Resource" id="Resource_e5rpg"]
 script = ExtResource("9_s2x07")
@@ -280,8 +236,33 @@ script = ExtResource("9_s2x07")
 [sub_resource type="Resource" id="Resource_340rl"]
 script = ExtResource("9_s2x07")
 
+[sub_resource type="Resource" id="Resource_iscjk"]
+script = ExtResource("19_fx52i")
+drop_on_death = true
+starting_inv = Array[ExtResource("20_s2x07")]([null, null, null, null, null])
+metadata/_custom_type_script = "uid://dwmur0cosbbwh"
+
 [sub_resource type="Resource" id="Resource_8jild"]
 script = ExtResource("9_s2x07")
+
+[sub_resource type="Resource" id="Resource_ca8it"]
+script = ExtResource("21_iotvt")
+uid = null
+stats = ExtResource("22_8lm63")
+q = 10
+metadata/_custom_type_script = "uid://cbw8j4ps8ii7p"
+
+[sub_resource type="Resource" id="Resource_oxbws"]
+script = ExtResource("20_s2x07")
+uid = null
+stats = ExtResource("23_8lm63")
+metadata/_custom_type_script = "uid://cv7ha7muvg5qu"
+
+[sub_resource type="Resource" id="Resource_05q3t"]
+script = ExtResource("19_fx52i")
+drop_on_death = true
+starting_inv = Array[ExtResource("20_s2x07")]([SubResource("Resource_ca8it"), null, null, SubResource("Resource_oxbws"), null, null, null, null, null, null])
+metadata/_custom_type_script = "uid://dwmur0cosbbwh"
 
 [sub_resource type="Resource" id="Resource_yng6w"]
 script = ExtResource("9_s2x07")
@@ -307,48 +288,14 @@ metadata/_custom_type_script = "uid://cbiskerf2stk6"
 [sub_resource type="Resource" id="Resource_04pgg"]
 script = ExtResource("22_63ihc")
 new_location = Vector2(200, 200)
-time_to_move = 5.0
+time_to_move = 2.0
 time_to_resize = 2.0
 metadata/_custom_type_script = "uid://cbiskerf2stk6"
 
-[sub_resource type="Resource" id="Resource_4mw0v"]
-script = ExtResource("28_fx52i")
-stat_id = &"max_speed"
-mod_id = &"burning"
-operation = "-%"
-value = 20.0
-metadata/_custom_type_script = "uid://bcjwesiannbd0"
-
-[sub_resource type="Resource" id="Resource_y1lxn"]
-script = ExtResource("11_s2x07")
-source_type = 9
-base_damage = 1
-dmg_affected_stats = 0
-hit_flash_color = Color(0.98402876, 0.2854099, 0.022971844, 0.6)
-metadata/_custom_type_script = "uid://dkfssottmsrch"
-
-[sub_resource type="Resource" id="Resource_vblrk"]
-script = ExtResource("27_om42l")
-duration = 3.0
-tick_delay = 0.0
-perpetual = true
-perpetual_interval = 1.0
-tick_count = 3
-ticks_array = Array[ExtResource("11_s2x07")]([SubResource("Resource_y1lxn")])
-stat_mods = Array[ExtResource("28_fx52i")]([SubResource("Resource_4mw0v")])
-metadata/_custom_type_script = "uid://20acrt2hb6y"
-
-[sub_resource type="Resource" id="Resource_05q3t"]
-script = ExtResource("10_fx52i")
-goodness = 1
-conditions_to_stop = Array[int]([1])
-eot_stats = SubResource("Resource_vblrk")
-metadata/_custom_type_script = "uid://boo31eu083dqd"
-
-[sub_resource type="Resource" id="Resource_om42l"]
-script = ExtResource("11_s2x07")
-conditions = Array[ExtResource("10_fx52i")]([SubResource("Resource_05q3t")])
-metadata/_custom_type_script = "uid://dkfssottmsrch"
+[sub_resource type="Resource" id="Resource_a2una"]
+script = ExtResource("13_1llel")
+conditions = Array[ExtResource("10_fx52i")]([ExtResource("28_om42l")])
+metadata/_custom_type_script = "uid://dn82yybtu3o00"
 
 [sub_resource type="Resource" id="Resource_s2x07"]
 script = ExtResource("27_dgobw")
@@ -359,18 +306,21 @@ metadata/_custom_type_script = "uid://cgese4xtht2od"
 script = ExtResource("22_63ihc")
 new_location = Vector2(20, -20)
 offset_location = true
-delay = 2.0
+new_radius = 300.0
+delay = 1.0
+time_to_move = 5.0
+time_to_resize = 5.0
 auto_advance = false
 es_setting = 0
-effect_source = SubResource("Resource_om42l")
+effect_source = SubResource("Resource_a2una")
 visuals_setting = 0
 storm_visuals = SubResource("Resource_s2x07")
 metadata/_custom_type_script = "uid://cbiskerf2stk6"
 
-[sub_resource type="Resource" id="Resource_nton5"]
-script = ExtResource("11_s2x07")
-conditions = Array[ExtResource("10_fx52i")]([ExtResource("22_daxbq")])
-metadata/_custom_type_script = "uid://dkfssottmsrch"
+[sub_resource type="Resource" id="Resource_vblrk"]
+script = ExtResource("13_1llel")
+conditions = Array[ExtResource("10_fx52i")]([ExtResource("30_fx52i")])
+metadata/_custom_type_script = "uid://dn82yybtu3o00"
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_7o6b3"]
 radius = 615.0
@@ -476,17 +426,17 @@ y_sort_enabled = true
 
 [node name="TestRigidEntity" parent="WorldRoot/Testing" unique_id=120789680 instance=ExtResource("9_37jga")]
 position = Vector2(127, 27)
-physics_material_override = SubResource("PhysicsMaterial_nton5")
+physics_material_override = SubResource("PhysicsMaterial_iotvt")
 sc = SubResource("Resource_fx52i")
 
 [node name="TestRigidEntity2" parent="WorldRoot/Testing" unique_id=294390776 instance=ExtResource("9_37jga")]
 position = Vector2(129, 87)
-physics_material_override = SubResource("PhysicsMaterial_dgobw")
+physics_material_override = SubResource("PhysicsMaterial_8lm63")
 sc = SubResource("Resource_h3uly")
 
 [node name="TestRigidEntity3" parent="WorldRoot/Testing" unique_id=941546994 instance=ExtResource("9_37jga")]
 position = Vector2(65, 118)
-physics_material_override = SubResource("PhysicsMaterial_04pgg")
+physics_material_override = SubResource("PhysicsMaterial_a2una")
 freeze = true
 sc = SubResource("Resource_xm2up")
 
@@ -527,7 +477,7 @@ sc = SubResource("Resource_ed1p2")
 [node name="TestStaticEffectSource2" type="Area2D" parent="WorldRoot/Testing/TestStaticEntity3" unique_id=1245471775 node_paths=PackedStringArray("source_entity")]
 position = Vector2(0, -7)
 script = ExtResource("11_j4dgk")
-effect_source = SubResource("Resource_a2una")
+effect_source = SubResource("Resource_dgobw")
 source_entity = NodePath("..")
 use_self_position = true
 
@@ -577,10 +527,12 @@ sc = SubResource("Resource_340rl")
 
 [node name="TestPhysicalInventory" parent="WorldRoot/Testing" unique_id=1371114887 instance=ExtResource("17_om42l")]
 position = Vector2(211, -25)
+inv = SubResource("Resource_iscjk")
 sc = SubResource("Resource_8jild")
 
 [node name="TestPhysicalInventory2" parent="WorldRoot/Testing" unique_id=1601414041 instance=ExtResource("17_om42l")]
 position = Vector2(295, 6)
+inv = SubResource("Resource_05q3t")
 sc = SubResource("Resource_yng6w")
 
 [node name="TestRock5" parent="WorldRoot/Testing" unique_id=57795637 instance=ExtResource("30_yw2f7")]
@@ -631,8 +583,9 @@ z_index = -2
 z_as_relative = false
 position = Vector2(189, 143)
 script = ExtResource("22_0op7h")
+auto_start = false
 transform_queue = Array[ExtResource("22_63ihc")]([SubResource("Resource_04pgg"), SubResource("Resource_s5gqv")])
-default_storm_es = SubResource("Resource_nton5")
+default_storm_es = SubResource("Resource_vblrk")
 default_storm_visuals = ExtResource("23_rhtsc")
 metadata/_edit_group_ = true
 
@@ -672,45 +625,6 @@ offset_bottom = 270.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-
-[node name="PointLight2D" type="PointLight2D" parent="WorldRoot" unique_id=2123563252]
-light_mask = 0
-position = Vector2(276, 68)
-color = Color(1, 0.684396, 0.33276, 1)
-range_item_cull_mask = 3
-shadow_color = Color(0, 0, 0, 0.19)
-texture = ExtResource("32_s5gqv")
-texture_scale = 0.5
-height = 32.0
-
-[node name="PointLight2D2" type="PointLight2D" parent="WorldRoot" unique_id=119514472]
-light_mask = 0
-position = Vector2(126, 199)
-color = Color(1, 0.684396, 0.33276, 1)
-range_item_cull_mask = 3
-shadow_color = Color(0, 0, 0, 0.19)
-texture = ExtResource("32_s5gqv")
-texture_scale = 0.5
-height = 32.0
-
-[node name="PointLight2D3" type="PointLight2D" parent="WorldRoot" unique_id=208707161]
-light_mask = 0
-position = Vector2(378, 173)
-color = Color(1, 0.684396, 0.33276, 1)
-range_item_cull_mask = 3
-shadow_color = Color(0, 0, 0, 0.19)
-texture = ExtResource("32_s5gqv")
-texture_scale = 0.5
-height = 32.0
-
-[node name="PointLight2D4" type="PointLight2D" parent="WorldRoot" unique_id=1303917722]
-light_mask = 0
-position = Vector2(401, 53)
-color = Color(1, 0.684396, 0.33276, 1)
-range_item_cull_mask = 3
-shadow_color = Color(0, 0, 0, 0.19)
-texture = ExtResource("32_s5gqv")
-texture_scale = 0.5
 
 [node name="LightRay" type="Sprite2D" parent="WorldRoot" unique_id=1212039330]
 modulate = Color(0.864, 0.761, 0.589, 0.234)

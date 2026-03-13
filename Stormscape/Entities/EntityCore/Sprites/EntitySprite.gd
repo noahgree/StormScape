@@ -1,7 +1,9 @@
 @icon("res://Utilities/Debug/EditorIcons/entity_sprite.svg")
-extends Node2D
+extends AnimatedSprite2D
 class_name EntitySprite
 ## The main sprite node that is attached to any game entity.
+
+enum HitflashColor { NORMAL, BURNING, FROSTBITE, REGEN, POISON, STORM_SYNDROME } ## The potential sources for hitflash colors.
 
 @export var disable_floor_light: bool = false ## When true, the light that shines at the base of the sprite in response to conditions will be disabled.
 @export var cracks_with_damage: bool = true ## When true, the shader will simulate cracking based on the percentage of health left (note that shield changing does nothing, this only updates with health changes). This only applies to non-dynamic entities.
@@ -47,6 +49,14 @@ class_name EntitySprite
 	Condition.ID.UNTOUCHABLE : Color(0.29, 0.713, 0.75),
 	Condition.ID.STUN : Color(1, 0.909, 0.544),
 	Condition.ID.TIME_SNARE : Color(1, 0.4, 0.463)
+}
+@export_storage var hitflash_colors: Dictionary[HitflashColor, Color] = { ## The condition names that have associated colors to hitflash with. Only applies to conditions with damage or healing over time.
+	HitflashColor.NORMAL : Color(1.0, 1.0, 1.0, 0.5),
+	HitflashColor.BURNING : Color(1.0, 0.58, 0.482, 0.525),
+	HitflashColor.FROSTBITE : Color(0.435, 0.827, 1.0, 0.569),
+	HitflashColor.POISON : Color(0.0, 0.933, 0.471, 0.502),
+	HitflashColor.REGEN : Color(0.0, 0.8, 0.514, 0.588),
+	HitflashColor.STORM_SYNDROME : Color(0.863, 0.573, 1.0, 0.573)
 }
 
 @onready var floor_light: PointLight2D = $FloorLight ## The light with the effect color that is shining up on the entity.
@@ -175,18 +185,19 @@ func update_overlay_color(condition_id: Condition.ID, kill: bool = false) -> voi
 
 ## Starts a hitflash effect based on the color defined in the effect source that caused it.
 ## Optionally tweens it in for gentler things like healing.
-func start_hitflash(flash_color: Color = Color(1, 1, 1, 0.6), tween_in: bool = false) -> void:
+func start_hitflash(color_key: HitflashColor, tween_in: bool = false) -> void:
 	if hitflash_tween:
 		hitflash_tween.kill()
 	hitflash_tween = create_tween()
 
 	shader_node.set_instance_shader_parameter("use_override_color", true)
+	var color: Color = hitflash_colors.get(color_key, hitflash_colors[HitflashColor.NORMAL])
 
 	if tween_in:
-		hitflash_tween.tween_property(shader_node, "instance_shader_parameters/override_color", flash_color, 0.1)
+		hitflash_tween.tween_property(shader_node, "instance_shader_parameters/override_color", color, 0.1)
 		hitflash_tween.tween_interval(HITFLASH_DURATION)
 	else:
-		shader_node.set_instance_shader_parameter("override_color", flash_color)
+		shader_node.set_instance_shader_parameter("override_color", color)
 		hitflash_tween.tween_interval(HITFLASH_DURATION)
 
 	hitflash_tween.tween_property(shader_node, "instance_shader_parameters/override_color", Color.TRANSPARENT, 0.1)

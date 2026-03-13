@@ -4,16 +4,18 @@ class_name ESI
 ## that originate from entities and items.
 
 @export var es: EffectSource: set = _set_es ## The effect source that this wraps.
+@export var source_entity_team: Globals.Teams = Globals.Teams.ENEMY ## A local copy of the last known source entity's team. Stored in case the source entity is freed but we still need the team it was on.
+@export var source_ii: II: set = _set_source_ii, get = _get_source_ii ## The item instance that produced this ESI.
+@export var source_ii_lvl: int = 0 ## A local copy of the last known source II's level. Stored in case the source II is freed but we still need the level it was at. Always set to 0 by default for if the source II was not a weapon.
+@export var source_condition: Condition ## The condition that sent out this ESI, usually originating from an EOTI. Will be null if this ESI does not come from a condition.
+@export var contact_position: Vector2 ## The position of what the effect source is attached to when it makes contact with a receiver.
+@export var movement_direction: Vector2 ## The direction vector of this effect source at contact used for knockback.
+
 var es_stat_overrides: Dictionary[StringName, float] ## The overrides to use instead when accessing stats from the es.
 var conditions: Array[Condition] ## The modifiable list of conditions for the effect source.
 var source_entity: Entity: set = _set_source_entity, get = _get_source_entity ## The entity that produced this ESI.
-var source_entity_team: Globals.Teams = Globals.Teams.ENEMY ## A local copy of the last known source entity's team. Stored in case the source entity is freed but we still need the team it was on.
-var source_ii: II: set = _set_source_ii, get = _get_source_ii ## The item instance that produced this ESI.
-var source_ii_lvl: int = 0 ## A local copy of the last known source II's level. Stored in case the source II is freed but we still need the level it was at. Always set to 0 by default for if the source II was not a weapon.
-var source_condition: Condition ## The condition that sent out this ESI, usually originating from an EOTI. Will be null if this ESI does not come from a condition.
-var contact_position: Vector2 ## The position of what the effect source is attached to when it makes contact with a receiver.
-var movement_direction: Vector2 ## The direction vector of this effect source at contact used for knockback.
 var multishot_id: int = -1 ## The id used to relate multishot projectiles with each other. -1 means it did not come from a multishot.
+var uid: int = UIDHelper.generate_esi_uid() ## Used to differentiate ESIs in a game session. Different for each instance, regardless of multishot.
 
 
 ## Checks if the effect source should do bad conditions and values to allies.
@@ -44,11 +46,13 @@ func reset_conditions() -> void:
 	if es != null:
 		conditions.assign(es.conditions)
 
-## Duplicates and returns this ESI with the stat override and condition arrays duplicated.
+## Duplicates and returns this ESI with the stat override and condition arrays duplicated and source entity
+## reference copied.
 func copy() -> ESI:
 	var new: ESI = self.duplicate()
 	new.es_stat_overrides = es_stat_overrides.duplicate()
 	new.conditions = conditions.duplicate()
+	new.source_entity = source_entity
 	return new
 
 ## Called externally to set all three properties at the same time.

@@ -1,7 +1,7 @@
 [gd_resource type="Resource" script_class="ProjWeaponStats" format=3 uid="uid://kmidnuyti5xi"]
 
-[ext_resource type="Script" uid="uid://dkfssottmsrch" path="res://Entities/Components/ESComponent/EffectSource.gd" id="1_pnsqi"]
-[ext_resource type="Resource" uid="uid://y5iqfraea8ry" path="res://Entities/Player/PlayerCore/PlayerCamera/CamFXPresets/2(NoFreeze).tres" id="2_o0qyt"]
+[ext_resource type="Script" uid="uid://boo31eu083dqd" path="res://Entities/Components/ConditionsComponent/Conditions/Condition.gd" id="1_o0cb4"]
+[ext_resource type="Script" uid="uid://dn82yybtu3o00" path="res://Entities/Components/ESComponent/NormalES.gd" id="2_dwcei"]
 [ext_resource type="Script" uid="uid://cje5bobi6o8bo" path="res://Entities/Items/Hitscans/HitscanStats.gd" id="3_46awu"]
 [ext_resource type="Script" uid="uid://bj3r5oopspj6l" path="res://Entities/Items/Projectiles/ProjectileCore/ProjStats.gd" id="4_7qce5"]
 [ext_resource type="Texture2D" uid="uid://cqsoww8i0aya3" path="res://Entities/Items/Weapons/ProjectileWeapons/Boomerang/BoomerangSteelCT.tres" id="4_gupq0"]
@@ -12,15 +12,13 @@
 [ext_resource type="Script" uid="uid://ctxa7i1mbt7ab" path="res://Entities/Player/UI/Inventory/Panels/CraftingPanel/CraftingIngredient.gd" id="11_abng5"]
 [ext_resource type="Script" uid="uid://dvasncq3tgljs" path="res://Entities/Items/Weapons/ProjectileWeapons/ProjWeaponCore/ProjWeaponStats.gd" id="13_rmhbo"]
 
-[sub_resource type="Resource" id="Resource_etijc"]
-script = ExtResource("1_pnsqi")
+[sub_resource type="Resource" id="Resource_rmhbo"]
+script = ExtResource("2_dwcei")
 source_type = 1
-source_tags = Array[String](["chops_wood"])
+source_tags = Array[int]([0])
 can_hit_self = false
-base_damage = 45
-crit_chance = 3
-crit_multiplier = 1.25
-impact_cam_fx = ExtResource("2_o0qyt")
+base_damage = 42
+metadata/_custom_type_script = "uid://dn82yybtu3o00"
 
 [sub_resource type="Resource" id="Resource_ot56n"]
 script = ExtResource("3_46awu")
@@ -73,7 +71,7 @@ fire_cooldown = 0.3
 spawn_after_fire_anim = true
 projectile_logic = SubResource("Resource_n65by")
 hitscan_logic = SubResource("Resource_ot56n")
-effect_source = SubResource("Resource_etijc")
+effect_source = SubResource("Resource_rmhbo")
 ammo_type = 8
 mag_size = -1
 stamina_use_per_proj = 4.0

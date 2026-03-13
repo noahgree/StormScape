@@ -51,8 +51,23 @@ enum GoodAffectedTeams { ENEMIES = 1 << 0, ALLIES = 1 << 1 }
 # Items
 enum ItemType { CONSUMABLE, WEAPON, AMMO, WEARABLE, WORLD_RESOURCE, SPECIAL, WEAPON_MOD, CURRENCY }
 enum CurrencyType { STORMSHINE, SCRAP, TOKEN }
-const all_proj_weapons: Array[ProjWeaponStats.Types] = [ProjWeaponStats.Types.PISTOL, ProjWeaponStats.Types.SHOTGUN, ProjWeaponStats.Types.SUBMACHINE, ProjWeaponStats.Types.SNIPER, ProjWeaponStats.Types.RIFLE, ProjWeaponStats.Types.EXPLOSIVE, ProjWeaponStats.Types.PRIMITIVE_WEAPON, ProjWeaponStats.Types.MAGIC, ProjWeaponStats.Types.THROWABLE, ProjWeaponStats.Types.SPECIAL_WEAPON]
-const all_melee_wpns: Array[MeleeWeaponStats.MeleeWeaponType] = [MeleeWeaponStats.MeleeWeaponType.TOOL, MeleeWeaponStats.MeleeWeaponType.PHYSICAL, MeleeWeaponStats.MeleeWeaponType.COMBAT]
+const all_proj_weapons: Array[ProjWeaponStats.Types] = [
+	ProjWeaponStats.Types.PISTOL,
+	ProjWeaponStats.Types.SHOTGUN,
+	ProjWeaponStats.Types.SUBMACHINE,
+	ProjWeaponStats.Types.SNIPER,
+	ProjWeaponStats.Types.RIFLE,
+	ProjWeaponStats.Types.EXPLOSIVE,
+	ProjWeaponStats.Types.PRIMITIVE_WEAPON,
+	ProjWeaponStats.Types.MAGIC,
+	ProjWeaponStats.Types.THROWABLE,
+	ProjWeaponStats.Types.SPECIAL_WEAPON
+]
+const all_melee_wpns: Array[MeleeWeaponStats.MeleeWeaponType] = [
+	MeleeWeaponStats.MeleeWeaponType.TOOL,
+	MeleeWeaponStats.MeleeWeaponType.PHYSICAL,
+	MeleeWeaponStats.MeleeWeaponType.COMBAT
+]
 
 enum ItemRarity {
 	COMMON,  ## [b][color=darkgray]0[/color][/b]

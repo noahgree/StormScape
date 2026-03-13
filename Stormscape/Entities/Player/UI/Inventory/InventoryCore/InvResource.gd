@@ -19,7 +19,7 @@ var auto_decrementer: AutoDecrementer = AutoDecrementer.new() ## The script cont
 ## Must be called after this inventory resource is created to set it up.
 func initialize_inventory(source: Entity) -> void:
 	source_node = source
-	auto_decrementer.inv = self
+	auto_decrementer.inv = weakref(self)
 	if drop_on_death:
 		source_node.tree_exiting.connect(drop_entire_inventory)
 	if source.is_object:

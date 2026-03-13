@@ -29,15 +29,18 @@ enum SourceType { ## The different kind of sources that the condition can come f
 	FROM_SELF ## For self conditions like when weapons apply conditions to the entity while being charged up.
 }
 
-enum Goodness { GOOD, BAD } ## Splits up what is considered good and bad conditions.
+enum Goodness { GOOD, BAD } ## Separates good from bad conditions.
+
+const GOOD_CONDITIONS: Dictionary[ID, bool] = { ## Which condition IDs are considered "good" conditions.
+	ID.REGEN : true, ID.SELF_KNOCKBACK : true, ID.SPEED: true, ID.KINETIC_IMPACT: true, ID.UNTOUCHABLE: true
+}
 
 @export var id: ID ## What the effect is identified by (doesn't include the level).
 @export var source_type: SourceType ## The source of this condition to differentiate it and control how its timing may get reset if another of the same effect with a matching source_id comes in.
 @export_range(1, 10, 1) var level: int = 1 ## The level of the condition, 1 is the lowest.
-@export var goodness: Goodness = Goodness.GOOD ## Whether this should be considered a negative condition. This is used when handling which teams should receive which types of conditions related to who sent them.
 @export_flags("DynamicEntity:1", "RigidEntity:2", "StaticEntity:4") var affected_entities: int = 0b111
 @export var conditions_to_stop: Array[ID] ## The names of other conditions that this condition should stop and remove from the entity upon being applied.
-@export var eot_stats: EOTStats: set = _check_ticks_array ## The effect over time stats used when this applies damage, healing, or stat mods over time.
+@export var eot_stats: EOTStats ## The effect over time stats used when this applies damage, healing, or stat mods over time.
 
 @export_group("FX")
 @export var audio_to_play: String = "" ## The audio resource to play as a sound effect when hitting an entity.
@@ -49,6 +52,10 @@ enum Goodness { GOOD, BAD } ## Splits up what is considered good and bad conditi
 ## Overrides the default to_string to print a more readable output when included in a print() call.
 func _to_string() -> String:
 	return ID.keys()[id].capitalize() + ":" + str(level) + " (" + SourceType.keys()[source_type].capitalize() + ")"
+
+## Gets the string used in the item details panel, which is just condition ID and level number.
+func get_panel_string() -> String:
+	return ID.keys()[id].capitalize() + " " + str(level)
 
 ## Gets the full cache key for this condition, which is an array as [id, source, level].
 func get_cache_key() -> Array:
@@ -62,12 +69,3 @@ func get_key() -> Array:
 ## teams check.
 func on_received_regardless_of_level(_esi: ESI, _entity: Entity) -> void:
 	pass
-
-#region Debug
-## Setter for the ticks array to make sure each Effect Source uses the right source type.
-func _check_ticks_array(new_eot_stats: EOTStats) -> void:
-	eot_stats = new_eot_stats
-	for effect_source: EffectSource in eot_stats.ticks_array:
-		if effect_source.source_type != EffectSource.SourceType.FROM_EOT:
-			push_error(str(self) + " has an effect source in its eot_stats that don't identify their source as FROM_EOTI. This will cause issues.")
-#endregion

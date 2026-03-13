@@ -1,7 +1,8 @@
 extends II
 class_name WeaponII
+## Specific implementation of an item instance for all weapons.
 
-const BASE_XP_FOR_LVL: int = 500
+const BASE_XP_FOR_LVL: int = 300
 const LVL_SCALING_EXPONENT: float = 1.005
 const RARITY_LEVELING_FACTOR: float = 0.1
 const MAX_LEVEL: int = 40
@@ -12,7 +13,7 @@ const MEDIUM_LARGE_XP: int = 50
 const LARGE_XP: int = 100
 const HUGE_XP: int = 250
 const ENORMOUS_XP: int = 500
-const EFFECT_AMOUNT_XP_MULT: float = 0.35 ## Multiplies effect src amounts (dmg, heal) before adding that amount as xp.
+const EFFECT_AMOUNT_XP_MULT: float = 0.38 ## Multiplies effect src amounts (dmg, heal) before adding that amount as xp.
 
 @export_group("Weapon Specific")
 @export_range(1, 40, 1) var level: int = 1 ## The level for this weapon.
@@ -153,7 +154,7 @@ func visual_percent_of_lvl_progress() -> float:
 ## Adds xp to the weapon, potentially leveling it up if it has reached enough accumulation of xp. Returns true
 ## if a level up occurred as a result of the added xp.
 func add_xp(amount: int) -> bool:
-	if stats.no_levels:
+	if (stats.no_levels) or (amount == 0) or (level == MAX_LEVEL):
 		return false
 
 	var allowed_leveled_up: bool = false

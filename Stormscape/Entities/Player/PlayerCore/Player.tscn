@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://c3rpxq8pnbdje" path="res://Entities/Player/PlayerCore/Player.gd" id="1_m33tt"]
 [ext_resource type="Script" uid="uid://bdd0xujg1bgm0" path="res://Entities/Player/UI/Inventory/InventoryCore/PlayerInvResource.gd" id="2_14ixx"]
-[ext_resource type="PackedScene" uid="uid://cj2wy5f05cos4" path="res://Entities/EntityCore/Shadow/EntityShadow.tscn" id="3_05f62"]
+[ext_resource type="PackedScene" uid="uid://digwuyppqnmsf" path="res://Entities/EntityCore/Shadow/EntityShadow.tscn" id="3_05f62"]
 [ext_resource type="Script" uid="uid://cv7ha7muvg5qu" path="res://Entities/Items/ItemCore/II.gd" id="3_lo25j"]
 [ext_resource type="PackedScene" uid="uid://cdfdy8m6ki3oq" path="res://Entities/Components/HPComponent/HPComponent.tscn" id="3_ojev3"]
 [ext_resource type="PackedScene" uid="uid://dh4ydl7l86ywq" path="res://Entities/EntityCore/Sprites/EntitySprite.tscn" id="4_fmbcv"]
@@ -20,8 +20,13 @@
 [ext_resource type="Resource" uid="uid://dk3vlbvu2b7eq" path="res://Entities/Items/TRESItems/MeleeWeapons/Sword(4).tres" id="8_g5u5n"]
 [ext_resource type="Resource" uid="uid://cx1ydw2jde1y8" path="res://Entities/Items/TRESItems/Consumables/Apple(0).tres" id="9_thmqm"]
 [ext_resource type="PackedScene" uid="uid://bhcqtorpyerc3" path="res://Utilities/Debug/ParticleEmissionComponent.tscn" id="10_6wv7y"]
+[ext_resource type="Resource" uid="uid://3avt5jvd3dye" path="res://Entities/Items/TRESItems/ProjectileWeapons/BottleOFire(3).tres" id="11_rdrbb"]
 [ext_resource type="Resource" uid="uid://dpmwqsai6gxsr" path="res://Entities/Items/TRESItems/ProjectileWeapons/FlameBlower(5).tres" id="12_gdihr"]
 [ext_resource type="Script" uid="uid://c2gdoebfp12dq" path="res://Entities/Components/StatMod/StatModsCache.gd" id="14_0313k"]
+[ext_resource type="Resource" uid="uid://cpxev3kvt74vw" path="res://Entities/Items/TRESItems/Ammo/Shell(0).tres" id="15_o382h"]
+[ext_resource type="Resource" uid="uid://c5jim46mul7ex" path="res://Entities/Items/TRESItems/Ammo/IonCharge(1).tres" id="16_n4o3n"]
+[ext_resource type="Resource" uid="uid://dsylig1px18qv" path="res://Entities/Items/TRESItems/Ammo/Boompowder(3).tres" id="17_0t1mv"]
+[ext_resource type="Texture2D" uid="uid://b1u5ju5rhciug" path="res://Entities/Player/Sprites/Base/PlayerBaseFramesCT.tres" id="24_6wv7y"]
 [ext_resource type="PackedScene" uid="uid://jpq0ij8wwlhy" path="res://Entities/Components/FacingComponent/FacingComponent.tscn" id="25_0t1mv"]
 [ext_resource type="Script" uid="uid://c28itqxmeqbq0" path="res://Entities/FSM/FSMCore/StateMachine.gd" id="25_6wv7y"]
 [ext_resource type="Texture2D" uid="uid://crawnbhc5weqf" path="res://Entities/EntityCore/EntityTypes/DynamicEntity/entity_footstep.png" id="27_0t1mv"]
@@ -135,6 +140,13 @@ stats = ExtResource("9_thmqm")
 q = 10
 metadata/_custom_type_script = "uid://cixw344dpwknt"
 
+[sub_resource type="Resource" id="Resource_3uq13"]
+script = ExtResource("5_3uq13")
+uid = null
+stats = ExtResource("11_rdrbb")
+q = 10
+metadata/_custom_type_script = "uid://cbw8j4ps8ii7p"
+
 [sub_resource type="Resource" id="Resource_hxjay"]
 script = ExtResource("5_3uq13")
 uid = null
@@ -157,12 +169,33 @@ metadata/_custom_type_script = "uid://cbw8j4ps8ii7p"
 script = ExtResource("3_lo25j")
 uid = null
 stats = ExtResource("7_o382h")
-q = 350
+q = 500
+metadata/_custom_type_script = "uid://cv7ha7muvg5qu"
+
+[sub_resource type="Resource" id="Resource_n4o3n"]
+script = ExtResource("3_lo25j")
+uid = null
+stats = ExtResource("15_o382h")
+q = 500
+metadata/_custom_type_script = "uid://cv7ha7muvg5qu"
+
+[sub_resource type="Resource" id="Resource_gdihr"]
+script = ExtResource("3_lo25j")
+uid = null
+stats = ExtResource("16_n4o3n")
+q = 99
+metadata/_custom_type_script = "uid://cv7ha7muvg5qu"
+
+[sub_resource type="Resource" id="Resource_g5u5n"]
+script = ExtResource("3_lo25j")
+uid = null
+stats = ExtResource("17_0t1mv")
+q = 99
 metadata/_custom_type_script = "uid://cv7ha7muvg5qu"
 
 [sub_resource type="Resource" id="Resource_0t1mv"]
 script = ExtResource("2_14ixx")
-starting_inv = Array[ExtResource("3_lo25j")]([SubResource("Resource_6wv7y"), SubResource("Resource_6f5us"), SubResource("Resource_5qckj"), null, null, null, null, null, null, null, null, null, SubResource("Resource_r5dvw"), null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, SubResource("Resource_hxjay"), SubResource("Resource_da65a"), SubResource("Resource_s4yud"), null, null, null, null, null, null, null, SubResource("Resource_o382h"), null, null, null, null, null])
+starting_inv = Array[ExtResource("3_lo25j")]([SubResource("Resource_6wv7y"), SubResource("Resource_6f5us"), SubResource("Resource_5qckj"), null, null, null, null, null, null, null, null, null, SubResource("Resource_r5dvw"), null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, SubResource("Resource_3uq13"), SubResource("Resource_hxjay"), SubResource("Resource_da65a"), SubResource("Resource_s4yud"), null, null, null, null, null, null, SubResource("Resource_o382h"), SubResource("Resource_n4o3n"), SubResource("Resource_gdihr"), SubResource("Resource_g5u5n"), null, null])
 metadata/_custom_type_script = "uid://bdd0xujg1bgm0"
 
 [sub_resource type="Resource" id="Resource_thmqm"]
@@ -174,6 +207,10 @@ height = 12.0
 
 [sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_o382h"]
 polygon = PackedVector2Array(-5, -2.98466, -6, -1.98977, -5, 0, 5, 0, 6, -1.98977, 5, -2.98466)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_baoul"]
+atlas = ExtResource("24_6wv7y")
+region = Rect2(0, 0, 32, 32)
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_f5l7i"]
 particles_animation = true
@@ -1195,13 +1232,13 @@ scene_audio = Array[ExtResource("85_w0i1c")]([ExtResource("127_ou5t4"), ExtResou
 scale = Vector2(1, 1.00514)
 occluder = SubResource("OccluderPolygon2D_o382h")
 
+[node name="EntityShadow" parent="." unique_id=56936167 instance=ExtResource("3_05f62")]
+texture = SubResource("AtlasTexture_baoul")
+offset = Vector2(0, -16)
+
 [node name="YSorter" type="Node2D" parent="." unique_id=2049245221]
 editor_description = "MUST TURN ON Y SORTING ON THIS NODE!"
 y_sort_enabled = true
-
-[node name="EntityShadow" parent="YSorter" unique_id=199334492 instance=ExtResource("3_05f62")]
-offset_left = -8.0
-offset_right = 8.0
 
 [node name="EntitySprite" parent="YSorter" unique_id=203065323 instance=ExtResource("4_fmbcv")]
 unique_name_in_owner = true
@@ -1317,6 +1354,7 @@ theme_override_constants/separation = 1
 alignment = 2
 
 [node name="OverheatBar" type="TextureProgressBar" parent="OverheadUI/VBoxContainer" unique_id=1945148211]
+unique_name_in_owner = true
 material = SubResource("CanvasItemMaterial_6wv7y")
 custom_minimum_size = Vector2(0, 3)
 layout_mode = 2
@@ -1330,6 +1368,7 @@ texture_over = ExtResource("63_3uq13")
 texture_progress = ExtResource("64_o382h")
 
 [node name="ChargeBar" type="TextureProgressBar" parent="OverheadUI/VBoxContainer" unique_id=1302623574]
+unique_name_in_owner = true
 material = SubResource("CanvasItemMaterial_6wv7y")
 custom_minimum_size = Vector2(0, 3)
 layout_mode = 2
@@ -1343,6 +1382,7 @@ texture_over = ExtResource("63_3uq13")
 texture_progress = ExtResource("61_6wv7y")
 
 [node name="ReloadBar" type="TextureProgressBar" parent="OverheadUI/VBoxContainer" unique_id=1165969161]
+unique_name_in_owner = true
 material = SubResource("CanvasItemMaterial_n4o3n")
 custom_minimum_size = Vector2(0, 3)
 layout_mode = 2

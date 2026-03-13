@@ -1,18 +1,24 @@
 [gd_resource type="Resource" script_class="ProjWeaponStats" format=3 uid="uid://ciel2rrqq4dvv"]
 
-[ext_resource type="Script" uid="uid://boo31eu083dqd" path="res://Entities/Components/ConditionsComponent/Conditions/Condition.gd" id="1_iti0p"]
-[ext_resource type="Script" uid="uid://dkfssottmsrch" path="res://Entities/Components/ESComponent/EffectSource.gd" id="2_v1b1g"]
+[ext_resource type="Script" uid="uid://boo31eu083dqd" path="res://Entities/Components/ConditionsComponent/Conditions/Condition.gd" id="1_5xvje"]
+[ext_resource type="Script" uid="uid://dn82yybtu3o00" path="res://Entities/Components/ESComponent/NormalES.gd" id="2_xwyrc"]
 [ext_resource type="Script" uid="uid://cowjdnic7xmkp" path="res://Entities/Player/UI/Inventory/Panels/ItemDetailsPanel/StatDetail.gd" id="3_iti0p"]
 [ext_resource type="PackedScene" uid="uid://c3e5wour08d6u" path="res://Entities/Items/Hitscans/LaserBeam.tscn" id="3_ujvf8"]
 [ext_resource type="Texture2D" uid="uid://dhi85kahpnkpu" path="res://Entities/Items/Weapons/ProjectileWeapons/LaserGun/LaserGunBaseFrameCT.tres" id="4_nt47o"]
 [ext_resource type="Texture2D" uid="uid://cbejnd21g2010" path="res://Entities/Items/Weapons/ProjectileWeapons/LaserGun/laser_gun_base_frame.png" id="4_v1b1g"]
 [ext_resource type="Script" uid="uid://cje5bobi6o8bo" path="res://Entities/Items/Hitscans/HitscanStats.gd" id="4_w5523"]
 [ext_resource type="PackedScene" uid="uid://ckf7i8bnass5n" path="res://Entities/Items/Projectiles/Laser/Laser.tscn" id="5_xjmn2"]
+[ext_resource type="Curve" uid="uid://bk3m2mnf6cwxc" path="res://Utilities/Game/Curves/BASE_HITSCAN_FALLOFF.tres" id="6_7l43n"]
 [ext_resource type="Script" uid="uid://bj3r5oopspj6l" path="res://Entities/Items/Projectiles/ProjectileCore/ProjStats.gd" id="6_ll0mi"]
 [ext_resource type="Resource" uid="uid://cl4lqk1b8bquo" path="res://Entities/Player/PlayerCore/PlayerCamera/CamFXPresets/0(NoFreeze).tres" id="7_j8kuh"]
+[ext_resource type="Curve" uid="uid://dcf3klshobqsh" path="res://Utilities/Game/Curves/0-1-MAX.tres" id="8_1pnt5"]
+[ext_resource type="Curve" uid="uid://rlvyvqmf4jeq" path="res://Utilities/Game/Curves/BASE_OVERHEAT_DEC_RATE.tres" id="8_bu2fp"]
+[ext_resource type="Curve" uid="uid://b6omqen77gwxv" path="res://Utilities/Game/Curves/BASE_OVERHEAT_INC_RATE.tres" id="9_gch3x"]
 [ext_resource type="PackedScene" uid="uid://baxpb3crwepc0" path="res://Entities/Items/Weapons/ProjectileWeapons/LaserGun/LaserGun.tscn" id="11_ykm1j"]
 [ext_resource type="Script" uid="uid://ctxa7i1mbt7ab" path="res://Entities/Player/UI/Inventory/Panels/CraftingPanel/CraftingIngredient.gd" id="12_bu2fp"]
+[ext_resource type="Curve" uid="uid://omr2xxxhvdbq" path="res://Utilities/Game/Curves/BASE_PROJ_FALLOFF.tres" id="14_orx1t"]
 [ext_resource type="Script" uid="uid://dvasncq3tgljs" path="res://Entities/Items/Weapons/ProjectileWeapons/ProjWeaponCore/ProjWeaponStats.gd" id="15_gch3x"]
+[ext_resource type="Curve" uid="uid://cx5xd3sk17ryv" path="res://Utilities/Game/Curves/BASE_PROJ_HOMING_TURN_RATE.tres" id="16_7umg3"]
 
 [sub_resource type="Curve" id="Curve_kfl3v"]
 _data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.259631, 0), 0.0, 0.0, 0, 0, Vector2(0.757194, 0.277558), 0.0, 0.0, 0, 0, Vector2(1, 1), 2.89929, 0.0, 0, 0]
@@ -27,16 +33,11 @@ _limits = [0.0, 0.1, 0.0, 1.0]
 _data = [Vector2(0, 0.0137044), 0.0, 0.0609458, 0, 0, Vector2(1, 0.0522747), 0.0, 0.0, 0, 0]
 point_count = 2
 
-[sub_resource type="Resource" id="Resource_nt47o"]
-script = ExtResource("2_v1b1g")
-source_type = 1
-can_hit_self = false
-base_damage = 1
-metadata/_custom_type_script = "uid://dkfssottmsrch"
-
-[sub_resource type="Curve" id="Curve_j8kuh"]
-_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.69563), 0.0, 0.0, 0, 0]
-point_count = 2
+[sub_resource type="Resource" id="Resource_nsfds"]
+script = ExtResource("2_xwyrc")
+source_type = 2
+base_damage = 2
+metadata/_custom_type_script = "uid://dn82yybtu3o00"
 
 [sub_resource type="Curve" id="Curve_k6g4e"]
 _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
@@ -47,7 +48,6 @@ script = ExtResource("4_w5523")
 hitscan_effect_interval = 0.1
 hitscan_max_distance = 250
 hitscan_pierce_count = 12
-hitscan_effect_falloff = SubResource("Curve_j8kuh")
 hitscan_width_curve = SubResource("Curve_k6g4e")
 beam_color = Color(0.638628, 0.415557, 1, 1)
 glow_amount = 1.2
@@ -56,16 +56,8 @@ impact_particle_color = Color(0.55681, 0.883298, 1, 1)
 beam_particle_color = Color(0.0428848, 0.531751, 0.977188, 1)
 metadata/_custom_type_script = "uid://cje5bobi6o8bo"
 
-[sub_resource type="Curve" id="Curve_3rmxf"]
-_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.651446), 0.0, 0.0, 0, 0]
-point_count = 2
-
 [sub_resource type="Curve" id="Curve_0ifmj"]
 _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.499148), 0.0, 0.0, 0, 0]
-point_count = 2
-
-[sub_resource type="Curve" id="Curve_bhy44"]
-_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.501364), 0.0, 0.0, 0, 0]
 point_count = 2
 
 [sub_resource type="Curve" id="Curve_pesg6"]
@@ -76,7 +68,6 @@ point_count = 2
 script = ExtResource("6_ll0mi")
 speed_curve = SubResource("Curve_pesg6")
 height_override = 6
-effect_falloff_curve = SubResource("Curve_bhy44")
 arc_travel_distance = 100
 arc_speed = 350.0
 bounce_falloff_curve = SubResource("Curve_0ifmj")
@@ -84,7 +75,6 @@ split_into_counts = Array[int]([3, 10])
 angular_spreads = Array[float]([45.0, 360.0])
 split_delays = Array[float]([0.2, 0.15])
 split_cam_fx = null
-aoe_effect_falloff_curve = SubResource("Curve_3rmxf")
 
 [sub_resource type="Curve" id="Curve_21u6p"]
 _data = [Vector2(0, 0.0632948), 0.0, 0.0, 0, 0, Vector2(1, 0.0743148), 0.0, 0.0, 0, 0]
@@ -111,7 +101,7 @@ charge_loss_mult = 2.0
 firing_cam_fx = ExtResource("7_j8kuh")
 projectile_logic = SubResource("Resource_nhr3k")
 hitscan_logic = SubResource("Resource_k6g4e")
-effect_source = SubResource("Resource_nt47o")
+effect_source = SubResource("Resource_nsfds")
 ammo_type = 2
 mag_size = 50
 mag_reload_time = 1.65

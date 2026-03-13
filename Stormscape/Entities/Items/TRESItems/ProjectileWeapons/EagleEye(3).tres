@@ -1,10 +1,12 @@
 [gd_resource type="Resource" script_class="ProjWeaponStats" format=3 uid="uid://duc0xfejpfs1"]
 
+[ext_resource type="Curve" uid="uid://b8lhpj4fuv50h" path="res://Utilities/Game/Curves/BASE_BLOOM.tres" id="1_5khun"]
 [ext_resource type="Texture2D" uid="uid://bm570hawaupxe" path="res://Entities/Items/Weapons/WeaponVFX/Casings/small_casing.png" id="1_6mhsi"]
-[ext_resource type="Script" uid="uid://dkfssottmsrch" path="res://Entities/Components/ESComponent/EffectSource.gd" id="1_hh3cs"]
 [ext_resource type="Texture2D" uid="uid://on5kqhtv8tmw" path="res://Entities/Items/Weapons/ProjectileWeapons/EagleEye/eagle_eye_base.png" id="1_jqvl6"]
+[ext_resource type="Curve" uid="uid://cgmh8p2atrnb5" path="res://Utilities/Game/Curves/BASE_BLOOM_DEC_RATE.tres" id="2_8iivo"]
 [ext_resource type="SpriteFrames" uid="uid://85w3h1wajacl" path="res://Entities/Items/Weapons/ProjectileWeapons/EagleEye/EagleEyeCursors.tres" id="2_efc0d"]
 [ext_resource type="Script" uid="uid://cje5bobi6o8bo" path="res://Entities/Items/Hitscans/HitscanStats.gd" id="3_f7syj"]
+[ext_resource type="Curve" uid="uid://cffshxd52otno" path="res://Utilities/Game/Curves/BASE_BLOOM_INC_RATE.tres" id="3_rsaq8"]
 [ext_resource type="PackedScene" uid="uid://btaigaokvm7qx" path="res://Entities/Items/Weapons/ProjectileWeapons/EagleEye/EagleEye.tscn" id="3_uuh4c"]
 [ext_resource type="Texture2D" uid="uid://bfoy8x1f7gqq7" path="res://Entities/Items/Weapons/ProjectileWeapons/EagleEye/EagleEyeBaseCT.tres" id="4_ghyeh"]
 [ext_resource type="Script" uid="uid://boo31eu083dqd" path="res://Entities/Components/ConditionsComponent/Conditions/Condition.gd" id="4_khfji"]
@@ -12,33 +14,35 @@
 [ext_resource type="Script" uid="uid://cowjdnic7xmkp" path="res://Entities/Player/UI/Inventory/Panels/ItemDetailsPanel/StatDetail.gd" id="5_4ip00"]
 [ext_resource type="PackedScene" uid="uid://bqkyplubhsx43" path="res://Entities/Items/Projectiles/Bullets/SmallBullet/SmallBullet.tscn" id="5_58e3c"]
 [ext_resource type="Resource" uid="uid://cev0y0oe3igus" path="res://Entities/Player/PlayerCore/PlayerCamera/CamFXPresets/6.tres" id="5_ihh7l"]
-[ext_resource type="Script" uid="uid://c2gdoebfp12dq" path="res://Entities/Components/StatMod/StatModsCache.gd" id="10_v3ja1"]
+[ext_resource type="Script" uid="uid://dn82yybtu3o00" path="res://Entities/Components/ESComponent/NormalES.gd" id="7_qc2fo"]
+[ext_resource type="Curve" uid="uid://bk3m2mnf6cwxc" path="res://Utilities/Game/Curves/BASE_HITSCAN_FALLOFF.tres" id="11_0s771"]
+[ext_resource type="Curve" uid="uid://dcf3klshobqsh" path="res://Utilities/Game/Curves/0-1-MAX.tres" id="12_kcve8"]
 [ext_resource type="Script" uid="uid://ctxa7i1mbt7ab" path="res://Entities/Player/UI/Inventory/Panels/CraftingPanel/CraftingIngredient.gd" id="13_ysd46"]
 [ext_resource type="Script" uid="uid://dvasncq3tgljs" path="res://Entities/Items/Weapons/ProjectileWeapons/ProjWeaponCore/ProjWeaponStats.gd" id="15_khfji"]
+[ext_resource type="Curve" uid="uid://rlvyvqmf4jeq" path="res://Utilities/Game/Curves/BASE_OVERHEAT_DEC_RATE.tres" id="16_svyt3"]
+[ext_resource type="Curve" uid="uid://b6omqen77gwxv" path="res://Utilities/Game/Curves/BASE_OVERHEAT_INC_RATE.tres" id="17_vsk6v"]
+[ext_resource type="Curve" uid="uid://ddo8hn7smn666" path="res://Utilities/Game/Curves/BASE_PROJ_BOUNCE_FALLOFF.tres" id="18_gsjlc"]
+[ext_resource type="Curve" uid="uid://omr2xxxhvdbq" path="res://Utilities/Game/Curves/BASE_PROJ_FALLOFF.tres" id="19_631lo"]
+[ext_resource type="Curve" uid="uid://cx5xd3sk17ryv" path="res://Utilities/Game/Curves/BASE_PROJ_HOMING_TURN_RATE.tres" id="21_l8ejn"]
+[ext_resource type="Curve" uid="uid://8ywvmktc1aft" path="res://Utilities/Game/Curves/BASE_WARMUP_DEC_RATE.tres" id="25_thb1y"]
+[ext_resource type="Curve" uid="uid://ck0fdly3k0i4d" path="res://Utilities/Game/Curves/BASE_WARMUP.tres" id="26_4rxw3"]
+[ext_resource type="Curve" uid="uid://b8jnpwdqcgv41" path="res://Utilities/Game/Curves/BASE_WARMUP_INC_RATE.tres" id="27_dn7nq"]
 
-[sub_resource type="Resource" id="Resource_3mxcx"]
-script = ExtResource("1_hh3cs")
+[sub_resource type="Resource" id="Resource_kciil"]
+script = ExtResource("7_qc2fo")
 source_type = 1
-base_damage = 85
-
-[sub_resource type="Curve" id="Curve_7bpvq"]
-_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
-point_count = 2
+base_damage = 90
+metadata/_custom_type_script = "uid://dn82yybtu3o00"
 
 [sub_resource type="Resource" id="Resource_8lm83"]
 script = ExtResource("3_f7syj")
 hitscan_effect_interval = 0.1
 hitscan_max_distance = 250
 hitscan_pierce_count = 1
-hitscan_effect_falloff = SubResource("Curve_7bpvq")
 hitscan_max_width = 0.5
 beam_color = Color(1, 0.0784314, 0.576471, 1)
 start_particle_color = Color(1, 0.752941, 0.796078, 1)
 impact_particle_color = Color(1, 0.752941, 0.796078, 1)
-
-[sub_resource type="Curve" id="Curve_r1td5"]
-_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
-point_count = 2
 
 [sub_resource type="Curve" id="Curve_4y4hw"]
 _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.797205), 0.0, 0.0, 0, 0]
@@ -50,11 +54,7 @@ speed = 750
 speed_curve = SubResource("Curve_4y4hw")
 lifetime = 2.0
 height_override = 6
-effect_falloff_curve = SubResource("Curve_r1td5")
 split_cam_fx = null
-
-[sub_resource type="Resource" id="Resource_pm717"]
-script = ExtResource("10_v3ja1")
 
 [resource]
 script = ExtResource("15_khfji")
@@ -69,7 +69,7 @@ firing_sound = "eagle_eye_shot"
 empty_mag_sound = "bullet_dry_fire"
 projectile_logic = SubResource("Resource_wluh4")
 hitscan_logic = SubResource("Resource_8lm83")
-effect_source = SubResource("Resource_3mxcx")
+effect_source = SubResource("Resource_kciil")
 ammo_type = 3
 mag_size = 1
 reload_type = 1
@@ -77,7 +77,6 @@ single_proj_reload_time = 0.72
 must_reload_fully = true
 reload_sound = "eagle_eye_reload"
 pullout_delay = 0.5
-s_mods = SubResource("Resource_pm717")
 id = "eagle_eye"
 name = "Eagle Eye"
 item_type = 1

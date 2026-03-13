@@ -1,22 +1,34 @@
 [gd_resource type="Resource" script_class="ProjWeaponStats" format=3 uid="uid://dy8rwyeyusim7"]
 
+[ext_resource type="Curve" uid="uid://b8lhpj4fuv50h" path="res://Utilities/Game/Curves/BASE_BLOOM.tres" id="1_7vaft"]
 [ext_resource type="Texture2D" uid="uid://bm570hawaupxe" path="res://Entities/Items/Weapons/WeaponVFX/Casings/small_casing.png" id="1_iu0as"]
+[ext_resource type="Curve" uid="uid://cgmh8p2atrnb5" path="res://Utilities/Game/Curves/BASE_BLOOM_DEC_RATE.tres" id="2_55idg"]
+[ext_resource type="Curve" uid="uid://cffshxd52otno" path="res://Utilities/Game/Curves/BASE_BLOOM_INC_RATE.tres" id="3_4trvt"]
 [ext_resource type="Script" uid="uid://boo31eu083dqd" path="res://Entities/Components/ConditionsComponent/Conditions/Condition.gd" id="3_qaa2o"]
-[ext_resource type="Script" uid="uid://dkfssottmsrch" path="res://Entities/Components/ESComponent/EffectSource.gd" id="3_vp4wp"]
 [ext_resource type="Script" uid="uid://cowjdnic7xmkp" path="res://Entities/Player/UI/Inventory/Panels/ItemDetailsPanel/StatDetail.gd" id="4_lo1fw"]
 [ext_resource type="Resource" uid="uid://o8dc73c74md6" path="res://Entities/Player/PlayerCore/PlayerCamera/CamFXPresets/4(NoFreeze).tres" id="5_qaa2o"]
 [ext_resource type="Texture2D" uid="uid://d05er482r6c5u" path="res://Entities/Items/Weapons/ProjectileWeapons/Twin/TwinBaseCT.tres" id="6_lo1fw"]
+[ext_resource type="Script" uid="uid://dn82yybtu3o00" path="res://Entities/Components/ESComponent/NormalES.gd" id="6_nmjwk"]
 [ext_resource type="PackedScene" uid="uid://cclotxo1c628r" path="res://Entities/Items/Weapons/ProjectileWeapons/Twin/Twin.tscn" id="10_8mtfe"]
 [ext_resource type="Script" uid="uid://ctxa7i1mbt7ab" path="res://Entities/Player/UI/Inventory/Panels/CraftingPanel/CraftingIngredient.gd" id="10_nfelq"]
+[ext_resource type="Curve" uid="uid://rlvyvqmf4jeq" path="res://Utilities/Game/Curves/BASE_OVERHEAT_DEC_RATE.tres" id="11_qti6r"]
 [ext_resource type="Script" uid="uid://dvasncq3tgljs" path="res://Entities/Items/Weapons/ProjectileWeapons/ProjWeaponCore/ProjWeaponStats.gd" id="12_qaa2o"]
+[ext_resource type="Curve" uid="uid://b6omqen77gwxv" path="res://Utilities/Game/Curves/BASE_OVERHEAT_INC_RATE.tres" id="12_unbwg"]
+[ext_resource type="Curve" uid="uid://dcf3klshobqsh" path="res://Utilities/Game/Curves/0-1-MAX.tres" id="13_8lm48"]
 [ext_resource type="Script" uid="uid://bj3r5oopspj6l" path="res://Entities/Items/Projectiles/ProjectileCore/ProjStats.gd" id="13_82v8g"]
 [ext_resource type="PackedScene" uid="uid://bqkyplubhsx43" path="res://Entities/Items/Projectiles/Bullets/SmallBullet/SmallBullet.tscn" id="14_nrwym"]
-[ext_resource type="Script" uid="uid://c2gdoebfp12dq" path="res://Entities/Components/StatMod/StatModsCache.gd" id="16_ecu5v"]
+[ext_resource type="Curve" uid="uid://ddo8hn7smn666" path="res://Utilities/Game/Curves/BASE_PROJ_BOUNCE_FALLOFF.tres" id="14_x8bmv"]
+[ext_resource type="Curve" uid="uid://omr2xxxhvdbq" path="res://Utilities/Game/Curves/BASE_PROJ_FALLOFF.tres" id="15_nv4e7"]
+[ext_resource type="Curve" uid="uid://cx5xd3sk17ryv" path="res://Utilities/Game/Curves/BASE_PROJ_HOMING_TURN_RATE.tres" id="17_2v0sh"]
+[ext_resource type="Curve" uid="uid://8ywvmktc1aft" path="res://Utilities/Game/Curves/BASE_WARMUP_DEC_RATE.tres" id="21_mhu2y"]
+[ext_resource type="Curve" uid="uid://ck0fdly3k0i4d" path="res://Utilities/Game/Curves/BASE_WARMUP.tres" id="22_iqnfn"]
+[ext_resource type="Curve" uid="uid://b8jnpwdqcgv41" path="res://Utilities/Game/Curves/BASE_WARMUP_INC_RATE.tres" id="23_n0u8q"]
 
-[sub_resource type="Resource" id="Resource_m86me"]
-script = ExtResource("3_vp4wp")
+[sub_resource type="Resource" id="Resource_0l7e1"]
+script = ExtResource("6_nmjwk")
 source_type = 1
-base_damage = 38
+base_damage = 15
+metadata/_custom_type_script = "uid://dn82yybtu3o00"
 
 [sub_resource type="Resource" id="Resource_lo1fw"]
 script = ExtResource("4_lo1fw")
@@ -25,10 +37,6 @@ stat_array = Array[String](["angular_spread"])
 up_is_good = false
 suffix = "[char=00B0]"
 metadata/_custom_type_script = "uid://cowjdnic7xmkp"
-
-[sub_resource type="Curve" id="Curve_mu5i2"]
-_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.398278), 0.0, 0.0, 0, 0]
-point_count = 2
 
 [sub_resource type="Curve" id="Curve_u4moy"]
 _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.884681), 0.0, 0.0, 0, 0]
@@ -41,13 +49,9 @@ speed_curve = SubResource("Curve_u4moy")
 lifetime = 1.0
 max_distance = 95
 height_override = 6
-effect_falloff_curve = SubResource("Curve_mu5i2")
 point_of_max_falloff = 110.0
 split_cam_fx = null
-metadata/_custom_type_script = ExtResource("13_82v8g")
-
-[sub_resource type="Resource" id="Resource_gimit"]
-script = ExtResource("16_ecu5v")
+metadata/_custom_type_script = "uid://bj3r5oopspj6l"
 
 [resource]
 script = ExtResource("12_qaa2o")
@@ -59,7 +63,7 @@ casing_texture = ExtResource("1_iu0as")
 casing_tint = Color(0.77622, 0, 0.0846659, 1)
 firing_sound = "twin_shot"
 projectile_logic = SubResource("Resource_f2brx")
-effect_source = SubResource("Resource_m86me")
+effect_source = SubResource("Resource_0l7e1")
 ammo_type = 4
 mag_size = 2
 reload_type = 1
@@ -71,7 +75,6 @@ angular_spread = 22.0
 do_cluster_barrage = true
 barrage_proj_delay = 0.01
 pullout_delay = 0.3
-s_mods = SubResource("Resource_gimit")
 id = "twin"
 name = "Twin"
 item_type = 1

@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://dh4ydl7l86ywq"]
+[gd_scene format=3 uid="uid://dh4ydl7l86ywq"]
 
 [ext_resource type="Shader" uid="uid://cfbagv3hrtar2" path="res://Utilities/Game/Shaders/EntityEffectShader.gdshader" id="1_xxxwy"]
 [ext_resource type="Script" uid="uid://ripiioihhkbc" path="res://Entities/EntityCore/Sprites/EntitySprite.gd" id="2_yqofs"]

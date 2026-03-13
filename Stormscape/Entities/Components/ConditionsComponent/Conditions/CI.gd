@@ -15,13 +15,15 @@ var tick_timer: float ## Decremented as the tick timer for this condition instan
 var delay_time_left: float ## Decremented as the delay time timer for this instance.
 var duration_override: float = -1 ## When > 0, this will override the total duration for this CI.
 var expiring: bool = false ## Marked true after we emit the condition expired signal to prevent it from firing twice.
+var source_esi_uid: int = -1 ## The unique id attained from the ESI that this CI came from.
 
 
-func _init(src_condition: Condition, src_entity: Entity, src_ii: II) -> void:
+func _init(src_condition: Condition, src_entity: Entity, src_ii: II, esi_uid: int) -> void:
 	condition = src_condition
 	eot_stats = condition.eot_stats
 	source_entity = src_entity
 	source_ii = src_ii
+	source_esi_uid = esi_uid
 
 	if not condition.eot_stats:
 		return

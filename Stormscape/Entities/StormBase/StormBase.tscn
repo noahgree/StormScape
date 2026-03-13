@@ -10,6 +10,7 @@
 [ext_resource type="Script" uid="uid://baglarh3m4c8o" path="res://Entities/Components/ItemComponents/LootTableComponent/LootTableResource.gd" id="5_0mah8"]
 [ext_resource type="PackedScene" uid="uid://bj7vw8d6oqv0m" path="res://Entities/Player/UI/Interactions/InteractionsCore/InteractionArea.tscn" id="5_4ticl"]
 [ext_resource type="Texture2D" uid="uid://cd22xh5jduxd6" path="res://Entities/Player/UI/Interactions/Assets/e_prompt.png" id="6_l3b7a"]
+[ext_resource type="PackedScene" uid="uid://digwuyppqnmsf" path="res://Entities/EntityCore/Shadow/EntityShadow.tscn" id="7_0mah8"]
 [ext_resource type="Script" uid="uid://dgibl37gudpj1" path="res://Entities/Player/UI/Interactions/InteractionsCore/InteractionOffer.gd" id="7_c4v6l"]
 [ext_resource type="PackedScene" uid="uid://2yy4xfm5g74l" path="res://Entities/Components/ItemComponents/ClippingComponent/ClippingArea.tscn" id="8_0mah8"]
 [ext_resource type="PackedScene" uid="uid://bhcqtorpyerc3" path="res://Utilities/Debug/ParticleEmissionComponent.tscn" id="9_7ccbt"]
@@ -49,7 +50,7 @@ animations = [{
 "speed": 5.0
 }]
 
-[sub_resource type="Resource" id="Resource_l3b7a"]
+[sub_resource type="Resource" id="Resource_c4v6l"]
 resource_local_to_scene = true
 script = ExtResource("7_c4v6l")
 title = "Storm Base"
@@ -73,20 +74,28 @@ loot = SubResource("Resource_sj27e")
 sc = SubResource("Resource_vblrk")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=295419995]
+position = Vector2(0, -20)
 shape = SubResource("RectangleShape2D_f5fhq")
 debug_color = Color(0.6905431, 0.28825647, 1, 0.2509804)
 
+[node name="EntityShadow" parent="." unique_id=1622387572 instance=ExtResource("7_0mah8")]
+scale = Vector2(0.049, 0.049)
+texture = SubResource("AtlasTexture_xm2up")
+
 [node name="EntitySprite" parent="." unique_id=607345551 instance=ExtResource("3_yktvl")]
 unique_name_in_owner = true
+position = Vector2(0, -19.999998)
 scale = Vector2(0.049, 0.049)
 sprite_frames = SubResource("SpriteFrames_hkn5b")
 
 [node name="InteractionArea" parent="." unique_id=897230405 instance=ExtResource("5_4ticl")]
+position = Vector2(0, -20)
 prompt_radius = 36.0
-interaction_offer = SubResource("Resource_l3b7a")
+interaction_offer = SubResource("Resource_c4v6l")
 prompt_offset = Vector2(0, -23)
 
 [node name="ClippingArea" parent="." unique_id=222141319 instance=ExtResource("8_0mah8")]
+position = Vector2(0, -20)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="ClippingArea" unique_id=718504616]
 shape = SubResource("RectangleShape2D_yng6w")
@@ -96,6 +105,7 @@ shape = SubResource("RectangleShape2D_yng6w")
 [node name="DetectionComponent" parent="." unique_id=678579272 instance=ExtResource("10_sj27e")]
 
 [node name="ESIReceiverComponent" parent="." unique_id=1890609378 instance=ExtResource("11_o7dcf")]
+position = Vector2(0, -20)
 absorb_full_hit = true
 stat_modifiers = SubResource("Resource_s2x07")
 

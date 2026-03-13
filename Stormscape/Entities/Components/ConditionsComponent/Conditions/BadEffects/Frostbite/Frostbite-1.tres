@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://20acrt2hb6y" path="res://Entities/Components/ConditionsComponent/Conditions/EOTStats.gd" id="1_dfwn3"]
 [ext_resource type="Script" uid="uid://boo31eu083dqd" path="res://Entities/Components/ConditionsComponent/Conditions/Condition.gd" id="1_pph78"]
 [ext_resource type="Script" uid="uid://bcjwesiannbd0" path="res://Entities/Components/StatMod/StatMod.gd" id="2_jrdvf"]
-[ext_resource type="Script" uid="uid://dkfssottmsrch" path="res://Entities/Components/ESComponent/EffectSource.gd" id="3_0yd6c"]
+[ext_resource type="Script" uid="uid://cbcq3vjvdouts" path="res://Entities/Components/ESComponent/TickES.gd" id="3_toke5"]
 
 [sub_resource type="Resource" id="Resource_fs5cc"]
 script = ExtResource("2_jrdvf")
@@ -22,25 +22,23 @@ operation = "-%"
 value = 70.0
 metadata/_custom_type_script = "uid://bcjwesiannbd0"
 
-[sub_resource type="Resource" id="Resource_dfwn3"]
-script = ExtResource("3_0yd6c")
-source_type = 9
+[sub_resource type="Resource" id="Resource_15411"]
+script = ExtResource("3_toke5")
 base_damage = 2
 dmg_affected_stats = 0
 dmg_popup_type = 6
-hit_flash_color = Color(0.3882353, 1, 1, 0.6)
-metadata/_custom_type_script = "uid://dkfssottmsrch"
+hit_flash_color = 2
+metadata/_custom_type_script = "uid://cbcq3vjvdouts"
 
 [sub_resource type="Resource" id="Resource_i7ap4"]
 script = ExtResource("1_dfwn3")
-ticks_array = Array[ExtResource("3_0yd6c")]([SubResource("Resource_dfwn3")])
+ticks_array = Array[ExtResource("3_toke5")]([SubResource("Resource_15411")])
 stat_mods = Array[ExtResource("2_jrdvf")]([SubResource("Resource_fs5cc"), SubResource("Resource_jrdvf")])
 metadata/_custom_type_script = "uid://20acrt2hb6y"
 
 [resource]
 script = ExtResource("1_pph78")
 id = 1
-goodness = 1
 conditions_to_stop = Array[int]([0])
 eot_stats = SubResource("Resource_i7ap4")
 metadata/_custom_type_script = "uid://boo31eu083dqd"
