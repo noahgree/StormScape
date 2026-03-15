@@ -202,19 +202,20 @@ func _create_popup(popup_type: EffectPopup.POPUP_TYPE, amount: int, esi: ESI) ->
 	if amount == 0:
 		return
 
-	if not current_popups.is_empty():
-		var last_popup: EffectPopup = current_popups.back()
-		if (esi.multishot_id == last_popup.multishot_id) and (esi.multishot_id != -1):
-			last_popup.update_popup(popup_type, amount)
+	var dur_mult: float = max(1 - (current_popups.size() / float(MAX_CURRENT_POPUPS)), 0.5)
+
+	for popup: EffectPopup in current_popups:
+		if (esi.multishot_id == popup.multishot_id) and (esi.multishot_id != -1):
+			popup.update_popup(popup_type, amount, dur_mult)
 			return
 
 	if current_popups.size() >= MAX_CURRENT_POPUPS:
 		var oldest_popup: EffectPopup = current_popups.pop_front()
-		oldest_popup.set_as_new(popup_type, amount, esi)
+		oldest_popup.set_as_new(popup_type, amount, esi, dur_mult)
 		current_popups.push_back(oldest_popup)
 		return
 
-	var new_popup: EffectPopup = EffectPopup.create_popup(popup_type, amount, entity, esi)
+	var new_popup: EffectPopup = EffectPopup.create_popup(popup_type, amount, entity, esi, dur_mult)
 	new_popup.tree_exiting.connect(func() -> void: current_popups.erase(new_popup))
 
 	current_popups.push_back(new_popup)

@@ -3,15 +3,16 @@ extends Area2D
 class_name HitboxComponent
 ## The area2d that defines where an effect source comes from.
 
-@export_group("Standalone Hitbox Properties") # Only set these manually if using this as a standalone hitbox and not attached to a projectile or other weapon
+# Only set these manually if using this as a standalone hitbox and not attached to a projectile or other weapon!
+@export_group("Standalone Hitbox Properties")
 @export var effect_source: EffectSource ## The effect source to be applied when this hitbox hits an esi receiver.
 @export var source_entity: Entity ## The entity that the effect was produced by.
 @export var use_self_position: bool = false ## When using the hitbox as a standalone area2d, make this property true so that it uses its own position to handle effects like knockback.
 
 @onready var collider: CollisionShape2D = $CollisionShape2D ## The collision shape for this hitbox.
 
-var esi: ESI ## The effect source instance to be use when this hitbox hits an esi receiver.
-var source_ii: WeaponII ## The reference to the weapon item instance that produced this effect source, if any.
+var esi: ESI ## The effect source instance to use when this hitbox hits an esi receiver.
+var source_ii: WeaponII ## The reference to the weapon item instance that used this hitbox, if any.
 var movement_direction: Vector2 = Vector2.ZERO ## The current movement direction for this hitbox.
 
 

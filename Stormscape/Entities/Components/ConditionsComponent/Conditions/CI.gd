@@ -11,8 +11,8 @@ var esi_ticks: Array[ESI] ## The esi ticks to apply. Set to copy the eot's ticks
 var source_entity: Entity ## The entity that sent out this EOTI.
 var source_ii: II ## The II that sent out this EOTI.
 var affected_entity: Entity ## The entity being affected by this CI.
-var tick_timer: float ## Decremented as the tick timer for this condition instance.
-var delay_time_left: float ## Decremented as the delay time timer for this instance.
+var tick_timer: float = 0 ## Decremented as the tick timer for this condition instance.
+var delay_time_left: float = 0 ## Decremented as the delay time timer for this instance.
 var duration_override: float = -1 ## When > 0, this will override the total duration for this CI.
 var expiring: bool = false ## Marked true after we emit the condition expired signal to prevent it from firing twice.
 var source_esi_uid: int = -1 ## The unique id attained from the ESI that this CI came from.
@@ -23,14 +23,25 @@ func _init(src_condition: Condition, src_entity: Entity, src_ii: II, esi_uid: in
 	eot_stats = condition.eot_stats
 	source_entity = src_entity
 	source_ii = src_ii
-	source_esi_uid = esi_uid
 
+	restart(esi_uid, false)
+
+## Starts or restarts the condition instance as if it were just added to an entity. When called externally,
+## we usually don't want to trigger the delay again, as that would make repeated shots that apply this condition
+## stuck waiting for the delay to end on every reapplication. So instead, we hit an instant tick.
+func restart(new_source_esi_uid: int, instant_tick: bool = true) -> void:
+	source_esi_uid = new_source_esi_uid
 	if not condition.eot_stats:
 		return
-	delay_time_left = condition.eot_stats.tick_delay
-	tick_timer = _get_tick_interval()
 
 	_copy_in_esi_ticks()
+
+	if not instant_tick:
+		delay_time_left = condition.eot_stats.tick_delay
+	else:
+		tick()
+
+	tick_timer = _get_tick_interval()
 
 ## Called externally to process the internal tick and delay timers.
 func process(delta: float) -> void:
@@ -53,6 +64,8 @@ func process(delta: float) -> void:
 
 ## Maps each effect source in the eot_stats ticks array to a new ESI in the local esi_ticks array.
 func _copy_in_esi_ticks() -> void:
+	esi_ticks.clear()
+
 	if (eot_stats.ticks_array.size() != eot_stats.tick_count) and eot_stats.ticks_array.size() != 1:
 		push_error(source_entity.name + " has created a CI with EOTStats that do not have the same number of effect sources provided as the number of indicated ticks. Either sync the counts or only use one effect source in the array as the same source for each tick.")
 

@@ -11,6 +11,7 @@ class Factor:
 	var factor: float
 	var ceil_result: bool
 	var apply_to_orig_sum: bool
+
 	func _init(factor_float: float = 1.0, ceil_resulting_value: bool = false,
 				apply_to_original_sum: bool = false) -> void:
 		factor = factor_float
@@ -67,8 +68,8 @@ func parse_player() -> Array[String]:
 	strings.append(_get_title("MAX STAMINA") + _get_player_sum(["max_stamina"], true))
 	strings.append(_get_title("MAX HUNGER BARS") + _get_player_sum(["max_hunger_bars"], true))
 
-	for wearable_dict: Dictionary in Globals.player_node.wearables:
-		var wearable: WearableStats = wearable_dict.values()[0]
+	for wearable_cache_key: StringName in Globals.player_node.current_wearables:
+		var wearable: WearableStats = Items.cached_items.get(wearable_cache_key, null)
 		if wearable != null:
 			var ii: II = wearable.create_ii(1)
 			strings.append_array(_get_extra_details(ii, wearable.applied_details, true, true))
@@ -112,13 +113,16 @@ func _get_damage(ii: II) -> String:
 	var string: String = _get_title("DMG")
 	var proj_count: int = ii.sc.get_stat("barrage_count") * ii.sc.get_stat("projectiles_per_fire") if ii is ProjWeaponII else 1.0
 
-	var lvl_mult: float = 1.0
+	var lvl_add: float = 0.0
 	if ii is WeaponII:
-		lvl_mult = ((floori(ii.level / 10.0) * ii.stats.effect_source.lvl_dmg_scalar) / 100.0) + 1
+		if ii.stats.effect_source.get(&"base_damage") == 0:
+			return ""
+		lvl_add = floori(ii.level / 10.0) * ii.stats.effect_source.lvl_dmg_scalar
 
-	# Applying the lvl mult to the original so we don't get a green up arrow bc of its increase
-	var mults: Array[Factor] = [Factor.new(lvl_mult, true, true), Factor.new(proj_count, false, true)]
-	var dmg: String = _get_item_sums(ii, ["base_damage"], true, up_lvl_color if lvl_mult > 1.0 else "", mults)
+	# Applying the lvl addition to the original so we don't get a green up arrow bc of its increase
+	var mults: Array[Factor] = [Factor.new(proj_count, false, true)]
+	var adds: Array[Factor] = [Factor.new(lvl_add, true, true)]
+	var dmg: String = _get_item_sums(ii, ["base_damage"], true, up_lvl_color if lvl_add > 0 else "", mults, adds)
 	var crit_mult: String = str(ii.stats.effect_source.crit_multiplier) + "x"
 
 	string += dmg
@@ -138,10 +142,12 @@ func _get_charge_damage(ii: II) -> String:
 		return ""
 	elif not ii.stats.can_do_charge_use:
 		return ""
+	elif ii.stats.charge_effect_source.get(&"base_damage") == 0:
+		return ""
 
 	var string: String = _get_title("CHRG DMG")
-	var lvl_mult: float = ((floori(ii.level / 10.0) * ii.stats.effect_source.lvl_dmg_scalar) / 100.0) + 1
-	var dmg: String = _get_item_sums(ii, ["charge_base_damage"], true, up_lvl_color if lvl_mult > 1.0 else "", [Factor.new(lvl_mult, true, true)])
+	var lvl_add: float = floori(ii.level / 10.0) * ii.stats.effect_source.lvl_dmg_scalar
+	var dmg: String = _get_item_sums(ii, ["charge_base_damage"], true, up_lvl_color if lvl_add > 0 else "", [], [Factor.new(lvl_add, true, true)])
 	var crit_mult: String = str(ii.stats.charge_effect_source.crit_multiplier) + "x"
 
 	string += dmg
@@ -158,13 +164,16 @@ func _get_healing(ii: II) -> String:
 	var string: String = _get_title("HEAL")
 	var proj_count: int = ii.sc.get_stat("barrage_count") * ii.sc.get_stat("projectiles_per_fire") if ii is ProjWeaponII else 1.0
 
-	var lvl_mult: float = 1.0
+	var lvl_add: float = 0.0
 	if ii is WeaponII:
-		lvl_mult = ((floori(ii.level / 10.0) * ii.stats.effect_source.lvl_heal_scalar) / 100.0) + 1
+		if ii.stats.effect_source.get(&"base_healing") == 0:
+			return ""
+		lvl_add = floori(ii.level / 10.0) * ii.stats.effect_source.lvl_heal_scalar
 
-	# Applying the lvl mult to the original so we don't get a green up arrow bc of its increase
-	var mults: Array[Factor] = [Factor.new(lvl_mult, true, true), Factor.new(proj_count, false, true)]
-	var heal: String = _get_item_sums(ii, ["base_healing"], true, up_lvl_color if lvl_mult > 1.0 else "", mults)
+	# Applying the lvl addition to the original so we don't get a green up arrow bc of its increase
+	var mults: Array[Factor] = [Factor.new(proj_count, false, true)]
+	var adds: Array[Factor] = [Factor.new(lvl_add, true, true)]
+	var heal: String = _get_item_sums(ii, ["base_healing"], true, up_lvl_color if lvl_add > 0.0 else "", mults, adds)
 
 	string += heal
 
@@ -179,10 +188,12 @@ func _get_charge_healing(ii: II) -> String:
 		return ""
 	elif not ii.stats.can_do_charge_use:
 		return ""
+	elif ii.stats.charge_effect_source.get(&"base_healing") == 0:
+		return ""
 
 	var string: String = _get_title("CHRG HEAL")
-	var lvl_mult: float = ((floori(ii.level / 10.0) * ii.stats.effect_source.lvl_heal_scalar) / 100.0) + 1
-	var heal: String = _get_item_sums(ii, ["charge_base_healing"], true, up_lvl_color if lvl_mult > 1.0 else "", [Factor.new(lvl_mult, true, true)])
+	var lvl_add: float = floori(ii.level / 10.0) * ii.stats.effect_source.lvl_heal_scalar
+	var heal: String = _get_item_sums(ii, ["charge_base_healing"], true, up_lvl_color if lvl_add > 0 else "", [], [Factor.new(lvl_add, true, true)])
 
 	string += heal
 
@@ -314,29 +325,30 @@ func _get_aoe_stats(ii: II) -> Array[String]:
 		return [""]
 	elif ii.sc.get_stat("proj_aoe_radius") == 0:
 		return [""]
-	elif ii.aoe_esi.conditions.is_empty():
-		return[""]
 
-	var strings: Array[String] = [_get_title("AOE RADIUS") + _get_item_sums(ii, ["proj_aoe_radius"], true, " px")]
+	var strings: Array[String] = [_get_title("AOE RADIUS") + _get_item_sums(ii, ["proj_aoe_radius"], true)]
 
-	var damage: String = _get_title("AOE DMG")
 	if ii.sc.get_stat("proj_aoe_base_damage") > 0:
-		damage += _get_item_sums(ii, ["proj_aoe_base_damage"], true)
+		var damage: String = _get_title("AOE DAMAGE")
+		var lvl_add: float = floori(ii.level / 10.0) * ii.aoe_esi.es.lvl_dmg_scalar
+		damage += _get_item_sums(ii, ["proj_aoe_base_damage"], true, up_lvl_color if lvl_add > 0.0 else "", [], [Factor.new(lvl_add, true, true)])
 		strings.append(damage)
 
-	var healing: String = _get_title("AOE HEAL")
 	if ii.sc.get_stat("proj_aoe_base_healing") > 0:
-		healing += _get_item_sums(ii, ["proj_aoe_base_healing"], true)
+		var healing: String = _get_title("AOE HEALING")
+		var lvl_add: float = floori(ii.level / 10.0) * ii.aoe_esi.es.lvl_heal_scalar
+		healing += _get_item_sums(ii, ["proj_aoe_base_healing"], true, up_lvl_color if lvl_add > 0.0 else "", [], [Factor.new(lvl_add, true, true)])
 		strings.append(healing)
 
-	var conditions: String = _get_title("AOE EFFECTS")
-	for condition: Condition in ii.aoe_esi.conditions:
-		if condition not in ii.aoe_esi.es.conditions:
-			conditions += "[color=Lawngreen]" + condition.get_panel_string() + "[/color], "
-		else:
-			conditions += condition.get_panel_string() + ", "
-	conditions = conditions.trim_suffix(", ")
-	strings.append(conditions)
+	if not ii.aoe_esi.conditions.is_empty():
+		var conditions: String = _get_title("AOE EFFECTS")
+		for condition: Condition in ii.aoe_esi.conditions:
+			if condition not in ii.aoe_esi.es.conditions:
+				conditions += "[color=Lawngreen]" + condition.get_panel_string() + "[/color], "
+			else:
+				conditions += condition.get_panel_string() + ", "
+		conditions = conditions.trim_suffix(", ")
+		strings.append(conditions)
 
 	return strings
 
@@ -397,8 +409,8 @@ func _get_players_stat_sums(list: Array[String]) -> Array[float]:
 	var original_sum: float = 0
 
 	for stat: String in list:
-		sum += Globals.player_node.stats.get_stat(stat)
-		original_sum += Globals.player_node.stats.get_original_stat(stat)
+		sum += Globals.player_node.sc.get_stat(stat)
+		original_sum += Globals.player_node.sc.get_original_stat(stat)
 
 	return [sum, original_sum]
 

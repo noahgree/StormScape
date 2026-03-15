@@ -23,8 +23,7 @@ metadata/_custom_type_script = "uid://cbcq3vjvdouts"
 
 [sub_resource type="Resource" id="Resource_wdbkx"]
 script = ExtResource("1_wdbkx")
-duration = 3.0
-tick_count = 3
+tick_count = 8
 ticks_array = Array[ExtResource("3_wdbkx")]([SubResource("Resource_sah37")])
 stat_mods = Array[ExtResource("2_sah37")]([SubResource("Resource_4mw0v")])
 metadata/_custom_type_script = "uid://20acrt2hb6y"

@@ -171,7 +171,7 @@ _data = {
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_0s14j"]
 radius = 6.0
 
-[node name="FlameBlower" type="Node2D" node_paths=PackedStringArray("overheat_overlays", "sprites_to_tint")]
+[node name="FlameBlower" type="Node2D" unique_id=765136555 node_paths=PackedStringArray("overheat_overlays", "sprites_to_tint")]
 script = ExtResource("1_7mk4f")
 proj_origin = Vector2(19, 3)
 overheat_overlays = [NodePath("ItemSprite/OverheatOverlay")]
@@ -179,13 +179,13 @@ particle_emission_extents = Vector2(6, 1)
 particle_emission_origin = Vector2(11, 2)
 sprites_to_tint = [NodePath("ItemSprite")]
 
-[node name="ItemSprite" type="AnimatedSprite2D" parent="."]
+[node name="ItemSprite" type="AnimatedSprite2D" parent="." unique_id=421894958]
 clip_children = 2
 light_mask = 2
 material = SubResource("ShaderMaterial_qv0hn")
 sprite_frames = SubResource("SpriteFrames_8pr6a")
 
-[node name="OverheatOverlay" type="TextureRect" parent="ItemSprite"]
+[node name="OverheatOverlay" type="TextureRect" parent="ItemSprite" unique_id=1373071605]
 modulate = Color(1, 1, 1, 0.75)
 self_modulate = Color(1, 1, 1, 0)
 material = ExtResource("4_xc27p")
@@ -195,34 +195,33 @@ offset_right = 19.0
 offset_bottom = 7.0
 texture = SubResource("GradientTexture1D_xc27p")
 
-[node name="RemoteTransformOffHand" type="RemoteTransform2D" parent="ItemSprite"]
+[node name="RemoteTransformOffHand" type="RemoteTransform2D" parent="ItemSprite" unique_id=1134945784]
 position = Vector2(1, 7)
 remote_path = NodePath("../../OffHandSprite")
 
-[node name="RemoteTransformMainHand" type="RemoteTransform2D" parent="ItemSprite"]
+[node name="RemoteTransformMainHand" type="RemoteTransform2D" parent="ItemSprite" unique_id=1323910545]
 position = Vector2(-16, 3)
 remote_path = NodePath("../../MainHandSprite")
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-libraries = {
-&"": SubResource("AnimationLibrary_aonid")
-}
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=579640987]
+libraries/ = SubResource("AnimationLibrary_aonid")
 
-[node name="ProjectileOrigin" type="Marker2D" parent="."]
+[node name="ProjectileOrigin" type="Marker2D" parent="." unique_id=1828067619]
 position = Vector2(19, 3)
 
-[node name="OffHandSprite" parent="." instance=ExtResource("7_xc27p")]
+[node name="OffHandSprite" parent="." unique_id=1109429239 instance=ExtResource("7_xc27p")]
 position = Vector2(1, 7)
 
-[node name="MainHandSprite" parent="." instance=ExtResource("7_xc27p")]
+[node name="MainHandSprite" parent="." unique_id=99881190 instance=ExtResource("7_xc27p")]
 position = Vector2(-16, 3)
 
-[node name="SmokeEmissionBox" parent="." instance=ExtResource("8_yltag")]
+[node name="SmokeEmissionBox" parent="." unique_id=817702328 instance=ExtResource("8_yltag")]
+visible = false
 polygon = PackedVector2Array(5, 1, 17, 1, 17, 3, 5, 3)
 
-[node name="ClippingDetector" parent="." instance=ExtResource("6_qpgmn")]
+[node name="ClippingDetector" parent="." unique_id=1267770043 instance=ExtResource("6_qpgmn")]
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="ClippingDetector"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ClippingDetector" unique_id=1585442211]
 position = Vector2(4, 2)
 rotation = -1.5708
 shape = SubResource("CapsuleShape2D_0s14j")

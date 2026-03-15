@@ -4,13 +4,12 @@
 [ext_resource type="Script" uid="uid://dwmur0cosbbwh" path="res://Entities/Player/UI/Inventory/InventoryCore/InvResource.gd" id="2_ymdvb"]
 [ext_resource type="Script" uid="uid://cv7ha7muvg5qu" path="res://Entities/Items/ItemCore/II.gd" id="3_1mdei"]
 [ext_resource type="PackedScene" uid="uid://di7vcyrki71nm" path="res://Entities/Components/DetectionComponent/DetectionComponent.tscn" id="3_ke02d"]
-[ext_resource type="PackedScene" uid="uid://cj2wy5f05cos4" path="res://Entities/EntityCore/Shadow/EntityShadow.tscn" id="4_mc2cg"]
+[ext_resource type="PackedScene" uid="uid://digwuyppqnmsf" path="res://Entities/EntityCore/Shadow/EntityShadow.tscn" id="4_mc2cg"]
 [ext_resource type="PackedScene" uid="uid://dh4ydl7l86ywq" path="res://Entities/EntityCore/Sprites/EntitySprite.tscn" id="5_by2me"]
 [ext_resource type="Script" uid="uid://c2gdoebfp12dq" path="res://Entities/Components/StatMod/StatModsCache.gd" id="6_7qjvm"]
 [ext_resource type="Script" uid="uid://baglarh3m4c8o" path="res://Entities/Components/ItemComponents/LootTableComponent/LootTableResource.gd" id="6_ymdvb"]
 [ext_resource type="Texture2D" uid="uid://y4h3ce1ifonf" path="res://Entities/Environment/Rocks/Rock1CT.tres" id="7_7qjvm"]
 [ext_resource type="PackedScene" uid="uid://cdfdy8m6ki3oq" path="res://Entities/Components/HPComponent/HPComponent.tscn" id="8_c8cii"]
-[ext_resource type="Texture2D" uid="uid://tt44u2wmer3n" path="res://Entities/EntityCore/Shadow/shadow_large.png" id="9_7qjvm"]
 [ext_resource type="PackedScene" uid="uid://btba0jmsow1mx" path="res://Entities/Components/ESComponent/ESIReceiverComponent.tscn" id="9_wje6d"]
 [ext_resource type="PackedScene" uid="uid://jpq0ij8wwlhy" path="res://Entities/Components/FacingComponent/FacingComponent.tscn" id="12_1nxg5"]
 [ext_resource type="Script" uid="uid://1qq7eo7lm8j6" path="res://Entities/Components/ItemComponents/LootTableComponent/LootTableEntry.gd" id="14_v0818"]
@@ -76,16 +75,8 @@ occluder = SubResource("OccluderPolygon2D_2kecs")
 
 [node name="EntityShadow" parent="." unique_id=1546844488 instance=ExtResource("4_mc2cg")]
 self_modulate = Color(0, 0, 0, 0.164)
-offset_left = -16.0
-offset_top = -13.0
-offset_right = 16.0
-offset_bottom = 7.0
-texture = ExtResource("9_7qjvm")
-patch_margin_left = 8
-patch_margin_top = 8
-patch_margin_right = 8
-patch_margin_bottom = 8
-type = 3
+texture = SubResource("AtlasTexture_ymdvb")
+offset = Vector2(0, -9)
 
 [node name="EntitySprite" parent="." unique_id=1280603393 instance=ExtResource("5_by2me")]
 unique_name_in_owner = true

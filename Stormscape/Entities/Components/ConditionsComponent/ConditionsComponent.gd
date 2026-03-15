@@ -26,7 +26,7 @@ const PROCESS_INTERVAL: float = 0.1 ## How often we should process the CIs. Help
 
 var actives: Dictionary[Array, Array] = {} ## { [id, source] : [CI] } Higher indices are higher levels.
 var actives_by_id: Dictionary[Condition.ID, Dictionary] = {} ## { id : { Condition.SourceType : [CI] } } CIs not ordered.
-var actives_by_esi_uid: Dictionary[int, Array] = {} ## { esi_source_uid: [CI } CIs not ordered.
+var actives_by_esi_uid: Dictionary[int, Array] = {} ## { esi_source_uid: [CI] } CIs not ordered.
 var tick_accumulator: float ## Tracks time since last tick.
 
 
@@ -91,18 +91,27 @@ func _process_condition(condition: Condition, esi: ESI) -> void:
 	if (condition.id not in Condition.GOOD_CONDITIONS) and (is_untouchable()):
 		return
 
-	# --- Stopping Conditions The New Condition Stops ---
+	# --- Checking for an Exact Match Condition to Simply Restart ---
+	var to_restart: CI = _find_ci_with_same_condition_stats_from_wpn_ii(condition)
+
+	# --- Stopping Conditions the New Condition Stops ---
 	for condition_id_to_stop: Condition.ID in condition.conditions_to_stop:
 		remove_condition_for_all_sources(condition_id_to_stop)
 
-	# --- Debug Print the Addition ---
-	_debug_print_adding_condition(condition)
+	# --- Debug Print the Addition or Restart ---
+	if not to_restart:
+		_debug_print_adding_condition(condition)
+	else:
+		_debug_print_restarting_condition(condition)
 
 	# --- Calling the On Received Regardless Function ---
 	condition.on_received_regardless_of_level(esi, entity)
 
-	# --- Adding the CI ---
-	_add_ci(condition, esi)
+	# --- Adding or Restarting the CI ---
+	if not to_restart:
+		_add_ci(condition, esi)
+	else:
+		_swap_active_ci_source_esi_uid_and_restart(to_restart, esi.uid)
 
 	# --- Playing Hit Sound ---
 	if (entity is Player) or (not condition.only_cue_on_player_hit):
@@ -121,6 +130,14 @@ func _check_filter(condition: Condition) -> bool:
 			var affected: bool = condition.affected_entities & entity.class_type != 0
 			return (affected) and (condition.id not in manual_filter)
 	return false
+
+func _find_ci_with_same_condition_stats_from_wpn_ii(new_condition: Condition) -> CI:
+	if new_condition.source_type != Condition.SourceType.FROM_WEAPON:
+		return null
+	for ci: CI in actives.get([new_condition.id, new_condition.source_type], []):
+		if (ci.condition == new_condition):
+			return ci
+	return null
 
 func _add_ci(condition: Condition, esi: ESI) -> void:
 	var ci: CI = CI.new(condition, esi.source_entity, esi.source_ii, esi.uid)
@@ -167,6 +184,22 @@ func _start_condition_fx(ci: CI) -> void:
 		entity.sprite.update_overlay_color(ci.condition.id, false)
 	if ci.condition.spawn_particles:
 		entity.particle_mgr.start_particles(ci.condition.id)
+
+## Restarts an active CI and assigns the new source esi uid that triggered the restart.
+func _swap_active_ci_source_esi_uid_and_restart(existing_ci: CI, new_source_esi_uid: int) -> void:
+	_debug_print_restarting_condition(existing_ci.condition)
+
+	var old_esi_uid: int = existing_ci.source_esi_uid
+	actives_by_esi_uid[old_esi_uid].erase(existing_ci)
+	if actives_by_esi_uid[old_esi_uid].is_empty():
+		actives_by_esi_uid.erase(old_esi_uid)
+
+	if actives_by_esi_uid.has(new_source_esi_uid):
+		actives_by_esi_uid[new_source_esi_uid].append(existing_ci)
+	else:
+		actives_by_esi_uid[new_source_esi_uid] = [existing_ci]
+
+	existing_ci.restart(new_source_esi_uid)
 #endregion
 
 
@@ -290,6 +323,13 @@ func _debug_print_adding_condition(condition: Condition) -> void:
 			print_rich("------- [color=green]Adding[/color][b] [color=pink]" + str(condition) + "[/color][/b][color=gray] to " + entity.name + " -------")
 		else:
 			print_rich("------- [color=green]Adding[/color][b] " + str(condition) + "[/b][color=gray] to " + entity.name + " -------")
+
+func _debug_print_restarting_condition(condition: Condition) -> void:
+	if DebugFlags.current_condition_changes and debug_updates:
+		if condition.id == Condition.ID.STORM_SYNDROME:
+			print_rich("------- [color=green]Restarting[/color][b] [color=pink]" + str(condition) + "[/color][/b][color=gray] on " + entity.name + " -------")
+		else:
+			print_rich("------- [color=green]Restarting[/color][b] " + str(condition) + "[/b][color=gray] on " + entity.name + " -------")
 
 func _debug_print_removing_condition(condition: Condition) -> void:
 	if DebugFlags.current_condition_changes and debug_updates:

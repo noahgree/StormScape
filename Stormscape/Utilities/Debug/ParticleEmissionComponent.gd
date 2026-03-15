@@ -48,7 +48,7 @@ enum Area { BELOW, ABOVE, COVER } ## The types of areas that can be set and retr
 @onready var above_box: DebugBox = $AboveBox ## The debug box showing the area above the entity.
 @onready var cover_box: DebugBox = $CoverBox ## The debug box showing the area covering the entity.
 
-var active_nodes: Dictionary[Condition.ID, CPUParticles2D] ## A mapping of active particle node children based on their condition id.
+var active_nodes: Dictionary[Condition.ID, ParticleEffect] ## A mapping of active particle node children based on their condition id.
 
 
 ## Gets the origin for the emission area.
@@ -91,7 +91,10 @@ func _get_extents(area: Area) -> Vector2:
 
 ## Starts the particles by instantiating a new packed version, setting it up with position and extents.
 func start_particles(condition_id: Condition.ID) -> void:
-	if condition_id in active_nodes:
+	var existing_node: ParticleEffect = active_nodes.get(condition_id, null)
+	if existing_node:
+		var emission_area: Area = existing_node.emission_area
+		active_nodes[condition_id].start(_get_origin(emission_area), _get_extents(emission_area))
 		return
 	var packed_scene: PackedScene = FXLibrary.get_condition_fx(condition_id)
 	if packed_scene == null:

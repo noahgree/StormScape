@@ -7,8 +7,7 @@
 [ext_resource type="Script" uid="uid://c2gdoebfp12dq" path="res://Entities/Components/StatMod/StatModsCache.gd" id="6_b403c"]
 [ext_resource type="Script" uid="uid://baglarh3m4c8o" path="res://Entities/Components/ItemComponents/LootTableComponent/LootTableResource.gd" id="7_qgbkl"]
 [ext_resource type="PackedScene" uid="uid://di7vcyrki71nm" path="res://Entities/Components/DetectionComponent/DetectionComponent.tscn" id="8_y2id4"]
-[ext_resource type="Texture2D" uid="uid://tt44u2wmer3n" path="res://Entities/EntityCore/Shadow/shadow_large.png" id="9_b403c"]
-[ext_resource type="PackedScene" uid="uid://cj2wy5f05cos4" path="res://Entities/EntityCore/Shadow/EntityShadow.tscn" id="9_kerkt"]
+[ext_resource type="PackedScene" uid="uid://digwuyppqnmsf" path="res://Entities/EntityCore/Shadow/EntityShadow.tscn" id="9_kerkt"]
 [ext_resource type="PackedScene" uid="uid://dh4ydl7l86ywq" path="res://Entities/EntityCore/Sprites/EntitySprite.tscn" id="10_kkd23"]
 [ext_resource type="Shader" uid="uid://cfbagv3hrtar2" path="res://Utilities/Game/Shaders/EntityEffectShader.gdshader" id="11_pg7ae"]
 [ext_resource type="Texture2D" uid="uid://vyww0ruffm15" path="res://Entities/Environment/Rocks/Rock2CT.tres" id="12_b403c"]
@@ -33,13 +32,13 @@ script = ExtResource("6_b403c")
 [sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_2kecs"]
 polygon = PackedVector2Array(-9, -15, -9, -6, 9, -6, 9, -15)
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_b403c"]
-resource_local_to_scene = true
-shader = ExtResource("11_pg7ae")
-
 [sub_resource type="AtlasTexture" id="AtlasTexture_nmdsi"]
 atlas = ExtResource("12_b403c")
 region = Rect2(0, 0, 30, 30)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_mvpeq"]
+resource_local_to_scene = true
+shader = ExtResource("11_pg7ae")
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_1mdei"]
 animations = [{
@@ -77,20 +76,12 @@ occluder = SubResource("OccluderPolygon2D_2kecs")
 
 [node name="EntityShadow" parent="." unique_id=384959382 instance=ExtResource("9_kerkt")]
 self_modulate = Color(0, 0, 0, 0.164)
-offset_left = -14.0
-offset_top = -19.0
-offset_right = 14.0
-offset_bottom = 1.0
-texture = ExtResource("9_b403c")
-patch_margin_left = 8
-patch_margin_top = 8
-patch_margin_right = 8
-patch_margin_bottom = 8
-type = 3
+texture = SubResource("AtlasTexture_nmdsi")
+offset = Vector2(0, -11)
 
 [node name="EntitySprite" parent="." unique_id=33604155 instance=ExtResource("10_kkd23")]
 unique_name_in_owner = true
-material = SubResource("ShaderMaterial_b403c")
+material = SubResource("ShaderMaterial_mvpeq")
 instance_shader_parameters/crack_color = Color(0.132138, 0.153553, 0.183094, 0.85)
 instance_shader_parameters/crack_depth = 0.4
 instance_shader_parameters/crack_intensity = 0.0

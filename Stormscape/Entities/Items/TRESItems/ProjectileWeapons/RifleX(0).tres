@@ -37,6 +37,7 @@ point_count = 2
 script = ExtResource("3_7av10")
 source_type = 1
 base_damage = 18
+lvl_dmg_scalar = 2
 metadata/_custom_type_script = "uid://dn82yybtu3o00"
 
 [sub_resource type="Curve" id="Curve_gtex7"]

@@ -95,12 +95,12 @@ func _apply_crit_calculations(amount: int, esi: ESI) -> Array:
 	return [round(amount * esi.get_stat(&"crit_multiplier")), true]
 
 func _apply_level_scaling(amount: int, esi: ESI, type: Type) -> int:
-	var level_mult: float = 1.0
+	var level_add: float = 0
 	if type == Type.DAMAGE:
-		level_mult = ((floori(esi.source_ii_lvl / 10.0) * esi.get_stat(&"lvl_dmg_scalar")) / 100.0) + 1
+		level_add = floori(esi.source_ii_lvl / 10.0) * esi.get_stat(&"lvl_dmg_scalar")
 	else:
-		level_mult = ((floori(esi.source_ii_lvl / 10.0) * esi.get_stat(&"lvl_heal_scalar")) / 100.0) + 1
-	return ceili(amount * level_mult)
+		level_add = floori(esi.source_ii_lvl / 10.0) * esi.get_stat(&"lvl_heal_scalar")
+	return ceili(amount + level_add)
 
 func _apply_armor_blocking(amount: int, esi: ESI) -> int:
 	var armor_block_percent: int = max(0, affected_entity.hp_component.armor - esi.get_stat(&"armor_penetration"))

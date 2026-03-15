@@ -34,13 +34,13 @@ enum Tag {
 @export_range(0, 100, 1, "suffix:%") var crit_chance: int = 0 ## The chance the application of damage will be a critial hit.
 @export var crit_multiplier: float = 1.5 ## How much stronger critical hits are than normal hits.
 @export_range(0, 100, 1, "suffix:%") var armor_penetration: int = 0 ## The percent of armor ignored.
-@export_range(0, 100, 1, "suffix:%") var lvl_dmg_scalar: int = 8 ## The percent of base damage that gets added on for every 10 levels, calculated as (((floor(current_lvl / 10) * lvl_dmg_scalar) + 1.0) / 100.0) * base_damage.
+@export_range(0, 1000, 1) var lvl_dmg_scalar: int = 1 ## The amount of additional base damage that gets added on for every 10 levels. Only applies when the base damage is greater than 0.
 
 @export_group("Healing")
 @export var base_healing: int ## The base numerical amount of health associated with this effect source.
 @export var heal_affected_stats: DHHandler.DHType = DHHandler.DHType.HEALTH_THEN_SHIELD ## Which entity stats are affected by this healing source.
 @export var heal_popup_type: EffectPopup.POPUP_TYPE = EffectPopup.POPUP_TYPE.AUTO ## What the popup that results from an entity being hit by this healing should look like it came from.
-@export_range(0, 100, 1, "suffix:%") var lvl_heal_scalar: int = 8 ## The percent of base healing that gets added on for every 10 levels, calculated as [codeblock](((floor(current_lvl / 10) * lvl_heal_scalar) + 1.0) / 100.0) * base_healing[/codeblock].
+@export_range(0, 1000, 1) var lvl_heal_scalar: int = 1 ## The amount of additional base healing that gets added on for every 10 levels. Only applies when the base healing is greater than 0.
 
 @export_group("FX")
 @export var hit_flash_color: EntitySprite.HitflashColor = EntitySprite.HitflashColor.NORMAL ## The color to flash the hit entity to when hit.
