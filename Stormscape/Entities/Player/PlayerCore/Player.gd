@@ -7,6 +7,7 @@ class_name Player
 @onready var interaction_prompt: Control = %InteractionPrompt ## The UI that shows when an interaction is available.
 
 var interaction_handler: InteractionHandler = InteractionHandler.new() ## The script handling offered interactions and what to do when they are accepted.
+var xp: int = 0
 
 
 func _ready() -> void:

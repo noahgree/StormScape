@@ -13,6 +13,7 @@
 [ext_resource type="Texture2D" uid="uid://b2bgxo22c1tup" path="res://Entities/Items/Weapons/ProjectileWeapons/Cratershot/cratershot_base.png" id="6_2s01n"]
 [ext_resource type="Script" uid="uid://dn82yybtu3o00" path="res://Entities/Components/ESComponent/NormalES.gd" id="6_rv058"]
 [ext_resource type="PackedScene" uid="uid://dwyof8hbs8fxr" path="res://Entities/Items/Weapons/ProjectileWeapons/Cratershot/Cratershot.tscn" id="8_af8pb"]
+[ext_resource type="Script" uid="uid://ig4jcnxaphcg" path="res://Entities/Components/ConditionsComponent/Conditions/GoodEffects/SelfKnockback/SelfKnockbackStats.gd" id="9_ynno2"]
 [ext_resource type="Curve" uid="uid://rlvyvqmf4jeq" path="res://Utilities/Game/Curves/BASE_OVERHEAT_DEC_RATE.tres" id="12_gk78h"]
 [ext_resource type="Script" uid="uid://ctxa7i1mbt7ab" path="res://Entities/Player/UI/Inventory/Panels/CraftingPanel/CraftingIngredient.gd" id="12_s5u2h"]
 [ext_resource type="Curve" uid="uid://b6omqen77gwxv" path="res://Utilities/Game/Curves/BASE_OVERHEAT_INC_RATE.tres" id="13_45kh3"]
@@ -39,6 +40,12 @@ up_is_good = false
 suffix = "[char=00B0]"
 metadata/_custom_type_script = "uid://cowjdnic7xmkp"
 
+[sub_resource type="Resource" id="Resource_k8rif"]
+script = ExtResource("9_ynno2")
+direction_method = 1
+knockback_force = 100
+metadata/_custom_type_script = "uid://ig4jcnxaphcg"
+
 [sub_resource type="Curve" id="Curve_7gqp2"]
 _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.884681), 0.0, 0.0, 0, 0]
 point_count = 2
@@ -60,6 +67,7 @@ proj_weapon_type = 1
 projectile_scn = ExtResource("5_ilshb")
 firing_duration = 0.09
 fire_cooldown = 0.45
+firing_condition = SubResource("Resource_k8rif")
 post_fire_anim_dur = 0.22
 firing_cam_fx = ExtResource("4_qi223")
 casing_texture = ExtResource("1_7gqp2")

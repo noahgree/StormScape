@@ -18,10 +18,13 @@
 [ext_resource type="Resource" uid="uid://ciel2rrqq4dvv" path="res://Entities/Items/TRESItems/ProjectileWeapons/LaserGun(2).tres" id="8_6wv7y"]
 [ext_resource type="Script" uid="uid://cixw344dpwknt" path="res://Entities/Items/Consumables/ConsumableCore/ConsumableII.gd" id="8_0313k"]
 [ext_resource type="Resource" uid="uid://dk3vlbvu2b7eq" path="res://Entities/Items/TRESItems/MeleeWeapons/Sword(4).tres" id="8_g5u5n"]
+[ext_resource type="Resource" uid="uid://h1xp0w2wx18e" path="res://Entities/Items/TRESItems/ProjectileWeapons/Grizzly(3).tres" id="9_hxjay"]
 [ext_resource type="Resource" uid="uid://cx1ydw2jde1y8" path="res://Entities/Items/TRESItems/Consumables/Apple(0).tres" id="9_thmqm"]
 [ext_resource type="PackedScene" uid="uid://bhcqtorpyerc3" path="res://Utilities/Debug/ParticleEmissionComponent.tscn" id="10_6wv7y"]
+[ext_resource type="Resource" uid="uid://14gw464h13vv" path="res://Entities/Items/TRESItems/ProjectileWeapons/Cratershot(1).tres" id="10_gdihr"]
 [ext_resource type="Resource" uid="uid://3avt5jvd3dye" path="res://Entities/Items/TRESItems/ProjectileWeapons/BottleOFire(3).tres" id="11_rdrbb"]
 [ext_resource type="Resource" uid="uid://dpmwqsai6gxsr" path="res://Entities/Items/TRESItems/ProjectileWeapons/FlameBlower(5).tres" id="12_gdihr"]
+[ext_resource type="Resource" uid="uid://bper7kxtsf7f1" path="res://Entities/Items/TRESItems/MeleeWeapons/Axe(1).tres" id="13_gdihr"]
 [ext_resource type="Script" uid="uid://c2gdoebfp12dq" path="res://Entities/Components/StatMod/StatModsCache.gd" id="14_0313k"]
 [ext_resource type="Resource" uid="uid://cpxev3kvt74vw" path="res://Entities/Items/TRESItems/Ammo/Shell(0).tres" id="15_o382h"]
 [ext_resource type="Resource" uid="uid://c5jim46mul7ex" path="res://Entities/Items/TRESItems/Ammo/IonCharge(1).tres" id="16_n4o3n"]
@@ -133,6 +136,31 @@ uid = null
 stats = ExtResource("8_g5u5n")
 metadata/_custom_type_script = "uid://coadjb34ugaa6"
 
+[sub_resource type="Resource" id="Resource_0313k"]
+script = ExtResource("5_3uq13")
+uid = null
+stats = ExtResource("9_hxjay")
+metadata/_custom_type_script = "uid://cbw8j4ps8ii7p"
+
+[sub_resource type="Resource" id="Resource_bvo3j"]
+script = ExtResource("5_3uq13")
+uid = null
+stats = ExtResource("10_gdihr")
+metadata/_custom_type_script = "uid://cbw8j4ps8ii7p"
+
+[sub_resource type="Resource" id="Resource_gb65f"]
+script = ExtResource("8_0313k")
+uid = null
+stats = ExtResource("9_thmqm")
+q = 5
+metadata/_custom_type_script = "uid://cixw344dpwknt"
+
+[sub_resource type="Resource" id="Resource_eufsu"]
+script = ExtResource("7_gdihr")
+uid = null
+stats = ExtResource("13_gdihr")
+metadata/_custom_type_script = "uid://coadjb34ugaa6"
+
 [sub_resource type="Resource" id="Resource_r5dvw"]
 script = ExtResource("8_0313k")
 uid = null
@@ -195,7 +223,7 @@ metadata/_custom_type_script = "uid://cv7ha7muvg5qu"
 
 [sub_resource type="Resource" id="Resource_0t1mv"]
 script = ExtResource("2_14ixx")
-starting_inv = Array[ExtResource("3_lo25j")]([SubResource("Resource_6wv7y"), SubResource("Resource_6f5us"), SubResource("Resource_5qckj"), null, null, null, null, null, null, null, null, null, SubResource("Resource_r5dvw"), null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, SubResource("Resource_3uq13"), SubResource("Resource_hxjay"), SubResource("Resource_da65a"), SubResource("Resource_s4yud"), null, null, null, null, null, null, SubResource("Resource_o382h"), SubResource("Resource_n4o3n"), SubResource("Resource_gdihr"), SubResource("Resource_g5u5n"), null, null])
+starting_inv = Array[ExtResource("3_lo25j")]([SubResource("Resource_6wv7y"), SubResource("Resource_6f5us"), SubResource("Resource_5qckj"), null, null, null, SubResource("Resource_0313k"), null, SubResource("Resource_bvo3j"), SubResource("Resource_gb65f"), SubResource("Resource_eufsu"), null, SubResource("Resource_r5dvw"), null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, SubResource("Resource_3uq13"), SubResource("Resource_hxjay"), SubResource("Resource_da65a"), SubResource("Resource_s4yud"), null, null, null, null, null, null, SubResource("Resource_o382h"), SubResource("Resource_n4o3n"), SubResource("Resource_gdihr"), SubResource("Resource_g5u5n"), null, null])
 metadata/_custom_type_script = "uid://bdd0xujg1bgm0"
 
 [sub_resource type="Resource" id="Resource_thmqm"]

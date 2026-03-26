@@ -172,7 +172,7 @@ func add_xp(amount: int) -> bool:
 	if allowed_lvl == MAX_LEVEL:
 		lvl_progress = 0
 
-	if allowed_leveled_up:
+	if allowed_leveled_up: #Temporary UI until proper upgrade graphic is made!
 		if allowed_lvl == MAX_LEVEL:
 			MessageManager.add_msg("[color=white]" + stats.name + "[/color] Can Now Become[color=white] MAX LEVEL[/color]!", Globals.ui_colors.ui_glow_strong_success, stats.inv_icon)
 		else:

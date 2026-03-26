@@ -6,7 +6,7 @@
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_o33n8"]
 shader = ExtResource("1_koba2")
 shader_parameter/shadow_color = Color(0, 0, 0, 0.35)
-shader_parameter/cast_direction = Vector2(-1, 0.5)
+shader_parameter/cast_direction = Vector2(1, 0.5)
 shader_parameter/flatten = 0.45
 shader_parameter/shear_amount = 0.9
 
