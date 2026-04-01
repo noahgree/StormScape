@@ -83,7 +83,7 @@ func _ready() -> void:
 		floor_light.queue_free()
 
 	if time_brightness_min_max != Vector2(1.0, 1.0):
-		DayNightManager.brightness_signal.connect(_on_day_night_brightness_tick)
+		DayNightManager.brightness_progress_signal.connect(_on_day_night_brightness_tick)
 
 	call_deferred("_setup_overlay_size", sprite_size)
 	call_deferred("_setup_cracks_with_damage", sprite_size)

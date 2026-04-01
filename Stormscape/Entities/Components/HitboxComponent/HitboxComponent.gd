@@ -51,11 +51,12 @@ func _start_being_handled(handling_area: ESIReceiverComponent) -> void:
 	if handling_area.absorb_full_hit:
 		collider.set_deferred("disabled", true) # Does not apply to hitscans
 
+	var esi_copy: ESI = esi.copy()
 	if esi.es.source_type == EffectSource.SourceType.FROM_PROJECTILE:
-		esi.movement_direction = movement_direction
-	esi.contact_position = get_parent().global_position if not use_self_position else global_position
-	esi.set_source_info(source_entity, source_ii)
-	handling_area.handle_esi(esi)
+		esi_copy.movement_direction = movement_direction
+	esi_copy.contact_position = get_parent().global_position if not use_self_position else global_position
+	esi_copy.set_source_info(source_entity, source_ii)
+	handling_area.handle_esi(esi_copy)
 
 ## Meant to be overridden by subclasses to determine what to do after hitting an object.
 func _process_hit(_object: Node2D) -> void:

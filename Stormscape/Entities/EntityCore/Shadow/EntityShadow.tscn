@@ -1,15 +1,8 @@
 [gd_scene format=3 uid="uid://digwuyppqnmsf"]
 
-[ext_resource type="Shader" uid="uid://daot0sksppvtq" path="res://Utilities/Game/Shaders/ShadowShader.gdshader" id="1_koba2"]
+[ext_resource type="Material" uid="uid://dbpk21y6ho24t" path="res://Entities/EntityCore/Shadow/ShadowShaderMaterial.tres" id="1_koba2"]
 [ext_resource type="Script" uid="uid://dlmkpfogcyo7g" path="res://Entities/EntityCore/Shadow/EntityShadow.gd" id="3_5qdff"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_o33n8"]
-shader = ExtResource("1_koba2")
-shader_parameter/shadow_color = Color(0, 0, 0, 0.35)
-shader_parameter/cast_direction = Vector2(1, 0.5)
-shader_parameter/flatten = 0.45
-shader_parameter/shear_amount = 0.9
-
 [node name="EntityShadow" type="Sprite2D" unique_id=56936167]
-material = SubResource("ShaderMaterial_o33n8")
+material = ExtResource("1_koba2")
 script = ExtResource("3_5qdff")

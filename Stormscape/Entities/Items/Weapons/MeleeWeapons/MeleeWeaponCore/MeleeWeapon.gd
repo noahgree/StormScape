@@ -153,7 +153,7 @@ func _charge_swing() -> void:
 
 ## Sets the hitbox's effect source instance and collision mask (what to hit) for the swing.
 func _set_hitbox_effect_source_instance_and_collision(new_esi: ESI) -> void:
-	hitbox_component.esi = new_esi.copy()
+	hitbox_component.esi = new_esi
 	hitbox_component.collision_mask = new_esi.es.scanned_phys_layers
 
 ## Starts the swing animation and plays any associated fx. Awaits the animation ending and returns control

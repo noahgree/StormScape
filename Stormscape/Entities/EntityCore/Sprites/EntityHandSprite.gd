@@ -23,7 +23,7 @@ func _setup_texture() -> void:
 	if hands:
 		texture = hands.hand_texture
 		if hands.time_brightness_min_max != Vector2(1.0, 1.0):
-			DayNightManager.brightness_signal.connect(_on_day_night_brightness_tick)
+			DayNightManager.brightness_progress_signal.connect(_on_day_night_brightness_tick)
 
 ## Interpolates the brightness mult on the modulate based on the brightness given by the day-night manager.
 func _on_day_night_brightness_tick(progress: float) -> void:

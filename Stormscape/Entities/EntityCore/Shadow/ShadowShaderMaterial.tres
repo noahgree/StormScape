@@ -1,0 +1,10 @@
+[gd_resource type="ShaderMaterial" format=3 uid="uid://dbpk21y6ho24t"]
+
+[ext_resource type="Shader" uid="uid://daot0sksppvtq" path="res://Utilities/Game/Shaders/ShadowShader.gdshader" id="1_7dq5e"]
+
+[resource]
+shader = ExtResource("1_7dq5e")
+shader_parameter/shadow_color = Color(0, 0, 0, 0.35)
+shader_parameter/cast_direction = Vector2(1, 0.5)
+shader_parameter/flatten = 0.45
+shader_parameter/shear_amount = 0.35

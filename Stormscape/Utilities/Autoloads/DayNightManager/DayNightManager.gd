@@ -1,75 +1,109 @@
 extends Node
-## This autoload handles the transitioning between day and night as well as the in-game time.
 
-signal time_tick(day: int, hour: int, minute: int) ## Emitted every time change.
-signal day_started ## Emitted at 7hrs when daytime is in full swing.
-signal night_started ## Emitted at 20hrs when nighttime is in full swing.
-signal brightness_signal(brightness: float) ## Emitted at each time tick with the percentage of brightness showing for the day from 0->1.
+signal time_tick(day: int, hour: int, minute: int)
+signal day_started
+signal night_started
+signal brightness_progress_signal(progress: float)
 
-@export var color_gradient: GradientTexture1D ## The color gradient responsible for coloring the canvas modulate based on time.
-@export var game_day_time_scale: float = 1.0 ## The number of minutes to pass in game per second of the real world.
-@export var current_hour: int = 9: ## The in-game hour.
-	set(new_value):
-		current_hour = new_value
-		time_counter = GAME_TO_IRL_MINUTE * new_value * 60
+@export var color_gradient: GradientTexture1D
+@export var game_day_time_scale: float = 1.0
+@export var starting_hour: int = 9
 
-@onready var canvas_modulate: CanvasModulate = $CanvasModulate ## The modulate rect that affects the colors.
+@onready var canvas_modulate: CanvasModulate = $CanvasModulate
+@onready var shadow_material: ShaderMaterial = load("uid://dbpk21y6ho24t")
 
-var time_counter: float = 0 ## The elapsed engine time that determines game time once digested by the sin calculation.
-var previously_emitted_minute: int = -1 ## The last known minute of game time. Used to determine when the minute has changed.
-var just_changed_time_manually: bool = false ## Flagged to true for one frame to emit the signals of a time change as soon as it is changed manually (and not wait for the next minute).
-const MINUTES_PER_DAY: int = 1440 ## How many in game minutes per in game day.
-const GAME_TO_IRL_MINUTE: float = (2 * PI) / MINUTES_PER_DAY ## Splits the sin function's result range into a slices where each slice is one minute of in game time.
+const MINUTES_PER_DAY: int = 1440
+const RADIANS_PER_GAME_MINUTE: float = TAU / MINUTES_PER_DAY
+
+var time_counter: float = 0.0
+var current_day: int = 0
+var current_hour: int = 9
+var current_minute: int = 0
+var day_progress: float = 0.0
+var last_emitted_total_minutes: int = -1
+var force_emit_tick: bool = false
 
 
 func _ready() -> void:
-	change_time(current_hour)
+	set_time(0, starting_hour, 0)
 
-	DebugConsole.add_command("time", change_time)
-	DebugConsole.add_command("time_scale", func(new_value: float) -> void: game_day_time_scale = new_value)
+	DebugConsole.add_command("time", set_hour)
+	DebugConsole.add_command("time_scale", func(new_value: float) -> void:
+		game_day_time_scale = new_value
+	)
+
 
 func _process(delta: float) -> void:
-	time_counter += delta * GAME_TO_IRL_MINUTE * game_day_time_scale
-	var day_offset: float = (sin(time_counter - (0.5 * PI)) + 1.0) / 2.0
+	time_counter += delta * RADIANS_PER_GAME_MINUTE * game_day_time_scale
+
+	var progress: float = _get_day_progress()
+	var day_offset: float = (sin(progress * TAU - PI / 2.0) + 1.0) / 2.0
 
 	canvas_modulate.color = color_gradient.gradient.sample(day_offset)
 
 	_tick_game_time()
+	_update_entity_shadows()
 
-## Ticks the game time ahead and emits signals when needed.
+
+func _input(_event: InputEvent) -> void:
+	if Input.is_key_pressed(KEY_RIGHT):
+		set_hour(wrapi(current_hour + 1, 0, 24))
+	elif Input.is_key_pressed(KEY_LEFT):
+		set_hour(wrapi(current_hour - 1, 0, 24))
+
+
 func _tick_game_time() -> void:
-	var total_minutes: int = int(time_counter / GAME_TO_IRL_MINUTE)
-	var curr_day: int = int(total_minutes / float(MINUTES_PER_DAY))
-	var curr_day_minutes_elapsed: int = total_minutes % MINUTES_PER_DAY
-	var curr_day_hour: int = int(curr_day_minutes_elapsed / 60.0)
-	var curr_hour_min: int = int(curr_day_minutes_elapsed % 60)
+	var total_minutes: int = int(time_counter / RADIANS_PER_GAME_MINUTE)
+	current_day = floori(total_minutes / float(MINUTES_PER_DAY))
 
-	if curr_day_hour == 20 and curr_hour_min == 0:
-		night_started.emit()
-	elif curr_day_hour == 7 and curr_hour_min == 0:
-		day_started.emit()
+	var day_minutes: int = total_minutes % MINUTES_PER_DAY
+	current_hour = floori(day_minutes / 60.0)
+	current_minute = day_minutes % 60
+	day_progress = day_minutes / float(MINUTES_PER_DAY)
 
-	if (previously_emitted_minute != curr_hour_min) or just_changed_time_manually:
-		time_tick.emit(curr_day, curr_day_hour, curr_hour_min)
-		previously_emitted_minute = curr_hour_min
+	if total_minutes != last_emitted_total_minutes or force_emit_tick:
+		if current_hour == 7 and current_minute == 0:
+			day_started.emit()
+		elif current_hour == 20 and current_minute == 0:
+			night_started.emit()
 
-		brightness_signal.emit(_get_brightness_progress(curr_day_hour, curr_hour_min))
-		just_changed_time_manually = false
+		time_tick.emit(current_day, current_hour, current_minute)
+		brightness_progress_signal.emit(_get_brightness_progress(current_hour, current_minute))
 
-## Gets the relative brightness based on the time of day.
+		last_emitted_total_minutes = total_minutes
+		force_emit_tick = false
+
+
+func _get_day_progress() -> float:
+	var total_minutes: int = int(time_counter / RADIANS_PER_GAME_MINUTE)
+	var day_minutes: int = total_minutes % MINUTES_PER_DAY
+	return day_minutes / float(MINUTES_PER_DAY)
+
+
 func _get_brightness_progress(hour: int, minute: int) -> float:
 	var total_minutes: int = hour * 60 + minute
 
 	if total_minutes >= 19 * 60 and total_minutes <= 21 * 60:
-		return 1.0 - (total_minutes - 19 * 60) / (2 * 60.0)
+		return 1.0 - (total_minutes - 19 * 60) / 120.0
 	elif total_minutes >= 4 * 60 and total_minutes <= 6 * 60:
-		return (total_minutes - 4 * 60) / (2 * 60.0)
+		return (total_minutes - 4 * 60) / 120.0
 	elif total_minutes > 6 * 60 and total_minutes < 19 * 60:
 		return 1.0
 	else:
 		return 0.0
 
-## Changes the current game time by setting the current hour.
-func change_time(new_hour: int) -> void:
-	current_hour = new_hour
-	just_changed_time_manually = true
+
+func _update_entity_shadows() -> void:
+	var angle: float = day_progress * TAU
+	var shear_amount: float = sin(angle)
+	shadow_material.set_shader_parameter("shear_amount", shear_amount)
+
+
+func set_hour(new_hour: int) -> void:
+	set_time(current_day, new_hour, 0)
+
+
+func set_time(day: int, hour: int, minute: int) -> void:
+	var total_minutes: int = day * MINUTES_PER_DAY + hour * 60 + minute
+	time_counter = total_minutes * RADIANS_PER_GAME_MINUTE
+	force_emit_tick = true

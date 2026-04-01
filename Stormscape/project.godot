@@ -26,7 +26,7 @@ resources_spreadsheet_view/array_color_tint=100.0
 config/name="StormScape"
 config/version="0.1"
 run/main_scene="res://Stages/World/Game.tscn"
-config/features=PackedStringArray("4.6", "Forward Plus")
+config/features=PackedStringArray("4.7", "Forward Plus")
 boot_splash/bg_color=Color(0.104389, 0.121748, 0.27417, 1)
 config/icon="uid://b16ywn0u2djhd"
 

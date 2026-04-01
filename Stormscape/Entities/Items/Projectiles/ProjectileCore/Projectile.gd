@@ -496,27 +496,28 @@ func _start_being_handled(handling_area: ESIReceiverComponent) -> void:
 	if about_to_free:
 		return
 
+	var esi_copy: ESI = esi.copy() if not is_in_aoe_phase else aoe_esi.copy()
 	var dist_to_center: float = handling_area.get_parent().global_position.distance_to(global_position)
 	if not is_in_aoe_phase:
-		_adjust_esi_for_falloff(esi, dist_to_center, false)
+		_adjust_esi_for_falloff(esi_copy, dist_to_center, false)
 
-		esi.multishot_id = multishot_id
-		esi.movement_direction = movement_direction
-		esi.contact_position = global_position
-		esi.set_source_info(source_entity, source_ii)
+		esi_copy.multishot_id = multishot_id
+		esi_copy.movement_direction = movement_direction
+		esi_copy.contact_position = global_position
+		esi_copy.set_source_info(source_entity, source_ii)
 
-		handling_area.handle_esi(esi)
+		handling_area.handle_esi(esi_copy)
 	else:
-		_adjust_esi_for_falloff(aoe_esi, dist_to_center, true)
+		_adjust_esi_for_falloff(esi_copy, dist_to_center, true)
 
-		aoe_esi.contact_position = global_position
-		aoe_esi.set_source_info(source_entity, source_ii)
+		esi_copy.contact_position = global_position
+		esi_copy.set_source_info(source_entity, source_ii)
 
 		tree_exiting.connect(
-			handling_area.entity.conditions_component.remove_conditions_by_esi_uid.bind(aoe_esi.uid)
+			handling_area.entity.conditions_component.remove_conditions_by_esi_uid.bind(esi_copy.uid)
 		)
 
-		handling_area.handle_esi(aoe_esi)
+		handling_area.handle_esi(esi_copy)
 
 ## When we hit a handling area during an AOE, we need to apply falloff based on distance from the center of the AOE.
 func _adjust_esi_for_falloff(esi_to_adjust: ESI, dist: float, is_aoe: bool = false) -> void:

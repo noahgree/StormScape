@@ -1081,19 +1081,25 @@ animation = &"idle_down"
 animation = &"idle_up"
 
 [sub_resource type="AnimationNodeBlendSpace2D" id="AnimationNodeBlendSpace2D_s8iwx"]
+blend_mode = 1
 blend_point_0/node = SubResource("AnimationNodeAnimation_sahic")
 blend_point_0/pos = Vector2(-1, 1)
+blend_point_0/name = &"0"
 blend_point_1/node = SubResource("AnimationNodeAnimation_ie8rn")
 blend_point_1/pos = Vector2(1, 1)
+blend_point_1/name = &"1"
 blend_point_2/node = SubResource("AnimationNodeAnimation_2ot5v")
 blend_point_2/pos = Vector2(1, -1)
+blend_point_2/name = &"2"
 blend_point_3/node = SubResource("AnimationNodeAnimation_2n85y")
 blend_point_3/pos = Vector2(-1, -1)
+blend_point_3/name = &"3"
 blend_point_4/node = SubResource("AnimationNodeAnimation_duaaf")
 blend_point_4/pos = Vector2(0, 1)
+blend_point_4/name = &"4"
 blend_point_5/node = SubResource("AnimationNodeAnimation_kra6l")
 blend_point_5/pos = Vector2(0, -1)
-blend_mode = 1
+blend_point_5/name = &"5"
 
 [sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_xmxd0"]
 graph_offset = Vector2(-225.05, 34.7129)
@@ -1125,19 +1131,25 @@ animation = &"run_down"
 animation = &"run_up"
 
 [sub_resource type="AnimationNodeBlendSpace2D" id="AnimationNodeBlendSpace2D_ykscl"]
+blend_mode = 1
 blend_point_0/node = SubResource("AnimationNodeAnimation_djas4")
 blend_point_0/pos = Vector2(-1, 1)
+blend_point_0/name = &"0"
 blend_point_1/node = SubResource("AnimationNodeAnimation_dnleh")
 blend_point_1/pos = Vector2(-1, -1)
+blend_point_1/name = &"1"
 blend_point_2/node = SubResource("AnimationNodeAnimation_nygkw")
 blend_point_2/pos = Vector2(1, 1)
+blend_point_2/name = &"2"
 blend_point_3/node = SubResource("AnimationNodeAnimation_obetw")
 blend_point_3/pos = Vector2(1, -1)
+blend_point_3/name = &"3"
 blend_point_4/node = SubResource("AnimationNodeAnimation_ixiqu")
 blend_point_4/pos = Vector2(0, 1)
+blend_point_4/name = &"4"
 blend_point_5/node = SubResource("AnimationNodeAnimation_b2ov1")
 blend_point_5/pos = Vector2(0, -1)
-blend_mode = 1
+blend_point_5/name = &"5"
 
 [sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_w6nco"]
 graph_offset = Vector2(-11.0598, 3.96877)

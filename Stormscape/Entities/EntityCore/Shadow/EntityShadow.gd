@@ -3,7 +3,7 @@ extends Sprite2D
 class_name EntityShadow
 
 
-@onready var sprite: EntitySprite = owner.get_node_or_null("%EntitySprite")
+@onready var sprite: EntitySprite = owner.get_node_or_null("%EntitySprite") if owner is Entity else null
 
 
 func _ready() -> void:

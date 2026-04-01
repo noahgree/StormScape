@@ -238,14 +238,15 @@ func _update_impact_particles(pierce_list: Dictionary) -> void:
 ## Overrides parent method. When we overlap with an entity who can accept effect sources,
 ## pass the ESI to that entity's handler.
 func _start_being_handled(handling_area: ESIReceiverComponent, contact_point: Vector2) -> void:
-	_adjust_esi_for_falloff(esi, contact_point)
+	var esi_copy: ESI = esi.copy()
+	_adjust_esi_for_falloff(esi_copy, contact_point)
 
-	esi.multishot_id = multishot_id
-	esi.movement_direction = Vector2(cos(rotation), sin(rotation)).normalized()
-	esi.contact_position = contact_point
-	esi.set_source_info(source_entity, source_ii)
+	esi_copy.multishot_id = multishot_id
+	esi_copy.movement_direction = Vector2(cos(rotation), sin(rotation)).normalized()
+	esi_copy.contact_position = contact_point
+	esi_copy.set_source_info(source_entity, source_ii)
 
-	handling_area.handle_esi(esi)
+	handling_area.handle_esi(esi_copy)
 
 ## When we hit a handling area during a hitscan, we apply falloff to the components of the effect source.
 func _adjust_esi_for_falloff(esi_to_adjust: ESI, contact_point: Vector2) -> void:
